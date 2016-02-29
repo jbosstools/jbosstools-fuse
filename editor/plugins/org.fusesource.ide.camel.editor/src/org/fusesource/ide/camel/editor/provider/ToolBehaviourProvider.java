@@ -72,7 +72,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -189,8 +189,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				}
 
 				String name = "";
-				if (bo instanceof CamelModelElement) {
-					CamelModelElement bo2 = (CamelModelElement) bo;
+				if (bo instanceof AbstractCamelModelElement) {
+					AbstractCamelModelElement bo2 = (AbstractCamelModelElement) bo;
 					if (bo2 != null && bo2.getName() != null) {
 						name = bo2.getName();
 					}
@@ -428,8 +428,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			// and then our own
 			IFeatureProvider featureProvider = getFeatureProvider();
 			Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
-			if (bo instanceof CamelModelElement) {
-				CamelModelElement node = (CamelModelElement) bo;
+			if (bo instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement node = (AbstractCamelModelElement) bo;
 
 				ValidationResult res = ValidationFactory.getInstance().validate(node);
 				if (res.getInformationCount() > 0) {
@@ -519,8 +519,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public String getToolTip(GraphicsAlgorithm ga) {
 		PictogramElement pe = ga.getPictogramElement();
 		Object bo = getFeatureProvider().getBusinessObjectForPictogramElement(pe);
-		if (bo instanceof CamelModelElement) {
-			String name = ((CamelModelElement) bo).getDescription(); // getDisplayToolTip();
+		if (bo instanceof AbstractCamelModelElement) {
+			String name = ((AbstractCamelModelElement) bo).getDescription(); // getDisplayToolTip();
 			if (name != null && !name.isEmpty()) {
 				return name;
 			}
@@ -534,7 +534,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public boolean equalsBusinessObjects(Object o1, Object o2) {
-		if (o1 instanceof CamelModelElement || o2 instanceof CamelModelElement) {
+		if (o1 instanceof AbstractCamelModelElement || o2 instanceof AbstractCamelModelElement) {
 			return Objects.equal(o1, o2);
 		}
 		return super.equalsBusinessObjects(o1, o2);
@@ -548,7 +548,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public GraphicsAlgorithm[] getClickArea(PictogramElement pe) {
 		IFeatureProvider featureProvider = getFeatureProvider();
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
-		if (bo instanceof CamelModelElement && !(bo instanceof CamelElementConnection)) {
+		if (bo instanceof AbstractCamelModelElement && !(bo instanceof CamelElementConnection)) {
 			GraphicsAlgorithm rectangle = pe.getGraphicsAlgorithm();
 			return new GraphicsAlgorithm[] { rectangle };
 		}
@@ -563,7 +563,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public GraphicsAlgorithm getSelectionBorder(PictogramElement pe) {
 		IFeatureProvider featureProvider = getFeatureProvider();
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
-		if (bo instanceof CamelModelElement) {
+		if (bo instanceof AbstractCamelModelElement) {
 			GraphicsAlgorithm rectangle = pe.getGraphicsAlgorithm();
 			return rectangle;
 		}

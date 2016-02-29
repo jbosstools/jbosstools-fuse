@@ -19,7 +19,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -55,8 +55,8 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	public boolean canCreate(ICreateConnectionContext context) {
 		// return true if both anchors belong to a EClass
 		// and those EClasses are not identical
-		CamelModelElement source = getNode(context.getSourceAnchor());
-		CamelModelElement target = getNode(context.getTargetAnchor());
+		AbstractCamelModelElement source = getNode(context.getSourceAnchor());
+		AbstractCamelModelElement target = getNode(context.getTargetAnchor());
 		
 		if (target != null && source != target) {
 			// if we only support a single output and we already have one then we can't connect to another output
@@ -89,8 +89,8 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		Connection newConnection = null;
 
 		// get EClasses which should be connected
-		CamelModelElement source = getNode(context.getSourceAnchor());
-		CamelModelElement target = getNode(context.getTargetAnchor());
+		AbstractCamelModelElement source = getNode(context.getSourceAnchor());
+		AbstractCamelModelElement target = getNode(context.getTargetAnchor());
 
 		if (target != null) {
 			// create new business object
@@ -108,11 +108,11 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	/**
 	 * Returns the EClass belonging to the anchor, or null if not available.
 	 */
-	private CamelModelElement getNode(Anchor anchor) {
+	private AbstractCamelModelElement getNode(Anchor anchor) {
 		if (anchor != null) {
 			Object obj = getBusinessObjectForPictogramElement(anchor.getParent());
-			if (obj instanceof CamelModelElement) {
-				return (CamelModelElement) obj;
+			if (obj instanceof AbstractCamelModelElement) {
+				return (AbstractCamelModelElement) obj;
 			}
 		}
 		return null;
@@ -121,7 +121,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	/**
 	 * Creates a EReference between two EClasses.
 	 */
-	private CamelElementConnection createFlow(CamelModelElement source, CamelModelElement target) {
+	private CamelElementConnection createFlow(AbstractCamelModelElement source, AbstractCamelModelElement target) {
 		return new CamelElementConnection(source, target);
 	}
 }

@@ -24,7 +24,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
@@ -82,8 +82,8 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 		Map<String,RouteNode> routeMap = new HashMap<String, RouteNode>();
 		camelContext = getCamelContextNode().getCamelContext();
 		if (camelContext != null) {
-			List<CamelModelElement> children = camelContext.getChildElements();
-			for (CamelModelElement node : children) {
+			List<AbstractCamelModelElement> children = camelContext.getChildElements();
+			for (AbstractCamelModelElement node : children) {
 				if (node instanceof CamelRouteElement) {
 					CamelRouteElement route = (CamelRouteElement) node;
 					RouteNode routeNode = new RouteNode(this, route);

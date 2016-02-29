@@ -57,7 +57,7 @@ import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.ui.archetypes.BeanDef;
 
 /**
@@ -85,7 +85,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		// is object for add request a EClass or EReference?
 		if (context.getNewObject() instanceof CamelElementConnection) {
 			return new AddFlowFeature(this);
-		} else if (context.getNewObject() instanceof CamelModelElement) {
+		} else if (context.getNewObject() instanceof AbstractCamelModelElement) {
 			return new AddNodeFeature(this);
 		}
 		return super.getAddFeature(context);
@@ -128,7 +128,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		PictogramElement pictogramElement = context.getPictogramElement();
 		if (pictogramElement instanceof ContainerShape) {
 			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-			if (bo instanceof CamelModelElement) {
+			if (bo instanceof AbstractCamelModelElement) {
 				return new UpdateNodeFeature(this);
 			}
 		}
@@ -161,7 +161,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	public IResizeShapeFeature getResizeShapeFeature(IResizeShapeContext context) {
 		Shape shape = context.getShape();
 		Object bo = getBusinessObjectForPictogramElement(shape);
-		if (bo instanceof CamelModelElement) {
+		if (bo instanceof AbstractCamelModelElement) {
 			return new ResizeNodeFeature(this);
 		}
 		return super.getResizeShapeFeature(context);

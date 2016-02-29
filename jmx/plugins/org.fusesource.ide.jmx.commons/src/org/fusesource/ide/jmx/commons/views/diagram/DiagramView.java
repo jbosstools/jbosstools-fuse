@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.util.Selections;
@@ -46,7 +46,7 @@ public class DiagramView extends GraphViewSupport {
 	public static final String ID = "org.fusesource.ide.jmx.views.DiagramView";
 
 	private Node selectedNode;
-	CamelModelElement node;
+	AbstractCamelModelElement node;
 	private NodeStatisticsContainer nodeStatisticsContainer;
 
 	private IWorkbenchPart selectionPart;
@@ -129,7 +129,7 @@ public class DiagramView extends GraphViewSupport {
 //						setSelectedObjectOnly(null);
 //					}
 					
-					CamelModelElement node = NodeUtils.getSelectedNode(selection);
+					AbstractCamelModelElement node = NodeUtils.getSelectedNode(selection);
 					if (node != null && !(part instanceof CamelEditor)) {
 						//Activator.getLogger().debug("Part is: " + part + " of type : " + part.getClass());
 						if (node != DiagramView.this.node) {
@@ -197,7 +197,7 @@ public class DiagramView extends GraphViewSupport {
 		this.viewer.refresh();
 	}
 	
-	public void updateGraph(CamelModelElement node, IWorkbenchPart part) {
+	public void updateGraph(AbstractCamelModelElement node, IWorkbenchPart part) {
 		this.node = node;
 		this.selectionPart = part;
 		RouteGraphContentProvider contentProvider = new RouteGraphContentProvider();
@@ -220,9 +220,9 @@ public class DiagramView extends GraphViewSupport {
 
 	protected boolean selectNodeId(String toNode, String endpointUri) {
 		if (node != null) {
-			CamelModelElement parent = getParentContainer();
+			AbstractCamelModelElement parent = getParentContainer();
 			if (parent != null) {
-				CamelModelElement newSelection = parent.findNode(toNode);
+				AbstractCamelModelElement newSelection = parent.findNode(toNode);
 				if (newSelection != null) {
 					if (newSelection instanceof CamelRouteElement) {
 						// okay its the route we want to select, but we dont display the route node itself
@@ -249,10 +249,10 @@ public class DiagramView extends GraphViewSupport {
 
 	protected boolean selectEndpointUri(String uri) {
 		if (node != null) {
-			CamelModelElement parent = getParentContainer();
+			AbstractCamelModelElement parent = getParentContainer();
 			if (parent instanceof CamelRouteElement) {
 				CamelRouteElement route = (CamelRouteElement) parent;
-				CamelModelElement newSelection = route.findEndpoint(uri);
+				AbstractCamelModelElement newSelection = route.findEndpoint(uri);
 				if (newSelection != null) {
 					viewer.setSelection(new StructuredSelection(newSelection));
 					return true;
@@ -263,7 +263,7 @@ public class DiagramView extends GraphViewSupport {
 	}
 
 
-	protected CamelModelElement getParentContainer() {
+	protected AbstractCamelModelElement getParentContainer() {
 		return node.getParent();
 	}
 

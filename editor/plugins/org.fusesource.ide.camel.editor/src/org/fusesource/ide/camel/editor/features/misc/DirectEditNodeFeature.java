@@ -19,7 +19,7 @@ import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Text;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 
 public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
@@ -41,7 +41,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		GraphicsAlgorithm ga = context.getGraphicsAlgorithm();
 		// support direct editing, if it is a EClass, and the user clicked
 		// directly on the text and not somewhere else in the rectangle
-		if (bo instanceof CamelModelElement && ga instanceof Text) {
+		if (bo instanceof AbstractCamelModelElement && ga instanceof Text) {
 			// EClass eClass = (EClass) bo;
 			// additionally the flag isFrozen must be false
 			// return !eClass.isFrozen();
@@ -55,7 +55,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		// return the current name of the EClass
 		PictogramElement pe = context.getPictogramElement();
 		//EClass eClass = (EClass) getBusinessObjectForPictogramElement(pe);
-		CamelModelElement node = (CamelModelElement)getBusinessObjectForPictogramElement(pe);
+		AbstractCamelModelElement node = (AbstractCamelModelElement)getBusinessObjectForPictogramElement(pe);
 		//return eClass.getName();
 		return node.getDisplayText();
 	}

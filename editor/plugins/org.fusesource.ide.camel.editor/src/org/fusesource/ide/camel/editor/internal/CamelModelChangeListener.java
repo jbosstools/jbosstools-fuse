@@ -29,7 +29,7 @@ import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein

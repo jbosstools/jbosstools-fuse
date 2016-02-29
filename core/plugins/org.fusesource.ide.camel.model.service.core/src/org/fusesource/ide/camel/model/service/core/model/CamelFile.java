@@ -41,7 +41,7 @@ import org.xml.sax.Locator;
  * 
  * @author lhein
  */
-public class CamelFile extends CamelModelElement implements EventListener {
+public class CamelFile extends AbstractCamelModelElement implements EventListener {
 	
 	public static final int XML_INDENT_VALUE = 3;
 	
@@ -338,7 +338,7 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 */
 	@Override
 	public CamelContextElement getCamelContext() {
-		for (CamelModelElement e : getChildElements()) {
+		for (AbstractCamelModelElement e : getChildElements()) {
 			String translatedNodeName = e.getTranslatedNodeName();
 			if (translatedNodeName.equalsIgnoreCase("camelContext") || translatedNodeName.equalsIgnoreCase("routes")) {
 				return (CamelContextElement) e;

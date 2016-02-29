@@ -34,7 +34,7 @@ import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.widgets.ZestStyles;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 import org.fusesource.ide.jmx.commons.Activator;
@@ -49,7 +49,7 @@ public class DiagramGraphLabelProvider extends GraphLabelProviderSupport impleme
 IEntityStyleProvider, IConnectionStyleProvider,
 ISelectionChangedListener {
 	private final DiagramView view;
-	private Set<CamelModelElement> selectedConnections;
+	private Set<AbstractCamelModelElement> selectedConnections;
 	private NumberFormat numberFormat = NumberFormat.getInstance();
 	private boolean useNodeIdForLabel;
 
@@ -68,7 +68,7 @@ ISelectionChangedListener {
 	public void selectionChanged(SelectionChangedEvent event) {
 		GraphViewer viewer = getViewer();
 		if (selectedConnections != null) {
-			for (CamelModelElement node : selectedConnections) {
+			for (AbstractCamelModelElement node : selectedConnections) {
 				viewer.unReveal(node);
 			}
 			selectedConnections = null;
@@ -76,10 +76,10 @@ ISelectionChangedListener {
 
 		ISelection selection = event.getSelection();
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			selectedConnections = new HashSet<CamelModelElement>();
+			selectedConnections = new HashSet<AbstractCamelModelElement>();
 			for (Object o : ((IStructuredSelection) selection).toList()) {
-				if (o instanceof CamelModelElement) {
-					CamelModelElement node = (CamelModelElement) o;
+				if (o instanceof AbstractCamelModelElement) {
+					AbstractCamelModelElement node = (AbstractCamelModelElement) o;
 					viewer.reveal(node);
 					selectedConnections.add(node);
 					/*
@@ -132,7 +132,7 @@ ISelectionChangedListener {
 	public Image getImage(Object element) {
 		if (isShowIcon()) {
 			if (isRouteNode(element)) {
-				CamelModelElement node = (CamelModelElement) element;
+				AbstractCamelModelElement node = (AbstractCamelModelElement) element;
 				return Activator.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
 			}
 			if (element instanceof ImageProvider) {
@@ -144,7 +144,7 @@ ISelectionChangedListener {
 	}
 
 	protected boolean isRouteNode(Object element) {
-		return element instanceof CamelModelElement && !(element instanceof CamelElementConnection);
+		return element instanceof AbstractCamelModelElement && !(element instanceof CamelElementConnection);
 	}
 
 	/*
@@ -155,7 +155,7 @@ ISelectionChangedListener {
 	public String getText(Object element) {
 		try {
 			if (isRouteNode(element)) {
-				CamelModelElement node = (CamelModelElement) element;
+				AbstractCamelModelElement node = (AbstractCamelModelElement) element;
 				String label = node.getDisplayText(useNodeIdForLabel);
 				return label;
 			} else if (element instanceof HasName) {
@@ -190,7 +190,7 @@ ISelectionChangedListener {
 	@Override
 	public IFigure getTooltip(Object entity) {
 		if (isRouteNode(entity)) {
-			CamelModelElement node = (CamelModelElement) entity;
+			AbstractCamelModelElement node = (AbstractCamelModelElement) entity;
 			String label = node.getDescription();
 
 			String id = node.getId();
@@ -215,7 +215,7 @@ ISelectionChangedListener {
 	protected INodeStatistics getStatsFor(CamelElementConnection flow) {
 		NodeStatisticsContainer traceExchangeList = view.getNodeStatisticsContainer();
 		INodeStatistics stats = null;
-		CamelModelElement node = flow.getTarget();
+		AbstractCamelModelElement node = flow.getTarget();
 		if (traceExchangeList != null && node != null) {
 			stats = traceExchangeList.getNodeStats(node.getId());
 		}

@@ -58,8 +58,9 @@ import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizar
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -472,7 +473,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 			// we add all context wide endpoint elements
 			if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
-				for (CamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
+				for (AbstractCamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
 					boolean foundMatch = false;
 					for (GlobalConfigElementItem item : elementContributions) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
@@ -488,7 +489,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 			// we add all context wide data formats
 			if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
-				for (CamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
+				for (AbstractCamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
 					boolean foundMatch = false;
 					for (GlobalConfigElementItem item : elementContributions) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
@@ -535,10 +536,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 								case GLOBAL_ELEMENT:		String id = ((Element)newXMLNode).getAttribute("id");
 															cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);	
 															break;
-								case CONTEXT_DATAFORMAT:	CamelModelElement elemDF = new CamelModelElement(cf.getCamelContext(), newXMLNode);
+							case CONTEXT_DATAFORMAT:
+								AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
 															cf.getCamelContext().addDataFormat(elemDF);
 															break;
-								case CONTEXT_ENDPOINT:		CamelModelElement elemEP = new CamelModelElement(cf.getCamelContext(), newXMLNode);
+							case CONTEXT_ENDPOINT:
+								AbstractCamelModelElement elemEP = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
 															cf.getCamelContext().addEndpointDefinition(elemEP);
 															break;
 								default:					// ignore
@@ -566,7 +569,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		if (this.treeViewer.getSelection().isEmpty() == false) {
 			IStructuredSelection sel = (IStructuredSelection)this.treeViewer.getSelection();
 			Object o = Selections.getFirstSelection(sel);
-			Element modElem = o instanceof Element ? (Element)o : o instanceof CamelModelElement ? (Element)((CamelModelElement)o).getXmlNode() : null; 
+			Element modElem = o instanceof Element ? (Element)o : o instanceof AbstractCamelModelElement ? (Element)((AbstractCamelModelElement)o).getXmlNode() : null; 
 			ICustomGlobalConfigElementContribution extHandler = getExtensionForElement(modElem);
 			if (extHandler != null) {
 				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel().getDocument());
@@ -581,7 +584,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 					if (newXMLNode == null) return;
 					switch (extHandler.getGlobalConfigElementType()) {
 						case CONTEXT_DATAFORMAT:	// here we need to reinit the model element so it copies all information from the node
-						case CONTEXT_ENDPOINT:		CamelModelElement cme = (CamelModelElement)o;
+						case CONTEXT_ENDPOINT:		AbstractCamelModelElement cme = (AbstractCamelModelElement)o;
 													cme.initialize();
 													break;
 						case GLOBAL_ELEMENT:		
@@ -604,9 +607,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				ICustomGlobalConfigElementContribution extHandler = null;
 				Element deletedNode = null;
 				try {
-					if (selObj instanceof CamelModelElement) {
+					if (selObj instanceof AbstractCamelModelElement) {
 						// either an endpoint or a data format definition
-						CamelModelElement cme = (CamelModelElement)selObj;
+						AbstractCamelModelElement cme = (AbstractCamelModelElement)selObj;
 						deletedNode = (Element)cme.getXmlNode();
 						extHandler = getExtensionForElement(deletedNode);
 						if (cme.isEndpointElement()) {
@@ -650,8 +653,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		Element e = null;
 		if (element instanceof Element) {
 			e = (Element)element;
-		} else if (element instanceof CamelModelElement) {
-			e = (Element)((CamelModelElement)element).getXmlNode();
+		} else if (element instanceof AbstractCamelModelElement) {
+			e = (Element)((AbstractCamelModelElement)element).getXmlNode();
 		}
 		if (e != null) {
 			ICustomGlobalConfigElementContribution handler = getExtensionForElement(e);
@@ -786,8 +789,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				if (!Strings.isEmpty(node.getAttribute("id"))) text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
 				cell.setText(text.toString());
 				cell.setStyleRanges(text.getStyleRanges());
-			} else if (element instanceof CamelModelElement) {
-				CamelModelElement cme = (CamelModelElement)element;
+			} else if (element instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
 				Image img = getIconForElement(cme);
 				String type = Strings.capitalize(cme.getTranslatedNodeName());
 				for (GlobalConfigElementItem item : elementContributions) {
@@ -811,8 +814,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		private Image getIconForElement(Object element) {
 			if (element instanceof Node) {
 				return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
-			} else if (element instanceof CamelModelElement) {
-				CamelModelElement cme = (CamelModelElement)element;
+			} else if (element instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
 				if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
 					return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");	
 				} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {

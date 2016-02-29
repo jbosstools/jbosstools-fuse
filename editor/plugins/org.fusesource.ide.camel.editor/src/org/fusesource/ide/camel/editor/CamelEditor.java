@@ -62,7 +62,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
@@ -547,11 +547,11 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param nodes
 	 * @return
 	 */
-	private boolean findUnconnectedNode(List<CamelModelElement> nodes) {
+	private boolean findUnconnectedNode(List<AbstractCamelModelElement> nodes) {
 		boolean unconnected = false;
 		int nodesWithoutInput = 0;
 		int nodesWithoutOutput = 0;
-		for (CamelModelElement node : nodes) {
+		for (AbstractCamelModelElement node : nodes) {
 			if (!node.getChildElements().isEmpty()) {
 				unconnected = findUnconnectedNode(node.getChildElements());
 				if (unconnected) return true;
@@ -643,7 +643,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					designEditor.setModel(designEditor.getModel().reloadModelFromXML(text));
 					// add the diagram contents
 					ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(),
-							(CamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
+							(AbstractCamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
 					designEditor.getEditingDomain().getCommandStack().execute(importCommand);
 					designEditor.initializeDiagram(importCommand.getDiagram());
 					designEditor.refreshDiagramContents(null);

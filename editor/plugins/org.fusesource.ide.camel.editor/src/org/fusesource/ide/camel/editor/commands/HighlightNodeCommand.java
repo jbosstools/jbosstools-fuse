@@ -22,7 +22,7 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
@@ -31,10 +31,10 @@ import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 public class HighlightNodeCommand extends RecordingCommand {
 	
 	private final CamelDesignEditor designEditor;
-	private CamelModelElement node;
+	private AbstractCamelModelElement node;
 	private boolean highlight;
 
-	public HighlightNodeCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement node, boolean highlight) {
+	public HighlightNodeCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractCamelModelElement node, boolean highlight) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.node = node;

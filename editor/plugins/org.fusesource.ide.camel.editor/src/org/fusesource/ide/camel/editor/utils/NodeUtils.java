@@ -26,7 +26,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.HasOwner;
 
@@ -48,8 +48,8 @@ public class NodeUtils {
 	public static boolean isMandatory(Object bean, String propertyName) {
 		// lets look at the setter method and see if its got a @Required
 		// annotation
-		if (bean instanceof CamelModelElement) {
-			CamelModelElement node = (CamelModelElement) bean;
+		if (bean instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement node = (AbstractCamelModelElement) bean;
 			Eip eip = node.getUnderlyingMetaModelObject();
 			Parameter p = eip.getParameter(propertyName);
 			if (p != null) {
@@ -66,7 +66,7 @@ public class NodeUtils {
 	 * @param child		the child element
 	 * @return			true if the child is valid for the given container, otherwise false
 	 */
-	public static boolean isValidChild(CamelModelElement parent, CamelModelElement child) {
+	public static boolean isValidChild(AbstractCamelModelElement parent, AbstractCamelModelElement child) {
 		if (parent != null && child != null) {
     		String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
     		CamelModel metaModel = CamelModelFactory.getModelForVersion(camelVersion);
@@ -93,11 +93,11 @@ public class NodeUtils {
 	 * @param context
 	 * @param pes
 	 */
-    public static void getAllContainers(IFeatureProvider fp, CamelModelElement context, ArrayList<PictogramElement> pes) {
+    public static void getAllContainers(IFeatureProvider fp, AbstractCamelModelElement context, ArrayList<PictogramElement> pes) {
 		if (context instanceof CamelRouteElement) {
 			pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(context));
 		}
-    	for (CamelModelElement cme : context.getChildElements()) {
+    	for (AbstractCamelModelElement cme : context.getChildElements()) {
 			if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().canHaveChildren()) {
 				pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(cme));
 			}
@@ -107,10 +107,10 @@ public class NodeUtils {
 		}
 	}
 
-    public static CamelModelElement toCamelElement(Object input) {
-		CamelModelElement answer = null;
-		if (input instanceof CamelModelElement) {
-			return (CamelModelElement) input;
+    public static AbstractCamelModelElement toCamelElement(Object input) {
+		AbstractCamelModelElement answer = null;
+		if (input instanceof AbstractCamelModelElement) {
+			return (AbstractCamelModelElement) input;
 // TODO: check what AbstractNodeFacade is about and how to migrate if needed
 //		} else if (input instanceof AbstractNodeFacade) {
 //			AbstractNodeFacade facade = (AbstractNodeFacade) input;
@@ -125,7 +125,7 @@ public class NodeUtils {
 					answer = CamelUtils.getDiagramEditor().getSelectedContainer() != null ? CamelUtils.getDiagramEditor().getSelectedContainer() : CamelUtils.getDiagramEditor().getModel();				
 				} else {
 					// select the node
-					answer = (CamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
+					answer = (AbstractCamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
 				}
 			}
 		} else if (input instanceof AbstractEditPart) {
@@ -134,10 +134,10 @@ public class NodeUtils {
 			answer = toCamelElement(model);
 		} else if (input instanceof ContainerShape) {
 			ContainerShape shape = (ContainerShape) input;
-			answer = (CamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
+			answer = (AbstractCamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
 		}
 		if (input != null && answer == null) {
-			answer = (CamelModelElement) Platform.getAdapterManager().getAdapter(input, CamelModelElement.class);
+			answer = (AbstractCamelModelElement) Platform.getAdapterManager().getAdapter(input, AbstractCamelModelElement.class);
 		}
 		if (answer == null && input instanceof HasOwner) {
 			HasOwner ho = (HasOwner) input;
@@ -146,8 +146,8 @@ public class NodeUtils {
 		return answer;
 	}
     
-    public static CamelModelElement getSelectedNode(ISelection selection) {
-    	CamelModelElement answer = null;
+    public static AbstractCamelModelElement getSelectedNode(ISelection selection) {
+    	AbstractCamelModelElement answer = null;
 		if (selection instanceof IStructuredSelection) {
 			Object input = ((IStructuredSelection) selection).getFirstElement();
 			answer = toCamelElement(input);

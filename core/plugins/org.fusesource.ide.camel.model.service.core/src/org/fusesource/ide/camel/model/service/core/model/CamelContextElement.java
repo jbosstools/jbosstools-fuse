@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
@@ -24,7 +25,7 @@ import org.w3c.dom.NodeList;
  * 
  * @author lhein
  */
-public class CamelContextElement extends CamelModelElement {
+public class CamelContextElement extends AbstractCamelModelElement {
 	
 	public static final String ATTR_Id = "id";
 	public static final String ATTR_UseMDCLogging = "useMDCLogging";
@@ -33,12 +34,12 @@ public class CamelContextElement extends CamelModelElement {
 	/**
 	 * contains endpoint definitions stored using their ID value
 	 */
-	private Map<String, CamelModelElement> endpointDefinitions = new HashMap<String, CamelModelElement>();
+	private Map<String, AbstractCamelModelElement> endpointDefinitions = new HashMap<String, AbstractCamelModelElement>();
 	
 	/**
 	 * contains the dataformat definitions stored using their ID value
 	 */
-	private Map<String, CamelModelElement> dataformats = new HashMap<String, CamelModelElement>();
+	private Map<String, AbstractCamelModelElement> dataformats = new HashMap<String, AbstractCamelModelElement>();
 	
 	/**
 	 * 
@@ -50,14 +51,14 @@ public class CamelContextElement extends CamelModelElement {
 	/**
 	 * @return the endpointDefinitions
 	 */
-	public Map<String, CamelModelElement> getEndpointDefinitions() {
+	public Map<String, AbstractCamelModelElement> getEndpointDefinitions() {
 		return this.endpointDefinitions;
 	}
 	
 	/**
 	 * @param endpointDefinitions the endpointDefinitions to set
 	 */
-	public void setEndpointDefinitions(Map<String, CamelModelElement> endpointDefinitions) {
+	public void setEndpointDefinitions(Map<String, AbstractCamelModelElement> endpointDefinitions) {
 		this.endpointDefinitions = endpointDefinitions;
 	}
 
@@ -66,7 +67,7 @@ public class CamelContextElement extends CamelModelElement {
 	 * 
 	 * @param def
 	 */
-	public void addEndpointDefinition(CamelModelElement def) {
+	public void addEndpointDefinition(AbstractCamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) return;
 		this.endpointDefinitions.put(def.getId(), def);
 		boolean childExists = false;
@@ -91,7 +92,7 @@ public class CamelContextElement extends CamelModelElement {
 	 * 
 	 * @param def
 	 */
-	public void removeEndpointDefinition(CamelModelElement def) {
+	public void removeEndpointDefinition(AbstractCamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) {
 			this.endpointDefinitions.remove(def.getId());
 			boolean childExists = false;
@@ -117,14 +118,14 @@ public class CamelContextElement extends CamelModelElement {
 	/**
 	 * @return the dataformats
 	 */
-	public Map<String, CamelModelElement> getDataformats() {
+	public Map<String, AbstractCamelModelElement> getDataformats() {
 		return this.dataformats;
 	}
 	
 	/**
 	 * @param dataformats the dataformats to set
 	 */
-	public void setDataformats(Map<String, CamelModelElement> dataformats) {
+	public void setDataformats(Map<String, AbstractCamelModelElement> dataformats) {
 		this.dataformats = dataformats;
 	}
 	
@@ -133,7 +134,7 @@ public class CamelContextElement extends CamelModelElement {
 	 * 
 	 * @param df
 	 */
-	public void addDataFormat(CamelModelElement df) {
+	public void addDataFormat(AbstractCamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) return;
 		this.dataformats.put((String)df.getId(), df);
 		boolean childExists = false;
@@ -172,7 +173,7 @@ public class CamelContextElement extends CamelModelElement {
 	 * 
 	 * @param df
 	 */
-	public void removeDataFormat(CamelModelElement df) {
+	public void removeDataFormat(AbstractCamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) {
 			this.dataformats.remove(df.getId());
 			Node dataFormatsNode = null;
@@ -234,7 +235,7 @@ public class CamelContextElement extends CamelModelElement {
 	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#ensureUniqueID(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public void ensureUniqueID(CamelModelElement elem) {
+	public void ensureUniqueID(AbstractCamelModelElement elem) {
 		super.ensureUniqueID(elem);
 	}
 	
@@ -271,12 +272,12 @@ public class CamelContextElement extends CamelModelElement {
 				for (int y=0; y<dfs.getLength(); y++) {
 					Node tmp_df = dfs.item(y);
 					if (tmp_df.getNodeType() != Node.ELEMENT_NODE) continue;
-					CamelModelElement cme = new CamelModelElement(this, tmp_df);
+					CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp_df);
 					cme.initialize();
 					this.dataformats.put(cme.getId(), cme);
 				}
 			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ENDPOINT_NODE_NAME)) {
-				CamelModelElement cme = new CamelModelElement(this, tmp);
+				CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp);
 				cme.initialize();
 				this.endpointDefinitions.put(cme.getId(), cme);
 			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ROUTE_NODE_NAME)) {
@@ -289,6 +290,37 @@ public class CamelContextElement extends CamelModelElement {
 		}
 	}
 	
+	public List<AbstractCamelModelElement> findAllNodesWithId(String nodeId) {
+		List<AbstractCamelModelElement> result = super.findAllNodesWithId(nodeId);
+		if (getDataformats().containsKey(nodeId)) {
+			result.add(getDataformats().get(nodeId));
+		}
+		if (getEndpointDefinitions().containsKey(nodeId)) {
+			result.add(getEndpointDefinitions().get(nodeId));
+		}
+		return result;
+	}
+
+	/**
+	 * searches the model for a node with the given id
+	 * 
+	 * @param nodeId
+	 * @return the node or null
+	 */
+	public AbstractCamelModelElement findNode(String nodeId) {
+		AbstractCamelModelElement res = super.findNode(nodeId);
+		if (res != null) {
+			return res;
+		}
+		if (getDataformats().containsKey(nodeId)) {
+			return getDataformats().get(nodeId);
+		}
+		if (getEndpointDefinitions().containsKey(nodeId)) {
+			return getEndpointDefinitions().get(nodeId);
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelContext()
 	 */

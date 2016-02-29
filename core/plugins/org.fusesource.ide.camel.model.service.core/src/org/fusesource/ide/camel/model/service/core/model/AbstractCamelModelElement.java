@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author lhein
  */
-public class CamelModelElement {
+public abstract class AbstractCamelModelElement {
 
 	protected static final String ID_ATTRIBUTE = "id";
 	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
@@ -45,16 +45,16 @@ public class CamelModelElement {
 	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
 	
 	// children is a list of objects which are no route outputs
-	private List<CamelModelElement> childElements = new ArrayList<CamelModelElement>();
+	private List<AbstractCamelModelElement> childElements = new ArrayList<AbstractCamelModelElement>();
 
 	// input is the element which comes before this one
-	private CamelModelElement inputElement;
+	private AbstractCamelModelElement inputElement;
 
 	// output is the route output of this element
-	private CamelModelElement outputElement;
+	private AbstractCamelModelElement outputElement;
 
 	// the parent node
-	private CamelModelElement parent;
+	private AbstractCamelModelElement parent;
 
 	// the catalog element which represents this object
 	private Node xmlNode;
@@ -82,7 +82,7 @@ public class CamelModelElement {
 	 * @param underlyingNode
 	 *            the camel xml node
 	 */
-	public CamelModelElement(CamelModelElement parent, Node underlyingNode) {
+	protected AbstractCamelModelElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		this.xmlNode = underlyingNode;
 		this.parent = parent;
 
@@ -133,14 +133,14 @@ public class CamelModelElement {
 	 * @param uri
 	 * @return
 	 */
-	public CamelModelElement findEndpoint(String uri) {
+	public AbstractCamelModelElement findEndpoint(String uri) {
 		if (getChildElements().isEmpty()) {
 			if (getParameter("uri") != null && ((String)getParameter("uri")).equals(uri)) {
 				return this;
 			}
 		} else {
-			for (CamelModelElement cme : getChildElements()) {
-				CamelModelElement e = cme.findEndpoint(uri);
+			for (AbstractCamelModelElement cme : getChildElements()) {
+				AbstractCamelModelElement e = cme.findEndpoint(uri);
 				if (e != null) return e;
 			}	
 		}		
@@ -212,7 +212,7 @@ public class CamelModelElement {
 	/**
 	 * @return the parent
 	 */
-	public CamelModelElement getParent() {
+	public AbstractCamelModelElement getParent() {
 		return this.parent;
 	}
 
@@ -220,7 +220,7 @@ public class CamelModelElement {
 	 * @param parent
 	 *            the parent to set
 	 */
-	public void setParent(CamelModelElement parent) {
+	public void setParent(AbstractCamelModelElement parent) {
 		this.parent = parent;
 	}
 
@@ -345,9 +345,9 @@ public class CamelModelElement {
 		if( propertyToCheck != null ) {
 			Object propVal = getParameter(propertyToCheck);
 			if (propVal != null) {
-				if( propVal instanceof CamelModelElement) {
+				if( propVal instanceof AbstractCamelModelElement) {
 					// seems to be an expression
-					String expression = ((CamelModelElement)propVal).getParameter("expression") != null ? (String)((CamelModelElement)propVal).getParameter("expression") : null;
+					String expression = ((AbstractCamelModelElement)propVal).getParameter("expression") != null ? (String)((AbstractCamelModelElement)propVal).getParameter("expression") : null;
 					if (expression != null)	return result + expression;			
 				} else {
 					return result + propVal.toString();
@@ -442,7 +442,7 @@ public class CamelModelElement {
 	/**
 	 * @return the inputElement
 	 */
-	public CamelModelElement getInputElement() {
+	public AbstractCamelModelElement getInputElement() {
 		return this.inputElement;
 	}
 
@@ -454,7 +454,7 @@ public class CamelModelElement {
 	 * @param inputElement
 	 *            the inputElement to set
 	 */
-	public void setInputElement(CamelModelElement inputElement) {
+	public void setInputElement(AbstractCamelModelElement inputElement) {
 		this.inputElement = inputElement;
 		// now move the node directly after inputElement in DOM tree
 		if (inputElement != null) {
@@ -533,7 +533,7 @@ public class CamelModelElement {
 	/**
 	 * @return the outputElement
 	 */
-	public CamelModelElement getOutputElement() {
+	public AbstractCamelModelElement getOutputElement() {
 		return this.outputElement;
 	}
 
@@ -541,7 +541,7 @@ public class CamelModelElement {
 	 * @param outputElement
 	 *            the outputElement to set
 	 */
-	public void setOutputElement(CamelModelElement outputElement) {
+	public void setOutputElement(AbstractCamelModelElement outputElement) {
 		this.outputElement = outputElement;
 		if (isEndpointElement()) {
 			checkEndpointType();
@@ -551,7 +551,7 @@ public class CamelModelElement {
 	/**
 	 * @return the childElements
 	 */
-	public List<CamelModelElement> getChildElements() {
+	public List<AbstractCamelModelElement> getChildElements() {
 		return this.childElements;
 	}
 
@@ -559,7 +559,7 @@ public class CamelModelElement {
 	 * @param childElements
 	 *            the childElements to set
 	 */
-	public void setChildElements(List<CamelModelElement> childElements) {
+	public void setChildElements(List<AbstractCamelModelElement> childElements) {
 		this.childElements = childElements;
 	}
 
@@ -575,7 +575,7 @@ public class CamelModelElement {
 	 * 
 	 * @param element
 	 */
-	public void addChildElement(CamelModelElement element) {
+	public void addChildElement(AbstractCamelModelElement element) {
 		if (this.childElements.contains(element) == false) {
 			this.childElements.add(element);
 		}
@@ -586,7 +586,7 @@ public class CamelModelElement {
 	 * 
 	 * @param element
 	 */
-	public void removeChildElement(CamelModelElement element) {
+	public void removeChildElement(AbstractCamelModelElement element) {
 		if (childElements.contains(element)) {
 			childElements.remove(element);
 			boolean childFound = false;
@@ -628,8 +628,8 @@ public class CamelModelElement {
 	public void removeParameter(String name) {
 		if (this.parameters.containsKey(name)) {
 			Object removedItem = this.parameters.remove(name);
-			if (removedItem instanceof CamelModelElement) {
-				getXmlNode().removeChild(((CamelModelElement)removedItem).getXmlNode());
+			if (removedItem instanceof AbstractCamelModelElement) {
+				getXmlNode().removeChild(((AbstractCamelModelElement)removedItem).getXmlNode());
 			}
 			((Element) getXmlNode()).removeAttribute(name);
 		}
@@ -699,7 +699,7 @@ public class CamelModelElement {
 		// save param in internal map
 		this.parameters.put(name, value);
 		
-		if (value instanceof CamelModelElement && getParameter("ref") != null) {
+		if (value instanceof AbstractCamelModelElement && getParameter("ref") != null) {
 			removeParameter("ref");
 		} else if (name.equalsIgnoreCase("ref")) {
 			removePossibleDataFormatsInFavorToREF();
@@ -730,13 +730,13 @@ public class CamelModelElement {
 				e.setTextContent(null);
 			}
 		} else {
-			if (kind == null && value instanceof CamelModelElement == false) {
+			if (kind == null && value instanceof AbstractCamelModelElement == false) {
 				kind = "value";
 			}
-			if (kind == null && value instanceof CamelModelElement) {
+			if (kind == null && value instanceof AbstractCamelModelElement) {
 				// special case for nested expressions
 				Node oldChild = getFirstChild(e);
-				Node newChild = ((CamelModelElement) value).getXmlNode();
+				Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
 				e.replaceChild(newChild, oldChild);
 			} else if (kind.equalsIgnoreCase("attribute")) {
 				String defaultValue = this.underlyingMetaModelObject != null
@@ -772,9 +772,9 @@ public class CamelModelElement {
 				}
 			} else if (kind.equalsIgnoreCase("element") && javaType.equals("org.apache.camel.model.DataFormatDefinition")) {
 				// expression element handling
-				CamelModelElement df = null;
-				if (value instanceof CamelModelElement) {
-					df = (CamelModelElement) value;
+				AbstractCamelModelElement df = null;
+				if (value instanceof AbstractCamelModelElement) {
+					df = (AbstractCamelModelElement) value;
 				}
 				Eip subEip = getEipByName(df.getNodeTypeId());
 				if (subEip != null) {
@@ -817,9 +817,9 @@ public class CamelModelElement {
 				}
 			} else if (kind.equalsIgnoreCase("expression")) {
 				// expression element handling
-				CamelModelElement exp = null;
-				if (value instanceof CamelModelElement) {
-					exp = (CamelModelElement) value;
+				AbstractCamelModelElement exp = null;
+				if (value instanceof AbstractCamelModelElement) {
+					exp = (AbstractCamelModelElement) value;
 				}
 				Eip subEip = getEipByName(exp.getNodeTypeId());
 				if (subEip != null) {
@@ -876,7 +876,7 @@ public class CamelModelElement {
 							break;
 						}
 					}
-					Node newChild = ((CamelModelElement) value).getXmlNode();
+					Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
 					e.replaceChild(newChild, oldChild);
 				}
 			} else if (kind.equalsIgnoreCase("value")) {
@@ -948,7 +948,7 @@ public class CamelModelElement {
 		linkChildrenToAttributes();
 	}
 
-	public void ensureUniqueID(CamelModelElement elem) {
+	public void ensureUniqueID(AbstractCamelModelElement elem) {
 		// if this element is also a parent element parameter then we don't
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null && 
@@ -963,7 +963,7 @@ public class CamelModelElement {
 				elem.setId(elem.getNewID());
 			}
 		}
-		for (CamelModelElement e : elem.getChildElements()) {
+		for (AbstractCamelModelElement e : elem.getChildElements()) {
 			e.ensureUniqueID(e);
 		}
 	}
@@ -1030,7 +1030,7 @@ public class CamelModelElement {
 					}
 				} else if (	param.getKind().equalsIgnoreCase("element") && 
 							param.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition")) {
-					CamelModelElement dfNode = null;
+					AbstractCamelModelElement dfNode = null;
 					String[] dfs = param.getOneOf().split(",");
 					ArrayList<String> dfList = new ArrayList<String>();
 					for (String df : dfs)
@@ -1039,14 +1039,14 @@ public class CamelModelElement {
 						Node subNode = getXmlNode().getChildNodes().item(i);
 						if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
 						if (subNode != null && dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
-							dfNode = new CamelModelElement(this, subNode);
+							dfNode = new CamelBasicModelElement(this, subNode);
 							dfNode.initialize();
 							// expNode.setParent(this);
 							setParameter(param.getName(), dfNode);
 						}
 					}
 				} else if (param.getKind().equalsIgnoreCase("expression")) {
-					CamelModelElement expNode = null;
+					AbstractCamelModelElement expNode = null;
 					String[] langs = param.getOneOf().split(",");
 					ArrayList<String> langList = new ArrayList<String>();
 					for (String lang : langs)
@@ -1060,7 +1060,7 @@ public class CamelModelElement {
 							// this case is for expressions which are directly
 							// stored under the parent node
 							// for instance when.<expression>
-							expNode = new CamelModelElement(this, subNode);
+							expNode = new CamelBasicModelElement(this, subNode);
 							expNode.initialize();
 							// expNode.setParent(this);
 							setParameter(param.getName(), expNode);
@@ -1076,10 +1076,10 @@ public class CamelModelElement {
 								if (subExpNode.getNodeType() == Node.ELEMENT_NODE && subExpNode != null
 										&& langList.contains(CamelUtils.getTranslatedNodeName(subExpNode))) {
 									// found the sub -> create container element
-									CamelModelElement expContainer = new CamelModelElement(this, subNode);
+									AbstractCamelModelElement expContainer = new CamelBasicModelElement(this, subNode);
 									// expContainer.initialize();
 									// expContainer.setParent(this);
-									expNode = new CamelModelElement(expContainer, subExpNode);
+									expNode = new CamelBasicModelElement(expContainer, subExpNode);
 									expNode.initialize();
 									// expNode.setParent(this);
 									expContainer.setParameter("expression", expNode);
@@ -1181,13 +1181,13 @@ public class CamelModelElement {
 		boolean canHaveChildren = hasChildren(nodeName) || hasSpecialHandling(nodeName);
 		if (canHaveChildren) {
 			NodeList children = getXmlNode().getChildNodes();
-			CamelModelElement lastNode = null;
+			AbstractCamelModelElement lastNode = null;
 			for (int i = 0; i < children.getLength(); i++) {
 				Node tmp = children.item(i);
 				if (tmp.getNodeType() != Node.ELEMENT_NODE)
 					continue;
 				if (!isUsedAsAttribute(tmp)) {
-					CamelModelElement cme = new CamelModelElement(this, tmp);
+					AbstractCamelModelElement cme = new CamelBasicModelElement(this, tmp);
 					addChildElement(cme);
 					cme.initialize();
 					boolean createLink = lastNode != null && this.getNodeTypeId().equals("choice") == false;
@@ -1257,7 +1257,7 @@ public class CamelModelElement {
 			return;
 		for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
 			if (p.getKind().equalsIgnoreCase("expression") || p.getKind().equalsIgnoreCase("element")) {
-				for (CamelModelElement child : getChildElements()) {
+				for (AbstractCamelModelElement child : getChildElements()) {
 					if (child.getNodeTypeId().equalsIgnoreCase(p.getName()) && p.getType().equalsIgnoreCase("object")) {
 						// so we have a child of type element or expression
 						// which should be handled as an attribute
@@ -1309,7 +1309,7 @@ public class CamelModelElement {
 				if (u.startsWith("ref:")) {
 					// if its a ref we lookup what is the reference scheme
 					String refId = u.substring(u.indexOf(":") + 1);
-					CamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
+					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
 					if (endpointRef != null) {
 						String refUri = (String) endpointRef.getParameter("uri");
 						if (refUri != null) {
@@ -1403,7 +1403,7 @@ public class CamelModelElement {
 	 */
 	public CamelFile getCamelFile() {
 		if (this.cf == null) {
-			CamelModelElement tmp = this;
+			AbstractCamelModelElement tmp = this;
 			while (tmp.getParent() != null && tmp.getParent() instanceof CamelFile == false) {
 				tmp = tmp.getParent();
 			}
@@ -1421,7 +1421,7 @@ public class CamelModelElement {
 	 */
 	public CamelContextElement getCamelContext() {
 		if (this.context == null) {
-			CamelModelElement tmp = this;
+			AbstractCamelModelElement tmp = this;
 			while (tmp.getParent() != null && tmp.getParent() instanceof CamelContextElement == false) {
 				tmp = tmp.getParent();
 			}
@@ -1484,7 +1484,7 @@ public class CamelModelElement {
 	 * @param nodeId
 	 * @return the node or null
 	 */
-	public CamelModelElement findNode(String nodeId) {
+	public AbstractCamelModelElement findNode(String nodeId) {
 		if (getId() != null && getId().equals(nodeId)) {
 			return this;
 		}
@@ -1504,8 +1504,8 @@ public class CamelModelElement {
 		}
 		
 		if (getChildElements() != null) {
-			for (CamelModelElement e : getChildElements()) {
-				CamelModelElement cme = e.findNode(nodeId);
+			for (AbstractCamelModelElement e : getChildElements()) {
+				AbstractCamelModelElement cme = e.findNode(nodeId);
 				if (cme != null)
 					return cme;
 			}
@@ -1514,29 +1514,15 @@ public class CamelModelElement {
 		return null;
 	}
 	
-	public ArrayList<CamelModelElement> findAllNodesWithId(String nodeId) {
-		ArrayList<CamelModelElement> result = new ArrayList<CamelModelElement>();
+	public List<AbstractCamelModelElement> findAllNodesWithId(String nodeId) {
+		List<AbstractCamelModelElement> result = new ArrayList<AbstractCamelModelElement>();
 		
 		if (getId() != null && getId().equals(nodeId)) {
 			result.add(this);
 		}
-
-		if (this instanceof CamelContextElement) {
-			CamelContextElement ctx = (CamelContextElement)this;
-			if (ctx.getDataformats().isEmpty() == false) {
-				if (ctx.getDataformats().containsKey(nodeId)) {
-					result.add(ctx.getDataformats().get(nodeId));
-				}
-			}
-			if (ctx.getEndpointDefinitions().isEmpty() == false) {
-				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
-					result.add(ctx.getEndpointDefinitions().get(nodeId));
-				}
-			}
-		}
 		
 		if (getChildElements() != null) {
-			for (CamelModelElement e : getChildElements()) {
+			for (AbstractCamelModelElement e : getChildElements()) {
 				result.addAll(e.findAllNodesWithId(nodeId));
 			}
 		}

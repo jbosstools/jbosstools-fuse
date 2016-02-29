@@ -20,7 +20,7 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.w3c.dom.Node;
 
 
@@ -37,7 +37,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	 * @param deps	optional dependencies...if not applicable hand over null or empty list
 	 */
 	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, String endpointUri, List<Dependency> deps) {
-		super(fp, name, description, (Class<? extends CamelModelElement>)null);
+		super(fp, name, description, (Class<? extends AbstractCamelModelElement>)null);
 		this.endpointUri = endpointUri;
 		this.deps = deps;
 		setEip(getEipByName("to"));
@@ -55,7 +55,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
 	 */
 	@Override
-	protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+	protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
 		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 		if (editor.getModel() != null) { 
 			Node newNode = null;

@@ -11,11 +11,11 @@
 
 package org.fusesource.ide.camel.editor.utils;
 
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 public interface INodeViewer {
 
-	CamelModelElement getSelectedNode();
+	AbstractCamelModelElement getSelectedNode();
 
-	void setSelectedNode(CamelModelElement newSelection);
+	void setSelectedNode(AbstractCamelModelElement newSelection);
 }

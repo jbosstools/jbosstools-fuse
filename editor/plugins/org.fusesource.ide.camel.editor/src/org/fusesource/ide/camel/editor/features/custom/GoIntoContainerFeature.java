@@ -15,7 +15,7 @@ import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -39,8 +39,8 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		PictogramElement[] pes = context.getPictogramElements();
 		if (pes != null && pes.length == 1) {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
-			if (bo instanceof CamelModelElement) {
-				CamelModelElement cme = (CamelModelElement)bo;
+			if (bo instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
 				return 	cme.getNodeTypeId().equals("route") && 
 						cme.equals(CamelUtils.getDiagramEditor().getSelectedContainer()) == false &&
 						cme.getCamelContext().getChildElements().size() > 1;
@@ -57,8 +57,8 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		PictogramElement[] pes = context.getPictogramElements();
 		if (pes != null && pes.length == 1) {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
-	 	   	if(bo instanceof CamelModelElement) {
-	 	   		CamelModelElement cme = (CamelModelElement)bo;
+	 	   	if(bo instanceof AbstractCamelModelElement) {
+	 	   		AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
 	 	   		CamelUtils.getDiagramEditor().setSelectedContainer(cme);
 	 	   	}
 		}

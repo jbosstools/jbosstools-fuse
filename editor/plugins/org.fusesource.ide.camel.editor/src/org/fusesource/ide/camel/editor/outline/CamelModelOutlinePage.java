@@ -18,7 +18,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 
 /**
@@ -57,7 +57,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		viewer.setContentProvider(new CamelModelOutlineContentProvider());
 		viewer.setLabelProvider(new CamelModelOutlineLabelProvider());
 		viewer.addSelectionChangedListener(this);
-		CamelModelElement selectedContainer = this.designEditor.getSelectedContainer();
+		AbstractCamelModelElement selectedContainer = this.designEditor.getSelectedContainer();
 		if (selectedContainer == null) selectedContainer = this.designEditor.getModel().getCamelContext();
 		viewer.setInput(getModelRoots(selectedContainer));
 		viewer.expandAll();
@@ -68,7 +68,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * 
 	 * @param cme
 	 */
-	public void setOutlineSelection(CamelModelElement cme) {
+	public void setOutlineSelection(AbstractCamelModelElement cme) {
 		if (cme == null || cme.getId() == null || getTreeViewer() == null || getTreeViewer().getTree().isDisposed()) return;
 		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
 		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
@@ -80,13 +80,13 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		}
 	}
 
-	private TreeItem findTreeItemForElement(CamelModelElement cme, TreeItem[] treeItems) {
+	private TreeItem findTreeItemForElement(AbstractCamelModelElement cme, TreeItem[] treeItems) {
 		TreeItem tRes = null;
 		for (TreeItem ti : treeItems) {
 			if (tRes != null) break;
 			Object o = ti.getData();
-			if (o instanceof CamelModelElement) {
-				CamelModelElement cme2 = (CamelModelElement)o;
+			if (o instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement cme2 = (AbstractCamelModelElement)o;
 				if (cme.getId().equals(cme2.getId())) {
 					tRes = ti;
 					break;
@@ -114,21 +114,21 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * 
 	 * @param container
 	 */
-	public void changeInput(CamelModelElement container) {
+	public void changeInput(AbstractCamelModelElement container) {
 		if (getTreeViewer() != null && getTreeViewer().getTree().isDisposed() == false) {
 			getTreeViewer().setInput(getModelRoots(container));
 			modelChanged();
 		}
 	}
 	
-	private CamelModelElement[] getModelRoots(CamelModelElement selectedContainer) {
-		CamelModelElement[] container = null;
+	private AbstractCamelModelElement[] getModelRoots(AbstractCamelModelElement selectedContainer) {
+		AbstractCamelModelElement[] container = null;
 		if (selectedContainer instanceof CamelFile) {
-			container = selectedContainer.getChildElements().get(0).getChildElements().toArray(new CamelModelElement[selectedContainer.getChildElements().size()]);
+			container = selectedContainer.getChildElements().get(0).getChildElements().toArray(new AbstractCamelModelElement[selectedContainer.getChildElements().size()]);
 		} else if (selectedContainer instanceof CamelContextElement) {
-			container = selectedContainer.getChildElements().toArray(new CamelModelElement[selectedContainer.getChildElements().size()]);
+			container = selectedContainer.getChildElements().toArray(new AbstractCamelModelElement[selectedContainer.getChildElements().size()]);
 		} else {
-			container = new CamelModelElement[] { selectedContainer };
+			container = new AbstractCamelModelElement[] { selectedContainer };
 		}
 		return container;
 	}

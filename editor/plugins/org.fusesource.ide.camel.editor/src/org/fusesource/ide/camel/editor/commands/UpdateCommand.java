@@ -17,7 +17,7 @@ import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -25,9 +25,9 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 public class UpdateCommand extends RecordingCommand {
 	
 	private final CamelDesignEditor designEditor;
-	private CamelModelElement node;
+	private AbstractCamelModelElement node;
 
-	public UpdateCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement node) {
+	public UpdateCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractCamelModelElement node) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.node = node;
@@ -35,7 +35,7 @@ public class UpdateCommand extends RecordingCommand {
 
 	@Override
 	protected void doExecute() {
-		CamelModelElement selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
+		AbstractCamelModelElement selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
 		if (selectedNode == null) {
 			// use the route node in this case
 			selectedNode = designEditor.getModel().getCamelContext();
@@ -43,7 +43,7 @@ public class UpdateCommand extends RecordingCommand {
 		updateFigure(selectedNode);
 	}
 	
-	private void updateFigure(CamelModelElement node) {
+	private void updateFigure(AbstractCamelModelElement node) {
 		if (node == null) return;
 
 		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
@@ -53,7 +53,7 @@ public class UpdateCommand extends RecordingCommand {
 		}
 		
 		// do check if underlying xml node changed / document changed
-		CamelModelElement bo2 = designEditor.getModel().findNode(node.getId());
+		AbstractCamelModelElement bo2 = designEditor.getModel().findNode(node.getId());
 		if (pe != null && bo2 != null && bo2.getXmlNode().isEqualNode(node.getXmlNode()) == false) {
 			designEditor.getFeatureProvider().link(pe, bo2);
 		}
@@ -61,7 +61,7 @@ public class UpdateCommand extends RecordingCommand {
 		UpdateContext ctx = new UpdateContext(pe);
 		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);
 		updateFeature.update(ctx);
-		for (CamelModelElement elem : node.getChildElements()) {
+		for (AbstractCamelModelElement elem : node.getChildElements()) {
 			updateFigure(elem);
 		}
 	}

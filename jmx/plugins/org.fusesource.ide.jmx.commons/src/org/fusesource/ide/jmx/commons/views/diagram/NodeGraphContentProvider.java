@@ -19,7 +19,7 @@ import java.util.Set;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.jmx.commons.tree.ConnectedNode;
 import org.fusesource.ide.jmx.commons.tree.GraphableNode;
@@ -52,10 +52,10 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 	 */
 	@Override
 	public Object[] getElements(Object input) {
-		if (input instanceof CamelModelElement) {
-			CamelModelElement node = (CamelModelElement) input;
+		if (input instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement node = (AbstractCamelModelElement) input;
 
-			Set<CamelModelElement> set = new HashSet<CamelModelElement>();
+			Set<AbstractCamelModelElement> set = new HashSet<AbstractCamelModelElement>();
 			CamelRouteElement parent;
 			if (node instanceof CamelRouteElement) {
 				parent = (CamelRouteElement) node;
@@ -88,8 +88,8 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 		}
 	}
 	
-	private CamelRouteElement getRoute(CamelModelElement e) {
-		CamelModelElement cme = e;
+	private CamelRouteElement getRoute(AbstractCamelModelElement e) {
+		AbstractCamelModelElement cme = e;
 		while (cme != null && cme instanceof CamelRouteElement == false) {
 			cme = cme.getParent();
 		}
@@ -99,12 +99,12 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 		return null;
 	}
 
-	private void getAllOutputs(CamelModelElement elem, Set<CamelModelElement> set) {
+	private void getAllOutputs(AbstractCamelModelElement elem, Set<AbstractCamelModelElement> set) {
 		if (elem.getOutputElement() != null) set.add(elem.getOutputElement());
 	}
 	
-	private void getAllChildren(List<CamelModelElement> elems, Set<CamelModelElement> set) {
-		for (CamelModelElement e : elems) {
+	private void getAllChildren(List<AbstractCamelModelElement> elems, Set<AbstractCamelModelElement> set) {
+		for (AbstractCamelModelElement e : elems) {
 			set.add(e);
 			getAllOutputs(e, set);
 			if (e.getChildElements().isEmpty() == false) {
@@ -121,8 +121,8 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 		} else if (entity instanceof CamelRouteElement) {
 			CamelRouteElement route = (CamelRouteElement) entity;
 			return route.getInputs().toArray();
-		} else if (entity instanceof CamelModelElement) {
-			CamelModelElement node = (CamelModelElement) entity;
+		} else if (entity instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement node = (AbstractCamelModelElement) entity;
 			return new Object[] {node.getOutputElement()};
 		} else if (entity instanceof ConnectedNode) {
 			ConnectedNode node = (ConnectedNode) entity;

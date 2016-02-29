@@ -35,7 +35,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.swt.graphics.Rectangle;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -103,7 +103,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 				((Connection) cc.getPictogramElements()[0]).getStart().getParent() : 
 				cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
-        return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
+        return (bo != null && bo instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
 	}
 	
 	/*

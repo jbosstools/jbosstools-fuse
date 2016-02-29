@@ -25,7 +25,7 @@ import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.swt.graphics.Rectangle;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 
 public class LayoutNodeFeature extends AbstractLayoutFeature {
@@ -51,7 +51,7 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 		Object[] bos = getAllBusinessObjectsForPictogramElement(pe);
 		
 		return bos != null && bos.length == 1
-	              && bos[0] instanceof CamelModelElement;
+	              && bos[0] instanceof AbstractCamelModelElement;
 	}
 
 	/*
@@ -68,12 +68,12 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 		Rectangle maxDim = new Rectangle(containerGa.getX(), containerGa.getY(), containerGa.getWidth(), containerGa.getHeight());
 		
 		ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();		
-		NodeUtils.getAllContainers(getFeatureProvider(), (CamelModelElement)bo, containers);
+		NodeUtils.getAllContainers(getFeatureProvider(), (AbstractCamelModelElement)bo, containers);
 		containers.add(containerShape);
 		for (PictogramElement pe : containers) {
 			Object peBO = getBusinessObjectForPictogramElement(pe);
-			if (peBO instanceof CamelModelElement) {
-				CamelModelElement container = (CamelModelElement)peBO;
+			if (peBO instanceof AbstractCamelModelElement) {
+				AbstractCamelModelElement container = (AbstractCamelModelElement)peBO;
 				IDimension dPe = gaService.calculateSize(pe.getGraphicsAlgorithm(), true);
 				if (dPe.getWidth() + pe.getGraphicsAlgorithm().getX() > maxDim.width) maxDim.width = dPe.getWidth() + pe.getGraphicsAlgorithm().getX();
 				if (dPe.getHeight() + pe.getGraphicsAlgorithm().getY() > maxDim.height) maxDim.height = dPe.getHeight() + pe.getGraphicsAlgorithm().getY();

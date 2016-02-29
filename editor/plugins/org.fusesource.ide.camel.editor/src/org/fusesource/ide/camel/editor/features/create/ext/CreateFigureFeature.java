@@ -30,9 +30,10 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Node;
 
@@ -42,7 +43,7 @@ import org.w3c.dom.Node;
 public class CreateFigureFeature extends AbstractCreateFeature implements PaletteCategoryItemProvider {
 
 	private Eip eip;
-	private Class<? extends CamelModelElement> clazz;
+	private Class<? extends AbstractCamelModelElement> clazz;
 	
 	/**
 	 * 
@@ -63,7 +64,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * @param description
 	 * @param clazz
 	 */
-	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<? extends CamelModelElement> clazz) {
+	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<? extends AbstractCamelModelElement> clazz) {
 		super(fp, name, description);
 		this.clazz = clazz;;
 	}
@@ -79,7 +80,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		this.eip = eip;
 	}
 	
-	public Class<? extends CamelModelElement> getClazz() {
+	public Class<? extends AbstractCamelModelElement> getClazz() {
 		return clazz;
 	}
 	
@@ -120,25 +121,25 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				eip.getName().equalsIgnoreCase("rest") || eip.getName().equalsIgnoreCase("restConfiguration");
 			if (clazz != null) { 
 				Object obj = newInstance(clazz);
-				if (obj != null && obj instanceof CamelModelElement) return ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
+				if (obj != null && obj instanceof AbstractCamelModelElement) return ((AbstractCamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
 				return false;
 			}
-		} else if (containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
+		} else if (containerBO instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
 			// only one otherwise per choice
-			CamelModelElement choice = (CamelModelElement)containerBO;
+			AbstractCamelModelElement choice = (AbstractCamelModelElement)containerBO;
 			if (this.eip != null) {
 				if (this.eip.getName().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
 				return this.eip.getName().equalsIgnoreCase("when") || this.eip.getName().equalsIgnoreCase("otherwise");
 			} else if (clazz != null) {
 				Object obj = newInstance(clazz);
-				if (obj instanceof CamelModelElement && ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
+				if (obj instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
 			}
 		}
 		
 		// we have to prevent some eips being dropped on the route even if camel catalog says its allowed
-		if (eip.getName().equalsIgnoreCase("when") || eip.getName().equalsIgnoreCase("otherwise") && containerBO != null && ((CamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice") == false) return false;
+		if (eip.getName().equalsIgnoreCase("when") || eip.getName().equalsIgnoreCase("otherwise") && containerBO != null && ((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice") == false) return false;
 		
-		return (containerBO != null && containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().canHaveChildren() && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(eip.getName()));
+		return (containerBO != null && containerBO instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)containerBO).getUnderlyingMetaModelObject().canHaveChildren() && ((AbstractCamelModelElement)containerBO).getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(eip.getName()));
 	}
 
 	/*
@@ -172,7 +173,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	protected String getIconName() {
 		String ret = null;
-		CamelModelElement node = createNode(null, false);
+		AbstractCamelModelElement node = createNode(null, false);
 		if(node != null ) {
 			ret = node.getIconName();
 		}
@@ -187,14 +188,14 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public Object[] create(ICreateContext context) {
 		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 		ContainerShape container = context.getTargetContainer();
-		CamelModelElement selectedContainer = null;
+		AbstractCamelModelElement selectedContainer = null;
 		if (container instanceof Diagram) {
 			selectedContainer = editor.getModel().getCamelContext();
 		} else {
-			selectedContainer = (CamelModelElement)getBusinessObjectForPictogramElement(container);
+			selectedContainer = (AbstractCamelModelElement)getBusinessObjectForPictogramElement(container);
 		}
 
-		CamelModelElement node = createNode(selectedContainer, selectedContainer != null);
+		AbstractCamelModelElement node = createNode(selectedContainer, selectedContainer != null);
 		if (selectedContainer != null && node != null) {
 			selectedContainer.addChildElement(node);
 			node.setParent(selectedContainer);
@@ -222,7 +223,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * 
 	 * @return
 	 */
-	protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+	protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
 		if( eip != null ) {
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 			if (editor.getModel() != null) { 
@@ -232,13 +233,13 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 					final String namespace = parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
 					newNode = editor.getModel().createElement(nodeTypeId, namespace);
 				}
-				return new CamelModelElement(parent, newNode);
+				return new CamelBasicModelElement(parent, newNode);
 			}
 		}
 		if( clazz != null ) {
 			Object o = newInstance(clazz);
-			if( o instanceof CamelModelElement ) {
-				CamelModelElement e = (CamelModelElement)o;
+			if( o instanceof AbstractCamelModelElement ) {
+				AbstractCamelModelElement e = (AbstractCamelModelElement)o;
 				e.setParent(parent);
 				return e;
 			}

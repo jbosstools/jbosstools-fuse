@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.validation;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -25,7 +25,7 @@ public class BasicUriValidator implements ValidationSupport {
      * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
      */
     @Override
-    public ValidationResult validate(CamelModelElement node) {
+    public ValidationResult validate(AbstractCamelModelElement node) {
         ValidationResult res = new ValidationResult();
         
         final String underlyingModelName = node.getUnderlyingMetaModelObject().getName();

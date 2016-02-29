@@ -23,7 +23,7 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.ui.util.DialogUtils;
 import org.jboss.tools.fuse.transformation.core.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -43,7 +43,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler#canHandle(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public boolean canHandle(CamelModelElement clickedNode) {
+	public boolean canHandle(AbstractCamelModelElement clickedNode) {
 		if (clickedNode.isEndpointElement()) {
 			String uri = (String) clickedNode.getParameter("uri");
 			if (uri != null && uri.trim().length()>0 && uri.trim().toLowerCase().startsWith("ref:")) {
@@ -87,7 +87,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler#handleDoubleClick(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public void handleDoubleClick(CamelModelElement clickedNode) {
+	public void handleDoubleClick(AbstractCamelModelElement clickedNode) {
 		if (clickedNode.isEndpointElement()) {
 			String id = ((String) clickedNode.getParameter("uri")).substring("ref:".length());
 			if (id != null) {

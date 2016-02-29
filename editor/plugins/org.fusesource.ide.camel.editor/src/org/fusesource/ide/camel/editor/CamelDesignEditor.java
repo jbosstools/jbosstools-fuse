@@ -77,7 +77,7 @@ import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -105,8 +105,8 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	private CamelDiagramBehaviour camelDiagramBehaviour;
 	private CamelDesignEditorFlyoutPaletteComposite paletteComposite;
 	private CamelFile model;
-	private CamelModelElement selectedContainer;
-	private CamelModelElement highlightedNodeInDebugger;
+	private AbstractCamelModelElement selectedContainer;
+	private AbstractCamelModelElement highlightedNodeInDebugger;
 	private AbstractEditPart selectedEditPart;
 	private AbstractEditPart lastSelectedEditPart;
 	private KeyHandler keyHandler;
@@ -272,15 +272,15 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				Object firstElement = structuredSelection.getFirstElement();
 				
 				/** this handles selections in the outline view -> selects the node in diagram **/
-				if (firstElement instanceof CamelModelElement) {
-					CamelModelElement node = (CamelModelElement)firstElement;
+				if (firstElement instanceof AbstractCamelModelElement) {
+					AbstractCamelModelElement node = (AbstractCamelModelElement)firstElement;
 					if (node != null) {
 						if (node instanceof CamelContextElement == false) setSelectedNode(node);
 					}
 				
 				/** this handles selections in the diagram -> selects node in outline view **/
 				} else if (firstElement instanceof ContainerShapeEditPart) {
-					CamelModelElement node = NodeUtils.toCamelElement(firstElement);
+					AbstractCamelModelElement node = NodeUtils.toCamelElement(firstElement);
 					if (node != null) {
 						this.outlinePage.setOutlineSelection(node);
 					}
@@ -445,7 +445,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	/**
 	 * @return the selectedContainer
 	 */
-	public CamelModelElement getSelectedContainer() {
+	public AbstractCamelModelElement getSelectedContainer() {
 		return this.selectedContainer;
 	}
 	
@@ -454,7 +454,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * 
 	 * @param route
 	 */
-	public void setSelectedContainer(CamelModelElement route) {
+	public void setSelectedContainer(AbstractCamelModelElement route) {
 		this.selectedContainer = route;
 		switchContainer();
 	}
@@ -467,7 +467,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			@Override
 			public void run() {
 				parent.stopDirtyListener();
-				CamelModelElement container = getSelectedContainer() != null ? getSelectedContainer() : getModel();
+				AbstractCamelModelElement container = getSelectedContainer() != null ? getSelectedContainer() : getModel();
 				// reimport diagram contents
 				ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(CamelDesignEditor.this, getEditingDomain(), container, null);
 		        getEditingDomain().getCommandStack().execute(importCommand);
@@ -603,7 +603,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	/**
 	 * @return the highlightedNodeInDebugger
 	 */
-	public synchronized CamelModelElement getHighlightedNodeInDebugger() {
+	public synchronized AbstractCamelModelElement getHighlightedNodeInDebugger() {
 		return this.highlightedNodeInDebugger;
 	}
 	
@@ -614,7 +614,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 */
 	private synchronized void highlightBreakpointNodeWithID(String endpointNodeId) {
 		// get the correct node for the id
-		final CamelModelElement node = getModel().findNode(endpointNodeId);
+		final AbstractCamelModelElement node = getModel().findNode(endpointNodeId);
 		
 		if (node == null) return;
 		if (this.highlightedNodeInDebugger != null && node.getId() != null && node.getId().equals(highlightedNodeInDebugger.getId())) return;
@@ -643,7 +643,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @param bo			the node
 	 * @param highlight		the highlight status
 	 */
-	private synchronized void setDebugHighLight(CamelModelElement bo, boolean highlight) {
+	private synchronized void setDebugHighLight(AbstractCamelModelElement bo, boolean highlight) {
 		if (bo == null) return;
 		
 		// delegate to an operation command for async transacted diagram update
@@ -658,7 +658,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @see org.fusesource.ide.camel.editor.utils.INodeViewer#getSelectedNode()
 	 */
 	@Override
-	public CamelModelElement getSelectedNode() {
+	public AbstractCamelModelElement getSelectedNode() {
 		return NodeUtils.getSelectedNode(Selections.getSelection(getEditorSite()));
 	}
 	
@@ -666,7 +666,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * Finds the given node by walking the edit part tree looking for the correct one
 	 */
 	@SuppressWarnings("unchecked")
-	public static EditPart findEditPart(CamelModelElement node, EditPart part) {
+	public static EditPart findEditPart(AbstractCamelModelElement node, EditPart part) {
 		if (part instanceof RootEditPart) {
 			RootEditPart root = (RootEditPart) part;
 			EditPart contents = root.getContents();
@@ -676,7 +676,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		}
 		if (part instanceof EditPart) {
 			EditPart nodeEditPart = part;
-			CamelModelElement modelNode = NodeUtils.toCamelElement(nodeEditPart);
+			AbstractCamelModelElement modelNode = NodeUtils.toCamelElement(nodeEditPart);
 			if (Objects.equal(node, modelNode) || node.getId().equals(modelNode.getId())) {
 				return nodeEditPart;
 			}
@@ -695,7 +695,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @see org.fusesource.ide.camel.editor.utils.INodeViewer#setSelectedNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public void setSelectedNode(CamelModelElement newSelection) {
+	public void setSelectedNode(AbstractCamelModelElement newSelection) {
 		if (newSelection != null) {
 			Object editPart = getGraphicalViewer().getEditPartRegistry().get(getFeatureProvider().getPictogramElementForBusinessObject(newSelection));
 			if (editPart != null) {

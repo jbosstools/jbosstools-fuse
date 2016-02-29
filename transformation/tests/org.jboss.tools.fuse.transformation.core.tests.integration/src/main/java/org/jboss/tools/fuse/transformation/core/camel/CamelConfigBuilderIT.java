@@ -26,7 +26,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.assertj.core.api.Assertions;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.TransformType;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder.MarshalType;
@@ -59,11 +59,11 @@ public class CamelConfigBuilderIT {
 		// Document xmlJsonDoc = loadDocument(XML_JSON);
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
 		config.getModel().getCamelContext().setId("test-defined-id");
-		CamelModelElement sourceFormat = config.createDataFormat(
+		AbstractCamelModelElement sourceFormat = config.createDataFormat(
                 TransformType.XML, "xml.ABCOrder", MarshalType.UNMARSHALLER);
-		CamelModelElement targetFormat = config.createDataFormat(
+		AbstractCamelModelElement targetFormat = config.createDataFormat(
                 TransformType.JSON, "json.XYZOrder", MarshalType.MARSHALLER);
-		CamelModelElement endpoint = config.createEndpoint("xml2json", 
+		AbstractCamelModelElement endpoint = config.createEndpoint("xml2json", 
                 DozerMapperConfiguration.DEFAULT_DOZER_CONFIG, 
                 "xml.ABCOrder", 
                 "json.XYZOrder",

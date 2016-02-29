@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.editor.properties;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.IFilter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 
 /**
@@ -26,7 +26,7 @@ public class AdvancedPropertiesFilter implements IFilter {
      */
     @Override
     public boolean select(Object toTest) {
-        CamelModelElement ep = getSelectedEndpoint(toTest);
+        AbstractCamelModelElement ep = getSelectedEndpoint(toTest);
         if (ep != null && (ep.getNodeTypeId().equalsIgnoreCase("from") || ep.getNodeTypeId().equalsIgnoreCase("to"))) {
             if (ep.getParameter("uri") == null || ((String)ep.getParameter("uri")).trim().length()<1) return false;
         	int protocolSeparatorIdx = ((String)ep.getParameter("uri")).indexOf(":");
@@ -39,13 +39,13 @@ public class AdvancedPropertiesFilter implements IFilter {
         return false;
     }
     
-    protected CamelModelElement getSelectedEndpoint(Object toTest) {
+    protected AbstractCamelModelElement getSelectedEndpoint(Object toTest) {
         Object bo = null;
         if (toTest instanceof ContainerShapeEditPart) {
             bo = ((ContainerShapeEditPart)toTest).getFeatureProvider().getBusinessObjectForPictogramElement(((ContainerShapeEditPart)toTest).getPictogramElement());
         }
-        if (bo instanceof CamelModelElement) {
-            return (CamelModelElement)bo;
+        if (bo instanceof AbstractCamelModelElement) {
+            return (AbstractCamelModelElement)bo;
         }
         return null;
     }

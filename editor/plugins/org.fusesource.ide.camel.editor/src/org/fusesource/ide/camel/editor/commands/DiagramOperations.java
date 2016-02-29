@@ -23,7 +23,7 @@ import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -59,7 +59,7 @@ public class DiagramOperations {
 		}
 	}
 
-	public static DeleteNodeCommand deleteNode(CamelDesignEditor designEditor, CamelModelElement selectedNode) {
+	public static DeleteNodeCommand deleteNode(CamelDesignEditor designEditor, AbstractCamelModelElement selectedNode) {
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
 		DeleteNodeCommand operation = new DeleteNodeCommand(designEditor, editingDomain, selectedNode);
 		execute(editingDomain, operation, true);
@@ -123,7 +123,7 @@ public class DiagramOperations {
 		return operation;
 	}
 	
-	public static void highlightNode(final CamelDesignEditor designEditor, final CamelModelElement node,  final boolean highlight) {
+	public static void highlightNode(final CamelDesignEditor designEditor, final AbstractCamelModelElement node,  final boolean highlight) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

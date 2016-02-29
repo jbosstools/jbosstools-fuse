@@ -55,7 +55,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -77,7 +78,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected Form form;
 	protected CTabFolder tabFolder;
 	protected List<CTabItem> tabs = new ArrayList<CTabItem>();
-	protected CamelModelElement selectedEP;
+	protected AbstractCamelModelElement selectedEP;
     protected DataBindingContext dbc;
     protected IObservableMap modelMap = new WritableMap();
     protected Composite parent;
@@ -126,11 +127,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         this.dbc = new DataBindingContext();
 
         Object o = Selections.getFirstSelection(selection);
-        CamelModelElement n = NodeUtils.toCamelElement(o);
+        AbstractCamelModelElement n = NodeUtils.toCamelElement(o);
 
         createTabFolder();        
         
-        if (n.getUnderlyingMetaModelObject() != null) {
+		if (n.getUnderlyingMetaModelObject() != null) {
             this.selectedEP = n;
             this.eip = PropertiesUtils.getEipFor(selectedEP);
             String headerText = selectedEP.getDisplayText();
@@ -276,7 +277,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 * @param modelElement
 	 * @return
 	 */
-    protected CamelModel getCamelModel(CamelModelElement modelElement) {
+    protected CamelModel getCamelModel(AbstractCamelModelElement modelElement) {
     	String prjCamelVersion = CamelUtils.getCurrentProjectCamelVersion();
 		// then get the meta model for the given camel version
 		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
@@ -295,14 +296,14 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param page					the page
      * @param prop					the property which is currently used
      */
-    protected void languageChanged(String language, Composite eform, CamelModelElement expressionElement, Composite page, Parameter prop) {
+    protected void languageChanged(String language, Composite eform, AbstractCamelModelElement expressionElement, Composite page, Parameter prop) {
         for (Control co : eform.getChildren()) if (co.getData("fuseExpressionClient") != null) co.dispose();
         Composite client = getWidgetFactory().createComposite(eform);
         client.setData("fuseExpressionClient", true);
         client.setLayoutData(new GridData(GridData.FILL_BOTH));
         client.setLayout(new GridLayout(4, false));
         
-        CamelModelElement uiExpressionElement = null;
+        AbstractCamelModelElement uiExpressionElement = null;
         
         if (prop.getName().equalsIgnoreCase("expression")) {
         	// normal expression subnode - no cascading -> when.<expression>
@@ -317,7 +318,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
             	}
             	if (language.trim().length()>0) {
 	            	Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-	            	expressionElement = new CamelModelElement(this.selectedEP, expNode);
+					expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
 	            	selectedEP.setParameter(prop.getName(), expressionElement);
 	            	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
             	} else {
@@ -328,7 +329,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         	} else if (expressionElement == null && language.trim().length()>0) {
         		// no expression set, but now we set one
         		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-        		expressionElement = new CamelModelElement(this.selectedEP, expNode);
+				expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
             	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
             	this.selectedEP.setParameter(prop.getName(), expressionElement);
             } 
@@ -349,11 +350,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
             			break;
             		}
             	}
-            	CamelModelElement expElement = (CamelModelElement)expressionElement.getParameter("expression");
+            	AbstractCamelModelElement expElement = (AbstractCamelModelElement)expressionElement.getParameter("expression");
             	if (expElement.getTranslatedNodeName().equals(language) == false) {
             		if (language.trim().length()>0) {
 	            		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-	                	uiExpressionElement = new CamelModelElement(expressionElement, expNode);
+						uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 	                	expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
 	                	expressionElement.setParameter("expression", uiExpressionElement);
             		} else {
@@ -368,7 +369,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         	} else if (expressionElement != null && expressionElement.getParameter("expression") == null) {
         		// 2. container element exists but no expression element exists
         		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-        		uiExpressionElement = new CamelModelElement(expressionElement, expNode);
+				uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
         		expressionElement.getXmlNode().appendChild(expNode);
             	expressionElement.setParameter("expression", uiExpressionElement);
         		
@@ -376,8 +377,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         		// 3. No container but language set
         		Node expContainerNode = selectedEP.createElement(prop.getName(), selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
         		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-        		CamelModelElement expContainerElement = new CamelModelElement(selectedEP, expContainerNode);
-        		expressionElement = new CamelModelElement(expContainerElement, expNode);
+				AbstractCamelModelElement expContainerElement = new CamelBasicModelElement(selectedEP, expContainerNode);
+				expressionElement = new CamelBasicModelElement(expContainerElement, expNode);
         		expContainerElement.getXmlNode().appendChild(expNode);
             	selectedEP.getXmlNode().insertBefore(expContainerNode, selectedEP.getXmlNode().getFirstChild());
             	expContainerElement.setParameter("expression", expressionElement);
@@ -400,7 +401,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param expressionElement
      * @param parent
      */
-    protected void prepareExpressionUIForLanguage(String language, CamelModelElement expressionElement, Composite parent) {
+    protected void prepareExpressionUIForLanguage(String language, AbstractCamelModelElement expressionElement, Composite parent) {
     	CamelModel model = getCamelModel(expressionElement);
     	// now create the new fields
     	Language lang = model.getLanguageModel().getLanguageByName(language);
@@ -442,7 +443,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param lang
      * @return
      */
-    protected Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement expressionElement, Language lang) {
+    protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement expressionElement, Language lang) {
     	Control c = null;
     	
     	// BOOLEAN PROPERTIES
@@ -524,14 +525,14 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param page					the page
      * @param prop					the property which is currently used
      */
-    protected void dataFormatChanged(String dataformat, Composite eform, CamelModelElement dataFormatElement, Composite page, Parameter prop) {
+    protected void dataFormatChanged(String dataformat, Composite eform, AbstractCamelModelElement dataFormatElement, Composite page, Parameter prop) {
         for (Control co : eform.getChildren()) if (co.getData("fuseDataFormatClient") != null) co.dispose();
         Composite client = getWidgetFactory().createComposite(eform);
         client.setData("fuseDataFormatClient", true);
         client.setLayoutData(new GridData(GridData.FILL_BOTH));
         client.setLayout(new GridLayout(4, false));
         
-        CamelModelElement uiDataFormatElement = null;
+        AbstractCamelModelElement uiDataFormatElement = null;
         
         if (dataFormatElement != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
         	Node oldExpNode = null;
@@ -543,7 +544,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         	}
         	if (dataformat.trim().length()>0) {
             	Node expNode = selectedEP.createElement(dataformat, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-            	dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
+				dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
             	selectedEP.setParameter(prop.getName(), dataFormatElement);
             	if (oldExpNode == null) {
             		System.err.println("pdd");
@@ -557,7 +558,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	} else if (dataFormatElement == null && dataformat.trim().length()>0) {
     		// no expression set, but now we set one
     		Node expNode = selectedEP.createElement(dataformat, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
-    		dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
+			dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
         	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
         	this.selectedEP.setParameter(prop.getName(), dataFormatElement);
         } 
@@ -577,7 +578,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param dataFormatElement
      * @param parent
      */
-    protected void prepareDataFormatUIForDataFormat(String dataformat, CamelModelElement dataFormatElement, Composite parent) {
+    protected void prepareDataFormatUIForDataFormat(String dataformat, AbstractCamelModelElement dataFormatElement, Composite parent) {
     	CamelModel model = getCamelModel(dataFormatElement);
     	
     	// now create the new fields
@@ -605,7 +606,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
      * @param df
      * @return
      */
-    protected Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement dataFormatElement, DataFormat df) {
+    protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement dataFormatElement, DataFormat df) {
     	Control c = null;
     	
     	// BOOLEAN PROPERTIES
@@ -693,4 +694,5 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected GridData createPropertyFieldLayoutData() {
 		return GridDataFactory.fillDefaults().indent(5, 0).span(3, 1).grab(true, false).create();
 	}
+
 }

@@ -14,14 +14,14 @@ package org.fusesource.ide.camel.editor.utils;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * Helper class to track the selection of a node
  */
 public class NodeSelectionSupport implements ISelectionListener {
 
-	protected CamelModelElement selectedNode;
+	protected AbstractCamelModelElement selectedNode;
 
 	/*
 	 * (non-Javadoc)
@@ -29,7 +29,7 @@ public class NodeSelectionSupport implements ISelectionListener {
 	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		CamelModelElement lastNode = selectedNode;
+		AbstractCamelModelElement lastNode = selectedNode;
 		selectedNode = NodeUtils.getSelectedNode(selection);
 		if (selectedNode != null) {
 			if (lastNode == selectedNode) {
@@ -43,18 +43,18 @@ public class NodeSelectionSupport implements ISelectionListener {
 	/**
 	 * Override this method to perform some logic when the selected node changes
 	 */
-	protected void onNodeChanged(CamelModelElement node) {
+	protected void onNodeChanged(AbstractCamelModelElement node) {
 		//Activator.getLogger().debug("Selection changed: " + node, null);
 	}
 
-	public CamelModelElement getSelectedNode() {
+	public AbstractCamelModelElement getSelectedNode() {
 		return selectedNode;
 	}
 
 	/**
 	 * Returns the node container
 	 */
-	public CamelModelElement getNodeContainer() {
+	public AbstractCamelModelElement getNodeContainer() {
 		if (selectedNode != null) {
 			return selectedNode.getParent();
 		}

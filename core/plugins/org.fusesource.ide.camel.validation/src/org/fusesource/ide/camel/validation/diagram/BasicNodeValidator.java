@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.ValidationResult;
@@ -45,14 +45,14 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class BasicNodeValidator implements ValidationSupport {
 
-	private static Map<IMarker, CamelModelElement> markers = new HashMap<>();
+	private static Map<IMarker, AbstractCamelModelElement> markers = new HashMap<>();
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public ValidationResult validate(CamelModelElement camelModelElement) {
+	public ValidationResult validate(AbstractCamelModelElement camelModelElement) {
 		ValidationResult result = new ValidationResult();
 
 		if (camelModelElement != null && camelModelElement.getCamelContext() != null) { // TODO: check why camel context can be null?!?
@@ -76,7 +76,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param camelModelElement
 	 * @param result
 	 */
-	private void createMarkers(CamelModelElement camelModelElement, ValidationResult result) {
+	private void createMarkers(AbstractCamelModelElement camelModelElement, ValidationResult result) {
 		final CamelFile camelFile = camelModelElement.getCamelFile();
 		if (camelFile != null) {
 			final IResource resource = camelFile.getResource();
@@ -96,14 +96,14 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param camelModelElement
 	 * @return
 	 */
-	private void clearMarkers(CamelModelElement camelModelElement) {
+	private void clearMarkers(AbstractCamelModelElement camelModelElement) {
 		try {
 			final CamelFile camelFile = camelModelElement.getCamelFile();
 			if (camelFile != null) {
 				final IResource resource = camelFile.getResource();
 				if (resource != null) {
 					for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
-						final CamelModelElement cmeWithMarker = markers.get(marker);
+						final AbstractCamelModelElement cmeWithMarker = markers.get(marker);
 						if (camelModelElement.equals(cmeWithMarker)
 								// we are lucky still the same model in memory
 								|| hasSameId(camelModelElement, cmeWithMarker)
@@ -127,7 +127,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param obj
 	 * @return
 	 */
-	private boolean hasSameId(CamelModelElement camelModelElement, final CamelModelElement obj) {
+	private boolean hasSameId(AbstractCamelModelElement camelModelElement, final AbstractCamelModelElement obj) {
 		return camelModelElement.getId() != null && obj != null && camelModelElement.getId().equals(obj.getId());
 	}
 
@@ -148,7 +148,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param selectedEP
 	 * @param result
 	 */
-	private void validateDetailProperties(CamelModelElement selectedEP, ValidationResult result) {
+	private void validateDetailProperties(AbstractCamelModelElement selectedEP, ValidationResult result) {
 		for (Parameter prop : PropertiesUtils.getPropertiesFor(selectedEP)) {
 			String property = prop.getName();
 			if ((prop.getKind().equalsIgnoreCase("element") && prop.getType().equalsIgnoreCase("array")) || prop.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition"))
@@ -167,7 +167,7 @@ public class BasicNodeValidator implements ValidationSupport {
 							result.addError("One of Ref and Uri values have to be filled! Please check the properties view for more details.");
 						} else {
 							// ref found - now check if REF has URI defined
-							CamelModelElement cme = selectedEP.getCamelContext().findNode((String) selectedEP.getParameter("ref"));
+							AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode((String) selectedEP.getParameter("ref"));
 							if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
 								// no uri defined on ref
 								result.addError("The referenced endpoint has no URI defined or does not exist. Please check the properties view for more details.");
@@ -195,7 +195,7 @@ public class BasicNodeValidator implements ValidationSupport {
 
 					if (value != null && value instanceof String && value.toString().trim().length() > 0) {
 						String refId = (String) value;
-						CamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
+						AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
 						if (cme == null && selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
 							// the ref doesn't exist
 							result.addWarning("The entered reference does not exist in your context! Please check the properties view for more details.");
@@ -249,9 +249,9 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param processedNodeIDs
 	 * @return
 	 */
-	protected boolean checkAllUniqueIDs(CamelModelElement nodeUnderValidation, List<CamelModelElement> nodes, ArrayList<String> processedNodeIDs) {
+	protected boolean checkAllUniqueIDs(AbstractCamelModelElement nodeUnderValidation, List<AbstractCamelModelElement> nodes, ArrayList<String> processedNodeIDs) {
 		boolean noDoubledIDs = true;
-		for (CamelModelElement node : nodes) {
+		for (AbstractCamelModelElement node : nodes) {
 			if (node.getChildElements() != null) {
 				noDoubledIDs = checkAllUniqueIDs(nodeUnderValidation, node.getChildElements(), processedNodeIDs);
 				if (noDoubledIDs == false) return false;
@@ -269,7 +269,7 @@ public class BasicNodeValidator implements ValidationSupport {
 		return noDoubledIDs;
 	}
 
-	private void createMarker(IResource resource, CamelModelElement cme, final String message, final int severity) {
+	private void createMarker(IResource resource, AbstractCamelModelElement cme, final String message, final int severity) {
 		try {
 			IMarker marker = resource.createMarker(IFuseMarker.MARKER_TYPE);
 			marker.setAttribute(IMarker.SEVERITY, severity);
@@ -290,7 +290,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param marker
 	 * @throws CoreException
 	 */
-	private void managePosition(IResource resource, CamelModelElement cme, IMarker marker) throws CoreException {
+	private void managePosition(IResource resource, AbstractCamelModelElement cme, IMarker marker) throws CoreException {
 		Integer lineNumber = -1;
 		if (cme.getId() != null) {
 			List<Integer> foundIds = findLineNumbers("id=\"" + cme.getId() + "\"", resource.getRawLocation().toFile());
@@ -338,9 +338,9 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param cme
 	 * @return
 	 */
-	private String getCamelPath(CamelModelElement cme) {
+	private String getCamelPath(AbstractCamelModelElement cme) {
 		String res = cme.getDisplayText();
-		final CamelModelElement parent = cme.getParent();
+		final AbstractCamelModelElement parent = cme.getParent();
 		if (parent != null && !(parent instanceof CamelFile)) {
 			res = getCamelPath(parent) + "/" + res;
 		}

@@ -18,7 +18,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 
@@ -61,7 +61,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
      * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
      */
     @Override
-    protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+    protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
     	if( getEip() != null ) {
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 			if (editor.getModel() != null) { 

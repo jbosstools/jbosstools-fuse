@@ -62,7 +62,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
@@ -99,7 +99,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     TransformationManager manager;
     URLClassLoader loader;
     File camelConfigFile;
-    CamelModelElement camelEndpoint;
+    AbstractCamelModelElement camelEndpoint;
 
     MappingsViewer mappingsViewer;
     Text helpText;

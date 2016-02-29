@@ -18,7 +18,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.functions.Function1;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -60,8 +60,8 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 
 	@Override
 	protected void loadChildren() {
-		List<CamelModelElement> children = route.getChildElements();
-		for (CamelModelElement node : children) {
+		List<AbstractCamelModelElement> children = route.getChildElements();
+		for (AbstractCamelModelElement node : children) {
 			if (node.getInputElement() == null) {
 				addChild(new ProcessorNode(this, this, node));
 			}

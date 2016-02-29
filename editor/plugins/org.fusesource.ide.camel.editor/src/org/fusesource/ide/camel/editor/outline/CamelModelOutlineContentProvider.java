@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.editor.outline;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -48,10 +48,10 @@ public class CamelModelOutlineContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof CamelModelElement[]) {
-			return (CamelModelElement[])parentElement;
-		} else if (parentElement instanceof CamelModelElement) {
-			CamelModelElement e = (CamelModelElement)parentElement;
+		if (parentElement instanceof AbstractCamelModelElement[]) {
+			return (AbstractCamelModelElement[])parentElement;
+		} else if (parentElement instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement e = (AbstractCamelModelElement)parentElement;
 			return e.getChildElements().toArray();
 		}
 		return EMPTY_ARRAY;
@@ -70,8 +70,8 @@ public class CamelModelOutlineContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof CamelModelElement) {
-			CamelModelElement e = (CamelModelElement)element;
+		if (element instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement e = (AbstractCamelModelElement)element;
 			return e.getChildElements().size()>0;
 		}
 		return false;

@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.jboss.tools.jmx.core.tree.Node;
 
@@ -24,9 +24,9 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	private static final boolean useCaching = true;
 
 	private final RouteNode routeNode;
-	private final CamelModelElement node;
+	private final AbstractCamelModelElement node;
 
-	public ProcessorNode(RouteNode routeNode, Node parent, CamelModelElement node) {
+	public ProcessorNode(RouteNode routeNode, Node parent, AbstractCamelModelElement node) {
 		super(parent, routeNode.getRoute());
 		this.routeNode = routeNode;
 		this.node = node;
@@ -44,11 +44,11 @@ public class ProcessorNode extends ProcessorNodeSupport {
 
 	@Override
 	protected void loadChildren() {
-		List<CamelModelElement> children = node.getChildElements(); //getOutputs()
+		List<AbstractCamelModelElement> children = node.getChildElements(); //getOutputs()
 		if (node.getOutputElement() != null) {
 			addChild(new ProcessorNode(routeNode, this, node.getOutputElement()));
 		}
-		for (CamelModelElement pnode : children) {
+		for (AbstractCamelModelElement pnode : children) {
 			if (pnode.getInputElement() == null) {
 				addChild(new ProcessorNode(routeNode, this, pnode));
 			}
