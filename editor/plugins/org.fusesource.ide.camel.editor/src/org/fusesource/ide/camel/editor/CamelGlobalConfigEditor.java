@@ -551,7 +551,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						List<Dependency> deps = item.getContributor().getElementDependencies();
 						if (deps != null && deps.isEmpty() == false) {
 							try {
-								MavenUtils.updateMavenDependencies(deps);
+								new MavenUtils().updateMavenDependencies(deps);
 							} catch (CoreException ex) {
 								CamelEditorUIActivator.pluginLog().logError("Unable to update pom dependencies for element " + item.getName(), ex);
 							}
