@@ -75,9 +75,9 @@ import org.fusesource.ide.camel.editor.provider.CamelEditorContextMenuProvider;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -469,6 +469,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			@Override
 			public void run() {
 				parent.stopDirtyListener();
+				// Deselect to avoid refresh on a not well handled time by
+				// Graphiti which is disposing Font - see FUSETOOLS-1678
+				getEditorSite().getSelectionProvider().setSelection(new StructuredSelection());
 				AbstractCamelModelElement container = getSelectedContainer() != null ? getSelectedContainer() : getModel();
 				// reimport diagram contents
 				ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(CamelDesignEditor.this, getEditingDomain(), container, null);
