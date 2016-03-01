@@ -23,7 +23,6 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author lhein
@@ -55,12 +54,9 @@ public class HighlightNodeCommand extends RecordingCommand {
 		
 		// check if we need to switch to another route for highlighting
 		if (this.node != null && highlight) {
-			if (node.getParent() != null) {
-				// seems the next breakpoint is in a different route and we need to switch to that route now
-				if (node.getParent() instanceof CamelRouteElement) {
-					// switch the route
-					this.designEditor.setSelectedContainer((CamelRouteElement)node.getParent());											
-				}
+			if (node.getRoute() != null && designEditor.getSelectedContainer() != node.getCamelContext() && node.getRoute() != designEditor.getSelectedContainer()) {
+				// switch the route
+				this.designEditor.setSelectedContainer(node.getRoute());											
 			}
 		}
 		
@@ -76,9 +72,27 @@ public class HighlightNodeCommand extends RecordingCommand {
 			if (pe instanceof ContainerShape) {
 				ContainerShape cs = (ContainerShape) pe;
 				if (highlight) {
-					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+					if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
+						// container node - border already visible
+						cs.getGraphicsAlgorithm().setLineWidth(3);
+						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+					} else {
+						// child node - no border visible
+						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+						cs.getGraphicsAlgorithm().setLineWidth(3);
+						cs.getGraphicsAlgorithm().setLineVisible(true);
+					}
 				} else {
-					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_FOREGROUND));
+					if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
+						// container node - border already visible
+						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.CONTAINER_FIGURE_BORDER_COLOR));
+						cs.getGraphicsAlgorithm().setLineWidth(1);
+					} else {
+						// child node - no border visible
+						cs.getGraphicsAlgorithm().setForeground(cs.getGraphicsAlgorithm().getBackground());
+						cs.getGraphicsAlgorithm().setLineVisible(false);
+						cs.getGraphicsAlgorithm().setLineWidth(1);
+					}
 				}
 				
 				for (GraphicsAlgorithm ga : pe.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {

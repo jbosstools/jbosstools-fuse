@@ -217,6 +217,22 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	/**
+	 * returns the route this endpoint belongs to
+	 * 
+	 * @return
+	 */
+	public CamelRouteElement getRoute() {
+		AbstractCamelModelElement cme = getParent();
+		while (cme instanceof CamelRouteElement == false && cme != null) {
+			cme = cme.getParent();
+		}
+		if (cme != null && cme instanceof CamelRouteElement) {
+			return (CamelRouteElement)cme;
+		}
+		return null;
+	}
+
+	/**
 	 * @param parent
 	 *            the parent to set
 	 */

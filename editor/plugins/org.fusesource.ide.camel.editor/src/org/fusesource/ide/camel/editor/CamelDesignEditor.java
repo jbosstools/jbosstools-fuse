@@ -211,7 +211,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				CamelEditorUIActivator.pluginLog().logError(e);
 			}
 
-	        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
+//	        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
 //			getEditingDomain().getCommandStack().flush();
 		}
 		
@@ -336,12 +336,14 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @param model the model to set
 	 */
 	public void setModel(CamelFile model) {
-		this.model = model;
-		if (model != null && model.getCamelFile() != null) {
-			model.getCamelFile().addModelListener(this);
-			model.getCamelFile().addModelListener(getParent().getGlobalConfigEditor());
-			setSelectedContainer(model.getCamelContext());
-		}
+		if (this.model != model) {
+			this.model = model;
+			if (model != null && model.getCamelFile() != null) {
+				model.getCamelFile().addModelListener(this);
+				model.getCamelFile().addModelListener(getParent().getGlobalConfigEditor());
+				this.selectedContainer = model.getCamelContext();
+			}	
+		}		
 	}
 	
     /**
