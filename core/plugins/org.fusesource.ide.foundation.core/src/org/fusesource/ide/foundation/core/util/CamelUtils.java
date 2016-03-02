@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
 import org.fusesource.ide.foundation.core.xml.namespace.FindCamelNamespaceHandler;
@@ -135,19 +136,24 @@ public class CamelUtils {
 	        if(javaProject!=null){
 	        	for(IPackageFragmentRoot ifr:javaProject.getAllPackageFragmentRoots()){
 	        		if(ifr.getKind()==IPackageFragmentRoot.K_SOURCE){
-	        			files.addAll(getFilesWithCamelContentType(ifr.getCorrespondingResource()));
+						files.addAll(getFilesWithCamelContentTypeInResource(ifr.getCorrespondingResource()));
 	        		}
 	        	}
 	        }
-	    } else {
-	    	files.addAll(getFilesWithCamelContentType(project));//most likely NA
-	    }	
+		}
+		if (project.hasNature(FacetedProjectNature.NATURE_ID)) {
+			// TODO: search in deployed resources
+		}
+
+		if (files.isEmpty()) {// or should we throw an error?
+			files.addAll(getFilesWithCamelContentTypeInResource(project));
+		}
 		return files;
 	}
 	
-	private static List<IFile> getFilesWithCamelContentType(IResource root) throws CoreException{ 
+	private static List<IFile> getFilesWithCamelContentTypeInResource(IResource root) throws CoreException {
 		final List<IFile> files = new ArrayList<IFile>();
-		if(root!=null){			
+		if (root != null) {
 			root.accept(new IResourceVisitor() {		
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
