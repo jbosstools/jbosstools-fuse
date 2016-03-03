@@ -12,14 +12,16 @@ package org.fusesource.ide.camel.editor.features.delete;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IRemoveContext;
+import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.impl.DefaultRemoveFeature;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -38,10 +40,18 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 	 */
 	@Override
 	public void preRemove(IRemoveContext context) {
+		PictogramElement pe = context.getPictogramElement();
+		removeBreakpoint(pe);
+
 		super.preRemove(context);
 		
-		// now delete the BO from our model
-		PictogramElement pe = context.getPictogramElement();
+		deleteBusinessObjectFromModel(pe);
+	}
+
+	/**
+	 * @param pe
+	 */
+	private void deleteBusinessObjectFromModel(PictogramElement pe) {
 		Object[] businessObjectsForPictogramElement = getAllBusinessObjectsForPictogramElement(pe);
 		if (businessObjectsForPictogramElement != null && businessObjectsForPictogramElement.length > 0) {
 			Object bo = businessObjectsForPictogramElement[0];
@@ -54,7 +64,16 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 			}
 		}
 	}
-	
+
+	/**
+	 * @param pe
+	 */
+	private void removeBreakpoint(PictogramElement pe) {
+		final DeleteEndpointBreakpointFeature deleteEndpointBreakpointFeature = new DeleteEndpointBreakpointFeature(getFeatureProvider());
+		final CustomContext context = new CustomContext(new PictogramElement[] { pe });
+		deleteEndpointBreakpointFeature.execute(context);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.features.impl.DefaultRemoveFeature#postRemove(org.eclipse.graphiti.features.context.IRemoveContext)
 	 */
