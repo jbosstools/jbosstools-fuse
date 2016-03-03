@@ -72,15 +72,15 @@ import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelConditionalBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelEndpointBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
-import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * @author lhein

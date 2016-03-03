@@ -42,9 +42,7 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 	public void preRemove(IRemoveContext context) {
 		PictogramElement pe = context.getPictogramElement();
 		removeBreakpoint(pe);
-
 		super.preRemove(context);
-		
 		deleteBusinessObjectFromModel(pe);
 	}
 

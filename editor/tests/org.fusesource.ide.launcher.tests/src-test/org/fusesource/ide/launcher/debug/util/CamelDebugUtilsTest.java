@@ -12,6 +12,7 @@ package org.fusesource.ide.launcher.debug.util;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;

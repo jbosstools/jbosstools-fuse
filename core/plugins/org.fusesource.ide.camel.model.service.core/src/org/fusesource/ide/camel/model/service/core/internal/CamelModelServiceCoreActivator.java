@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
  */
 public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.core";
+	public static final String IMAGE_CAMEL_ICON = "icons/camel.png";
 
 	private static CamelModelServiceCoreActivator instance;
 	private static BundleContext myContext;

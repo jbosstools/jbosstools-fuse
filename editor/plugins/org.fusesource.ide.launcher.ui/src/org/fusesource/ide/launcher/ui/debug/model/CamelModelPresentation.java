@@ -20,17 +20,17 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
-import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
-import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
-import org.fusesource.ide.launcher.debug.model.CamelThread;
-import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelDebuggerVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelExchangeVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelMessageVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelProcessorVariable;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.camel.model.service.core.debug.CamelDebugTarget;
+import org.fusesource.ide.camel.model.service.core.debug.CamelStackFrame;
+import org.fusesource.ide.camel.model.service.core.debug.CamelThread;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelConditionalBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelEndpointBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.BaseCamelVariable;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.CamelDebuggerVariable;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.CamelExchangeVariable;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.CamelMessageVariable;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.CamelProcessorVariable;
+import org.fusesource.ide.camel.model.service.core.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.Activator;
 
 /**

@@ -22,10 +22,10 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelEndpointBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
-import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * @author lhein

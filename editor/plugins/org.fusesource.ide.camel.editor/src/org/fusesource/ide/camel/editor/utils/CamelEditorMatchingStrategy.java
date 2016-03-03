@@ -16,7 +16,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
+import org.fusesource.ide.camel.model.service.core.io.CamelXMLEditorInput;
 
 /**
  * @author lhein

@@ -23,11 +23,11 @@ import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupPartici
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
-import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
-import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
-import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugRegistry;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugRegistryEntry;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
+import org.fusesource.ide.camel.model.service.core.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.camel.model.service.core.io.CamelXMLEditorInput;
 
 /**
  * Camel source lookup director. For Camel source lookup there is one source

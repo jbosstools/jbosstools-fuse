@@ -14,7 +14,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupParticipant;
-import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
+import org.fusesource.ide.camel.model.service.core.debug.CamelStackFrame;
 
 /**
  * The Camel source lookup participant knows how to translate a 

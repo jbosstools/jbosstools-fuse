@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * deletes breakpoints for endpoint nodes
