@@ -85,7 +85,7 @@ public class CamelIOHandler {
      * @return	the camel file object representation or null on errors
      */
     public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
-		if (xmlFile == null) return null;
+		if (xmlFile == null || xmlFile.isFile() == false || xmlFile.exists() == false) return null;
 
 		CamelFile cf = null;
     	try {

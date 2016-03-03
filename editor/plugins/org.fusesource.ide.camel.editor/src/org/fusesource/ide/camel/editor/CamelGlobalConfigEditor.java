@@ -281,7 +281,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	@Override
 	public void dispose() {
-		parentEditor.getDesignEditor().getModel().removeModelListener(this);
+		if (parentEditor != null && parentEditor.getDesignEditor() != null && parentEditor.getDesignEditor().getModel() != null) {
+			parentEditor.getDesignEditor().getModel().removeModelListener(this);
+		}				
 		super.dispose();
 	}
 	

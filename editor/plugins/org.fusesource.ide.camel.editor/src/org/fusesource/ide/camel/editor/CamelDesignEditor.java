@@ -148,7 +148,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 */
 	@Override
 	public void dispose() {
-		getModel().removeModelListener(this);
+		if (getModel() != null) getModel().removeModelListener(this);
 		super.dispose();
 	}
 	
