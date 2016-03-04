@@ -11,6 +11,8 @@
 package org.fusesource.ide.launcher.ui.launch;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -30,11 +32,25 @@ public class ExecutePomActionNoTests extends ExecutePomActionSupport {
 	}
 	
 	@Override
-	protected void appendAttributes(IContainer basedir,
-			ILaunchConfigurationWorkingCopy workingCopy, String goal) {
+	protected void appendAttributes(IContainer basedir, ILaunchConfigurationWorkingCopy workingCopy, String goal) {
 		String path = getSelectedFilePath();
 		workingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, path == null ? "" : path); // basedir.getLocation().toOSString()
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, true);
 		workingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.launcher.ui.launch.ExecutePomActionSupport#
+	 * isTestStrategyMatching(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
+	@Override
+	protected boolean isTestStrategyMatching(ILaunchConfiguration configuration) {
+		return isSkipTest(configuration);
+	}
+
+	protected String getBasicLaunchConfigurationName(IContainer basedir, IFile camelFile, String launchSafeGoalName) {
+		return super.getBasicLaunchConfigurationName(camelFile) + " (without Tests)";
 	}
 }

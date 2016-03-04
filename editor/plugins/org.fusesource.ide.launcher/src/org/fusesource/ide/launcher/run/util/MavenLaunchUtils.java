@@ -45,8 +45,7 @@ public class MavenLaunchUtils {
 			return s;
 		}
 		try {
-			return VariablesPlugin.getDefault().getStringVariableManager()
-					.performStringSubstitution(s);
+			return VariablesPlugin.getDefault().getStringVariableManager().performStringSubstitution(s);
 		} catch (CoreException e) {
 			Activator.getLogger().error("Could not substitute variable {}.", e);
 			return null;
