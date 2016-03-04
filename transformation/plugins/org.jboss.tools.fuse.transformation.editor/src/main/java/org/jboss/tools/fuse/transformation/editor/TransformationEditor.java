@@ -359,7 +359,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             
             // Ensure Maven will compile transformations folder
             File pomFile = manager.project().getLocation().append("pom.xml").toFile();
-            MavenUtils.addResourceFolder(manager.project(), pomFile, Util.TRANSFORMATIONS_FOLDER);
+			new MavenUtils().addResourceFolder(manager.project(), pomFile, Util.TRANSFORMATIONS_FOLDER);
             
             // Ensure Java project source classpath entry exists for transformations folder
             boolean exists = false;

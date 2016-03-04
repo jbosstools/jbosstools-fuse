@@ -261,7 +261,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
      * and inserts it into the pom.xml if needed
      */
     public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
-    	MavenUtils.updateMavenDependencies(compDeps);
+		new MavenUtils().updateMavenDependencies(compDeps);
     }
     
 	/**
