@@ -98,7 +98,6 @@ public class Downloader {
         ignoredArtifacts.add("camel-web-osgi-archetype");
         ignoredArtifacts.add("camel-archetype-groovy");
         ignoredArtifacts.add("camel-archetype-api-component");
-        ignoredArtifacts.add("camel-archetype-component");
         ignoredArtifacts.add("camel-archetype-dataformat");
         ignoredArtifacts.add("camel-archetype-scr");
         ignoredArtifacts.add("camel-archetype-war");
@@ -172,7 +171,7 @@ public class Downloader {
         String[] repositories = { "http://origin-repository.jboss.org/nexus/content/groups/ea", "http://repository.jboss.org/nexus/content/groups/ea/", "http://repository.jboss.org/nexus/content/groups/fs-public/", "http://repo1.maven.org/maven2" };
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
-//        indexer.start();
+        indexer.start();
 
         List<Repository> repos = Aether.defaultRepositories();
         repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
@@ -185,8 +184,8 @@ public class Downloader {
     }
 
     public void run() throws Exception {
-//        downloadArchetypes();
-//        downloadXsds();
+        downloadArchetypes();
+        downloadXsds();
         downloadCamelCatalogModelData();
     }
 
