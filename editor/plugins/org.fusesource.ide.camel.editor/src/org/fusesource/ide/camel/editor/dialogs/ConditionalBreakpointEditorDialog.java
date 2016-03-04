@@ -244,7 +244,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 		grpLayout.marginHeight = 10;
 		grpLayout.marginWidth = 10;
 		
-		grp_language = new Group(container, SWT.BORDER);
+		grp_language = new Group(container, SWT.NONE);
 		grp_language.setText("Language");
 		grp_language.setToolTipText("Please select a language from the drop down box...");
 	    grp_language.setLayout(grpLayout);
@@ -297,7 +297,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 		grpLayout.marginHeight = 10;
 		grpLayout.marginWidth = 10;
 		
-		grp_condition = new Group(container, SWT.BORDER);
+		grp_condition = new Group(container, SWT.NONE);
 		grp_condition.setText("Condition");
 		grp_condition.setToolTipText("Please define your condition...");
 		grp_condition.setLayout(grpLayout);
