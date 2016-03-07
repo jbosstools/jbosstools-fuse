@@ -22,7 +22,7 @@ import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 /**
  * @author lhein
  */
-public final class ValidationFactory {
+public class ValidationFactory {
 	
 	private static Map<Class<? extends AbstractCamelModelElement>, ValidationSupport> registeredValidators = new HashMap<Class<? extends AbstractCamelModelElement>, ValidationSupport>();
 	private static ValidationFactory instance;

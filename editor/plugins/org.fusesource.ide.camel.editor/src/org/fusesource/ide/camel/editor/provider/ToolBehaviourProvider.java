@@ -42,6 +42,7 @@ import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.graphiti.palette.impl.PaletteCompartmentEntry;
+import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.graphiti.platform.IPlatformImageConstants;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.tb.ContextButtonEntry;
@@ -71,8 +72,8 @@ import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -91,6 +92,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public static final String PALETTE_ICON_ATTR = "paletteIcon";
 	public static final String DIAGRAM_IMAGE_ATTR = "diagramImage";
 	public static final String EXT_ID_ATTR = "id";
+	static final int OFFSET_VALIDATION_DECORATOR = 20;
 
 	private static HashMap<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<ICreateFeature, IConfigurationElement>();
 
@@ -422,93 +424,105 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		if (pe.isVisible()) {
 			// first we add super decorators
 			IDecorator[] superDecorators = super.getDecorators(pe);
-			for (IDecorator d : superDecorators)
+			for (IDecorator d : superDecorators) {
 				decorators.add(d);
+			}
 
 			// and then our own
-			IFeatureProvider featureProvider = getFeatureProvider();
-			Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
+			Object bo = getBusinessObject(pe);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement node = (AbstractCamelModelElement) bo;
-
-				ValidationResult res = ValidationFactory.getInstance().validate(node);
-				if (res.getInformationCount() > 0) {
-					for (String message : res.getInformations()) {
-						IDecorator imageRenderingDecorator = new ImageDecorator(
-								IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
-						imageRenderingDecorator.setMessage(message);
-						decorators.add(imageRenderingDecorator);
-					}
-				}
-				if (res.getWarningCount() > 0) {
-					for (String message : res.getWarnings()) {
-						IDecorator imageRenderingDecorator = new ImageDecorator(
-								IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
-						imageRenderingDecorator.setMessage(message);
-						decorators.add(imageRenderingDecorator);
-					}
-				}
-				if (res.getErrorCount() > 0) {
-					for (String message : res.getErrors()) {
-						IDecorator imageRenderingDecorator = new ImageDecorator(
-								IPlatformImageConstants.IMG_ECLIPSE_ERROR_TSK);
-						imageRenderingDecorator.setMessage(message);
-						decorators.add(imageRenderingDecorator);
-					}
-				}
-
-				// decorate breakpoints on endpoints
-				if (getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null
-						&& getDiagramTypeProvider().getDiagramBehavior()
-								.getDiagramContainer() instanceof CamelDesignEditor) {
-
-					CamelDesignEditor editor = (CamelDesignEditor) getDiagramTypeProvider().getDiagramBehavior()
-							.getDiagramContainer();
-					if (editor.getWorkspaceProject() != null) {
-						IResource file = editor.getModel().getResource();
-						String projectName = editor.getWorkspaceProject().getName();
-						IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), file.getName(),
-								projectName);
-						if (bp != null && bp instanceof CamelEndpointBreakpoint) {
-							CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint) bp;
-
-							// we only want to decorate breakpoints which belong
-							// to this
-							// project
-							if (cep.getProjectName().equals(projectName)) {
-								try {
-									if (cep.isEnabled() && bp instanceof CamelConditionalBreakpoint) {
-										// show enabled breakpoint decorator
-										IDecorator imageRenderingDecorator = new ImageDecorator(
-												ImageProvider.IMG_YELLOWDOT);
-										imageRenderingDecorator.setMessage("");
-										decorators.add(imageRenderingDecorator);
-									} else if (cep.isEnabled() && bp instanceof CamelEndpointBreakpoint) {
-										// show enabled breakpoint decorator
-										IDecorator imageRenderingDecorator = new ImageDecorator(
-												ImageProvider.IMG_REDDOT);
-										imageRenderingDecorator.setMessage("");
-										decorators.add(imageRenderingDecorator);
-									} else {
-										// show disabled breakpoint decorator
-										IDecorator imageRenderingDecorator = new ImageDecorator(
-												ImageProvider.IMG_GRAYDOT);
-										imageRenderingDecorator.setMessage("");
-										decorators.add(imageRenderingDecorator);
-									}
-								} catch (CoreException e) {
-									CamelEditorUIActivator.pluginLog().logError(e);
-								}
-							}
-						}
-					}
-				}
-
+				addValidationDecorators(ValidationFactory.getInstance(), decorators, node);
+				addBreakPointDecorator(decorators, node);
 				return decorators.toArray(new IDecorator[decorators.size()]);
 			}
 		}
 
 		return super.getDecorators(pe);
+	}
+
+	/**
+	 * @param pe
+	 * @return
+	 */
+	private Object getBusinessObject(PictogramElement pe) {
+		IFeatureProvider featureProvider = getFeatureProvider();
+		return featureProvider.getBusinessObjectForPictogramElement(pe);
+	}
+
+	/**
+	 * @param decorators
+	 * @param node
+	 */
+	private void addBreakPointDecorator(List<IDecorator> decorators, AbstractCamelModelElement node) {
+		// decorate breakpoints on endpoints
+		final IDiagramContainer diagramContainer = getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+		if (diagramContainer != null && diagramContainer instanceof CamelDesignEditor) {
+
+			CamelDesignEditor editor = (CamelDesignEditor) diagramContainer;
+			if (editor.getWorkspaceProject() != null) {
+				IResource file = editor.getModel().getResource();
+				String projectName = editor.getWorkspaceProject().getName();
+				IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), file.getName(), projectName);
+				if (bp != null && bp instanceof CamelEndpointBreakpoint) {
+					CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint) bp;
+
+					// we only want to decorate breakpoints which belong to this
+					// project
+					if (cep.getProjectName().equals(projectName)) {
+						try {
+							if (cep.isEnabled() && bp instanceof CamelConditionalBreakpoint) {
+								// show enabled breakpoint decorator
+								addBreakPointValidator(decorators, ImageProvider.IMG_YELLOWDOT);
+							} else if (cep.isEnabled() && bp instanceof CamelEndpointBreakpoint) {
+								// show enabled breakpoint decorator
+								addBreakPointValidator(decorators, ImageProvider.IMG_REDDOT);
+							} else {
+								// show disabled breakpoint decorator
+								addBreakPointValidator(decorators, ImageProvider.IMG_GRAYDOT);
+							}
+						} catch (CoreException e) {
+							CamelEditorUIActivator.pluginLog().logError(e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param decorators
+	 * @param imgYellowdot
+	 */
+	private void addBreakPointValidator(List<IDecorator> decorators, final String imgYellowdot) {
+		IDecorator imageRenderingDecorator = new ImageDecorator(imgYellowdot);
+		imageRenderingDecorator.setMessage("");
+		decorators.add(imageRenderingDecorator);
+	}
+
+	void addValidationDecorators(ValidationFactory validationFactoryInstance, List<IDecorator> decorators, AbstractCamelModelElement node) {
+		ValidationResult res = validationFactoryInstance.validate(node);
+		if (res.getInformationCount() > 0) {
+			addValidationDecorator(decorators, String.join("\n", res.getInformations()), IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
+		}
+		if (res.getWarningCount() > 0) {
+			addValidationDecorator(decorators, String.join("\n", res.getWarnings()), IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
+		}
+		if (res.getErrorCount() > 0) {
+			addValidationDecorator(decorators, String.join("\n", res.getErrors()), IPlatformImageConstants.IMG_ECLIPSE_ERROR_TSK);
+		}
+	}
+
+	/**
+	 * @param decorators
+	 * @param message
+	 * @param imgEclipseInformationTsk
+	 */
+	private void addValidationDecorator(List<IDecorator> decorators, String message, final String imgEclipseInformationTsk) {
+		ImageDecorator imageRenderingDecorator = new ImageDecorator(imgEclipseInformationTsk);
+		imageRenderingDecorator.setMessage(message);
+		imageRenderingDecorator.setX(OFFSET_VALIDATION_DECORATOR);
+		decorators.add(imageRenderingDecorator);
 	}
 
 	/*
@@ -546,8 +560,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm[] getClickArea(PictogramElement pe) {
-		IFeatureProvider featureProvider = getFeatureProvider();
-		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
+		Object bo = getBusinessObject(pe);
 		if (bo instanceof AbstractCamelModelElement && !(bo instanceof CamelElementConnection)) {
 			GraphicsAlgorithm rectangle = pe.getGraphicsAlgorithm();
 			return new GraphicsAlgorithm[] { rectangle };
@@ -561,8 +574,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm getSelectionBorder(PictogramElement pe) {
-		IFeatureProvider featureProvider = getFeatureProvider();
-		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
+		Object bo = getBusinessObject(pe);
 		if (bo instanceof AbstractCamelModelElement) {
 			GraphicsAlgorithm rectangle = pe.getGraphicsAlgorithm();
 			return rectangle;
