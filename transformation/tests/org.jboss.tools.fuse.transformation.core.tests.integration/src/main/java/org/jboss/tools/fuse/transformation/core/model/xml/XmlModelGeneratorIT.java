@@ -22,8 +22,9 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.assertj.core.api.Assertions;
+import org.eclipse.ui.PlatformUI;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -60,8 +61,9 @@ public class XmlModelGeneratorIT {
     }
 
     @Test
-	@Ignore("test is failing due to accessExternalSchemaProperty")
     public void generateFromInstanceWithMultipleNamespaces() throws Exception {
+		// The test need to be launched in an OSGi platform to have a real check
+		Assertions.assertThat(PlatformUI.getWorkbench()).isNotNull();
 		File xmlInstance = getFile(XML_INST_PATH_3);
 		File generatedSchema = new File(xmlInstance.getParentFile(), XML_INST_PATH_3 + ".xsd");
 		File generatedSchemaA = new File(xmlInstance.getParentFile(), "bogus.com.a.xsd");
@@ -75,7 +77,9 @@ public class XmlModelGeneratorIT {
 		File generatedObjectFactoryC = new File(targetFolder, "com/bogus/c/ObjectFactory.java");
 		File generatedRoot = new File(targetFolder, "com/bogus/a/ObjectFactory.java");
         XmlModelGenerator modelGen = new XmlModelGenerator();
+
 		JCodeModel codeModel = modelGen.generateFromInstance(xmlInstance, generatedSchema, null, targetFolder);
+
         Assert.assertTrue(generatedSchema.exists());
         Assert.assertTrue(generatedSchemaA.exists());
         Assert.assertTrue(generatedSchemaB.exists());

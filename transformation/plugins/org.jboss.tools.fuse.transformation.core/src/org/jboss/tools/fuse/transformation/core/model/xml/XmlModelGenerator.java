@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
@@ -30,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
@@ -43,6 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -69,6 +72,7 @@ public class XmlModelGenerator {
 
     private static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
     private static final String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
+	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema";
 
     void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
                                    JPrimitiveType voidType) {
@@ -213,6 +217,8 @@ public class XmlModelGenerator {
                                            File schemaFile,
                                            String packageName,
                                            File targetPath) throws Exception {
+		// Step 0 - avoid issue with schema loading on Java 8
+		final String initialValue_AccessExternalSchema = System.getProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
         // Step 1 - generate schema from instance doc
         Inst2XsdOptions options = new Inst2XsdOptions();
         options.setDesign(Inst2XsdOptions.DESIGN_RUSSIAN_DOLL);
@@ -221,6 +227,8 @@ public class XmlModelGenerator {
         if (schemaDocs.length == 1) {
             schemaDocs[0].save(schemaFile, new XmlOptions().setSavePrettyPrint());
         } else {
+			System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all");
+
             String namespace = xml[0].getDomNode().getFirstChild().getNamespaceURI();
             // Save schemas and map their namespaces to their locations
             Map<String, File> fileByNamespace = new HashMap<>();
@@ -237,7 +245,7 @@ public class XmlModelGenerator {
                         if (builder.length() > 0) builder.append('.');
                         builder.append(part);
                     }
-                    file = new File(builder + ".xsd");
+					file = new File(schemaFile.getParent(), builder + ".xsd");
                 }
                 schemaDoc.save(file, new XmlOptions().setSavePrettyPrint());
                 fileByNamespace.put(targetNamespace, file);
@@ -279,7 +287,15 @@ public class XmlModelGenerator {
         }
 
         // Step 2 - call generateFromSchema with generated schema
-        return generateFromSchema(schemaFile, packageName, targetPath);
+		final JCodeModel generatedSchema = generateFromSchema(schemaFile, packageName, targetPath);
+
+		if (initialValue_AccessExternalSchema != null) {
+			System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, initialValue_AccessExternalSchema);
+		} else {
+			System.clearProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
+		}
+
+		return generatedSchema;
     }
 
     /**
