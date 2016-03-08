@@ -19,6 +19,8 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -43,7 +45,6 @@ public abstract class AbstractCamelModelElement {
 	protected static final String ENDPOINT_NODE_NAME = "endpoint";
 	protected static final String ROUTE_NODE_NAME = "route";
 	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
-	
 	// children is a list of objects which are no route outputs
 	private List<AbstractCamelModelElement> childElements = new ArrayList<AbstractCamelModelElement>();
 
@@ -73,6 +74,7 @@ public abstract class AbstractCamelModelElement {
 
 	private String name;
 	private String description;
+	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
 
 	/**
 	 * creates a camel node using the xml node
@@ -542,8 +544,11 @@ public abstract class AbstractCamelModelElement {
 					break;
 				}
 			}
-			if (childFound)
+			if (childFound) {
 				getXmlNode().removeChild(element.getXmlNode());
+				IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+				eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, element);
+			}
 		}
 		// special handling for the otherwise element
 		if (getNodeTypeId().equalsIgnoreCase("choice") && element.getNodeTypeId().equalsIgnoreCase("otherwise")) {

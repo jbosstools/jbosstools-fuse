@@ -10,7 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.validation;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -23,6 +27,8 @@ public class CamelValidationActivator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static CamelValidationActivator plugin;
+
+	private ClearValidationMarkerOnRemoveEventHandler eventHandler = null;
 	
 	/**
 	 * The constructor
@@ -37,6 +43,9 @@ public class CamelValidationActivator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventHandler = new ClearValidationMarkerOnRemoveEventHandler(new BasicNodeValidator());
+		eventBroker.subscribe(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, eventHandler);
 	}
 
 	/*
@@ -45,6 +54,10 @@ public class CamelValidationActivator extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		if (eventHandler != null) {
+			eventBroker.unsubscribe(eventHandler);
+		}
 		super.stop(context);
 	}
 

@@ -29,8 +29,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.ValidationResult;
@@ -96,7 +96,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param camelModelElement
 	 * @return
 	 */
-	private void clearMarkers(AbstractCamelModelElement camelModelElement) {
+	public void clearMarkers(AbstractCamelModelElement camelModelElement) {
 		try {
 			final CamelFile camelFile = camelModelElement.getCamelFile();
 			if (camelFile != null) {
