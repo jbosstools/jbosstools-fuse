@@ -99,6 +99,8 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 			AbstractCamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
 			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
 				link(pictogramElement, bo2);
+				// CamelDebugUtils.getBreakpointForSelection(endpointId, ,
+				// projectName);
 				this.changed = true;
 			}
 			

@@ -19,10 +19,13 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelEndpointBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -673,9 +676,6 @@ public abstract class AbstractCamelModelElement {
 		setParameter(name, value, false);
 	}
 
-	/**
-	 * 
-	 */
 	private void removePossibleDataFormatsInFavorToREF() {
 		if (getUnderlyingMetaModelObject() != null) {
 			for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
@@ -724,8 +724,8 @@ public abstract class AbstractCamelModelElement {
 		Element e = (Element) getXmlNode();
 		if (e == null)
 			return;
-		String kind = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
-		String javaType = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getJavaType() : null;
+		String kind = getKind(name);
+		String javaType = getJavaType(name);
 
 		if (this instanceof CamelContextElement) kind = "attribute";
 		
@@ -755,150 +755,232 @@ public abstract class AbstractCamelModelElement {
 				Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
 				e.replaceChild(newChild, oldChild);
 			} else if (kind.equalsIgnoreCase("attribute")) {
-				String defaultValue = this.underlyingMetaModelObject != null
-						? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
-				if (defaultValue != null && defaultValue.equals(getMappedValue(value))) {
-					// default value -> no need to explicitely set it -> delete
-					// existing
-					e.removeAttribute(name);
-				} else {
-					// not the default value, so set it
-					e.setAttribute(name, getMappedValue(value));
-				}
+				updateAttributes(name, value, oldValue, e);
 			} else if (kind.equalsIgnoreCase("element") && name.equals("description")) {
-				// description element handling
-				Eip subEip = getEipByName(name);
-				if (subEip != null) {
-					// seems this parameter is another eip type -> we need to
-					// create/modify a subnode
-					boolean createSubNode = true;
-					Node subNode = null;
-					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
-						subNode = e.getChildNodes().item(c);
-						if (subNode.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTranslatedNodeName(subNode).equals(name)) {
-							createSubNode = false;
-							break;
-						}
-					}
-					if (createSubNode) {
-						subNode = createElement(name, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-						e.appendChild(subNode);
-					}
-					subNode.setTextContent(getMappedValue(value));
-				}
+				updateElementDescription(name, value, e);
 			} else if (kind.equalsIgnoreCase("element") && javaType.equals("org.apache.camel.model.DataFormatDefinition")) {
-				// expression element handling
-				AbstractCamelModelElement df = null;
-				if (value instanceof AbstractCamelModelElement) {
-					df = (AbstractCamelModelElement) value;
-				}
-				Eip subEip = getEipByName(df.getNodeTypeId());
-				if (subEip != null) {
-					// seems this parameter is another eip type -> we need to
-					// create/modify a subnode
-					boolean createSubNode = true;
-					Node subNode = null;
-
-					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
-						subNode = e.getChildNodes().item(c);
-						if (subNode.getNodeType() == Node.ELEMENT_NODE
-								&& CamelUtils.getTranslatedNodeName(subNode).equals(df.getNodeTypeId())) {
-							createSubNode = false;
-							break;
-						}
-					}
-					if (createSubNode) {
-						subNode = createElement(df.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-						e.appendChild(subNode);
-					}
-
-					for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
-						Node attrNode = ((Element) subNode).getAttributes().item(i);
-						((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
-					}
-					Iterator<String> pKeys = df.getParameters().keySet().iterator();
-					while (pKeys.hasNext()) {
-						String pKey = pKeys.next();
-						Object oValue = df.getParameter(pKey);
-						// expressions shouldn't have expression attributes but
-						// values
-						if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
-							if (oValue != null && oValue.toString().trim().length() > 0)
-								((Element) subNode).setNodeValue(oValue.toString());
-						} else {
-							if (oValue != null && oValue.toString().trim().length() > 0)
-								((Element) subNode).setAttribute(pKey, oValue.toString());
-						}
-					}
-				}
+				updateDataFormat(value, e);
 			} else if (kind.equalsIgnoreCase("expression")) {
-				// expression element handling
-				AbstractCamelModelElement exp = null;
-				if (value instanceof AbstractCamelModelElement) {
-					exp = (AbstractCamelModelElement) value;
-				}
-				Eip subEip = getEipByName(exp.getNodeTypeId());
-				if (subEip != null) {
-					// seems this parameter is another eip type -> we need to
-					// create/modify a subnode
-					boolean createSubNode = true;
-					Node subNode = null;
-
-					String comparedNodeName = name.equals("expression") ? exp.getNodeTypeId() : name;
-
-					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
-						subNode = e.getChildNodes().item(c);
-						if (subNode.getNodeType() == Node.ELEMENT_NODE
-								&& CamelUtils.getTranslatedNodeName(subNode).equals(comparedNodeName)) {
-							createSubNode = false;
-							break;
-						}
-					}
-					if (createSubNode) {
-						subNode = createElement(comparedNodeName, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-						e.appendChild(subNode);
-						if (comparedNodeName.equals("expression") == false) {
-							Node subSubNode = createElement(exp.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-							subNode.appendChild(subSubNode);
-							subNode = subSubNode;
-						}
-					}
-
-					for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
-						Node attrNode = ((Element) subNode).getAttributes().item(i);
-						((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
-					}
-					Iterator<String> pKeys = exp.getParameters().keySet().iterator();
-					while (pKeys.hasNext()) {
-						String pKey = pKeys.next();
-						Object oValue = exp.getParameter(pKey);
-						// expressions shouldn't have expression attributes but
-						// values
-						if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
-							if (oValue != null && oValue.toString().trim().length() > 0)
-								((Element) subNode).setNodeValue(oValue.toString());
-						} else {
-							if (oValue != null && oValue.toString().trim().length() > 0)
-								((Element) subNode).setAttribute(pKey, oValue.toString());
-						}
-					}
-				} else {
-					// special case for nested expressions
-					Node oldChild = null;
-					for (int i = 0; i < e.getChildNodes().getLength(); i++) {
-						if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
-								&& CamelUtils.getTranslatedNodeName(e.getChildNodes().item(i)).equals(name)) {
-							oldChild = e.getChildNodes().item(i);
-							break;
-						}
-					}
-					Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
-					e.replaceChild(newChild, oldChild);
-				}
+				updateExpression(name, value, e);
 			} else if (kind.equalsIgnoreCase("value")) {
 				e.setTextContent(getMappedValue(value));
 			}
 		}
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	private String getJavaType(String name) {
+		return getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getJavaType() : null;
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	String getKind(String name) {
+		return getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
+	}
+
+	/**
+	 * @param name
+	 * @param value
+	 * @param e
+	 */
+	private void updateExpression(String name, Object value, Element e) {
+		// expression element handling
+		AbstractCamelModelElement exp = null;
+		if (value instanceof AbstractCamelModelElement) {
+			exp = (AbstractCamelModelElement) value;
+		}
+		Eip subEip = getEipByName(exp.getNodeTypeId());
+		if (subEip != null) {
+			// seems this parameter is another eip type -> we need to
+			// create/modify a subnode
+			boolean createSubNode = true;
+			Node subNode = null;
+
+			String comparedNodeName = name.equals("expression") ? exp.getNodeTypeId() : name;
+
+			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+				subNode = e.getChildNodes().item(c);
+				if (subNode.getNodeType() == Node.ELEMENT_NODE
+						&& CamelUtils.getTranslatedNodeName(subNode).equals(comparedNodeName)) {
+					createSubNode = false;
+					break;
+				}
+			}
+			if (createSubNode) {
+				subNode = createElement(comparedNodeName, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				e.appendChild(subNode);
+				if (comparedNodeName.equals("expression") == false) {
+					Node subSubNode = createElement(exp.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+					subNode.appendChild(subSubNode);
+					subNode = subSubNode;
+				}
+			}
+
+			for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
+				Node attrNode = ((Element) subNode).getAttributes().item(i);
+				((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
+			}
+			Iterator<String> pKeys = exp.getParameters().keySet().iterator();
+			while (pKeys.hasNext()) {
+				String pKey = pKeys.next();
+				Object oValue = exp.getParameter(pKey);
+				// expressions shouldn't have expression attributes but
+				// values
+				if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+					if (oValue != null && oValue.toString().trim().length() > 0)
+						((Element) subNode).setNodeValue(oValue.toString());
+				} else {
+					if (oValue != null && oValue.toString().trim().length() > 0)
+						((Element) subNode).setAttribute(pKey, oValue.toString());
+				}
+			}
+		} else {
+			// special case for nested expressions
+			Node oldChild = null;
+			for (int i = 0; i < e.getChildNodes().getLength(); i++) {
+				if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
+						&& CamelUtils.getTranslatedNodeName(e.getChildNodes().item(i)).equals(name)) {
+					oldChild = e.getChildNodes().item(i);
+					break;
+				}
+			}
+			Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
+			e.replaceChild(newChild, oldChild);
+		}
+	}
+
+	/**
+	 * @param name
+	 * @param value
+	 * @param e
+	 */
+	private void updateElementDescription(String name, Object value, Element e) {
+		// description element handling
+		Eip subEip = getEipByName(name);
+		if (subEip != null) {
+			// seems this parameter is another eip type -> we need to
+			// create/modify a subnode
+			boolean createSubNode = true;
+			Node subNode = null;
+			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+				subNode = e.getChildNodes().item(c);
+				if (subNode.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTranslatedNodeName(subNode).equals(name)) {
+					createSubNode = false;
+					break;
+				}
+			}
+			if (createSubNode) {
+				subNode = createElement(name, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				e.appendChild(subNode);
+			}
+			subNode.setTextContent(getMappedValue(value));
+		}
+	}
+
+	/**
+	 * @param value
+	 * @param e
+	 */
+	private void updateDataFormat(Object value, Element e) {
+		// expression element handling
+		AbstractCamelModelElement df = null;
+		if (value instanceof AbstractCamelModelElement) {
+			df = (AbstractCamelModelElement) value;
+		}
+		Eip subEip = getEipByName(df.getNodeTypeId());
+		if (subEip != null) {
+			// seems this parameter is another eip type -> we need to
+			// create/modify a subnode
+			boolean createSubNode = true;
+			Node subNode = null;
+
+			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+				subNode = e.getChildNodes().item(c);
+				if (subNode.getNodeType() == Node.ELEMENT_NODE
+						&& CamelUtils.getTranslatedNodeName(subNode).equals(df.getNodeTypeId())) {
+					createSubNode = false;
+					break;
+				}
+			}
+			if (createSubNode) {
+				subNode = createElement(df.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				e.appendChild(subNode);
+			}
+
+			for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
+				Node attrNode = ((Element) subNode).getAttributes().item(i);
+				((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
+			}
+			Iterator<String> pKeys = df.getParameters().keySet().iterator();
+			while (pKeys.hasNext()) {
+				String pKey = pKeys.next();
+				Object oValue = df.getParameter(pKey);
+				// expressions shouldn't have expression attributes but
+				// values
+				if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+					if (oValue != null && oValue.toString().trim().length() > 0)
+						((Element) subNode).setNodeValue(oValue.toString());
+				} else {
+					if (oValue != null && oValue.toString().trim().length() > 0)
+						((Element) subNode).setAttribute(pKey, oValue.toString());
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param name
+	 * @param value
+	 * @param oldValue
+	 * @param e
+	 */
+	private void updateAttributes(String name, Object value, Object oldValue, Element e) {
+		String defaultValue = getDefaultvalue(name);
+		if (defaultValue != null && defaultValue.equals(getMappedValue(value))) {
+			// default value -> no need to explicitely set it -> delete
+			// existing
+			e.removeAttribute(name);
+		} else {
+			// not the default value, so set it
+			e.setAttribute(name, getMappedValue(value));
+			if ("id".equals(name)) {
+				updateBreakpoint((String) value, (String) oldValue);
+			}
+		}
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	String getDefaultvalue(String name) {
+		return this.underlyingMetaModelObject != null ? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
+	}
+
+	/**
+	 * @param newId
+	 * @param oldId
+	 */
+	void updateBreakpoint(String newId, String oldId) {
+		IBreakpoint breakpointForSelection = getBreakpoint(oldId);
+		if (breakpointForSelection != null && breakpointForSelection instanceof CamelEndpointBreakpoint) {
+			((CamelEndpointBreakpoint) breakpointForSelection).updateEndpointNodeId(getMappedValue(newId));
+		}
+	}
+
+	/**
+	 * @param oldId
+	 * @return
+	 */
+	IBreakpoint getBreakpoint(String oldId) {
+		final IResource resource = getCamelFile().getResource();
+		return CamelDebugUtils.getBreakpointForSelection((String) oldId, resource.getName(), resource.getProject().getName());
 	}
 
 	/**

@@ -22,9 +22,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.dialogs.ConditionalBreakpointEditorDialog;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.model.service.core.debug.model.CamelConditionalBreakpoint;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * @author lhein

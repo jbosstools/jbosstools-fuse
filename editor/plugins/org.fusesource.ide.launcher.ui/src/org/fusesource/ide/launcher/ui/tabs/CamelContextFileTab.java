@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.ui.Activator;
 

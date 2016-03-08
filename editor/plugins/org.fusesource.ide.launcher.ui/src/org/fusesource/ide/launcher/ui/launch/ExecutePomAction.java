@@ -14,7 +14,7 @@ package org.fusesource.ide.launcher.ui.launch;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.camel.model.service.core.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 
 

@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.camel.model.service.core.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.Activator;
 import org.fusesource.ide.launcher.util.SecureStorageUtil;
 

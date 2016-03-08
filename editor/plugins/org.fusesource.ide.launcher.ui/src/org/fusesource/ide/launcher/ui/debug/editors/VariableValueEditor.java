@@ -16,7 +16,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.ui.actions.IVariableValueEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.fusesource.ide.launcher.debug.model.variables.BaseWriteableCamelBooleanVariable;
+import org.fusesource.ide.camel.model.service.core.debug.model.variables.BaseWriteableCamelBooleanVariable;
 import org.fusesource.ide.launcher.ui.Activator;
 
 /**

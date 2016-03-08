@@ -33,8 +33,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.fusesource.ide.camel.model.service.core.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.Activator;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * Computes the default source lookup path for a Camel launch configuration.

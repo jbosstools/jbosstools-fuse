@@ -18,9 +18,9 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.m2e.internal.launch.MavenLaunchDelegate;
+import org.fusesource.ide.camel.model.service.core.debug.CamelDebugTarget;
+import org.fusesource.ide.camel.model.service.core.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.Activator;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.util.SecureStorageUtil;
 
 public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {

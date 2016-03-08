@@ -35,13 +35,13 @@
    <extension
          point="org.eclipse.debug.core.breakpoints">
       <breakpoint
-            class="org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint"
+            class="org.fusesource.ide.camel.model.service.core.debug.model.CamelEndpointBreakpoint"
             id="org.fusesource.ide.launcher.debug.camel.endpointBreakpoint"
             markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
             name="Camel Endpoint Breakpoint">
       </breakpoint>
       <breakpoint
-            class="org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint"
+            class="org.fusesource.ide.camel.model.service.core.debug.model.CamelConditionalBreakpoint"
             id="org.fusesource.ide.launcher.debug.camel.conditionalEndpointBreakpoint"
             markerType="org.fusesource.ide.launcher.debug.camel.conditionalbreakpoint.marker"
             name="Camel Conditional Breakpoint">

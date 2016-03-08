@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.fusesource.ide.camel.model.service.core.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
 import org.jboss.tools.jmx.core.tree.Node;
