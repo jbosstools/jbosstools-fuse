@@ -25,6 +25,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -199,5 +200,21 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	@Override
 	public String toString() {
 		return String.format("Camel Breakpoint [endpointId=%s, project=%s, fileName=%s, contextId=%s]", getEndpointNodeId(), getProjectName(), getFileName(), getContextId());
+	}
+
+	/**
+	 * @param newId
+	 */
+	public void updateEndpointNodeId(String newId) {
+		this.endpointNodeId = newId;
+		try {
+			final IMarker marker = getMarker();
+			if (marker != null) {
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, CamelEndpointBreakpoint.this.endpointNodeId);
+			}
+		} catch (CoreException e) {
+			Activator.getLogger().error(e);
+		}
+
 	}
 }
