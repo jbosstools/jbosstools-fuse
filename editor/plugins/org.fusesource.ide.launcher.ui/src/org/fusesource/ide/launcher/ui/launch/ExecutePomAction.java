@@ -12,6 +12,7 @@
 package org.fusesource.ide.launcher.ui.launch;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -37,5 +38,16 @@ public class ExecutePomAction extends ExecutePomActionSupport {
 		workingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, path == null ? "" : path); // basedir.getLocation().toOSString()
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, false);
 		workingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.launcher.ui.launch.ExecutePomActionSupport#
+	 * isTestStrategyMatching(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
+	@Override
+	protected boolean isTestStrategyMatching(ILaunchConfiguration configuration) {
+		return !isSkipTest(configuration);
 	}
 }
