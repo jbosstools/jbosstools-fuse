@@ -33,19 +33,12 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.e4.core.services;bundle-version="2.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator
-Export-Package: org.fusesource.ide.launcher;uses:="org.eclipse.osgi.util,org.eclipse.core.runtime",
- org.fusesource.ide.launcher.debug.launching;uses:="org.eclipse.debug.core,org.eclipse.debug.core.sourcelookup,org.eclipse.core.runtime",
- org.fusesource.ide.launcher.debug.model;
-  uses:="org.eclipse.debug.core,
-   org.eclipse.core.runtime,
-   org.fusesource.ide.launcher.debug.model.exchange,
-   org.eclipse.core.runtime.jobs,
-   org.eclipse.core.resources,
-   javax.management,
-   org.eclipse.debug.core.model",
+Export-Package: org.fusesource.ide.launcher,
+ org.fusesource.ide.launcher.debug.launching,
+ org.fusesource.ide.launcher.debug.model,
  org.fusesource.ide.launcher.debug.model.values,
  org.fusesource.ide.launcher.debug.model.variables,
- org.fusesource.ide.launcher.debug.util;uses:="org.fusesource.ide.launcher.debug.model,org.eclipse.core.resources,org.eclipse.debug.core.model",
+ org.fusesource.ide.launcher.debug.util,
  org.fusesource.ide.launcher.run.util,
- org.fusesource.ide.launcher.util;uses:="org.eclipse.debug.core"
+ org.fusesource.ide.launcher.util
 Import-Package: org.eclipse.jdt.ui
