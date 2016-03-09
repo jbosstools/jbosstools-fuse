@@ -534,7 +534,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return true if this is a FROM endpoint
 	 */
 	public boolean isFromEndpoint() {
-		return getInputElement() == null;
+		return getInputElement() == null && getParent() instanceof CamelRouteElement;
 	}
 
 	/**
