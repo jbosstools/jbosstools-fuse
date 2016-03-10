@@ -92,8 +92,8 @@ public class CamelEditorUIActivator extends BaseUIPlugin {
 			if (!file.startsWith(prefix)) {
 				CamelEditorUIActivator.pluginLog().logWarning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
 			}
-			fileName = fileName.substring(prefix.length());
-			registerImage(reg, fileName, fileName);
+			fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+			registerImage(reg, fileName, file);
 		}
 	}
 
@@ -103,8 +103,8 @@ public class CamelEditorUIActivator extends BaseUIPlugin {
 	 * @param key		the key to register under
 	 * @param fileName	the file name
 	 */
-	private void registerImage(ImageRegistry reg, String key, String fileName) {
-		reg.put(key, imageDescriptorFromPlugin(getBundle().getSymbolicName(), String.format("icons/%s", fileName)));
+	private void registerImage(ImageRegistry reg, String key, String filePath) {
+		reg.put(key, imageDescriptorFromPlugin(getBundle().getSymbolicName(), filePath));
 	}
 
 	/**

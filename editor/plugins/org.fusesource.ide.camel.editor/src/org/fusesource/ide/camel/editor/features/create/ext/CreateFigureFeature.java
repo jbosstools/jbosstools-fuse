@@ -150,7 +150,11 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public String getCreateImageId() {
 		String iconName = getIconName();
 		if (iconName != null) {
-			iconName = ImageProvider.getKeyForSmallIcon(iconName);
+			iconName = ImageProvider.getKeyForDiagramIcon(iconName);
+		}
+		if (iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE)) && 
+			getCategoryType().equals(CATEGORY_TYPE.COMPONENTS)) {
+			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
 		}
 		return iconName;
 	}
@@ -162,7 +166,11 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public String getCreateLargeImageId() {
 		String iconName = getIconName();
-		if (iconName != null) iconName = ImageProvider.getKeyForLargeIcon(iconName);
+		if (iconName != null) iconName = ImageProvider.getKeyForDiagramIcon(iconName);
+		if (iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE)) && 
+			getCategoryType().equals(CATEGORY_TYPE.COMPONENTS)) {
+			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
+		}
 		return iconName;
 	}
 
@@ -173,11 +181,16 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	protected String getIconName() {
 		String ret = null;
-		AbstractCamelModelElement node = createNode(null, false);
-		if(node != null ) {
-			ret = node.getIconName();
+		if (eip != null) {
+			ret = eip.getName();
 		}
-		return ret != null ? ret : "generic.png";
+		if (ret == null) {
+			AbstractCamelModelElement node = createNode(null, false);
+			if(node != null ) {
+				ret = node.getIconName();
+			}
+		}
+		return ret != null ? ret : "generic";
 	}
 	
 	/*

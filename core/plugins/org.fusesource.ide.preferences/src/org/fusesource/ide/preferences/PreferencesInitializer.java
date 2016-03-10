@@ -31,8 +31,8 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 		final IPreferenceStore store = PreferenceManager.getInstance().getUnderlyingStorage();
 
 		store.setDefault(PreferencesConstants.EDITOR_DEFAULT_LANGUAGE, "simple");
-		store.setDefault(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL, true);
-		store.setDefault(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION, PositionConstants.EAST);
+		store.setDefault(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL, false);
+		store.setDefault(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION, PositionConstants.SOUTH);
 		store.setDefault(PreferencesConstants.EDITOR_GRID_VISIBILITY, true);
 		store.setDefault(PreferencesConstants.EDITOR_GRID_COLOR, "227,238,249");
 		store.setDefault(PreferencesConstants.EDITOR_CONNECTION_COLOR, "0,0,0");

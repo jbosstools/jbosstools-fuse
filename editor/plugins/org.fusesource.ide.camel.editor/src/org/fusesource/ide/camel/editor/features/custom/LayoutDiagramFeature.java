@@ -59,7 +59,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	private static final int PADDING_H = 10;
 	private static final int PADDING_V = 10;
 	private static final int SPACING_H = 10;
-	private static final int SPACING_V = 30;
+	private static final int SPACING_V = 40;
 
 	public LayoutDiagramFeature(IFeatureProvider fp) {
 		super(fp);

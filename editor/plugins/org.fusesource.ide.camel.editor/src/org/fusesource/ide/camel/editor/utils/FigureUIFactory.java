@@ -44,16 +44,16 @@ public class FigureUIFactory {
 	
 	// new statics
 	public static final int DEFAULT_LABEL_OFFSET_H = 5;
-	public static final int DEFAULT_LABEL_OFFSET_V = 10;
-	public static final int IMAGE_DEFAULT_WIDTH = 100;
-	public static final int IMAGE_DEFAULT_HEIGHT = 70;
-	public static final int FIGURE_MAX_WIDTH = 140;
-	public static final int FIGURE_TITLEBAR_HEIGHT = 30;
+	public static final int DEFAULT_LABEL_OFFSET_V = 5;
+	public static final int FONT_SPACING_V = 4;
+	public static final int IMAGE_DEFAULT_WIDTH = 32;
+	public static final int IMAGE_DEFAULT_HEIGHT = 34;
+	public static final int FIGURE_MAX_WIDTH = 200;
 	public static final int BREAKPOINT_DECORATOR_SPACE = 25;
 	public static final int CORNER_WIDTH = 15;
 	public static final int CORNER_HEIGHT = 15;
 	public static final int BORDER_SIZE = 1;
-	
+
 	/**
 	 * 
 	 * @param context
@@ -111,9 +111,9 @@ public class FigureUIFactory {
 		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
 		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
 		int label_width = fontDimension.getWidth();
-		int label_height = fontDimension.getHeight();
+		int label_height = fontDimension.getHeight()+FONT_SPACING_V;
 
-		Dimension imageDimension = ImageUtils.getImageSize(ImageProvider.getKeyForSmallIcon(element.getIconName()));
+		Dimension imageDimension = ImageUtils.getImageSize(getEndpointFigureImageKey(element));
 		int image_width = imageDimension.width;
 		int image_height = imageDimension.height;
 
@@ -124,13 +124,13 @@ public class FigureUIFactory {
 		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
 																							 context.getY(), 
 																							 FIGURE_MAX_WIDTH + BORDER_SIZE + BORDER_SIZE, 
-																							 IMAGE_DEFAULT_HEIGHT + Math.max(image_height, label_height) + DEFAULT_LABEL_OFFSET_V);
+																							 IMAGE_DEFAULT_HEIGHT * 2 + DEFAULT_LABEL_OFFSET_V);
 
 		// the container for the child elements	
 		org.eclipse.swt.graphics.Rectangle contentSection = new org.eclipse.swt.graphics.Rectangle(	BORDER_SIZE, 
-																									FIGURE_TITLEBAR_HEIGHT - BORDER_SIZE, 
+																									IMAGE_DEFAULT_HEIGHT - BORDER_SIZE, 
 																								 	FIGURE_MAX_WIDTH - BORDER_SIZE, 
-																								 	baseRect.height - FIGURE_TITLEBAR_HEIGHT - BORDER_SIZE);
+																								 	baseRect.height - IMAGE_DEFAULT_HEIGHT - BORDER_SIZE);
 				
 		IGaService gaService = Graphiti.getGaService();
 
@@ -142,8 +142,7 @@ public class FigureUIFactory {
 		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
 		baseFigure.setBackground(titleSectionColor);
 		baseFigure.setFilled(true);
-//		baseFigure.setTransparency(.6);
-		markFigureHeaderArea(baseFigure, FIGURE_TITLEBAR_HEIGHT);		
+		markFigureHeaderArea(baseFigure, IMAGE_DEFAULT_HEIGHT);		
 		
 		// rearrange container
 		containerShape.getGraphicsAlgorithm().setLineVisible(true);
@@ -151,8 +150,8 @@ public class FigureUIFactory {
 		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
 		
 		// create and set image
-		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForSmallIcon(element.getIconName()));
-		gaService.setLocationAndSize(image, BREAKPOINT_DECORATOR_SPACE, (FIGURE_TITLEBAR_HEIGHT / 2) - (image_height / 2), image_width, image_height);
+		Image image = gaService.createImage(baseFigure, getEndpointFigureImageKey(element));
+		gaService.setLocationAndSize(image, BREAKPOINT_DECORATOR_SPACE, (IMAGE_DEFAULT_HEIGHT-image_height)/2, image_width, image_height);
 		
 		// create and set text graphics algorithm
 		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
@@ -162,7 +161,7 @@ public class FigureUIFactory {
 		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
-		gaService.setLocationAndSize(text, BREAKPOINT_DECORATOR_SPACE + image_width + DEFAULT_LABEL_OFFSET_H, 0, label_width, FIGURE_TITLEBAR_HEIGHT);
+		gaService.setLocationAndSize(text, BREAKPOINT_DECORATOR_SPACE + image_width + DEFAULT_LABEL_OFFSET_H, (IMAGE_DEFAULT_HEIGHT-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
 		markFigureTitleArea(text, image_width);
 		
 		// the content section figure
@@ -173,9 +172,8 @@ public class FigureUIFactory {
 		contentRectangle.setLineWidth(BORDER_SIZE);
 		contentRectangle.setLineVisible(false);
 		contentRectangle.setFilled(true);
-//		contentRectangle.setTransparency(.6);
 		gaService.setLocationAndSize(contentRectangle, contentSection.x, contentSection.y, contentSection.width, contentSection.height);
-		markExpandableFigureArea(contentRectangle, FIGURE_TITLEBAR_HEIGHT);
+		markExpandableFigureArea(contentRectangle, IMAGE_DEFAULT_HEIGHT);
 		
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
@@ -230,7 +228,6 @@ public class FigureUIFactory {
 		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
 		baseFigure.setBackground(figureBackgroundColor);
 		baseFigure.setFilled(true);
-//		baseFigure.setTransparency(.6);
 		
 		// rearrange container
 		containerShape.getGraphicsAlgorithm().setLineVisible(true);
@@ -280,19 +277,23 @@ public class FigureUIFactory {
 	private static void paintChildFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
+		Dimension imageDimension = ImageUtils.getImageSize(getEndpointFigureImageKey(element));
+		int image_width = imageDimension.width;
+		int image_height = imageDimension.height;
+		
 		// calculate the label width and height
 		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
 		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
 		int label_width = fontDimension.getWidth();
-		int label_height = fontDimension.getHeight();
+		int label_height = fontDimension.getHeight()+FONT_SPACING_V;
 
 		// a child figure is drawn as a rounded rectangle containing a big 
 		// descriptive icon and below the icon there will be a label shown
 		// describing the element
 		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
 																							 context.getY(), 
-																							 FIGURE_MAX_WIDTH, 
-																							 IMAGE_DEFAULT_HEIGHT + label_height + DEFAULT_LABEL_OFFSET_V + DEFAULT_LABEL_OFFSET_V);
+																							 Math.min(12*DEFAULT_LABEL_OFFSET_H+image_width+label_width, FIGURE_MAX_WIDTH), 
+																							 IMAGE_DEFAULT_HEIGHT);
 		
 		IGaService gaService = Graphiti.getGaService();
 
@@ -323,19 +324,19 @@ public class FigureUIFactory {
 		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
 		
 		// create and set image
-		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForLargeIcon(element.getIconName()));
-		gaService.setLocationAndSize(image, (FIGURE_MAX_WIDTH / 2) - (IMAGE_DEFAULT_WIDTH / 2), DEFAULT_LABEL_OFFSET_V, IMAGE_DEFAULT_WIDTH, IMAGE_DEFAULT_HEIGHT);
+		Image image = gaService.createImage(baseFigure, getEndpointFigureImageKey(element));
+		gaService.setLocationAndSize(image, DEFAULT_LABEL_OFFSET_H * 3, (baseRect.height-image_height)/2, image_width, image_height);
 
 		// create and set text graphics algorithm
 		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
 		Style style = StyleUtil.getStyleForCamelText(diagram);
 		text.setParentGraphicsAlgorithm(baseFigure);
 		text.setStyle(style);
-		text.setHorizontalAlignment(Orientation.ALIGNMENT_CENTER);
+		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
 		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
-		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H, IMAGE_DEFAULT_HEIGHT, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (baseRect.height-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
 			
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
@@ -393,5 +394,18 @@ public class FigureUIFactory {
 	public static void storeCollapsedSize(ContainerShape containerShape) {
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, String.valueOf(containerShape.getGraphicsAlgorithm().getWidth()));
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, String.valueOf(containerShape.getGraphicsAlgorithm().getHeight()));
+	}
+	
+	/**
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public static String getEndpointFigureImageKey(AbstractCamelModelElement element) {
+		String iconName = ImageProvider.getKeyForDiagramIcon(element.getIconName());
+		if (element.isEndpointElement() && iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE))) {
+			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
+		}
+		return iconName;
 	}
 }

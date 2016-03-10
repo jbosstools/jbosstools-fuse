@@ -33,9 +33,9 @@ public class ImageProvider extends AbstractImageProvider {
 	private static final String ROOT_FOLDER_FOR_IMG = "icons/"; //$NON-NLS-1$
 
 	// The prefix for all identifiers of this image provider
-	public static final String PREFIX = "org.fusesource.demo.icons."; //$NON-NLS-1$
-	public static final String POSTFIX_SMALL = "_small"; //$NON-NLS-1$
-	public static final String POSTFIX_LARGE = "_large"; //$NON-NLS-1$
+	public static final String PREFIX = "org.fusesource.ide.icons."; //$NON-NLS-1$
+	public static final String POSTFIX_SMALL = "_palette"; //$NON-NLS-1$
+	public static final String POSTFIX_LARGE = "_diagram"; //$NON-NLS-1$
 
 	public static final String IMG_FLOW = PREFIX + "flow"; //$NON-NLS-1$
 	public static final String IMG_REDDOT = PREFIX + "reddot"; //$NON-NLS-1$
@@ -69,17 +69,17 @@ public class ImageProvider extends AbstractImageProvider {
 		addToImageRegistry(IMG_GREENDOT, ROOT_FOLDER_FOR_IMG + "green-dot.png"); //$NON-NLS-1$
 		addImage(IMG_YELLOWDOT, ROOT_FOLDER_FOR_IMG + "yellow-dot.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_YELLOWDOT, ROOT_FOLDER_FOR_IMG + "yellow-dot.png"); //$NON-NLS-1$
-		addImage(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.gif"); //$NON-NLS-1$
-		addToImageRegistry(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.gif"); //$NON-NLS-1$
-		addImage(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.gif"); //$NON-NLS-1$
-		addToImageRegistry(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.gif"); //$NON-NLS-1$
+		addImage(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.png"); //$NON-NLS-1$
+		addImage(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.png"); //$NON-NLS-1$
 		
 		addImage(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$
-		addImage(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.gif"); //$NON-NLS-1$
-		addToImageRegistry(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.gif"); //$NON-NLS-1$
-		addImage(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.gif"); //$NON-NLS-1$
-		addToImageRegistry(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.gif"); //$NON-NLS-1$
+		addImage(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.png"); //$NON-NLS-1$
+		addImage(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.png"); //$NON-NLS-1$
 
 		// add the images from extension point users
 		addExtensionPointImages();
@@ -99,11 +99,13 @@ public class ImageProvider extends AbstractImageProvider {
             if (!file.startsWith(prefix)) {
                 CamelEditorUIActivator.pluginLog().logWarning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
             }
-            fileName = fileName.substring(prefix.length());
-            addIconCustomImages(fileName);
+            addIconCustomImage(fileName);
         }
 	}
 
+	/**
+	 * loads all images provided by the extension points
+	 */
 	private void addExtensionPointImages() {
 		// inject palette entries icons delivered via extension points
         IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(ToolBehaviourProvider.PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
@@ -128,6 +130,12 @@ public class ImageProvider extends AbstractImageProvider {
         }
 	}
 	
+	/**
+	 * returns the bundle with the given id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private Bundle getBundleById(String id) {
 		for (Bundle b : CamelEditorUIActivator.getDefault().getBundle().getBundleContext().getBundles()) {
 			if (b.getSymbolicName().equals(id)) return b;
@@ -135,17 +143,30 @@ public class ImageProvider extends AbstractImageProvider {
 		return null;
 	}
 	
+	/**
+	 * gets an image from an external bundle
+	 * 
+	 * @param bundle
+	 * @param iconPath
+	 * @return
+	 */
 	private ImageDescriptor getExternalImage(Bundle bundle, String iconPath) {
 		URL url = bundle.getResource(iconPath);
 		if (url != null) return ImageDescriptor.createFromURL(url);
 		return null;
 	}
 	
-	private void addIconCustomImages(String... iconNames) {
-		for (String iconName : iconNames) {
-			String littleIcon = iconName.replace(".png", "16.png");
-			addIconsForIconName(iconName, littleIcon, iconName);
-		}
+	/**
+	 * 
+	 * @param icon
+	 */
+	private void addIconCustomImage(String iconPath) {
+		if (iconPath == null || iconPath.endsWith("/")) return;
+		String iconName = iconPath.substring(iconPath.lastIndexOf("/")+1, iconPath.lastIndexOf("."));
+		if (iconName.endsWith("16")) iconName = iconName.substring(0, iconName.lastIndexOf("16"));
+		String key = String.format("%s%s%s", PREFIX, iconName, iconPath.toLowerCase().endsWith("16.png") ? POSTFIX_SMALL : POSTFIX_LARGE);
+		addImage(key, iconPath);
+		addToImageRegistry(key, iconPath);
 	}
 
 	/**
@@ -160,10 +181,10 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 
 	protected void addIconsForIconName(String iconName, String fileNameSmall, String fileNameLarge) {
-		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), ROOT_FOLDER_FOR_IMG + fileNameSmall);
-		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), ROOT_FOLDER_FOR_IMG + fileNameLarge); //$NON-NLS-1$
-		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), ROOT_FOLDER_FOR_IMG + fileNameSmall); //$NON-NLS-1$
-		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), ROOT_FOLDER_FOR_IMG + fileNameLarge); //$NON-NLS-1$
+		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), fileNameSmall);
+		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
+		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), fileNameSmall); //$NON-NLS-1$
+		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
 	}
 
 	/**
@@ -183,26 +204,22 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 
 	public void addIconsForClass(AbstractCamelModelElement node) {
-		addIconsForClass(node, node.getIconName().replaceAll(".png", "16.png"), node.getIconName());
+		addIconsForClass(node, String.format("%s%s16.png", ROOT_FOLDER_FOR_IMG, node.getIconName()), String.format("%s%s.png", ROOT_FOLDER_FOR_IMG, node.getIconName()));
 	}
 	
 	public void addIconsForEIP(Eip eip ) {
-//		String eipName = eip.getName();
-//		addIconsForIconName(UniversalEIPUtility.getIconName(eipName), 
-//				UniversalEIPUtility.getSmallIconName(eipName), 
-//				UniversalEIPUtility.getIconName(eipName));
+		String eipName = eip.getName();
+		addIconsForIconName(eipName, ROOT_FOLDER_FOR_IMG + eipName + "16.png", ROOT_FOLDER_FOR_IMG + eipName + ".png");
 	}
 
-	
-
-	public static String getKeyForSmallIcon(String iconName) {
-	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
-	    return String.format("%s%s%s", PREFIX, "endpoint.png", POSTFIX_SMALL);
+	public static String getKeyForPaletteIcon(String iconName) {
+	    if (isImageAvailable(String.format("%s16.png", iconName))) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
+	    return String.format("%s%s%s", PREFIX, "generic", POSTFIX_SMALL);
 	}
 
-	public static String getKeyForLargeIcon(String iconName) {
-	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
-		return String.format("%s%s%s", PREFIX, "endpoint.png", POSTFIX_LARGE);
+	public static String getKeyForDiagramIcon(String iconName) {
+	    if (isImageAvailable(String.format("%s.png", iconName))) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
+		return String.format("%s%s%s", PREFIX, "generic", POSTFIX_LARGE);
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {

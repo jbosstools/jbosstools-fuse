@@ -54,7 +54,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
      */
     @Override
     protected String getIconName() {
-        return String.format("%s.png", this.component.getSchemeTitle().replaceAll("-", "_"));
+        return this.component.getSchemeTitle();
     }
         
     /* (non-Javadoc)

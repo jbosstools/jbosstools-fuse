@@ -22,6 +22,7 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -124,11 +125,11 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 					String iconKey = null;
 					// set the new icon id - refresh will to the rest
 					if (((AbstractCamelModelElement)bo).isEndpointElement()) {
-						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
+						iconKey = FigureUIFactory.getEndpointFigureImageKey(addedClass);
 					} else if (((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren()) {
-						iconKey = ImageProvider.getKeyForSmallIcon(addedClass.getIconName());
+						iconKey = ImageProvider.getKeyForDiagramIcon(addedClass.getIconName());
 					} else {
-						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
+						iconKey = ImageProvider.getKeyForDiagramIcon(addedClass.getIconName());
 					}
 					((Image)shape).setId(iconKey);
 					this.changed = true;

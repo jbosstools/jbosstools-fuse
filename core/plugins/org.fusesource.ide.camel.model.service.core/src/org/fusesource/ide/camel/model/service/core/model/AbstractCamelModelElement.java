@@ -329,7 +329,7 @@ public abstract class AbstractCamelModelElement {
 			String uri = (String)this.getParameter("uri");
 			if (uri != null && uri.trim().length() > 0) {
 				// uri specified, use it
-				result += uri;
+				result = uri;
 				return result;
 			}
 		}
@@ -370,76 +370,6 @@ public abstract class AbstractCamelModelElement {
 				}
 			}
 		}
-		// suffix =
-		// Expressions.getExpressionOrElse(((ExpressionDefinition)propVal));
-		// } else {
-		// suffix = Strings.getOrElse(propVal);
-		// }
-		// String ret = convertCamelCase(eipType) + " " + suffix;
-		// return ret;
-		// }
-		//
-		//
-		// if ("catch".equals(eipType)) {
-		// List exceptions = getShortPropertyValue("exception", List.class);
-		// if (exceptions != null && exceptions.size() > 0) {
-		// return "catch " + exceptions;
-		// } else {
-		// return "catch " +
-		// Expressions.getExpressionOrElse(getShortPropertyValue("handled",
-		// ExpressionDefinition.class));
-		// }
-		// } else if ("setExchangePattern".equals(eipType)) {
-		// ExchangePattern pattern = getShortPropertyValue("handled",
-		// ExchangePattern.class);
-		// if (pattern == null) {
-		// return "setExchangePattern";
-		// } else {
-		// return "set " + pattern;
-		// }
-		// } else if ("loadBalance".equals(eipType)) {
-		// String ref = getShortPropertyValue("ref", String.class);
-		// if (ref != null) {
-		// return "custom " + Strings.getOrElse(ref);
-		// }
-		// Object loadType = getShortPropertyValue("loadBalancerType",
-		// Object.class);
-		// if (loadType != null) {
-		// if
-		// (loadType.getClass().isAssignableFrom(CustomLoadBalancerDefinition.class))
-		// {
-		// CustomLoadBalancerDefinition custom = (CustomLoadBalancerDefinition)
-		// loadType;
-		// return "custom " + Strings.getOrElse(custom.getRef());
-		// } else if
-		// (loadType.getClass().isAssignableFrom(FailoverLoadBalancerDefinition.class))
-		// {
-		// return "failover";
-		// } else if
-		// (loadType.getClass().isAssignableFrom(RandomLoadBalancerDefinition.class))
-		// {
-		// return "random";
-		// } else if
-		// (loadType.getClass().isAssignableFrom(RoundRobinLoadBalancerDefinition.class))
-		// {
-		// return "round robin";
-		// } else if
-		// (loadType.getClass().isAssignableFrom(StickyLoadBalancerDefinition.class))
-		// {
-		// return "sticky";
-		// } else if
-		// (loadType.getClass().isAssignableFrom(TopicLoadBalancerDefinition.class))
-		// {
-		// return "topic";
-		// } else if
-		// (loadType.getClass().isAssignableFrom(WeightedLoadBalancerDefinition.class))
-		// {
-		// return "weighted";
-		// }
-		// } else {
-		// return "load balance";
-		// }
-		// }
 
 		String answer = null;
 		if (Strings.isBlank(answer)) {
@@ -1313,11 +1243,6 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	public String getIconName() {
-		
-		if (getNodeTypeId().equalsIgnoreCase("when") || 
-			getNodeTypeId().equalsIgnoreCase("otherwise")) 
-			return "generic.png";
-		
 		if (isEndpointElement()) {
 			String u = (String) getParameter("uri");
 			if (u != null && u.trim().length() > 0) {
@@ -1329,53 +1254,20 @@ public abstract class AbstractCamelModelElement {
 					if (endpointRef != null) {
 						String refUri = (String) endpointRef.getParameter("uri");
 						if (refUri != null) {
-							scheme = refUri.substring(0, refUri.indexOf(":") + 1);
+							scheme = refUri.substring(0, refUri.indexOf(":"));
 						} else {
 							// seems we have a broken ref
-							return "endpoint.png";
+							return "endpoint";
 						}
 					}
 				} else {
-					scheme = u.substring(0, u.indexOf(":") + 1);
+					scheme = u.substring(0, u.indexOf(":"));
 				}
-
-				if (scheme.startsWith("drools:")) {
-					return "endpointDrools.png";
-				} else if (scheme.startsWith("jms:") || scheme.startsWith("activemq") || scheme.startsWith("mq")
-						|| scheme.startsWith("sjms")) {
-					return "endpointQueue.png";
-				} else if (scheme.startsWith("file:") || scheme.startsWith("ftp") || scheme.startsWith("sftp")
-						|| scheme.startsWith("jcr") || scheme.startsWith("scp")) {
-					return "endpointFolder.png";
-				} else if (scheme.startsWith("log:") || scheme.startsWith("hdfs") || scheme.startsWith("paxlogging")) {
-					return "endpointFile.png";
-				} else if (scheme.startsWith("timer:") || scheme.startsWith("quartz")) {
-					return "endpointTimer.png";
-				} else if (scheme.startsWith("elasticsearch:") || scheme.startsWith("hazelcast:")
-						|| scheme.startsWith("hibernate:") || scheme.startsWith("jpa:") || scheme.startsWith("jdbc:")
-						|| scheme.startsWith("sql:") || scheme.startsWith("ibatis:") || scheme.startsWith("mybatis:")
-						|| scheme.startsWith("javaspace:") || scheme.startsWith("jcr:") || scheme.startsWith("ldap:")
-						|| scheme.startsWith("mongodb:") || scheme.startsWith("zookeeper:")) {
-					return "endpointRepository.png";
-				} else if (scheme.startsWith("twitter:")) {
-					return "endpointTwitter.png";
-				} else if (scheme.startsWith("weather:")) {
-					return "endpointWeather.png";
-				} else if (scheme.startsWith("sap-netweaver:")) {
-					return "endpointSAPNetweaver.png";
-				} else if (scheme.startsWith("sap:")) {
-					return "endpointSAP.png";
-				} else if (scheme.startsWith("salesforce:")) {
-					return "endpointSalesforce.png";
-				} else if (scheme.startsWith("facebook:")) {
-					return "endpointFacebook.png";
-				} else if (scheme.startsWith("dozer:")) {
-					return "endpointDozer.png";
-				}
+				return scheme;
 			}
-			return "endpoint.png";
+			return "endpoint";
 		}
-		return String.format("%s.png", getNodeTypeId());
+		return getNodeTypeId();
 	}
 
 	/**

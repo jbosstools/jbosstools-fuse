@@ -144,7 +144,7 @@ public class CamelDiagramLoader {
 			if (this.orientation == PositionConstants.EAST) {
 				retVal += FigureUIFactory.FIGURE_MAX_WIDTH + 20;
 			} else {
-				retVal += FigureUIFactory.IMAGE_DEFAULT_HEIGHT + FigureUIFactory.FIGURE_TITLEBAR_HEIGHT + 20;
+				retVal += FigureUIFactory.IMAGE_DEFAULT_HEIGHT + FigureUIFactory.IMAGE_DEFAULT_HEIGHT + 30;
 			}
 		} else {
 			CamelEditorUIActivator.pluginLog().logWarning("Cannot add node: " + node);
