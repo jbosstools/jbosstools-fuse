@@ -19,6 +19,7 @@ import org.eclipse.graphiti.platform.IPlatformImageConstants;
 import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.junit.Test;
@@ -109,6 +110,26 @@ public class ToolBehaviourProviderTest {
 		assertThat(((ImageDecorator) iDecorator).getImageId()).isEqualTo(IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
 		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_X_DECORATOR);
 		assertThat(((ImageDecorator) iDecorator).getY()).isEqualTo(ToolBehaviourProvider.OFFSET_Y_VALIDATION_DECORATOR);
+	}
+
+	@Test
+	public void testTooltip_returnDescriptionIfNotEmpty() {
+		ToolBehaviourProvider tbp = new ToolBehaviourProvider(new DiagramTypeProvider());
+
+		AbstractCamelModelElement cme = new CamelEndpoint("plop");
+		cme.setDescription("myDescription");
+		assertThat(tbp.getTooltip(cme)).isEqualTo("myDescription");
+	}
+
+	@Test
+	public void testTooltip_returnDisplayTextIfNoDescription() {
+		ToolBehaviourProvider tbp = new ToolBehaviourProvider(new DiagramTypeProvider());
+
+		AbstractCamelModelElement cme = new CamelEndpoint("plop");
+		cme.setDescription("");
+		assertThat(tbp.getTooltip(cme)).isEqualTo(cme.getDisplayText());
+		cme.setDescription(null);
+		assertThat(tbp.getTooltip(cme)).isEqualTo(cme.getDisplayText());
 	}
 
 }
