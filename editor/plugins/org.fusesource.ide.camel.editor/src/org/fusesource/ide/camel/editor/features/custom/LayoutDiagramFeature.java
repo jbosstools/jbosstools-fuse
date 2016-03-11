@@ -146,8 +146,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 
 		if (container == null) return dg;
 		
-		if (Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
-			Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+		if (isExpanded(container)) {
 
 			EList<Shape> children = ((ContainerShape)container).getChildren();
 			for (Shape shape : children) {
@@ -178,6 +177,15 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		
 		return dg;
 	}
+
+	/**
+	 * @param container
+	 * @return
+	 */
+	private boolean isExpanded(PictogramElement container) {
+		final String collapsedPropertyValue = Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE);
+		return collapsedPropertyValue == null || collapsedPropertyValue.equals("false");
+	}
 	
 	/**
 	 * resizes the container element to fit all children 
@@ -189,8 +197,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
 		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
 
-		if (Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
-			Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+		if (isExpanded(containerPE)) {
 			int newWidth = 0;
 			int newHeight = 0;
 			for (Shape shape : children) {
@@ -216,8 +223,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		cc.setHeight(maxContentArea.height);
 		getFeatureProvider().getResizeShapeFeature(cc).execute(cc);
 
-		if (Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
-			Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+		if (isExpanded(containerPE)) {
 			for (Shape shape : children) {
 				resizeContainer(shape);
 			}
