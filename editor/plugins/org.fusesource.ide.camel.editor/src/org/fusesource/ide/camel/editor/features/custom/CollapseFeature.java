@@ -25,6 +25,7 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -89,6 +90,7 @@ public class CollapseFeature extends AbstractCustomFeature {
 	 	   	}
 		}
 		getDiagramBehavior().getDiagramContainer().selectPictogramElements(pes);
+		((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).autoLayoutRoute();
 	}
 	
 	/* (non-Javadoc)

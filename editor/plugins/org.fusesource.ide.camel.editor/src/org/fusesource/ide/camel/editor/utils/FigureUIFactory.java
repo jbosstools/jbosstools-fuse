@@ -151,7 +151,7 @@ public class FigureUIFactory {
 		
 		// create and set image
 		Image image = gaService.createImage(baseFigure, getEndpointFigureImageKey(element));
-		gaService.setLocationAndSize(image, BREAKPOINT_DECORATOR_SPACE, (IMAGE_DEFAULT_HEIGHT-image_height)/2, image_width, image_height);
+		gaService.setLocationAndSize(image, DEFAULT_LABEL_OFFSET_H * 3, (IMAGE_DEFAULT_HEIGHT-image_height)/2, image_width, image_height);
 		
 		// create and set text graphics algorithm
 		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
@@ -161,7 +161,7 @@ public class FigureUIFactory {
 		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
-		gaService.setLocationAndSize(text, BREAKPOINT_DECORATOR_SPACE + image_width + DEFAULT_LABEL_OFFSET_H, (IMAGE_DEFAULT_HEIGHT-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (IMAGE_DEFAULT_HEIGHT-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
 		markFigureTitleArea(text, image_width);
 		
 		// the content section figure
@@ -190,7 +190,7 @@ public class FigureUIFactory {
 		fp.link(ca, element); 
 		
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, "" + containerShape.getGraphicsAlgorithm().getWidth());
-		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + containerShape.getGraphicsAlgorithm().getHeight());
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + IMAGE_DEFAULT_HEIGHT);
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class FigureUIFactory {
 		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
 		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
 		int label_width = fontDimension.getWidth();
-		int label_height = fontDimension.getHeight();
+		int label_height = fontDimension.getHeight()+FONT_SPACING_V;
 
 		// we draw a filled rounded rectangle with a title label 
 		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
@@ -228,6 +228,7 @@ public class FigureUIFactory {
 		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
 		baseFigure.setBackground(figureBackgroundColor);
 		baseFigure.setFilled(true);
+		markFigureHeaderArea(baseFigure, IMAGE_DEFAULT_HEIGHT);	
 		
 		// rearrange container
 		containerShape.getGraphicsAlgorithm().setLineVisible(true);
@@ -240,10 +241,11 @@ public class FigureUIFactory {
 		text.setParentGraphicsAlgorithm(baseFigure);
 		text.setStyle(style);
 		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
-		text.setVerticalAlignment(Orientation.ALIGNMENT_TOP);
+		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
 		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
-		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H + DEFAULT_LABEL_OFFSET_H + DEFAULT_LABEL_OFFSET_H, DEFAULT_LABEL_OFFSET_V, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 3, (IMAGE_DEFAULT_HEIGHT-label_height)/2, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height);
+		markFigureTitleArea(text, 24);
 		
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
@@ -260,7 +262,7 @@ public class FigureUIFactory {
 		fp.link(ca, element); 
 		
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, "" + containerShape.getGraphicsAlgorithm().getWidth());
-		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + containerShape.getGraphicsAlgorithm().getHeight());
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + IMAGE_DEFAULT_HEIGHT);
 	}
 	
 	

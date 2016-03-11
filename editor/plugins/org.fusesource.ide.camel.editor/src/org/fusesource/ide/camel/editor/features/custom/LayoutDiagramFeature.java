@@ -34,7 +34,9 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
+import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.swt.graphics.Rectangle;
+import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -144,17 +146,21 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 
 		if (container == null) return dg;
 		
-		EList<Shape> children = ((ContainerShape)container).getChildren();
-		for (Shape shape : children) {
-			Node node = new Node();
-			GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
-			node.x = ga.getX();
-			node.y = ga.getY();
-			node.width = ga.getWidth();
-			node.height = ga.getHeight();
-			node.data = shape;
-			shapeToNode.put(shape, node);
-			nodeList.add(node);
+		if (Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
+			Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+
+			EList<Shape> children = ((ContainerShape)container).getChildren();
+			for (Shape shape : children) {
+				Node node = new Node();
+				GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
+				node.x = ga.getX();
+				node.y = ga.getY();
+				node.width = ga.getWidth();
+				node.height = ga.getHeight();
+				node.data = shape;
+				shapeToNode.put(shape, node);
+				nodeList.add(node);
+			}
 		}
 		
 		EList<Connection> connections = getDiagram().getConnections();
@@ -182,18 +188,26 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null) return;
 		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
 		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
-		int newWidth = 0;
-		int newHeight = 0;
-		for (Shape shape : children) {
-			GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
-			int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
-			int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
-			if (w > newWidth) newWidth = w;
-			if (h > newHeight) newHeight = h;
-		}
-		maxContentArea.width = newWidth;
-		maxContentArea.height = newHeight;
 
+		if (Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
+			Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+			int newWidth = 0;
+			int newHeight = 0;
+			for (Shape shape : children) {
+				GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
+				int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
+				int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
+				if (w > newWidth) newWidth = w;
+				if (h > newHeight) newHeight = h;
+			}
+			maxContentArea.width = newWidth;
+			maxContentArea.height = newHeight;
+		} else {
+			// this is needed as workaround because the diagram GA still has 
+			// old height and width values set for some reason
+			maxContentArea.height = FigureUIFactory.IMAGE_DEFAULT_HEIGHT;
+		}
+		
 		// do a resize feature call 
 		ResizeShapeContext cc = new ResizeShapeContext((ContainerShape)containerPE);
 		cc.setX(maxContentArea.x);
@@ -201,10 +215,12 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		cc.setWidth(maxContentArea.width);
 		cc.setHeight(maxContentArea.height);
 		getFeatureProvider().getResizeShapeFeature(cc).execute(cc);
-//		Graphiti.getGaService().setLocationAndSize(containerPE.getGraphicsAlgorithm(), maxContentArea.x, maxContentArea.y, maxContentArea.width, maxContentArea.height, true);
-		
-		for (Shape shape : children) {
-			resizeContainer(shape);
+
+		if (Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE) == null ||
+			Graphiti.getPeService().getPropertyValue(containerPE, CollapseFeature.PROP_COLLAPSED_STATE).equals("false")) {
+			for (Shape shape : children) {
+				resizeContainer(shape);
+			}
 		}
 	}
 
