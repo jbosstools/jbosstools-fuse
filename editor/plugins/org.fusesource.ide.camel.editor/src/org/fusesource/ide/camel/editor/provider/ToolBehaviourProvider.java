@@ -92,7 +92,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public static final String PALETTE_ICON_ATTR = "paletteIcon";
 	public static final String DIAGRAM_IMAGE_ATTR = "diagramImage";
 	public static final String EXT_ID_ATTR = "id";
-	static final int OFFSET_VALIDATION_DECORATOR = 20;
+	static final int OFFSET_X_DECORATOR = 7;
+	static final int OFFSET_Y_VALIDATION_DECORATOR = 18;
+	static final int OFFSET_Y_BREAKPOINT_DECORATOR = 2;
 
 	private static HashMap<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<ICreateFeature, IConfigurationElement>();
 
@@ -495,8 +497,10 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * @param imgYellowdot
 	 */
 	private void addBreakPointValidator(List<IDecorator> decorators, final String imgYellowdot) {
-		IDecorator imageRenderingDecorator = new ImageDecorator(imgYellowdot);
+		ImageDecorator imageRenderingDecorator = new ImageDecorator(imgYellowdot);
 		imageRenderingDecorator.setMessage("");
+		imageRenderingDecorator.setX(OFFSET_X_DECORATOR);
+		imageRenderingDecorator.setY(OFFSET_Y_BREAKPOINT_DECORATOR);
 		decorators.add(imageRenderingDecorator);
 	}
 
@@ -517,11 +521,13 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * @param decorators
 	 * @param message
 	 * @param imgEclipseInformationTsk
+	 * @param pe
 	 */
 	private void addValidationDecorator(List<IDecorator> decorators, String message, final String imgEclipseInformationTsk) {
 		ImageDecorator imageRenderingDecorator = new ImageDecorator(imgEclipseInformationTsk);
 		imageRenderingDecorator.setMessage(message);
-		imageRenderingDecorator.setX(OFFSET_VALIDATION_DECORATOR);
+		imageRenderingDecorator.setY(OFFSET_Y_VALIDATION_DECORATOR);
+		imageRenderingDecorator.setX(OFFSET_X_DECORATOR);
 		decorators.add(imageRenderingDecorator);
 	}
 

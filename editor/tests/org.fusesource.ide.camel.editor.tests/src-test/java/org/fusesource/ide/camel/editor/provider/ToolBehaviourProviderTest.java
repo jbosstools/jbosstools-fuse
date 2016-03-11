@@ -67,7 +67,8 @@ public class ToolBehaviourProviderTest {
 		assertThat(iDecorator.getMessage()).isEqualTo("error1\nerror2");
 		assertThat(iDecorator).isInstanceOf(ImageDecorator.class);
 		assertThat(((ImageDecorator) iDecorator).getImageId()).isEqualTo(IPlatformImageConstants.IMG_ECLIPSE_ERROR_TSK);
-		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_VALIDATION_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_X_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getY()).isEqualTo(ToolBehaviourProvider.OFFSET_Y_VALIDATION_DECORATOR);
 	}
 
 	@Test
@@ -86,7 +87,8 @@ public class ToolBehaviourProviderTest {
 		assertThat(iDecorator.getMessage()).isEqualTo("warning1\nwarning2");
 		assertThat(iDecorator).isInstanceOf(ImageDecorator.class);
 		assertThat(((ImageDecorator) iDecorator).getImageId()).isEqualTo(IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
-		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_VALIDATION_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_X_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getY()).isEqualTo(ToolBehaviourProvider.OFFSET_Y_VALIDATION_DECORATOR);
 	}
 
 	@Test
@@ -105,7 +107,8 @@ public class ToolBehaviourProviderTest {
 		assertThat(iDecorator.getMessage()).isEqualTo("info1\ninfo2");
 		assertThat(iDecorator).isInstanceOf(ImageDecorator.class);
 		assertThat(((ImageDecorator) iDecorator).getImageId()).isEqualTo(IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
-		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_VALIDATION_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getX()).isEqualTo(ToolBehaviourProvider.OFFSET_X_DECORATOR);
+		assertThat(((ImageDecorator) iDecorator).getY()).isEqualTo(ToolBehaviourProvider.OFFSET_Y_VALIDATION_DECORATOR);
 	}
 
 }
