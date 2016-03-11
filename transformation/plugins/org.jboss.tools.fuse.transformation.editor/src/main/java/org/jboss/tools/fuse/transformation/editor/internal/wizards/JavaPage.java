@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -54,10 +55,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
-import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 
 /**
  * @author brianf
@@ -139,7 +140,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             @Override
             public void widgetSelected(final SelectionEvent event) {
                try {
-                    IType selected = selectType(_page.getShell(), "java.lang.Object", null);
+					IType selected = selectType(_page.getShell(), null);
                     if (selected != null) {
                         _javaClassText.setText(selected.getFullyQualifiedName());
                         if (isSourcePage()) {
@@ -285,34 +286,8 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
      * @return IType the type created
      * @throws JavaModelException exception thrown
      */
-    public IType selectType(Shell shell, String superTypeName, IProject project) throws JavaModelException {
-        IJavaSearchScope searchScope = null;
-        if (project == null) {
-            ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
-                    .getSelection();
-            IStructuredSelection selectionToPass = StructuredSelection.EMPTY;
-            if (selection instanceof IStructuredSelection) {
-                selectionToPass = (IStructuredSelection) selection;
-                if (selectionToPass.getFirstElement() instanceof IFile) {
-                    project = ((IFile) selectionToPass.getFirstElement()).getProject();
-                }
-            }
-        }
-        if (superTypeName == null) {
-        	superTypeName = "java.lang.Object"; //$NONNLS-1$
-        }
-        if (model.getProject() != null) {
-            if (project == null) {
-                project = model.getProject();
-            }
-            IJavaProject javaProject = JavaCore.create(project);
-            IType superType = javaProject.findType(superTypeName);
-            if (superType != null) {
-                searchScope = SearchEngine.createStrictHierarchyScope(javaProject, superType, true, false, null);
-            }
-        } else {
-            searchScope = SearchEngine.createWorkspaceScope();
-        }
+	public IType selectType(Shell shell, IProject project) throws JavaModelException {
+        IJavaSearchScope searchScope = computeSearchScope(project);
         SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
                 IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, "**");
         dialog.setTitle("Select Class");
@@ -329,4 +304,32 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         }
         return (IType) types[0];
      }
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	private IJavaSearchScope computeSearchScope(IProject project) {
+		IJavaSearchScope searchScope = null;
+        if (project == null) {
+			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+            IStructuredSelection selectionToPass = StructuredSelection.EMPTY;
+            if (selection instanceof IStructuredSelection) {
+                selectionToPass = (IStructuredSelection) selection;
+                if (selectionToPass.getFirstElement() instanceof IFile) {
+                    project = ((IFile) selectionToPass.getFirstElement()).getProject();
+                }
+            }
+        }
+        if (model.getProject() != null) {
+            if (project == null) {
+                project = model.getProject();
+            }
+            IJavaProject javaProject = JavaCore.create(project);
+			searchScope = SearchEngine.createJavaSearchScope(new IJavaElement[] { javaProject });
+        } else {
+            searchScope = SearchEngine.createWorkspaceScope();
+        }
+		return searchScope;
+	}
 }
