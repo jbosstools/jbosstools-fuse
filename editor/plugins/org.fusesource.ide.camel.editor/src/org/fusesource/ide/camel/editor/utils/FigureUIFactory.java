@@ -161,7 +161,7 @@ public class FigureUIFactory {
 		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
-		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (IMAGE_DEFAULT_HEIGHT-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (IMAGE_DEFAULT_HEIGHT-label_height)/2, Math.min(label_width, baseRect.width - image_width - 6 * DEFAULT_LABEL_OFFSET_H), label_height);
 		markFigureTitleArea(text, image_width);
 		
 		// the content section figure
@@ -324,7 +324,7 @@ public class FigureUIFactory {
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
 		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
-		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (baseRect.height-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (baseRect.height-label_height)/2, Math.min(label_width, baseRect.width - image_width - 6 * DEFAULT_LABEL_OFFSET_H), label_height);
 		markFigureTitleArea(text, image_width);
 
 		// provide information to support direct-editing directly

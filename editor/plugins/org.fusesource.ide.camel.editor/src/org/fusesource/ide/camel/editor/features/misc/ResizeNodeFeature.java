@@ -80,7 +80,7 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 				
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH) != null) {
 					int imgWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH));
-					ga.setWidth(w - imgWidth - FigureUIFactory.DEFAULT_LABEL_OFFSET_H - FigureUIFactory.BREAKPOINT_DECORATOR_SPACE);
+					ga.setWidth(w - imgWidth - FigureUIFactory.DEFAULT_LABEL_OFFSET_H * 6);
 				}	
 				
 			} else if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && 
