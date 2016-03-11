@@ -299,21 +299,7 @@ public class FigureUIFactory {
 		
 		IGaService gaService = Graphiti.getGaService();
 
-		Color figureBackgroundColor = null;
-		if (element.isEndpointElement()) {
-			// endpoint
-			if (element.getNodeTypeId().equalsIgnoreCase("from")) {
-				// from endpoint
-				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.FROM_FIGURE_BACKGROUND_COLOR);
-			} else {
-				// to endpoint
-				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.TO_FIGURE_BACKGROUND_COLOR);
-			}
-		} else {
-			// not an endpoint
-			figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.EIP_FIGURE_BACKGROUND_COLOR);
-		}
-				
+		Color figureBackgroundColor = computeBackGroundColor(element, diagram, gaService);
 		
 		// create invisible outer rectangle expanded by the width needed for the anchor
 		RoundedRectangle baseFigure = gaService.createRoundedRectangle(containerShape, CORNER_WIDTH, CORNER_HEIGHT);
@@ -339,7 +325,8 @@ public class FigureUIFactory {
 		text.setFont(style.getFont());
 		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
 		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H * 4 + image_width, (baseRect.height-label_height)/2, Math.min(label_width, baseRect.width - image_width - 4 * DEFAULT_LABEL_OFFSET_H), label_height);
-			
+		markFigureTitleArea(text, image_width);
+
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
 		IDirectEditingInfo directEditingInfo = fp.getDirectEditingInfo();
@@ -353,6 +340,30 @@ public class FigureUIFactory {
 		// add a chopbox anchor to the shape
 		ChopboxAnchor ca = peCreateService.createChopboxAnchor(containerShape);
 		fp.link(ca, element); 
+	}
+
+	/**
+	 * @param element
+	 * @param diagram
+	 * @param gaService
+	 * @return
+	 */
+	private static Color computeBackGroundColor(AbstractCamelModelElement element, Diagram diagram, IGaService gaService) {
+		Color figureBackgroundColor = null;
+		if (element.isEndpointElement()) {
+			// endpoint
+			if (element.getNodeTypeId().equalsIgnoreCase("from")) {
+				// from endpoint
+				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.FROM_FIGURE_BACKGROUND_COLOR);
+			} else {
+				// to endpoint
+				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.TO_FIGURE_BACKGROUND_COLOR);
+			}
+		} else {
+			// not an endpoint
+			figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.EIP_FIGURE_BACKGROUND_COLOR);
+		}
+		return figureBackgroundColor;
 	}
 	
 	/**
