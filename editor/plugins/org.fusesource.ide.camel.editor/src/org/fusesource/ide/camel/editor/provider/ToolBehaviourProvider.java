@@ -556,7 +556,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		PictogramElement pe = ga.getPictogramElement();
 		Object bo = getFeatureProvider().getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractCamelModelElement) {
-			String name = ((AbstractCamelModelElement) bo).getDescription(); // getDisplayToolTip();
+			String name = ((AbstractCamelModelElement) bo).getDisplayText(); // getDisplayToolTip();
 			if (name != null && !name.isEmpty()) {
 				return name;
 			}
