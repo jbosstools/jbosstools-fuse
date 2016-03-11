@@ -44,6 +44,7 @@ public class ImageProvider extends AbstractImageProvider {
 	public static final String IMG_YELLOWDOT = PREFIX + "yellowdot"; //$NON-NLS-1$
 	public static final String IMG_DELETE_BP = PREFIX + "delete_bp"; //$NON-NLS-1$
 	public static final String IMG_PROPERTIES_BP = PREFIX + "properties_bp"; //$NON-NLS-1$
+	public static final String IMG_UP_NAV = PREFIX + "up_nav"; //$NON-NLS-1$
 	
 	// outline
 	/**
@@ -80,6 +81,8 @@ public class ImageProvider extends AbstractImageProvider {
 		addToImageRegistry(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.png"); //$NON-NLS-1$
 		addImage(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.png"); //$NON-NLS-1$
+		addImage(IMG_UP_NAV, ROOT_FOLDER_FOR_IMG + "up_nav.gif"); //$NON-NLS-1$
+		addToImageRegistry(IMG_UP_NAV, ROOT_FOLDER_FOR_IMG + "up_nav.gif"); //$NON-NLS-1$
 
 		// add the images from extension point users
 		addExtensionPointImages();

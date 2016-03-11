@@ -74,6 +74,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -176,7 +177,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 
 		// 1. set the generic context buttons
 		// note, that we do not add 'remove' (just as an example)
-		setGenericContextButtons(data, pe, CONTEXT_BUTTON_DELETE | CONTEXT_BUTTON_UPDATE);
+		setGenericContextButtons(data, pe, CONTEXT_BUTTON_DELETE);
 
 		// 2. set the collapse button
 		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
@@ -206,11 +207,26 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				collapseButton.setIconId(image);
 				data.setCollapseContextButton(collapseButton);
 			} else if (f instanceof GoIntoContainerFeature && f.canExecute(cc)) {
-				IContextButtonEntry goIntoButton = new ContextButtonEntry(f, cc);
-				goIntoButton.setDescription(f.getDescription());
-				goIntoButton.setText(f.getName());
-				goIntoButton.setIconId(ImageProvider.IMG_OUTLINE_TREE);
-				data.getGenericContextButtons().add(goIntoButton);
+				if (bo instanceof CamelRouteElement) {
+					CamelRouteElement route = (CamelRouteElement) bo;
+					IContextButtonEntry goIntoButton = new ContextButtonEntry(f, cc);
+					goIntoButton.setDescription(f.getDescription());
+					goIntoButton.setText(f.getName());
+					goIntoButton.setIconId(ImageProvider.IMG_OUTLINE_TREE);
+					
+					CamelDesignEditor editor = CamelUtils.getDiagramEditor();
+					if (editor != null && 
+						editor.getModel() != null && 
+						editor.getModel().getCamelContext().getChildElements().size()>1 &&
+						editor.getSelectedContainer() == route) {
+						// we can go up to context
+						goIntoButton.setDescription("Show the whole Camel Context");
+						goIntoButton.setText("Show Camel Context");
+						goIntoButton.setIconId(ImageProvider.IMG_UP_NAV);
+					}
+					
+					data.getGenericContextButtons().add(goIntoButton);					
+				}
 			}
 		}
 
