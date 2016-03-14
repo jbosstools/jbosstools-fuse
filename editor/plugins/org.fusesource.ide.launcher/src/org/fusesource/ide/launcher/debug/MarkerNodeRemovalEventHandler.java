@@ -8,11 +8,15 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.validation;
+package org.fusesource.ide.launcher.debug;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
+import org.fusesource.ide.launcher.Activator;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -20,14 +24,7 @@ import org.osgi.service.event.EventHandler;
  * @author Aurelien Pupier
  *
  */
-public class ClearValidationMarkerOnRemoveEventHandler implements EventHandler {
-
-	private BasicNodeValidator basicNodeValidator;
-
-	public ClearValidationMarkerOnRemoveEventHandler(BasicNodeValidator basicNodeValidator) {
-		this.basicNodeValidator = basicNodeValidator;
-	}
-
+final class MarkerNodeRemovalEventHandler implements EventHandler {
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -38,20 +35,27 @@ public class ClearValidationMarkerOnRemoveEventHandler implements EventHandler {
 	@Override
 	public void handleEvent(Event event) {
 		final Object cme = event.getProperty(IEventBroker.DATA);
+
 		if (cme instanceof AbstractCamelModelElement) {
-			clearMarkers((AbstractCamelModelElement) cme);
+			for (AbstractCamelModelElement child : ((AbstractCamelModelElement) cme).getChildElements()) {
+				clearBreakpoints(child);
+			}
+			clearBreakpoints((AbstractCamelModelElement) cme);
 		}
 	}
 
 	/**
-	 * @param cme
-	 *            The Camel Model Element for which we need to clear its markers
-	 *            and its children markers
+	 * @param child
 	 */
-	private void clearMarkers(final AbstractCamelModelElement cme) {
-		for (AbstractCamelModelElement child : cme.getChildElements()) {
-			clearMarkers(child);
+	private void clearBreakpoints(AbstractCamelModelElement cme) {
+		final IResource resource = cme.getCamelFile().getResource();
+		IBreakpoint breakpoint = CamelDebugUtils.getBreakpointForSelection(cme.getId(), resource.getName(), resource.getProject().getName());
+		if (breakpoint != null) {
+			try {
+				breakpoint.delete();
+			} catch (CoreException e) {
+				Activator.getLogger().error(e);
+			}
 		}
-		basicNodeValidator.clearMarkers(cme);
 	}
 }
