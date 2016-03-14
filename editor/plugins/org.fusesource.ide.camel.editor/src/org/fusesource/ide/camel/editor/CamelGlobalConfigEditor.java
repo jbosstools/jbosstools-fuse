@@ -530,7 +530,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 					WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					wizdlg.setBlockOnOpen(true);
 					wizdlg.setTitle(UIMessages.newGlobalConfigurationTypeWizardDialogTitle);
-					wizdlg.setTitleImage(null); // get a general icon or retrieve from contributor <- TODO!
 					if (Window.OK == wizdlg.open()) {
 						Node newXMLNode = wizard.getGlobalConfigrationElementNode();
 						if (newXMLNode != null) {

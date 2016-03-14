@@ -71,8 +71,14 @@ public class UIMessages extends NLS {
 	
 	public static String newGlobalConfigurationTypeWizardDialogTitle;
 	public static String CamelDiagramBehaviour_messageOnErrorEditorInitialization;
-	
-	
+
+	public static String newGlobalConfigurationTypeDataFormatWizardDialogTitle;
+	public static String newGlobalConfigurationTypeEndpointWizardDialogTitle;
+
+	public static String dataFormatSelectionPage_dataformatLabel;
+	public static String dataFormatSelectionPage_idLabel;
+	public static String dataFormatSelectionPage_descriptionLabel;
+
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);

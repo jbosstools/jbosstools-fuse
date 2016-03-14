@@ -145,6 +145,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		CONNECTORS_WHITELIST.add("servlet");
 		CONNECTORS_WHITELIST.add("smtp");
 		CONNECTORS_WHITELIST.add("smtps");
+		CONNECTORS_WHITELIST.add("snmp");
 		CONNECTORS_WHITELIST.add("sql");
 		CONNECTORS_WHITELIST.add("timer");
 		CONNECTORS_WHITELIST.add("vm");

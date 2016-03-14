@@ -280,6 +280,20 @@
             id="org.fusesource.ide.camel.editor.globalconfig.DEFAULT_CATEGORY"
             name="Uncategorized">
       </GlobalConfigCategory>
+      <GlobalConfigElement
+            category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
+            class="org.fusesource.ide.camel.editor.provider.GlobalEndpointContributor"
+            icon="icons/endpointdef.png"
+            id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.globalendpoint"
+            name="Endpoint">
+      </GlobalConfigElement>
+      <GlobalConfigElement
+            category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
+            class="org.fusesource.ide.camel.editor.provider.DataFormatContributor"
+            icon="icons/dataformat.png"
+            id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.dataformat"
+            name="Data Format">
+      </GlobalConfigElement>
    </extension>
    <extension
          point="org.fusesource.ide.editor.dblClickHandler">
