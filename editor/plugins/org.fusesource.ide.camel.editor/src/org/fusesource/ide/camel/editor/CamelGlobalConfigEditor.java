@@ -195,6 +195,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				}
 			}
 		});
+		getSite().setSelectionProvider(treeViewer);
 		
 		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
