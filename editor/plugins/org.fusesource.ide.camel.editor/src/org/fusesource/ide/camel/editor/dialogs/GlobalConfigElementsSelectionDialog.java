@@ -13,7 +13,11 @@ package org.fusesource.ide.camel.editor.dialogs;
 import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -94,6 +98,21 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
         listViewer.setContentProvider(contentProvider);
         
         initializeViewer();
+
+		listViewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				final IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
+				if (selection.isEmpty() || !(selection.getFirstElement() instanceof GlobalConfigElementItem)) {
+					getButton(IDialogConstants.OK_ID).setEnabled(false);
+					setMessage("Please select a global type");
+				} else {
+					getButton(IDialogConstants.OK_ID).setEnabled(true);
+					setMessage(null);
+				}
+			}
+		});
 
         Dialog.applyDialogFont(composite);
 
