@@ -10,7 +10,11 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
 
+import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Image;
+import org.fusesource.ide.camel.editor.provider.DiagramTypeProvider;
+import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 
 /**
@@ -27,5 +31,14 @@ final class ComponentLabelProvider extends LabelProvider {
 			return component.getDisplayTitle() + descriptionSuffix;
 		}
 		return super.getText(element);
+	}
+
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof Component) {
+			final String keyForComponentSmallIcon = ImageProvider.getKeyForSmallIcon(true, ((Component) element).getScheme());
+			return GraphitiUi.getImageService().getImageForId(DiagramTypeProvider.ID, keyForComponentSmallIcon);
+		}
+		return super.getImage(element);
 	}
 }

@@ -21,13 +21,12 @@ import org.fusesource.ide.camel.editor.internal.CamelModelNotificationService;
  */
 public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
 
+	public static final String ID = "org.fusesource.ide.camel.editor.dtp.id";
+
 	private CamelModelNotificationService camelModelNotificationService;
 	
 	private IToolBehaviorProvider[] toolBehaviorProviders;
 
-	/**
-	 * 
-	 */
 	public DiagramTypeProvider() {
 		super();
 		setFeatureProvider(new CamelFeatureProvider(this));
