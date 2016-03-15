@@ -14,6 +14,8 @@ import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -110,6 +112,16 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
 				} else {
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
 					setMessage(null);
+				}
+			}
+		});
+
+		listViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (getButton(IDialogConstants.OK_ID).isEnabled()) {
+					okPressed();
 				}
 			}
 		});
