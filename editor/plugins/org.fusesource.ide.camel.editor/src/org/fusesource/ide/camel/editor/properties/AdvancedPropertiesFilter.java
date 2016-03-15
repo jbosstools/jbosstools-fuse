@@ -33,14 +33,14 @@ public class AdvancedPropertiesFilter implements IFilter {
             if (protocolSeparatorIdx != -1) {
 				Component comp = CamelComponentUtils.getComponentModel(((String) ep.getParameter("uri")).substring(0, protocolSeparatorIdx),
 						ep.getCamelFile().getResource().getProject());
-                return comp != null && comp.getUriParameters().isEmpty() == false;
+				return comp != null && !comp.getUriParameters().isEmpty();
             }            
         }
         return false;
     }
     
     protected AbstractCamelModelElement getSelectedEndpoint(Object toTest) {
-        Object bo = null;
+		Object bo = toTest;
         if (toTest instanceof ContainerShapeEditPart) {
             bo = ((ContainerShapeEditPart)toTest).getFeatureProvider().getBusinessObjectForPictogramElement(((ContainerShapeEditPart)toTest).getPictogramElement());
         }
