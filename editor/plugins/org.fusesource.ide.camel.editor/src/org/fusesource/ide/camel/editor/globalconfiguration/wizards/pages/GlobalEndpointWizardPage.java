@@ -66,8 +66,8 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
-		composite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
+		composite.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		createIdLine(composite);
 		createDescriptionLine(composite);
 
@@ -120,7 +120,8 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	 */
 	private void createCamelComponentListViewer(Composite parent) {
 		ListViewer list = new ListViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
-		list.getList().setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).span(2, 1).hint(450, 400).create());
+		final int xHint = getShell().getSize().x - 20;
+		list.getList().setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
 		list.setContentProvider(ArrayContentProvider.getInstance());
 		list.setComparator(new ViewerComparator());
 		list.setLabelProvider(new ComponentLabelProvider());
