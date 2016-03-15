@@ -17,9 +17,8 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.w3c.dom.Element;
 
 /**
@@ -36,7 +35,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
      * @param component
      */
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
-    	super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), (Eip)null);
+		super(fp, component.getDisplayTitle(), component.getDescription(), (Eip) null);
         this.component = component;        
         setEip(getEipByName("to"));
     }

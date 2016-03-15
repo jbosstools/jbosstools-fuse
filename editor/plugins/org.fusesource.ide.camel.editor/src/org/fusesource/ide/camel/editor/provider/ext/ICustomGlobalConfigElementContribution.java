@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.provider.ext;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -22,20 +23,21 @@ import org.w3c.dom.Node;
 public interface ICustomGlobalConfigElementContribution {
 
 	/**
-	 * this method is invoked when a user tries to create an element
-	 * of this type in the global config tab. Implementors should come up with 
-	 * a wizard for creating the element and if that wizard is finished it 
-	 * should create the xml node ready to be injected into the xml document. This
-	 * node will be gathered via the GlobalConfigurationTypeWizard.getResultNode()
-	 * method. Make sure you set your result element correctly.
-	 * DO NOT MANIPULATE THE DOCUMENT OR INSERT THE NODE YOURSELF! THIS IS DONE BY
-	 * THE EDITOR AUTOMATICALLY! 
+	 * this method is invoked when a user tries to create an element of this
+	 * type in the global config tab. Implementors should come up with a wizard
+	 * for creating the element and if that wizard is finished it should create
+	 * the xml node ready to be injected into the xml document. This node will
+	 * be gathered via the GlobalConfigurationTypeWizard.getResultNode() method.
+	 * Make sure you set your result element correctly. DO NOT MANIPULATE THE
+	 * DOCUMENT OR INSERT THE NODE YOURSELF! THIS IS DONE BY THE EDITOR
+	 * AUTOMATICALLY!
 	 * 
-	 * @param document		a reference to the camel context xml document to be
-	 * 						used for creating dom nodes / elements
-	 * @return	a wizard for adding this kind of element
+	 * @param camelFile
+	 *            a reference to the camel file providing the context on which
+	 *            global elements will be created
+	 * @return a wizard for adding this kind of element
 	 */
-	GlobalConfigurationTypeWizard createGlobalElement(Document document);
+	GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile);
 	
 	/**
 	 * returns a list of dependencies to be injected into the maven pom file

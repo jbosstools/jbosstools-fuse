@@ -282,7 +282,7 @@
       </GlobalConfigCategory>
       <GlobalConfigElement
             category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
-            class="org.fusesource.ide.camel.editor.provider.GlobalEndpointContributor"
+            class="org.fusesource.ide.camel.editor.globalconfiguration.provider.GlobalEndpointContributor"
             icon="icons/endpointdef.png"
             id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.globalendpoint"
             name="Endpoint">

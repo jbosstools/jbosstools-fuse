@@ -113,7 +113,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	 * @see org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard#getGlobalConfigrationElementNode()
 	 */
 	@Override
-	public Element getGlobalConfigrationElementNode() {
+	public Element getGlobalConfigurationElementNode() {
 		return this.dataformat;
 	}
 	
@@ -121,7 +121,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	 * @see org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard#setGlobalConfigrationElementNode(org.w3c.dom.Node)
 	 */
 	@Override
-	public void setGlobalConfigrationElementNode(Element node) {
+	public void setGlobalConfigurationElementNode(Element node) {
 		this.dataformat = node;
 	}
 	
