@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -17,6 +18,7 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
@@ -107,7 +109,10 @@ public class GlobalEndpointWizardPage extends WizardPage {
 				return ValidationStatus.ok();
 			}
 		});
-		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), PojoProperties.value(GlobalEndpointWizardPage.class, "id", String.class).observe(this), strategy, null); //$NON-NLS-1$
+
+		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), PojoProperties.value(GlobalEndpointWizardPage.class, "id", String.class).observe(this), //$NON-NLS-1$
+				strategy, null);
+		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
 	/**
