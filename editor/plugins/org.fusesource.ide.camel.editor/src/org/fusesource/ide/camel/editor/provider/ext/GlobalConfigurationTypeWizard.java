@@ -24,12 +24,12 @@ public interface GlobalConfigurationTypeWizard extends IWizard {
 	 * 
 	 * @return	the node or null on error/abort
 	 */
-	Element getGlobalConfigrationElementNode();
+	Element getGlobalConfigurationElementNode();
 	
 	/**
 	 * sets the node for the wizard
 	 * 
 	 * @param node
 	 */
-	void setGlobalConfigrationElementNode(Element node);
+	void setGlobalConfigurationElementNode(Element node);
 }

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein
@@ -298,5 +299,9 @@ public class Component implements ICamelCatalogElement {
 		dup.setUriParameters(getUriParameters());
 		
 		return dup;
+	}
+
+	public String getDisplayTitle() {
+		return Strings.isBlank(getTitle()) ? Strings.humanize(getSchemeTitle()) : getTitle();
 	}
 }

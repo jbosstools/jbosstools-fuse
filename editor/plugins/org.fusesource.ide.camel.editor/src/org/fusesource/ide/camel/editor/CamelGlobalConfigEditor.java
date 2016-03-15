@@ -60,6 +60,7 @@ import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
@@ -194,6 +195,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				}
 			}
 		});
+		getSite().setSelectionProvider(treeViewer);
 		
 		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
@@ -525,28 +527,28 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				if (selObj instanceof GlobalConfigElementItem) {
 					GlobalConfigElementItem item = (GlobalConfigElementItem)selObj;
 					CamelFile cf = parentEditor.getDesignEditor().getModel();
-					GlobalConfigurationTypeWizard wizard = item.getContributor().createGlobalElement(cf.getDocument());
+					GlobalConfigurationTypeWizard wizard = item.getContributor().createGlobalElement(cf);
 					if (wizard == null) return;
 					WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					wizdlg.setBlockOnOpen(true);
 					wizdlg.setTitle(UIMessages.newGlobalConfigurationTypeWizardDialogTitle);
 					if (Window.OK == wizdlg.open()) {
-						Node newXMLNode = wizard.getGlobalConfigrationElementNode();
+						Node newXMLNode = wizard.getGlobalConfigurationElementNode();
 						if (newXMLNode != null) {
 							switch (item.getContributor().getGlobalConfigElementType()) {
-								case GLOBAL_ELEMENT:		String id = ((Element)newXMLNode).getAttribute("id");
-															cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);	
-															break;
+							case GLOBAL_ELEMENT:
+								String id = ((Element) newXMLNode).getAttribute("id");
+								cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
+								break;
 							case CONTEXT_DATAFORMAT:
 								AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
-															cf.getCamelContext().addDataFormat(elemDF);
-															break;
+								cf.getCamelContext().addDataFormat(elemDF);
+								break;
 							case CONTEXT_ENDPOINT:
-								AbstractCamelModelElement elemEP = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
-															cf.getCamelContext().addEndpointDefinition(elemEP);
-															break;
-								default:					// ignore
-															break;
+								addEndpointToGlobalContext(cf, (Element) newXMLNode);
+								break;
+							default: // ignore
+								break;
 							}
 						}
 						List<Dependency> deps = item.getContributor().getElementDependencies();
@@ -564,6 +566,22 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	/**
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
+		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+		elemEP.setXmlNode(newXMLNode);
+		elemEP.setId(newXMLNode.getAttribute("id"));
+		final String description = newXMLNode.getAttribute("description");
+		if (description != null && !description.isEmpty()) {
+			elemEP.setDescription(description);
+		}
+		cf.getCamelContext().addEndpointDefinition(elemEP);
+		elemEP.setParent(cf.getCamelContext());
+	}
+
+	/**
 	 * modifies the selected entry
 	 */
 	private void modifyEntry() {
@@ -575,13 +593,13 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			if (extHandler != null) {
 				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel().getDocument());
 				if (wizard == null) return;
-				wizard.setGlobalConfigrationElementNode(modElem);
+				wizard.setGlobalConfigurationElementNode(modElem);
 				WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 				wizdlg.setBlockOnOpen(true);
 				wizdlg.setTitle(UIMessages.newGlobalConfigurationTypeWizardDialogTitle);
 				wizdlg.setTitleImage(null); // get a general icon or retrieve from contributor <- TODO!
 				if (Window.OK == wizdlg.open()) {
-					Node newXMLNode = wizard.getGlobalConfigrationElementNode();
+					Node newXMLNode = wizard.getGlobalConfigurationElementNode();
 					if (newXMLNode == null) return;
 					switch (extHandler.getGlobalConfigElementType()) {
 						case CONTEXT_DATAFORMAT:	// here we need to reinit the model element so it copies all information from the node

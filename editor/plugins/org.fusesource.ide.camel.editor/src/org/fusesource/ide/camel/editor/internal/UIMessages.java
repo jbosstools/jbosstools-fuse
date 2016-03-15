@@ -20,7 +20,9 @@ public class UIMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.editor.internal.l10n.messages";
 
-    public static String editorSourcePageTitle;
+    public static String AddGlobalEndpointWizard_windowTitle;
+
+	public static String editorSourcePageTitle;
     public static String editorDesignPageTitle;
     public static String editorGlobalConfigurationPageTitle;
     public static String connectorsDrawerTitle;
@@ -79,7 +81,19 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPage_idLabel;
 	public static String dataFormatSelectionPage_descriptionLabel;
 
-    static {
+    public static String GlobalEndpointWizardPage_componentSelectionMandatoryMessage;
+
+	public static String GlobalEndpointWizardPage_descriptionFieldLabel;
+
+	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription;
+
+	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle;
+
+	public static String GlobalEndpointWizardPage_idFieldLabel;
+
+	public static String GlobalEndpointWizardPage_idMandatoryMessage;
+
+	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);
     }
