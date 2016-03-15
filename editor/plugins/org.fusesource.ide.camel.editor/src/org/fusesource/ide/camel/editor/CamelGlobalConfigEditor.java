@@ -57,6 +57,8 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
@@ -573,6 +575,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
 		elemEP.setXmlNode(newXMLNode);
 		elemEP.setId(newXMLNode.getAttribute("id"));
+		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
+		elemEP.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("to"));
 		final String description = newXMLNode.getAttribute("description");
 		if (description != null && !description.isEmpty()) {
 			elemEP.setDescription(description);
