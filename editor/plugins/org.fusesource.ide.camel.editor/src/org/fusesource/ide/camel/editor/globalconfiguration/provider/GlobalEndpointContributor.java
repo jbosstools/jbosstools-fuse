@@ -21,6 +21,7 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementCo
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
@@ -33,6 +34,7 @@ import org.w3c.dom.Node;
 public class GlobalEndpointContributor implements ICustomGlobalConfigElementContribution {
 
 	private static final String ENDPOINT = "endpoint";
+	private AddGlobalEndpointWizard wizard = null;
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#createGlobalElement(org.w3c.dom.Document)
@@ -41,7 +43,8 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
 		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(camelFile.getResource().getProject()));
 		final ComponentModel componentModel = camelModel.getComponentModel();
-		return new AddGlobalEndpointWizard(camelFile, componentModel);
+		wizard = new AddGlobalEndpointWizard(camelFile, componentModel);
+		return wizard;
 	}
 
 	/* (non-Javadoc)
@@ -58,6 +61,12 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	 */
 	@Override
 	public List<Dependency> getElementDependencies() {
+		if (wizard != null) {
+			final Component component = wizard.getComponent();
+			if (component != null) {
+				return component.getDependencies();
+			}
+		}
 		return new ArrayList<Dependency>();
 	}
 

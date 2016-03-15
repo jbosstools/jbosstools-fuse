@@ -31,6 +31,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	private Element globalConfigurationNode;
 	private GlobalEndpointWizardPage globalEndpointPage;
 	private CamelFile camelFile;
+	private Component component;
 
 	public AddGlobalEndpointWizard(CamelFile camelFile, ComponentModel componentModel) {
 		super();
@@ -77,6 +78,13 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 		this.globalConfigurationNode = node;
 	}
 
+	/**
+	 * @return the component
+	 */
+	public Component getComponent() {
+		return component;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -84,7 +92,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	 */
 	@Override
 	public boolean performFinish() {
-		Component component = globalEndpointPage.getComponentSelected();
+		component = globalEndpointPage.getComponentSelected();
 		globalConfigurationNode = camelFile.createElement("endpoint", camelFile.getCamelContext().getXmlNode().getPrefix()); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("uri", component.getSyntax()); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("id", globalEndpointPage.getId()); //$NON-NLS-1$
