@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
@@ -123,9 +124,11 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	 */
 	private void createCamelComponentListViewer(Composite parent) {
 		final Button groupedByCategories = createCheckboxToGroupByCategory(parent);
-		final TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		FilteredTree filteredTree = new FilteredTree(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER, new ComponentNameAndTagPatternFilter(), true);
+		filteredTree.getFilterControl().setMessage(UIMessages.GlobalEndpointWizardPage_filterSearchMessage);
+		final TreeViewer treeViewer = filteredTree.getViewer();
 		final int xHint = getShell().getSize().x - 20;
-		treeViewer.getTree().setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
+		filteredTree.setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
 		treeViewer.setContentProvider(new ComponentListTreeContentProvider());
 		treeViewer.setComparator(new ViewerComparator());
 		treeViewer.setLabelProvider(new ComponentLabelProvider());
