@@ -74,6 +74,8 @@ public class UIMessages extends NLS {
 	public static String newGlobalConfigurationTypeWizardDialogTitle;
 	public static String CamelDiagramBehaviour_messageOnErrorEditorInitialization;
 
+	public static String ComponentGroupedByTagsTreeContenProvider_Uncategorized;
+
 	public static String newGlobalConfigurationTypeDataFormatWizardDialogTitle;
 	public static String newGlobalConfigurationTypeEndpointWizardDialogTitle;
 
@@ -88,6 +90,8 @@ public class UIMessages extends NLS {
 	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription;
 
 	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle;
+
+	public static String GlobalEndpointWizardPage_groupByCategories;
 
 	public static String GlobalEndpointWizardPage_idFieldLabel;
 

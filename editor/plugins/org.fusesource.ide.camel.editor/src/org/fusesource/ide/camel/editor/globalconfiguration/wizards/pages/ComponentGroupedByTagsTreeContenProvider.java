@@ -10,16 +10,26 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author Aurelien Pupier
  *
  */
-final class ComponentTreeContenProvider implements ITreeContentProvider {
+public final class ComponentGroupedByTagsTreeContenProvider implements ITreeContentProvider {
+
+	private ComponentManager componentManager;
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		if (newInput instanceof ComponentManager) {
+			componentManager = (ComponentManager) newInput;
+		}
 	}
 
 	@Override
@@ -28,7 +38,7 @@ final class ComponentTreeContenProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return false;
+		return element instanceof String;
 	}
 
 	@Override
@@ -38,11 +48,27 @@ final class ComponentTreeContenProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
+		if (inputElement instanceof ComponentManager) {
+			componentManager = (ComponentManager) inputElement;
+			Set<String> res = new HashSet<>();
+			res.addAll(componentManager.getTags());
+			if (!componentManager.getComponentWithoutTag().isEmpty()) {
+				res.add(UIMessages.ComponentGroupedByTagsTreeContenProvider_Uncategorized);
+			}
+			return res.toArray();
+		}
 		return (Object[]) inputElement;
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+		if(parentElement instanceof String){
+			if (UIMessages.ComponentGroupedByTagsTreeContenProvider_Uncategorized.equals(parentElement)) {
+				return componentManager.getComponentWithoutTag().toArray();
+			} else {
+				return componentManager.getComponentForTag((String) parentElement).toArray();
+			}
+		}
 		return null;
 	}
 }
