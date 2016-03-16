@@ -150,11 +150,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public String getCreateImageId() {
 		String iconName = getIconName();
 		if (iconName != null) {
-			iconName = ImageProvider.getKeyForDiagramIcon(iconName);
-		}
-		if (iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE)) && 
-			getCategoryType().equals(CATEGORY_TYPE.COMPONENTS)) {
-			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
+			iconName = ImageProvider.getKeyForDiagramIcon(getCategoryType().equals(CATEGORY_TYPE.COMPONENTS), iconName);
 		}
 		return iconName;
 	}
@@ -166,10 +162,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public String getCreateLargeImageId() {
 		String iconName = getIconName();
-		if (iconName != null) iconName = ImageProvider.getKeyForDiagramIcon(iconName);
-		if (iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE)) && 
-			getCategoryType().equals(CATEGORY_TYPE.COMPONENTS)) {
-			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
+		if (iconName != null) {
+			iconName = ImageProvider.getKeyForDiagramIcon(getCategoryType().equals(CATEGORY_TYPE.COMPONENTS), iconName);
 		}
 		return iconName;
 	}

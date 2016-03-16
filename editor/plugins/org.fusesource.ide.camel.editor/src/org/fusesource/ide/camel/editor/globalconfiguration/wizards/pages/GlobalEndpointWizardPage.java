@@ -24,8 +24,7 @@ import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -119,13 +118,13 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	 * @param parent
 	 */
 	private void createCamelComponentListViewer(Composite parent) {
-		ListViewer list = new ListViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		final int xHint = getShell().getSize().x - 20;
-		list.getList().setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
-		list.setContentProvider(ArrayContentProvider.getInstance());
-		list.setComparator(new ViewerComparator());
-		list.setLabelProvider(new ComponentLabelProvider());
-		list.setInput(componentModel.getSupportedComponents());
+		treeViewer.getTree().setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
+		treeViewer.setContentProvider(new ComponentTreeContenProvider());
+		treeViewer.setComparator(new ViewerComparator());
+		treeViewer.setLabelProvider(new ComponentLabelProvider());
+		treeViewer.setInput(componentModel.getSupportedComponents().toArray());
 		UpdateValueStrategy strategy = new UpdateValueStrategy() ;
 		strategy.setBeforeSetValidator(new IValidator() {
 			
@@ -138,7 +137,7 @@ public class GlobalEndpointWizardPage extends WizardPage {
 			}
 		}) ;
 		
-		dbc.bindValue(ViewerProperties.singleSelection().observe(list), PojoProperties.value(GlobalEndpointWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
+		dbc.bindValue(ViewerProperties.singleSelection().observe(treeViewer), PojoProperties.value(GlobalEndpointWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
 				strategy, null);
 	}
 

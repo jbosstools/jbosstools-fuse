@@ -113,7 +113,7 @@ public class FigureUIFactory {
 		int label_width = fontDimension.getWidth();
 		int label_height = fontDimension.getHeight()+FONT_SPACING_V;
 
-		Dimension imageDimension = ImageUtils.getImageSize(getEndpointFigureImageKey(element));
+		Dimension imageDimension = ImageUtils.getImageSize(ImageProvider.getKeyForDiagramIcon(element.isEndpointElement(), element.getIconName()));
 		int image_width = imageDimension.width;
 		int image_height = imageDimension.height;
 
@@ -150,7 +150,7 @@ public class FigureUIFactory {
 		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
 		
 		// create and set image
-		Image image = gaService.createImage(baseFigure, getEndpointFigureImageKey(element));
+		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForDiagramIcon(element.isEndpointElement(), element.getIconName()));
 		gaService.setLocationAndSize(image, DEFAULT_LABEL_OFFSET_H * 3, (IMAGE_DEFAULT_HEIGHT-image_height)/2, image_width, image_height);
 		
 		// create and set text graphics algorithm
@@ -279,7 +279,7 @@ public class FigureUIFactory {
 	private static void paintChildFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
-		Dimension imageDimension = ImageUtils.getImageSize(getEndpointFigureImageKey(element));
+		Dimension imageDimension = ImageUtils.getImageSize(ImageProvider.getKeyForDiagramIcon(element.isEndpointElement(), element.getIconName()));
 		int image_width = imageDimension.width;
 		int image_height = imageDimension.height;
 		
@@ -312,7 +312,7 @@ public class FigureUIFactory {
 		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
 		
 		// create and set image
-		Image image = gaService.createImage(baseFigure, getEndpointFigureImageKey(element));
+		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForDiagramIcon(element.isEndpointElement(), element.getIconName()));
 		gaService.setLocationAndSize(image, DEFAULT_LABEL_OFFSET_H * 3, (baseRect.height-image_height)/2, image_width, image_height);
 
 		// create and set text graphics algorithm
@@ -409,16 +409,4 @@ public class FigureUIFactory {
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, String.valueOf(containerShape.getGraphicsAlgorithm().getHeight()));
 	}
 	
-	/**
-	 * 
-	 * @param element
-	 * @return
-	 */
-	public static String getEndpointFigureImageKey(AbstractCamelModelElement element) {
-		String iconName = ImageProvider.getKeyForDiagramIcon(element.getIconName());
-		if (element.isEndpointElement() && iconName.equalsIgnoreCase(String.format("%s%s%s", ImageProvider.PREFIX, "generic", ImageProvider.POSTFIX_LARGE))) {
-			iconName = String.format("%s%s%s", ImageProvider.PREFIX, "endpoint", ImageProvider.POSTFIX_LARGE);
-		}
-		return iconName;
-	}
 }

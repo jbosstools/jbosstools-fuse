@@ -34,7 +34,7 @@ public class ImageProvider extends AbstractImageProvider {
 
 	// The prefix for all identifiers of this image provider
 	public static final String PREFIX = "org.fusesource.ide.icons."; //$NON-NLS-1$
-	public static final String POSTFIX_SMALL = "_palette"; //$NON-NLS-1$
+	public static final String POSTFIX_SMALL = "_small"; //$NON-NLS-1$
 	public static final String POSTFIX_LARGE = "_diagram"; //$NON-NLS-1$
 
 	public static final String IMG_FLOW = PREFIX + "flow"; //$NON-NLS-1$
@@ -215,14 +215,27 @@ public class ImageProvider extends AbstractImageProvider {
 		addIconsForIconName(eipName, ROOT_FOLDER_FOR_IMG + eipName + "16.png", ROOT_FOLDER_FOR_IMG + eipName + ".png");
 	}
 
-	public static String getKeyForPaletteIcon(String iconName) {
-	    if (isImageAvailable(String.format("%s16.png", iconName))) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
-	    return String.format("%s%s%s", PREFIX, "generic", POSTFIX_SMALL);
+	public static String getKeyForSmallIcon(boolean isEndpoint, String iconName) {
+		return getKeyForIcon(isEndpoint, iconName, "%s16.png", POSTFIX_SMALL);
 	}
 
-	public static String getKeyForDiagramIcon(String iconName) {
-	    if (isImageAvailable(String.format("%s.png", iconName))) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
-		return String.format("%s%s%s", PREFIX, "generic", POSTFIX_LARGE);
+	public static String getKeyForDiagramIcon(boolean isEndpoint, String iconName) {
+		return getKeyForIcon(isEndpoint, iconName, "%s.png", POSTFIX_LARGE);
+	}
+
+	/**
+	 * @param isEndpoint
+	 * @param iconName
+	 * @param iconNamePattern
+	 * @param postfix
+	 * @return
+	 */
+	private static String getKeyForIcon(boolean isEndpoint, String iconName, final String iconNamePattern, final String postfix) {
+		if (isImageAvailable(String.format(iconNamePattern, iconName))) {
+			return String.format("%s%s%s", PREFIX, iconName, postfix);
+		} else {
+			return String.format("%s%s%s", PREFIX, isEndpoint ? "endpoint" : "generic", postfix);
+		}
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
