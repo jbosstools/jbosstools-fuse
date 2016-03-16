@@ -201,7 +201,7 @@ public class BasicNodeValidator implements ValidationSupport {
 							result.addWarning("The entered reference does not exist in your context! Please check the properties view for more details.");
 						} else {
 							// the ref exists
-							if (cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
+							if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
 								// but has no URI defined
 								result.addError("The referenced endpoint does not define a valid URI! Please check the properties view for more details.");
 							}
