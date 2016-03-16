@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.provider.DiagramTypeProvider;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author Aurelien Pupier
@@ -30,7 +31,7 @@ final class ComponentLabelProvider extends LabelProvider {
 			final String descriptionSuffix = component.getDescription() != null ? " - " + component.getDescription() : "";
 			return component.getDisplayTitle() + descriptionSuffix;
 		}
-		return super.getText(element);
+		return Strings.humanize(super.getText(element));
 	}
 
 	@Override

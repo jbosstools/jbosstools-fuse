@@ -28,6 +28,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -118,13 +122,14 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	 * @param parent
 	 */
 	private void createCamelComponentListViewer(Composite parent) {
-		TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		final Button groupedByCategories = createCheckboxToGroupByCategory(parent);
+		final TreeViewer treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		final int xHint = getShell().getSize().x - 20;
 		treeViewer.getTree().setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
-		treeViewer.setContentProvider(new ComponentTreeContenProvider());
+		treeViewer.setContentProvider(new ComponentListTreeContentProvider());
 		treeViewer.setComparator(new ViewerComparator());
 		treeViewer.setLabelProvider(new ComponentLabelProvider());
-		treeViewer.setInput(componentModel.getSupportedComponents().toArray());
+		treeViewer.setInput(new ComponentManager(componentModel));
 		UpdateValueStrategy strategy = new UpdateValueStrategy() ;
 		strategy.setBeforeSetValidator(new IValidator() {
 			
@@ -139,6 +144,29 @@ public class GlobalEndpointWizardPage extends WizardPage {
 		
 		dbc.bindValue(ViewerProperties.singleSelection().observe(treeViewer), PojoProperties.value(GlobalEndpointWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
 				strategy, null);
+		groupedByCategories.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (groupedByCategories.getSelection()) {
+					treeViewer.setContentProvider(new ComponentGroupedByTagsTreeContenProvider());
+				} else {
+					treeViewer.setContentProvider(new ComponentListTreeContentProvider());
+				}
+			}
+		});
+	}
+
+	/**
+	 * @param parent
+	 * @return
+	 */
+	private Button createCheckboxToGroupByCategory(Composite parent) {
+		new Label(parent, SWT.NONE);
+		final Button groupedByCategories = new Button(parent, SWT.CHECK);
+		groupedByCategories.setText(UIMessages.GlobalEndpointWizardPage_groupByCategories);
+		groupedByCategories.setLayoutData(GridDataFactory.fillDefaults().align(GridData.END, SWT.FILL).create());
+		return groupedByCategories;
 	}
 
 	/**
