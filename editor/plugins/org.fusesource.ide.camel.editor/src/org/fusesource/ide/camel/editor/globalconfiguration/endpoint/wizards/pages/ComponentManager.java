@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
 
 import java.util.Collections;
 import java.util.HashMap;

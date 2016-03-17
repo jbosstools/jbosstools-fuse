@@ -8,13 +8,14 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.globalconfiguration.provider;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider.GlobalEndpointContributor;
 import org.junit.Test;
 import org.w3c.dom.Element;
 

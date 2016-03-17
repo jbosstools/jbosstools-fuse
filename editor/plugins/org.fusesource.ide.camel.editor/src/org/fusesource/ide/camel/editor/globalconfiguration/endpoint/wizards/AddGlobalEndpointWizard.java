@@ -8,11 +8,11 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.wizards;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.wizard.Wizard;
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages.GlobalEndpointWizardPage;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.GlobalEndpointWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;

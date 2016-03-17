@@ -10,8 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages;
 
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages.ComponentGroupedByTagsTreeContenProvider;
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages.ComponentManager;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.ComponentGroupedByTagsTreeContenProvider;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.ComponentManager;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
