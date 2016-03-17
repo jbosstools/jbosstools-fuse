@@ -83,7 +83,9 @@ public class UIMessages extends NLS {
 	public static String dataFormatSelectionPage_idLabel;
 	public static String dataFormatSelectionPage_descriptionLabel;
 
-    public static String GlobalEndpointWizardPage_componentSelectionMandatoryMessage;
+    public static String GlobalEndpointWizardPage_componentSelectionGroupTitle;
+
+	public static String GlobalEndpointWizardPage_componentSelectionMandatoryMessage;
 
 	public static String GlobalEndpointWizardPage_descriptionFieldLabel;
 
@@ -98,6 +100,8 @@ public class UIMessages extends NLS {
 	public static String GlobalEndpointWizardPage_idFieldLabel;
 
 	public static String GlobalEndpointWizardPage_idMandatoryMessage;
+
+	public static String GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText;
 
 	static {
         // initialize resource bundle

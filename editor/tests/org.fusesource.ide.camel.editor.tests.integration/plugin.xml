@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.fusesource.ide.editor.paletteContributor">
+      <PaletteContribution
+            categoryName="COMPONENTS"
+            class="org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages.CustomPaletteEntry1"
+            id="org.fusesource.ide.camel.editor.tests.integration.PaletteContribution1">
+      </PaletteContribution>
+   </extension>
+
+</plugin>
