@@ -8,19 +8,18 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.provider;
+package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
-import org.fusesource.ide.camel.editor.wizards.NewDataFormatWizard;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Document;
@@ -37,7 +36,9 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	 */
 	@Override
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
-		return new NewDataFormatWizard();
+		final String camelVersion = CamelModelFactory.getCamelVersion(camelFile.getResource().getProject());
+		final DataFormatModel dataformatModel = CamelModelFactory.getModelForVersion(camelVersion).getDataformatModel();
+		return new NewDataFormatWizard(camelFile, dataformatModel);
 	}
 	
 	/* (non-Javadoc)

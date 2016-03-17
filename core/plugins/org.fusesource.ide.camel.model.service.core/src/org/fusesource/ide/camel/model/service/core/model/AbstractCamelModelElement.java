@@ -665,7 +665,7 @@ public abstract class AbstractCamelModelElement {
 		if (e == null)
 			return;
 		String kind = getKind(name);
-		String javaType = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getJavaType() : null;
+		String javaType = getJavaType(name);
 
 		if (this instanceof CamelContextElement) kind = "attribute";
 		
@@ -709,13 +709,28 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	/**
+	 * @param name
+	 * @return
+	 */
+	private String getJavaType(String name) {
+		if (getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getParameter(name) != null) {
+			return getUnderlyingMetaModelObject().getParameter(name).getJavaType();
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * /!\ Public for test purpose
 	 * 
 	 * @param name
 	 * @return
 	 */
 	public String getKind(String name) {
-		return getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
+		if (getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getParameter(name) != null) {
+			return getUnderlyingMetaModelObject().getParameter(name).getKind();
+		}
+		return null;
 	}
 
 	/**

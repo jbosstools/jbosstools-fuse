@@ -289,7 +289,7 @@
       </GlobalConfigElement>
       <GlobalConfigElement
             category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
-            class="org.fusesource.ide.camel.editor.provider.DataFormatContributor"
+            class="org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor"
             icon="icons/dataformat.png"
             id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.dataformat"
             name="Data Format">
