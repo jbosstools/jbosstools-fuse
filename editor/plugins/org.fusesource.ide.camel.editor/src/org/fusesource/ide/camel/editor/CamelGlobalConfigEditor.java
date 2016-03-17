@@ -71,6 +71,7 @@ import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author lhein
@@ -573,16 +574,27 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
 		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+		setDescriptionIfAvailable(newXMLNode, elemEP);
 		elemEP.setXmlNode(newXMLNode);
 		elemEP.setId(newXMLNode.getAttribute("id"));
 		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
 		elemEP.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("to"));
-		final String description = newXMLNode.getAttribute("description");
-		if (description != null && !description.isEmpty()) {
-			elemEP.setDescription(description);
-		}
 		cf.getCamelContext().addEndpointDefinition(elemEP);
 		elemEP.setParent(cf.getCamelContext());
+	}
+
+	/**
+	 * @param newXMLNode
+	 * @param elemEP
+	 */
+	private void setDescriptionIfAvailable(Element newXMLNode, AbstractCamelModelElement elemEP) {
+		final NodeList childNodes = newXMLNode.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node item = childNodes.item(i);
+			if ("description".equals(item.getNodeName())) {
+				elemEP.setDescription(item.getTextContent());
+			}
+		}
 	}
 
 	/**
