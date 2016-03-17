@@ -87,6 +87,8 @@ public class UIMessages extends NLS {
 
 	public static String GlobalEndpointWizardPage_descriptionFieldLabel;
 
+	public static String GlobalEndpointWizardPage_filterSearchMessage;
+
 	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription;
 
 	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle;
