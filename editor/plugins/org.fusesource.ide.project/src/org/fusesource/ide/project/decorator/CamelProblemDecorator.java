@@ -30,24 +30,7 @@ import org.fusesource.ide.project.providers.CamelVirtualFolder;
  * @author Aurelien Pupier
  *
  */
-public class CamelRouteProblemDecorator implements ILightweightLabelDecorator {
-
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	@Override
-	public void dispose() {
-	}
-
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		return false;
-	}
-
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-	}
+public class CamelProblemDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(Object element, IDecoration decoration) {
@@ -57,7 +40,39 @@ public class CamelRouteProblemDecorator implements ILightweightLabelDecorator {
 			decorationForCamelRoute((CamelRouteElement) element, decoration);
 		} else if (element instanceof CamelCtxNavRouteNode) {
 			decorationForCamelRoute(((CamelCtxNavRouteNode) element).getCamelRoute(), decoration);
+		} else if (element instanceof AbstractCamelModelElement) {
+			decorationForCamelModelElement((AbstractCamelModelElement) element, decoration);
 		}
+	}
+
+	/**
+	 * @param cme
+	 * @param decoration
+	 */
+	private void decorationForCamelModelElement(AbstractCamelModelElement cme, IDecoration decoration) {
+		try {
+			for (IMarker marker : getFuseMarkers(cme)) {
+				String id = (String) marker.getAttribute(IFuseMarker.CAMEL_ID);
+				if (id != null && id.equals(cme.getId())) {
+					decoration.addOverlay(getOverlay((int) marker.getAttribute(IMarker.SEVERITY)));
+					return;
+				}
+			}
+		} catch (CoreException e) {
+			Activator.getLogger().error(e);
+		}
+
+	}
+
+	/**
+	 * @param cme
+	 * @return
+	 * @throws CoreException
+	 */
+	private IMarker[] getFuseMarkers(AbstractCamelModelElement cme) throws CoreException {
+		IResource resource = cme.getCamelFile().getResource();
+		IMarker[] markers = resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+		return markers;
 	}
 
 	/**
@@ -80,16 +95,12 @@ public class CamelRouteProblemDecorator implements ILightweightLabelDecorator {
 	 * @param decoration
 	 */
 	private void decorationForCamelRoute(CamelRouteElement camelRoute, IDecoration decoration) {
-		IResource resource = camelRoute.getCamelFile().getResource();
 		try {
-			IMarker[] markers = resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
-			for (IMarker marker : markers) {
+			for (IMarker marker : getFuseMarkers(camelRoute)) {
 				String id = (String) marker.getAttribute(IFuseMarker.CAMEL_ID);
-				if (id != null) {
-					if (isInsideRoute(camelRoute, id)) {
-						decoration.addOverlay(getOverlay((int) marker.getAttribute(IMarker.SEVERITY)));
-						return;
-					}
+				if (id != null && isInsideRoute(camelRoute, id)) {
+					decoration.addOverlay(getOverlay((int) marker.getAttribute(IMarker.SEVERITY)));
+					return;
 				}
 			}
 		} catch (CoreException e) {
@@ -125,6 +136,23 @@ public class CamelRouteProblemDecorator implements ILightweightLabelDecorator {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void addListener(ILabelProviderListener listener) {
+	}
+
+	@Override
+	public void dispose() {
+	}
+
+	@Override
+	public boolean isLabelProperty(Object element, String property) {
+		return false;
+	}
+
+	@Override
+	public void removeListener(ILabelProviderListener listener) {
 	}
 
 }
