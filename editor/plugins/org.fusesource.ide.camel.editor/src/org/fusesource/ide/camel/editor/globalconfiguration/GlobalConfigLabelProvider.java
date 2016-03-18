@@ -57,6 +57,8 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	 * @return
 	 */
 	private String getTypeFromExtensionPoint(Node node) {
+		StyledString text = new StyledString();
+		String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
 			if (item.getContributor().canHandle(node)) {
 				return item.getName();

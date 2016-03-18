@@ -226,7 +226,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		getSite().setSelectionProvider(treeViewer);
 	}
 
-
 	private void createRightButtons() {
 		createAddButton();
 		createEditButton();
