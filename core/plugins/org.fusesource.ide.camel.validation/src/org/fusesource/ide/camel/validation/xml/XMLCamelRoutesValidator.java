@@ -18,8 +18,9 @@ import org.eclipse.wst.validation.ValidationEvent;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 
@@ -86,6 +87,11 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 		validationResult.incrementError(result.getErrors().size());
 		for (AbstractCamelModelElement cmeChild : cme.getChildElements()) {
 			checkCamelModelElement(cmeChild, validationResult, resource);
+		}
+		if (cme instanceof CamelContextElement) {
+			for (AbstractCamelModelElement globalEndpoint : ((CamelContextElement) cme).getEndpointDefinitions().values()) {
+				checkCamelModelElement(globalEndpoint, validationResult, resource);
+			}
 		}
 	}
 
