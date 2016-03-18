@@ -14,6 +14,7 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -30,9 +31,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -75,7 +76,7 @@ public class GlobalEndpointWizardPage extends WizardPage {
 		createIdLine(composite);
 		createDescriptionLine(composite);
 
-		createCamelComponentListViewer(composite);
+		createCamelComponentSelectionGroup(composite);
 		setControl(composite);
 		WizardPageSupport.create(this, dbc);
 	}
@@ -88,8 +89,8 @@ public class GlobalEndpointWizardPage extends WizardPage {
 		descriptionLabel.setText(UIMessages.GlobalEndpointWizardPage_descriptionFieldLabel);
 		Text descriptionText = new Text(composite, SWT.BORDER);
 		descriptionText.setLayoutData(GridDataFactory.fillDefaults().create());
-		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(descriptionText),
-				PojoProperties.value(GlobalEndpointWizardPage.class, "descriptionCreated", String.class).observe(this)); //$NON-NLS-1$
+		final IObservableValue descriptionObservable = PojoProperties.value(GlobalEndpointWizardPage.class, "descriptionCreated", String.class).observe(this); //$NON-NLS-1$
+		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(descriptionText), descriptionObservable);
 	}
 
 	/**
@@ -114,21 +115,34 @@ public class GlobalEndpointWizardPage extends WizardPage {
 			}
 		});
 
-		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), PojoProperties.value(GlobalEndpointWizardPage.class, "id", String.class).observe(this), //$NON-NLS-1$
-				strategy, null);
+		final IObservableValue idObservable = PojoProperties.value(GlobalEndpointWizardPage.class, "id", String.class).observe(this); //$NON-NLS-1$
+		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), idObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
 
 	/**
 	 * @param parent
 	 */
-	private void createCamelComponentListViewer(Composite parent) {
-		final Button groupedByCategories = createCheckboxToGroupByCategory(parent);
-		FilteredTree filteredTree = new FilteredTree(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER, new ComponentNameAndTagPatternFilter(), true);
+	private void createCamelComponentSelectionGroup(Composite parent) {
+		Group componentSelectionGroup = new Group(parent, SWT.NONE);
+		componentSelectionGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+		componentSelectionGroup.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
+		componentSelectionGroup.setText(UIMessages.GlobalEndpointWizardPage_componentSelectionGroupTitle);
+		final FilteredTree filteredTree = createFilteredTree(componentSelectionGroup);
+		createCheckboxFilterComposite(componentSelectionGroup, filteredTree.getViewer());
+	}
+
+	/**
+	 * @param componentSelectionGroup
+	 * @return
+	 */
+	private FilteredTree createFilteredTree(Group componentSelectionGroup) {
+		final int treeStyle = SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER;
+		final FilteredTree filteredTree = new FilteredTree(componentSelectionGroup, treeStyle, new ComponentNameAndTagPatternFilter(), true);
 		filteredTree.getFilterControl().setMessage(UIMessages.GlobalEndpointWizardPage_filterSearchMessage);
-		final TreeViewer treeViewer = filteredTree.getViewer();
 		final int xHint = getShell().getSize().x - 20;
-		filteredTree.setLayoutData(GridDataFactory.swtDefaults().span(2, 1).align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
+		filteredTree.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
+		final TreeViewer treeViewer = filteredTree.getViewer();
 		treeViewer.setContentProvider(new ComponentListTreeContentProvider());
 		treeViewer.setComparator(new ViewerComparator());
 		treeViewer.setLabelProvider(new ComponentLabelProvider());
@@ -147,6 +161,45 @@ public class GlobalEndpointWizardPage extends WizardPage {
 		
 		dbc.bindValue(ViewerProperties.singleSelection().observe(treeViewer), PojoProperties.value(GlobalEndpointWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
 				strategy, null);
+		return filteredTree;
+	}
+
+	/**
+	 * @param componentSelectionGroup
+	 * @param treeViewer
+	 */
+	private void createCheckboxFilterComposite(Group componentSelectionGroup, final TreeViewer treeViewer) {
+		Composite buttonsComposite = new Composite(componentSelectionGroup, SWT.NONE);
+		buttonsComposite.setLayout(GridLayoutFactory.fillDefaults().create());
+		buttonsComposite.setLayoutData(GridDataFactory.fillDefaults().create());
+		createCheckboxToGroupByCategory(buttonsComposite, treeViewer);
+		createCheckboxToShowOnlyPaletteComponents(buttonsComposite, treeViewer);
+	}
+
+	private Button createCheckboxToShowOnlyPaletteComponents(Composite parent, final TreeViewer treeViewer) {
+		final Button showOnlyPaletteComponents = new Button(parent, SWT.CHECK);
+		showOnlyPaletteComponents.setText(UIMessages.GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText);
+		final WhiteListComponentFilter whiteListComponentFilter = new WhiteListComponentFilter();
+		treeViewer.addFilter(whiteListComponentFilter);
+		showOnlyPaletteComponents.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				super.widgetSelected(e);
+				if (showOnlyPaletteComponents.getSelection()) {
+					treeViewer.addFilter(whiteListComponentFilter);
+				} else {
+					treeViewer.removeFilter(whiteListComponentFilter);
+				}
+			}
+		});
+		showOnlyPaletteComponents.setSelection(true);
+		return showOnlyPaletteComponents;
+	}
+
+	private Button createCheckboxToGroupByCategory(Composite parent, final TreeViewer treeViewer) {
+		final Button groupedByCategories = new Button(parent, SWT.CHECK);
+		groupedByCategories.setText(UIMessages.GlobalEndpointWizardPage_groupByCategories);
 		groupedByCategories.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -158,17 +211,6 @@ public class GlobalEndpointWizardPage extends WizardPage {
 				}
 			}
 		});
-	}
-
-	/**
-	 * @param parent
-	 * @return
-	 */
-	private Button createCheckboxToGroupByCategory(Composite parent) {
-		new Label(parent, SWT.NONE);
-		final Button groupedByCategories = new Button(parent, SWT.CHECK);
-		groupedByCategories.setText(UIMessages.GlobalEndpointWizardPage_groupByCategories);
-		groupedByCategories.setLayoutData(GridDataFactory.fillDefaults().align(GridData.END, SWT.FILL).create());
 		return groupedByCategories;
 	}
 

@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -100,6 +102,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	private static HashMap<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<ICreateFeature, IConfigurationElement>();
 
 	private static final ArrayList<String> CONNECTORS_WHITELIST;
+	private static final Set<String> COMPONENTS_FROM_EXTENSION_POINTS = new HashSet<>();
 
 	static {
 		CONNECTORS_WHITELIST = new ArrayList<String>();
@@ -696,14 +699,14 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				if (o instanceof ICustomPaletteEntry) {
 					ICustomPaletteEntry pe = (ICustomPaletteEntry) o;
 					ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
-					String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId()
-							: ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_SMALL;
+					final String schemeId = e.getAttribute(EXT_ID_ATTR);
+					String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_SMALL;
 					String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId()
-							: ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_LARGE;
-					IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon,
-							diagramImg, cf);
+							: ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_LARGE;
+					IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
 					entries.add(te);
 					paletteItemExtensions.put(cf, e);
+					COMPONENTS_FROM_EXTENSION_POINTS.add(schemeId);
 				}
 			} catch (CoreException ex) {
 				ex.printStackTrace();
@@ -804,7 +807,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * @param connectorId
 	 * @return
 	 */
-	private boolean shouldBeIgnored(String connectorId) {
-		return !CONNECTORS_WHITELIST.contains(connectorId);
+	public boolean shouldBeIgnored(String connectorId) {
+		return !CONNECTORS_WHITELIST.contains(connectorId) && !COMPONENTS_FROM_EXTENSION_POINTS.contains(connectorId);
 	}
 }
