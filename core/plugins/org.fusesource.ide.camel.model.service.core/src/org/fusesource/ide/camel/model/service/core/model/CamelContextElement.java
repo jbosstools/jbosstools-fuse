@@ -69,6 +69,9 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 */
 	public void addEndpointDefinition(AbstractCamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) return;
+		if (def.getId() == null) {
+			def.setId(def.getNewID());
+		}
 		this.endpointDefinitions.put(def.getId(), def);
 		boolean childExists = false;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
@@ -94,7 +97,9 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 */
 	public void removeEndpointDefinition(AbstractCamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) {
-			this.endpointDefinitions.remove(def.getId());
+			if (def.getId() != null) {
+				this.endpointDefinitions.remove(def.getId());
+			}
 			boolean childExists = false;
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
@@ -136,7 +141,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 */
 	public void addDataFormat(AbstractCamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) return;
-		this.dataformats.put((String)df.getId(), df);
+		if (df.getId() == null) {
+			df.setId(df.getNewID());
+		}
+		this.dataformats.put((String) df.getId(), df);
 		boolean childExists = false;
 		Node dataFormatsNode = null;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
@@ -175,7 +183,9 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 */
 	public void removeDataFormat(AbstractCamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) {
-			this.dataformats.remove(df.getId());
+			if (df.getId() != null) {
+				this.dataformats.remove(df.getId());
+			}
 			Node dataFormatsNode = null;
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				Node n = getXmlNode().getChildNodes().item(i);
@@ -274,11 +284,17 @@ public class CamelContextElement extends AbstractCamelModelElement {
 					if (tmp_df.getNodeType() != Node.ELEMENT_NODE) continue;
 					CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp_df);
 					cme.initialize();
+					if (cme.getId() == null) {
+						cme.setId(cme.getNewID());
+					}
 					this.dataformats.put(cme.getId(), cme);
 				}
 			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ENDPOINT_NODE_NAME)) {
 				CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp);
 				cme.initialize();
+				if (cme.getId() == null) {
+					cme.setId(cme.getNewID());
+				}
 				this.endpointDefinitions.put(cme.getId(), cme);
 			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ROUTE_NODE_NAME)) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);

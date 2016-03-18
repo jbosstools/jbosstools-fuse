@@ -835,7 +835,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						break;
 					}
 				}
-				text.append(cme.getId());
+				final String id = cme.getId();
+				text.append(id != null ? id : "<unknownId>");
 				cell.setImage(img);
 				text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
 				cell.setText(text.toString());
