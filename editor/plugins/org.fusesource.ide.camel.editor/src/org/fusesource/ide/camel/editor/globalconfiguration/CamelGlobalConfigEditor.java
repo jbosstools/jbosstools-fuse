@@ -584,9 +584,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
 		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
-		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
 		elemEP.setParent(cf.getCamelContext());
-		cf.getCamelContext().addChildElement(elemEP);
+		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
+		cf.getCamelContext().addEndpointDefinition(elemEP);
 	}
 
 	/**
