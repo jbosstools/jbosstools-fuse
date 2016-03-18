@@ -188,9 +188,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
 			@Override
 			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
-				if (DEFAULT_CAT_ID.equals(o1.getId()))
+				if (o1.getId().equals(DEFAULT_CAT_ID))
 					return 1;
-				if (DEFAULT_CAT_ID.equals(o2.getId()))
+				if (o2.getId().equals(DEFAULT_CAT_ID))
 					return -1;
 				return o1.getName().compareTo(o2.getName());
 			}
@@ -226,6 +226,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		getSite().setSelectionProvider(treeViewer);
 	}
 
+
 	private void createRightButtons() {
 		createAddButton();
 		createEditButton();
@@ -258,11 +259,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 	}
 
+	/**
+	 * 
+	 */
 	private void createAddButton() {
 		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
-		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
+		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false,
+				false, 1, 1);
 		gd.minimumWidth = 120;
 		gd.widthHint = 120;
 		this.btnAdd.setLayoutData(gd);
@@ -414,6 +419,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			extensionPointIcons.add(image);
 		}
 	}
+
 	
 	GlobalConfigCategoryItem getCategoryForId(String catId) {
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
