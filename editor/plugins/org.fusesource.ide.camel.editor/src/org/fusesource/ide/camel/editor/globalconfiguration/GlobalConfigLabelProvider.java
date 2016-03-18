@@ -10,9 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration;
 
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
@@ -23,7 +23,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-class GlobalConfigLabelProvider extends StyledCellLabelProvider {
+class GlobalConfigLabelProvider implements IStyledLabelProvider {
 
 	private final CamelGlobalConfigEditor camelGlobalConfigEditor;
 
@@ -31,93 +31,113 @@ class GlobalConfigLabelProvider extends StyledCellLabelProvider {
 		this.camelGlobalConfigEditor = camelGlobalConfigEditor;
 	}
 
-	@Override
-	public void update(ViewerCell cell) {
-		Object element = cell.getElement();
+	private StyledString getTextCamelModelElement(AbstractCamelModelElement cme) {
 		StyledString text = new StyledString();
-		if (element instanceof String) {
-			handleString(cell, (String) element, text);
-		} else if (element instanceof Element) {
-			handleXMLElement(cell, (Element) element, text);
-		} else if (element instanceof AbstractCamelModelElement) {
-			handleCamelModelElement(cell, (AbstractCamelModelElement) element, text);
-		} else {
-			// unhandled
-		}
-		super.update(cell);
-	}
-
-	/**
-	 * @param cell
-	 * @param element
-	 * @param text
-	 */
-	private void handleCamelModelElement(ViewerCell cell, AbstractCamelModelElement cme, StyledString text) {
-		Image img = getIconForElement(cme);
 		String type = Strings.capitalize(cme.getTranslatedNodeName());
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
 			if (item.getContributor().canHandle(cme.getXmlNode())) {
 				type = item.getName();
-				img = item.getIcon();
 				break;
 			}
 		}
 		text.append(cme.getId());
-		cell.setImage(img);
 		text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
-		cell.setText(text.toString());
-		cell.setStyleRanges(text.getStyleRanges());
+		return text;
 	}
 
-	/**
-	 * @param cell
-	 * @param element
-	 * @param text
-	 */
-	private void handleXMLElement(ViewerCell cell, Element node, StyledString text) {
-		Image img = getIconForElement(node);
+	private StyledString getTextForXMLElement(Element node) {
+		StyledString text = new StyledString();
 		String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
 			if (item.getContributor().canHandle(node)) {
 				type = item.getName();
-				img = item.getIcon();
 				break;
 			}
 		}
 		text.append(!Strings.isEmpty(node.getAttribute("id")) ? node.getAttribute("id") : CamelUtils.getTranslatedNodeName(node));
-		cell.setImage(img);
 		if (!Strings.isEmpty(node.getAttribute("id"))) text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
-		cell.setText(text.toString());
-		cell.setStyleRanges(text.getStyleRanges());
+		return text;
 	}
 
-	/**
-	 * @param cell
-	 * @param element
-	 * @param text
-	 */
-	private void handleString(ViewerCell cell, String element, StyledString text) {
+	private StyledString getTextForCategory(String element) {
 		GlobalConfigCategoryItem cat = camelGlobalConfigEditor.getCategoryForId(element);
-		Image img = cat.getIcon();
-		text.append(cat.getName());
-		cell.setImage(img);
-		cell.setText(text.toString());
-		cell.setStyleRanges(text.getStyleRanges());
+		return new StyledString(cat.getName());
 	}
-	
-	private Image getIconForElement(Object element) {
+
+	@Override
+	public StyledString getStyledText(Object element) {
+		if (element instanceof String) {
+			return getTextForCategory((String) element);
+		} else if (element instanceof Element) {
+			return getTextForXMLElement((Element) element);
+		} else if (element instanceof AbstractCamelModelElement) {
+			return getTextCamelModelElement((AbstractCamelModelElement) element);
+		} else {
+			// unhandled
+		}
+		return new StyledString();
+	}
+
+	@Override
+	public Image getImage(Object element) {
 		if (element instanceof Node) {
 			return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
 		} else if (element instanceof AbstractCamelModelElement) {
-			AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
-			if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
-				return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");	
-			} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
-				return CamelEditorUIActivator.getDefault().getImage("dataformat.gif");	
-			} else {
-				// unhandled
+			return getImageForCamelModelElement((AbstractCamelModelElement) element);
+		} else if (element instanceof Element) {
+			return getImageForXMLElement((Node) element);
+		} else if (element instanceof String) {
+			GlobalConfigCategoryItem cat = camelGlobalConfigEditor.getCategoryForId((String) element);
+			return cat.getIcon();
+		}
+		return null;
+	}
+
+	/**
+	 * @param element
+	 */
+	private Image getImageForXMLElement(Node element) {
+		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
+			if (item.getContributor().canHandle(element)) {
+				return item.getIcon();
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param cme
+	 * @return
+	 */
+	private Image getImageForCamelModelElement(AbstractCamelModelElement cme) {
+		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
+			if (item.getContributor().canHandle(cme.getXmlNode())) {
+				return item.getIcon();
+			}
+		}
+		if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
+			return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
+		} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
+			return CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public void addListener(ILabelProviderListener listener) {
+	}
+
+	@Override
+	public void dispose() {
+	}
+
+	@Override
+	public boolean isLabelProperty(Object element, String property) {
+		return false;
+	}
+
+	@Override
+	public void removeListener(ILabelProviderListener listener) {
 	}
 }

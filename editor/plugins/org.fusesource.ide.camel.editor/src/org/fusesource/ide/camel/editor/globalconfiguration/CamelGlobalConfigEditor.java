@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -40,6 +41,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
@@ -200,7 +202,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		this.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.treeViewer.setUseHashlookup(true);
 		this.treeViewer.setContentProvider(new GlobalConfigContentProvider(this));
-		this.treeViewer.setLabelProvider(new GlobalConfigLabelProvider(this));
+		this.treeViewer.setLabelProvider(
+				new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator(), null));
 		this.treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
 		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -216,18 +219,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		getSite().setSelectionProvider(treeViewer);
 	}
 
-	/**
-	 * 
-	 */
 	private void createRightButtons() {
 		createAddButton();
 		createEditButton();
 		createDeleteButton();
 	}
 
-	/**
-	 * 
-	 */
 	private void createDeleteButton() {
 		this.btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
