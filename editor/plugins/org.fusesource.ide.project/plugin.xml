@@ -225,17 +225,101 @@
     </decorator>
  </extension>
  
- <!-- Camel Project -->
-
-      <extension
-         point="org.eclipse.wst.common.project.facet.core.facets">
-      <project-facet
-            id="jst.camel">
-         <label>
-            Camel
-         </label>
-      </project-facet>
-      <project-facet-version
+ 	<extension point="org.eclipse.ui.menus">
+    	<menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+       		<command
+            	commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
+             	label="Disable Fuse Camel Nature"
+             	style="push">
+          		<visibleWhen checkEnabled="false">
+                	<with variable="selection">
+                    	<iterate ifEmpty="false"
+                                 operator="and">
+                        	<test forcePluginActivation="true"
+                                  property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled"/>
+                            <test forcePluginActivation="true"
+                                  property="org.fusesource.ide.project.CamelNatureTester.projectOpen"/>
+                        </iterate>
+          			</with>
+          		</visibleWhen>
+       		</command>
+       		<command
+             	commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
+             	label="Enable Fuse Camel Nature"
+             	style="push">
+          		<visibleWhen checkEnabled="false">
+                	<with variable="selection">
+                		<iterate ifEmpty="false" operator="and">
+                   			<test forcePluginActivation="true"
+                         		  property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled"/>
+                   			<test forcePluginActivation="true"
+                         		  property="org.fusesource.ide.project.CamelNatureTester.projectOpen" />
+		                </iterate>
+        		 	</with>
+          		</visibleWhen>
+       		</command>
+		</menuContribution>
+ 	</extension>
+ 
+ 	<extension point="org.eclipse.ui.commands">
+    	<command id="org.fusesource.ide.project.EnableCamelNatureCmd"
+          		 name="Enable Fuse Camel Nature"/>
+	    <command id="org.fusesource.ide.project.DisableCamelNatureCmd"
+          		 name="Disable Fuse Camel Nature"/>
+	</extension>
+	
+ 	<extension point="org.eclipse.ui.handlers">
+    	<handler class="org.fusesource.ide.project.handlers.EnableCamelNatureHandler"
+          		 commandId="org.fusesource.ide.project.EnableCamelNatureCmd"/>
+	    <handler class="org.fusesource.ide.project.handlers.DisableCamelNatureHandler"
+          		 commandId="org.fusesource.ide.project.DisableCamelNatureCmd"/>
+	</extension>
+ 
+ 	<extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+        	class="org.fusesource.ide.project.CamelNatureTester"
+          	id="org.fusesource.ide.project.CamelNatureTester"
+          	namespace="org.fusesource.ide.project.CamelNatureTester"
+          	properties="camelNatureEnabled,camelNatureDisabled,projectOpen,hasChildren"
+          	type="org.eclipse.core.resources.IProject"/>
+	</extension>
+ 
+ 	<extension point="org.eclipse.wst.server.core.moduleFactories">
+    	<moduleFactory
+        	class="org.fusesource.ide.project.integration.CamelModuleFactory"
+          	id="org.fusesource.ide.project.fuseModuleFactory">
+       		<moduleType
+            	types="fuse.camel"
+             	versions="1.0">
+       		</moduleType>
+    	</moduleFactory>
+ 	</extension>
+ 	
+ 	<extension point="org.eclipse.wst.server.core.moduleTypes">
+    	<moduleType
+          	id="fuse.camel"
+          	name="Camel Context">
+    	</moduleType>
+ 	</extension>
+ 
+ 	<extension point="org.eclipse.wst.server.ui.serverImages">
+    	<image
+        	id="org.fusesource.ide.project.image"
+        	icon="icons/fuse_icon_16c.png"          
+          	typeIds="fuse.camel"/>
+ 	</extension>
+  
+ 	<!-- Camel Project -->
+    <extension point="org.eclipse.wst.common.project.facet.core.facets">
+    	
+    	<project-facet id="jst.camel">
+         	<label>Camel</label>
+         	<description>
+             	Adds support for Camel to the project.
+         	</description>
+      	</project-facet>
+      
+      	<project-facet-version
             facet="jst.camel"
             version="2.15">
         	
@@ -245,6 +329,10 @@
                     	facet="jst.java"
                      	version="[1.6">
                		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
                		<or>
 	               		<requires 
 	               			facet="jst.utility"
@@ -269,6 +357,10 @@
                     	facet="jst.java"
                      	version="[1.7">
                		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
                		<or>
 	               		<requires 
 	               			facet="jst.utility"
@@ -425,6 +517,7 @@
   <extension
         point="org.eclipse.wst.common.project.facet.ui.images">
      <image
+
            facet="jst.camel"
            path="icons/camel_context_icon.png">
      </image>
