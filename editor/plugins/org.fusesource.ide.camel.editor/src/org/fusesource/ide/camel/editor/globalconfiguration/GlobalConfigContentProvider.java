@@ -25,42 +25,20 @@ class GlobalConfigContentProvider implements ITreeContentProvider {
 		this.camelGlobalConfigEditor = camelGlobalConfigEditor;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-	 */
 	@Override
 	public void dispose() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang
-	 * .Object)
-	 */
 	@Override
 	public Object[] getChildren(Object parent) {
 		return getElements(parent);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang
-	 * .Object)
-	 */
 	@Override
 	public Object[] getElements(Object parent) {
 		if (parent instanceof HashMap) {
-			Object[] catIds = ((HashMap)parent).keySet().toArray();
+			Object[] catIds = ((HashMap<?, ?>) parent).keySet().toArray();
 			Arrays.sort(catIds, new Comparator<Object>() {
-				/* (non-Javadoc)
-				 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-				 */
 				@Override
 				public int compare(Object o1, Object o2) {
 					if (o1.toString().equals(CamelGlobalConfigEditor.DEFAULT_CAT_ID)) return 1;
