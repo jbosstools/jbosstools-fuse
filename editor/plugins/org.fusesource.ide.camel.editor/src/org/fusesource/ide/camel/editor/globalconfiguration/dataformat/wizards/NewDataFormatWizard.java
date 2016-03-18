@@ -75,22 +75,9 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		final String prefixNS = camelFile.getCamelContext().getXmlNode().getPrefix();
 		dataformatNode = camelFile.createElement(dataformatSelected.getName(), prefixNS); // $NON-NLS-1$
 		dataformatNode.setAttribute("id", dataFormatSelectionPage.getId()); //$NON-NLS-1$
-		handleDescriptionNode(prefixNS);
 		return true;
 	}
 	
-	/**
-	 * @param prefixNS
-	 */
-	private void handleDescriptionNode(final String prefixNS) {
-		final String description = dataFormatSelectionPage.getDescriptionCreated();
-		if (description != null && !description.isEmpty()) {
-			Element descriptionNode = camelFile.getDocument().createElementNS(prefixNS, "description");
-			descriptionNode.appendChild(camelFile.getDocument().createTextNode(description));
-			dataformatNode.appendChild(descriptionNode);
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard#getGlobalConfigrationElementNode()
 	 */

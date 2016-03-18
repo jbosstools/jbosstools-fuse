@@ -72,7 +72,6 @@ import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author lhein
@@ -597,25 +596,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param eipName
 	 */
 	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
-		setDescriptionIfAvailable(newXMLNode, cme);
 		cme.setXmlNode(newXMLNode);
-		cme.setId(newXMLNode.getAttribute("id"));
 		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
 		cme.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName(eipName));
-	}
-
-	/**
-	 * @param newXMLNode
-	 * @param elemEP
-	 */
-	private void setDescriptionIfAvailable(Element newXMLNode, AbstractCamelModelElement elemEP) {
-		final NodeList childNodes = newXMLNode.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node item = childNodes.item(i);
-			if ("description".equals(item.getNodeName())) {
-				elemEP.setDescription(item.getTextContent());
-			}
-		}
+		cme.setId(newXMLNode.getAttribute("id"));
 	}
 
 	/**

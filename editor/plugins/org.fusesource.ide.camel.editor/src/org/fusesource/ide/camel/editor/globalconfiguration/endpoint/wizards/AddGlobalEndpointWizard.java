@@ -97,19 +97,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 		globalConfigurationNode = camelFile.createElement("endpoint", prefixNS); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("uri", component.getSyntax()); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("id", globalEndpointPage.getId()); //$NON-NLS-1$
-		handleDescriptionNode(prefixNS);
 		return true;
 	}
 
-	/**
-	 * @param prefixNS
-	 */
-	private void handleDescriptionNode(final String prefixNS) {
-		final String description = globalEndpointPage.getDescriptionCreated();
-		if (description != null && !description.isEmpty()) {
-			Element descriptionNode = camelFile.getDocument().createElementNS(prefixNS, "description");
-			descriptionNode.appendChild(camelFile.getDocument().createTextNode(description));
-			globalConfigurationNode.appendChild(descriptionNode);
-		}
-	}
 }

@@ -47,7 +47,6 @@ public class DataFormatSelectionPage extends WizardPage {
 	private DataFormatModel dfModel;
 	private DataFormat dataFormatSelected;
 	private String id;
-	private String descriptionCreated;
 	private DataBindingContext dbc;
 	
 	/**
@@ -73,7 +72,6 @@ public class DataFormatSelectionPage extends WizardPage {
 		
 		createDataFormatSelectionLine(container);
 		createIdLine(container);
-		createDescriptionLine(container);
 
 		setControl(container);
 		WizardPageSupport.create(this, dbc);
@@ -97,21 +95,6 @@ public class DataFormatSelectionPage extends WizardPage {
 		dbc.bindValue(ViewerProperties.singleSelection().observe(dataformatComboViewer),
 				PojoProperties.value(DataFormatSelectionPage.class, "dataFormatSelected", DataFormat.class).observe(this)); //$NON-NLS-1$
 		dataformatComboViewer.setSelection(new StructuredSelection(dataformatComboViewer.getElementAt(0)));
-	}
-
-	/**
-	 * @param container
-	 */
-	private void createDescriptionLine(Composite container) {
-		Label l_desc = new Label(container, SWT.NONE);
-		l_desc.setText(UIMessages.dataFormatSelectionPage_descriptionLabel);
-		l_desc.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
-		
-		Text txt_desc = new Text(container, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.BORDER);
-		txt_desc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
-
-		final IObservableValue descriptionObservable = PojoProperties.value(DataFormatSelectionPage.class, "descriptionCreated", String.class).observe(this); //$NON-NLS-1$
-		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(txt_desc), descriptionObservable);
 	}
 
 	private void createIdLine(Composite container) {
@@ -156,11 +139,4 @@ public class DataFormatSelectionPage extends WizardPage {
 		this.id = id;
 	}
 
-	public String getDescriptionCreated() {
-		return descriptionCreated;
-	}
-
-	public void setDescriptionCreated(String descriptionCreated) {
-		this.descriptionCreated = descriptionCreated;
-	}
 }
