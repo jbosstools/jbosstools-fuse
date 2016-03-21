@@ -92,6 +92,9 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 			for (AbstractCamelModelElement globalEndpoint : ((CamelContextElement) cme).getEndpointDefinitions().values()) {
 				checkCamelModelElement(globalEndpoint, validationResult, resource);
 			}
+			for (AbstractCamelModelElement globalEndpoint : ((CamelContextElement) cme).getDataformats().values()) {
+				checkCamelModelElement(globalEndpoint, validationResult, resource);
+			}
 		}
 	}
 
