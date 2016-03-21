@@ -206,14 +206,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createTreeViewer() {
-		this.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
-		this.treeViewer.setUseHashlookup(true);
-		this.treeViewer.setContentProvider(new GlobalConfigContentProvider(this));
+		treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+		treeViewer.setUseHashlookup(true);
+		treeViewer.setContentProvider(new GlobalConfigContentProvider(this));
 		final ILabelDecorator labelDecorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
 		final IBaseLabelProvider labelProvider = new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), labelDecorator, null);
-		this.treeViewer.setLabelProvider(labelProvider);
-		this.treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
-		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		treeViewer.setLabelProvider(labelProvider);
+		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				Object selObj = Selections.getFirstSelection(event.getSelection());
@@ -461,18 +461,41 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	public void reload() {
 		buildModel();
 		if (treeViewer != null && treeViewer.getTree().isDisposed() == false) {
+			IStructuredSelection selection = treeViewer.getStructuredSelection();
+			Object firstElement = selection.getFirstElement();
+			String selectedId = null;
+			if (firstElement instanceof AbstractCamelModelElement) {
+				selectedId = ((AbstractCamelModelElement) firstElement).getId();
+			}
 			treeViewer.setInput(this.getModel());
 			treeViewer.refresh(true);
 			treeViewer.expandAll();
+			restoreSelection(selection, selectedId);
 		}
 		final Object selection = treeViewer.getStructuredSelection().getFirstElement();
 		if (selection instanceof AbstractCamelModelElement) {
 			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement) selection);
 		}
-		final Object selection = treeViewer.getStructuredSelection().getFirstElement();
-		if (selection instanceof AbstractCamelModelElement) {
-			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement) selection);
+	}
+
+	/**
+	 * @param selection
+	 * @param selectedId
+	 */
+	private void restoreSelection(IStructuredSelection selection, String selectedId) {
+		if (selectedId != null) {
+			for (List<Object> models : getModel().values()) {
+				for (Object object : models) {
+					if (object instanceof AbstractCamelModelElement) {
+						if (selectedId.equals(((AbstractCamelModelElement) object).getId())) {
+							selection = new StructuredSelection(object);
+							break;
+						}
+					}
+				}
+			}
 		}
+		treeViewer.setSelection(selection);
 	}
 
 	private void buildModel() {
