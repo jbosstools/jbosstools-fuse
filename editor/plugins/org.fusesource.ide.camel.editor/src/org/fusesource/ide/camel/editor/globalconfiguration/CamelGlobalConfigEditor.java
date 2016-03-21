@@ -10,12 +10,15 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.CoreException;
@@ -23,6 +26,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -47,6 +52,7 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementsSelectionDialog;
+import org.fusesource.ide.camel.editor.dialogs.GlobalConfigSupport;
 import org.fusesource.ide.camel.editor.dialogs.provider.GlobalConfigElementsDialogContentProvider;
 import org.fusesource.ide.camel.editor.dialogs.provider.GlobalConfigElementsDialogLabelProvider;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
@@ -94,7 +100,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	
 	private List<GlobalConfigElementItem> elementContributions = new ArrayList<GlobalConfigElementItem>();
 	private List<GlobalConfigCategoryItem> categoryContributions = new ArrayList<GlobalConfigCategoryItem>();
-	private HashMap<String, ArrayList> model;
+	private HashMap<String, ArrayList<Object>> model;
+	private Set<Image> extensionPointIcons = new HashSet<>();
 	
 	/**
 	 * 
@@ -175,16 +182,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 		this.parent.setLayout(gl);
 
-		// now create the controls
-
 		createTreeViewer();
 		createRightButtons();
 		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
 			@Override
 			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
-				if (o1.getId().equals(DEFAULT_CAT_ID))
+				if (DEFAULT_CAT_ID.equals(o1.getId()))
 					return 1;
-				if (o2.getId().equals(DEFAULT_CAT_ID))
+				if (DEFAULT_CAT_ID.equals(o2.getId()))
 					return -1;
 				return o1.getName().compareTo(o2.getName());
 			}
@@ -202,8 +207,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		this.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.treeViewer.setUseHashlookup(true);
 		this.treeViewer.setContentProvider(new GlobalConfigContentProvider(this));
-		this.treeViewer.setLabelProvider(
-				new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator(), null));
+		final ILabelDecorator labelDecorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+		final IBaseLabelProvider labelProvider = new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), labelDecorator, null);
+		this.treeViewer.setLabelProvider(labelProvider);
 		this.treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
 		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -229,16 +235,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		this.btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
 		this.btnDelete.setToolTipText(UIMessages.globalElementsTabDeleteButtonTooltip);
-		this.btnDelete.setLayoutData(new GridData(GridData.FILL,
-				GridData.BEGINNING, false, false, 1, 1));
+		this.btnDelete.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
 		this.btnDelete.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				deleteEntries();
@@ -246,23 +244,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 	}
 
-	/**
-	 * 
-	 */
 	private void createEditButton() {
 		this.btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
 		this.btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
-		this.btnModify.setLayoutData(new GridData(GridData.FILL,
-				GridData.BEGINNING, false, false, 1, 1));
+		this.btnModify.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
 		this.btnModify.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				modifyEntry();
@@ -270,26 +257,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 	}
 
-	/**
-	 * 
-	 */
 	private void createAddButton() {
 		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
-		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false,
-				false, 1, 1);
+		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
 		gd.minimumWidth = 120;
 		gd.widthHint = 120;
 		this.btnAdd.setLayoutData(gd);
 		this.btnAdd.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				createNewEntry();
@@ -305,7 +281,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	public void dispose() {
 		if (parentEditor != null && parentEditor.getDesignEditor() != null && parentEditor.getDesignEditor().getModel() != null) {
 			parentEditor.getDesignEditor().getModel().removeModelListener(this);
-		}				
+		}
+		for (Image image : extensionPointIcons) {
+			image.dispose();
+		}
 		super.dispose();
 	}
 	
@@ -317,10 +296,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	@Override
 	public void setFocus() {
 		Display.getDefault().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
 			@Override
 			public void run() {
 				reload();
@@ -367,8 +342,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			// now shuffle children into categories
 			for (GlobalConfigCategoryItem cat : categoryContributions) {
 				for (GlobalConfigElementItem elem : getElementContributions()) {
-					if ( (elem.getCategoryId().trim().length()<1 && cat.getId().equals(FUSE_CAT_ID)) || 
-						 (elem.getCategoryId().equals(cat.getId()) && cat.getChildren().contains(elem) == false)) {
+					final String elementCategoryId = elem.getCategoryId();
+					final String categoryId = cat.getId();
+					if ( (elementCategoryId.trim().length()<1 && categoryId.equals(FUSE_CAT_ID)) || 
+ (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
 						cat.getChildren().add(elem);
 					}
 				}
@@ -385,7 +362,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 			if (o instanceof ICustomGlobalConfigElementContribution) {
 				ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
-				String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
 				String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
 				String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
 				String catId = e.getAttribute(GLOBAL_ELEMENTS_CATEGORY_ATTR);
@@ -395,12 +371,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				item.setId(id);
 				item.setName(name);
 				item.setCategoryId(catId);
-				if (Strings.isBlank(icon) == false) {
-					String implementorBundle = e.getDeclaringExtension().getContributor().getName();
-					Bundle implBundle = Platform.getBundle(implementorBundle);
-					URL iconUrl = implBundle.getResource(icon);
-					item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
-				}
+				setIconIfProvided(e, item);
 				getElementContributions().add(item);
 			}
 		} catch (Exception ex) {
@@ -413,22 +384,33 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	private void determineCategoryExtension(IConfigurationElement e) {
 		try {
-			String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
 			String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
 			String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
 
 			GlobalConfigCategoryItem item = new GlobalConfigCategoryItem();
 			item.setId(id);
 			item.setName(name);
-			if (Strings.isBlank(icon) == false) {
-				String implementorBundle = e.getDeclaringExtension().getContributor().getName();
-				Bundle implBundle = Platform.getBundle(implementorBundle);
-				URL iconUrl = implBundle.getResource(icon);
-				item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
-			}					
+			setIconIfProvided(e, item);
 			categoryContributions.add(item);
 		} catch (Exception ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	/**
+	 * @param e
+	 * @param item
+	 * @throws IOException
+	 */
+	private void setIconIfProvided(IConfigurationElement e, GlobalConfigSupport item) throws IOException {
+		String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
+		if (!Strings.isBlank(icon)) {
+			String implementorBundle = e.getDeclaringExtension().getContributor().getName();
+			Bundle implBundle = Platform.getBundle(implementorBundle);
+			URL iconUrl = implBundle.getResource(icon);
+			final Image image = new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream());
+			item.setIcon(image);
+			extensionPointIcons.add(image);
 		}
 	}
 	
@@ -484,10 +466,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void buildModel() {
-		model = new HashMap<String, ArrayList>();
+		model = new HashMap<String, ArrayList<Object>>();
 		
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
-			getModel().put(cat.getId(), new ArrayList());
+			getModel().put(cat.getId(), new ArrayList<Object>());
 		}
 		
 		CamelFile cf = parentEditor.getDesignEditor().getModel();
@@ -690,7 +672,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						// a global bean or alike
 						deletedNode = (Element)selObj;
 						String id = deletedNode.getAttribute("id");
-						if (id == null && id.trim().length()<1) {
+						if (id != null && id.trim().length() < 1) {
 							Iterator<String> keyIt = parentEditor.getDesignEditor().getModel().getGlobalDefinitions().keySet().iterator();
 							while (keyIt.hasNext()) {
 								String key = keyIt.next();
@@ -735,7 +717,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	/**
 	 * @return the model
 	 */
-	public HashMap<String, ArrayList> getModel() {
+	public HashMap<String, ArrayList<Object>> getModel() {
 		return model;
 	}
 

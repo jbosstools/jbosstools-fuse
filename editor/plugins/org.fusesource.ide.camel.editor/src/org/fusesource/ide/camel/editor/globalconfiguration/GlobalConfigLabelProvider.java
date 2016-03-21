@@ -31,35 +31,41 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 		this.camelGlobalConfigEditor = camelGlobalConfigEditor;
 	}
 
-	private StyledString getTextCamelModelElement(AbstractCamelModelElement cme) {
+	private StyledString getStyledTextForCamelModelElement(AbstractCamelModelElement cme) {
 		StyledString text = new StyledString();
-		String type = Strings.capitalize(cme.getTranslatedNodeName());
-		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
-			if (item.getContributor().canHandle(cme.getXmlNode())) {
-				type = item.getName();
-				break;
-			}
-		}
+		String type = getTypeFromExtensionPoint(cme.getXmlNode());
 		text.append(cme.getId());
-		text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
+		if (!Strings.isEmpty(type)) {
+			text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
+		}
 		return text;
 	}
 
-	private StyledString getTextForXMLElement(Element node) {
+	private StyledString getStyledTextForXMLElement(Element node) {
 		StyledString text = new StyledString();
-		String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
+		String type = getTypeFromExtensionPoint(node);
+		final String idAttributeValue = node.getAttribute("id");
+		text.append(!Strings.isEmpty(idAttributeValue) ? idAttributeValue : CamelUtils.getTranslatedNodeName(node));
+		if (!Strings.isEmpty(type)) {
+			text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
+		}
+		return text;
+	}
+
+	/**
+	 * @param node
+	 * @return
+	 */
+	private String getTypeFromExtensionPoint(Node node) {
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
 			if (item.getContributor().canHandle(node)) {
-				type = item.getName();
-				break;
+				return item.getName();
 			}
 		}
-		text.append(!Strings.isEmpty(node.getAttribute("id")) ? node.getAttribute("id") : CamelUtils.getTranslatedNodeName(node));
-		if (!Strings.isEmpty(node.getAttribute("id"))) text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
-		return text;
+		return Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
 	}
 
-	private StyledString getTextForCategory(String element) {
+	private StyledString getStyledTextForCategory(String element) {
 		GlobalConfigCategoryItem cat = camelGlobalConfigEditor.getCategoryForId(element);
 		return new StyledString(cat.getName());
 	}
@@ -67,13 +73,11 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	@Override
 	public StyledString getStyledText(Object element) {
 		if (element instanceof String) {
-			return getTextForCategory((String) element);
+			return getStyledTextForCategory((String) element);
 		} else if (element instanceof Element) {
-			return getTextForXMLElement((Element) element);
+			return getStyledTextForXMLElement((Element) element);
 		} else if (element instanceof AbstractCamelModelElement) {
-			return getTextCamelModelElement((AbstractCamelModelElement) element);
-		} else {
-			// unhandled
+			return getStyledTextForCamelModelElement((AbstractCamelModelElement) element);
 		}
 		return new StyledString();
 	}
@@ -97,12 +101,7 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	 * @param element
 	 */
 	private Image getImageForXMLElement(Node element) {
-		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
-			if (item.getContributor().canHandle(element)) {
-				return item.getIcon();
-			}
-		}
-		return null;
+		return getIconFromExtensionPoint(element);
 	}
 
 	/**
@@ -110,18 +109,27 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	 * @return
 	 */
 	private Image getImageForCamelModelElement(AbstractCamelModelElement cme) {
+		Image res = getIconFromExtensionPoint(cme.getXmlNode());
+		if (res == null) {
+			if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
+				res = CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
+			} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
+				res = CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
+			}
+		}
+		return res;
+	}
+
+	/**
+	 * @param cme
+	 */
+	private Image getIconFromExtensionPoint(Node node) {
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
-			if (item.getContributor().canHandle(cme.getXmlNode())) {
+			if (item.getContributor().canHandle(node)) {
 				return item.getIcon();
 			}
 		}
-		if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
-			return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
-		} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
-			return CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
-		} else {
-			return null;
-		}
+		return null;
 	}
 
 	@Override
