@@ -188,9 +188,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
 			@Override
 			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
-				if (o1.getId().equals(DEFAULT_CAT_ID))
+				if (DEFAULT_CAT_ID.equals(o1.getId()))
 					return 1;
-				if (o2.getId().equals(DEFAULT_CAT_ID))
+				if (DEFAULT_CAT_ID.equals(o2.getId()))
 					return -1;
 				return o1.getName().compareTo(o2.getName());
 			}
@@ -258,15 +258,11 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 	}
 
-	/**
-	 * 
-	 */
 	private void createAddButton() {
 		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
-		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false,
-				false, 1, 1);
+		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
 		gd.minimumWidth = 120;
 		gd.widthHint = 120;
 		this.btnAdd.setLayoutData(gd);
@@ -419,7 +415,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		}
 	}
 
-	
 	GlobalConfigCategoryItem getCategoryForId(String catId) {
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
 			if (cat.getId().equals(catId)) return cat;
