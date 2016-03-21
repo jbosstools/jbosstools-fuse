@@ -469,6 +469,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		if (selection instanceof AbstractCamelModelElement) {
 			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement) selection);
 		}
+		final Object selection = treeViewer.getStructuredSelection().getFirstElement();
+		if (selection instanceof AbstractCamelModelElement) {
+			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement) selection);
+		}
 	}
 
 	private void buildModel() {
