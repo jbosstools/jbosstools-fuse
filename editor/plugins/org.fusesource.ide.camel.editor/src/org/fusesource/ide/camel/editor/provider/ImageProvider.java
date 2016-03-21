@@ -12,7 +12,9 @@
 package org.fusesource.ide.camel.editor.provider;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -57,6 +59,8 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	public static final String IMG_OUTLINE_THUMBNAIL = PREFIX + "outline.thumbnail"; //$NON-NLS-1$
 
+	private static ArrayList<String> externalImages = new ArrayList<String>();
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.platform.AbstractImageProvider#addAvailableImages()
 	 */
@@ -121,14 +125,18 @@ public class ImageProvider extends AbstractImageProvider {
             if (paletteIconPath != null && paletteIconPath.trim().length()>0) {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_SMALL);
             	URL imgUrl = b.getEntry(paletteIconPath);
+            	String fileExt = imgUrl.getFile().substring(imgUrl.getFile().lastIndexOf("."));
             	addImageFilePath(key, imgUrl.toString());
             	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
+            	externalImages.add(entryId+fileExt);
             }
             if (diagramImagePath != null && diagramImagePath.trim().length()>0) {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_LARGE);
             	URL imgUrl = b.getEntry(diagramImagePath);
+            	String fileExt = imgUrl.getFile().substring(imgUrl.getFile().lastIndexOf("."));
             	addImageFilePath(key, imgUrl.toString());
             	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
+            	externalImages.add(entryId+fileExt);
             }
         }
 	}
@@ -239,6 +247,7 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
-	    return CamelEditorUIActivator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
+		if (externalImages.contains(iconName)) return true;
+		return CamelEditorUIActivator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }
