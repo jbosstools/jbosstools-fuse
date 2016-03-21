@@ -68,6 +68,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
+import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
@@ -555,10 +556,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 								cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
 								break;
 							case CONTEXT_DATAFORMAT:
-								addDataFormat(cf, (Element) newXMLNode);
+								final CamelBasicModelElement newDataFormat = addDataFormat(cf, (Element) newXMLNode);
+								new BasicNodeValidator().validate(newDataFormat);
 								break;
 							case CONTEXT_ENDPOINT:
-								addEndpointToGlobalContext(cf, (Element) newXMLNode);
+								final CamelEndpoint newEndpoint = addEndpointToGlobalContext(cf, (Element) newXMLNode);
+								new BasicNodeValidator().validate(newEndpoint);
 								break;
 							default: // ignore
 								break;
@@ -582,22 +585,24 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param cf
 	 * @param newXMLNode
 	 */
-	private void addDataFormat(CamelFile cf, Element newXMLNode) {
-		AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
+	private CamelBasicModelElement addDataFormat(CamelFile cf, Element newXMLNode) {
+		CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
 		final String eipName = newXMLNode.getNodeName();
 		configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
 		cf.getCamelContext().addDataFormat(elemDF);
+		return elemDF;
 	}
 
 	/**
 	 * @param cf
 	 * @param newXMLNode
 	 */
-	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
-		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+	private CamelEndpoint addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
+		CamelEndpoint elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
 		elemEP.setParent(cf.getCamelContext());
 		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
 		cf.getCamelContext().addEndpointDefinition(elemEP);
+		return elemEP;
 	}
 
 	/**
