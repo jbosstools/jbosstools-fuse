@@ -101,6 +101,30 @@ public class GoToMarkerForCamelEditorTest {
 	}
 
 	@Test
+	public void testGotoMarkerGlobalEditor() throws Exception {
+		doReturn("nodeId").when(marker).getAttribute(IFuseMarker.CAMEL_ID);
+
+		CamelFile camelFile = new CamelFile(resource);
+		final CamelContextElement camelContext = new CamelContextElement(camelFile, null);
+		CamelRouteElement route = new CamelRouteElement(camelContext, null);
+		camelFile.addChildElement(route);
+		final CamelEndpoint endPoint = new CamelEndpoint("imap:host:port");
+		endPoint.setId("nodeId");
+		route.addChildElement(endPoint);
+		endPoint.setParent(camelContext);
+		doReturn(camelFile).when(designEditor).getModel();
+
+		goToMarkerForCamelEditor.gotoMarker(marker);
+
+		verify(camelEditor).setActiveEditor(configEditor);
+		// Ensure Source Editor is no called
+		verify(sourceEditor, Mockito.never()).getAdapter(IGotoMarker.class);
+		verify(sourceGotoMarker, Mockito.never()).gotoMarker(marker);
+		// ensure Design editor not called
+		verify(designEditor, Mockito.never()).getAdapter(IGotoMarker.class);
+	}
+
+	@Test
 	public void testGotoMarkerDesignEditorFallBackSource() throws Exception {
 		doReturn("nodeId").when(marker).getAttribute(IFuseMarker.CAMEL_ID);
 

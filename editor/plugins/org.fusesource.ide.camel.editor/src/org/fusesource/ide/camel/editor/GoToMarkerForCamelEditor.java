@@ -15,9 +15,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 
 /**
@@ -48,10 +50,17 @@ public class GoToMarkerForCamelEditor implements IGotoMarker {
 				CamelFile camelFile = designEditor.getModel();
 				AbstractCamelModelElement camelModelElement = camelFile.findNode(id);
 				if (camelModelElement != null) {
-					camelEditor.setActiveEditor(designEditor);
-					designEditor.setSelectedNode(camelModelElement);
-					// TODO: go to the exact Property place
-					return;
+					if (isGlobalElement(camelModelElement)) {
+						final CamelGlobalConfigEditor globalConfigEditor = camelEditor.getGlobalConfigEditor();
+						camelEditor.setActiveEditor(globalConfigEditor);
+						globalConfigEditor.setSelection(camelModelElement);
+						return;
+					} else {
+						camelEditor.setActiveEditor(designEditor);
+						designEditor.setSelectedNode(camelModelElement);
+						// TODO: go to the exact Property place
+						return;
+					}
 				}
 			}
 		} catch (CoreException e) {
@@ -69,6 +78,22 @@ public class GoToMarkerForCamelEditor implements IGotoMarker {
 			if (sourceEditorGoToMarker != null) {
 				sourceEditorGoToMarker.gotoMarker(marker);
 			}
+		}
+	}
+
+	/**
+	 * @param camelModelElement
+	 * @return
+	 */
+	private boolean isGlobalElement(AbstractCamelModelElement camelModelElement) {
+		if (camelModelElement instanceof CamelContextElement) {
+			return true;
+		}
+		final AbstractCamelModelElement parent = camelModelElement.getParent();
+		if (parent != null) {
+			return isGlobalElement(parent);
+		} else {
+			return false;
 		}
 	}
 

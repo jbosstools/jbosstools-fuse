@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -414,7 +415,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			extensionPointIcons.add(image);
 		}
 	}
-	
+
 	GlobalConfigCategoryItem getCategoryForId(String catId) {
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
 			if (cat.getId().equals(catId)) return cat;
@@ -735,6 +736,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	public List<GlobalConfigElementItem> getElementContributions() {
 		return elementContributions;
+	}
+
+	/**
+	 * @param camelModelElement
+	 */
+	public void setSelection(AbstractCamelModelElement camelModelElement) {
+		if (camelModelElement != null) {
+			treeViewer.setSelection(new StructuredSelection(camelModelElement), true);
+		}
 	}
 
 }
