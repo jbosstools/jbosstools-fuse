@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,6 +51,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.editor.commands.ShowPropertiesViewHandler;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementsSelectionDialog;
@@ -668,25 +670,35 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			ICustomGlobalConfigElementContribution extHandler = getExtensionForElement(modElem);
 			if (extHandler != null) {
 				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel().getDocument());
-				if (wizard == null) return;
-				wizard.setGlobalConfigurationElementNode(modElem);
-				WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-				wizdlg.setBlockOnOpen(true);
-				wizdlg.setTitle(UIMessages.newGlobalConfigurationTypeWizardDialogTitle);
-				wizdlg.setTitleImage(null); // get a general icon or retrieve from contributor <- TODO!
-				if (Window.OK == wizdlg.open()) {
-					Node newXMLNode = wizard.getGlobalConfigurationElementNode();
-					if (newXMLNode == null) return;
-					switch (extHandler.getGlobalConfigElementType()) {
+				if (wizard == null) {
+					try {
+						new ShowPropertiesViewHandler().execute(null);
+					} catch (ExecutionException e) {
+						CamelEditorUIActivator.pluginLog().logError(e);
+					}
+				} else {
+					wizard.setGlobalConfigurationElementNode(modElem);
+					WizardDialog wizdlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+					wizdlg.setBlockOnOpen(true);
+					wizdlg.setTitle(UIMessages.newGlobalConfigurationTypeWizardDialogTitle);
+					wizdlg.setTitleImage(null); // get a general icon or
+												// retrieve from contributor <-
+												// TODO!
+					if (Window.OK == wizdlg.open()) {
+						Node newXMLNode = wizard.getGlobalConfigurationElementNode();
+						if (newXMLNode == null)
+							return;
+						switch (extHandler.getGlobalConfigElementType()) {
 						case CONTEXT_DATAFORMAT:	// here we need to reinit the model element so it copies all information from the node
 						case CONTEXT_ENDPOINT:		AbstractCamelModelElement cme = (AbstractCamelModelElement)o;
-													cme.initialize();
-													break;
+							cme.initialize();
+							break;
 						case GLOBAL_ELEMENT:		
 						default:					// nothing to do - handled via node events
-													break;
+							break;
+						}
+						treeViewer.refresh(o, true);
 					}
-					treeViewer.refresh(o, true);
 				}
 			}
 		}
