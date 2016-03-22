@@ -8,8 +8,9 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
 
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.ComponentLabelProvider;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.junit.Test;
 

@@ -11,8 +11,8 @@
 package org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages;
 
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages.ComponentManager;
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages.WhiteListComponentFilter;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.ComponentManager;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.WhiteListComponentFilter;
 import org.fusesource.ide.camel.editor.provider.DiagramTypeProvider;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;

@@ -282,14 +282,14 @@
       </GlobalConfigCategory>
       <GlobalConfigElement
             category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
-            class="org.fusesource.ide.camel.editor.globalconfiguration.provider.GlobalEndpointContributor"
+            class="org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider.GlobalEndpointContributor"
             icon="icons/endpointdef.png"
             id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.globalendpoint"
             name="Endpoint">
       </GlobalConfigElement>
       <GlobalConfigElement
             category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
-            class="org.fusesource.ide.camel.editor.provider.DataFormatContributor"
+            class="org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor"
             icon="icons/dataformat.png"
             id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.dataformat"
             name="Data Format">

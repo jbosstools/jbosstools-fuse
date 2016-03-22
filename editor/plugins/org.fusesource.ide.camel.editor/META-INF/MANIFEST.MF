@@ -8,7 +8,7 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.fusesource.ide.camel.editor,
  org.fusesource.ide.camel.editor.features.create.ext,
- org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
+ org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.navigator,
  org.fusesource.ide.camel.editor.properties;x-friends:="org.fusesource.ide.camel.editor.tests",
  org.fusesource.ide.camel.editor.provider;x-friends:="org.fusesource.ide.camel.editor.tests.integration",

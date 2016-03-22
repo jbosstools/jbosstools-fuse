@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -150,7 +151,12 @@ public class CamelContextElement extends AbstractCamelModelElement {
 		if (dataFormatsNode == null) {
 			// first create a dataFormats node
 			dataFormatsNode = createElement(DATA_FORMATS_NODE_NAME, this != null && this.getXmlNode() != null ? this.getXmlNode().getPrefix() : null);
-			getXmlNode().insertBefore(dataFormatsNode, getXmlNode().getFirstChild());
+			final Node firstNotEndpointNode = getFirstNotEndpointNode();
+			if (firstNotEndpointNode != null) {
+				getXmlNode().insertBefore(dataFormatsNode, firstNotEndpointNode);
+			} else {
+				getXmlNode().appendChild(dataFormatsNode);
+			}
 		}
 		for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
 		    if(df.getXmlNode() != null && dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
@@ -166,6 +172,20 @@ public class CamelContextElement extends AbstractCamelModelElement {
 		if (!childExists) {
 			dataFormatsNode.appendChild(df.getXmlNode());
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private Node getFirstNotEndpointNode() {
+		final NodeList childNodes = getXmlNode().getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node currentNode = childNodes.item(i);
+			if (currentNode instanceof Element && !"endpoint".equals(currentNode.getLocalName())) {
+				return currentNode;
+			}
+		}
+		return null;
 	}
 	
 	/**

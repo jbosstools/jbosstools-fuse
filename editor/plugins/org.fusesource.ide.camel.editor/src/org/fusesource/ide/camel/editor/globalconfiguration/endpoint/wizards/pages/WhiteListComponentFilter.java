@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;

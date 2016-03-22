@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.wizards.pages;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -52,7 +52,6 @@ public class GlobalEndpointWizardPage extends WizardPage {
 
 	private Component componentSelected;
 	private String id;
-	private String descriptionCreated;
 
 	/**
 	 * @param pageName
@@ -74,7 +73,6 @@ public class GlobalEndpointWizardPage extends WizardPage {
 		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 		composite.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
 		createIdLine(composite);
-		createDescriptionLine(composite);
 
 		createCamelComponentSelectionGroup(composite);
 		setControl(composite);
@@ -84,23 +82,11 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	/**
 	 * @param composite
 	 */
-	private void createDescriptionLine(Composite composite) {
-		Label descriptionLabel = new Label(composite, SWT.NONE);
-		descriptionLabel.setText(UIMessages.GlobalEndpointWizardPage_descriptionFieldLabel);
-		Text descriptionText = new Text(composite, SWT.BORDER);
-		descriptionText.setLayoutData(GridDataFactory.fillDefaults().create());
-		final IObservableValue descriptionObservable = PojoProperties.value(GlobalEndpointWizardPage.class, "descriptionCreated", String.class).observe(this); //$NON-NLS-1$
-		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(descriptionText), descriptionObservable);
-	}
-
-	/**
-	 * @param composite
-	 */
 	private void createIdLine(Composite composite) {
 		Label idLabel = new Label(composite, SWT.NONE);
 		idLabel.setText(UIMessages.GlobalEndpointWizardPage_idFieldLabel);
 		Text idText = new Text(composite, SWT.BORDER);
-		idText.setLayoutData(GridDataFactory.fillDefaults().create());
+		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
 		strategy.setBeforeSetValidator(new IValidator() {
 
@@ -237,26 +223,11 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	}
 
 	/**
-	 * @return the description
-	 */
-	public String getDescriptionCreated() {
-		return descriptionCreated;
-	}
-
-	/**
 	 * @param id
 	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescriptionCreated(String description) {
-		this.descriptionCreated = description;
 	}
 
 }

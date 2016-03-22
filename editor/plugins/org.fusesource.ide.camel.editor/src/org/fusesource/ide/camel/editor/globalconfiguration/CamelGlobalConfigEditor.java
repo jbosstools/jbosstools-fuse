@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor;
+package org.fusesource.ide.camel.editor.globalconfiguration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,6 +47,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementsSelectionDialog;
@@ -71,7 +72,6 @@ import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author lhein
@@ -544,8 +544,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 								cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
 								break;
 							case CONTEXT_DATAFORMAT:
-								AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
-								cf.getCamelContext().addDataFormat(elemDF);
+								addDataFormat(cf, (Element) newXMLNode);
 								break;
 							case CONTEXT_ENDPOINT:
 								addEndpointToGlobalContext(cf, (Element) newXMLNode);
@@ -572,29 +571,35 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param cf
 	 * @param newXMLNode
 	 */
-	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
-		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
-		setDescriptionIfAvailable(newXMLNode, elemEP);
-		elemEP.setXmlNode(newXMLNode);
-		elemEP.setId(newXMLNode.getAttribute("id"));
-		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
-		elemEP.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("to"));
-		cf.getCamelContext().addEndpointDefinition(elemEP);
-		elemEP.setParent(cf.getCamelContext());
+	private void addDataFormat(CamelFile cf, Element newXMLNode) {
+		AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
+		final String eipName = newXMLNode.getNodeName();
+		configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
+		cf.getCamelContext().addDataFormat(elemDF);
 	}
 
 	/**
+	 * @param cf
 	 * @param newXMLNode
-	 * @param elemEP
 	 */
-	private void setDescriptionIfAvailable(Element newXMLNode, AbstractCamelModelElement elemEP) {
-		final NodeList childNodes = newXMLNode.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node item = childNodes.item(i);
-			if ("description".equals(item.getNodeName())) {
-				elemEP.setDescription(item.getTextContent());
-			}
-		}
+	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
+		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+		elemEP.setParent(cf.getCamelContext());
+		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
+		cf.getCamelContext().addEndpointDefinition(elemEP);
+	}
+
+	/**
+	 * @param cf
+	 * @param newXMLNode
+	 * @param cme
+	 * @param eipName
+	 */
+	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
+		cme.setXmlNode(newXMLNode);
+		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
+		cme.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName(eipName));
+		cme.setId(newXMLNode.getAttribute("id"));
 	}
 
 	/**

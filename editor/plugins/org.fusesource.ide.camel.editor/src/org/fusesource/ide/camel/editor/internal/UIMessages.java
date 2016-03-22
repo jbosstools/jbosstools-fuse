@@ -80,6 +80,10 @@ public class UIMessages extends NLS {
 	public static String newGlobalConfigurationTypeEndpointWizardDialogTitle;
 
 	public static String dataFormatSelectionPage_dataformatLabel;
+	public static String DataFormatSelectionPage_DataFormatSelectionPageDescription;
+
+	public static String DataFormatSelectionPage_dataFormatSelectionPageTitle;
+
 	public static String dataFormatSelectionPage_idLabel;
 	public static String dataFormatSelectionPage_descriptionLabel;
 

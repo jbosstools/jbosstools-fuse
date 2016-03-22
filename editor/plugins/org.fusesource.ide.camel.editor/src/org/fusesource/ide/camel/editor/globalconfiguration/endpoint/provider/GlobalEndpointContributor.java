@@ -9,12 +9,12 @@
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
 
-package org.fusesource.ide.camel.editor.globalconfiguration.provider;
+package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fusesource.ide.camel.editor.globalconfiguration.wizards.AddGlobalEndpointWizard;
+import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.AddGlobalEndpointWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
