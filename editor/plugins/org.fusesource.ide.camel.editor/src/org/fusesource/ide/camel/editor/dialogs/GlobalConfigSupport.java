@@ -20,4 +20,6 @@ public interface GlobalConfigSupport {
 	String getId();
 	String getName();
 	Image getIcon();
+
+	void setIcon(Image image);
 }

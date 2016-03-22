@@ -93,7 +93,7 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 				dfName += String.format("-%s", "keyvalue");
 			}
 		}
-		return CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode()).equalsIgnoreCase("dataformats") &&
+		return "dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode())) &&
 			   dfModel.getDataFormatByName(dfName) != null;
 	}
 

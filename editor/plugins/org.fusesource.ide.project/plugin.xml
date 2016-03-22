@@ -223,9 +223,9 @@
  <extension
        point="org.eclipse.ui.decorators">
     <decorator
-          class="org.fusesource.ide.project.decorator.CamelRouteProblemDecorator"
+          class="org.fusesource.ide.project.decorator.CamelProblemDecorator"
           id="org.fusesource.ide.project.decorator.problem.route"
-          label="Camel Route Problem Decorator"
+          label="Camel Problem Decorator"
           lightweight="true"
           location="BOTTOM_LEFT"
           state="true">
@@ -239,6 +239,9 @@
              </objectClass>
              <objectClass
                    name="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode">
+             </objectClass>
+             <objectClass
+                   name="org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement">
              </objectClass>
           </or>
        </enablement>

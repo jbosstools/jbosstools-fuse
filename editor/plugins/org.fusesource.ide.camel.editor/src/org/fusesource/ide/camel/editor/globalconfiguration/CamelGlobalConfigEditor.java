@@ -10,28 +10,28 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
-import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -46,11 +46,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementsSelectionDialog;
+import org.fusesource.ide.camel.editor.dialogs.GlobalConfigSupport;
 import org.fusesource.ide.camel.editor.dialogs.provider.GlobalConfigElementsDialogContentProvider;
 import org.fusesource.ide.camel.editor.dialogs.provider.GlobalConfigElementsDialogLabelProvider;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
@@ -66,7 +68,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
-import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
@@ -99,7 +101,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	
 	private List<GlobalConfigElementItem> elementContributions = new ArrayList<GlobalConfigElementItem>();
 	private List<GlobalConfigCategoryItem> categoryContributions = new ArrayList<GlobalConfigCategoryItem>();
-	private HashMap<String, ArrayList> model;
+	private HashMap<String, ArrayList<Object>> model;
+	private Set<Image> extensionPointIcons = new HashSet<>();
 	
 	/**
 	 * 
@@ -180,12 +183,34 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 		this.parent.setLayout(gl);
 
-		// now create the controls
+		createTreeViewer();
+		createRightButtons();
+		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
+			@Override
+			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
+				if (DEFAULT_CAT_ID.equals(o1.getId()))
+					return 1;
+				if (DEFAULT_CAT_ID.equals(o2.getId()))
+					return -1;
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		reload();
+		this.treeViewer.setInput(this.getModel());
+		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
+		if (designEditorModel != null) {
+			designEditorModel.addModelListener(this);
+		}
+		this.treeViewer.expandAll();
+	}
 
+	private void createTreeViewer() {
 		this.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.treeViewer.setUseHashlookup(true);
-		this.treeViewer.setContentProvider(new GlobalConfigContentProvider());
-		this.treeViewer.setLabelProvider(new GlobalConfigLabelProvider());
+		this.treeViewer.setContentProvider(new GlobalConfigContentProvider(this));
+		final ILabelDecorator labelDecorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+		final IBaseLabelProvider labelProvider = new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), labelDecorator, null);
+		this.treeViewer.setLabelProvider(labelProvider);
 		this.treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
 		this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -199,86 +224,55 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 		});
 		getSite().setSelectionProvider(treeViewer);
-		
-		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
-		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
-		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
-		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false,
-				false, 1, 1);
-		gd.minimumWidth = 120;
-		gd.widthHint = 120;
-		this.btnAdd.setLayoutData(gd);
-		this.btnAdd.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				createNewEntry();
-			}
-		});
-		this.btnAdd.setEnabled(elementContributions.isEmpty() == false);
+	}
 
-		this.btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
-		this.btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
-		this.btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
-		this.btnModify.setLayoutData(new GridData(GridData.FILL,
-				GridData.BEGINNING, false, false, 1, 1));
-		this.btnModify.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				modifyEntry();
-			}
-		});
+	private void createRightButtons() {
+		createAddButton();
+		createEditButton();
+		createDeleteButton();
+	}
 
+	private void createDeleteButton() {
 		this.btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
 		this.btnDelete.setToolTipText(UIMessages.globalElementsTabDeleteButtonTooltip);
-		this.btnDelete.setLayoutData(new GridData(GridData.FILL,
-				GridData.BEGINNING, false, false, 1, 1));
+		this.btnDelete.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
 		this.btnDelete.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse
-			 * .swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				deleteEntries();
 			}
 		});
+	}
 
-		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
-			/* (non-Javadoc)
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
+	private void createEditButton() {
+		this.btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
+		this.btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
+		this.btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
+		this.btnModify.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
+		this.btnModify.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
-				if (o1.getId().equals(DEFAULT_CAT_ID)) return 1;
-				if (o2.getId().equals(DEFAULT_CAT_ID)) return -1;
-				return o1.getName().compareTo(o2.getName());
+			public void widgetSelected(SelectionEvent e) {
+				modifyEntry();
 			}
 		});
-		reload();
-		this.treeViewer.setInput(this.model);
-		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
-		if(designEditorModel != null){
-			designEditorModel.addModelListener(this);
-		}
-		this.treeViewer.expandAll();
+	}
+
+	private void createAddButton() {
+		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
+		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
+		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
+		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
+		gd.minimumWidth = 120;
+		gd.widthHint = 120;
+		this.btnAdd.setLayoutData(gd);
+		this.btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				createNewEntry();
+			}
+		});
+		this.btnAdd.setEnabled(getElementContributions().isEmpty() == false);
 	}
 
 	/* (non-Javadoc)
@@ -288,7 +282,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	public void dispose() {
 		if (parentEditor != null && parentEditor.getDesignEditor() != null && parentEditor.getDesignEditor().getModel() != null) {
 			parentEditor.getDesignEditor().getModel().removeModelListener(this);
-		}				
+		}
+		for (Image image : extensionPointIcons) {
+			image.dispose();
+		}
 		super.dispose();
 	}
 	
@@ -300,10 +297,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	@Override
 	public void setFocus() {
 		Display.getDefault().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
 			@Override
 			public void run() {
 				reload();
@@ -339,53 +332,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(GLOBAL_ELEMENTS_PROVIDER_EXT_POINT_ID);
 			for (IConfigurationElement e : extensions) {
 				if (e.getName().equals(CATEGORY_ELEMENT)) {
-					try {
-						String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
-						String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
-						String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
-		
-						GlobalConfigCategoryItem item = new GlobalConfigCategoryItem();
-						item.setId(id);
-						item.setName(name);
-						if (Strings.isBlank(icon) == false) {
-							String implementorBundle = e.getDeclaringExtension().getContributor().getName();
-							Bundle implBundle = Platform.getBundle(implementorBundle);
-							URL iconUrl = implBundle.getResource(icon);
-							item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
-						}					
-						categoryContributions.add(item);
-					} catch (Exception ex) {
-						CamelEditorUIActivator.pluginLog().logError(ex);
-						continue;
-					}
+					determineCategoryExtension(e);
 				} else if (e.getName().equals(TYPE_ELEMENT)) {
-					try {
-						final Object o = e.createExecutableExtension("class");
-						
-						if (o instanceof ICustomGlobalConfigElementContribution) {
-							ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
-							String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
-							String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
-							String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
-							String catId = e.getAttribute(GLOBAL_ELEMENTS_CATEGORY_ATTR);
-							
-							GlobalConfigElementItem item = new GlobalConfigElementItem();
-							item.setContributor(globalElementHandler);
-							item.setId(id);
-							item.setName(name);
-							item.setCategoryId(catId);
-							if (Strings.isBlank(icon) == false) {
-								String implementorBundle = e.getDeclaringExtension().getContributor().getName();
-								Bundle implBundle = Platform.getBundle(implementorBundle);
-								URL iconUrl = implBundle.getResource(icon);
-								item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
-							}					
-							elementContributions.add(item);
-						}
-					} catch (Exception ex) {
-						CamelEditorUIActivator.pluginLog().logError(ex);
-						continue;
-					}
+					determineGlobalConfigExtension(e);
 				} else {
 					// undefined
 				}
@@ -393,17 +342,80 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		} finally {
 			// now shuffle children into categories
 			for (GlobalConfigCategoryItem cat : categoryContributions) {
-				for (GlobalConfigElementItem elem : elementContributions) {
-					if ( (elem.getCategoryId().trim().length()<1 && cat.getId().equals(FUSE_CAT_ID)) || 
-						 (elem.getCategoryId().equals(cat.getId()) && cat.getChildren().contains(elem) == false)) {
+				for (GlobalConfigElementItem elem : getElementContributions()) {
+					final String elementCategoryId = elem.getCategoryId();
+					final String categoryId = cat.getId();
+					if ( (elementCategoryId.trim().length()<1 && categoryId.equals(FUSE_CAT_ID)) || 
+ (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
 						cat.getChildren().add(elem);
 					}
 				}
 			}
 		}
 	}
+
+	/**
+	 * @param e
+	 */
+	private void determineGlobalConfigExtension(IConfigurationElement e) {
+		try {
+			final Object o = e.createExecutableExtension("class");
+
+			if (o instanceof ICustomGlobalConfigElementContribution) {
+				ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
+				String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
+				String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
+				String catId = e.getAttribute(GLOBAL_ELEMENTS_CATEGORY_ATTR);
+
+				GlobalConfigElementItem item = new GlobalConfigElementItem();
+				item.setContributor(globalElementHandler);
+				item.setId(id);
+				item.setName(name);
+				item.setCategoryId(catId);
+				setIconIfProvided(e, item);
+				getElementContributions().add(item);
+			}
+		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	/**
+	 * @param e
+	 */
+	private void determineCategoryExtension(IConfigurationElement e) {
+		try {
+			String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
+			String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
+
+			GlobalConfigCategoryItem item = new GlobalConfigCategoryItem();
+			item.setId(id);
+			item.setName(name);
+			setIconIfProvided(e, item);
+			categoryContributions.add(item);
+		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	/**
+	 * @param e
+	 * @param item
+	 * @throws IOException
+	 */
+	private void setIconIfProvided(IConfigurationElement e, GlobalConfigSupport item) throws IOException {
+		String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
+		if (!Strings.isBlank(icon)) {
+			String implementorBundle = e.getDeclaringExtension().getContributor().getName();
+			Bundle implBundle = Platform.getBundle(implementorBundle);
+			URL iconUrl = implBundle.getResource(icon);
+			final Image image = new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream());
+			item.setIcon(image);
+			extensionPointIcons.add(image);
+		}
+	}
 	
-	private GlobalConfigCategoryItem getCategoryForId(String catId) {
+	GlobalConfigCategoryItem getCategoryForId(String catId) {
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
 			if (cat.getId().equals(catId)) return cat;
 		}
@@ -448,17 +460,21 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	public void reload() {
 		buildModel();
 		if (treeViewer != null && treeViewer.getTree().isDisposed() == false) {
-			treeViewer.setInput(this.model);
+			treeViewer.setInput(this.getModel());
 			treeViewer.refresh(true);
 			treeViewer.expandAll();
+		}
+		final Object selection = treeViewer.getStructuredSelection().getFirstElement();
+		if (selection instanceof AbstractCamelModelElement) {
+			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement) selection);
 		}
 	}
 
 	private void buildModel() {
-		this.model = new HashMap<String, ArrayList>();
+		model = new HashMap<String, ArrayList<Object>>();
 		
 		for (GlobalConfigCategoryItem cat : categoryContributions) {
-			model.put(cat.getId(), new ArrayList());
+			getModel().put(cat.getId(), new ArrayList<Object>());
 		}
 		
 		CamelFile cf = parentEditor.getDesignEditor().getModel();
@@ -467,30 +483,30 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			// we add all global beans etc outside context
 			for (Node n : cf.getGlobalDefinitions().values()) {
 				boolean foundMatch = false;
-				for (GlobalConfigElementItem item : elementContributions) {
+				for (GlobalConfigElementItem item : getElementContributions()) {
 					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;	
-					if (item.getContributor().canHandle(n) && model.containsKey(catId)) {
-						model.get(catId).add(n);
+					if (item.getContributor().canHandle(n) && getModel().containsKey(catId)) {
+						getModel().get(catId).add(n);
 						foundMatch = true;
 						break;
 					}
 				}
-				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(n);
+				if (!foundMatch) getModel().get(DEFAULT_CAT_ID).add(n);
 			}
 
 			// we add all context wide endpoint elements
 			if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
 				for (AbstractCamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
 					boolean foundMatch = false;
-					for (GlobalConfigElementItem item : elementContributions) {
+					for (GlobalConfigElementItem item : getElementContributions()) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
-						if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
-							model.get(catId).add(cme);
+						if (item.getContributor().canHandle(cme.getXmlNode()) && getModel().containsKey(catId)) {
+							getModel().get(catId).add(cme);
 							foundMatch = true;
 							break;
 						}
 					}
-					if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
+					if (!foundMatch) getModel().get(DEFAULT_CAT_ID).add(cme);
 				}
 			}
 
@@ -498,15 +514,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
 				for (AbstractCamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
 					boolean foundMatch = false;
-					for (GlobalConfigElementItem item : elementContributions) {
+					for (GlobalConfigElementItem item : getElementContributions()) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
-						if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
-							model.get(catId).add(cme);
+						if (item.getContributor().canHandle(cme.getXmlNode()) && getModel().containsKey(catId)) {
+							getModel().get(catId).add(cme);
 							foundMatch = true;
 							break;
 						}
 					}
-					if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
+					if (!foundMatch) getModel().get(DEFAULT_CAT_ID).add(cme);
 				}
 			}
 		}
@@ -544,10 +560,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 								cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
 								break;
 							case CONTEXT_DATAFORMAT:
-								addDataFormat(cf, (Element) newXMLNode);
+								final CamelBasicModelElement newDataFormat = addDataFormat(cf, (Element) newXMLNode);
+								new BasicNodeValidator().validate(newDataFormat);
 								break;
 							case CONTEXT_ENDPOINT:
-								addEndpointToGlobalContext(cf, (Element) newXMLNode);
+								final CamelEndpoint newEndpoint = addEndpointToGlobalContext(cf, (Element) newXMLNode);
+								new BasicNodeValidator().validate(newEndpoint);
 								break;
 							default: // ignore
 								break;
@@ -571,22 +589,24 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param cf
 	 * @param newXMLNode
 	 */
-	private void addDataFormat(CamelFile cf, Element newXMLNode) {
-		AbstractCamelModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
+	private CamelBasicModelElement addDataFormat(CamelFile cf, Element newXMLNode) {
+		CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
 		final String eipName = newXMLNode.getNodeName();
 		configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
 		cf.getCamelContext().addDataFormat(elemDF);
+		return elemDF;
 	}
 
 	/**
 	 * @param cf
 	 * @param newXMLNode
 	 */
-	private void addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
-		AbstractCamelModelElement elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+	private CamelEndpoint addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
+		CamelEndpoint elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
 		elemEP.setParent(cf.getCamelContext());
 		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
 		cf.getCamelContext().addEndpointDefinition(elemEP);
+		return elemEP;
 	}
 
 	/**
@@ -661,7 +681,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						// a global bean or alike
 						deletedNode = (Element)selObj;
 						String id = deletedNode.getAttribute("id");
-						if (id == null && id.trim().length()<1) {
+						if (id != null && id.trim().length() < 1) {
 							Iterator<String> keyIt = parentEditor.getDesignEditor().getModel().getGlobalDefinitions().keySet().iterator();
 							while (keyIt.hasNext()) {
 								String key = keyIt.next();
@@ -703,168 +723,18 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		return false;
 	}
 
-	
-	class GlobalConfigContentProvider implements ITreeContentProvider {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-		 */
-		@Override
-		public void dispose() {
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang
-		 * .Object)
-		 */
-		@Override
-		public Object[] getChildren(Object parent) {
-			return getElements(parent);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang
-		 * .Object)
-		 */
-		@Override
-		public Object[] getElements(Object parent) {
-			if (parent instanceof HashMap) {
-				Object[] catIds = ((HashMap)parent).keySet().toArray();
-				Arrays.sort(catIds, new Comparator<Object>() {
-					/* (non-Javadoc)
-					 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-					 */
-					@Override
-					public int compare(Object o1, Object o2) {
-						if (o1.toString().equals(DEFAULT_CAT_ID)) return 1;
-						if (o2.toString().equals(DEFAULT_CAT_ID)) return -1;
-						return o1.toString().compareTo(o2.toString());
-					}
-				});
-				return catIds;
-			} else if (parent instanceof String) {
-				return model.get((String)parent).toArray();
-			}
-			
-			return new Object[0];
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang
-		 * .Object)
-		 */
-		@Override
-		public Object getParent(Object element) {
-			return null;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang
-		 * .Object)
-		 */
-		@Override
-		public boolean hasChildren(Object element) {
-			return element instanceof String;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse
-		 * .jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public void inputChanged(Viewer arg0, Object arg1, Object arg2) {
-		}
+	/**
+	 * @return the model
+	 */
+	public HashMap<String, ArrayList<Object>> getModel() {
+		return model;
 	}
 
-	class GlobalConfigLabelProvider extends StyledCellLabelProvider {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * org.eclipse.jface.viewers.StyledCellLabelProvider#update(org.eclipse
-		 * .jface.viewers.ViewerCell)
-		 */
-		@Override
-		public void update(ViewerCell cell) {
-			Object element = cell.getElement();
-			StyledString text = new StyledString();
-			
-			if (element instanceof String) {
-				GlobalConfigCategoryItem cat = getCategoryForId((String)element);
-				Image img = cat.getIcon();
-				text.append(cat.getName());
-				cell.setImage(img);
-				cell.setText(text.toString());
-				cell.setStyleRanges(text.getStyleRanges());
-			} else if (element instanceof Element) {
-				Element node = (Element)element;
-				Image img = getIconForElement(node);
-				String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
-				String catId = FUSE_CAT_ID;
-				for (GlobalConfigElementItem item : elementContributions) {
-					if (item.getContributor().canHandle(node)) {
-						type = item.getName();
-						img = item.getIcon();
-						break;
-					}
-				}
-				text.append(!Strings.isEmpty(node.getAttribute("id")) ? node.getAttribute("id") : CamelUtils.getTranslatedNodeName(node));
-				cell.setImage(img);
-				if (!Strings.isEmpty(node.getAttribute("id"))) text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
-				cell.setText(text.toString());
-				cell.setStyleRanges(text.getStyleRanges());
-			} else if (element instanceof AbstractCamelModelElement) {
-				AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
-				Image img = getIconForElement(cme);
-				String type = Strings.capitalize(cme.getTranslatedNodeName());
-				for (GlobalConfigElementItem item : elementContributions) {
-					if (item.getContributor().canHandle(cme.getXmlNode())) {
-						type = item.getName();
-						img = item.getIcon();
-						break;
-					}
-				}
-				text.append(cme.getId());
-				cell.setImage(img);
-				text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
-				cell.setText(text.toString());
-				cell.setStyleRanges(text.getStyleRanges());
-			} else {
-				// unhandled
-			}
-			super.update(cell);
-		}
-		
-		private Image getIconForElement(Object element) {
-			if (element instanceof Node) {
-				return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
-			} else if (element instanceof AbstractCamelModelElement) {
-				AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
-				if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
-					return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");	
-				} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
-					return CamelEditorUIActivator.getDefault().getImage("dataformat.gif");	
-				} else {
-					// unhandled
-				}
-			}
-			return null;
-		}
+	/**
+	 * @return the elementContributions
+	 */
+	public List<GlobalConfigElementItem> getElementContributions() {
+		return elementContributions;
 	}
+
 }
