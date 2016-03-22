@@ -60,7 +60,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.foundation.ui.util.Selections;
 import org.w3c.dom.Node;
 
 /**
@@ -126,8 +125,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	
         this.dbc = new DataBindingContext();
 
-        Object o = Selections.getFirstSelection(selection);
-        AbstractCamelModelElement n = NodeUtils.toCamelElement(o);
+		AbstractCamelModelElement n = NodeUtils.getSelectedNode(selection);
 
         createTabFolder();        
         
