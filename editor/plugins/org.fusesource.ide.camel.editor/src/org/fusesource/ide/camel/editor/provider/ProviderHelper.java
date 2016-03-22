@@ -34,7 +34,6 @@ public class ProviderHelper {
 	public static final String CATEGORY_MISC = "Miscellaneous";
 	public static final String CATEGORY_COMPONENTS = "Components";
 	public static final String CATEGORY_TRANSFORMATION = "Transformation";
-	public static final String CATEGORY_REST = "Rest";
 		
 	private static final HashMap<String, String> categoryMap;
 
@@ -46,13 +45,10 @@ public class ProviderHelper {
 		categoryMap.put("choice", CATEGORY_ROUTING);
 		categoryMap.put("convertBodyTo", CATEGORY_TRANSFORMATION);
 		categoryMap.put("delay",CATEGORY_CONTROL_FLOW);
-		categoryMap.put("delete",CATEGORY_REST);
 		categoryMap.put("doCatch",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("doFinally",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("enrich", CATEGORY_TRANSFORMATION);
 		categoryMap.put("filter", CATEGORY_ROUTING);
-		categoryMap.put("get",CATEGORY_REST);
-		categoryMap.put("head",CATEGORY_REST);
 		categoryMap.put("idempotentConsumer", CATEGORY_ROUTING);
 		categoryMap.put("inOnly", CATEGORY_TRANSFORMATION);
 		categoryMap.put("inOut", CATEGORY_TRANSFORMATION);
@@ -70,20 +66,13 @@ public class ProviderHelper {
 		categoryMap.put("pipeline", CATEGORY_ROUTING);
 		categoryMap.put("policy", CATEGORY_MISC);
 		categoryMap.put("pollEnrich", CATEGORY_TRANSFORMATION);
-		categoryMap.put("post",CATEGORY_REST);
 		categoryMap.put("process", CATEGORY_COMPONENTS);
-		categoryMap.put("put",CATEGORY_REST);
 		categoryMap.put("recipientList", CATEGORY_ROUTING);
 		categoryMap.put("removeHeader", CATEGORY_TRANSFORMATION);
 		categoryMap.put("removeHeaders", CATEGORY_TRANSFORMATION);
 		categoryMap.put("removeProperty", CATEGORY_TRANSFORMATION);
 		categoryMap.put("removeProperties", CATEGORY_TRANSFORMATION);
 		categoryMap.put("resequence", CATEGORY_ROUTING);
-		categoryMap.put("restBinding",CATEGORY_REST);
-		categoryMap.put("restConfiguration",CATEGORY_REST);
-		categoryMap.put("restProperty",CATEGORY_REST);
-		categoryMap.put("rest",CATEGORY_REST);
-		categoryMap.put("rests",CATEGORY_REST);
 		categoryMap.put("rollback",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("route",CATEGORY_ROUTING);
 		categoryMap.put("routingSlip", CATEGORY_ROUTING);
@@ -105,7 +94,6 @@ public class ProviderHelper {
 		categoryMap.put("doTry",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("unmarshal", CATEGORY_TRANSFORMATION);
 		categoryMap.put("validate", CATEGORY_MISC);
-		categoryMap.put("verb",CATEGORY_REST);
 		categoryMap.put("when", CATEGORY_ROUTING);
 		categoryMap.put("wireTap", CATEGORY_ROUTING);
 	}
