@@ -219,10 +219,13 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				Object selObj = Selections.getFirstSelection(event.getSelection());
 				if (selObj != null) {
 					btnModify.setEnabled(supportsEdit(selObj));
+					btnDelete.setEnabled(supportsDelete(selObj));
 				} else {
 					btnModify.setEnabled(false);
+					btnDelete.setEnabled(false);
 				}
 			}
+
 		});
 		getSite().setSelectionProvider(treeViewer);
 	}
@@ -234,11 +237,11 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createDeleteButton() {
-		this.btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
-		this.btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
-		this.btnDelete.setToolTipText(UIMessages.globalElementsTabDeleteButtonTooltip);
-		this.btnDelete.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
-		this.btnDelete.addSelectionListener(new SelectionAdapter() {
+		btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
+		btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
+		btnDelete.setToolTipText(UIMessages.globalElementsTabDeleteButtonTooltip);
+		btnDelete.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
+		btnDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				deleteEntries();
@@ -247,11 +250,11 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createEditButton() {
-		this.btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
-		this.btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
-		this.btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
-		this.btnModify.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
-		this.btnModify.addSelectionListener(new SelectionAdapter() {
+		btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
+		btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
+		btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
+		btnModify.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1));
+		btnModify.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				modifyEntry();
@@ -260,20 +263,20 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createAddButton() {
-		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
-		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
-		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
+		btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
+		btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
+		btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
 		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
 		gd.minimumWidth = 120;
 		gd.widthHint = 120;
-		this.btnAdd.setLayoutData(gd);
-		this.btnAdd.addSelectionListener(new SelectionAdapter() {
+		btnAdd.setLayoutData(gd);
+		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				createNewEntry();
 			}
 		});
-		this.btnAdd.setEnabled(getElementContributions().isEmpty() == false);
+		btnAdd.setEnabled(getElementContributions().isEmpty() == false);
 	}
 
 	/* (non-Javadoc)
@@ -749,6 +752,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			return handler != null;
 		}
 		return false;
+	}
+
+	private boolean supportsDelete(Object selObj) {
+		return selObj instanceof AbstractCamelModelElement || selObj instanceof Element;
 	}
 
 	/**
