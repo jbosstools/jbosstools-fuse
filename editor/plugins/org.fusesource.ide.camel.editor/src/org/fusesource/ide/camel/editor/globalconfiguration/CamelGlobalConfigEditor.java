@@ -593,10 +593,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 							case CONTEXT_DATAFORMAT:
 								final CamelBasicModelElement newDataFormat = addDataFormat(cf, (Element) newXMLNode);
 								new BasicNodeValidator().validate(newDataFormat);
+								reload();
+								treeViewer.setSelection(new StructuredSelection(newDataFormat), true);
 								break;
 							case CONTEXT_ENDPOINT:
 								final CamelEndpoint newEndpoint = addEndpointToGlobalContext(cf, (Element) newXMLNode);
 								new BasicNodeValidator().validate(newEndpoint);
+								reload();
+								treeViewer.setSelection(new StructuredSelection(newEndpoint), true);
 								break;
 							default: // ignore
 								break;
@@ -622,7 +626,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	private CamelBasicModelElement addDataFormat(CamelFile cf, Element newXMLNode) {
 		CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
-		final String eipName = newXMLNode.getNodeName();
+		final String eipName = org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(newXMLNode);
 		configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
 		cf.getCamelContext().addDataFormat(elemDF);
 		return elemDF;
