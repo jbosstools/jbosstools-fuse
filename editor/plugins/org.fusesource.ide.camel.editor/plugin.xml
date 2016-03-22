@@ -159,6 +159,12 @@
             id="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
             name="Auto Layout Diagram">
       </command>
+      <command
+            categoryId="org.fusesource.ide.camel.editor.commands.category"
+            defaultHandler="org.fusesource.ide.camel.editor.commands.ShowPropertiesViewHandler"
+            id="org.fusesource.ide.camel.editor.commands.ShowPropertiesView"
+            name="Show Properties view">
+      </command>
    </extension>
    
    <extension
@@ -300,6 +306,18 @@
       <DoubleClickHandler
             class="org.fusesource.ide.camel.editor.handler.RouteDblClickHandler">
       </DoubleClickHandler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.fusesource.ide.camel.editor">
+         <command
+               commandId="org.fusesource.ide.camel.editor.commands.ShowPropertiesView"
+               label="Show Properties view"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>    
 
 </plugin>

@@ -43,9 +43,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -62,12 +60,11 @@ import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEdit
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
-import org.fusesource.ide.foundation.ui.util.UIHelper;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -430,49 +427,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.dispose();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.part.MultiPageEditorPart#setFocus()
-	 */
-	@Override
-	public void setFocus() {
-		super.setFocus();
-		// open the properties view if not already open
-		openPropertiesView();
-	}
-
-	/**
-	 * opens the properties view if not already open
-	 */
-	private void openPropertiesView() {
-		Display.getDefault().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				IWorkbench wb = PlatformUI.getWorkbench();
-				if (wb != null) {
-					IWorkbenchWindow wbw = wb.getActiveWorkbenchWindow();
-					if (wbw != null) {
-						IWorkbenchPage page = wbw.getActivePage();
-						if (page != null) {
-							try {
-								if (page.findView(UIHelper.ID_PROPERTIES_VIEW) == null) {
-									page.showView(UIHelper.ID_PROPERTIES_VIEW);
-								}
-							} catch (PartInitException ex) {
-								CamelEditorUIActivator.pluginLog().logError(ex);
-							}
-						}
-					}
-				}
-			}
-		});
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#pageChange(int)

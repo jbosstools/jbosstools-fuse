@@ -73,8 +73,10 @@ public class DocumentationSection extends NodeSectionSupport {
 	@Override
 	protected void onNodeChanged(AbstractCamelModelElement node) {
 		this.node = node;
-		form.setText(node != null ? String.format("%s - %s", UIMessages.propertiesDocumentationTitle, node.getNodeTypeId()) : UIMessages.propertiesDocumentationTitle);
-		showDocumentationPage();
+		if (!form.isDisposed()) {
+			form.setText(node != null ? String.format("%s - %s", UIMessages.propertiesDocumentationTitle, node.getNodeTypeId()) : UIMessages.propertiesDocumentationTitle);
+			showDocumentationPage();
+		}
 	}
 
 	/*
