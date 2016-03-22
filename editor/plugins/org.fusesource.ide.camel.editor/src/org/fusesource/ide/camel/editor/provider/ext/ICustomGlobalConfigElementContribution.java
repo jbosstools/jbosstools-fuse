@@ -50,12 +50,14 @@ public interface ICustomGlobalConfigElementContribution {
 	/**
 	 * this method is invokes when a user tries to modify an existing global
 	 * element of this type in the global config tab. Implementors should come
-	 * up with a wizard or dialog for modifying the element node. It's up to
-	 * the implementors code to change the XML element given as parameter.
+	 * up with a wizard or dialog for modifying the element node. It's up to the
+	 * implementors code to change the XML element given as parameter. If no
+	 * wizard provided, the edit action will put focus on Properties view.
 	 * 
-	 * @param document	a reference to the camel context xml document to be
-	 * 					used for creating dom nodes / elements
-	 * @return	true if changed by user or false if canceled modifying
+	 * @param document
+	 *            a reference to the camel context xml document to be used for
+	 *            creating dom nodes / elements
+	 * @return true if changed by user or false if canceled modifying
 	 */
 	GlobalConfigurationTypeWizard modifyGlobalElement(Document document);
 	
