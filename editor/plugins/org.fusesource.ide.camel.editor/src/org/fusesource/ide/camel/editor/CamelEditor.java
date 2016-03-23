@@ -561,6 +561,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 								boolean designEditorWasDirty = designEditor.isDirty();
 								document.set(newText);
 								if (!designEditorWasDirty) {
+									// stopping dirty listener wasn't enough
 									doSave(new NullProgressMonitor());
 								}
 							}
