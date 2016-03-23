@@ -24,7 +24,7 @@ import org.osgi.service.event.EventHandler;
  * @author Aurelien Pupier
  *
  */
-final class MarkerNodeRemovalEventHandler implements EventHandler {
+public final class MarkerNodeRemovalEventHandler implements EventHandler {
 	/*
 	 * (non-Javadoc)
 	 * 

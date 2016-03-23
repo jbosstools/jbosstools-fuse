@@ -17,8 +17,8 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.fusesource.ide.launcher.debug.MarkerNodeIDUpdateEventhandler;
+import org.fusesource.ide.launcher.debug.MarkerNodeRemovalEventHandler;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.event.EventHandler;
 
 /**
  * @author lhein
@@ -27,7 +27,7 @@ public class Activator extends Plugin {
 
 	private static Activator instance;
 	private MarkerNodeIDUpdateEventhandler idRenamingEventHandler = null;
-	private EventHandler camelElementRemovalEventHandler;
+	private MarkerNodeRemovalEventHandler camelElementRemovalEventHandler = null;
 	
 	public Activator() {
 		instance = this;
@@ -56,7 +56,7 @@ public class Activator extends Plugin {
 		super.start(context);
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		idRenamingEventHandler = new MarkerNodeIDUpdateEventhandler();
-		camelElementRemovalEventHandler = new MarkerNodeIDUpdateEventhandler();
+		camelElementRemovalEventHandler = new MarkerNodeRemovalEventHandler();
 		eventBroker.subscribe(AbstractCamelModelElement.TOPIC_ID_RENAMING, idRenamingEventHandler);
 		eventBroker.subscribe(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, camelElementRemovalEventHandler);
 	}
