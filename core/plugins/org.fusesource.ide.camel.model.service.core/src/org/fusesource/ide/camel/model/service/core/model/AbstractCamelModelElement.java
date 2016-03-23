@@ -448,7 +448,11 @@ public abstract class AbstractCamelModelElement {
 		if (xmlNodeToReplace != null) {
 			Node newNode = createElement(newEndpointType, determineNSPrefixFromParent());
 			final Node parentXmlNode = getParent().getXmlNode();
-			parentXmlNode.replaceChild(newNode, xmlNodeToReplace);
+			if (xmlNodeToReplace.getParentNode() != null) {
+				parentXmlNode.replaceChild(newNode, xmlNodeToReplace);
+			} else {
+				parentXmlNode.appendChild(newNode);
+			}
 			setXmlNode(newNode);
 			updateXMLNode();
 		}
