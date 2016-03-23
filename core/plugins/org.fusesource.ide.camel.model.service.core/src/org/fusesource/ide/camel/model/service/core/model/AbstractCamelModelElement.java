@@ -40,6 +40,8 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
+	private static final String ENDPOINT_TYPE_TO = "to";
+	private static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
 	public static final String TOPIC_ID_RENAMING = "TOPIC_ID_RENAMING";
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
@@ -424,33 +426,39 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	protected void checkEndpointType() {
-		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null && 
-			getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
-			// switch from a TO endpoint to a FROM endpoint
-			setUnderlyingMetaModelObject(getEipByName("from"));
-			if (getXmlNode() != null) {
-				Node newNode = createElement("from", parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-				getParent().getXmlNode().replaceChild(newNode, getXmlNode());
-				setXmlNode(newNode);
-				updateXMLNode();
-			}
-		} else if (isToEndpoint() && getUnderlyingMetaModelObject() != null
-				&& getUnderlyingMetaModelObject().getName().equalsIgnoreCase("from")) {
-			// switch from a FROM endpoint to a TO endpoint
-			setUnderlyingMetaModelObject(getEipByName("to"));
-			if (getXmlNode() != null) {
-				Node newNode = createElement("to", parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-				getParent().getXmlNode().replaceChild(newNode, getXmlNode());
-				setXmlNode(newNode);
-				updateXMLNode();
-			}
+		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_TO)) {
+			switchEndpointType(ENDPOINT_TYPE_FROM);
+		} else if (isToEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_FROM)) {
+			switchEndpointType(ENDPOINT_TYPE_TO);
 		} else if (getUnderlyingMetaModelObject() == null) {
 			if (isFromEndpoint()) {
-				setUnderlyingMetaModelObject(getEipByName("from"));
+				setUnderlyingMetaModelObject(getEipByName(ENDPOINT_TYPE_FROM));
 			} else {
-				setUnderlyingMetaModelObject(getEipByName("to"));
+				setUnderlyingMetaModelObject(getEipByName(ENDPOINT_TYPE_TO));
 			}
 		}
+	}
+
+	/**
+	 * @param newEndpointType
+	 */
+	private void switchEndpointType(final String newEndpointType) {
+		setUnderlyingMetaModelObject(getEipByName(newEndpointType));
+		final Node xmlNodeToReplace = getXmlNode();
+		if (xmlNodeToReplace != null) {
+			Node newNode = createElement(newEndpointType, determineNSPrefixFromParent());
+			final Node parentXmlNode = getParent().getXmlNode();
+			parentXmlNode.replaceChild(newNode, xmlNodeToReplace);
+			setXmlNode(newNode);
+			updateXMLNode();
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private String determineNSPrefixFromParent() {
+		return parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
 	}
 
 	/**
@@ -762,10 +770,10 @@ public abstract class AbstractCamelModelElement {
 				}
 			}
 			if (createSubNode) {
-				subNode = createElement(comparedNodeName, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				subNode = createElement(comparedNodeName, determineNSPrefixFromParent());
 				e.appendChild(subNode);
 				if (comparedNodeName.equals("expression") == false) {
-					Node subSubNode = createElement(exp.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+					Node subSubNode = createElement(exp.getNodeTypeId(), determineNSPrefixFromParent());
 					subNode.appendChild(subSubNode);
 					subNode = subSubNode;
 				}
@@ -830,7 +838,7 @@ public abstract class AbstractCamelModelElement {
 				}
 			}
 			if (createSubNode) {
-				subNode = createElement(df.getNodeTypeId(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				subNode = createElement(df.getNodeTypeId(), determineNSPrefixFromParent());
 				e.appendChild(subNode);
 			}
 
@@ -876,7 +884,7 @@ public abstract class AbstractCamelModelElement {
 				}
 			}
 			if (createSubNode) {
-				subNode = createElement(name, parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				subNode = createElement(name, determineNSPrefixFromParent());
 				e.appendChild(subNode);
 			}
 			subNode.setTextContent(getMappedValue(value));
@@ -1156,7 +1164,8 @@ public abstract class AbstractCamelModelElement {
 		// then we get the eip meta model
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// special case for context wide endpoint definitions
-		if (eip == null && name.equals("endpoint")) eip = model.getEipModel().getEIPByName("to");
+		if (eip == null && name.equals("endpoint"))
+			eip = model.getEipModel().getEIPByName(ENDPOINT_TYPE_TO);
 		// and return it
 		return eip;
 	}
