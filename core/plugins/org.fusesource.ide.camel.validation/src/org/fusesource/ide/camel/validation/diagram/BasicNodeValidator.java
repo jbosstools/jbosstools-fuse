@@ -232,7 +232,7 @@ public class BasicNodeValidator implements ValidationSupport {
 				} else {
 					// by default we only check for a value != null and length >
 					// 0
-					if (value == null || value instanceof String == false || value.toString().trim().length() < 1) {
+					if (value == null || (value instanceof String && value.toString().trim().isEmpty())) {
 						result.addError("Parameter " + prop.getName() + " is a mandatory field and cannot be empty. Please check the properties view for more details.");
 					}
 				}
