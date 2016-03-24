@@ -326,7 +326,7 @@
             class="org.fusesource.ide.camel.editor.genericEndpoint.GenericEndpointPaletteEntry"
             diagramImage="icons/endpoint.png"
             id="genericEndpoint"
-            paletteIcon="icons/endpoint16.png">
+            paletteIcon="icons/endpoint.png">
       </PaletteContribution>
    </extension>    
 
