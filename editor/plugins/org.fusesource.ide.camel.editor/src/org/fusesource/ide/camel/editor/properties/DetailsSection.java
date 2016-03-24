@@ -700,7 +700,9 @@ public class DetailsSection extends FusePropertySection {
             // CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
             } else {
                 // must be some class as all other options were missed
-                final Text txtField = getWidgetFactory().createText(page, (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+				String textValue = (String) (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName())
+						: this.eip.getParameter(p.getName()).getDefaultValue());
+				final Text txtField = getWidgetFactory().createText(page, textValue, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {

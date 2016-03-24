@@ -631,7 +631,7 @@ public abstract class AbstractCamelModelElement {
 	private void removePossibleDataFormatsInFavorToREF() {
 		if (getUnderlyingMetaModelObject() != null) {
 			for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
-				if (p.getKind().equalsIgnoreCase("element") && p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition")) {
+				if (isElementKind(p) && isDataFormatDefinition(p)) {
 					if (getParameter(p.getName()) != null) {
 						removeParameter(p.getName());
 						break;
@@ -1014,125 +1014,224 @@ public abstract class AbstractCamelModelElement {
 		Eip eip = getEipByName(nodename);
 		if (eip != null) {
 			for (Parameter param : eip.getParameters()) {
-				if (param.getKind().equalsIgnoreCase("attribute")) {
-					// now loop all meta model parameter and check if we have
-					// them in the node
-					Node tmp = getXmlNode().getAttributes().getNamedItem(param.getName());
-					if (tmp != null) {
-						// now map the node attribute into our EIP parameters
-						setParameter(param.getName(), tmp.getNodeValue());
-					}
-				} else if (param.getKind().equalsIgnoreCase("element") && param.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition") == false) {
-					if (param.getType().equalsIgnoreCase("array")) {
-						ArrayList<String> list = new ArrayList<String>();
-						for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
-							Node subNode = getXmlNode().getChildNodes().item(i);
-							if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
-							if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
-								String val = subNode.getTextContent();
-								if (val != null && val.trim().length() > 0 && list.contains(val) == false) {
-									list.add(val);
-								}
-							}
-						}
-						if (list.isEmpty() == false) {
-							setParameter(param.getName(), list);
-						}
+				if (isAttributeKind(param)) {
+					parseAttributeKindAttribute(param);
+				} else if (isElementKind(param)) {
+					if (isDataFormatDefinition(param)) {
+						parseDataFormatElementAttribute(param);
 					} else {
-						Node descNode = null;
-						for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
-							Node subNode = getXmlNode().getChildNodes().item(i);
-							if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
-							if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
-								descNode = subNode;
-								break;
-							}
-						}
-						if (descNode != null) {
-							String val = descNode.getTextContent();
-							if (val != null) {
-								setParameter(param.getName(), val);
-								if (param.getName().equalsIgnoreCase("description"))
-									setDescription(val);
-							}
-						}
+						parseNotDataFormatElementAttribute(param);
 					}
 				} else if (param.getKind().equalsIgnoreCase("value")) {
-					String val = getXmlNode().getTextContent();
-					if (val != null) {
-						setParameter(param.getName(), val);
-						if (param.getName().equalsIgnoreCase("description"))
-							setDescription(val);
-					}
-				} else if (	param.getKind().equalsIgnoreCase("element") && 
-							param.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition")) {
-					AbstractCamelModelElement dfNode = null;
-					String[] dfs = param.getOneOf().split(",");
-					ArrayList<String> dfList = new ArrayList<String>();
-					for (String df : dfs)
-						dfList.add(df);
-					for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
-						Node subNode = getXmlNode().getChildNodes().item(i);
-						if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
-						if (subNode != null && dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
-							dfNode = new CamelBasicModelElement(this, subNode);
-							dfNode.initialize();
-							// expNode.setParent(this);
-							setParameter(param.getName(), dfNode);
-						}
-					}
-				} else if (param.getKind().equalsIgnoreCase("expression")) {
-					AbstractCamelModelElement expNode = null;
-					String[] langs = param.getOneOf().split(",");
-					ArrayList<String> langList = new ArrayList<String>();
-					for (String lang : langs)
-						langList.add(lang);
-					for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
-						Node subNode = getXmlNode().getChildNodes().item(i);
-						if (subNode.getNodeType() != Node.ELEMENT_NODE)
-							continue;
-						if (subNode != null && param.getName().equals("expression")
-								&& langList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
-							// this case is for expressions which are directly
-							// stored under the parent node
-							// for instance when.<expression>
-							expNode = new CamelBasicModelElement(this, subNode);
-							expNode.initialize();
-							// expNode.setParent(this);
-							setParameter(param.getName(), expNode);
-						} else if (subNode != null && param.getName().equals("expression") == false
-								&& param.getName().equals(CamelUtils.getTranslatedNodeName(subNode))) {
-							// this case is for expressions which are not
-							// directly
-							// stored under the parent node but under another
-							// subnode
-							// for instance onException.handled.<expression>
-							for (int x = 0; x < subNode.getChildNodes().getLength(); x++) {
-								Node subExpNode = subNode.getChildNodes().item(x);
-								if (subExpNode.getNodeType() == Node.ELEMENT_NODE && subExpNode != null
-										&& langList.contains(CamelUtils.getTranslatedNodeName(subExpNode))) {
-									// found the sub -> create container element
-									AbstractCamelModelElement expContainer = new CamelBasicModelElement(this, subNode);
-									// expContainer.initialize();
-									// expContainer.setParent(this);
-									expNode = new CamelBasicModelElement(expContainer, subExpNode);
-									expNode.initialize();
-									// expNode.setParent(this);
-									expContainer.setParameter("expression", expNode);
-									setParameter(param.getName(), expContainer);
-									break;
-								}
-							}
-						}
-					}
+					parseValueAttribute(param);
+				} else if (isAnExpressionGuessedByKind(param)) {
+					parseExpressionKindAttribute(param);
 				} else {
 					// ignore the other kinds
 				}
 			}
 		} else {
-			CamelModelServiceCoreActivator.pluginLog()
-					.logWarning("ParseAttributes: Unsupported EIP will be ignored: " + nodename);
+			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Unsupported EIP will be ignored: " + nodename);
 		}
+	}
+
+	/**
+	 * @param param
+	 */
+	private void parseNotDataFormatElementAttribute(Parameter param) {
+		if (isArrayType(param)) {
+			parseNotDataFormatElementArrayElementAttribute(param);
+		} else {
+			parseNotDataFormatElementSimpleElementAttribute(param);
+		}
+	}
+
+	/**
+	 * @param param
+	 * @param childNodes
+	 */
+	private void parseNotDataFormatElementSimpleElementAttribute(Parameter param) {
+		final NodeList childNodes = getXmlNode().getChildNodes();
+		Node descNode = null;
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node subNode = childNodes.item(i);
+			if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
+			if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
+				descNode = subNode;
+				break;
+			}
+		}
+		if (descNode != null) {
+			String val = descNode.getTextContent();
+			if (val != null) {
+				setParameter(param.getName(), val);
+				if (param.getName().equalsIgnoreCase("description"))
+					setDescription(val);
+			}
+		}
+	}
+
+	/**
+	 * @param param
+	 * @param childNodes
+	 */
+	private void parseNotDataFormatElementArrayElementAttribute(Parameter param) {
+		final NodeList childNodes = getXmlNode().getChildNodes();
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node subNode = childNodes.item(i);
+			if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
+			if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
+				String val = subNode.getTextContent();
+				if (val != null && !val.trim().isEmpty() && !list.contains(val)) {
+					list.add(val);
+				}
+			}
+		}
+		if (!list.isEmpty()) {
+			setParameter(param.getName(), list);
+		}
+	}
+
+	/**
+	 * @param param
+	 */
+	private void parseAttributeKindAttribute(Parameter param) {
+		// now loop all meta model parameter and check if we have
+		// them in the node
+		Node tmp = getXmlNode().getAttributes().getNamedItem(param.getName());
+		if (tmp != null) {
+			// now map the node attribute into our EIP parameters
+			setParameter(param.getName(), tmp.getNodeValue());
+		}
+	}
+
+	/**
+	 * @param param
+	 */
+	private void parseValueAttribute(Parameter param) {
+		String val = getXmlNode().getTextContent();
+		if (val != null) {
+			setParameter(param.getName(), val);
+			if (param.getName().equalsIgnoreCase("description"))
+				setDescription(val);
+		}
+	}
+
+	/**
+	 * @param param
+	 */
+	private void parseDataFormatElementAttribute(Parameter param) {
+		NodeList childNodes = getXmlNode().getChildNodes();
+		AbstractCamelModelElement dfNode = null;
+		String[] dfs = param.getOneOf().split(",");
+		List<String> dfList = new ArrayList<>(Arrays.asList(dfs));
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node subNode = childNodes.item(i);
+			if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
+			if (subNode != null && dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
+				dfNode = new CamelBasicModelElement(this, subNode);
+				dfNode.initialize();
+				// expNode.setParent(this);
+				setParameter(param.getName(), dfNode);
+			}
+		}
+	}
+
+	/**
+	 * @param param
+	 */
+	private void parseExpressionKindAttribute(Parameter param) {
+		NodeList childNodes = getXmlNode().getChildNodes();
+		AbstractCamelModelElement expNode = null;
+		String[] langs = param.getOneOf().split(",");
+		List<String> langList = new ArrayList<>(Arrays.asList(langs));
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node subNode = childNodes.item(i);
+			if (subNode.getNodeType() != Node.ELEMENT_NODE)
+				continue;
+			if (subNode != null && isAnExpressionGuessedByName(param)
+					&& langList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
+				// this case is for expressions which are directly
+				// stored under the parent node
+				// for instance when.<expression>
+				expNode = new CamelBasicModelElement(this, subNode);
+				expNode.initialize();
+				// expNode.setParent(this);
+				setParameter(param.getName(), expNode);
+			} else if (subNode != null && !isAnExpressionGuessedByName(param)
+					&& param.getName().equals(CamelUtils.getTranslatedNodeName(subNode))) {
+				// this case is for expressions which are not
+				// directly
+				// stored under the parent node but under another
+				// subnode
+				// for instance onException.handled.<expression>
+				for (int x = 0; x < subNode.getChildNodes().getLength(); x++) {
+					Node subExpNode = subNode.getChildNodes().item(x);
+					if (subExpNode.getNodeType() == Node.ELEMENT_NODE && subExpNode != null
+							&& langList.contains(CamelUtils.getTranslatedNodeName(subExpNode))) {
+						// found the sub -> create container element
+						AbstractCamelModelElement expContainer = new CamelBasicModelElement(this, subNode);
+						// expContainer.initialize();
+						// expContainer.setParent(this);
+						expNode = new CamelBasicModelElement(expContainer, subExpNode);
+						expNode.initialize();
+						// expNode.setParent(this);
+						expContainer.setParameter("expression", expNode);
+						setParameter(param.getName(), expContainer);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isAnExpressionGuessedByKind(Parameter param) {
+		return param.getKind().equalsIgnoreCase("expression");
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isAnExpressionGuessedByName(Parameter param) {
+		return param.getName().equals("expression");
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isArrayType(Parameter param) {
+		return param.getType().equalsIgnoreCase("array");
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isElementKind(Parameter param) {
+		return param.getKind().equalsIgnoreCase("element");
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isAttributeKind(Parameter param) {
+		return param.getKind().equalsIgnoreCase("attribute");
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private boolean isDataFormatDefinition(Parameter param) {
+		return "org.apache.camel.model.DataFormatDefinition".equalsIgnoreCase(param.getJavaType());
 	}
 
 	/**
@@ -1186,7 +1285,7 @@ public abstract class AbstractCamelModelElement {
 			Iterator<Parameter> it = eip.getParameters().iterator();
 			while (it.hasNext()) {
 				Parameter p = it.next();
-				if (p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")
+				if (isElementKind(p) && isArrayType(p)
 						&& p.getName().equals("exception") == false) {
 					return true;
 				}
@@ -1293,7 +1392,7 @@ public abstract class AbstractCamelModelElement {
 		if (getUnderlyingMetaModelObject() == null)
 			return;
 		for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
-			if (p.getKind().equalsIgnoreCase("expression") || p.getKind().equalsIgnoreCase("element")) {
+			if (isAnExpressionGuessedByKind(p) || isElementKind(p)) {
 				for (AbstractCamelModelElement child : getChildElements()) {
 					if (child.getNodeTypeId().equalsIgnoreCase(p.getName()) && p.getType().equalsIgnoreCase("object")) {
 						// so we have a child of type element or expression
