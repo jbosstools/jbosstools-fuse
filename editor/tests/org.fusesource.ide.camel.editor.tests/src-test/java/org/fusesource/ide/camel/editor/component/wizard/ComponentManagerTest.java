@@ -8,11 +8,11 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
+package org.fusesource.ide.camel.editor.component.wizard;
 
 import java.util.ArrayList;
 
-import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.ComponentManager;
+import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.junit.Before;

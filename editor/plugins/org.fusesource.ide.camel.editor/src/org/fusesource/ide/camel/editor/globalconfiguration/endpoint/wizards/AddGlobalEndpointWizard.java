@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.wizard.Wizard;
-import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages.GlobalEndpointWizardPage;
+import org.fusesource.ide.camel.editor.component.wizard.SelectComponentWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -29,7 +29,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	private ComponentModel componentModel;
 	private DataBindingContext dbc;
 	private Element globalConfigurationNode;
-	private GlobalEndpointWizardPage globalEndpointPage;
+	private SelectComponentWizardPage globalEndpointPage;
 	private CamelFile camelFile;
 	private Component component;
 
@@ -50,7 +50,8 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	@Override
 	public void addPages() {
 		super.addPages();
-		globalEndpointPage = new GlobalEndpointWizardPage(dbc, componentModel);
+		globalEndpointPage = new SelectComponentWizardPage(dbc, componentModel, UIMessages.SelectComponentWizardPage_pageName,
+				UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription);
 		addPage(globalEndpointPage);
 
 	}

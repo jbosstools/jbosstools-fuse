@@ -73,39 +73,28 @@ public class UIMessages extends NLS {
 	
 	public static String newGlobalConfigurationTypeWizardDialogTitle;
 	public static String CamelDiagramBehaviour_messageOnErrorEditorInitialization;
-
 	public static String ComponentGroupedByTagsTreeContenProvider_Uncategorized;
-
 	public static String newGlobalConfigurationTypeDataFormatWizardDialogTitle;
 	public static String newGlobalConfigurationTypeEndpointWizardDialogTitle;
-
 	public static String dataFormatSelectionPage_dataformatLabel;
 	public static String DataFormatSelectionPage_DataFormatSelectionPageDescription;
-
 	public static String DataFormatSelectionPage_dataFormatSelectionPageTitle;
-
 	public static String dataFormatSelectionPage_idLabel;
 	public static String dataFormatSelectionPage_descriptionLabel;
-
-    public static String GlobalEndpointWizardPage_componentSelectionGroupTitle;
-
+    public static String GenericEndpointFigureFeature_paletteDescription;
+	public static String GenericEndpointFigureFeature_paletteName;
+	public static String GlobalEndpointWizardPage_componentSelectionGroupTitle;
 	public static String GlobalEndpointWizardPage_componentSelectionMandatoryMessage;
-
 	public static String GlobalEndpointWizardPage_descriptionFieldLabel;
-
 	public static String GlobalEndpointWizardPage_filterSearchMessage;
-
 	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription;
-
-	public static String GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle;
-
+	public static String SelectComponentWizardPage_pageName;
 	public static String GlobalEndpointWizardPage_groupByCategories;
-
 	public static String GlobalEndpointWizardPage_idFieldLabel;
-
 	public static String GlobalEndpointWizardPage_idMandatoryMessage;
-
 	public static String GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText;
+	public static String SelectEndpointWizard_pageSelectionComponentDescription;
+	public static String SelectEndpointWizard_pageSelectionComponentTitle;
 
 	static {
         // initialize resource bundle

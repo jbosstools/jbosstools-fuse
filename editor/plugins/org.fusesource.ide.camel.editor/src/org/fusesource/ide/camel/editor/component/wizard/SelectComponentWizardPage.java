@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.pages;
+package org.fusesource.ide.camel.editor.component.wizard;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -45,7 +45,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentM
  * @author Aurelien Pupier
  *
  */
-public class GlobalEndpointWizardPage extends WizardPage {
+public class SelectComponentWizardPage extends WizardPage {
 
 	private ComponentModel componentModel;
 	private DataBindingContext dbc;
@@ -56,10 +56,10 @@ public class GlobalEndpointWizardPage extends WizardPage {
 	/**
 	 * @param pageName
 	 */
-	public GlobalEndpointWizardPage(DataBindingContext dbc, ComponentModel componentModel) {
-		super(UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle);
-		setTitle(UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageTitle);
-		setDescription(UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription);
+	public SelectComponentWizardPage(DataBindingContext dbc, ComponentModel componentModel, String title, String description) {
+		super(UIMessages.SelectComponentWizardPage_pageName);
+		setTitle(title);
+		setDescription(description);
 		this.dbc = dbc;
 		this.componentModel = componentModel;
 	}
@@ -101,7 +101,7 @@ public class GlobalEndpointWizardPage extends WizardPage {
 			}
 		});
 
-		final IObservableValue idObservable = PojoProperties.value(GlobalEndpointWizardPage.class, "id", String.class).observe(this); //$NON-NLS-1$
+		final IObservableValue idObservable = PojoProperties.value(SelectComponentWizardPage.class, "id", String.class).observe(this); //$NON-NLS-1$
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), idObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
@@ -145,7 +145,7 @@ public class GlobalEndpointWizardPage extends WizardPage {
 			}
 		}) ;
 		
-		dbc.bindValue(ViewerProperties.singleSelection().observe(treeViewer), PojoProperties.value(GlobalEndpointWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
+		dbc.bindValue(ViewerProperties.singleSelection().observe(treeViewer), PojoProperties.value(SelectComponentWizardPage.class, "componentSelected", Component.class).observe(this), //$NON-NLS-1$
 				strategy, null);
 		return filteredTree;
 	}

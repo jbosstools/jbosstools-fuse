@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
-	private static final String ENDPOINT_TYPE_TO = "to";
+	public static final String ENDPOINT_TYPE_TO = "to";
 	private static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
 	public static final String TOPIC_ID_RENAMING = "TOPIC_ID_RENAMING";
