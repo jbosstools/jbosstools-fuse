@@ -323,8 +323,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			 */
 			@Override
 			public void run() {
-				reload();
-				parentEditor.setDirtyFlag(true);
+				if (CamelGlobalConfigEditor.this.parentEditor.getActiveEditor().equals(CamelGlobalConfigEditor.this)) {
+					reload();
+					parentEditor.setDirtyFlag(true);
+				}
 			}
 		});
 	}
