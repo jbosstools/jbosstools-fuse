@@ -7,7 +7,7 @@
 
   <!-- some camel route stuff now... -->
 
-  <camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" lazyLoadTypeConverters="false" streamCache="false">
+  <camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" lazyLoadTypeConverters="false" streamCache="false" id="context1">
     <endpoint id="something" singleton="false" uri="seda:myConfiguredEndpoint"/>
     <route>
         <description>edit file!</description>
