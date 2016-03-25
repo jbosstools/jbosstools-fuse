@@ -4945,7 +4945,7 @@
       </tags>
       <title>OptaPlanner</title>
       <description>OptaPlanner component for Camel</description>
-      <syntax>optaplanner:resourceUri</syntax>
+      <syntax>optaplanner:configFile</syntax>
       <class>org.apache.camel.component.optaplanner.OptaPlannerComponent</class>
       <kind>component</kind>
       <scheme>optaplanner</scheme>
