@@ -8719,7 +8719,7 @@
       </tags>
       <title>Git</title>
       <description>Represents the component that manages GitEndpoint.</description>
-      <syntax>git:localpath</syntax>
+      <syntax>git:localPath</syntax>
       <class>org.apache.camel.component.git.GitComponent</class>
       <kind>component</kind>
       <scheme>git</scheme>
