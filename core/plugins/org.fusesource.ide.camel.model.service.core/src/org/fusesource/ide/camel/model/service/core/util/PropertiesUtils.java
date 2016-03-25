@@ -78,54 +78,76 @@ public class PropertiesUtils {
             if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
 						selectedEP.getCamelFile().getResource().getProject());
-                if (componentModel != null) {
-                    for (Parameter p : componentModel.getUriParameters()) {
-                        if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
-                        	result.add(p);
-                        }
-                    }
-                }
+				return getPathProperties(selectedEP, componentModel);
             }
         }
 
         return result;
 	}
 	
+	public static List<Parameter> getPathProperties(AbstractCamelModelElement selectedEP, Component componentModel) {
+		ArrayList<Parameter> result = new ArrayList<Parameter>();
+
+		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			if (protocolSeparatorIdx != -1) {
+				if (componentModel != null) {
+					for (Parameter p : componentModel.getUriParameters()) {
+						if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
+							result.add(p);
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
     /**
      * 
      * @param kind
      * @return
      */
     public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP, UriParameterKind kind) {
-        ArrayList<Parameter> result = new ArrayList<Parameter>();
-
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
 						selectedEP.getCamelFile().getResource().getProject());
                 if (componentModel != null) {
-                    for (Parameter p : componentModel.getUriParameters()) {
-                        if (kind == UriParameterKind.CONSUMER) {
-                        	if (p.getLabel() != null && containsLabel("consumer", p)) {
-                        		result.add(p);
-                        	}
-                        } else if (kind == UriParameterKind.PRODUCER) {
-                        	if (p.getLabel() != null && containsLabel("producer", p)) {
-                        		result.add(p);
-                        	}
-                        } else if (kind == UriParameterKind.BOTH) {
-                        	if (p.getLabel() == null || p.getLabel().trim().length()<1) {
-                        		result.add(p);
-                        	}
-                        }
-                    }
+					return getPropertiesFor(kind, componentModel);
                 }
             }
         }
 
-        return result;
+		return Collections.emptyList();
     }
+
+	/**
+	 * @param kind
+	 * @param result
+	 * @param componentModel
+	 */
+	public static List<Parameter> getPropertiesFor(UriParameterKind kind, Component componentModel) {
+		List<Parameter> result = new ArrayList<>();
+		for (Parameter p : componentModel.getUriParameters()) {
+		    if (kind == UriParameterKind.CONSUMER) {
+		    	if (p.getLabel() != null && containsLabel("consumer", p)) {
+		    		result.add(p);
+		    	}
+		    } else if (kind == UriParameterKind.PRODUCER) {
+		    	if (p.getLabel() != null && containsLabel("producer", p)) {
+		    		result.add(p);
+		    	}
+		    } else if (kind == UriParameterKind.BOTH) {
+		    	if (p.getLabel() == null || p.getLabel().trim().length()<1) {
+		    		result.add(p);
+		    	}
+		    }
+		}
+		return result;
+	}
     
     /**
      * 
@@ -283,7 +305,7 @@ public class PropertiesUtils {
     	HashMap<String, String> retVal = new HashMap<String, String>();
 
     	// get all path params
-    	List<Parameter> pathParams = getPathProperties(selectedEP);
+		List<Parameter> pathParams = getPathProperties(selectedEP, c);
     	// get all delimiters
     	final String syntax = c.getSyntax();
 		String delimiters = getDelimitersAsString(syntax, pathParams);
