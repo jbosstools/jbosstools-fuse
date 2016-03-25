@@ -48,13 +48,13 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.TransformationMapping;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.core.model.Model;
 
 // TODO handle variable length args
 class TransformationDialog extends BaseDialog {
@@ -250,8 +250,10 @@ class TransformationDialog extends BaseDialog {
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
                         argumentValues[argNdx] = val;
-                        checkBox.setSelection(Boolean.valueOf(val));
+					} else {
+						argumentValues[argNdx] = Boolean.FALSE.toString();
                     }
+					checkBox.setSelection(Boolean.valueOf(argumentValues[argNdx]));
                     checkBox.addSelectionListener(new SelectionAdapter() {
 
                         @Override
