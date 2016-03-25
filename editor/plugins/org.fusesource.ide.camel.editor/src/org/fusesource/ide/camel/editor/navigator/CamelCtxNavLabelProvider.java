@@ -27,9 +27,9 @@ public class CamelCtxNavLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if( element instanceof AbstractCamelModelElement) {
-			return CamelEditorUIActivator.getDefault().getImage(((AbstractCamelModelElement)element).getIconName().replaceAll(".png", "16.png"));
+			return CamelEditorUIActivator.getDefault().getImage(((AbstractCamelModelElement) element).getIconName() + "16.png");
 		} else if (element instanceof CamelCtxNavRouteNode) {
-			return CamelEditorUIActivator.getDefault().getImage(((CamelCtxNavRouteNode) element).getCamelRoute().getIconName().replaceAll(".png", "16.png"));
+			return CamelEditorUIActivator.getDefault().getImage(((CamelCtxNavRouteNode) element).getCamelRoute().getIconName() + "16.png");
 		}
 		return null;
 	}
