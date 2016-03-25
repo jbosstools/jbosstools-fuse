@@ -18,13 +18,14 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
+import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 
 /**
  * @author lhein
  */
 @XmlRootElement(name = "eip")
-public class Eip implements ICamelCatalogElement {
+public class Eip implements ICamelCatalogElement, IParameterContainer {
 	
 	private String name;
 	private ArrayList<String> tags;

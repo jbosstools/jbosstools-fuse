@@ -44,6 +44,7 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -63,11 +64,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
@@ -697,8 +701,28 @@ public class DetailsSection extends FusePropertySection {
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
-            // CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
-            } else {
+				// object items
+			} else if ("redeliveryPolicy".equals(prop.getName())) {
+				Object valueToDisplay = (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName())
+						: this.eip.getParameter(p.getName()).getDefaultValue());
+				if (valueToDisplay instanceof AbstractCamelModelElement) {
+					Group objectGroup = getWidgetFactory().createGroup(page, "");
+					objectGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).create());
+					objectGroup.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
+					CamelModel camelModel = getCamelModel((AbstractCamelModelElement) valueToDisplay);
+					final Eip eip = camelModel.getEipModel().getEIPByName(prop.getName());
+					for (Parameter childParameter : eip.getParameters()) {
+						createPropertyLabel(toolkit, objectGroup, childParameter);
+
+						// Field
+						Control field = getControlForParameter(childParameter, objectGroup, (AbstractCamelModelElement) valueToDisplay, eip);
+						field.setToolTipText(childParameter.getDescription());
+					}
+					c = objectGroup;
+				}
+
+				// CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
+			} else {
                 // must be some class as all other options were missed
 				String textValue = (String) (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName())
 						: this.eip.getParameter(p.getName()).getDefaultValue());
@@ -869,7 +893,9 @@ public class DetailsSection extends FusePropertySection {
         		};
         		bindValue = dbc.bindList(uiListObservable, modelListObservable, listStrategy, null);
         	}
-            ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT); 
+			if (bindValue != null) {
+				ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+			}
             
 			createHelpDecoration(p, c);
         }

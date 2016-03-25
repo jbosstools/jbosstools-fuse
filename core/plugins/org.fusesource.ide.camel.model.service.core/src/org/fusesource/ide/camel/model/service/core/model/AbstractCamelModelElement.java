@@ -1019,8 +1019,10 @@ public abstract class AbstractCamelModelElement {
 				} else if (isElementKind(param)) {
 					if (isDataFormatDefinition(param)) {
 						parseDataFormatElementAttribute(param);
+					} else if (isRedeliveryPolicy(param)) {
+						parseRedeliveryPolicyElementAttribute(param);
 					} else {
-						parseNotDataFormatElementAttribute(param);
+						parseBasicElementAttribute(param);
 					}
 				} else if (param.getKind().equalsIgnoreCase("value")) {
 					parseValueAttribute(param);
@@ -1038,7 +1040,7 @@ public abstract class AbstractCamelModelElement {
 	/**
 	 * @param param
 	 */
-	private void parseNotDataFormatElementAttribute(Parameter param) {
+	private void parseBasicElementAttribute(Parameter param) {
 		if (isArrayType(param)) {
 			parseNotDataFormatElementArrayElementAttribute(param);
 		} else {
@@ -1138,6 +1140,18 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
+	private void parseRedeliveryPolicyElementAttribute(Parameter param) {
+		NodeList childNodes = getXmlNode().getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node subNode = childNodes.item(i);
+			if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+				AbstractCamelModelElement redeliveryPolicyNode = new CamelBasicModelElement(this, subNode);
+				redeliveryPolicyNode.initialize();
+				setParameter(param.getName(), redeliveryPolicyNode);
+			}
+		}
+	}
+
 	/**
 	 * @param param
 	 */
@@ -1232,6 +1246,10 @@ public abstract class AbstractCamelModelElement {
 	 */
 	private boolean isDataFormatDefinition(Parameter param) {
 		return "org.apache.camel.model.DataFormatDefinition".equalsIgnoreCase(param.getJavaType());
+	}
+
+	private boolean isRedeliveryPolicy(Parameter param) {
+		return "redeliveryPolicy".equals(param.getName());
 	}
 
 	/**

@@ -50,6 +50,7 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
@@ -431,89 +432,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     		}
     	}
     }
-    
-    /**
-     * creates the control for the given parameter
-     * 
-     * @param p
-     * @param parent
-     * @param expressionElement
-     * @param lang
-     * @return
-     */
-    protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement expressionElement, Language lang) {
-    	Control c = null;
-    	
-    	// BOOLEAN PROPERTIES
-    	if (CamelComponentUtils.isBooleanProperty(p)) {
-			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
-    		Boolean b = Boolean.parseBoolean( (expressionElement != null && expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()));
-    		checkBox.setSelection(b);
-    		checkBox.addSelectionListener(new SelectionAdapter() {
-	            /* (non-Javadoc)
-	             * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	             */
-	            @Override
-	            public void widgetSelected(SelectionEvent e) {
-	            	Button chkBox = (Button)e.getSource();
-	                expressionElement.setParameter(p.getName(), checkBox.getSelection());
-	            }
-	        });
-			checkBox.setLayoutData(createPropertyFieldLayoutData());
-    		c = checkBox;
-        
-    		// TEXT PROPERTIES
-    	} else if (CamelComponentUtils.isTextProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-	        txtField.addModifyListener(new ModifyListener() {
-	            @Override
-	            public void modifyText(ModifyEvent e) {
-	                Text txt = (Text)e.getSource();
-	                expressionElement.setParameter(p.getName(), txt.getText());
-	            }
-	        });
-			txtField.setLayoutData(createPropertyFieldLayoutData());
-	        c = txtField;
-        
-	    // NUMBER PROPERTIES
-	    } else if (CamelComponentUtils.isNumberProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
-	        txtField.addModifyListener(new ModifyListener() {
-	            @Override
-	            public void modifyText(ModifyEvent e) {
-	                Text txt = (Text)e.getSource();
-	                String val = txt.getText();
-	                try {
-	                	Double.parseDouble(val);
-	                	txt.setBackground(ColorConstants.white);
-	                    expressionElement.setParameter(p.getName(), txt.getText());
-	                } catch (NumberFormatException ex) {
-	                	// invalid character found
-	                    txt.setBackground(ColorConstants.red);
-	                    return;
-	                }
-	            }
-	        });
-			txtField.setLayoutData(createPropertyFieldLayoutData());
-	        c = txtField;
 
-        // OTHER
-	    } else {
-	    	Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-	        txtField.addModifyListener(new ModifyListener() {
-	            @Override
-	            public void modifyText(ModifyEvent e) {
-	                Text txt = (Text)e.getSource();
-	                expressionElement.setParameter(p.getName(), txt.getText());
-	            }
-	        });
-			txtField.setLayoutData(createPropertyFieldLayoutData());
-	        c = txtField;
-	    }
-    	
-    	return c;
-    }
-    
     /**
      * called when user switches the expression language
      * 
@@ -596,22 +515,26 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     }
     
     /**
-     * returns the control for the given parameter
-     * 
-     * @param p
-     * @param parent
-     * @param dataFormatElement
-     * @param df
-     * @return
-     */
-    protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement dataFormatElement, DataFormat df) {
+	 * returns the control for the given parameter
+	 * 
+	 * @param p
+	 * @param parent
+	 * @param camelModelElement
+	 * @param parameterContainer
+	 * @return
+	 */
+	protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement camelModelElement, IParameterContainer parameterContainer) {
     	Control c = null;
     	
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
 			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
-    		String boolVal = dataFormatElement.getParameter(p.getName()) instanceof Boolean ? Boolean.toString((boolean)dataFormatElement.getParameter(p.getName())) : (String)dataFormatElement.getParameter(p.getName());
-    		Boolean b = Boolean.parseBoolean( (dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? boolVal : df.getParameter(p.getName()).getDefaultValue()));
+			Boolean b = false;
+			if(camelModelElement != null && camelModelElement.getParameter(p.getName()) != null){
+				b = (Boolean)camelModelElement.getParameter(p.getName());
+			} else if(parameterContainer != null){
+				b = Boolean.parseBoolean(parameterContainer.getParameter(p.getName()).getDefaultValue());
+			}
     		checkBox.setSelection(b);
     		checkBox.addSelectionListener(new SelectionAdapter() {
 	            /* (non-Javadoc)
@@ -619,7 +542,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	             */
 	            @Override
 	            public void widgetSelected(SelectionEvent e) {
-	            	dataFormatElement.setParameter(p.getName(), checkBox.getSelection());
+	            	camelModelElement.setParameter(p.getName(), checkBox.getSelection());
 	            }
 	        });
 			checkBox.setLayoutData(createPropertyFieldLayoutData());
@@ -627,12 +550,20 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         
     		// TEXT PROPERTIES
     	} else if (CamelComponentUtils.isTextProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+			String initialTextValue = null;
+			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
+				initialTextValue = (String) camelModelElement.getParameter(p.getName());
+			} else {
+				if (parameterContainer != null) {
+					initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+				}
+			}
+			Text txtField = getWidgetFactory().createText(parent, initialTextValue, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
 	                Text txt = (Text)e.getSource();
-	                dataFormatElement.setParameter(p.getName(), txt.getText());
+	                camelModelElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
 			txtField.setLayoutData(createPropertyFieldLayoutData());
@@ -640,7 +571,13 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         
 	    // NUMBER PROPERTIES
 	    } else if (CamelComponentUtils.isNumberProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+	    	String initialValue = null;
+	    	if(camelModelElement != null && camelModelElement.getParameter(p.getName()) != null){
+	    		initialValue = (String) camelModelElement.getParameter(p.getName());
+	    	} else if(parameterContainer != null){
+	    		initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+	    	}
+			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
@@ -649,7 +586,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                try {
 	                	Double.parseDouble(val);
 	                	txt.setBackground(ColorConstants.white);
-	                	dataFormatElement.setParameter(p.getName(), txt.getText());
+	                	camelModelElement.setParameter(p.getName(), txt.getText());
 	                } catch (NumberFormatException ex) {
 	                	// invalid character found
 	                    txt.setBackground(ColorConstants.red);
@@ -662,12 +599,18 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
         // OTHER
 	    } else {
-	    	Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+			String initialValue = null;
+			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
+				initialValue = (String) camelModelElement.getParameter(p.getName());
+			} else if (parameterContainer != null) {
+				initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+			}
+			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
 	                Text txt = (Text)e.getSource();
-	                dataFormatElement.setParameter(p.getName(), txt.getText());
+	                camelModelElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
 			txtField.setLayoutData(createPropertyFieldLayoutData());
