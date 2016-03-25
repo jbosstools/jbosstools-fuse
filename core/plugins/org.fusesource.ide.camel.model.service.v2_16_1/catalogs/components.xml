@@ -4198,7 +4198,7 @@
       </tags>
       <title>JBPM</title>
       <description>Camel JBPM support</description>
-      <syntax>jbpm:host</syntax>
+      <syntax>jbpm:connectionURL</syntax>
       <class>org.apache.camel.component.jbpm.JBPMComponent</class>
       <kind>component</kind>
       <producerOnly>true</producerOnly>
