@@ -6820,7 +6820,7 @@
       </tags>
       <title>REST API</title>
       <description>Rest API component.</description>
-      <syntax>rest-api:path/contextId</syntax>
+      <syntax>rest-api:path/contextIdPattern</syntax>
       <class>org.apache.camel.component.rest.RestApiComponent</class>
       <kind>component</kind>
       <consumerOnly>true</consumerOnly>
@@ -7951,7 +7951,7 @@
       </tags>
       <title>Google Drive</title>
       <description>Represents the component that manages GoogleDriveEndpoint.</description>
-      <syntax>google-drive:drive:apiName/methodName</syntax>
+      <syntax>google-drive:apiName/methodName</syntax>
       <class>org.apache.camel.component.google.drive.GoogleDriveComponent</class>
       <kind>component</kind>
       <scheme>google-drive</scheme>
