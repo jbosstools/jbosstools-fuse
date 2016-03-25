@@ -285,13 +285,14 @@ public class PropertiesUtils {
     	// get all path params
     	List<Parameter> pathParams = getPathProperties(selectedEP);
     	// get all delimiters
-    	String delimiters = getDelimitersAsString(c.getSyntax(), pathParams);
+    	final String syntax = c.getSyntax();
+		String delimiters = getDelimitersAsString(syntax, pathParams);
     	// now get the uri without scheme and options
     	String uri = ((String)selectedEP.getParameter("uri")).substring(((String)selectedEP.getParameter("uri")).indexOf(":") + 1, ((String)selectedEP.getParameter("uri")).indexOf("?") != -1 ? ((String)selectedEP.getParameter("uri")).indexOf("?") : ((String)selectedEP.getParameter("uri")).length());
     	
     	Map<Integer, Parameter> fieldMapping = new HashMap<Integer, Parameter>();
     	for (Parameter param : pathParams) {
-    		int idx = getFieldIndex(delimiters, c.getSyntax().substring(c.getSyntax().indexOf(":")+1), param.getName());
+    		int idx = getFieldIndex(delimiters, syntax.substring(syntax.indexOf(":")+1), param.getName());
     		fieldMapping.put(idx, param);
     	}
 
