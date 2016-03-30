@@ -44,6 +44,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -177,16 +178,21 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			@Override
 			public void run() {
 				// close all editors without valid input
-				IEditorReference[] eds = getSite().getPage().getEditorReferences();
-				for (IEditorReference er : eds) {
-					IEditorPart editor = er.getEditor(false);
-					if (editor != null) {
-						IEditorInput editorInput = editor.getEditorInput();
-						if (editorInput instanceof CamelXMLEditorInput && 
-							!((CamelXMLEditorInput) editorInput).getCamelContextFile().exists()) {
-							getSite().getPage().closeEditor(er.getEditor(false), false);
-							if (er != null && er.getEditor(false) != null) {
-								er.getEditor(false).dispose();
+				final IWorkbenchPartSite site = getSite();
+				if (site != null) {
+					final IWorkbenchPage page = site.getPage();
+					if (page != null) {
+						IEditorReference[] eds = page.getEditorReferences();
+						for (IEditorReference er : eds) {
+							IEditorPart editor = er.getEditor(false);
+							if (editor != null) {
+								IEditorInput editorInput = editor.getEditorInput();
+								if (editorInput instanceof CamelXMLEditorInput && !((CamelXMLEditorInput) editorInput).getCamelContextFile().exists()) {
+									page.closeEditor(er.getEditor(false), false);
+									if (er != null && er.getEditor(false) != null) {
+										er.getEditor(false).dispose();
+									}
+								}
 							}
 						}
 					}
