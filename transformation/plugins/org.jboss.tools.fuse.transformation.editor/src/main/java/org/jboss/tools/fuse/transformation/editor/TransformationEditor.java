@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -79,7 +80,7 @@ import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDesc
 
 public class TransformationEditor extends EditorPart implements ISaveablePart2, IResourceChangeListener {
 
-    private static final int SASH_WIDTH = 3;
+	private static final int SASH_WIDTH = 3;
 
     private static final String PREFERENCE_PREFIX = TransformationEditor.class.getName() + ".";
 
@@ -358,8 +359,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             
             // Ensure Maven will compile transformations folder
-            File pomFile = manager.project().getLocation().append("pom.xml").toFile();
-			new MavenUtils().addResourceFolder(manager.project(), pomFile, Util.TRANSFORMATIONS_FOLDER);
+            final IProject project = manager.project();
+			File pomFile = project.getLocation().append("pom.xml").toFile();
+			final MavenUtils mavenUtils = new MavenUtils();
+			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
+			mavenUtils.addResourceFolder(project, pomFile, Util.RESOURCES_PATH);
             
             // Ensure Java project source classpath entry exists for transformations folder
             boolean exists = false;
@@ -376,7 +380,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 newEntries[entries.length] = JavaCore.newSourceEntry(path);
                 javaProject.setRawClasspath(newEntries, null);
             }
-            manager.project().refreshLocal(IResource.DEPTH_INFINITE, null);
+            project.refreshLocal(IResource.DEPTH_INFINITE, null);
             // Ensure build of Java classes has completed
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
