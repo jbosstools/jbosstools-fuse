@@ -84,8 +84,11 @@ public class GoToMarkerForCamelEditorTest {
 		doReturn("nodeId").when(marker).getAttribute(IFuseMarker.CAMEL_ID);
 
 		CamelFile camelFile = new CamelFile(resource);
-		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
-		camelFile.addChildElement(route);
+		final CamelContextElement camelContext = new CamelContextElement(camelFile, null);
+		CamelRouteElement route = new CamelRouteElement(camelContext, null);
+		route.setParent(camelContext);
+		camelContext.addChildElement(route);
+		camelFile.addChildElement(camelContext);
 		final CamelEndpoint endPoint = new CamelEndpoint("imap:host:port");
 		endPoint.setId("nodeId");
 		route.addChildElement(endPoint);

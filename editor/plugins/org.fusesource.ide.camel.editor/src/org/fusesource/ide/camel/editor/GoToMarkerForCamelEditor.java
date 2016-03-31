@@ -20,6 +20,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 
 /**
@@ -44,24 +45,29 @@ public class GoToMarkerForCamelEditor implements IGotoMarker {
 	@Override
 	public void gotoMarker(IMarker marker) {
 		try {
-			String id = (String) marker.getAttribute(IFuseMarker.CAMEL_ID);
-			if (id != null) {
-				final CamelDesignEditor designEditor = camelEditor.getDesignEditor();
-				CamelFile camelFile = designEditor.getModel();
-				AbstractCamelModelElement camelModelElement = camelFile.findNode(id);
-				if (camelModelElement != null) {
-					if (isGlobalElement(camelModelElement)) {
-						final CamelGlobalConfigEditor globalConfigEditor = camelEditor.getGlobalConfigEditor();
-						camelEditor.setActiveEditor(globalConfigEditor);
-						globalConfigEditor.setSelection(camelModelElement);
-						return;
-					} else {
-						camelEditor.setActiveEditor(designEditor);
-						designEditor.setSelectedNode(camelModelElement);
-						// TODO: go to the exact Property place
-						return;
+			if (marker.exists()) {
+				String id = (String) marker.getAttribute(IFuseMarker.CAMEL_ID);
+				if (id != null) {
+					final CamelDesignEditor designEditor = camelEditor.getDesignEditor();
+					CamelFile camelFile = designEditor.getModel();
+					AbstractCamelModelElement camelModelElement = camelFile.findNode(id);
+					if (camelModelElement != null) {
+						if (isGlobalElement(camelModelElement)) {
+							final CamelGlobalConfigEditor globalConfigEditor = camelEditor.getGlobalConfigEditor();
+							camelEditor.setActiveEditor(globalConfigEditor);
+							globalConfigEditor.setSelection(camelModelElement);
+							return;
+						} else {
+							camelEditor.setActiveEditor(designEditor);
+							designEditor.setSelectedNode(camelModelElement);
+							// TODO: go to the exact Property place
+							return;
+						}
 					}
 				}
+			} else {
+				System.out.println(marker);
+
 			}
 		} catch (CoreException e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
@@ -88,6 +94,9 @@ public class GoToMarkerForCamelEditor implements IGotoMarker {
 	private boolean isGlobalElement(AbstractCamelModelElement camelModelElement) {
 		if (camelModelElement instanceof CamelContextElement) {
 			return true;
+		}
+		if (camelModelElement instanceof CamelRouteElement) {
+			return false;
 		}
 		final AbstractCamelModelElement parent = camelModelElement.getParent();
 		if (parent != null) {

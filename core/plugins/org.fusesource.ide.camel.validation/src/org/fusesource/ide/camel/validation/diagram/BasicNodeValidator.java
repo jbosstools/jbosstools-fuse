@@ -11,16 +11,17 @@
 
 package org.fusesource.ide.camel.validation.diagram;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.resources.IMarker;
@@ -65,9 +66,18 @@ public class BasicNodeValidator implements ValidationSupport {
 				checkFor(result, prop, value, new NumberValidator(prop));
 			}
 		}
+		
+		Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
+		
+		createOrReuseMarkers(camelModelElement, result, markersRelatedToElement);
 
-		clearMarkers(camelModelElement);
-		createMarkers(camelModelElement, result);
+		for (IMarker markerToDelete : markersRelatedToElement) {
+			try {
+				markerToDelete.delete();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 
 		return result;
 	}
@@ -75,19 +85,20 @@ public class BasicNodeValidator implements ValidationSupport {
 	/**
 	 * @param camelModelElement
 	 * @param result
+	 * @param markersRelatedToElement
 	 */
-	private void createMarkers(AbstractCamelModelElement camelModelElement, ValidationResult result) {
+	private void createOrReuseMarkers(AbstractCamelModelElement camelModelElement, ValidationResult result, Set<IMarker> markersRelatedToElement) {
 		final CamelFile camelFile = camelModelElement.getCamelFile();
 		if (camelFile != null) {
 			final IResource resource = camelFile.getResource();
 			for (String error : result.getErrors()) {
-				createMarker(resource, camelModelElement, error, IMarker.SEVERITY_ERROR);
+				createOrReuseMarker(resource, camelModelElement, error, IMarker.SEVERITY_ERROR, markersRelatedToElement);
 			}
 			for (String warning : result.getWarnings()) {
-				createMarker(resource, camelModelElement, warning, IMarker.SEVERITY_WARNING);
+				createOrReuseMarker(resource, camelModelElement, warning, IMarker.SEVERITY_WARNING, markersRelatedToElement);
 			}
 			for (String info : result.getInformations()) {
-				createMarker(resource, camelModelElement, info, IMarker.SEVERITY_INFO);
+				createOrReuseMarker(resource, camelModelElement, info, IMarker.SEVERITY_INFO, markersRelatedToElement);
 			}
 		}
 	}
@@ -96,23 +107,23 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param camelModelElement
 	 * @return
 	 */
-	public void clearMarkers(AbstractCamelModelElement camelModelElement) {
+	public Set<IMarker> getMarkersFor(AbstractCamelModelElement camelModelElement) {
+		Set<IMarker> res = new HashSet<>();
 		try {
 			final CamelFile camelFile = camelModelElement.getCamelFile();
 			if (camelFile != null) {
 				final IResource resource = camelFile.getResource();
 				if (resource != null) {
 					for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
-						final AbstractCamelModelElement cmeWithMarker = markers.get(marker);
-						if (camelModelElement.equals(cmeWithMarker)
-								// we are lucky still the same model in memory
-								|| hasSameId(camelModelElement, cmeWithMarker)
-						// maybe just a reloaded model, so finger-crossed two
-						// elements
-						// have the same id
-						) {
-							markers.remove(marker);
-							marker.delete();
+						if (camelModelElement.getId() != null && camelModelElement.getId().equals(marker.getAttribute(IFuseMarker.CAMEL_ID))) {
+							res.add(marker);
+						} else {
+							final AbstractCamelModelElement cmeWithMarker = markers.get(marker);
+							if (camelModelElement.equals(cmeWithMarker)) {
+								// Used for id renaming
+								res.add(marker);
+							}
+
 						}
 					}
 				}
@@ -120,15 +131,7 @@ public class BasicNodeValidator implements ValidationSupport {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @param camelModelElement
-	 * @param obj
-	 * @return
-	 */
-	private boolean hasSameId(AbstractCamelModelElement camelModelElement, final AbstractCamelModelElement obj) {
-		return camelModelElement.getId() != null && obj != null && camelModelElement.getId().equals(obj.getId());
+		return res;
 	}
 
 	/**
@@ -269,19 +272,72 @@ public class BasicNodeValidator implements ValidationSupport {
 		return noDoubledIDs;
 	}
 
-	private void createMarker(IResource resource, AbstractCamelModelElement cme, final String message, final int severity) {
+	private IMarker createOrReuseMarker(IResource resource, AbstractCamelModelElement cme, final String message, final int severity, Set<IMarker> markersRelatedToElement) {
+		IMarker res = null;
 		try {
-			IMarker marker = resource.createMarker(IFuseMarker.MARKER_TYPE);
-			marker.setAttribute(IMarker.SEVERITY, severity);
-			marker.setAttribute(IMarker.MESSAGE, message);
-			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-			managePosition(resource, cme, marker);
-			markers.put(marker, cme);
-			// marker.setAttribute(IMarker.CHAR_START, 0);
-			// marker.setAttribute(IMarker.CHAR_END, 10);
+			Map<String, Object> attributesForPosition = managePosition(resource, cme);
+			res = searchForExistingSimilarMarker(message, severity, markersRelatedToElement, res, attributesForPosition);
+			if (res == null) {
+				res = createMarker(resource, message, severity, attributesForPosition);
+			}
+			markers.put(res, cme);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+		markersRelatedToElement.remove(res);
+		return res;
+	}
+
+	/**
+	 * @param resource
+	 * @param message
+	 * @param severity
+	 * @param attributesForPosition
+	 * @return
+	 * @throws CoreException
+	 */
+	private IMarker createMarker(IResource resource, final String message, final int severity, Map<String, Object> attributesForPosition) throws CoreException {
+		IMarker res;
+		res = resource.createMarker(IFuseMarker.MARKER_TYPE);
+		res.setAttribute(IMarker.SEVERITY, severity);
+		res.setAttribute(IMarker.MESSAGE, message);
+		res.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+
+		for (Entry<String, Object> attributeForPosition : attributesForPosition.entrySet()) {
+			res.setAttribute(attributeForPosition.getKey(), attributeForPosition.getValue());
+		}
+		// marker.setAttribute(IMarker.CHAR_START, 0);
+		// marker.setAttribute(IMarker.CHAR_END, 10);
+		return res;
+	}
+
+	/**
+	 * @param message
+	 * @param severity
+	 * @param markersRelatedToElement
+	 * @param res
+	 * @param attributesForPosition
+	 * @return
+	 * @throws CoreException
+	 */
+	private IMarker searchForExistingSimilarMarker(final String message, final int severity, Set<IMarker> markersRelatedToElement, IMarker res,
+			Map<String, Object> attributesForPosition) throws CoreException {
+		for (IMarker existingMarker : markersRelatedToElement) {
+			if (severity == existingMarker.getAttribute(IMarker.SEVERITY, -1) && message.equals(existingMarker.getAttribute(IMarker.MESSAGE))) {
+				boolean hasSamePositionAttributes = true;
+				for (Entry<String, Object> attributeForPosition : attributesForPosition.entrySet()) {
+					if (!attributeForPosition.getValue().equals(existingMarker.getAttribute(attributeForPosition.getKey()))) {
+						hasSamePositionAttributes = false;
+						break;
+					}
+				}
+				if (hasSamePositionAttributes) {
+					res = existingMarker;
+					break;
+				}
+			}
+		}
+		return res;
 	}
 
 	/**
@@ -290,46 +346,44 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param marker
 	 * @throws CoreException
 	 */
-	private void managePosition(IResource resource, AbstractCamelModelElement cme, IMarker marker) throws CoreException {
+	private Map<String, Object> managePosition(IResource resource, AbstractCamelModelElement cme) throws CoreException {
+		Map<String, Object> attributesForPosition = new HashMap<>();
 		Integer lineNumber = -1;
 		if (cme.getId() != null) {
-			List<Integer> foundIds = findLineNumbers("id=\"" + cme.getId() + "\"", resource.getRawLocation().toFile());
+			List<Integer> foundIds = findLineNumbers("id=\"" + cme.getId() + "\"", cme.getCamelFile().getDocumentAsXML());
 			if (foundIds.size() == 1) {
 				lineNumber = foundIds.get(0);
-				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+				attributesForPosition.put(IMarker.LINE_NUMBER, lineNumber);
 			}
 		}
 		if (lineNumber == -1) {
-			marker.setAttribute(IMarker.LOCATION, "/" + getCamelPath(cme));
+			attributesForPosition.put(IMarker.LOCATION, "/" + getCamelPath(cme));
 		} else {
-			marker.setAttribute(IFuseMarker.PATH, "/" + getCamelPath(cme));
+			attributesForPosition.put(IFuseMarker.PATH, "/" + getCamelPath(cme));
 		}
-		marker.setAttribute(IFuseMarker.CAMEL_ID, cme.getId());
+		attributesForPosition.put(IFuseMarker.CAMEL_ID, cme.getId());
+		return attributesForPosition;
 	}
 
-	public List<Integer> findLineNumbers(String word, File text) {
+	public List<Integer> findLineNumbers(String word, String text) {
 		List<Integer> results = new ArrayList<Integer>();
 		LineNumberReader rdr;
+		rdr = new LineNumberReader(new StringReader(text));
 		try {
-			rdr = new LineNumberReader(new FileReader(text));
-			try {
-				String line;
-				while ((line = rdr.readLine()) != null) {
-					if (line.indexOf(word) >= 0) {
-						results.add(rdr.getLineNumber());
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					rdr.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+			String line;
+			while ((line = rdr.readLine()) != null) {
+				if (line.indexOf(word) >= 0) {
+					results.add(rdr.getLineNumber());
 				}
 			}
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				rdr.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return results;
 	}
@@ -345,6 +399,19 @@ public class BasicNodeValidator implements ValidationSupport {
 			res = getCamelPath(parent) + "/" + res;
 		}
 		return res;
+	}
+
+	/**
+	 * @param cme
+	 */
+	public void clearMarkers(AbstractCamelModelElement cme) {
+		for (IMarker marker : getMarkersFor(cme)) {
+			try {
+				marker.delete();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

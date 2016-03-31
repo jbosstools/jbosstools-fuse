@@ -19,7 +19,6 @@ import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -79,7 +78,6 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
-import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
@@ -203,14 +201,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	        // update outline view
 	        this.outlinePage = new CamelModelOutlinePage(this);
 	        
-			// clear Old Validation Markers,
-			// they will be recalculated when opening the diagram
-			try {
-				asFileEditorInput(input).getFile().deleteMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
-			} catch (CoreException e) {
-				CamelEditorUIActivator.pluginLog().logError(e);
-			}
-
 //	        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
 //			getEditingDomain().getCommandStack().flush();
 		}
@@ -705,6 +695,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			Object editPart = getGraphicalViewer().getEditPartRegistry().get(getFeatureProvider().getPictogramElementForBusinessObject(newSelection));
 			if (editPart != null) {
 				getEditorSite().getSelectionProvider().setSelection(new StructuredSelection(editPart));
+				getGraphicalViewer().reveal((EditPart) editPart);
 			} else {
 				CamelEditorUIActivator.pluginLog().logError("Could not select editPart for selection: " + newSelection);
 			}
