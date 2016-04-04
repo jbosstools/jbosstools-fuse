@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.jmx.commons.views.diagram;
+package org.fusesource.ide.jmx.diagram.view;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -20,7 +20,6 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -99,14 +98,14 @@ public class DiagramView extends GraphViewSupport {
 					if (!isRelevantSelectionSource(part, selection)) {
 						return;
 					}
-					
+
 					Object firstSelection = Selections.getFirstSelection(selection);
-					
+
 					// we don't want to process empty selections
 					if (selection.isEmpty()) {
 						return;
 					}
-					
+
 					if (part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView")) {
 						// special handling for message view selections
 						if (firstSelection != null) {
@@ -120,25 +119,27 @@ public class DiagramView extends GraphViewSupport {
 						}
 						return;
 					}
-					
+
 					if (firstSelection != null) {
 						updateselection(firstSelection);
 					}
-					
-//					if (firstSelection == null) {
-//						setSelectedObjectOnly(null);
-//					}
-					
-					AbstractCamelModelElement node = NodeUtils.getSelectedNode(selection);
+
+					// if (firstSelection == null) {
+					// setSelectedObjectOnly(null);
+					// }
+
+					AbstractCamelModelElement node = org.fusesource.ide.camel.editor.utils.NodeUtils.getSelectedNode(selection);
 					if (node != null && !(part instanceof CamelEditor)) {
-						//Activator.getLogger().debug("Part is: " + part + " of type : " + part.getClass());
+						// Activator.getLogger().debug("Part is: " + part + " of
+						// type : " + part.getClass());
 						if (node != DiagramView.this.node) {
 							updateGraph(node, part);
 						}
 					} else {
 						if (firstSelection instanceof Node) {
 							updateGraph((Node) firstSelection, part);
-						// this clause is needed because ConnectionHandlers are not descendants of Node 
+							// this clause is needed because ConnectionHandlers
+							// are not descendants of Node
 						} else if (firstSelection instanceof IConnectionWrapper) {
 							viewer.setContentProvider(new NodeGraphContentProvider());
 							setSelectedObjectOnly(firstSelection);
@@ -149,7 +150,6 @@ public class DiagramView extends GraphViewSupport {
 								if (toNode != null) {
 									selectNodeId(toNode, in.getEndpointUri());
 								}
-
 							}
 						}
 					}
@@ -163,12 +163,15 @@ public class DiagramView extends GraphViewSupport {
 		boolean process = false;
 		
 		// we filter for specific selection sources...
-		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") || 
-			part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView") ||
-			part.getClass().getName().equals("org.eclipse.ui.views.properties.PropertySheet") ||
-			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView") ||
-			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.cnf.ServersView2")
+		final String partClassname = part.getClass().getName();
+		//@formatter:off
+		if (partClassname.equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator")
+				|| partClassname.equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView")
+				|| partClassname.equals("org.eclipse.ui.views.properties.PropertySheet")
+				|| partClassname.equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView")
+				|| partClassname.equals("org.eclipse.wst.server.ui.internal.cnf.ServersView2")
 		   ) {
+			//@formatter:on
 			process = true;
 		}
 		
@@ -202,12 +205,7 @@ public class DiagramView extends GraphViewSupport {
 		this.selectionPart = part;
 		RouteGraphContentProvider contentProvider = new RouteGraphContentProvider();
 		viewer.setContentProvider(contentProvider);
-		if (true) {
-			//Object[] input = contentProvider.getElements(node);
-			setInputAndSelection(node, node);
-		} else {
-			setSelectedObject(node);
-		}
+		setInputAndSelection(node, node);
 	}
 
 	public void updateGraph(Node node, IWorkbenchPart part) {

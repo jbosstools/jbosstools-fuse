@@ -12,7 +12,6 @@
 package org.fusesource.ide.camel.model.service.core.catalog;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -135,7 +134,6 @@ public class CamelModelFactory {
         	final Model model = MavenPlugin.getMaven().readModel(pomFile);
 
         	// get camel-core or another camel dep
-	        ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency>();
 	        List<Dependency> deps = model.getDependencies();
 	        for (Dependency pomDep : deps) {
 	            if (pomDep.getGroupId().equalsIgnoreCase("org.apache.camel") &&

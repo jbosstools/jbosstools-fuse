@@ -11,8 +11,8 @@
 package org.fusesource.ide.launcher.debug.model.values;
 
 import org.eclipse.debug.core.DebugException;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.exchange.Header;
 
 /**
  * @author lhein
@@ -20,7 +20,7 @@ import org.fusesource.ide.launcher.debug.model.exchange.Header;
  */
 public class CamelHeaderValue extends BaseCamelValue {
 	
-	private Header header;
+	private IBacklogTracerHeader header;
 
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class CamelHeaderValue extends BaseCamelValue {
 	 * @param header
 	 * @param type
 	 */
-	public CamelHeaderValue(CamelDebugTarget debugTarget, Header header, Class type) {
+	public CamelHeaderValue(CamelDebugTarget debugTarget, IBacklogTracerHeader header, Class<?> type) {
 		super(debugTarget, header.getValue(), type);
 		this.header = header;
 	}
@@ -52,7 +52,7 @@ public class CamelHeaderValue extends BaseCamelValue {
 	/**
 	 * @return the header
 	 */
-	public Header getHeader() {
+	public IBacklogTracerHeader getHeader() {
 		return this.header;
 	}
 }

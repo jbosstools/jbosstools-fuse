@@ -11,13 +11,15 @@
 package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.Header;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.exchange.Header;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeaderVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
@@ -29,7 +31,7 @@ public class CamelHeadersValue extends BaseCamelValue {
 	
 	private CamelHeadersVariable parent;
 	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
-	private ArrayList<Header> headers;
+	private List<? extends IBacklogTracerHeader> headers;
 	private CamelDebugTarget debugTarget;
 	
 	/**
@@ -39,12 +41,13 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 * @param type
 	 * @param msg
 	 */
-	public CamelHeadersValue(CamelDebugTarget debugTarget, ArrayList<Header> headers, Class type, CamelHeadersVariable parent) {
+	public CamelHeadersValue(CamelDebugTarget debugTarget, List<? extends IBacklogTracerHeader> headers, Class<?> type, CamelHeadersVariable parent) {
 		super(debugTarget, "" + headers.hashCode(), type);
 		this.parent = parent;
 		this.debugTarget = debugTarget;
 		this.headers = headers;
-		if (this.headers == null) this.headers = new ArrayList<Header>();
+		if (this.headers == null)
+			this.headers = new ArrayList<IBacklogTracerHeader>();
 		try {
 			initHeaders();
 		} catch (DebugException ex) {
@@ -59,7 +62,7 @@ public class CamelHeadersValue extends BaseCamelValue {
 		BaseCamelVariable var = null;
 		BaseCamelValue val = null;
 
-		for (Header h : this.headers) {
+		for (IBacklogTracerHeader h : this.headers) {
 			var = new CamelHeaderVariable(this.debugTarget, h.getKey(), String.class, parent);
 			val = new CamelHeaderValue(this.fTarget, h, var.getReferenceType());
 			var.setValue(val);

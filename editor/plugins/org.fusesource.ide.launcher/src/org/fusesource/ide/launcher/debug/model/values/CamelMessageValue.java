@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerMessage;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.exchange.Message;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
@@ -28,7 +28,7 @@ import org.fusesource.ide.launcher.debug.model.variables.CamelMessageVariable;
 public class CamelMessageValue extends BaseCamelValue {
 	
 	private CamelMessageVariable parent;
-	private Message message;
+	private IBacklogTracerMessage message;
 	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
 	private CamelDebugTarget debugTarget;
 	
@@ -39,7 +39,7 @@ public class CamelMessageValue extends BaseCamelValue {
 	 * @param message
 	 * @param type
 	 */
-	public CamelMessageValue(CamelDebugTarget target, Message message, Class type, CamelMessageVariable parent) {
+	public CamelMessageValue(CamelDebugTarget target, IBacklogTracerMessage message, Class type, CamelMessageVariable parent) {
 		super(target, message.getExchangeId(), type);
 		this.parent = parent;
 		this.debugTarget = target;

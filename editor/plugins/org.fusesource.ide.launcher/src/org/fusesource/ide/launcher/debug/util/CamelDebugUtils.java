@@ -10,15 +10,10 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.util;
 
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -35,7 +30,6 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
-import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 
 /**
@@ -190,24 +184,6 @@ public class CamelDebugUtils {
 	public static String getCondition(IBreakpoint breakpoint) {
 		if (breakpoint instanceof CamelConditionalBreakpoint) {
 			return ((CamelConditionalBreakpoint)breakpoint).getConditionPredicate();	
-		}
-		return null;
-	}
-	
-	/**
-	 * creates the backlog tracer event message for a given xml dump
-	 * 
-	 * @param xmlDump	the xml dump of the message
-	 * @return	the message object or null on errors
-	 */
-	public static BacklogTracerEventMessage getBacklogTracerEventMessage(String xmlDump) {
-		try {
-			// create JAXB context and instantiate marshaller
-		    JAXBContext context = JAXBContext.newInstance(BacklogTracerEventMessage.class);
-		    Unmarshaller um = context.createUnmarshaller();
-		    return (BacklogTracerEventMessage) um.unmarshal(new StringReader(xmlDump));
-		} catch (JAXBException ex) {
-			Activator.getLogger().error(ex);
 		}
 		return null;
 	}

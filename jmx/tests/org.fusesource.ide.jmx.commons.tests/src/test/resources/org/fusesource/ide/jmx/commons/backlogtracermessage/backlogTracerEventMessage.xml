@@ -1,0 +1,30 @@
+<backlogTracerEventMessage>
+    <uid>5</uid>
+    <timestamp>2016-04-01T17:09:44.635+0200</timestamp>
+    <routeId>_route1</routeId>
+    <toNode>_route1</toNode>
+    <exchangeId>ID-DESKTOP-9NT300B-61151-1459523299086-0-40</exchangeId>
+      <message exchangeId="ID-DESKTOP-9NT300B-61151-1459523299086-0-40">
+      <headers>
+        <header key="CamelFileAbsolute" type="java.lang.Boolean">false</header>
+        <header key="CamelFileAbsolutePath" type="java.lang.String">C:\install\eclipse-Mars-SR1\ws_fusetooling_dev with space\tesTrace\src\data\ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="CamelFileContentType"></header>
+        <header key="CamelFileLastModified" type="java.lang.Long">1459523384297</header>
+        <header key="CamelFileLength" type="java.lang.Long">154</header>
+        <header key="CamelFileName" type="java.lang.String">ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="CamelFileNameConsumed" type="java.lang.String">ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="CamelFileNameOnly" type="java.lang.String">ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="CamelFileParent" type="java.lang.String">src\data</header>
+        <header key="CamelFilePath" type="java.lang.String">src\data\ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="CamelFileRelativePath" type="java.lang.String">ID-DESKTOP-9NT300B-61151-1459523299086-0-37</header>
+        <header key="breadcrumbId" type="java.lang.String">ID-DESKTOP-9NT300B-61151-1459523299086-0-39</header>
+      </headers>
+      <body type="org.apache.camel.component.file.GenericFile">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;person user=&quot;hiram&quot;&gt;
+  &lt;firstName&gt;Hiram&lt;/firstName&gt;
+  &lt;lastName&gt;Chirino&lt;/lastName&gt;
+  &lt;city&gt;Tampa&lt;/city&gt;
+&lt;/person&gt;
+</body>
+    </message>
+  </backlogTracerEventMessage>

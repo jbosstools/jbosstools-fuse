@@ -25,7 +25,7 @@ import org.fusesource.ide.launcher.debug.model.variables.IVariableConstants;
 public class BaseCamelValue extends CamelDebugElement implements IValue, IVariableConstants {
 	
 	private String fValue;
-	private Class fType;
+	private Class<?> fType;
 	
 	/**
 	 * creates a value
@@ -34,7 +34,7 @@ public class BaseCamelValue extends CamelDebugElement implements IValue, IVariab
 	 * @param value
 	 * @param type
 	 */
-	public BaseCamelValue(CamelDebugTarget target, String value, Class type) {
+	public BaseCamelValue(CamelDebugTarget target, String value, Class<?> type) {
 		super(target);
 		this.fValue = value;
 		this.fType = type;

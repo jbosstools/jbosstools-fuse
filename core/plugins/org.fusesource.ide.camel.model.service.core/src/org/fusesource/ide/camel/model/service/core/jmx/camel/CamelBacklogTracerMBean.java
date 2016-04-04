@@ -19,9 +19,9 @@ import java.util.List;
  */
 public interface CamelBacklogTracerMBean {
 	void clear(); 
-	List<BacklogTracerMessage>	dumpAllTracedMessages(); 
+	List<IBacklogTracerEventMessageMBean>	dumpAllTracedMessages(); 
 	String dumpAllTracedMessagesAsXml(); 
-	List<BacklogTracerMessage> dumpTracedMessages(String nodeOrRouteId); 
+	List<IBacklogTracerEventMessageMBean> dumpTracedMessages(String nodeOrRouteId); 
 	String dumpTracedMessagesAsXml(String nodeOrRouteId); 
 	int	getBacklogSize(); 
 	int getBodyMaxChars(); 

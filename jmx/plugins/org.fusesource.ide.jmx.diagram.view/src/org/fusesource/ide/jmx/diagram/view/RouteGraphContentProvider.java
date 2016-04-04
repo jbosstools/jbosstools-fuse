@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.jmx.commons.views.diagram;
+package org.fusesource.ide.jmx.diagram.view;
 
 import java.util.HashSet;
 import java.util.List;

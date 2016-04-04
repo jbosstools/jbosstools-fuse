@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.jmx.commons.messages;
 
 import java.util.ArrayList;
@@ -248,6 +258,43 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 	public void addHeader(Header header) {
 		getHeaderList().add(header);
 		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.camel.model.service.core.jmx.camel.
+	 * IBacklogTracerMessage#setBody(java.lang.String)
+	 */
+	void setBody(String body) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.camel.model.service.core.jmx.camel.
+	 * IBacklogTracerMessage#setHeaders(java.util.ArrayList)
+	 */
+	void setHeaders(ArrayList<Header> headers) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.camel.model.service.core.jmx.camel.
+	 * IBacklogTracerMessage#setExchangeId(java.lang.String)
+	 */
+	void setExchangeId(String exchangeId) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.fusesource.ide.camel.model.service.core.jmx.camel.
+	 * IBacklogTracerMessage#getExchangeId()
+	 */
+	String getExchangeId() {
+		return null;
 	}
 
 }

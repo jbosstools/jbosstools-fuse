@@ -13,6 +13,7 @@ package org.fusesource.ide.launcher.debug.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,13 +44,15 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessageParser;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.Header;
 import org.fusesource.ide.launcher.Activator;
-import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
-import org.fusesource.ide.launcher.debug.model.exchange.Header;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -174,12 +177,11 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	public String generateKey(BacklogTracerEventMessage msg) {
 		if (msg == null) return null;
-		if (msg.getMessage().getHeaders().size()>0) {
-			for (Header h : msg.getMessage().getHeaders()) {
-				if (h.getKey().equalsIgnoreCase("breadcrumbid")) {
-					// there is a breadcrumbId - use that as key
-					return h.getValue();
-				}
+		final List<Header> headers = msg.getMessage().getHeaders();
+		for (IBacklogTracerHeader h : headers) {
+			if (h.getKey().equalsIgnoreCase("breadcrumbid")) {
+				// there is a breadcrumbId - use that as key
+				return h.getValue();
 			}
 		}
 		// otherwise use the exchange id
@@ -727,7 +729,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 							suspend();
 							
 							for (String nodeId : suspendedBreakpoints) {
-								BacklogTracerEventMessage evMsg = CamelDebugUtils.getBacklogTracerEventMessage(getMessagesForNode(nodeId));
+								BacklogTracerEventMessage evMsg = new BacklogTracerEventMessageParser().getBacklogTracerEventMessage(getMessagesForNode(nodeId));
 								String id = generateKey(evMsg);
 								CamelThread t = getThreadForId(id);
 									

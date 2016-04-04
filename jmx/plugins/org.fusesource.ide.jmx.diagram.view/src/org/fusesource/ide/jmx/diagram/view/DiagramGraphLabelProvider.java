@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.jmx.commons.views.diagram;
+package org.fusesource.ide.jmx.diagram.view;
 
 import java.text.NumberFormat;
 import java.util.HashSet;
@@ -27,17 +27,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.widgets.ZestStyles;
-import org.fusesource.ide.camel.editor.utils.DiagramUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
-import org.fusesource.ide.jmx.commons.Activator;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
 import org.jboss.tools.jmx.core.HasName;
@@ -133,7 +130,7 @@ ISelectionChangedListener {
 		if (isShowIcon()) {
 			if (isRouteNode(element)) {
 				AbstractCamelModelElement node = (AbstractCamelModelElement) element;
-				return Activator.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
+				return JMXDiagramViewActivator.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
 			}
 			if (element instanceof ImageProvider) {
 				ImageProvider node = (ImageProvider) element;
@@ -177,7 +174,7 @@ ISelectionChangedListener {
 				return null;
 			}
 		} catch (Exception e) {
-			Activator.getLogger().warning("Caught exception trying to get label: " + e, e);
+			JMXDiagramViewActivator.getLogger().warning("Caught exception trying to get label: " + e, e);
 			return null;
 		}
 	}
@@ -318,17 +315,8 @@ ISelectionChangedListener {
 	public int getLineWidth(Object rel) {
 		int lineWidth = 1;
 		// rel is a Flow...
-		if (isRouteNode(rel)) {
-			if (selectedConnections != null
-					&& selectedConnections.contains(rel)) {
-				return lineWidth;
-			}
-
-		} else if (rel instanceof EntityConnectionData) {
-			if (selectedConnections != null
-					&& selectedConnections.contains(rel)) {
-				return lineWidth;
-			}
+		if (isRouteNode(rel) && selectedConnections != null && selectedConnections.contains(rel)) {
+			return lineWidth;
 		}
 		return 0;
 	}

@@ -5,32 +5,23 @@ Bundle-SymbolicName: org.fusesource.ide.launcher;singleton:=true
 Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.eclipse.core.resources,
- org.eclipse.core.runtime,
- org.eclipse.debug.core,
- org.eclipse.jdt.launching,
- org.eclipse.jface,
+Require-Bundle: org.eclipse.jdt.launching,
  org.eclipse.debug.ui,
  org.eclipse.core.variables,
- org.eclipse.jface.text,
- org.eclipse.ui.externaltools,
- org.eclipse.ui.console,
  org.eclipse.m2e.core,
  org.eclipse.m2e.launching;bundle-version="1.6.0",
- org.eclipse.m2e.maven.runtime;bundle-version="1.6.0",
  org.eclipse.ui,
  org.eclipse.equinox.security;bundle-version="1.2.0",
- org.eclipse.graphiti.ui;bundle-version="0.13.0",
  org.eclipse.ui.ide,
- org.eclipse.core.filesystem;bundle-version="1.4.100",
  org.eclipse.emf.transaction;bundle-version="1.9.0",
  org.eclipse.jdt.core,
- org.eclipse.m2e.maven.indexer;bundle-version="1.6.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.foundation.core;bundle-version="8.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
  org.eclipse.osgi.services;bundle-version="3.5.0",
- org.eclipse.e4.core.services;bundle-version="2.0.0"
+ org.eclipse.e4.core.services;bundle-version="2.0.0",
+ org.fusesource.ide.jmx.commons;bundle-version="8.0.0",
+ org.eclipse.m2e.maven.runtime;bundle-version="1.6.3"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator
 Export-Package: org.fusesource.ide.launcher,

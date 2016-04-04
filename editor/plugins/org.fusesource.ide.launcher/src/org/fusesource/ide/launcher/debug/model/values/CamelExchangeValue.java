@@ -15,9 +15,9 @@ import java.util.Date;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 
 /**
@@ -36,7 +36,7 @@ public class CamelExchangeValue extends BaseCamelValue {
 	 * @param exchange
 	 * @param type 
 	 */
-	public CamelExchangeValue(CamelDebugTarget target, BacklogTracerEventMessage exchange, Class type) {
+	public CamelExchangeValue(CamelDebugTarget target, BacklogTracerEventMessage exchange, Class<?> type) {
 		super(target, exchange.getExchangeId(), type);
 		this.debugTarget = target;
 		this.exchange = exchange;
@@ -74,13 +74,13 @@ public class CamelExchangeValue extends BaseCamelValue {
 		
 		// TIMESTAMP
 		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_TIMESTAMP, Date.class);
-		val = new BaseCamelValue(this.fTarget, this.exchange.getTimestamp(), var.getReferenceType());
+		val = new BaseCamelValue(this.fTarget, String.valueOf(this.exchange.getTimestamp().getTime()), var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 
 		// UID
 		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_UID, String.class);
-		val = new BaseCamelValue(this.fTarget, this.exchange.getUid(), var.getReferenceType());
+		val = new BaseCamelValue(this.fTarget, String.valueOf(this.exchange.getUid()), var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 	}

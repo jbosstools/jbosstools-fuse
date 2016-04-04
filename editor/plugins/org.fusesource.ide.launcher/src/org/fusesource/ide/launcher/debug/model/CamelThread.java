@@ -18,8 +18,8 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.Activator;
-import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**

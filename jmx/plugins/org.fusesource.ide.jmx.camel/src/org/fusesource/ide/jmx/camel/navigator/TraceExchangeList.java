@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -20,10 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
-import org.fusesource.ide.camel.model.service.core.jmx.camel.BacklogTracerMessage;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.jmx.commons.messages.Exchange;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
@@ -48,8 +51,8 @@ public class TraceExchangeList implements ITraceExchangeList {
 		return exchangeList;
 	}
 
-	public void addBackLogTraceMessages(List<BacklogTracerMessage> traceMessages) throws JAXBException, SAXException {
-		for (BacklogTracerMessage traceMessage : traceMessages) {
+	public void addBackLogTraceMessages(List<BacklogTracerEventMessage> traceMessages) throws JAXBException, SAXException {
+		for (BacklogTracerEventMessage traceMessage : traceMessages) {
 			String exchangeId = traceMessage.getExchangeId();
 			ExchangeStepList stepList = stepListMap.get(exchangeId);
 			if (stepList == null) {
@@ -67,8 +70,8 @@ public class TraceExchangeList implements ITraceExchangeList {
 		refreshExchangeList(stepLists);
 	}
 	
-	public void addFabricTraceMessages(List<BacklogTracerMessage> traceMessages) throws JAXBException, SAXException {
-		for (BacklogTracerMessage traceMessage : traceMessages) {
+	public void addFabricTraceMessages(List<BacklogTracerEventMessage> traceMessages) throws JAXBException, SAXException {
+		for (BacklogTracerEventMessage traceMessage : traceMessages) {
 			String exchangeId = traceMessage.getExchangeId();
 			ExchangeStepList stepList = stepListMap.get(exchangeId);
 			if (stepList == null) {
@@ -93,7 +96,7 @@ public class TraceExchangeList implements ITraceExchangeList {
 		}
 		
 		// sort so they are in natural sort order
-		Collections.sort((List)temp);
+		Collections.sort(temp);
 		
 		// then update the exchange index, if missing
 		for (IExchange ie : temp) {
@@ -133,7 +136,7 @@ public class TraceExchangeList implements ITraceExchangeList {
 			return exchangeList;
 		}
 
-		public IExchange addExchange(BacklogTracerMessage traceMessage) throws JAXBException, SAXException {
+		public IExchange addExchange(BacklogTracerEventMessage traceMessage) throws JAXBException, SAXException {
 			IExchange answer = createExchange(traceMessage);
 			if (answer != null) {
 //				answer.getIn().setExchangeIndex(exchangeList.size() + 1);
@@ -144,8 +147,15 @@ public class TraceExchangeList implements ITraceExchangeList {
 			return answer;
 		}
 		
-		public IExchange createExchange(BacklogTracerMessage traceMessage) throws JAXBException, SAXException {
-			String xml = traceMessage.getMessageAsXml();
+		public IExchange createExchange(BacklogTracerEventMessage traceMessage) throws JAXBException, SAXException {
+
+			StringWriter writer = new StringWriter();
+			JAXBContext context = JAXBContext.newInstance(org.fusesource.ide.jmx.commons.backlogtracermessage.Message.class);
+			Marshaller m = context.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			m.marshal(traceMessage.getMessage(), writer);
+			String xml = writer.toString();
+
 			Exchange exchange = null;
 			if (!Strings.isBlank(xml)) {
 				exchange = Exchanges.unmarshalNoNamespaceXmlString(xml);

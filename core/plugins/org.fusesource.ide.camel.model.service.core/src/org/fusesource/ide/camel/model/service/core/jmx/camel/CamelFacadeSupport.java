@@ -59,8 +59,7 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         }));
     }
 
-    @SuppressWarnings("unchecked")
-    protected Object newProxyInstance(ObjectName objectName, Class interfaceClass, boolean notificationBroadcaster) throws Exception {
+	protected Object newProxyInstance(ObjectName objectName, Class<?> interfaceClass, boolean notificationBroadcaster) throws Exception {
         Object jmx_proxy = MBeanServerInvocationHandler.newProxyInstance(getMBeanServerConnection(), objectName, interfaceClass, notificationBroadcaster);
         return addGetId(interfaceClass, jmx_proxy, objectName.getCanonicalName());
     }
@@ -106,13 +105,13 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public CamelContextMBean getCamelContext(String managementName) throws Exception {
         MBeanServerConnection connection = getMBeanServerConnection();
 
-        Set contexts = findCamelContexts(connection, managementName);
+		Set<ObjectName> contexts = findCamelContexts(connection, managementName);
         if (contexts.size() == 0) {
             throw new IOException("No CamelContext could be found in the JMX.");
         }
 
         // we just take the first CamelContext as it matches the context id
-        ObjectName name = (ObjectName) contexts.iterator().next();
+		ObjectName name = contexts.iterator().next();
         CamelContextMBean mbean = (CamelContextMBean) newProxyInstance(name, CamelContextMBean.class, true);
         return mbean;
     }

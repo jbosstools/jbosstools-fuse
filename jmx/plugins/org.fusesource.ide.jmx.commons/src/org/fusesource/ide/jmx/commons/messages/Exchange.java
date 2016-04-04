@@ -11,15 +11,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.TextFilter;
 import org.fusesource.ide.foundation.ui.util.TextFilters;
-import org.fusesource.ide.foundation.core.util.Objects;
 
 
 @XmlRootElement(name = "exchange")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Exchange implements IExchange, TextFilter, PreMarshalHook, Comparable<Exchange> {
+public class Exchange implements IExchange, TextFilter, PreMarshalHook {
 	@XmlAttribute(required = false)
 	private String id;
 
@@ -42,26 +42,26 @@ public class Exchange implements IExchange, TextFilter, PreMarshalHook, Comparab
 	}
 	
 	@Override
-	public int compareTo(Exchange that) {
+	public int compareTo(IExchange that) {
 		if (this == that) {
 			return 0;
 		}
-		int answer = Objects.compare(this.id, that.id);
+		int answer = Objects.compare(this.id, that.getId());
 		if (answer == 0) {
 			// same exchange id, so sort by uuid if given
 			Long uuid1 = in != null ? in.getUuid() : null;
-			Long uuid2 = that.in != null ? that.in.getUuid() : null;
+			Long uuid2 = that.getIn() != null ? that.getIn().getUuid() : null;
 			if (uuid1 != null && uuid2 != null) {
 				answer = uuid1.compareTo(uuid2);
 			}
 		}
 		// sort by exchange index
 		if (answer == 0) {
-			answer = Objects.compare(this.in.getExchangeIndex(), that.in.getExchangeIndex());
+			answer = Objects.compare(this.in.getExchangeIndex(), that.getIn().getExchangeIndex());
 		}
 		// and then timestamp
 		if (answer == 0) {
-			answer = Objects.compare(this.in.getTimestamp(), that.in.getTimestamp());
+			answer = Objects.compare(this.in.getTimestamp(), that.getIn().getTimestamp());
 		}
 		return answer;
 	}

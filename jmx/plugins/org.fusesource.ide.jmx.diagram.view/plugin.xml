@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<extension
+         point="org.eclipse.ui.views">
+      <view
+           category="org.fusesource.ide"
+           class="org.fusesource.ide.jmx.diagram.view.DiagramView"
+           icon="icons/diagram_view.gif"
+           id="org.fusesource.ide.jmx.views.DiagramView"
+           name="Diagram View">
+        <description>
+           This view shows a graphical diagram view of the current selection for example to show a Camel Route or set of ActiveMQ destinations
+        </description>
+      </view>
+   </extension>
+
+</plugin>
