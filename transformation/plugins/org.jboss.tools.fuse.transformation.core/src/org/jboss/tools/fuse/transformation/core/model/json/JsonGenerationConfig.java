@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.core.model.json;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Iterator;
-
 import org.jsonschema2pojo.DefaultGenerationConfig;
 import org.jsonschema2pojo.SourceType;
 
@@ -22,7 +18,6 @@ import org.jsonschema2pojo.SourceType;
  */
 public class JsonGenerationConfig extends DefaultGenerationConfig {
 
-    private File source;
     private boolean includeHashcodeAndEquals;
     private boolean includeToString;
     private boolean usePrimitives = true;

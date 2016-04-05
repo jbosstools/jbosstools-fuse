@@ -70,8 +70,6 @@ import com.sun.tools.xjc.api.XJC;
  */
 public class XmlModelGenerator {
 
-    private static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
-    private static final String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
 	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema";
 
     void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
@@ -144,7 +142,6 @@ public class XmlModelGenerator {
         }
     }
 
-    @SuppressWarnings("resource")
     private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
         final SchemaCompiler sc = XJC.createSchemaCompiler();
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
