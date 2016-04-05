@@ -58,7 +58,7 @@ public class XmlMarshalIT {
 
 	@Parameters
 	public static Collection<String> params() {
-		return Arrays.asList("sample.xml", "filterSample.xml", "filterSampleBlueprint.xml", "cbrSample.xml", "onDeliverySample.xml");
+		return Arrays.asList("sample.xml", "filterSample.xml", "filterSampleBlueprint.xml", "cbrSample.xml", "onDeliverySample.xml", "tryCatchSample.xml");
 	}
 
 	private IProject project;
