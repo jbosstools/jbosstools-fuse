@@ -31,7 +31,6 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -94,7 +93,6 @@ public class CamelIOHandlerIT {
 	}
 	
 	@Test
-	@Ignore("Deactivate test which is failing with timeout only on CI")
 	public void testLoadAndSaveOfSimpleModel() throws Exception {
 		assertModelRoundTrip(fileNameToTest, 1);
 	}
