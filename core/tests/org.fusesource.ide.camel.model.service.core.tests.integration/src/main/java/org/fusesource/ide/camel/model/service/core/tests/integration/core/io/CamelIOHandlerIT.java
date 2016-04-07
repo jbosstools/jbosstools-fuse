@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.service.core.tests.integration;
+package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,7 +42,7 @@ import org.junit.runners.Parameterized.Parameters;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class XmlMarshalIT {
+public class CamelIOHandlerIT {
 	
 	CamelIOHandler marshaller = new CamelIOHandler();
 	
@@ -51,7 +51,7 @@ public class XmlMarshalIT {
 
 	private String fileNameToTest;
 
-	public XmlMarshalIT(final String fileNameToTest) {
+	public CamelIOHandlerIT(final String fileNameToTest) {
 		this.fileNameToTest = fileNameToTest;
 	}
 
@@ -102,12 +102,12 @@ public class XmlMarshalIT {
 
 	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
 		
-		InputStream inputStream = XmlMarshalIT.class.getClassLoader().getResourceAsStream("/" + name);
+		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
 		
 		File baseFile = File.createTempFile("baseFile" + name, "xml");
 		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-		inputStream = XmlMarshalIT.class.getClassLoader().getResourceAsStream("/" + name);
+		inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
 		IFile fileInProject = project.getFile(name);
 		fileInProject.create(inputStream, true, new NullProgressMonitor());
 
