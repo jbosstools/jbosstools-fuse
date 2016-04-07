@@ -64,7 +64,8 @@ public class XmlMarshalIT {
 				"filterSampleBlueprint.xml",
 				"cbrSample.xml",
 				"onDeliverySample.xml",
-				"tryCatchSample.xml");
+				"tryCatchSample.xml",
+				"propertyPlaceHolderSample.xml");
 		//@formatter:on
 	}
 
@@ -101,7 +102,7 @@ public class XmlMarshalIT {
 
 	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
 		
-		InputStream inputStream = XmlMarshalIT.class.getClassLoader().getResourceAsStream("/"+name);
+		InputStream inputStream = XmlMarshalIT.class.getClassLoader().getResourceAsStream("/" + name);
 		
 		File baseFile = File.createTempFile("baseFile" + name, "xml");
 		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
