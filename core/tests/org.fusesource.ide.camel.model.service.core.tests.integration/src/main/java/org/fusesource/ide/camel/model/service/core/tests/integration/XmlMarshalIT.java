@@ -8,11 +8,9 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
-package org.fusesource.ide.camel.editor.integration;
+package org.fusesource.ide.camel.model.service.core.tests.integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -23,7 +21,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.assertj.core.api.Assertions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -42,6 +39,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(Parameterized.class)
 public class XmlMarshalIT {
 	
@@ -58,7 +57,15 @@ public class XmlMarshalIT {
 
 	@Parameters
 	public static Collection<String> params() {
-		return Arrays.asList("sample.xml", "filterSample.xml", "filterSampleBlueprint.xml", "cbrSample.xml", "onDeliverySample.xml", "tryCatchSample.xml");
+		//@formatter:off
+		return Arrays.asList(
+				"sample.xml",
+				"filterSample.xml",
+				"filterSampleBlueprint.xml",
+				"cbrSample.xml",
+				"onDeliverySample.xml",
+				"tryCatchSample.xml");
+		//@formatter:on
 	}
 
 	private IProject project;
@@ -113,15 +120,10 @@ public class XmlMarshalIT {
 		String model1String = model1.getDocumentAsXML();
 		String model2String = model2.getDocumentAsXML();
 		
-		Assertions.assertThat(model1String).isXmlEqualToContentOf(baseFile);
+		assertThat(model1String).isXmlEqualToContentOf(baseFile);
 		assertEquals("Should have the same content", model1String, model2String);
 		
 		return model2;
 	}
 
-	protected <T> void assertContains(Collection<T> collection, T... items) {
-		for (T item : items) {
-			assertTrue("collection should contain " + item, collection.contains(item));
-		}
-	}
 }

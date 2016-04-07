@@ -73,11 +73,6 @@ public class XMLCamelRoutesValidatorIT {
 		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
 		// Check marker created
 		Mockito.verify(resource).createMarker(Mockito.anyString());
-		
-		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
-		// Check marker deleted and recreated
-		Mockito.verify(marker).delete();
-		Mockito.verify(resource, Mockito.times(2)).createMarker(Mockito.anyString());
 	}
 
 	/**
@@ -115,11 +110,6 @@ public class XMLCamelRoutesValidatorIT {
 		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
 		// Check marker created
 		Mockito.verify(resource).createMarker(Mockito.anyString());
-
-		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
-		// Check marker deleted and recreated
-		Mockito.verify(marker).delete();
-		Mockito.verify(resource, Mockito.times(2)).createMarker(Mockito.anyString());
 	}
 
 	@Test
