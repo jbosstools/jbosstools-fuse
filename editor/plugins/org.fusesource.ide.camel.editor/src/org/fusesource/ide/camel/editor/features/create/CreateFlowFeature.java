@@ -16,10 +16,11 @@ import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateConnectionFeature;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
+import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 
 /**
  * @author lhein
@@ -99,6 +100,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 			// add connection for business object
 			AddConnectionContext addContext = new AddConnectionContext(context.getSourceAnchor(), context.getTargetAnchor());
 			addContext.setNewObject(eReference);
+			addContext.putProperty(AddFlowFeature.DEACTIVATE_LAYOUT, context.getProperty(AddFlowFeature.DEACTIVATE_LAYOUT));
 			newConnection = (Connection) getFeatureProvider().addIfPossible(addContext);
 		}
 
