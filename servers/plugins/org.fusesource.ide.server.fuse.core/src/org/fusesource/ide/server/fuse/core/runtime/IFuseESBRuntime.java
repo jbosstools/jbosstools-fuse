@@ -21,6 +21,7 @@ public interface IFuseESBRuntime extends IKarafRuntime{
 	static final String[] FUSEESB_RUNTIME_TYPES_SUPPORTED = new String[] {
 		IFuseToolingConstants.RUNTIME_FUSE_60,
 		IFuseToolingConstants.RUNTIME_FUSE_61,
-		IFuseToolingConstants.RUNTIME_FUSE_62
+		IFuseToolingConstants.RUNTIME_FUSE_62,
+		IFuseToolingConstants.RUNTIME_FUSE_63
 	};
 }
