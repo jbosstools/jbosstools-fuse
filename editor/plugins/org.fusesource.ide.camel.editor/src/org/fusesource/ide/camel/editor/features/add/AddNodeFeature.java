@@ -30,6 +30,8 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class AddNodeFeature extends AbstractAddShapeFeature {
 
+	public static final String DEACTIVATE_LAYOUT = "deactivateLayout";
+
 	/**
 	 * 
 	 * @param fp
@@ -48,9 +50,10 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		if (newObject instanceof AbstractCamelModelElement) {
 			// check if user wants to add to a diagram
 			if (context.getTargetContainer() instanceof Diagram) {
-                return ((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("route") ||
-                		((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("rest") ||
-                		((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("restConfiguration");
+                final String nodeTypeId = ((AbstractCamelModelElement) newObject).getNodeTypeId();
+				return nodeTypeId.equalsIgnoreCase("route") ||
+                		nodeTypeId.equalsIgnoreCase("rest") ||
+                		nodeTypeId.equalsIgnoreCase("restConfiguration");
             } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof AbstractCamelModelElement) {
             	AbstractCamelModelElement container =  (AbstractCamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
             	AbstractCamelModelElement child = (AbstractCamelModelElement)newObject;
@@ -82,14 +85,17 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		// call the layout feature
 		layoutPictogramElement(containerShape);
 		
-		Object o_editor = getFeatureProvider().getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-		CamelDesignEditor editor = null;
-		if (o_editor == null || o_editor instanceof DiagramEditorDummy) {
-			editor = CamelUtils.getDiagramEditor();
-		} else {
-			editor = (CamelDesignEditor)o_editor;
+		final Object deactivateLayout = context.getProperty(DEACTIVATE_LAYOUT);
+		if (!Boolean.TRUE.equals(deactivateLayout)) {
+			Object o_editor = getFeatureProvider().getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+			CamelDesignEditor editor = null;
+			if (o_editor == null || o_editor instanceof DiagramEditorDummy) {
+				editor = CamelUtils.getDiagramEditor();
+			} else {
+				editor = (CamelDesignEditor) o_editor;
+			}
+			DiagramOperations.layoutDiagram(editor);
 		}
-		DiagramOperations.layoutDiagram(editor);
 
 		return containerShape;
 	}

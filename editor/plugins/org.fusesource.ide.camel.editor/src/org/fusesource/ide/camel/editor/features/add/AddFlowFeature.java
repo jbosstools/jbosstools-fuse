@@ -37,6 +37,8 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class AddFlowFeature extends AbstractAddFeature {
 
+	public static final String DEACTIVATE_LAYOUT = "deactivateLayout";
+
 	public AddFlowFeature(IFeatureProvider fp) {
 		super(fp);
 	}
@@ -87,11 +89,13 @@ public class AddFlowFeature extends AbstractAddFeature {
 //		text.setValue(flow.getName());
 		
 		// add static graphical decorators (composition and navigable)
-		ConnectionDecorator cd;
-		cd = peCreateService.createConnectionDecorator(connection, false, 1.0, true);
+		ConnectionDecorator cd = peCreateService.createConnectionDecorator(connection, false, 1.0, true);
 		createArrow(cd);
 		
-		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+		final Object deactivateLayout = context.getProperty(DEACTIVATE_LAYOUT);
+		if (!Boolean.TRUE.equals(deactivateLayout)) {
+			DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+		}
 		
 		return connection;
 	}

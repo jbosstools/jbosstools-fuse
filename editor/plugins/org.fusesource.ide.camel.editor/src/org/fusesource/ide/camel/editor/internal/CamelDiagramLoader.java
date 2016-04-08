@@ -25,7 +25,11 @@ import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
+import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
@@ -78,6 +82,7 @@ public class CamelDiagramLoader {
 			}
 			lastElem = node;
 		}
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
 
 	private int addProcessor(AbstractCamelModelElement lastElement, AbstractCamelModelElement node, int x, int y, List<AbstractCamelModelElement> processedNodes, ContainerShape container) {
@@ -87,6 +92,7 @@ public class CamelDiagramLoader {
 		addContext.setTargetContainer(container);
 		addContext.setX(x);
 		addContext.setY(y);
+		addContext.putProperty(AddNodeFeature.DEACTIVATE_LAYOUT, true);
 
 		int retVal = this.orientation == PositionConstants.EAST ? x : y;
 		
@@ -117,6 +123,7 @@ public class CamelDiagramLoader {
 				}
 				connectContext.setSourcePictogramElement(srcState);
 				connectContext.setTargetPictogramElement(destState);
+				connectContext.putProperty(AddFlowFeature.DEACTIVATE_LAYOUT, true);
 				Anchor srcAnchor = getAnchor(srcState);
 				Anchor destAnchor = getAnchor(destState);
 				if (srcAnchor != null && destAnchor != null) {
