@@ -17,13 +17,14 @@ import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
+import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
 /**
  * @author lhein
@@ -33,7 +34,14 @@ public class DiagramOperations {
 	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor) {
 		if (designEditor == null) return null;
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-		LayoutCommand operation = new LayoutCommand(designEditor, editingDomain);
+		LayoutCommand operation = new LayoutCommand(designEditor.getFeatureProvider(), designEditor.getDiagramTypeProvider().getDiagram(),
+				designEditor.getModel().getCamelContext(), editingDomain);
+		execute(editingDomain, operation, false);
+		return operation;
+	}
+
+	public static LayoutCommand layoutDiagram(TransactionalEditingDomain editingDomain, IFeatureProvider featureProvider, Diagram diagram, AbstractCamelModelElement container) {
+		LayoutCommand operation = new LayoutCommand(featureProvider, diagram, container, editingDomain);
 		execute(editingDomain, operation, false);
 		return operation;
 	}
