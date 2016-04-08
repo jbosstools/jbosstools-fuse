@@ -212,6 +212,10 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		sb.append("       http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd\n");
 		sb.append("       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
 		sb.append("\n");
+		sb.append("	<camelContext id=\"context1\" xmlns=\"http://camel.apache.org/schema/blueprint\">\n");
+		sb.append("\n");
+		sb.append("	</camelContext>\n");
+		sb.append("\n");
 		sb.append("</blueprint>\n");
 		return sb.toString();
 	}

@@ -87,59 +87,6 @@
 	</extension>
 
  <extension
-       point="org.eclipse.ui.menus">
-    <menuContribution
-          allPopups="false"
-          locationURI="popup:org.eclipse.ui.popup.any?before=additions">
-       <command
-             commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
-             label="Disable Fuse Camel Nature"
-             style="push">
-          <visibleWhen
-                checkEnabled="false">
-                <with
-                variable="selection">
-                                <iterate
-                                      ifEmpty="false"
-                                      operator="and">
-                                   <test
-                                         forcePluginActivation="true"
-                                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled">
-                                   </test>
-                                   <test
-                                         forcePluginActivation="true"
-                                         property="org.fusesource.ide.project.CamelNatureTester.projectOpen">
-                                   </test>
-                                </iterate>
-          </with>
-          </visibleWhen>
-       </command>
-       <command
-             commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
-             label="Enable Fuse Camel Nature"
-             style="push">
-          <visibleWhen
-                checkEnabled="false">
-                <with
-                variable="selection">
-                <iterate
-                      ifEmpty="false"
-                      operator="and">
-                   <test
-                         forcePluginActivation="true"
-                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled">
-                   </test>
-                   <test
-                         forcePluginActivation="true"
-                         property="org.fusesource.ide.project.CamelNatureTester.projectOpen">
-                   </test>
-                </iterate>
-          </with>
-          </visibleWhen>
-       </command>
-    </menuContribution>
- </extension>
- <extension
        point="org.eclipse.ui.commands">
     <command
           id="org.fusesource.ide.project.EnableCamelNatureCmd"
@@ -387,6 +334,7 @@
          	<label>Camel JAR Project Template</label>
          	<fixed facet="jst.java"></fixed>
          	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
          	<preset id="preset.jst.camel.jar_2.15">
          		<label>Camel JAR Project</label>
          		<description>
@@ -398,6 +346,7 @@
         	<label>Camel Web Project Template</label>
          	<fixed facet="jst.java"></fixed>
          	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
          	<preset id="preset.jst.camel.web_2.15">
     	     	<label>Camel Web Project</label>
          		<description>
@@ -409,6 +358,7 @@
          	<label>Camel JAR Project Template</label>
          	<fixed facet="jst.java"></fixed>
          	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
          	<preset id="preset.jst.camel.jar_2.16">
          		<label>Camel JAR Project</label>
          		<description>
@@ -420,6 +370,7 @@
         	<label>Camel Web Project Template</label>
          	<fixed facet="jst.java"></fixed>
          	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
          	<preset id="preset.jst.camel.web_2.16">
 	         	<label>Camel Web Project</label>
     	 		<description>
@@ -477,29 +428,33 @@
         	<label>Camel JAR Project</label>
          	<facet id="jst.java" version="1.6"></facet>
          	<facet id="jst.utility" version="1.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
          	<facet id="jst.camel" version="2.15"></facet>
-         	<description>Configure a project as Camel JAR</description>
+         	<description>Configure a project to be deployed as a Camel JAR file</description>
       	</static-preset>
       	<static-preset id="preset.jst.camel.web_2.15">
         	<label>Camel Web Project</label>
          	<facet id="jst.java" version="1.6"></facet>
          	<facet id="jst.web" version="3.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
          	<facet id="jst.camel" version="2.15"></facet>
-         	<description>Configure a project as Camel WAR</description>
+         	<description>Configure a project to be deployed as a Camel WAR file</description>
       	</static-preset>
       	<static-preset id="preset.jst.camel.jar_2.16">
         	<label>Camel JAR Project</label>
          	<facet id="jst.java" version="1.7"></facet>
          	<facet id="jst.utility" version="1.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
          	<facet id="jst.camel" version="2.16"></facet>
-         	<description>Configure a project as Camel JAR</description>
+         	<description>Configure a project to be deployed as a Camel JAR file</description>
       	</static-preset>
       	<static-preset id="preset.jst.camel.web_2.16">
         	<label>Camel Web Project</label>
          	<facet id="jst.java" version="1.7"></facet>
          	<facet id="jst.web" version="3.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
          	<facet id="jst.camel" version="2.16"></facet>
-         	<description>Configure a project as Camel WAR</description>
+         	<description>Configure a project to be deployed as a Camel WAR file</description>
       	</static-preset>
    	</extension>
  
