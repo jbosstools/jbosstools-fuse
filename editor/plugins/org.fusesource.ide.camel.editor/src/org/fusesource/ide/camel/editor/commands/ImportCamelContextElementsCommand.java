@@ -10,28 +10,21 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.commands;
 
-import java.util.ArrayList;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.features.context.impl.CustomContext;
-import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.internal.CamelDiagramLoader;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -112,26 +105,10 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
 			try {
 				context = (CamelContextElement)camelContextFile.getChildElements().get(0);
-				diagramReader.loadModel(this.container != null && this.container instanceof CamelFile == false ? this.container : context);
+				diagramReader.loadModel(editingDomain, this.container != null && this.container instanceof CamelFile == false ? this.container : context);
 			} catch (Exception e) {
 				CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
 			}
-			
-	        ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();
-	        containers.add(diagram);
-	        NodeUtils.getAllContainers(featureProvider, container != null ? container : designEditor.getModel().getCamelContext(), containers);
-	        for (int i=0; i<containers.size(); i++) {
-		        for (PictogramElement pe : containers) {
-		        	CustomContext cc = new CustomContext(new PictogramElement[] {pe});
-		        	ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
-		        	for (ICustomFeature cf : cfs) {
-		        		if (cf instanceof LayoutDiagramFeature) {
-		        			cf.execute(cc);		
-		        			break;
-		        		}
-		        	}        	
-		        }
-	        }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {

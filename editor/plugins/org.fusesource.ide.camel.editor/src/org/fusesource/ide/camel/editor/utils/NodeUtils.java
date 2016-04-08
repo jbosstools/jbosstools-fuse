@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.camel.editor.utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.editparts.AbstractEditPart;
@@ -93,7 +93,7 @@ public class NodeUtils {
 	 * @param context
 	 * @param pes
 	 */
-    public static void getAllContainers(IFeatureProvider fp, AbstractCamelModelElement context, ArrayList<PictogramElement> pes) {
+	public static void getAllContainers(IFeatureProvider fp, AbstractCamelModelElement context, List<PictogramElement> pes) {
 		if (context instanceof CamelRouteElement) {
 			pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(context));
 		}

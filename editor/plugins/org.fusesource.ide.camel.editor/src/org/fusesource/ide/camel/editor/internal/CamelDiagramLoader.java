@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.impl.AddContext;
@@ -29,7 +30,6 @@ import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
@@ -64,7 +64,7 @@ public class CamelDiagramLoader {
 	 * 
 	 * @param container
 	 */
-	public void loadModel(AbstractCamelModelElement container) {
+	public void loadModel(TransactionalEditingDomain editingDomain, AbstractCamelModelElement container) {
 		if (container == null) {
 			return;
 		}
@@ -82,7 +82,7 @@ public class CamelDiagramLoader {
 			}
 			lastElem = node;
 		}
-		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+		DiagramOperations.layoutDiagram(editingDomain, featureProvider, diagram, container);
 	}
 
 	private int addProcessor(AbstractCamelModelElement lastElement, AbstractCamelModelElement node, int x, int y, List<AbstractCamelModelElement> processedNodes, ContainerShape container) {

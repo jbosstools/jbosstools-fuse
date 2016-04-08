@@ -11,24 +11,28 @@
 
 package org.fusesource.ide.camel.editor.commands;
 
-import java.util.ArrayList;
-
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 
 public class LayoutCommand extends RecordingCommand {
-	private final CamelDesignEditor designEditor;
+	private final IFeatureProvider featureProvider;
+	private AbstractCamelModelElement container;
+	private PictogramElement diagram;
 
-	public LayoutCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain) {
+	public LayoutCommand(IFeatureProvider featureProvider, Diagram diagram, AbstractCamelModelElement container, TransactionalEditingDomain editingDomain) {
 		super(editingDomain);
-		this.designEditor = designEditor;
+		this.featureProvider = featureProvider;
+		this.container = container;
+		this.diagram = diagram;
 	}
 
 	/*
@@ -37,20 +41,27 @@ public class LayoutCommand extends RecordingCommand {
 	 */
 	@Override
 	protected void doExecute() {
-		ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();
-        containers.add(designEditor.getDiagramTypeProvider().getDiagram());
-        NodeUtils.getAllContainers(designEditor.getFeatureProvider(), designEditor.getModel().getChildElements().get(0), containers);
-        for (int i=0; i<containers.size(); i++) {
-	        for (PictogramElement pe : containers) {
-	        	CustomContext cc = new CustomContext(new PictogramElement[] {pe});
-	        	ICustomFeature[] cfs = designEditor.getFeatureProvider().getCustomFeatures(null);
-	        	for (ICustomFeature cf : cfs) {
-	        		if (cf instanceof LayoutDiagramFeature) {
-	        			cf.execute(cc);		
-	        			break;
-	        		}
-	        	}        	
-	        }
-        }
+		layout(featureProvider, container);
+		layout(featureProvider, diagram);
+	}
+	
+	private void layout(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
+		for (AbstractCamelModelElement cme : container.getChildElements()) {
+			layout(featureProvider, cme);
+		}
+		if (container instanceof CamelRouteElement || container.getUnderlyingMetaModelObject() != null && container.getUnderlyingMetaModelObject().canHaveChildren()) {
+			layout(featureProvider, featureProvider.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(container));
+		}
+	}
+	
+	private void layout(IFeatureProvider featureProvider, PictogramElement pe) {
+		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
+		ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
+		for (ICustomFeature cf : cfs) {
+			if (cf instanceof LayoutDiagramFeature) {
+				cf.execute(cc);
+				break;
+			}
+		}
 	}
 }
