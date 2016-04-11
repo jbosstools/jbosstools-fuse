@@ -25,8 +25,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
 
-import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
-
 /**
  * publisher using the osgi.core:type=framework mbean
  * 
