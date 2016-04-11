@@ -27,17 +27,7 @@ public class CamelFileTemplateCreator {
 	 * @param f	the file to use / to write to
 	 */
 	public void createSpringTemplateFile(File f) {
-		if (f == null) throw new IllegalArgumentException("The given file parameter can't be null.");
-		if (f.isDirectory()) throw new IllegalArgumentException("The given file parameter can't be a folder.");
-		
-		if (f.exists() && f.isFile()) f.delete();
-		try {
-			if (f.createNewFile()) {
-				IOUtils.writeText(f, getSpringStubText());
-			}
-		} catch (IOException ex) {
-			throw new IllegalArgumentException("An error occured creating the template file..." ,ex);
-		}
+		createTemplateFile(f, getSpringStubText());
 	}
 	
 	/**
@@ -46,13 +36,17 @@ public class CamelFileTemplateCreator {
 	 * @param f	the file to use / to write to
 	 */
 	public void createBlueprintTemplateFile(File f) {
+		createTemplateFile(f, getBlueprintStubText());
+	}
+	
+	private void createTemplateFile(File f, String content) {
 		if (f == null) throw new IllegalArgumentException("The given file parameter can't be null.");
 		if (f.isDirectory()) throw new IllegalArgumentException("The given file parameter can't be a folder.");
 		
 		if (f.exists() && f.isFile()) f.delete();
 		try {
 			if (f.createNewFile()) {
-				IOUtils.writeText(f, getBlueprintStubText());
+				IOUtils.writeText(f, content);
 			}
 		} catch (IOException ex) {
 			throw new IllegalArgumentException("An error occured creating the template file..." ,ex);
@@ -64,7 +58,7 @@ public class CamelFileTemplateCreator {
 	 * 
 	 * @return
 	 */
-	public String getSpringStubText() {
+	String getSpringStubText() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<beans xmlns=\"http://www.springframework.org/schema/beans\"\n");
@@ -80,7 +74,7 @@ public class CamelFileTemplateCreator {
 	 * 
 	 * @return
 	 */
-	public String getBlueprintStubText() {
+	String getBlueprintStubText() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n");
