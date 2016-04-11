@@ -20,7 +20,7 @@ import org.eclipse.wst.web.internal.deployables.FlatComponentDeployable;
 import org.jboss.ide.eclipse.as.wtp.core.modules.JBTFlatProjectModuleFactory;
 
 public class CamelModuleFactory extends JBTFlatProjectModuleFactory {
-	public static final String FACTORY_ID = "org.jboss.ide.eclipse.as.core.modules.sar.moduleFactory"; //$NON-NLS-1$
+	public static final String FACTORY_ID = "org.fusesource.ide.project.fuseModuleFactory"; //$NON-NLS-1$
 	public static final String MODULE_TYPE = ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET;
 	public static final String V1_0 = "1.0"; //$NON-NLS-1$
 	
