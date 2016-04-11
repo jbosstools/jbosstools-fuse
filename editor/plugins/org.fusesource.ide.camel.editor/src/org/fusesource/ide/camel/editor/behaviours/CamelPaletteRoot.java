@@ -183,9 +183,6 @@ public class CamelPaletteRoot extends PaletteRoot {
 		if (paletteEntry.getLabel() != null && paletteEntry.getLabel().toLowerCase().contains(filter)) {
 			return true;
 		}
-		if (paletteEntry.getDescription() != null && paletteEntry.getDescription().toLowerCase().contains(filter)) {
-			return true;
-		}
 		return false;
 	}
 
