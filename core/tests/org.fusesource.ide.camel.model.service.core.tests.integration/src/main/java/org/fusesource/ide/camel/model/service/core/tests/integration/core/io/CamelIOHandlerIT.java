@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -37,8 +38,6 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class CamelIOHandlerIT {
@@ -97,6 +96,19 @@ public class CamelIOHandlerIT {
 		assertModelRoundTrip(fileNameToTest, 1);
 	}
 	
+	@Test
+	public void testBlueprintTemplateCreation() throws Exception {
+		File file = testFolder.newFile("testBlueprintTemplate.xml");
+		marshaller.createCamelFileTemplate(file, false);
+		assertThat(marshaller.getBlueprintStubText()).isXmlEqualToContentOf(file);
+	}
+
+	@Test
+	public void testSpringTemplateCreation() throws Exception {
+		File file = testFolder.newFile("testSpringTemplate.xml");
+		marshaller.createCamelFileTemplate(file, true);
+		assertThat(marshaller.getSpringStubText()).isXmlEqualToContentOf(file);
+	}
 
 	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
 		

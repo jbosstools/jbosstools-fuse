@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.model.service.core.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -272,5 +274,57 @@ public class CamelIOHandler {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to create a document builder for loading the camel file.", e);
 		}
 		return null;
+	}
+	
+	/**
+	 * creates a new camel context file in the given newFile
+	 * 
+	 * @param newFile			the file to be used / where to save
+	 * @param isSpringContext	if true a spring context is created, otherwise a blueprint context
+	 */
+	public void createCamelFileTemplate(File newFile, boolean isSpringContext) {
+		if (newFile == null) throw new IllegalArgumentException("The given file parameter can't be null.");
+		if (newFile.isDirectory()) throw new IllegalArgumentException("The given file parameter can't be a folder.");
+		
+		if (newFile.exists() && newFile.isFile()) newFile.delete();
+		try {
+			if (newFile.createNewFile()) {
+				if (isSpringContext) {
+					IOUtils.writeText(newFile, getSpringStubText());
+				} else {
+					IOUtils.writeText(newFile, getBlueprintStubText());
+				}
+			}
+		} catch (IOException ex) {
+			throw new IllegalArgumentException("An error occured creating the template file..." ,ex);
+		}
+	}
+
+	public String getSpringStubText() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		sb.append("<beans xmlns=\"http://www.springframework.org/schema/beans\"\n");
+		sb.append("       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd\">\n");
+		sb.append("   <camelContext id=\"camelContext1\" xmlns=\"http://camel.apache.org/schema/spring\">\n");
+		sb.append("   </camelContext>\n");
+		sb.append("</beans>\n");
+		return sb.toString();
+	}
+	
+	public String getBlueprintStubText() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		sb.append("<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n");
+		sb.append("		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+		sb.append("		       xsi:schemaLocation=\"\n");
+		sb.append("       http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd\n");
+		sb.append("       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
+		sb.append("\n");
+		sb.append("	<camelContext id=\"context1\" xmlns=\"http://camel.apache.org/schema/blueprint\">\n");
+		sb.append("\n");
+		sb.append("	</camelContext>\n");
+		sb.append("\n");
+		sb.append("</blueprint>\n");
+		return sb.toString();
 	}
 }
