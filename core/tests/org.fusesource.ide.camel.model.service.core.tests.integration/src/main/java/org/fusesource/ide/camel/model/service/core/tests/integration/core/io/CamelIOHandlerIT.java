@@ -96,20 +96,6 @@ public class CamelIOHandlerIT {
 		assertModelRoundTrip(fileNameToTest, 1);
 	}
 	
-	@Test
-	public void testBlueprintTemplateCreation() throws Exception {
-		File file = testFolder.newFile("testBlueprintTemplate.xml");
-		marshaller.createCamelFileTemplate(file, false);
-		assertThat(marshaller.getBlueprintStubText()).isXmlEqualToContentOf(file);
-	}
-
-	@Test
-	public void testSpringTemplateCreation() throws Exception {
-		File file = testFolder.newFile("testSpringTemplate.xml");
-		marshaller.createCamelFileTemplate(file, true);
-		assertThat(marshaller.getSpringStubText()).isXmlEqualToContentOf(file);
-	}
-
 	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
 		
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
