@@ -21,6 +21,8 @@ import javax.management.ObjectName;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
@@ -72,7 +74,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		try {
 			bundleUrl = new File(bundlePath).toURL().toExternalForm();
 		} catch(MalformedURLException murle) {
-			murle.printStackTrace();		
+			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
 		}
 
 		try {
@@ -91,8 +93,14 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	@Override
 	public boolean updateBundle(MBeanServerConnection mbsc, long bundleId,
 			String bundlePath) {
+		String bundleUrl = bundlePath;
 		try {
-			mbsc.invoke(this.objectName, "update", new Object[] { ""+bundleId, bundlePath } , new String[] {String.class.getName(), String.class.getName() }); 
+			bundleUrl = new File(bundlePath).toURL().toExternalForm();
+		} catch(MalformedURLException murle) {
+			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
+		}
+		try {
+			mbsc.invoke(this.objectName, "update", new Object[] { ""+bundleId, bundleUrl } , new String[] {String.class.getName(), String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
