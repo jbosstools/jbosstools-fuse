@@ -36,6 +36,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.fusesource.ide.camel.model.service.core.util.CamelFileTemplateCreator;
 
 /**
  * The camel facet as currently implemented requires either a utility facet
@@ -94,12 +95,14 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		}
 		IFolder metaInf = findFolder(all, "META-INF");
 		if( metaInf != null ) {
-			IFolder osgiInf = metaInf.getParent().getFolder(new Path(ICamelFacetDataModelProperties.OSGI_INF)); 
-			createFolder(osgiInf, new NullProgressMonitor());
-			project.refreshLocal(IResource.DEPTH_ZERO, null);
-			Boolean createBlueprint = model.getBooleanProperty(ICamelFacetDataModelProperties.CREATE_BLUEPRINT_DESCRIPTOR);
-			if( createBlueprint.booleanValue() ) {
+			String dsl = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_DSL);
+			if( dsl.equalsIgnoreCase("Blueprint") ) {
+				IFolder osgiInf = metaInf.getParent().getFolder(new Path(ICamelFacetDataModelProperties.OSGI_INF)); 
+				createFolder(osgiInf, new NullProgressMonitor());
+				project.refreshLocal(IResource.DEPTH_ZERO, null);
 				createBlueprintDescriptor(osgiInf);
+			} else if (dsl.equalsIgnoreCase("Spring")) {
+				createSpringDescriptor(metaInf);
 			}
 			createUtilityManifest(project, metaInf, new NullProgressMonitor());
 		}
@@ -157,27 +160,29 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		
 		IFolder camelContent = project.getFolder(strContentFolder);
 		IProgressMonitor monitor = new NullProgressMonitor();
-		IFolder osgiInf = camelContent.getFolder(ICamelFacetDataModelProperties.OSGI_INF); 
-		createFolder(osgiInf, monitor);
-		project.refreshLocal(IResource.DEPTH_ZERO, null);
 		
-
 		IVirtualComponent newComponent = ComponentCore.createComponent(project);
 		final IVirtualFolder jbiRoot = newComponent.getRootFolder();
 
 		// Map the CAMELcontent to root for deploy
-		String resourcesFolder = model.getStringProperty(
-				ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
+		String resourcesFolder = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
 		jbiRoot.createLink(new Path("/" + resourcesFolder), 0, null); //$NON-NLS-1$
 
-		Boolean createBlueprint = model.getBooleanProperty(ICamelFacetDataModelProperties.CREATE_BLUEPRINT_DESCRIPTOR);
-		if( createBlueprint.booleanValue() ) {
-			createBlueprintDescriptor(osgiInf);
-		}
 		IFolder metainf = project.getFolder("src").getFolder("META-INF"); 
 		if( metainf.exists())
 			metainf.move(camelContent.getFolder("META-INF").getFullPath(), true, new NullProgressMonitor());
 		createUtilityManifest(project, camelContent.getFolder("META-INF"), monitor);
+		
+		String dsl = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_DSL);
+		if( dsl.equalsIgnoreCase("Blueprint") ) {
+			IFolder osgiInf = camelContent.getFolder(ICamelFacetDataModelProperties.OSGI_INF); 
+			createFolder(osgiInf, monitor);
+			project.refreshLocal(IResource.DEPTH_ZERO, null);
+			createBlueprintDescriptor(osgiInf);
+		} else if (dsl.equalsIgnoreCase("Spring")) {
+			createSpringDescriptor(camelContent.getFolder("META-INF"));
+		}
+		
 	}
 	
 	private void createUtilityManifest(IProject project, IFolder metainf, IProgressMonitor monitor) throws CoreException {
@@ -198,26 +203,17 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 	private void createBlueprintDescriptor(IFolder folder) throws CoreException {
 		IFolder bp = folder.getFolder("blueprint");
 		bp.create(true, true, new NullProgressMonitor());
-		IFile bpFile = bp.getFile("blueprint.xml");
-		bpFile.create(new ByteArrayInputStream(getBlueprintStubText().getBytes()), true, new NullProgressMonitor());
+		IFile bpFile = bp.getFile("camel-context.xml");
+		CamelFileTemplateCreator cftc = new CamelFileTemplateCreator();
+		cftc.createBlueprintTemplateFile(bpFile);
 	}
-	
-	private String getBlueprintStubText() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		sb.append("<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n");
-		sb.append("		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-		sb.append("		       xsi:schemaLocation=\"\n");
-		
-		sb.append("       http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd\n");
-		sb.append("       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd\">\n");
-		sb.append("\n");
-		sb.append("	<camelContext id=\"context1\" xmlns=\"http://camel.apache.org/schema/blueprint\">\n");
-		sb.append("\n");
-		sb.append("	</camelContext>\n");
-		sb.append("\n");
-		sb.append("</blueprint>\n");
-		return sb.toString();
+
+	private void createSpringDescriptor(IFolder folder) throws CoreException {
+		IFolder spring = folder.getFolder("spring");
+		spring.create(true, true, new NullProgressMonitor());
+		IFile springFile = spring.getFile("camel-context.xml");
+		CamelFileTemplateCreator cftc = new CamelFileTemplateCreator();
+		cftc.createSpringTemplateFile(springFile);
 	}
 	
 	/**

@@ -20,7 +20,7 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	 */
 	public static final String CAMEL_CONTENT_FOLDER = "ICamelFacetDataModelProperties.Content_Folder"; //$NON-NLS-1$
 	public static final String CAMEL_PROJECT_VERSION = "ICamelFacetDataModelProperties.Project.Version"; //$NON-NLS-1$
-	public static final String CREATE_BLUEPRINT_DESCRIPTOR = "ICamelFacetDataModelProperties.Project.Descriptor.Blueprint.Create"; //$NON-NLS-1$
+	public static final String CAMEL_DSL = "ICamelFacetDataModelProperties.Project.CamelDSL"; //$NON-NLS-1$
 	
 	/**
 	 * A boolean representing whether we have the freedom to completely tear apart and rebuild a project structure

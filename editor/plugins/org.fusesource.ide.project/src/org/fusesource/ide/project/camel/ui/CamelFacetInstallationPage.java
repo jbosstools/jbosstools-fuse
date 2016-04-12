@@ -23,14 +23,13 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
-import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
@@ -45,7 +44,8 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 
 	private Text contentFolder;
 	private Label contentRootLabel;
-	private Button createBlueprintDescriptor;
+	private Label dslLabel;
+	private Combo createBlueprintDescriptor;
 	
 	
 	private IDataModel model;
@@ -118,8 +118,6 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 		prjGroup.setLayout(new GridLayout(1, false));
 		prjGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		
-		
 		this.contentRootLabel = new Label(prjGroup, SWT.NONE);
 		this.contentRootLabel.setText(Messages.NewCamelProject_ContentRootLabel);
 		this.contentRootLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -137,12 +135,19 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 				 changePageStatus();
 			}
 		});
-		this.createBlueprintDescriptor = new Button(prjGroup, SWT.CHECK);
-		this.createBlueprintDescriptor.setText("Create blueprint descriptor");
+
+		this.dslLabel = new Label(prjGroup, SWT.NONE);
+		this.dslLabel.setText(Messages.NewCamelProject_DSLLabel);
+		this.dslLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		this.createBlueprintDescriptor = new Combo(prjGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		this.createBlueprintDescriptor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.createBlueprintDescriptor.setItems(new String[] {"Blueprint", "Spring"});
 		createBlueprintDescriptor.addSelectionListener( new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				boolean selection = createBlueprintDescriptor.getSelection();
-				model.setProperty(CREATE_BLUEPRINT_DESCRIPTOR, selection);
+				String dsl = createBlueprintDescriptor.getItem(createBlueprintDescriptor.getSelectionIndex());
+				model.setProperty(CAMEL_DSL, dsl);
+				changePageStatus();
 			}
 		});
 		

@@ -14,12 +14,33 @@ package org.fusesource.ide.camel.model.service.core.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.core.resources.IFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 
 /**
  * @author lhein
  */
 public class CamelFileTemplateCreator {
+	
+	/**
+	 * creates a camel spring context template file
+	 * 
+	 * @param f	the file to use / to write to
+	 */
+	public void createSpringTemplateFile(IFile f) {
+		File file = f.getRawLocation().makeAbsolute().toFile();
+		createSpringTemplateFile(file);
+	}
+	
+	/**
+	 * creates a camel blueprint context template file
+	 * 
+	 * @param f	the file to use / to write to
+	 */
+	public void createBlueprintTemplateFile(IFile f) {
+		File file = f.getRawLocation().makeAbsolute().toFile();
+		createBlueprintTemplateFile(file);
+	}
 	
 	/**
 	 * creates a camel spring context template file

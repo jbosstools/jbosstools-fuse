@@ -24,11 +24,9 @@ public class Messages extends NLS {
 	public static String riderBrowseCamelContextButton;
 	public static String invalidCamelContextFileMessage;
 	public static String riderLaunchConfigTabTitle;
-	
-	
-	
 
 	public static String NewCamelProject_ContentRootLabel;
+	public static String NewCamelProject_DSLLabel;
 	public static String NewCamelProject_FacetInstallationPage;
 	public static String NewCamelProject_FacetInstallationPageDesc;
 	public static String NewCamelProject_FacetInstallationPage_ContentRootError;
