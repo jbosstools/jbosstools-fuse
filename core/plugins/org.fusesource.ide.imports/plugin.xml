@@ -10,7 +10,7 @@
       <wizard
             category="org.fusesource.ide"
             class="org.fusesource.ide.imports.sap.SAPToolSuiteImportWizard"
-            icon="icons/sap_tool_suite_icon_16x16.png"
+            icon="icons/sap16.png"
             id="org.fusesource.ide.imports.SAPImportWizard"
             name="%sap.wizard.name">
          <description>
