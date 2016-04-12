@@ -43,8 +43,8 @@
     <jbtis.version>4.3.1.Final-SNAPSHOT</jbtis.version>
     
     <!-- Tycho versions -->
-    <jboss-tycho-version>0.22.1-SNAPSHOT</jboss-tycho-version>
-    <tychoVersion>0.25.0</tychoVersion>
+    <jboss-tycho-version>0.23.3</jboss-tycho-version>
+    <tychoVersion>0.24.0</tychoVersion>
     <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
     <!-- fuse tooling related -->
