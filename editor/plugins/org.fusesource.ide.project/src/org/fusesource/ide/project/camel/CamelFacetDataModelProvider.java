@@ -23,7 +23,7 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 	public Set getPropertyNames() {
 		Set names = super.getPropertyNames();
 		names.add(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
-		names.add(ICamelFacetDataModelProperties.CREATE_BLUEPRINT_DESCRIPTOR);
+		names.add(ICamelFacetDataModelProperties.CAMEL_DSL);
 		names.add(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE);
 		return names;
 	}
