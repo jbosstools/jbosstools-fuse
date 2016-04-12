@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.jboss.tools</groupId>
     <artifactId>parent</artifactId>
-    <version>4.3.0.Beta1-SNAPSHOT</version>
+    <version>4.4.0.Alpha1-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -44,7 +44,7 @@
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.22.1-SNAPSHOT</jboss-tycho-version>
-    <tychoVersion>0.23.0</tychoVersion>
+    <tychoVersion>0.25.0</tychoVersion>
     <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
     <!-- fuse tooling related -->
