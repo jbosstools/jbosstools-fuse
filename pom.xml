@@ -70,6 +70,7 @@
     
     <!-- data transformation versions -->
     <version.xmlbeans>2.6.0</version.xmlbeans>
+    <version.gson>2.2.4</version.gson>
 
     <!-- other versions -->
     <jackson.version>2.5.1</jackson.version>
