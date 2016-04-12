@@ -69,23 +69,11 @@
     <wildfly.version>2.3.0.redhat-621031</wildfly.version>
     
     <!-- data transformation versions -->
-    <version.fasterxml>2.2.0</version.fasterxml>
-    <version.jaxb>2.2.7</version.jaxb>
-    <version.jsonschema2pojo>0.4.13</version.jsonschema2pojo>
     <version.xmlbeans>2.6.0</version.xmlbeans>
-    <version.xmlunit>1.5</version.xmlunit>
-    <version.commons>3.2.1</version.commons>
-    <version.camel>${camel.version}</version.camel>
 
     <!-- other versions -->
     <jackson.version>2.5.1</jackson.version>
-    <spring.version>4.1.5.RELEASE</spring.version>
     <slf4j.version>1.7.5</slf4j.version>
-    <guava.version>17.0</guava.version>
-    <jolokia.version>1.2.2</jolokia.version>
-    <json-simple.version>1.1.1</json-simple.version>
-    <apache.http.version>4.3.6</apache.http.version>
-    <apache.httpcore.version>4.3.3</apache.httpcore.version>
   </properties>
 
   <modules>
