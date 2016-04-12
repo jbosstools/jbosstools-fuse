@@ -35,12 +35,12 @@
 						<artifactItem>
 							<groupId>com.google.code.gson</groupId>
 							<artifactId>gson</artifactId>
-							<version>{version.gson}</version>
+							<version>${version.gson}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.xmlbeans</groupId>
 							<artifactId>xmlbeans</artifactId>
-							<version>{version.xmlbeans}</version>
+							<version>${version.xmlbeans}</version>
 						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>
