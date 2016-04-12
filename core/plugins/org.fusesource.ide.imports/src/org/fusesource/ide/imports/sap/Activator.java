@@ -27,8 +27,8 @@ import org.osgi.framework.ServiceReference;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static final String SAP_TOOL_SUITE_16_IMAGE = "icons/sap_tool_suite_icon_16x16.png"; //$NON-NLS-1$
-	public static final String SAP_TOOL_SUITE_48_IMAGE = "icons/sap_tool_suite_icon_48x48.png"; //$NON-NLS-1$
+	public static final String SAP_TOOL_SUITE_16_IMAGE = "icons/sap16.png"; //$NON-NLS-1$
+	public static final String SAP_TOOL_SUITE_48_IMAGE = "icons/sap48.png"; //$NON-NLS-1$
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.fusesource.ide.imports"; //$NON-NLS-1$
