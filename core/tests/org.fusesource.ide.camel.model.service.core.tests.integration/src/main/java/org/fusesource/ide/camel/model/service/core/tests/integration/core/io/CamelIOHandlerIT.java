@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,15 +21,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -39,13 +32,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(Parameterized.class)
 public class CamelIOHandlerIT {
 	
-	CamelIOHandler marshaller = new CamelIOHandler();
+	private CamelIOHandler marshaller = new CamelIOHandler();
 	
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
+
+	@Rule
+	public FuseProject fuseProject = new FuseProject("External Files");
 
 	private String fileNameToTest;
 
@@ -63,48 +61,24 @@ public class CamelIOHandlerIT {
 				"cbrSample.xml",
 				"onDeliverySample.xml",
 				"tryCatchSample.xml",
-				"propertyPlaceHolderSample.xml");
+				"propertyPlaceHolderSample.xml",
+				"unmarshalSample.xml");
 		//@formatter:on
 	}
 
-	private IProject project;
-	
-	@Before
-	public void setup() throws CoreException{
-		IWorkspace ws = ResourcesPlugin.getWorkspace();
-		project = ws.getRoot().getProject("External Files");
-		if (!project.exists()){
-		    project.create(null);
-		}
-		if (!project.isOpen()){
-		    project.open(null);
-		}
-		//Create a fake pom.xml
-		IFile pom = project.getFile("pom.xml");
-		pom.create(new ByteArrayInputStream("".getBytes()), true, new NullProgressMonitor());
-	}
-	
-	@After
-	public void tearDown() throws CoreException{
-		if (project.exists()){
-			project.delete(true, new NullProgressMonitor());
-		}
-	}
-	
 	@Test
 	public void testLoadAndSaveOfSimpleModel() throws Exception {
 		assertModelRoundTrip(fileNameToTest, 1);
 	}
 	
 	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
-		
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
 		
 		File baseFile = File.createTempFile("baseFile" + name, "xml");
 		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 		inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
-		IFile fileInProject = project.getFile(name);
+		IFile fileInProject = fuseProject.getProject().getFile(name);
 		fileInProject.create(inputStream, true, new NullProgressMonitor());
 
 		CamelFile model1 = marshaller.loadCamelModel(fileInProject, new NullProgressMonitor());
