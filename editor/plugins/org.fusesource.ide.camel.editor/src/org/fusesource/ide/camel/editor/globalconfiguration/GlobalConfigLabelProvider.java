@@ -109,12 +109,16 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	 * @return
 	 */
 	private Image getImageForCamelModelElement(AbstractCamelModelElement cme) {
-		Image res = getIconFromExtensionPoint(cme.getXmlNode());
+		final Node xmlNode = cme.getXmlNode();
+		Image res = getIconFromExtensionPoint(xmlNode);
 		if (res == null) {
-			if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
+			if ("endpoint".equalsIgnoreCase(cme.getTranslatedNodeName())) {
 				res = CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
-			} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
-				res = CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
+			} else if (xmlNode != null) {
+				final Node parentNode = xmlNode.getParentNode();
+				if ("dataFormats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(parentNode))) {
+					res = CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
+				}
 			}
 		}
 		return res;
