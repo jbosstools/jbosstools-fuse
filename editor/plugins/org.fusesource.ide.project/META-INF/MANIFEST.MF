@@ -36,7 +36,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.jboss.tools.maven.core;bundle-version="1.7.0",
  org.fusesource.ide.camel.editor;bundle-version="8.0.0",
  org.fusesource.ide.camel.validation;bundle-version="8.0.0",
- org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0"
+ org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
+ org.eclipse.jst.server.core;bundle-version="1.2.400"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.project.Activator
 Export-Package: org.fusesource.ide.project,
