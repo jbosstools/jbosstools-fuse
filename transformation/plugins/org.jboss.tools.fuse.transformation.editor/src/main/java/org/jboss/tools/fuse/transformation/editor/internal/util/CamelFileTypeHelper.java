@@ -15,7 +15,9 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.fusesource.ide.foundation.core.contenttype.*;
+import org.fusesource.ide.foundation.core.contenttype.BlueprintXmlMatchingStrategy;
+import org.fusesource.ide.foundation.core.contenttype.SpringXmlMatchingStrategy;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
 
 /**
  * A couple of utilities to check to see if a given Camel configuration file
@@ -64,7 +66,7 @@ public final class CamelFileTypeHelper {
 
         if (filePath != null && filePath.trim().length() > 0) {
             String rawPath = null;
-            if (filePath.startsWith("file:")) {
+            if (filePath.startsWith("file:")) { //$NON-NLS-1$
                 rawPath = filePath.substring(5);
             } else {
                 IPath wholePath = project.getLocation().append(filePath);

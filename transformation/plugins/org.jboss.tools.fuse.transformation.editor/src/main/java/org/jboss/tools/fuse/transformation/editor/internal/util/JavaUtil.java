@@ -51,7 +51,7 @@ public final class JavaUtil {
         IWorkspaceRoot root = project.getWorkspace().getRoot();
         List<URL> urls = new ArrayList<>();
         urls.add(new File(project.getLocation()
-                + "/" + javaProject.getOutputLocation().removeFirstSegments(1)
+                + "/" + javaProject.getOutputLocation().removeFirstSegments(1) //$NON-NLS-1$
                 + "/") //$NON-NLS-1$ //$NON-NLS-2$
                 .toURI().toURL());
         for (IClasspathEntry classpathEntry : javaProject.getResolvedClasspath(true)) {

@@ -40,7 +40,7 @@ public final class DozerFileTypeHelper {
 
         if (filePath != null && filePath.trim().length() > 0) {
             String rawPath = null;
-            if (filePath.startsWith("file:")) {
+            if (filePath.startsWith("file:")) { //$NON-NLS-1$
                 rawPath = filePath.substring(5);
             } else {
                 IPath wholePath = project.getLocation().append(filePath);

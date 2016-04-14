@@ -20,12 +20,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class TestGenerator {
 
-    private static final String SPRING_TEST_TEMPLATE = "templates/spring-test.template";
-    private static final String BLUEPRINT_TEST_TEMPLATE = "templates/blueprint-test.template";
-    private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]";
-    private static final String PACKAGE_KEY = "\\$\\[package-name\\]";
-    private static final String CLASSNAME_KEY = "\\$\\[test-name\\]";
-    private static final String FILENAME_KEY = "\\$\\[camel-name\\]";
+    private static final String SPRING_TEST_TEMPLATE = "templates/spring-test.template"; //$NON-NLS-1$
+    private static final String BLUEPRINT_TEST_TEMPLATE = "templates/blueprint-test.template"; //$NON-NLS-1$
+    private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]"; //$NON-NLS-1$
+    private static final String PACKAGE_KEY = "\\$\\[package-name\\]"; //$NON-NLS-1$
+    private static final String CLASSNAME_KEY = "\\$\\[test-name\\]"; //$NON-NLS-1$
+    private static final String FILENAME_KEY = "\\$\\[camel-name\\]"; //$NON-NLS-1$
 
     /**
      * Creates a test class for a transformation endpoint with the specified transform ID.
@@ -60,7 +60,7 @@ public class TestGenerator {
         }
         // in the case of a default package, we don't have the package name
         if (packageName.isEmpty()) {
-            template = template.replaceFirst("package ;", "");
+            template = template.replaceFirst("package ;", ""); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return template;

@@ -59,10 +59,11 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.Variable;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.core.model.Model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -71,15 +72,15 @@ import com.google.gson.JsonParser;
 
 public class Util {
 
-    public static final String MAIN_PATH = "src/main/";
+    public static final String MAIN_PATH = "src/main/"; //$NON-NLS-1$
 
-    public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
+    public static final String RESOURCES_PATH = MAIN_PATH + "resources/"; //$NON-NLS-1$
 
-    public static final String JAVA_PATH = MAIN_PATH + "java/";
+    public static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    public static final String TRANSFORMATIONS_FOLDER = ".transformations";
+    public static final String TRANSFORMATIONS_FOLDER = ".transformations"; //$NON-NLS-1$
 
     public static boolean isJSONValid(String incomingJSON) {
         try {
@@ -102,8 +103,8 @@ public class Util {
 
     public static String displayName(Class<?> type) {
         String name = type.getName();
-        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) return "String";
-        if (type == Date.class) return "Date";
+        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) return "String"; //$NON-NLS-1$ //$NON-NLS-2$
+        if (type == Date.class) return "Date"; //$NON-NLS-1$
         return type.getName().replace('.', '/');
     }
 
@@ -161,12 +162,12 @@ public class Util {
         ArrayList<IResource> allFiles = new ArrayList<>();
         IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
         IPath path = project.getLocation();
-        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml");
+        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml"); //$NON-NLS-1$
         return allFiles;
     }
 
     public static String getCamelVersion(IProject project) {
-        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
+        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
         String pomPath = pomPathValue.toOSString();
         final File pomFile = new File(pomPath);
         try {
@@ -174,7 +175,7 @@ public class Util {
             List<org.apache.maven.model.Dependency> deps = model.getDependencies();
             for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
                 org.apache.maven.model.Dependency dependency = iterator.next();
-                if (dependency.getArtifactId().equals("camel-core")) {
+                if (dependency.getArtifactId().equals("camel-core")) { //$NON-NLS-1$
                     return dependency.getVersion();
                 }
             }
@@ -229,11 +230,11 @@ public class Util {
         Model srcModel = (Model)source;
         Model tgtModel = (Model)target;
         if (isValidNonNullType(srcModel) && isValidNonNullType(tgtModel)) {
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) {
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
+                tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) { //$NON-NLS-1$
                 return true;
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                       srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) {
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
+                       srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) { //$NON-NLS-1$
                 return true;
             }
         }
@@ -243,21 +244,21 @@ public class Util {
     public static String nonPrimitiveClassName(String type) {
         // Return wrapper class if type is primitive
         switch (type) {
-            case "int":
+            case "int": //$NON-NLS-1$
                 return Integer.class.getName();
-            case "long":
+            case "long": //$NON-NLS-1$
                 return Long.class.getName();
-            case "double":
+            case "double": //$NON-NLS-1$
                 return Double.class.getName();
-            case "float":
+            case "float": //$NON-NLS-1$
                 return Float.class.getName();
-            case "boolean":
+            case "boolean": //$NON-NLS-1$
                 return Boolean.class.getName();
-            case "short":
+            case "short": //$NON-NLS-1$
                 return Short.class.getName();
-            case "char":
+            case "char": //$NON-NLS-1$
                 return Character.class.getName();
-            case "byte":
+            case "byte": //$NON-NLS-1$
                 return Byte.class.getName();
         }
         return type;
@@ -294,8 +295,8 @@ public class Util {
                     }
                 } else if (element instanceof IParent) {
                     String path = element.getPath().toString();
-                    if (!path.contains("/test/")
-                        && !path.endsWith("/.functions") && !path.endsWith("/" + TRANSFORMATIONS_FOLDER)
+                    if (!path.contains("/test/") //$NON-NLS-1$
+                        && !path.endsWith("/.functions") && !path.endsWith("/" + TRANSFORMATIONS_FOLDER) //$NON-NLS-1$ //$NON-NLS-2$
                         && (!(element instanceof IPackageFragmentRoot) || !((IPackageFragmentRoot)element).isExternal()))
                         populateClasses(shell, (IParent)element, types, filter);
                 }
@@ -407,11 +408,11 @@ public class Util {
         if (javaProject == null) {
             dialog = new CamelResourceClasspathSelectionDialog(shell,
                                                                ResourcesPlugin.getWorkspace().getRoot(),
-                                                               "xml");
+                                                               "xml"); //$NON-NLS-1$
         } else {
-            dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+            dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
         }
-        dialog.setTitle("Select Camel XML File from Project");
+        dialog.setTitle(Messages.Util_SelectCamelFileDialogTitle);
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
@@ -468,8 +469,8 @@ public class Util {
                                                         final IProject project,
                                                         final Filter filter) {
         return selectClass(shell, project, filter,
-                           "Custom Transformation Class",
-                           "Select a custom transformation class");
+                           Messages.Util_CustomTransformationClass,
+                           Messages.Util_SelectACustomTransformationClass);
     }
 
     /**
@@ -487,11 +488,11 @@ public class Util {
         if (javaProject == null) {
             dialog = new DozerResourceClasspathSelectionDialog(shell,
                                                                ResourcesPlugin.getWorkspace().getRoot(),
-                                                               "xml");
+                                                               "xml"); //$NON-NLS-1$
         } else {
-            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
         }
-        dialog.setTitle("Select Transformation File from Project");
+        dialog.setTitle(Messages.Util_SelectTransformationFileFromProject);
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
@@ -518,11 +519,11 @@ public class Util {
 
                 @Override
                 public String getText(final Object element) {
-                    return super.getText(element) + " - "
+                    return super.getText(element) + " - " //$NON-NLS-1$
                            + ((IResource)element).getParent().getFullPath().makeRelative();
                 }
             });
-        dlg.setTitle("Select " + schemaType);
+        dlg.setTitle(Messages.Util_Select_DialogTtile + schemaType);
         dlg.setMessage("Select the " + schemaType + " file for the transformation");
         dlg.setMatchEmptyString(true);
         dlg.setHelpAvailable(false);
@@ -550,11 +551,11 @@ public class Util {
         if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell,
                                                           ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml");
+                                                          "xml"); //$NON-NLS-1$
         } else {
-            dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), "xml");
+            dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
         }
-        dialog.setTitle("Select Camel XML File from Project");
+        dialog.setTitle(Messages.Util_SelectCamelXMLFileFromProject_DialogTitle);
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
@@ -641,12 +642,12 @@ public class Util {
         if (mapping.getType() != MappingType.FIELD) return;
         Model srcModel = (Model)mapping.getSource();
         Model tgtModel = (Model)mapping.getTarget();
-        if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-            tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+        if (srcModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
+            tgtModel.getType().equalsIgnoreCase("java.util.Date")) { //$NON-NLS-1$
             String dateFormatStr = Util.getDateFormat(shell, mapping, true);
             mapping.setSourceDateFormat(dateFormatStr);
-        } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                   srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+        } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
+                   srcModel.getType().equalsIgnoreCase("java.util.Date")) { //$NON-NLS-1$
             String dateFormatStr = Util.getDateFormat(shell, mapping, false);
             mapping.setTargetDateFormat(dateFormatStr);
         }
@@ -680,7 +681,7 @@ public class Util {
 
     public static void updateMavenDependencies(final List<Dependency> dependencies,
                                                final IProject project) throws CoreException {
-        final IFile pomIFile = project.getProject().getFile("pom.xml");
+        final IFile pomIFile = project.getProject().getFile("pom.xml"); //$NON-NLS-1$
         final File pomFile = new File(pomIFile.getLocationURI());
         final org.apache.maven.model.Model pom = MavenPlugin.getMaven().readModel(pomFile);
 
@@ -805,11 +806,11 @@ public class Util {
 
     public static interface Decorations {
 
-        ImageDescriptor ADD = Activator.imageDescriptor("addOverlay.gif");
+        ImageDescriptor ADD = Activator.imageDescriptor("addOverlay.gif"); //$NON-NLS-1$
 
-        ImageDescriptor LIST = Activator.imageDescriptor("listOverlay.gif");
+        ImageDescriptor LIST = Activator.imageDescriptor("listOverlay.gif"); //$NON-NLS-1$
 
-        ImageDescriptor MAPPED = Activator.imageDescriptor("mappedOverlay.gif");
+        ImageDescriptor MAPPED = Activator.imageDescriptor("mappedOverlay.gif"); //$NON-NLS-1$
     }
 
     /**
@@ -830,38 +831,38 @@ public class Util {
 
         Image ADD = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 
-        Image ADD_TRANSFORMATION = Activator.imageDescriptor("addTransformation16.gif").createImage();
+        Image ADD_TRANSFORMATION = Activator.imageDescriptor("addTransformation16.gif").createImage(); //$NON-NLS-1$
 
-        Image CHANGE = Activator.imageDescriptor("change16.gif").createImage();
+        Image CHANGE = Activator.imageDescriptor("change16.gif").createImage(); //$NON-NLS-1$
 
-        Image CLEAR = Activator.imageDescriptor("clear16.gif").createImage();
+        Image CLEAR = Activator.imageDescriptor("clear16.gif").createImage(); //$NON-NLS-1$
 
-        Image COLLAPSE_ALL = Activator.imageDescriptor("collapseAll16.gif").createImage();
+        Image COLLAPSE_ALL = Activator.imageDescriptor("collapseAll16.gif").createImage(); //$NON-NLS-1$
 
         Image DELETE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE);
 
-        Image HIDE_MAPPED = Activator.imageDescriptor("hideMapped16.gif").createImage();
+        Image HIDE_MAPPED = Activator.imageDescriptor("hideMapped16.gif").createImage(); //$NON-NLS-1$
 
-        Image MAPPED = Activator.imageDescriptor("mapped16.gif").createImage();
+        Image MAPPED = Activator.imageDescriptor("mapped16.gif").createImage(); //$NON-NLS-1$
 
-        Image MAPPED_NODE = Activator.imageDescriptor("mappedNode16.gif").createImage();
+        Image MAPPED_NODE = Activator.imageDescriptor("mappedNode16.gif").createImage(); //$NON-NLS-1$
 
-        Image MAPPED_PROPERTY = Activator.imageDescriptor("mappedProperty16.gif").createImage();
+        Image MAPPED_PROPERTY = Activator.imageDescriptor("mappedProperty16.gif").createImage(); //$NON-NLS-1$
 
-        Image MENU = Activator.imageDescriptor("menu10x5.gif").createImage();
+        Image MENU = Activator.imageDescriptor("menu10x5.gif").createImage(); //$NON-NLS-1$
 
-        Image NODE = Activator.imageDescriptor("node16.gif").createImage();
+        Image NODE = Activator.imageDescriptor("node16.gif").createImage(); //$NON-NLS-1$
 
-        Image PROPERTY = Activator.imageDescriptor("property16.gif").createImage();
+        Image PROPERTY = Activator.imageDescriptor("property16.gif").createImage(); //$NON-NLS-1$
 
-        Image SEARCH = Activator.imageDescriptor("search16.gif").createImage();
+        Image SEARCH = Activator.imageDescriptor("search16.gif").createImage(); //$NON-NLS-1$
 
-        Image SHOW_TYPES = Activator.imageDescriptor("showTypes32x16.gif").createImage();
+        Image SHOW_TYPES = Activator.imageDescriptor("showTypes32x16.gif").createImage(); //$NON-NLS-1$
 
-        Image TRANSFORMATION = Activator.imageDescriptor("transformation16.gif").createImage();
+        Image TRANSFORMATION = Activator.imageDescriptor("transformation16.gif").createImage(); //$NON-NLS-1$
 
-        Image TREE = Activator.imageDescriptor("tree16.gif").createImage();
+        Image TREE = Activator.imageDescriptor("tree16.gif").createImage(); //$NON-NLS-1$
 
-        Image VARIABLE = Activator.imageDescriptor("variable16.gif").createImage();
+        Image VARIABLE = Activator.imageDescriptor("variable16.gif").createImage(); //$NON-NLS-1$
     }
 }

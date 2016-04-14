@@ -11,6 +11,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.model.Model;

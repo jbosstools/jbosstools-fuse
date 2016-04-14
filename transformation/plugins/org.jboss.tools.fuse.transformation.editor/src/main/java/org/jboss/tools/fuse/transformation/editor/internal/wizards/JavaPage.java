@@ -58,6 +58,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 
 /**
@@ -80,8 +81,8 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
      */
     public JavaPage(String pageName, final Model model, boolean isSource) {
         super(pageName, model);
-        setTitle("Java Page");
-        setImageDescriptor(Activator.imageDescriptor("transform.png"));
+        setTitle(Messages.JavaPage_pageTitle);
+        setImageDescriptor(Activator.imageDescriptor("transform.png")); //$NON-NLS-1$
         this.isSource = isSource;
         observablesManager.addObservablesFromContext(context, true, true);
     }
@@ -89,11 +90,11 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void createControl(final Composite parent) {
         if (this.isSource) {
-            setTitle("Source Type (Java)");
-            setDescription("Specify details for the source Java class for this transformation.");
+            setTitle(Messages.JavaPage_SourceTypeJavaTitle);
+            setDescription(Messages.JavaPage_SourceTypeJava_Description);
         } else {
-            setTitle("Target Type (Java)");
-            setDescription("Specify details for the target Java class for this transformation.");
+            setTitle(Messages.JavaPage_TargetTypeJavaTitle);
+            setDescription(Messages.JavaPage_TargetTypeJava_Description);
         }
         observablesManager.runAndCollect(new Runnable() {
 
@@ -121,9 +122,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         // Create file path widgets
         Label label;
         if (isSourcePage()) {
-            label = createLabel(_page, "Source Class:", "The source Java class for the transformation.");
+            label = createLabel(_page, Messages.JavaPage_label_theSourceClass, Messages.JavaPage_label_theSourClassTooltip);
         } else {
-            label = createLabel(_page, "Target Class:", "The target Java class for the transformation.");
+            label = createLabel(_page, Messages.JavaPage_label_theTargetClass, Messages.JavaPage_label_theTargetClassTooltip);
         }
 
         _javaClassText = new Text(_page, SWT.BORDER);
@@ -132,8 +133,8 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 
         final Button javaClassBrowseButton = new Button(_page, SWT.NONE);
         javaClassBrowseButton.setLayoutData(new GridData());
-        javaClassBrowseButton.setText("...");
-        javaClassBrowseButton.setToolTipText("Browse to specify the selected class.");
+        javaClassBrowseButton.setText("..."); //$NON-NLS-1$
+        javaClassBrowseButton.setToolTipText(Messages.JavaPage_tooltipBrowseButton);
 
         javaClassBrowseButton.addSelectionListener(new SelectionAdapter() {
 
@@ -152,7 +153,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                         }
                         final IType inner = selected;
 
-                        UIJob uiJob = new UIJob("open error") {
+                        UIJob uiJob = new UIJob(Messages.JavaPage_jobName_openError) {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
@@ -177,7 +178,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         });
 
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
-        group.setText("Class Structure Preview");
+        group.setText(Messages.JavaPage_groupText_ClassStructurepreview);
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
@@ -196,9 +197,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_javaClassText);
         IObservableValue modelValue = null;
         if (isSourcePage()) {
-            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
-            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model); //$NON-NLS-1$
         }
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -209,11 +210,11 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                 String pathEmptyError = null;
                 String unableToFindError = null;
                 if (isSourcePage()) {
-                    pathEmptyError = "A source file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a source file with the supplied path";
+                    pathEmptyError = Messages.JavaPage_pathEmptyError_source;
+                    unableToFindError = Messages.JavaPage_unableToFindError_source;
                 } else {
-                    pathEmptyError = "A target file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a target file with the supplied path";
+                    pathEmptyError = Messages.JavaPage_pathEmptyError_target;
+                    unableToFindError = Messages.JavaPage_unableToFindError_target;
                 }
                 if (path == null || path.isEmpty()) {
                     return ValidationStatus.error(pathEmptyError);
@@ -266,7 +267,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
             _javaModel = null;
             _modelViewer.setModel(_javaModel);
-            _javaClassText.setText("");
+            _javaClassText.setText(""); //$NON-NLS-1$
         }
         notifyListeners();
     }
@@ -289,9 +290,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 	public IType selectType(Shell shell, IProject project) throws JavaModelException {
         IJavaSearchScope searchScope = computeSearchScope(project);
         SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
-                IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, "**");
-        dialog.setTitle("Select Class");
-        dialog.setMessage("Matching items");
+                IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, "**"); //$NON-NLS-1$
+        dialog.setTitle(Messages.JavaPage_SelectClass_title);
+        dialog.setMessage(Messages.JavaPage_SelectClassDialog_message);
         if (dialog instanceof ITypeSelectionComponent) {
             ((ITypeSelectionComponent)dialog).triggerSearch();
           }

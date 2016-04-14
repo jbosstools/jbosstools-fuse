@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DateFormatInputDialog extends BaseDialog {
     
@@ -30,21 +31,21 @@ public class DateFormatInputDialog extends BaseDialog {
     protected void constructContents(Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
         Label label = new Label(parent, SWT.NONE);
-        label.setText("Date Format:");
+        label.setText(Messages.DateFormatInputDialog_DateFormat);
         formatComboViewer = new ComboViewer(parent, SWT.NONE);
         formatComboViewer.setContentProvider(new ObservableListContentProvider());
         formatComboViewer.getCombo().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(1, 1).create());
         WritableList formatList = new WritableList();
-        formatList.add("yyyy-MM-dd HH:mm:ss");
-        formatList.add("yyyy-MM-dd HH:mm:ss.SSS");
-        formatList.add("yyyy-MM-dd HH:mm:ss.SSS Z");
-        formatList.add("MM-dd-yyyy HH:mm:ss");
-        formatList.add("MM/dd/yyyy HH:mm");
-        formatList.add("");
+        formatList.add("yyyy-MM-dd HH:mm:ss"); //$NON-NLS-1$
+        formatList.add("yyyy-MM-dd HH:mm:ss.SSS"); //$NON-NLS-1$
+        formatList.add("yyyy-MM-dd HH:mm:ss.SSS Z"); //$NON-NLS-1$
+        formatList.add("MM-dd-yyyy HH:mm:ss"); //$NON-NLS-1$
+        formatList.add("MM/dd/yyyy HH:mm"); //$NON-NLS-1$
+        formatList.add(""); //$NON-NLS-1$
         formatComboViewer.setInput(formatList);
 
         Label tipLabel = new Label(parent, SWT.NONE);
-        tipLabel.setText("(Type your own format if yours is not listed)");
+        tipLabel.setText(Messages.DateFormatInputDialog_TypeOwnFormatIsNotListed);
         tipLabel.setLayoutData(GridDataFactory.swtDefaults().span(2, 1).create());
         
         formatComboViewer.getCombo().addSelectionListener(new SelectionAdapter() {
@@ -76,12 +77,12 @@ public class DateFormatInputDialog extends BaseDialog {
 
     @Override
     protected String message() {
-        return "Select or enter the date format for the date conversion.";
+        return Messages.DateFormatInputDialog_SelectOrEnterDateFormatForConversion;
     }
 
     @Override
     protected String title() {
-        return "Date Format";
+        return Messages.DateFormatInputDialog_DateFormatTitle;
     }
 
     void validate() {
