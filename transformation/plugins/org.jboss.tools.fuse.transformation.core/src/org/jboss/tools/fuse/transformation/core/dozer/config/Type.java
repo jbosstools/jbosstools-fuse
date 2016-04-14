@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 public enum Type {
 
     @XmlEnumValue("one-way")
-    ONE_WAY("one-way"),
+    ONE_WAY("one-way"), //$NON-NLS-1$
     @XmlEnumValue("bi-directional")
-    BI_DIRECTIONAL("bi-directional");
+    BI_DIRECTIONAL("bi-directional"); //$NON-NLS-1$
     private final String value;
 
     Type(String v) {

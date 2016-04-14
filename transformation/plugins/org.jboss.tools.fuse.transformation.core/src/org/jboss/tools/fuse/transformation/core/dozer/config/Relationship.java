@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 public enum Relationship {
 
     @XmlEnumValue("cumulative")
-    CUMULATIVE("cumulative"),
+    CUMULATIVE("cumulative"), //$NON-NLS-1$
     @XmlEnumValue("non-cumulative")
-    NON_CUMULATIVE("non-cumulative");
+    NON_CUMULATIVE("non-cumulative"); //$NON-NLS-1$
     private final String value;
 
     Relationship(String v) {

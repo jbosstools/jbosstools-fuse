@@ -18,12 +18,12 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public final class EndpointHelper {
 
-    public static String DOZER_SCHEME = "dozer";
-    public static String SOURCE_MODEL = "sourceModel";
-    public static String TARGET_MODEL = "targetModel";
-    public static String MARSHAL_ID = "marshalId";
-    public static String UNMARSHAL_ID = "unmarshalId";
-    public static String MAPPING_FILE = "mappingFile";
+    public static String DOZER_SCHEME = "dozer"; //$NON-NLS-1$
+    public static String SOURCE_MODEL = "sourceModel"; //$NON-NLS-1$
+    public static String TARGET_MODEL = "targetModel"; //$NON-NLS-1$
+    public static String MARSHAL_ID = "marshalId"; //$NON-NLS-1$
+    public static String UNMARSHAL_ID = "unmarshalId"; //$NON-NLS-1$
+    public static String MAPPING_FILE = "mappingFile"; //$NON-NLS-1$
 
     public static String createEndpointUri(
             String dozerConfigPath,
@@ -33,17 +33,17 @@ public final class EndpointHelper {
             String unmarshallerId,
             String marshallerId) {
 
-        StringBuffer uriBuf = new StringBuffer(DOZER_SCHEME + ":" + transformId + "?");
-        uriBuf.append(SOURCE_MODEL + "=" + sourceClass);
-        uriBuf.append("&" + TARGET_MODEL + "=" + targetClass);
+        StringBuffer uriBuf = new StringBuffer(DOZER_SCHEME + ":" + transformId + "?"); //$NON-NLS-1$ //$NON-NLS-2$
+        uriBuf.append(SOURCE_MODEL + "=" + sourceClass); //$NON-NLS-1$
+        uriBuf.append("&" + TARGET_MODEL + "=" + targetClass); //$NON-NLS-1$ //$NON-NLS-2$
         if (marshallerId != null) {
-            uriBuf.append("&" + MARSHAL_ID + "=" + marshallerId);
+            uriBuf.append("&" + MARSHAL_ID + "=" + marshallerId); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (unmarshallerId != null) {
-            uriBuf.append("&" + UNMARSHAL_ID + "=" + unmarshallerId);
+            uriBuf.append("&" + UNMARSHAL_ID + "=" + unmarshallerId); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (dozerConfigPath != null) {
-            uriBuf.append("&" + MAPPING_FILE + "=" + dozerConfigPath);
+            uriBuf.append("&" + MAPPING_FILE + "=" + dozerConfigPath); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return uriBuf.toString();
@@ -59,16 +59,16 @@ public final class EndpointHelper {
 
     public static void replaceEndpointParameter(AbstractCamelModelElement endpoint, String key, String val) {
 
-        StringBuilder uriStr = new StringBuilder((String)endpoint.getParameter("uri"));
-        if (uriStr.indexOf(key + "=") < 0) {
-            throw new IllegalArgumentException("Endpoint does not contain parameter: " + key);
+        StringBuilder uriStr = new StringBuilder((String)endpoint.getParameter("uri")); //$NON-NLS-1$
+        if (uriStr.indexOf(key + "=") < 0) { //$NON-NLS-1$
+            throw new IllegalArgumentException("Endpoint does not contain parameter: " + key); //$NON-NLS-1$
         }
         int startIdx = uriStr.indexOf(key);
-        int endIdx = uriStr.indexOf("&", startIdx);
+        int endIdx = uriStr.indexOf("&", startIdx); //$NON-NLS-1$
         if (endIdx < 0) {
             endIdx = uriStr.length();
         }
-        uriStr.replace(startIdx, endIdx, key + "=" + val);
-        endpoint.setParameter("uri", uriStr.toString());
+        uriStr.replace(startIdx, endIdx, key + "=" + val); //$NON-NLS-1$
+        endpoint.setParameter("uri", uriStr.toString()); //$NON-NLS-1$
     }
 }

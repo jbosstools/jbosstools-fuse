@@ -22,10 +22,10 @@ import java.nio.charset.StandardCharsets;
  */
 public class TestGenerator {
 
-	private static final String TEST_TEMPLATE = "TestTemplate.java.template";
-    private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]";
-    private static final String PACKAGE_KEY = "\\$\\[package-name\\]";
-    private static final String CLASSNAME_KEY = "\\$\\[test-name\\]";
+	private static final String TEST_TEMPLATE = "TestTemplate.java.template"; //$NON-NLS-1$
+    private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]"; //$NON-NLS-1$
+    private static final String PACKAGE_KEY = "\\$\\[package-name\\]"; //$NON-NLS-1$
+    private static final String CLASSNAME_KEY = "\\$\\[test-name\\]"; //$NON-NLS-1$
 
     /**
      * Creates a test class for a transformation endpoint with the specified
@@ -50,7 +50,7 @@ public class TestGenerator {
         File testPath = new File(targetPath, createTestPath(packageName, className));
         // Check for collision on the path given for the test class
         if (testPath.exists()) {
-            throw new Exception("Unable to create test, target already exists: "
+            throw new Exception("Unable to create test, target already exists: " //$NON-NLS-1$
                     + testPath.getAbsolutePath());
         }
         // Create any needed parent directories for the package name
@@ -82,10 +82,10 @@ public class TestGenerator {
     private static String createTestPath(String packageName, String className) {
         StringBuilder path = new StringBuilder();
         if (packageName != null && packageName.length() > 0) {
-            path.append(packageName.replaceAll("\\.", "/"));
-            path.append("/");
+            path.append(packageName.replaceAll("\\.", "/")); //$NON-NLS-1$ //$NON-NLS-2$
+            path.append("/"); //$NON-NLS-1$
         }
-        path.append(className + ".java");
+        path.append(className + ".java"); //$NON-NLS-1$
         return path.toString();
     }
 }

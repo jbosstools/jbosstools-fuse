@@ -47,9 +47,9 @@ public class Model {
 
     public Model get(String nodeName) {
         Model model = null;
-        if (nodeName.contains(".")) {
+        if (nodeName.contains(".")) { //$NON-NLS-1$
             if (hasChildren()) {
-                int idx = nodeName.indexOf(".");
+                int idx = nodeName.indexOf("."); //$NON-NLS-1$
                 String parent = nodeName.substring(0, idx);
                 String child = nodeName.substring(idx + 1, nodeName.length());
                 Model parentModel = children.get(parent);
@@ -94,14 +94,14 @@ public class Model {
 
     public List<String> listFields() {
         List<String> fields = new LinkedList<String>();
-        return listFields(fields, this.children.values(), "");
+        return listFields(fields, this.children.values(), ""); //$NON-NLS-1$
     }
 
     public List<String> listFields(List<String> fieldList, 
             Collection<Model> fields, String prefix) {
         for (Model field : fields) {
             fieldList.add(prefix + field.getName());
-            listFields(fieldList, field.children.values(), prefix + field.getName() + ".");
+            listFields(fieldList, field.children.values(), prefix + field.getName() + "."); //$NON-NLS-1$
         }
         return fieldList;
     }
@@ -150,10 +150,10 @@ public class Model {
     private String format(Model node, int depth) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < depth; i++) {
-            sb.append("  ");
+            sb.append("  "); //$NON-NLS-1$
         }
-        sb.append(node.children.isEmpty() ? "- " : "* ");
-        sb.append(node.name + " : " + node.type);
+        sb.append(node.children.isEmpty() ? "- " : "* "); //$NON-NLS-1$ //$NON-NLS-2$
+        sb.append(node.name + " : " + node.type); //$NON-NLS-1$
         return sb.toString();
     }
 

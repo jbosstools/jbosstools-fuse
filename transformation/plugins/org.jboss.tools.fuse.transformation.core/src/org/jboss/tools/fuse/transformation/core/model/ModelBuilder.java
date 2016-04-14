@@ -48,11 +48,11 @@ public class ModelBuilder {
     }
 
     public static String getListName(Class<?> listType) {
-        return "[" + listType.getName() + "]";
+        return "[" + listType.getName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static String getListType(String listName) {
-        return listName.split("\\[")[1].split("\\]")[0];
+        return listName.split("\\[")[1].split("\\]")[0]; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private static void addFieldsToModel(List<Field> fields, Model model) {
@@ -122,7 +122,7 @@ public class ModelBuilder {
         boolean excluded = 
             fieldClass.isPrimitive()
             || fieldClass.getName().equals(String.class.getName())
-            || fieldClass.getName().startsWith("java.")
+            || fieldClass.getName().startsWith("java.") //$NON-NLS-1$
             || Number.class.isAssignableFrom(fieldClass)
             || (fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum());
         

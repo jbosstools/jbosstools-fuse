@@ -85,7 +85,7 @@ public class CamelConfigBuilder {
                 dataFormat = null;
                 break;
             default:
-                throw new Exception("Unsupported data format type: " + type);
+                throw new Exception("Unsupported data format type: " + type); //$NON-NLS-1$
         }
 
         return dataFormat;
@@ -152,7 +152,7 @@ public class CamelConfigBuilder {
     public List<String> getTransformEndpointIds() {
         List<String> endpointIds = new LinkedList<String>();
         for (AbstractCamelModelElement ep : getEndpoints()) {
-            if (((String)ep.getParameter("uri")).startsWith(EndpointHelper.DOZER_SCHEME)) {
+            if (((String)ep.getParameter("uri")).startsWith(EndpointHelper.DOZER_SCHEME)) { //$NON-NLS-1$
                 endpointIds.add(ep.getId());
             }
         }
@@ -183,7 +183,7 @@ public class CamelConfigBuilder {
 		CamelEndpoint ep = new CamelEndpoint(uri);
 		ep.setId(id);
 		ep.setParent(parent);
-		ep.setUnderlyingMetaModelObject(getEipByName("from"));
+		ep.setUnderlyingMetaModelObject(getEipByName("from")); //$NON-NLS-1$
 		getModel().getCamelContext().addEndpointDefinition(ep);
 		return ep;
     }
@@ -194,8 +194,8 @@ public class CamelConfigBuilder {
     }
 
     protected AbstractCamelModelElement createJsonDataFormat(String className) throws Exception {
-        final String id = className != null ? className.replaceAll("\\.", "") : "transform-json";
-        Eip json = getEipByName("json");
+        final String id = className != null ? className.replaceAll("\\.", "") : "transform-json"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Eip json = getEipByName("json"); //$NON-NLS-1$
         AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
@@ -203,8 +203,8 @@ public class CamelConfigBuilder {
 			dataFormat = new CamelBasicModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(json);
-    		dataFormat.setParameter("library", "Jackson");
-    		dataFormat.setParameter("unmarshalTypeName", className);
+    		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
+    		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
     		parent.getCamelContext().addDataFormat(dataFormat);
         }
         return dataFormat;
@@ -212,8 +212,8 @@ public class CamelConfigBuilder {
 
 
     protected AbstractCamelModelElement createJaxbDataFormat(String contextPath) throws Exception {
-        final String id = contextPath.replaceAll("\\.", "");
-        Eip jaxb = getEipByName("jaxb");
+        final String id = contextPath.replaceAll("\\.", ""); //$NON-NLS-1$ //$NON-NLS-2$
+        Eip jaxb = getEipByName("jaxb"); //$NON-NLS-1$
         AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
@@ -221,7 +221,7 @@ public class CamelConfigBuilder {
 			dataFormat = new CamelBasicModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(jaxb);
-    		dataFormat.setParameter("contextPath", contextPath);
+    		dataFormat.setParameter("contextPath", contextPath); //$NON-NLS-1$
     		parent.getCamelContext().addDataFormat(dataFormat);
         }
         return dataFormat;

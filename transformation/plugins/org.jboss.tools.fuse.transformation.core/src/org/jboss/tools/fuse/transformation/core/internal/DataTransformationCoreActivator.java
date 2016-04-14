@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
  * @author lhein
  */
 public class DataTransformationCoreActivator extends BaseUIPlugin {
-	public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.core";
+	public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.core"; //$NON-NLS-1$
 
 	private static DataTransformationCoreActivator instance;
 	private static BundleContext myContext;

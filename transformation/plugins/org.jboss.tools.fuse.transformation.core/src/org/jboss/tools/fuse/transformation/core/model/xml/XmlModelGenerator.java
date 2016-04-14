@@ -70,7 +70,7 @@ import com.sun.tools.xjc.api.XJC;
  */
 public class XmlModelGenerator {
 
-	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema";
+	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema"; //$NON-NLS-1$
 
     void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
                                    JPrimitiveType voidType) {
@@ -80,13 +80,13 @@ public class XmlModelGenerator {
             Set<JMethod> listGetMethods = new HashSet<>();
             // Collect getters for all list fields
             for (JMethod method : definedClass.methods()) {
-                if (method.name().startsWith("get") && method.type().name().startsWith("List<"))
+                if (method.name().startsWith("get") && method.type().name().startsWith("List<")) //$NON-NLS-1$ //$NON-NLS-2$
                     listGetMethods.add(method);
             }
             if (!listGetMethods.isEmpty()) {
                 // Remove getters w/ matching setters
                 for (JMethod method : definedClass.methods()) {
-                    if (method.name().startsWith("set")) {
+                    if (method.name().startsWith("set")) { //$NON-NLS-1$
                         for (Iterator<JMethod> iter = listGetMethods.iterator(); iter.hasNext();) {
                             JMethod getMethod = iter.next();
                             if (method.name().substring(3).equals(getMethod.name().substring(3))) {
@@ -101,7 +101,7 @@ public class XmlModelGenerator {
                     String name = getMethod.name().substring(3);
                     JMethod setMethod = definedClass.method(getMethod.mods().getValue(),
                                                             voidType,
-                                                            "set" + name);
+                                                            "set" + name); //$NON-NLS-1$
                     name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
                     JVar prm = setMethod.param(0, getMethod.type(), name);
                     setMethod.body().assign(JExpr._this().ref(name), prm);
@@ -124,7 +124,7 @@ public class XmlModelGenerator {
                 Attr nsAttr = null;
                 for (int attrNdx = 0; attrNdx < attrs.getLength(); ++attrNdx) {
                     Node attr = attrs.item(attrNdx);
-                    if (attr.getNodeName().startsWith("xmlns")) {
+                    if (attr.getNodeName().startsWith("xmlns")) { //$NON-NLS-1$
                         nsAttr = (Attr)attr;
                         break;
                     }
@@ -132,9 +132,9 @@ public class XmlModelGenerator {
                 if (nsAttr != null) {
                     element.removeAttributeNode(nsAttr);
                     schema.setAttributeNodeNS(nsAttr);
-                    Element importElement = schema.getOwnerDocument().createElementNS(schemaNamespace, schemaPrefix + ":import");
-                    importElement.setAttribute("namespace", nsAttr.getNodeValue());
-                    importElement.setAttribute("schemaLocation", fileByNamespace.get(nsAttr.getNodeValue()).toURI().toString());
+                    Element importElement = schema.getOwnerDocument().createElementNS(schemaNamespace, schemaPrefix + ":import"); //$NON-NLS-1$
+                    importElement.setAttribute("namespace", nsAttr.getNodeValue()); //$NON-NLS-1$
+                    importElement.setAttribute("schemaLocation", fileByNamespace.get(nsAttr.getNodeValue()).toURI().toString()); //$NON-NLS-1$
                     schema.insertBefore(importElement, schema.getFirstChild());
                 }
             }
@@ -170,12 +170,12 @@ public class XmlModelGenerator {
                 JDefinedClass jdClass = classIt.next();
                 // Certain schema styles do not use XmlRootElement annotations and use
                 // XmlElementDecl inside of ObjectFactory instead - check for that
-                if (jdClass.name().equals("ObjectFactory")) {
+                if (jdClass.name().equals("ObjectFactory")) { //$NON-NLS-1$
                     for (JMethod method : jdClass.methods()) {
                         JAnnotationUse elementAnnotation = getAnnotation(
                                                                          method, XmlElementDecl.class.getName());
                         if (elementAnnotation != null) {
-                            String elementName = getAnnotationValue(elementAnnotation, "name");
+                            String elementName = getAnnotationValue(elementAnnotation, "name"); //$NON-NLS-1$
                             JType returnType = ((JClass)method.type()).getTypeParameters().get(0);
                             mappings.put(elementName, returnType.fullName());
                         }
@@ -185,7 +185,7 @@ public class XmlModelGenerator {
                     // which is all we care about.
                     JAnnotationUse elementAnnotation = getAnnotation(jdClass, XmlRootElement.class.getName());
                     if (elementAnnotation != null) {
-                        String elementName = getAnnotationValue(elementAnnotation, "name");
+                        String elementName = getAnnotationValue(elementAnnotation, "name"); //$NON-NLS-1$
                         mappings.put(elementName, jdClass.fullName());
                     }
                 }
@@ -224,7 +224,7 @@ public class XmlModelGenerator {
         if (schemaDocs.length == 1) {
             schemaDocs[0].save(schemaFile, new XmlOptions().setSavePrettyPrint());
         } else {
-			System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all");
+			System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all"); //$NON-NLS-1$
 
             String namespace = xml[0].getDomNode().getFirstChild().getNamespaceURI();
             // Save schemas and map their namespaces to their locations
@@ -237,12 +237,12 @@ public class XmlModelGenerator {
                 } else {
                     String name = new URI(targetNamespace).getSchemeSpecificPart();
                     StringBuilder builder = new StringBuilder();
-                    for (String part : name.split("/")) {
+                    for (String part : name.split("/")) { //$NON-NLS-1$
                         if (part.isEmpty()) continue;
                         if (builder.length() > 0) builder.append('.');
                         builder.append(part);
                     }
-					file = new File(schemaFile.getParent(), builder + ".xsd");
+					file = new File(schemaFile.getParent(), builder + ".xsd"); //$NON-NLS-1$
                 }
                 schemaDoc.save(file, new XmlOptions().setSavePrettyPrint());
                 fileByNamespace.put(targetNamespace, file);
@@ -258,22 +258,22 @@ public class XmlModelGenerator {
                         // Determine schema's namespace prefix
                         String schemaPrefix = schema.getNodeName();
                         int ndx = schemaPrefix.indexOf(':');
-                        schemaPrefix = ndx > 0 ? schemaPrefix.substring(0, ndx) : "";
+                        schemaPrefix = ndx > 0 ? schemaPrefix.substring(0, ndx) : ""; //$NON-NLS-1$
                         // Determine schema's namespace
                         String schemaNamespace;
                         NamedNodeMap attrs = schema.getAttributes();
                         if (attrs == null) {
-                            schemaNamespace = "";
+                            schemaNamespace = ""; //$NON-NLS-1$
                         } else {
                             Attr nsAttr = null;
                             for (int attrNdx = 0; attrNdx < attrs.getLength(); ++attrNdx) {
                                 Node attr = attrs.item(attrNdx);
-                                if (attr.getNodeName().equals("xmlns" + (schemaPrefix.isEmpty() ? "" : ":" + schemaPrefix))) {
+                                if (attr.getNodeName().equals("xmlns" + (schemaPrefix.isEmpty() ? "" : ":" + schemaPrefix))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                                     nsAttr = (Attr)attr;
                                     break;
                                 }
                             }
-                            schemaNamespace = nsAttr == null ? "" : nsAttr.getValue();
+                            schemaNamespace = nsAttr == null ? "" : nsAttr.getValue(); //$NON-NLS-1$
                         }
 
                         addSchemaLocations(node.getChildNodes(), fileByNamespace, schema, schemaPrefix, schemaNamespace);
@@ -341,7 +341,7 @@ public class XmlModelGenerator {
         sc.setErrorListener(listener);
         final S2JJAXBModel s2 = sc.bind();
         if (listener.exception != null) throw listener.exception;
-        if (s2 == null) throw new Exception("Failed to parse schema into JAXB Model");
+        if (s2 == null) throw new Exception("Failed to parse schema into JAXB Model"); //$NON-NLS-1$
         final JCodeModel jcm = s2.generateCode(null, null);
         for (Iterator<JPackage> iter = jcm.packages(); iter.hasNext();) {
             addMissingSettersForLists(iter.next().classes(), jcm.VOID);
@@ -372,7 +372,7 @@ public class XmlModelGenerator {
         }
         StringWriter sw = new StringWriter();
         jaVal.generate(new JFormatter(sw));
-        return sw.toString().replaceAll("\"", "");
+        return sw.toString().replaceAll("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -388,7 +388,7 @@ public class XmlModelGenerator {
         SchemaCompiler sc = createSchemaCompiler(schemaFile);
         final S2JJAXBModel s2 = sc.bind();
         if (s2 == null) {
-            throw new Exception("Failed to parse schema into JAXB Model");
+            throw new Exception("Failed to parse schema into JAXB Model"); //$NON-NLS-1$
         }
         for (Mapping mapping : s2.getMappings()) {
             elements.add(mapping.getElement());
@@ -412,7 +412,7 @@ public class XmlModelGenerator {
         Document doc = dbf.newDocumentBuilder().parse(instanceFile);
         Element root = doc.getDocumentElement();
         if (root == null) {
-            throw new Exception("Invalid instance document : no root element");
+            throw new Exception("Invalid instance document : no root element"); //$NON-NLS-1$
         }
         return new QName(root.getNamespaceURI(), root.getLocalName());
     }

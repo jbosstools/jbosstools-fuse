@@ -62,12 +62,12 @@ public class DozerVariableMapping extends BaseDozerMapping implements VariableMa
     
     public static String qualifyName(String variableName) {
         return !isQualified(variableName)
-                ? "${" + variableName + "}"
+                ? "${" + variableName + "}" //$NON-NLS-1$ //$NON-NLS-2$
                 : variableName;
     }
     
     public static boolean isQualified(String variableName) {
-        return variableName.startsWith("${") && variableName.endsWith("}");
+        return variableName.startsWith("${") && variableName.endsWith("}"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override

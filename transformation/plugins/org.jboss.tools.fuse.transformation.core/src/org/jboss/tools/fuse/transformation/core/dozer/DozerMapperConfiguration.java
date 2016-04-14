@@ -39,17 +39,17 @@ import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 
 public class DozerMapperConfiguration implements MapperConfiguration {
 
-    public static final String DEFAULT_DOZER_CONFIG = "dozerBeanMapping.xml";
+    public static final String DEFAULT_DOZER_CONFIG = "dozerBeanMapping.xml"; //$NON-NLS-1$
 
     private static final String VARIABLE_MAPPER_CLASS =
-            "org.apache.camel.component.dozer.VariableMapper";
+            "org.apache.camel.component.dozer.VariableMapper"; //$NON-NLS-1$
     private static final String EXPRESSION_MAPPER_CLASS =
-            "org.apache.camel.component.dozer.ExpressionMapper";
-    private static final String VARIABLE_MAPPER_ID = "_variableMapping";
-    private static final String CUSTOM_MAPPER_ID = "_customMapping";
-    private static final String EXPRESSION_MAPPER_ID = "_expressionMapping";
+            "org.apache.camel.component.dozer.ExpressionMapper"; //$NON-NLS-1$
+    private static final String VARIABLE_MAPPER_ID = "_variableMapping"; //$NON-NLS-1$
+    private static final String CUSTOM_MAPPER_ID = "_customMapping"; //$NON-NLS-1$
+    private static final String EXPRESSION_MAPPER_ID = "_expressionMapping"; //$NON-NLS-1$
     private static final String DOZER_SCHEMA_LOC =
-            "http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd";
+            "http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd"; //$NON-NLS-1$
 
     public static DozerMapperConfiguration loadConfig(final File file) throws Exception {
         return new DozerMapperConfiguration(file, null);
@@ -87,12 +87,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private Model targetModel;
 
     private final Model variableModel =
-            new Model("variables", VARIABLE_MAPPER_CLASS)
-                    .addChild("literal", java.lang.String.class.getName());
+            new Model("variables", VARIABLE_MAPPER_CLASS) //$NON-NLS-1$
+                    .addChild("literal", java.lang.String.class.getName()); //$NON-NLS-1$
 
     private final Model expressionModel =
-            new Model("expressions", EXPRESSION_MAPPER_CLASS)
-                    .addChild("expression", java.lang.String.class.getName());
+            new Model("expressions", EXPRESSION_MAPPER_CLASS) //$NON-NLS-1$
+                    .addChild("expression", java.lang.String.class.getName()); //$NON-NLS-1$
 
     private DozerMapperConfiguration(final File file, final ClassLoader loader) throws Exception {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(file);
@@ -583,8 +583,8 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private void validateIndex(Model model, List<Integer> index) throws RuntimeException {
         int nodes = DozerUtil.numberOfNodes(model);
         if (nodes != index.size()) {
-            throw new RuntimeException("Invalid index size for model, expected "
-                    + nodes + " but index size is " + index.size());
+            throw new RuntimeException("Invalid index size for model, expected " //$NON-NLS-1$
+                    + nodes + " but index size is " + index.size()); //$NON-NLS-1$
         }
     }
 }

@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 public enum FieldType {
 
     @XmlEnumValue("iterate")
-    ITERATE("iterate"),
+    ITERATE("iterate"), //$NON-NLS-1$
     @XmlEnumValue("generic")
-    GENERIC("generic");
+    GENERIC("generic"); //$NON-NLS-1$
     private final String value;
 
     FieldType(String v) {
