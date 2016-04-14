@@ -68,7 +68,7 @@ public class DozerVariable implements org.jboss.tools.fuse.transformation.core.V
 
     @Override
     public String toString() {
-        return "variable[name:" + variable.getName() + ",value:" + variable.getContent() + "]";
+        return "variable[name:" + variable.getName() + ",value:" + variable.getContent() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     Variable getVariable() {

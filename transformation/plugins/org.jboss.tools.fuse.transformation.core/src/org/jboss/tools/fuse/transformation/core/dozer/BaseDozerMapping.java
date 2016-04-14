@@ -62,12 +62,12 @@ public abstract class BaseDozerMapping {
     
     public void setSourceIndex(List<Integer> indexes) {
         throw new UnsupportedOperationException(
-                "setSourceIndex not supported for mappings of type " + getClass().getSimpleName());
+                "setSourceIndex not supported for mappings of type " + getClass().getSimpleName()); //$NON-NLS-1$
     }
     
     public void setTargetIndex(List<Integer> indexes) {
         throw new UnsupportedOperationException(
-                "setTargetIndex not supported for mappings of type " + getClass().getSimpleName());
+                "setTargetIndex not supported for mappings of type " + getClass().getSimpleName()); //$NON-NLS-1$
     }
     
     public void setFieldIndex(FieldDefinition field, Model model, String rootType, List<Integer> indexes) {

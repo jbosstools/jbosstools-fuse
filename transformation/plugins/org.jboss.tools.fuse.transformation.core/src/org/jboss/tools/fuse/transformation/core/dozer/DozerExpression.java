@@ -21,7 +21,7 @@ import org.jboss.tools.fuse.transformation.core.dozer.config.Field;
  */
 public class DozerExpression implements Expression {
 
-    private static final String SEP = ":";
+    private static final String SEP = ":"; //$NON-NLS-1$
     private Field field;
 
     /**
@@ -46,7 +46,7 @@ public class DozerExpression implements Expression {
     @Override
     public String getExpression() {
         String nextPart = getArgumentPart(field, SEP, 1);
-        if (nextPart.equalsIgnoreCase("resource")) {
+        if (nextPart.equalsIgnoreCase("resource")) { //$NON-NLS-1$
             String scheme = getArgumentPart(field, SEP, 2);
             String path = getArgumentPart(field, SEP, 3);
             if (scheme != null && path != null) {
@@ -63,6 +63,6 @@ public class DozerExpression implements Expression {
 
     @Override
     public String toString() {
-        return "expression[language:" + getLanguage() + ",expr:" + getExpression() + "]";
+        return "expression[language:" + getLanguage() + ",expr:" + getExpression() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

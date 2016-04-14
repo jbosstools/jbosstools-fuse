@@ -34,26 +34,26 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _RelationshipType_QNAME = new QName("http://dozer.sourceforge.net", "relationship-type");
-    private final static QName _ClassA_QNAME = new QName("http://dozer.sourceforge.net", "class-a");
-    private final static QName _BDeepIndexHint_QNAME = new QName("http://dozer.sourceforge.net", "b-deep-index-hint");
-    private final static QName _ClassB_QNAME = new QName("http://dozer.sourceforge.net", "class-b");
-    private final static QName _MapEmptyString_QNAME = new QName("http://dozer.sourceforge.net", "map-empty-string");
-    private final static QName _A_QNAME = new QName("http://dozer.sourceforge.net", "a");
-    private final static QName _Exception_QNAME = new QName("http://dozer.sourceforge.net", "exception");
-    private final static QName _CopyByReference_QNAME = new QName("http://dozer.sourceforge.net", "copy-by-reference");
-    private final static QName _TrimStrings_QNAME = new QName("http://dozer.sourceforge.net", "trim-strings");
-    private final static QName _Wildcard_QNAME = new QName("http://dozer.sourceforge.net", "wildcard");
-    private final static QName _AHint_QNAME = new QName("http://dozer.sourceforge.net", "a-hint");
-    private final static QName _ADeepIndexHint_QNAME = new QName("http://dozer.sourceforge.net", "a-deep-index-hint");
-    private final static QName _B_QNAME = new QName("http://dozer.sourceforge.net", "b");
-    private final static QName _BeanFactory_QNAME = new QName("http://dozer.sourceforge.net", "bean-factory");
-    private final static QName _MapNull_QNAME = new QName("http://dozer.sourceforge.net", "map-null");
-    private final static QName _DateFormat_QNAME = new QName("http://dozer.sourceforge.net", "date-format");
-    private final static QName _StopOnErrors_QNAME = new QName("http://dozer.sourceforge.net", "stop-on-errors");
-    private final static QName _BHint_QNAME = new QName("http://dozer.sourceforge.net", "b-hint");
-    private final static QName _Variable_QNAME = new QName("http://dozer.sourceforge.net", "variable");
-    private final static QName _Converter_QNAME = new QName("http://dozer.sourceforge.net", "converter");
+    private final static QName _RelationshipType_QNAME = new QName("http://dozer.sourceforge.net", "relationship-type"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _ClassA_QNAME = new QName("http://dozer.sourceforge.net", "class-a"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _BDeepIndexHint_QNAME = new QName("http://dozer.sourceforge.net", "b-deep-index-hint"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _ClassB_QNAME = new QName("http://dozer.sourceforge.net", "class-b"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _MapEmptyString_QNAME = new QName("http://dozer.sourceforge.net", "map-empty-string"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _A_QNAME = new QName("http://dozer.sourceforge.net", "a"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Exception_QNAME = new QName("http://dozer.sourceforge.net", "exception"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _CopyByReference_QNAME = new QName("http://dozer.sourceforge.net", "copy-by-reference"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _TrimStrings_QNAME = new QName("http://dozer.sourceforge.net", "trim-strings"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Wildcard_QNAME = new QName("http://dozer.sourceforge.net", "wildcard"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _AHint_QNAME = new QName("http://dozer.sourceforge.net", "a-hint"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _ADeepIndexHint_QNAME = new QName("http://dozer.sourceforge.net", "a-deep-index-hint"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _B_QNAME = new QName("http://dozer.sourceforge.net", "b"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _BeanFactory_QNAME = new QName("http://dozer.sourceforge.net", "bean-factory"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _MapNull_QNAME = new QName("http://dozer.sourceforge.net", "map-null"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _DateFormat_QNAME = new QName("http://dozer.sourceforge.net", "date-format"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _StopOnErrors_QNAME = new QName("http://dozer.sourceforge.net", "stop-on-errors"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _BHint_QNAME = new QName("http://dozer.sourceforge.net", "b-hint"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Variable_QNAME = new QName("http://dozer.sourceforge.net", "variable"); //$NON-NLS-1$ //$NON-NLS-2$
+    private final static QName _Converter_QNAME = new QName("http://dozer.sourceforge.net", "converter"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.jboss.tools.fuse.transformation.core.model.dozer.config

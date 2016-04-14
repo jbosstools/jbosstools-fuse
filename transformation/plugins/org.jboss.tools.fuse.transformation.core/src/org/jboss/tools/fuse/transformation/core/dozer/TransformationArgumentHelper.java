@@ -17,7 +17,7 @@ public final class TransformationArgumentHelper {
     static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public static String emptyForNull(String str) {
-        return str == null ? "" : str;
+        return str == null ? "" : str; //$NON-NLS-1$
     }
 
     public static String getArgumentPart(Field field,

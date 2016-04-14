@@ -26,12 +26,12 @@ import org.jboss.tools.fuse.transformation.core.model.Model;
 public final class DozerUtil {
     
     // Regex which catches indexes in a field name
-    private static final Pattern INDEX_PATTERN = Pattern.compile("\\[[0-9]+\\]");
+    private static final Pattern INDEX_PATTERN = Pattern.compile("\\[[0-9]+\\]"); //$NON-NLS-1$
     
     public static List<Integer> getFieldIndexes(String fieldVal) {
         ArrayList<Integer> indices = new ArrayList<Integer>();
         if (fieldVal != null) {
-            for (String fieldName : fieldVal.split("\\.")) {
+            for (String fieldName : fieldVal.split("\\.")) { //$NON-NLS-1$
                 indices.add(getIndex(fieldName));
             }
         }
@@ -45,7 +45,7 @@ public final class DozerUtil {
      */
     public static String removeIndexes(String fieldVal) {
         return fieldVal != null && fieldVal.indexOf('[') > 0
-                ? fieldVal.replaceAll(INDEX_PATTERN.pattern(), "")
+                ? fieldVal.replaceAll(INDEX_PATTERN.pattern(), "") //$NON-NLS-1$
                 : fieldVal;
     }
     
@@ -73,8 +73,8 @@ public final class DozerUtil {
     public static String getFieldName(final Model model, final String rootType, List<Integer> indexes) {
         int depth = numberOfNodes(model);
         if (depth != indexes.size()) {
-            throw new IllegalArgumentException("Size of index list " + indexes.size() 
-                    + "does not match depth of model tree " + depth);
+            throw new IllegalArgumentException("Size of index list " + indexes.size()  //$NON-NLS-1$
+                    + "does not match depth of model tree " + depth); //$NON-NLS-1$
         }
         
         // The model tree is bottom-top order while the indexes are top-bottom, so reverse the list
@@ -94,7 +94,7 @@ public final class DozerUtil {
             if (parent.isCollection() && parentIdx == null) {
                 break;
             }
-            name.insert(0, formatName(parent.getName(), parentIdx) + ".");
+            name.insert(0, formatName(parent.getName(), parentIdx) + "."); //$NON-NLS-1$
         }
         return name.toString();
     }
@@ -113,7 +113,7 @@ public final class DozerUtil {
     }
     
     static String formatName(String name, Integer index) {
-        return index != null ? name + "[" + index + "]" : name;
+        return index != null ? name + "[" + index + "]" : name; //$NON-NLS-1$ //$NON-NLS-2$
     }
     
     public static int numberOfNodes(Model model) {

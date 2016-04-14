@@ -25,7 +25,7 @@ import org.jboss.tools.fuse.transformation.core.TransformationMapping;
  */
 public class DozerTransformationMapping extends DozerFieldMapping implements TransformationMapping {
 
-    private static final String SEP = ",";
+    private static final String SEP = ","; //$NON-NLS-1$
 
     /**
      * Create a new DozerTransformationMapping.
@@ -44,16 +44,16 @@ public class DozerTransformationMapping extends DozerFieldMapping implements Tra
     public void addTransformationArgument(String type,
                                           String value) {
         String[] parts = getArgumentParts(getField(), SEP);
-        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
+        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : ""); //$NON-NLS-1$
         builder.append(SEP);
-        builder.append(parts.length > 1 ? parts[1] : "");
+        builder.append(parts.length > 1 ? parts[1] : ""); //$NON-NLS-1$
         for (int ndx = 2; ndx < parts.length; ndx++) {
             builder.append(SEP);
             builder.append(parts[ndx]);
         }
         builder.append(SEP);
         builder.append(emptyForNull(type));
-        builder.append("=");
+        builder.append("="); //$NON-NLS-1$
         builder.append(emptyForNull(value));
         getField().setCustomConverterArgument(builder.toString());
     }
@@ -61,9 +61,9 @@ public class DozerTransformationMapping extends DozerFieldMapping implements Tra
     @Override
     public void addTransformationArguments(String... arguments) {
         String[] parts = getArgumentParts(getField(), SEP);
-        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
+        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : ""); //$NON-NLS-1$
         builder.append(SEP);
-        builder.append(parts.length > 1 ? parts[1] : "");
+        builder.append(parts.length > 1 ? parts[1] : ""); //$NON-NLS-1$
         for (String arg : arguments) {
             builder.append(SEP);
             builder.append(arg);
@@ -97,7 +97,7 @@ public class DozerTransformationMapping extends DozerFieldMapping implements Tra
         String[] parts = getArgumentParts(getField(), SEP);
         StringBuilder builder = new StringBuilder(emptyForNull(name));
         builder.append(SEP);
-        builder.append(parts.length > 1 ? parts[1] : "");
+        builder.append(parts.length > 1 ? parts[1] : ""); //$NON-NLS-1$
         for (int ndx = 2; ndx < parts.length; ndx++) {
             builder.append(SEP);
             builder.append(parts[ndx]);
@@ -108,7 +108,7 @@ public class DozerTransformationMapping extends DozerFieldMapping implements Tra
     @Override
     public void setTransformationName(String name) {
         String[] parts = getArgumentParts(getField(), SEP);
-        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
+        StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : ""); //$NON-NLS-1$
         builder.append(SEP);
         builder.append(emptyForNull(name));
         for (int ndx = 2; ndx < parts.length; ndx++) {
