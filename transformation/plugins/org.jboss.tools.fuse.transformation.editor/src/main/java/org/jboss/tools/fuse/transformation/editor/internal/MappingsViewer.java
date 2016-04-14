@@ -32,6 +32,7 @@ import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -66,7 +67,7 @@ public class MappingsViewer extends Composite {
         setBackground(parent.getParent().getBackground());
         final Label title = new Label(this, SWT.CENTER);
         title.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        title.setText("Mappings");
+        title.setText(Messages.MappingsViewer_labelMappings);
 
         // Create tool bar
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
@@ -74,7 +75,7 @@ public class MappingsViewer extends Composite {
         addButton.setImage(new DecorationOverlayIcon(Images.MAPPED,
                                                      Decorations.ADD,
                                                      IDecoration.TOP_RIGHT).createImage());
-        addButton.setToolTipText("Add a new mapping");
+        addButton.setToolTipText(Messages.MappingsViewer_tooltipMappings);
         addButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -84,7 +85,7 @@ public class MappingsViewer extends Composite {
         });
         deleteButton = new ToolItem(toolBar, SWT.PUSH);
         deleteButton.setImage(Images.DELETE);
-        deleteButton.setToolTipText("Delete the selected mapping");
+        deleteButton.setToolTipText(Messages.MappingsViewer_tooltipDeleteMapping);
         deleteButton.setEnabled(false);
         deleteButton.addSelectionListener(new SelectionAdapter() {
 

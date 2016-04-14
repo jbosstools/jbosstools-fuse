@@ -62,7 +62,7 @@ final class MappingSummary extends MappingViewer {
         if (mapping.getType() == MappingType.TRANSFORMATION) {
             builder.append(')');
         }
-        builder.append(" => ");
+        builder.append(" => "); //$NON-NLS-1$
         builder.append(name(mapping.getTarget()));
         mapsToLabel.setToolTipText(builder.toString());
 
