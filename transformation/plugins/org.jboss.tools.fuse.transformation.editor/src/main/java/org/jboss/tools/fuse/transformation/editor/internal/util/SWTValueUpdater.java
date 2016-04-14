@@ -66,7 +66,7 @@ public final class SWTValueUpdater implements Listener, IDisposeListener, IValue
             control = ((IViewerObservable) target).getViewer().getControl();
         } else {
             throw new IllegalArgumentException(
-                    "target of binding must be an ISWTObservable whose widget is a Control.");
+                    "target of binding must be an ISWTObservable whose widget is a Control."); //$NON-NLS-1$
         }
         addListeners();
     }

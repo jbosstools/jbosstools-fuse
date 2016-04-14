@@ -21,7 +21,7 @@ public class FormatParser {
 
     // %[argument_index$][flags][width][.precision][t]conversion
     private static final String FORMAT_SPECIFIER
-        = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])";
+        = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])"; //$NON-NLS-1$
 
     private static Pattern fsPattern = Pattern.compile(FORMAT_SPECIFIER);
 
@@ -361,7 +361,7 @@ public class FormatParser {
             String tT = m.group(idx++);
             if (tT != null) {
                 dt = true;
-                if (tT.equals("T"))
+                if (tT.equals("T")) //$NON-NLS-1$
                     f.add(Flags.UPPERCASE);
             }
 
@@ -403,7 +403,7 @@ public class FormatParser {
             if (precision != -1)
                 throw new IllegalFormatPrecisionException(precision);
             if (!DateTime.isValid(c))
-                throw new UnknownFormatConversionException("t" + c);
+                throw new UnknownFormatConversionException("t" + c); //$NON-NLS-1$
             checkBadFlags(Flags.ALTERNATE, Flags.PLUS, Flags.LEADING_SPACE,
                           Flags.ZERO_PAD, Flags.GROUP, Flags.PARENTHESES);
             // '-' requires a width
