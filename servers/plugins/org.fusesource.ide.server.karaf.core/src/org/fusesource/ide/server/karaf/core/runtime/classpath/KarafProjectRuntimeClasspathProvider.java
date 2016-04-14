@@ -17,6 +17,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jst.server.core.RuntimeClasspathProviderDelegate;
 import org.eclipse.wst.server.core.IRuntime;
+import org.jboss.ide.eclipse.as.classpath.core.runtime.CustomRuntimeClasspathModel;
+import org.jboss.ide.eclipse.as.classpath.core.runtime.IRuntimePathProvider;
+import org.jboss.ide.eclipse.as.classpath.core.runtime.cache.internal.RuntimeClasspathCache;
+import org.jboss.ide.eclipse.as.classpath.core.runtime.internal.PathProviderResolutionUtil;
 
 /**
  * This class is in use for all server types, because legacy projects
@@ -61,6 +65,29 @@ public class KarafProjectRuntimeClasspathProvider
 		// It is advisable to cache the result, at least for the default entries
 		
 		// More work to pull from the classpath defaults via pref page per runtime type... might need api extensions
-		return new IClasspathEntry[0];
+		return resolveClasspathContainerFromRuntime(runtime);
+	}
+	
+	/*
+	 * For as6 and below, pull from the runtime-type model, which is cached once
+	 * per runtime-type and is only recached if the list of default path providers is changed. 
+	 */
+	public IClasspathEntry[] resolveClasspathContainerFromRuntime(IRuntime runtime) {
+		if( runtime == null ) 
+			return new IClasspathEntry[0];
+
+		// if cache is available, use cache
+		IClasspathEntry[] runtimeClasspath = RuntimeClasspathCache.getInstance().getEntries(runtime);
+		if (runtimeClasspath != null) {
+			return runtimeClasspath;
+		}
+		
+		// resolve
+		IRuntimePathProvider[] sets = CustomRuntimeClasspathModel.getInstance().getEntries(runtime.getRuntimeType());
+		IPath[] allPaths = PathProviderResolutionUtil.getAllPaths(runtime, sets);
+		runtimeClasspath = PathProviderResolutionUtil.getClasspathEntriesForResolvedPaths(allPaths);
+	
+		RuntimeClasspathCache.getInstance().cacheEntries(runtime, runtimeClasspath);
+		return runtimeClasspath;
 	}
 }

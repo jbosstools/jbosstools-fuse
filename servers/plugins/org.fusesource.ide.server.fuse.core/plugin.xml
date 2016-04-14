@@ -298,32 +298,28 @@
        			<facet id="jst.utility" version="1.0"/>
        			<facet id="jst.camel" version="2.16"/>
      		</supported>
+     		
+			<adapter>
+			  <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.0"/>
+			  <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+			  <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+			</adapter>
+			<adapter>
+			  <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.1"/>
+			  <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+			  <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+			</adapter>
+			<adapter>
+			  <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.2"/>
+			  <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+			  <type class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider"/>
+			</adapter>
+			<adapter>
+			  <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.3"/>
+			  <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+			  <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+			</adapter>
    </extension>  
-   
-   <extension
-         point="org.eclipse.wst.common.project.facet.core.runtimes">
-    <adapter>
-      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.0"/>
-      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
-      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
-	</adapter>
-    <adapter>
-      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.1"/>
-      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
-      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
-	</adapter>
-    <adapter>
-      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.2"/>
-      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
-      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
-	</adapter>
-	<adapter>
-      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.3"/>
-      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
-      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
-	</adapter>
-   </extension>
-   
    
   <!-- 		NEW_SERVER_ADAPTER add id for new runtime in the runtimeIds field below -->
    <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
