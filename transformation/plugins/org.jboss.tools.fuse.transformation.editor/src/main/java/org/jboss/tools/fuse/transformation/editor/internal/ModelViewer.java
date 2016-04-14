@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -55,13 +56,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
-import org.jboss.tools.fuse.transformation.core.model.Model;
 
 /**
  *
@@ -315,7 +316,7 @@ public class ModelViewer extends Composite {
             manager.addListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(final PropertyChangeEvent event) {
-                    if (event.getPropertyName().equals(Event.MAPPING)) {
+					if (event.getPropertyName().equals(Event.MAPPING.name())) {
                         if (!treeViewer.getControl().isDisposed()) {
                             treeViewer.refresh();
                         }
