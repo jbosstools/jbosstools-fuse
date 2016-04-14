@@ -165,7 +165,7 @@ abstract class MappingViewer {
         if (object instanceof Model) return ((Model)object).getName();
         if (object instanceof Variable) return ((Variable)object).getName();
         if (object instanceof Expression) return ((Expression)object).getLanguage();
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     void setSource(Object source) throws Exception {
@@ -203,18 +203,18 @@ abstract class MappingViewer {
             label.setForeground(Colors.FOREGROUND);
             label.setImage(Images.VARIABLE);
         } else if (object instanceof Expression) {
-            label.setToolTipText(((Expression)object).getExpression().replace("\\${", "${"));
+            label.setToolTipText(((Expression)object).getExpression().replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
             label.setBackground(Colors.BACKGROUND);
             label.setForeground(Colors.EXPRESSION);
         } else {
-            label.setToolTipText("");
+            label.setToolTipText(""); //$NON-NLS-1$
             label.setBackground(Colors.BACKGROUND);
             label.setForeground(Colors.FOREGROUND);
         }
     }
 
     private String variableToolTip(Variable variable) {
-        return "\"" + variable.getValue() + "\"";
+        return "\"" + variable.getValue() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     void variableValueUpdated(Variable variable) {

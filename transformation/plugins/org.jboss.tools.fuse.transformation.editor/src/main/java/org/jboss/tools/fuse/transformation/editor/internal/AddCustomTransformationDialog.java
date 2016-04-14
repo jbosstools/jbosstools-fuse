@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
@@ -60,16 +61,16 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations
 final class AddCustomTransformationDialog extends BaseDialog {
 
     private static final String[] TYPES = {
-        "java.lang.String",
-        "java.lang.Integer",
-        "java.lang.Boolean",
-        "java.lang.Long",
-        "java.lang.Double",
-        "java.lang.Float",
-        "java.util.Date",
-        "java.lang.Short",
-        "java.lang.Character",
-        "java.lang.Byte",
+        "java.lang.String", //$NON-NLS-1$
+        "java.lang.Integer", //$NON-NLS-1$
+        "java.lang.Boolean", //$NON-NLS-1$
+        "java.lang.Long", //$NON-NLS-1$
+        "java.lang.Double", //$NON-NLS-1$
+        "java.lang.Float", //$NON-NLS-1$
+        "java.util.Date", //$NON-NLS-1$
+        "java.lang.Short", //$NON-NLS-1$
+        "java.lang.Character", //$NON-NLS-1$
+        "java.lang.Byte", //$NON-NLS-1$
     };
 
     private final IProject project;
@@ -89,17 +90,17 @@ final class AddCustomTransformationDialog extends BaseDialog {
     protected void constructContents(Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
         Label label = new Label(parent, SWT.NONE);
-        label.setText("Class:");
+        label.setText(Messages.AddCustomTransformationDialog_label_Class);
         final Button classButton = new Button(parent, SWT.NONE);
         classButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create());
         classButton.setAlignment(SWT.LEFT);
-        classButton.setText("< Click to select an existing class >");
+        classButton.setText(Messages.AddCustomTransformationDialog_button_selectAnExistingClass);
         Button newClassButton = new Button(parent, SWT.NONE);
         newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_CLASS),
                                                           Decorations.ADD,
                                                           IDecoration.TOP_RIGHT).createImage());
         label = new Label(parent, SWT.NONE);
-        label.setText("Method:");
+        label.setText(Messages.AddCustomTransformationDialog_label_method);
         final ComboViewer methodComboViewer = new ComboViewer(parent, SWT.READ_ONLY);
         methodComboViewer.getCombo().setLayoutData(GridDataFactory.swtDefaults()
                                                                   .span(2, 1)
@@ -115,27 +116,27 @@ final class AddCustomTransformationDialog extends BaseDialog {
                 try {
                     StringBuilder builder = new StringBuilder();
                     builder.append(Signature.getSignatureSimpleName(method.getReturnType()));
-                    builder.append(" ");
+                    builder.append(" "); //$NON-NLS-1$
                     builder.append(method.getElementName());
-                    builder.append("(");
+                    builder.append("("); //$NON-NLS-1$
                     String[] types = method.getParameterTypes();
                     String[] names = method.getParameterNames();
                     boolean hasPrm = false;
                     for (int ndx = 0; ndx < types.length; ndx++) {
-                        if (hasPrm) builder.append(", ");
+                        if (hasPrm) builder.append(", "); //$NON-NLS-1$
                         else {
-                            builder.append(" ");
+                            builder.append(" "); //$NON-NLS-1$
                             hasPrm = true;
                         }
                         builder.append(Signature.getSignatureSimpleName(types[ndx]));
-                        builder.append(" ");
+                        builder.append(" "); //$NON-NLS-1$
                         builder.append(names[ndx]);
                     }
-                    if (hasPrm) builder.append(" ");
-                    builder.append(")");
+                    if (hasPrm) builder.append(" "); //$NON-NLS-1$
+                    builder.append(")"); //$NON-NLS-1$
                     return builder.toString();
                 } catch (JavaModelException e) {
-                    return "";
+                    return ""; //$NON-NLS-1$
                 }
             }
         });
@@ -199,10 +200,10 @@ final class AddCustomTransformationDialog extends BaseDialog {
         IType type = (IType)action.getCreatedElement();
         if (type != null) {
             try {
-                if (page.returnType.equals("Date")) page.returnType = "java.util.Date";
-                if (page.prmType.equals("Date")) page.prmType = "java.util.Date";
-                type.createMethod("public " + page.returnType + " " + page.methodName + "(" + page.prmType + " input) {\n"
-                                  + "\treturn null;\n" + "}",
+                if (page.returnType.equals("Date")) page.returnType = "java.util.Date"; //$NON-NLS-1$ //$NON-NLS-2$
+                if (page.prmType.equals("Date")) page.prmType = "java.util.Date"; //$NON-NLS-1$ //$NON-NLS-2$
+                type.createMethod("public " + page.returnType + " " + page.methodName + "(" + page.prmType + " input) {\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                                  + "\treturn null;\n" + "}", //$NON-NLS-1$ //$NON-NLS-2$
                                   null, false, null);
                 if (type.getCompilationUnit().isWorkingCopy()) type.getCompilationUnit().commitWorkingCopy(true, null);
                 setClass(type, classButton, methodComboViewer);
@@ -214,7 +215,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
 
     @Override
     protected String message() {
-        return "Select or create the Java class and method that implements the custom transformation";
+        return Messages.AddCustomTransformationDialog_dialogMessage;
     }
 
     private void methodSelected(ComboViewer methodComboViewer) {
@@ -256,7 +257,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
 
     @Override
     protected String title() {
-        return "Add Custom Transformation";
+        return Messages.AddCustomTransformationDialog_dialogTitle;
     }
 
     private boolean valid(IMethod method) throws JavaModelException {
@@ -269,11 +270,11 @@ final class AddCustomTransformationDialog extends BaseDialog {
     private String resolvedTypeName(IMethod method,
                                     String typeName) throws JavaModelException {
         typeName = Signature.toString(typeName);
-        if (typeName.contains(".")) return typeName;
+        if (typeName.contains(".")) return typeName; //$NON-NLS-1$
         for (IImportDeclaration decl : method.getCompilationUnit().getImports()) {
-            if (decl.getElementName().endsWith("." + typeName)) return decl.getElementName();
+            if (decl.getElementName().endsWith("." + typeName)) return decl.getElementName(); //$NON-NLS-1$
         }
-        return "java.lang." + typeName;
+        return "java.lang." + typeName; //$NON-NLS-1$
     }
 
     private class Page extends NewClassWizardPage {
@@ -282,9 +283,9 @@ final class AddCustomTransformationDialog extends BaseDialog {
         private String returnType;
         private String methodName;
         private String prmType;
-        private IStatus returnTypeStatus = typeStatus(null, "return");
-        private IStatus methodNameStatus = nameStatus(null, "method");
-        private IStatus prmTypeStatus = typeStatus(null, "parameter");
+        private IStatus returnTypeStatus = typeStatus(null, "return"); //$NON-NLS-1$
+        private IStatus methodNameStatus = nameStatus(null, "method"); //$NON-NLS-1$
+        private IStatus prmTypeStatus = typeStatus(null, "parameter"); //$NON-NLS-1$
         private Control pkgText;
 
         private Page(final String sourceType) {
@@ -340,34 +341,34 @@ final class AddCustomTransformationDialog extends BaseDialog {
             Group group = new Group(composite, SWT.NONE);
             group.setLayoutData(GridDataFactory.fillDefaults().span(columns, 1).grab(true, false).create());
             group.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(6).create());
-            group.setText("Custom Transformation");
-            createLabelPane(group, "Return Type");
-            createLabelPane(group, "Method Name");
-            createLabelPane(group, "Parameter Type");
-            createComboPane(group, sourceType, " ", new CustomTransformationListener() {
+            group.setText(Messages.AddCustomTransformationDialog_GroupText_CustomTransformation);
+            createLabelPane(group, Messages.AddCustomTransformationDialog_labelPane_returnType);
+            createLabelPane(group, Messages.AddCustomTransformationDialog_labelPane_MethodName);
+            createLabelPane(group, Messages.AddCustomTransformationDialog_labelPane_ParameterType);
+            createComboPane(group, sourceType, " ", new CustomTransformationListener() { //$NON-NLS-1$
 
                 @Override
                 public void transformationChanged(String text) {
                     returnType = text;
-                    returnTypeStatus = typeStatus(returnType, "return");
+                    returnTypeStatus = typeStatus(returnType, "return"); //$NON-NLS-1$
                     updateStatus();
                 }
             });
-            createTextPane(group, "map", "(", new CustomTransformationListener() {
+            createTextPane(group, "map", "(", new CustomTransformationListener() { //$NON-NLS-1$ //$NON-NLS-2$
 
                 @Override
                 public void transformationChanged(String text) {
                     methodName = text.trim();
-                    methodNameStatus = nameStatus(methodName, "method");
+                    methodNameStatus = nameStatus(methodName, "method"); //$NON-NLS-1$
                     updateStatus();
                 }
             });
-            createComboPane(group, sourceType, " input)", new CustomTransformationListener() {
+            createComboPane(group, sourceType, " input)", new CustomTransformationListener() { //$NON-NLS-1$
 
                 @Override
                 public void transformationChanged(String text) {
                     prmType = text;
-                    prmTypeStatus = typeStatus(prmType, "parameter");
+                    prmTypeStatus = typeStatus(prmType, "parameter"); //$NON-NLS-1$
                     updateStatus();
                 }
             });
@@ -396,24 +397,24 @@ final class AddCustomTransformationDialog extends BaseDialog {
             if (name == null || name.isEmpty())
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "A " + nameName + " name for the custom transformation must be provided");
+                                  "A " + nameName + " name for the custom transformation must be provided"); //$NON-NLS-1$ //$NON-NLS-2$
             char[] chars = name.toCharArray();
             char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar))
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName + " name for the custom transformation begins with an invalid character");
+                                  "The " + nameName + " name for the custom transformation begins with an invalid character"); //$NON-NLS-1$ //$NON-NLS-2$
             for (int ndx = 1; ndx < chars.length; ++ndx) {
                 if (!Character.isJavaIdentifierPart(chars[ndx]))
                     return new Status(IStatus.ERROR,
                                       Activator.plugin().getBundle().getSymbolicName(),
-                                      "The " + nameName
-                                      + " name for the custom transformation contains at least one invalid character");
+                                      "The " + nameName //$NON-NLS-1$
+                                      + " name for the custom transformation contains at least one invalid character"); //$NON-NLS-1$
             }
             if (Character.isUpperCase(firstChar))
                 return new Status(IStatus.WARNING,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName + " name for the custom transformation begins with an uppercase letter");
+                                  "The " + nameName + " name for the custom transformation begins with an uppercase letter"); //$NON-NLS-1$ //$NON-NLS-2$
             return Status.OK_STATUS;
         }
 
@@ -426,7 +427,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
                                    String typeName) {
             return type == null ? new Status(IStatus.ERROR,
                                              Activator.plugin().getBundle().getSymbolicName(),
-                                             "A " + typeName + " type for the custom transformation must be selected")
+                                             "A " + typeName + " type for the custom transformation must be selected") //$NON-NLS-1$ //$NON-NLS-2$
                                 : Status.OK_STATUS;
         }
 

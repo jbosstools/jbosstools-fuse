@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.core.FieldMapping;
 import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
@@ -40,11 +41,11 @@ public class SourceTabFolder extends ModelTabFolder {
     public SourceTabFolder(TransformationManager manager,
                            Composite parent,
                            List<PotentialDropTarget> potentialDropTargets) {
-        super(manager, parent, "Source", manager.rootSourceModel(), potentialDropTargets);
+        super(manager, parent, Messages.SourceTabFolder_Source, manager.rootSourceModel(), potentialDropTargets);
 
         // Create variables tab
         variablesTab = new CTabItem(this, SWT.NONE);
-        variablesTab.setText("Variables");
+        variablesTab.setText(Messages.SourceTabFolder_Variables);
         variablesViewer = new VariablesViewer(manager, this);
         variablesTab.setControl(variablesViewer);
         variablesTab.setImage(Images.VARIABLE);

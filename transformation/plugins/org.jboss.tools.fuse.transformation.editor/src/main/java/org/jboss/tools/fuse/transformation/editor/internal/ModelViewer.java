@@ -58,6 +58,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -69,9 +70,9 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
  */
 public class ModelViewer extends Composite {
 
-    private static final String PREFERENCE_PREFIX = ModelViewer.class.getName() + ".";
-    private static final String HIDE_MAPPED_PROPERTIES_PREFERENCE = ".hideMappedProperties";
-    private static final String SHOW_TYPES_PREFERENCE = ".showTypes";
+    private static final String PREFERENCE_PREFIX = ModelViewer.class.getName() + "."; //$NON-NLS-1$
+    private static final String HIDE_MAPPED_PROPERTIES_PREFERENCE = ".hideMappedProperties"; //$NON-NLS-1$
+    private static final String SHOW_TYPES_PREFERENCE = ".showTypes"; //$NON-NLS-1$
 
     final TransformationManager manager;
     Model rootModel;
@@ -123,31 +124,31 @@ public class ModelViewer extends Composite {
         collapseAllButton.setImage(Images.COLLAPSE_ALL);
         final ToolItem filterTypesButton = new ToolItem(toolBar, SWT.CHECK);
         filterTypesButton.setImage(Images.SHOW_TYPES);
-        filterTypesButton.setToolTipText("Show types");
+        filterTypesButton.setToolTipText(Messages.ModelViewer_Tooltip_ShowTypes);
 
         final ToolItem filterMappedPropertiesButton;
         if (preferenceId == null) filterMappedPropertiesButton = null;
         else {
             filterMappedPropertiesButton = new ToolItem(toolBar, SWT.CHECK);
             filterMappedPropertiesButton.setImage(Images.HIDE_MAPPED);
-            filterMappedPropertiesButton.setToolTipText("Hide mapped properties");
+            filterMappedPropertiesButton.setToolTipText(Messages.ModelViewer_Tooltip_HideMappedproperties);
         }
 
         Composite searchPane = new Composite(this, SWT.NONE);
         searchPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         searchPane.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
-        searchPane.setToolTipText("Search");
+        searchPane.setToolTipText(Messages.ModelViewer_searchPaneTooltip);
         searchPane.setBackground(getBackground());
         searchLabel = new Label(searchPane, SWT.NONE);
         searchLabel.setImage(Images.SEARCH);
-        searchLabel.setToolTipText("Search");
+        searchLabel.setToolTipText(Messages.ModelViewer_searchLabelTooltip);
         searchLabel.setBackground(getBackground());
         searchText = new Text(searchPane, SWT.NONE);
         searchText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        searchText.setToolTipText("Search");
+        searchText.setToolTipText(Messages.ModelViewer_searchLabelTooltip);
         clearSearchLabel = new Label(searchPane, SWT.NONE);
         clearSearchLabel.setImage(Images.CLEAR);
-        clearSearchLabel.setToolTipText("Clear search text");
+        clearSearchLabel.setToolTipText(Messages.ModelViewer_clearSearchTextTooltip);
         clearSearchLabel.setBackground(getBackground());
         searchPane.addPaintListener(Util.ovalBorderPainter());
 
@@ -247,7 +248,7 @@ public class ModelViewer extends Composite {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 showTypes = filterTypesButton.getSelection();
-                filterTypesButton.setToolTipText((showTypes ? "Hide" : "Show") + " types");
+                filterTypesButton.setToolTipText((showTypes ? Messages.ModelViewer_HideTooltip : Messages.ModelViewer_ShowTooltip) + Messages.ModelViewer_types);
                 treeViewer.refresh();
                 if (preferenceId != null)
                     prefs.setValue(PREFERENCE_PREFIX + preferenceId + SHOW_TYPES_PREFERENCE, showTypes);
@@ -263,7 +264,7 @@ public class ModelViewer extends Composite {
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
                     hideMappedProperties = filterMappedPropertiesButton.getSelection();
-                    filterMappedPropertiesButton.setToolTipText((hideMappedProperties ? "Show" : "Hide") + " mapped properties");
+                    filterMappedPropertiesButton.setToolTipText((hideMappedProperties ? Messages.ModelViewer_ShowTooltip : Messages.ModelViewer_HideTooltip) + Messages.ModelViewer_mappedproperties);
                     if (hideMappedProperties) prevSelectedModel = (Model)treeViewer.getStructuredSelection().getFirstElement();
                     treeViewer.refresh();
                     if (!hideMappedProperties && prevSelectedModel != null) select(prevSelectedModel);
@@ -287,7 +288,7 @@ public class ModelViewer extends Composite {
 
             @Override
             public void mouseUp(final MouseEvent event) {
-                searchText.setText("");
+                searchText.setText(""); //$NON-NLS-1$
             }
         });
         searchText.addModifyListener(new ModifyListener() {
@@ -309,7 +310,7 @@ public class ModelViewer extends Composite {
         });
 
         if (rootModel != null) {
-            treeViewer.setInput("root");
+            treeViewer.setInput("root"); //$NON-NLS-1$
         }
 
         if (manager != null) {
@@ -368,7 +369,7 @@ public class ModelViewer extends Composite {
     public void setModel(final Model model) {
         rootModel = model;
         updateSearchMap(model);
-        treeViewer.setInput(model == null ? null : "root");
+        treeViewer.setInput(model == null ? null : "root"); //$NON-NLS-1$
     }
 
     private boolean show(final Object element,
@@ -455,15 +456,15 @@ public class ModelViewer extends Composite {
             final String type = model.getType();
             boolean eligible = eligible(model);
             text.append(model.getName(), eligible ? null : StyledString.QUALIFIER_STYLER);
-            boolean list = type.startsWith("[");
+            boolean list = type.startsWith("["); //$NON-NLS-1$
             if (list) {
-                text.append("[", StyledString.QUALIFIER_STYLER);
+                text.append("[", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
                 if (showTypes) text.append(type.substring(1, type.length() - 1),
                                            eligible ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
-                else text.append(" ");
-                text.append("]", StyledString.QUALIFIER_STYLER);
+                else text.append(" "); //$NON-NLS-1$
+                text.append("]", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
             } else if (showTypes) {
-                text.append(": ", StyledString.QUALIFIER_STYLER);
+                text.append(": ", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
                 text.append(type, eligible ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
             }
             return text.getString();

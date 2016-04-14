@@ -46,6 +46,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
@@ -65,10 +66,10 @@ public class VariablesViewer extends Composite {
         ToolBar toolBar = new ToolBar(this, SWT.NONE);
         ToolItem addButton = new ToolItem(toolBar, SWT.PUSH);
         addButton.setImage(new DecorationOverlayIcon(Images.VARIABLE, Decorations.ADD, IDecoration.TOP_RIGHT).createImage());
-        addButton.setToolTipText("Add a new variable");
+        addButton.setToolTipText(Messages.VariablesViewer_toolbarTooltip_addNewVariable);
         final ToolItem deleteButton = new ToolItem(toolBar, SWT.PUSH);
         deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
-        deleteButton.setToolTipText("Delete the selected variable(s)");
+        deleteButton.setToolTipText(Messages.VariablesViewer_toolbarTooltip_DeleteVariable);
         deleteButton.setEnabled(false);
 
         // Create table
@@ -80,7 +81,7 @@ public class VariablesViewer extends Composite {
         // Create columns
         // TODO add support for changing variable names
         final TableViewerColumn nameColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-        nameColumn.getColumn().setText("Name");
+        nameColumn.getColumn().setText(Messages.VariablesViewer_columnName_name);
         nameColumn.getColumn().setImage(Images.VARIABLE);
         nameColumn.setLabelProvider(new ColumnLabelProvider() {
 
@@ -98,12 +99,12 @@ public class VariablesViewer extends Composite {
             }
         });
         final TableViewerColumn valueColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-        valueColumn.getColumn().setText("Value");
+        valueColumn.getColumn().setText(Messages.VariablesViewer_columnName_value);
         valueColumn.setLabelProvider(new ColumnLabelProvider() {
 
             @Override
             public String getText(final Object element) {
-                return "\"" + ((Variable) element).getValue() + "\"";
+                return "\"" + ((Variable) element).getValue() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
             }
         });
         valueColumn.setEditingSupport(new EditingSupport(tableViewer) {
@@ -152,12 +153,12 @@ public class VariablesViewer extends Composite {
             @Override
             public void widgetSelected(SelectionEvent event) {
                 InputDialog dlg =
-                    new InputDialog(getShell(), "Add Variable", "Enter a new variable name", null, new IInputValidator() {
+                    new InputDialog(getShell(), Messages.VariablesViewer_addVariableDialogTitle, Messages.VariablesViewer_addVariableDialogDescription, null, new IInputValidator() {
 
                     @Override
                     public String isValid(String text) {
                         for (final Variable variable : manager.variables()) {
-                            if (variable.getName().equals(text)) return "Variable already exists";
+                            if (variable.getName().equals(text)) return Messages.VariablesViewer_addVariableDialog_validation_variablealreadyExists;
                         }
                         return null;
                     }
@@ -190,7 +191,7 @@ public class VariablesViewer extends Composite {
                         if (manager.mapped(variable)) {
                             if (!deleteAll) {
                                 MessageDialog dlg = new MessageDialog(getShell(),
-                                                                      "Confirm",
+                                                                      Messages.VariablesViewer_confirm,
                                                                       null,
                                                                       "Variable \"" + variable.getName()
                                                                       + "\" is being used in one or more mappings.\n\n"

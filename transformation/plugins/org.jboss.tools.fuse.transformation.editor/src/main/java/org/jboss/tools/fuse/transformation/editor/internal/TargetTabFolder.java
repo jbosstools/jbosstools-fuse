@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
@@ -35,7 +36,7 @@ public final class TargetTabFolder extends ModelTabFolder {
     public TargetTabFolder(final TransformationManager manager,
                            final Composite parent,
                            final List<PotentialDropTarget> potentialDropTargets) {
-        super(manager, parent, "Target", manager.rootTargetModel(), potentialDropTargets);
+        super(manager, parent, Messages.TargetTabFolder_target, manager.rootTargetModel(), potentialDropTargets);
     }
 
     @Override

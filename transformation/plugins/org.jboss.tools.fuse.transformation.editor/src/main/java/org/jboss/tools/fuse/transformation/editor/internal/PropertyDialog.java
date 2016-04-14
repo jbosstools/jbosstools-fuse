@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -70,12 +71,12 @@ class PropertyDialog extends BaseDialog {
 
     @Override
     protected String message() {
-        return "Select a property.";
+        return Messages.PropertyDialog_message;
     }
 
     @Override
     protected String title() {
-        return "Property";
+        return Messages.PropertyDialog_title;
     }
 
     private boolean valid(Model model) {
@@ -91,7 +92,7 @@ class PropertyDialog extends BaseDialog {
 
     private void validate() {
         boolean enabled = property != null && valid(property);
-        setErrorMessage(enabled ? null : "Invalid property");
+        setErrorMessage(enabled ? null : Messages.PropertyDialog_validationErrorMessage);
         getButton(IDialogConstants.OK_ID).setEnabled(enabled);
     }
 }

@@ -49,7 +49,7 @@ abstract class ModelTabFolder extends CTabFolder {
         setTopRight(toolBar);
 
         modelTab = new CTabItem(this, SWT.NONE);
-        modelTab.setText(title + (model == null ? "" : ": " + model.getName()));
+        modelTab.setText(title + (model == null ? "" : ": " + model.getName())); //$NON-NLS-1$ //$NON-NLS-2$
         modelViewer = constructModelViewer(potentialDropTargets, title);
         modelTab.setControl(modelViewer);
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
