@@ -67,6 +67,7 @@ import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 /**
@@ -93,8 +94,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
      */
     public OtherPage(String pageName, final Model model, boolean isSource) {
         super(pageName, model);
-        setTitle("Other Page");
-        setImageDescriptor(Activator.imageDescriptor("transform.png"));
+        setTitle(Messages.OtherPage_title);
+        setImageDescriptor(Activator.imageDescriptor("transform.png")); //$NON-NLS-1$
         this.isSource = isSource;
         observablesManager.addObservablesFromContext(context, true, true);
     }
@@ -102,11 +103,11 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     @Override
     public void createControl(final Composite parent) {
         if (this.isSource) {
-            setTitle("Source Type (Other)");
-            setDescription("Specify details for the source data format and Java class for this transformation.");
+            setTitle(Messages.OtherPage_titleSource);
+            setDescription(Messages.OtherPage_descriptionSource);
         } else {
-            setTitle("Target Type (Other)");
-            setDescription("Specify details for the target data format and Java class for this transformation.");
+            setTitle(Messages.OtherPage_titletarget);
+            setDescription(Messages.OtherPage_descriptionTarget);
         }
         observablesManager.runAndCollect(new Runnable() {
 
@@ -134,9 +135,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         // Create file path widgets
         Label label;
         if (isSourcePage()) {
-            label = createLabel(_page, "Source Class:", "The source Java class for the transformation.");
+            label = createLabel(_page, Messages.OtherPage_labelSourceClass, Messages.OtherPage_tooltipSourceClass);
         } else {
-            label = createLabel(_page, "Target Class:", "The target Java class for the transformation.");
+            label = createLabel(_page, Messages.OtherPage_labelTargetClass, Messages.OtherPage_tooltipTargetClass);
         }
 
         _javaClassText = new Text(_page, SWT.BORDER);
@@ -145,15 +146,15 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
 
         final Button javaClassBrowseButton = new Button(_page, SWT.NONE);
         javaClassBrowseButton.setLayoutData(new GridData());
-        javaClassBrowseButton.setText("...");
-        javaClassBrowseButton.setToolTipText("Browse to specify the selected class.");
+        javaClassBrowseButton.setText("..."); //$NON-NLS-1$
+        javaClassBrowseButton.setToolTipText(Messages.OtherPage_tooltipBrowseButton);
 
         javaClassBrowseButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    IType selected = selectType(_page.getShell(), "java.lang.Object", null);
+                    IType selected = selectType(_page.getShell(), "java.lang.Object", null); //$NON-NLS-1$
                     if (selected != null) {
                         _javaClassText.setText(selected.getFullyQualifiedName());
                         if (isSourcePage()) {
@@ -165,7 +166,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                         }
                         final IType inner = selected;
 
-                        UIJob uiJob = new UIJob("open error") {
+                        UIJob uiJob = new UIJob(Messages.OtherPage_uiJobNameOpenError) {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
@@ -189,19 +190,19 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
              }
         });
 
-        label = createLabel(_page, "Data Format ID:", "Unique ID for the data format.");
+        label = createLabel(_page, Messages.OtherPage_labelDataFormatID, Messages.OtherPage_tooltipDataFormatID);
 
         _dataFormatIdCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
         _dataFormatIdCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _dataFormatIdCombo.getCombo().setToolTipText(label.getToolTipText());
         _dataFormatIdCombo.setContentProvider(new ObservableListContentProvider());
 
-        label = createLabel(_page, "", ""); // spacer
-        _dfErrorLabel = createLabel(_page, "", "");
+        label = createLabel(_page, "", ""); // spacer //$NON-NLS-1$ //$NON-NLS-2$
+        _dfErrorLabel = createLabel(_page, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
         _dfErrorLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
-        group.setText("Class Structure Preview");
+        group.setText(Messages.OtherPage_groupNameClassStructurePreview);
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
@@ -220,9 +221,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_javaClassText);
         IObservableValue modelValue = null;
         if (isSourcePage()) {
-            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
-            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model); //$NON-NLS-1$
         }
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -233,11 +234,11 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 String pathEmptyError = null;
                 String unableToFindError = null;
                 if (isSourcePage()) {
-                    pathEmptyError = "A source file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a source file with the supplied path";
+                    pathEmptyError = Messages.OtherPage_errorMessagePathEmptySource;
+                    unableToFindError = Messages.OtherPage_errorMessageNotFoundSource;
                 } else {
-                    pathEmptyError = "A target file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a target file with the supplied path";
+                    pathEmptyError = Messages.OtherPage_errorMessagePathEmptyTarget;
+                    unableToFindError = Messages.OtherPage_errorMessageNotFoundTarget;
                 }
                 if (path == null || path.isEmpty()) {
                     return ValidationStatus.error(pathEmptyError);
@@ -281,18 +282,18 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             }
         }
         if (dfList.isEmpty()) {
-            _dfErrorLabel.setText("No available data format definitions in the selected Camel configuration.");
+            _dfErrorLabel.setText(Messages.OtherPage_errormessageNoAvailableDataFormats);
             _dfErrorLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
             _dataFormatIdCombo.getCombo().setEnabled(false);
         } else {
-            _dfErrorLabel.setText("");
+            _dfErrorLabel.setText(""); //$NON-NLS-1$
             _dataFormatIdCombo.getCombo().setEnabled(true);
         }
         _dataFormatIdCombo.setInput(dfList);
         if (isSourcePage()) {
-            idModelValue = BeanProperties.value(Model.class, "sourceDataFormatid").observe(model);
+            idModelValue = BeanProperties.value(Model.class, "sourceDataFormatid").observe(model); //$NON-NLS-1$
         } else {
-            idModelValue = BeanProperties.value(Model.class, "targetDataFormatid").observe(model);
+            idModelValue = BeanProperties.value(Model.class, "targetDataFormatid").observe(model); //$NON-NLS-1$
         }
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -301,7 +302,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus.error("A data format id must be supplied for the transformation.");
+                    return ValidationStatus.error(Messages.OtherPage_errormessageNoDataFormatId);
                 }
                 return ValidationStatus.ok();
             }
@@ -343,11 +344,11 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
             _javaModel = null; // new org.jboss.tools.fuse.transformation.model.Model("", "");
             _modelViewer.setModel(_javaModel);
-            _javaClassText.setText("");
+            _javaClassText.setText(""); //$NON-NLS-1$
             _dataFormatIdCombo.getCombo().deselectAll();
             _dataFormatIdCombo.getCombo().clearSelection();
             if (idModelValue != null) {
-            	idModelValue.setValue("");
+            	idModelValue.setValue(""); //$NON-NLS-1$
             }
         }
         notifyListeners();
@@ -384,7 +385,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             }
         }
         if (superTypeName == null) {
-        	superTypeName = "java.lang.Object"; //$NONNLS-1$
+        	superTypeName = "java.lang.Object"; //$NONNLS-1$ //$NON-NLS-1$
         }
         if (model.getProject() != null) {
             if (project == null) {
@@ -399,9 +400,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             searchScope = SearchEngine.createWorkspaceScope();
         }
         SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
-                IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, "**");
-        dialog.setTitle("Select Class");
-        dialog.setMessage("Matching items");
+                IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false, "**"); //$NON-NLS-1$
+        dialog.setTitle(Messages.OtherPage_selectClassDialogTitle);
+        dialog.setMessage(Messages.OtherPage_matchingitemsMessageSelectClassDialog);
         if (dialog instanceof ITypeSelectionComponent) {
             ((ITypeSelectionComponent)dialog).triggerSearch();
           }

@@ -27,6 +27,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.foundation.ui.util.DialogUtils;
 import org.jboss.tools.fuse.transformation.core.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
@@ -45,12 +46,12 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	@Override
 	public boolean canHandle(AbstractCamelModelElement clickedNode) {
 		if (clickedNode.isEndpointElement()) {
-			String uri = (String) clickedNode.getParameter("uri");
-			if (uri != null && uri.trim().length()>0 && uri.trim().toLowerCase().startsWith("ref:")) {
-				String id = uri.substring("ref:".length());
+			String uri = (String) clickedNode.getParameter("uri"); //$NON-NLS-1$
+			if (uri != null && uri.trim().length()>0 && uri.trim().toLowerCase().startsWith("ref:")) { //$NON-NLS-1$
+				String id = uri.substring("ref:".length()); //$NON-NLS-1$
 				if (id != null) {
-					String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri");
-					if (refUri != null && refUri.startsWith("dozer:")) {
+					String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
+					if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
 						return true;
 					}
 				}
@@ -69,11 +70,11 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	private String getEndpointParameter(String uri, String key) {
 		String value = null;
 		StringBuilder uriStr = new StringBuilder(uri);
-		if (uriStr.indexOf(key + "=") == -1) {
+		if (uriStr.indexOf(key + "=") == -1) { //$NON-NLS-1$
 			return null;
 		}
 		int startIdx = uriStr.indexOf(key);
-		int endIdx = uriStr.indexOf("&", startIdx);
+		int endIdx = uriStr.indexOf("&", startIdx); //$NON-NLS-1$
 		if (endIdx == -1) {
 			value = uriStr.substring(startIdx + (key + '=').length());
 		} else {
@@ -89,10 +90,10 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	@Override
 	public void handleDoubleClick(AbstractCamelModelElement clickedNode) {
 		if (clickedNode.isEndpointElement()) {
-			String id = ((String) clickedNode.getParameter("uri")).substring("ref:".length());
+			String id = ((String) clickedNode.getParameter("uri")).substring("ref:".length()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (id != null) {
-				String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri");
-				if (refUri != null && refUri.startsWith("dozer:")) {
+				String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
+				if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
 					String filename = getEndpointParameter(refUri, EndpointHelper.MAPPING_FILE);
 
 					// Open mapping editor
@@ -109,7 +110,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 							xmlFile = res.getProject().getFile(tempPath);
 							if (xmlFile != null && !xmlFile.exists()) {
 								MessageDialog.openError(Display.getCurrent().getActiveShell(),
-										"Transformation File Not Accessible", "The Transformation file (" + filename
+										Messages.TransformationDblClickHandler_ErrorDialogTitle_TransdformationFileNotAccessible, "The Transformation file (" + filename
 												+ ") is not accessible in the Camel project.");
 								return;
 							}
@@ -119,7 +120,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 								.openEditor(new FileEditorInput(xmlFile), desc.getId());
 					} catch (Exception e) {
 						DialogUtils.showUserError(Activator.plugin().getBundle().getSymbolicName(),
-								"Exception Opening Transformation File",
+								Messages.TransformationDblClickHandler_ErroDialogTitle_ExceptionOpeningTransformationFile,
 								"The Transformation file (" + filename + ") is not accessible in the Camel project.",
 								e);
 						Activator.error(e);

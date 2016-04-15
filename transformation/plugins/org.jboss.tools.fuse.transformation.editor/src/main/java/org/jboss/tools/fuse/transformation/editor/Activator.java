@@ -31,8 +31,8 @@ public class Activator extends AbstractUIPlugin {
     // The shared instance
     private static Activator plugin;
 
-    public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor";
-    public static final String TRANSFORMATION_EXTENSION_POINT = PLUGIN_ID + ".function";
+    public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor"; //$NON-NLS-1$
+    public static final String TRANSFORMATION_EXTENSION_POINT = PLUGIN_ID + ".function"; //$NON-NLS-1$
 
     /**
      * @param red
@@ -63,10 +63,10 @@ public class Activator extends AbstractUIPlugin {
     public static void error(Throwable error) {
         Status status = new Status(Status.ERROR,
                                    plugin.getBundle().getSymbolicName(),
-                                   "Unexpected error: " + error.getMessage(),
+                                   "Unexpected error: " + error.getMessage(), //$NON-NLS-1$
                                    error);
         ErrorDialog.openError(Display.getCurrent().getActiveShell(),
-                              "Error",
+                              "Error", //$NON-NLS-1$
                               status.getMessage(),
                               status);
         log(status);
@@ -77,12 +77,12 @@ public class Activator extends AbstractUIPlugin {
      * @return the image with the supplied name
      */
     public static ImageDescriptor imageDescriptor(final String name) {
-        final String key = plugin.getBundle().getSymbolicName() + "." + name;
+        final String key = plugin.getBundle().getSymbolicName() + "." + name; //$NON-NLS-1$
         ImageDescriptor img = plugin.getImageRegistry().getDescriptor(key);
         if (img != null) {
             return img;
         }
-        img = ImageDescriptor.createFromURL(plugin.getBundle().getEntry("icons/" + name));
+        img = ImageDescriptor.createFromURL(plugin.getBundle().getEntry("icons/" + name)); //$NON-NLS-1$
         plugin.getImageRegistry().put(key, img);
         return img;
     }

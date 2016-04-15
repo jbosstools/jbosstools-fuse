@@ -36,6 +36,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
@@ -46,7 +47,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTest
  */
 public class NewTransformationTestWizard extends NewElementWizard {
 
-    static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml";
+    static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml"; //$NON-NLS-1$
 
     IProject project;
     IJavaProject javaProject;
@@ -65,7 +66,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
      *
      */
     public NewTransformationTestWizard() {
-        setWindowTitle("New Fuse Transformation Test");
+        setWindowTitle(Messages.NewTransformationTestWizard_windowtitle);
         _page = new TransformTestWizardPage();
     }
 
@@ -82,7 +83,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
      */
     @Override
     public void init(IWorkbench workbench, IStructuredSelection selection) {
-        _page.setTypeName("TransformationTest", true);
+        _page.setTypeName(Messages.NewTransformationTestWizard_pageTypeName, true);
         // what are we passing in? assume we're right-clicking on the dozer file
         if (selection.size() != 1) {
             return;
@@ -107,7 +108,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
             }
             if (project != null && camelConfigFile == null) {
                 IResource findCamelContext =
-                        project.findMember("src/main/resources/META-INF/spring/camel-context.xml");
+                        project.findMember("src/main/resources/META-INF/spring/camel-context.xml"); //$NON-NLS-1$
                 if (findCamelContext != null) {
                     camelConfigFile = (IFile) findCamelContext;
                 }
@@ -125,7 +126,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
             if (javaProject != null) {
                 _page.setJavaProject(javaProject);
 
-                IFolder srcFolder = javaProject.getProject().getFolder("src/test/java");
+                IFolder srcFolder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
                 if (!JavaUtil.findFolderOnProjectClasspath(javaProject, srcFolder)) {
                     JavaUtil.addFolderToProjectClasspath(javaProject, srcFolder);
                 }
@@ -161,8 +162,8 @@ public class NewTransformationTestWizard extends NewElementWizard {
             openResource(resource);
         } else {
             throw new CoreException(new Status(IStatus.ERROR,
-                "TransformationEditor",
-                "Problem encountered while creating test class."));
+                "TransformationEditor", //$NON-NLS-1$
+                "Problem encountered while creating test class.")); //$NON-NLS-1$
         }
     }
 

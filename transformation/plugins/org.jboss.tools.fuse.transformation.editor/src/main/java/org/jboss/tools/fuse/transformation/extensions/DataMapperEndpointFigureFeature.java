@@ -51,7 +51,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
 	        try {
 	            updateMavenDependencies(requiredDependencies);
 	        } catch (CoreException ex) {
-	            Activator.log(Status.ERROR, "Unable to add the component dependency to the project maven configuration file.\n" + ex.getMessage());
+	            Activator.log(Status.ERROR, "Unable to add the component dependency to the project maven configuration file.\n" + ex.getMessage()); //$NON-NLS-1$
 	        }
 		}
 		return super.create(context);

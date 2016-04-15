@@ -7,6 +7,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -31,13 +32,13 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
     @Override
     protected void createFieldEditors() {
         addField(new ColorFieldEditor(MappingDetailViewer.TRANSFORMATION_FOREGROUND_PREFERENCE,
-                                      "Transformation foreground in Details view",
+                                      Messages.PreferencePage_TransformationForegroundInDetailsView,
                                       getFieldEditorParent()));
         addField(new ColorFieldEditor(MappingDetailViewer.TRANSFORMATION_BACKGROUND_PREFERENCE,
-                                      "Transformation background in Details view",
+                                      Messages.PreferencePage_TransformationBackgroundInDetailsView,
                                       getFieldEditorParent()));
         addField(new BooleanFieldEditor(MappingDetailViewer.TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE,
-                                        "Show user-friendly formatting of transformations in Details view",
+                                        Messages.PreferencePage_ShowUserFirendlyFormattingOfTransformationsInDetainsView,
                                         getFieldEditorParent()));
     }
 }

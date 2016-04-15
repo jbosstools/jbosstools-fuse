@@ -94,16 +94,16 @@ public abstract class XformWizardPage extends WizardPage {
 
     public IWizardPage getSourcePage() {
         if (model.getSourceTypeStr() != null && !model.getSourceTypeStr().trim().isEmpty()) {
-            if (model.getSourceTypeStr().equalsIgnoreCase("java")) {
+            if (model.getSourceTypeStr().equalsIgnoreCase("java")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.javaSource;
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("xml")) {
+            } else if (model.getSourceTypeStr().equalsIgnoreCase("xml")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.xmlSource;
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("json")) {
+            } else if (model.getSourceTypeStr().equalsIgnoreCase("json")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.jsonSource;
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("other")) {
+            } else if (model.getSourceTypeStr().equalsIgnoreCase("other")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.otherSource;
             }
@@ -114,16 +114,16 @@ public abstract class XformWizardPage extends WizardPage {
 
     public IWizardPage getTargetPage() {
         if (model.getTargetTypeStr() != null && !model.getTargetTypeStr().trim().isEmpty()) {
-            if (model.getTargetTypeStr().equalsIgnoreCase("java")) {
+            if (model.getTargetTypeStr().equalsIgnoreCase("java")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.javaTarget;
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("xml")) {
+            } else if (model.getTargetTypeStr().equalsIgnoreCase("xml")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.xmlTarget;
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("json")) {
+            } else if (model.getTargetTypeStr().equalsIgnoreCase("json")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.jsonTarget;
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("other")) {
+            } else if (model.getTargetTypeStr().equalsIgnoreCase("other")) { //$NON-NLS-1$
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.otherTarget;
             }

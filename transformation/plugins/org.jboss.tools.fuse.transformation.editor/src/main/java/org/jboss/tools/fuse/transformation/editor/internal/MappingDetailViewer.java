@@ -64,6 +64,7 @@ import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.TransformationMapping;
 import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser.FormatSpecifier;
@@ -78,12 +79,12 @@ import org.jboss.tools.fuse.transformation.core.model.Model;
 
 public class MappingDetailViewer extends MappingViewer {
 
-    private static final String PREFERENCE_PREFIX = MappingDetailViewer.class.getName() + ".";
+    private static final String PREFERENCE_PREFIX = MappingDetailViewer.class.getName() + "."; //$NON-NLS-1$
 
-    public static final String TRANSFORMATION_BACKGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationBackground";
-    public static final String TRANSFORMATION_FOREGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationForeground";
+    public static final String TRANSFORMATION_BACKGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationBackground"; //$NON-NLS-1$
+    public static final String TRANSFORMATION_FOREGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationForeground"; //$NON-NLS-1$
     public static final String TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE =
-        PREFERENCE_PREFIX + "transformationUserFriendlyFormat";
+        PREFERENCE_PREFIX + "transformationUserFriendlyFormat"; //$NON-NLS-1$
 
     private final ScrolledComposite scroller;
     private final Map<Integer, Text> textById = new HashMap<>();
@@ -129,7 +130,7 @@ public class MappingDetailViewer extends MappingViewer {
         String[] args = new String[dlg.argumentValues.length];
         Class<?>[] types = dlg.transformation.getParameterTypes();
         for (int ndx = 0; ndx < dlg.argumentValues.length; ++ndx) {
-            args[ndx] = types[ndx + 1].getName() + "=" + dlg.argumentValues[ndx];
+            args[ndx] = types[ndx + 1].getName() + "=" + dlg.argumentValues[ndx]; //$NON-NLS-1$
         }
         mapping = manager.setTransformation((FieldMapping)mapping,
                                             dlg.transformation.getDeclaringClass().getName(),
@@ -170,7 +171,7 @@ public class MappingDetailViewer extends MappingViewer {
             string.append('[', StyledString.QUALIFIER_STYLER);
             Integer index = indexes.get(indexesIndex);
             if (index == null) {
-                string.append(" ]", StyledString.QUALIFIER_STYLER);
+                string.append(" ]", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
                 text.setText(string.toString());
                 text.setStyleRanges(string.getStyleRanges());
                 text.setBackground(parentPane.getForeground());
@@ -195,7 +196,7 @@ public class MappingDetailViewer extends MappingViewer {
                         return false;
                     }
                 };
-                string = new StyledString("]", StyledString.QUALIFIER_STYLER);
+                string = new StyledString("]", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
                 text.setText(string.toString());
                 text.setStyleRanges(string.getStyleRanges());
                 text.setBackground(parentPane.getForeground());
@@ -227,7 +228,7 @@ public class MappingDetailViewer extends MappingViewer {
             }
         };
         propPane.create();
-        propPane.addMenuItem("Set property", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetproperty, new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -238,7 +239,7 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        propPane.addMenuItem("Set variable", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetVariable, new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -254,7 +255,7 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        propPane.addMenuItem("Set expression", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetExpression, new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -270,7 +271,7 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        propPane.addMenuItem("Add transformation", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_menuItemAddTransformation, new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -286,7 +287,7 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        propPane.addMenuItem("Add custom transformation", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_mnuItemAddCustomTransformation, new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -304,7 +305,7 @@ public class MappingDetailViewer extends MappingViewer {
         });
         if (mapping != null && mapping.getSource() != null) {
             if (Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), true)) {
-                propPane.addMenuItem("Set date format", new MenuItemHandler() {
+                propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetDateFormat, new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
@@ -337,7 +338,7 @@ public class MappingDetailViewer extends MappingViewer {
             }
         };
         propPane.create();
-        propPane.addMenuItem("Set property", new MenuItemHandler() {
+        propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetproperty, new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -350,7 +351,7 @@ public class MappingDetailViewer extends MappingViewer {
         });
         if (mapping != null && mapping.getTarget() != null) {
             if (Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), false)) {
-                propPane.addMenuItem("Set date format", new MenuItemHandler() {
+                propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetDateFormat, new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
@@ -372,7 +373,7 @@ public class MappingDetailViewer extends MappingViewer {
                                                       final TransformationMapping transformationMapping,
                                                       final String[] mappingArgs,
                                                       final int argNdx) {
-        String val = mappingArgs[argNdx].split("=")[1];
+        String val = mappingArgs[argNdx].split("=")[1]; //$NON-NLS-1$
         Control control;
         if (type == Boolean.class) {
             final Button checkBox = new Button(parent, SWT.CHECK);
@@ -415,11 +416,11 @@ public class MappingDetailViewer extends MappingViewer {
         if (argAnno == null) control.setToolTipText(Util.displayName(type));
         else {
             StringBuilder builder = new StringBuilder(argAnno.name());
-            builder.append(" <");
+            builder.append(" <"); //$NON-NLS-1$
             builder.append(Util.displayName(type));
-            builder.append(">");
-            if (!argAnno.defaultValue().isEmpty()) builder.append(" (optional)");
-            builder.append(": ");
+            builder.append(">"); //$NON-NLS-1$
+            if (!argAnno.defaultValue().isEmpty()) builder.append(Messages.MappingDetailViewer_optional);
+            builder.append(": "); //$NON-NLS-1$
             builder.append(argAnno.description());
             control.setToolTipText(builder.toString());
         }
@@ -446,18 +447,18 @@ public class MappingDetailViewer extends MappingViewer {
                                               GridLayout layout) {
                         layout.numColumns = 4 + mappingArgs.length * 2;
                         Label label = new Label(parent, SWT.NONE);
-                        label.setText(transformationMapping.getTransformationName() + "(");
+                        label.setText(transformationMapping.getTransformationName() + "("); //$NON-NLS-1$
                         setToolTipToTransformationDescription(label);
                         label.setForeground(foreground);
                         createSourcePane(parent).setMenuArrowColor(foreground);
                         for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
-                            new Label(parent, SWT.NONE).setText(",");
+                            new Label(parent, SWT.NONE).setText(","); //$NON-NLS-1$
                             int argNdx = typeNdx - 1;
                             Arg argAnno = annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
                             createTransformationParameterControl(parent, types[typeNdx], argAnno, transformationMapping, mappingArgs, argNdx);
                         }
                         label = new Label(parent, SWT.NONE);
-                        label.setText(")");
+                        label.setText(")"); //$NON-NLS-1$
                         label.setForeground(foreground);
                     }
                 }.create();
@@ -497,12 +498,12 @@ public class MappingDetailViewer extends MappingViewer {
                                           GridLayout layout) {
                     layout.numColumns = 4;
                     Label label = new Label(parent, SWT.NONE);
-                    label.setText(transformationMapping.getTransformationName() + "(");
+                    label.setText(transformationMapping.getTransformationName() + "("); //$NON-NLS-1$
                     label.setToolTipText(transformationMapping.getTransformationClass() + '.' + transformationMapping.getTransformationName());
                     label.setForeground(foreground);
                     createSourcePane(parent).setMenuArrowColor(foreground);
                     label = new Label(parent, SWT.NONE);
-                    label.setText(")");
+                    label.setText(")"); //$NON-NLS-1$
                     label.setForeground(foreground);
                 }
             }.create();
@@ -649,7 +650,7 @@ public class MappingDetailViewer extends MappingViewer {
                                               Class<?> type,
                                               String value) {
         if (Util.valid(value, argAnnotation, type)) {
-            transformationArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value);
+            transformationArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value); //$NON-NLS-1$
             mapping =
                 manager.setTransformation(mapping,
                                           mapping.getTransformationClass(),
@@ -800,7 +801,7 @@ public class MappingDetailViewer extends MappingViewer {
             super.createMenuArrow();
             setToolTipToTransformationDescription(menuArrow);
             if (annotation != null) {
-                addMenuItem("Edit transformation", new MenuItemHandler() {
+                addMenuItem(Messages.MappingDetailViewer_menuItemEditTransformation, new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(SelectionEvent event) {
@@ -812,7 +813,7 @@ public class MappingDetailViewer extends MappingViewer {
                     }
                 });
             }
-            addMenuItem("Remove transformation", new MenuItemHandler() {
+            addMenuItem(Messages.MappingDetailViewer_menuItemRemoveTransformation, new MenuItemHandler() {
 
                 @Override
                 public void widgetSelected(SelectionEvent event) {
@@ -830,7 +831,7 @@ public class MappingDetailViewer extends MappingViewer {
 
         void setToolTipToTransformationDescription(Control control) {
             if (annotation == null)
-                control.setToolTipText(transformationMapping.getTransformationClass() + "."
+                control.setToolTipText(transformationMapping.getTransformationClass() + "." //$NON-NLS-1$
                                        + transformationMapping.getTransformationName());
             else control.setToolTipText(annotation.description());
         }
@@ -849,7 +850,7 @@ public class MappingDetailViewer extends MappingViewer {
         protected void constructContents(final Composite parent) {
             parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
             Label label = new Label(parent, SWT.NONE);
-            label.setText("Variable:");
+            label.setText(Messages.MappingDetailViewer_labelVariable);
             final ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
             comboViewer.setContentProvider(new ArrayContentProvider());
             comboViewer.setLabelProvider(new LabelProvider() {
@@ -880,12 +881,12 @@ public class MappingDetailViewer extends MappingViewer {
 
         @Override
         protected String message() {
-            return "Select a variable.";
+            return Messages.MappingDetailViewer_message;
         }
 
         @Override
         protected String title() {
-            return "Set Variable";
+            return Messages.MappingDetailViewer_title;
         }
 
         void validate() {

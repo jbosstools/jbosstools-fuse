@@ -18,10 +18,11 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
-    private static final String PROTOCOL = "dozer";
+    private static final String PROTOCOL = "dozer"; //$NON-NLS-1$
 
     /**
      * {@inheritDoc}
@@ -32,8 +33,8 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
         return new DataMapperEndpointFigureFeature(fp,
-                "Data Transformation",
-                "Creates a Data Transformation endpoint...", getRequiredDependencies());
+                Messages.DataTransformationPaletteEntry_paletteName,
+                Messages.DataTransformationPaletteEntry_paletteDescription, getRequiredDependencies());
     }
 
     /* (non-Javadoc)
@@ -59,8 +60,8 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     public List<Dependency> getRequiredDependencies() {
         List<Dependency> deps = new ArrayList<>();
         Dependency dep = new Dependency();
-        dep.setGroupId("org.apache.camel");
-        dep.setArtifactId("camel-dozer");
+        dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
+        dep.setArtifactId("camel-dozer"); //$NON-NLS-1$
         dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
         deps.add(dep);
         return deps;

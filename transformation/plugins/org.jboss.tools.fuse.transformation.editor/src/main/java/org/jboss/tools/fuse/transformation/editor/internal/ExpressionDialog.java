@@ -47,6 +47,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.core.Expression;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
 
@@ -82,9 +83,9 @@ public class ExpressionDialog extends BaseDialog {
                                                         .getLanguageModel()
                                                         .getSupportedLanguages()) {
             final String name = language.getName();
-            if (!name.equals("bean") && !name.equals("file") && !name.equals("sql")
-                && !name.equals("xtokenize") && !name.equals("tokenize")
-                && !name.equals("spel")) {
+            if (!name.equals("bean") && !name.equals("file") && !name.equals("sql") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                && !name.equals("xtokenize") && !name.equals("tokenize") //$NON-NLS-1$ //$NON-NLS-2$
+                && !name.equals("spel")) { //$NON-NLS-1$
                 if (languageName != null && name.equals(languageName)) {
                     this.language = language;
                 }
@@ -97,7 +98,7 @@ public class ExpressionDialog extends BaseDialog {
     protected void constructContents(Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
         Label label = new Label(parent, SWT.NONE);
-        label.setText("Language:");
+        label.setText(Messages.ExpressionDialog_LabelLanguage);
         languageComboViewer = new ComboViewer(parent, SWT.READ_ONLY);
         languageComboViewer.setContentProvider(ArrayContentProvider.getInstance());
         languageComboViewer.setComparator(new ViewerComparator() {
@@ -119,20 +120,20 @@ public class ExpressionDialog extends BaseDialog {
         languageComboViewer.getCombo().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(1, 1).create());
 
         Group detailsGroup = new Group(parent, SWT.NONE);
-        detailsGroup.setText("Details");
+        detailsGroup.setText(Messages.ExpressionDialog_grouptitleDetails);
         detailsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(2, 1).create());
         detailsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
 
         valueOption = new Button(detailsGroup, SWT.RADIO);
-        valueOption.setText("Value");
+        valueOption.setText(Messages.ExpressionDialog_ValueButton);
         valueOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
         valueOption.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                scriptTypeComboViewer.setSelection(new StructuredSelection(""));
-                pathText.setText("");
-                expression = "";
-                expressionText.setText(expression.replace("\\${", "${"));
+                scriptTypeComboViewer.setSelection(new StructuredSelection("")); //$NON-NLS-1$
+                pathText.setText(""); //$NON-NLS-1$
+                expression = ""; //$NON-NLS-1$
+                expressionText.setText(expression.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
                 validate();
             }
             @Override
@@ -141,16 +142,16 @@ public class ExpressionDialog extends BaseDialog {
         });
 
         label = new Label(detailsGroup, SWT.NONE);
-        label.setText("Expression:");
+        label.setText(Messages.ExpressionDialog_ExpressionLabel);
         label.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).create());
         expressionText = new Text(detailsGroup, SWT.BORDER);
         expressionText.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).grab(true, false).span(2, 1).create());
         if (expression != null) {
-            expressionText.setText(expression.replace("\\${", "${"));
+            expressionText.setText(expression.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         scriptOption = new Button(detailsGroup, SWT.RADIO);
-        scriptOption.setText("Script");
+        scriptOption.setText(Messages.ExpressionDialog_ScriptButton);
         scriptOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
         scriptOption.addSelectionListener(new SelectionListener() {
             @Override
@@ -163,7 +164,7 @@ public class ExpressionDialog extends BaseDialog {
         });
 
         label = new Label(detailsGroup, SWT.NONE);
-        label.setText("Source:");
+        label.setText(Messages.ExpressionDialog_SourceLabel);
         label.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).create());
         scriptTypeComboViewer = new ComboViewer(detailsGroup, SWT.READ_ONLY);
         scriptTypeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -177,14 +178,14 @@ public class ExpressionDialog extends BaseDialog {
         });
 
         WritableList sourceList = new WritableList();
-        sourceList.add("classpath");
-        sourceList.add("file");
-        sourceList.add("http");
-        sourceList.add("");
+        sourceList.add("classpath"); //$NON-NLS-1$
+        sourceList.add("file"); //$NON-NLS-1$
+        sourceList.add("http"); //$NON-NLS-1$
+        sourceList.add(""); //$NON-NLS-1$
         scriptTypeComboViewer.setInput(sourceList);
 
         browseBtn = new Button(detailsGroup,  SWT.PUSH);
-        browseBtn.setText("...");
+        browseBtn.setText("..."); //$NON-NLS-1$
         browseBtn.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
         browseBtn.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -193,12 +194,12 @@ public class ExpressionDialog extends BaseDialog {
                         (IStructuredSelection)scriptTypeComboViewer.getSelection();
                 String value = (String) selection.getFirstElement();
                 String path = null;
-                if (value.equalsIgnoreCase("classpath")) {
-                    path = selectResourceFromWorkspace(browseBtn.getShell(), "");
-                } else if (value.equalsIgnoreCase("file")) {
+                if (value.equalsIgnoreCase("classpath")) { //$NON-NLS-1$
+                    path = selectResourceFromWorkspace(browseBtn.getShell(), ""); //$NON-NLS-1$
+                } else if (value.equalsIgnoreCase("file")) { //$NON-NLS-1$
                     FileDialog dialog = new FileDialog(browseBtn.getShell());
-                    dialog.setText("Select Script File");
-                    String[] filterExt = { "*.*" };
+                    dialog.setText(Messages.ExpressionDialog_fileDialogTitleSelectScriptFile);
+                    String[] filterExt = { "*.*" }; //$NON-NLS-1$
                     dialog.setFilterExtensions(filterExt);
                     path = dialog.open();
                     if (path != null) {
@@ -213,7 +214,7 @@ public class ExpressionDialog extends BaseDialog {
         });
 
         label = new Label(detailsGroup, SWT.NONE);
-        label.setText("Path:");
+        label.setText(Messages.ExpressionDialog_labelPath);
         label.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).create());
         pathText = new Text(detailsGroup, SWT.BORDER);
         pathText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).indent(20, 0).span(2, 1).create());
@@ -247,7 +248,7 @@ public class ExpressionDialog extends BaseDialog {
             @Override
             public void modifyText(final ModifyEvent event) {
                 String expr = expressionText.getText().trim();
-                for (int ndx = expr.indexOf("${"); ndx >= 0; ndx = expr.indexOf("${", ndx)) {
+                for (int ndx = expr.indexOf("${"); ndx >= 0; ndx = expr.indexOf("${", ndx)) { //$NON-NLS-1$ //$NON-NLS-2$
                     if (ndx == 0 || expr.charAt(ndx - 1) != '\\') {
                         expr = expr.substring(0, ndx) + '\\' + expr.substring(ndx);
                         ndx += 3;
@@ -277,13 +278,13 @@ public class ExpressionDialog extends BaseDialog {
             valueOption.setEnabled(true);
             scriptOption.setSelection(false);
             scriptOption.setEnabled(true);
-            if (part0.contentEquals("resource")) {
+            if (part0.contentEquals("resource")) { //$NON-NLS-1$
                 valueOption.setSelection(false);
                 scriptOption.setSelection(true);
                 String part1 = getParameterPart(expression, 1);
                 scriptTypeComboViewer.setSelection(new StructuredSelection(part1));
                 String part2 = getParameterPart(expression, 2);
-                pathText.setText(part2.replace("\\${", "${"));
+                pathText.setText(part2.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
     }
@@ -293,14 +294,14 @@ public class ExpressionDialog extends BaseDialog {
         if ( File.separatorChar != '/' ) {
             path = path.replace ( File.separatorChar, '/' );
         }
-        if (path.startsWith("file:")) {
-            path = path.replace("file:", "");
+        if (path.startsWith("file:")) { //$NON-NLS-1$
+            path = path.replace("file:", ""); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (path.indexOf(':') > -1) {
-            path = path.replace(":", "");
+            path = path.replace(":", ""); //$NON-NLS-1$ //$NON-NLS-2$
         }
-        if ( !path.startsWith ( "/" ) ) {
-            path = "/" + path;
+        if ( !path.startsWith ( "/" ) ) { //$NON-NLS-1$
+            path = "/" + path; //$NON-NLS-1$
         }
         return path;
     }
@@ -311,10 +312,10 @@ public class ExpressionDialog extends BaseDialog {
                 final IStructuredSelection selection =
                         (IStructuredSelection)scriptTypeComboViewer.getSelection();
                 String value = (String) selection.getFirstElement();
-                expression = "resource:" + value + ":" + pathText.getText().trim();
-                expressionText.setText(expression.replace("\\${", "${"));
+                expression = "resource:" + value + ":" + pathText.getText().trim(); //$NON-NLS-1$ //$NON-NLS-2$
+                expressionText.setText(expression.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
             } else {
-                expressionText.setText(expression.replace("\\${", "${"));
+                expressionText.setText(expression.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
     }
@@ -327,17 +328,17 @@ public class ExpressionDialog extends BaseDialog {
 
     @Override
     protected String message() {
-        return "Select the expression language, then specify details for the expression.";
+        return Messages.ExpressionDialog_message;
     }
 
     @Override
     protected String title() {
-        return "Set Expression";
+        return Messages.ExpressionDialog_title;
     }
 
     private String getParameterPart(String expression, int idx) {
         String part = null;
-        String[] parts = expression.split(":", 3);
+        String[] parts = expression.split(":", 3); //$NON-NLS-1$
         if (parts.length > idx) {
             part = parts[idx];
         }
@@ -360,7 +361,7 @@ public class ExpressionDialog extends BaseDialog {
                     (IStructuredSelection)scriptTypeComboViewer.getSelection();
             String value = (String) selection.getFirstElement();
             browseBtn.setEnabled(value != null
-                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file"))
+                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file")) //$NON-NLS-1$ //$NON-NLS-2$
                     && scriptOption.getSelection());
         }
     }
@@ -405,7 +406,7 @@ public class ExpressionDialog extends BaseDialog {
     @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("Set Expression");
+        shell.setText(Messages.ExpressionDialog_shellTitle);
      }
 
 }
