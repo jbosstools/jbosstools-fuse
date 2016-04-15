@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -393,7 +394,7 @@ public class ExpressionDialog extends BaseDialog {
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
-        dialog.setTitle("Select " + extension.toUpperCase() + " From Project");
+		dialog.setTitle(Messages.bind(Messages.ExpressionDialog_titleResourceSelection, extension.toUpperCase()));
         dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
         dialog.open();
         Object[] result = dialog.getResult();

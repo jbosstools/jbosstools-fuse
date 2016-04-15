@@ -93,8 +93,7 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
     @Override
     protected Control createDialogArea(final Composite parent) {
         setTitle(Messages.CamelEndpointSelectionDialog_title);
-        setMessage("Please specify path to the Camel configuration file "
-                + "\nand the ID of the endpoint to update with new transformation details.");
+		setMessage(Messages.CamelEndpointSelectionDialog_message);
         getShell().setText(Messages.CamelEndpointSelectionDialog_shellTitle);
         final Composite composite = new Composite(parent, SWT.NONE);
         composite.setFont(parent.getFont());

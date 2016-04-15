@@ -422,9 +422,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     public int promptToSaveOnClose() {
         return manager.hasMappingPlaceholders()
                && !MessageDialog.openConfirm(mappingsViewer.getShell(), Messages.TransformationEditor_ConfirmDialogTtile,
-                                             "Are you sure?\n\n"
-                                                 + "All incomplete mappings will be lost when the "
-                                                 + "editor is closed.")
+				Messages.TransformationEditor_messageDialogConfirmation)
             ? CANCEL : NO;
     }
 
@@ -501,14 +499,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
             if (sourceTabFolder.getSelectionIndex() == 0) {
-                helpText.setText("Create a new mapping below by dragging a property from source "
-                                 + manager.rootSourceModel().getName()
-                                 + " on the left to a property in target "
-                                 + manager.rootTargetModel().getName() + " on the right.");
+				helpText.setText(Messages.bind(Messages.TransformationEditor_helptextSource,
+						manager.rootSourceModel().getName(), manager.rootTargetModel().getName()));
             } else {
-                helpText.setText("Create a new mapping below by dragging a variable from the list"
-                                 + " of variables on the left to a property in target "
-                                 + manager.rootTargetModel().getName() + " on the right.");
+				helpText.setText(Messages.bind(Messages.TransformationEditor_helpTextTarget,
+								manager.rootTargetModel().getName()));
             }
         } else {
             helpText.setText(""); //$NON-NLS-1$

@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -87,8 +88,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         super(true, TransformTestWizardPage.class.getSimpleName());
         setImageDescriptor(Activator.imageDescriptor("transform.png")); //$NON-NLS-1$
         setTitle(Messages.TransformTestWizardPage_title);
-        setDescription("Specify the transformation endpoint to test, then provide the camel configuration"
-                + ", class name and java package for the generated test class.");
+		setDescription(Messages.TransformTestWizardPage_description);
     }
 
     private void createCamelSpecificControls(Composite composite, int nColumns) {
@@ -412,8 +412,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         doStatusUpdate();
 
         updateStatus(new Status(IStatus.OK, Activator.PLUGIN_ID,
-                "Specify the transformation endpoint to test, then provide the camel configuration"
-                + ", class name and java package for the generated test class."));
+				Messages.TransformTestWizardPage_description));
         setErrorMessage(null);
     }
 

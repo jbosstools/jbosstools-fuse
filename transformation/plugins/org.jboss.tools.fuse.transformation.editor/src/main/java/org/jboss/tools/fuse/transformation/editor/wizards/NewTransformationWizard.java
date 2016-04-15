@@ -108,8 +108,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // Save transformation file
         final IFile file = uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
         if (file.exists()
-                && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm, "Overwrite existing transformation file (\""
-                        + file.getFullPath() + "\")?")) {
+ && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm,
+				Messages.bind(Messages.NewTransformationWizard_confirmationDialogmessage, file.getFullPath()))) {
             return false;
         }
         IRunnableWithProgress op = new IRunnableWithProgress() {

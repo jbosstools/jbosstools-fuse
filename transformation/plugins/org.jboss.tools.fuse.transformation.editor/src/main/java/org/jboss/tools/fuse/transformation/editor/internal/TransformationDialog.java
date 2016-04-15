@@ -11,6 +11,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -330,8 +331,7 @@ class TransformationDialog extends BaseDialog {
      */
     @Override
     protected String message() {
-        return "Select a transformation for the " + ((Model)mapping.getSource()).getName()
-               + " property, along with any applicable arguments";
+		return Messages.bind(Messages.TransformationDialog_message, ((Model) mapping.getSource()).getName());
     }
 
     private Composite newTableCell(Composite parent,

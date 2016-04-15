@@ -110,8 +110,8 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 							xmlFile = res.getProject().getFile(tempPath);
 							if (xmlFile != null && !xmlFile.exists()) {
 								MessageDialog.openError(Display.getCurrent().getActiveShell(),
-										Messages.TransformationDblClickHandler_ErrorDialogTitle_TransdformationFileNotAccessible, "The Transformation file (" + filename
-												+ ") is not accessible in the Camel project.");
+										Messages.TransformationDblClickHandler_ErrorDialogTitle_TransdformationFileNotAccessible,
+										Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename));
 								return;
 							}
 						}
@@ -121,7 +121,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 					} catch (Exception e) {
 						DialogUtils.showUserError(Activator.plugin().getBundle().getSymbolicName(),
 								Messages.TransformationDblClickHandler_ErroDialogTitle_ExceptionOpeningTransformationFile,
-								"The Transformation file (" + filename + ") is not accessible in the Camel project.",
+								Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename),
 								e);
 						Activator.error(e);
 					}
