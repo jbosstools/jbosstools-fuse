@@ -70,6 +70,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
 import org.jboss.tools.fuse.transformation.editor.internal.SourceTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.TargetTabFolder;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -82,20 +83,20 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
 	private static final int SASH_WIDTH = 3;
 
-    private static final String PREFERENCE_PREFIX = TransformationEditor.class.getName() + ".";
+    private static final String PREFERENCE_PREFIX = TransformationEditor.class.getName() + "."; //$NON-NLS-1$
 
-    private static final String SOURCE_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "sourceViewer";
-    private static final String TARGET_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "targetViewer";
+    private static final String SOURCE_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "sourceViewer"; //$NON-NLS-1$
+    private static final String TARGET_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "targetViewer"; //$NON-NLS-1$
 
-    private static final String HORIZONTAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "horizontalSplitterWeight.";
-    private static final String VERTICAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "verticalSplitterWeight.";
-    private static final String HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "left";
-    private static final String HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "center";
-    private static final String HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "right";
-    private static final String VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "top";
-    private static final String VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "bottom";
+    private static final String HORIZONTAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "horizontalSplitterWeight."; //$NON-NLS-1$
+    private static final String VERTICAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "verticalSplitterWeight."; //$NON-NLS-1$
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "left"; //$NON-NLS-1$
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "center"; //$NON-NLS-1$
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "right"; //$NON-NLS-1$
+    private static final String VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "top"; //$NON-NLS-1$
+    private static final String VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "bottom"; //$NON-NLS-1$
 
-    private static final String VERSION_PREFERENCE = PREFERENCE_PREFIX + "version";
+    private static final String VERSION_PREFERENCE = PREFERENCE_PREFIX + "version"; //$NON-NLS-1$
 
     TransformationManager manager;
     URLClassLoader loader;
@@ -148,7 +149,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         IPath xformsFolderPath = manager.project().getLocation().append(Util.TRANSFORMATIONS_FOLDER);
         File file = xformsFolderPath.append(pkgPath).toFile();
         if (!file.exists()) file.mkdirs();
-        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
+        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java"); //$NON-NLS-1$
         file = xformsFolderPath.append(resourcePath).toFile();
         if (file.exists() && latestVersion) return;
         byte[] buf = null;
@@ -333,8 +334,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                      IEditorInput input) throws PartInitException {
         IContentType contentType = Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
         if (!contentType.isAssociatedWith(input.getName())) {
-            throw new PartInitException("The Fuse Transformation editor can only be opened with a"
-                                        + " Dozer configuration file.");
+            throw new PartInitException("The Fuse Transformation editor can only be opened with a" //$NON-NLS-1$
+                                        + " Dozer configuration file."); //$NON-NLS-1$
         }
         setSite(site);
         setInput(input);
@@ -354,13 +355,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             copySourceToProject(Function.class, latestVersion);
             for (IConfigurationElement element : Platform.getExtensionRegistry()
                                                          .getConfigurationElementsFor(Activator.TRANSFORMATION_EXTENSION_POINT)) {
-                copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
+                copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion); //$NON-NLS-1$
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             
             // Ensure Maven will compile transformations folder
             final IProject project = manager.project();
-			File pomFile = project.getLocation().append("pom.xml").toFile();
+			File pomFile = project.getLocation().append("pom.xml").toFile(); //$NON-NLS-1$
 			final MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
 			mavenUtils.addResourceFolder(project, pomFile, Util.RESOURCES_PATH);
@@ -384,7 +385,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             // Ensure build of Java classes has completed
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
-            throw new PartInitException("Error initializing editor", e);
+            throw new PartInitException("Error initializing editor", e); //$NON-NLS-1$
         }
     }
 
@@ -420,7 +421,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     @Override
     public int promptToSaveOnClose() {
         return manager.hasMappingPlaceholders()
-               && !MessageDialog.openConfirm(mappingsViewer.getShell(), "Confirm",
+               && !MessageDialog.openConfirm(mappingsViewer.getShell(), Messages.TransformationEditor_ConfirmDialogTtile,
                                              "Are you sure?\n\n"
                                                  + "All incomplete mappings will be lost when the "
                                                  + "editor is closed.")
@@ -483,8 +484,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         sourceTabFolder.setVisible(sourceViewerButton.getSelection());
         horizontalSplitter.layout();
         sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
-            ? "Hide the source/variables viewers"
-            : "Show the source/variables viewers");
+            ? Messages.TransformationEditor_tooltipHideSourceVariableViewers
+            : Messages.TransformationEditor_tooltipShowSourceVariableViewers);
         updateHelpText();
     }
 
@@ -492,8 +493,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         targetTabFolder.setVisible(targetViewerButton.getSelection());
         horizontalSplitter.layout();
         targetViewerButton.setToolTipText(targetViewerButton.getSelection()
-            ? "Hide the target viewer"
-            : "Show the target viewer");
+            ? Messages.TransformationEditor_tooltipHideTargetViewers
+            : Messages.TransformationEditor_tooltipShowTargetViewers);
         updateHelpText();
     }
 
@@ -510,7 +511,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                                  + manager.rootTargetModel().getName() + " on the right.");
             }
         } else {
-            helpText.setText("");
+            helpText.setText(""); //$NON-NLS-1$
         }
         helpText.getParent().layout();
     }

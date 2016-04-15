@@ -19,37 +19,37 @@ public enum ModelType {
     /**
      *
      */
-    CLASS("Java Class", TransformType.JAVA),
+    CLASS("Java Class", TransformType.JAVA), //$NON-NLS-1$
 
     /**
      *
      */
-    JAVA("Java Source", TransformType.JAVA),
+    JAVA("Java Source", TransformType.JAVA), //$NON-NLS-1$
 
     /**
      *
      */
-    JSON("JSON", TransformType.JSON),
+    JSON("JSON", TransformType.JSON), //$NON-NLS-1$
 
     /**
      *
      */
-    JSON_SCHEMA("JSON Schema", TransformType.JSON),
+    JSON_SCHEMA("JSON Schema", TransformType.JSON), //$NON-NLS-1$
 
     /**
      *
      */
-    XML("XML", TransformType.XML),
+    XML("XML", TransformType.XML), //$NON-NLS-1$
 
     /**
      *
      */
-    XSD("XSD", TransformType.XML),
+    XSD("XSD", TransformType.XML), //$NON-NLS-1$
     
     /**
      * Type where a dataformat and model classes already exist.
      */
-    OTHER("OTHER", TransformType.OTHER);
+    OTHER("OTHER", TransformType.OTHER); //$NON-NLS-1$
     
 
     final String text;

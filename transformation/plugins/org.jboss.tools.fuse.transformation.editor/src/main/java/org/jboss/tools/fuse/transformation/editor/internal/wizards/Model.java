@@ -28,7 +28,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
  */
 public class Model implements PropertyChangeListener {
 
-    private static final String DEFAULT_FILE_PATH = "transformation.xml";
+    private static final String DEFAULT_FILE_PATH = "transformation.xml"; //$NON-NLS-1$
 
     /**
      *
@@ -145,7 +145,7 @@ public class Model implements PropertyChangeListener {
      * @param filePath the Camel file path
      */
     public void setCamelFilePath(final String filePath) {
-        changeSupport.firePropertyChange("camelFilePath", this.camelFilePath, this.camelFilePath =
+        changeSupport.firePropertyChange("camelFilePath", this.camelFilePath, this.camelFilePath = //$NON-NLS-1$
                 filePath.trim());
         setProject(project);
     }
@@ -155,21 +155,21 @@ public class Model implements PropertyChangeListener {
      */
     public void setFilePath(final String filePath) {
         changeSupport
-                .firePropertyChange("filePath", this.filePath, this.filePath = filePath.trim());
+                .firePropertyChange("filePath", this.filePath, this.filePath = filePath.trim()); //$NON-NLS-1$
     }
 
     /**
      * @param id
      */
     public void setId(final String id) {
-        changeSupport.firePropertyChange("id", this.id, this.id = id.trim());
+        changeSupport.firePropertyChange("id", this.id, this.id = id.trim()); //$NON-NLS-1$
     }
 
     /**
      * @param project
      */
     public void setProject(final IProject project) {
-        changeSupport.firePropertyChange("project", this.project, this.project = project);
+        changeSupport.firePropertyChange("project", this.project, this.project = project); //$NON-NLS-1$
 
         if (camelFilePath != null && !camelFilePath.trim().isEmpty()) {
             try {
@@ -212,7 +212,7 @@ public class Model implements PropertyChangeListener {
      * @param sourceFilePath
      */
     public void setSourceFilePath(final String sourceFilePath) {
-        changeSupport.firePropertyChange("sourceFilePath", this.sourceFilePath,
+        changeSupport.firePropertyChange("sourceFilePath", this.sourceFilePath, //$NON-NLS-1$
                 this.sourceFilePath = sourceFilePath.trim());
     }
 
@@ -220,7 +220,7 @@ public class Model implements PropertyChangeListener {
      * @param sourceType
      */
     public void setSourceType(final ModelType sourceType) {
-        changeSupport.firePropertyChange("sourceType", this.sourceType, this.sourceType =
+        changeSupport.firePropertyChange("sourceType", this.sourceType, this.sourceType = //$NON-NLS-1$
                 sourceType);
     }
 
@@ -228,7 +228,7 @@ public class Model implements PropertyChangeListener {
      * @param targetFilePath
      */
     public void setTargetFilePath(final String targetFilePath) {
-        changeSupport.firePropertyChange("targetFilePath", this.targetFilePath,
+        changeSupport.firePropertyChange("targetFilePath", this.targetFilePath, //$NON-NLS-1$
                 this.targetFilePath = targetFilePath.trim());
     }
 
@@ -236,7 +236,7 @@ public class Model implements PropertyChangeListener {
      * @param targetType
      */
     public void setTargetType(final ModelType targetType) {
-        changeSupport.firePropertyChange("targetType", this.targetType, this.targetType =
+        changeSupport.firePropertyChange("targetType", this.targetType, this.targetType = //$NON-NLS-1$
                 targetType);
     }
 
@@ -245,7 +245,7 @@ public class Model implements PropertyChangeListener {
     }
 
     public void setSourceTypeStr(String sourceTypeStr) {
-        changeSupport.firePropertyChange("sourceTypeStr", this.sourceTypeStr, this.sourceTypeStr =
+        changeSupport.firePropertyChange("sourceTypeStr", this.sourceTypeStr, this.sourceTypeStr = //$NON-NLS-1$
                 sourceTypeStr);
     }
 
@@ -254,7 +254,7 @@ public class Model implements PropertyChangeListener {
     }
 
     public void setTargetTypeStr(String targetTypeStr) {
-        changeSupport.firePropertyChange("targetTypeStr", this.targetTypeStr, this.targetTypeStr =
+        changeSupport.firePropertyChange("targetTypeStr", this.targetTypeStr, this.targetTypeStr = //$NON-NLS-1$
                 targetTypeStr);
     }
 
@@ -263,7 +263,7 @@ public class Model implements PropertyChangeListener {
     }
 
     public void setSourceDataFormatid(String sourceDataFormatid) {
-        changeSupport.firePropertyChange("sourceDataFormatid", this.sourceDataFormatid, this.sourceDataFormatid =
+        changeSupport.firePropertyChange("sourceDataFormatid", this.sourceDataFormatid, this.sourceDataFormatid = //$NON-NLS-1$
                 sourceDataFormatid.trim());
     }
 
@@ -272,7 +272,7 @@ public class Model implements PropertyChangeListener {
     }
 
     public void setTargetDataFormatid(String targetDataFormatid) {
-        changeSupport.firePropertyChange("targetDataFormatid", this.targetDataFormatid, this.targetDataFormatid =
+        changeSupport.firePropertyChange("targetDataFormatid", this.targetDataFormatid, this.targetDataFormatid = //$NON-NLS-1$
                 targetDataFormatid.trim());
     }
 

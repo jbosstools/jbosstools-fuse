@@ -58,6 +58,7 @@ import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
 import org.jboss.tools.fuse.transformation.core.model.json.JsonModelGenerator;
 import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -81,8 +82,8 @@ import com.sun.codemodel.JPackage;
  */
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
-    public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH + "META-INF/spring/camel-context.xml";
-    private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
+    public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH + "META-INF/spring/camel-context.xml"; //$NON-NLS-1$
+    private static final String OBJECT_FACTORY_NAME = "ObjectFactory"; //$NON-NLS-1$
 
     private Model uiModel = new Model();
     private AbstractCamelModelElement sourceFormat;
@@ -107,7 +108,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // Save transformation file
         final IFile file = uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
         if (file.exists()
-                && !MessageDialog.openConfirm(getShell(), "Confirm", "Overwrite existing transformation file (\""
+                && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm, "Overwrite existing transformation file (\""
                         + file.getFullPath() + "\")?")) {
             return false;
         }
@@ -178,7 +179,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                             addDataFormat(camelContext, targetFormat);
                         }
                         // Create the route endpoint
-                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId());
+                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId()); //$NON-NLS-1$
                     }
 
                     uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
@@ -231,35 +232,35 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         addPage(start);
         if (javaSource == null) {
-            javaSource = new JavaPage("SourceJava", uiModel, true);
+            javaSource = new JavaPage("SourceJava", uiModel, true); //$NON-NLS-1$
         }
         addPage(javaSource);
         if (javaTarget == null) {
-            javaTarget = new JavaPage("TargetJava", uiModel, false);
+            javaTarget = new JavaPage("TargetJava", uiModel, false); //$NON-NLS-1$
         }
         addPage(javaTarget);
         if (xmlSource == null) {
-            xmlSource = new XMLPage("SourceXml", uiModel, true);
+            xmlSource = new XMLPage("SourceXml", uiModel, true); //$NON-NLS-1$
         }
         addPage(xmlSource);
         if (xmlTarget == null) {
-            xmlTarget = new XMLPage("TargetXml", uiModel, false);
+            xmlTarget = new XMLPage("TargetXml", uiModel, false); //$NON-NLS-1$
         }
         addPage(xmlTarget);
         if (jsonSource == null) {
-            jsonSource = new JSONPage("Sourcejson", uiModel, true);
+            jsonSource = new JSONPage("Sourcejson", uiModel, true); //$NON-NLS-1$
         }
         addPage(jsonSource);
         if (jsonTarget == null) {
-            jsonTarget = new JSONPage("Targetjson", uiModel, false);
+            jsonTarget = new JSONPage("Targetjson", uiModel, false); //$NON-NLS-1$
         }
         addPage(jsonTarget);
         if (otherSource == null) {
-            otherSource = new OtherPage("Sourceother", uiModel, true);
+            otherSource = new OtherPage("Sourceother", uiModel, true); //$NON-NLS-1$
         }
         addPage(otherSource);
         if (otherTarget == null) {
-            otherTarget = new OtherPage("Targetother", uiModel, false);
+            otherTarget = new OtherPage("Targetother", uiModel, false); //$NON-NLS-1$
         }
         addPage(otherTarget);
     }
@@ -270,7 +271,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
      */
     @Override
     public String getWindowTitle() {
-        return "New Fuse Transformation";
+        return Messages.NewTransformationWizard_windowTtile;
     }
 
     public void setSelectedProject(IProject project) {
@@ -326,7 +327,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             uiModel.setProject(uiModel.projects.get(0));
         } else {
             final IStructuredSelection resourceSelection = (IStructuredSelection) workbench.getActiveWorkbenchWindow()
-                    .getSelectionService().getSelection("org.eclipse.ui.navigator.ProjectExplorer");
+                    .getSelectionService().getSelection("org.eclipse.ui.navigator.ProjectExplorer"); //$NON-NLS-1$
             if (resourceSelection == null || resourceSelection.size() != 1) {
                 return;
             }
@@ -423,13 +424,13 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             final JsonModelGenerator generator = new JsonModelGenerator();
             generator.generateFromInstance(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
                     .getLocationURI().toURL(), targetClassesFolder);
-            return pkgName + "." + className;
+            return pkgName + "." + className; //$NON-NLS-1$
         }
         case JSON_SCHEMA: {
             final JsonModelGenerator generator = new JsonModelGenerator();
             generator.generateFromSchema(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
                     .getLocationURI().toURL(), targetClassesFolder);
-            return pkgName + "." + className;
+            return pkgName + "." + className; //$NON-NLS-1$
         }
         case XSD: {
             final XmlModelGenerator generator = new XmlModelGenerator();
@@ -455,7 +456,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         case XML: {
             final XmlModelGenerator generator = new XmlModelGenerator();
-            final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
+            final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI()); //$NON-NLS-1$
             final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
                     .getLocationURI()), schemaPath, null, targetClassesFolder);
             String elementName = null;
@@ -544,7 +545,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private void addCamelDozerDependency() {
-        Dependency dep = createDependency("org.apache.camel", "camel-dozer", CamelUtils.getCurrentProjectCamelVersion());
+        Dependency dep = createDependency("org.apache.camel", "camel-dozer", CamelUtils.getCurrentProjectCamelVersion()); //$NON-NLS-1$ //$NON-NLS-2$
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
@@ -558,10 +559,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         Dependency dep = null;
         String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         if (dataFormat != null && dataFormat.getNodeTypeId() != null) {
-            if (dataFormat.getNodeTypeId().startsWith("json")) {
-                dep = createDependency("org.apache.camel", "camel-jackson", camelVersion);
-            } else if (dataFormat.getNodeTypeId().equalsIgnoreCase("jaxb")) {
-                dep = createDependency("org.apache.camel", "camel-jaxb", camelVersion);
+            if (dataFormat.getNodeTypeId().startsWith("json")) { //$NON-NLS-1$
+                dep = createDependency("org.apache.camel", "camel-jackson", camelVersion); //$NON-NLS-1$ //$NON-NLS-2$
+            } else if (dataFormat.getNodeTypeId().equalsIgnoreCase("jaxb")) { //$NON-NLS-1$
+                dep = createDependency("org.apache.camel", "camel-jaxb", camelVersion); //$NON-NLS-1$ //$NON-NLS-2$
             }
             if (dep != null) {
                 List<Dependency> deps = new ArrayList<>();

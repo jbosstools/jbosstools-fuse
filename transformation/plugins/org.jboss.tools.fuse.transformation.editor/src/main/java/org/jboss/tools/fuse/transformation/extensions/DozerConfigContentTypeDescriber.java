@@ -20,11 +20,11 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
 
 public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
 
-    public static final String ID = "org.jboss.tools.fuse.transformation.editor.dozer-config-content-type";
+    public static final String ID = "org.jboss.tools.fuse.transformation.editor.dozer-config-content-type"; //$NON-NLS-1$
 
     private static final QualifiedName[] SUPPORTED_OPTIONS = new QualifiedName[] {IContentDescription.CHARSET};
-    private static final String ROOT_ELEMENT = "<mappingsxmlns=";
-    private static final String XMLNS = "http://dozer.sourceforge.net";
+    private static final String ROOT_ELEMENT = "<mappingsxmlns="; //$NON-NLS-1$
+    private static final String XMLNS = "http://dozer.sourceforge.net"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)
@@ -45,7 +45,7 @@ public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
             final IContentDescription description) throws IOException {
         final char[] buf = new char[200];
         contents.read(buf);
-        final String text = String.valueOf(buf).replaceAll("\\s", "");
+        final String text = String.valueOf(buf).replaceAll("\\s", ""); //$NON-NLS-1$ //$NON-NLS-2$
         final int ndx = text.indexOf(ROOT_ELEMENT);
         return ndx > 0 && text.indexOf(XMLNS) > ndx ? ITextContentDescriber.VALID
                 : ITextContentDescriber.INVALID;

@@ -50,6 +50,7 @@ import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.TransformationMapping;
 import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -101,7 +102,7 @@ class TransformationDialog extends BaseDialog {
         Group group = new Group(parent, SWT.SHADOW_ETCHED_OUT);
         group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         group.setLayout(GridLayoutFactory.swtDefaults().create());
-        group.setText("Transformations");
+        group.setText(Messages.TransformationDialog_groupTitleTransformations);
         listViewer = new ListViewer(group, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
         listViewer.getList().setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         listViewer.setLabelProvider(new LabelProvider() {
@@ -125,7 +126,7 @@ class TransformationDialog extends BaseDialog {
             String sourceType = ((Model)mapping.getSource()).getType();
             for (IConfigurationElement element
                  : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.TRANSFORMATION_EXTENSION_POINT)) {
-                Object instance = element.createExecutableExtension("class");
+                Object instance = element.createExecutableExtension("class"); //$NON-NLS-1$
                 for (Method method : instance.getClass().getDeclaredMethods()) {
                     Class<?>[] types = method.getParameterTypes();
                     if (Modifier.isPublic(method.getModifiers())
@@ -145,14 +146,14 @@ class TransformationDialog extends BaseDialog {
         final Group descGroup = new Group(pane, SWT.NONE);
         descGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         descGroup.setLayout(GridLayoutFactory.fillDefaults().create());
-        descGroup.setText("Description");
+        descGroup.setText(Messages.TransformationDialog_grouptitleDescription);
         maximizeDescription(pane, true);
         pane = new Composite(splitter, SWT.NONE);
         pane.setLayout(GridLayoutFactory.fillDefaults().create());
         final Group argsGroup = new Group(pane, SWT.NONE);
         argsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         argsGroup.setLayout(GridLayoutFactory.fillDefaults().create());
-        argsGroup.setText("Arguments");
+        argsGroup.setText(Messages.TransformationDialog_groupTitleArguments);
         listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
@@ -200,7 +201,7 @@ class TransformationDialog extends BaseDialog {
 
         description = new Browser(descGroup, SWT.BORDER);
         description.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-        description.setText(annotation == null ? "" : annotation.description());
+        description.setText(annotation == null ? "" : annotation.description()); //$NON-NLS-1$
 
         if (types.length > 1) {
             maximizeDescription(description, false);
@@ -212,12 +213,12 @@ class TransformationDialog extends BaseDialog {
             headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             headerPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(4).create());
             GridData nameData = GridDataFactory.fillDefaults().create();
-            newTableColumnHeader(headerPane, "Name").setLayoutData(nameData);
+            newTableColumnHeader(headerPane, Messages.TransformationDialog_NameColumn).setLayoutData(nameData);
             GridData valData = GridDataFactory.fillDefaults().create();
-            newTableColumnHeader(headerPane, "Value").setLayoutData(valData);
+            newTableColumnHeader(headerPane, Messages.TransformationDialog_ValueColumn).setLayoutData(valData);
             GridData typeData = GridDataFactory.fillDefaults().create();
-            newTableColumnHeader(headerPane, "Type").setLayoutData(typeData);
-            newTableColumnHeader(headerPane, "Description").setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+            newTableColumnHeader(headerPane, Messages.TransformationDialog_TypeColumn).setLayoutData(typeData);
+            newTableColumnHeader(headerPane, Messages.TransformationDialog_DescriptionColumn).setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             final int headerPaneHeight = headerPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
             final ScrolledComposite scroller = new ScrolledComposite(argsPane, SWT.V_SCROLL);
             scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -240,15 +241,15 @@ class TransformationDialog extends BaseDialog {
                 Composite cell = newTableCell(scrollerPane, false, true, false);
                 Label label = new Label(cell, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
-                if (argAnno == null) label.setText("argument" + (argNdx + 1));
-                else label.setText(argAnno.name() + (argAnno.defaultValue().isEmpty() ? "" : " (optional)"));
+                if (argAnno == null) label.setText(Messages.TransformationDialog_labelArgument + (argNdx + 1));
+                else label.setText(argAnno.name() + (argAnno.defaultValue().isEmpty() ? "" : Messages.TransformationDialog_optional)); //$NON-NLS-1$
                 nameData.widthHint = Math.max(nameData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
                 cell = newTableCell(scrollerPane, false, false, false);
                 if (type == Boolean.class) {
                     final Button checkBox = new Button(cell, SWT.CHECK);
                     checkBox.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
-                        String val = mappingArgs[argNdx].split("=")[1];
+                        String val = mappingArgs[argNdx].split("=")[1]; //$NON-NLS-1$
                         argumentValues[argNdx] = val;
 					} else {
 						argumentValues[argNdx] = Boolean.FALSE.toString();
@@ -266,7 +267,7 @@ class TransformationDialog extends BaseDialog {
                     final Text text = new Text(cell, SWT.BORDER);
                     text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
-                        String val = mappingArgs[argNdx].split("=")[1];
+                        String val = mappingArgs[argNdx].split("=")[1]; //$NON-NLS-1$
                         argumentValues[argNdx] = val;
                         if (argAnno == null || !argAnno.hideDefault() || !val.equals(argAnno.defaultValue())) text.setText(val);
                     }
@@ -360,7 +361,7 @@ class TransformationDialog extends BaseDialog {
      */
     @Override
     protected String title() {
-        return (origTransformation == null ? "Add" : "Edit") + " Transformation";
+        return (origTransformation == null ? Messages.TransformationDialog_AddTitle : Messages.TransformationDialog_EditTitle) + Messages.TransformationDialog_titleSuffix;
     }
 
     private void validate(Function annotation,

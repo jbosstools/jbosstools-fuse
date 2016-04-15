@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -91,10 +92,10 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
      */
     @Override
     protected Control createDialogArea(final Composite parent) {
-        setTitle("Specify Camel Config and Endpoint ID");
+        setTitle(Messages.CamelEndpointSelectionDialog_title);
         setMessage("Please specify path to the Camel configuration file "
                 + "\nand the ID of the endpoint to update with new transformation details.");
-        getShell().setText("Update Camel Endpoint");
+        getShell().setText(Messages.CamelEndpointSelectionDialog_shellTitle);
         final Composite composite = new Composite(parent, SWT.NONE);
         composite.setFont(parent.getFont());
         composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -106,8 +107,8 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
 
         // Create camel file path widgets
         Label label = new Label(composite, SWT.NONE);
-        label.setText("Camel File path: ");
-        label.setToolTipText("Path to the Camel configuration file.");
+        label.setText(Messages.CamelEndpointSelectionDialog_labelCamelFilePath);
+        label.setToolTipText(Messages.CamelEndpointSelectionDialog_labelTooltipCamelFilePath);
         final Text camelFilePathText = new Text(composite, SWT.BORDER);
         camelFilePathText.setLayoutData(GridDataFactory.swtDefaults().span(1, 1).grab(true, false)
                 .align(SWT.FILL, SWT.CENTER).create());
@@ -123,15 +124,15 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
         });
 
         final Button camelPathButton = new Button(composite, SWT.NONE);
-        camelPathButton.setText("...");
-        camelPathButton.setToolTipText("Browse to select an available Camel file.");
+        camelPathButton.setText("..."); //$NON-NLS-1$
+        camelPathButton.setToolTipText(Messages.CamelEndpointSelectionDialog_tooltipBrowseButton);
         camelPathButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
 
                 final IResource res =
-                        Util.selectResourceFromWorkspace(getShell(), ".xml", project);
+                        Util.selectResourceFromWorkspace(getShell(), ".xml", project); //$NON-NLS-1$
                 if (res != null) {
                     final IPath respath = JavaUtil.getJavaPathForResource(res);
                     final String relpath = respath.makeRelative().toString();
@@ -158,8 +159,8 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
 
         // Create ID widgets
         label = new Label(composite, SWT.NONE);
-        label.setText("Endpoint:");
-        label.setToolTipText("The Endpoint ID used in the Camel configuration");
+        label.setText(Messages.CamelEndpointSelectionDialog_labelEndpoint);
+        label.setToolTipText(Messages.CamelEndpointSelectionDialog_labelEndpointTooltip);
         endpointCombo = new ComboViewer(composite, SWT.BORDER | SWT.READ_ONLY);
         endpointCombo.getControl().setLayoutData(
                 GridDataFactory.swtDefaults().span(2, 1).grab(true, false)
@@ -203,7 +204,7 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
         errMessage = null;
 
         if (camelFilePath == null || camelFilePath.trim().isEmpty()) {
-            errMessage = "A Camel file path must be supplied";
+            errMessage = Messages.CamelEndpointSelectionDialog_errorMessageMissingCamelFilePath;
         } else {
             try {
                 File testFile = new File(project.getFile(camelFilePath).getLocationURI());
@@ -221,7 +222,7 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
                     }
                 }
             } catch (final Exception e) {
-                errMessage = "The Camel file path must refer to a valid Camel file";
+                errMessage = Messages.CamelEndpointSelectionDialog_erromessageInvalidFilePath;
             }
         }
         if (camelConfigBuilder != null && updateCamelBuilder) {
@@ -230,12 +231,12 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
         }
         updateCamelBuilder = false;
         if (endpointID == null || endpointID.toString().trim().isEmpty()) {
-            errMessage = "An endpoint must be selected";
+            errMessage = Messages.CamelEndpointSelectionDialog_errorMessageNoEndpointSelected;
         } else {
             final String id = endpointID.trim();
             if (camelConfigBuilder != null) {
                 if (camelConfigBuilder.getEndpoint(id) == null) {
-                    errMessage = "An endpoint does not exist with the specified id";
+                    errMessage = Messages.CamelEndpointSelectionDialog_errorMessageIdNotFound;
                 }
             }
         }
