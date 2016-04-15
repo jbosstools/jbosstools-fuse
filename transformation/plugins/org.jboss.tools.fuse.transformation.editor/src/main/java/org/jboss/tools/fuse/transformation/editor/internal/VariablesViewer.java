@@ -10,6 +10,8 @@
 package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.Iterator;
+
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -193,15 +195,10 @@ public class VariablesViewer extends Composite {
                                 MessageDialog dlg = new MessageDialog(getShell(),
                                                                       Messages.VariablesViewer_confirm,
                                                                       null,
-                                                                      "Variable \"" + variable.getName()
-                                                                      + "\" is being used in one or more mappings.\n\n"
-                                                                      + "Are you sure you want to delete it?",
+										Messages.bind(Messages.VariablesViewer_deleteConfirmationMessage, variable.getName()),
                                                                       MessageDialog.WARNING,
                                                                       new String[] {
-                                                                          "Cancel",
-                                                                          "Yes",
-                                                                          "Yes For All",
-                                                                          "No"
+ IDialogConstants.CANCEL_LABEL, IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL
                                                                       },
                                                                       3);
                                 int button = dlg.open();

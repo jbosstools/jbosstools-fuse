@@ -524,7 +524,7 @@ public class Util {
                 }
             });
         dlg.setTitle(Messages.Util_Select_DialogTtile + schemaType);
-        dlg.setMessage("Select the " + schemaType + " file for the transformation");
+		dlg.setMessage(Messages.bind(Messages.Util_messageSelectFileFortransformation, schemaType));
         dlg.setMatchEmptyString(true);
         dlg.setHelpAvailable(false);
         final List<IResource> resources = new ArrayList<>();

@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -83,14 +84,13 @@ public class StartPage extends XformWizardPage {
      * @param model
      */
     public StartPage(final Model model) {
-        super("New Transformation", "New Transformation", Activator.imageDescriptor("transform.png"), model);
+		super(Messages.StartPage_title, Messages.StartPage_description, Activator.imageDescriptor("transform.png"), model); //$NON-NLS-1$
         observablesManager.addObservablesFromContext(context, true, true);
     }
 
     @Override
     public void createControl(final Composite parent) {
-        setDescription("Supply the ID, project, and path, as well as"
-                + " the source and target types for the transformation.");
+		setDescription(Messages.StartPage_descriptionStartPage);
         observablesManager.runAndCollect(new Runnable() {
 
             @Override
@@ -114,7 +114,7 @@ public class StartPage extends XformWizardPage {
         _page.setLayout(layout);
 
         // Create project widgets
-        Label label = createLabel(_page, "Project:", "The project to contain the mapping file.");
+        Label label = createLabel(_page, Messages.StartPage_labelProject, Messages.StartPage_labelProjectTooltip);
 
         _projectCombo = new ComboViewer(new Combo(_page, SWT.READ_ONLY));
         _projectCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
@@ -127,14 +127,14 @@ public class StartPage extends XformWizardPage {
         });
 
         // Create ID widgets
-        label = createLabel(_page, "Transformation ID:", "The transformation ID that will be shown in the Fuse editor.");
+        label = createLabel(_page, Messages.StartPage_labelTransformationID, Messages.StartPage_labelTransformationIDTooltip);
 
         _idText = new Text(_page, SWT.BORDER);
         _idText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _idText.setToolTipText(label.getToolTipText());
 
         // Create file path widgets
-        label = createLabel(_page, "Dozer File Path:", "The path to the Dozer transformation file.");
+        label = createLabel(_page, Messages.StartPage_labelDozerFilePath, Messages.StartPage_labelDozerFilePathTooltip);
 
         _dozerPathText = new Text(_page, SWT.BORDER);
         _dozerPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -142,8 +142,8 @@ public class StartPage extends XformWizardPage {
 
         final Button dozerPathButton = new Button(_page, SWT.NONE);
         dozerPathButton.setLayoutData(new GridData());
-        dozerPathButton.setText("...");
-        dozerPathButton.setToolTipText("Browse to select an available Dozer file to overwrite.");
+        dozerPathButton.setText("..."); //$NON-NLS-1$
+        dozerPathButton.setToolTipText(Messages.StartPage_browseDozerTooltip);
 
         dozerPathButton.addSelectionListener(new SelectionAdapter() {
 
@@ -161,15 +161,15 @@ public class StartPage extends XformWizardPage {
         });
 
         // Create camel file path widgets
-        label = createLabel(_page, "Camel File Path:", "The path to the Camel configuration file.");
+        label = createLabel(_page, Messages.StartPage_labelCamelFilepath, Messages.StartPage_labelCamelFilePathTooltip);
 
         _camelFilePathText = new Text(_page, SWT.BORDER);
         _camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _camelFilePathText.setToolTipText(label.getToolTipText());
 
         final Button camelPathButton = new Button(_page, SWT.NONE);
-        camelPathButton.setText("...");
-        camelPathButton.setToolTipText("Browse to select an available Camel file.");
+        camelPathButton.setText("..."); //$NON-NLS-1$
+        camelPathButton.setToolTipText(Messages.StartPage_browseCamelTooltip);
 
         camelPathButton.addSelectionListener(new SelectionAdapter() {
 
@@ -195,24 +195,24 @@ public class StartPage extends XformWizardPage {
             }
         });
 
-        label = createLabel(_page, "", ""); // spacer
+        label = createLabel(_page, "", ""); // spacer //$NON-NLS-1$ //$NON-NLS-2$
         label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
-        group.setText("Types Transformed");
+        group.setText(Messages.StartPage_groupTypesTransformed);
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 2));
 
-        createLabel(group, "Source Type", "Data type for the source being transformed.");
-        createLabel(group, "", ""); // spacer
-        createLabel(group, "Target Type", "Data type for the target of the transformation.");
+        createLabel(group, Messages.StartPage_labelSourceType, Messages.StartPage_labelSourceTypeTooltip);
+        createLabel(group, "", ""); // spacer //$NON-NLS-1$ //$NON-NLS-2$
+        createLabel(group, Messages.StartPage_labelTargetType, Messages.StartPage_labelTargetTypeTooltip);
 
         _sourceCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
         GridData sourceGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
         sourceGD.horizontalIndent = 5;
         _sourceCV.getCombo().setLayoutData(sourceGD);
 
-        new Label(group, SWT.NONE).setImage(Activator.imageDescriptor("mapped16.gif").createImage());
+        new Label(group, SWT.NONE).setImage(Activator.imageDescriptor("mapped16.gif").createImage()); //$NON-NLS-1$
         _targetCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
         GridData targetGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
         targetGD.horizontalIndent = 5;
@@ -291,10 +291,10 @@ public class StartPage extends XformWizardPage {
         _projectCombo.setContentProvider(new ObservableListContentProvider());
 
         IObservableValue projectComboValue = ViewerProperties.singleSelection().observe(_projectCombo);
-        IObservableValue projectValue = BeanProperties.value(Model.class, "project").observe(model);
+        IObservableValue projectValue = BeanProperties.value(Model.class, "project").observe(model); //$NON-NLS-1$
         
         IObservableValue dozerPathTextValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
-        IObservableValue dozerPathValue = BeanProperties.value(Model.class, "filePath").observe(model);
+        IObservableValue dozerPathValue = BeanProperties.value(Model.class, "filePath").observe(model); //$NON-NLS-1$
         
         // bind the project dropdown
         UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -303,7 +303,7 @@ public class StartPage extends XformWizardPage {
             @Override
             public IStatus validate(final Object value) {
                 if (value == null) {
-                    return ValidationStatus.error("A project must be selected");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageProjectMustBeSelected);
                 }
                 return ValidationStatus.ok();
             }
@@ -323,7 +323,7 @@ public class StartPage extends XformWizardPage {
 
         // Bind transformation ID widget to UI model
         IObservableValue idTextValue = WidgetProperties.text(SWT.Modify).observe(_idText);
-        IObservableValue idValue = BeanProperties.value(Model.class, "id").observe(model);
+        IObservableValue idValue = BeanProperties.value(Model.class, "id").observe(model); //$NON-NLS-1$
 
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -331,20 +331,19 @@ public class StartPage extends XformWizardPage {
             @Override
             public IStatus validate(final Object value) {
                 if (value == null || value.toString().trim().isEmpty()) {
-                    return ValidationStatus.error("A transformation ID must be supplied");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageIDMustBeSupplied);
                 }
                 final String id = value.toString().trim();
                 final StringCharacterIterator iter = new StringCharacterIterator(id);
                 for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
                     if (!Character.isJavaIdentifierPart(chr)) {
-                        return ValidationStatus.error("The transformation ID may only contain letters, "
-                                + "digits, currency symbols, or underscores");
+						return ValidationStatus.error(Messages.StartPage_errorMessageInvalidCharacters);
                     }
                 }
                 if (model.camelConfig != null && model.camelConfig.getConfigBuilder() != null) {
                     for (final String endpointId : model.camelConfig.getConfigBuilder().getTransformEndpointIds()) {
                         if (id.equalsIgnoreCase(endpointId)) {
-                            return ValidationStatus.error("A transformation endpoint with the supplied ID already exists");
+                            return ValidationStatus.error(Messages.StartPage_errorMessageIDAlreadyExists);
                         }
                     }
                 }
@@ -361,13 +360,13 @@ public class StartPage extends XformWizardPage {
             @Override
             public IStatus validate(final Object value) {
                 if (value == null || value.toString().trim().isEmpty()) {
-                    return ValidationStatus.error("The transformation file path must be supplied");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageFlePathMissing);
                 }
                 if (!(value.toString().trim().isEmpty())) {
                     if (model.getProject() != null) {
                         final IFile file = model.getProject().getFile(Util.RESOURCES_PATH + (String) value);
                         if (file != null && file.exists()) {
-                            return ValidationStatus.warning("A transformation file with that name already exists.");
+                            return ValidationStatus.warning(Messages.StartPage_errorMessageNameFileAlreadyExists);
                         }
                     }
                 }
@@ -381,14 +380,14 @@ public class StartPage extends XformWizardPage {
 
         // Bind camel file path widget to UI model
         IObservableValue camelFileTextValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
-        IObservableValue camelFileValue = BeanProperties.value(Model.class, "camelFilePath").observe(model);
+        IObservableValue camelFileValue = BeanProperties.value(Model.class, "camelFilePath").observe(model); //$NON-NLS-1$
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
             @Override
             public IStatus validate(final Object value) {
                 if (value == null || value.toString().trim().isEmpty()) {
-                    return ValidationStatus.error("The Camel file path must be supplied");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageCamelFilePathMustBeSupplied);
                 }
                 if (!(value.toString().trim().isEmpty())) {
                     File testFile = null;
@@ -397,13 +396,13 @@ public class StartPage extends XformWizardPage {
                     if (!testFile.exists()) {
                         testFile = new File(model.getProject().getFile(Util.RESOURCES_PATH + path).getLocationURI());
                         if (!testFile.exists()) {
-                            return ValidationStatus.error("The Camel file path must be a valid file location");
+                            return ValidationStatus.error(Messages.StartPage_errorMessageCamelFileInvalidLocation);
                         }
                     }
                     try {
                         CamelConfigurationHelper.load(testFile).getConfigBuilder();
                     } catch (final Exception e) {
-                        return ValidationStatus.error("The Camel file path must refer to a valid Camel file");
+                        return ValidationStatus.error(Messages.StartPage_errorMessageInvalidCamelFile);
                     }
                 }
                 return ValidationStatus.ok();
@@ -422,7 +421,7 @@ public class StartPage extends XformWizardPage {
         // bind the source type string dropdown
         _sourceCV.setContentProvider(new ObservableListContentProvider());
         IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_sourceCV);
-        IObservableValue modelValue = BeanProperties.value(Model.class, "sourceTypeStr").observe(model);
+        IObservableValue modelValue = BeanProperties.value(Model.class, "sourceTypeStr").observe(model); //$NON-NLS-1$
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -433,7 +432,7 @@ public class StartPage extends XformWizardPage {
                 if (StartPage.this.getSourcePage() != null) {
                     ((XformWizardPage) StartPage.this.getSourcePage()).clearControls();
                 }
-                UIJob uiJob = new UIJob("open error") {
+                UIJob uiJob = new UIJob(Messages.StartPage_openErroUiJobName) {
                     @Override
                     public IStatus runInUIThread(IProgressMonitor monitor) {
                         if (StartPage.this.getTargetPage() != null) {
@@ -447,18 +446,18 @@ public class StartPage extends XformWizardPage {
 
                 if (value == null || ((String) value).trim().isEmpty()) {
                     resetFinish();
-                    return ValidationStatus.error("A source type must be selected");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageSourceTypeMissing);
                 }
                 return ValidationStatus.ok();
             }
         });
 
         WritableList sourceList = new WritableList();
-        sourceList.add("Java");
-        sourceList.add("XML");
-        sourceList.add("JSON");
-        sourceList.add("Other");
-        sourceList.add("");
+        sourceList.add("Java"); //$NON-NLS-1$
+        sourceList.add("XML"); //$NON-NLS-1$
+        sourceList.add("JSON"); //$NON-NLS-1$
+        sourceList.add("Other"); //$NON-NLS-1$
+        sourceList.add(""); //$NON-NLS-1$
         _sourceCV.setInput(sourceList);
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
                 null);
@@ -466,7 +465,7 @@ public class StartPage extends XformWizardPage {
         // bind the source type string dropdown
         _targetCV.setContentProvider(new ObservableListContentProvider());
         widgetValue = ViewerProperties.singleSelection().observe(_targetCV);
-        modelValue = BeanProperties.value(Model.class, "targetTypeStr").observe(model);
+        modelValue = BeanProperties.value(Model.class, "targetTypeStr").observe(model); //$NON-NLS-1$
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -477,7 +476,7 @@ public class StartPage extends XformWizardPage {
                 if (StartPage.this.getTargetPage() != null) {
                     ((XformWizardPage) StartPage.this.getTargetPage()).clearControls();
                 }
-                UIJob uiJob = new UIJob("open error") {
+                UIJob uiJob = new UIJob(Messages.StartPage_openErroruiJobName) {
                     @Override
                     public IStatus runInUIThread(IProgressMonitor monitor) {
                         if (StartPage.this.getSourcePage() != null) {
@@ -491,18 +490,18 @@ public class StartPage extends XformWizardPage {
 
                 if (value == null || ((String) value).trim().isEmpty()) {
                     resetFinish();
-                    return ValidationStatus.error("A target type must be selected");
+                    return ValidationStatus.error(Messages.StartPage_errorMessageTargetTypeMissing);
                 }
                 return ValidationStatus.ok();
             }
         });
 
         WritableList targetList = new WritableList();
-        targetList.add("Java");
-        targetList.add("XML");
-        targetList.add("JSON");
-        targetList.add("Other");
-        targetList.add("");
+        targetList.add("Java"); //$NON-NLS-1$
+        targetList.add("XML"); //$NON-NLS-1$
+        targetList.add("JSON"); //$NON-NLS-1$
+        targetList.add("Other"); //$NON-NLS-1$
+        targetList.add(""); //$NON-NLS-1$
         _targetCV.setInput(targetList);
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
                 null);
