@@ -11,12 +11,26 @@
 
 package org.fusesource.ide.server.karaf.core.runtime.classpath;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.ClasspathAttribute;
+import org.eclipse.jdt.internal.core.ClasspathEntry;
 import org.eclipse.jst.server.core.RuntimeClasspathProviderDelegate;
 import org.eclipse.wst.server.core.IRuntime;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.CustomRuntimeClasspathModel;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.IRuntimePathProvider;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.cache.internal.RuntimeClasspathCache;
@@ -61,11 +75,88 @@ public class KarafProjectRuntimeClasspathProvider
 
 	@Override
 	public IClasspathEntry[] resolveClasspathContainer(IProject project, IRuntime runtime) {
-		// TODO:   Find somewhere to pull this from based on runtime version
-		// It is advisable to cache the result, at least for the default entries
+		IPath installPath = runtime.getLocation();
 		
-		// More work to pull from the classpath defaults via pref page per runtime type... might need api extensions
-		return resolveClasspathContainerFromRuntime(runtime);
+		if (installPath == null) return new IClasspathEntry[0];
+		
+		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+		
+		String runtimeId = runtime.getRuntimeType().getId();
+		if (runtimeId.indexOf(".fuseesb.runtime.") != -1 || 
+			runtimeId.indexOf(".karaf.runtime.") != -1) {
+			IPath libFolder = installPath.append("lib");
+			addLibraryEntries(list, libFolder.toFile(), true);
+			IPath dataFolder = installPath.append("data").append("cache");
+//			addLibraryEntries(list, dataFolder.toFile(), true);
+			collectDeployedBundles(list, dataFolder);
+		}
+		return list.toArray(new IClasspathEntry[list.size()]);
+	}
+	
+	private void collectDeployedBundles(List<IClasspathEntry> list, IPath folder) {
+		// loop all subfolders
+		// parse bundle.info to obtain name and version
+		// go into the next subfolder and reference the bundle.jar
+		// create a classpath entry with good naming reffing the jar
+		for (File subFolder : folder.toFile().listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File subDir) {
+				return subDir.isDirectory() && subDir.list(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.toLowerCase().trim().equals("bundle.info");
+					}
+				}).length==1;
+			}
+		})) {
+			// now we have all folders containing a bundle.info file
+			// parse bundle manifest.mf inside the next subfolders jar
+			IClasspathEntry cpe = null;
+			JarFile jf = null;
+			try {
+				File f = getJarFromFolder(subFolder);
+				if (f == null) continue;
+				jf = new JarFile(f);
+
+				Manifest mf = jf.getManifest();
+				String version = mf.getMainAttributes().getValue("Bundle-Version");
+				String symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
+				
+				if (!Strings.isBlank(symbolicName) && !Strings.isBlank(version)) {
+					IPath bundleFolder = folder.append(subFolder.getName()).append(f.getParentFile().getName()).append(f.getName());
+					cpe = JavaCore.newLibraryEntry(bundleFolder, null, null);
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				continue;
+			} finally {
+				try {
+					if (jf != null) jf.close();
+				} catch (IOException ex) {
+					// ignore
+				}
+			}
+						
+			if (cpe != null) list.add(cpe);
+		}
+	}
+	
+	private File getJarFromFolder(File folder) throws IOException {
+		File jf = null;
+		
+		for (File sf : folder.listFiles()) {
+			if (sf.isDirectory() && sf.list(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.trim().equalsIgnoreCase("bundle.jar");
+				}
+			}).length==1) {
+				// found bundle.jar
+				jf = new File(sf, "bundle.jar");
+			}
+		}
+		
+		return jf;
 	}
 	
 	/*

@@ -14,15 +14,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.wst.common.project.facet.core.IDelegate;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.IRuntimeChangedEvent;
-import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
-import org.jboss.ide.eclipse.as.wtp.core.vcf.VCFClasspathCommand;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jst.server.core.internal.JavaServerPlugin;
 import org.eclipse.jst.server.core.internal.RuntimeClasspathContainer;
@@ -51,14 +42,9 @@ public class CamelRuntimeChangedDelegate implements IDelegate {
 	}
 	
 	public static IPath getContainerPath(IRuntime runtime) {
-		
-		// TODO THIS IS INCOMPLETE
-		
 		org.eclipse.wst.server.core.IRuntime serverRuntime = ServerCore.findRuntime(runtime.getName());
 		RuntimeClasspathProviderWrapper rcpw = JavaServerPlugin.findRuntimeClasspathProvider(serverRuntime.getRuntimeType());
-		IPath serverContainerPath = new Path(RuntimeClasspathContainer.SERVER_CONTAINER)
-			.append(rcpw.getId()).append(serverRuntime.getId());
+		IPath serverContainerPath = new Path(RuntimeClasspathContainer.SERVER_CONTAINER).append(rcpw.getId()).append(serverRuntime.getId());
 		return serverContainerPath;
-//		return null;
 	}
 }
