@@ -45,7 +45,7 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 	private Text contentFolder;
 	private Label contentRootLabel;
 	private Label dslLabel;
-	private Combo createBlueprintDescriptor;
+	private Combo dslSelectionCombo;
 	
 	
 	private IDataModel model;
@@ -140,16 +140,17 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 		this.dslLabel.setText(Messages.NewCamelProject_DSLLabel);
 		this.dslLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		this.createBlueprintDescriptor = new Combo(prjGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
-		this.createBlueprintDescriptor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		this.createBlueprintDescriptor.setItems(new String[] {"Blueprint", "Spring"});
-		createBlueprintDescriptor.addSelectionListener( new SelectionAdapter() {
+		this.dslSelectionCombo = new Combo(prjGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+		this.dslSelectionCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.dslSelectionCombo.setItems(new String[] {"Blueprint", "Spring"});
+		dslSelectionCombo.addSelectionListener( new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				String dsl = createBlueprintDescriptor.getItem(createBlueprintDescriptor.getSelectionIndex());
+				String dsl = dslSelectionCombo.getItem(dslSelectionCombo.getSelectionIndex());
 				model.setProperty(CAMEL_DSL, dsl);
 				changePageStatus();
 			}
 		});
+		this.dslSelectionCombo.select(0);
 		
 		updateWidgetsFromModel();
 	}
@@ -171,7 +172,7 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 	}
 	
 	private void updateWidgetsFromModel() {
-		boolean uiLoaded = createBlueprintDescriptor != null;
+		boolean uiLoaded = dslSelectionCombo != null;
 		if( uiLoaded ) {
 			boolean webfound = hasWebFacet();
 			boolean shouldUpdateStructure = model.getBooleanProperty(UPDATE_PROJECT_STRUCTURE);
