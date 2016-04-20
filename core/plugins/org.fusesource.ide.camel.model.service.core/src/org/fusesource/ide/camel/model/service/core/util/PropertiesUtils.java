@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.runtime.IStatus;
@@ -38,6 +40,8 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  * @author lhein
  */
 public class PropertiesUtils {
+	
+	public static final Pattern PATH_DELIMETER = Pattern.compile(":|/"); 
 	
 	public static Parameter getUriParam(String name, Component c) {
 		return getUriParam(name, c.getUriParameters());
@@ -400,22 +404,7 @@ public class PropertiesUtils {
     		String newUri = "";
     		
     		// first build the path part
-    		String syntax = c.getSyntax();
-    		String withoutScheme = syntax.substring(syntax.indexOf(":")+1);
-    		List<Parameter> pathParams = getPathProperties(selectedEP);
-    		for (Parameter pparam : pathParams) {
-    			String val = "";
-    			if (p.getName().equals(pparam.getName())) {
-    				val = value.toString();
-    			} else {
-    				val = modelMap.get(pparam.getName()).toString();
-    			}
-    			if (val.trim().length()<1) val = pparam.getDefaultValue();
-    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
-    			 
-    			if (val != null) withoutScheme = withoutScheme.replace(pparam.getName(), val);
-    		}
-    		newUri += String.format("%s:%s?", syntax.substring(0, syntax.indexOf(":")), withoutScheme);
+    		newUri = updatePathParams(c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
     		
     		// now build the options
     		for (Parameter uriParam : c.getUriParameters()) {
@@ -470,6 +459,98 @@ public class PropertiesUtils {
     	}
     }
     
+	/**
+	 * Updates the path part of a given uri syntax
+	 * 
+	 * @param syntax
+	 *            uri syntax
+	 * @param param
+	 *            parameter to be changed
+	 * @param value
+	 *            value
+	 * @param pathParams
+	 *            path parameters
+	 * @param modelMap
+	 *            current model map
+	 * @return
+	 */
+	public static String updatePathParams(String syntax, Parameter param, Object value, List<Parameter> pathParams,
+			Map modelMap) {
+		String withoutScheme = syntax.substring(syntax.indexOf(":") + 1);
+		for (Parameter pparam : pathParams) {
+			String val = "";
+			if (param.getName().equals(pparam.getName())) {
+				val = value.toString();
+			} else {
+				val = modelMap.get(pparam.getName()).toString();
+			}
+			if (val.trim().length() < 1)
+				val = pparam.getDefaultValue();
+			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam))
+				val = val.substring(1);
+
+			if (val != null) {
+				// sap components have some parameters with the same prefix (see FUSETOOLS-1779)
+				String newWithoutScheme = replaceParts(withoutScheme, pparam.getName(), val, PATH_DELIMETER);
+				// if nothing happens then use the old logic
+				if (withoutScheme.equals(newWithoutScheme)) {
+					withoutScheme = withoutScheme.replace(pparam.getName(), val);
+				} else {
+					withoutScheme = newWithoutScheme;
+				}
+			}
+		}
+		return String.format("%s:%s", syntax.substring(0, syntax.indexOf(":")), withoutScheme);
+	}
+
+	/**
+	 * Replaces either the whole part of a given text or nothing. The parts are determined by the specified delimiter.
+	 * 
+	 * @param text
+	 *            text
+	 * @param target
+	 *            string to be replaced
+	 * @param replacement
+	 *            replacement string
+	 * @param delimiter
+	 *            delimiter
+	 * @return text with replaced parts
+	 */
+	public static String replaceParts(String text, String target, String replacement, String delimiter) {
+		return replaceParts(text, target, replacement, Pattern.compile(delimiter));
+	}
+
+	/**
+	 * Replaces either the whole part of a given text or nothing. The parts are determined by the specified delimiter.
+	 * 
+	 * @param text
+	 *            text
+	 * @param target
+	 *            string to be replaced
+	 * @param replacement
+	 *            replacement string
+	 * @param delimiterPattern
+	 *            delimiter pattern
+	 * @return text with replaced parts
+	 */
+	public static String replaceParts(String text, String target, String replacement, Pattern delimiterPattern) {
+		String[] parts = delimiterPattern.split(text);
+		for (int i = 0; i < parts.length; i++) {
+			if (parts[i] != null && parts[i].equals(target)) {
+				parts[i] = replacement;
+			}
+		}
+
+		Matcher matcher = delimiterPattern.matcher(text);
+
+		StringBuilder result = new StringBuilder(parts[0]);
+		int i = 1;
+		while (matcher.find()) {
+			result.append(matcher.group()).append(parts[i++]);
+		}
+		return result.toString();
+	}
+
     public static String getUsedProtocol(AbstractCamelModelElement selectedEP) {
         return ((String)selectedEP.getParameter("uri")).substring(0, ((String)selectedEP.getParameter("uri")).indexOf(':'));
     }
