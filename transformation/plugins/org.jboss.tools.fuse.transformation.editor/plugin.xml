@@ -57,7 +57,7 @@
             class="org.jboss.tools.fuse.transformation.extensions.DataTransformationPaletteEntry"
             diagramImage="icons/transform.png"
             id="datatransformation"
-            paletteIcon="icons/transform16.png">
+            paletteIcon="icons/transform.png">
       </PaletteContribution>
    </extension>
    <extension
