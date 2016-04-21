@@ -138,13 +138,6 @@
             id="activemq"
             paletteIcon="icons/activemq.png">
       </PaletteContribution>
-      <PaletteContribution
-            categoryName="COMPONENTS"
-            class="org.fusesource.ide.camel.editor.provider.BrokerPaletteEntry"
-            diagramImage="icons/activemq.png"
-            id="broker"
-            paletteIcon="icons/activemq.png">
-      </PaletteContribution>
    </extension>
 
    <!-- definitions for editor commands -->
