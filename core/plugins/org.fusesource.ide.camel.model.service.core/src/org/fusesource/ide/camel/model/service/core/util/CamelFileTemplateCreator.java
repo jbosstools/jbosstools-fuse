@@ -43,6 +43,16 @@ public class CamelFileTemplateCreator {
 	}
 	
 	/**
+	 * creates a camel routes context template file
+	 * 
+	 * @param f	the file to use / to write to
+	 */
+	public void createRoutesTemplateFile(IFile f) {
+		File file = f.getRawLocation().makeAbsolute().toFile();
+		createRoutesTemplateFile(file);
+	}
+	
+	/**
 	 * creates a camel spring context template file
 	 * 
 	 * @param f	the file to use / to write to
@@ -58,6 +68,15 @@ public class CamelFileTemplateCreator {
 	 */
 	public void createBlueprintTemplateFile(File f) {
 		createTemplateFile(f, getBlueprintStubText());
+	}
+	
+	/**
+	 * creates a camel routes context template file
+	 * 
+	 * @param f	the file to use / to write to
+	 */
+	public void createRoutesTemplateFile(File f) {
+		createTemplateFile(f, getRoutesStubText());
 	}
 	
 	private void createTemplateFile(File f, String content) {
@@ -109,6 +128,23 @@ public class CamelFileTemplateCreator {
 		sb.append("	</camelContext>\n");
 		sb.append("\n");
 		sb.append("</blueprint>\n");
+		return sb.toString();
+	}
+	
+	/**
+	 * returns a stub template for a routes
+	 * 
+	 * @return
+	 */
+	String getRoutesStubText() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		sb.append("<routes xmlns=\"http://camel.apache.org/schema/spring\">\n");
+		sb.append("   <route id=\"fileCopy\">\n");
+		sb.append("   	<from id=\"readFolder\" uri=\"file:/tmp/inbox/\"/>\n");
+		sb.append("   	<to id=\"writeFolder\" uri=\"file:/tmp/outbox/\"/>\n");
+		sb.append("   </route>\n");
+		sb.append("</routes>\n");
 		return sb.toString();
 	}
 }

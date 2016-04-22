@@ -142,7 +142,7 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 
 		this.dslSelectionCombo = new Combo(prjGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
 		this.dslSelectionCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		this.dslSelectionCombo.setItems(new String[] {"Blueprint", "Spring"});
+		this.dslSelectionCombo.setItems(new String[] {"Blueprint", "Spring", "Routes"});
 		dslSelectionCombo.addSelectionListener( new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				String dsl = dslSelectionCombo.getItem(dslSelectionCombo.getSelectionIndex());
