@@ -103,6 +103,8 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 				createBlueprintDescriptor(osgiInf);
 			} else if (dsl.equalsIgnoreCase("Spring")) {
 				createSpringDescriptor(metaInf);
+			} else if (dsl.equalsIgnoreCase("Routes")) {
+				createRoutesDescriptor(metaInf);
 			}
 			createUtilityManifest(project, metaInf, new NullProgressMonitor());
 		}
@@ -181,6 +183,8 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 			createBlueprintDescriptor(osgiInf);
 		} else if (dsl.equalsIgnoreCase("Spring")) {
 			createSpringDescriptor(camelContent.getFolder("META-INF"));
+		} else if (dsl.equalsIgnoreCase("Routes")) {
+			createRoutesDescriptor(camelContent.getFolder("META-INF"));
 		}
 		
 	}
@@ -214,6 +218,12 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		IFile springFile = spring.getFile("camel-context.xml");
 		CamelFileTemplateCreator cftc = new CamelFileTemplateCreator();
 		cftc.createSpringTemplateFile(springFile);
+	}
+	
+	private void createRoutesDescriptor(IFolder folder) throws CoreException {
+		IFile springFile = folder.getFile("routes.xml");
+		CamelFileTemplateCreator cftc = new CamelFileTemplateCreator();
+		cftc.createRoutesTemplateFile(springFile);
 	}
 	
 	/**
