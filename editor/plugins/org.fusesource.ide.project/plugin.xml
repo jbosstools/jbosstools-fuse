@@ -2,167 +2,90 @@
 <?eclipse version="3.4"?>
 <plugin>
 	<extension id="RiderProjectNature" name="JBoss Fuse Nature" point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="org.fusesource.ide.project.RiderProjectNature">
-         </run>
-      </runtime>
-      <content-type
-            id="org.fusesource.ide.project.camelNatureContentType">
-      </content-type>
-      <builder
-            id="org.fusesource.ide.project.RiderProjectBuilder">
-      </builder>
+    	<runtime>
+        	<run class="org.fusesource.ide.project.RiderProjectNature"/>
+		</runtime>
+      	<content-type id="org.fusesource.ide.project.camelNatureContentType"/>
+		<builder id="org.fusesource.ide.project.RiderProjectBuilder"/>
 	</extension>
+
 	<extension point="org.eclipse.ui.ide.projectNatureImages">
-      <image icon="icons/fuse_icon_16c.png" id="org.fusesource.ide.project.RiderProjectNature.icon" natureId="org.fusesource.ide.project.RiderProjectNature"/>
+    	<image id="org.fusesource.ide.project.RiderProjectNature.icon" 
+    		   natureId="org.fusesource.ide.project.RiderProjectNature"
+    		   icon="icons/fuse_icon_16c.png"/>
 	</extension>
- <extension
-       id="org.fusesource.ide.project.RiderProjectBuilder"
-       point="org.eclipse.core.resources.builders">
-    <builder
-          callOnEmptyDelta="false"
-          hasNature="true"
-          isConfigurable="false"
-          supportsConfigurations="false">
-       <run
-             class="org.fusesource.ide.project.RiderProjectBuilder">
-       </run>
-    </builder>
- </extension>
  
- <extension
-      point="org.eclipse.ui.navigator.navigatorContent">
-	   <navigatorContent
-	         id="org.fusesource.ide.camelContent"
-	         activeByDefault="true"
-	         contentProvider="org.fusesource.ide.project.providers.CamelFilesContentProvider"
-	         icon="icons/fuse_icon_16c.png"
-	         labelProvider="org.fusesource.ide.project.providers.CamelFilesLabelProvider"
-	         name="Camel Contexts"
-	         priority="highest">
-	      <triggerPoints>
-          <or>
-               <instanceof value="org.eclipse.jdt.core.IJavaProject" />
-               <instanceof
-                     value="org.eclipse.core.resources.IProject">
-               </instanceof>
-            </or>
-	      </triggerPoints>
-	      <possibleChildren>
-             <and>
-                <adapt type="org.eclipse.core.resources.IFile">
-                    <test
-                          property="org.eclipse.core.resources.contentTypeId"
-                          value="org.fusesource.ide.project.camelNatureContentType">
-                    </test>
-                 </adapt>
-             </and>
-          </possibleChildren>
-       <enablement>
-          <and>
-             <instanceof
-                   value="org.eclipse.core.resources.IProject">
-             </instanceof>
-             <test
-                   forcePluginActivation="true"
-                   property="org.eclipse.core.resources.projectNature"
-                   value="org.fusesource.ide.project.RiderProjectNature">
-             </test>
-             <test
-                   forcePluginActivation="true"
-                   property="org.fusesource.ide.project.CamelNatureTester.hasChildren"
-                   value="true">
-             </test>
-          </and>
-       </enablement>
-       <actionProvider
-             class="org.fusesource.ide.project.providers.VirtualCamelNodesActionProvider"
-             id="org.fusesource.ide.project.navigator.actionProvider">
-          <enablement>
-             <or>
-                <instanceof
-                      value="org.fusesource.ide.project.providers.CamelVirtualFolder">
-                </instanceof>
-             </or>
-          </enablement>
-       </actionProvider>
-	   </navigatorContent>
+ 	<extension point="org.eclipse.core.resources.builders" 
+ 			   id="org.fusesource.ide.project.RiderProjectBuilder">
+    	<builder
+        	callOnEmptyDelta="false"
+          	hasNature="true"
+          	isConfigurable="false"
+          	supportsConfigurations="false">
+    	   	<run class="org.fusesource.ide.project.RiderProjectBuilder"/>
+	    </builder>
+ 	</extension>
+ 
+ 	<extension point="org.eclipse.ui.navigator.navigatorContent">
+		<navigatorContent
+	    	id="org.fusesource.ide.camelContent"
+	        activeByDefault="true"
+	        contentProvider="org.fusesource.ide.project.providers.CamelFilesContentProvider"
+	        icon="icons/fuse_icon_16c.png"
+	        labelProvider="org.fusesource.ide.project.providers.CamelFilesLabelProvider"
+	        name="Camel Contexts"
+	        priority="highest">
+	     	<triggerPoints>
+          		<or>
+               		<instanceof value="org.eclipse.jdt.core.IJavaProject" />
+               		<instanceof value="org.eclipse.core.resources.IProject"/>
+	            </or>
+			</triggerPoints>
+			<possibleChildren>
+            	<and>
+                	<adapt type="org.eclipse.core.resources.IFile">
+                		<test property="org.eclipse.core.resources.contentTypeId"
+                      	  	  value="org.fusesource.ide.project.camelNatureContentType">
+                		</test>
+                 	</adapt>
+             	</and>
+          	</possibleChildren>
+       		<enablement>
+          		<and>
+             		<instanceof value="org.eclipse.core.resources.IProject"/>
+					<test 	forcePluginActivation="true"
+                   			property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled"
+                   			value="true"/>
+             		<test	forcePluginActivation="true"
+                   			property="org.fusesource.ide.project.CamelNatureTester.hasChildren"
+                   			value="true"/>
+				</and>
+       		</enablement>
+       		<actionProvider
+            	class="org.fusesource.ide.project.providers.VirtualCamelNodesActionProvider"
+             	id="org.fusesource.ide.project.navigator.actionProvider">
+          		<enablement>
+             		<or>
+                		<instanceof value="org.fusesource.ide.project.providers.CamelVirtualFolder"/>
+		            </or>
+        	 	</enablement>
+       		</actionProvider>
+   		</navigatorContent>
 	</extension>
 	
-	<extension
-	      point="org.eclipse.ui.navigator.viewer">
-	   <viewerContentBinding
-	         viewerId="org.eclipse.jdt.ui.PackageExplorer">
-	      <includes>
-	         <contentExtension
-	               isRoot="false"
-	               pattern="org.fusesource.ide.camelContent">
-	         </contentExtension>
-	      </includes>
-	   </viewerContentBinding>
-	   <viewerContentBinding
-	         viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-	      <includes>
-	         <contentExtension
-	               isRoot="false"
-	               pattern="org.fusesource.ide.camelContent">
-	         </contentExtension>
-	      </includes>
-	   </viewerContentBinding>
+	<extension point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.jdt.ui.PackageExplorer">
+	    	<includes>
+	        	<contentExtension isRoot="false" pattern="org.fusesource.ide.camelContent"/>
+			</includes>
+	   	</viewerContentBinding>
+	   	<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+	    	<includes>
+	        	<contentExtension isRoot="false" pattern="org.fusesource.ide.camelContent"/>
+			</includes>
+	   	</viewerContentBinding>
 	</extension>
- <extension
-       point="org.eclipse.ui.menus">
-    <menuContribution
-          allPopups="false"
-          locationURI="popup:org.eclipse.ui.popup.any?before=additions">
-       <command
-             commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
-             label="Disable Fuse Camel Nature"
-             style="push">
-          <visibleWhen
-                checkEnabled="false">
-                <with
-                variable="selection">
-                                <iterate
-                                      ifEmpty="false"
-                                      operator="and">
-                                   <test
-                                         forcePluginActivation="true"
-                                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled">
-                                   </test>
-                                   <test
-                                         forcePluginActivation="true"
-                                         property="org.fusesource.ide.project.CamelNatureTester.projectOpen">
-                                   </test>
-                                </iterate>
-          </with>
-          </visibleWhen>
-       </command>
-       <command
-             commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
-             label="Enable Fuse Camel Nature"
-             style="push">
-          <visibleWhen
-                checkEnabled="false">
-                <with
-                variable="selection">
-                <iterate
-                      ifEmpty="false"
-                      operator="and">
-                   <test
-                         forcePluginActivation="true"
-                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled">
-                   </test>
-                   <test
-                         forcePluginActivation="true"
-                         property="org.fusesource.ide.project.CamelNatureTester.projectOpen">
-                   </test>
-                </iterate>
-          </with>
-          </visibleWhen>
-       </command>
-    </menuContribution>
- </extension>
+
  <extension
        point="org.eclipse.ui.commands">
     <command
@@ -220,6 +143,7 @@
           id="org.fusesource.ide.project.image"
           typeIds="fuse.camel"/>
  </extension>
+
  <extension
        point="org.eclipse.ui.decorators">
     <decorator
@@ -247,4 +171,311 @@
        </enablement>
     </decorator>
  </extension>
+ 
+ 	<extension point="org.eclipse.ui.menus">
+    	<menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+       		<command
+            	commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
+             	label="Disable Fuse Camel Nature"
+             	style="push">
+          		<visibleWhen checkEnabled="false">
+                	<with variable="selection">
+                    	<iterate ifEmpty="false"
+                                 operator="and">
+                        	<test forcePluginActivation="true"
+                                  property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled"/>
+                            <test forcePluginActivation="true"
+                                  property="org.fusesource.ide.project.CamelNatureTester.projectOpen"/>
+                        </iterate>
+          			</with>
+          		</visibleWhen>
+       		</command>
+       		<command
+             	commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
+             	label="Enable Fuse Camel Nature"
+             	style="push">
+          		<visibleWhen checkEnabled="false">
+                	<with variable="selection">
+                		<iterate ifEmpty="false" operator="and">
+                   			<test forcePluginActivation="true"
+                         		  property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled"/>
+                   			<test forcePluginActivation="true"
+                         		  property="org.fusesource.ide.project.CamelNatureTester.projectOpen" />
+		                </iterate>
+        		 	</with>
+          		</visibleWhen>
+       		</command>
+		</menuContribution>
+ 	</extension>
+ 
+ 	<extension point="org.eclipse.ui.commands">
+    	<command id="org.fusesource.ide.project.EnableCamelNatureCmd"
+          		 name="Enable Fuse Camel Nature"/>
+	    <command id="org.fusesource.ide.project.DisableCamelNatureCmd"
+          		 name="Disable Fuse Camel Nature"/>
+	</extension>
+	
+ 	<extension point="org.eclipse.ui.handlers">
+    	<handler class="org.fusesource.ide.project.handlers.EnableCamelNatureHandler"
+          		 commandId="org.fusesource.ide.project.EnableCamelNatureCmd"/>
+	    <handler class="org.fusesource.ide.project.handlers.DisableCamelNatureHandler"
+          		 commandId="org.fusesource.ide.project.DisableCamelNatureCmd"/>
+	</extension>
+ 
+ 	<extension point="org.eclipse.core.expressions.propertyTesters">
+    	<propertyTester
+        	class="org.fusesource.ide.project.CamelNatureTester"
+          	id="org.fusesource.ide.project.CamelNatureTester"
+          	namespace="org.fusesource.ide.project.CamelNatureTester"
+          	properties="camelNatureEnabled,camelNatureDisabled,projectOpen,hasChildren"
+          	type="org.eclipse.core.resources.IProject"/>
+	</extension>
+ 
+ 	<extension point="org.eclipse.wst.server.core.moduleFactories">
+    	<moduleFactory
+        	class="org.fusesource.ide.project.integration.CamelModuleFactory"
+          	id="org.fusesource.ide.project.fuseModuleFactory">
+       		<moduleType
+            	types="fuse.camel"
+             	versions="1.0">
+       		</moduleType>
+    	</moduleFactory>
+ 	</extension>
+ 	
+ 	<extension point="org.eclipse.wst.server.core.moduleTypes">
+    	<moduleType
+          	id="fuse.camel"
+          	name="Camel Context">
+    	</moduleType>
+ 	</extension>
+ 
+ 	<extension point="org.eclipse.wst.server.ui.serverImages">
+    	<image
+        	id="org.fusesource.ide.project.image"
+        	icon="icons/fuse_icon_16c.png"          
+          	typeIds="fuse.camel"/>
+ 	</extension>
+  
+ 	<!-- Camel Project -->
+    <extension point="org.eclipse.wst.common.project.facet.core.facets">
+    	
+    	<project-facet id="jst.camel">
+         	<label>Camel</label>
+         	<description>
+             	Adds support for Camel to the project.
+         	</description>
+      	</project-facet>
+      
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.15">
+        	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.6">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+      	
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.16">
+       	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.7">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+	  
+	  	<action
+        	facet="jst.camel"
+            id="jst.camel.install"
+            type="install">
+         	<delegate class="org.fusesource.ide.project.camel.CamelFacetInstallationDelegate"/>
+			<config-factory class="org.fusesource.ide.project.camel.CamelFacetDataModelProvider"/>
+		</action>
+      
+      	<template id="template.jst.camel.jar_2.15">
+         	<label>Camel JAR Project Template</label>
+         	<fixed facet="jst.java"></fixed>
+         	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
+         	<preset id="preset.jst.camel.jar_2.15">
+         		<label>Camel JAR Project</label>
+         		<description>
+             		A Camel JAR project configuration	
+         		</description>
+         	</preset>
+      	</template>
+      	<template id="template.jst.camel.web_2.15">
+        	<label>Camel Web Project Template</label>
+         	<fixed facet="jst.java"></fixed>
+         	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
+         	<preset id="preset.jst.camel.web_2.15">
+    	     	<label>Camel Web Project</label>
+         		<description>
+             		A Camel Web Project configuration	
+         		</description>
+         	</preset>
+      	</template>
+      	<template id="template.jst.camel.jar_2.16">
+         	<label>Camel JAR Project Template</label>
+         	<fixed facet="jst.java"></fixed>
+         	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
+         	<preset id="preset.jst.camel.jar_2.16">
+         		<label>Camel JAR Project</label>
+         		<description>
+             		A Camel JAR project configuration	
+         		</description>
+         	</preset>
+      	</template>
+      	<template id="template.jst.camel.web_2.16">
+        	<label>Camel Web Project Template</label>
+         	<fixed facet="jst.java"></fixed>
+         	<fixed facet="jst.camel"></fixed>
+         	<fixed facet="jboss.m2"></fixed>
+         	<preset id="preset.jst.camel.web_2.16">
+	         	<label>Camel Web Project</label>
+    	 		<description>
+    	     		A Camel Web Project configuration	
+         		</description>
+         	</preset>
+      	</template>
+      	
+      	<event-handler
+        	facet="jst.camel"
+            type="RUNTIME_CHANGED"
+            version="1.0">
+         	<delegate class="org.fusesource.ide.project.camel.CamelRuntimeChangedDelegate"/>
+		</event-handler>
+   	</extension>
+    
+    <extension point="org.eclipse.wst.server.core.moduleTypes">
+       	<moduleType
+        	id="jst.camel"
+            name="Camel Module">
+       	</moduleType>
+    </extension>
+    
+    <extension point="org.eclipse.wst.server.core.moduleFactories">
+       	<moduleFactory
+        	class="org.fusesource.ide.project.camel.CamelModuleFactory"
+            id="org.fusesource.ide.project.camel.CamelModuleFactory"
+            projects="true">
+          	<moduleType
+            	types="jst.camel"
+                versions="1.0">
+          	</moduleType>
+       	</moduleFactory>
+    </extension>
+ 
+   	<extension point="org.eclipse.ui.newWizards">
+      	<wizard
+        	category="org.fusesource.ide.newwizards"
+            class="org.fusesource.ide.project.camel.ui.CamelProjectWizard"
+            icon="icons/camel_context_icon.png"
+            id="jst.camel.project.wizard"
+            name="Camel Project"
+            project="true">
+      	</wizard>
+   	</extension>
+
+   	<extension point="org.eclipse.wst.common.project.facet.ui.wizardPages">
+    	<wizard-pages action="jst.camel.install">
+         	<page class="org.fusesource.ide.project.camel.ui.CamelFacetInstallationPage"/>
+      	</wizard-pages>
+	</extension>
+  
+  	<extension point="org.eclipse.wst.common.project.facet.core.presets">
+      	<static-preset id="preset.jst.camel.jar_2.15">
+        	<label>Camel JAR Project</label>
+         	<facet id="jst.java" version="1.6"></facet>
+         	<facet id="jst.utility" version="1.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
+         	<facet id="jst.camel" version="2.15"></facet>
+         	<description>Configure a project to be deployed as a Camel JAR file</description>
+      	</static-preset>
+      	<static-preset id="preset.jst.camel.web_2.15">
+        	<label>Camel Web Project</label>
+         	<facet id="jst.java" version="1.6"></facet>
+         	<facet id="jst.web" version="3.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
+         	<facet id="jst.camel" version="2.15"></facet>
+         	<description>Configure a project to be deployed as a Camel WAR file</description>
+      	</static-preset>
+      	<static-preset id="preset.jst.camel.jar_2.16">
+        	<label>Camel JAR Project</label>
+         	<facet id="jst.java" version="1.7"></facet>
+         	<facet id="jst.utility" version="1.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
+         	<facet id="jst.camel" version="2.16"></facet>
+         	<description>Configure a project to be deployed as a Camel JAR file</description>
+      	</static-preset>
+      	<static-preset id="preset.jst.camel.web_2.16">
+        	<label>Camel Web Project</label>
+         	<facet id="jst.java" version="1.7"></facet>
+         	<facet id="jst.web" version="3.0"></facet>
+         	<facet id="jboss.m2" version="1.0"></facet>
+         	<facet id="jst.camel" version="2.16"></facet>
+         	<description>Configure a project to be deployed as a Camel WAR file</description>
+      	</static-preset>
+   	</extension>
+ 
+ 	<!-- Maven configurator  -->
+   	<extension point="org.eclipse.m2e.core.projectConfigurators">
+      	<configurator 
+        	id="org.fusesource.ide.project.camel.maven.configurator.wtp"
+          	class="org.fusesource.ide.project.camel.maven.CamelProjectConfigurator"
+          	name="Camel Configurator" 
+           	runsAfter="org.eclipse.m2e.jdt.javaConfigurator,org.maven.ide.eclipse.configuration.wtp.configurator?"/>
+	</extension>
+ 	
+ 	<extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
+ 	</extension>
+  <extension
+        point="org.eclipse.wst.common.project.facet.ui.images">
+     <image
+
+           facet="jst.camel"
+           path="icons/camel_context_icon.png">
+     </image>
+  </extension>
+
 </plugin>
