@@ -140,10 +140,6 @@ public class CamelFileTemplateCreator {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<routes xmlns=\"http://camel.apache.org/schema/spring\">\n");
-		sb.append("   <route id=\"fileCopy\">\n");
-		sb.append("   	<from id=\"readFolder\" uri=\"file:/tmp/inbox/\"/>\n");
-		sb.append("   	<to id=\"writeFolder\" uri=\"file:/tmp/outbox/\"/>\n");
-		sb.append("   </route>\n");
 		sb.append("</routes>\n");
 		return sb.toString();
 	}

@@ -171,8 +171,11 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		IFolder metainf = project.getFolder("src").getFolder(ICamelFacetDataModelProperties.META_INF); 
 		if( metainf.exists())
 			metainf.move(camelContent.getFolder(ICamelFacetDataModelProperties.META_INF).getFullPath(), true, new NullProgressMonitor());
+		IFolder osgiinf = project.getFolder("src").getFolder(ICamelFacetDataModelProperties.OSGI_INF); 
+		if( osgiinf.exists())
+			osgiinf.move(camelContent.getFolder(ICamelFacetDataModelProperties.OSGI_INF).getFullPath(), true, new NullProgressMonitor());
 		createUtilityManifest(project, camelContent.getFolder(ICamelFacetDataModelProperties.META_INF), monitor);
-		createCamelContextFile(project, metainf);				
+		createCamelContextFile(project, camelContent.getFolder(ICamelFacetDataModelProperties.META_INF));				
 	}
 	
 	private void createCamelContextFile(IProject project, IFolder folder) throws CoreException {

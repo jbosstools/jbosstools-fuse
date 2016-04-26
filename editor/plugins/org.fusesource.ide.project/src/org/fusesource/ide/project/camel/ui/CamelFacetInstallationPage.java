@@ -180,6 +180,8 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 			} else {
 				contentFolder.setText("camelcontent");
 			}
+			String dsl = dslSelectionCombo.getItem(dslSelectionCombo.getSelectionIndex());
+			model.setProperty(CAMEL_DSL, dsl);
 			contentFolder.setEnabled(displayContentFolder);
 			contentFolder.setVisible(displayContentFolder);
 			contentRootLabel.setVisible(displayContentFolder);

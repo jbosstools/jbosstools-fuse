@@ -354,13 +354,11 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getBundleVersionFromFileName(File f, String packaging) {
-		String version = null;
-		
-		version = "";
+		String version = "";
 		String[] parts = f.getName().split("-");
 		for (String part : parts) {
 			if (!Character.isDigit(part.charAt(0))) {
-				if (version.length()==0) continue;
+				if (version.isEmpty()) continue;
 				version += "." + part;
 			}
 			version += part.trim();

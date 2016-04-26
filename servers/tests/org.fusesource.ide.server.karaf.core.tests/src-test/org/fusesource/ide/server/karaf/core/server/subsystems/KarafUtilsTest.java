@@ -19,7 +19,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * @author lhein
@@ -31,41 +33,62 @@ public class KarafUtilsTest {
 			"Bundle-Name: Test Bundle\n" + 
 			"Bundle-SymbolicName: com.sample.mytest.BundleName\n";
 	
+	@Rule
+	public TemporaryFolder testFolder = new TemporaryFolder();
+	
 	@Test
 	public void testGetBundleVersionFromManifest() throws CoreException, IOException {
 		File mfFile = createTempManifest("1.0.0");
 		String version = KarafUtils.getBundleVersionFromManifest(mfFile);
 		assertEquals("1.0.0", version);
-		
-		mfFile = createTempManifest("1.0.0.SNAPSHOT");
-		version = KarafUtils.getBundleVersionFromManifest(mfFile);
+	}
+	
+	@Test
+	public void testGetBundleSnapshotVersionFromManifest() throws CoreException, IOException {
+		File mfFile = createTempManifest("1.0.0.SNAPSHOT");
+		String version = KarafUtils.getBundleVersionFromManifest(mfFile);
 		assertEquals("1.0.0.SNAPSHOT", version);
 	}
 	
 	@Test
-	public void testGetBundleVersionFromFileName() throws CoreException, IOException {
+	public void testGetJarVersionFromFileName() throws CoreException, IOException {
 		File bundleFile = new File("./target/test-1.0.0.jar");
 		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_JAR);
 		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
-		version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_JAR);
+	}
+	
+	@Test
+	public void testGetJarSnapshotVersionFromFileName() throws CoreException, IOException {
+		File bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
+		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_JAR);
 		assertEquals("1.0.0.SNAPSHOT", version);
+	}
 
-		bundleFile = new File("./target/test-1.0.0.jar");
-		version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_BUNDLE);
+	@Test
+	public void testGetBundleVersionFromFileName() throws CoreException, IOException {
+		File bundleFile = new File("./target/test-1.0.0.jar");
+		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_BUNDLE);
 		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
-		version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_BUNDLE);
+	}
+	
+	@Test
+	public void testGetBundleSnapshotVersionFromFileName() throws CoreException, IOException {
+		File bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
+		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_BUNDLE);
 		assertEquals("1.0.0.SNAPSHOT", version);
-		
-		bundleFile = new File("./target/test-1.0.0.war");
-		version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_WAR);
+	}
+
+	@Test
+	public void testGetWarVersionFromFileName() throws CoreException, IOException {
+		File bundleFile = new File("./target/test-1.0.0.war");
+		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_WAR);
 		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test-1.0.0-SNAPSHOT.war");
-		version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_WAR);
+	}
+	
+	@Test
+	public void testGetWarSnapshotVersionFromFileName() throws CoreException, IOException {
+		File bundleFile = new File("./target/test-1.0.0-SNAPSHOT.war");
+		String version = KarafUtils.getBundleVersionFromFileName(bundleFile, KarafUtils.PACKAGING_WAR);
 		assertEquals("1.0.0.SNAPSHOT", version);
 	}
 	
@@ -75,36 +98,50 @@ public class KarafUtilsTest {
 		String uri = String.format("%sfile:%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_BUNDLE), bundleFile.toURI().toString());
 		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_BUNDLE);
 		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
-		uri = String.format("%sfile:%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_BUNDLE), bundleFile.toURI().toString());
-		version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_BUNDLE);
-		assertEquals("1.0.0.SNAPSHOT", version);
-		
-		bundleFile = new File("./target/test.jar");
-		uri = String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_JAR), bundleFile.toURI().toString(), "test", "1.0.0");
-		version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_JAR);
-		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test.jar");
-		uri = String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_JAR), bundleFile.toURI().toString(), "test", "1.0.0.SNAPSHOT");
-		version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_JAR);
-		assertEquals("1.0.0.SNAPSHOT", version);
-		
-		bundleFile = new File("./target/test.war");
-		uri = String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_WAR), bundleFile.toURI().toString(), "test", "1.0.0");
-		version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_WAR);
-		assertEquals("1.0.0", version);
-		
-		bundleFile = new File("./target/test.war");
-		uri = String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_WAR), bundleFile.toURI().toString(), "test", "1.0.0.SNAPSHOT");
-		version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_WAR);
+	}
+	
+	@Test
+	public void testBundleSnapshotVersionFromURI() throws CoreException {
+		File bundleFile = new File("./target/test-1.0.0-SNAPSHOT.jar");
+		String uri = String.format("%sfile:%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_BUNDLE), bundleFile.toURI().toString());
+		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_BUNDLE);
 		assertEquals("1.0.0.SNAPSHOT", version);
 	}
 	
+	@Test
+	public void testGetJarVersionFromURI() throws CoreException {
+		File bundleFile = new File("./target/test.jar");
+		String uri = String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_JAR), bundleFile.toURI().toString(), "test", "1.0.0");
+		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_JAR);
+		assertEquals("1.0.0", version);
+	}
 	
+	@Test
+	public void testGetJarSnapshotVersionFromURI() throws CoreException {
+		File bundleFile = new File("./target/test.jar");
+		String uri = String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_JAR), bundleFile.toURI().toString(), "test", "1.0.0.SNAPSHOT");
+		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_JAR);
+		assertEquals("1.0.0.SNAPSHOT", version);
+	}
+	
+	@Test
+	public void testGetWarVersionFromURI() throws CoreException {
+		File bundleFile = new File("./target/test.war");
+		String uri = String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_WAR), bundleFile.toURI().toString(), "test", "1.0.0");
+		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_WAR);
+		assertEquals("1.0.0", version);
+	}
+	
+	@Test
+	public void testGetWarSnapshotVersionFromURI() throws CoreException {
+		File bundleFile = new File("./target/test.war");
+		String uri = String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(KarafUtils.PACKAGING_WAR), bundleFile.toURI().toString(), "test", "1.0.0.SNAPSHOT");
+		String version = KarafUtils.getBundleVersionFromURI(uri, KarafUtils.PACKAGING_WAR);
+		assertEquals("1.0.0.SNAPSHOT", version);
+	}
+		
 	private File createTempManifest(String version) throws IOException {
-		File manifestFile = new File("./target/MANIFEST.MF");
+		File manifestFile = testFolder.newFile("MANIFEST.MF");
 		if (manifestFile.exists()) manifestFile.delete();
 		IOUtils.writeText(manifestFile, MANIFEST_BLURP + "Bundle-Version: " + version + "\n\n");
 		manifestFile.deleteOnExit();
