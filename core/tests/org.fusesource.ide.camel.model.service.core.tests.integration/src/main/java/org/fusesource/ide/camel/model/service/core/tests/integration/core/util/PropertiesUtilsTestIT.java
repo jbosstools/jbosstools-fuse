@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.service.core.util;
+package org.fusesource.ide.camel.model.service.core.tests.integration.core.util;
 
 import static org.fusesource.ide.camel.model.service.core.util.PropertiesUtils.updateURIParams;
 import static org.junit.Assert.assertTrue;
@@ -92,11 +92,6 @@ public class PropertiesUtilsTestIT {
 		route.addChildElement(endpoint);
 		endpoint.setParent(route);
 		return endpoint;
-	}
-
-	private Component component(CamelEndpoint endpoint) {
-		String schema = endpoint.getUri().substring(0, endpoint.getUri().indexOf(":"));
-		return CamelComponentUtils.getComponentModel(schema, null);
 	}
 
 	private IObservableMap modelMap(List<Parameter> params) {
