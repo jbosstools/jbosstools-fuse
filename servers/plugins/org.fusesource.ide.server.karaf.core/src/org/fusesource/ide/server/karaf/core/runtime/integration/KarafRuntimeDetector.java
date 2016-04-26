@@ -48,8 +48,8 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		ServerBeanLoader loader = new ServerBeanLoader(root);
 		ServerBean serverBean = loader.getServerBean();
 		ServerBeanType type = serverBean.getBeanType();
-		if( KarafBeanProvider.KARAF_2x.equals(type) ||
-			KarafBeanProvider.KARAF_3x.equals(type) ) {
+		List<ServerBeanType> valid = Arrays.asList(getServerBeanTypes());
+		if( valid.contains(type)) {
 			RuntimeDefinition runtimeDefinition = new RuntimeDefinition(serverBean.getName(), 
 					serverBean.getVersion(), type.getId(), new File(serverBean.getLocation()));
 			return runtimeDefinition;
@@ -57,6 +57,16 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		return null;
 	}
 
+	protected ServerBeanType[] getServerBeanTypes() {
+		return new ServerBeanType[]{
+				KarafBeanProvider.KARAF_2x, KarafBeanProvider.KARAF_3x
+		};
+	}
+
+	protected boolean isValidServerType(String type) {
+		return Arrays.asList(IKarafToolingConstants.ALL_KARAF_SERVER_TYPES).contains(type);
+	}
+	
 	/**
 	 * Determine whether the given runtime definition exists in the workspace.
 	 */
@@ -66,58 +76,47 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		return runtimeExistsAtLocation(path);
 	}
 	
-	/**
-	 * Create a runtime out of this runtime definition
-	 */
 	@Override
-	public void initializeRuntimes(List<RuntimeDefinition> runtimeDefinitions) {
-		createKarafServerFromDefinitions(runtimeDefinitions);
-	}
-	
-	private void createKarafServerFromDefinitions(List<RuntimeDefinition> runtimeDefinitions) {
-		for (RuntimeDefinition runtimeDefinition:runtimeDefinitions) {
-			if (runtimeDefinition.isEnabled()) {
-				File asLocation = runtimeDefinition.getLocation();
-				if (asLocation != null && asLocation.isDirectory()) {
-					String wtpServerType = new ServerBeanLoader(asLocation).getServerAdapterId();
-					if( isKarafServerType(wtpServerType)) {
-						String name = runtimeDefinition.getName();
-						String runtimeName = name + " Runtime"; //$NON-NLS-1$
-						createKarafServer(asLocation, wtpServerType, name, runtimeName);
-					}
+	public boolean initializeRuntime(RuntimeDefinition runtimeDefinition) throws CoreException {
+		if (runtimeDefinition.isEnabled()) {
+			File asLocation = runtimeDefinition.getLocation();
+			if (asLocation != null && asLocation.isDirectory()) {
+				String wtpServerType = new ServerBeanLoader(asLocation).getServerAdapterId();
+				if( isValidServerType(wtpServerType)) {
+					String name = runtimeDefinition.getName();
+					String runtimeName = name + " Runtime"; //$NON-NLS-1$
+					return createServer(asLocation, wtpServerType, name, runtimeName);
 				}
 			}
-		}	
+		}
+		return false;
 	}
 	
-	private boolean isKarafServerType(String type) {
-		return Arrays.asList(IKarafToolingConstants.ALL_KARAF_SERVER_TYPES).contains(type);
-	}
 	
-	private static void createKarafServer(File loc, String serverTypeId, String name, String runtimeName) {
+	private static boolean createServer(File loc, String serverTypeId, String name, String runtimeName) {
 		if (loc == null || !loc.isDirectory() || serverTypeId == null)
-			return;
+			return false;
 		IServerType serverType = ServerCore.findServerType(serverTypeId);
 		if( serverType == null )
-			return;
+			return false;
 		IRuntimeType rtType = serverType.getRuntimeType();
 		if( rtType == null )
-			return;
+			return false;
 		
+		IRuntimeWorkingCopy rt = null;
 		try {
 			IPath locPath = new Path(loc.getAbsolutePath());
-			IRuntimeWorkingCopy rt = rtType.createRuntime(runtimeName, new NullProgressMonitor());
+			rt = rtType.createRuntime(runtimeName, new NullProgressMonitor());
 			rt.setLocation(locPath);
 			rt.setName(runtimeName);
 			// We don't need to set a vm, it can use default
-			rt.save(true, new NullProgressMonitor());
-			
-			
+			IRuntime rtret = rt.save(true, new NullProgressMonitor());
+			return rtret != null;
 			// TODO create the server also
 		} catch(CoreException ce) {
 			Activator.getLogger().error(ce);
 		}
-		
+		return false;
 	}
 	
 	@Override
