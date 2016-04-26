@@ -15,8 +15,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.ObservableMap;
@@ -48,16 +51,18 @@ public class PropertiesUtilsTestIT {
 	@Mock
 	private IResource resource;
 
-	private Component component;
+	@org.junit.runners.Parameterized.Parameter
+	public String componentName;
 
-	@Parameters
-	public static Collection<Component> components() {
+	@org.junit.runners.Parameterized.Parameter(value = 1)
+	public Component component;
+
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> components() {
 		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		return camelModel.getComponentModel().getSupportedComponents();
-	}
-
-	public PropertiesUtilsTestIT(Component component) {
-		this.component = component;
+		final List<Component> supportedComponents = camelModel.getComponentModel().getSupportedComponents();
+		Stream<Object[]> stream = supportedComponents.stream().map(component -> new Object[] { component.getName(), component });
+		return stream.collect(Collectors.toCollection(HashSet::new));
 	}
 
 	@Before
@@ -69,11 +74,12 @@ public class PropertiesUtilsTestIT {
 	public void testUpdateURIParamsWithPathParams() throws Exception {
 		for (Parameter p : component.getUriParameters()) {
 			if (p.getKind().equalsIgnoreCase("path")) {
-				// Sometimes it returns a path param which is not in the syntax (then it causes NPE), e.g openshift
+				// Sometimes it returns a path param which is not in the syntax
+				// (then it causes NPE), e.g openshift
 				if (!component.getSyntax().contains(p.getName())) {
 					continue;
 				}
-				// This is really weird because, see FUSETOOLS-1803 
+				// This is really weird because, see FUSETOOLS-1803
 				if (component.getScheme().equals("http4s")) {
 					continue;
 				}
