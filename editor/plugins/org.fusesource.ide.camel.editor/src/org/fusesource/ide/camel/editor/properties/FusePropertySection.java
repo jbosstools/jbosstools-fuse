@@ -242,10 +242,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 	protected String computePropertyDisplayName(Parameter parameter) {
 		String s = Strings.humanize(parameter.getName());
-		if(isRequired(parameter)){
+		if (PropertiesUtils.isRequired(parameter)) {
 			s += " *";
 		}
-	    if (isDeprecated(parameter)){
+		if (PropertiesUtils.isDeprecated(parameter)) {
 	    	s += " (deprecated)"; 
 	    }
 		return s;
@@ -256,18 +256,6 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		if (description != null) {
 	    	label.setToolTipText(description);
 	    }
-	}
-
-	protected boolean isRequired(Parameter parameter) {
-		return isParameterValueTrue(parameter.getRequired());
-	}
-
-	private boolean isDeprecated(Parameter parameter) {
-		return isParameterValueTrue(parameter.getDeprecated());
-	}
-	
-	private boolean isParameterValueTrue(String parameterValue) {
-		return parameterValue != null && parameterValue.equalsIgnoreCase("true");
 	}
 
 	/**
@@ -449,13 +437,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         client.setLayoutData(new GridData(GridData.FILL_BOTH));
         client.setLayout(new GridLayout(4, false));
         
-        AbstractCamelModelElement uiDataFormatElement = null;
-        
         if (dataFormatElement != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
         	Node oldExpNode = null;
         	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
-        		if (org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(selectedEP.getXmlNode().getChildNodes().item(i)).equalsIgnoreCase(dataFormatElement.getTranslatedNodeName())) {
-        			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
+        		final Node childNode = selectedEP.getXmlNode().getChildNodes().item(i);
+				if (org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(childNode).equalsIgnoreCase(dataFormatElement.getTranslatedNodeName())) {
+        			oldExpNode = childNode;
         			break;
         		}
         	}
@@ -463,9 +450,6 @@ public abstract class FusePropertySection extends AbstractPropertySection {
             	Node expNode = selectedEP.createElement(dataformat, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 				dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
             	selectedEP.setParameter(prop.getName(), dataFormatElement);
-            	if (oldExpNode == null) {
-            		System.err.println("pdd");
-            	}
             	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
         	} else {
         		// user wants to delete the expression
@@ -479,9 +463,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
         	this.selectedEP.setParameter(prop.getName(), dataFormatElement);
         } 
-        uiDataFormatElement = dataFormatElement;
         
-        prepareDataFormatUIForDataFormat(dataformat, uiDataFormatElement, client);
+		prepareDataFormatUIForDataFormat(dataformat, dataFormatElement, client);
 		page.layout(true);
 		refresh();
 		eform.layout(true);
