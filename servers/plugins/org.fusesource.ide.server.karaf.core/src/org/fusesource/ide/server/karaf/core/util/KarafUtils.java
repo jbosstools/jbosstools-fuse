@@ -32,6 +32,9 @@ import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleFolder;
+import org.eclipse.wst.server.core.model.IModuleResource;
+import org.eclipse.wst.server.core.model.ModuleDelegate;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.Activator;
@@ -161,7 +164,11 @@ public class KarafUtils {
 			 */
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.exists() && pathname.isFile() && (pathname.getName().toLowerCase().startsWith(module.getProject().getName().toLowerCase()) || pathname.getName().toLowerCase().startsWith(artifactId.toLowerCase())) && pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
+				return 	pathname.exists() && 
+						pathname.isFile() && 
+						(pathname.getName().toLowerCase().startsWith(module.getProject().getName().toLowerCase()) || 
+						 pathname.getName().toLowerCase().startsWith(artifactId.toLowerCase())) && 
+						pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
 			}
 		});
 		if (jars != null && jars.length>0) {
@@ -316,25 +323,17 @@ public class KarafUtils {
 	}
 	
 	/**
+	 * retrieves the bundle version from the given manifest file
 	 * 
-	 * @param module
-	 * @param f
+	 * @param manifest
 	 * @return
 	 */
-	public static String getBundleVersion(IModule module, File f) throws CoreException {
-		
-		if (module == null)
-			return "";
-		
+	public static String getBundleVersionFromManifest(File manifest) {
 		String version = null;
-		String packaging = getPackaging(module);
-		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
-		if (!manifest.exists()) {
-			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
-		}
+		
 		if (manifest.exists()) {
 			try {
-				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
+				Manifest mf = new Manifest(new FileInputStream(manifest));
 				version = mf.getMainAttributes().getValue("Bundle-Version");
 			} catch (IOException ex) {
 				version = null;
@@ -343,50 +342,129 @@ public class KarafUtils {
 			// no OSGi bundle - lets take the project name instead
 			version = null;
 		}
+		
+		return version;
+	}
+	
+	/**
+	 * parses the file name for the version
+	 * 
+	 * @param f
+	 * @param packaging
+	 * @return
+	 */
+	public static String getBundleVersionFromFileName(File f, String packaging) {
+		String version = null;
+		
+		version = "";
+		String[] parts = f.getName().split("-");
+		for (String part : parts) {
+			if (!Character.isDigit(part.charAt(0))) {
+				if (version.length()==0) continue;
+				version += "." + part;
+			}
+			version += part.trim();
+		}
+		version = version.substring(0, version.indexOf(getFileExtensionForPackaging(packaging)));
+		
+		return version;
+	}
+	
+	/**
+	 * searches the Manifest.mf file in the module
+	 * 
+	 * @param module
+	 * @return
+	 */
+	public static File findManifest(IModule module) throws CoreException {
+		ModuleDelegate md = (ModuleDelegate)module.loadAdapter(ModuleDelegate.class, null);
+		IModuleResource[] res = md.members();
+		for( int i = 0; i < res.length; i++ ) {
+			if( res[i].getName().equals("META-INF")) {
+				IModuleResource meta = res[i];
+				if( meta instanceof IModuleFolder) {
+					IModuleResource[] metaContents = ((IModuleFolder)meta).members();
+					for( int j = 0; j < metaContents.length; j++ ) {
+						if( metaContents[j].getName().equalsIgnoreCase("manifest.mf")) {
+							IModuleResource mf = metaContents[j];
+							return (File)mf.getAdapter(File.class);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * retrieves the version from the install uri
+	 * 
+	 * @param uri
+	 * @param packaging
+	 * @return
+	 */
+	public static String getBundleVersionFromURI(String uri, String packaging) {
+		String version = null;
+		
+		if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
+			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+		} else if (uri != null && uri.endsWith(KarafUtils.getFileExtensionForPackaging(packaging))) {
+			String s = uri.substring(uri.lastIndexOf(File.separatorChar)+1);
+			String pack = KarafUtils.getFileExtensionForPackaging(packaging);
+			boolean versionDigitsFound = false;
+			int pointCount = 0;
+			version = "";
+			for (int i=s.length()-pack.length()-1; i>=0; i--) {
+				char c = s.charAt(i);
+				if (Character.isAlphabetic(c)) {
+					if (versionDigitsFound) break;
+				} else if (Character.isDigit(c)) {
+					versionDigitsFound = true;
+				} else if (c == '-') {
+					if (versionDigitsFound) break;
+				} else if (c == '.') {
+					pointCount++;
+					if (pointCount>2) break;
+				}
+				version = c + version;
+			}
+			// finally replace a possible - with a . to be OSGi compliant
+			if (version.indexOf("-") != -1) version = version.replaceAll("-", ".");
+		}
+		
+		return version;
+	}
+	
+	/**
+	 * 
+	 * @param module
+	 * @param f
+	 * @return
+	 */
+	public static String getBundleVersion(IModule module, File f) throws CoreException {
+		if (module == null)
+			return "";
+		
+		String version = null;
+		String packaging = getPackaging(module);
+		
+		File manifest = findManifest(module);
+		if (manifest == null || !manifest.exists()) {
+			manifest = module.getProject().getFile("META-INF/MANIFEST.MF").getLocation().toFile();
+		}
 
+		// retrieve the version from the found manifest.mf file
+		version = getBundleVersionFromManifest(manifest);
+		
+		// if that fails...
 		if (version == null) {
 			// no manifest - so grab it from the file name
 			if (f != null) {
-				if (version == null) {
-					version = "";
-					String[] parts = f.getName().split("-");
-					for (String part : parts) {
-						if (!Character.isDigit(part.charAt(0))) {
-							if (version.length()==0) continue;
-							version += "." + part;
-						}
-						version += part.trim();
-					}
-					version = version.substring(0, version.indexOf(getFileExtensionForPackaging(packaging)));
-				}
+				version = getBundleVersionFromFileName(f, packaging);
 			} else {
 				// no file...parse it from the bundle url
 				String uri = getBundleFilePath(module);
-				if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
-					version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
-				} else if (uri != null && uri.endsWith(KarafUtils.getFileExtensionForPackaging(KarafUtils.getPackaging(module)))) {
-					String s = uri.substring(uri.lastIndexOf(File.separatorChar)+1);
-					String pack = KarafUtils.getFileExtensionForPackaging(KarafUtils.getPackaging(module));
-					boolean versionDigitsFound = false;
-					int pointCount = 0;
-					version = "";
-					for (int i=s.length()-pack.length()-1; i>=0; i--) {
-						char c = s.charAt(i);
-						if (Character.isAlphabetic(c)) {
-							if (versionDigitsFound) break;
-						} else if (Character.isDigit(c)) {
-							versionDigitsFound = true;
-						} else if (c == '-') {
-							if (versionDigitsFound) break;
-						} else if (c == '.') {
-							pointCount++;
-							if (pointCount>2) break;
-						}
-						version = c + version;
-					}
-					// finally replace a possible - with a . to be OSGi compliant
-					if (version.indexOf("-") != -1) version = version.replaceAll("-", ".");
-				}
+				version = getBundleVersionFromURI(uri, packaging);
 			}
 		}
 		

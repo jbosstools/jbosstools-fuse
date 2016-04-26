@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -31,7 +31,11 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	/* Store settings inside the project .settings folder */
 	public static final QualifiedName QNAME_CAMEL_CONTENT_FOLDER = new QualifiedName("camel", CAMEL_CONTENT_FOLDER); //$NON-NLS-1$
 
-	
+	/**
+	 * 
+	 */
+	public static final String FACET_JST_WEB = "jst.web";
+	public static final String FACET_JST_CAMEL = "jst.camel";
 	
 	/*
 	 * Other constants
@@ -40,6 +44,7 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	public final static String CAMEL_PROJECT_FACET = "jst.camel";//$NON-NLS-1$
 	public final static String CAMEL_PROJECT_FACET_TEMPLATE = "template.jst.camel.jar_2.15";//$NON-NLS-1$
 	public final static String OSGI_INF = "OSGI-INF";//$NON-NLS-1$
+	public final static String META_INF = "META-INF";//$NON-NLS-1$
 	
 	public final static String DEFAULT_CAMEL_CONFIG_RESOURCE_FOLDER = "camelcontent";//$NON-NLS-1$
 	public final static String DEFAULT_CAMEL_SOURCE_FOLDER = "src";//$NON-NLS-1$

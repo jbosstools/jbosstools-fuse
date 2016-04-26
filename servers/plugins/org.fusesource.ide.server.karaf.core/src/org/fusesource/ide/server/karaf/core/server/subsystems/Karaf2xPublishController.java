@@ -127,11 +127,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		if( !isBinaryObject ) {
 			return handleZippedPublish(module, publishType, false, monitor);
 		}
-		// Skip any wtp-deleted-module for a full or incremental publish
-//		if( isBinaryObject ) {
-//			// Remove situation has been handled
-//			return handlePublishBinaryModule(module, publishType);
-// 		}
 		
 		return IServer.PUBLISH_STATE_UNKNOWN;
 	}

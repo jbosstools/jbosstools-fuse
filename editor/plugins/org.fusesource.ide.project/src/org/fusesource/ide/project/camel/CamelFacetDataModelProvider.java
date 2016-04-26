@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -40,10 +40,6 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 		return super.getDefaultProperty(propertyName);
 	}
 
-	// Superclass will take over this method
-//	protected int convertFacetVersionToJ2EEVersion(IProjectFacetVersion version) {
-//		return J2EEVersionConstants.J2EE_1_4_ID;
-//	}
 	public IStatus validate(String propertyName) {
 		return OK_STATUS;
 	}

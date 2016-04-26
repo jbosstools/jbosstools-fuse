@@ -149,10 +149,6 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			// insert a project refresh here
 			IProject project = module[0].getProject();
 			project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-			
-//			String version = KarafUtils.getBundleVersion(module[0], null);
-//			String version2 = KarafUtils.getBundleVersion(module[0], null);
-//			String symbolicName2 = KarafUtils.getBundleSymbolicName(module[0]);
 			// first check if there is a bundle installed with that name already
 			long bundleId = this.jmxPublisher.getBundleId(mbsc, symbolicName, version);
 			if (bundleId != -1) {

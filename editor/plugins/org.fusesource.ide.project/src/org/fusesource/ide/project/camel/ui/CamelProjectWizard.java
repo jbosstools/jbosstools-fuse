@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -19,12 +19,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.ui.INewWizard;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
-import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
@@ -35,8 +33,7 @@ import org.fusesource.ide.project.camel.CamelRuntimeChangedDelegate;
 import org.fusesource.ide.project.camel.ICamelFacetDataModelProperties;
 import org.jboss.ide.eclipse.as.wtp.core.vcf.VCFClasspathCommand;
 
-public class CamelProjectWizard extends NewProjectDataModelFacetWizard implements
-		INewWizard {
+public class CamelProjectWizard extends NewProjectDataModelFacetWizard {
 
 	public CamelProjectWizard() {
 		super();
@@ -57,11 +54,6 @@ public class CamelProjectWizard extends NewProjectDataModelFacetWizard implement
 	protected IDataModel createDataModel() {
 		return DataModelFactory.createDataModel(new CamelFacetProjectCreationDataModelProvider());
 	}
-
-    @Override
-    public void setFacetedProjectWorkingCopy( final IFacetedProjectWorkingCopy fpjwc ) {
-		super.setFacetedProjectWorkingCopy(fpjwc);
-    }
 
 	@Override
 	protected IWizardPage createFirstPage() {

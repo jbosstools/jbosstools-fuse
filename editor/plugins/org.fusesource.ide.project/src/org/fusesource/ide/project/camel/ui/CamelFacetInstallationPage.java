@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -57,8 +57,6 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 	}
 
 	public void setConfig(Object config) {
-		System.out.println("config = " + config);
-		System.out.println("set config");
 		this.model = (IDataModel)config;
 		IDataModel o =(IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 		//FacetDataModelMap map = (FacetDataModelMap) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
@@ -71,7 +69,6 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 			model.setProperty(UPDATE_PROJECT_STRUCTURE, true);
 			o.addListener(new IDataModelListener() {
 				public void propertyChanged(DataModelEvent event) {
-					System.out.println("Property changed");
 					if( IFacetProjectCreationDataModelProperties.FACET_ACTION_MAP.equals(event.getPropertyName())) {
 						updateWidgetsFromModel();
 					}
@@ -107,7 +104,7 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 		final Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		createProjectGroup(composite);
-//		//set page status
+		//set page status
 		changePageStatus();
 		
 		return composite;
@@ -124,7 +121,7 @@ public class CamelFacetInstallationPage extends AbstractFacetWizardPage implemen
 
 		this.contentFolder = new Text(prjGroup, SWT.BORDER);
 		this.contentFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		this.contentFolder.setData("label", this.contentRootLabel); //$NON-NLS-1$ // wtf??
+		this.contentFolder.setData("label", this.contentRootLabel); //$NON-NLS-1$
 		this.contentFolder.setText(model.getStringProperty(CAMEL_CONTENT_FOLDER));
 		contentFolder.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){

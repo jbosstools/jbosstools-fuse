@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -11,6 +11,7 @@
 package org.fusesource.ide.project.camel;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -46,11 +47,14 @@ import org.fusesource.ide.camel.model.service.core.util.CamelFileTemplateCreator
  * we still need to make a content mapping folder. 
  * 
  */
-
 public class CamelFacetInstallationDelegate implements IDelegate {
 
+	private static final String ROUTES_DSL_TEXT = "Routes";
+	private static final String SPRING_DSL_TEXT = "Spring";
+	private static final String BLUEPRINT_DSL_TEXT = "Blueprint";
 	
 	private IDataModel model;
+	
 	public void execute(IProject project, IProjectFacetVersion fv,
 			Object config, IProgressMonitor monitor) throws CoreException {
 		model = (IDataModel) config;
@@ -70,8 +74,8 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		Iterator<IProjectFacetVersion> it = enabled.iterator();
 		while(it.hasNext()) {
 			IProjectFacetVersion i = it.next();
-			if( i.getProjectFacet().getId().equals("jst.web")) {
-				webfound = true;
+			if( i.getProjectFacet().getId().equals(ICamelFacetDataModelProperties.FACET_JST_WEB)) {
+				return true;
 			}
 		}
 		return webfound;
@@ -93,22 +97,13 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		for( int i = 0; i < mappedRoots.length; i++ ) {
 			all[i] = project.getFolder(mappedRoots[i]);
 		}
-		IFolder metaInf = findFolder(all, "META-INF");
+		IFolder metaInf = findFolder(all, ICamelFacetDataModelProperties.META_INF);
 		if( metaInf != null ) {
-			String dsl = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_DSL);
-			if( dsl.equalsIgnoreCase("Blueprint") ) {
-				IFolder osgiInf = metaInf.getParent().getFolder(new Path(ICamelFacetDataModelProperties.OSGI_INF)); 
-				createFolder(osgiInf, new NullProgressMonitor());
-				project.refreshLocal(IResource.DEPTH_ZERO, null);
-				createBlueprintDescriptor(osgiInf);
-			} else if (dsl.equalsIgnoreCase("Spring")) {
-				createSpringDescriptor(metaInf);
-			} else if (dsl.equalsIgnoreCase("Routes")) {
-				createRoutesDescriptor(metaInf);
-			}
+			createCamelContextFile(project, metaInf);
 			createUtilityManifest(project, metaInf, new NullProgressMonitor());
 		}
 	}
+	
 	protected IPath[] getAllSourceMappings(IProject p) {
 		ComponentResource[] res = findAllMappings(p);
 		IPath[] sourcePaths = new IPath[res.length];
@@ -120,16 +115,19 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 	
 	protected ComponentResource[] findAllMappings(IProject project) {
 		StructureEdit structureEdit = null;
+
 		try {
-			structureEdit = StructureEdit.getStructureEditForRead(project);
-			WorkbenchComponent component = structureEdit.getComponent();
-			Object[] arr = component.getResources().toArray();
-			ComponentResource[] result = new ComponentResource[arr.length];
-			for( int i = 0; i < arr.length; i++ )
-				result[i] = (ComponentResource)arr[i];
-			return result;
-		} catch (NullPointerException e) {
-			// TODO log
+			structureEdit = StructureEdit.getStructureEditForRead(project);			
+			if (structureEdit != null) {
+				WorkbenchComponent component = structureEdit.getComponent();
+				if (component != null) {
+					Object[] arr = component.getResources().toArray();
+					ComponentResource[] result = new ComponentResource[arr.length];
+					for( int i = 0; i < arr.length; i++ )
+						result[i] = (ComponentResource)arr[i];
+					return result;					
+				}
+			}			
 		} finally {
 			if(structureEdit != null)
 				structureEdit.dispose();
@@ -170,23 +168,25 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		String resourcesFolder = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
 		jbiRoot.createLink(new Path("/" + resourcesFolder), 0, null); //$NON-NLS-1$
 
-		IFolder metainf = project.getFolder("src").getFolder("META-INF"); 
+		IFolder metainf = project.getFolder("src").getFolder(ICamelFacetDataModelProperties.META_INF); 
 		if( metainf.exists())
-			metainf.move(camelContent.getFolder("META-INF").getFullPath(), true, new NullProgressMonitor());
-		createUtilityManifest(project, camelContent.getFolder("META-INF"), monitor);
-		
+			metainf.move(camelContent.getFolder(ICamelFacetDataModelProperties.META_INF).getFullPath(), true, new NullProgressMonitor());
+		createUtilityManifest(project, camelContent.getFolder(ICamelFacetDataModelProperties.META_INF), monitor);
+		createCamelContextFile(project, metainf);				
+	}
+	
+	private void createCamelContextFile(IProject project, IFolder folder) throws CoreException {
 		String dsl = model.getStringProperty(ICamelFacetDataModelProperties.CAMEL_DSL);
-		if( dsl.equalsIgnoreCase("Blueprint") ) {
-			IFolder osgiInf = camelContent.getFolder(ICamelFacetDataModelProperties.OSGI_INF); 
-			createFolder(osgiInf, monitor);
+		if( dsl.equalsIgnoreCase(CamelFacetInstallationDelegate.BLUEPRINT_DSL_TEXT) ) {
+			IFolder osgiInf = folder.getParent().getFolder(new Path(ICamelFacetDataModelProperties.OSGI_INF)); 
+			createFolder(osgiInf, new NullProgressMonitor());
 			project.refreshLocal(IResource.DEPTH_ZERO, null);
 			createBlueprintDescriptor(osgiInf);
-		} else if (dsl.equalsIgnoreCase("Spring")) {
-			createSpringDescriptor(camelContent.getFolder("META-INF"));
-		} else if (dsl.equalsIgnoreCase("Routes")) {
-			createRoutesDescriptor(camelContent.getFolder("META-INF"));
+		} else if (dsl.equalsIgnoreCase(CamelFacetInstallationDelegate.SPRING_DSL_TEXT)) {
+			createSpringDescriptor(folder);
+		} else if (dsl.equalsIgnoreCase(CamelFacetInstallationDelegate.ROUTES_DSL_TEXT)) {
+			createRoutesDescriptor(folder);
 		}
-		
 	}
 	
 	private void createUtilityManifest(IProject project, IFolder metainf, IProgressMonitor monitor) throws CoreException {
@@ -195,8 +195,8 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		
 		sb.append("Manifest-Version: 1.0\n");
 		sb.append("Bundle-ManifestVersion: 2\n");
-		sb.append("Bundle-Name: " + project.getName() + "\n");
-		sb.append("Bundle-SymbolicName: " + project.getName() +"\n"); // TODO this string won't be osgi-valid as a symbolic name possibly
+		sb.append("Bundle-Name: " + project.getName().getBytes(StandardCharsets.UTF_8) + "\n");
+		sb.append("Bundle-SymbolicName: " + project.getName().getBytes(StandardCharsets.UTF_8) +"\n"); // TODO this string won't be osgi-valid as a symbolic name possibly
 		sb.append("Bundle-Version: 1.0.0.SNAPSHOT\n");
 		if( manifestFile.exists())
 			manifestFile.setContents(new ByteArrayInputStream(sb.toString().getBytes()), IResource.FORCE, monitor);
