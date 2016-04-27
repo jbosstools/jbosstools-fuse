@@ -14,9 +14,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
@@ -47,7 +49,6 @@ public class CamelProjectWizard extends NewProjectDataModelFacetWizard {
 		super(model);
 		setWindowTitle( org.fusesource.ide.project.Messages.NewCamelProject_FirstPageTitle);
 		setDefaultPageImageDescriptor(SharedImages.getImageDescriptor(SharedImages.IMG_CAMEL_64));
-		
 	}
 
 	@Override
@@ -73,21 +74,25 @@ public class CamelProjectWizard extends NewProjectDataModelFacetWizard {
 	@Override
 	protected void postPerformFinish() throws InvocationTargetException {
 		super.postPerformFinish();
-		String prjName = this.getProjectName();
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(prjName);
-		IRuntime runtime = null;
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
 		if(project.exists()) {
 			try {
 				IFacetedProject fp = ProjectFacetsManager.create(project);
-				runtime = fp.getPrimaryRuntime();
+				IRuntime runtime = fp.getPrimaryRuntime();
+				if (runtime != null) {
+					IPath serverContainerPath = CamelRuntimeChangedDelegate.getContainerPath(runtime);
+					if (serverContainerPath != null) {
+						VCFClasspathCommand.addContainerClasspathEntry(project, serverContainerPath);
+					}
+				}
 			} catch (CoreException e) {
 				Activator.getDefault().getLog().log(e.getStatus());
 			}
-		}
-		if(runtime != null) {
-			IPath serverContainerPath = CamelRuntimeChangedDelegate.getContainerPath(runtime);
-			if( serverContainerPath != null )
-				VCFClasspathCommand.addContainerClasspathEntry(project, serverContainerPath);
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			} catch (CoreException e) {
+				Activator.getDefault().getLog().log(e.getStatus());
+			}
 		}
 	}
 }

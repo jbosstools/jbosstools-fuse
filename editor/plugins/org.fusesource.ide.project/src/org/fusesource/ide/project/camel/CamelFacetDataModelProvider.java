@@ -20,8 +20,8 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 
 	private static final String JBOSS_CAMEL_PROJECT_FACET = ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET;
 
-	public Set getPropertyNames() {
-		Set names = super.getPropertyNames();
+	public Set<Object> getPropertyNames() {
+		Set<Object> names = super.getPropertyNames();
 		names.add(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
 		names.add(ICamelFacetDataModelProperties.CAMEL_DSL);
 		names.add(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE);
