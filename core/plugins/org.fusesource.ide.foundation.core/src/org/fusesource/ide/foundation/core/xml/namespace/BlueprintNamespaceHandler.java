@@ -21,7 +21,8 @@ import java.util.Set;
  */
 public class BlueprintNamespaceHandler extends FindNamespaceHandlerSupport {
 	
-	private static String[] blueprintNamespaces = new String[]{ "http://camel.apache.org/schema/blueprint" };
+	private static String[] blueprintNamespaces = new String[]{ "http://camel.apache.org/schema/blueprint", 
+			"http://www.osgi.org/xmlns/blueprint/v1.0.0", "https://www.osgi.org/xmlns/blueprint/v1.0.0" };
 	public static Set<String> bpNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(blueprintNamespaces)));
 	
 	public BlueprintNamespaceHandler() {

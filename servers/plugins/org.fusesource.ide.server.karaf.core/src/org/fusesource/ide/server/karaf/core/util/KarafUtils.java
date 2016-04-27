@@ -15,15 +15,10 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.apache.maven.Maven;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.model.Model;
@@ -31,20 +26,19 @@ import org.apache.maven.settings.Server;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.ICallable;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleFolder;
+import org.eclipse.wst.server.core.model.IModuleResource;
+import org.eclipse.wst.server.core.model.ModuleDelegate;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
-import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xPublishController;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -105,28 +99,9 @@ public class KarafUtils {
 	/**
 	 * property keys
 	 */
-	public static final String SERVER_ID				= "fuse-server-id";
-	public static final String SERVER_USER				= "fuse-server-user";
-	public static final String SERVER_PASSWORD			= "fuse-server-password";
-	
-	/**
-	 * variable substitution
-	 */
-	public static final String VAR_GROUP_ID				= "${groupId}";
-	public static final String VAR_PROJECT_GROUP_ID  	= "${project.groupId}";
-	public static final String VAR_ARTIFACT_ID			= "${artifactId}";
-	public static final String VAR_PROJECT_ARTIFACT_ID  = "${project.artifactId}";
-	public static final String VAR_VERSION				= "${version}";
-	public static final String VAR_PROJECT_VERSION  	= "${project.version}";
-	
-	public static final String[] VARIABLES = new String[] {
-			VAR_GROUP_ID,
-			VAR_PROJECT_GROUP_ID,
-			VAR_ARTIFACT_ID,
-			VAR_PROJECT_ARTIFACT_ID,
-			VAR_VERSION,
-			VAR_PROJECT_VERSION
-	};
+	public static final String SERVER_ID				= "fabric8-server-id";
+	public static final String SERVER_USER				= "fabric8-server-user";
+	public static final String SERVER_PASSWORD			= "fabric8-server-password";
 	
 	/**
 	 * retrieves the version of the runtime installation
@@ -179,82 +154,35 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getBundleFilePath(final IModule module) throws CoreException {
-		String packaging = getPackaging(module);
-		String artifactPath = getFullArtifactPath(module, packaging);
-		
-		if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
-			return String.format("%sfile:%s", getProtocolPrefixForModule(module), artifactPath);
-		} else if (packaging.equalsIgnoreCase(PACKAGING_JAR)) {
-			return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), artifactPath, KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, new File(artifactPath)));
-		} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
-			return String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), artifactPath, KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, new File(artifactPath)));	
-		}			
-
-		return null;
-	}
-
-	/**
-	 * checks whether the projects build artifact already exists
-	 * 
-	 * @param module
-	 * @param packaging
-	 * @return
-	 * @throws CoreException
-	 */
-	private static File[] getOutputArtifacts(final IModule module, final String packaging) throws CoreException {
-		File projectTargetPath = module.getProject().getLocation().append(getOutputFilePath(module)).toFile();
-		String finalName = null;
-		try {
-			finalName = getOutputFilename(module);
-		} catch (CoreException ex) {
-			Activator.getLogger().error(ex);
-		}
-
-		final String artName = finalName;
-		File[] files = projectTargetPath.listFiles(new FileFilter() {
+		final String packaging = getPackaging(module);
+		final String artifactId = getArtifactId(module);
+		File projectTargetPath = module.getProject().getLocation().append("target").toFile();
+		File[] jars = projectTargetPath.listFiles(new FileFilter() {
 			/*
 			 * (non-Javadoc)
 			 * @see java.io.FileFilter#accept(java.io.File)
 			 */
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.getName().startsWith(artName) && pathname.getName().endsWith(getFileExtensionForPackaging(packaging));
+				return 	pathname.exists() && 
+						pathname.isFile() && 
+						(pathname.getName().toLowerCase().startsWith(module.getProject().getName().toLowerCase()) || 
+						 pathname.getName().toLowerCase().startsWith(artifactId.toLowerCase())) && 
+						pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
 			}
 		});
-		
-		// lets sort -> shortest filenames first
-		Arrays.sort(files, new Comparator<File>() {
-			/* (non-Javadoc)
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
-			@Override
-			public int compare(File o1, File o2) {
-				return o1.getName().length()-o2.getName().length();
-			}
-		});
-		
-		return files;
-	}
-	
-	/**
-	 * returns the full path of the build artifact
-	 * 
-	 * @param module
-	 * @param packaging
-	 * @return
-	 * @throws CoreException
-	 */
-	public static String getFullArtifactPath(final IModule module, final String packaging) throws CoreException {
-		String artifactPath = null;
-
-		File[] files = getOutputArtifacts(module, packaging);
-		if (files != null && files.length>0) {
-			artifactPath = files[0].getPath();
+		if (jars != null && jars.length>0) {
+			if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
+				return String.format("%sfile:%s", getProtocolPrefixForModule(module), jars[0].getPath());
+			} else if (packaging.equalsIgnoreCase(PACKAGING_JAR)) {
+				return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, jars[0]));
+			} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
+				return String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, jars[0]));	
+			}			
 		}
-		
-		return artifactPath;
+		return null;
 	}
-	
+
 	/**
 	 * returns the default file extension for the built artifact of a given packaging type
 	 * 
@@ -307,38 +235,6 @@ public class KarafUtils {
 		return model.getArtifactId();
 	}
 	
-	private static String getOutputFilename(IModule module) throws CoreException {
-		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
-		String finalName = model.getBuild().getFinalName() != null ? model.getBuild().getFinalName() : getArtifactId(module);
-		finalName = substituteVariables(finalName, model);
-		return finalName;
-	}
-	
-	private static String substituteVariables(String originalString, Model model) {
-		String returnValue = "";
-		
-		for (String var : VARIABLES) {
-			int pos = originalString.indexOf(var);
-			int len = var.length();
-			if (pos != -1) {
-				returnValue = originalString.substring(0, pos);
-				
-				if (var.equals(VAR_GROUP_ID) 	|| var.equals(VAR_PROJECT_GROUP_ID)) 	returnValue += model.getGroupId();
-				if (var.equals(VAR_ARTIFACT_ID) || var.equals(VAR_PROJECT_ARTIFACT_ID)) returnValue += model.getArtifactId();
-				if (var.equals(VAR_VERSION) 	|| var.equals(VAR_PROJECT_VERSION)) 	returnValue += model.getVersion();
-				
-				returnValue += originalString.substring(pos+len);
-			}
-		}
-		
-		return returnValue;
-	}
-	
-	private static String getOutputFilePath(IModule module) throws CoreException {
-		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
-		return model.getBuild().getOutputDirectory() != null ? model.getBuild().getOutputDirectory() : "target/";
-	}
-	
 	/**
 	 * returns a file reference to the maven pom file of the module
 	 * @param module
@@ -372,50 +268,32 @@ public class KarafUtils {
 	 * @throws CoreException
 	 */
 	public static boolean runBuild(List<String> goals, Properties serverProperties, IModule module, IProgressMonitor monitor)  throws CoreException {
-		final IMaven maven = MavenPlugin.getMaven();
+		IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext executionContext = maven.createExecutionContext();
-		final MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
+		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
 		executionRequest.setPom(getModelFile(module));
 		if (serverProperties != null && serverProperties.isEmpty() == false) {
-			Server server = new Server();
-			server.setId(serverProperties.getProperty(SERVER_ID));
-			server.setUsername(serverProperties.getProperty(SERVER_USER));
-			server.setPassword(serverProperties.getProperty(SERVER_PASSWORD));
-			executionRequest.addServer(server);
+			Server fabric8Server = new Server();
+			fabric8Server.setId(serverProperties.getProperty(SERVER_ID));
+			fabric8Server.setUsername(serverProperties.getProperty(SERVER_USER));
+			fabric8Server.setPassword(serverProperties.getProperty(SERVER_PASSWORD));
+			executionRequest.addServer(fabric8Server);
 		}
 		executionRequest.setGoals(goals);
 		
-		MavenExecutionResult result = executionContext.execute(new ICallable<MavenExecutionResult>() {
-		    /*
-		     * (non-Javadoc)
-		     * @see org.eclipse.m2e.core.embedder.ICallable#call(org.eclipse.m2e.core.embedder.IMavenExecutionContext, org.eclipse.core.runtime.IProgressMonitor)
-		     */
-			@Override
-			public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor innerMonitor) throws CoreException {
-				return ((MavenImpl)maven).lookupComponent(Maven.class).execute(executionRequest);
-		    }
-			
-		}, monitor);	
-		
+		MavenExecutionResult result = maven.execute(executionRequest, monitor);
 		for (Throwable t : result.getExceptions()) {
 			Activator.getLogger().error(t);
 		}
 		return !result.hasExceptions();
 	}
 
-	/**
-	 * retrieves the given attribute from the manifest
-	 * 
-	 * @param module
-	 * @param attributeName
-	 * @return
-	 * @throws CoreException
-	 */
-	private static String getManifestValue(final IModule module, final String attributeName) throws CoreException {
-		String value = null;
+	public static String getBundleSymbolicName(IModule module) throws CoreException {
+		String symbolicName = null;
 		
-		// 2 possible ways possible
-		// a) we have a manifest.mf file already and can read info from there
+		if (module == null || module.getProject() == null)
+			return "";
+		
 		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
 		if (!manifest.exists()) {
 			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
@@ -423,62 +301,14 @@ public class KarafUtils {
 		if (manifest.exists()) {
 			try {
 				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
-				value = mf.getMainAttributes().getValue(attributeName);
+				symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
 			} catch (IOException ex) {
-				value = null;
+				symbolicName = null;
 			}
+		} else {
+			// no OSGi bundle - lets take the project name instead
+			symbolicName = null;
 		}
-		
-		// b) manifest is generated by felix plugin on build -> we need to evaluate pom and/or build the project to extract the manifest
-		if (value == null) {
-			// now get the manifest and read the symbolic name
-			String packaging = getPackaging(module);
-			String artifactPath = getFullArtifactPath(module, packaging);
-			File f = new File(artifactPath);
-			if (!f.exists() || !f.isFile()) {
-				// we need to build the project to get the built artifact
-				KarafUtils.runBuild(Karaf2xPublishController.GOALS, module, new NullProgressMonitor());
-			}
-			if (f.exists() && f.isFile()) {
-				ZipFile zf = null;
-				try {
-					zf = new ZipFile(f);
-					ZipEntry ze = zf.getEntry("META-INF/MANIFEST.MF");
-					Manifest mani = new Manifest(zf.getInputStream(ze));
-					// now ready symbolic name
-					value = mani.getMainAttributes().getValue(attributeName);
-				} catch (Exception ex) {
-					Activator.getLogger().error(ex);
-				} finally {
-					if (zf != null) {
-						try {
-							zf.close();
-						} catch (Exception ex) {
-							// ignore
-						}
-					}
-				}
-								
-			}
-		}
-		
-		return value;
-	}
-	
-	/**
-	 * 
-	 * @param module
-	 * @return
-	 * @throws CoreException
-	 */
-	public static String getBundleSymbolicName(IModule module) throws CoreException {
-		String symbolicName = null;
-
-		if (module == null || module.getProject() == null)
-			return "";
-
-		// extract the value from manifest
-		symbolicName = getManifestValue(module, "Bundle-SymbolicName");
 		
 		if (symbolicName == null) {
 			// no manifest - so grab the artifactId
@@ -486,11 +316,121 @@ public class KarafUtils {
 		}
 		
 		if (symbolicName == null) {
-			// if all fails fall back to module id
 			symbolicName = module.getId();
 		}
 		
 		return symbolicName;
+	}
+	
+	/**
+	 * retrieves the bundle version from the given manifest file
+	 * 
+	 * @param manifest
+	 * @return
+	 */
+	public static String getBundleVersionFromManifest(File manifest) {
+		String version = null;
+		
+		if (manifest.exists()) {
+			try {
+				Manifest mf = new Manifest(new FileInputStream(manifest));
+				version = mf.getMainAttributes().getValue("Bundle-Version");
+			} catch (IOException ex) {
+				version = null;
+			}
+		} else {
+			// no OSGi bundle - lets take the project name instead
+			version = null;
+		}
+		
+		return version;
+	}
+	
+	/**
+	 * parses the file name for the version
+	 * 
+	 * @param f
+	 * @param packaging
+	 * @return
+	 */
+	public static String getBundleVersionFromFileName(File f, String packaging) {
+		String version = "";
+		String[] parts = f.getName().split("-");
+		for (String part : parts) {
+			if (!Character.isDigit(part.charAt(0))) {
+				if (version.isEmpty()) continue;
+				version += "." + part;
+			}
+			version += part.trim();
+		}
+		version = version.substring(0, version.indexOf(getFileExtensionForPackaging(packaging)));
+		
+		return version;
+	}
+	
+	/**
+	 * searches the Manifest.mf file in the module
+	 * 
+	 * @param module
+	 * @return
+	 */
+	public static File findManifest(IModule module) throws CoreException {
+		ModuleDelegate md = (ModuleDelegate)module.loadAdapter(ModuleDelegate.class, null);
+		IModuleResource[] res = md.members();
+		for( int i = 0; i < res.length; i++ ) {
+			if( res[i].getName().equals("META-INF")) {
+				IModuleResource meta = res[i];
+				if( meta instanceof IModuleFolder) {
+					IModuleResource[] metaContents = ((IModuleFolder)meta).members();
+					for( int j = 0; j < metaContents.length; j++ ) {
+						if( metaContents[j].getName().equalsIgnoreCase("manifest.mf")) {
+							IModuleResource mf = metaContents[j];
+							return (File)mf.getAdapter(File.class);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * retrieves the version from the install uri
+	 * 
+	 * @param uri
+	 * @param packaging
+	 * @return
+	 */
+	public static String getBundleVersionFromURI(String uri, String packaging) {
+		String version = null;
+		
+		if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
+			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+		} else if (uri != null && uri.endsWith(KarafUtils.getFileExtensionForPackaging(packaging))) {
+			String s = uri.substring(uri.lastIndexOf(File.separatorChar)+1);
+			String pack = KarafUtils.getFileExtensionForPackaging(packaging);
+			boolean versionDigitsFound = false;
+			int pointCount = 0;
+			version = "";
+			for (int i=s.length()-pack.length()-1; i>=0; i--) {
+				char c = s.charAt(i);
+				if (Character.isAlphabetic(c)) {
+					if (versionDigitsFound) break;
+				} else if (Character.isDigit(c)) {
+					versionDigitsFound = true;
+				} else if (c == '-') {
+					if (versionDigitsFound) break;
+				} else if (c == '.') {
+					pointCount++;
+					if (pointCount>2) break;
+				}
+				version = c + version;
+			}
+			// finally replace a possible - with a . to be OSGi compliant
+			if (version.indexOf("-") != -1) version = version.replaceAll("-", ".");
+		}
+		
+		return version;
 	}
 	
 	/**
@@ -500,13 +440,31 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getBundleVersion(IModule module, File f) throws CoreException {
-		String version = null;
-		
-		if (module == null || module.getProject() == null)
+		if (module == null)
 			return "";
 		
-		// retrieve the bundle version
-		version = getManifestValue(module, "Bundle-Version");
+		String version = null;
+		String packaging = getPackaging(module);
+		
+		File manifest = findManifest(module);
+		if (manifest == null || !manifest.exists()) {
+			manifest = module.getProject().getFile("META-INF/MANIFEST.MF").getLocation().toFile();
+		}
+
+		// retrieve the version from the found manifest.mf file
+		version = getBundleVersionFromManifest(manifest);
+		
+		// if that fails...
+		if (version == null) {
+			// no manifest - so grab it from the file name
+			if (f != null) {
+				version = getBundleVersionFromFileName(f, packaging);
+			} else {
+				// no file...parse it from the bundle url
+				String uri = getBundleFilePath(module);
+				version = getBundleVersionFromURI(uri, packaging);
+			}
+		}
 		
 		return version;
 	}

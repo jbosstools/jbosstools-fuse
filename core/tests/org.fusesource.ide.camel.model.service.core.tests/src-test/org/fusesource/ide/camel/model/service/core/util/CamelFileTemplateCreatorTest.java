@@ -56,4 +56,11 @@ public class CamelFileTemplateCreatorTest {
 		this.templateFactory.createBlueprintTemplateFile(f);
 		assertThat(this.templateFactory.getBlueprintStubText()).isXmlEqualToContentOf(f);
 	}
+	
+	@Test
+	public void testCreateRoutesTemplateFile() throws IOException {
+		File f = testFolder.newFile("routesTemplate.xml");
+		this.templateFactory.createRoutesTemplateFile(f);
+		assertThat(this.templateFactory.getRoutesStubText()).isXmlEqualToContentOf(f);
+	}
 }
