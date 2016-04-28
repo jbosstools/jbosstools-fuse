@@ -18,6 +18,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.w3c.dom.Element;
 
 /**
@@ -48,12 +49,12 @@ public class AbstractComponentBasedCreateFigurefeature extends CreateFigureFeatu
 				Element newNode = null;
 				if (createDOMNode) {
 					final String prefixNS = parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
-					newNode = camelFile.createElement(getEip().getName(), prefixNS);
+					newNode = camelFile.createElement(determineEIP(parent).getName(), prefixNS);
 				}
 				final String uri = component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme());
 				CamelEndpoint ep = new CamelEndpoint(uri); // we use the first found protocol string
 				ep.setParent(parent);
-				ep.setUnderlyingMetaModelObject(getEip());
+				ep.setUnderlyingMetaModelObject(determineEIP(parent));
 				if (createDOMNode) {
 					ep.setXmlNode(newNode);
 					ep.updateXMLNode();
@@ -69,4 +70,13 @@ public class AbstractComponentBasedCreateFigurefeature extends CreateFigureFeatu
 	    return null;
 	}
 
+	private Eip determineEIP(AbstractCamelModelElement parent) {
+		if (parent instanceof CamelRouteElement) {
+			CamelRouteElement route = (CamelRouteElement)parent;
+			if (route.getChildElements().size()<1) {
+				return getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_FROM);
+			}
+		}		
+		return getEip();
+	}
 }
