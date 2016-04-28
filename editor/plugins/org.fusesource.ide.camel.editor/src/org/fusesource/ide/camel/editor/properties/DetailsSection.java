@@ -245,7 +245,7 @@ public class DetailsSection extends FusePropertySection {
 										AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode((String)selectedEP.getParameter("ref"));
 										if (cme == null || cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
 											// no uri defined on ref
-											return ValidationStatus.error("The referenced endpoint has no URI defined or does not exist.");
+											return ValidationStatus.warning("The referenced endpoint has no URI defined or does not exist.");
 										}
 									}
 								}
@@ -255,7 +255,7 @@ public class DetailsSection extends FusePropertySection {
 									String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
 									List<String> refs = Arrays.asList(CamelComponentUtils.getRefs(selectedEP.getCamelFile()));
 									if (refId == null || refId.trim().length()<1 || refs.contains(refId) == false) {
-										return ValidationStatus.error("The entered reference does not exist in your context!");
+										return ValidationStatus.warning("The entered reference does not exist in your context!");
 									}
 								}
 								
@@ -274,13 +274,13 @@ public class DetailsSection extends FusePropertySection {
 										// check for global beans
 										if (selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
 											// the ref doesn't exist
-											return ValidationStatus.error("The entered reference does not exist in your context!");
+											return ValidationStatus.warning("The entered reference does not exist in your context!");
 										}
 									} else {
 										// the ref exists
 										if (cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
 											// but has no URI defined
-											return ValidationStatus.error("The referenced endpoint does not define a valid URI!");
+											return ValidationStatus.warning("The referenced endpoint does not define a valid URI!");
 										}
 									}
 								}

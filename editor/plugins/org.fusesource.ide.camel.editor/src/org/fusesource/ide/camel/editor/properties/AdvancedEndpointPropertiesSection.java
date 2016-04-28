@@ -238,7 +238,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 								// check for broken refs
 								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
 								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
-									return ValidationStatus.error("The entered reference does not exist in your context!");
+									return ValidationStatus.warning("The entered reference does not exist in your context!");
 								}
 							}
 							

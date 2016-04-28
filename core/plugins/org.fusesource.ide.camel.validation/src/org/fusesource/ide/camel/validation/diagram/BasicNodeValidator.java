@@ -184,7 +184,7 @@ public class BasicNodeValidator implements ValidationSupport {
 								? ((String) selectedEP.getParameter("uri")).substring("ref:".length()) : null;
 						List<String> refs = Arrays.asList(CamelComponentUtils.getRefs(selectedEP.getCamelFile()));
 						if (refId == null || refId.trim().length() < 1 || refs.contains(refId) == false) {
-							result.addError("The entered reference does not exist in your context! Please check the properties view for more details.");
+							result.addWarning("The entered reference does not exist in your context! Make sure this reference exists in your runtime.");
 						}
 					}
 
@@ -201,7 +201,7 @@ public class BasicNodeValidator implements ValidationSupport {
 						AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
 						if (cme == null && selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
 							// the ref doesn't exist
-							result.addWarning("The entered reference does not exist in your context! Please check the properties view for more details.");
+							result.addWarning("The entered reference does not exist in your context!  Make sure this reference exists in your runtime.");
 						} else {
 							// the ref exists
 							if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
