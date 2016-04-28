@@ -68,7 +68,6 @@ public final class CamelComponentUtils {
 			knownComponents.put(componentClass, c);
 			return getComponentModel(protocol, project);
 		}
-
 		return null;
 	}
 

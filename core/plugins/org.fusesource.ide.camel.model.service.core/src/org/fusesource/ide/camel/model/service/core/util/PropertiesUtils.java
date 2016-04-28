@@ -399,7 +399,7 @@ public class PropertiesUtils {
      * @param value
      */
     public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap modelMap) {
-    	if (p.getKind().equalsIgnoreCase("path")) {
+		if ("path".equalsIgnoreCase(p.getKind())) {
     		// simply rebuild the uri
     		String newUri = "";
     		
@@ -408,12 +408,13 @@ public class PropertiesUtils {
     		
     		// now build the options
     		for (Parameter uriParam : c.getUriParameters()) {
-    			if (uriParam.getKind().equalsIgnoreCase("path")) continue;
+				if ("path".equalsIgnoreCase(uriParam.getKind()))
+					continue;
     			String pName = uriParam.getName();
     			String pValue = getPropertyFromUri(selectedEP, uriParam, c);
     			if (pValue == null || pValue.trim().length()<1) continue;
     			
-    			// remove values wich equal the default
+				// remove values which equal the default
     			if (uriParam.getDefaultValue() != null && uriParam.getDefaultValue().trim().length()>0 && pValue.equals(uriParam.getDefaultValue())) continue;
     			
     			if (newUri.endsWith("?") == false) newUri += "&";
@@ -428,28 +429,25 @@ public class PropertiesUtils {
     		boolean valueDeleted = value == null || value.toString().trim().length()<1 || (p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue()));
 	        String val = getPropertyFromUri(selectedEP, p, c);
 	        String key = String.format("%s=", p.getName());
-	        int idx = ((String)selectedEP.getParameter("uri")).indexOf(key);
+	        final String uri = (String)selectedEP.getParameter("uri");
+			int idx = uri.indexOf(key);
 	        if (val != null && idx != -1) {
 	            // special replace logic needed as special expression chars can break the replacement
 	            String newUri = "";
-	            boolean firstParam = idx == -1 || ((String)selectedEP.getParameter("uri")).charAt(idx-1) == '?';
-	            newUri = valueDeleted ? ((String)selectedEP.getParameter("uri")).substring(0, firstParam ? idx : idx-1) : ((String)selectedEP.getParameter("uri")).substring(0, idx + key.length());
+	            boolean firstParam = idx == -1 || uri.charAt(idx-1) == '?';
+	            newUri = valueDeleted ? uri.substring(0, firstParam ? idx : idx-1) : uri.substring(0, idx + key.length());
 	            if (!valueDeleted) newUri += value.toString();
-	            if (valueDeleted && firstParam) {
-	                newUri += ((String)selectedEP.getParameter("uri")).substring(idx + key.length() + val.length());
-	            } else {
-	                newUri += ((String)selectedEP.getParameter("uri")).substring(idx + key.length() + val.length());
-	            }
+				newUri += uri.substring(idx + key.length() + val.length());
 	            if (newUri.indexOf("?&") != -1) newUri = newUri.replace("?&", "?");
 	            if (newUri.endsWith("?")) newUri = newUri.substring(0, newUri.indexOf("?"));
 	            selectedEP.setParameter("uri", newUri);
 	        } else {
-	            String newUri = ((String)selectedEP.getParameter("uri"));
+	            String newUri = uri;
 	            if (valueDeleted == false) {
-		            if (((String)selectedEP.getParameter("uri")).indexOf('?') == -1) {
+		            if (uri.indexOf('?') == -1) {
 		                newUri += '?';
 		            }
-		            if (((String)selectedEP.getParameter("uri")).indexOf('=') != -1) {
+		            if (uri.indexOf('=') != -1) {
 		                newUri += '&';
 		            }
 	            	newUri += String.format("%s=%s", p.getName(), value.toString());
@@ -616,7 +614,14 @@ public class PropertiesUtils {
     }
 
 	public static boolean isRequired(Parameter parameter) {
-		final String required = parameter.getRequired();
-		return required != null && required.equalsIgnoreCase("true");
+		return isParameterValueTrue(parameter.getRequired());
+	}
+
+	public static boolean isDeprecated(Parameter parameter) {
+		return isParameterValueTrue(parameter.getDeprecated());
+	}
+
+	private static boolean isParameterValueTrue(String parameterValue) {
+		return parameterValue != null && parameterValue.equalsIgnoreCase("true");
 	}
 }
