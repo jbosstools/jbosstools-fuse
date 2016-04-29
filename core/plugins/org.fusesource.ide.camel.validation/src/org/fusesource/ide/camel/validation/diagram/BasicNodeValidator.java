@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,12 +31,13 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.camel.validation.ValidationSupport;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
+import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 import org.fusesource.ide.camel.validation.model.RequiredPropertyValidator;
+import org.fusesource.ide.camel.validation.model.TextParameterValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 
@@ -160,87 +160,10 @@ public class BasicNodeValidator implements ValidationSupport {
 			Object value = selectedEP.getParameter(property);
 
 			if (PropertiesUtils.isRequired(prop)) {
-
-				if (prop.getName().equalsIgnoreCase("uri")) {
-					// only enforce URI if there is no REF set
-					if (selectedEP.getParameter("uri") == null || ((String) selectedEP.getParameter("uri")).trim().length() < 1) {
-						// no URI set -> check for REF
-						if (selectedEP.getParameter("ref") == null || ((String) selectedEP.getParameter("ref")).trim().length() < 1) {
-							// there is no ref
-							result.addError("One of Ref and Uri values have to be filled! Please check the properties view for more details.");
-						} else {
-							// ref found - now check if REF has URI defined
-							AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode((String) selectedEP.getParameter("ref"));
-							if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
-								// no uri defined on ref
-								result.addError("The referenced endpoint has no URI defined or does not exist. Please check the properties view for more details.");
-							}
-						}
-					}
-
-					// check for broken refs
-					if (selectedEP.getParameter("uri") != null && ((String) selectedEP.getParameter("uri")).startsWith("ref:")) {
-						String refId = ((String) selectedEP.getParameter("uri")).trim().length() > "ref:".length()
-								? ((String) selectedEP.getParameter("uri")).substring("ref:".length()) : null;
-						List<String> refs = Arrays.asList(CamelComponentUtils.getRefs(selectedEP.getCamelFile()));
-						if (refId == null || refId.trim().length() < 1 || refs.contains(refId) == false) {
-							result.addWarning("The entered reference does not exist in your context! Make sure this reference exists in your runtime.");
-						}
-					}
-
-					// warn user if he set both ref and uri
-					if (selectedEP.getParameter("uri") != null && ((String) selectedEP.getParameter("uri")).trim().length() > 0 && selectedEP.getParameter("ref") != null
-							&& ((String) selectedEP.getParameter("ref")).trim().length() > 0) {
-						result.addError("Please choose either URI or Ref but do not enter both values. Please check the properties view for more details.");
-					}
-
-				} else if (prop.getName().equalsIgnoreCase("ref")) {
-
-					if (value != null && value instanceof String && value.toString().trim().length() > 0) {
-						String refId = (String) value;
-						AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
-						if (cme == null && selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
-							// the ref doesn't exist
-							result.addWarning("The entered reference does not exist in your context!  Make sure this reference exists in your runtime.");
-						} else {
-							// the ref exists
-							if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
-								// but has no URI defined
-								result.addError("The referenced endpoint does not define a valid URI! Please check the properties view for more details.");
-							}
-						}
-					}
-
-					// warn user if he set both ref and uri
-					if (selectedEP.getParameter("uri") != null && ((String) selectedEP.getParameter("uri")).trim().length() > 0 && selectedEP.getParameter("ref") != null
-							&& ((String) selectedEP.getParameter("ref")).trim().length() > 0) {
-						result.addWarning("Please choose only ONE of Uri and Ref. Please check the properties view for more details.");
-					}
-
-				} else if (prop.getName().equalsIgnoreCase("id")) {
-					// check if ID is unique
-					if (value == null || value instanceof String == false || value.toString().trim().length() < 1) {
-						result.addError("Parameter " + prop.getName() + " is a mandatory field and cannot be empty. Please check the properties view for more details.");
-					} else {
-						if (selectedEP.getCamelContext().isIDUnique((String) value) == false) {
-							result.addError("Parameter " + prop.getName() + " does not contain a unique value. Please check the properties view for more details.");
-						}
-					}
-
-				} else if (prop.getName().equalsIgnoreCase("expression")) {
-
-					// ignore for now - TODO: provide better validation for
-					// expression properties
-
-				} else {
-					// by default we only check for a value != null and length >
-					// 0
-					if (value == null || (value instanceof String && value.toString().trim().isEmpty())) {
-						result.addError("Parameter " + prop.getName() + " is a mandatory field and cannot be empty. Please check the properties view for more details.");
-					}
-				}
-
+				checkFor(result, prop, value, new TextParameterValidator(selectedEP, prop));
 			}
+			checkFor(result, prop, value, new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop));
+
 		}
 	}
 

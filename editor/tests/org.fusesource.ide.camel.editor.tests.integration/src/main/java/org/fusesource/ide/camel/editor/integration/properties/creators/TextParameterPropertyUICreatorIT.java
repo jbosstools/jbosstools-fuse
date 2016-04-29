@@ -30,6 +30,7 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 	public void testUIDisplayed() throws Exception {
 		Parameter parameter = new Parameter();
 		parameter.setName("testParameterName");
+		parameter.setKind("parameter");
 		Eip eip = new Eip();
 		final ArrayList<Parameter> parameters = new ArrayList<>();
 		parameters.add(parameter);

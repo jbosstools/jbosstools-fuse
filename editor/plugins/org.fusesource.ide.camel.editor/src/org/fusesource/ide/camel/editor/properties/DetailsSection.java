@@ -53,6 +53,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -239,10 +240,8 @@ public class DetailsSection extends FusePropertySection {
 									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");
 								}
 							}
-						}							
-						// all tests passed
-						return ValidationStatus.ok();
-						
+						}
+						return new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop).validate(value);
 					}
 				};
                 
@@ -394,9 +393,10 @@ public class DetailsSection extends FusePropertySection {
 						@Override
 						public IStatus validate(Object value) {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
+								return new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop).validate(value);
 							}
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+
 						}
 					};
                 }
