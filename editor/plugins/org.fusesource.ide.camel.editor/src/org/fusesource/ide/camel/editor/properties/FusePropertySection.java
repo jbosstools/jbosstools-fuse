@@ -514,7 +514,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
 			Boolean b = false;
 			if(camelModelElement != null && camelModelElement.getParameter(p.getName()) != null){
-				b = (Boolean)camelModelElement.getParameter(p.getName());
+				Object paramValue = camelModelElement.getParameter(p.getName());
+				if (paramValue instanceof String) {
+					b = Boolean.valueOf((String) paramValue);
+				} else {
+					b = (Boolean) paramValue;
+				}
 			} else if(parameterContainer != null){
 				b = Boolean.parseBoolean(parameterContainer.getParameter(p.getName()).getDefaultValue());
 			}
@@ -541,7 +546,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
 				}
 			}
-			Text txtField = getWidgetFactory().createText(parent, initialTextValue, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+			Text txtField = getWidgetFactory().createText(parent, initialTextValue, SWT.SINGLE | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
@@ -560,7 +565,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	    	} else if(parameterContainer != null){
 	    		initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
 	    	}
-			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.RIGHT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
@@ -588,7 +593,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			} else if (parameterContainer != null) {
 				initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
 			}
-			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
