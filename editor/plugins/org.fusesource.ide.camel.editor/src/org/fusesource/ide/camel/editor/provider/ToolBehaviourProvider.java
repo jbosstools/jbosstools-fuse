@@ -560,12 +560,22 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		PictogramElement pe = ga.getPictogramElement();
 		Object bo = getFeatureProvider().getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractCamelModelElement) {
-			String name = ((AbstractCamelModelElement) bo).getDisplayText(); // getDisplayToolTip();
-			if (name != null && !name.isEmpty()) {
-				return name;
-			}
+			return getTooltip((AbstractCamelModelElement) bo);
 		}
 		return (String) super.getToolTip(ga);
+	}
+
+	/**
+	 * @param cme
+	 * @return
+	 */
+	String getTooltip(AbstractCamelModelElement cme) {
+		String description = cme.getDescription();
+		if (!Strings.isBlank(description)) {
+			return description;
+		} else {
+			return cme.getDisplayText();
+		}
 	}
 
 	/*
