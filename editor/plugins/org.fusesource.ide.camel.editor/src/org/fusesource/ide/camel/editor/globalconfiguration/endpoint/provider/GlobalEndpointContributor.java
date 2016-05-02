@@ -25,7 +25,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -51,8 +50,8 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#modifyGlobalElement(org.w3c.dom.Document)
 	 */
 	@Override
-	public GlobalConfigurationTypeWizard modifyGlobalElement(Document document) {
-		// TODO Auto-generated method stub
+	public GlobalConfigurationTypeWizard modifyGlobalElement(CamelFile camelFile) {
+		// It is redirected to Properties view
 		return null;
 	}
 	

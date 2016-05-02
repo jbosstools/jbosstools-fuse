@@ -22,7 +22,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -45,7 +44,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#modifyGlobalElement(org.w3c.dom.Document)
 	 */
 	@Override
-	public GlobalConfigurationTypeWizard modifyGlobalElement(Document document) {
+	public GlobalConfigurationTypeWizard modifyGlobalElement(CamelFile camelFile) {
+		// It is redirected to Properties view
 		return null;
 	}
 	

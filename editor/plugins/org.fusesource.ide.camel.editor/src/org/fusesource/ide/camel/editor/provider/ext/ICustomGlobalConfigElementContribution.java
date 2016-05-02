@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -54,12 +53,12 @@ public interface ICustomGlobalConfigElementContribution {
 	 * implementors code to change the XML element given as parameter. If no
 	 * wizard provided, the edit action will put focus on Properties view.
 	 * 
-	 * @param document
-	 *            a reference to the camel context xml document to be used for
-	 *            creating dom nodes / elements
+	 * @param camelFile
+	 *            a reference to the camel file providing the context on which
+	 *            global elements will be created
 	 * @return true if changed by user or false if canceled modifying
 	 */
-	GlobalConfigurationTypeWizard modifyGlobalElement(Document document);
+	GlobalConfigurationTypeWizard modifyGlobalElement(CamelFile camelFile);
 	
 	/**
 	 * this method is invoked if the user deleted a global element from the

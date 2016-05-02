@@ -592,7 +592,13 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 							switch (item.getContributor().getGlobalConfigElementType()) {
 							case GLOBAL_ELEMENT:
 								String id = ((Element) newXMLNode).getAttribute("id");
-								cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
+								if (cf.getGlobalDefinitions().containsKey(id)) {
+									cf.updateGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
+								} else {
+									cf.addGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
+								}
+								reload();
+								treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
 								break;
 							case CONTEXT_DATAFORMAT:
 								final CamelBasicModelElement newDataFormat = addDataFormat(cf, (Element) newXMLNode);
@@ -671,7 +677,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			Element modElem = o instanceof Element ? (Element)o : o instanceof AbstractCamelModelElement ? (Element)((AbstractCamelModelElement)o).getXmlNode() : null; 
 			ICustomGlobalConfigElementContribution extHandler = getExtensionForElement(modElem);
 			if (extHandler != null) {
-				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel().getDocument());
+				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel());
 				if (wizard == null) {
 					try {
 						new ShowPropertiesViewHandler().execute(null);
@@ -695,7 +701,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						case CONTEXT_ENDPOINT:		AbstractCamelModelElement cme = (AbstractCamelModelElement)o;
 							cme.initialize();
 							break;
-						case GLOBAL_ELEMENT:		
+						case GLOBAL_ELEMENT:
+							String id = ((Element) newXMLNode).getAttribute("id");
+							CamelFile cf = parentEditor.getDesignEditor().getModel();
+							cf.updateGlobalDefinition(Strings.isBlank(id) ? UUID.randomUUID().toString() : id, newXMLNode);
+							reload();
+							treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
 						default:					// nothing to do - handled via node events
 							break;
 						}
