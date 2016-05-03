@@ -29,6 +29,12 @@ import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
@@ -42,6 +48,8 @@ import org.xml.sax.InputSource;
  * @author lhein
  */
 public class CamelUtils {
+	
+	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	
 	private static FindNamespaceHandlerSupport blueprintXmlMatcher = new BlueprintNamespaceHandler();
 	private static FindNamespaceHandlerSupport springXmlMatcher = new SpringNamespaceHandler();
@@ -182,5 +190,59 @@ public class CamelUtils {
 			});
 		}
 		return files;
+	}
+	
+	/**
+	 * retrieves the camel design editor
+	 * 
+	 * @return
+	 */
+	public static IEditorPart getDiagramEditor() {
+		IWorkbench wb = PlatformUI.getWorkbench();
+		if (wb != null) {
+			IWorkbenchWindow wbw = wb.getActiveWorkbenchWindow();
+			if (wbw != null) {
+				IWorkbenchPage page = wbw.getActivePage();
+				if (page != null && page.getActiveEditor() != null) {
+					IEditorReference[] refs = page.getEditorReferences();
+					for (IEditorReference ref : refs) {
+						// we need to check if the id of the editor ref matches our editor id
+						// and also if the active editor is equal to the ref editor otherwise we might pick
+						// a wrong editor and return it...bad thing
+						if (ref.getId().equals(CAMEL_EDITOR_ID) && 
+							page.getActiveEditor().equals(ref.getEditor(false))) {
+							// ok, we found a route editor and it is also the acitve editor
+							return ref.getEditor(true);
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * tries to figure out the used project
+	 * 
+	 * @return
+	 */
+	public static IProject getCurrentProject() {
+		IEditorPart ep = getDiagramEditor();
+		if (ep != null) {
+			IProject wsProject = null;			
+			try {
+				Object designEditor = ep.getClass().getMethod("getDesignEditor", null).invoke(ep, null);
+				if (designEditor != null) {
+					Object prj = designEditor.getClass().getMethod("getWorkspaceProject", null).invoke(designEditor, null);
+					if (prj != null && prj instanceof IProject) {
+						wsProject = (IProject)prj;
+						return wsProject;
+					}
+				}
+			} catch (Exception ex) {
+				FoundationCoreActivator.pluginLog().logError("Unable to retrieve the currently opened project.", ex);
+			}
+		}
+		return null;
 	}
 }
