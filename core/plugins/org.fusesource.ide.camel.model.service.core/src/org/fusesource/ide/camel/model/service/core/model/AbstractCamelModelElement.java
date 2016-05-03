@@ -626,22 +626,6 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	/**
-	 * 
-	 */
-	private void removePossibleDataFormatsInFavorToREF() {
-		if (getUnderlyingMetaModelObject() != null) {
-			for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
-				if (isElementKind(p) && isDataFormatDefinition(p)) {
-					if (getParameter(p.getName()) != null) {
-						removeParameter(p.getName());
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * sets the parameter with the given name to the given value. If the
 	 * parameter doesn't exist it will be created
 	 * 
@@ -666,12 +650,6 @@ public abstract class AbstractCamelModelElement {
 
 		// save param in internal map
 		this.parameters.put(name, value);
-		
-		if (value instanceof AbstractCamelModelElement && getParameter("ref") != null) {
-			removeParameter("ref");
-		} else if (name.equalsIgnoreCase("ref")) {
-			removePossibleDataFormatsInFavorToREF();
-		}
 
 		Element e = (Element) getXmlNode();
 		if (e == null)
@@ -1228,7 +1206,7 @@ public abstract class AbstractCamelModelElement {
 	 * @param param
 	 * @return
 	 */
-	private boolean isElementKind(Parameter param) {
+	public boolean isElementKind(Parameter param) {
 		return param.getKind().equalsIgnoreCase("element");
 	}
 
@@ -1244,7 +1222,7 @@ public abstract class AbstractCamelModelElement {
 	 * @param param
 	 * @return
 	 */
-	private boolean isDataFormatDefinition(Parameter param) {
+	public boolean isDataFormatDefinition(Parameter param) {
 		return "org.apache.camel.model.DataFormatDefinition".equalsIgnoreCase(param.getJavaType());
 	}
 

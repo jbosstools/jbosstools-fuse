@@ -37,6 +37,7 @@ import org.w3c.dom.Node;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -113,7 +114,7 @@ public class XMLCamelRoutesValidatorIT {
 	}
 
 	@Test
-	public void testValidateUnMarshallNodesMissignChild() throws Exception {
+	public void testValidateUnMarshallNodesMissingChild() throws Exception {
 		CamelFile camelFile = createRouteWithUnMarshalNodeWithNoChild();
 		Mockito.doReturn("myNodeName").when(xmlNode).getNodeName();
 		Mockito.doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
@@ -171,6 +172,43 @@ public class XMLCamelRoutesValidatorIT {
 		CamelBasicModelElement jaxBElement = new CamelBasicModelElement(unmarshall, jaxbXmlNode);
 		jaxBElement.setXmlNode(jaxbXmlNode);
 		unmarshall.setParameter("dataFormatType", jaxBElement);
+		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+
+		unmarshall.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("unmarshal"));
+		unmarshall.setParent(route);
+
+		route.addChildElement(unmarshall);
+		return camelFile;
+	}
+
+	@Test
+	public void testValidateUnMarshallNodesWithRefSettedReturnsError() throws Exception {
+		CamelFile camelFile = createRouteWithUnMarshalNodeWithrefAlsoSet();
+		Mockito.doReturn("myNodeName").when(xmlNode).getNodeName();
+		Mockito.doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
+		Mockito.doReturn(marker).when(resource).createMarker(Mockito.anyString());
+		Mockito.doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
+		ValidationEvent event = new ValidationEvent(resource, IResourceDelta.CHANGED, null);
+		ValidationState state = new ValidationState();
+
+		final ValidationResult validationResult = xmlCamelRoutesValidator.validate(event, state, monitor);
+
+		Assertions.assertThat(validationResult.getSeverityError()).isEqualTo(2);
+		Mockito.verify(resource, times(2)).createMarker(Mockito.anyString());
+	}
+
+	private CamelFile createRouteWithUnMarshalNodeWithrefAlsoSet() {
+		CamelFile camelFile = new CamelFile(resource);
+		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
+		camelFile.addChildElement(route);
+		CamelBasicModelElement unmarshall = new CamelBasicModelElement(route, null);
+		doReturn("unmarshal").when(unmarshalNode).getNodeName();
+		unmarshall.setXmlNode(unmarshalNode);
+		doReturn("jaxb").when(jaxbXmlNode).getNodeName();
+		CamelBasicModelElement jaxBElement = new CamelBasicModelElement(unmarshall, jaxbXmlNode);
+		jaxBElement.setXmlNode(jaxbXmlNode);
+		unmarshall.setParameter("dataFormatType", jaxBElement);
+		unmarshall.setParameter("ref", "aRefValue");
 		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
 
 		unmarshall.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("unmarshal"));
