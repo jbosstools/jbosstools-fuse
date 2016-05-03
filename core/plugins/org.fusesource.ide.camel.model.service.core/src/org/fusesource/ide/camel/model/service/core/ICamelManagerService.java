@@ -100,4 +100,13 @@ public interface ICamelManagerService {
 	 * @return	null if test ok otherwise the exception text
 	 */
 	String testExpression(String language, String expression);
+	
+	/**
+	 * tests a duration string and returns the amount of millis
+	 *  
+	 * @param duration	the duration string like 10h(ours)5m(inutes)30s(econds)
+	 * @return	the value in milliseconds
+	 * @throws IllegalArgumentException	if the string is invalid
+	 */
+	long durationToMillis(String duration) throws IllegalArgumentException;
 }

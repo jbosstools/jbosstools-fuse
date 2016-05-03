@@ -123,4 +123,12 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
 			throws URISyntaxException {
 		return checkedGetService().createEndpointXml(scheme, properties, encode);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#durationToMillis(java.lang.String)
+	 */
+	@Override
+	public long durationToMillis(String duration) throws IllegalArgumentException {
+		return checkedGetService().durationToMillis(duration);
+	}
 }

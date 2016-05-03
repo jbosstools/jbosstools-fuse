@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.utils;
 
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -47,27 +48,9 @@ public class CamelUtils {
 	 * @return
 	 */
 	public static CamelDesignEditor getDiagramEditor() {
-		IWorkbench wb = PlatformUI.getWorkbench();
-		if (wb != null) {
-			IWorkbenchWindow wbw = wb.getActiveWorkbenchWindow();
-			if (wbw != null) {
-				IWorkbenchPage page = wbw.getActivePage();
-				if (page != null && page.getActiveEditor() != null) {
-					IEditorReference[] refs = page.getEditorReferences();
-					for (IEditorReference ref : refs) {
-						// we need to check if the id of the editor ref matches our editor id
-						// and also if the active editor is equal to the ref editor otherwise we might pick
-						// a wrong editor and return it...bad thing
-						if (ref.getId().equals(CAMEL_EDITOR_ID) && 
-							page.getActiveEditor().equals(ref.getEditor(false))) {
-							// ok, we found a route editor and it is also the acitve editor
-							CamelEditor ed = (CamelEditor)ref.getEditor(true);
-							// so return it
-							return ed.getDesignEditor();
-						}
-					}
-				}
-			}
+		IEditorPart ep = org.fusesource.ide.foundation.core.util.CamelUtils.getDiagramEditor();
+		if (ep != null && ep instanceof CamelEditor) {
+			return ((CamelEditor)ep).getDesignEditor();
 		}
 		return null;
 	}

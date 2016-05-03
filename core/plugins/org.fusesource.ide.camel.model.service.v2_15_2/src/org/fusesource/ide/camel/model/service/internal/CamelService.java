@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
+import org.apache.camel.converter.TimePatternConverter;
 import org.fusesource.ide.camel.model.service.core.CamelSchemaProvider;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.adopters.CamelModelLoader;
@@ -134,6 +135,14 @@ public class CamelService implements ICamelManagerService {
 			ctx = null;
 		}
 		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#durationToMillis(java.lang.String)
+	 */
+	@Override
+	public long durationToMillis(String duration) throws IllegalArgumentException {
+		return TimePatternConverter.toMilliSeconds(duration);
 	}
 	
 	/**

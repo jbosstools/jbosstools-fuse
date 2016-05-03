@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.l10n.Messages;
 
 /**
@@ -39,13 +40,12 @@ public class NumberValidator implements IValidator {
 		if (CamelComponentUtils.isNumberProperty(parameter)) {
 			if (value != null && value.toString().trim().length() > 0) {
 				try {
-					Double.parseDouble(value.toString());
-				} catch (NumberFormatException ex) {
-					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()));
+					PropertiesUtils.validateDuration(value.toString());
+				} catch (IllegalArgumentException ex) {
+					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()), ex);
 				}
 			}
 		}
 		return ValidationStatus.ok();
 	}
-
 }

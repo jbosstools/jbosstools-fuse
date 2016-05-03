@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.properties.creators;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Text;
@@ -21,8 +23,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -73,5 +73,4 @@ public class NumberParameterPropertyUICreatorIT extends AbstractParameterPropert
 		assertThat(modelMap.get("testParameterName")).isEqualTo("2");
 		assertThat(PropertiesUtils.getTypedPropertyFromUri(camelModelElement, parameter, PropertiesUtils.getComponentFor(camelModelElement))).isEqualTo("2");
 	}
-
 }
