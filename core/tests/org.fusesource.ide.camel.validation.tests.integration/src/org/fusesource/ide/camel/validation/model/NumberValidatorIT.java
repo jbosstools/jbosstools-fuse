@@ -14,7 +14,7 @@ import org.assertj.core.api.Assertions;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.junit.Test;
 
-public class NumberValidatorTest {
+public class NumberValidatorIT {
 
 	@Test
 	public void testValidateOK() throws Exception {
