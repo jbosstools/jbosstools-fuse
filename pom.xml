@@ -169,14 +169,6 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-    <testSourceDirectory>src-test/java</testSourceDirectory>
-    <testResources>
-    	<testResource>
-    		<directory>src-test/resources</directory>
-    	</testResource>
-    </testResources>
-		
-    
     <plugins>
 
       <plugin>
