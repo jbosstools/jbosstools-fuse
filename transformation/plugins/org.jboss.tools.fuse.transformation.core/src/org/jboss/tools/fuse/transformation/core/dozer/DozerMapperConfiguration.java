@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.transformation.core.dozer;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -561,6 +562,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public void saveConfig(final OutputStream output) throws Exception {
         final Marshaller m = getJAXBContext().createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		m.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, DOZER_SCHEMA_LOC);
         m.marshal(mapConfig, output);
     }
