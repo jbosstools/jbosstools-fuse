@@ -26,6 +26,7 @@ import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
@@ -129,16 +130,31 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 */
 	public String addGlobalDefinition(String id, Node def) {
 		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
-		if (usedId != null && this.globalDefinitions.containsKey(usedId)) return null;
-		if (id == null && this.globalDefinitions.containsValue(def)) return null;
-		this.globalDefinitions.put(usedId, def);
-		if (def.getParentNode() == null || def.getParentNode().isEqualNode(getDocument().getDocumentElement()) == false) {
-			getDocument().getDocumentElement().insertBefore(def, getDocument().getDocumentElement().getChildNodes().item(0));	
+		if (usedId != null && globalDefinitions.containsKey(usedId) || id == null && globalDefinitions.containsValue(def)) {
+			return null;
+		}
+		globalDefinitions.put(usedId, def);
+		final Node parentNode = def.getParentNode();
+		final Element documentElement = getDocument().getDocumentElement();
+		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
+			documentElement.insertBefore(def, documentElement.getChildNodes().item(0));
 			fireModelChanged();
 		}		
 		return usedId;
 	}
 	
+	public String updateGlobalDefinition(String id, Node def) {
+		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
+		Node oldDef = globalDefinitions.put(usedId, def);
+		final Node parentNode = def.getParentNode();
+		final Element documentElement = getDocument().getDocumentElement();
+		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
+			documentElement.replaceChild(def, oldDef);
+			fireModelChanged();
+		}
+		return usedId;
+	}
+
 	/**
 	 * removes the global definition from context 
 	 * 
