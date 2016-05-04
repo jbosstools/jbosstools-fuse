@@ -47,6 +47,16 @@ public class CamelModelFactory {
 	}
 	
 	/**
+	 * /!\ Used for Unit testing only
+	 * 
+	 * @param mockedSupportedCamelModels
+	 */
+	@Deprecated
+	public static void initializeModels(HashMap<String, CamelModel> mockedSupportedCamelModels) {
+		supportedCamelModels = mockedSupportedCamelModels;
+	}
+
+	/**
 	 * returns the list of supported camel versions
 	 * 
 	 * @return

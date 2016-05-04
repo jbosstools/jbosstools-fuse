@@ -23,3 +23,4 @@ Bundle-ClassPath: .,
  libs/slf4j-api-1.7.5.jar,
  libs/slf4j-simple-1.7.5.jar
 Service-Component: OSGI-INF/*.xml
+Export-Package: org.fusesource.ide.camel.model.service.internal;x-friends:="org.fusesource.ide.camel.tests.util"
