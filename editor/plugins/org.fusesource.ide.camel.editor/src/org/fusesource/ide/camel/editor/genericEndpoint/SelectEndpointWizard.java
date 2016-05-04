@@ -33,6 +33,7 @@ public class SelectEndpointWizard extends Wizard {
 	 */
 	public SelectEndpointWizard(CamelFile camelFile, ComponentModel componentModel) {
 		this.componentModel = componentModel;
+		setWindowTitle(UIMessages.SelectEndpointWizard_windowTitle);
 	}
 
 	@Override

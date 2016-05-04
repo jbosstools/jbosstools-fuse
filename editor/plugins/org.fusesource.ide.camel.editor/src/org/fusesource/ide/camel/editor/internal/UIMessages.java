@@ -95,6 +95,7 @@ public class UIMessages extends NLS {
 	public static String GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText;
 	public static String SelectEndpointWizard_pageSelectionComponentDescription;
 	public static String SelectEndpointWizard_pageSelectionComponentTitle;
+	public static String SelectEndpointWizard_windowTitle;
 
 	static {
         // initialize resource bundle
