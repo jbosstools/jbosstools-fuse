@@ -35,13 +35,14 @@
   </prerequisites>
 
   <properties>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
     <!-- compiler settings -->
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.3.1.Final</jbtis.version>
+    <jbtis.version>4.4.0.Alpha1-SNAPSHOT</jbtis.version>
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.23.3</jboss-tycho-version>
