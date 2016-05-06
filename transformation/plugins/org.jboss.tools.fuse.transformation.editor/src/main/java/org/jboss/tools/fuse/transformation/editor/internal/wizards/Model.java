@@ -58,6 +58,10 @@ public class Model implements PropertyChangeListener {
     private String sourceClassName;
     private String targetClassName;
 
+    public List<Object> getProjectsAsObjectList() {
+    	return Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    }
+    
     /**
      * @param propertyName
      * @param listener

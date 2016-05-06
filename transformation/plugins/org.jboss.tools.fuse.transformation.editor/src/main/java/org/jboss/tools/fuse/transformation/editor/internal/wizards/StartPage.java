@@ -14,6 +14,7 @@ import java.io.File;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -234,7 +235,7 @@ public class StartPage extends XformWizardPage {
                 iter.remove();
             }
         }
-        _projectCombo.setInput(Properties.selfList(IProject.class).observe(model.projects));
+        _projectCombo.setInput(Properties.selfList(IProject.class).observe(model.getProjectsAsObjectList()));
 
         if (model.getProject() == null) {
             _projectCombo.getCombo().setFocus();
