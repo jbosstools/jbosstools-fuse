@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.core.tests.feature"
+      label="JBoss Fuse Tooling Core Tests Feature"
+      version="8.0.0.qualifier"
+      provider-name="Red Hat"
+      license-feature="org.jboss.tools.foundation.license.feature">
+
+   <description url="http://tools.jboss.org/features/apachecamel.html">
+      This provides Core tests of Jboss Fuse Tooling. Including Utility plugin.
+   </description>
+
+   <copyright url="http://redhat.com/">
+      JBoss, Home of Professional Open Source\nCopyright (c) Red Hat, Inc., and individual contributors as indicated\nby the @authors tag, \
+2006-2016. See the copyright.txt in the distribution\nfor a full listing of individual contributors.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="org.assertj.core" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.12.0" match="greaterOrEqual"/>
+      <import plugin="org.jboss.tools.locus.mockito" version="1.9.5" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.camel.model.service.v2_16_1" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.camel.model.service.core" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.11.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.databinding.observable" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.foundation.core" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.foundation.ui" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.camel.model.service.v2_15_2" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.camel.validation" version="8.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.databinding" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.wst.validation"/>
+      <import plugin="org.eclipse.ui" version="3.107.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.core.tests.integration"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.tests.util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.validation.tests.integration"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.core.feature</module>
+		<module>org.fusesource.ide.core.tests.feature</module>
 	</modules>
 
 </project>

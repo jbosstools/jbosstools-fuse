@@ -6,38 +6,39 @@
    <feature id="org.fusesource.ide.core.feature">
       <category name="AllFeatures"/>
    </feature>
+   <feature id="org.fusesource.ide.core.tests.feature">
+      <category name="AllTests"/>
+   </feature>
+      <feature id="org.fusesource.ide.core.tests.feature.source">
+      <category name="AllTestsSources"/>
+   </feature>
    <feature id="org.fusesource.ide.core.feature.source">
       <category name="AllSources"/>
    </feature>
-
    <feature id="org.fusesource.ide.camel.editor.feature">
       <category name="AllFeatures"/>
    </feature>
    <feature id="org.fusesource.ide.camel.editor.feature.source">
       <category name="AllSources"/>
    </feature>
-
    <feature id="org.fusesource.ide.jmx.feature">
       <category name="AllFeatures"/>
    </feature>
    <feature id="org.fusesource.ide.jmx.feature.source">
       <category name="AllSources"/>
    </feature>
-
    <feature id="org.fusesource.ide.server.extensions.feature">
       <category name="AllFeatures"/>
    </feature>
    <feature id="org.fusesource.ide.server.extensions.feature.source">
       <category name="AllSources"/>
    </feature>
-
    <feature id="org.jboss.tools.fuse.transformation.feature">
       <category name="AllFeatures"/>
    </feature>
    <feature id="org.jboss.tools.fuse.transformation.feature.source">
       <category name="AllSources"/>
    </feature>
-
    <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.
@@ -46,6 +47,16 @@
    <category-def name="AllSources" label="JBoss Fuse Tooling Nightly Build Update Site">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all source features in this build.
+      </description>
+   </category-def>
+   <category-def name="AllTests" label="JBoss Fuse Tooling Nightly Build Update Site">
+      <description>
+         JBoss Fuse Tooling Nightly Build Update Site: contains all tests features in this build.
+      </description>
+   </category-def>
+   <category-def name="AllTestsSources" label="JBoss Fuse Tooling Nightly Build Update Site">
+      <description>
+         JBoss Fuse Tooling Nightly Build Update Site: contains all source test features in this build.
       </description>
    </category-def>
 </site>
