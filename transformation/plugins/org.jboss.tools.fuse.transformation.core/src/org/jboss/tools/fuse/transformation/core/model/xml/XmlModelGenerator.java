@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
@@ -31,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
@@ -45,7 +43,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -142,6 +139,7 @@ public class XmlModelGenerator {
         }
     }
 
+    @SuppressWarnings("resource")
     private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
         final SchemaCompiler sc = XJC.createSchemaCompiler();
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
@@ -160,7 +158,7 @@ public class XmlModelGenerator {
      * @return map with element names as keys and class names as values
      */
     public Map<String, String> elementToClassMapping(JCodeModel model) {
-        Map<String, String> mappings = new HashMap<String, String>();
+        Map<String, String> mappings = new HashMap<>();
         Iterator<JPackage> packageIt = model.packages();
 
         // We need to search through all generated classes of generated packages
@@ -384,7 +382,7 @@ public class XmlModelGenerator {
      * @throws Exception
      */
     public List<QName> getElementsFromSchema(final File schemaFile) throws Exception {
-        List<QName> elements = new LinkedList<QName>();
+        List<QName> elements = new LinkedList<>();
         SchemaCompiler sc = createSchemaCompiler(schemaFile);
         final S2JJAXBModel s2 = sc.bind();
         if (s2 == null) {
