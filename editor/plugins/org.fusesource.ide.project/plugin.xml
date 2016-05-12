@@ -531,10 +531,10 @@
       	<configurator 
         	id="org.fusesource.ide.project.camel.maven.configurator.wtp"
           	class="org.fusesource.ide.project.camel.maven.CamelProjectConfigurator"
-          	name="Camel Configurator" 
+          	name="%configurator.name" 
            	runsAfter="org.eclipse.m2e.jdt.javaConfigurator,org.maven.ide.eclipse.configuration.wtp.configurator?"/>
 	</extension>
- 	
+
  	<extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
  	</extension>
   <extension

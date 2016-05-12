@@ -10,13 +10,20 @@
  ******************************************************************************/
 package org.fusesource.ide.project.camel.maven;
 
+import java.util.Arrays;
+
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
@@ -33,8 +40,10 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
+import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.project.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.project.camel.ICamelFacetDataModelProperties;
+import org.fusesource.ide.project.providers.CamelVirtualFolder;
 import org.jboss.tools.maven.core.IJBossMavenConstants;
 import org.jboss.tools.maven.core.internal.project.facet.MavenFacetInstallDataModelProvider;
 
@@ -68,9 +77,27 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
 		MavenProject mavenProject = request.getMavenProject();
 		IProject project = request.getProject();
+		configureNature(project, mavenProject, monitor);
 		configureInternal(mavenProject, project, monitor);
 	}
 
+	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor) throws CoreException {
+		boolean hasCamelDeps = checkCamelDependencies(m2Project);
+		boolean hasCamelContextXML = false;
+						
+		// now determine if we have camel context files in the project 
+		// (only if we don't have any camel deps already)		
+		if (!hasCamelDeps) {
+			hasCamelContextXML = checkCamelContextsExist(project);
+		}
+		
+		// if we got camel deps and/or camel context files we add the fuse 
+		// camel nature to this project
+		if (hasCamelDeps || hasCamelContextXML) {
+			addFuseNature(project, monitor);
+		}
+	}
+	
 	private void configureInternal(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 
@@ -204,5 +231,90 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	private boolean isKnownFuseGroup(Artifact artifact) {
 		return (artifact.getGroupId().startsWith("org.jboss.quickstarts.fuse."));
+	}
+	
+	/**
+	 * checks whether the pom contains any apache camel dependency
+	 * 
+	 * @param m2Project
+	 * @return
+	 */
+	private boolean checkCamelDependencies(MavenProject m2Project) {
+		for (Dependency dep : m2Project.getDependencies()) {
+			if (dep.getGroupId().equalsIgnoreCase("org.apache.camel") && 
+				dep.getArtifactId().toLowerCase().startsWith("camel-")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checks whether the project contains any camel context xml file
+	 * 
+	 * @param project
+	 * @return
+	 */
+	private boolean checkCamelContextsExist(IProject project) throws CoreException {
+		return findFiles(project);
+	}
+	
+	/**
+	 * adds the fuse camel and java nature to the project if needed
+	 * 
+	 * @param project
+	 */
+	private void addFuseNature(IProject project, IProgressMonitor monitor) throws CoreException {
+		IProjectDescription projectDescription = project.getDescription();
+		String[] ids = projectDescription.getNatureIds();
+
+		boolean javaNatureFound = Arrays.stream(ids).anyMatch(s -> JavaCore.NATURE_ID.equals(s));
+		boolean camelNatureFound = Arrays.stream(ids).anyMatch(s -> RiderProjectNature.NATURE_ID.equals(s));
+
+		int toAdd = 0;
+		if (!camelNatureFound) {
+			toAdd++;
+		}
+		if (!javaNatureFound) {
+			toAdd++;
+		}
+		String[] newIds = new String[ids.length + toAdd];
+		System.arraycopy(ids, 0, newIds, 0, ids.length);
+		if (!camelNatureFound && !javaNatureFound) {
+			newIds[ids.length] = RiderProjectNature.NATURE_ID;
+			newIds[newIds.length - 1] = JavaCore.NATURE_ID;
+		} else if (!camelNatureFound) {
+			newIds[ids.length] = RiderProjectNature.NATURE_ID;
+		} else if (!javaNatureFound) {
+			newIds[ids.length] = JavaCore.NATURE_ID;
+		}
+		projectDescription.setNatureIds(newIds);
+		project.setDescription(projectDescription, monitor);
+
+		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+	}
+	
+	private boolean findFiles(IResource resource) throws CoreException {
+		if (resource instanceof IContainer ) {
+			IResource[] children = ((IContainer)resource).members();
+			for (IResource f : children) {
+				if (f instanceof IContainer) {
+					boolean found = findFiles(f);
+					if (found) return true;
+				} else {
+					IFile ifile = (IFile)f;
+					if (ifile != null) {
+						if (ifile.getContentDescription() != null && 
+							ifile.getContentDescription()
+							  	 .getContentType()
+								 .getId()
+								 .equals(CamelVirtualFolder.FUSE_CAMEL_CONTENT_TYPE)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
