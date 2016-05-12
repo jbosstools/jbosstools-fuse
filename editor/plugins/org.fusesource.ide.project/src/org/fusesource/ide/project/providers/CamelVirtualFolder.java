@@ -39,7 +39,7 @@ import org.fusesource.ide.project.Activator;
 public class CamelVirtualFolder implements ContextMenuProvider {
 	
 	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
-	private static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
+	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
 	
 	private IProject project;
 	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
