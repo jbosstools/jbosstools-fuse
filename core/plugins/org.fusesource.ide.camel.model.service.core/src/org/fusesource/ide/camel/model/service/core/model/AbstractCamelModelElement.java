@@ -1447,7 +1447,9 @@ public abstract class AbstractCamelModelElement {
 						}
 					}
 				} else {
-					scheme = u.substring(0, u.indexOf(":"));
+					if (u.indexOf(":") != -1) {
+						scheme = u.substring(0, u.indexOf(":"));
+					}
 				}
 				return scheme;
 			}
