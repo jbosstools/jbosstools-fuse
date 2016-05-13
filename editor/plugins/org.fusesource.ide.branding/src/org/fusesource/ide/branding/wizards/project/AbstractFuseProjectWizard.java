@@ -71,9 +71,9 @@ public abstract class AbstractFuseProjectWizard extends Wizard {
 		Activator.getLogger().debug("Done!");
 	}
 	
-	protected void createProject(final ArchetypeDetails archetype, File outputDir,String packageName) throws IOException {
+	protected void createProject(final ArchetypeDetails archetype, File outputDir,String packageName, String groupId, String artifactId, String version) throws IOException {
 		createProject(archetype.getResource().openStream()/*this is closed in ArchetypeHelper - existing behavior*/,
-				outputDir, archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(), packageName,
+				outputDir, groupId, artifactId, version, packageName,
 				archetype.getRequiredProperties());
 	}
 }

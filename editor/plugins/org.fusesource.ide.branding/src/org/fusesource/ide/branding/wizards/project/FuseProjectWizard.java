@@ -270,7 +270,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					 * IFiles.toFile(projectDir);
 					 */
 
-					createProject(archetype, outputDir,javaPackage);
+					createProject(archetype, outputDir,javaPackage, groupId, artifactId, version);
 
 					final IProject project = root.getProject(projectName);
 
