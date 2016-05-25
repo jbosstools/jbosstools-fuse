@@ -76,7 +76,7 @@ public class EndpointNode extends NodeSupport implements IExchangeBrowser, Messa
 
 	@Override
 	public List<IExchange> browseExchanges() {
-		List<IExchange> answer = new ArrayList<IExchange>();
+		List<IExchange> answer = new ArrayList<>();
 		if (endpointMBean instanceof CamelBrowsableEndpointMBean) {
 			CamelBrowsableEndpointMBean browsable = (CamelBrowsableEndpointMBean) endpointMBean;
 			long size = browsable.queueSize();

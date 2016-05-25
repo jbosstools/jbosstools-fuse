@@ -102,7 +102,7 @@ public class BundlesTabSection extends BundlesTableView {
         getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
-                HashSet<String> states = new HashSet<String>(getSelectedBundleIDStates().values());
+				Set<String> states = new HashSet<>(getSelectedBundleIDStates().values());
 
                 startBundleAction.setEnabled(!states.isEmpty() && !states.contains("ACTIVE"));
                 stopBundleAction.setEnabled(!states.isEmpty() && states.contains("ACTIVE"));
@@ -123,7 +123,7 @@ public class BundlesTabSection extends BundlesTableView {
             current.getFacade().removeBundleStateNotificationListener(notificationListener, null, null);
         }
         current = bundles;
-        List<?> propertySources = bundles == null ? Collections.emptyList() : bundles.getPropertySourceList();
+		List<IPropertySource> propertySources = bundles == null ? Collections.emptyList() : bundles.getPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);
         recreateColumns();
@@ -233,7 +233,7 @@ public class BundlesTabSection extends BundlesTableView {
         TableViewer viewer = getViewer();
         if (viewer != null) {
             List<?> propertySources = getPropertySources();
-            List<Object> selected = new ArrayList<Object>();
+			List<Object> selected = new ArrayList<>();
             for (Object object : propertySources) {
                 if (object instanceof IPropertySource) {
                     BundleStateFacade bundleState = new BundleStateFacade((IPropertySource) object);
@@ -264,7 +264,7 @@ public class BundlesTabSection extends BundlesTableView {
     }
 
     protected Map<Long, String> getSelectedBundleIDStates() {
-        Map<Long, String> answer = new HashMap<Long, String>();
+		Map<Long, String> answer = new HashMap<>();
         IStructuredSelection selection = Selections.getStructuredSelection(getViewer());
         if (selection != null) {
             Iterator<?> iter = selection.iterator();

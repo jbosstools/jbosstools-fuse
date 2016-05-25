@@ -29,7 +29,6 @@ import org.eclipse.jface.viewers.ViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -65,8 +64,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	private Action refreshAction;
 	private Action chartAction;
 	private Action doubleClickAction;
-	private List<Function1> functions = new ArrayList<Function1>();
-	private Menu menu;
+	private List<Function1<?, ?>> functions = new ArrayList<>();
 	private IPageSite pageSite;
 	private TableConfiguration configuration;
 	private boolean showChartingOptions;
@@ -75,8 +73,8 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	private ConfigureColumnsAction configureColumnsAction;
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 	private IChangeListener changeListener;
-	private List<Object> localMenuActions = new ArrayList<Object>();
-	private List<Object> toolBarActions = new ArrayList<Object>();
+	private List<Object> localMenuActions = new ArrayList<>();
+	private List<Object> toolBarActions = new ArrayList<>();
 
 	public ColumnViewSupport() {
 		super();
@@ -126,12 +124,9 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	}
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setActionBars(IActionBars actionBars) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -267,14 +262,10 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 
 	@Override
 	public void updateColumnConfiguration(TableConfiguration configuration) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public abstract ColumnViewer getViewer();
@@ -381,7 +372,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 		return actionBars;
 	}
 
-	protected void addFunction(Function1 function) {
+	protected void addFunction(Function1<?, ?> function) {
 		functions.add(function);
 	}
 

@@ -52,12 +52,12 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 
 	public static final String ID = "org.fusesource.ide.fabric.views.PropertySourceTableView";
 
-	private List propertySources = new ArrayList();
+	private List<IPropertySource> propertySources = new ArrayList<>();
 
 	private final String viewId;
 	private Object input;
 
-	private Object exemplar;
+	private IPropertySource exemplar;
 
 	public PropertySourceTableView(String viewId) {
 		this.viewId = viewId;
@@ -72,11 +72,11 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 		}
 	}
 
-	public List getPropertySources() {
+	public List<IPropertySource> getPropertySources() {
 		return propertySources;
 	}
 
-	public void setPropertySources(List propertySources) {
+	public void setPropertySources(List<IPropertySource> propertySources) {
 		this.propertySources = propertySources;
 		setInput(propertySources);
 	}
@@ -85,7 +85,7 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 		return exemplar;
 	}
 
-	public void setExemplar(Object exemplar) {
+	public void setExemplar(IPropertySource exemplar) {
 		this.exemplar = exemplar;
 	}
 
@@ -120,14 +120,10 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void setActionBars(IActionBars actionBars) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -136,9 +132,9 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 		int column = 0;
 		clearColumns();
 
-		List list = propertySources;
+		List<IPropertySource> list = propertySources;
 		if (list.isEmpty() && exemplar != null) {
-			list = new ArrayList();
+			list = new ArrayList<>();
 			list.add(exemplar);
 		}
 
@@ -171,7 +167,7 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 			}
 		}
 		else {
-			SortedMap<String, Function1> headers = new TreeMap<String, Function1>();
+			SortedMap<String, Function1<?, ?>> headers = new TreeMap<>();
 			for (Object object : list) {
 				final IPropertySource propertySource = PropertySources.asPropertySource(object);
 				IPropertyDescriptor[] descriptors = propertySource.getPropertyDescriptors();
@@ -200,14 +196,14 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 			}
 			int idx = 0;
 			boolean pickedSortColumn = false;
-			Set<Entry<String, Function1>> entrySet = headers.entrySet();
-			for (Entry<String, Function1> entry : entrySet) {
+			Set<Entry<String, Function1<?, ?>>> entrySet = headers.entrySet();
+			for (Entry<String, Function1<?, ?>> entry : entrySet) {
 				String header = entry.getKey();
 				if (!pickedSortColumn && isDefaultSortColumn(header)) {
 					setDefaultSortColumnIndex(idx);
 					pickedSortColumn = true;
 				}
-				Function1 function = entry.getValue();
+				Function1<?, ?> function = entry.getValue();
 				addFunction(function);
 				TableViewerColumn col = createTableViewerColumn(header, bounds, column++);
 				col.setLabelProvider(createColumnLabelProvider(header, function));
@@ -216,7 +212,7 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 		}
 	}
 
-	protected CellLabelProvider createColumnLabelProvider(String header, Function1 function) {
+	protected CellLabelProvider createColumnLabelProvider(String header, Function1<?, ?> function) {
 		return new FunctionColumnLabelProvider(function);
 	}
 

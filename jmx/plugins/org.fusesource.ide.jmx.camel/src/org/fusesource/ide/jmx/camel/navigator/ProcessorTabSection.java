@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableView;
 import org.fusesource.ide.foundation.ui.util.Selections;
 
@@ -38,7 +39,7 @@ public class ProcessorTabSection extends PropertySourceTableView {
             setConfiguration(null);
         }
         current = processor;
-        List<?> propertySources = processor == null ? Collections.emptyList() : processor
+		List<IPropertySource> propertySources = processor == null ? Collections.emptyList() : processor
                 .getAllProcessorsPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);

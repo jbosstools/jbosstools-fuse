@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableView;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.foundation.ui.util.Selections;
@@ -39,7 +40,7 @@ public class ContentsTabSection extends PropertySourceTableView {
             setConfiguration(null);
         }
         current = node;
-        List<?> propertySources = node == null ? Collections.emptyList() : node.getPropertySourceList();
+		List<IPropertySource> propertySources = node == null ? Collections.emptyList() : node.getPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);
         recreateColumns();

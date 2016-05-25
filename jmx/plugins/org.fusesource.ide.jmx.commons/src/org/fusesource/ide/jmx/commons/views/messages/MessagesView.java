@@ -48,7 +48,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	public static final String ID = "org.fusesource.ide.fabric.views.MessagesView";
 
 	IExchangeBrowser browser;
-	List<IExchange> exchanges = new ArrayList<IExchange>();
+	List<IExchange> exchanges = new ArrayList<>();
 
 	private boolean showBody = true;
 	private boolean showTimestamp = true;

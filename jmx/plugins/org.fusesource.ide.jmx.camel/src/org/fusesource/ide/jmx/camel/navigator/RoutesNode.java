@@ -23,8 +23,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
@@ -153,7 +153,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 	}
 
 	public List<IPropertySource> getAllProcessorsPropertySourceList() {
-		List<IPropertySource> answer = new ArrayList<IPropertySource>();
+		List<IPropertySource> answer = new ArrayList<>();
 		Node[] children = getChildren();
 		for (Node node : children) {
 			if (node instanceof ProcessorNodeSupport) {

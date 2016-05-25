@@ -72,7 +72,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 	@Override
 	public List<String> getColumns() {
 		if (columnNames == null) {
-			columnNames = new ArrayList<String>();
+			columnNames = new ArrayList<>();
 			if (viewer != null) {
 				Table table = viewer.getTable();
 				if (table != null) {
@@ -133,10 +133,8 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 		}
 		inner.setLayout(layout);
 
-		if (useNestedComposite) {
-			if (parentLayout instanceof GridLayout) {
-				inner.setLayoutData(new GridData(GridData.FILL_BOTH));
-			} // else nothing to do...
+		if (useNestedComposite && parentLayout instanceof GridLayout) {
+			inner.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 
 		if (isShowSearchBox()) {
@@ -236,10 +234,10 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 			return;
 		}
 
-		Map<String,TableColumn> columnMap = new HashMap<String,TableColumn>();
-		Map<String,Integer> columnIndexes = new HashMap<String,Integer>();
-		List<String> columnNameOrderList = new ArrayList<String>();
-		List<Integer> columnOrderList = new ArrayList<Integer>();
+		Map<String, TableColumn> columnMap = new HashMap<>();
+		Map<String, Integer> columnIndexes = new HashMap<>();
+		List<String> columnNameOrderList = new ArrayList<>();
+		List<Integer> columnOrderList = new ArrayList<>();
 		TableColumn[] columnArray = Tables.getColumns(table);
 		for (int i = 0, size = columnArray.length; i < size; i++) {
 			TableColumn column = columnArray[i];
@@ -279,7 +277,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 
 		// now lets update the column indices as we may have disposed of some
 		columnArray = table.getColumns();
-		Map<String,Integer> indexMap = new HashMap<String,Integer>();
+		Map<String, Integer> indexMap = new HashMap<>();
 		for (int i = 0, size = columnArray.length; i < size; i++) {
 			TableColumn column = columnArray[i];
 			String name = column.getText();
@@ -374,7 +372,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 	}
 
 	protected SelectionAdapter getSelectionAdapter(final TableColumn column, final int index) {
-		SelectionAdapter selectionAdapter = new SelectionAdapter() {
+		return new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				comparator.setColumn(index);
@@ -383,7 +381,6 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 					if (viewer.getTable().getSortColumn() == column) {
 						dir = dir == SWT.UP ? SWT.DOWN : SWT.UP;
 					} else {
-
 						dir = SWT.DOWN;
 					}
 					viewer.getTable().setSortDirection(dir);
@@ -392,9 +389,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 				}
 			}
 		};
-		return selectionAdapter;
 	}
-
 
 	public ColumnFunctionComparator getComparator() {
 		return comparator;
@@ -426,7 +421,5 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 	public void setShowSearchBox(boolean showSearchBox) {
 		this.showSearchBox = showSearchBox;
 	}
-
-
 
 }

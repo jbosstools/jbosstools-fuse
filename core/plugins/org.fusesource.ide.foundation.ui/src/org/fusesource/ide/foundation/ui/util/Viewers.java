@@ -23,9 +23,13 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Tree;
 
 
 public class Viewers {
+
+	private Viewers() {
+	}
 
 	public static Viewer getViewer(Object object) {
 		if (object instanceof Viewer) {
@@ -54,8 +58,9 @@ public class Viewers {
 					viewer.refresh();
 					Control control = viewer.getControl();
 					if (control instanceof Table) {
-						Table table = (Table) control;
-						table.showSelection();
+						((Table) control).showSelection();
+					} else if (control instanceof Tree) {
+						((Tree) control).showSelection();
 					}
 				}
 			}
@@ -79,13 +84,7 @@ public class Viewers {
 
 
 	public static void refreshAsync(final Viewer viewer) {
-		async(new Runnable() {
-
-			@Override
-			public void run() {
-				refresh(viewer);
-			}
-		});
+		async(() -> refresh(viewer));
 	}
 
 	/**
@@ -134,7 +133,7 @@ public class Viewers {
 		if (viewer instanceof AbstractTreeViewer) {
 			final AbstractTreeViewer cv = (AbstractTreeViewer) viewer;
 			Object[] expandedElements = cv.getExpandedElements();
-			List<Object> list = new ArrayList<Object>();
+			List<Object> list = new ArrayList<>();
 			if (expandedElements != null) {
 				list.addAll(Arrays.asList(expandedElements));
 			}
