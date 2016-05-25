@@ -51,9 +51,9 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
     private TreeViewer listViewer;
 
     // sizing constants
-    private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
+	private static final int SIZING_SELECTION_WIDGET_HEIGHT = 250;
 
-    private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
+	private static final int SIZING_SELECTION_WIDGET_WIDTH = 300;
 	
 	/**
 	 * @param parentShell
@@ -74,10 +74,6 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
         this.labelProvider = labelProvider;
 	}
 	
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
-     */
     @Override
 	protected Control createDialogArea(Composite parent) {
         // page group
@@ -92,6 +88,7 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
         data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
         data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
         listViewer.getTree().setLayoutData(data);
+		listViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
         listViewer.getTree().setHeaderVisible(false);
         listViewer.getTree().setLinesVisible(false);
