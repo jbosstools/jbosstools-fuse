@@ -12,6 +12,7 @@ package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -30,7 +31,7 @@ import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
 public class CamelHeadersValue extends BaseCamelValue {
 	
 	private CamelHeadersVariable parent;
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private List<IVariable> fVariables = new ArrayList<>();
 	private List<? extends IBacklogTracerHeader> headers;
 	private CamelDebugTarget debugTarget;
 	
@@ -42,12 +43,12 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 * @param msg
 	 */
 	public CamelHeadersValue(CamelDebugTarget debugTarget, List<? extends IBacklogTracerHeader> headers, Class<?> type, CamelHeadersVariable parent) {
-		super(debugTarget, "" + headers.hashCode(), type);
+		super(debugTarget, headers != null ? Integer.toString(headers.hashCode()) : "", type);
 		this.parent = parent;
 		this.debugTarget = debugTarget;
 		this.headers = headers;
 		if (this.headers == null)
-			this.headers = new ArrayList<IBacklogTracerHeader>();
+			this.headers = new ArrayList<>();
 		try {
 			initHeaders();
 		} catch (DebugException ex) {
@@ -59,12 +60,9 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 * initialize variables
 	 */
 	private void initHeaders() throws DebugException {
-		BaseCamelVariable var = null;
-		BaseCamelValue val = null;
-
 		for (IBacklogTracerHeader h : this.headers) {
-			var = new CamelHeaderVariable(this.debugTarget, h.getKey(), String.class, parent);
-			val = new CamelHeaderValue(this.fTarget, h, var.getReferenceType());
+			BaseCamelVariable var = new CamelHeaderVariable(this.debugTarget, h.getKey(), String.class, parent);
+			BaseCamelValue val = new CamelHeaderValue(this.fTarget, h, var.getReferenceType());
 			var.setValue(val);
 			this.fVariables.add(var);
 		}
@@ -114,40 +112,23 @@ public class CamelHeadersValue extends BaseCamelValue {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#hasVariables()
-	 */
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.size()>0;
+		return !this.fVariables.isEmpty();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariables()
-	 */
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		return this.fVariables.toArray(new IVariable[this.fVariables.size()]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariableDisplayString()
-	 */
 	@Override
 	protected String getVariableDisplayString() {
 		return "MessageHeaders";
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getValueString()
-	 */
 	@Override
 	public String getValueString() throws DebugException {
-		StringBuffer sb = new StringBuffer();
-		for (IVariable v : this.fVariables) {
-			sb.append(v.toString());
-			sb.append("\n");
-		}
-		return sb.toString();
+		return fVariables.stream().map(v -> v.toString()).collect(Collectors.joining("\n"));
 	}
 }

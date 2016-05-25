@@ -66,10 +66,8 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 	}
 	
 	private String getPassword(ILaunchConfiguration configuration) {
-		String s = SecureStorageUtil.getFromSecureStorage(Activator.getBundleID(), 
-				configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID);
-		if( s == null )	return "";
-		return s;
+		String s = SecureStorageUtil.getFromSecureStorage(Activator.getBundleID(), configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID);
+		return s != null ? s : "";
 	}
 	
 	/**
@@ -91,10 +89,8 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 	}
 	
 	@Override
-	public String getVMArguments(ILaunchConfiguration configuration)
-			throws CoreException {
-
-		StringBuffer sb = new StringBuffer();
+	public String getVMArguments(ILaunchConfiguration configuration) throws CoreException {
+		StringBuilder sb = new StringBuilder();
 		
 		// user configured entries
 		sb.append(" ").append(super.getVMArguments(configuration));

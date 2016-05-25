@@ -12,6 +12,7 @@ package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
@@ -26,7 +27,7 @@ import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 public class CamelExchangeValue extends BaseCamelValue {
 	
 	private BacklogTracerEventMessage exchange;
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private List<IVariable> fVariables = new ArrayList<>();
 	private CamelDebugTarget debugTarget;
 	
 	/**
@@ -51,59 +52,39 @@ public class CamelExchangeValue extends BaseCamelValue {
 	 * initialize variables
 	 */
 	private void initExchange() throws DebugException {
-		BaseCamelVariable var = null;
-		BaseCamelValue val = null;
+		fillfVariables(VARIABLE_NAME_EXCHANGEID, String.class, exchange.getExchangeId());
+		fillfVariables(VARIABLE_NAME_NODEID, String.class, exchange.getToNode());
+		fillfVariables(VARIABLE_NAME_ROUTEID, String.class, exchange.getRouteId());
+		
+		final Date timestamp = exchange.getTimestamp();
+		fillfVariables(VARIABLE_NAME_TIMESTAMP, Date.class, timestamp != null ? String.valueOf(timestamp.getTime()) : null);
 
-		// EXCHANGE ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_EXCHANGEID, String.class);
-		val = new BaseCamelValue(this.fTarget, this.exchange.getExchangeId(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// NODE ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_NODEID, String.class);
-		val = new BaseCamelValue(this.fTarget, this.exchange.getToNode(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// ROUTE ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_ROUTEID, String.class);
-		val = new BaseCamelValue(this.fTarget, this.exchange.getRouteId(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// TIMESTAMP
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_TIMESTAMP, Date.class);
-		val = new BaseCamelValue(this.fTarget, String.valueOf(this.exchange.getTimestamp().getTime()), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-
-		// UID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_UID, String.class);
-		val = new BaseCamelValue(this.fTarget, String.valueOf(this.exchange.getUid()), var.getReferenceType());
+		fillfVariables(VARIABLE_NAME_UID, String.class, String.valueOf(exchange.getUid()));
+	}
+	
+	/**
+	 * @param variableName
+	 * @param class1
+	 * @param value
+	 * @throws DebugException
+	 */
+	private void fillfVariables(String variableName, Class<?> type, String value) throws DebugException {
+		BaseCamelVariable var = new BaseCamelVariable(this.debugTarget, variableName, type);
+		BaseCamelValue val = new BaseCamelValue(this.fTarget, value, var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#hasVariables()
-	 */
+
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.size()>0;
+		return this.fVariables.isEmpty();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariables()
-	 */
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		return this.fVariables.toArray(new IVariable[this.fVariables.size()]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariableDisplayString()
-	 */
 	@Override
 	protected String getVariableDisplayString() {
 		return "CamelExchange";

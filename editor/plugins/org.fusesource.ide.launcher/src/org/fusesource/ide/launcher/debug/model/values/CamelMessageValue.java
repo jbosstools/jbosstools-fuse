@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
@@ -29,7 +30,7 @@ public class CamelMessageValue extends BaseCamelValue {
 	
 	private CamelMessageVariable parent;
 	private IBacklogTracerMessage message;
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private List<IVariable> fVariables = new ArrayList<>();
 	private CamelDebugTarget debugTarget;
 	
 	/**
@@ -39,7 +40,7 @@ public class CamelMessageValue extends BaseCamelValue {
 	 * @param message
 	 * @param type
 	 */
-	public CamelMessageValue(CamelDebugTarget target, IBacklogTracerMessage message, Class type, CamelMessageVariable parent) {
+	public CamelMessageValue(CamelDebugTarget target, IBacklogTracerMessage message, Class<?> type, CamelMessageVariable parent) {
 		super(target, message.getExchangeId(), type);
 		this.parent = parent;
 		this.debugTarget = target;
@@ -55,8 +56,8 @@ public class CamelMessageValue extends BaseCamelValue {
 	 * initialize variables
 	 */
 	private void initMessage() throws DebugException {
-		BaseCamelVariable var = null;
-		BaseCamelValue val = null;
+		BaseCamelVariable var;
+		BaseCamelValue val;
 		
 		// BODY
 		var = new CamelBodyVariable(this.debugTarget, VARIABLE_NAME_MESSAGEBODY, String.class, parent);
@@ -82,7 +83,7 @@ public class CamelMessageValue extends BaseCamelValue {
 	 */
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.size()>0;
+		return !this.fVariables.isEmpty();
 	}
 	
 	/* (non-Javadoc)

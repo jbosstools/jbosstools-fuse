@@ -510,7 +510,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		return basedir.getFile(Path.fromOSString("pom.xml"));		
 	}
 	
-	private void launchCamelContextOnProject(IProject project, String mode){
+	private void launchCamelContextOnProject(IProject project, String mode) {
 		try{
 			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);		
 			if (files.size() == 1) {

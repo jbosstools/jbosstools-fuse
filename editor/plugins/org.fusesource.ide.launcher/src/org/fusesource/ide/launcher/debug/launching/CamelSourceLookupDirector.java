@@ -59,7 +59,7 @@ public class CamelSourceLookupDirector extends AbstractSourceLookupDirector impl
 			LocalFileStorage lfs = (LocalFileStorage)element;
 
 			for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-				IFile f = (IFile)entry.getEditorInput().getAdapter(IFile.class);
+				IFile f = entry.getEditorInput().getAdapter(IFile.class);
 				if (f.getLocation().toFile().getPath().equals(lfs.getFile().getPath())) {
 					input = entry.getEditorInput();
 					break;
@@ -78,7 +78,7 @@ public class CamelSourceLookupDirector extends AbstractSourceLookupDirector impl
 				return new FileEditorInput(sourceFileResolved); 
 			}
 			for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-				IFile f = (IFile)entry.getEditorInput().getAdapter(IFile.class);
+				IFile f = entry.getEditorInput().getAdapter(IFile.class);
 				if (f.getLocation().toFile().getName().equals(sourceFile.getName())) {
 					input = entry.getEditorInput();
 					break;
