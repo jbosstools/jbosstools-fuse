@@ -15,12 +15,16 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.camel.ui.CamelProjectWizard;
 import org.junit.After;
 import org.junit.Before;
@@ -35,6 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CamelProjectWizardIT {
 
 	private String projectName = this.getClass().getName() + "-testProjectCreation";
+	boolean deploymentFinished = false;
+	boolean isDeploymentOk = false;
 
 	@Before
 	public void setup() throws CoreException {
@@ -54,7 +60,7 @@ public class CamelProjectWizardIT {
 	}
 
 	@Test
-	public void testCreateDefaultBlueprintCamelProject() throws Exception {
+	public void testCreateDefaultBlueprintCamelProject() throws InterruptedException {
 		CamelProjectWizard wizard = createAndInitializeWizard();
 
 		assertThat(wizard.performFinish()).isTrue();
@@ -68,6 +74,41 @@ public class CamelProjectWizardIT {
 		// TODO: check that there is no compilation error
 		// TODO: check that there is no validation error
 		// TODO: check that we can run as camel route without error
+		// launchDebug(project); Currently this provided code shows that it
+		// doesn't work. Uncomment when the implementation will be done.
+	}
+
+	/**
+	 * @param project
+	 * @throws InterruptedException
+	 */
+	private void launchDebug(IProject project) throws InterruptedException {
+		final ExecutePomAction executePomAction = new ExecutePomAction();
+
+
+		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
+
+			@Override
+			public void executeOnSuccess() {
+				// TODO: shutdown
+				deploymentFinished = true;
+				isDeploymentOk = true;
+				// fail("deployment success");
+			}
+
+			@Override
+			public void executeOnFailure() {
+				// TODO fail the test
+				deploymentFinished = true;
+				isDeploymentOk = false;
+				// fail("Deployment failed");
+			}
+		});
+		executePomAction.launch(new StructuredSelection(project), ILaunchManager.DEBUG_MODE);
+		while (!deploymentFinished) {
+			Thread.sleep(100);
+		}
+		assertThat(isDeploymentOk).isTrue();
 	}
 
 	private CamelProjectWizard createAndInitializeWizard() {

@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -45,7 +46,7 @@ public class CamelDebugUtils {
 	 * @return	a list of breakpoints which might be empty but never null
 	 */
 	public static IBreakpoint[] getBreakpointsForContext(String fileName, String projectName) {
-		ArrayList<IBreakpoint> breakpointsFound = new ArrayList<IBreakpoint>();
+		List<IBreakpoint> breakpointsFound = new ArrayList<>();
 		final IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
 		for (IBreakpoint breakpoint : breakpoints) {
 			CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint)breakpoint;

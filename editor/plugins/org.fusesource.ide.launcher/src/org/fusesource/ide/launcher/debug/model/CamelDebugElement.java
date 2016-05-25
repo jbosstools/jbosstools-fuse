@@ -42,27 +42,22 @@ public abstract class CamelDebugElement extends DebugElement {
 		fTarget = target;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugElement#getModelIdentifier()
-	 */
+	@Override
 	public String getModelIdentifier() {
 		return ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL;
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugElement#getDebugTarget()
-	 */
+
+	@Override
 	public IDebugTarget getDebugTarget() {
 		return fTarget;
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugElement#getLaunch()
-	 */
+
+	@Override
 	public ILaunch getLaunch() {
 		return getDebugTarget().getLaunch();
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-	 */
+
+	@Override
 	public Object getAdapter(Class adapter) {
 		if (adapter == IDebugElement.class) {
 			return this;

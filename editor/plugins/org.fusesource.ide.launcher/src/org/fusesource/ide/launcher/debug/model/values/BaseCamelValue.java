@@ -40,9 +40,7 @@ public class BaseCamelValue extends CamelDebugElement implements IValue, IVariab
 		this.fType = type;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#getReferenceTypeName()
-	 */
+	@Override
 	public String getReferenceTypeName() throws DebugException {
 		return String.format("%s (id=%d)", getVariableDisplayString(), getVariableIDCode());
 	}
@@ -66,10 +64,7 @@ public class BaseCamelValue extends CamelDebugElement implements IValue, IVariab
 		return this.fType.getName();
 	}
 
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#getValueString()
-	 */
+	@Override
 	public String getValueString() throws DebugException {
 		if (hasVariables()) {
 			// node with children  / composite object
@@ -78,23 +73,17 @@ public class BaseCamelValue extends CamelDebugElement implements IValue, IVariab
 		return this.fValue;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#isAllocated()
-	 */
+	@Override
 	public boolean isAllocated() throws DebugException {
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#getVariables()
-	 */
+	@Override
 	public IVariable[] getVariables() throws DebugException {
 		return new IVariable[0];
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#hasVariables()
-	 */
+	@Override
 	public boolean hasVariables() throws DebugException {
 		return false;
 	}

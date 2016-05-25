@@ -74,9 +74,9 @@ public class CamelSourcePathComputerDelegate implements
 		}
 		
 		// Compute the source path for any java-based debug targets.
-		ISourceContainer javaSourceContainers[] = computeJavaSourceContainers(configuration, monitor);
-		ISourceContainer wsSourceContainers[] = computeWorkspaceSourceContainers(configuration, monitor);		
-		ISourceContainer sourceContainers[] = new ISourceContainer[javaSourceContainers.length + wsSourceContainers.length + 1];
+		ISourceContainer[] javaSourceContainers = computeJavaSourceContainers(configuration, monitor);
+		ISourceContainer[] wsSourceContainers = computeWorkspaceSourceContainers(configuration, monitor);
+		ISourceContainer[] sourceContainers = new ISourceContainer[javaSourceContainers.length + wsSourceContainers.length + 1];
 		
 		System.arraycopy(javaSourceContainers, 0, sourceContainers, 0, javaSourceContainers.length);
 		System.arraycopy(wsSourceContainers, 0, sourceContainers, javaSourceContainers.length, wsSourceContainers.length);
@@ -101,7 +101,7 @@ public class CamelSourcePathComputerDelegate implements
 		IRuntimeClasspathEntry[] unresolvedEntries = JavaRuntime.computeUnresolvedSourceLookupPath(configuration);		
 		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject[] projects = wsRoot.getProjects();			
-		List<IJavaProject> javaProjectList = new ArrayList<IJavaProject>();
+		List<IJavaProject> javaProjectList = new ArrayList<>();
 		
 		processProjects(projects, javaProjectList, monitor);
 
@@ -114,9 +114,7 @@ public class CamelSourcePathComputerDelegate implements
 		System.arraycopy(projectEntries,0,entries,unresolvedEntries.length,projectEntries.length);
 		
 		IRuntimeClasspathEntry[] resolved = JavaRuntime.resolveSourceLookupPath(entries, configuration);
-		ISourceContainer[] javaSourceContainers = JavaRuntime.getSourceContainers(resolved);
-		
-		return javaSourceContainers;		
+		return JavaRuntime.getSourceContainers(resolved);
 	}
 
 	private void processProjects(IProject[] projects, List<IJavaProject> javaProjectList, IProgressMonitor monitor) {

@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
@@ -25,7 +26,7 @@ import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
  */
 public class CamelProcessorValue extends BaseCamelValue {
 	
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private List<IVariable> fVariables = new ArrayList<>();
 	private CamelDebugTarget debugTarget;
 	private CamelStackFrame stackFrame; 
 	private String processorId;
@@ -38,7 +39,7 @@ public class CamelProcessorValue extends BaseCamelValue {
 	 * @param value
 	 * @param type 
 	 */
-	public CamelProcessorValue(CamelDebugTarget target, CamelStackFrame stackFrame, String value, Class type) {
+	public CamelProcessorValue(CamelDebugTarget target, CamelStackFrame stackFrame, String value, Class<?> type) {
 		super(target, value, type);
 		this.debugTarget = target;
 		this.stackFrame = stackFrame;
@@ -54,100 +55,40 @@ public class CamelProcessorValue extends BaseCamelValue {
 	 * initialize variables
 	 */
 	private void init() throws DebugException {
-		BaseCamelVariable var = null;
-		BaseCamelValue val = null;
-		
-		// PROCESSOR ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_ID, String.class);
-		val = new BaseCamelValue(this.fTarget, getValueString(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// ROUTE ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_ROUTE_ID, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getRouteId(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// CAMEL ID
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_CAMEL_ID, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getCamelId(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-
-		// EXCHANGES COMPLETED
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_EXCHANGES_COMPLETED, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getExchangesCompleted(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// EXCHANGES FAILED
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_EXCHANGES_FAILED, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getExchangesFailed(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// TOTAL EXCHANGES
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_EXCHANGES_TOTAL, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getTotalExchanges(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-
-		// REDELIVERIES
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_REDELIVERIES, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getRedeliveries(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// EXTERNAL REDELIVERIES
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_EXTERNAL_REDELIVERIES, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getExternalRedeliveries(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// FAILURES HANDLED
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_FAILURES_HANDLED, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getFailuresHandled(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// LAST PROCESSING TIME
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_LAST_PROCESSING_TIME, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getLastProcessingTime(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-
-		// MIN PROCESSING TIME
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_MIN_PROCESSING_TIME, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getMinProcessingTime(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// MEAN PROCESSING TIME
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_AVG_PROCESSING_TIME, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getMeanProcessingTime(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// MAX PROCESSING TIME
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_MAX_PROCESSING_TIME, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getMaxProcessingTime(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// TOTAL PROCESSING TIME
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_PROCESSOR_TOTAL_PROCESSING_TIME, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getTotalProcessingTime(), var.getReferenceType());
+		fillFVariables(VARIABLE_NAME_PROCESSOR_ID, getValueString());
+		fillFVariables(VARIABLE_NAME_PROCESSOR_ROUTE_ID, getRouteId());
+		fillFVariables(VARIABLE_NAME_PROCESSOR_CAMEL_ID, getCamelId());
+		fillFVariables(VARIABLE_NAME_PROCESSOR_EXCHANGES_COMPLETED, Long.toString(getExchangesCompleted()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_EXCHANGES_FAILED, Long.toString(getExchangesFailed()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_EXCHANGES_TOTAL, Long.toString(getTotalExchanges()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_REDELIVERIES, Long.toString(getRedeliveries()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_EXTERNAL_REDELIVERIES, Long.toString(getExternalRedeliveries()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_FAILURES_HANDLED, Long.toString(getFailuresHandled()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_LAST_PROCESSING_TIME, Long.toString(getLastProcessingTime()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_MIN_PROCESSING_TIME, Long.toString(getMinProcessingTime()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_AVG_PROCESSING_TIME, Long.toString(getMeanProcessingTime()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_MAX_PROCESSING_TIME, Long.toString(getMaxProcessingTime()));
+		fillFVariables(VARIABLE_NAME_PROCESSOR_TOTAL_PROCESSING_TIME, Long.toString(getTotalProcessingTime()));
+	}
+	
+	/**
+	 * @param variableNameProcessorId
+	 * @param valueString
+	 * @throws DebugException
+	 */
+	private void fillFVariables(String variableNameProcessorId, String valueString) throws DebugException {
+		BaseCamelVariable var = new BaseCamelVariable(this.debugTarget, variableNameProcessorId, String.class);
+		BaseCamelValue val = new BaseCamelValue(this.fTarget, valueString, var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#hasVariables()
 	 */
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.size()>0;
+		return !this.fVariables.isEmpty();
 	}
 	
 	/* (non-Javadoc)

@@ -73,7 +73,7 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 			while (launchConfigIterator.hasNext()) {
 				ILaunchConfiguration lc = launchConfigIterator.next();
 				CamelDebugRegistryEntry entry = CamelDebugRegistry.getInstance().getEntry(lc);
-				if (((IFile)entry.getEditorInput().getAdapter(IFile.class)).getFullPath().toFile().getPath().equals(resource.getFullPath().toFile().getPath())) {
+				if ((entry.getEditorInput().getAdapter(IFile.class)).getFullPath().toFile().getPath().equals(resource.getFullPath().toFile().getPath())) {
 					this.resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(lc)));
 				}
 			}
@@ -117,9 +117,7 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 		this.resource = marker.getResource();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IBreakpoint#getModelIdentifier()
-	 */
+	@Override
 	public String getModelIdentifier() {
 		return ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL;
 	}

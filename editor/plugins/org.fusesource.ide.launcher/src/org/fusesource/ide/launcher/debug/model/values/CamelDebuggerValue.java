@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
@@ -18,17 +19,13 @@ import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelBodyIncludeFilesVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelBodyIncludeStreamsVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelBodyMaxCharsVariable;
-import org.fusesource.ide.launcher.debug.model.variables.CamelLogLevelVariable;
 
 /**
  * @author lhein
  */
 public class CamelDebuggerValue extends BaseCamelValue {
 	
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private List<IVariable> fVariables = new ArrayList<>();
 	private CamelDebugTarget debugTarget;
 	private CamelStackFrame stackFrame; 
 	
@@ -39,8 +36,8 @@ public class CamelDebuggerValue extends BaseCamelValue {
 	 * @param stackFrame
 	 * @param type 
 	 */
-	public CamelDebuggerValue(CamelDebugTarget target, CamelStackFrame stackFrame, Class type) {
-		super(target, "" + target.hashCode(), type);
+	public CamelDebuggerValue(CamelDebugTarget target, CamelStackFrame stackFrame, Class<?> type) {
+		super(target, target != null ? Integer.toString(target.hashCode()) : "", type);
 		this.debugTarget = target;
 		this.stackFrame = stackFrame;
 		try {
@@ -54,59 +51,35 @@ public class CamelDebuggerValue extends BaseCamelValue {
 	 * initialize variables
 	 */
 	private void init() throws DebugException {
-		BaseCamelVariable var = null;
-		BaseCamelValue val = null;
-		
-		// BODY MAX CHARS
-		var = new CamelBodyMaxCharsVariable(this.debugTarget, VARIABLE_NAME_BODYMAXCHARS, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getBodyMaxChars(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
+		fillFVariables(VARIABLE_NAME_BODYMAXCHARS, Integer.toString(getBodyMaxChars()));
+		fillFVariables(VARIABLE_NAME_BODYINCLUDEFILES, Boolean.toString(isBodyIncludeFiles()));
+		fillFVariables(VARIABLE_NAME_BODYINCLUDESTREAMS, Boolean.toString(isBodyIncludeStreams()));
+		fillFVariables(VARIABLE_NAME_DEBUGCOUNTER, Long.toString(getDebugCounter()));
+		fillFVariables(VARIABLE_NAME_LOGLEVEL, getLogLevel());
+	}
 
-		// BODY INCLUDE FILES
-		var = new CamelBodyIncludeFilesVariable(this.debugTarget, VARIABLE_NAME_BODYINCLUDEFILES, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + isBodyIncludeFiles(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// BODY INCLUDE STREAMS
-		var = new CamelBodyIncludeStreamsVariable(this.debugTarget, VARIABLE_NAME_BODYINCLUDESTREAMS, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + isBodyIncludeStreams(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-
-		// DEBUG COUNTER
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_DEBUGCOUNTER, String.class);
-		val = new BaseCamelValue(this.fTarget, "" + getDebugCounter(), var.getReferenceType());
-		var.setValue(val);
-		this.fVariables.add(var);
-		
-		// LOG LEVEL
-		var = new CamelLogLevelVariable(this.debugTarget, VARIABLE_NAME_LOGLEVEL, String.class);
-		val = new BaseCamelValue(this.fTarget, getLogLevel(), var.getReferenceType());
+	/**
+	 * @param variableNameProcessorId
+	 * @param valueString
+	 * @throws DebugException
+	 */
+	private void fillFVariables(String variableNameProcessorId, String valueString) throws DebugException {
+		BaseCamelVariable var = new BaseCamelVariable(this.debugTarget, variableNameProcessorId, String.class);
+		BaseCamelValue val = new BaseCamelValue(this.fTarget, valueString, var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#hasVariables()
-	 */
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.size()>0;
+		return !this.fVariables.isEmpty();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariables()
-	 */
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		return this.fVariables.toArray(new IVariable[this.fVariables.size()]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariableDisplayString()
-	 */
 	@Override
 	protected String getVariableDisplayString() {
 		return "CamelDebuggerSettings";
