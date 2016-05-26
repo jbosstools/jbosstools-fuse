@@ -25,13 +25,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
-import org.xml.sax.Locator;
 
 /**
  * this object represents the camel xml file. It can be of a schema type
@@ -45,11 +46,13 @@ import org.xml.sax.Locator;
 public class CamelFile extends AbstractCamelModelElement implements EventListener {
 	
 	public static final int XML_INDENT_VALUE = 3;
+	protected static final String CAMEL_CONTEXT = "camelContext";
+	protected static final String CAMEL_ROUTES = "routes";
 	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value
 	 */
-	private Map<String, Node> globalDefinitions = new HashMap<String, Node>();
+	private Map<String, GlobalDefinitionCamelModelElement> globalDefinitions = new HashMap<>();
 
 	/**
 	 * the resource the camel file is stored in
@@ -69,11 +72,8 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	/**
 	 * list of listeners looking for changes in the internal model
 	 */
-	private List<ICamelModelListener> modelListeners = new ArrayList<ICamelModelListener>();
+	private List<ICamelModelListener> modelListeners = new ArrayList<>();
 
-	private Locator locator;
-	
-	
 	/**
 	 * creates a camel file object for the given resource
 	 * 
@@ -92,6 +92,49 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		getChildElements().clear();
 	}
 	
+	@Override
+	public void initialize() {
+		super.initialize();
+		NodeList childNodes = document.getDocumentElement().getChildNodes();
+        if (CamelUtils.getTranslatedNodeName(document.getDocumentElement()).equals(CAMEL_ROUTES)) {
+        	// found a routes element
+    		CamelContextElement cce = new CamelContextElement(this, document.getDocumentElement());
+    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
+    		int startIdx 	= resource.getFullPath().toOSString().indexOf("--");
+    		int endIdx 		= resource.getFullPath().toOSString().indexOf("--", startIdx+1);
+    		if (startIdx != endIdx && startIdx != -1) {
+    			contextId = resource.getFullPath().toOSString().substring(startIdx+2, endIdx);
+    		}
+    		cce.setId(contextId);
+    		cce.initialize();
+    		// then add the context to the file
+    		addChildElement(cce);
+        } else {
+            for (int i = 0; i<childNodes.getLength(); i++) {
+            	Node child = childNodes.item(i);
+				if (child.getNodeType() != Node.ELEMENT_NODE) {
+					continue;
+				}
+            	String name = CamelUtils.getTranslatedNodeName(child);            	
+            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
+            	if (name.equals(CAMEL_CONTEXT)) {
+            		// found a camel context
+            		CamelContextElement cce = new CamelContextElement(this, child);
+            		cce.setId(id);
+            		cce.initialize();
+            		// then add the context to the file
+            		addChildElement(cce);
+            	} else {
+            		// found a global configuration element
+					GlobalDefinitionCamelModelElement cme = new GlobalDefinitionCamelModelElement(this, child);
+					cme.setId(id);
+					cme.initialize();
+					addGlobalDefinition(id, cme);
+				}
+            }
+		}
+	}
+
 	/**
 	 * 
 	 * @param xmlString
@@ -110,14 +153,14 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	/**
 	 * @return the globalDefinitions
 	 */
-	public Map<String, Node> getGlobalDefinitions() {
+	public Map<String, GlobalDefinitionCamelModelElement> getGlobalDefinitions() {
 		return this.globalDefinitions;
 	}
 	
 	/**
 	 * @param globalDefinitions the globalDefinitions to set
 	 */
-	public void setGlobalDefinitions(Map<String, Node> globalDefinitions) {
+	public void setGlobalDefinitions(Map<String, GlobalDefinitionCamelModelElement> globalDefinitions) {
 		this.globalDefinitions = globalDefinitions;
 	}
 	
@@ -128,28 +171,31 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 * @param def
 	 * @return the id used for adding the definition or null if not added
 	 */
-	public String addGlobalDefinition(String id, Node def) {
+	public String addGlobalDefinition(String id, GlobalDefinitionCamelModelElement cme) {
+		if (globalDefinitions.containsKey(id)) {
+			return id;
+		}
 		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
-		if (usedId != null && globalDefinitions.containsKey(usedId) || id == null && globalDefinitions.containsValue(def)) {
+		if (usedId != null && globalDefinitions.containsKey(usedId) || id == null && globalDefinitions.containsValue(cme)) {
 			return null;
 		}
-		globalDefinitions.put(usedId, def);
-		final Node parentNode = def.getParentNode();
+		globalDefinitions.put(usedId, cme);
+		final Node parentNode = cme.getXmlNode().getParentNode();
 		final Element documentElement = getDocument().getDocumentElement();
 		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
-			documentElement.insertBefore(def, documentElement.getChildNodes().item(0));
+			documentElement.insertBefore(cme.getXmlNode(), documentElement.getChildNodes().item(0));
 			fireModelChanged();
-		}		
+		}
 		return usedId;
 	}
 	
-	public String updateGlobalDefinition(String id, Node def) {
+	public String updateGlobalDefinition(String id, GlobalDefinitionCamelModelElement cme) {
 		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
-		Node oldDef = globalDefinitions.put(usedId, def);
-		final Node parentNode = def.getParentNode();
+		Node oldDef = globalDefinitions.put(usedId, cme).getXmlNode();
+		final Node parentNode = cme.getXmlNode().getParentNode();
 		final Element documentElement = getDocument().getDocumentElement();
 		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
-			documentElement.replaceChild(def, oldDef);
+			documentElement.replaceChild(cme.getXmlNode(), oldDef);
 			fireModelChanged();
 		}
 		return usedId;
@@ -161,10 +207,13 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 * @param id
 	 */
 	public void removeGlobalDefinition(String id) {
-		Node nodeToRemove = this.globalDefinitions.remove(id);
-		if (nodeToRemove != null) {
-			getDocument().getDocumentElement().removeChild(nodeToRemove);
-			fireModelChanged();
+		GlobalDefinitionCamelModelElement cmeToremove = globalDefinitions.remove(id);
+		if (cmeToremove != null) {
+			Node nodeToRemove = cmeToremove.getXmlNode();
+			if (nodeToRemove != null) {
+				getDocument().getDocumentElement().removeChild(nodeToRemove);
+				fireModelChanged();
+			}
 		}
 	}
 	

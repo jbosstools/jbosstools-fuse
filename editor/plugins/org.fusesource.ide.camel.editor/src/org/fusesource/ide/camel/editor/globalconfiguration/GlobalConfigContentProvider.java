@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -27,6 +27,7 @@ class GlobalConfigContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
+		// Nothing to dispose
 	}
 
 	@Override
@@ -36,14 +37,18 @@ class GlobalConfigContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object parent) {
-		if (parent instanceof HashMap) {
-			Object[] catIds = ((HashMap<?, ?>) parent).keySet().toArray();
+		if (parent instanceof Map) {
+			Object[] catIds = ((Map<?, ?>) parent).keySet().toArray();
 			Arrays.sort(catIds, new Comparator<Object>() {
 				@Override
 				public int compare(Object o1, Object o2) {
-					if (o1.toString().equals(CamelGlobalConfigEditor.DEFAULT_CAT_ID)) return 1;
-					if (o2.toString().equals(CamelGlobalConfigEditor.DEFAULT_CAT_ID)) return -1;
-					return o1.toString().compareTo(o2.toString());
+					if (CamelGlobalConfigEditor.DEFAULT_CAT_ID.equals(o1.toString())) {
+						return 1;
+					} else if (CamelGlobalConfigEditor.DEFAULT_CAT_ID.equals(o2.toString())) {
+						return -1;
+					} else {
+						return o1.toString().compareTo(o2.toString());
+					}
 				}
 			});
 			return catIds;
@@ -66,5 +71,6 @@ class GlobalConfigContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void inputChanged(Viewer arg0, Object arg1, Object arg2) {
+		// Nothing special to update
 	}
 }

@@ -54,7 +54,7 @@ public abstract class AbstractCamelModelElement {
 	protected static final String ROUTE_NODE_NAME = "route";
 	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
 	// children is a list of objects which are no route outputs
-	private List<AbstractCamelModelElement> childElements = new ArrayList<AbstractCamelModelElement>();
+	private List<AbstractCamelModelElement> childElements = new ArrayList<>();
 
 	// input is the element which comes before this one
 	private AbstractCamelModelElement inputElement;
@@ -72,7 +72,7 @@ public abstract class AbstractCamelModelElement {
 	private Eip underlyingMetaModelObject;
 
 	// a map containing all the properties of the element
-	private Map<String, Object> parameters = new HashMap<String, Object>();
+	private Map<String, Object> parameters = new HashMap<>();
 
 	// the camel file
 	private CamelFile cf;

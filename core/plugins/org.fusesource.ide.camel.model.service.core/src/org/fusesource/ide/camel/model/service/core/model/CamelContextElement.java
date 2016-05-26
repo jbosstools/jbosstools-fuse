@@ -35,12 +35,12 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	/**
 	 * contains endpoint definitions stored using their ID value
 	 */
-	private Map<String, AbstractCamelModelElement> endpointDefinitions = new HashMap<String, AbstractCamelModelElement>();
+	private Map<String, AbstractCamelModelElement> endpointDefinitions = new HashMap<>();
 	
 	/**
 	 * contains the dataformat definitions stored using their ID value
 	 */
-	private Map<String, AbstractCamelModelElement> dataformats = new HashMap<String, AbstractCamelModelElement>();
+	private Map<String, AbstractCamelModelElement> dataformats = new HashMap<>();
 	
 	/**
 	 * 
@@ -69,8 +69,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 * @param def
 	 */
 	public void addEndpointDefinition(AbstractCamelModelElement def) {
-		if (this.endpointDefinitions.containsKey(def.getId())) return;
-		this.endpointDefinitions.put(def.getId(), def);
+		if (endpointDefinitions.containsKey(def.getId())) {
+			return;
+		}
+		endpointDefinitions.put(def.getId(), def);
 		boolean childExists = false;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
@@ -243,25 +245,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 		this.dataformats.clear();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#parseNode()
-	 */
-	@Override
-	protected void parseNode() {
-		super.parseNode();
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#ensureUniqueID(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
-	 */
-	@Override
-	public void ensureUniqueID(AbstractCamelModelElement elem) {
-		super.ensureUniqueID(elem);
-	}
-	
 	/**
 	 * parses direct attributes of the node
 	 */
+	@Override
 	protected void parseAttributes() {
 		Node tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_Id);
 		if (tmp != null && tmp.getNodeValue() != null && tmp.getNodeValue().trim().length()>0) {
@@ -282,6 +269,7 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	/**
 	 * parses the children of this node
 	 */
+	@Override
 	protected void parseChildren() {
 		NodeList children = getXmlNode().getChildNodes();
 		for (int i=0; i<children.getLength(); i++) {
@@ -310,6 +298,7 @@ public class CamelContextElement extends AbstractCamelModelElement {
 		}
 	}
 	
+	@Override
 	public List<AbstractCamelModelElement> findAllNodesWithId(String nodeId) {
 		List<AbstractCamelModelElement> result = super.findAllNodesWithId(nodeId);
 		if (getDataformats().containsKey(nodeId)) {
@@ -327,6 +316,7 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	 * @param nodeId
 	 * @return the node or null
 	 */
+	@Override
 	public AbstractCamelModelElement findNode(String nodeId) {
 		AbstractCamelModelElement res = super.findNode(nodeId);
 		if (res != null) {

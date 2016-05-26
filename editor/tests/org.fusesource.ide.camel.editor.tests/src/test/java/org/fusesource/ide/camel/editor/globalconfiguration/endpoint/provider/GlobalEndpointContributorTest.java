@@ -15,13 +15,22 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider.GlobalEndpointContributor;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Element;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.mockito.Mockito.doReturn;
+
+@RunWith(MockitoJUnitRunner.class)
 public class GlobalEndpointContributorTest {
+
+	@Mock
+	AbstractCamelModelElement cme;
 
 	@Test
 	public void testCanHandle_GlobalEndpoint() throws Exception {
@@ -30,7 +39,8 @@ public class GlobalEndpointContributorTest {
 						"<endpoint id=\"aaa\" uri=\"dozer:aaa?sourceModel=com.mycompany.camel.spring.sss&amp;targetModel=com.mycompany.camel.spring.sss&amp;mappingFile=transformation.xml\"/>"
 								.getBytes(StandardCharsets.UTF_8.name())))
 				.getDocumentElement();
-		assertThat(new GlobalEndpointContributor().canHandle(nodeToHandle)).isTrue();
+		doReturn(nodeToHandle).when(cme).getXmlNode();
+		assertThat(new GlobalEndpointContributor().canHandle(cme)).isTrue();
 	}
 
 	@Test
@@ -40,7 +50,8 @@ public class GlobalEndpointContributorTest {
 						"<myPrefix:endpoint id=\"aaa\" uri=\"dozer:aaa?sourceModel=com.mycompany.camel.spring.sss&amp;targetModel=com.mycompany.camel.spring.sss&amp;mappingFile=transformation.xml\"/>"
 								.getBytes(StandardCharsets.UTF_8.name())))
 				.getDocumentElement();
-		assertThat(new GlobalEndpointContributor().canHandle(nodeToHandle)).isTrue();
+		doReturn(nodeToHandle).when(cme).getXmlNode();
+		assertThat(new GlobalEndpointContributor().canHandle(cme)).isTrue();
 	}
 
 	@Test
@@ -48,7 +59,8 @@ public class GlobalEndpointContributorTest {
 		Element nodeToHandle = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new ByteArrayInputStream("<bindy type=\"KeyValue\"/>".getBytes(StandardCharsets.UTF_8.name())))
 				.getDocumentElement();
-		assertThat(new GlobalEndpointContributor().canHandle(nodeToHandle)).isFalse();
+		doReturn(nodeToHandle).when(cme).getXmlNode();
+		assertThat(new GlobalEndpointContributor().canHandle(cme)).isFalse();
 	}
 
 }

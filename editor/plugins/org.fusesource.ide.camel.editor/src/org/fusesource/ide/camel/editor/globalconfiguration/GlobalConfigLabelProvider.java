@@ -18,9 +18,9 @@ import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 class GlobalConfigLabelProvider implements IStyledLabelProvider {
@@ -33,21 +33,10 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 
 	private StyledString getStyledTextForCamelModelElement(AbstractCamelModelElement cme) {
 		StyledString text = new StyledString();
-		String type = getTypeFromExtensionPoint(cme.getXmlNode());
+		String type = getTypeFromExtensionPoint(cme);
 		text.append(cme.getId());
 		if (!Strings.isEmpty(type)) {
 			text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
-		}
-		return text;
-	}
-
-	private StyledString getStyledTextForXMLElement(Element node) {
-		StyledString text = new StyledString();
-		String type = getTypeFromExtensionPoint(node);
-		final String idAttributeValue = node.getAttribute("id");
-		text.append(!Strings.isEmpty(idAttributeValue) ? idAttributeValue : CamelUtils.getTranslatedNodeName(node));
-		if (!Strings.isEmpty(type)) {
-			text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
 		}
 		return text;
 	}
@@ -56,13 +45,13 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	 * @param node
 	 * @return
 	 */
-	private String getTypeFromExtensionPoint(Node node) {
+	private String getTypeFromExtensionPoint(AbstractCamelModelElement cme) {
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
-			if (item.getContributor().canHandle(node)) {
+			if (item.getContributor().canHandle(cme)) {
 				return item.getName();
 			}
 		}
-		return Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
+		return Strings.capitalize(CamelUtils.getTranslatedNodeName(cme.getXmlNode()));
 	}
 
 	private StyledString getStyledTextForCategory(String element) {
@@ -74,8 +63,6 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	public StyledString getStyledText(Object element) {
 		if (element instanceof String) {
 			return getStyledTextForCategory((String) element);
-		} else if (element instanceof Element) {
-			return getStyledTextForXMLElement((Element) element);
 		} else if (element instanceof AbstractCamelModelElement) {
 			return getStyledTextForCamelModelElement((AbstractCamelModelElement) element);
 		}
@@ -84,12 +71,10 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof Node) {
+		if (element instanceof GlobalDefinitionCamelModelElement) {
 			return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
 		} else if (element instanceof AbstractCamelModelElement) {
 			return getImageForCamelModelElement((AbstractCamelModelElement) element);
-		} else if (element instanceof Element) {
-			return getImageForXMLElement((Node) element);
 		} else if (element instanceof String) {
 			GlobalConfigCategoryItem cat = camelGlobalConfigEditor.getCategoryForId((String) element);
 			return cat.getIcon();
@@ -98,19 +83,12 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	}
 
 	/**
-	 * @param element
-	 */
-	private Image getImageForXMLElement(Node element) {
-		return getIconFromExtensionPoint(element);
-	}
-
-	/**
 	 * @param cme
 	 * @return
 	 */
 	private Image getImageForCamelModelElement(AbstractCamelModelElement cme) {
 		final Node xmlNode = cme.getXmlNode();
-		Image res = getIconFromExtensionPoint(xmlNode);
+		Image res = getIconFromExtensionPoint(cme);
 		if (res == null) {
 			if ("endpoint".equalsIgnoreCase(cme.getTranslatedNodeName())) {
 				res = CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
@@ -127,9 +105,9 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	/**
 	 * @param cme
 	 */
-	private Image getIconFromExtensionPoint(Node node) {
+	private Image getIconFromExtensionPoint(AbstractCamelModelElement cme) {
 		for (GlobalConfigElementItem item : camelGlobalConfigEditor.getElementContributions()) {
-			if (item.getContributor().canHandle(node)) {
+			if (item.getContributor().canHandle(cme)) {
 				return item.getIcon();
 			}
 		}

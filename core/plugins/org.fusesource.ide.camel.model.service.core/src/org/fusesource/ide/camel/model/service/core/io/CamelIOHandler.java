@@ -32,6 +32,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
@@ -147,40 +148,7 @@ public class CamelIOHandler {
         CamelFile cf = new CamelFile(null);
         cf.setResource(res);
         cf.setDocument(document);
-        NodeList childNodes = document.getDocumentElement().getChildNodes();
-        if (CamelUtils.getTranslatedNodeName(document.getDocumentElement()).equals(CAMEL_ROUTES)) {
-        	// found a routes element
-    		CamelContextElement cce = new CamelContextElement(cf, document.getDocumentElement());
-    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
-    		int startIdx 	= res.getFullPath().toOSString().indexOf("--");
-    		int endIdx 		= res.getFullPath().toOSString().indexOf("--", startIdx+1);
-    		if (startIdx != endIdx && startIdx != -1) {
-    			contextId = res.getFullPath().toOSString().substring(startIdx+2, endIdx);
-    		}
-    		cce.setId(contextId);
-    		cce.initialize();
-    		// then add the context to the file
-    		cf.addChildElement(cce);
-        } else {
-            for (int i = 0; i<childNodes.getLength(); i++) {
-            	Node child = childNodes.item(i);
-            	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-            	String name = CamelUtils.getTranslatedNodeName(child);            	
-            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
-            	if (name.equals(CAMEL_CONTEXT)) {
-            		// found a camel context
-            		CamelContextElement cce = new CamelContextElement(cf, child);
-            		cce.setId(id);
-            		cce.initialize();
-            		// then add the context to the file
-            		cf.addChildElement(cce);
-            	} else {
-            		// found a global configuration element
-            		cf.addGlobalDefinition(id, child);
-            	}	        	
-            }
-        }
-
+        cf.initialize();
         return cf;
     }
     
