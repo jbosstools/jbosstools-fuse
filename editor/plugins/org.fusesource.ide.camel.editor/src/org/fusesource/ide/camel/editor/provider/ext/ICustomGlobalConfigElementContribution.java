@@ -13,8 +13,8 @@ package org.fusesource.ide.camel.editor.provider.ext;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.w3c.dom.Node;
 
 /**
  * @author lhein
@@ -62,13 +62,13 @@ public interface ICustomGlobalConfigElementContribution {
 	
 	/**
 	 * this method is invoked if the user deleted a global element from the
-	 * camel xml file via the global config tab. Deletions in the xml source 
-	 * are NOT tracked. This is an informational hook so implementors can react
-	 * upon deletion of their elements and properly do clean up actions etc.
+	 * camel xml file via the global config tab. Deletions in the xml source are
+	 * NOT tracked. This is an informational hook so implementors can react upon
+	 * deletion of their elements and properly do clean up actions etc.
 	 * 
-	 * @param node
+	 * @param camelModelElement
 	 */
-	void onGlobalElementDeleted(Node node);
+	void onGlobalElementDeleted(AbstractCamelModelElement camelModelElement);
 
 	/**
 	 * checks whether the extension can handle the given node or not
@@ -79,7 +79,7 @@ public interface ICustomGlobalConfigElementContribution {
 	 * elements are used for several cases - maybe you are not the only one. So 
 	 * be sure you check if its exactly the type of node you are responsible for
 	 */
-	boolean canHandle(final Node nodeToHandle);
+	boolean canHandle(final AbstractCamelModelElement camelModelElementToHandle);
 	
 	/**
 	 * returns the type of global element this class handles

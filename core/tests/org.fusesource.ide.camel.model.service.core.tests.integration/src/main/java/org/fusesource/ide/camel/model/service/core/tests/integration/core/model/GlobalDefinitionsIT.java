@@ -20,8 +20,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Rule;
@@ -34,17 +34,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Aurelien Pupier
  *
  */
-public class DataFormatsInCamelModelElementIT {
+public class GlobalDefinitionsIT {
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(DataFormatsInCamelModelElementIT.class.getSimpleName());
+	public FuseProject fuseProject = new FuseProject(GlobalDefinitionsIT.class.getSimpleName());
 
 	@Test
-	public void testDataFormatsInUnmarshal_notRemovedWhenUpdatingRefParameter() throws IOException, CoreException {
-		String name = "unmarshalSample.xml";
+	public void testGlobalDefinitionRead() throws IOException, CoreException {
+		String name = "withGlobalDefinitionSample.xml";
 
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
 
@@ -57,10 +57,8 @@ public class DataFormatsInCamelModelElementIT {
 
 		CamelFile model1 = new CamelIOHandler().loadCamelModel(fileInProject, new NullProgressMonitor());
 
-		final AbstractCamelModelElement unmarshallElement = model1.getCamelContext().getChildElements().get(0).getChildElements().get(0);
-		assertThat(unmarshallElement.getNodeTypeId()).isEqualTo("unmarshal");
-		unmarshallElement.setParameter("ref", "");
-		assertThat(((AbstractCamelModelElement) unmarshallElement.getParameter("dataFormatType")).getNodeTypeId()).isEqualTo("json");
-	}
+		GlobalDefinitionCamelModelElement globalDefinition = model1.getGlobalDefinitions().values().iterator().next();
+		assertThat(globalDefinition.getId()).isEqualTo("sap-configuration");
 
+	}
 }

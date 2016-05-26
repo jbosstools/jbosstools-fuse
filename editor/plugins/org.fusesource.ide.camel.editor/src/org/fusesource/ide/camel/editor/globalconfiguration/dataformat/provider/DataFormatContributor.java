@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
@@ -20,6 +20,7 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementCo
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Element;
@@ -49,28 +50,20 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#getElementDependencies()
-	 */
 	@Override
 	public List<Dependency> getElementDependencies() {
-		return new ArrayList<Dependency>();
+		return Collections.emptyList();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#onGlobalElementDeleted(org.w3c.dom.Node)
-	 */
 	@Override
-	public void onGlobalElementDeleted(Node node) {
+	public void onGlobalElementDeleted(AbstractCamelModelElement cme) {
 		// possible actions if one of my nodes got deleted from the context
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#canHandle(org.w3c.dom.Node)
-	 */
 	@Override
-	public boolean canHandle(Node nodeToHandle) {
+	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
 		// we support it if the parent node is dataFormats and the node is one of the supported languages of our model
+		final Node nodeToHandle = camelModelElementToHandle.getXmlNode();
 		String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
 		DataFormatModel dfModel = CamelModelFactory.getModelForVersion(org.fusesource.ide.camel.editor.utils.CamelUtils.getCurrentProjectCamelVersion()).getDataformatModel();
 

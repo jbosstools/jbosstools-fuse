@@ -62,16 +62,17 @@ public class CamelIOHandlerIT {
 				"onDeliverySample.xml",
 				"tryCatchSample.xml",
 				"propertyPlaceHolderSample.xml",
-				"unmarshalSample.xml");
+				"unmarshalSample.xml",
+				"withGlobalDefinitionSample.xml");
 		//@formatter:on
 	}
 
 	@Test
-	public void testLoadAndSaveOfSimpleModel() throws Exception {
-		assertModelRoundTrip(fileNameToTest, 1);
+	public void testLoadAndSaveOfSimpleModel() throws IOException, CoreException {
+		assertModelRoundTrip(fileNameToTest);
 	}
 	
-	protected CamelFile assertModelRoundTrip(String name, int outputCount) throws IOException, CoreException {
+	protected CamelFile assertModelRoundTrip(String name) throws IOException, CoreException {
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
 		
 		File baseFile = File.createTempFile("baseFile" + name, "xml");

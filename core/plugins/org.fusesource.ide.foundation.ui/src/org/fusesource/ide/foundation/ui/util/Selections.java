@@ -32,6 +32,9 @@ import org.fusesource.ide.foundation.ui.tree.RefreshableUI;
 
 public class Selections {
 
+	private Selections() {
+	}
+
 	public static Object getFirstSelection(ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -41,12 +44,12 @@ public class Selections {
 	}
 
 	public static List<Object> getSelectionList(Viewer viewer) {
-		List<Object> answer = new ArrayList<Object>();
+		List<Object> answer = new ArrayList<>();
 		if (viewer != null) {
 			ISelection selection = viewer.getSelection();
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-				Iterator iter = structuredSelection.iterator();
+				Iterator<?> iter = structuredSelection.iterator();
 				while (iter.hasNext()) {
 					Object next = iter.next();
 					answer.add(next);
@@ -182,7 +185,7 @@ public class Selections {
 	}
 
 	public static boolean selectionIs(Viewer viewer, Object singleSelection) {
-		List list = Selections.getSelectionList(viewer);
+		List<Object> list = Selections.getSelectionList(viewer);
 		if (list.size() == 1) {
 			Object current = list.get(0);
 			return current == singleSelection;
