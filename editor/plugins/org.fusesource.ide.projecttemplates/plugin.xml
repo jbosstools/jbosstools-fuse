@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.fusesource.ide.projecttemplates.templates" name="projectTemplates" schema="schema/org.fusesource.ide.projecttemplates.templates.exsd"/>
+	<extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="%jboss.fuse.category.label"
+            id="org.fusesource.ide.newwizards">
+      </category>
+      <wizard id="org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard"
+            category="org.fusesource.ide.newwizards"
+            class="org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard"
+            icon="icons/camel_project_64x64.png"
+            name="%project.wizard.name"
+            project="true">
+         <description>%project.wizard.description</description>
+         <keywordReference
+               id="org.eclipse.jdt.ui.wizards.java">
+         </keywordReference>
+      </wizard>
+   </extension>
+ <extension
+       point="org.fusesource.ide.projecttemplates.templates">
+    <projectTemplateCategory
+          id="fuse.projecttemplates.DEFAULT_CATEGORY"
+          name="%template.category.default"
+          weight="10">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.jbossfuse"
+          name="%template.category.jbossfuse"
+          weight="0">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.eap"
+          name="%template.category.eap"
+          weight="1">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.ose"
+          name="%template.category.ose"
+          weight="2">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.jbossfuse.simple"
+          name="%template.category.jbossfuse.simple"
+          parent="fuse.projecttemplates.jbossfuse"
+          weight="0">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.jbossfuse.advanced"
+          name="%template.category.jbossfuse.advanced"
+          parent="fuse.projecttemplates.jbossfuse"
+          weight="1">
+    </projectTemplateCategory>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.jbossfuse.expert"
+          name="%template.category.jbossfuse.expert"
+          parent="fuse.projecttemplates.jbossfuse"
+          weight="2">
+    </projectTemplateCategory>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate"
+          description="%template.simple.cbr.description"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimple"
+          keywords="fuse cbr content based router"
+          name="%template.simple.cbr.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate"
+          description="%template.simple.amq.description"
+          id="org.fusesource.ide.projecttemplates.amqTemplateSimple"
+          keywords="fuse amq activemq queue jms message cbr content based router"
+          name="%template.simple.amq.name"
+          weight="0">
+    </projectTemplate>
+ </extension>
+ 
+ <!-- Maven configurator  -->
+ <extension point="org.eclipse.m2e.core.projectConfigurators">
+   	<configurator 
+       	id="org.fusesource.ide.projecttemplates.camel.maven.configurator.wtp"
+       	class="org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator"
+       	name="%configurator.name" 
+       	runsAfter="org.eclipse.m2e.jdt.javaConfigurator,org.maven.ide.eclipse.configuration.wtp.configurator?"/>
+ </extension>
+
+ <extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
+ </extension>
+ 
+ <extension point="org.eclipse.wst.common.project.facet.ui.images">
+    <image facet="jst.camel"
+           path="icons/camel_context_icon.png">
+    </image>
+ </extension>
+ 
+  	<!-- Camel Project -->
+    <extension point="org.eclipse.wst.common.project.facet.core.facets">
+    	
+    	<project-facet id="jst.camel">
+         	<label>Camel</label>
+         	<description>
+             	Adds support for Camel to the project.
+         	</description>
+      	</project-facet>
+      
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.15">
+        	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.6">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+      	
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.16">
+       	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.7">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+      	
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.17">
+       	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.8">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+	  
+	  	<action
+        	facet="jst.camel"
+            id="jst.camel.install"
+            type="install">
+         	<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetInstallationDelegate"/>
+			<config-factory class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider"/>
+		</action>
+		
+		<event-handler
+        	facet="jst.camel"
+            type="RUNTIME_CHANGED"
+            version="1.0">
+         	<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelRuntimeChangedDelegate"/>
+		</event-handler>
+   	</extension>
+    
+    <extension point="org.eclipse.wst.server.core.moduleTypes">
+       	<moduleType
+        	id="jst.camel"
+            name="Camel Module">
+       	</moduleType>
+    </extension>
+    
+    <extension point="org.eclipse.wst.server.core.moduleFactories">
+       	<moduleFactory
+        	class="org.fusesource.ide.projecttemplates.util.camel.CamelModuleFactory"
+            id="org.fusesource.ide.project.camel.CamelModuleFactory"
+            projects="true">
+          	<moduleType
+            	types="jst.camel"
+                versions="1.0">
+          	</moduleType>
+       	</moduleFactory>
+    </extension>
+
+</plugin>

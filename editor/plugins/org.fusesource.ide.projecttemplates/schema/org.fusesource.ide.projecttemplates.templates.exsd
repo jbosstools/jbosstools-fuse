@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.fusesource.ide.projecttemplates" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.fusesource.ide.projecttemplates" id="org.fusesource.ide.projecttemplates.templates" name="Fuse Integration Project Templates"/>
+      </appinfo>
+      <documentation>
+         This extension point can be used to define additional categories and templates for the new fuse integration project wizard.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="projectTemplateCategory"/>
+            <element ref="projectTemplate"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="projectTemplateCategory">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the template category. This id value should be unique amongst all the other categories.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the category as it is displayed in the list of templates.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="weight" type="string" use="default" value="50">
+            <annotation>
+               <documentation>
+                  Specify a weight here in order to influence the category sort order. The categories are sorted by weight and then lexically. Weight 0 means the category is displayed on top of the list and the bigger the value gets the more it is moved down in the list. 
+Valid values are 0 and bigger integer numbers. Please don&apos;t use the values 0 - 10 as they are reserved values.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="parent" type="string">
+            <annotation>
+               <documentation>
+                  Specify a parent category or leave it blank for a top level category.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.fusesource.ide.projecttemplates.templates/projectTemplateCategory/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="projectTemplate">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of the template.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the template entry as it is displayed in the list of templates.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A brief description of what the template is good for, which technologies it uses, what it enables the user to do...
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="category" type="string" use="default" value="fuse.projecttemplates.DEFAULT_CATEGORY">
+            <annotation>
+               <documentation>
+                  The ID of an existing category for this template. Leave it empty to assign it to the default category.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.fusesource.ide.projecttemplates.templates/projectTemplateCategory/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The configurator class which will handle the configuration of a new project for the template.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="weight" type="string" use="default" value="50">
+            <annotation>
+               <documentation>
+                  Specify a weight here in order to influence the category sort order. The categories are sorted by weight and then lexically. Weight 0 means the category is displayed on top of the list and the bigger the value gets the more it is moved down in the list. 
+Valid values are 0 and bigger integer numbers. Please don&apos;t use the values 0 - 10 as they are reserved values.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="keywords" type="string">
+            <annotation>
+               <documentation>
+                  Define keywords / tags to find this template easier when using the filter function. You can specify more than one word by leaving a blank between the words.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         8.0.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         JBoss, Home of Professional Open Source
+Copyright (c) Red Hat, Inc., and individual contributors as indicated
+by the @authors tag, 2006-2016. See the copyright.txt in the distribution
+for a full listing of individual contributors.
+      </documentation>
+   </annotation>
+
+</schema>

@@ -257,6 +257,7 @@
  	</extension>
   
  	<!-- Camel Project -->
+ 	<!--
     <extension point="org.eclipse.wst.common.project.facet.core.facets">
     	
     	<project-facet id="jst.camel">
@@ -526,7 +527,6 @@
       	</static-preset>
    	</extension>
  
- 	<!-- Maven configurator  -->
    	<extension point="org.eclipse.m2e.core.projectConfigurators">
       	<configurator 
         	id="org.fusesource.ide.project.camel.maven.configurator.wtp"
@@ -545,5 +545,5 @@
            path="icons/camel_context_icon.png">
      </image>
   </extension>
-
+-->
 </plugin>
