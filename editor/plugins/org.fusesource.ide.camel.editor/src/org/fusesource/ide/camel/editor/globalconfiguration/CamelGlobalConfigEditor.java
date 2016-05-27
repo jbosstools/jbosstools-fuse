@@ -75,6 +75,7 @@ import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Selections;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -416,7 +417,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	public void reload() {
 		buildModel();
-		if (treeViewer != null && !treeViewer.getTree().isDisposed()) {
+		if (!Widgets.isDisposed(treeViewer)) {
 			IStructuredSelection selection = treeViewer.getStructuredSelection();
 			Object firstElement = selection.getFirstElement();
 			String selectedId = null;

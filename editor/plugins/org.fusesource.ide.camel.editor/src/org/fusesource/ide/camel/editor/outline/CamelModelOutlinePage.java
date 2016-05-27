@@ -16,10 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
  * @author lhein
@@ -69,7 +70,8 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * @param cme
 	 */
 	public void setOutlineSelection(AbstractCamelModelElement cme) {
-		if (cme == null || cme.getId() == null || getTreeViewer() == null || getTreeViewer().getTree().isDisposed()) return;
+		if (cme == null || cme.getId() == null || Widgets.isDisposed(getTreeViewer()))
+			return;
 		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
 		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
 			getTreeViewer().expandAll();

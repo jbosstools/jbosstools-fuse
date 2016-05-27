@@ -28,9 +28,10 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
  * @author Renjith M. 
@@ -100,7 +101,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 						 */
 						@Override
 						public void run() {
-							if (mViewer!=null && !mViewer.getControl().isDisposed()) {
+							if (!Widgets.isDisposed(mViewer)) {
 								mViewer.add(camelFile,routes);
 							}
 						}
@@ -119,7 +120,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 			public void done(IJobChangeEvent event) {
 	        	Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						if (mViewer!=null && !mViewer.getControl().isDisposed()) {
+						if (!Widgets.isDisposed(mViewer)) {
 							mViewer.remove(camelFile, new Object[] { placeHolder});
 						}
 					}
