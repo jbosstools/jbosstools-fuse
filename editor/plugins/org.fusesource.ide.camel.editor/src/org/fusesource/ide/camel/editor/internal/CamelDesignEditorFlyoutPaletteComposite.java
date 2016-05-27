@@ -97,6 +97,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
  * The FlyoutPaletteComposite is used to show a flyout palette alongside another
@@ -317,7 +318,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		// Fix for bug 101703 -- pViewer.getControl().getParent() might be
 		// parented
 		// by paletteContainer
-		if (result != null && !result.isDisposed()
+		if (!Widgets.isDisposed(result)
 				&& result.getParent() != paletteContainer)
 			result = result.getParent();
 		return result;
@@ -650,7 +651,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			if (provider.getEditDomain().getPaletteViewer() == pViewer)
 				provider.getEditDomain().setPaletteViewer(null);
 			Control pViewerCtrl = getPaletteViewerControl();
-			if (pViewerCtrl != null && !pViewerCtrl.isDisposed())
+			if (!Widgets.isDisposed(pViewerCtrl))
 				pViewerCtrl.dispose();
 			pViewer = null;
 		}

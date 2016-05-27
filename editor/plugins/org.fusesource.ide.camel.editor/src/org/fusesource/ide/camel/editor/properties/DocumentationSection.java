@@ -38,6 +38,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
  * Shows the documentation for the currently selected node
@@ -192,7 +193,7 @@ public class DocumentationSection extends NodeSectionSupport {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		if (form != null && !form.isDisposed()) {
+		if (!Widgets.isDisposed(form)) {
 			try {
 				form.dispose();
 			} catch (Exception e) {

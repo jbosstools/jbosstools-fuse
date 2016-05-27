@@ -83,11 +83,13 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.branding.wizards.NewCamelTestWizardPageTwo.EndpointMaps;
-import org.fusesource.ide.foundation.core.contenttype.*;
+import org.fusesource.ide.foundation.core.contenttype.CamelXmlMatchingStrategy;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.URIs;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 
 /**
  * Creates a new test case based on the currently selected Camel XML file
@@ -1294,7 +1296,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 	 *            The name to set
 	 */
 	public void setXmlFileUnderTest(IFile file) {
-		if (fXmlFileUnderTestControl != null && !fXmlFileUnderTestControl.isDisposed()) {
+		if (!Widgets.isDisposed(fXmlFileUnderTestControl)) {
 			String name = getIFileName(file);
 			fXmlFileUnderTestControl.setText(name);
 		}
