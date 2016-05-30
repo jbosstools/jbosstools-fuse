@@ -79,7 +79,7 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 	}
 
 	protected synchronized void checkLoaded() {
-		if (loaded.get() == false) {
+		if (!loaded.get()) {
 			loading = true;
 			try {
 				loadChildren();
@@ -102,7 +102,7 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 	}
 
 	public boolean isLoaded() {
-		return this.loaded.get();
+		return loaded.get();
 	}
 	
 	/**

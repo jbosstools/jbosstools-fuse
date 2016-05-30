@@ -62,6 +62,7 @@ import org.fusesource.ide.jmx.commons.messages.IMessage;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeList;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
+import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -77,11 +78,11 @@ public class CamelContextNode 	extends NodeSupport
 	private final CamelContextMBean camelContextMBean;
 	private CamelContextElement camelContext;
 	private final RoutesNode routes;
-	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
+	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
 	private File tempContextFile = null;
 	
-	public CamelContextNode(CamelContextsNode camelContextsNode, CamelJMXFacade facade, CamelContextMBean camelContext) throws Exception {
+	public CamelContextNode(CamelContextsNode camelContextsNode, CamelJMXFacade facade, CamelContextMBean camelContext) {
 		super(camelContextsNode);
 		this.camelContextsNode = camelContextsNode;
 		this.facade = facade;
