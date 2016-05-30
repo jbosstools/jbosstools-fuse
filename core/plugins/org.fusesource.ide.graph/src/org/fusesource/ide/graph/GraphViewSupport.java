@@ -20,9 +20,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -31,8 +29,8 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -331,14 +329,10 @@ public abstract class GraphViewSupport extends ViewPart implements IZoomableWork
 				MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
 				menuItem.setText(action.getText());
 				menuItem.setAccelerator(action.getAccelerator());
-				menuItem.addSelectionListener(new SelectionListener() {
+				menuItem.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						action.run();
-					}
-
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
 					}
 				});
 				if (!setLayoutChecked) {
@@ -478,12 +472,7 @@ public abstract class GraphViewSupport extends ViewPart implements IZoomableWork
 	}
 
 	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
+		viewer.addDoubleClickListener(event -> doubleClickAction.run());
 	}
 
 	protected GraphFilter createGraphFilter() {

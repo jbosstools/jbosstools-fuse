@@ -137,7 +137,7 @@ public class NodeUtils {
 			answer = (AbstractCamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
 		}
 		if (input != null && answer == null) {
-			answer = (AbstractCamelModelElement) Platform.getAdapterManager().getAdapter(input, AbstractCamelModelElement.class);
+			answer = Platform.getAdapterManager().getAdapter(input, AbstractCamelModelElement.class);
 		}
 		if (answer == null && input instanceof HasOwner) {
 			HasOwner ho = (HasOwner) input;

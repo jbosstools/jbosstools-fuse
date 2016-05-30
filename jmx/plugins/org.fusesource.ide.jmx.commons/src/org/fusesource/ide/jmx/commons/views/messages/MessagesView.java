@@ -17,14 +17,13 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.ide.foundation.core.functions.Function1;
@@ -43,7 +42,7 @@ import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
 /**
  * UI for viewing messages
  */
-public class MessagesView extends TableViewSupport { // implements ITabbedPropertySheetPageContributor {
+public class MessagesView extends TableViewSupport {
 
 	public static final String ID = "org.fusesource.ide.fabric.views.MessagesView";
 
@@ -56,22 +55,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	private boolean showToNode = true;
 	private boolean showTraceExchangeId = true;
 	private boolean showElapsedTime = true;
-	private ISelectionListener selectionListener = new ISelectionListener() {
-
-        @Override
-        public void selectionChanged(IWorkbenchPart part,
-                ISelection selection) {
-
-            // we only want to process selection change events from few selected sources...so filtering here
-            if (!isRelevantSelectionSource(part, selection)) {
-                return;
-            }
-
-            IExchangeBrowser browser = ExchangeBrowsers.getSelectedExchangeBrowser(selection);
-            setExchangeBrowser(browser);
-        }
-
-    };
+	private ISelectionListener selectionListener = new SelectionListenerForMessageView(this);
 
 	public MessagesView() {
 	}
@@ -125,11 +109,12 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	@Override
 	public List<String> getColumns() {
 		TableConfiguration tc = getConfiguration();
-		List<String> cols = new ArrayList<String>();
-		
-		if (tc == null || tc.hasColumns() == false) return super.getColumns();
+		if (tc == null || !tc.hasColumns()) {
+			return super.getColumns();
+		}
 		
 		tc.reload();
+		List<String> cols = new ArrayList<>();
 		Iterator<String> names = tc.getColumnMap().keySet().iterator();
 		while (names.hasNext()) {
 			cols.add(names.next());
@@ -153,22 +138,6 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	    }
         super.dispose();
     }
-
-    private boolean isRelevantSelectionSource(IWorkbenchPart part, ISelection selection) {
-		boolean process = false;
-
-		// we filter for specific selection sources...
-		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") ||
-			part.getClass().getName().equals("org.fusesource.ide.fabric8.ui.navigator.FabricNavigator") ||
-			part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.diagram.DiagramView") ||
-			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView") ||
-			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.cnf.ServersView2")
-			) {
-			process = true;
-		}
-
-		return process;
-	}
 
 	@Override
 	protected void createViewer() {
@@ -260,7 +229,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 			column = addColumnFunction(bounds, column, function, "Message Body");
 		}
 
-		SortedSet<String> headers = new TreeSet<String>();
+		SortedSet<String> headers = new TreeSet<>();
 		for (IExchange exchange : exchanges) {
 			IMessage in = exchange.getIn();
 			if (in != null) {
@@ -348,21 +317,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 
 	@Override
 	protected IStructuredContentProvider createContentProvider() {
-		return new IStructuredContentProvider() {
-			@Override
-			public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			}
-
-			@Override
-			public void dispose() {
-			}
-
-			@Override
-			public Object[] getElements(Object parent) {
-				return exchanges.toArray();
-			}
-
-		};
+		return ArrayContentProvider.getInstance();
 	}
 
 	public void setExchangeBrowser(IExchangeBrowser browser) {

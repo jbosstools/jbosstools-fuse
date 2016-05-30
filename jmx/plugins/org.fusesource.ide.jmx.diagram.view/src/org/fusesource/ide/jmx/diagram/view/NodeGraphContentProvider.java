@@ -55,7 +55,7 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 		if (input instanceof AbstractCamelModelElement) {
 			AbstractCamelModelElement node = (AbstractCamelModelElement) input;
 
-			Set<AbstractCamelModelElement> set = new HashSet<AbstractCamelModelElement>();
+			Set<AbstractCamelModelElement> set = new HashSet<>();
 			CamelRouteElement parent;
 			if (node instanceof CamelRouteElement) {
 				parent = (CamelRouteElement) node;
@@ -70,7 +70,7 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 			}
 			return set.toArray();
 		} else {
-			List<Object> answer = new ArrayList<Object>();
+			List<Object> answer = new ArrayList<>();
 			if (input instanceof GraphableNode) {
 				GraphableNode node = (GraphableNode) input;
 				answer.addAll(node.getChildrenGraph());
@@ -90,7 +90,7 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 	
 	private CamelRouteElement getRoute(AbstractCamelModelElement e) {
 		AbstractCamelModelElement cme = e;
-		while (cme != null && cme instanceof CamelRouteElement == false) {
+		while (cme != null && !(cme instanceof CamelRouteElement)) {
 			cme = cme.getParent();
 		}
 		if (cme != null && cme instanceof CamelRouteElement) {
@@ -100,14 +100,17 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 	}
 
 	private void getAllOutputs(AbstractCamelModelElement elem, Set<AbstractCamelModelElement> set) {
-		if (elem.getOutputElement() != null) set.add(elem.getOutputElement());
+		final AbstractCamelModelElement outputElement = elem.getOutputElement();
+		if (outputElement != null) {
+			set.add(outputElement);
+		}
 	}
-	
+
 	private void getAllChildren(List<AbstractCamelModelElement> elems, Set<AbstractCamelModelElement> set) {
 		for (AbstractCamelModelElement e : elems) {
 			set.add(e);
 			getAllOutputs(e, set);
-			if (e.getChildElements().isEmpty() == false) {
+			if (!e.getChildElements().isEmpty()) {
 				getAllChildren(e.getChildElements(), set);
 			}
 		}

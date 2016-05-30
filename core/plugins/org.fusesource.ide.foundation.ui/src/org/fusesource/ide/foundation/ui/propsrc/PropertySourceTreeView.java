@@ -46,7 +46,7 @@ public class PropertySourceTreeView extends TreeViewSupport implements IProperty
 
 	public static final String ID = "org.fusesource.ide.fabric.views.PropertySourceTableView";
 
-	private List<IPropertySource> propertySources = new ArrayList<IPropertySource>();
+	private List<IPropertySource> propertySources = new ArrayList<>();
 
 	private final String viewId;
 
@@ -81,7 +81,6 @@ public class PropertySourceTreeView extends TreeViewSupport implements IProperty
 
 	@Override
 	public Control getControl() {
-		// TODO Auto-generated method stub
 		return getViewer().getControl();
 	}
 
@@ -163,22 +162,30 @@ public class PropertySourceTreeView extends TreeViewSupport implements IProperty
 
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public Object getParent(Object element) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public boolean hasChildren(Object element) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 
 		};
 	}
+
+	@Override
+	public void refresh() {
+		for (IPropertySource propSource : propertySources) {
+			if (propSource instanceof BeanPropertySource) {
+				((BeanPropertySource) propSource).cleanCache();
+			}
+		}
+		super.refresh();
+	}
+
 }

@@ -114,7 +114,6 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 
 	@Override
 	public Control getControl() {
-		// TODO Auto-generated method stub
 		return getViewer().getControl();
 	}
 
@@ -248,4 +247,15 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 
 		};
 	}
+
+	@Override
+	public void refresh() {
+		for (IPropertySource propSource : propertySources) {
+			if (propSource instanceof BeanPropertySource) {
+				((BeanPropertySource) propSource).cleanCache();
+			}
+		}
+		super.refresh();
+	}
+
 }
