@@ -29,3 +29,4 @@ Require-Bundle: org.jboss.tools.foundation.ui;bundle-version="1.1.0",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.camel.CamelJMXPlugin
 Bundle-ClassPath: .
+Export-Package: org.fusesource.ide.jmx.camel.navigator;x-friends:="org.fusesource.ide.jmx.camel.tests.integration"

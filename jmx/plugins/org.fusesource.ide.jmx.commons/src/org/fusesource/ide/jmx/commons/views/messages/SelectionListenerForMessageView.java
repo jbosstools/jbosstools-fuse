@@ -51,7 +51,6 @@ final class SelectionListenerForMessageView implements ISelectionListener {
 		//@formatter:off
 		List<String> relevantPartClassNames = Arrays.asList(new String[]{
 				"org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator",
-				"org.fusesource.ide.fabric8.ui.navigator.FabricNavigator",
 				"org.fusesource.ide.jmx.commons.views.diagram.DiagramView",
 				"org.eclipse.wst.server.ui.internal.view.servers.ServersView",
 				"org.eclipse.wst.server.ui.internal.cnf.ServersView2"});

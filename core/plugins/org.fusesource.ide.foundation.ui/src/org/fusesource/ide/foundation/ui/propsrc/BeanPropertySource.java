@@ -15,6 +15,7 @@ import java.beans.IntrospectionException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -26,27 +27,17 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 	public static final long THROTTLE = 10 * 1000L; // 10 secs
 	
 	private static long lastGCRun = System.currentTimeMillis();	
-	private static Map<String, BeanCache> cachedValues = new HashMap<String, BeanCache>();
+	private static Map<String, BeanCache> cachedValues = new HashMap<>();
 			
 	class BeanCache {
 		private long cacheTime;
 		private Object value;
 		
-		/**
-		 * 
-		 */
 		public BeanCache(Object value) {
 			this.cacheTime = System.currentTimeMillis();
 			this.value = value;
 		}
-		
-		/**
-		 * @return the cacheTime
-		 */
-		private long getCacheTime() {
-			return this.cacheTime;
-		}
-		
+
 		/**
 		 * @return the value
 		 */
@@ -58,7 +49,7 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 		}
 		
 		private void cleanup() {
-			ArrayList<String> keysToBeCollected = new ArrayList<String>();
+			List<String> keysToBeCollected = new ArrayList<>();
 			Iterator<String> it = cachedValues.keySet().iterator();
 			while (it.hasNext()) {
 				String key = it.next();
@@ -87,7 +78,6 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 	public BeanPropertySource(Object bean, Class<?> beanType) throws IntrospectionException {
 		this.bean = bean;
 		metadata = BeanTypePropertyMetadata.beanMetadata(beanType);
-
 	}
 
 	@Override
@@ -141,5 +131,12 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 
 	@Override
 	public void resetPropertyValue(Object id) {
+		// not resettable value
 	}
+
+	public void cleanCache() {
+		cachedValues.clear();
+		lastGCRun = System.currentTimeMillis();
+	}
+
 }
