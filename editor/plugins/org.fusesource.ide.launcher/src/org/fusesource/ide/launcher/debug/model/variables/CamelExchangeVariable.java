@@ -23,7 +23,7 @@ public class CamelExchangeVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelExchangeVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelExchangeVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

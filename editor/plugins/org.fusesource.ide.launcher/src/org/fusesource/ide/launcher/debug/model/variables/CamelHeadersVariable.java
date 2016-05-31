@@ -28,7 +28,7 @@ public class CamelHeadersVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelHeadersVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelHeadersVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

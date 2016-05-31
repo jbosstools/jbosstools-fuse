@@ -25,7 +25,7 @@ public class CamelLogLevelVariable extends BaseWritableCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelLogLevelVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelLogLevelVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

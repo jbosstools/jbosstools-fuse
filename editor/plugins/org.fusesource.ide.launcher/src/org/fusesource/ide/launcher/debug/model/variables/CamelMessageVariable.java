@@ -23,13 +23,10 @@ public class CamelMessageVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelMessageVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelMessageVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#getVariableDisplayString()
-	 */
 	@Override
 	protected String getVariableDisplayString() {
 		return "CamelMessage";

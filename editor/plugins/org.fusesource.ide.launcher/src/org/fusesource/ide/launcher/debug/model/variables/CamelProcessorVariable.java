@@ -23,7 +23,7 @@ public class CamelProcessorVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelProcessorVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelProcessorVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

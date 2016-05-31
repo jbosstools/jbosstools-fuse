@@ -28,7 +28,7 @@ public class BaseWritableCamelVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public BaseWritableCamelVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public BaseWritableCamelVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

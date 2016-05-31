@@ -33,7 +33,7 @@ public class CamelBodyVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelBodyVariable(CamelDebugTarget debugTarget, String name, Class type, CamelMessageVariable parent) {
+	public CamelBodyVariable(CamelDebugTarget debugTarget, String name, Class<?> type, CamelMessageVariable parent) {
 		super(debugTarget, name, type);
 		this.parent = parent;
 	}

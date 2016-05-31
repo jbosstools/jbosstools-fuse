@@ -26,7 +26,7 @@ public class CamelBodyIncludeFilesVariable extends BaseWriteableCamelBooleanVari
 	 * @param name
 	 * @param type
 	 */
-	public CamelBodyIncludeFilesVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelBodyIncludeFilesVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

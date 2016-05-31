@@ -18,8 +18,7 @@ import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
  * @author lhein
  *
  */
-public class BaseWriteableCamelBooleanVariable extends
-		BaseWritableCamelVariable {
+public class BaseWriteableCamelBooleanVariable extends BaseWritableCamelVariable {
 	
 	/**
 	 * 
@@ -27,7 +26,7 @@ public class BaseWriteableCamelBooleanVariable extends
 	 * @param name
 	 * @param type
 	 */
-	public BaseWriteableCamelBooleanVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public BaseWriteableCamelBooleanVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

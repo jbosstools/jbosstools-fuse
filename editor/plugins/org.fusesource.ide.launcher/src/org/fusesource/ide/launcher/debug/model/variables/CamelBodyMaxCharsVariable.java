@@ -26,7 +26,7 @@ public class CamelBodyMaxCharsVariable extends BaseWritableCamelIntegerVariable 
 	 * @param name
 	 * @param type
 	 */
-	public CamelBodyMaxCharsVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelBodyMaxCharsVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

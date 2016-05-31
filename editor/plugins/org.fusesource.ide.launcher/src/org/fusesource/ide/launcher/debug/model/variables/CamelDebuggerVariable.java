@@ -24,7 +24,7 @@ public class CamelDebuggerVariable extends BaseCamelVariable {
 	 * @param name
 	 * @param type
 	 */
-	public CamelDebuggerVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelDebuggerVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	

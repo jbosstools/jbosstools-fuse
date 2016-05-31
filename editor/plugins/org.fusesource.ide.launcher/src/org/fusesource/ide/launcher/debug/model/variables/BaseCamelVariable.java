@@ -27,7 +27,7 @@ public class BaseCamelVariable extends CamelDebugElement implements IVariable {
 
 	// name & type
 	private String fName;
-	private Class fType;
+	private Class<?> fType;
 	
 	boolean valueChanged = false;
 	
@@ -42,64 +42,48 @@ public class BaseCamelVariable extends CamelDebugElement implements IVariable {
 	 * @param name variable name
 	 * @param type	value type
 	 */
-	public BaseCamelVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public BaseCamelVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget);
 		this.fName = name;
 		this.fType = type;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IVariable#getValue()
-	 */
+	@Override
 	public IValue getValue() throws DebugException {
 		return this.value;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IVariable#getName()
-	 */
+	@Override
 	public String getName() throws DebugException {
 		return this.fName;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IVariable#hasValueChanged()
-	 */
+	@Override
 	public boolean hasValueChanged() throws DebugException {
 		return this.valueChanged;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValueModification#setValue(java.lang.String)
-	 */
+	@Override
 	public void setValue(String expression) throws DebugException {
 		notSupported("No variable modifications!", null);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValueModification#setValue(org.eclipse.debug.core.model.IValue)
-	 */
+	@Override
 	public void setValue(IValue value) throws DebugException {
 		this.value = (BaseCamelValue)value;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValueModification#supportsValueModification()
-	 */
+	@Override
 	public boolean supportsValueModification() {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValueModification#verifyValue(java.lang.String)
-	 */
+	@Override
 	public boolean verifyValue(String expression) throws DebugException {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValueModification#verifyValue(org.eclipse.debug.core.model.IValue)
-	 */
+	@Override
 	public boolean verifyValue(IValue value) throws DebugException {
 		return true;
 	}
@@ -109,13 +93,11 @@ public class BaseCamelVariable extends CamelDebugElement implements IVariable {
 	 * 
 	 * @return
 	 */
-	public Class getReferenceType() {
+	public Class<?> getReferenceType() {
 		return this.fType;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IValue#getReferenceTypeName()
-	 */
+	@Override
 	public String getReferenceTypeName() throws DebugException {
 		return String.format("%s (id=%d)", getVariableDisplayString(), getVariableIDCode());
 	}

@@ -26,7 +26,7 @@ public class CamelBodyIncludeStreamsVariable extends BaseWriteableCamelBooleanVa
 	 * @param name
 	 * @param type
 	 */
-	public CamelBodyIncludeStreamsVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelBodyIncludeStreamsVariable(CamelDebugTarget debugTarget, String name, Class<?> type) {
 		super(debugTarget, name, type);
 	}
 	
