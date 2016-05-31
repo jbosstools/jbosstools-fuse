@@ -23,10 +23,15 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.graph.GraphFilter;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 import org.fusesource.ide.graph.GraphViewSupport;
+import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
+import org.fusesource.ide.jmx.camel.navigator.EndpointNode;
+import org.fusesource.ide.jmx.camel.navigator.ProcessorNode;
+import org.fusesource.ide.jmx.camel.navigator.RouteNode;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.HasNodeStatisticsContainer;
 import org.fusesource.ide.jmx.commons.messages.IMessage;
@@ -108,16 +113,18 @@ public class DiagramView extends GraphViewSupport {
 
 					if (part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView")) {
 						// special handling for message view selections
+
 						if (firstSelection != null) {
 							IMessage in = Exchanges.asMessage(firstSelection);
 							if (in != null) {
 								String toNode = in.getToNode();
 								if (toNode != null) {
-									selectNodeId(toNode, in.getEndpointUri());
+									if (selectNodeId(toNode, in.getEndpointUri())) {
+										return;
+									}
 								}
 							}
 						}
-						return;
 					}
 
 					if (firstSelection != null) {
@@ -148,11 +155,14 @@ public class DiagramView extends GraphViewSupport {
 							if (in != null) {
 								String toNode = in.getToNode();
 								if (toNode != null) {
-									selectNodeId(toNode, in.getEndpointUri());
+									if (selectNodeId(toNode, in.getEndpointUri())) {
+										return;
+									}
 								}
 							}
 						}
 					}
+					viewer.setSelection(selection);
 				}
 
 			});
@@ -241,8 +251,73 @@ public class DiagramView extends GraphViewSupport {
 					}
 				}
 			}
+		} else {
+			for (Object nodeElement : getViewer().getNodeElements()) {
+				if (isCorrespondingElement(toNode, nodeElement)) {
+					viewer.setSelection(new StructuredSelection(nodeElement));
+					return true;
+				}
+			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingElement(String toNode, Object nodeElement) {
+		return isCorrespondingNodeText(toNode, nodeElement)
+				|| isCorrespondingCamelContext(toNode, nodeElement)
+				|| isCorrespondingCamelRoute(toNode, nodeElement)
+				|| isCorrespondingCamelEndpoint(toNode, nodeElement)
+				|| isCorrespondingProcessor(toNode, nodeElement);
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingNodeText(String toNode, Object nodeElement) {
+		return nodeElement instanceof Node && toNode.equals(Strings.getOrElse(nodeElement));
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingProcessor(String toNode, Object nodeElement) {
+		return nodeElement instanceof ProcessorNode && toNode.equals(((ProcessorNode) nodeElement).getNodeId());
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingCamelEndpoint(String toNode, Object nodeElement) {
+		return nodeElement instanceof EndpointNode && toNode.equals(((EndpointNode) nodeElement).getEndpointUri());
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingCamelRoute(String toNode, Object nodeElement) {
+		return nodeElement instanceof RouteNode && toNode.equals(((RouteNode) nodeElement).getNodeId());
+	}
+
+	/**
+	 * @param toNode
+	 * @param nodeElement
+	 * @return
+	 */
+	private boolean isCorrespondingCamelContext(String toNode, Object nodeElement) {
+		return nodeElement instanceof CamelContextNode && toNode.equals(((CamelContextNode) nodeElement).getContextId());
 	}
 
 	protected boolean selectEndpointUri(String uri) {

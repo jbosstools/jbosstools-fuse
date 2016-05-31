@@ -140,13 +140,7 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	
 	@Override
 	public RefreshableUI getRefreshableUI() {
-		if (this instanceof RefreshableUI) {
-			return (RefreshableUI) this;
-		} else if (parent != null) {
-			// return parent.getRefreshableUI();
-// TODO: reworkd refresh logic -->			System.err.println("refreshing node?!?");
-		}
-		return null;
+		return this;
 	}
 	
 	/* (non-Javadoc)
@@ -162,11 +156,7 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	 */
 	@Override
 	public void fireRefresh(Object node, boolean full) {
-		if (node instanceof Node) {
-			((Node) node).getParent().clearChildren();
-			((Node) node).getParent().getChildren();
-			fireRefresh();
-		}
+		fireRefresh();
 	}
 }
 

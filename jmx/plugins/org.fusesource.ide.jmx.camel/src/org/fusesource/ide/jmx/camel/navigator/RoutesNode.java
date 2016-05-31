@@ -79,7 +79,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 
 	@Override
 	protected void loadChildren() {
-		Map<String,RouteNode> routeMap = new HashMap<String, RouteNode>();
+		Map<String, RouteNode> routeMap = new HashMap<>();
 		camelContext = getCamelContextNode().getCamelContext();
 		if (camelContext != null) {
 			List<AbstractCamelModelElement> children = camelContext.getChildElements();
