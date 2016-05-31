@@ -14,6 +14,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerEventMessageMBean;
 
@@ -52,6 +53,7 @@ public class BacklogTracerEventMessage implements IBacklogTracerEventMessageMBea
 	 */
 	@Override
 	@XmlElement(name = "timestamp")
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	public Date getTimestamp() {
 		return this.timestamp;
 	}

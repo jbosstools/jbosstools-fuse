@@ -1,4 +1,4 @@
 eclipse.preferences.version=1
 org.moreunit.preferences.version=2
-org.moreunit.unitsourcefolder=org.fusesource.ide.jmx.commons\:src\:org.fusesource.ide.jmx.common.tests\:src-test
+org.moreunit.unitsourcefolder=org.fusesource.ide.jmx.commons\:src\:org.fusesource.ide.jmx.common.tests\:src/test/java
 org.moreunit.useprojectsettings=true
