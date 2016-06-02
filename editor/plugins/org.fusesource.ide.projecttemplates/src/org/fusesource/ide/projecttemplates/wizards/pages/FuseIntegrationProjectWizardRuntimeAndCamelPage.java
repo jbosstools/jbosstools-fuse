@@ -87,7 +87,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
 
-		Group runtimeGrp = new Group(container, SWT.BORDER);
+		Group runtimeGrp = new Group(container, SWT.NONE);
 		GridData runtimeGrpData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		runtimeGrp.setLayout(new GridLayout(3, false));
 		runtimeGrp.setLayoutData(runtimeGrpData);
@@ -150,7 +150,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		new Label(runtimeGrp, SWT.None);
 		
-		Group camelGrp = new Group(container, SWT.BORDER);
+		Group camelGrp = new Group(container, SWT.NONE);
 		GridData camelGrpData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 20);
 		camelGrp.setLayout(new GridLayout(3, false));
 		camelGrp.setLayoutData(camelGrpData);

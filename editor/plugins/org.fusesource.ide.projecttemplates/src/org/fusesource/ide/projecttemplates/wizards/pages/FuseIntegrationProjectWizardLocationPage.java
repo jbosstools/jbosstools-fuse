@@ -81,7 +81,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 			}
 		});
 
-		Group locationGrp = new Group(container, SWT.BORDER);
+		Group locationGrp = new Group(container, SWT.NONE);
 		GridData locationGrpData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		locationGrp.setLayout(new GridLayout(3, false));
 		locationGrp.setLayoutData(locationGrpData);
