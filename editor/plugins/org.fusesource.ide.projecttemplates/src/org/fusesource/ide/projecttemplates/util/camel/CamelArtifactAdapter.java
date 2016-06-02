@@ -22,28 +22,39 @@ import org.eclipse.wst.server.core.model.ModuleArtifactAdapterDelegate;
  * @author lhein
  */
 public class CamelArtifactAdapter extends ModuleArtifactAdapterDelegate {
+
+	@Override
 	public IModuleArtifact getModuleArtifact(Object obj) {
-		if( obj instanceof IJavaElement ) {
-			obj = ((IJavaElement)obj).getJavaProject().getProject();
-		}
-		if( obj instanceof IResource ) {
-			IProject p = ((IResource)obj).getProject();
-			if( p != null ) {
-				IModule[] mods = ServerUtil.getModules(p);
-				if( mods.length == 1 && mods[0].getModuleType().getId().equals(CamelModuleFactory.MODULE_TYPE)) {
-					return new MBeanNullArtifact(mods[0]);
-				}
+		IProject p = getProject(obj);
+		if (p != null) {
+			IModule[] mods = ServerUtil.getModules(p);
+			if (mods.length == 1 && mods[0].getModuleType().getId().equals(CamelModuleFactory.MODULE_TYPE)) {
+				return new MBeanNullArtifact(mods[0]);
 			}
 		}
 		return null;
 	}
 	
+	/**
+	 * @param obj
+	 * @return
+	 */
+	private IProject getProject(Object obj) {
+		if (obj instanceof IJavaElement) {
+			return ((IJavaElement) obj).getJavaProject().getProject();
+		} else if (obj instanceof IResource) {
+			return ((IResource) obj).getProject();
+		}
+		return null;
+	}
+
 	public static class MBeanNullArtifact implements IModuleArtifact {
 		private IModule module;
 		public MBeanNullArtifact(IModule mod) {
 			this.module = mod;
 		}
 		
+		@Override
 		public IModule getModule() {
 			return module;
 		}

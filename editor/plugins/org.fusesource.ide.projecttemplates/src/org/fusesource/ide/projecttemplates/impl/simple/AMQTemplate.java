@@ -13,7 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipInputStream;
 
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
@@ -89,7 +89,7 @@ public class AMQTemplate extends AbstractProjectTemplate {
 				InputStream is = null;
 				try {
 					is = archiveUrl.openStream();
-					return new ZipInputStream(is, Charset.forName("UTF-8"));
+					return new ZipInputStream(is, StandardCharsets.UTF_8);
 				} catch (IOException ex) {
 					ProjectTemplatesActivator.pluginLog().logError(ex);
 				}			
