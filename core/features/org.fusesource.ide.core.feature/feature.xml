@@ -87,7 +87,14 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.v2_15_2"
+         id="org.fusesource.ide.camel.model.service.v2_15_1"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.v2_17_0"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -144,13 +151,6 @@
 
    <plugin
          id="org.fusesource.ide.camel.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_16_1"
          download-size="0"
          install-size="0"
          version="0.0.0"
