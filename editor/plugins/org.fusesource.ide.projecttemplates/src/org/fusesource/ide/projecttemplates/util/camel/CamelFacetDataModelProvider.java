@@ -21,6 +21,7 @@ import org.eclipse.jst.j2ee.project.facet.J2EEModuleFacetInstallDataModelProvide
 public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModelProvider 
 	implements ICamelFacetDataModelProperties {
 	
+	@Override
 	public Set<Object> getPropertyNames() {
 		Set<Object> names = super.getPropertyNames();
 		names.add(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
@@ -31,6 +32,7 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 		return names;
 	}
 	
+	@Override
 	public Object getDefaultProperty(String propertyName) {
 		if (propertyName.equals(FACET_ID)) {
 			return ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET;
@@ -43,6 +45,7 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 		return super.getDefaultProperty(propertyName);
 	}
 	
+	@Override
 	public IStatus validate(String propertyName) {
 		return OK_STATUS;
 	}

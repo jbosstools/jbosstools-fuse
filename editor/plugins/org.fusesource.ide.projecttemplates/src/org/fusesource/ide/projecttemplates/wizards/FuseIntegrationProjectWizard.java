@@ -41,10 +41,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 	protected FuseIntegrationProjectWizardLocationPage locationPage;
 	protected FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
 	protected FuseIntegrationProjectWizardTemplatePage templateSelectionPage;
-	
-	/**
-	 * 
-	 */
+
 	public FuseIntegrationProjectWizard() {
 		super();
 		setWindowTitle(Messages.newProjectWizardTitle);

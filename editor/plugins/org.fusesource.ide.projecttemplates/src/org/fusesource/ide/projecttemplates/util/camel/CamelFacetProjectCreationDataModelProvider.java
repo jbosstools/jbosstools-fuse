@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.util.camel;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
@@ -38,12 +37,4 @@ public class CamelFacetProjectCreationDataModelProvider extends
 		map.add(camelFacet);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider#validate(java.lang.String)
-	 */
-	@Override
-	public IStatus validate(String propertyName) {
-		return super.validate(propertyName);
-	}
 }

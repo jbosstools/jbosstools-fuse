@@ -23,9 +23,6 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
  */
 public class TemplateNameAndKeywordPatternFilter extends PatternFilter {
 	
-	/**
-	 * 
-	 */
 	public TemplateNameAndKeywordPatternFilter() {
 		setIncludeLeadingWildcard(true);
 	}

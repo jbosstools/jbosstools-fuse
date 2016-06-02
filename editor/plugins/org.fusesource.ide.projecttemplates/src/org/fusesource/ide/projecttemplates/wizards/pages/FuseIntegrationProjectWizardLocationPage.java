@@ -48,9 +48,6 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 	
 	private IPath location;
 	
-	/**
-	 * 
-	 */
 	public FuseIntegrationProjectWizardLocationPage() {
 		super(Messages.newProjectWizardLocationPageName);
 		setTitle(Messages.newProjectWizardLocationPageTitle);

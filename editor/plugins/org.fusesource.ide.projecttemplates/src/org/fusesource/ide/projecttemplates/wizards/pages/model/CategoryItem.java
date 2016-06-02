@@ -92,7 +92,7 @@ public class CategoryItem {
 	 * @param template
 	 */
 	public void addTemplate(TemplateItem template) {
-		if (templates.contains(template) == false) {
+		if (!templates.contains(template)) {
 			templates.add(template);
 			Collections.sort(this.templates, new Comparator<TemplateItem>() {
 				/* (non-Javadoc)
@@ -101,7 +101,9 @@ public class CategoryItem {
 				@Override
 				public int compare(TemplateItem o1, TemplateItem o2) {
 					int res = Integer.compare(o1.getWeight(), o2.getWeight());
-					if (res == 0) res = o1.getName().compareTo(o2.getName());
+					if (res == 0) {
+						res = o1.getName().compareTo(o2.getName());
+					}
 					return res;
 				}
 			});
@@ -114,7 +116,7 @@ public class CategoryItem {
 	 * @param subCategory
 	 */
 	public void addSubCategory(CategoryItem subCategory) {
-		if (subCategories.contains(subCategory) == false) {
+		if (!subCategories.contains(subCategory)) {
 			subCategories.add(subCategory);
 			subCategory.setParentCategory(this);
 			Collections.sort(this.subCategories, new Comparator<CategoryItem>() {

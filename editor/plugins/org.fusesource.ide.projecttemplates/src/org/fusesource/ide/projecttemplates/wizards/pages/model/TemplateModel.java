@@ -141,7 +141,9 @@ public class TemplateModel {
 			@Override
 			public int compare(CategoryItem o1, CategoryItem o2) {
 				int res = Integer.compare(o1.getWeight(), o2.getWeight());
-				if (res == 0) res = o1.getName().compareTo(o2.getName());
+				if (res == 0) {
+					res = o1.getName().compareTo(o2.getName());
+				}
 				return res;
 			}
 		});
@@ -154,7 +156,7 @@ public class TemplateModel {
 	private CategoryItem findCategory(List<CategoryItem> categories, String catId) {
 		for (CategoryItem cat : categories) {
 			if (cat.getId().equals(catId)) return cat;
-			if (cat.getSubCategories().isEmpty() == false) {
+			if (!cat.getSubCategories().isEmpty()) {
 				return findCategory(cat.getSubCategories(), catId);
 			}
 		}
