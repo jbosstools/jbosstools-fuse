@@ -15,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -104,34 +105,17 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			monitor.beginTask("Adapting the project to the new Camel version...", IProgressMonitor.UNKNOWN);
 			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString());
 			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+
+			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {
-				for (Dependency dep : m2m.getDependencyManagement().getDependencies()) {
-					if (dep.getGroupId().equalsIgnoreCase("org.apache.camel") && 
-						dep.getArtifactId().startsWith("camel-")) {
-						dep.setVersion(projectMetaData.getCamelVersion());
-					}
-				}
+				updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
 			}
-			for (Dependency dep : m2m.getDependencies()) {
-				if (dep.getGroupId().equalsIgnoreCase("org.apache.camel") && 
-					dep.getArtifactId().startsWith("camel-")) {
-					dep.setVersion(projectMetaData.getCamelVersion());
-				}
-			}
+			updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
 			if (m2m.getBuild().getPluginManagement() != null) {
-				for (Plugin p : m2m.getBuild().getPluginManagement().getPlugins()) {
-					if (p.getGroupId().equalsIgnoreCase("org.apache.camel") && 
-						p.getArtifactId().startsWith("camel-")) {
-						p.setVersion(projectMetaData.getCamelVersion());
-					}
-				}
+				updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 			}
-			for (Plugin p : m2m.getBuild().getPlugins()) {
-				if (p.getGroupId().equalsIgnoreCase("org.apache.camel") && 
-					p.getArtifactId().startsWith("camel-")) {
-					p.setVersion(projectMetaData.getCamelVersion());
-				}
-			}
+			updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
+
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
 			IFile pomIFile2 = project.getProject().getFile("pom.xml");
@@ -146,5 +130,30 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			monitor.done();
 		}
 		return true;
+	}
+
+	/**
+	 * @param plugins
+	 * @param camelVersion
+	 */
+	private void updateCamelVersionPlugins(List<Plugin> plugins, String camelVersion) {
+		for (Plugin p : plugins) {
+			if ("org.apache.camel".equalsIgnoreCase(p.getGroupId()) && p.getArtifactId().startsWith("camel-")) {
+				p.setVersion(camelVersion);
+			}
+		}
+	}
+
+	/**
+	 * @param dependencies
+	 * @param camelVersion
+	 */
+	private void updateCamelVersionDependencies(List<Dependency> dependencies, String camelVersion) {
+		for (Dependency dep : dependencies) {
+			if ("org.apache.camel".equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
+				dep.setVersion(camelVersion);
+			}
+		}
+
 	}
 }
