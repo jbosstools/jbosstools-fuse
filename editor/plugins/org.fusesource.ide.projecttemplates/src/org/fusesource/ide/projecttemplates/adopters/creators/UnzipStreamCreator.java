@@ -11,9 +11,11 @@
 package org.fusesource.ide.projecttemplates.adopters.creators;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -43,8 +45,6 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	 * @return
 	 */
 	protected boolean unzipStream(IProject project, NewProjectMetaData metadata) {
-		byte[] buffer = new byte[1024];
-    	
 	     try {
 	    	 // create output directory is not exists
 	    	 File folder = new File(project.getLocation().toOSString());
@@ -53,35 +53,32 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	    	 }
 	    	 InputStream is = getTemplateStream(metadata);
 	    	 
-	    	 if (is instanceof ZipInputStream) {
-		    	 // get the zip file content
-		    	 ZipInputStream zis = (ZipInputStream)getTemplateStream(metadata);
-		    	 // get the zipped file list entry
-		    	 ZipEntry ze = zis.getNextEntry();
-		    	 while(ze != null) {
-		    		 String fileName = ze.getName();
-		    		 File newFile = new File(folder + File.separator + fileName);
-		    		 if (ze.isDirectory()) {
-		    			newFile.mkdirs(); 
-		    		 } else {
-			    		 // create all non exists folders
-			    		 // else you will hit FileNotFoundException for compressed folder
-			    		 new File(newFile.getParent()).mkdirs();
-			    		 FileOutputStream fos = new FileOutputStream(newFile);             
-			    		 int len;
-			    		 while ((len = zis.read(buffer)) > 0) {
-			    			 fos.write(buffer, 0, len);
-			    		 }
-			    		 fos.close();   
-		    		 }
-		    		 ze = zis.getNextEntry();
-		    	 }
-		    	 zis.closeEntry();
-		    	 zis.close();	    		 
-	    	 } else {
-	    		 ProjectTemplatesActivator.pluginLog().logError("Unable to unzip stream of type " + is.getClass().getName());
-	    		 return false;
-	    	 }
+			 if (is instanceof ZipInputStream) {
+				// get the zip file content
+				ZipInputStream zis = (ZipInputStream) getTemplateStream(metadata);
+				// get the zipped file list entry
+				ZipEntry ze = zis.getNextEntry();
+				while (ze != null) {
+					String fileName = ze.getName();
+					File newFile = new File(folder + File.separator + fileName);
+					if (ze.isDirectory()) {
+						newFile.mkdirs();
+					} else {
+						// create all non exists folders
+						// else you will hit FileNotFoundException for
+						// compressed folder
+						final Path newFilePath = newFile.toPath();
+						Files.createDirectories(newFilePath.getParent());
+						Files.copy(zis, newFilePath, StandardCopyOption.REPLACE_EXISTING);
+					}
+					ze = zis.getNextEntry();
+				}
+				zis.closeEntry();
+				zis.close();
+			 } else {
+				ProjectTemplatesActivator.pluginLog().logError("Unable to unzip stream of type " + is.getClass().getName());
+				return false;
+			 }
 	     } catch(IOException ex) {
 	    	 ProjectTemplatesActivator.pluginLog().logError(ex);
 	    	 return false;
