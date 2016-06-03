@@ -44,7 +44,7 @@ public class CamelStackFrame extends CamelDebugElement implements IStackFrame, I
 	private CamelThread fThread;
 	private CamelDebugTarget debugTarget;
 	private int fId;
-	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
+	private ArrayList<IVariable> fVariables = new ArrayList<>();
 	private String data;
 	private File contextFile;
 	private BacklogTracerEventMessage backlogTracerEventMessage;
@@ -153,51 +153,37 @@ public class CamelStackFrame extends CamelDebugElement implements IStackFrame, I
 		return this.data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getThread()
-	 */
+	@Override
 	public IThread getThread() {
 		return fThread;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getVariables()
-	 */
+	@Override
 	public IVariable[] getVariables() throws DebugException {
 		return fVariables.toArray(new IVariable[this.fVariables.size()]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#hasVariables()
-	 */
+	@Override
 	public boolean hasVariables() throws DebugException {
-		return fVariables.size() > 0;
+		return !fVariables.isEmpty();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getLineNumber()
-	 */
+	@Override
 	public int getLineNumber() throws DebugException {
 		return -1;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getCharStart()
-	 */
+	@Override
 	public int getCharStart() throws DebugException {
 		return -1;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getCharEnd()
-	 */
+	@Override
 	public int getCharEnd() throws DebugException {
 		return -1;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getName()
-	 */
+	@Override
 	public String getName() throws DebugException {
 		if (this.backlogTracerEventMessage != null) {
 			return String.format("%s in %s [%s]", this.backlogTracerEventMessage.getToNode(), this.backlogTracerEventMessage.getRouteId(), this.contextFile != null ? contextFile.getName() : "unknown");
@@ -205,121 +191,87 @@ public class CamelStackFrame extends CamelDebugElement implements IStackFrame, I
 		return this.contextFile != null ? contextFile.getName() + ": " + data : data;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#getRegisterGroups()
-	 */
+	@Override
 	public IRegisterGroup[] getRegisterGroups() throws DebugException {
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStackFrame#hasRegisterGroups()
-	 */
+	@Override
 	public boolean hasRegisterGroups() throws DebugException {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#canStepInto()
-	 */
+	@Override
 	public boolean canStepInto() {
 		return getThread().canStepInto();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#canStepOver()
-	 */
+	@Override
 	public boolean canStepOver() {
 		return getThread().canStepOver();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#canStepReturn()
-	 */
+	@Override
 	public boolean canStepReturn() {
 		return getThread().canStepReturn();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#isStepping()
-	 */
+	@Override
 	public boolean isStepping() {
 		return getThread().isStepping();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepInto()
-	 */
+	@Override
 	public void stepInto() throws DebugException {
 		getThread().stepInto();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepOver()
-	 */
+	@Override
 	public void stepOver() throws DebugException {
 		getThread().stepOver();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepReturn()
-	 */
+	@Override
 	public void stepReturn() throws DebugException {
 		getThread().stepReturn();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#canResume()
-	 */
+	@Override
 	public boolean canResume() {
 		return getThread().canResume();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#canSuspend()
-	 */
+	@Override
 	public boolean canSuspend() {
 		return getThread().canSuspend();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#isSuspended()
-	 */
+	@Override
 	public boolean isSuspended() {
 		return getThread().isSuspended();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#resume()
-	 */
+	@Override
 	public void resume() throws DebugException {
 		getThread().resume();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#suspend()
-	 */
+	@Override
 	public void suspend() throws DebugException {
 		getThread().suspend();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#canTerminate()
-	 */
+	@Override
 	public boolean canTerminate() {
 		return getThread().canTerminate();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#isTerminated()
-	 */
+	@Override
 	public boolean isTerminated() {
 		return getThread().isTerminated();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#terminate()
-	 */
+	@Override
 	public void terminate() throws DebugException {
 		getThread().terminate();
 	}

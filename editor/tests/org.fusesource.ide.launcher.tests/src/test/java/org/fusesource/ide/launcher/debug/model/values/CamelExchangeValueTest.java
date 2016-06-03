@@ -23,6 +23,7 @@ public class CamelExchangeValueTest {
 		exchange.setExchangeId("TestExchangeId");
 		CamelExchangeValue camelExchangeValue = new CamelExchangeValue(null, exchange, String.class);
 
+		assertThat(camelExchangeValue.hasVariables()).isTrue();
 		assertThat(camelExchangeValue.getVariables()).hasSize(5);
 	}
 

@@ -36,6 +36,7 @@ public class CamelDebuggerValueTest {
 
 		CamelDebuggerValue camelDebuggerValue = new CamelDebuggerValue(null, stackFrame, String.class);
 
+		assertThat(camelDebuggerValue.hasVariables()).isTrue();
 		assertThat(camelDebuggerValue.getVariables()).hasSize(5);
 	}
 

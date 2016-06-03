@@ -35,6 +35,7 @@ public class CamelProcessorValueTest {
 
 		CamelProcessorValue camelProcessorValue = new CamelProcessorValue(null, stackFrame, null, String.class);
 		
+		assertThat(camelProcessorValue.hasVariables()).isTrue();
 		assertThat(camelProcessorValue.getVariables()).hasSize(14);
 	}
 

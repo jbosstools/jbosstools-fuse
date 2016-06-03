@@ -77,7 +77,7 @@ public class CamelExchangeValue extends BaseCamelValue {
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return this.fVariables.isEmpty();
+		return !fVariables.isEmpty();
 	}
 	
 	@Override
