@@ -59,23 +59,29 @@ public class CamelProjectWizardIT {
 		}
 	}
 
+	/**
+	 * commented out for now because that wizard is going to disappear and
+	 * the test is therefore obsolete (at least here)
+	 * 
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testCreateDefaultBlueprintCamelProject() throws InterruptedException {
-		CamelProjectWizard wizard = createAndInitializeWizard();
-
-		assertThat(wizard.performFinish()).isTrue();
-
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		assertThat(project.exists()).isTrue();
-		assertThat(project.getFile("pom.xml").exists()).isTrue();
-		assertThat(project.getFile(new Path("camelcontent/OSGI-INF/blueprint/camel-context.xml")).exists()).isTrue();
-		// TODO: check that the project has the right Camel/Fuse nature/facet
-		// assertThat(project.hasNature(RiderProjectNature.NATURE_ID)).isTrue();
-		// TODO: check that there is no compilation error
-		// TODO: check that there is no validation error
-		// TODO: check that we can run as camel route without error
-		// launchDebug(project); Currently this provided code shows that it
-		// doesn't work. Uncomment when the implementation will be done.
+//		CamelProjectWizard wizard = createAndInitializeWizard();
+//
+//		assertThat(wizard.performFinish()).isTrue();
+//
+//		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+//		assertThat(project.exists()).isTrue();
+//		assertThat(project.getFile("pom.xml").exists()).isTrue();
+//		assertThat(project.getFile(new Path("camelcontent/OSGI-INF/blueprint/camel-context.xml")).exists()).isTrue();
+//		// TODO: check that the project has the right Camel/Fuse nature/facet
+//		// assertThat(project.hasNature(RiderProjectNature.NATURE_ID)).isTrue();
+//		// TODO: check that there is no compilation error
+//		// TODO: check that there is no validation error
+//		// TODO: check that we can run as camel route without error
+//		// launchDebug(project); Currently this provided code shows that it
+//		// doesn't work. Uncomment when the implementation will be done.
 	}
 
 	/**
