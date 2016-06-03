@@ -21,27 +21,15 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
-import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
+ * this template is used for creating a blank project (not template based)
+ * 
  * @author lhein
  */
-public class AMQTemplate extends AbstractProjectTemplate {
-
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#supportsDSL(org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType)
-	 */
-	@Override
-	public boolean supportsDSL(CamelDSLType type) {
-		switch (type) {
-		case BLUEPRINT:	return true;
-		case SPRING:	return false;
-		case JAVA:		return false;
-		default:		return false;
-	}	
-	}
+public class EmptyProjectTemplate extends AbstractProjectTemplate {
 	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getConfigurator()
@@ -50,24 +38,21 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	public TemplateConfiguratorSupport getConfigurator() {
 		return new MavenTemplateConfigurator();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
 	 */
 	@Override
 	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
-		return new AMQUnzipTemplateCreator();
+		return new BlankProjectCreator();
 	}
+	
+	private class BlankProjectCreator extends UnzipStreamCreator {
 
-	/**
-	 * creator class for the CBR simple template 
-	 */
-	private class AMQUnzipTemplateCreator extends UnzipStreamCreator {
-
-		private static final String TEMPLATE_FOLDER = "templates/simple/amq/";
-		private static final String TEMPLATE_BLUEPRINT = "simple-fuse-activemq-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "simple-fuse-activemq-spring.zip";
-		private static final String TEMPLATE_JAVA = "simple-fuse-activemq-java.zip";
+		private static final String TEMPLATE_FOLDER = "templates/blank/";
+		private static final String TEMPLATE_BLUEPRINT = "blank-blueprint.zip";
+		private static final String TEMPLATE_SPRING = "blank-spring.zip";
+		private static final String TEMPLATE_JAVA = "blank-java.zip";
 		
 		/* (non-Javadoc)
 		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)

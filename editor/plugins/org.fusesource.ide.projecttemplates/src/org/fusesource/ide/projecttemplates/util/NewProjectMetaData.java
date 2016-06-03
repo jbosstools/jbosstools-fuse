@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.util;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IRuntime;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 
 /**
@@ -24,6 +25,14 @@ public class NewProjectMetaData {
 	private CamelDSLType dslType;
 	private boolean blankProject;
 	private IPath locationPath;
+	private AbstractProjectTemplate template;
+	
+	/**
+	 * @return the template
+	 */
+	public AbstractProjectTemplate getTemplate() {
+		return this.template;
+	}
 	
 	/**
 	 * @return the locationPath
@@ -65,6 +74,13 @@ public class NewProjectMetaData {
 	 */
 	public boolean isBlankProject() {
 		return this.blankProject;
+	}
+	
+	/**
+	 * @param template the template to set
+	 */
+	public void setTemplate(AbstractProjectTemplate template) {
+		this.template = template;
 	}
 	
 	/**

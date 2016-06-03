@@ -2160,7 +2160,7 @@
       </tags>
       <title>Kubernetes</title>
       <description>The kubernetes component allows to work with Kubernetes PaaS.</description>
-      <syntax>kubernetes:master</syntax>
+      <syntax>kubernetes:masterUrl</syntax>
       <class>org.apache.camel.component.kubernetes.KubernetesComponent</class>
       <kind>component</kind>
       <scheme>kubernetes</scheme>
@@ -2988,7 +2988,7 @@
       </tags>
       <title>Braintree</title>
       <description>The braintree component is used for integrating with the Braintree Payment System.</description>
-      <syntax>braintree:name</syntax>
+      <syntax>braintree:apiName/methodName</syntax>
       <class>org.apache.camel.component.braintree.BraintreeComponent</class>
       <kind>component</kind>
       <scheme>braintree</scheme>
@@ -9024,7 +9024,7 @@
       </tags>
       <title>Crypto (JCE)</title>
       <description>The crypto component is used for signing and verifying exchanges using the Signature Service of the Java Cryptographic Extension (JCE).</description>
-      <syntax>crypto:cryptoOperation:name</syntax>
+      <syntax>crypto:cryptoOperation</syntax>
       <class>org.apache.camel.component.crypto.DigitalSignatureComponent</class>
       <kind>component</kind>
       <producerOnly>true</producerOnly>
@@ -9603,7 +9603,7 @@
       </tags>
       <title>ironmq</title>
       <description>Represents a IronMQ endpoint.</description>
-      <syntax>ironmq:queue</syntax>
+      <syntax>ironmq:queueName</syntax>
       <class>org.apache.camel.component.ironmq.IronMQComponent</class>
       <kind>component</kind>
       <scheme>ironmq</scheme>
