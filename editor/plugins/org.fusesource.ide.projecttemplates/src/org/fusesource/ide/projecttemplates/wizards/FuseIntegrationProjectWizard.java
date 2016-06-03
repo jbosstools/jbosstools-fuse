@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
@@ -29,7 +31,6 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardLocationPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardTemplatePage;
-import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 
 /**
  * @author lhein
@@ -95,13 +96,16 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 					boolean ok = c.create(monitor);
 					if (ok) {
 						// then configure the project for the given template
-						TemplateItem template = templateSelectionPage.getSelectedTemplate();
-						if (template != null) {
-							try {
-								template.getTemplate().create(c.getProject(), metadata);
-							} catch (CoreException ex) {
-								ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex);
-							}
+						AbstractProjectTemplate template = metadata.getTemplate();
+						if (metadata.isBlankProject()) {
+							// we create a blank project
+							template = new EmptyProjectTemplate();
+						}
+						// now execute the template
+						try {
+							template.create(c.getProject(), metadata);
+						} catch (CoreException ex) {
+							ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex);
 						}
 					}
 					try {
@@ -147,6 +151,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		metadata.setTargetRuntime(runtimeAndCamelVersionPage.getSelectedRuntime());
 		metadata.setDslType(templateSelectionPage.getDSL());
 		metadata.setBlankProject(templateSelectionPage.isEmptyProject());
+		metadata.setTemplate(templateSelectionPage.getSelectedTemplate() != null ? templateSelectionPage.getSelectedTemplate().getTemplate() : null);
 		return metadata;
 	}
 }
