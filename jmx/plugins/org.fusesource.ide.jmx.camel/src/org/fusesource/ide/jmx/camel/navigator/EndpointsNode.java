@@ -144,7 +144,6 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 				schemeEndpoint.addChild(endpoint);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			CamelJMXPlugin.getLogger().warning("Failed to load endpoints for "
 					+ camelContextNode + ". " + e, e);
 		}

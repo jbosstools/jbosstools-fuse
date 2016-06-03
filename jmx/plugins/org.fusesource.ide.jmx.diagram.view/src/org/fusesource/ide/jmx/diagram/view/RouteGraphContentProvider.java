@@ -17,8 +17,8 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.zest.core.viewers.IGraphContentProvider;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 public class RouteGraphContentProvider implements IGraphContentProvider {
@@ -76,14 +76,14 @@ public class RouteGraphContentProvider implements IGraphContentProvider {
 		} else if (input instanceof AbstractCamelModelElement) {
 			AbstractCamelModelElement node = (AbstractCamelModelElement) input;
 
-			Set<CamelElementConnection> set = new HashSet<CamelElementConnection>();
+			Set<CamelElementConnection> set = new HashSet<>();
 			CamelRouteElement parent;
 			if (node instanceof CamelRouteElement) {
 				parent = (CamelRouteElement) node;
 			} else {
 				parent = getRoute(node);
 			}
-			Set<AbstractCamelModelElement> descendents = new HashSet<AbstractCamelModelElement>();
+			Set<AbstractCamelModelElement> descendents = new HashSet<>();
 			if (parent == null) {
 				getAllChildren(node.getChildElements(), descendents);
 			} else {
@@ -95,14 +95,16 @@ public class RouteGraphContentProvider implements IGraphContentProvider {
 	}
 	
 	private void getAllOutputs(AbstractCamelModelElement elem, Set<AbstractCamelModelElement> set) {
-		if (elem.getOutputElement() != null) set.add(elem.getOutputElement());
+		if (elem.getOutputElement() != null) {
+			set.add(elem.getOutputElement());
+		}
 	}
 	
 	private void getAllChildren(List<AbstractCamelModelElement> elems, Set<AbstractCamelModelElement> set) {
 		for (AbstractCamelModelElement e : elems) {
 			set.add(e);
 			getAllOutputs(e, set);
-			if (e.getChildElements().isEmpty() == false) {
+			if (!e.getChildElements().isEmpty()) {
 				getAllChildren(e.getChildElements(), set);
 			}
 		}
@@ -110,7 +112,7 @@ public class RouteGraphContentProvider implements IGraphContentProvider {
 	
 	private CamelRouteElement getRoute(AbstractCamelModelElement e) {
 		AbstractCamelModelElement cme = e;
-		while (cme != null && cme instanceof CamelRouteElement == false) {
+		while (cme != null && !(cme instanceof CamelRouteElement)) {
 			cme = cme.getParent();
 		}
 		if (cme != null && cme instanceof CamelRouteElement) {

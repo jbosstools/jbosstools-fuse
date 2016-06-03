@@ -1587,12 +1587,12 @@ public abstract class AbstractCamelModelElement {
 
 		if (this instanceof CamelContextElement) {
 			CamelContextElement ctx = (CamelContextElement)this;
-			if (ctx.getDataformats().isEmpty() == false) {
+			if (!ctx.getDataformats().isEmpty()) {
 				if (ctx.getDataformats().containsKey(nodeId)) {
 					return ctx.getDataformats().get(nodeId);
 				}
 			}
-			if (ctx.getEndpointDefinitions().isEmpty() == false) {
+			if (!ctx.getEndpointDefinitions().isEmpty()) {
 				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
 					return ctx.getEndpointDefinitions().get(nodeId);
 				}

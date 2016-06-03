@@ -30,26 +30,14 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 
 	private static final Object[] EMPTY = {};
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-	 */
 	@Override
 	public void dispose() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.zest.core.viewers.IGraphContentProvider#getElements(java.lang.Object)
-	 */
 	@Override
 	public Object[] getElements(Object input) {
 		if (input instanceof AbstractCamelModelElement) {
@@ -74,12 +62,8 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 			if (input instanceof GraphableNode) {
 				GraphableNode node = (GraphableNode) input;
 				answer.addAll(node.getChildrenGraph());
-			} else if (input != null) {
-				answer.add(input);
-				if (input instanceof Node) {
-					Node aNode = (Node) input;
-					answer.addAll(aNode.getChildrenList());
-				}
+			} else if (input instanceof Node) {
+				return getAllNodeChildren((Node) input, new HashSet<>()).toArray();
 			} else {
 				// will prevent the grayish box in the diagram view
 				return null;
@@ -88,6 +72,22 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 		}
 	}
 	
+	/**
+	 * @param input
+	 * @return
+	 */
+	private Set<Node> getAllNodeChildren(Node node, Set<Node> handledNodes) {
+		Set<Node> res = new HashSet<>();
+		res.add(node);
+		handledNodes.add(node);
+		for (Node child : node.getChildrenList()) {
+			if (!handledNodes.contains(child)) {
+				res.addAll(getAllNodeChildren(child, handledNodes));
+			}
+		}
+		return res;
+	}
+
 	private CamelRouteElement getRoute(AbstractCamelModelElement e) {
 		AbstractCamelModelElement cme = e;
 		while (cme != null && !(cme instanceof CamelRouteElement)) {
