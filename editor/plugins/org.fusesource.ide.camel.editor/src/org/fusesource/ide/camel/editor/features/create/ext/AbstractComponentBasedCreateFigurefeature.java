@@ -72,8 +72,7 @@ public class AbstractComponentBasedCreateFigurefeature extends CreateFigureFeatu
 
 	private Eip determineEIP(AbstractCamelModelElement parent) {
 		if (parent instanceof CamelRouteElement) {
-			CamelRouteElement route = (CamelRouteElement)parent;
-			if (route.getChildElements().size()<1) {
+			if (parent.getChildElements().size()<1) {
 				return getEipByName(AbstractCamelModelElement.ENDPOINT_TYPE_FROM);
 			}
 		}		

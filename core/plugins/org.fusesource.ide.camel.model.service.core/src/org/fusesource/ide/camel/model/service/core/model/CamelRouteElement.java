@@ -33,6 +33,13 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 	/**
 	 * 
 	 */
+	public CamelRouteElement(AbstractCamelModelElement parent, Node underlyingNode) {
+		super(parent, underlyingNode);
+	}
+	
+	/**
+	 * 
+	 */
 	public CamelRouteElement(CamelContextElement camelContext, Node underlyingNode) {
 		super(camelContext, underlyingNode);
 	}
