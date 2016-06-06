@@ -34,6 +34,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Node;
 
@@ -240,7 +241,13 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 					final String namespace = parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
 					newNode = editor.getModel().createElement(nodeTypeId, namespace);
 				}
-				return new CamelBasicModelElement(parent, newNode);
+				// if we have a route eip we need to use the speific route model element
+				// because otherwise this causes issues
+				if (eip.getName().equalsIgnoreCase("route")) {
+					return new CamelRouteElement(parent, newNode);
+				} else {
+					return new CamelBasicModelElement(parent, newNode);
+				}
 			}
 		}
 		if( clazz != null ) {
