@@ -240,6 +240,17 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	private void setTemplatesActive(boolean active) {
 		list_templates.getTree().setEnabled(active);
 		list_templates.getTree().getParent().setEnabled(active);
+		if (!active) {
+			// user selected Empty Project -> activate all DSL buttons
+			btn_blueprintDSL.setEnabled(true);
+			btn_springDSL.setEnabled(true);
+			btn_javaDSL.setEnabled(true);
+		} else {
+			// user wants to use template -> activatre dsl buttons if supported
+			btn_blueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
+			btn_springDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
+			btn_javaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));
+		}
 	}
 	
 	private void validate() {
