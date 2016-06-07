@@ -34,6 +34,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -196,6 +198,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				}
 			}
 
+		});
+		treeViewer.addFilter(new ViewerFilter() {	
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (element instanceof String) {
+					return !getModel().get(element).isEmpty();
+				}
+				return true;
+			}
 		});
 		getSite().setSelectionProvider(treeViewer);
 	}

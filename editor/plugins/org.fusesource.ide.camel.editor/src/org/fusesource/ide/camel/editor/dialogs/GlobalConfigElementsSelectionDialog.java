@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -95,6 +97,16 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
 
         listViewer.setLabelProvider(labelProvider);
         listViewer.setContentProvider(contentProvider);
+        
+        listViewer.addFilter(new ViewerFilter() {	
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (element instanceof GlobalConfigCategoryItem) {
+					return !((GlobalConfigCategoryItem)element).getChildren().isEmpty();
+				}
+				return true;
+			}
+		});
         
         initializeViewer();
 
