@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -75,7 +76,6 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
 
 /**
- * @author brianf
  *
  */
 public class NewTransformationWizard extends Wizard implements INewWizard {
@@ -108,7 +108,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // Save transformation file
         final IFile file = uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
         if (file.exists()
- && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm,
+            && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm,
 				Messages.bind(Messages.NewTransformationWizard_confirmationDialogmessage, file.getFullPath()))) {
             return false;
         }
@@ -124,10 +124,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 try (FileOutputStream configStream = new FileOutputStream(newFile)) {
                     if (uiModel.getSourceFilePath() != null) {
                         // Generate models
-                        final String sourceClassName = generateModel(uiModel.getSourceFilePath(),
-                                uiModel.getSourceType(), true);
-                        final String targetClassName = generateModel(uiModel.getTargetFilePath(),
-                                uiModel.getTargetType(), false);
+                        final String sourceClassName
+                            = generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType(), true, monitor);
+                        final String targetClassName
+                            = generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType(), false, monitor);
                         // Update Camel config
                         final IPath resourcesPath = uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
                         final IFile camelIFile = uiModel.getCamelIFile();
@@ -384,7 +384,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return super.canFinish();
     }
 
-    private String generateModel(final String filePath, final ModelType type, boolean isSource) throws Exception {
+    private String generateModel(String filePath,
+                                 ModelType type,
+                                 boolean isSource,
+                                 IProgressMonitor monitor) throws Exception {
         // Build class name from file name
         final StringBuilder className = new StringBuilder();
         final StringCharacterIterator iter = new StringCharacterIterator(filePath.substring(
@@ -446,50 +449,72 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
             final JCodeModel model = generator.generateFromSchema(schemaFile, null, targetClassesFolder);
-            String elementName = null;
-            if (isSource) {
-                elementName = uiModel.getSourceClassName();
-            } else {
-                elementName = uiModel.getTargetClassName();
-            }
-            String modelClass = null;
-            Map<String, String> mappings = generator.elementToClassMapping(model);
-            if (mappings != null && !mappings.isEmpty()) {
-                modelClass = mappings.get(elementName);
-            } else {
-                modelClass = selectModelClass(model);
-            }
-            if (modelClass != null) {
-                return modelClass;
-            }
-            return null;
+            return generateXmlModel(generator, model, isSource, monitor);
         }
         case XML: {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI()); //$NON-NLS-1$
             final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
                     .getLocationURI()), schemaPath, null, targetClassesFolder);
-            String elementName = null;
-            if (isSource) {
-                elementName = uiModel.getSourceClassName();
-            } else {
-                elementName = uiModel.getTargetClassName();
-            }
-            String modelClass = null;
-            Map<String, String> mappings = generator.elementToClassMapping(model);
-            if (mappings != null && !mappings.isEmpty()) {
-                modelClass = mappings.get(elementName);
-            } else {
-                modelClass = selectModelClass(model);
-            }
-            if (modelClass != null) {
-                return modelClass;
-            }
-            return null;
+            return generateXmlModel(generator, model, isSource, monitor);
         }
         default:
             return null;
         }
+    }
+
+    private String generateXmlModel(XmlModelGenerator generator,
+                                    JCodeModel model,
+                                    boolean isSource,
+                                    IProgressMonitor monitor) throws Exception {
+        String elementName = null;
+        if (isSource) {
+            elementName = uiModel.getSourceClassName();
+        } else {
+            elementName = uiModel.getTargetClassName();
+        }
+        String modelClassName = null;
+        Map<String, String> mappings = generator.elementToClassMapping(model);
+        if (mappings != null && !mappings.isEmpty()) {
+            modelClassName = mappings.get(elementName);
+        } else {
+            modelClassName = selectModelClass(model);
+        }
+        // Rename packages to avoid conflicts with existing classes
+        uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+        long time = System.currentTimeMillis();
+        IJavaProject project = JavaCore.create(uiModel.getProject());
+        boolean modelClassFound = false;
+        for (Iterator<JPackage> pkgIter = model.packages(); pkgIter.hasNext();) {
+            JPackage modelPkg = pkgIter.next();
+            Iterator<JDefinedClass> classIter = modelPkg.classes();
+            if (classIter.hasNext()) {
+                JDefinedClass modelClass = classIter.next();
+                IPackageFragment newPkg = project.findType(modelClass.fullName(), monitor).getPackageFragment();
+                String newPkgName = newPkg.getElementName() + '_' + time;
+                newPkg.rename(newPkgName, true, monitor);
+                project.save(monitor, true);
+                // Update transformation model class name if it's in this package
+                if (!modelClassFound) {
+                    if (modelClass.fullName().equals(modelClassName)) {
+                        modelClassName = newPkgName + '.' + modelClass.name();
+                        modelClassFound = true;
+                    } else while (classIter.hasNext()) {
+                        modelClass = classIter.next();
+                        if (modelClass.fullName().equals(modelClassName)) {
+                            modelClassName = newPkgName + '.' + modelClass.name();
+                            modelClassFound = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (modelClassName != null) {
+            return modelClassName;
+        }
+        return null;
     }
 
     private String selectModelClass(final JCodeModel model) {
