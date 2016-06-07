@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/cxf
+       http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<bean id="myBean" class="org.acme.MyBean" />
+	<bean id="usecaseDB"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:tcp://localhost/~/test" />
+		<property name="username" value="SA" />
+		<property name="password" value="sa" />
+	</bean>
+	<bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+		<property name="dataSource" ref="usecaseDB" />
+	</bean>
+	<bean id="enrichBean" class="org.fuse.usecase.service.CustomerRestImpl" />
+	<bean id="wsBean" class="org.fuse.usecase.service.CustomerWSImpl" />
+	<bean id="jsonProvider"
+		class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
+	<bean id="accountAggregator" class="org.fuse.usecase.AccountAggregator" />
+
+
+
+	<cxf:rsServer id="enrichServer" address="http://localhost:9191/rest"
+		loggingFeatureEnabled="true" serviceClass="org.fuse.usecase.service.CustomerRest">
+		<!-- <cxf:serviceBeans> <ref bean="enrichBean" /> </cxf:serviceBeans> -->
+		<cxf:providers>
+			<ref bean="jsonProvider" />
+		</cxf:providers>
+	</cxf:rsServer>
+
+	<cxf:cxfEndpoint id="wsServer"
+		address="http://localhost:9090/ws/customerService" serviceClass="org.fuse.usecase.service.CustomerWS"
+		loggingFeatureEnabled="true">
+	</cxf:cxfEndpoint>
+
+	<cxf:rsClient id="enrichClient" address="http://localhost:9191/rest"
+		loggingFeatureEnabled="true" serviceClass="org.fuse.usecase.service.CustomerRest">
+		<cxf:providers>
+			<ref bean="jsonProvider" />
+		</cxf:providers>
+	</cxf:rsClient>
+	<!-- CSV Input & JSon OutPut DataFormat -->
+	<!-- Route Definition CSV to JSON -->
+	<!-- Consume files from input directory -->
+	<!-- Consume files from input directory -->
+	<!-- Route Definition CSV to JSON -->
+	<!-- Consume files from input directory -->
+	<camelContext id="myCamelContext" trace="false"
+		xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder location="fabric8/route.properties"
+			id="properties" />
+		<endpoint
+			uri="dozer:csv2json?sourceModel=org.acme.Customer&amp;targetModel=org.globex.Account&amp;marshalId=json&amp;unmarshalId=csv&amp;mappingFile=transformation.xml"
+			id="csv2json" />
+		<dataFormats>
+			<bindy type="Csv" classType="org.acme.Customer" id="csv" />
+			<json library="Jackson" id="json" />
+		</dataFormats>
+
+
+		<!-- Route Definition CSV to JSON -->
+		<route>
+			<!-- Consume files from input directory -->
+			<from uri="file:{{fileInput}}?fileName=customers.csv&amp;noop=true" />
+			<onException>
+				<exception>java.lang.IllegalArgumentException</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<to
+					uri="file:{{fileError}}?fileName=csv-record-${date:now:yyyyMMdd}.txt" />
+			</onException>
+			<split>
+				<tokenize token="\n" />
+				<to ref="csv2json" />
+				<convertBodyTo type="java.lang.String" />
+				<to
+					uri="file:{{fileOutput}}?fileName=account-${property.CamelSplitIndex}.json" />
+			</split>
+		</route>
+
+		<route>
+			<from uri="file:{{fileOutput}}" />
+			<unmarshal>
+				<json library="Jackson" unmarshalTypeName="org.globex.Account" />
+			</unmarshal>
+
+			<multicast stopOnException="true" strategyRef="accountAggregator">
+				<to uri="direct://callRestEndpoint" />
+				<to uri="direct://callSoapEndpoint" />
+			</multicast>
+
+			<to uri="myBean" />
+			<to uri="sql:{{sql.insertAccount}}" />
+
+		</route>
+
+		<route>
+			<from uri="direct://callRestEndpoint" />
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="CamelHttpMethod">
+				<constant>POST</constant>
+			</setHeader>
+			<setHeader headerName="CamelHttpPath">
+				<constant>/customerservice/enrich</constant>
+			</setHeader>
+			<setHeader headerName="CamelCxfRsUsingHttpApi">
+				<constant>True</constant>
+			</setHeader>
+			<setHeader headerName="originalBody">
+				<simple>${body}</simple>
+			</setHeader>
+			<inOut uri="cxfrs:bean:enrichClient" />
+			<unmarshal>
+				<json library="Jackson" unmarshalTypeName="org.globex.Account" />
+			</unmarshal>
+		</route>
+
+		<route>
+			<from uri="direct://callSoapEndpoint" />
+			<to uri="cxf:bean:wsServer" />
+		</route>
+
+		<route>
+			<from uri="cxfrs:bean:enrichServer" />
+			<bean ref="enrichBean" method="enrich" />
+			<log message="Starting REST Server..." />
+		</route>
+		<route>
+			<from uri="cxf:bean:wsServer" />
+			<bean ref="wsBean" method="updateAccount" />
+			<log message="Starting WS Server..." />
+		</route>
+	</camelContext>
+</beans>

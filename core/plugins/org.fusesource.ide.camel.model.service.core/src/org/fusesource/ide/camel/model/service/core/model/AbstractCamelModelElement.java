@@ -658,6 +658,10 @@ public abstract class AbstractCamelModelElement {
 		String javaType = getJavaType(name);
 
 		if (this instanceof CamelContextElement) kind = "attribute";
+
+		// this is needed for FUSETOOLS-1884, otherwise some global config
+		// elements lose their children and get corrupted
+		if (getEipByName(CamelUtils.getTranslatedNodeName(getXmlNode())) == null && name.equalsIgnoreCase("id")) kind="attribute";
 		
 		if (value == null || value.toString().length() < 1) {
 			// seems the attribute has been deleted?

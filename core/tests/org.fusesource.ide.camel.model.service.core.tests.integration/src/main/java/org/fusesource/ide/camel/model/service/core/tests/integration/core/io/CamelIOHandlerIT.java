@@ -63,7 +63,8 @@ public class CamelIOHandlerIT {
 				"tryCatchSample.xml",
 				"propertyPlaceHolderSample.xml",
 				"unmarshalSample.xml",
-				"withGlobalDefinitionSample.xml");
+				"withGlobalDefinitionSample.xml",
+				"testWithCXFGlobalEndpoint.xml");
 		//@formatter:on
 	}
 
