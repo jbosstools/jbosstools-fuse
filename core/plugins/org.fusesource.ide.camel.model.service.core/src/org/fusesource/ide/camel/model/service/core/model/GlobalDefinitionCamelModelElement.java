@@ -14,7 +14,6 @@ import org.w3c.dom.Node;
 
 /**
  * @author Aurelien Pupier
- *
  */
 public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement {
 
@@ -26,4 +25,12 @@ public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement
 		super(parent, underlyingNode);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#parseNode()
+	 */
+	@Override
+	protected void parseNode() {
+		// we don't want to parse global config nodes and just reuse the xml node 
+		// directly - see FUSETOOLS-1884
+	}
 }
