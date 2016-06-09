@@ -18,9 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -30,11 +28,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -166,7 +164,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         // Below is necessary when running from within development Eclipse
         if (buf == null) {
             try (InputStream in =
-                    sourceClass.getResourceAsStream(new Path(Util.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
+                    sourceClass.getResourceAsStream(new Path(MavenUtils.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
                 buf = new byte[4096];
                 try (OutputStream out = new FileOutputStream(file)) {
                     for (int len = in.read(buf); len > 0; len = in.read(buf)) {
@@ -358,32 +356,21 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion); //$NON-NLS-1$
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
-            
+
             // Ensure Maven will compile transformations folder
             final IProject project = manager.project();
 			File pomFile = project.getLocation().append("pom.xml").toFile(); //$NON-NLS-1$
 			final MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
-			mavenUtils.addResourceFolder(project, pomFile, Util.RESOURCES_PATH);
-            
-            // Ensure Java project source classpath entry exists for transformations folder
-            boolean exists = false;
-            IClasspathEntry[] entries = javaProject.getRawClasspath();
-            IPath path = javaProject.getPath().append(Util.TRANSFORMATIONS_FOLDER);
-            for (IClasspathEntry entry : entries) {
-                if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().equals(path)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                IClasspathEntry[] newEntries = Arrays.copyOf(entries, entries.length + 1);
-                newEntries[entries.length] = JavaCore.newSourceEntry(path);
-                javaProject.setRawClasspath(newEntries, null);
-            }
-            project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
+
+            IProgressMonitor monitor = new NullProgressMonitor();
+            // Ensure Java project source classpath entry exists for main Java source & transformations folder
+            Util.ensureSourceFolderExists(javaProject, Util.TRANSFORMATIONS_FOLDER, monitor);
+            Util.ensureSourceFolderExists(javaProject, new MavenUtils().javaSourceFolder(), monitor);
+            project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
             // Ensure build of Java classes has completed
-            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e); //$NON-NLS-1$
         }
@@ -475,7 +462,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      */
     @Override
     public void setFocus() {
-    	
+
     }
 
     void toggleSourceViewer(SashForm horizontalSplitter) {

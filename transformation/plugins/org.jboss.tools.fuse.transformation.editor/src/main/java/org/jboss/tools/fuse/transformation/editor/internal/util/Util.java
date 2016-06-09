@@ -9,16 +9,13 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -27,8 +24,9 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -41,7 +39,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -54,8 +51,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.Variable;
@@ -64,7 +60,6 @@ import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -72,34 +67,9 @@ import com.google.gson.JsonParser;
 
 public class Util {
 
-    public static final String MAIN_PATH = "src/main/"; //$NON-NLS-1$
-
-    public static final String RESOURCES_PATH = MAIN_PATH + "resources/"; //$NON-NLS-1$
-
-    public static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
-
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public static final String TRANSFORMATIONS_FOLDER = ".transformations"; //$NON-NLS-1$
-
-    public static boolean isJSONValid(String incomingJSON) {
-        try {
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(incomingJSON); // throws JsonSyntaxException
-            if (incomingJSON.trim().isEmpty() || element instanceof JsonNull) {
-                return false;
-            }
-            if (element instanceof JsonObject) {
-                JsonObject jObj = (JsonObject) element;
-                if (jObj.entrySet().size() < 1) {
-                    return false;
-                }
-            }
-            return true;
-        } catch(com.google.gson.JsonSyntaxException ex) { 
-            return false;
-        }
-    }
 
     public static String displayName(Class<?> type) {
         String name = type.getName();
@@ -140,6 +110,26 @@ public class Util {
         return root(model).equals(manager.rootTargetModel());
     }
 
+    public static void ensureSourceFolderExists(IJavaProject javaProject,
+                                                String folder,
+                                                IProgressMonitor monitor) throws JavaModelException {
+        boolean exists = false;
+        IClasspathEntry[] entries = javaProject.getRawClasspath();
+        IPath path = javaProject.getPath().append(folder);
+        for (IClasspathEntry entry : entries) {
+            if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().equals(path)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            IClasspathEntry[] newEntries = Arrays.copyOf(entries, entries.length + 1);
+            newEntries[entries.length] = JavaCore.newSourceEntry(path);
+            javaProject.setRawClasspath(newEntries, monitor);
+            javaProject.save(monitor, true);
+        }
+    }
+
     /**
      * @param model
      * @return the fully-qualified name of the supplied model
@@ -160,29 +150,9 @@ public class Util {
 
     private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
         ArrayList<IResource> allFiles = new ArrayList<>();
-        IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
         IPath path = project.getLocation();
-        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml"); //$NON-NLS-1$
+        recursivelyFindFilesWithExtension(allFiles, path, workspaceRoot(), "xml"); //$NON-NLS-1$
         return allFiles;
-    }
-
-    public static String getCamelVersion(IProject project) {
-        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml")); //$NON-NLS-1$ //$NON-NLS-2$
-        String pomPath = pomPathValue.toOSString();
-        final File pomFile = new File(pomPath);
-        try {
-            final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
-            List<org.apache.maven.model.Dependency> deps = model.getDependencies();
-            for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
-                org.apache.maven.model.Dependency dependency = iterator.next();
-                if (dependency.getArtifactId().equals("camel-core")) { //$NON-NLS-1$
-                    return dependency.getVersion();
-                }
-            }
-        } catch (CoreException e) {
-            // not found, go with default
-        }
-        return CamelUtils.getCurrentProjectCamelVersion();
     }
 
     public static String getDateFormat(final Shell shell,
@@ -219,6 +189,25 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    public static boolean jsonValid(String incomingJSON) {
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(incomingJSON); // throws JsonSyntaxException
+            if (incomingJSON.trim().isEmpty() || element instanceof JsonNull) {
+                return false;
+            }
+            if (element instanceof JsonObject) {
+                JsonObject jObj = (JsonObject) element;
+                if (jObj.entrySet().size() < 1) {
+                    return false;
+                }
+            }
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) {
+            return false;
+        }
     }
 
     public static boolean modelsNeedDateFormat(final Object source,
@@ -400,26 +389,11 @@ public class Util {
      */
     public static IResource selectCamelResourceFromWorkspace(final Shell shell,
                                                              final IProject project) {
-        IJavaProject javaProject = null;
-        if (project != null) {
-            javaProject = JavaCore.create(project);
-        }
-        CamelResourceClasspathSelectionDialog dialog;
-        if (javaProject == null) {
-            dialog = new CamelResourceClasspathSelectionDialog(shell,
-                                                               ResourcesPlugin.getWorkspace().getRoot(),
-                                                               "xml"); //$NON-NLS-1$
-        } else {
-            dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
-        }
-        dialog.setTitle(Messages.Util_SelectCamelFileDialogTitle);
-        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
-        dialog.open();
-        final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
-            return null;
-        }
-        return (IFile)result[0];
+        CamelResourceClasspathSelectionDialog dialog =
+            new CamelResourceClasspathSelectionDialog(shell,
+                                                      workspaceContext(project),
+                                                      Messages.Util_SelectCamelFileDialogTitle);
+        return selectResourceFromDialog(dialog, "xml"); //$NON-NLS-1$
     }
 
     /**
@@ -480,26 +454,11 @@ public class Util {
      */
     public static IResource selectDozerResourceFromWorkspace(final Shell shell,
                                                              final IProject project) {
-        IJavaProject javaProject = null;
-        if (project != null) {
-            javaProject = JavaCore.create(project);
-        }
-        DozerResourceClasspathSelectionDialog dialog;
-        if (javaProject == null) {
-            dialog = new DozerResourceClasspathSelectionDialog(shell,
-                                                               ResourcesPlugin.getWorkspace().getRoot(),
-                                                               "xml"); //$NON-NLS-1$
-        } else {
-            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
-        }
-        dialog.setTitle(Messages.Util_SelectTransformationFileFromProject);
-        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
-        dialog.open();
-        final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
-            return null;
-        }
-        return (IFile)result[0];
+        DozerResourceClasspathSelectionDialog dialog =
+            new DozerResourceClasspathSelectionDialog(shell,
+                                                      workspaceContext(project),
+                                                      Messages.Util_SelectTransformationFileFromProject);
+        return selectResourceFromDialog(dialog, "xml"); //$NON-NLS-1$
     }
 
     /**
@@ -534,35 +493,26 @@ public class Util {
             ? ((IFile)dlg.getFirstResult()).getProjectRelativePath().toString() : null;
     }
 
+    private static IResource selectResourceFromDialog(FilteredResourcesSelectionDialog dialog,
+                                                      String extension) {
+        dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
+        dialog.open();
+        Object[] result = dialog.getResult();
+        return result == null || result.length == 0 || !(result[0] instanceof IFile) ? null : (IFile)result[0];
+    }
+
     /**
-     * @param shell
-     * @param extension
-     * @param project
+     * @param shell the parent shell in which to display the selection dialog
+     * @param title the title of the selection dialog
+     * @param extension the file extension to which to restrict selections
+     * @param project the currently selected project
      * @return The selected resource
      */
-    public static IResource selectResourceFromWorkspace(final Shell shell,
-                                                        final String extension,
-                                                        final IProject project) {
-        IJavaProject javaProject = null;
-        if (project != null) {
-            javaProject = JavaCore.create(project);
-        }
-        ClasspathResourceSelectionDialog dialog;
-        if (javaProject == null) {
-            dialog = new ClasspathResourceSelectionDialog(shell,
-                                                          ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml"); //$NON-NLS-1$
-        } else {
-            dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), "xml"); //$NON-NLS-1$
-        }
-        dialog.setTitle(Messages.Util_SelectCamelXMLFileFromProject_DialogTitle);
-        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
-        dialog.open();
-        final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
-            return null;
-        }
-        return (IFile)result[0];
+    public static IResource selectResourceFromWorkspace(Shell shell,
+                                                        String title,
+                                                        String extension,
+                                                        IProject project) {
+        return selectResourceFromDialog(new ClasspathResourceSelectionDialog(shell, workspaceContext(project), title), extension);
     }
 
     public static List<Integer> sourceUpdateIndexes(MappingOperation<?, ?> mapping) {
@@ -679,52 +629,6 @@ public class Util {
         } else updateIndexes.add(null);
     }
 
-    public static void updateMavenDependencies(final List<Dependency> dependencies,
-                                               final IProject project) throws CoreException {
-        final IFile pomIFile = project.getProject().getFile("pom.xml"); //$NON-NLS-1$
-        final File pomFile = new File(pomIFile.getLocationURI());
-        final org.apache.maven.model.Model pom = MavenPlugin.getMaven().readModel(pomFile);
-
-        // Check if dependency already in the pom
-        final List<Dependency> missingDependencies = new ArrayList<>();
-        for (final Dependency dependency : dependencies) {
-            boolean found = false;
-            for (final org.apache.maven.model.Dependency pomDependency : pom.getDependencies()) {
-                if (pomDependency.getGroupId().equalsIgnoreCase(dependency.getGroupId())
-                    && pomDependency.getArtifactId().equalsIgnoreCase(dependency.getArtifactId())) {
-                    // check for correct version
-                    if (!dependency.getVersion().equalsIgnoreCase(pomDependency.getVersion())) {
-                        pomDependency.setVersion(dependency.getVersion());
-                    }
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                missingDependencies.add(dependency);
-            }
-        }
-
-        for (final Dependency dependency : missingDependencies) {
-            final org.apache.maven.model.Dependency pomDependency =
-                new org.apache.maven.model.Dependency();
-            pomDependency.setGroupId(dependency.getGroupId());
-            pomDependency.setArtifactId(dependency.getArtifactId());
-            pomDependency.setVersion(dependency.getVersion());
-            pom.addDependency(pomDependency);
-        }
-
-        if (!missingDependencies.isEmpty()) {
-            try (final OutputStream stream =
-                new BufferedOutputStream(new FileOutputStream(pomFile))) {
-                MavenPlugin.getMaven().writeModel(pom, stream);
-                pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-            } catch (final Exception e) {
-                Activator.error(e);
-            }
-        }
-    }
-
     /**
      * @return <code>true</code> if the supplied value is valid for the supplied transformation argument's annotation and type
      * @param value
@@ -761,6 +665,14 @@ public class Util {
             if (sourceModel.isCollection() || targetModel.isCollection()) return false;
         }
         return true;
+    }
+
+    private static IContainer workspaceContext(IProject project) {
+        return project == null || JavaCore.create(project) == null ? workspaceRoot() : project;
+    }
+
+    private static IWorkspaceRoot workspaceRoot() {
+        return ResourcesPlugin.getWorkspace().getRoot();
     }
 
     private Util() {}

@@ -58,24 +58,25 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.jboss.tools.fuse.transformation.core.FieldMapping;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.TransformationMapping;
 import org.jboss.tools.fuse.transformation.core.Variable;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser.FormatSpecifier;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.core.model.Model;
 
 public class MappingDetailViewer extends MappingViewer {
 
@@ -562,7 +563,7 @@ public class MappingDetailViewer extends MappingViewer {
     private void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog(sourcePropPane.getShell(), mapping, manager.project());
         if (dlg.open() != Window.OK) return;
-        Util.updateMavenDependencies(dlg.getLanguage().getDependencies(), manager.project());
+        new MavenUtils().updateMavenDependencies(dlg.getLanguage().getDependencies());
         mapping = manager.setExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression());
         manager.save();
     }
