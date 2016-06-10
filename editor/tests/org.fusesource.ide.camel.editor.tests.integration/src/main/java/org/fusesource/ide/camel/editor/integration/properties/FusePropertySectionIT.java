@@ -58,7 +58,9 @@ public class FusePropertySectionIT {
 		parameter.setName("myName");
 		parameter.setDeprecated("false");
 		parameter.setRequired("false");
-		
+		parameter.setKind("text");
+		parameter.setJavaType("java.lang.String");
+
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name", labelCaptor.getValue());
@@ -70,7 +72,9 @@ public class FusePropertySectionIT {
 		Parameter parameter = new Parameter();
 		parameter.setName("myName");
 		parameter.setDeprecated("true");
-		
+		parameter.setKind("text");
+		parameter.setJavaType("java.lang.String");
+
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name (deprecated)", labelCaptor.getValue());
@@ -82,7 +86,9 @@ public class FusePropertySectionIT {
 		Parameter parameter = new Parameter();
 		parameter.setName("myName");
 		parameter.setRequired("true");
-		
+		parameter.setKind("text");
+		parameter.setJavaType("java.lang.String");
+
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name *", labelCaptor.getValue());
@@ -95,11 +101,28 @@ public class FusePropertySectionIT {
 		parameter.setName("myName");
 		parameter.setRequired("true");
 		parameter.setDeprecated("true");
+		parameter.setKind("text");
+		parameter.setJavaType("java.lang.String");
 		
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name * (deprecated)", labelCaptor.getValue());
 //		Mockito.verify(label).setForeground(Mockito.any(Color.class));
 	}
-	
+
+	@Test
+	public void testExpressionLabeledAsLanguage(){
+		Parameter parameter = new Parameter();
+		parameter.setName("expression");
+		parameter.setRequired("true");
+		parameter.setDeprecated("false");
+		parameter.setOneOf("simple,header,constant");
+		parameter.setKind("expression");
+		parameter.setJavaType("org.apache.camel.model.language.ExpressionDefinition");
+		
+		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
+		
+		assertEquals("Language *", labelCaptor.getValue());
+//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
+	}
 }
