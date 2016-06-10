@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -10,7 +10,6 @@
 package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.io.File;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -37,6 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
@@ -130,17 +130,17 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
             @Override
             public void widgetSelected(final SelectionEvent event) {
 
-                final IResource res =
-                        Util.selectResourceFromWorkspace(getShell(), ".xml", project); //$NON-NLS-1$
+                IResource res = Util.selectResourceFromWorkspace(getShell(),
+                                                                 Messages.Util_SelectCamelXMLFileFromProject_DialogTitle,
+                                                                 "xml", //$NON-NLS-1$
+                                                                 project);
                 if (res != null) {
                     final IPath respath = JavaUtil.getJavaPathForResource(res);
                     final String relpath = respath.makeRelative().toString();
                     try {
                         File camelFile = new File(project.getFile(relpath).getLocationURI());
                         if (!camelFile.exists()) {
-                            camelFile =
-                                    new File(project.getFile(Util.RESOURCES_PATH + relpath)
-                                            .getLocationURI());
+                            camelFile = new File(project.getFile(MavenUtils.RESOURCES_PATH + relpath).getLocationURI());
                             if (camelFile.exists()) {
                                 camelFilePath = relpath;
                                 camelFilePathText.setText(relpath);
@@ -209,10 +209,10 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
                 File testFile = new File(project.getFile(camelFilePath).getLocationURI());
                 if (!testFile.exists()) {
                     testFile =
-                            new File(project.getFile(Util.RESOURCES_PATH + camelFilePath)
+                            new File(project.getFile(MavenUtils.RESOURCES_PATH + camelFilePath)
                                     .getLocationURI());
                     if (testFile.exists()) {
-                        camelFilePath = Util.RESOURCES_PATH + camelFilePath;
+                        camelFilePath = MavenUtils.RESOURCES_PATH + camelFilePath;
                         final CamelConfigBuilder testBuilder =
                                 CamelConfigurationHelper.load(testFile).getConfigBuilder();
                         if (updateCamelBuilder) {

@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -51,6 +50,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -229,7 +230,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
         dep.setArtifactId("camel-test-blueprint"); //$NON-NLS-1$
-        dep.setVersion(Util.getCamelVersion(project));
+        dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
         deps.add(dep);
         return deps;
     }
@@ -239,7 +240,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
         dep.setArtifactId("camel-test-spring"); //$NON-NLS-1$
-        dep.setVersion(Util.getCamelVersion(project));
+        dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
         deps.add(dep);
         return deps;
     }
@@ -257,14 +258,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 return null;
             }
 
-            if (isBlueprint) {
-            	updateMavenDependencies(project.getProject(),
-            			getRequiredBlueprintTestDependencies(project.getProject()));
-            }
-            if (isSpring) {
-            	updateMavenDependencies(project.getProject(),
-            			getRequiredSpringTestDependencies(project.getProject()));
-            }
+            if (isBlueprint) updateMavenDependencies(getRequiredBlueprintTestDependencies(project.getProject()));
+            else updateMavenDependencies(getRequiredSpringTestDependencies(project.getProject()));
 
             // refresh the project in case we added dependencies
             project.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
@@ -358,12 +353,11 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     /**
      * Checks if we need to add a maven dependency for the chosen component and inserts it into the pom.xml if needed.
      *
-     * @param project
      * @param compDeps
      * @throws CoreException
      */
-    public void updateMavenDependencies(IProject project, List<Dependency> compDeps) throws CoreException {
-    	Util.updateMavenDependencies(compDeps, project);
+    public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
+    	new MavenUtils().updateMavenDependencies(compDeps);
     }
 
     @Override

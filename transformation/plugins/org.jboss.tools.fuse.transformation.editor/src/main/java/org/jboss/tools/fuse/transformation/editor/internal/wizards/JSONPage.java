@@ -127,7 +127,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                             return;
                         }
                         String jsonText = getJsonText((IFile) resource);
-                        if (!Util.isJSONValid(jsonText)) {
+                        if (!Util.jsonValid(jsonText)) {
                             return;
                         }
                         IPath filePath = resource.getLocation();
@@ -306,7 +306,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                         IPath tempPath = new Path(path);
                         IFile xmlFile = model.getProject().getFile(tempPath);
                         String jsonText = getJsonText(xmlFile);
-                        if (!Util.isJSONValid(jsonText)) {
+                        if (!Util.jsonValid(jsonText)) {
                             _jsonFileText.setText(path);
                             notifyControl(_jsonFileText, SWT.Modify);
                             return;
@@ -561,7 +561,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             IResource resource = model.getProject().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
-                if (!Util.isJSONValid(jsonText)) {
+                if (!Util.jsonValid(jsonText)) {
                     _jsonPreviewText.setText(""); //$NON-NLS-1$
                     return ValidationStatus.error(Messages.JSONPage_errorMessageInvalidJSON);
                 }

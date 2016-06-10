@@ -23,12 +23,12 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.ui.util.DialogUtils;
 import org.jboss.tools.fuse.transformation.core.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  * @author brianf
@@ -62,7 +62,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 
 	/**
 	 * extracts a uri parameter from a given uri
-	 * 
+	 *
 	 * @param uri	the uri to search parameter
 	 * @param key	the key of the parameter
 	 * @return	the parameter value or null
@@ -78,7 +78,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 		if (endIdx == -1) {
 			value = uriStr.substring(startIdx + (key + '=').length());
 		} else {
-			value = uriStr.substring(startIdx + (key + '=').length(), endIdx); 
+			value = uriStr.substring(startIdx + (key + '=').length(), endIdx);
 		}
 		return value;
 	}
@@ -106,7 +106,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 						IPath tempPath = new Path(filename);
 						IFile xmlFile = res.getProject().getFile(tempPath);
 						if (xmlFile != null && !xmlFile.exists()) {
-							tempPath = new Path(Util.RESOURCES_PATH + filename);
+							tempPath = new Path(MavenUtils.RESOURCES_PATH + filename);
 							xmlFile = res.getProject().getFile(tempPath);
 							if (xmlFile != null && !xmlFile.exists()) {
 								MessageDialog.openError(Display.getCurrent().getActiveShell(),

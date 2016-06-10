@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -16,12 +16,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
@@ -175,7 +174,7 @@ public class Model implements PropertyChangeListener {
             try {
                 IFile test = project.getFile(camelFilePath);
                 if (!test.exists()) {
-                    test = project.getFile(Util.RESOURCES_PATH + camelFilePath);
+                    test = project.getFile(MavenUtils.RESOURCES_PATH + camelFilePath);
                 }
                 if (test != null && test.exists()) {
                     final File camelFile = new File(test.getLocationURI());
@@ -187,7 +186,7 @@ public class Model implements PropertyChangeListener {
             }
         }
     }
-    
+
     /**
      * @return IFile reference to camel file
      */
@@ -196,7 +195,7 @@ public class Model implements PropertyChangeListener {
             try {
                 IFile test = project.getFile(camelFilePath);
                 if (!test.exists()) {
-                    test = project.getFile(Util.RESOURCES_PATH + camelFilePath);
+                    test = project.getFile(MavenUtils.RESOURCES_PATH + camelFilePath);
                 }
                 if (test != null && test.exists()) {
                     return test;

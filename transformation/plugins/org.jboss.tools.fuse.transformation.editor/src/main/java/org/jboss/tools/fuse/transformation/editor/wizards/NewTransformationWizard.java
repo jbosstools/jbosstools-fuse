@@ -48,6 +48,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
@@ -80,7 +81,7 @@ import com.sun.codemodel.JPackage;
  */
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
-    public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH + "META-INF/spring/camel-context.xml"; //$NON-NLS-1$
+    public static final String CAMEL_CONFIG_PATH = MavenUtils.RESOURCES_PATH + "META-INF/spring/camel-context.xml"; //$NON-NLS-1$
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory"; //$NON-NLS-1$
 
     private Model uiModel = new Model();
@@ -106,7 +107,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     @Override
     public boolean performFinish() {
         // Save transformation file
-        final IFile file = uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
+        final IFile file = uiModel.getProject().getFile(MavenUtils.RESOURCES_PATH + uiModel.getFilePath());
         if (file.exists()
             && !MessageDialog.openConfirm(getShell(), Messages.NewTransformationWizard_messageDialogTitleConfirm,
 				Messages.bind(Messages.NewTransformationWizard_confirmationDialogmessage, file.getFullPath()))) {
@@ -122,6 +123,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     newFile.getParentFile().mkdirs();
                 }
                 try (FileOutputStream configStream = new FileOutputStream(newFile)) {
+                    Util.ensureSourceFolderExists(JavaCore.create(uiModel.getProject()),
+                                                  new MavenUtils().javaSourceFolder(),
+                                                  monitor);
                     if (uiModel.getSourceFilePath() != null) {
                         // Generate models
                         final String sourceClassName
@@ -129,7 +133,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         final String targetClassName
                             = generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType(), false, monitor);
                         // Update Camel config
-                        final IPath resourcesPath = uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
+                        final IPath resourcesPath = uiModel.getProject().getFolder(MavenUtils.RESOURCES_PATH).getFullPath();
                         final IFile camelIFile = uiModel.getCamelIFile();
 
                         CamelConfigBuilder configBuilder = CamelConfigurationHelper.getConfigBuilder(camelIFile.getRawLocation().toFile());
@@ -409,12 +413,13 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // Build package name from class name
         int sequencer = 1;
         String pkgName = className.toString();
-        while (uiModel.getProject().exists(new Path(Util.JAVA_PATH + pkgName))) {
+        String javaSourceFolder = new MavenUtils().javaSourceFolder();
+        while (uiModel.getProject().exists(new Path(javaSourceFolder + pkgName))) {
             pkgName = className.toString() + sequencer++;
         }
         pkgName = pkgName.toLowerCase();
         // Generate model
-        final File targetClassesFolder = new File(uiModel.getProject().getFolder(Util.JAVA_PATH).getLocationURI());
+        File targetSourceFolder = new File(uiModel.getProject().getFolder(javaSourceFolder).getLocationURI());
         switch (type) {
         case OTHER:
         case CLASS: {
@@ -436,26 +441,26 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         case JSON: {
             final JsonModelGenerator generator = new JsonModelGenerator();
             generator.generateFromInstance(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
-                    .getLocationURI().toURL(), targetClassesFolder);
+                    .getLocationURI().toURL(), targetSourceFolder);
             return pkgName + "." + className; //$NON-NLS-1$
         }
         case JSON_SCHEMA: {
             final JsonModelGenerator generator = new JsonModelGenerator();
             generator.generateFromSchema(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
-                    .getLocationURI().toURL(), targetClassesFolder);
+                    .getLocationURI().toURL(), targetSourceFolder);
             return pkgName + "." + className; //$NON-NLS-1$
         }
         case XSD: {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
-            final JCodeModel model = generator.generateFromSchema(schemaFile, null, targetClassesFolder);
+            final JCodeModel model = generator.generateFromSchema(schemaFile, null, targetSourceFolder);
             return generateXmlModel(generator, model, isSource, monitor);
         }
         case XML: {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI()); //$NON-NLS-1$
             final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
-                    .getLocationURI()), schemaPath, null, targetClassesFolder);
+                    .getLocationURI()), schemaPath, null, targetSourceFolder);
             return generateXmlModel(generator, model, isSource, monitor);
         }
         default:
@@ -481,7 +486,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             modelClassName = selectModelClass(model);
         }
         // Rename packages to avoid conflicts with existing classes
-        uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+        uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, monitor);
         long time = System.currentTimeMillis();
         IJavaProject project = JavaCore.create(uiModel.getProject());
         boolean modelClassFound = false;
@@ -584,7 +589,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
-            Util.updateMavenDependencies(deps, uiModel.getProject());
+            new MavenUtils().updateMavenDependencies(deps);
         } catch (CoreException e) {
             Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
         }
@@ -603,7 +608,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 List<Dependency> deps = new ArrayList<>();
                 deps.add(dep);
                 try {
-                    Util.updateMavenDependencies(deps, uiModel.getProject());
+                    new MavenUtils().updateMavenDependencies(deps);
                 } catch (CoreException e) {
                     Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
                 }

@@ -14,7 +14,6 @@ import java.io.File;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Iterator;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -56,6 +55,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.progress.UIJob;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
@@ -79,7 +79,7 @@ public class StartPage extends XformWizardPage {
     private Binding _filePathBinding;
     private Binding _camelPathBinding;
     private Binding _endpointIdBinding;
-    
+
     /**
      * @param model
      */
@@ -292,10 +292,10 @@ public class StartPage extends XformWizardPage {
 
         IObservableValue projectComboValue = ViewerProperties.singleSelection().observe(_projectCombo);
         IObservableValue projectValue = BeanProperties.value(Model.class, "project").observe(model); //$NON-NLS-1$
-        
+
         IObservableValue dozerPathTextValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
         IObservableValue dozerPathValue = BeanProperties.value(Model.class, "filePath").observe(model); //$NON-NLS-1$
-        
+
         // bind the project dropdown
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -308,16 +308,16 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        
+
         projectValue.addChangeListener(new IChangeListener() {
-            
+
             @Override
             public void handleChange(ChangeEvent event) {
                 _filePathBinding.validateTargetToModel();
             }
         });
 
-        Binding projectBinding = 
+        Binding projectBinding =
                 context.bindValue(projectComboValue, projectValue, strategy, null);
         ControlDecorationSupport.create(projectBinding, decoratorPosition, _projectCombo.getControl().getParent());
 
@@ -364,7 +364,7 @@ public class StartPage extends XformWizardPage {
                 }
                 if (!(value.toString().trim().isEmpty())) {
                     if (model.getProject() != null) {
-                        final IFile file = model.getProject().getFile(Util.RESOURCES_PATH + (String) value);
+                        final IFile file = model.getProject().getFile(MavenUtils.RESOURCES_PATH + (String) value);
                         if (file != null && file.exists()) {
                             return ValidationStatus.warning(Messages.StartPage_errorMessageNameFileAlreadyExists);
                         }
@@ -373,7 +373,7 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        _filePathBinding = 
+        _filePathBinding =
                 context.bindValue(dozerPathTextValue, dozerPathValue, strategy, null);
         ControlDecorationSupport.create(
                 _filePathBinding, decoratorPosition, _dozerPathText.getParent());
@@ -394,7 +394,7 @@ public class StartPage extends XformWizardPage {
                     final String path = (String) value;
                     testFile = new File(model.getProject().getFile(path).getLocationURI());
                     if (!testFile.exists()) {
-                        testFile = new File(model.getProject().getFile(Util.RESOURCES_PATH + path).getLocationURI());
+                        testFile = new File(model.getProject().getFile(MavenUtils.RESOURCES_PATH + path).getLocationURI());
                         if (!testFile.exists()) {
                             return ValidationStatus.error(Messages.StartPage_errorMessageCamelFileInvalidLocation);
                         }
@@ -410,7 +410,7 @@ public class StartPage extends XformWizardPage {
         });
         _camelPathBinding = context.bindValue(camelFileTextValue, camelFileValue, strategy, null);
         _camelPathBinding.getModel().addChangeListener(new IChangeListener() {
-            
+
             @Override
             public void handleChange(ChangeEvent event) {
                 _endpointIdBinding.validateTargetToModel();
@@ -519,7 +519,7 @@ public class StartPage extends XformWizardPage {
             notifyControl(_idText, SWT.Modify);
         }
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);

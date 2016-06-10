@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -14,11 +14,9 @@ package org.fusesource.ide.camel.editor.utils;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Resource;
@@ -34,7 +32,6 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
@@ -45,24 +42,37 @@ public class MavenUtils {
 	private static final String CAMEL_GROUP_ID = "org.apache.camel";
 	private static final String CAMEL_CORE_ARTIFACT_ID = "camel-core";
 	private static final String SCOPE_PROVIDED = "provided";
-	
+
+    private static final String MAIN_PATH = "src/main/"; //$NON-NLS-1$
+
+    public static final String RESOURCES_PATH = MAIN_PATH + "resources/"; //$NON-NLS-1$
+
+    private static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
+
+    /**
+     * @return the Java source folder for the project containing the Camel file currently being edited
+     * @throws CoreException if the project's POM file could not be read
+     */
+    public String javaSourceFolder() throws CoreException {
+        String name = readMavenModel(getPomFile(CamelUtils.project())).getBuild().getSourceDirectory();
+        if (name == null) return JAVA_PATH;
+        return name.endsWith("/") ? name : name + "/";
+    }
+
 	/**
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
+     *
+	 * @param compDeps the Maven dependencies to be updated
+	 * @throws CoreException
      */
 	public void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
-        if (editor == null) {
-            CamelEditorUIActivator.pluginLog().logError("Unable to add component dependencies because Editor instance can't be determined.");
-            return;
-        }
-        
-        IProject project = editor.getWorkspaceProject();
+        IProject project = CamelUtils.project();
         if (project == null) {
             CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
-        
+
         updateMavenDependencies(compDeps, project);
     }
 
@@ -78,13 +88,13 @@ public class MavenUtils {
 		List<Dependency> deps = getDependencies(project, model);
 
         // then check if component dependency is already a dep
-        ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency>();
+        ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
         String scope = null;
         for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
             boolean found = false;
             for (Dependency pomDep : deps) {
-            	if (scope == null && 
-            		pomDep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) && 
+            	if (scope == null &&
+            		pomDep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) &&
             		pomDep.getArtifactId().equalsIgnoreCase(CAMEL_CORE_ARTIFACT_ID)) {
 					if (SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
             			scope = pomDep.getScope();
@@ -107,7 +117,7 @@ public class MavenUtils {
         }
 
         addDependency(model, missingDeps, scope);
-        
+
         if (missingDeps.size()>0) {
             writeNewPomFile(project, pomFile, model);
         }
@@ -115,7 +125,7 @@ public class MavenUtils {
 
 	/**
 	 * @param pomFile
-	 * @return
+	 * @return the Maven model for the supplied POM file
 	 * @throws CoreException
 	 */
 	Model readMavenModel(final File pomFile) throws CoreException {
@@ -124,7 +134,7 @@ public class MavenUtils {
 
 	/**
 	 * @param project
-	 * @return
+	 * @return the POM file for the supplied project
 	 */
 	File getPomFile(IProject project) {
 		IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
@@ -138,9 +148,7 @@ public class MavenUtils {
 	 * @param model
 	 */
 	void writeNewPomFile(IProject project, final File pomFile, final Model model) {
-		OutputStream os = null;
-		try {
-		    os = new BufferedOutputStream(new FileOutputStream(pomFile));
+		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 		    MavenPlugin.getMaven().writeModel(model, os);
 			IFile pomIFile2 = project.getProject().getFile("pom.xml");
 			if (pomIFile2 != null) {
@@ -148,14 +156,6 @@ public class MavenUtils {
 		    }
 		} catch (Exception ex) {
 		    CamelEditorUIActivator.pluginLog().logError(ex);
-		} finally {
-		    try {
-		        if (os != null) {
-		            os.close();
-		        }
-		    } catch (IOException e) {
-		    	CamelEditorUIActivator.pluginLog().logError(e);
-		    }
 		}
 	}
 
@@ -180,7 +180,7 @@ public class MavenUtils {
 	/**
 	 * @param project
 	 * @param model
-	 * @return
+	 * @return The dependencies for the supplied Maven model in the supplied project
 	 */
 	private List<Dependency> getDependencies(IProject project, final Model model) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
@@ -201,17 +201,17 @@ public class MavenUtils {
 
 	/**
 	 * @param project
-	 * @return
+	 * @return the Maven project facade corresponding to the supplied project
 	 */
 	IMavenProjectFacade getMavenProjectFacade(IProject project) {
 		final IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
 		return projectRegistry.create(pomIFile, false, new NullProgressMonitor());
 	}
-    
+
     /**
      * adds a resource folder to the maven pom file if not yet there
-     * 
+     *
      * @param project	the eclipse project
      * @param pomFile	the pom.xml file
      * @param resourceFolderName	the name of the new resource folder
@@ -220,7 +220,7 @@ public class MavenUtils {
 	public void addResourceFolder(IProject project, File pomFile, String resourceFolderName) throws CoreException {
     	final Model model = readMavenModel(pomFile);
         List<Resource> resources = model.getBuild().getResources();
-        
+
         boolean exists = false;
         for (Resource resource : resources) {
             if (resource.getDirectory().equals(resourceFolderName)) {
@@ -233,9 +233,7 @@ public class MavenUtils {
             resource.setDirectory(resourceFolderName);
             model.getBuild().addResource(resource);
 
-            OutputStream os = null;
-            try {
-                os = new BufferedOutputStream(new FileOutputStream(pomFile));
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
                 MavenPlugin.getMaven().writeModel(model, os);
                 IFile pomIFile = project.getFile("pom.xml");
                 if (pomIFile != null){
@@ -243,14 +241,6 @@ public class MavenUtils {
                 }
             } catch (Exception ex) {
                 CamelEditorUIActivator.pluginLog().logError(ex);
-            } finally {
-                try {
-                    if (os != null) {
-                        os.close();
-                    }
-                } catch (IOException e) {
-                	CamelEditorUIActivator.pluginLog().logError(e);
-                }
             }
         }
     }

@@ -125,7 +125,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                             return;
                         }
                         String jsonText = getJsonText((IFile) resource);
-                        if (!Util.isJSONValid(jsonText)) {
+                        if (!Util.jsonValid(jsonText)) {
                             return;
                         }
                         IPath filePath = resource.getLocation();
@@ -304,7 +304,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                         IPath tempPath = new Path(path);
                         IFile xmlFile = model.getProject().getFile(tempPath);
                         String jsonText = getJsonText(xmlFile);
-                        if (!Util.isJSONValid(jsonText)) {
+                        if (!Util.jsonValid(jsonText)) {
                             hl7FileText.setText(path);
                             notifyControl(hl7FileText, SWT.Modify);
                             return;
@@ -559,7 +559,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
             IResource resource = model.getProject().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
-                if (!Util.isJSONValid(jsonText)) {
+                if (!Util.jsonValid(jsonText)) {
                     hl7PreviewText.setText("");
                     return ValidationStatus.error("Invalid JSON");
                 }
