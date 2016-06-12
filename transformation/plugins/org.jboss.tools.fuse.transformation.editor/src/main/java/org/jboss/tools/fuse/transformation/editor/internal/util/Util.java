@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -22,7 +21,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.Flags;
@@ -111,14 +109,19 @@ public class Util {
     }
 
     public static void ensureSourceFolderExists(IJavaProject javaProject,
-                                                String folder,
-                                                IProgressMonitor monitor) throws JavaModelException {
+                                                String folderName,
+                                                IProgressMonitor monitor) throws Exception {
         boolean exists = false;
         IClasspathEntry[] entries = javaProject.getRawClasspath();
-        IPath path = javaProject.getPath().append(folder);
+        IPath path = javaProject.getPath().append(folderName);
         for (IClasspathEntry entry : entries) {
             if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().equals(path)) {
                 exists = true;
+                File folder = javaProject.getResource().getLocation().append(folderName).toFile();
+                if (!folder.exists()) {
+                    if (!folder.mkdirs()) throw new Exception(Messages.bind(Messages.Util_UnableToCreateSourceFolder, folder));
+                    javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+                }
                 break;
             }
         }
@@ -146,13 +149,6 @@ public class Util {
         }
         builder.append(model.getName());
         return builder.toString();
-    }
-
-    private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
-        ArrayList<IResource> allFiles = new ArrayList<>();
-        IPath path = project.getLocation();
-        recursivelyFindFilesWithExtension(allFiles, path, workspaceRoot(), "xml"); //$NON-NLS-1$
-        return allFiles;
     }
 
     public static String getDateFormat(final Shell shell,
@@ -308,51 +304,6 @@ public class Util {
             }
         } catch (final Exception e) {
             Activator.error(e);
-        }
-    }
-
-    public static boolean projectHasCamelResource(final IProject project) {
-        try {
-            ArrayList<IResource> xmlResources = getAllXMLFilesInProject(project);
-            for (Iterator<IResource> iterator = xmlResources.iterator(); iterator.hasNext();) {
-                IResource item = iterator.next();
-                File testFile = new File(item.getLocationURI());
-                if (testFile.exists()) {
-                    boolean isValidCamel = CamelFileTypeHelper
-                                                              .isSupportedCamelFile(project,
-                                                                                    item.getProjectRelativePath().toPortableString());
-                    if (isValidCamel) {
-                        return true;
-                    }
-                }
-            }
-        } catch (final Exception e) {
-            // ignore
-        }
-
-        return false;
-    }
-
-    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles,
-                                                          IPath path,
-                                                          IWorkspaceRoot wsRoot,
-                                                          String extension) {
-        IContainer container = wsRoot.getContainerForLocation(path);
-
-        try {
-            IResource[] resources = container.members();
-            for (IResource resource : resources) {
-                if (extension.equalsIgnoreCase(resource.getFileExtension())) {
-                    allFiles.add(resource);
-                }
-                if (resource.getType() == IResource.FOLDER) {
-                    IPath tempPath = resource.getLocation();
-                    recursivelyFindFilesWithExtension(allFiles, tempPath, wsRoot, extension);
-                }
-            }
-        } catch (CoreException e) {
-            // eat the exception, but throw it in the console
-            e.printStackTrace();
         }
     }
 

@@ -12,15 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.fusesource.ide.camel.editor.utils.MavenUtils;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 
 /**
  *
@@ -29,20 +20,8 @@ public class Model implements PropertyChangeListener {
 
     private static final String DEFAULT_FILE_PATH = "transformation.xml"; //$NON-NLS-1$
 
-    /**
-     *
-     */
-    public final List<IProject> projects = new ArrayList<>(Arrays.asList(ResourcesPlugin
-            .getWorkspace().getRoot().getProjects()));
-
-    /**
-     *
-     */
-    public CamelConfigurationHelper camelConfig;
-
     private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
-    private IProject project;
     private String id;
     private String filePath = DEFAULT_FILE_PATH;
     private String sourceFilePath;
@@ -85,13 +64,6 @@ public class Model implements PropertyChangeListener {
      */
     public String getId() {
         return id;
-    }
-
-    /**
-     * @return the project in which to create the transformation
-     */
-    public IProject getProject() {
-        return project;
     }
 
     /**
@@ -141,15 +113,6 @@ public class Model implements PropertyChangeListener {
     }
 
     /**
-     * @param filePath the Camel file path
-     */
-    public void setCamelFilePath(final String filePath) {
-        changeSupport.firePropertyChange("camelFilePath", this.camelFilePath, this.camelFilePath = //$NON-NLS-1$
-                filePath.trim());
-        setProject(project);
-    }
-
-    /**
      * @param filePath
      */
     public void setFilePath(final String filePath) {
@@ -162,49 +125,6 @@ public class Model implements PropertyChangeListener {
      */
     public void setId(final String id) {
         changeSupport.firePropertyChange("id", this.id, this.id = id.trim()); //$NON-NLS-1$
-    }
-
-    /**
-     * @param project
-     */
-    public void setProject(final IProject project) {
-        changeSupport.firePropertyChange("project", this.project, this.project = project); //$NON-NLS-1$
-
-        if (camelFilePath != null && !camelFilePath.trim().isEmpty()) {
-            try {
-                IFile test = project.getFile(camelFilePath);
-                if (!test.exists()) {
-                    test = project.getFile(MavenUtils.RESOURCES_PATH + camelFilePath);
-                }
-                if (test != null && test.exists()) {
-                    final File camelFile = new File(test.getLocationURI());
-                    camelConfig = CamelConfigurationHelper.load(camelFile);
-                }
-            } catch (final Exception e) {
-                // swallow
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * @return IFile reference to camel file
-     */
-    public IFile getCamelIFile() {
-        if (camelFilePath != null && !camelFilePath.trim().isEmpty()) {
-            try {
-                IFile test = project.getFile(camelFilePath);
-                if (!test.exists()) {
-                    test = project.getFile(MavenUtils.RESOURCES_PATH + camelFilePath);
-                }
-                if (test != null && test.exists()) {
-                    return test;
-                }
-            } catch (final Exception e) {
-                // swallow
-            }
-        }
-        return null;
     }
 
     /**

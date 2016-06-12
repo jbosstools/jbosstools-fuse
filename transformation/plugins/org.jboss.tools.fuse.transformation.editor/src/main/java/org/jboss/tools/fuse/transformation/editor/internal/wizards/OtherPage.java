@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.util.Collection;
 import java.util.Iterator;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -62,13 +61,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 /**
  * @author brianf
@@ -164,14 +163,13 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                             model.setTargetType(ModelType.OTHER);
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
-                        final IType inner = selected;
 
                         UIJob uiJob = new UIJob(Messages.OtherPage_uiJobNameOpenError) {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                                 try {
-                                    Class<?> tempClass = wizard.getLoader().loadClass(inner.getFullyQualifiedName());
+                                    Class<?> tempClass = wizard.loader().loadClass(selected.getFullyQualifiedName());
                                     _javaModel = ModelBuilder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
                                 } catch (ClassNotFoundException e) {
@@ -245,7 +243,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 }
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 try {
-                    Class<?> tempClass = wizard.getLoader().loadClass(path);
+                    Class<?> tempClass = wizard.loader().loadClass(path);
                     if (tempClass == null) {
                         return ValidationStatus.error(unableToFindError);
                     }
@@ -269,16 +267,13 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         idModelValue = null;
 
         WritableList dfList = new WritableList();
-        final IFile camelIFile = getModel().getCamelIFile();
-        CamelConfigBuilder configBuilder = CamelConfigurationHelper.getConfigBuilder(camelIFile.getRawLocation().toFile());
+        CamelConfigBuilder configBuilder = new CamelConfigBuilder();
 
-        if (configBuilder != null) {
-            Collection<AbstractCamelModelElement> dataFormats = configBuilder.getDataFormats();
-            for (Iterator<AbstractCamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
-            	AbstractCamelModelElement df = iterator.next();
-                if (df.getId() != null) {
-                    dfList.add(df.getId());
-                }
+        Collection<AbstractCamelModelElement> dataFormats = configBuilder.getDataFormats();
+        for (Iterator<AbstractCamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
+        	AbstractCamelModelElement df = iterator.next();
+            if (df.getId() != null) {
+                dfList.add(df.getId());
             }
         }
         if (dfList.isEmpty()) {
@@ -387,9 +382,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (superTypeName == null) {
         	superTypeName = "java.lang.Object"; //$NONNLS-1$ //$NON-NLS-1$
         }
-        if (model.getProject() != null) {
+        if (CamelUtils.project() != null) {
             if (project == null) {
-                project = model.getProject();
+                project = CamelUtils.project();
             }
             IJavaProject javaProject = JavaCore.create(project);
             IType superType = javaProject.findType(superTypeName);

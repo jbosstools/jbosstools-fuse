@@ -32,7 +32,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.Expression#getExpression()
+     * @see org.jboss.tools.fuse.transformation.core.Expression#getExpression()
      */
     @Override
     public String getExpression() {
@@ -42,7 +42,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.Expression#getLanguage()
+     * @see org.jboss.tools.fuse.transformation.core.Expression#getLanguage()
      */
     @Override
     public String getLanguage() {
@@ -52,7 +52,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.Expression#setExpression(java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.core.Expression#setExpression(java.lang.String)
      */
     @Override
     public void setExpression(final String expression) {
@@ -62,7 +62,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.Expression#setLanguage(java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.core.Expression#setLanguage(java.lang.String)
      */
     @Override
     public void setLanguage(final String language) {

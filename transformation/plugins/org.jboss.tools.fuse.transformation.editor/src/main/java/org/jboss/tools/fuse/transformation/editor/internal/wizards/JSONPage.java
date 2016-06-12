@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
@@ -119,7 +120,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 }
                 if (path != null) {
                     try {
-                        IResource resource = model.getProject().findMember(path);
+                        IResource resource = CamelUtils.project().findMember(path);
                         if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                             return;
                         }
@@ -152,7 +153,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
     private void updatePreview(String path) {
         IPath tempPath = new Path(path);
-        IFile xmlFile = model.getProject().getFile(tempPath);
+        IFile xmlFile = CamelUtils.project().getFile(tempPath);
         if (xmlFile != null && xmlFile.exists()) {
             try (InputStream istream = xmlFile.getContents()) {
                 StringBuffer buffer = new StringBuffer();
@@ -174,7 +175,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
     private void updateSettingsBasedOnFilePath(String path) throws Exception {
         final IPath tempPath = new Path(path);
-        final IFile xmlFile = model.getProject().getFile(tempPath);
+        final IFile xmlFile = CamelUtils.project().getFile(tempPath);
         if (xmlFile == null || !xmlFile.exists()) {
         	return;
         }
@@ -304,7 +305,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                             return;
                         }
                         IPath tempPath = new Path(path);
-                        IFile xmlFile = model.getProject().getFile(tempPath);
+                        IFile xmlFile = CamelUtils.project().getFile(tempPath);
                         String jsonText = getJsonText(xmlFile);
                         if (!Util.jsonValid(jsonText)) {
                             _jsonFileText.setText(path);
@@ -384,7 +385,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
     boolean fileIsEmpty(final String path) {
         try {
-            IFile testIFile = model.getProject().getFile(path);
+            IFile testIFile = CamelUtils.project().getFile(path);
             if (testIFile.exists()) {
                 File testFile = testIFile.getRawLocation().makeAbsolute().toFile();
                 if (testFile.length() == 0) {
@@ -405,7 +406,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
     boolean jsonSchema(final String path) throws Exception {
         final IPath tempPath = new Path(path);
-        final IFile jsonFile = model.getProject().getFile(tempPath);
+        final IFile jsonFile = CamelUtils.project().getFile(tempPath);
         if (fileIsEmpty(path)) {
             return false;
         }
@@ -444,8 +445,8 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     private String selectResourceFromWorkspace(final Shell shell, final String extension) {
         IJavaProject javaProject = null;
         if (getModel() != null) {
-            if (getModel().getProject() != null) {
-                javaProject = JavaCore.create(getModel().getProject());
+            if (CamelUtils.project() != null) {
+                javaProject = JavaCore.create(CamelUtils.project());
             }
         }
         ClasspathResourceSelectionDialog dialog = null;
@@ -513,11 +514,11 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 _jsonPreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(pathEmptyError);
             }
-            if (model.getProject().findMember(path) == null) {
+            if (CamelUtils.project().findMember(path) == null) {
                 _jsonPreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
             }
-            IResource resource = model.getProject().findMember(path);
+            IResource resource = CamelUtils.project().findMember(path);
             if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                 _jsonPreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
@@ -541,7 +542,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 _jsonPreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(fileEmptyError);
             }
-            IResource resource = model.getProject().findMember(path);
+            IResource resource = CamelUtils.project().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (jsonText == null || jsonText.trim().isEmpty()) {
@@ -558,7 +559,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         @Override
         public IStatus validate(final Object value) {
             final String path = value == null ? null : value.toString().trim();
-            IResource resource = model.getProject().findMember(path);
+            IResource resource = CamelUtils.project().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (!Util.jsonValid(jsonText)) {

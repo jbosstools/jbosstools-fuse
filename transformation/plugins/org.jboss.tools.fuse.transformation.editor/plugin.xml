@@ -5,16 +5,6 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard"
-            icon="icons/transform16.png"
-            category="org.fusesource.ide.newwizards"
-            id="org.jboss.tools.fuse.transformation.editor.data-mapping-wizard"
-            name="%new-wizard.name">
-         <description>
-            %new-wizard.description
-         </description>
-      </wizard>
-      <wizard
             class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationTestWizard"
             icon="icons/transform16.png"
             category="org.fusesource.ide.newwizards"

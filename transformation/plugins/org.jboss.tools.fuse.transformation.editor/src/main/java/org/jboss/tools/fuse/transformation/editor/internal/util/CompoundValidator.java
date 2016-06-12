@@ -17,24 +17,30 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * A way to break up Eclipse Data Binding framework validators into a bit
  * more modular, easy-to-digest chunks.
- * 
- * This came from 
- * http://eclipsesource.com/blogs/2012/08/22/improving-reuse-of-jface-data-binding-validators/ 
+ *
+ * This came from
+ * http://eclipsesource.com/blogs/2012/08/22/improving-reuse-of-jface-data-binding-validators/
  *
  */
 public class CompoundValidator implements IValidator {
 
     private final IValidator[] validators;
-    
+
     public CompoundValidator(final IValidator... validators) {
         this.validators = validators;
     }
- 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+     */
+    @Override
     public IStatus validate(final Object value) {
         IStatus result = ValidationStatus.ok();
         for (IValidator validator : validators) {
             IStatus status = validator.validate(value);
- 
+
             if (status.getSeverity() > result.getSeverity()) {
                 result = status;
             }

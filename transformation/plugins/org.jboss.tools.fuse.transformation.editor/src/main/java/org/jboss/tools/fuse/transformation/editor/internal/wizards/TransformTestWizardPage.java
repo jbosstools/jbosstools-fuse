@@ -56,7 +56,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TestGenerator;
@@ -145,7 +144,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                             boolean isValid = CamelFileTypeHelper
                                     .isSupportedCamelFile(_project, _camelFilePath);
                             if (isValid) {
-                                _builder = CamelConfigurationHelper.load(file).getConfigBuilder();
+                                _builder = new CamelConfigBuilder(file);
                                 _camelFileSelectedStatus = Status.OK_STATUS;
                             } else {
                                 _builder = null;

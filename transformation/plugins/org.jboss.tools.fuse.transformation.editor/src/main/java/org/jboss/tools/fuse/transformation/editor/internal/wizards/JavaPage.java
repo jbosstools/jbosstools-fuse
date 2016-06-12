@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
@@ -151,14 +152,13 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                             model.setTargetType(ModelType.CLASS);
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
-                        final IType inner = selected;
 
                         UIJob uiJob = new UIJob(Messages.JavaPage_jobName_openError) {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                                 try {
-                                    Class<?> tempClass = wizard.getLoader().loadClass(inner.getFullyQualifiedName());
+                                    Class<?> tempClass = wizard.loader().loadClass(selected.getFullyQualifiedName());
                                     _javaModel = ModelBuilder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
                                 } catch (ClassNotFoundException e) {
@@ -221,7 +221,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                 }
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 try {
-                    Class<?> tempClass = wizard.getLoader().loadClass(path);
+                    Class<?> tempClass = wizard.loader().loadClass(path);
                     if (tempClass == null) {
                         return ValidationStatus.error(unableToFindError);
                     }
@@ -282,7 +282,6 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 
     /**
      * @param shell Shell for the window
-     * @param superTypeName supertype to search for
      * @param project project to look in
      * @return IType the type created
      * @throws JavaModelException exception thrown
@@ -308,7 +307,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 
 	/**
 	 * @param project
-	 * @return
+	 * @return the scope of resources to be searched
 	 */
 	private IJavaSearchScope computeSearchScope(IProject project) {
 		IJavaSearchScope searchScope = null;
@@ -322,9 +321,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                 }
             }
         }
-        if (model.getProject() != null) {
+        if (CamelUtils.project() != null) {
             if (project == null) {
-                project = model.getProject();
+                project = CamelUtils.project();
             }
             IJavaProject javaProject = JavaCore.create(project);
 			searchScope = SearchEngine.createJavaSearchScope(new IJavaElement[] { javaProject });

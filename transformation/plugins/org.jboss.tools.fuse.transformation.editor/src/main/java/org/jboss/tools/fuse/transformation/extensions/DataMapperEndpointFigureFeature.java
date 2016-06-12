@@ -1,21 +1,18 @@
-/******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 
 package org.jboss.tools.fuse.transformation.extensions;
 
 import java.util.List;
-
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -27,14 +24,13 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureF
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 import org.w3c.dom.Node;
 
 public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature {
 
 	private List<Dependency> requiredDependencies;
-	
+
     public DataMapperEndpointFigureFeature(IFeatureProvider fp, String name, String description, List<Dependency> deps) {
         super(fp, name, description, null, deps);
         this.requiredDependencies = deps;
@@ -64,14 +60,8 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
     protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
         // Launch the New Transformation wizard
         NewTransformationWizard wizard = new NewTransformationWizard();
+        wizard.init(null, null);
         wizard.setNeedsProgressMonitor(true);
-
-        IResource res = parent.getCamelFile().getResource();
-        wizard.setSelectedProject(res.getProject());
-        IPath respath = JavaUtil.getJavaPathForResource(res);
-        String path = respath.makeRelative().toString();
-        wizard.setCamelFilePath(path);
-        wizard.setSelectedProject(res.getProject());
 
         // eventually we want to do all our Camel file updates
         // within the Camel editor's context, but for now
@@ -83,7 +73,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
         AbstractCamelModelElement ep = (status == IStatus.OK) ? wizard.getRouteEndpoint() : null;
         if (ep != null && getEip() != null) {
         	CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
-        	if (editor.getModel() != null) { 
+        	if (editor.getModel() != null) {
         		ep.setParent(parent);
         		ep.setUnderlyingMetaModelObject(getEip());
         		if (createDOMNode) {

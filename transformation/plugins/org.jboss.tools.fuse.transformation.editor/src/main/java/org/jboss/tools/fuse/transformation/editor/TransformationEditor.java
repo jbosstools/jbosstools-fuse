@@ -59,6 +59,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -124,16 +125,19 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
             @Override
             public void run() {
+                if (getSite() == null || getSite().getPage() == null) return;
                 // close all editors without valid input
                 IEditorReference[] refs = getSite().getPage().getEditorReferences();
-                for (IEditorReference ref : refs) {
-                    IEditorPart editor = ref.getEditor(false);
-                    if (editor != null) {
-                        IEditorInput editorInput = editor.getEditorInput();
-                        if (editorInput instanceof FileEditorInput
-                            && !((FileEditorInput)editorInput).getFile().exists()) {
-                            getSite().getPage().closeEditor(editor, false);
-                            editor.dispose();
+                if (refs != null) {
+                    for (IEditorReference ref : refs) {
+                        IEditorPart editor = ref.getEditor(false);
+                        if (editor != null) {
+                            IEditorInput editorInput = editor.getEditorInput();
+                            if (editorInput instanceof FileEditorInput
+                                && !((FileEditorInput)editorInput).getFile().exists()) {
+                                getSite().getPage().closeEditor(editor, false);
+                                editor.dispose();
+                            }
                         }
                     }
                 }
@@ -331,10 +335,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     public void init(IEditorSite site,
                      IEditorInput input) throws PartInitException {
         IContentType contentType = Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
-        if (!contentType.isAssociatedWith(input.getName())) {
-            throw new PartInitException("The Fuse Transformation editor can only be opened with a" //$NON-NLS-1$
-                                        + " Dozer configuration file."); //$NON-NLS-1$
-        }
+        if (!contentType.isAssociatedWith(input.getName()))
+            throw new PartInitException(Messages.TransformationEditor_invalidTransformationFile);
+        if (CamelUtils.getDiagramEditor() == null)
+            throw new PartInitException(Messages.TransformationEditor_mustBeOpenedViaCamelEditor);
         setSite(site);
         setInput(input);
         setPartName(input.getName());
@@ -342,8 +346,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         IFile configFile = ((FileEditorInput)getEditorInput()).getFile();
         IJavaProject javaProject = JavaCore.create(configFile.getProject());
         try {
-            loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject,
-                                                                    getClass().getClassLoader());
+            loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject, getClass().getClassLoader());
             manager = new TransformationManager(configFile, loader);
             CamelModelFactory.initializeModels();
             // Add contributed transformations if missing or a different version
