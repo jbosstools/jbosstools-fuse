@@ -12,7 +12,6 @@ package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,6 +46,8 @@ public class TemplateModel {
 
 	private List<CategoryItem> templateCategories = new ArrayList<CategoryItem>();
 
+	private NameAndWeightComparator comparator = new NameAndWeightComparator();
+	
 	/**
 	 * 
 	 */
@@ -134,19 +135,7 @@ public class TemplateModel {
 		}
 		
 		// now sort the root list of categories
-		Collections.sort(templateCategories, new Comparator<CategoryItem>() {
-			/* (non-Javadoc)
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
-			@Override
-			public int compare(CategoryItem o1, CategoryItem o2) {
-				int res = Integer.compare(o1.getWeight(), o2.getWeight());
-				if (res == 0) {
-					res = o1.getName().compareTo(o2.getName());
-				}
-				return res;
-			}
-		});
+		Collections.sort(templateCategories, comparator);
 	}
 
 	private CategoryItem getCategory(String id) {
