@@ -10,7 +10,6 @@
 package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -35,9 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
-import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTestWizardPage;
@@ -47,20 +44,11 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTest
  */
 public class NewTransformationTestWizard extends NewElementWizard {
 
-    static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml"; //$NON-NLS-1$
+    private static final String JDT_EDITOR = "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$
 
     IProject project;
-    IJavaProject javaProject;
-    IFile camelConfigFile;
-    CamelConfigBuilder builder;
-    String transformID = null;
-    String packageName = null;
-    String className = null;
 
     private TransformTestWizardPage _page = null;
-
-    private static final String JDT_EDITOR =
-            "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$
 
     /**
      *
@@ -73,75 +61,6 @@ public class NewTransformationTestWizard extends NewElementWizard {
     @Override
     public void addPages() {
         addPage(_page);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
-     *      org.eclipse.jface.viewers.IStructuredSelection)
-     */
-    @Override
-    public void init(IWorkbench workbench, IStructuredSelection selection) {
-        _page.setTypeName(Messages.NewTransformationTestWizard_pageTypeName, true);
-        // what are we passing in? assume we're right-clicking on the dozer file
-        if (selection.size() != 1) {
-            return;
-        }
-        _page.init(selection);
-        Object selectedObject = selection.getFirstElement();
-        if (selectedObject != null) {
-            if (selectedObject instanceof IResource) {
-                project = ((IResource)selectedObject).getProject();
-            }
-            if (selectedObject instanceof IFile) {
-                IFile selectedFile = (IFile) selectedObject;
-                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project,
-                        selectedFile.getProjectRelativePath().toPortableString());
-                if (isCamelConfig) {
-                    camelConfigFile = selectedFile;
-                }
-            }
-            if (project != null) {
-                _page.setProject(project);
-                javaProject = JavaCore.create(project);
-            }
-            if (project != null && camelConfigFile == null) {
-                IResource findCamelContext =
-                        project.findMember("src/main/resources/META-INF/spring/camel-context.xml"); //$NON-NLS-1$
-                if (findCamelContext != null) {
-                    camelConfigFile = (IFile) findCamelContext;
-                }
-            }
-            if (camelConfigFile != null) {
-                _page.setCamelConfigFile(camelConfigFile);
-                File file = new File(camelConfigFile.getLocationURI());
-                try {
-                    builder = CamelConfigurationHelper.getConfigBuilder(file);
-                    _page.setBuilder(builder);
-                } catch (Exception e) {
-                    Activator.error(e);
-                }
-            }
-            if (javaProject != null) {
-                _page.setJavaProject(javaProject);
-
-                IFolder srcFolder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
-                if (!JavaUtil.findFolderOnProjectClasspath(javaProject, srcFolder)) {
-                    JavaUtil.addFolderToProjectClasspath(javaProject, srcFolder);
-                }
-                if (!srcFolder.exists()) {
-                    try {
-                        srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
-                    } catch (CoreException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
-                _page.setPackageFragmentRoot(root, true);
-            }
-        }
     }
 
     @Override
@@ -170,6 +89,72 @@ public class NewTransformationTestWizard extends NewElementWizard {
     @Override
     public IJavaElement getCreatedElement() {
         return _page.getCreatedType();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
+     *      org.eclipse.jface.viewers.IStructuredSelection)
+     */
+    @Override
+    public void init(IWorkbench workbench, IStructuredSelection selection) {
+        _page.setTypeName(Messages.NewTransformationTestWizard_pageTypeName, true);
+        // what are we passing in? assume we're right-clicking on the dozer file
+        if (selection.size() != 1) {
+            return;
+        }
+        _page.init(selection);
+        Object selectedObject = selection.getFirstElement();
+        if (selectedObject != null) {
+            if (selectedObject instanceof IResource) {
+                project = ((IResource)selectedObject).getProject();
+            }
+            IFile camelConfigFile = null;
+            if (selectedObject instanceof IFile) {
+                IFile selectedFile = (IFile) selectedObject;
+                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project,
+                        selectedFile.getProjectRelativePath().toPortableString());
+                if (isCamelConfig) {
+                    camelConfigFile = selectedFile;
+                }
+            }
+            IJavaProject javaProject = null;
+            if (project != null) {
+                _page.setProject(project);
+                javaProject = JavaCore.create(project);
+            }
+            if (project != null && camelConfigFile == null) {
+                IResource findCamelContext =
+                        project.findMember("src/main/resources/META-INF/spring/camel-context.xml"); //$NON-NLS-1$
+                if (findCamelContext != null) {
+                    camelConfigFile = (IFile) findCamelContext;
+                }
+            }
+            if (camelConfigFile != null) {
+                _page.setCamelConfigFile(camelConfigFile);
+                File file = new File(camelConfigFile.getLocationURI());
+                _page.setBuilder(new CamelConfigBuilder(file));
+            }
+            if (javaProject != null) {
+                _page.setJavaProject(javaProject);
+
+                IFolder srcFolder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
+                if (!JavaUtil.findFolderOnProjectClasspath(javaProject, srcFolder)) {
+                    JavaUtil.addFolderToProjectClasspath(javaProject, srcFolder);
+                }
+                if (!srcFolder.exists()) {
+                    try {
+                        srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+                    } catch (CoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
+                _page.setPackageFragmentRoot(root, true);
+            }
+        }
     }
 
     @Override

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.l10n;
 
@@ -27,7 +27,7 @@ public class Messages extends NLS {
 	public static String AddCustomTransformationDialog_labelPane_MethodName;
 	public static String AddCustomTransformationDialog_labelPane_ParameterType;
 	public static String AddCustomTransformationDialog_labelPane_returnType;
-	public static String CamelEndpointSelectionDialog_erromessageInvalidFilePath;
+	public static String CamelEndpointSelectionDialog_errorMessageInvalidFilePath;
 	public static String CamelEndpointSelectionDialog_errorMessageIdNotFound;
 	public static String CamelEndpointSelectionDialog_errorMessageMissingCamelFilePath;
 	public static String CamelEndpointSelectionDialog_errorMessageNoEndpointSelected;
@@ -156,7 +156,6 @@ public class Messages extends NLS {
 	public static String PropertyDialog_validationErrorMessage;
 	public static String SourceTabFolder_Source;
 	public static String SourceTabFolder_Variables;
-	public static String StartPage_browseCamelTooltip;
 	public static String StartPage_browseDozerTooltip;
 	public static String StartPage_description;
 	public static String StartPage_descriptionStartPage;
@@ -172,12 +171,8 @@ public class Messages extends NLS {
 	public static String StartPage_errorMessageSourceTypeMissing;
 	public static String StartPage_errorMessageTargetTypeMissing;
 	public static String StartPage_groupTypesTransformed;
-	public static String StartPage_labelCamelFilepath;
-	public static String StartPage_labelCamelFilePathTooltip;
 	public static String StartPage_labelDozerFilePath;
 	public static String StartPage_labelDozerFilePathTooltip;
-	public static String StartPage_labelProject;
-	public static String StartPage_labelProjectTooltip;
 	public static String StartPage_labelSourceType;
 	public static String StartPage_labelSourceTypeTooltip;
 	public static String StartPage_labelTargetType;
@@ -208,7 +203,9 @@ public class Messages extends NLS {
 	public static String TransformationEditor_ConfirmDialogTtile;
 	public static String TransformationEditor_helptextSource;
 	public static String TransformationEditor_helpTextTarget;
+	public static String TransformationEditor_invalidTransformationFile;
 	public static String TransformationEditor_messageDialogConfirmation;
+	public static String TransformationEditor_mustBeOpenedViaCamelEditor;
 	public static String TransformationEditor_tooltipHideSourceVariableViewers;
 	public static String TransformationEditor_tooltipHideTargetViewers;
 	public static String TransformationEditor_tooltipShowSourceVariableViewers;
@@ -233,6 +230,7 @@ public class Messages extends NLS {
 	public static String Util_SelectCamelFileDialogTitle;
 	public static String Util_SelectCamelXMLFileFromProject_DialogTitle;
 	public static String Util_SelectTransformationFileFromProject;
+    public static String Util_UnableToCreateSourceFolder;
 
 	public static String VariablesViewer_addVariableDialog_validation_variablealreadyExists;
 	public static String VariablesViewer_addVariableDialogDescription;

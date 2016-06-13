@@ -20,9 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.xml.namespace.QName;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -65,6 +63,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
@@ -123,10 +122,10 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
     }
-    
+
     private void updatePreview(String path) {
         IPath tempPath = new Path(path);
-        IFile xmlFile = model.getProject().getFile(tempPath);
+        IFile xmlFile = CamelUtils.project().getFile(tempPath);
         if (xmlFile != null && xmlFile.exists()) {
             try (InputStream istream = xmlFile.getContents()) {
                 StringBuffer buffer = new StringBuffer();
@@ -145,7 +144,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         }
     }
-    
+
     private void updateSettingsBasedOnFilePath(String path) {
         boolean isXML = false;
         if (path.endsWith("xml")) { //$NON-NLS-1$
@@ -266,13 +265,13 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
-                    IResource resource = model.getProject().findMember(path);
+                    IResource resource = CamelUtils.project().findMember(path);
                     if (resource != null && resource.exists()) {
                     	updateSettingsBasedOnFilePath(resource.getLocation().makeAbsolute().toOSString());
+                        updatePreview(resource.getProjectRelativePath().toString());
                     }
                     _xmlFileText.setText(path);
 
-                    updatePreview(resource.getProjectRelativePath().toString());
                     pingBinding();
                 }
             }
@@ -326,12 +325,12 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     private String selectResourceFromWorkspace(Shell shell, final String extension) {
         IJavaProject javaProject = null;
         if (getModel() != null) {
-            if (getModel().getProject() != null) {
-                javaProject = JavaCore.create(getModel().getProject());
+            if (CamelUtils.project() != null) {
+                javaProject = JavaCore.create(CamelUtils.project());
             }
         }
         ClasspathResourceSelectionDialog dialog = null;
-        HashSet<String> extensions = new HashSet<String>();
+        HashSet<String> extensions = new HashSet<>();
         extensions.add("xml"); //$NON-NLS-1$
         extensions.add("xsd"); //$NON-NLS-1$
         extensions.add("wsdl"); //$NON-NLS-1$
@@ -355,7 +354,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         _xmlRootsCombo.getCombo().setEnabled(false);
         _xmlPreviewText.setText(""); //$NON-NLS-1$
     }
-    
+
     private void bindControls() {
 
         // Bind source file path widget to UI model
@@ -388,11 +387,11 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 	clearSelection();
                 	return ValidationStatus.error(pathEmptyError);
                 }
-                if (model.getProject().findMember(path) == null) {
+                if (CamelUtils.project().findMember(path) == null) {
                 	clearSelection();
                     return ValidationStatus.error(unableToFindError);
                 }
-                IResource resource = model.getProject().findMember(path);
+                IResource resource = CamelUtils.project().findMember(path);
                 if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                 	clearSelection();
                 	return ValidationStatus.error(unableToFindError);
@@ -422,7 +421,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 XmlModelGenerator modelGen = new XmlModelGenerator();
                 List<QName> elements = null;
-                IResource resource = model.getProject().findMember(path);
+                IResource resource = CamelUtils.project().findMember(path);
                 if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                 	return;
                 }
