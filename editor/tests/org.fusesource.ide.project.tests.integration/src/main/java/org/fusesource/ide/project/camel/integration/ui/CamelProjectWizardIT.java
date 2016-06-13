@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.project.camel.integration.ui;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -17,21 +19,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
-import org.fusesource.ide.project.camel.ui.CamelProjectWizard;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -69,9 +62,9 @@ public class CamelProjectWizardIT {
 	@Test
 	@Ignore("CamelProjectWizard is no more used. New test need to be written")
 	public void testCreateDefaultBlueprintCamelProject() throws InterruptedException {
-		CamelProjectWizard wizard = createAndInitializeWizard();
+//		CamelProjectWizard wizard = createAndInitializeWizard();
 
-		assertThat(wizard.performFinish()).isTrue();
+//		assertThat(wizard.performFinish()).isTrue();
 
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		assertThat(project.exists()).isTrue();
@@ -119,16 +112,16 @@ public class CamelProjectWizardIT {
 		assertThat(isDeploymentOk).isTrue();
 	}
 
-	private CamelProjectWizard createAndInitializeWizard() {
-		CamelProjectWizard wizard = new CamelProjectWizard();
-		final WizardDialog wizardContainer = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
-		wizardContainer.create();
-		wizard.setContainer(wizardContainer);
-		wizard.init(PlatformUI.getWorkbench(), null);
-		wizard.addPages();
-		wizard.createPageControls(new Composite(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.NONE));
-		final IDataModel model = wizard.getDataModel();
-		model.setStringProperty(IFacetProjectCreationDataModelProperties.FACET_PROJECT_NAME, projectName);
-		return wizard;
-	}
+//	private CamelProjectWizard createAndInitializeWizard() {
+//		CamelProjectWizard wizard = new CamelProjectWizard();
+//		final WizardDialog wizardContainer = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+//		wizardContainer.create();
+//		wizard.setContainer(wizardContainer);
+//		wizard.init(PlatformUI.getWorkbench(), null);
+//		wizard.addPages();
+//		wizard.createPageControls(new Composite(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.NONE));
+//		final IDataModel model = wizard.getDataModel();
+//		model.setStringProperty(IFacetProjectCreationDataModelProperties.FACET_PROJECT_NAME, projectName);
+//		return wizard;
+//	}
 }

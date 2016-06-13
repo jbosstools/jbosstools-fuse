@@ -41,6 +41,4 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.project.Activator
 Export-Package: org.fusesource.ide.project,
- org.fusesource.ide.project.camel,
- org.fusesource.ide.project.camel.ui,
  org.fusesource.ide.project.providers
