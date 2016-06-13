@@ -12,13 +12,12 @@ package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
  * @author lhein
  */
-public class CategoryItem {
+public class CategoryItem implements NameAndWeightSupport {
 	private String id;
 	private String name;
 	private String parent;
@@ -26,6 +25,7 @@ public class CategoryItem {
 	private CategoryItem parentCategory;
 	private List<CategoryItem> subCategories = new ArrayList<>();
 	private List<TemplateItem> templates = new ArrayList<>();
+	private NameAndWeightComparator comparator = new NameAndWeightComparator();
 	
 	/**
 	 * creates a template category
@@ -49,16 +49,20 @@ public class CategoryItem {
 		return this.id;
 	}
 	
-	/**
-	 * @return the name
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getName()
 	 */
+	@Override
 	public String getName() {
 		return this.name;
 	}
 	
-	/**
-	 * @return the weight
+	/* 
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getWeight()
 	 */
+	@Override
 	public int getWeight() {
 		return this.weight;
 	}
@@ -94,19 +98,7 @@ public class CategoryItem {
 	public void addTemplate(TemplateItem template) {
 		if (!templates.contains(template)) {
 			templates.add(template);
-			Collections.sort(this.templates, new Comparator<TemplateItem>() {
-				/* (non-Javadoc)
-				 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-				 */
-				@Override
-				public int compare(TemplateItem o1, TemplateItem o2) {
-					int res = Integer.compare(o1.getWeight(), o2.getWeight());
-					if (res == 0) {
-						res = o1.getName().compareTo(o2.getName());
-					}
-					return res;
-				}
-			});
+			Collections.sort(this.templates, comparator);
 		}
 	}
 	
@@ -119,17 +111,7 @@ public class CategoryItem {
 		if (!subCategories.contains(subCategory)) {
 			subCategories.add(subCategory);
 			subCategory.setParentCategory(this);
-			Collections.sort(this.subCategories, new Comparator<CategoryItem>() {
-				/* (non-Javadoc)
-				 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-				 */
-				@Override
-				public int compare(CategoryItem o1, CategoryItem o2) {
-					int res = Integer.compare(o1.getWeight(), o2.getWeight());
-					if (res == 0) res = o1.getName().compareTo(o2.getName());
-					return res;
-				}
-			});
+			Collections.sort(this.subCategories, comparator);
 		}
 	}
 	

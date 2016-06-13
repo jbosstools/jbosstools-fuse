@@ -19,7 +19,7 @@ import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 /**
  * @author lhein
  */
-public class TemplateItem {
+public class TemplateItem implements NameAndWeightSupport {
 	private String id;
 	private String name;
 	private String description;
@@ -72,9 +72,11 @@ public class TemplateItem {
 		return this.id;
 	}
 	
-	/**
-	 * @return the name
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getName()
 	 */
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -85,10 +87,12 @@ public class TemplateItem {
 	public String getDescription() {
 		return this.description;
 	}
-	
-	/**
-	 * @return the weight
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getWeight()
 	 */
+	@Override
 	public int getWeight() {
 		return this.weight;
 	}
