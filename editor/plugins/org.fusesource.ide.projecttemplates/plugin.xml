@@ -13,7 +13,7 @@
       <wizard id="org.fusesource.ide.branding.wizards.FuseProjectWizard"
             category="org.fusesource.ide.newwizards"
             class="org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard"
-            icon="icons/camel_project_64x64.png"
+            icon="icons/camel_project_16x16.png"
             name="%project.wizard.name"
             project="true">
          <description>%project.wizard.description</description>
