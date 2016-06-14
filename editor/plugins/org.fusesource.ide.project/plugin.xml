@@ -172,54 +172,57 @@
     </decorator>
  </extension>
  
- 	<extension point="org.eclipse.ui.menus">
-    	<menuContribution allPopups="false" locationURI="popup:org.eclipse.ui.popup.any?before=additions">
-       		<command
-            	commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
-             	label="Disable Fuse Camel Nature"
-             	style="push">
-          		<visibleWhen checkEnabled="false">
-                	<with variable="selection">
-                    	<iterate ifEmpty="false"
-                                 operator="and">
-                        	<test forcePluginActivation="true"
-                                  property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled"/>
-                            <test forcePluginActivation="true"
-                                  property="org.fusesource.ide.project.CamelNatureTester.projectOpen"/>
-                        </iterate>
-          			</with>
-          		</visibleWhen>
-       		</command>
-       		<command
-             	commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
-             	label="Enable Fuse Camel Nature"
-             	style="push">
-          		<visibleWhen checkEnabled="false">
-                	<with variable="selection">
-                		<iterate ifEmpty="false" operator="and">
-                   			<test forcePluginActivation="true"
-                         		  property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled"/>
-                   			<test forcePluginActivation="true"
-                         		  property="org.fusesource.ide.project.CamelNatureTester.projectOpen" />
-		                </iterate>
-        		 	</with>
-          		</visibleWhen>
-       		</command>
-		</menuContribution>
- 	</extension>
- 
- 	<extension point="org.eclipse.ui.commands">
-    	<command id="org.fusesource.ide.project.EnableCamelNatureCmd"
-          		 name="Enable Fuse Camel Nature"/>
-	    <command id="org.fusesource.ide.project.DisableCamelNatureCmd"
-          		 name="Disable Fuse Camel Nature"/>
-	</extension>
-	
- 	<extension point="org.eclipse.ui.handlers">
-    	<handler class="org.fusesource.ide.project.handlers.EnableCamelNatureHandler"
-          		 commandId="org.fusesource.ide.project.EnableCamelNatureCmd"/>
-	    <handler class="org.fusesource.ide.project.handlers.DisableCamelNatureHandler"
-          		 commandId="org.fusesource.ide.project.DisableCamelNatureCmd"/>
+ 	<extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.fusesource.ide.project.configuration.nature.enable"
+            objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+            <and>
+               <objectState
+                     name="projectNature"
+                     value="org.eclipse.jdt.core.javanature">
+               </objectState>
+               <not>
+                  <objectState
+                        name="projectNature"
+                        value="org.fusesource.ide.project.RiderProjectNature">
+                  </objectState>
+               </not>
+            </and>
+         </visibility>
+         <action
+               class="org.fusesource.ide.project.AddCamelNatureAction"
+               id="org.fusesource.ide.project.AddCamelNatureAction"
+               label="%ConfigureMenu_AddCamelSupport"
+               menubarPath="org.eclipse.ui.projectConfigure/additions">
+         </action>
+      </objectContribution>
+      
+      <objectContribution
+            adaptable="true"
+            id="org.fusesource.ide.project.configuration.nature.disable"
+            objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+            <and>
+               <objectState
+                     name="projectNature"
+                     value="org.eclipse.jdt.core.javanature">
+               </objectState>
+               <objectState
+                     name="projectNature"
+                     value="org.fusesource.ide.project.RiderProjectNature">
+               </objectState>
+            </and>
+         </visibility>
+         <action
+               class="org.fusesource.ide.project.RemoveCamelNatureAction"
+               id="org.fusesource.ide.project.RemoveCamelNatureAction"
+               label="%ConfigureMenu_RemoveCamelSupport"
+               menubarPath="org.eclipse.ui.projectConfigure/additions">
+         </action>
+      </objectContribution>
 	</extension>
  
  	<extension point="org.eclipse.core.expressions.propertyTesters">
