@@ -115,6 +115,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		locationBrowseButton.setLayoutData(locationBrowseButtonData);
 		locationBrowseButton.setText(Messages.newProjectWizardLocationPageLocationBrowseButtonLabel);
 		locationBrowseButton.setToolTipText(Messages.newProjectWizardLocationPageLocationBrowseButtonDescription);
+		locationBrowseButton.setEnabled(false);
 		locationBrowseButton.addSelectionListener(new SelectionAdapter() {
 			/*
 			 * (non-Javadoc)
@@ -134,6 +135,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 				String selectedDir = dialog.open();
 				if (selectedDir != null) {
 					locationText.setText(selectedDir);
+					locationText.setEditable(true);
 					useDefaultWorkspaceLocationButton.setSelection(false);
 					validate();
 				}
@@ -159,6 +161,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 				boolean inWorkspace = isInWorkspace();
 				locationLabel.setEnabled(!inWorkspace);
 				locationText.setEnabled(!inWorkspace);
+				locationBrowseButton.setEnabled(!inWorkspace);
 			}
 		});
 		useDefaultWorkspaceLocationButton.setSelection(true);
