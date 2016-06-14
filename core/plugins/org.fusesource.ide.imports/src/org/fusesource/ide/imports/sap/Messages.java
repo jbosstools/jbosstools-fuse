@@ -46,6 +46,7 @@ public class Messages extends NLS {
 	public static String JCo3Archive_OSPlatformIsNotSupported;
 	public static String JCo3Archive_UnableToParseArchiveManifestFile;
 	
+	public static String SAPArchive_InvalidFile;
 	public static String SAPToolSuiteImportWizard_WindowTitle;
 	
 	public static String OverviewPage_DownloadAccountNote;

@@ -8,7 +8,7 @@
 * Contributors:
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
-******************************************************************************/ 
+******************************************************************************/
 package org.fusesource.ide.imports.sap;
 
 import java.io.File;
@@ -18,14 +18,13 @@ import java.text.MessageFormat;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -47,7 +46,7 @@ public class ArchivesSelectionPage extends WizardPage {
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
 
 	private static final String[] FILE_EXTS = new String[] { "*.zip", "*.tgz", ".tar.gz", ".tar", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	
+
 	private class JCo3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
@@ -63,7 +62,7 @@ public class ArchivesSelectionPage extends WizardPage {
 								clearJCo3Inputs();
 								setErrorMessage(Messages.ArchivesSelectionPage_UnsupportedJC03ArchiveFile);
 								return ValidationStatus.error(getErrorMessage());
-							} 
+							}
 							if (!jcoArchive.supportsCurrentPlatform()) {
 								clearJCo3Inputs();
 								setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_IncompatibleJC03ArchiveFileType, jcoArchive.getType().getDescription()));
@@ -101,7 +100,7 @@ public class ArchivesSelectionPage extends WizardPage {
 			}
 		}
 	}
-	
+
 	private class IDoc3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
@@ -136,7 +135,7 @@ public class ArchivesSelectionPage extends WizardPage {
 							return ValidationStatus.error(getErrorMessage());
 						} finally {
 							textSelectIDoc3Archive.setText(filename);
-						}            	
+						}
 					} else {
 						setMessage(Messages.ArchivesSelectionPage_PleaseSelectIDoc3Archive, WizardPage.INFORMATION);
 						return ValidationStatus.info(getMessage());
@@ -150,32 +149,32 @@ public class ArchivesSelectionPage extends WizardPage {
 			}
 		}
 	}
-	
-	private DataBindingContext context; 
+
+	private DataBindingContext context;
 
 	private JCo3ImportSettings jcoImportSettings;
-	
+
 	private Text textSelectJCo3Archive;
 	private Button btnSelectJCo3Archive;
-	
+
 	private Label lblJCo3ArchiveOsPlatform;
 	private Text textJCo3ArchiveOs;
 	private Label lblJCo3ArchiveVersion;
 	private Text textJCo3ArchiveVersion;
-	
+
 	private boolean isJCo3ArchiveValid;
 
 	private IDoc3ImportSettings idoc3ImportSettings;
-	
+
 	private Text textSelectIDoc3Archive;
 	private Button btnSelectIDoc3Archive;
-	
+
 	private Label lblIDoc3ArchiveVersion;
 	private Text textIDoc3ArchiveVersion;
-	
+
 	private boolean isIDoc3ArchiveValid;
 	private Label label;
-	
+
 	protected ArchivesSelectionPage(DataBindingContext context, JCo3ImportSettings jcoImportSettings, IDoc3ImportSettings idocImportSettings) {
 		super(Messages.ArchivesSelectionPage_PageName, Messages.ArchivesSelectionPage_PageName, Activator.getDefault().getImageRegistry().getDescriptor(Activator.SAP_TOOL_SUITE_48_IMAGE));
 		setDescription(Messages.ArchivesSelectionPage_SelectArchiveFilesContainingJCo3IDoc3Libs);
@@ -195,24 +194,24 @@ public class ArchivesSelectionPage extends WizardPage {
 	    Label lblJCo3Header = new Label(container, SWT.NONE);
 	    lblJCo3Header.setText(Messages.ArchivesSelectionPage_SelectJCo3ArchiveFile);
 	    GridDataFactory.fillDefaults().align(SWT.FILL,  SWT.TOP).span(3, 1).applyTo(lblJCo3Header);
-	    
+
 		Label lblSelectJCo3Archive = new Label(container, SWT.NONE);
 		lblSelectJCo3Archive.setText(Messages.ArchivesSelectionPage_JCo3ArchiveFile);
-		
+
 		textSelectJCo3Archive = new Text(container, SWT.BORDER);
 		textSelectJCo3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textSelectJCo3Archive.setMessage(Messages.ArchivesSelectionPage_JCo3ArchivePath_text_message);
-		
-		ISWTObservableValue uiObservable = WidgetProperties.text(SWT.Modify).observe(textSelectJCo3Archive);    
-        IObservableValue modelObservable = BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.JCO3_ARCHIVE_FILENAME);
+
+		ISWTObservableValue uiObservable = WidgetProperties.text(SWT.Modify).observe(textSelectJCo3Archive);
+		IObservableValue modelObservable = BeanProperties.value(JCo3ImportSettings.JCO3_ARCHIVE_FILENAME).observe(jcoImportSettings);
 
 		// create UpdateValueStrategy and assign to the binding
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new JCo3ArchiveNameValidator());
-		
+
         Binding bindingJCCo3 = context.bindValue(uiObservable, modelObservable, strategy, null);
 		ControlDecorationSupport.create(bindingJCCo3, SWT.TOP | SWT.LEFT);
-		
+
 		btnSelectJCo3Archive = new Button(container, SWT.PUSH);
 		btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -221,50 +220,52 @@ public class ArchivesSelectionPage extends WizardPage {
 			}
 		});
 		btnSelectJCo3Archive.setText(Messages.ArchivesSelectionPage_Browse);
-		
+
 		lblJCo3ArchiveVersion = new Label(container, SWT.NONE);
 		lblJCo3ArchiveVersion.setText(Messages.ArchivesSelectionPage_ArchiveVersion);
-		
+
 		textJCo3ArchiveVersion = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		textJCo3ArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		textJCo3ArchiveVersion.setEnabled(false);
-		context.bindValue(SWTObservables.observeText(textJCo3ArchiveVersion, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
-		
+		context.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(300, textJCo3ArchiveVersion),
+				BeanProperties.value(JCo3ImportSettings.ARCHIVE_VERSION).observe(jcoImportSettings), new UpdateValueStrategy(), new UpdateValueStrategy());
+
 		lblJCo3ArchiveOsPlatform = new Label(container, SWT.NONE);
 		lblJCo3ArchiveOsPlatform.setText(Messages.ArchivesSelectionPage_ArchiveOSPlatform);
-		
+
 		textJCo3ArchiveOs = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		textJCo3ArchiveOs.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		textJCo3ArchiveOs.setEnabled(false);
-		context.bindValue(SWTObservables.observeText(textJCo3ArchiveOs, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.ARCHIVE_OS), new UpdateValueStrategy(), new UpdateValueStrategy());
-		
+		context.bindValue(WidgetProperties.text(SWT.Modify).observe(textJCo3ArchiveOs), BeanProperties.value(JCo3ImportSettings.ARCHIVE_OS).observe(jcoImportSettings),
+				new UpdateValueStrategy(), new UpdateValueStrategy());
+
 		label = new Label(container, SWT.NONE);
 		label.setText("");
 		label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 3));
-		
+
 		Label lblIDoc3Header = new Label(container, SWT.NONE);
 		lblIDoc3Header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
 		lblIDoc3Header.setText(Messages.ArchivesSelectionPage_SelectIDoc3ArchiveFile);
 
 		Label lblSelectIDoc3Archive = new Label(container, SWT.NONE);
 		lblSelectIDoc3Archive.setText(Messages.ArchivesSelectionPage_IDoc3ArchiveFile);
-		
+
 		textSelectIDoc3Archive = new Text(container, SWT.BORDER);
 		GridData gd_textSelectIDoc3Archive = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_textSelectIDoc3Archive.widthHint = 230;
 		textSelectIDoc3Archive.setLayoutData(gd_textSelectIDoc3Archive);
 		textSelectIDoc3Archive.setMessage(Messages.ArchivesSelectionPage_IDoc3ArchivePath);
 
-		uiObservable = WidgetProperties.text(SWT.Modify).observe(textSelectIDoc3Archive);    
-        modelObservable = BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.IDOC3_ARCHIVE_FILENAME);
+		uiObservable = WidgetProperties.text(SWT.Modify).observe(textSelectIDoc3Archive);
+		modelObservable = BeanProperties.value(IDoc3ImportSettings.IDOC3_ARCHIVE_FILENAME).observe(idoc3ImportSettings);
 
 		// create UpdateValueStrategy and assign to the binding
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IDoc3ArchiveNameValidator());
-		
+
 		Binding bindingIDoc3 = context.bindValue(uiObservable, modelObservable, strategy, null);
 		ControlDecorationSupport.create(bindingIDoc3, SWT.TOP | SWT.LEFT);
-		
+
 		btnSelectIDoc3Archive = new Button(container, SWT.NONE);
 		btnSelectIDoc3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -273,14 +274,16 @@ public class ArchivesSelectionPage extends WizardPage {
 			}
 		});
 		btnSelectIDoc3Archive.setText(Messages.ArchivesSelectionPage_Browse);
-		
+
 		lblIDoc3ArchiveVersion = new Label(container, SWT.NONE);
 		lblIDoc3ArchiveVersion.setText(Messages.ArchivesSelectionPage_ArchiveVersion);
-		
+
 		textIDoc3ArchiveVersion = new Text(container, SWT.BORDER | SWT.READ_ONLY);
 		textIDoc3ArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		textIDoc3ArchiveVersion.setEnabled(false);
-		context.bindValue(SWTObservables.observeText(textIDoc3ArchiveVersion, SWT.Modify), BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
+		context.bindValue(WidgetProperties.text(SWT.Modify).observe(textIDoc3ArchiveVersion),
+				BeanProperties.value(IDoc3ImportSettings.ARCHIVE_VERSION).observe(idoc3ImportSettings),
+				new UpdateValueStrategy(), new UpdateValueStrategy());
 
 	    setControl(container);
 
@@ -288,18 +291,18 @@ public class ArchivesSelectionPage extends WizardPage {
 		setErrorMessage(null);
 		setMessage(null);
 	}
-	
+
 	public boolean checkPageComplete() {
 		return isJCo3ArchiveValid && isIDoc3ArchiveValid;
 	}
-	
+
 	protected void getJCo3ArchiveFile() {
 		String filename = getFile(textSelectJCo3Archive.getText());
         if (filename != null) {
             textSelectJCo3Archive.setText(filename);
         }
 	}
-	
+
 	protected void getIDoc3ArchiveFile() {
 		String filename = getFile(textSelectIDoc3Archive.getText());
         if (filename != null) {
@@ -310,12 +313,12 @@ public class ArchivesSelectionPage extends WizardPage {
 	protected String getFile(String startingFilename) {
 		setErrorMessage(null);
         FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.SHEET);
-		
+
         File startingFile = new File(startingFilename);
 		if (startingFile.exists()) {
 			dialog.setFileName(startingFile.getPath());
 		}
-	
+
         dialog.setFilterExtensions(FILE_EXTS);
         try {
 			String file = dialog.open();
@@ -331,20 +334,20 @@ public class ArchivesSelectionPage extends WizardPage {
         dialog = null;
         return null;
 	}
-	
+
 	protected void clearJCo3Inputs() {
-// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top		
+// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top
 //		textSelectJCo3Archive.setText(BLANK_STRING);
 		textJCo3ArchiveOs.setText(BLANK_STRING);
 		textJCo3ArchiveVersion.setText(BLANK_STRING);
 	}
-	
+
 	protected void clearIDoc3Inputs() {
 // we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top
 //		textSelectIDoc3Archive.setText(BLANK_STRING);
 		textIDoc3ArchiveVersion.setText(BLANK_STRING);
 	}
-	
+
 	protected void clearInput() {
 		clearJCo3Inputs();
 		clearIDoc3Inputs();

@@ -8,7 +8,7 @@
 * Contributors:
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
-******************************************************************************/ 
+******************************************************************************/
 package org.fusesource.ide.imports.sap;
 
 import java.io.ByteArrayInputStream;
@@ -38,7 +38,7 @@ public class SAPArchive {
 	public static final String MANIFEST_VERSION_VALUE = "1.0"; //$NON-NLS-1$
 	public static final String BUNDLE_MANIFEST_VERSION_VALUE = "2"; //$NON-NLS-1$
 	public static final String BUNDLE_ACTIVATION_POLICY_VALUE = "lazy"; //$NON-NLS-1$
-	protected Map<String, byte[]> contents = new HashMap<String, byte[]>();
+	protected Map<String, byte[]> contents = new HashMap<>();
 
 	protected void readArchiveFile(String filename, byte[] fileBytes) throws IOException {
 		if (filename.toLowerCase().endsWith(ZIP_EXTENTION)) { //$NON-NLS-1$
@@ -50,9 +50,9 @@ public class SAPArchive {
 		} else if (filename.toLowerCase().endsWith(TAR_EXTENTION)) { //$NON-NLS-1$
 			readTarFile(fileBytes);
 		} else {
-			throw new UnsupportedOperationException();
+			throw new IOException(Messages.SAPArchive_InvalidFile);
 		}
-	
+
 		if (contents.size() == 1) {
 			filename = contents.keySet().iterator().next();
 			fileBytes = contents.values().iterator().next();
@@ -61,7 +61,7 @@ public class SAPArchive {
 				readArchiveFile(filename, fileBytes);
 			}
 		}
-	
+
 	}
 
 	protected void readZIPFile(byte[] fileBytes) throws IOException {
