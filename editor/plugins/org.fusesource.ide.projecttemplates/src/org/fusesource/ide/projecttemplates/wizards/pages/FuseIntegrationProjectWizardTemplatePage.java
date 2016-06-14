@@ -13,7 +13,6 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -48,7 +47,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	private Button btn_springDSL;
 	private Button btn_javaDSL;
 	
-	private TreeViewer list_templates;
+	private FilteredTree list_templates;
 	private StyledText templateInfoText;
 	
 	/**
@@ -189,16 +188,15 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 * @param parent
 	 * @return
 	 */
-	private TreeViewer createFilteredTree(Composite parent) {
+	private FilteredTree createFilteredTree(Composite parent) {
 		final int treeStyle = SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER;
-		final FilteredTree filteredTree = new FilteredTree(parent, treeStyle, new TemplateNameAndKeywordPatternFilter(), true);
-		filteredTree.getFilterControl().setMessage(Messages.newProjectWizardTemplatePageFilterBoxText);
-		filteredTree.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
-		final TreeViewer treeViewer = filteredTree.getViewer();
-		treeViewer.setContentProvider(new TemplateContentProvider());
-		treeViewer.setLabelProvider(new TemplateLabelProvider());
-		treeViewer.setInput(getTemplates());
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		list_templates = new FilteredTree(parent, treeStyle, new TemplateNameAndKeywordPatternFilter(), true);
+		list_templates.getFilterControl().setMessage(Messages.newProjectWizardTemplatePageFilterBoxText);
+		list_templates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
+		list_templates.getViewer().setContentProvider(new TemplateContentProvider());
+		list_templates.getViewer().setLabelProvider(new TemplateLabelProvider());
+		list_templates.getViewer().setInput(getTemplates());
+		list_templates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
@@ -215,7 +213,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 				updateTemplateInfo(null);
 			}
 		});
-		return treeViewer;
+		return list_templates;
 	}
 
 	private void updateTemplateInfo(TemplateItem template) {
@@ -238,8 +236,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	}
 	
 	private void setTemplatesActive(boolean active) {
-		list_templates.getTree().setEnabled(active);
-		list_templates.getTree().getParent().setEnabled(active);
+		list_templates.getViewer().getTree().setEnabled(active);
+		list_templates.getViewer().getTree().getParent().setEnabled(active);
+		list_templates.getFilterControl().setEnabled(active);
+		templateInfoText.setEnabled(active);
 		if (!active) {
 			// user selected Empty Project -> activate all DSL buttons
 			btn_blueprintDSL.setEnabled(true);
@@ -255,8 +255,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	
 	private void validate() {
 		if (btn_templateProject.getSelection() &&
-			(list_templates.getSelection().isEmpty() || 
-			 Selections.getFirstSelection(list_templates.getSelection()) instanceof CategoryItem || !isSelectedDSLSupported())) {
+			(list_templates.getViewer().getSelection().isEmpty() || 
+			 Selections.getFirstSelection(list_templates.getViewer().getSelection()) instanceof CategoryItem || !isSelectedDSLSupported())) {
 			setPageComplete(false);
 		} else {
 			setPageComplete(true);
@@ -315,8 +315,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 */
 	public TemplateItem getSelectedTemplate() {
 		if (btn_templateProject.getSelection() && 
-			!list_templates.getSelection().isEmpty()) {
-			Object o = Selections.getFirstSelection(list_templates.getSelection());
+			!list_templates.getViewer().getSelection().isEmpty()) {
+			Object o = Selections.getFirstSelection(list_templates.getViewer().getSelection());
 			if (o instanceof TemplateItem) {
 				return (TemplateItem)o;
 			}
