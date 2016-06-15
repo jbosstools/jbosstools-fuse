@@ -36,9 +36,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class CamelIOHandlerIT {
-	
+
 	private CamelIOHandler marshaller = new CamelIOHandler();
-	
+
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
@@ -51,7 +51,7 @@ public class CamelIOHandlerIT {
 		this.fileNameToTest = fileNameToTest;
 	}
 
-	@Parameters
+	@Parameters(name = "{0}")
 	public static Collection<String> params() {
 		//@formatter:off
 		return Arrays.asList(
@@ -64,7 +64,8 @@ public class CamelIOHandlerIT {
 				"propertyPlaceHolderSample.xml",
 				"unmarshalSample.xml",
 				"withGlobalDefinitionSample.xml",
-				"testWithCXFGlobalEndpoint.xml");
+				"testWithCXFGlobalEndpoint.xml",
+				"emptyOtherwiseSample.xml");
 		//@formatter:on
 	}
 
@@ -72,10 +73,10 @@ public class CamelIOHandlerIT {
 	public void testLoadAndSaveOfSimpleModel() throws IOException, CoreException {
 		assertModelRoundTrip(fileNameToTest);
 	}
-	
+
 	protected CamelFile assertModelRoundTrip(String name) throws IOException, CoreException {
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
-		
+
 		File baseFile = File.createTempFile("baseFile" + name, "xml");
 		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
@@ -84,18 +85,18 @@ public class CamelIOHandlerIT {
 		fileInProject.create(inputStream, true, new NullProgressMonitor());
 
 		CamelFile model1 = marshaller.loadCamelModel(fileInProject, new NullProgressMonitor());
-		
+
 		File outFile = new File(testFolder.newFolder(), name);
 		marshaller.saveCamelModel(model1, outFile, new NullProgressMonitor());
-		
+
 		CamelFile model2 = marshaller.loadCamelModel(outFile, new NullProgressMonitor());
 
 		String model1String = model1.getDocumentAsXML();
 		String model2String = model2.getDocumentAsXML();
-		
+
 		assertThat(model1String).isXmlEqualToContentOf(baseFile);
 		assertEquals("Should have the same content", model1String, model2String);
-		
+
 		return model2;
 	}
 
