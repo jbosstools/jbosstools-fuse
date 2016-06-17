@@ -1,0 +1,2 @@
+# provide advanced debugging log
+org.fusesource.ide.camel.editor/debug=false

@@ -36,7 +36,7 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 			setSelectedNode(node);
 		}
 	};
-	
+
 	private ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -46,7 +46,7 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#setInput
 	 * (org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
@@ -95,13 +95,15 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 		AbstractCamelModelElement newNode = null;
 		if (lastPart != null) {
 			 selection = lastPart.getSite().getSelectionProvider().getSelection();
-			
+
 			newNode = getSelectedNode(selection);
 			if (newNode != null) {
 				setSelectedNode(newNode);
 			}
 		}
-		CamelEditorUIActivator.pluginLog().logInfo("After " + this + " about to be shown selection " + selection + " node: " + newNode + " last part: " + lastPart);
+		if (CamelEditorUIActivator.getDefault().isDebugging()) {
+			CamelEditorUIActivator.pluginLog().logInfo("After " + this + " about to be shown selection " + selection + " node: " + newNode + " last part: " + lastPart);
+		}
 	}
 
 	protected void setSelectedNode(AbstractCamelModelElement newNode) {
