@@ -12,6 +12,8 @@ package org.fusesource.ide.camel.model.service.core.catalog.dataformats;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,21 +35,21 @@ public class DataFormatModel {
 
 	private CamelModel model;
 	private ArrayList<DataFormat> supportedDataFormats;
-	
+
 	/**
 	 * @return the model
 	 */
 	public CamelModel getModel() {
 		return this.model;
 	}
-	
+
 	/**
 	 * @param model the model to set
 	 */
 	public void setModel(CamelModel model) {
 		this.model = model;
 	}
-	
+
 	/**
 	 * @return the supportedDataFormats
 	 */
@@ -55,31 +57,31 @@ public class DataFormatModel {
 	public ArrayList<DataFormat> getSupportedDataFormats() {
 		return this.supportedDataFormats;
 	}
-	
+
 	/**
 	 * @param supportedDataFormats the supportedDataFormats to set
 	 */
-	public void setSupportedDataFormats(
-			ArrayList<DataFormat> supportedDataFormats) {
+	public void setSupportedDataFormats(ArrayList<DataFormat> supportedDataFormats) {
 		this.supportedDataFormats = supportedDataFormats;
 	}
-		
+
 	/**
 	 * looks up the language for the given language name
-	 * 
+	 *
 	 * @param language
 	 * @return
 	 */
 	public DataFormat getDataFormatByName(String dataformat) {
-	    for (DataFormat df : supportedDataFormats) {
-            if (df.getName().equals(dataformat)) return df;
-        }
-        return null;
+		return supportedDataFormats.stream().filter(df -> df.getName().equals(dataformat)).findFirst().orElse(null);
 	}
-	
+
+	public Set<DataFormat> getDataFormatsByModelName(String dataformat) {
+		return supportedDataFormats.stream().filter(df -> df.getModelName().equals(dataformat)).collect(Collectors.toSet());
+	}
+
 	/**
-	 * creates the model from the given input stream 
-	 * 
+	 * creates the model from the given input stream
+	 *
 	 * @param stream	the stream to parse
 	 * @return			the created model instance of null on errors
 	 */
@@ -88,8 +90,7 @@ public class DataFormatModel {
 			// create JAXB context and instantiate marshaller
 		    JAXBContext context = JAXBContext.newInstance(DataFormatModel.class, DataFormat.class, Dependency.class, Parameter.class);
 		    Unmarshaller um = context.createUnmarshaller();
-		    DataFormatModel model = (DataFormatModel) um.unmarshal(new InputSource(stream));
-		    return model;
+			return (DataFormatModel) um.unmarshal(new InputSource(stream));
 		} catch (JAXBException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}

@@ -1,16 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -18,6 +20,8 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.junit.rules.ExternalResource;
 
 /**
@@ -63,6 +67,14 @@ public class FuseProject extends ExternalResource {
 
 	public IProject getProject() {
 		return project;
+	}
+
+	public CamelFile createEmptyCamelFile() throws CoreException, IOException {
+		IFile file = project.getFile("camel-context.xml");
+		InputStream source = FuseProject.class.getResourceAsStream("/empty-CamelFile.xml");
+		file.create(source, true, new NullProgressMonitor());
+		source.close();
+		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 
 }

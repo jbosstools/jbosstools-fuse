@@ -1,13 +1,13 @@
-/******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 
 package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards;
 
@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.pages.DataFormatSelectionPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -37,7 +38,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		this.dfModel = dfModel;
 		this.camelFile = camelFile;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#createPageControls(org.eclipse.swt.widgets.Composite)
 	 */
@@ -46,7 +47,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		super.createPageControls(pageContainer);
 		setWindowTitle(UIMessages.newGlobalConfigurationTypeDataFormatWizardDialogTitle);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
@@ -56,7 +57,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		this.dataFormatSelectionPage = new DataFormatSelectionPage(dfModel);
 		addPage(dataFormatSelectionPage);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performCancel()
 	 */
@@ -65,19 +66,37 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		this.dataformatNode = null;
 		return super.performCancel();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
 		dataformatSelected = dataFormatSelectionPage.getDataFormatSelected();
-		final String prefixNS = camelFile.getCamelContext().getXmlNode().getPrefix();
-		dataformatNode = camelFile.createElement(dataformatSelected.getName(), prefixNS); // $NON-NLS-1$
-		dataformatNode.setAttribute("id", dataFormatSelectionPage.getId()); //$NON-NLS-1$
+		dataformatNode = createDataFormatNode(dataformatSelected, dataFormatSelectionPage.getId());
 		return true;
 	}
-	
+
+	/**
+	 * /!\ Public for test purpose only
+	 *
+	 * @param dataformat
+	 * @param id
+	 * @return
+	 */
+	public Element createDataFormatNode(DataFormat dataformat, String id) {
+		final String prefixNS = camelFile.getCamelContext().getXmlNode().getPrefix();
+		Element newDataformatNode = camelFile.createElement(dataformat.getModelName(), prefixNS); // $NON-NLS-1$
+		newDataformatNode.setAttribute("id", id); //$NON-NLS-1$
+		for (Parameter parameter : dataformat.getParameters()) {
+			String defaultValue = parameter.getDefaultValue();
+			if (defaultValue != null) {
+				newDataformatNode.setAttribute(parameter.getName(), defaultValue);
+			}
+		}
+		return newDataformatNode;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard#getGlobalConfigrationElementNode()
 	 */
@@ -85,7 +104,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	public Element getGlobalConfigurationElementNode() {
 		return this.dataformatNode;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard#setGlobalConfigrationElementNode(org.w3c.dom.Node)
 	 */
@@ -93,5 +112,5 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	public void setGlobalConfigurationElementNode(Element node) {
 		this.dataformatNode = node;
 	}
-	
+
 }

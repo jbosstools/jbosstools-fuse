@@ -49,7 +49,7 @@ public final class CamelComponentUtils {
 
 	/**
 	 * returns the properties model for a given protocol
-	 * 
+	 *
 	 * @param protocol
 	 *            the protocol to get the properties for
 	 * @param project
@@ -72,7 +72,7 @@ public final class CamelComponentUtils {
 	}
 
 	public static String[] getRefs(CamelFile cf) {
-		ArrayList<String> refs = new ArrayList<String>();
+		ArrayList<String> refs = new ArrayList<>();
 
 		refs.add("");
 		refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet()
@@ -161,8 +161,9 @@ public final class CamelComponentUtils {
 		String[] choices = p.getChoice().split(",");
 		ArrayList<String> res = new ArrayList<String>();
 		res.add(" "); // empty entry
-		for (String choice : choices)
+		for (String choice : choices) {
 			res.add(choice);
+		}
 		return res.toArray(new String[res.size()]);
 	}
 
@@ -170,14 +171,15 @@ public final class CamelComponentUtils {
 		String[] choices = p.getOneOf().split(",");
 		ArrayList<String> res = new ArrayList<String>();
 		res.add(" "); // empty entry
-		for (String choice : choices)
+		for (String choice : choices) {
 			res.add(choice);
+		}
 		return res.toArray(new String[res.size()]);
 	}
 
 	/**
 	 * returns the component class for the given scheme
-	 * 
+	 *
 	 * @param scheme
 	 * @return the class or null if not found
 	 */
@@ -230,7 +232,7 @@ public final class CamelComponentUtils {
 
 	/**
 	 * returns the component class for the given scheme
-	 * 
+	 *
 	 * @param scheme
 	 * @param project
 	 * @return the class or null if not found
@@ -288,8 +290,9 @@ public final class CamelComponentUtils {
 		resModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getComponentForScheme(scheme);
 
 		// 2. try to generate the model from json blob
-		if (resModel == null)
+		if (resModel == null) {
 			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, project), clazz);
+		}
 
 		// 3. handling special cases
 		if (resModel == null) {
@@ -307,7 +310,7 @@ public final class CamelComponentUtils {
 	/**
 	 * tries to build the model by querying the component config of the camel
 	 * component
-	 * 
+	 *
 	 * @param clazz
 	 *            the component class
 	 * @return
@@ -361,7 +364,7 @@ public final class CamelComponentUtils {
 
 	/**
 	 * takes the json blob from camel configuration and makes a model from it
-	 * 
+	 *
 	 * @param json
 	 * @return
 	 */

@@ -1,13 +1,13 @@
-/******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider;
 
 import java.util.Collections;
@@ -23,7 +23,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataForma
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -40,7 +39,7 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 		final DataFormatModel dataformatModel = CamelModelFactory.getModelForVersion(camelVersion).getDataformatModel();
 		return new NewDataFormatWizard(camelFile, dataformatModel);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#modifyGlobalElement(org.w3c.dom.Document)
 	 */
@@ -49,7 +48,7 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 		// It is redirected to Properties view
 		return null;
 	}
-	
+
 	@Override
 	public List<Dependency> getElementDependencies() {
 		return Collections.emptyList();
@@ -64,30 +63,14 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
 		// we support it if the parent node is dataFormats and the node is one of the supported languages of our model
 		final Node nodeToHandle = camelModelElementToHandle.getXmlNode();
-		String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
-		DataFormatModel dfModel = CamelModelFactory.getModelForVersion(org.fusesource.ide.camel.editor.utils.CamelUtils.getCurrentProjectCamelVersion()).getDataformatModel();
+		if ("dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode()))) {
+			String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
+			final String camelVersion = CamelModelFactory.getCamelVersion(camelModelElementToHandle.getCamelFile().getResource().getProject());
+			DataFormatModel dfModel = CamelModelFactory.getModelForVersion(camelVersion).getDataformatModel();
 
-		String dfName = nodeName;
-		// special cases
-		if (nodeName.equalsIgnoreCase("json")) {
-			// library
-			if ( ((Element)nodeToHandle).hasAttribute("library")) {
-				dfName += String.format("-%s", ((Element)nodeToHandle).getAttribute("library").toLowerCase().trim());
-			} else {
-				// xstream as default
-				dfName += String.format("-%s", "xstream");
-			}
-		} else if (nodeName.equalsIgnoreCase("bindy")) {
-			// type
-			if ( ((Element)nodeToHandle).hasAttribute("type")) {
-				dfName += String.format("-%s", ((Element)nodeToHandle).getAttribute("type").toLowerCase().trim());
-			} else {
-				// keyvalue as default
-				dfName += String.format("-%s", "keyvalue");
-			}
+			return !dfModel.getDataFormatsByModelName(nodeName).isEmpty();
 		}
-		return "dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode())) &&
-			   dfModel.getDataFormatByName(dfName) != null;
+		return false;
 	}
 
 	/* (non-Javadoc)
