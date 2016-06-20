@@ -20,14 +20,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
@@ -47,27 +45,11 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	private FormToolkit toolkit;
 	private Form form;
-
-	private ModifyListener listener = new ModifyListener() {
-
-		@Override
-		public void modifyText(ModifyEvent arg0) {
-			/*
-			 * ButtonElementProperties properties = (ButtonElementProperties)
-			 * buttonElement .getAdapter(IPropertySource.class);
-			 * properties.setPropertyValue
-			 * (ButtonElementProperties.PROPERTY_TEXT, labelText.getText());
-			 */
-		}
-	};
-
-	private Composite parent;
-
 	private Browser browser;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.fusesource.ide.camel.editor.propertysheet.NodeSectionSupport#
 	 * onNodeChanged(org.fusesource.ide.camel.model.AbstractNode)
 	 */
@@ -82,7 +64,7 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#aboutToBeShown
 	 * ()
@@ -106,7 +88,9 @@ public class DocumentationSection extends NodeSectionSupport {
 						String scheme = uri.substring(0, idx);
 						String contextId = "org.fusesource.ide.camel.editor." + scheme;
 						loadedPage = resolvePage(contextId, true);
-						CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
+						if (CamelEditorUIActivator.getDefault().isDebugging()) {
+							CamelEditorUIActivator.pluginLog().logInfo("Loaded page " + contextId + " " + loadedPage);
+						}
 					}
 				}
 			}
@@ -164,7 +148,7 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#refresh()
 	 */
@@ -179,17 +163,15 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#createControls
 	 * (org.eclipse.swt.widgets.Composite,
 	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	@Override
-	public void createControls(final Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+	public void createControls(final Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 
-		this.parent = parent;
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
@@ -202,8 +184,9 @@ public class DocumentationSection extends NodeSectionSupport {
 		}
 		form = null;
 
-		if (parent.isDisposed())
+		if (parent.isDisposed()) {
 			return;
+		}
 
 		parent.setLayout(new GridLayout());
 		// parent.setLayout(new GridLayout(1, false));
@@ -229,24 +212,28 @@ public class DocumentationSection extends NodeSectionSupport {
 		forward.setText(">");
 		forward.setEnabled(false);
 
-		back.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+		back.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 				browser.back();
 			}
 		});
-		forward.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+		forward.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
 				browser.forward();
 			}
 		});
 
 		final LocationListener locationListener = new LocationListener() {
+			@Override
 			public void changed(LocationEvent event) {
 				Browser browser = (Browser) event.widget;
 				back.setEnabled(browser.isBackEnabled());
 				forward.setEnabled(browser.isForwardEnabled());
 			}
 
+			@Override
 			public void changing(LocationEvent event) {
 			}
 		};
