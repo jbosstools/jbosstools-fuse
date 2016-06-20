@@ -1,0 +1,167 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+package org.fusesource.ide.projecttemplates.tests.integration.wizards;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.ide.IDEInternalPreferences;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @author Aurelien Pupier
+ *
+ */
+public class FuseIntegrationProjectCreatorRunnableIT {
+
+	private IProject project = null;
+
+	@Before
+	public void setup() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
+		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
+	}
+
+	@After
+	public void tearDown() throws CoreException {
+		if (project != null) {
+			project.delete(true, new NullProgressMonitor());
+		}
+	}
+
+	@Test
+	public void testEmptyBlueprintProjectCreation() throws Exception {
+		testEmptyProjectCreation("-SimpleBlueprintProject", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml");
+	}
+
+	@Test
+	public void testEmptySpringProjectCreation() throws Exception {
+		testEmptyProjectCreation("-SimpleSpringProject", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml");
+	}
+
+	@Test
+	public void testEmptyJavaProjectCreation() throws Exception {
+		testEmptyProjectCreation("-SimpleJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java");
+	}
+
+	private void testEmptyProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath) throws Exception {
+		final String projectName = FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName() + projectNameSuffix;
+		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
+
+		NewProjectMetaData metadata = new NewProjectMetaData();
+		metadata.setProjectName(projectName);
+		metadata.setLocationPath(null);
+		metadata.setCamelVersion(CamelModelFactory.getLatestCamelVersion());
+		metadata.setTargetRuntime(null);
+		metadata.setDslType(dsl);
+		metadata.setBlankProject(true);
+		metadata.setTemplate(null);
+
+		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
+
+		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+
+		assertThat(project.exists()).isTrue();
+		final IFile camelResource = project.getFile(camelFilePath);
+		assertThat(camelResource.exists()).isTrue();
+
+		// TODO: wait for all build job to finish?
+		waitJob();
+
+		checkCorrectEditorOpened(camelResource);
+		// TODO: fix project to activate no validation error check
+		// checkNoValidationError();
+		// TODO: check for correct nature activated
+		// TODO: check that mvn clean install is working
+	}
+
+	private void waitJob() throws OperationCanceledException, InterruptedException {
+		try {
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, new NullProgressMonitor());
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
+		} catch (InterruptedException e) {
+			// Workaround to bug
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
+			System.out.println("Have a trace in case of infinite loop in FuseIntegrationProjectCreatorRunnableIT.waitJob()");
+			waitJob();
+		}
+	}
+
+	/**
+	 * @throws CoreException
+	 */
+	private void checkNoValidationError() throws CoreException {
+		final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+		final List<Object> readableMarkers = Arrays.asList(markers).stream().map(marker -> {
+			try {
+				return marker.getAttributes();
+			} catch (Exception e) {
+				return marker;
+			}
+		}).collect(Collectors.toList());
+		assertThat(readableMarkers).isEmpty();
+	}
+
+	/**
+	 * @param camelResource
+	 * @throws InterruptedException
+	 */
+	private void checkCorrectEditorOpened(IFile camelResource) throws InterruptedException {
+		while (Display.getDefault().readAndDispatch()) {
+
+		}
+		int currentAwaitedTime = 0;
+		while (getCurrentActiveEditor() == null && currentAwaitedTime < 30000) {
+			Thread.sleep(100);
+			currentAwaitedTime += 100;
+		}
+		// @formatter:off
+		IEditorPart editor = getCurrentActiveEditor();
+		// @formatter:on
+		IEditorInput editorInput = editor.getEditorInput();
+		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
+	}
+
+	/**
+	 * @return
+	 */
+	private IEditorPart getCurrentActiveEditor() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	}
+}
