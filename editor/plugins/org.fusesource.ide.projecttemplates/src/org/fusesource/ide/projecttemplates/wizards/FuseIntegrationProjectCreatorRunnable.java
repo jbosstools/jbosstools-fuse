@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -283,8 +284,12 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 				public boolean visit(IResource resource) throws CoreException {
 					if (resource instanceof IFile) {
 						IFile file = (IFile) resource;
-						if (file.getContentDescription() != null
-								&& "org.fusesource.ide.camel.editor.camelContentType".equals(file.getContentDescription().getContentType().getId())) {
+						//@formatter:off
+						final IContentDescription fileContentDescription = file.getContentDescription();
+						if (!"target".equals(file.getProjectRelativePath().segment(0))
+								&& fileContentDescription != null
+								&& "org.fusesource.ide.camel.editor.camelContentType".equals(fileContentDescription.getContentType().getId())) {
+						//@formatter:on
 							holder[0] = file;
 						}
 					}
