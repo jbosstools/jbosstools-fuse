@@ -106,7 +106,9 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 	private NewProjectMetaData getProjectMetaData() {
 		NewProjectMetaData metadata = new NewProjectMetaData();
 		metadata.setProjectName(locationPage.getProjectName());
-		metadata.setLocationPath(locationPage.getLocationPath());
+		if (!locationPage.isInWorkspace()) {
+			metadata.setLocationPath(locationPage.getLocationPath());
+		}
 		metadata.setCamelVersion(runtimeAndCamelVersionPage.getSelectedCamelVersion());
 		metadata.setTargetRuntime(runtimeAndCamelVersionPage.getSelectedRuntime());
 		metadata.setDslType(templateSelectionPage.getDSL());

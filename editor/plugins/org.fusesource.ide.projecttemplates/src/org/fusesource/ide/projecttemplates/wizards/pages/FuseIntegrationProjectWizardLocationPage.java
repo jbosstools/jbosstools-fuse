@@ -1,13 +1,13 @@
-/******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import org.eclipse.core.resources.IProject;
@@ -20,8 +20,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -45,9 +43,9 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 	private Text locationText;
 	private Label projectNameLabel;
 	private Text projectNameText;
-	
+
 	private IPath location;
-	
+
 	public FuseIntegrationProjectWizardLocationPage() {
 		super(Messages.newProjectWizardLocationPageName);
 		setTitle(Messages.newProjectWizardLocationPageTitle);
@@ -55,7 +53,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		setPageComplete(false);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
@@ -70,23 +68,14 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		projectNameText = new Text(container, SWT.BORDER);
 		projectNameText.setLayoutData(gridData);
 		projectNameText.setToolTipText(Messages.newProjectWizardLocationPageProjectNameDescription);
-		projectNameText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validate();
-			}
-		});
+		projectNameText.addModifyListener(event -> validate());
 
 		Group locationGrp = new Group(container, SWT.NONE);
 		GridData locationGrpData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		locationGrp.setLayout(new GridLayout(3, false));
 		locationGrp.setLayoutData(locationGrpData);
 		locationGrp.setText(Messages.newProjectWizardLocationPageLocationGroupLabel);
-		
+
 		locationLabel = new Label(locationGrp, SWT.NONE);
 		GridData locationLabelData = new GridData();
 		locationLabelData.horizontalIndent = 10;
@@ -98,16 +87,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		GridData locationTextData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		locationText.setLayoutData(locationTextData);
 		locationText.setToolTipText(Messages.newProjectWizardLocationPageLocationDescription);
-		locationText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validate();
-			}
-		});
+		locationText.addModifyListener(event -> validate());
 		locationText.setEnabled(false);
 
 		Button locationBrowseButton = new Button(locationGrp, SWT.NONE);
@@ -162,21 +142,22 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 				locationLabel.setEnabled(!inWorkspace);
 				locationText.setEnabled(!inWorkspace);
 				locationBrowseButton.setEnabled(!inWorkspace);
+				validate();
 			}
 		});
 		useDefaultWorkspaceLocationButton.setSelection(true);
 
 		new Label(locationGrp, SWT.None);
-		
+
 		setControl(container);
-		
+
 		projectNameText.setFocus();
 	}
-	
+
 	/**
 	 * Returns whether the user has chosen to create the project in the
 	 * workspace or at an external location.
-	 * 
+	 *
 	 * @return <code>true</code> if the project is to be created in the
 	 *         workspace, <code>false</code> if it should be created at an
 	 *         external location.
@@ -184,7 +165,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 	public boolean isInWorkspace() {
 		return useDefaultWorkspaceLocationButton.getSelection();
 	}
-	
+
 	/**
 	 * Validates the contents of this wizard page.
 	 * <p>
@@ -204,7 +185,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 	 * <li>A valid project location path must have been specified.</li>
 	 * </ul>
 	 * </p>
-	 * 
+	 *
 	 * @see org.eclipse.core.resources.IWorkspace#validateName(java.lang.String,
 	 *      int)
 	 * @see org.eclipse.core.resources.IWorkspace#validateProjectLocation(org.eclipse.core.resources.IProject,
@@ -217,7 +198,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 		final String name = getProjectName();
-		
+
 		// check whether the project name field is empty
 		if(name.trim().length() == 0) {
 			setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectNameText);
@@ -242,41 +223,51 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		}
 
 		IPath projectPath = getLocationPath();
-		String location = projectPath.toOSString();
+		if (!isInWorkspace()) {
+			String location = projectPath.toOSString();
 
-		// check whether location is empty
-		if (location.length() == 0) {
-			setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
-			setPageComplete(false);
-			return;
-		}
+			// check whether location is empty
+			if (location.length() == 0) {
+				setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
+				setPageComplete(false);
+				return;
+			}
 
-		// check whether the location is a syntactically correct path
-		if (!Path.ROOT.isValidPath(location)) {
-			setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
-			setPageComplete(false);
-			return;
+			// check whether the location is a syntactically correct path
+			if (!Path.ROOT.isValidPath(location)) {
+				setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
+				setPageComplete(false);
+				return;
+			}
+
+			// validate the location
+			final IStatus locationStatus = workspace.validateProjectLocation(handle, projectPath);
+			if (!locationStatus.isOK()) {
+				setErrorMessage(locationStatus.getMessage());
+				setPageComplete(false);
+				return;
+			}
 		}
 
 		setPageComplete(true);
 		setErrorMessage(null);
 		setMessage(null);
 	}
-	
+
 	/**
 	 * returns the project name
-	 * 
+	 *
 	 * @return
 	 */
 	public String getProjectName() {
 		return this.projectNameText != null ? this.projectNameText.getText() : null;
 	}
-	
+
 	/**
 	 * Returns the path of the location where the project is to be created.
 	 * According to the user input, the path either points to the workspace or
 	 * to a valid user specified location on the filesystem.
-	 * 
+	 *
 	 * @return The path of the location where to create the project. Is never
 	 *         <code>null</code>.
 	 */
