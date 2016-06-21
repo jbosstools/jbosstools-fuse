@@ -23,15 +23,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -48,6 +51,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FuseIntegrationProjectCreatorRunnableIT {
 
 	private IProject project = null;
+	boolean deploymentFinished = false;
+	boolean isDeploymentOk = false;
 
 	@Before
 	public void setup() {
@@ -85,7 +90,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		NewProjectMetaData metadata = new NewProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
-		metadata.setCamelVersion(CamelModelFactory.getLatestCamelVersion());
+		// TODO use latest version, or a parameterized test to test all versions
+		// available CamelModelFactory.getLatestCamelVersion()
+		metadata.setCamelVersion("2.15.1.redhat-621084");
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(dsl);
 		metadata.setBlankProject(true);
@@ -106,7 +113,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		// TODO: fix project to activate no validation error check
 		// checkNoValidationError();
 		// TODO: check for correct nature activated
-		// TODO: check that mvn clean install is working
+		// TODO: currently we generate completely project which are not valid so
+		// cannot be launched
+		// launchDebug(project);
 	}
 
 	private void waitJob() throws OperationCanceledException, InterruptedException {
@@ -150,6 +159,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		while (getCurrentActiveEditor() == null && currentAwaitedTime < 30000) {
 			Thread.sleep(100);
 			currentAwaitedTime += 100;
+			System.out.println("awaited activation of editor " + currentAwaitedTime);
 		}
 		// @formatter:off
 		IEditorPart editor = getCurrentActiveEditor();
@@ -163,5 +173,32 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	 */
 	private IEditorPart getCurrentActiveEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	}
+
+	private void launchDebug(IProject project) throws InterruptedException {
+		final ExecutePomAction executePomAction = new ExecutePomAction();
+
+		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
+
+			@Override
+			public void executeOnSuccess() {
+				// TODO: shutdown
+				deploymentFinished = true;
+				isDeploymentOk = true;
+			}
+
+			@Override
+			public void executeOnFailure() {
+				deploymentFinished = true;
+				isDeploymentOk = false;
+			}
+		});
+		executePomAction.launch(new StructuredSelection(project), ILaunchManager.DEBUG_MODE);
+		int currentAwaitedTime = 0;
+		while (currentAwaitedTime < 30000 && !deploymentFinished) {
+			Thread.sleep(100);
+			currentAwaitedTime += 100;
+		}
+		assertThat(isDeploymentOk).isTrue();
 	}
 }

@@ -198,6 +198,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (project != null) {
 			final IFile[] holder = new IFile[1];
 			searchCamelContextXMLFile(project, holder);
+			ProjectTemplatesActivator.pluginLog().logWarning("xml file found? " + holder[0]);
 			try {
 				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
 					searchCamelContextJavaFile(project, monitor, holder);
@@ -256,6 +257,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						monitor);
 				// @formatter:on
 				List<SearchMatch> results = requestor.getResults();
+				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results);
 				for (SearchMatch searchMatch : results) {
 					final Object element = searchMatch.getElement();
 					if (element instanceof ResolvedSourceType) {
