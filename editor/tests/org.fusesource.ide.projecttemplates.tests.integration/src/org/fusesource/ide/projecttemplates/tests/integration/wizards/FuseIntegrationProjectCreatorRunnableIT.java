@@ -71,8 +71,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	@After
-	public void tearDown() throws CoreException {
+	public void tearDown() throws CoreException, OperationCanceledException, InterruptedException {
 		if (project != null) {
+			waitJob();
 			project.delete(true, new NullProgressMonitor());
 		}
 	}
