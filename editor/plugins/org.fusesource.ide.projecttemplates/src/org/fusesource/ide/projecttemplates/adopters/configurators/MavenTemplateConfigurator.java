@@ -15,11 +15,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.List;
 
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -31,6 +28,7 @@ import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 /**
  * this configurator provides helper methods for maven configuration
@@ -108,13 +106,13 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {
-				updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
+				MavenUtils.updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
 			}
-			updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
+			MavenUtils.updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
 			if (m2m.getBuild().getPluginManagement() != null) {
-				updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
+				MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 			}
-			updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
+			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
 
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
@@ -130,30 +128,5 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			monitor.done();
 		}
 		return true;
-	}
-
-	/**
-	 * @param plugins
-	 * @param camelVersion
-	 */
-	private void updateCamelVersionPlugins(List<Plugin> plugins, String camelVersion) {
-		for (Plugin p : plugins) {
-			if ("org.apache.camel".equalsIgnoreCase(p.getGroupId()) && p.getArtifactId().startsWith("camel-")) {
-				p.setVersion(camelVersion);
-			}
-		}
-	}
-
-	/**
-	 * @param dependencies
-	 * @param camelVersion
-	 */
-	private void updateCamelVersionDependencies(List<Dependency> dependencies, String camelVersion) {
-		for (Dependency dep : dependencies) {
-			if ("org.apache.camel".equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
-				dep.setVersion(camelVersion);
-			}
-		}
-
 	}
 }
