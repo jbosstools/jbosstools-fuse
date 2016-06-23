@@ -76,17 +76,12 @@ public class ModuleBundleVersionUtility {
 		}
 	}
 	
-	
-	
 	private BundleDetails getJBossOSGiDetailsFromJar(IPath srcFile) {
 		JarFile jf = null;
 		try {
 			jf = new JarFile(srcFile.toOSString());
 			Manifest m = jf.getManifest();
-			Attributes attributes = m.getMainAttributes();
-			String symName = attributes.getValue("Bundle-SymbolicName");
-			String version = attributes.getValue("Bundle-Version");
-			return new BundleDetails(symName, version);
+			return createBundleDetails(m);
 		} catch(IOException ioe) {
 			// TODO cleanup
 		}finally {
@@ -108,7 +103,7 @@ public class ModuleBundleVersionUtility {
 			p.accept(new IResourceVisitor(){
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
-					if( resource instanceof IFile && resource.getName().toLowerCase().equals("manifest.mf")) {
+					if( resource instanceof IFile && "manifest.mf".equalsIgnoreCase(resource.getName())) {
 						found[0] = (IFile)resource;
 					}
 					return found[0] == null;
@@ -123,10 +118,7 @@ public class ModuleBundleVersionUtility {
 			try {
 				InputStream is = found[0].getContents();
 				Manifest mf = new Manifest(is);
-				Attributes attributes = mf.getMainAttributes();
-				String symName = attributes.getValue("Bundle-SymbolicName");
-				String version = attributes.getValue("Bundle-Version");
-				return new BundleDetails(symName, version);
+				return createBundleDetails(mf);
 			} catch(IOException ioe) {
 				// TODO log 
 			} catch(CoreException ce) {
@@ -135,5 +127,12 @@ public class ModuleBundleVersionUtility {
 		}
 		
 		return null;
+	}
+
+	private BundleDetails createBundleDetails(Manifest mf) {
+		Attributes attributes = mf.getMainAttributes();
+		String symName = attributes.getValue("Bundle-SymbolicName");
+		String version = attributes.getValue("Bundle-Version");
+		return new BundleDetails(symName, version);
 	}
 }
