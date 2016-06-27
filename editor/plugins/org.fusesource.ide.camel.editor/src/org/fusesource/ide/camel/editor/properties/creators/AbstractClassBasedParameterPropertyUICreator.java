@@ -23,6 +23,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -149,31 +150,46 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 					wp.setSuperClass(fClass.getName(), true);
 				}
 				wp.setAddComments(true, true);
-				IPackageFragmentRoot fragroot = null;
+				setInitialPackageFrament(project, wp);
+				if (Window.OK == wd.open()) {
+					String value = wp.getCreatedType().getFullyQualifiedName();
+					if (value != null)
+						getControl().setText(value);
+				}
+			}
+
+			private void setInitialPackageFrament(final IProject project, NewClassWizardPage wp) {
 				try {
 					IJavaProject javaProject = (IJavaProject) project.getNature(JavaCore.NATURE_ID);
-					IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
+					if(javaProject != null){
+						IPackageFragmentRoot fragroot = findPackageFragmentRoot(project, javaProject);
+						wp.setPackageFragmentRoot(fragroot, true);
+						wp.setPackageFragment(PropertiesUtils.getPackage(javaProject, fragroot), true);
+					}
+				} catch (Exception ex) {
+					CamelEditorUIActivator.pluginLog().logError(ex);
+				}
+			}
+
+			private IPackageFragmentRoot findPackageFragmentRoot(final IProject project, IJavaProject javaProject) throws JavaModelException {
+				IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
+				if(facade != null){
 					IPath[] paths = facade.getCompileSourceLocations();
 					if (paths != null && paths.length > 0) {
 						for (IPath p : paths) {
 							if (p == null)
 								continue;
 							IResource res = project.findMember(p);
-							fragroot = javaProject.getPackageFragmentRoot(res);
-							break;
+							return javaProject.getPackageFragmentRoot(res);
 						}
-						if (fragroot != null)
-							wp.setPackageFragmentRoot(fragroot, true);
-						wp.setPackageFragment(PropertiesUtils.getPackage(javaProject, fragroot), true);
 					}
-				} catch (Exception ex) {
-					CamelEditorUIActivator.pluginLog().logError(ex);
+				} else {
+					IPackageFragmentRoot[] allPackageFragmentRoots = javaProject.getAllPackageFragmentRoots();
+					if(allPackageFragmentRoots.length == 1){
+						return allPackageFragmentRoots[0];
+					}
 				}
-				if (Window.OK == wd.open()) {
-					String value = wp.getCreatedType().getFullyQualifiedName();
-					if (value != null)
-						getControl().setText(value);
-				}
+				return null;
 			}
 		});
 		btn_create.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
