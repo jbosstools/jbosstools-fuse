@@ -112,10 +112,16 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			if (designEditor.getDiagramTypeProvider() != null) designEditor.getDiagramTypeProvider().resourceReloaded(diagram);
+			if (designEditor.getDiagramTypeProvider() != null){
+				designEditor.getDiagramTypeProvider().resourceReloaded(diagram);
+			}
 			designEditor.getParent().startDirtyListener();
-			designEditor.getModel().registerDOMListener();
-			if (context != null) context.ensureUniqueID(context);
+			if(designEditor.getModel() != null) {
+				designEditor.getModel().registerDOMListener();
+			}
+			if (context != null){
+				context.ensureUniqueID(context);
+			}
 		}
 	}
 	
