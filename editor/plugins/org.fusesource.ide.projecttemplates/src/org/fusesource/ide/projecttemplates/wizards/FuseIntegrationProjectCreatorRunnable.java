@@ -286,7 +286,9 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						IFile file = (IFile) resource;
 						//@formatter:off
 						final IContentDescription fileContentDescription = file.getContentDescription();
-						if (!"target".equals(file.getProjectRelativePath().segment(0))
+						String firstSegmentPathInProject = file.getProjectRelativePath().segment(0);
+						if (!"target".equals(firstSegmentPathInProject)
+								&& !"bin".equals(firstSegmentPathInProject)
 								&& fileContentDescription != null
 								&& "org.fusesource.ide.camel.editor.camelContentType".equals(fileContentDescription.getContentType().getId())) {
 						//@formatter:on
