@@ -30,6 +30,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -188,9 +189,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	 * @throws InterruptedException
 	 */
 	private void checkCorrectEditorOpened(IFile camelResource) throws InterruptedException {
-		while (Display.getDefault().readAndDispatch()) {
-
-		}
+		readAndDispatch(0);
 		int currentAwaitedTime = 0;
 		while (getCurrentActiveEditor() == null && currentAwaitedTime < 30000) {
 			Thread.sleep(100);
@@ -202,6 +201,22 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		// @formatter:on
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
+	}
+
+	private void readAndDispatch(int currentNumberOfTry) {
+		try{
+			while (Display.getDefault().readAndDispatch()) {
+				
+			}
+		} catch(SWTException swtException){
+			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)
+			swtException.printStackTrace();
+			if(currentNumberOfTry < 100){
+				readAndDispatch(currentNumberOfTry ++);
+			} else {
+				System.out.println("Tried 100 times to wait for UI... Continue and see what happens.");
+			}
+		}
 	}
 
 	/**
