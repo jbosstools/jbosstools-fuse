@@ -41,7 +41,7 @@ import org.fusesource.ide.project.RiderProjectNature;
  */
 public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	
-	public static final String MODULE_TYPE = "jst.camel"; //$NON-NLS-1$
+	public static final String MODULE_TYPE = "fuse.camel"; //$NON-NLS-1$
 	public static final String VERSION = "1.0"; //$NON-NLS-1$
 
 	private ArrayList<CamelModuleDelegate> moduleResourceRegistry = new ArrayList<CamelModuleFactory.CamelModuleDelegate>();
@@ -97,7 +97,7 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	protected IModule[] createModules(final IProject project) {
 		// check for the correct project nature
 		try {
-			if (!project.hasNature(RiderProjectNature.NATURE_ID) || supportsDeployment(project) == false) {
+			if (!project.hasNature(RiderProjectNature.NATURE_ID) || !supportsDeployment(project)) {
 				// no fuse nature - so skip it
 				return new IModule[0];
 			}
@@ -225,7 +225,11 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 		 */
 		@Override
 		public IModuleResource[] members() throws CoreException {
-			return new IModuleResource[] { getModuleFile() };
+			ModuleFile res = getModuleFile();
+			if(res != null){
+				return new IModuleResource[] { res };
+			}
+			return new IModuleResource[] {};
 		}
 	}
 }

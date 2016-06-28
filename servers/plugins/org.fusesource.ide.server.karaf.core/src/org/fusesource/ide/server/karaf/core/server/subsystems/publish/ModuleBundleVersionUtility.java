@@ -77,21 +77,11 @@ public class ModuleBundleVersionUtility {
 	}
 	
 	private BundleDetails getJBossOSGiDetailsFromJar(IPath srcFile) {
-		JarFile jf = null;
-		try {
-			jf = new JarFile(srcFile.toOSString());
+		try (JarFile jf = new JarFile(srcFile.toOSString())){
 			Manifest m = jf.getManifest();
 			return createBundleDetails(m);
 		} catch(IOException ioe) {
 			// TODO cleanup
-		}finally {
-			if( jf != null ) {
-				try {
-					jf.close();
-				} catch(IOException ioe) {
-					// TODO
-				}
-			}
 		}
 		return null;
 	}

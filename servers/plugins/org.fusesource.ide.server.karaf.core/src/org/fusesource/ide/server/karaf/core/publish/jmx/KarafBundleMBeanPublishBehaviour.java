@@ -100,7 +100,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
 		}
 		try {
-			mbsc.invoke(this.objectName, "update", new Object[] { ""+bundleId, bundleUrl } , new String[] {String.class.getName(), String.class.getName() }); 
+			mbsc.invoke(this.objectName, "update", new Object[] { Long.toString(bundleId), bundleUrl } , new String[] {String.class.getName(), String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
@@ -111,7 +111,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	@Override
 	public boolean uninstallBundle(MBeanServerConnection mbsc, long bundleId) {
 		try {
-			mbsc.invoke(this.objectName, "uninstall", new Object[] { ""+bundleId } , new String[] {String.class.getName() }); 
+			mbsc.invoke(this.objectName, "uninstall", new Object[] { Long.toString(bundleId) } , new String[] {String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
@@ -146,16 +146,13 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		try {
 			this.objectName = new ObjectName(KARAF_BUNDLE_MBEAN);
 			
-			Set mbeans = mbsc.queryMBeans(this.objectName, null); 	    
-		    if (mbeans.size() == 1) {
-		    	// remember the mbean
-		    	Object oMbean = mbeans.iterator().next();
-		    	if (oMbean instanceof ObjectInstance) {
-		    		ObjectInstance oi = (ObjectInstance)oMbean;
-		    		this.objectName = oi.getObjectName();
-		    		return true;
-		    	}
-		    }
+			Set<ObjectInstance> mbeans = mbsc.queryMBeans(this.objectName, null); 	    
+			if (mbeans.size() == 1) {
+				// remember the mbean
+				ObjectInstance oMbean = mbeans.iterator().next();
+				this.objectName = oMbean.getObjectName();
+				return true;
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
