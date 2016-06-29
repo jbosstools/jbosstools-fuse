@@ -188,7 +188,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 */
 	private long installBundle(IServer server, IPath file) throws CoreException {
 		if (file != null) {
-			long bundleId = this.jmxPublisher.installBundle(mbsc, file.toOSString());
+			long bundleId = this.jmxPublisher.installBundle(mbsc, file.toOSString().replace("file:", ""));
 			return bundleId;
 		}
 		return -1;
