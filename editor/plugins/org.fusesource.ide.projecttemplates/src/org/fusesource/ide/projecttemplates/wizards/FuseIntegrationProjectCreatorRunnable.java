@@ -237,38 +237,15 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param holder
 	 */
 	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IJavaProject javaProject = JavaCore.create(project);
 		try {
 			waitJob();
 		} catch (OperationCanceledException | InterruptedException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 			return;
 		}
-		try {
-			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder");
-			if (routeBuilderType != null) {
-				IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
-				CollectingSearchRequestor requestor = new CollectingSearchRequestor();
-				// @formatter:off
-				final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH);
-				new SearchEngine().search(searchPattern,
-						new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
-						searchScope,
-						requestor,
-						monitor);
-				// @formatter:on
-				List<SearchMatch> results = requestor.getResults();
-				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results);
-				for (SearchMatch searchMatch : results) {
-					final Object element = searchMatch.getElement();
-					if (element instanceof ResolvedSourceType) {
-						holder[0] = (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
-						break;
-					}
-				}
-			}
-		} catch (Exception ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
+		IFile f = findJavaDSLRouteBuilderClass(project, monitor);
+		if (f != null) {
+			holder[0] = f;
 		}
 	}
 
@@ -315,5 +292,42 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
 			waitJob();
 		}
+	}
+	
+	/**
+	 * looks for the first best class extending RouteBuilder and returns it
+	 * 
+	 * @param project
+	 * @param monitor
+	 * @return	the routebuilder class or null
+	 */
+	public static IFile findJavaDSLRouteBuilderClass(IProject project, IProgressMonitor monitor) {
+		IJavaProject javaProject = JavaCore.create(project);
+		try {
+			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder");
+			if (routeBuilderType != null) {
+				IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
+				CollectingSearchRequestor requestor = new CollectingSearchRequestor();
+				// @formatter:off
+				final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH);
+				new SearchEngine().search(searchPattern,
+						new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
+						searchScope,
+						requestor,
+						monitor);
+				// @formatter:on
+				List<SearchMatch> results = requestor.getResults();
+				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results);
+				for (SearchMatch searchMatch : results) {
+					final Object element = searchMatch.getElement();
+					if (element instanceof ResolvedSourceType) {
+						return (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ProjectTemplatesActivator.pluginLog().logError(ex);
+		}
+		return null;
 	}
 }

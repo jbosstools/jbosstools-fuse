@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
@@ -46,6 +47,7 @@ import org.fusesource.ide.project.providers.CamelVirtualFolder;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
+import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
@@ -166,24 +168,31 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private boolean isCamelConfigurable(MavenProject mavenProject, IProject project) {
 		// Look for a file that has parent "blueprint" and grandparent "OSGI-INF" or
 		// spring in folder META-INF
-		// TODO: also check for a Java DSL route builder
 		final Boolean[] found = new Boolean[1];
 		found[0] = false;
-		try {
-			project.accept(new IResourceVisitor() {
-				public boolean visit(IResource resource) throws CoreException {
-					if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("blueprint")
-							&& resource.getParent().getParent().getName().equals("OSGI-INF")) {
-						found[0] = true;
-					} else if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("spring")
-							&& resource.getParent().getParent().getName().equals("META-INF")) {
-						found[0] = true;
-					}					
-					return !found[0];
-				}
-			});
-		} catch (CoreException ce) {
 
+		// check for java dsl
+		IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor());
+		if (f != null) {
+			// java dsl found
+			found[0] = true;
+		} else {
+			try {
+				project.accept(new IResourceVisitor() {
+					public boolean visit(IResource resource) throws CoreException {
+						if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("blueprint")
+								&& resource.getParent().getParent().getName().equals("OSGI-INF")) {
+							found[0] = true;
+						} else if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("spring")
+								&& resource.getParent().getParent().getName().equals("META-INF")) {
+							found[0] = true;
+						}					
+						return !found[0];
+					}
+				});
+			} catch (CoreException ce) {
+				ProjectTemplatesActivator.pluginLog().logError(ce);
+			}
 		}
 		return found[0];
 	}
@@ -220,7 +229,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @return
 	 */
 	private boolean checkCamelContextsExist(IProject project) throws CoreException {
-		return findFiles(project);
+		return findFiles(project) || FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor()) != null;
 	}
 	
 	private boolean findFiles(IResource resource) throws CoreException {

@@ -13,7 +13,6 @@ package org.fusesource.ide.projecttemplates.util.camel;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.maven.model.Model;
@@ -64,9 +63,8 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 		}
 		MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
-		OutputStream os = null;
 		try {
-			os = new BufferedOutputStream(new FileOutputStream(pomFile));
+			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
@@ -75,12 +73,6 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 			if (pomIFile2 != null) {
 				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		    }
-			if (os != null) {
-				try {
-					os.close();
-				} catch (IOException ie) {
-				}
-			}
 		}
 	}
 }

@@ -244,12 +244,6 @@
         	type="version-change">
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>		
-		<event-handler
-        	facet="jst.camel"
-            type="RUNTIME_CHANGED"
-            version="1.0">
-         	<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelRuntimeChangedDelegate"/>
-		</event-handler>
    	</extension>
     
     <extension point="org.eclipse.wst.server.core.moduleTypes">
