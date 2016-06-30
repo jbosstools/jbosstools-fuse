@@ -12,7 +12,7 @@
 	<extension point="org.eclipse.ui.ide.projectNatureImages">
     	<image id="org.fusesource.ide.project.RiderProjectNature.icon" 
     		   natureId="org.fusesource.ide.project.RiderProjectNature"
-    		   icon="icons/fuse_icon_16c.png"/>
+    		   icon="icons/camel_project_16x16.png"/>
 	</extension>
  
  	<extension point="org.eclipse.core.resources.builders" 
