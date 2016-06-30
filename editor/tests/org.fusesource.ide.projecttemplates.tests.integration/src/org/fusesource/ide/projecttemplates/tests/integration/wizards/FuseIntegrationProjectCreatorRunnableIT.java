@@ -10,9 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,8 +40,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
+import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -49,14 +57,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * @author Aurelien Pupier
  *
  */
 public class FuseIntegrationProjectCreatorRunnableIT {
 
+	public static IProjectFacet camelFacet  = ProjectFacetsManager.getProjectFacet("jst.camel");
+	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
+	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
+	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+		
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
 
@@ -129,7 +140,10 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		checkCorrectEditorOpened(camelResource);
 		// TODO: fix project to activate no validation error check
 		// checkNoValidationError();
-		// TODO: check for correct nature activated
+//		waitJob();
+//		checkCorrectFacetsEnabled(project);
+//		waitJob();
+//		checkCorrectNatureEnabled(project);
 		// TODO: currently we generate completely project which are not valid so
 		// cannot be launched
 		// launchDebug(project);
@@ -201,6 +215,38 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		// @formatter:on
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
+	}
+	
+	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
+		assertThat(project.getNature(RiderProjectNature.NATURE_ID)).isNotNull();
+	}
+	
+	private void checkCorrectFacetsEnabled(IProject project) throws CoreException {
+		IFacetedProject fproj = ProjectFacetsManager.create(project);
+
+		boolean camelFacetFound = fproj.hasProjectFacet(camelFacet);
+		boolean javaFacetFound = fproj.hasProjectFacet(javaFacet);
+		boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
+		boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
+		
+//		Iterator<IProjectFacetVersion> it = fproj.getProjectFacets().iterator();
+//		while (it.hasNext()) {
+//			IProjectFacetVersion fv = it.next();
+//			if (fv.getProjectFacet().getId().equals("jst.camel")) {
+//				camelFacetFound = true;
+//			} else if (fv.getProjectFacet().getId().equals("jst.utility")) {
+//				utilityFacetFound = true;
+//			} else if (fv.getProjectFacet().getId().equals("java")) {
+//				javaFacetFound = true;
+//			} else if (fv.getProjectFacet().getId().equals("jboss.m2")) {
+//				mavenFacetFound = true;
+//			}
+//		}
+				
+		assertThat(camelFacetFound).isTrue();
+		assertThat(javaFacetFound).isTrue();
+		assertThat(mavenFacetFound).isTrue();
+		assertThat(utilityFacetFound).isTrue();
 	}
 
 	private void readAndDispatch(int currentNumberOfTry) {

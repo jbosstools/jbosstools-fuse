@@ -237,12 +237,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param holder
 	 */
 	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		try {
-			waitJob();
-		} catch (OperationCanceledException | InterruptedException e) {
-			ProjectTemplatesActivator.pluginLog().logError(e);
-			return;
-		}
 		IFile f = findJavaDSLRouteBuilderClass(project, monitor);
 		if (f != null) {
 			holder[0] = f;
@@ -281,7 +275,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 	}
 
-	private void waitJob() throws OperationCanceledException, InterruptedException {
+	private static void waitJob() throws OperationCanceledException, InterruptedException {
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
@@ -302,6 +296,12 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @return	the routebuilder class or null
 	 */
 	public static IFile findJavaDSLRouteBuilderClass(IProject project, IProgressMonitor monitor) {
+		try {
+			waitJob();
+		} catch (OperationCanceledException | InterruptedException e) {
+			ProjectTemplatesActivator.pluginLog().logError(e);
+			return null;
+		}
 		IJavaProject javaProject = JavaCore.create(project);
 		try {
 			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder");

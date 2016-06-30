@@ -51,10 +51,10 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
-	private static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
-	private static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
-	private static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
-	private static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
+	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
+	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
+	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
 	
 	/*
 	 * (non-Javadoc)
@@ -171,29 +171,32 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		final Boolean[] found = new Boolean[1];
 		found[0] = false;
 
-		// check for java dsl
-		IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor());
-		if (f != null) {
-			// java dsl found
-			found[0] = true;
-		} else {
-			try {
-				project.accept(new IResourceVisitor() {
-					public boolean visit(IResource resource) throws CoreException {
-						if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("blueprint")
-								&& resource.getParent().getParent().getName().equals("OSGI-INF")) {
-							found[0] = true;
-						} else if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("spring")
-								&& resource.getParent().getParent().getName().equals("META-INF")) {
-							found[0] = true;
-						}					
-						return !found[0];
-					}
-				});
-			} catch (CoreException ce) {
-				ProjectTemplatesActivator.pluginLog().logError(ce);
+		try {
+			project.accept(new IResourceVisitor() {
+				public boolean visit(IResource resource) throws CoreException {
+					if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("blueprint")
+							&& resource.getParent().getParent().getName().equals("OSGI-INF")) {
+						found[0] = true;
+					} else if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("spring")
+							&& resource.getParent().getParent().getName().equals("META-INF")) {
+						found[0] = true;
+					}					
+					return !found[0];
+				}
+			});
+		} catch (CoreException ce) {
+			ProjectTemplatesActivator.pluginLog().logError(ce);
+		}
+
+		if (found[0] == false) {
+			// check for java dsl
+			IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor());
+			if (f != null) {
+				// java dsl found
+				found[0] = true;
 			}
 		}
+
 		return found[0];
 	}
 
