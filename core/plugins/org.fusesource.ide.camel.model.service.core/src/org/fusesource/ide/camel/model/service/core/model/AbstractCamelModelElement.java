@@ -47,6 +47,8 @@ public abstract class AbstractCamelModelElement {
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
+	public static final String USER_LABEL_REGEX = "[\\w-]+\\.[\\w-]+";
+	public static final String USER_LABEL_DELIMETER = ";";
 
 	protected static final String ID_ATTRIBUTE = "id";
 	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
@@ -379,6 +381,19 @@ public abstract class AbstractCamelModelElement {
 		singlePropertyDisplay.put("rollback", "message");
 		singlePropertyDisplay.put("sort", "expression");
 		singlePropertyDisplay.put(WHEN_NODE_NAME, "expression");
+
+		// User defined labels
+		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_USER_LABELS)) {
+			String userProperties = PreferenceManager.getInstance()
+					.loadPreferenceAsString(PreferencesConstants.EDITOR_USER_LABELS);
+			String[] userLabels = userProperties.split(USER_LABEL_DELIMETER);
+			for (String userLabel : userLabels) {
+				if (userLabel.matches(USER_LABEL_REGEX)) {
+					String[] parts = userLabel.split("\\.");
+					singlePropertyDisplay.put(parts[0], parts[1]);
+				}
+			}
+		}
 
 		String propertyToCheck = singlePropertyDisplay.get(eipType);
 		if( propertyToCheck != null ) {

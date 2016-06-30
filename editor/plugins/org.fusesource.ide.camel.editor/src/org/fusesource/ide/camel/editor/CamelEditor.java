@@ -776,6 +776,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (event.getProperty().equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
 			// user switched the displaytext logic flag - refresh diagram and outline
 			designEditor.update();
+		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_USER_LABELS)) {
+			// user defined own labels
+			designEditor.update();;
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
 			// user switched direction of diagram layout - relayout the diagram
 			designEditor.autoLayoutRoute();

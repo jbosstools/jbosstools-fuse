@@ -47,6 +47,7 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	private BooleanFieldEditor preferIdAsLabelEditor;
 	private ComboFieldEditor layoutOrientationEditor;
 	private BooleanFieldEditor gridVisibilityEditor;
+	private UserLabelsListEditor userLabelsEditor;
 
 	/**
 	 * 
@@ -95,7 +96,15 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 				getFieldEditorParent());
 
 		addField(this.gridVisibilityEditor);
+		
+		this.userLabelsEditor = new UserLabelsListEditor(
+				PreferencesConstants.EDITOR_USER_LABELS, 
+				UIMessages.editorPreferencePageUserLabels,
+				getFieldEditorParent());
 
+		addField(userLabelsEditor);
+		
+		
 		// Sets up the context sensitive help for this page
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}
