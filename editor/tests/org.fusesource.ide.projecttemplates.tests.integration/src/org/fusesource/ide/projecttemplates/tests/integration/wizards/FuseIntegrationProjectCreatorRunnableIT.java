@@ -228,20 +228,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		boolean javaFacetFound = fproj.hasProjectFacet(javaFacet);
 		boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
 		boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
-		
-//		Iterator<IProjectFacetVersion> it = fproj.getProjectFacets().iterator();
-//		while (it.hasNext()) {
-//			IProjectFacetVersion fv = it.next();
-//			if (fv.getProjectFacet().getId().equals("jst.camel")) {
-//				camelFacetFound = true;
-//			} else if (fv.getProjectFacet().getId().equals("jst.utility")) {
-//				utilityFacetFound = true;
-//			} else if (fv.getProjectFacet().getId().equals("java")) {
-//				javaFacetFound = true;
-//			} else if (fv.getProjectFacet().getId().equals("jboss.m2")) {
-//				mavenFacetFound = true;
-//			}
-//		}
 				
 		assertThat(camelFacetFound).isTrue();
 		assertThat(javaFacetFound).isTrue();
