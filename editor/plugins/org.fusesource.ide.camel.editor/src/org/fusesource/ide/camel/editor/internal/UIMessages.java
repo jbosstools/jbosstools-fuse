@@ -65,6 +65,8 @@ public class UIMessages extends NLS {
 	public static String editorPreferencePageLayoutOrientationSOUTH;
 	public static String editorPreferencePageLayoutOrientationEAST;
 	public static String editorPreferencePageGridVisibilitySetting;
+	public static String editorPreferencePageUserLabels;
+
 	public static String colorPreferencePageDescription;
 	public static String colorPreferencePageGridColorSetting;
 	public static String colorPreferencePageTextColorSetting;
@@ -168,6 +170,17 @@ public class UIMessages extends NLS {
 	public static String loadingCamelFile;
 	public static String pending;
 
+	/* User Labels */
+	public static String userLabels_newDialogTitle;
+	public static String userLabels_editDialogTitle;
+	public static String userLabels_message;
+	public static String userLabels_errorMessage;
+	public static String userLabels_errorMessageEmpty;
+	public static String userLabels_errorMessageCharacter;
+	public static String userLabels_errorMessageAttribute;
+	public static String userLabels_errorMessageDuplicate;
+	public static String userLabels_errorMessageMoreCommas;
+	public static String userLabels_editButtonText;
 
 	static {
 		// initialize resource bundle
