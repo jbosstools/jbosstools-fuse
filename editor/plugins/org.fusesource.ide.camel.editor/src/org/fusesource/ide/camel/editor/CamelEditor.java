@@ -734,7 +734,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 		setPartName(input.getName());
 	}
-	
+    
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
 	 */
@@ -744,6 +744,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (eventProperty.equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
 			// user switched the displaytext logic flag - refresh diagram and outline
 			designEditor.update();
+		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_USER_LABELS)) {
+			// user defined own labels
+			designEditor.update();;
 		} else if (eventProperty.equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
 			// user switched direction of diagram layout - relayout the diagram
 			designEditor.autoLayoutRoute();
@@ -757,7 +760,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			designEditor.getDiagramBehavior().refresh();
 		} else if (eventProperty.equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 			designEditor.setupGridVisibilityAsync();
-		} 	
+		}
 	}
 	
 	/**

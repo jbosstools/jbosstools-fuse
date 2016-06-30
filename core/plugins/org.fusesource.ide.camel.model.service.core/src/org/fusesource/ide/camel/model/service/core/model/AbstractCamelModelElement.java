@@ -57,13 +57,18 @@ public abstract class AbstractCamelModelElement {
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
-	
+
 	public static final String PARAMETER_LANGUAGENAME = "languageName";
 	
 	public static final String CHOICE_NODE_NAME = "choice";
 	public static final String WHEN_NODE_NAME = "when";
 	public static final String OTHERWISE_NODE_NAME = "otherwise";
 	public static final String WIRETAP_NODE_NAME = "wireTap";
+
+	public static final String USER_LABEL_REGEX = "[\\w-]+\\.[\\w-]+";
+	public static final String USER_LABEL_DELIMETER = ";";
+
+
 	public static final String ROUTE_NODE_NAME = "route";
 	public static final String ID_ATTRIBUTE = "id";
 	public static final String ROUTE_ATTRIBUTE = "route";
@@ -456,6 +461,19 @@ public abstract class AbstractCamelModelElement {
 		singlePropertyDisplay.put("rollback", "message");
 		singlePropertyDisplay.put("sort", NODE_KIND_EXPRESSION);
 		singlePropertyDisplay.put(WHEN_NODE_NAME, NODE_KIND_EXPRESSION);
+
+		// User defined labels
+		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_USER_LABELS)) {
+			String userProperties = PreferenceManager.getInstance()
+					.loadPreferenceAsString(PreferencesConstants.EDITOR_USER_LABELS);
+			String[] userLabels = userProperties.split(USER_LABEL_DELIMETER);
+			for (String userLabel : userLabels) {
+				if (userLabel.matches(USER_LABEL_REGEX)) {
+					String[] parts = userLabel.split("\\.");
+					singlePropertyDisplay.put(parts[0], parts[1]);
+				}
+			}
+		}
 
 		String propertyToCheck = singlePropertyDisplay.get(eipType);
 		if( propertyToCheck != null ) {

@@ -25,7 +25,6 @@ import org.fusesource.ide.camel.model.service.core.util.LanguageUtils;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
-
 /**
  * This class represents a preference page that
  * is contributed to the Preferences dialog. By
@@ -84,6 +83,11 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(gridVisibilityEditor);
 
+		UserLabelsListEditor userLabelsEditor = new UserLabelsListEditor(PreferencesConstants.EDITOR_USER_LABELS,
+				UIMessages.editorPreferencePageUserLabels, getFieldEditorParent());
+
+		addField(userLabelsEditor);
+
 		// Sets up the context sensitive help for this page
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}
@@ -111,3 +115,4 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	}
 
 }
+
