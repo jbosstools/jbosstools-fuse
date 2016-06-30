@@ -70,12 +70,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	
 	@Override
 	public long installBundle(MBeanServerConnection mbsc, String bundlePath) {
-		String bundleUrl = bundlePath;
-		try {
-			bundleUrl = new File(bundlePath).toURL().toExternalForm();
-		} catch(MalformedURLException murle) {
-			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
-		}
+		String bundleUrl = getBundleUrl(bundlePath);
 
 		try {
 			Object retVal = mbsc.invoke(this.objectName, "install", new Object[] { bundleUrl, Boolean.TRUE } , new String[] {String.class.getName(), "boolean" }); 
@@ -89,16 +84,21 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		}
 		return -1;
 	}
+
+	private String getBundleUrl(String bundlePath) {
+		String bundleUrl = bundlePath;
+		try {
+			bundleUrl = new File(bundlePath.replaceFirst("file:", "")).toURI().toURL().toExternalForm();
+		} catch(MalformedURLException murle) {
+			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
+		}
+		return bundleUrl;
+	}
 	
 	@Override
 	public boolean updateBundle(MBeanServerConnection mbsc, long bundleId,
 			String bundlePath) {
-		String bundleUrl = bundlePath;
-		try {
-			bundleUrl = new File(bundlePath).toURL().toExternalForm();
-		} catch(MalformedURLException murle) {
-			Activator.getLogger().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, murle.getMessage(), murle));
-		}
+		String bundleUrl = getBundleUrl(bundlePath);
 		try {
 			mbsc.invoke(this.objectName, "update", new Object[] { Long.toString(bundleId), bundleUrl } , new String[] {String.class.getName(), String.class.getName() }); 
 			return true;
