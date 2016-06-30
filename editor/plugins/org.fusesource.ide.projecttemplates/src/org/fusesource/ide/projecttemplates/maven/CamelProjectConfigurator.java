@@ -259,19 +259,14 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	
 	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion,
 			IDataModel config, IProgressMonitor mon) throws CoreException {
-		try {
-			if (facet != null && !fproj.hasProjectFacet(facet)) {
-				fproj.installProjectFacet(facetVersion, config, mon);
-			} else {
-				IProjectFacetVersion f = fproj.getProjectFacetVersion(facet);
-				if (!f.getVersionString().equals(facetVersion.getVersionString())) {
-					// version change
-					fpwc.changeProjectFacetVersion(facetVersion);
-				}
+		if (facet != null && !fproj.hasProjectFacet(facet)) {
+			fpwc.addProjectFacet(facetVersion);
+		} else {
+			IProjectFacetVersion f = fproj.getProjectFacetVersion(facet);
+			if (!f.getVersionString().equals(facetVersion.getVersionString())) {
+				// version change
+				fpwc.changeProjectFacetVersion(facetVersion);
 			}
-		} catch (CoreException ce) {
-			ProjectTemplatesActivator.pluginLog().logError(ce);
-			throw ce;
 		}
 	}
 	

@@ -140,10 +140,10 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		checkCorrectEditorOpened(camelResource);
 		// TODO: fix project to activate no validation error check
 		// checkNoValidationError();
-//		waitJob();
-//		checkCorrectFacetsEnabled(project);
-//		waitJob();
-//		checkCorrectNatureEnabled(project);
+		waitJob();
+		checkCorrectFacetsEnabled(project);
+		waitJob();
+		checkCorrectNatureEnabled(project);
 		// TODO: currently we generate completely project which are not valid so
 		// cannot be launched
 		// launchDebug(project);
