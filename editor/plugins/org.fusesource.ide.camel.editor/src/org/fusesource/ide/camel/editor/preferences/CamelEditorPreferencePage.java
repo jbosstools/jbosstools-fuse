@@ -57,13 +57,6 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(defaultLanguageEditor);
 
-		BooleanFieldEditor preferIdAsLabelEditor = new BooleanFieldEditor(
-				PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL,
-				UIMessages.editorPreferencePagePreferIdAsLabelSetting,
-				getFieldEditorParent());
-
-		addField(preferIdAsLabelEditor);
-
 		namesAndValues = new String[][] {
 				{ UIMessages.editorPreferencePageLayoutOrientationEAST,  String.valueOf(PositionConstants.EAST) },
 				{ UIMessages.editorPreferencePageLayoutOrientationSOUTH, String.valueOf(PositionConstants.SOUTH) }

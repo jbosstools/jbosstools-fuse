@@ -398,7 +398,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	public String getDisplayText() {
-		return getDisplayText(true);
+		return getDisplayText(false);
 	}
 
 	/**
@@ -409,22 +409,9 @@ public abstract class AbstractCamelModelElement {
 	public final String getDisplayText(boolean useID) {
 		String result = String.format("%s ", Strings.capitalize(getNodeTypeId()));
 
-		// honor the PREFER_ID_AS_LABEL preference
-		// we initially set it to the value of the contains method
-		boolean preferID = false;
-		if (useID) {
-			preferID = PreferenceManager.getInstance()
-					.containsPreference(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL);
-			// as second step if the value is there, we use it for the flag
-			if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
-				preferID = PreferenceManager.getInstance()
-						.loadPreferenceAsBoolean(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL);
-			}
-		}
-
 		// we only return the id if we are told so by the preference AND the
 		// value of the ID is set != null
-		if (preferID && getId() != null && getId().trim().length() > 0) {
+		if (useID && getId() != null && getId().trim().length() > 0) {
 			result += getId();
 			return result;
 		}
