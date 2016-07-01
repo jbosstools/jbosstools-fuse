@@ -44,7 +44,6 @@ extends FieldEditorPreferencePage
 implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 	private ComboFieldEditor defaultLanguageEditor;
-	private BooleanFieldEditor preferIdAsLabelEditor;
 	private ComboFieldEditor layoutOrientationEditor;
 	private BooleanFieldEditor gridVisibilityEditor;
 	private UserLabelsListEditor userLabelsEditor;
@@ -70,13 +69,6 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 				namesAndValues, getFieldEditorParent());
 
 		addField(this.defaultLanguageEditor);
-
-		this.preferIdAsLabelEditor = new BooleanFieldEditor(
-				PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL,
-				UIMessages.editorPreferencePagePreferIdAsLabelSetting,
-				getFieldEditorParent());
-
-		addField(this.preferIdAsLabelEditor);
 
 		namesAndValues = new String[][] {
 				{ UIMessages.editorPreferencePageLayoutOrientationEAST,  String.valueOf(PositionConstants.EAST) },
