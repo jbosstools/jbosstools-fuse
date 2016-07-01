@@ -741,10 +741,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventProperty = event.getProperty();
-		if (eventProperty.equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
-			// user switched the displaytext logic flag - refresh diagram and outline
-			designEditor.update();
-		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_USER_LABELS)) {
+		if (event.getProperty().equals(PreferencesConstants.EDITOR_USER_LABELS)) {
 			// user defined own labels
 			designEditor.update();;
 		} else if (eventProperty.equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
