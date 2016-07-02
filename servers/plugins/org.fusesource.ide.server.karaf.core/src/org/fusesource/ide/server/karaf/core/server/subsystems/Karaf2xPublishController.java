@@ -210,8 +210,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	@Override
 	public int removeModule(IModule[] module, IProgressMonitor monitor) throws CoreException {
 		IPath tmpArchive = getTempBundlePath(module);
-		
-		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, tmpArchive);  // This will clearly break... wtf.  Crap. 
+		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, tmpArchive);   
 		if( bd != null ) {
 			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
 			if( removed )
@@ -224,10 +223,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		IPath localTempLocation = getMetadataTemporaryLocation(getServer());
 		String archiveName = module[0].getName() + ServerModelUtilities.getDefaultSuffixForModule(module[0]);
 		IPath tempBundlePath = localTempLocation.append(archiveName);
-		if(tempBundlePath.toFile().exists()){
-			return tempBundlePath;
-		} else {
-			return null;
-		}
+		return tempBundlePath;
 	}
 }

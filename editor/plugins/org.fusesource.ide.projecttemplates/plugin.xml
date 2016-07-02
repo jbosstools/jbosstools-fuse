@@ -245,24 +245,5 @@
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>		
    	</extension>
-    
-    <extension point="org.eclipse.wst.server.core.moduleTypes">
-       	<moduleType
-        	id="jst.camel"
-            name="Camel Module">
-       	</moduleType>
-    </extension>
-    
-    <extension point="org.eclipse.wst.server.core.moduleFactories">
-       	<moduleFactory
-        	class="org.fusesource.ide.projecttemplates.util.camel.CamelModuleFactory"
-            id="org.fusesource.ide.project.camel.CamelModuleFactory"
-            projects="true">
-          	<moduleType
-            	types="jst.camel"
-                versions="1.0">
-          	</moduleType>
-       	</moduleFactory>
-    </extension>
 
 </plugin>

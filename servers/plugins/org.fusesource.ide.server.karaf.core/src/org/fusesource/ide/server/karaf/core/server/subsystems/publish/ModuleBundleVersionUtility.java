@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.server.subsystems.publish;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.Attributes;
@@ -22,7 +23,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IModule;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 
 public class ModuleBundleVersionUtility {
@@ -44,16 +49,15 @@ public class ModuleBundleVersionUtility {
 	
 	public BundleDetails getBundleDetails(IModule[] module, IPath srcFile) {
 		String moduleTypeId = module[0].getModuleType().getId(); 
-		if( moduleTypeId.equals("fuse.camel")) {
-			return getFuseCamelDetails(module);
-		} else if( moduleTypeId.equals("jboss.osgi")) { 
+		if( moduleTypeId.equals("jboss.osgi")) { 
 			return getJBossOSGiDetails(module, srcFile);
-		} else if( moduleTypeId.equals("jst.utility")) {
-			if( srcFile != null )
+		} else if( moduleTypeId.equals("jst.utility") || moduleTypeId.equals("jst.web")) {
+			if( srcFile != null ) {
 				return getJBossOSGiDetailsFromJar(srcFile);
+			}
 			return getJBossOSGiDetailsFromProject(module);
 		}
-		// TODO maybe log? 
+		Activator.getLogger().warning("Unhandled module type for deployment: " + moduleTypeId);
 		return null;
 	}
 	
@@ -63,7 +67,7 @@ public class ModuleBundleVersionUtility {
 			String symbolicName2 = KarafUtils.getBundleSymbolicName(module[0]);
 			return new BundleDetails(symbolicName2, version2 );
 		} catch(CoreException ce) {
-			//TODO cleanup
+			Activator.getLogger().error(ce);
 		}
 		return null;
 	}
@@ -81,7 +85,7 @@ public class ModuleBundleVersionUtility {
 			Manifest m = jf.getManifest();
 			return createBundleDetails(m);
 		} catch(IOException ioe) {
-			// TODO cleanup
+			Activator.getLogger().error(ioe);
 		}
 		return null;
 	}
@@ -101,24 +105,46 @@ public class ModuleBundleVersionUtility {
 				
 			});
 		} catch(CoreException ce) {
-			// TODO log
+			Activator.getLogger().error(ce);
 		}
 		
-		if( found[0] != null ) {
+		// if we did not find the manifest in the project directly
+		if (found[0] == null) {
+			// we search for the locally built artifact and get the manifest 
+			// from that one
+			return findBuildArtifactInProjectsOutputFolder(module);
+		} else {		
 			try {
 				InputStream is = found[0].getContents();
 				Manifest mf = new Manifest(is);
 				return createBundleDetails(mf);
 			} catch(IOException ioe) {
-				// TODO log 
+				Activator.getLogger().error(ioe);
 			} catch(CoreException ce) {
-				// TODO log 
+				Activator.getLogger().error(ce);
 			}
 		}
 		
 		return null;
 	}
 
+	private BundleDetails findBuildArtifactInProjectsOutputFolder(IModule[] module) {
+		BundleDetails bd = null;
+		IProject prj = module[0].getProject();
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(prj, new NullProgressMonitor());
+		String path = m2prj.getMavenProject().getBuild().getOutputDirectory();
+		String file = m2prj.getMavenProject().getBuild().getFinalName();
+		File out = new File(path, file);
+		if (out.exists() && out.isFile()) {
+			try (JarFile jf = new JarFile(out)) {
+				bd = createBundleDetails(jf.getManifest());
+			} catch (IOException ex) {
+				Activator.getLogger().error(ex);
+			}
+		}
+		return bd;
+	}
+	
 	private BundleDetails createBundleDetails(Manifest mf) {
 		Attributes attributes = mf.getMainAttributes();
 		String symName = attributes.getValue("Bundle-SymbolicName");

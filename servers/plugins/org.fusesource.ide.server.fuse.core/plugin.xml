@@ -11,10 +11,8 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.0">
-       <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
-       <moduleType types="jst.java" versions="1.6,1.7"></moduleType>
        <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
     <runtimeType
@@ -25,10 +23,8 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.1">
-       <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
-       <moduleType types="jst.java" versions="1.6,1.7"></moduleType>
        <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
     <runtimeType
@@ -39,10 +35,8 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.2">
-       <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
-       <moduleType types="jst.java" versions="1.6,1.7"></moduleType>
        <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
     <runtimeType
@@ -53,10 +47,8 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.3">
-       <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
-       <moduleType types="jst.java" versions="1.6,1.7,1.8"></moduleType>
        <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
   </extension>
