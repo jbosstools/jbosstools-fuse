@@ -172,7 +172,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionLabel.setLayoutData(camelLabelData);
 		camelVersionLabel.setText(Messages.newProjectWizardRuntimePageCamelLabel);
 
-		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT);
+		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT | SWT.READ_ONLY);
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
 		camelVersionCombo.setItems(CamelModelFactory.getSupportedCamelVersions().toArray(new String[CamelModelFactory.getSupportedCamelVersions().size()]));
