@@ -378,14 +378,14 @@ public class KarafUtils {
 		ModuleDelegate md = (ModuleDelegate)module.loadAdapter(ModuleDelegate.class, null);
 		IModuleResource[] res = md.members();
 		for( int i = 0; i < res.length; i++ ) {
-			if( res[i].getName().equals("META-INF")) {
+			if( "META-INF".equals(res[i].getName())) {
 				IModuleResource meta = res[i];
 				if( meta instanceof IModuleFolder) {
 					IModuleResource[] metaContents = ((IModuleFolder)meta).members();
 					for( int j = 0; j < metaContents.length; j++ ) {
-						if( metaContents[j].getName().equalsIgnoreCase("manifest.mf")) {
+						if( "manifest.mf".equalsIgnoreCase(metaContents[j].getName())) {
 							IModuleResource mf = metaContents[j];
-							return (File)mf.getAdapter(File.class);
+							return mf.getAdapter(File.class);
 						}
 					}
 				}

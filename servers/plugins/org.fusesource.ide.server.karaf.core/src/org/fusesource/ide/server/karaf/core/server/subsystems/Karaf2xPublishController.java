@@ -132,17 +132,13 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	}
 	
 	private int handleZippedPublish(IModule[] module, int publishType, boolean force, IProgressMonitor monitor) throws CoreException{
-		// Zip into a temporary folder, then transfer to the proper location
-		IPath localTempLocation = getMetadataTemporaryLocation(getServer());
-		String archiveName = module[0].getName() + ServerModelUtilities.getDefaultSuffixForModule(module[0]);
-		IPath tmpArchive = localTempLocation.append(archiveName);
+		IPath tmpArchive = getTempBundlePath(module);
 		
 		LocalZippedModulePublishRunner runner = createZippedRunner(module, tmpArchive); 
 		monitor.beginTask("Packaging Module", 200); //$NON-NLS-1$
 		
 		// Trimmed code from StandardFilesystemPublishController
-		IStatus result = null;
-		result = runner.fullPublishModule(ProgressMonitorUtil.submon(monitor, 100));
+		IStatus result = runner.fullPublishModule(ProgressMonitorUtil.submon(monitor, 100));
 		if( result == null || result.isOK()) {
 			if( tmpArchive.toFile().exists()) {
 				return transferBuiltModule(module, tmpArchive, ProgressMonitorUtil.submon(monitor, 100));
@@ -213,12 +209,20 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 
 	@Override
 	public int removeModule(IModule[] module, IProgressMonitor monitor) throws CoreException {
-		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, null);  // This will clearly break... wtf.  Crap. 
+		IPath tmpArchive = getTempBundlePath(module);
+		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, tmpArchive);   
 		if( bd != null ) {
 			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
 			if( removed )
 				return IServer.PUBLISH_STATE_NONE;
 		}
 		return IServer.PUBLISH_STATE_FULL;
+	}
+
+	private IPath getTempBundlePath(IModule[] module) {
+		IPath localTempLocation = getMetadataTemporaryLocation(getServer());
+		String archiveName = module[0].getName() + ServerModelUtilities.getDefaultSuffixForModule(module[0]);
+		IPath tempBundlePath = localTempLocation.append(archiveName);
+		return tempBundlePath;
 	}
 }

@@ -47,17 +47,24 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			for (Object row : rows) {
 				if (row instanceof CompositeData) {
 					CompositeData cd = (CompositeData) row;
-					String bsn = cd.get("SymbolicName").toString();
-					String id = cd.get("Identifier").toString();
-					String ver = cd.get("Version").toString();
-					if (version != null) {
-						if (bsn.equals(bundleSymbolicName) && ver.equals(version)) {
-							return Long.parseLong(id);
-						}	
-					} else {
-						// if we don't have a version we take the first best
-						if (bsn.equals(bundleSymbolicName)) {
-							return Long.parseLong(id);
+					Object symbolicName = cd.get("SymbolicName");
+					if(symbolicName != null){
+						String bsn = symbolicName.toString();
+						Object identifier = cd.get("Identifier");
+						if(identifier != null){
+							String id = identifier.toString();
+							Object deployedVersion = cd.get("Version");
+							if (version != null && deployedVersion != null) {
+								String ver = deployedVersion.toString();
+								if (bsn.equals(bundleSymbolicName) && ver.equals(version)) {
+									return Long.parseLong(id);
+								}	
+							} else {
+								// if we don't have a version we take the first best
+								if (bsn.equals(bundleSymbolicName)) {
+									return Long.parseLong(id);
+								}
+							}
 						}
 					}
 				}
@@ -70,19 +77,14 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	
 	@Override
 	public long installBundle(MBeanServerConnection mbsc, String bundlePath) {
-		String bundleUrl = bundlePath;
-		try {
-			bundleUrl = new File(bundlePath).toURL().toExternalForm();
-		} catch(MalformedURLException murle) {
-			murle.printStackTrace();		
-		}
+		String bundleUrl = getEncodedURIBundlePath(bundlePath);
 		
 		try {
-			Object retVal = mbsc.invoke(this.objectNameFramework, "installBundle", new Object[] { bundleUrl } , new String[] {String.class.getName() }); 
+			Object retVal = mbsc.invoke(objectNameFramework, "installBundle", new Object[] { bundleUrl } , new String[] {String.class.getName() }); 
 			if (retVal instanceof Long) {
 				long bid = (Long)retVal;
 				// also start the bundle
-				mbsc.invoke(this.objectNameFramework, "startBundle", new Object[] { bid }, new String[] { "long" });
+				mbsc.invoke(objectNameFramework, "startBundle", new Object[] { bid }, new String[] { "long" });
 				return bid;
 			} else {
 				Activator.getLogger().error(retVal.toString());
@@ -92,12 +94,23 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		}
 		return -1;
 	}
+
+	private String getEncodedURIBundlePath(String bundlePath) {
+		String bundleUrl = bundlePath;
+		try {
+			bundleUrl = new File(bundlePath.replaceFirst("file:", "")).toURI().toURL().toExternalForm();
+		} catch(MalformedURLException murle) {
+			murle.printStackTrace();		
+		}
+		return bundleUrl;
+	}
 	
 	@Override
-	public boolean updateBundle(MBeanServerConnection mbsc, long bundleId,
-			String bundlePath) {
+	public boolean updateBundle(MBeanServerConnection mbsc, long bundleId, String bundlePath) {
+		String bundleUrl = getEncodedURIBundlePath(bundlePath);
+		
 		try {
-			mbsc.invoke(this.objectNameFramework, "updateBundleFromURL", new Object[] { bundleId, bundlePath } , new String[] {"long", String.class.getName() }); 
+			mbsc.invoke(objectNameFramework, "updateBundleFromURL", new Object[] { bundleId, bundleUrl } , new String[] {"long", String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
@@ -108,7 +121,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	@Override
 	public boolean uninstallBundle(MBeanServerConnection mbsc, long bundleId) {
 		try {
-			mbsc.invoke(this.objectNameFramework, "uninstallBundle", new Object[] { bundleId } , new String[] { "long" }); 
+			mbsc.invoke(objectNameFramework, "uninstallBundle", new Object[] { bundleId } , new String[] { "long" }); 
 			return true;
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
@@ -144,17 +157,14 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	    	this.objectNameBundleState = new ObjectName(OSGI_BUNDLESTATE_MBEAN);
 	    	this.objectNameFramework = new ObjectName(OSGI_FRAMEWORK_MBEAN);
 	    	
-	    	Set mbeans = mbsc.queryMBeans(this.objectNameBundleState, null);
+	    	Set<ObjectInstance> mbeans = mbsc.queryMBeans(this.objectNameBundleState, null);
 	    	if (mbeans.size() != 1) {
 		    	// no bundleState mbean found - can't handle the jmx connection
 		    	return false;
 		    } else {
 		    	// remember the mbean
-		    	Object oMbean = mbeans.iterator().next();
-		    	if (oMbean instanceof ObjectInstance) {
-		    		ObjectInstance oi = (ObjectInstance)oMbean;
-		    		this.objectNameBundleState = oi.getObjectName();
-		    	}
+		    	ObjectInstance oMbean = mbeans.iterator().next();
+		    	objectNameBundleState = oMbean.getObjectName();
 		    }
 	    	mbeans = mbsc.queryMBeans(this.objectNameFramework, null); 	    
 		    if (mbeans.size() != 1) {
@@ -162,11 +172,8 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		    	return false;
 		    } else {
 		    	// remember the mbean
-		    	Object oMbean = mbeans.iterator().next();
-		    	if (oMbean instanceof ObjectInstance) {
-		    		ObjectInstance oi = (ObjectInstance)oMbean;
-		    		this.objectNameFramework = oi.getObjectName();
-		    	}
+		    	ObjectInstance oMbean = mbeans.iterator().next();
+		    	objectNameFramework = oMbean.getObjectName();
 		    }
 	    	return true;
 		} catch (Exception ex) {

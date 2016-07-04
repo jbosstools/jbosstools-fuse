@@ -149,8 +149,12 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			// insert a project refresh here
 			IProject project = module[0].getProject();
 			project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-			// first check if there is a bundle installed with that name already
-			long bundleId = this.jmxPublisher.getBundleId(mbsc, symbolicName, version);
+			// first check if there is a bundle installed with that name and version already
+			long bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, version.replaceAll("qualifier", ""));
+			// second if not found previously, check if there is a bundle with that name
+			if (bundleId == -1) {
+				bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, null);
+			}
 			if (bundleId != -1) {
 				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
 			}
@@ -184,7 +188,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 */
 	private long installBundle(IServer server, IPath file) throws CoreException {
 		if (file != null) {
-			long bundleId = this.jmxPublisher.installBundle(mbsc, file.toOSString());
+			long bundleId = this.jmxPublisher.installBundle(mbsc, file.toOSString().replace("file:", ""));
 			return bundleId;
 		}
 		return -1;
