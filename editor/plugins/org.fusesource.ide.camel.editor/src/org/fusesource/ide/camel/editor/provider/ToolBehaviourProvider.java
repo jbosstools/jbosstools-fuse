@@ -742,7 +742,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
 
 		// inject palette entries generated out of the component model file
-		String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
+		CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
 
 		ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel();
 		for (Component component : componentModel.getSupportedComponents()) {

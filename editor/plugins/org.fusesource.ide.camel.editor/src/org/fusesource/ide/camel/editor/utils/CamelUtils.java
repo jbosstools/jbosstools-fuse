@@ -36,6 +36,11 @@ public class CamelUtils {
 		                      : CamelModelFactory.getCamelVersion(editor.getWorkspaceProject());
 	}
 
+	public static String getCurrentProjectCamelVersion(CamelDesignEditor editor) {
+		return editor == null ? CamelModelFactory.getLatestCamelVersion()
+		                      : CamelModelFactory.getCamelVersion(editor.getWorkspaceProject());
+	}
+	
 	/**
 	 * @return the currently open and focused Camel editor
 	 */
