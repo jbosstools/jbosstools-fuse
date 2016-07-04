@@ -42,8 +42,8 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
-import org.fusesource.ide.project.providers.CamelVirtualFolder;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
@@ -259,7 +259,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					IFile ifile = (IFile) f;
 					if (ifile != null) {
 						if (ifile.getContentDescription() != null && ifile.getContentDescription().getContentType()
-								.getId().equals(CamelVirtualFolder.FUSE_CAMEL_CONTENT_TYPE)) {
+								.getId().equals(CamelFilesFinder.FUSE_CAMEL_CONTENT_TYPE)) {
 							return true;
 						}
 					}

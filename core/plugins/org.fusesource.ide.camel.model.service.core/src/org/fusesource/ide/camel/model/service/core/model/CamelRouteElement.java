@@ -12,7 +12,13 @@ package org.fusesource.ide.camel.model.service.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.w3c.dom.Node;
 
 /**
@@ -23,23 +29,17 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 	/**
 	 * contains all inputs of the route
 	 */
-	private List<AbstractCamelModelElement> inputs = new ArrayList<AbstractCamelModelElement>();
+	private List<AbstractCamelModelElement> inputs = new ArrayList<>();
 	
 	/**
 	 * contains all outputs of the route
 	 */
-	private List<AbstractCamelModelElement> outputs = new ArrayList<AbstractCamelModelElement>();
+	private List<AbstractCamelModelElement> outputs = new ArrayList<>();
 	
-	/**
-	 * 
-	 */
 	public CamelRouteElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode);
 	}
 	
-	/**
-	 * 
-	 */
 	public CamelRouteElement(CamelContextElement camelContext, Node underlyingNode) {
 		super(camelContext, underlyingNode);
 	}
@@ -47,6 +47,7 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 	/**
 	 * parses the children of this node
 	 */
+	@Override
 	protected void parseChildren() {
 		super.parseChildren();
 		inputs.clear();
@@ -80,5 +81,32 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 	@Override
 	public boolean supportsBreakpoint() {
 		return false;
+	}
+	
+	@Override
+	public String getNewID() {
+		Set<CamelFile> resolvedCamelFiles = findCamelFilesInSameProject();
+		int i = 1;
+		String answer = String.format("_%s%d", getNodeTypeId(), i++);
+		while (!isNewIDAvailable(resolvedCamelFiles, answer)) {
+			answer = String.format("_%s%d", getNodeTypeId(), i++);
+		}
+		return answer;
+	}
+
+	Set<CamelFile> findCamelFilesInSameProject() {
+		Set<IFile> allCamelFilesInProject = new CamelFilesFinder().findFiles(getCamelFile().getResource().getProject());
+		return allCamelFilesInProject.stream()
+				.map(file -> new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor()))
+				.collect(Collectors.toSet());
+	}
+
+	private boolean isNewIDAvailable(Set<CamelFile> resolvedCamelFiles, String answer) {
+		for (CamelFile camelFile : resolvedCamelFiles) {
+			if(!camelFile.isNewIDAvailable(answer)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

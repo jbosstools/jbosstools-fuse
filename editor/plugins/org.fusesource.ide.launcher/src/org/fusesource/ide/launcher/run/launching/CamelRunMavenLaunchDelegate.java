@@ -37,14 +37,13 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 			throws CoreException {
 		
 		IFile pomFile = null;
-		boolean isBluePrint = false;
 		String newGoalsAdditionForFile = null;
 		
 		// we need to check for WAR packaging...as this needs Jetty:run instead of Camel:Run, and we 
 		// check if its a blueprint or a spring context
 		String filePath = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
 		if (filePath.trim().length()>0) {
-			isBluePrint = CamelUtils.isBlueprintFile(filePath);
+			boolean isBluePrint = CamelUtils.isBlueprintFile(filePath);
 
 			if (filePath.trim().length()>0) {
 				newGoalsAdditionForFile = String.format(" -D%s=\"file:%s\"", CamelContextLaunchConfigConstants.ATTR_CONTEXT_FILE, filePath);
