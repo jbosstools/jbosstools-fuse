@@ -748,7 +748,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null) {
 			editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
 		}
-		String camelVersion = editor != null ? CamelUtils.getCurrentProjectCamelVersion(editor) : CamelUtils.getCurrentProjectCamelVersion();
+		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
 
 		ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel();
 		for (Component component : componentModel.getSupportedComponents()) {

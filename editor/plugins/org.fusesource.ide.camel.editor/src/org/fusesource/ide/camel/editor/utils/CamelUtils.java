@@ -31,12 +31,21 @@ public class CamelUtils {
 	 * @return the Camel version
 	 */
 	public static String getCurrentProjectCamelVersion() {
-	    CamelDesignEditor editor = getDiagramEditor();
-		return editor == null ? CamelModelFactory.getLatestCamelVersion()
-		                      : CamelModelFactory.getCamelVersion(editor.getWorkspaceProject());
+	    return getCurrentProjectCamelVersion(null);
 	}
 
+	/**
+	 * Tries to figure out the used camel version of the currently opened
+	 * diagram's project and if that fails it will return the latest supported
+	 * camel version
+	 *
+	 * @param editor	the camel design editor instance
+	 * @return the Camel version
+	 */
 	public static String getCurrentProjectCamelVersion(CamelDesignEditor editor) {
+		if (editor == null) {
+			editor = getDiagramEditor();
+		}
 		return editor == null ? CamelModelFactory.getLatestCamelVersion()
 		                      : CamelModelFactory.getCamelVersion(editor.getWorkspaceProject());
 	}
