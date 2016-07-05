@@ -19,6 +19,9 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
@@ -275,7 +278,27 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
      * and inserts it into the pom.xml if needed
      */
     public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
+    	CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+    	IFacetedProject fproj = ProjectFacetsManager.create(editor.getWorkspaceProject());
+    	IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
+    	if (fproj != null && fproj.hasProjectFacet(camelFacet)) {
+    		String facetVersion = fproj.getInstalledVersion(camelFacet).getVersionString();
+    		String m2CamelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
+    		if (m2CamelVersion != null) {
+    			updateDepsVersion(compDeps, m2CamelVersion);
+    		}
+    	}
 		new MavenUtils().updateMavenDependencies(compDeps);
+    }
+    
+    private void updateDepsVersion(List<Dependency> compDeps, String newCamelVersion) {
+    	for (Dependency dep : compDeps) {
+    		// we only update the versions of default camel components
+    		if (dep.getGroupId().equalsIgnoreCase("org.apache.camel") && 
+    			dep.getArtifactId().toLowerCase().startsWith("camel-")) {
+    			dep.setVersion(newCamelVersion);	
+    		}
+    	}
     }
     
 	/**
