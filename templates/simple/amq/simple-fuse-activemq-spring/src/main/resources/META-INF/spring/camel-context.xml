@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd        http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    <!-- This creates an embedded ActiveMQ Broker -->
+    <broker persistent="false" useJmx="true" xmlns="http://activemq.apache.org/schema/core">
+        <transportConnectors>
+            <transportConnector uri="tcp://localhost:61616"/>
+        </transportConnectors>
+    </broker>
+    <!-- Lets connect the Camel ActiveMQ component to the embedded broker.
+       See http://camel.apache.org/activemq.html for more information.
+  -->
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="brokerURL" value="failover:tcp://localhost:61616"/>
+    </bean>
+    <!-- Here is a sample which processes the input files
+         (leaving them in place - see the 'noop' flag), and
+         sends them on a JMS queue. This queue is watched by
+         another route which then performs content based
+         routing on the messages using XPath. 
+  -->
+    <camelContext id="camelContext-a2720579-da87-4bcd-9fcd-a5e474cf6ca6" xmlns="http://camel.apache.org/schema/spring">
+        <route id="_route1">
+            <from id="_from1" uri="file:src/data?noop=true"/>
+            <to id="_to1" uri="activemq:personnel.records"/>
+        </route>
+        <route id="_route2">
+            <from id="_from2" uri="activemq:personnel.records"/>
+            <log id="_log3" message="Receiving record ${file:name}"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <xpath>/person/city = 'London'</xpath>
+                    <to id="_to2" uri="file:target/messages/uk"/>
+                    <log id="_log1" message="Sending record ${file:name} to the UK"/>
+                </when>
+                <otherwise id="_otherwise1">
+                    <to id="_to3" uri="file:target/messages/others"/>
+                    <log id="_log2" message="Sending record ${file:name} to Other"/>
+                </otherwise>
+            </choice>
+        </route>
+    </camelContext>
+</beans>
