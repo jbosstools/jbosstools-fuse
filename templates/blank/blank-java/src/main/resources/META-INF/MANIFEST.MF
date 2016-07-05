@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: [B@183d80d
+Bundle-SymbolicName: [B@1cad32ea
+Bundle-Version: 1.0.0.SNAPSHOT
