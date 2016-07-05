@@ -11,7 +11,6 @@
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,17 +19,13 @@ import java.util.Set;
 import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -187,25 +182,26 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				validate();
 			}
 		});
-		camelVersionCombo.addFocusListener(new FocusAdapter() {
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.FocusAdapter#focusLost(org.eclipse.swt.events.FocusEvent)
-			 */
-			@Override
-			public void focusLost(FocusEvent e) {
-				super.focusLost(e);
-				validate();
-			}
-			
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.FocusAdapter#focusGained(org.eclipse.swt.events.FocusEvent)
-			 */
-			@Override
-			public void focusGained(FocusEvent e) {
-				super.focusGained(e);
-				setPageComplete(false);
-			}
-		});
+// TODO: leaving that out until we decide to support other camel versions than the ones we ship		
+//		camelVersionCombo.addFocusListener(new FocusAdapter() {
+//			/* (non-Javadoc)
+//			 * @see org.eclipse.swt.events.FocusAdapter#focusLost(org.eclipse.swt.events.FocusEvent)
+//			 */
+//			@Override
+//			public void focusLost(FocusEvent e) {
+//				super.focusLost(e);
+//				validate();
+//			}
+//			
+//			/* (non-Javadoc)
+//			 * @see org.eclipse.swt.events.FocusAdapter#focusGained(org.eclipse.swt.events.FocusEvent)
+//			 */
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				super.focusGained(e);
+//				setPageComplete(false);
+//			}
+//		});
 
 		new Label(camelGrp, SWT.None);
 	
@@ -347,19 +343,19 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				camelInfoText.setText("");
 			}			
 		}
-
-		try {
-			getWizard().getContainer().run(false, false, new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
-					validateCamelVersion();
-					monitor.done();
-				}
-			});
-		} catch (Exception ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
-		}
+// TODO: leaving that out until we decide to support other camel versions than the ones we ship
+//		try {
+//			getWizard().getContainer().run(false, false, new IRunnableWithProgress() {
+//				@Override
+//				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+//					monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
+//					validateCamelVersion();
+//					monitor.done();
+//				}
+//			});
+//		} catch (Exception ex) {
+//			ProjectTemplatesActivator.pluginLog().logError(ex);
+//		}
 		
 		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
 			warningIconLabel.setVisible(camelInfoText.getText().length()>0);
