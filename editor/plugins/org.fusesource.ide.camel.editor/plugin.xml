@@ -12,7 +12,7 @@
             class="org.fusesource.ide.camel.editor.CamelEditor"
             default="false"
             extensions="xml"
-            icon="icons/camel_context_icon.png"
+            icon="icons/editor/camel_project_16x16.png"
             id="org.fusesource.ide.camel.editor"
             matchingStrategy="org.fusesource.ide.camel.editor.utils.CamelEditorMatchingStrategy"
             name="%integration.editor.label">
@@ -224,7 +224,7 @@
       <navigatorContent
            activeByDefault="true"
            contentProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavContentProvider"
-           icon="icons/camel_context_icon.png"
+           icon="icons/editor/camel_project_16x16.png"
            id="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent"
            labelProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavLabelProvider"
            name="Camel Context Model Content"

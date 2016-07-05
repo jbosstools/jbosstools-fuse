@@ -134,7 +134,7 @@
  
  <extension point="org.eclipse.wst.common.project.facet.ui.images">
     <image facet="jst.camel"
-           path="icons/camel_context_icon.png">
+           path="icons/camel_project_16x16.png">
     </image>
  </extension>
  

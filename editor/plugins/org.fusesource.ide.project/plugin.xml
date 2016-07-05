@@ -31,7 +31,7 @@
 	    	id="org.fusesource.ide.camelContent"
 	        activeByDefault="true"
 	        contentProvider="org.fusesource.ide.project.providers.CamelFilesContentProvider"
-	        icon="icons/fuse_icon_16c.png"
+	        icon="icons/camel_project_16x16.png"
 	        labelProvider="org.fusesource.ide.project.providers.CamelFilesLabelProvider"
 	        name="Camel Contexts"
 	        priority="highest">
@@ -147,6 +147,7 @@
          </visibility>
          <action
                class="org.fusesource.ide.project.AddCamelNatureAction"
+               icon="icons/camel_project_16x16.png"
                id="org.fusesource.ide.project.AddCamelNatureAction"
                label="%ConfigureMenu_AddCamelSupport"
                menubarPath="org.eclipse.ui.projectConfigure/additions">
@@ -171,6 +172,7 @@
          </visibility>
          <action
                class="org.fusesource.ide.project.RemoveCamelNatureAction"
+               icon="icons/camel_project_16x16.png"
                id="org.fusesource.ide.project.RemoveCamelNatureAction"
                label="%ConfigureMenu_RemoveCamelSupport"
                menubarPath="org.eclipse.ui.projectConfigure/additions">

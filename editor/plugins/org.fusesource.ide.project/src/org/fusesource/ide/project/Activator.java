@@ -66,7 +66,7 @@ public class Activator extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry reg) {
 		super.initializeImageRegistry(reg);
 
-		reg.put("camelFileIcon", imageDescriptorFromPlugin(getDefault().getBundle().getSymbolicName(), "icons/camel_context_icon.png"));
+		reg.put("camelFileIcon", imageDescriptorFromPlugin(getDefault().getBundle().getSymbolicName(), "icons/camel_project_16x16.png"));
 		reg.put("camelFolderIcon", imageDescriptorFromPlugin(getDefault().getBundle().getSymbolicName(), "icons/camel_route_folder.png"));
 	}
 	
