@@ -352,7 +352,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			getWizard().getContainer().run(false, false, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask("Resolving Apache Camel version...", IProgressMonitor.UNKNOWN);
+					monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
 					validateCamelVersion();
 					monitor.done();
 				}

@@ -230,7 +230,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			try {
 				return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1]));
 			} catch (IllegalArgumentException ex) {
-				// ignore
+				ProjectTemplatesActivator.pluginLog().logWarning("Tried to retrieve non existing version of Camel facet", ex);
 				return null;
 			}
 		}
