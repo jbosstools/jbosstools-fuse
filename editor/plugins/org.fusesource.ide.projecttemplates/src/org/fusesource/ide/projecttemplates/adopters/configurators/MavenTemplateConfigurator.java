@@ -20,9 +20,12 @@ import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
@@ -74,6 +77,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
+			waitAllJobsComplete(monitor);
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, monitor);
 			configurationManager.updateProjectConfiguration(project, monitor);
@@ -84,6 +88,17 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
         	monitor.done();
         }
 		return true;
+	}
+
+	private void waitAllJobsComplete(IProgressMonitor monitor) {
+		try {
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
+		} catch (OperationCanceledException | InterruptedException e) {
+			ProjectTemplatesActivator.pluginLog().logError(e);
+		}
 	}
 	
 	/**
