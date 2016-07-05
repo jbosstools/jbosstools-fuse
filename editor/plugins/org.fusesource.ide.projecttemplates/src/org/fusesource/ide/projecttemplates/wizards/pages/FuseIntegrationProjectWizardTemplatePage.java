@@ -13,8 +13,6 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -31,6 +29,7 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.ExcludeEmptyCategoriesFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.TemplateNameAndKeywordPatternFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
@@ -197,15 +196,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		list_templates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
 		list_templates.getViewer().setContentProvider(new TemplateContentProvider());
 		list_templates.getViewer().setLabelProvider(new TemplateLabelProvider());
-		list_templates.getViewer().addFilter(new ViewerFilter() {	
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (element instanceof CategoryItem) {
-					return !isEmptyCategory((CategoryItem)element);
-				}
-				return true;
-			}
-		});
+		list_templates.getViewer().addFilter(new ExcludeEmptyCategoriesFilter());
 		list_templates.getViewer().setInput(getTemplates());
 		list_templates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			/*
@@ -227,16 +218,6 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		return list_templates;
 	}
 	
-	private boolean isEmptyCategory(CategoryItem cat) {
-		boolean empty = cat.getTemplates().isEmpty();
-		if (empty) {
-			for (CategoryItem subCat : cat.getSubCategories()) {
-				if (!isEmptyCategory(subCat)) return false;
-			}
-		}
-		return empty;
-	}
-
 	private void updateTemplateInfo(TemplateItem template) {
 		if (template == null) {
 			btn_blueprintDSL.setEnabled(true);
