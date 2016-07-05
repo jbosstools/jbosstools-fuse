@@ -29,6 +29,7 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.ExcludeEmptyCategoriesFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.TemplateNameAndKeywordPatternFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
@@ -195,6 +196,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		list_templates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
 		list_templates.getViewer().setContentProvider(new TemplateContentProvider());
 		list_templates.getViewer().setLabelProvider(new TemplateLabelProvider());
+		list_templates.getViewer().addFilter(new ExcludeEmptyCategoriesFilter());
 		list_templates.getViewer().setInput(getTemplates());
 		list_templates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			/*
@@ -215,7 +217,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		});
 		return list_templates;
 	}
-
+	
 	private void updateTemplateInfo(TemplateItem template) {
 		if (template == null) {
 			btn_blueprintDSL.setEnabled(true);
