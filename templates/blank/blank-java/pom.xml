@@ -167,7 +167,7 @@
         </executions>
         <configuration>
           <instructions>
-            <Bundle-SymbolicName>camel-blueprint</Bundle-SymbolicName>
+            <Bundle-SymbolicName>camel-java</Bundle-SymbolicName>
             <Private-Package>com.mycompany.camel.*</Private-Package>
             <Import-Package>*</Import-Package>
           </instructions>
