@@ -46,6 +46,7 @@ import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.project.providers.CamelVirtualFolder;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
+import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 
@@ -214,13 +215,24 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			throws CoreException {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
-		installFacet(fproj, fpwc, camelFacet, getCamelFacetVersion(camelVersionString), config, monitor);
+		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
+		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion, config, monitor);
+		if (camelFacetVersion == null) {
+			// we need to switch dependency versions
+			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
+			del.execute(fproj.getProject(), camelFacet.getLatestVersion(), config, monitor);
+		}
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
 		String[] vparts = camelVersionString.split("\\.");
 		if (vparts.length>1) {
-			return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1]));
+			try {
+				return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1]));
+			} catch (IllegalArgumentException ex) {
+				ProjectTemplatesActivator.pluginLog().logWarning("Tried to retrieve non existing version of Camel facet", ex);
+				return null;
+			}
 		}
 		return camelFacet.getLatestVersion();
 	}
