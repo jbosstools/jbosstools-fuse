@@ -15,6 +15,7 @@ import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -58,22 +59,30 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-				
-				// go into is allowed if:
-				// - selected element is a route
-				// - selected container is the camel context
-				// - context contains more than one route
-				// go up is allowed if:
-				// - selected container is a route
-				// - selected container is the selected element
-				return 	(cme.getNodeTypeId().equals("route") && 
-						 CamelUtils.getDiagramEditor().getSelectedContainer() instanceof CamelContextElement &&
-						 cme.getCamelContext().getChildElements().size() > 1) ||
-						(CamelUtils.getDiagramEditor().getSelectedContainer().equals(cme) && 
-						 cme instanceof CamelRouteElement);
+				return isAllowedToExecute(cme);
 			}
 		}
 		return ret;
+	}
+	
+	private boolean isAllowedToExecute(AbstractCamelModelElement cme) {
+		// go into is allowed if:
+		// - selected element is a route
+		// - selected container is the camel context
+		// - context contains more than one route
+		// go up is allowed if:
+		// - selected container is a route
+		// - selected container is the selected element
+		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+		return 	(editor != null && 
+				 cme.getNodeTypeId().equals("route") && 
+				 editor.getSelectedContainer() instanceof CamelContextElement &&
+				 cme.getCamelContext().getChildElements().size() > 1) 
+				||
+				(editor != null && 
+				 editor.getSelectedContainer().equals(cme) && 
+				 cme instanceof CamelRouteElement);
+
 	}
 	
 	private boolean isGoInto(AbstractCamelModelElement cme) {
