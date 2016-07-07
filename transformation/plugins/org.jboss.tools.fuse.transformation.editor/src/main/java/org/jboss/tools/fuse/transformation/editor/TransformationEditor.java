@@ -373,11 +373,25 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             Util.ensureSourceFolderExists(javaProject, new MavenUtils().javaSourceFolder(), monitor);
             project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
             // Ensure build of Java classes has completed
-            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+            waitJavaBuild(monitor);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e); //$NON-NLS-1$
         }
     }
+
+	private void waitJavaBuild(IProgressMonitor monitor) throws InterruptedException {
+		try{
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+		} catch(InterruptedException ie){
+			//try to wait a second time
+			//ugly workaround to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
+			try{
+				Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+			} catch(InterruptedException ie2){
+				Activator.error(ie2);
+			}
+		}
+	}
 
     /**
      * {@inheritDoc}
