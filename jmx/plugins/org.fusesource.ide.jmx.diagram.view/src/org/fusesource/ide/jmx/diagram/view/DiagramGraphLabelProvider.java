@@ -27,14 +27,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.widgets.ZestStyles;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelEndpointMBean;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
+import org.fusesource.ide.jmx.camel.navigator.EndpointNode;
+import org.fusesource.ide.jmx.camel.navigator.ProcessorNode;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
 import org.jboss.tools.jmx.core.HasName;
@@ -73,7 +77,7 @@ ISelectionChangedListener {
 
 		ISelection selection = event.getSelection();
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			selectedConnections = new HashSet<AbstractCamelModelElement>();
+			selectedConnections = new HashSet<>();
 			for (Object o : ((IStructuredSelection) selection).toList()) {
 				if (o instanceof AbstractCamelModelElement) {
 					AbstractCamelModelElement node = (AbstractCamelModelElement) o;
@@ -153,21 +157,16 @@ ISelectionChangedListener {
 		try {
 			if (isRouteNode(element)) {
 				AbstractCamelModelElement node = (AbstractCamelModelElement) element;
-				String label = node.getDisplayText(useNodeIdForLabel);
-				return label;
+				return node.getDisplayText(useNodeIdForLabel);
 			} else if (element instanceof HasName) {
 				HasName h = (HasName) element;
 				return h.getName();
 			} else if (element instanceof CamelElementConnection) {
-				CamelElementConnection flow = (CamelElementConnection) element;
-				INodeStatistics stats = getStatsFor(flow);
-				if (stats != null) {
-					return statsLabel(stats);
-				} else {
-					return null;
-				}
+				return getText((CamelElementConnection) element);
 			} else if (element instanceof Node){
 				return Strings.getOrElse(element, null);
+			} else if(element instanceof EntityConnectionData) {
+				return getText((EntityConnectionData)element);
 			} else {
 				// TODO use a strategy to display some label text...
 				// e.g. timing stuff??
@@ -175,6 +174,34 @@ ISelectionChangedListener {
 			}
 		} catch (Exception e) {
 			JMXDiagramViewActivator.getLogger().warning("Caught exception trying to get label: " + e, e);
+			return null;
+		}
+	}
+
+	private String getText(EntityConnectionData element) {
+		String nodeId = getNodeId(element);
+		if(nodeId != null){
+			INodeStatistics stats = getStatsFor(nodeId);
+			if (stats != null) {
+				return statsLabel(stats);
+			}
+		}
+		return null;
+	}
+
+	private String getNodeId(EntityConnectionData element) {
+		Object dest = element.dest;
+		if(dest instanceof ProcessorNode){
+			return ((ProcessorNode) dest).getNodeId();
+		}
+		return null;
+	}
+
+	private String getText(CamelElementConnection flow) {
+		INodeStatistics stats = getStatsFor(flow.getId());
+		if (stats != null) {
+			return statsLabel(stats);
+		} else {
 			return null;
 		}
 	}
@@ -198,25 +225,35 @@ ISelectionChangedListener {
 			return new Label(label);
 		} else if (entity instanceof CamelElementConnection) {
 			CamelElementConnection flow = (CamelElementConnection) entity;
-			INodeStatistics stats = getStatsFor(flow);
-			if (stats != null) {
-				return statsToolTip(stats);
-			} else {
-				return null;
+			if(flow.getTarget() != null){
+				INodeStatistics stats = getStatsFor(flow.getTarget().getId());
+				if (stats != null) {
+					return statsToolTip(stats);
+				}
 			}
+		}  else if(entity instanceof EntityConnectionData) {
+			return getTooltip((EntityConnectionData)entity);
 		} else if (entity instanceof Node) {
 		}
 		return null;
 	}
-
-	protected INodeStatistics getStatsFor(CamelElementConnection flow) {
-		NodeStatisticsContainer traceExchangeList = view.getNodeStatisticsContainer();
-		INodeStatistics stats = null;
-		AbstractCamelModelElement node = flow.getTarget();
-		if (traceExchangeList != null && node != null) {
-			stats = traceExchangeList.getNodeStats(node.getId());
+	
+	private IFigure getTooltip(EntityConnectionData entity){
+		INodeStatistics stats = getStatsFor(getNodeId(entity));
+		if (stats != null) {
+			return statsToolTip(stats);
+		} else {
+			return null;
 		}
-		return stats;
+	}
+
+	protected INodeStatistics getStatsFor(String nodeId) {
+		NodeStatisticsContainer traceExchangeList = view.getNodeStatisticsContainer();
+		if (traceExchangeList != null) {
+			return traceExchangeList.getNodeStats(nodeId);
+		} else {
+			return null;
+		}
 	}
 
 	protected String statsLabel(INodeStatistics stats) {
