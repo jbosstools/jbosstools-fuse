@@ -15,6 +15,7 @@ import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -58,27 +59,33 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-				
-				// go into is allowed if:
-				// - selected element is a route
-				// - selected container is the camel context
-				// - context contains more than one route
-				// go up is allowed if:
-				// - selected container is a route
-				// - selected container is the selected element
-				return 	(cme.getNodeTypeId().equals("route") && 
-						 CamelUtils.getDiagramEditor().getSelectedContainer() instanceof CamelContextElement &&
-						 cme.getCamelContext().getChildElements().size() > 1) ||
-						(CamelUtils.getDiagramEditor().getSelectedContainer().equals(cme) && 
-						 cme instanceof CamelRouteElement);
+				return isAllowedToExecute(cme);
 			}
 		}
 		return ret;
 	}
 	
-	private boolean isGoInto(AbstractCamelModelElement cme) {
-		return 	cme.getNodeTypeId().equals("route") && 
-				CamelUtils.getDiagramEditor().getSelectedContainer() instanceof CamelContextElement &&
+	private boolean isAllowedToExecute(AbstractCamelModelElement cme) {
+		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+		return 	editor != null && 
+				(isGoInto(cme, editor) || isGoUp(cme, editor)); 
+	}
+	
+	private boolean isGoUp(AbstractCamelModelElement cme, CamelDesignEditor editor) {
+		// go up is allowed if:
+		// - selected container is a route
+		// - selected container is the selected element
+		return  editor.getSelectedContainer().equals(cme) && 
+				cme instanceof CamelRouteElement;
+	}
+	
+	private boolean isGoInto(AbstractCamelModelElement cme, CamelDesignEditor editor) {
+		// go into is allowed if:
+		// - selected element is a route
+		// - selected container is the camel context
+		// - context contains more than one route
+		return 	cme.getNodeTypeId().equalsIgnoreCase("route") && 
+				editor.getSelectedContainer() instanceof CamelContextElement &&
 				cme.getCamelContext().getChildElements().size() > 1;
 	}
 	
@@ -92,10 +99,11 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 	 	   	if(bo instanceof AbstractCamelModelElement) {
 	 	   		AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-	 	   		if (isGoInto(cme)) {
-	 	   			CamelUtils.getDiagramEditor().setSelectedContainer(cme);	
+	 	   		CamelDesignEditor editor = CamelUtils.getDiagramEditor();
+	 	   		if (isGoInto(cme, editor)) {
+	 	   			editor.setSelectedContainer(cme);	
 	 	   		} else {
-	 	   			CamelUtils.getDiagramEditor().setSelectedContainer(cme.getCamelContext());
+	 	   			editor.setSelectedContainer(cme.getCamelContext());
 	 	   		}
 	 	   		
 	 	   	}
@@ -111,7 +119,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(lastPE);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-				if (!isGoInto(cme)) {
+				if (!isGoInto(cme, CamelUtils.getDiagramEditor())) {
 					return "Show Camel Context";
 				} 				 
 			}
@@ -128,7 +136,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(lastPE);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-				if (!isGoInto(cme)) {
+				if (!isGoInto(cme, CamelUtils.getDiagramEditor())) {
 					return "Show the whole Camel Context";
 				} 				 
 			}
@@ -145,7 +153,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(lastPE);
 			if (bo instanceof AbstractCamelModelElement) {
 				AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-				if (!isGoInto(cme)) {
+				if (!isGoInto(cme, CamelUtils.getDiagramEditor())) {
 					return ImageProvider.IMG_UP_NAV;
 				} 				 
 			}
