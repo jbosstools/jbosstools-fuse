@@ -12,9 +12,10 @@ package org.fusesource.ide.camel.editor.integration.preferences;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import org.eclipse.jface.preference.ListEditor;
+import java.util.List;
+
 import org.eclipse.swt.widgets.Shell;
-import org.fusesource.ide.camel.editor.preferences.UserLabelsListEditor;
+import org.fusesource.ide.camel.editor.preferences.PreferredLabelEditor;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 import org.junit.Before;
@@ -26,10 +27,10 @@ import org.junit.Test;
  * @author Andrej Podhradsky (apodhrad@redhat.com)
  *
  */
-public class UserLabelsListEditorTestIT {
+public class PreferredLabelEditorTestIT {
 
 	private static Shell shell;
-	private ListEditor listEditor;
+	private PreferredLabelEditor editor;
 
 	@BeforeClass
 	public static void createShell() {
@@ -38,44 +39,44 @@ public class UserLabelsListEditorTestIT {
 
 	@Before
 	public void createListEditor() {
-		listEditor = new UserLabelsListEditor(PreferencesConstants.EDITOR_USER_LABELS, "", shell);
-		listEditor.setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
+		editor = new PreferredLabelEditor(PreferencesConstants.EDITOR_PREFERRED_LABEL, "", shell);
+		editor.setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
 	}
 
 	@Test
 	public void testParsingEmptyLabel() {
 		setComponentLabels("");
-		listEditor.load();
-		assertItems(listEditor);
+		editor.load();
+		assertItems(editor);
 	}
 
 	@Test
 	public void testParsingOneLabel() {
 		setComponentLabels("abc.xyz");
-		listEditor.load();
-		assertItems(listEditor, "abc.xyz");
+		editor.load();
+		assertItems(editor, "abc.xyz");
 	}
 
 	@Test
 	public void testParsingMoreLabels() {
 		setComponentLabels("abc.xyz;abc2.xyz2;");
-		listEditor.load();
-		assertItems(listEditor, "abc.xyz", "abc2.xyz2");
+		editor.load();
+		assertItems(editor, "abc.xyz", "abc2.xyz2");
 	}
 
 	@Test
 	public void testParsingIncorrectLabels() {
 		setComponentLabels("abc.xyz;abc2xyz2;");
-		listEditor.load();
-		assertItems(listEditor, "abc.xyz", "abc2xyz2");
+		editor.load();
+		assertItems(editor, "abc.xyz", "abc2xyz2.");
 	}
 
-	private static void assertItems(ListEditor listEditor, String... expectedItems) {
-		String[] actualItems = listEditor.getListControl(shell).getItems();
-		assertArrayEquals(expectedItems, actualItems);
+	private static void assertItems(PreferredLabelEditor editor, String... expectedItems) {
+		List<String> actualItems = editor.getPreferredLabels();
+		assertArrayEquals(expectedItems, actualItems.toArray(new String[actualItems.size()]));
 	}
 
 	private static void setComponentLabels(String componentLabels) {
-		PreferenceManager.getInstance().savePreference(PreferencesConstants.EDITOR_USER_LABELS, componentLabels);
+		PreferenceManager.getInstance().savePreference(PreferencesConstants.EDITOR_PREFERRED_LABEL, componentLabels);
 	}
 }

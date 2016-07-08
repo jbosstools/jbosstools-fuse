@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.model;
 
-import static org.fusesource.ide.preferences.PreferencesConstants.EDITOR_USER_LABELS;
+import static org.fusesource.ide.preferences.PreferencesConstants.EDITOR_PREFERRED_LABEL;
 import static org.junit.Assert.assertEquals;
 
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -31,7 +31,7 @@ public class CamelBasicModelElementTestIT {
 	@Before
 	@After
 	public void cleanUserLabelsPreference() {
-		PreferenceManager.getInstance().savePreference(EDITOR_USER_LABELS, "");
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "");
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class CamelBasicModelElementTestIT {
 
 	@Test
 	public void testDisplayingUserText() {
-		PreferenceManager.getInstance().savePreference(EDITOR_USER_LABELS, "log.message");
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "log.message");
 		assertEquals("Log ${body}", simpleLog().getDisplayText());
 	}
 

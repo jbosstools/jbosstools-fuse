@@ -370,9 +370,9 @@ public abstract class AbstractCamelModelElement {
 		singlePropertyDisplay.put(WHEN_NODE_NAME, "expression");
 
 		// User defined labels
-		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_USER_LABELS)) {
+		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_PREFERRED_LABEL)) {
 			String userProperties = PreferenceManager.getInstance()
-					.loadPreferenceAsString(PreferencesConstants.EDITOR_USER_LABELS);
+					.loadPreferenceAsString(PreferencesConstants.EDITOR_PREFERRED_LABEL);
 			String[] userLabels = userProperties.split(USER_LABEL_DELIMETER);
 			for (String userLabel : userLabels) {
 				if (userLabel.matches(USER_LABEL_REGEX)) {

@@ -46,7 +46,7 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	private ComboFieldEditor defaultLanguageEditor;
 	private ComboFieldEditor layoutOrientationEditor;
 	private BooleanFieldEditor gridVisibilityEditor;
-	private UserLabelsListEditor userLabelsEditor;
+	private PreferredLabelEditor preferredLabelEditor;
 
 	/**
 	 * 
@@ -89,12 +89,12 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(this.gridVisibilityEditor);
 		
-		this.userLabelsEditor = new UserLabelsListEditor(
-				PreferencesConstants.EDITOR_USER_LABELS, 
+		this.preferredLabelEditor = new PreferredLabelEditor(
+				PreferencesConstants.EDITOR_PREFERRED_LABEL, 
 				UIMessages.editorPreferencePageUserLabels,
 				getFieldEditorParent());
 
-		addField(userLabelsEditor);
+		addField(preferredLabelEditor);
 		
 		
 		// Sets up the context sensitive help for this page
