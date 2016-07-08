@@ -1568,7 +1568,7 @@ public abstract class AbstractCamelModelElement {
 	public CamelContextElement getCamelContext() {
 		if (this.context == null) {
 			AbstractCamelModelElement tmp = this;
-			while (tmp.getParent() != null && tmp.getParent() instanceof CamelContextElement == false) {
+			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelContextElement)) {
 				tmp = tmp.getParent();
 			}
 			if (tmp.getParent() != null && tmp.getParent() instanceof CamelContextElement) {
@@ -1584,10 +1584,9 @@ public abstract class AbstractCamelModelElement {
 	 * @return a random id
 	 */
 	public String getNewID() {
-		String answer = null;
 		int i = 1;
-		answer = String.format("_%s%d", getNodeTypeId(), i++);
-		while (getCamelContext().doesNewIDExist(answer) == false) {
+		String answer = String.format("_%s%d", getNodeTypeId(), i++);
+		while (!getCamelContext().isNewIDAvailable(answer)) {
 			answer = String.format("_%s%d", getNodeTypeId(), i++);
 		}
 		return answer;
@@ -1617,16 +1616,11 @@ public abstract class AbstractCamelModelElement {
 	 * @param newId
 	 * @return
 	 */
-	public boolean doesNewIDExist(String newId) {
-		if (newId == null || newId.trim().length() < 1) {
+	public boolean isNewIDAvailable(String newId) {
+		if (newId == null || newId.trim().isEmpty()) {
 			return false;
 		}
-
-		if (getCamelContext().findNode(newId) != null) {
-			return false;
-		}
-
-		return true;
+		return getCamelContext().findNode(newId) == null;
 	}
 
 	/**

@@ -13,6 +13,8 @@ package org.fusesource.ide.project.providers;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -33,16 +35,16 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.project.Activator;
 
 public class CamelVirtualFolder implements ContextMenuProvider {
 	
 	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
-	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
 	
 	private IProject project;
-	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
+	private Set<IResource> camelFiles = new HashSet<IResource>();
 
 	/**
 	 * 
@@ -63,52 +65,16 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 		return "Camel Contexts";
 	}
 
-	public void addCamelFile(IResource file) {
-		if (!this.camelFiles.contains(file)) {
-			this.camelFiles.add(file);
-		}
-	}
-
 	/**
 	 * @return the camelFiles
 	 */
-	public ArrayList<IResource> getCamelFiles() {
+	public Set<IResource> getCamelFiles() {
 		return this.camelFiles;
 	}
 
 	public void populateChildren() {
 		if (project != null) {
-			try {
-				findFiles(project);
-			} catch (CoreException ex) {
-				// ignore
-			}
-		}
-	}
-
-	private void findFiles(IResource resource) throws CoreException {
-		if (resource instanceof IContainer ) {
-			IResource[] children = ((IContainer)resource).members();
-			for (IResource f : children) {
-				if (f instanceof IContainer) {
-					// ignore the target folder
-					if (f.getName().equalsIgnoreCase("target")
-							&& f.getParent().getName().equalsIgnoreCase(project.getName()))
-						continue;
-					findFiles(f);
-				} else {
-					IFile ifile = (IFile)f;
-					if (ifile != null) {
-						if (ifile.getContentDescription() != null && 
-							ifile.getContentDescription()
-							  	 .getContentType()
-								 .getId()
-								 .equals(FUSE_CAMEL_CONTENT_TYPE)) {
-							addCamelFile(ifile);
-						}
-					}
-				}
-			}
+			camelFiles.addAll(new CamelFilesFinder().findFiles(project));
 		}
 	}
 
@@ -116,9 +82,6 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 
 		private IProject _project;
 
-		/**
-		 * 
-		 */
 		public CamelVirtualFolderListener(IProject project) {
 			this._project = project;
 		}
@@ -139,9 +102,6 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 
 		private IProject _project;
 
-		/**
-		 * 
-		 */
 		public DeltaPrinter(IProject project) {
 			this._project = project;
 		}
@@ -151,7 +111,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			IResource resource = delta.getResource();
 
 			if (resource.getProject() != null
-					&& !resource.getProject().equals(project)) {
+					&& !resource.getProject().equals(_project)) {
 				// we are not interested in changes of other projects
 				return true;
 			}
@@ -168,10 +128,8 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 				// a resource was added, check if we need to add it the the
 				// camel virtual folder too
 				try {
-					if (resource != null
-							&& resource instanceof IFile && ((IFile) resource).getContentDescription() != null
-							&& ((IFile) resource).getContentDescription().getContentType().getId().equals(FUSE_CAMEL_CONTENT_TYPE)) {
-						addCamelFile(resource);
+					if (resource instanceof IFile && new CamelFilesFinder().isFuseCamelContentType((IFile) resource)) {
+						camelFiles.add(resource);
 					}
 				} catch (CoreException ex) {
 					// ignore file
@@ -180,9 +138,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			case IResourceDelta.REMOVED:
 				// a resource has been removed, check if we need to remove
 				// it from the virtual camel folder
-				if (camelFiles.contains(resource)) {
-					camelFiles.remove(resource);
-				}
+				camelFiles.remove(resource);
 				break;
 			}
 			return true; // visit the children
@@ -233,8 +189,8 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 							   // if there are already other camel context files we use the path the first best is stored under,
 							   // otherwise we use the project main folder
 							   IStructuredSelection sel = null;
-							   if (getCamelFiles().size()>0) {
-								   sel = new StructuredSelection(getCamelFiles().get(0).getParent());
+							   if (!getCamelFiles().isEmpty()) {
+								   sel = new StructuredSelection(getCamelFiles().iterator().next().getParent());
 							   } else {
 								   sel = new StructuredSelection(getProject());
 							   }
