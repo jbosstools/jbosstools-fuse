@@ -169,17 +169,20 @@ public class UIMessages extends NLS {
 	public static String loadingCamelFile;
 	public static String pending;
 
-	/* User Labels */
-	public static String userLabels_newDialogTitle;
-	public static String userLabels_editDialogTitle;
-	public static String userLabels_message;
-	public static String userLabels_errorMessage;
-	public static String userLabels_errorMessageEmpty;
-	public static String userLabels_errorMessageCharacter;
-	public static String userLabels_errorMessageAttribute;
-	public static String userLabels_errorMessageDuplicate;
-	public static String userLabels_errorMessageMoreCommas;
-	public static String userLabels_editButtonText;
+	/* Preferred Labels */	
+	public static String preferredLabels_newDialogTitle;
+	public static String preferredLabels_editDialogTitle;
+	public static String preferredLabels_title;
+	public static String preferredLabels_component;
+	public static String preferredLabels_parameter;
+	public static String preferredLabels_errorMessage;
+	public static String preferredLabels_errorMessageEmptyComponent;
+	public static String preferredLabels_errorMessageEmptyParameter;
+	public static String preferredLabels_errorMessageWrongCharacter;
+	public static String preferredLabels_errorMessageDuplicateComponent;
+	public static String preferredLabels_addButtonText;
+	public static String preferredLabels_editButtonText;
+	public static String preferredLabels_removeButtonText;
 
 	static {
 		// initialize resource bundle

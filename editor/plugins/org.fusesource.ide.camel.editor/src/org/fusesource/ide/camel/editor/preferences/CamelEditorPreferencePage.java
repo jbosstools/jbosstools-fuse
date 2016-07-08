@@ -76,7 +76,7 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(gridVisibilityEditor);
 
-		UserLabelsListEditor userLabelsEditor = new UserLabelsListEditor(PreferencesConstants.EDITOR_USER_LABELS,
+		PreferredLabelEditor userLabelsEditor = new PreferredLabelEditor(PreferencesConstants.EDITOR_PREFERRED_LABEL,
 				UIMessages.editorPreferencePageUserLabels, getFieldEditorParent());
 
 		addField(userLabelsEditor);
