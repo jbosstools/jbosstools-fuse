@@ -22,9 +22,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
@@ -136,6 +139,14 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		if (!isCamelConfigurable(mavenProject, project)) {
 			return;
 		}
+		
+		// pause to make sure all builds are done
+        try {
+            waitJob();
+        } catch (OperationCanceledException | InterruptedException e) {
+            ProjectTemplatesActivator.pluginLog().logError(e);
+            return;
+        }
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		
 		if (fproj == null) {
@@ -145,7 +156,15 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			fproj = ProjectFacetsManager.create(project);
 		}
 		
-		if (fproj != null) {
+        // pause again to make sure all builds are done
+        try {
+            waitJob();
+        } catch (OperationCanceledException | InterruptedException e) {
+            ProjectTemplatesActivator.pluginLog().logError(e);
+            return;
+        }
+
+        if (fproj != null) {
 			installDefaultFacets(project, mavenProject, fproj, monitor);
 		}
 	}
@@ -190,7 +209,15 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 
 		if (found[0] == false) {
-			// check for java dsl
+	        // pause to make sure all builds are done
+            try {
+                waitJob();
+            } catch (OperationCanceledException | InterruptedException e) {
+                ProjectTemplatesActivator.pluginLog().logError(e);
+                return !found[0];
+            }
+		    
+		    // check for java dsl
 			IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor());
 			if (f != null) {
 				// java dsl found
@@ -200,6 +227,20 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 		return found[0];
 	}
+	
+	   private static void waitJob() throws OperationCanceledException, InterruptedException {
+	        try {
+	            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+	            Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
+	            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, new NullProgressMonitor());
+	            Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
+	        } catch (InterruptedException e) {
+	            // Workaround to bug
+	            // https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
+	            waitJob();
+	        }
+	    }
+
 
 	private String getCamelVersion(IProject project, MavenProject mavenProject) throws CoreException {
 		for (Dependency dep : mavenProject.getDependencies()) {
