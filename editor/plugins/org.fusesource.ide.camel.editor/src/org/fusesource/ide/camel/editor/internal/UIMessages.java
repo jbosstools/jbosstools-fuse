@@ -174,7 +174,9 @@ public class UIMessages extends NLS {
 	public static String preferredLabels_editDialogTitle;
 	public static String preferredLabels_title;
 	public static String preferredLabels_component;
+	public static String preferredLabels_componentHeader;
 	public static String preferredLabels_parameter;
+	public static String preferredLabels_parameterHeader;
 	public static String preferredLabels_errorMessage;
 	public static String preferredLabels_errorMessageEmptyComponent;
 	public static String preferredLabels_errorMessageEmptyParameter;
