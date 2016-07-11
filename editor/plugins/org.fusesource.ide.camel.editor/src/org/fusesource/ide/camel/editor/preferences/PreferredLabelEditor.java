@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preferences;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -250,7 +250,7 @@ public class PreferredLabelEditor extends FieldEditor {
 	}
 
 	protected String[] getColumnHeaders() {
-		return new String[] { "Component", "Parameter" };
+		return new String[] { UIMessages.preferredLabels_componentHeader, UIMessages.preferredLabels_parameterHeader };
 	}
 
 	/**
@@ -389,15 +389,12 @@ public class PreferredLabelEditor extends FieldEditor {
 	}
 
 	public List<String> getPreferredLabels() {
-		List<String> preferredLabels = new ArrayList<>();
-		Stream.of(table.getItems()).map(row -> row.getText(0) + "." + row.getText(1)).forEach(preferredLabels::add);
-		return preferredLabels;
+		return Stream.of(table.getItems()).map(row -> row.getText(0) + "." + row.getText(1))
+				.collect(Collectors.toList());
 	}
-	
+
 	public String[] getComponents() {
-		List<String> components = new ArrayList<>();
-		Stream.of(table.getItems()).map(row -> row.getText(0)).forEach(components::add);
-		return components.toArray(new String[components.size()]);
+		return Stream.of(table.getItems()).map(row -> row.getText(0)).toArray(String[]::new);
 	}
 
 	@Override
