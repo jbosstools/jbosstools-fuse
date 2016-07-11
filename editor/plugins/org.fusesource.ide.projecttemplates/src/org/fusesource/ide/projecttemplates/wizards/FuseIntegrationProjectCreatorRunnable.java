@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -296,6 +297,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @return	the routebuilder class or null
 	 */
 	public static IFile findJavaDSLRouteBuilderClass(IProject project, IProgressMonitor monitor) {
+		try {
+			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		} catch (CoreException e) {
+			ProjectTemplatesActivator.pluginLog().logError(e);
+		}
 		try {
 			waitJob();
 		} catch (OperationCanceledException | InterruptedException e) {

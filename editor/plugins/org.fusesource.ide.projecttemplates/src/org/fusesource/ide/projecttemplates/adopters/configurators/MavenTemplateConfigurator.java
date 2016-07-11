@@ -133,14 +133,12 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		    MavenPlugin.getMaven().writeModel(m2m, os);
 			IFile pomIFile2 = project.getProject().getFile("pom.xml");
 			if (pomIFile2 != null) {
-				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		    }
 			os.close();
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
-		} finally {
-			monitor.done();
 		}
 		return true;
 	}
