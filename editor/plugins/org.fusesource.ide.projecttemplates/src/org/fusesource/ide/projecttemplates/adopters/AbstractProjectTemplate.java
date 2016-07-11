@@ -11,12 +11,16 @@
 package org.fusesource.ide.projecttemplates.adopters;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -49,14 +53,23 @@ public abstract class AbstractProjectTemplate {
 		boolean ok = getCreator(projectMetaData).create(project, projectMetaData);
 		// then we configure the project
 		if (ok) {
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			refreshProjectSync(project, monitor);
 			ok = getConfigurator().configure(project, projectMetaData, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			refreshProjectSync(project, monitor);
 			project.getFolder("bin").delete(true, monitor);
 			project.getFolder("build").delete(true, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			refreshProjectSync(project, monitor);
 		}
 		return ok;
+	}
+
+	private void refreshProjectSync(IProject project, IProgressMonitor monitor) throws CoreException {
+		project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+		try {
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
+		} catch (OperationCanceledException | InterruptedException e) {
+			ProjectTemplatesActivator.pluginLog().logError(e);
+		}
 	}
 	
 	/**
