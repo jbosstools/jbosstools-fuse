@@ -10,21 +10,28 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preferences;
 
-import java.util.ArrayList;
+import static org.fusesource.ide.camel.editor.provider.ProviderHelper.getCategoryFromEip;
+import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
+import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.getLatestCamelVersion;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -32,6 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.internal.CamelService;
 
@@ -45,11 +53,13 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	private String component;
 	private String parameter;
 
-	private Combo componentCombo;
-	private Combo parameterCombo;
+	private ComboViewer componentCombo;
+	private ComboViewer parameterCombo;
 
 	private IInputValidator componentValidator;
 	private IInputValidator parameterValidator;
+
+	private CamelModel camelModel;
 
 	public PreferredLabelDialog(Shell parentShell) {
 		super(parentShell);
@@ -79,14 +89,26 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 		this.parameterValidator = parameterValidator;
 	}
 
+	protected CamelModel getCamelModel() {
+		if (camelModel == null) {
+			camelModel = new CamelService().getCamelModel(getLatestCamelVersion(), RUNTIME_PROVIDER_KARAF);
+		}
+		return camelModel;
+	}
+
+	protected List<Eip> getComponents() {
+		return getCamelModel().getEips().stream().filter(eip -> !"NONE".equals(getCategoryFromEip(eip)))
+				.collect(Collectors.toList());
+	}
+
 	public void validate() {
 		if (componentValidator != null) {
-			if (setWarning(componentValidator.isValid(componentCombo.getText()))) {
+			if (setWarning(componentValidator.isValid(componentCombo.getCombo().getText()))) {
 				return;
 			}
 		}
 		if (parameterValidator != null) {
-			setWarning(parameterValidator.isValid(parameterCombo.getText()));
+			setWarning(parameterValidator.isValid(parameterCombo.getCombo().getText()));
 		}
 	}
 
@@ -105,6 +127,32 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		setTitle(UIMessages.preferredLabels_title);
+
+		componentCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ISelection selection = event.getSelection();
+				if (selection instanceof StructuredSelection) {
+					Object selectedObject = ((StructuredSelection) selection).getFirstElement();
+					if (selectedObject instanceof Eip) {
+						parameterCombo.setInput(((Eip) selectedObject).getParameters());
+					}
+				}
+			}
+		});
+
+		if (component != null && !component.isEmpty()) {
+			Eip eip = getCamelModel().getEip(component);
+			componentCombo.getCombo().setEnabled(false);
+			componentCombo.setInput(new Eip[] { eip });
+			componentCombo.setSelection(new StructuredSelection(eip));
+			if (parameter != null && !parameter.isEmpty()) {
+				parameterCombo.setSelection(new StructuredSelection(eip.getParameter(parameter)));
+			}
+		} else {
+			componentCombo.setInput(getComponents());
+		}
+
 		validate();
 	}
 
@@ -116,70 +164,43 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 
-		createComponentComboBox(container);
-		createParameterCombo(container);
-
-		CamelModel model = new CamelService().getCamelModel(CamelCatalogUtils.getLatestCamelVersion(), CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
-		List<String> componentNames = new ArrayList<String>();
-		model.getEips().stream().map(eip -> eip.getName()).sorted().forEach(componentNames::add);
-
-		componentCombo.setItems(componentNames.toArray(new String[componentNames.size()]));
-		componentCombo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				setParameterItems(model);
-			}
-		});
+		componentCombo = createComboViewer(container, UIMessages.preferredLabels_component);
+		parameterCombo = createComboViewer(container, UIMessages.preferredLabels_parameter);
 
 		return area;
 	}
 
-	private void createComponentComboBox(Composite container) {
+	private ComboViewer createComboViewer(Composite container, String label) {
 		Label lbtFirstName = new Label(container, SWT.NONE);
-		lbtFirstName.setText(UIMessages.preferredLabels_component);
+		lbtFirstName.setText(label);
 
 		GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		gd.horizontalAlignment = GridData.FILL;
 
-		componentCombo = new Combo(container, SWT.BORDER);
-		componentCombo.setLayoutData(gd);
-		componentCombo.addModifyListener(new ModifyListener() {
+		ComboViewer comboViewer = new ComboViewer(container, SWT.BORDER | SWT.READ_ONLY);
+		comboViewer.getCombo().setLayoutData(gd);
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setSorter(new ViewerSorter());
+		comboViewer.setLabelProvider(new LabelProvider() {
 			@Override
-			public void modifyText(ModifyEvent event) {
+			public String getText(Object element) {
+				if (element instanceof Eip) {
+					return ((Eip) element).getName();
+				}
+				if (element instanceof Parameter) {
+					return ((Parameter) element).getName();
+				}
+				return element.toString();
+			}
+		});
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
 				validate();
 			}
 		});
-
-	}
-
-	private void createParameterCombo(Composite container) {
-		Label lbtLastName = new Label(container, SWT.NONE);
-		lbtLastName.setText(UIMessages.preferredLabels_parameter);
-
-		GridData gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalAlignment = GridData.FILL;
-		parameterCombo = new Combo(container, SWT.BORDER);
-		parameterCombo.setLayoutData(gd);
-		parameterCombo.setEnabled(getComponent() != null);
-		parameterCombo.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent event) {
-				validate();
-			}
-		});
-	}
-
-	private void setParameterItems(CamelModel model) {
-		String componentName = componentCombo.getText();
-		List<String> paramNames = new ArrayList<String>();
-		if (!componentName.isEmpty()) {
-			List<Parameter> params = model.getEip(componentName).getParameters();
-			params.stream().map(p -> p.getName()).sorted().forEach(paramNames::add);
-		}
-		parameterCombo.setEnabled(!paramNames.isEmpty());
-		parameterCombo.setItems(paramNames.toArray(new String[paramNames.size()]));
+		return comboViewer;
 	}
 
 	@Override
@@ -198,8 +219,8 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	}
 
 	private void saveInput() {
-		component = componentCombo.getText();
-		parameter = parameterCombo.getText();
+		component = componentCombo.getCombo().getText();
+		parameter = parameterCombo.getCombo().getText();
 	}
 
 	@Override
