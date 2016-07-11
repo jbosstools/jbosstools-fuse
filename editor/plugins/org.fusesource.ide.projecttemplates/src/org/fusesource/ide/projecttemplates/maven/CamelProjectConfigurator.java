@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
@@ -99,7 +100,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			Iterator<IProjectFacetVersion> itFacet = facets.iterator();
 			while (itFacet.hasNext()) {
 				IProjectFacetVersion f = itFacet.next();
-				if (f.getProjectFacet().getId().equals(ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET)) {
+				if (ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET.equals(f.getProjectFacet().getId())) {
 					return true;
 				}
 			}
@@ -110,7 +111,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private boolean isCamelNatureEnabled(IProject project) throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
-		return Arrays.stream(ids).anyMatch(s -> RiderProjectNature.NATURE_ID.equals(s));
+		return Arrays.stream(ids).anyMatch(RiderProjectNature.NATURE_ID::equals);
 	}
 	
 	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor) throws CoreException {
@@ -133,7 +134,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 
-		if (!isCamelConfigurable(mavenProject, project)) {
+		if (!isCamelConfigurable(mavenProject, project, monitor)) {
 			return;
 		}
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -166,7 +167,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 	}
 	
-	private boolean isCamelConfigurable(MavenProject mavenProject, IProject project) {
+	private boolean isCamelConfigurable(MavenProject mavenProject, IProject project, IProgressMonitor monitor) {
 		// Look for a file that has parent "blueprint" and grandparent "OSGI-INF" or
 		// spring in folder META-INF
 		final Boolean[] found = new Boolean[1];
@@ -174,24 +175,28 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 		try {
 			project.accept(new IResourceVisitor() {
+				@Override
 				public boolean visit(IResource resource) throws CoreException {
-					if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("blueprint")
-							&& resource.getParent().getParent().getName().equals("OSGI-INF")) {
+					if (isMatchingPath(resource, "blueprint", "OSGI-INF")
+							|| isMatchingPath(resource, "spring", "META-INF")) {
 						found[0] = true;
-					} else if (resource.getName().endsWith(".xml") && resource.getParent().getName().equals("spring")
-							&& resource.getParent().getParent().getName().equals("META-INF")) {
-						found[0] = true;
-					}					
+					}				
 					return !found[0];
+				}
+
+				private boolean isMatchingPath(IResource resource, String parentName, String grandParentName) {
+					return resource.getName().endsWith(".xml")
+							&& resource.getParent().getName().equals(parentName)
+							&& resource.getParent().getParent().getName().equals(grandParentName);
 				}
 			});
 		} catch (CoreException ce) {
 			ProjectTemplatesActivator.pluginLog().logError(ce);
 		}
 
-		if (found[0] == false) {
+		if (!found[0]) {
 			// check for java dsl
-			IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor());
+			IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, monitor);
 			if (f != null) {
 				// java dsl found
 				found[0] = true;
@@ -258,8 +263,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				} else {
 					IFile ifile = (IFile) f;
 					if (ifile != null) {
-						if (ifile.getContentDescription() != null && ifile.getContentDescription().getContentType()
-								.getId().equals(CamelFilesFinder.FUSE_CAMEL_CONTENT_TYPE)) {
+						IContentDescription contentDescription = ifile.getContentDescription();
+						if (contentDescription != null
+								&& CamelFilesFinder.FUSE_CAMEL_CONTENT_TYPE.equals(contentDescription.getContentType().getId())) {
 							return true;
 						}
 					}
