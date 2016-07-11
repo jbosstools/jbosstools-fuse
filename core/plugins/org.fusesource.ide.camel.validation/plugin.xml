@@ -12,9 +12,6 @@
             markerId="JBossFuseToolingValidationProblem">
          <include>
             <rules>
-               <fileext
-                     ext="xml">
-               </fileext>
                <contentType
                      exactMatch="false"
                      id="org.fusesource.ide.camel.editor.camelContentType">
