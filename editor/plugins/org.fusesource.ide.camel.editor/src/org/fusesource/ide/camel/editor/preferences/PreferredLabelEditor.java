@@ -60,12 +60,6 @@ public class PreferredLabelEditor extends FieldEditor {
 	private SelectionListener selectionListener;
 
 	/**
-	 * Creates a new list field editor
-	 */
-	public PreferredLabelEditor() {
-	}
-
-	/**
 	 * Creates a table field editor.
 	 *
 	 * @param name
@@ -227,7 +221,7 @@ public class PreferredLabelEditor extends FieldEditor {
 		return table;
 	}
 
-	protected void addRow(String... values) {
+	public void addRow(String... values) {
 		TableItem item = new TableItem(table, SWT.NULL);
 		for (int i = 0; i < table.getColumns().length && i < values.length; i++) {
 			item.setText(i, values[i]);
@@ -235,11 +229,16 @@ public class PreferredLabelEditor extends FieldEditor {
 		packColumns();
 	}
 
-	protected void updateRow(int index, String... values) {
+	public void updateRow(int index, String... values) {
 		TableItem item = table.getItem(index);
 		for (int i = 0; i < table.getColumns().length; i++) {
 			item.setText(i, values[i]);
 		}
+		packColumns();
+	}
+
+	public void removeRows(int... indices) {
+		table.remove(indices);
 		packColumns();
 	}
 
@@ -326,7 +325,7 @@ public class PreferredLabelEditor extends FieldEditor {
 	}
 
 	protected void removePressed() {
-		table.remove(table.getSelectionIndices());
+		removeRows(table.getSelectionIndices());
 	}
 
 	@Override
