@@ -36,9 +36,9 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	@Override
 	public boolean supportsDSL(CamelDSLType type) {
 		switch (type) {
-		case BLUEPRINT:	return true;
-		case SPRING:	return false;
-		case JAVA:		return false;
+		case BLUEPRINT:	return false;
+		case SPRING:	return true;
+		case JAVA:		return true;
 		default:		return false;
 	}	
 	}
