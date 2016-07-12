@@ -128,6 +128,9 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 	}
 
 	public String getNodeId() {
+		if(route != null){
+			return route.getId();
+		}
 		return null;
 	}
 
