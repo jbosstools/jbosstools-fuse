@@ -182,7 +182,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()&& getConnection().isConnected()) {
 			return ("CamelRoutesNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

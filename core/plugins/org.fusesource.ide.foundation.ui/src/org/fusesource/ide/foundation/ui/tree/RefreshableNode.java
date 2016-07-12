@@ -82,6 +82,9 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 		if (!loaded.get()) {
 			loading = true;
 			try {
+				if(!isConnectionAvailable()){
+					throw new IllegalStateException("The connection is not available.");
+				}
 				loadChildren();
 				refreshUIAfterLazyLoad();
 			} catch (Exception e) {

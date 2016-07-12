@@ -39,7 +39,7 @@ public class TracerNode extends NodeSupport {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("CamelTracerNode-" + camelContextNode.getManagementName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

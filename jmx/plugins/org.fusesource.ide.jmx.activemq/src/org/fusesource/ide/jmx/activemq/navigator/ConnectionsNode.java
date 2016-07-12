@@ -89,7 +89,7 @@ public class ConnectionsNode extends RefreshableCollectionNode implements ImageP
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQConnectionsNode" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

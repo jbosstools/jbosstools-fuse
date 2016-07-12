@@ -139,7 +139,7 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQTopicNode-" + topicsNode.toString() + "-" + consumersNode.toString() + "-" + producersNode.toString() +  "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();
