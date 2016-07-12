@@ -86,7 +86,7 @@ public class MessageDetailView extends ViewPart implements IPropertySheetPage {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				Map.Entry entry = (Map.Entry) element;
+				Map.Entry<?,?> entry = (Map.Entry<?,?>) element;
 				return Strings.getOrElse(entry.getKey());
 			}
 		});
@@ -96,7 +96,7 @@ public class MessageDetailView extends ViewPart implements IPropertySheetPage {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				Map.Entry entry = (Map.Entry) element;
+				Map.Entry<?,?> entry = (Map.Entry<?,?>) element;
 				return Strings.getOrElse(entry.getValue());
 			}
 		});
@@ -114,7 +114,7 @@ public class MessageDetailView extends ViewPart implements IPropertySheetPage {
 			@Override
 			public Object[] getElements(Object parent) {
 				if (parent instanceof Map) {
-					Map map = (Map) parent;
+					Map<?,?> map = (Map<?,?>) parent;
 					return map.entrySet().toArray();
 				} else {
 					return new Object[0];

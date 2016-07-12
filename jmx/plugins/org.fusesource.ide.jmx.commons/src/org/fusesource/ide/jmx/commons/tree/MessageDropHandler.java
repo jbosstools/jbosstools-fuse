@@ -55,7 +55,6 @@ public class MessageDropHandler extends DropHandlerSupport {
 
 	public static IMessage fileToMessage(IFile resource) throws CoreException, JAXBException {
 		IContentDescription contentDescription = resource.getContentDescription();
-		String fileExtension = resource.getFileExtension();
 
 		IMessage message;
 		if (MessagesNamespaceXmlContentDescriber.isXmlFormat(resource)) {

@@ -32,12 +32,10 @@ import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.widgets.ZestStyles;
-import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelEndpointMBean;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
-import org.fusesource.ide.jmx.camel.navigator.EndpointNode;
 import org.fusesource.ide.jmx.camel.navigator.ProcessorNode;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
@@ -318,7 +316,6 @@ ISelectionChangedListener {
 	 */
 	@Override
 	public Color getForegroundColour(Object entity) {
-		//		return null;
 		return Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	}
 
@@ -328,8 +325,6 @@ ISelectionChangedListener {
 	 */
 	@Override
 	public Color getBackgroundColour(Object entity) {
-		if (isRouteNode(entity)) {
-		}
 		return null;
 	}
 
@@ -339,8 +334,6 @@ ISelectionChangedListener {
 	 */
 	@Override
 	public Color getNodeHighlightColor(Object entity) {
-		if (isRouteNode(entity)) {
-		}
 		return null;
 	}
 

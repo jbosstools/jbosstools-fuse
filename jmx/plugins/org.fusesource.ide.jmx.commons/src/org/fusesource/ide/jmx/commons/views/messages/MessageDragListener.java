@@ -55,39 +55,38 @@ public class MessageDragListener implements DragSourceListener {
 	}
 
 	public void dragSetData(DragSourceEvent event) {
-		IStructuredSelection selection = (IStructuredSelection) viewer
-				.getSelection();
-		if (FileTransfer.getInstance().isSupportedType(event.dataType)) {
-			List<String> fileNames = new ArrayList<String>();
-			Iterator iter = selection.iterator();
-			try {
-				while (iter.hasNext()) {
-					Object element = iter.next();
-					IMessage message = Exchanges.toMessage(element);
-					if (message != null) {
-						// TODO - use a temporary directory then make the file
-						// name based on the message ID?
-						File file = File.createTempFile("message-", ".xml");
-						Exchanges.marshal(message, file);
-						fileNames.add(file.getAbsolutePath());
+		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		if(selection != null){
+			if (FileTransfer.getInstance().isSupportedType(event.dataType)) {
+				List<String> fileNames = new ArrayList<>();
+				Iterator<?> iter = selection.iterator();
+				try {
+					while (iter.hasNext()) {
+						Object element = iter.next();
+						IMessage message = Exchanges.toMessage(element);
+						if (message != null) {
+							// TODO - use a temporary directory then make the file
+							// name based on the message ID?
+							File file = File.createTempFile("message-", ".xml");
+							Exchanges.marshal(message, file);
+							fileNames.add(file.getAbsolutePath());
+						}
 					}
+					event.data = fileNames.toArray(new String[fileNames.size()]);
+				} catch (Exception e) {
+					Activator.getLogger().warning(
+							"Failed to create file from message: " + e, e);
 				}
-				event.data = fileNames.toArray(new String[fileNames.size()]);
-			} catch (Exception e) {
-				Activator.getLogger().warning(
-						"Failed to create file from message: " + e, e);
-			}
-		} else if (PluginTransfer.getInstance().isSupportedType(event.dataType) && selection != null) {
-			event.data = selection;
-		} else if (LocalSelectionTransfer.getTransfer().isSupportedType(event.dataType) && selection != null) {
-			event.data = selection;
-		} else {
-			IMessage message = Exchanges.toMessage(selection.getFirstElement());
-			if (message != null) {
-				Object body = message.getBody();
-				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
-					event.data = body;
-				} else {
+			} else if (PluginTransfer.getInstance().isSupportedType(event.dataType)
+					|| LocalSelectionTransfer.getTransfer().isSupportedType(event.dataType)) {
+				event.data = selection;
+			} else {
+				IMessage message = Exchanges.toMessage(selection.getFirstElement());
+				if (message != null) {
+					Object body = message.getBody();
+					if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
+						event.data = body;
+					}
 				}
 			}
 		}

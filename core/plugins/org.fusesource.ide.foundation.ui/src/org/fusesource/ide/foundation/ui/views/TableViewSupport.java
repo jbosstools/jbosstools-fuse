@@ -355,7 +355,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 		return viewerColumn;
 	}
 
-	protected int addColumnFunction(int bounds, int column, final Function1<Object, Object> function, String columnName) {
+	protected int addColumnFunction(int bounds, int column, final Function1<Object, ?> function, String columnName) {
 		addFunction(function);
 		TableViewerColumn col = createTableViewerColumn(columnName,
 				bounds, column++);
