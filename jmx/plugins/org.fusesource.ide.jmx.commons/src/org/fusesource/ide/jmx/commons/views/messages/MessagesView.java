@@ -12,7 +12,6 @@
 package org.fusesource.ide.jmx.commons.views.messages;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -114,11 +113,7 @@ public class MessagesView extends TableViewSupport {
 		}
 		
 		tc.reload();
-		List<String> cols = new ArrayList<>();
-		Iterator<String> names = tc.getColumnMap().keySet().iterator();
-		while (names.hasNext()) {
-			cols.add(names.next());
-		}
+		List<String> cols = new ArrayList<>(tc.getColumnMap().keySet());
 		tc.sortDefaultColumnNames(cols);
 		
 		return cols;
@@ -182,7 +177,7 @@ public class MessagesView extends TableViewSupport {
 		clearColumns();
 
 		if (browser instanceof ITraceExchangeBrowser) {
-			final Function1 function = new Function1() {
+			final Function1<Object, Object> function = new Function1<Object, Object>() {
 				@Override
 				public Object apply(Object element) {
 					Exchange exchange = Exchanges.asExchange(element);
@@ -196,23 +191,21 @@ public class MessagesView extends TableViewSupport {
 		}
 
 		// TODO add exchange / message ID??
-		if (browser instanceof ITraceExchangeBrowser) {
-			if (showTraceExchangeId) {
-				final Function1 function = new Function1() {
-					@Override
-					public Object apply(Object element) {
-						Exchange exchange = Exchanges.asExchange(element);
-						if (exchange != null) {
-							return exchange.getId();
-						}
-						return null;
+		if (showTraceExchangeId && browser instanceof ITraceExchangeBrowser) {
+			final Function1<Object, Object> function = new Function1<Object, Object>() {
+				@Override
+				public Object apply(Object element) {
+					Exchange exchange = Exchanges.asExchange(element);
+					if (exchange != null) {
+						return exchange.getId();
 					}
-				};
-				column = addColumnFunction(bounds, column, function, "Exchange ID");
-			}
+					return null;
+				}
+			};
+			column = addColumnFunction(bounds, column, function, "Exchange ID");
 		}
 		if (showBody) {
-			final Function1 function = new Function1() {
+			final Function1<Object, Object> function = new Function1<Object, Object>() {
 				@Override
 				public Object apply(Object element) {
 					if (element instanceof IExchange) {
@@ -237,7 +230,7 @@ public class MessagesView extends TableViewSupport {
 			}
 		}
 		for (final String header : headers) {
-			final Function1 function = new Function1() {
+			final Function1<Object, Object> function = new Function1<Object, Object>() {
 				@Override
 				public Object apply(Object element) {
 					if (element instanceof IExchange) {
@@ -254,7 +247,7 @@ public class MessagesView extends TableViewSupport {
 		}
 		if (browser instanceof ITraceExchangeBrowser) {
 			if (showToNode) {
-				final Function1 function = new Function1() {
+				final Function1<Object, Object> function = new Function1<Object, Object>() {
 					@Override
 					public Object apply(Object element) {
 						IMessage message = Exchanges.asMessage(element);
@@ -267,7 +260,7 @@ public class MessagesView extends TableViewSupport {
 				column = addColumnFunction(bounds, column, function, "Trace Node Id");
 			}
 			if (showTimestamp) {
-				final Function1 function = new Function1() {
+				final Function1<Object, Object> function = new Function1<Object, Object>() {
 					@Override
 					public Object apply(Object element) {
 						IMessage message = Exchanges.asMessage(element);
@@ -280,7 +273,7 @@ public class MessagesView extends TableViewSupport {
 				column = addColumnFunction(bounds, column, function, "Trace Timestamp");
 			}
 			if (showRelativeTime) {
-				final Function1 function = new FunctionLong() {
+				final Function1<Object, Long> function = new FunctionLong<Object>() {
 					@Override
 					public Long apply(Object element) {
 						IMessage message = Exchanges.asMessage(element);
@@ -293,7 +286,7 @@ public class MessagesView extends TableViewSupport {
 				column = addColumnFunction(bounds, column, function, "Relative Time (ms)");
 			}
 			if (showElapsedTime) {
-				final Function1 function = new FunctionLong() {
+				final Function1<Object, Long> function = new FunctionLong<Object>() {
 					@Override
 					public Long apply(Object element) {
 						IMessage message = Exchanges.asMessage(element);

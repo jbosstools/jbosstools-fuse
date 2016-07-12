@@ -22,14 +22,13 @@ public class CamelNodeLabelProvider extends LabelProvider {
 		if( element instanceof ImageProvider ) {
 			return ((ImageProvider)element).getImage();
 		}
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getText(Object element) {
 		if( element instanceof NodeSupport ) {
-			return element == null ? "null" : element.toString();
+			return element.toString();
 		}
 		return null;
 	}

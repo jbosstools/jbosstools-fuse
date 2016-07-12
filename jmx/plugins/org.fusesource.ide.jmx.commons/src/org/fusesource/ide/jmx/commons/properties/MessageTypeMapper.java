@@ -18,7 +18,7 @@ import org.fusesource.ide.jmx.commons.messages.IExchange;
 public class MessageTypeMapper implements ITypeMapper {
 
 	@Override
-	public Class mapType(Object object) {
+	public Class<?> mapType(Object object) {
 		if (Exchanges.asExchange(object) != null) {
 			return IExchange.class;
 		}

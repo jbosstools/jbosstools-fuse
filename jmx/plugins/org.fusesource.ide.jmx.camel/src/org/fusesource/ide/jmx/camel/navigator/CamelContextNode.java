@@ -62,7 +62,6 @@ import org.fusesource.ide.jmx.commons.messages.IMessage;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeList;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
-import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;

@@ -25,14 +25,10 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -45,12 +41,10 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 		if( parentElement instanceof IConnectionWrapper ) {
 			IConnectionWrapper w = (IConnectionWrapper)parentElement;
 			Root r = w.getRoot();
-			if( r != null ) {
-				if (r.containsDomain("org.apache.camel")) {
-					CamelJMXFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(r.getConnection()));
-					CamelContextsNode camel = new CamelContextsNode(r, facade);
-					return new Object[]{camel};
-				}
+			if (r != null && r.containsDomain("org.apache.camel")) {
+				CamelJMXFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(r.getConnection()));
+				CamelContextsNode camel = new CamelContextsNode(r, facade);
+				return new Object[]{camel};
 			}
 		} else if (parentElement instanceof NodeSupport) {
 			NodeSupport contexts = (NodeSupport)parentElement;
