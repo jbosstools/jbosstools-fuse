@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1468411164814
+Build-Jdk: 1.8.0_92
+Built-By: lhein
+Bundle-Description: Camel Content-Based Router Example
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse CBR Quickstart
+Bundle-SymbolicName: camel-blueprint-cbr
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Import-Package: org.osgi.service.blueprint;version="[1.0.0,2.0.0)"
+Tool: Bnd-1.50.0

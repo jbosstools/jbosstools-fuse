@@ -1,5 +1,19 @@
 Manifest-Version: 1.0
+Bnd-LastModified: 1468413203630
+Build-Jdk: 1.8.0_92
+Built-By: lhein
+Bundle-Description: Camel AMQ Example using the Java
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
 Bundle-ManifestVersion: 2
-Bundle-Name: [B@183d80d
-Bundle-SymbolicName: [B@1cad32ea
+Bundle-Name: Fuse AMQ Quickstart - Java
+Bundle-SymbolicName: camel-activemq-java
 Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.mycompany.camel;uses:="org.apache.activemq.camel.com
+ ponent,org.apache.camel.builder,org.apache.camel,org.apache.camel.model
+ ,org.apache.camel.main";version="1.0.0.SNAPSHOT"
+Import-Package: org.apache.activemq.camel.component;version="[5.11,6)",o
+ rg.apache.camel;version="[2.15,3)",org.apache.camel.builder;version="[2
+ .15,3)",org.apache.camel.main;version="[2.15,3)",org.apache.camel.model
+ ;version="[2.15,3)"
+Tool: Bnd-1.50.0

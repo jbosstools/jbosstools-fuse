@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Repository;
 
 /**
  * @author lhein
@@ -43,6 +44,27 @@ public class MavenUtils {
 				dep.setVersion(camelVersion);
 			}
 		}
-
+	}
+	
+	/**
+	 * 
+	 * @param repositories
+	 * @param repoURI
+	 * @param newId
+	 */
+	public static void ensureRepositoryExists(List<Repository> repositories, String repoURI, String newId) {
+		boolean exists = false;
+		for (Repository rep : repositories) {
+			if (rep.getUrl().equalsIgnoreCase(repoURI)) {
+				exists = true;
+				break;
+			}
+		}
+		if (!exists) {
+			Repository repo = new Repository();
+			repo.setId(newId);
+			repo.setUrl(repoURI);
+			repositories.add(repo);
+		}
 	}
 }

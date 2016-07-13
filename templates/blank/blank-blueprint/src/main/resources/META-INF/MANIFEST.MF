@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1468407929676
+Build-Jdk: 1.8.0_92
+Built-By: bnd
+Bundle-Description: Empty Camel Spring Example
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: Camel Spring Quickstart
+Bundle-SymbolicName: camel-spring
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Tool: Bnd-1.50.0
