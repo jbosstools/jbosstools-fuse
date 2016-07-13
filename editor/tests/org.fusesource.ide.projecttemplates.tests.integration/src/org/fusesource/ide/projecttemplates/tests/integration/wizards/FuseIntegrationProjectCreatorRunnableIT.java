@@ -113,7 +113,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	@Test
-	@Ignore("Deactivate Java DSL test to move forward - failing randomly on CI only")
 	public void testEmptyJavaProjectCreation() throws Exception {
 		testEmptyProjectCreation("-SimpleJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
 	}
