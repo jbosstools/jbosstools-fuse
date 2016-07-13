@@ -69,6 +69,7 @@ public class CamelFilesFinder {
 	 */
 	public boolean isFuseCamelContentType(IFile ifile) throws CoreException {
 		return ifile != null
+				&& ifile.isSynchronized(IResource.DEPTH_ZERO)
 				&& ifile.getContentDescription() != null
 				&& ifile.getContentDescription()
 							.getContentType()
