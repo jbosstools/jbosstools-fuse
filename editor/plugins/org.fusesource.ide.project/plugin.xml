@@ -15,8 +15,10 @@
     		   icon="icons/camel_project_16x16.png"/>
 	</extension>
  
- 	<extension point="org.eclipse.core.resources.builders" 
- 			   id="org.fusesource.ide.project.RiderProjectBuilder">
+ 	<extension
+        id="org.fusesource.ide.project.RiderProjectBuilder"
+        name="Fuse Integration Project Builder"
+        point="org.eclipse.core.resources.builders">
     	<builder
         	callOnEmptyDelta="false"
           	hasNature="true"
