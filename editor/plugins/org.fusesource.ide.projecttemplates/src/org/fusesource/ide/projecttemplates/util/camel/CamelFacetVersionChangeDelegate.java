@@ -31,6 +31,9 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 public class CamelFacetVersionChangeDelegate implements IDelegate {
 
+	// TODO: remove me after release of 8.0.0 or reuse me for another newer camel version
+	private static final String CAMEL_STAGING_REPO_URI = "https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384";
+	
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor) throws CoreException {
 		String newVersion = getCamelVersionForFacetVersion(fv);
@@ -63,6 +66,8 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 		}
 		MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
+		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), CAMEL_STAGING_REPO_URI, "camelStaging");
+		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), CAMEL_STAGING_REPO_URI, "camelStaging");
 		try {
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
