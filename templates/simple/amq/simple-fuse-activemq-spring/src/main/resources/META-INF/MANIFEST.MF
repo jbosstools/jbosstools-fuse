@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1468412400466
+Build-Jdk: 1.8.0_92
+Built-By: lhein
+Bundle-Description: Camel AMQ Example using the Spring
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse AMQ Quickstart - Spring
+Bundle-SymbolicName: camel-activemq-spring
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Import-Package: org.apache.activemq.camel.component;version="[5.11,6)"
+Tool: Bnd-1.50.0

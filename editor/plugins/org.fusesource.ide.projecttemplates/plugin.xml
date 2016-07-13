@@ -109,6 +109,7 @@
           name="%template.simple.cbr.name"
           weight="0">
     </projectTemplate>
+<!--
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.simple"
           class="org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate"
@@ -118,6 +119,7 @@
           name="%template.simple.amq.name"
           weight="0">
     </projectTemplate>
+-->
  </extension>
  
  <!-- Maven configurator  -->

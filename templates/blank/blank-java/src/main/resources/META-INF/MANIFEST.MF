@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1468410203972
+Build-Jdk: 1.8.0_92
+Built-By: lhein
+Bundle-Description: Camel Java DSL Example
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse Empty Quickstart - Java
+Bundle-SymbolicName: camel-java
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.mycompany;uses:="org.apache.camel.builder,org.apache
+ .camel.main";version="1.0.0.SNAPSHOT"
+Import-Package: org.apache.camel.builder;version="[2.15,3)",org.apache.c
+ amel.main;version="[2.15,3)"
+Tool: Bnd-1.50.0

@@ -113,6 +113,15 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
+		// delete invalid MANIFEST files
+		IResource rs = c.getProject().findMember("src/META-INF/");
+		if (rs.exists()) {
+			try {
+				rs.delete(true, monitor);
+			} catch (CoreException ex) {
+				ProjectTemplatesActivator.pluginLog().logError(ex);
+			}
+		}
 		// finally open the camel context file
 		openCamelContextFile(c.getProject(), monitor);
 		monitor.done();
