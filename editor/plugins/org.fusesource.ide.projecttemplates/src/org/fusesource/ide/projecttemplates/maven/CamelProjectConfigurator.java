@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
-import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.internal.project.facet.UtilityFacetInstallDataModelProvider;
@@ -127,7 +126,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		// if we got camel deps and/or camel context files we add the fuse 
 		// camel nature to this project
 		if (hasCamelDeps || hasCamelContextXML) {
-			ProjectUtilities.addNatureToProject(project, RiderProjectNature.NATURE_ID);
+			addNature(project, RiderProjectNature.NATURE_ID, monitor);
 		}
 	}
 	
@@ -142,7 +141,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		if (fproj == null) {
 			// Add the modulecore nature
 			WtpUtils.addNatures(project);
-			ProjectUtilities.addNatureToProject(project, FacetedProjectNature.NATURE_ID);
+			addNature(project, FacetedProjectNature.NATURE_ID, monitor);
 			fproj = ProjectFacetsManager.create(project);
 		}
 		
