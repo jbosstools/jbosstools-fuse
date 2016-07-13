@@ -18,7 +18,7 @@
              icon="icons/bundle.png"
              priority="normal"
              contentProvider="org.fusesource.ide.jmx.karaf.jmx.content.navigator.providers.BundlesNodeContentProvider"
-             labelProvider="org.fusesource.ide.jmx.karaf.jmx.content.navigator.providers.BundlesNodeLabelProvider">
+             labelProvider="org.fusesource.ide.jmx.commons.labelproviders.NodeSupportLabelProvider">
           <triggerPoints>
              <instanceof
                    value="org.jboss.tools.jmx.core.IConnectionWrapper">

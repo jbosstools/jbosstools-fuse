@@ -85,7 +85,7 @@ public class TopicProducersNode extends RefreshableCollectionNode implements Ima
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQTopicProducersNode-" + brokerNode.toString() + "-" + topicNode.getName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

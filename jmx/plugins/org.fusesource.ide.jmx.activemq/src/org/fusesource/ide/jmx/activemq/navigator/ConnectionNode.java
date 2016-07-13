@@ -58,7 +58,7 @@ public class ConnectionNode extends NodeSupport implements ImageProvider {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQConnectionNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

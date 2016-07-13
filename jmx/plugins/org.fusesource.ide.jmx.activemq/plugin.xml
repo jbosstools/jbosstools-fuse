@@ -18,7 +18,7 @@
              icon="icons/queue.png"
              priority="normal"
              contentProvider="org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers.ActiveMQNodeContentProvider"
-             labelProvider="org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers.ActiveMQNodeLabelProvider">
+             labelProvider="org.fusesource.ide.jmx.commons.labelproviders.NodeSupportLabelProvider">
           <triggerPoints>
              <instanceof
                    value="org.jboss.tools.jmx.core.IConnectionWrapper">

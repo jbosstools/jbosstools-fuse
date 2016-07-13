@@ -158,5 +158,9 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	public void fireRefresh(Object node, boolean full) {
 		fireRefresh();
 	}
+	
+	public boolean isConnectionAvailable() {
+		return getConnection() != null && getConnection().getProvider() != null && getConnection().isConnected();
+	}
 }
 

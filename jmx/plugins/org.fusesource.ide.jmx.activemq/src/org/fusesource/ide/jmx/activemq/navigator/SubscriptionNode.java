@@ -45,7 +45,7 @@ public class SubscriptionNode extends NodeSupport {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQSubscriptionNode-" + getParent().toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

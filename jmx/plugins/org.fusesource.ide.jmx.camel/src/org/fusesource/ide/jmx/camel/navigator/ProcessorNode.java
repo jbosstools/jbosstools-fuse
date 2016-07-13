@@ -100,7 +100,7 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()&& getConnection().isConnected()) {
 			return ("CamelProcessorNode-" + routeNode.getNodeId() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

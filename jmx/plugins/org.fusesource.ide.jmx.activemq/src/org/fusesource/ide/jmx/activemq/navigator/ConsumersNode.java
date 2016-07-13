@@ -125,7 +125,7 @@ public class ConsumersNode extends RefreshableCollectionNode implements ImagePro
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQConsumersNode-" + toString() + "-" + brokerNode.toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

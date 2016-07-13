@@ -161,7 +161,7 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQQueueNode-" + queuesNode.getBrokerNode().getBrokerName() + "-" + queuesNode.toString() + "-" + queue.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

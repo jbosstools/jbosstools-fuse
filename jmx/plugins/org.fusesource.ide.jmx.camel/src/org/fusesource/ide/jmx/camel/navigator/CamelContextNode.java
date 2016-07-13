@@ -532,6 +532,9 @@ public class CamelContextNode 	extends NodeSupport
 	}
 
 	public Object getTracer() {
+		if(!isConnectionAvailable()){
+			return null;
+		}
 		try {
 			CamelBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
 			if (mbean != null) {
@@ -565,9 +568,10 @@ public class CamelContextNode 	extends NodeSupport
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("CamelContextNode-" + camelContextsNode.toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();
 	}
+
 }

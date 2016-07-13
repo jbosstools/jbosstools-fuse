@@ -85,7 +85,7 @@ public class QueueConsumersNode extends RefreshableCollectionNode implements Ima
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQQueueConsumersNode-" + brokerNode.getBrokerName() + "-" + queueNode.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

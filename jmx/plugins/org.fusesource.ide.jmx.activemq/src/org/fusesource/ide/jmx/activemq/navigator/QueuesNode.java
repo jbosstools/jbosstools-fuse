@@ -122,7 +122,7 @@ public class QueuesNode extends RefreshableCollectionNode implements ImageProvid
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQQueuesNode-" + brokerNode.toString() + "-" + toString() + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

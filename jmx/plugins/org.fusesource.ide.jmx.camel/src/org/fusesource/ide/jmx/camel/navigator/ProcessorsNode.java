@@ -45,7 +45,7 @@ public class ProcessorsNode extends RefreshableCollectionNode {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("CamelProcessorsNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

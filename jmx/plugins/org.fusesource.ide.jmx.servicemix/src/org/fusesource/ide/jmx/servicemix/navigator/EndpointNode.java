@@ -59,7 +59,7 @@ public class EndpointNode extends NodeSupport implements ImageProvider {
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("ServiceMixEndpointNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();

@@ -85,7 +85,7 @@ public class TopicDurableConsumersNode extends RefreshableCollectionNode impleme
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
+		if(isConnectionAvailable()) {
 			return ("AMQTopicDurableConsumersNode-" + brokerNode.toString() + "-" + queueNode.getName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();
