@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
@@ -87,6 +88,18 @@ public class NodeUtils {
 	}
 	
 	/**
+	 * checks if the given parent can host the given child eip
+	 * 
+	 * @param parent	the parent / container element
+	 * @param child		the child element
+	 * @return			true if the child is valid for the given container, otherwise false
+	 */
+	public static boolean isValidChild(AbstractCamelModelElement parent, Eip child) {
+		return 	parent.getUnderlyingMetaModelObject().canHaveChildren() && 
+				parent.getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(child.getName());
+	}
+	
+	/**
 	 * collects all container figures recursively
 	 * 
 	 * @param fp
@@ -153,5 +166,53 @@ public class NodeUtils {
 			answer = toCamelElement(input);
 		}
 		return answer;
+	}
+    
+    /**
+     * returns true if both nodes have the same parent
+     * 
+     * @param nodeA
+     * @param nodeB
+     * @return
+     */
+    public static boolean haveSameParent(AbstractCamelModelElement nodeA, AbstractCamelModelElement nodeB) {
+    	return nodeA.getParent().equals(nodeB.getParent());
+    }
+    
+    /**
+     * returns true if the EIP is allowed to be created on the Camel Context
+     * 
+     * @param eip
+     * @return
+     */
+    public static boolean canBeAddedToCamelContextDirectly(Eip eip) {
+    	return 	eip.getName().equalsIgnoreCase("route") || 
+				eip.getName().equalsIgnoreCase("rest") || 
+				eip.getName().equalsIgnoreCase("restConfiguration"); 
+    }
+    
+    /**
+     * returns true if the given element can be added on a camel context 
+     * 
+     * @param elem
+     * @return
+     */
+    public static boolean canBeAddedToCamelContextDirectly(AbstractCamelModelElement elem) {
+    	return 	elem.getNodeTypeId().equalsIgnoreCase("route") || 
+    			elem.getNodeTypeId().equalsIgnoreCase("rest") || 
+    			elem.getNodeTypeId().equalsIgnoreCase("restConfiguration"); 
+    }
+    
+    /**
+	 * Returns the EClass belonging to the anchor, or null if not available.
+	 */
+	public static AbstractCamelModelElement getNode(IFeatureProvider fp, Anchor anchor) {
+		if (anchor != null) {
+			Object obj = fp.getBusinessObjectForPictogramElement(anchor.getParent());
+			if (obj instanceof AbstractCamelModelElement) {
+				return (AbstractCamelModelElement) obj;
+			}
+		}
+		return null;
 	}
 }

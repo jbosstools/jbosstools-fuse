@@ -57,7 +57,27 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
             } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof AbstractCamelModelElement) {
             	AbstractCamelModelElement container =  (AbstractCamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
             	AbstractCamelModelElement child = (AbstractCamelModelElement)newObject;
-            	return NodeUtils.isValidChild(container, child);
+            	if (NodeUtils.isValidChild(container, child)) {
+            		return true;
+            	} else {
+            		// seems user wants to drop a figure on a non-container to connect new node to other node
+            		AbstractCamelModelElement sourceNode =  (AbstractCamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
+                	AbstractCamelModelElement newNode = (AbstractCamelModelElement)newObject;
+                	if (sourceNode.getOutputElement() != null) {
+                		// insert between 2 nodes
+                		AbstractCamelModelElement targetNode =  sourceNode.getOutputElement();
+                		// TODO: now we need to check:
+                		// - can sourceNode be wired to newNode?
+                		// - can newNode be wired to targetNode?
+                		return 	NodeUtils.haveSameParent(sourceNode, newNode) &&
+                				NodeUtils.haveSameParent(newNode, targetNode);
+                	} else {
+                		// append new node and connect to source node
+                		// TODO: now we need to check:
+                		// - can sourceNode be wired to newNode?
+                		return NodeUtils.haveSameParent(sourceNode, newNode);
+                	}
+            	}
             }
 		}
 		return false;

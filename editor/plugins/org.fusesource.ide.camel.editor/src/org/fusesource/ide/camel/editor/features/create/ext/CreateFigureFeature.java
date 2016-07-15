@@ -19,19 +19,30 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
+import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
+import org.eclipse.graphiti.features.context.impl.CreateContext;
+import org.eclipse.graphiti.features.context.impl.ReconnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
+import org.eclipse.graphiti.mm.pictograms.Anchor;
+import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ProviderHelper;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -118,35 +129,82 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public boolean canCreate(ICreateContext context) {
 		ContainerShape container = context.getTargetContainer();
 		Object containerBO = getBusinessObjectForPictogramElement(container);
+		
+		// creating on the Camel Context / Diagram
 		if (container instanceof Diagram) {
-			// we want to create something on the diagram rather than inside a container element - thats only allowed on camelContexts
 			CamelFile cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
-			if (cf.getCamelContext() == null && cf.getChildElements().size()==0) {
+			// check if the CamelFile has a Camel Context
+			if (cf.isEmpty()) {
+				// if not, then we need to add one right away to prevent further problems
 				cf.addChildElement(new CamelContextElement(cf, null));
 			}
-			if (eip != null) return eip.getName().equalsIgnoreCase("route") || 
-				eip.getName().equalsIgnoreCase("rest") || eip.getName().equalsIgnoreCase("restConfiguration");
-			if (clazz != null) { 
+			
+			// if we got an EIP reference then we can check if thats allowed
+			// to be added to the camel context
+			if (eip != null) {
+				return NodeUtils.canBeAddedToCamelContextDirectly(eip);
+			// if we only have a class defined
+			} else if (clazz != null) { 
+				// then we need to instantiate it
 				Object obj = newInstance(clazz);
-				if (obj != null && obj instanceof AbstractCamelModelElement) return ((AbstractCamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
+				if (obj != null && 
+					obj instanceof AbstractCamelModelElement) {
+					// and check if the element can be added to a context
+					return NodeUtils.canBeAddedToCamelContextDirectly((AbstractCamelModelElement)obj);
+				}
 				return false;
 			}
-		} else if (containerBO instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
+
+		// special handling for creating on choices (only one otherwise allowed)
+		} else if (	containerBO instanceof AbstractCamelModelElement && 
+					((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
 			// only one otherwise per choice
 			AbstractCamelModelElement choice = (AbstractCamelModelElement)containerBO;
+			
 			if (this.eip != null) {
-				if (this.eip.getName().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
-				return this.eip.getName().equalsIgnoreCase("when") || this.eip.getName().equalsIgnoreCase("otherwise");
+				if (this.eip.getName().equalsIgnoreCase("otherwise") && 
+					choice.getParameter("otherwise") != null) {
+					// this choice already has an otherwise case - adding more isn't allowed
+					return false;
+				}
+				// allow when and otherwise children on choice
+				return this.eip.getName().equalsIgnoreCase("when") || 
+					   this.eip.getName().equalsIgnoreCase("otherwise");
+			
 			} else if (clazz != null) {
 				Object obj = newInstance(clazz);
-				if (obj instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
+				if (obj instanceof AbstractCamelModelElement && 
+					((AbstractCamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && 
+					choice.getParameter("otherwise") != null) {
+					// this choice already has an otherwise case - adding more isn't allowed
+					return false;
+				}
 			}
 		}
 		
 		// we have to prevent some eips being dropped on the route even if camel catalog says its allowed
-		if (eip.getName().equalsIgnoreCase("when") || eip.getName().equalsIgnoreCase("otherwise") && containerBO != null && ((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice") == false) return false;
+		// probably issues in the catalog which will be fixed at later time, then we can
+		// remove the handling for these exceptions
+		if (eip.getName().equalsIgnoreCase("when") || eip.getName().equalsIgnoreCase("otherwise") && 
+			containerBO != null && 
+			!((AbstractCamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
+			return false;
+		}
 		
-		return (containerBO != null && containerBO instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)containerBO).getUnderlyingMetaModelObject().canHaveChildren() && ((AbstractCamelModelElement)containerBO).getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(eip.getName()));
+		if (containerBO != null && 
+			containerBO instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement sourceNode = (AbstractCamelModelElement)containerBO;
+			
+			if (NodeUtils.isValidChild(sourceNode, eip)) {
+				return true;
+			} else {
+				// seems user wants to drop a figure on a non-container to connect new node to other node
+				// maybe special handling needs to be added later so I preserve this else case for future use
+				// return sourceNode.getOutputElement() == null;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/*
@@ -209,7 +267,20 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			selectedContainer = (AbstractCamelModelElement)getBusinessObjectForPictogramElement(container);
 		}
 
-		AbstractCamelModelElement node = createNode(selectedContainer, selectedContainer != null);
+		CreateContext ctxNew = null;
+		AbstractCamelModelElement node = null;
+		if (selectedContainer != null && 
+			(!selectedContainer.getUnderlyingMetaModelObject().canHaveChildren() || context.getTargetConnection() != null)) {
+			node = createNode(selectedContainer instanceof CamelRouteElement ? selectedContainer : selectedContainer.getParent(), true);
+			if (context.getTargetConnection() == null) {
+				selectedContainer = selectedContainer.getParent();
+			}
+			ctxNew = new CreateContext(); 
+			ctxNew.setTargetContainer((ContainerShape)getFeatureProvider().getAllPictogramElementsForBusinessObject(selectedContainer)[0]);
+			ctxNew.setLocation(context.getX(), context.getY());
+		} else {
+			node = createNode(selectedContainer, selectedContainer != null);
+		}
 		if (selectedContainer != null && node != null) {
 			selectedContainer.addChildElement(node);
 			node.setParent(selectedContainer);
@@ -219,7 +290,16 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			}
 
 			// do the add
-	        addGraphicalRepresentation(context, node);
+			if (ctxNew != null) {
+				addGraphicalRepresentation(ctxNew, node);
+				AbstractCamelModelElement srcNode = (AbstractCamelModelElement)getBusinessObjectForPictogramElement(container);
+				if(context.getTargetConnection() != null) {
+					srcNode = NodeUtils.getNode(getFeatureProvider(), context.getTargetConnection().getStart());
+				}
+				connectNewNode(srcNode, node, context.getTargetConnection());
+			} else {
+				addGraphicalRepresentation(context, node);
+			}
 
 	        // activate direct editing after object creation
 	        getFeatureProvider().getDirectEditingInfo().setActive(true);
@@ -230,6 +310,45 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		return new Object[0];
 	}
 
+	private void connectNewNode(AbstractCamelModelElement src, AbstractCamelModelElement dest, Connection con) {
+		PictogramElement srcState = getFeatureProvider().getPictogramElementForBusinessObject(src);
+		PictogramElement destState = getFeatureProvider().getPictogramElementForBusinessObject(dest);
+		Anchor srcAnchor = DiagramUtils.getAnchor(srcState);
+		Anchor destAnchor = DiagramUtils.getAnchor(destState);
+		
+		if (src.getOutputElement() != null) {
+			// 1. reconnect old source with inserted node
+			ReconnectNodesFeature reconnectFeature = new ReconnectNodesFeature(getFeatureProvider());
+			if (con == null) {
+				con = Graphiti.getPeService().getAllConnections(DiagramUtils.getAnchor(getFeatureProvider().getPictogramElementForBusinessObject(src))).get(0);
+			}			
+			
+			PictogramElement oldState = getFeatureProvider().getPictogramElementForBusinessObject(src.getOutputElement());
+			Anchor oldAnchor = DiagramUtils.getAnchor(oldState);
+			
+			ReconnectionContext reconContext = new ReconnectionContext(con, oldAnchor, destAnchor, null);
+			if (reconnectFeature.canExecute(reconContext)) {
+				reconnectFeature.execute(reconContext);
+				srcState = destState;
+				srcAnchor = destAnchor;
+				destState = oldState;
+				destAnchor = oldAnchor;
+			} 
+		}
+		
+		CreateFlowFeature createFeature = new CreateFlowFeature(getFeatureProvider());
+		CreateConnectionContext connectContext = new CreateConnectionContext();
+		connectContext.setSourcePictogramElement(srcState);
+		connectContext.setTargetPictogramElement(destState);
+		if (destAnchor != null) {
+			connectContext.setSourceAnchor(srcAnchor);
+			connectContext.setTargetAnchor(destAnchor);
+			if (createFeature.canCreate(connectContext)) {
+				createFeature.execute(connectContext);
+			}
+		}	
+	}
+	
 	/**
 	 * Create a new node of this figure feature's underlying node. 
 	 * Default implementation will use either an eip or an Abstract Node class. 
@@ -247,7 +366,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 					final String namespace = parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
 					newNode = editor.getModel().createElement(nodeTypeId, namespace);
 				}
-				// if we have a route eip we need to use the speific route model element
+				// if we have a route eip we need to use the specific route model element
 				// because otherwise this causes issues
 				if (eip.getName().equalsIgnoreCase("route")) {
 					return new CamelRouteElement(parent, newNode);
