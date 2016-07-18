@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://com.mycompany.camel.ws" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://com.mycompany.camel.ws">
+
+	<!-- Type definitions for input- and output parameters for webservice -->
+	<wsdl:types>
+		<xs:schema targetNamespace="http://com.mycompany.camel.ws">
+			<xs:element type="xs:string" name="resultCode" />
+			<xs:element name="customer">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="name" type="xs:string" />
+						<xs:element name="city" type="xs:string" />
+						<xs:element name="country" type="xs:string" />
+					</xs:sequence>
+					<xs:attribute name="id" type="xs:string" use="required" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element type="xs:string" name="date" />	
+			<xs:element name="orderlines">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:orderline" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>		
+			<xs:element name="orderline">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="article">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="description" type="xs:string" />
+								</xs:sequence>
+								<xs:attribute name="id" type="xs:string" use="required" />
+							</xs:complexType>
+						</xs:element>
+						<xs:element type="xs:int" name="quantity" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="order">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tns:customer" />					
+						<xs:element ref="tns:date" />					
+						<xs:element ref="tns:orderlines" />					
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+
+	<!-- Message definitions for input and output -->
+	<wsdl:message name="orderMessage">
+		<wsdl:part name="order" element="tns:order" />
+	</wsdl:message>
+	<wsdl:message name="orderResult">
+		<wsdl:part name="resultCode" element="tns:resultCode" />
+	</wsdl:message>
+
+	<!-- Port (interface) definitions -->
+	<wsdl:portType name="OrderEndpoint">
+		<wsdl:operation name="order">
+			<wsdl:input message="tns:orderMessage" />
+			<wsdl:output message="tns:orderResult" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- Port bindings to transports and encoding - HTTP, document literal encoding 
+		is used -->
+	<wsdl:binding name="OrderBinding" type="tns:OrderEndpoint">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="order">
+			<soap:operation soapAction="http://com.mycompany.camel.ws/Order"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- Service definition -->
+	<wsdl:service name="OrderEndpointService">
+		<wsdl:port name="OrderService" binding="tns:OrderBinding">
+			<soap:address location="http://localhost:9101/order" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

@@ -1,5 +1,8 @@
+# . files from eclipse projects
 .classpath
 .project
 .settings
+
+# folders generated during builds or testing
 target
 work

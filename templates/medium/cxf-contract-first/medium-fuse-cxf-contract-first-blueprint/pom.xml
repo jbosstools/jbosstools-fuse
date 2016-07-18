@@ -265,7 +265,7 @@
         		</executions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>camel-cxf-contract-blueprint</Bundle-SymbolicName>
+ 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>ws.camel.mycompany.com</Export-Package>
 						<Import-Package>*</Import-Package>
 					</instructions>

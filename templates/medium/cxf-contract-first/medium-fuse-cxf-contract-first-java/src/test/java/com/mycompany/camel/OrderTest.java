@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ws.camel.mycompany.com;
+package com.mycompany.camel;
 
 import org.junit.Assert;
 import org.junit.Test;
