@@ -198,10 +198,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			if (NodeUtils.isValidChild(sourceNode, eip)) {
 				return true;
 			} else {
-				// seems user wants to drop a figure on a non-container to connect new node to other node
-				// maybe special handling needs to be added later so I preserve this else case for future use
-				// return sourceNode.getOutputElement() == null;
-				return true;
+				// only allow drop on node if the node has no outgoing connection
+				return sourceNode.getOutputElement() == null;
 			}
 		}
 		return false;
