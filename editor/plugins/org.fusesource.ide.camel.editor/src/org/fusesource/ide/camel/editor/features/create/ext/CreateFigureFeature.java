@@ -28,7 +28,6 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
@@ -198,8 +197,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			if (NodeUtils.isValidChild(sourceNode, eip)) {
 				return true;
 			} else {
-				// only allow drop on node if the node has no outgoing connection
-				return sourceNode.getOutputElement() == null;
+				// only allow drop on node if the node has no outgoing or no incoming connection
+				return sourceNode.getOutputElement() == null || sourceNode.getInputElement() == null;
 			}
 		}
 		return false;
@@ -292,9 +291,17 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				addGraphicalRepresentation(ctxNew, node);
 				AbstractCamelModelElement srcNode = (AbstractCamelModelElement)getBusinessObjectForPictogramElement(container);
 				if(context.getTargetConnection() != null) {
-					srcNode = NodeUtils.getNode(getFeatureProvider(), context.getTargetConnection().getStart());
-				}
-				connectNewNode(srcNode, node, context.getTargetConnection());
+					// drop on a connection -> insert node into the flow
+					insertNode(node, context.getTargetConnection());
+				} else {
+					if (srcNode.getInputElement() == null && srcNode.getOutputElement() != null) {
+						// drop on a figure with no input element -> prepend 
+						prependNode(srcNode, node);
+					} else {
+						// drop on a figure with no output (and maybe also no input) element -> append
+						appendNode(srcNode, node);
+					}
+				}				
 			} else {
 				addGraphicalRepresentation(context, node);
 			}
@@ -308,31 +315,60 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		return new Object[0];
 	}
 
-	private void connectNewNode(AbstractCamelModelElement src, AbstractCamelModelElement dest, Connection con) {
-		PictogramElement srcState = getFeatureProvider().getPictogramElementForBusinessObject(src);
-		PictogramElement destState = getFeatureProvider().getPictogramElementForBusinessObject(dest);
-		Anchor srcAnchor = DiagramUtils.getAnchor(srcState);
-		Anchor destAnchor = DiagramUtils.getAnchor(destState);
+	/**
+	 * the figure has been dropped on a connection between 2 figures. We insert
+	 * the new node between the 2 figures that connection wire.
+	 * 
+	 * @param newNode		the new (to be inserted) node
+	 * @param dropTarget	the connection to insert into
+	 */
+	private void insertNode(AbstractCamelModelElement newNode, Connection dropTarget) {
+		AbstractCamelModelElement srcNode  = NodeUtils.getNode(getFeatureProvider(), dropTarget.getStart());
+		AbstractCamelModelElement destNode = newNode;
+		AbstractCamelModelElement oldNode = srcNode.getOutputElement();
 		
-		if (src.getOutputElement() != null) {
-			// 1. reconnect old source with inserted node
+		PictogramElement destState 	= getFeatureProvider().getPictogramElementForBusinessObject(destNode);
+		PictogramElement oldState = getFeatureProvider().getPictogramElementForBusinessObject(oldNode);
+
+		Anchor oldAnchor = DiagramUtils.getAnchor(oldState);
+		Anchor destAnchor 	= DiagramUtils.getAnchor(destState);
+		
+		if (oldNode != null) {
+			// old -> new -> dest
 			ReconnectNodesFeature reconnectFeature = new ReconnectNodesFeature(getFeatureProvider());
-			if (con == null) {
-				con = Graphiti.getPeService().getAllConnections(DiagramUtils.getAnchor(getFeatureProvider().getPictogramElementForBusinessObject(src))).get(0);
-			}			
-			
-			PictogramElement oldState = getFeatureProvider().getPictogramElementForBusinessObject(src.getOutputElement());
-			Anchor oldAnchor = DiagramUtils.getAnchor(oldState);
-			
-			ReconnectionContext reconContext = new ReconnectionContext(con, oldAnchor, destAnchor, null);
+			ReconnectionContext reconContext = new ReconnectionContext(	dropTarget, 
+																		oldAnchor, 
+																		destAnchor, 
+																		null);
 			if (reconnectFeature.canExecute(reconContext)) {
 				reconnectFeature.execute(reconContext);
-				srcState = destState;
-				srcAnchor = destAnchor;
-				destState = oldState;
-				destAnchor = oldAnchor;
+				appendNode(newNode, oldNode);
 			} 
 		}
+		
+	}
+	
+	/**
+	 * prepends the new node in front of the drop target
+	 * 
+	 * @param dropTarget
+	 * @param newNode
+	 */
+	private void prependNode(AbstractCamelModelElement dropTarget, AbstractCamelModelElement newNode) {
+		appendNode(newNode, dropTarget);
+	}
+	
+	/**
+	 * appends the new node behind the drop target
+	 * 
+	 * @param dropTarget
+	 * @param newNode
+	 */
+	private void appendNode(AbstractCamelModelElement dropTarget, AbstractCamelModelElement newNode) {
+		PictogramElement srcState 	= getFeatureProvider().getPictogramElementForBusinessObject(dropTarget);
+		PictogramElement destState 	= getFeatureProvider().getPictogramElementForBusinessObject(newNode);
+		Anchor srcAnchor 	= DiagramUtils.getAnchor(srcState);
+		Anchor destAnchor 	= DiagramUtils.getAnchor(destState);
 		
 		CreateFlowFeature createFeature = new CreateFlowFeature(getFeatureProvider());
 		CreateConnectionContext connectContext = new CreateConnectionContext();
