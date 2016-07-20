@@ -169,17 +169,6 @@ public class NodeUtils {
 	}
     
     /**
-     * returns true if both nodes have the same parent
-     * 
-     * @param nodeA
-     * @param nodeB
-     * @return
-     */
-    public static boolean haveSameParent(AbstractCamelModelElement nodeA, AbstractCamelModelElement nodeB) {
-    	return nodeA.getParent().equals(nodeB.getParent());
-    }
-    
-    /**
      * returns true if the EIP is allowed to be created on the Camel Context
      * 
      * @param eip
@@ -189,18 +178,6 @@ public class NodeUtils {
     	return 	eip.getName().equalsIgnoreCase("route") || 
 				eip.getName().equalsIgnoreCase("rest") || 
 				eip.getName().equalsIgnoreCase("restConfiguration"); 
-    }
-    
-    /**
-     * returns true if the given element can be added on a camel context 
-     * 
-     * @param elem
-     * @return
-     */
-    public static boolean canBeAddedToCamelContextDirectly(AbstractCamelModelElement elem) {
-    	return 	elem.getNodeTypeId().equalsIgnoreCase("route") || 
-    			elem.getNodeTypeId().equalsIgnoreCase("rest") || 
-    			elem.getNodeTypeId().equalsIgnoreCase("restConfiguration"); 
     }
     
     /**

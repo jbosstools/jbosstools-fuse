@@ -47,15 +47,15 @@ public abstract class AbstractCamelModelElement {
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
-
-	protected static final String ID_ATTRIBUTE = "id";
-	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
-	protected static final String ENDPOINT_NODE_NAME = "endpoint";
+	public static final String CHOICE_NODE_NAME = "choice";
+	public static final String WHEN_NODE_NAME = "when";
+	public static final String OTHERWISE_NODE_NAME = "otherwise";
 	public static final String ROUTE_NODE_NAME = "route";
-	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
-	private static final String CHOICE_NODE_NAME = "choice";
-	private static final String WHEN_NODE_NAME = "when";
-	private static final String OTHERWISE_NONE_NAME = "otherwise";
+	public static final String ID_ATTRIBUTE = "id";
+	public static final String DATA_FORMATS_NODE_NAME = "dataFormats";
+	public static final String ENDPOINT_NODE_NAME = "endpoint";
+	public static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
+	
 	// children is a list of objects which are no route outputs
 	private List<AbstractCamelModelElement> childElements = new ArrayList<>();
 
@@ -116,14 +116,14 @@ public abstract class AbstractCamelModelElement {
 					if (this.getNodeTypeId().equals(WHEN_NODE_NAME)) {
 						Node otherwiseNode = null;
 						for (int i = 0; i < siblingNodes.getLength(); i++) {
-							if (CamelUtils.getTranslatedNodeName(siblingNodes.item(i)).equals(OTHERWISE_NONE_NAME)) {
+							if (CamelUtils.getTranslatedNodeName(siblingNodes.item(i)).equals(OTHERWISE_NODE_NAME)) {
 								otherwiseNode = siblingNodes.item(i);
 								break;
 							}
 						}
 						// move all when nodes before the otherwise
 						parent.getXmlNode().insertBefore(getXmlNode(), otherwiseNode);
-					} else if (getNodeTypeId().equals(OTHERWISE_NONE_NAME)) {
+					} else if (getNodeTypeId().equals(OTHERWISE_NODE_NAME)) {
 						parent.getXmlNode().appendChild(getXmlNode());
 					}
 				} else {
@@ -236,6 +236,27 @@ public abstract class AbstractCamelModelElement {
 	public AbstractCamelModelElement getParent() {
 		return this.parent;
 	}
+	
+	/**
+	 * checks if the given other node has the same parent than this node
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public boolean hasSameParent(AbstractCamelModelElement other) {
+		return getParent().equals(other.getParent());
+	}
+	
+	/**
+     * returns true if the element can be added on a camel context 
+     * 
+     * @return
+     */
+    public boolean canBeAddedToCamelContextDirectly() {
+    	return 	getNodeTypeId().equalsIgnoreCase("route") || 
+    			getNodeTypeId().equalsIgnoreCase("rest") || 
+    			getNodeTypeId().equalsIgnoreCase("restConfiguration"); 
+    }
 
 	/**
 	 * returns the route this endpoint belongs to
@@ -358,7 +379,7 @@ public abstract class AbstractCamelModelElement {
 
 		String eipType = getNodeTypeId();
 		// For some nodes, we just return their node name
-		String[] nodeNameOnly = new String[] { CHOICE_NODE_NAME, "try", "finally", OTHERWISE_NONE_NAME, "marshal", "unmarshal" };
+		String[] nodeNameOnly = new String[] { CHOICE_NODE_NAME, "try", "finally", OTHERWISE_NODE_NAME, "marshal", "unmarshal" };
 		if (Arrays.asList(nodeNameOnly).contains(eipType)) {
 			return result.trim();
 		}
@@ -443,7 +464,7 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
-	protected void checkEndpointType() {
+	public void checkEndpointType() {
 		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_TO)) {
 			switchEndpointType(ENDPOINT_TYPE_FROM);
 		} else if (isToEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_FROM)) {
@@ -563,8 +584,8 @@ public abstract class AbstractCamelModelElement {
 			this.childElements.add(element);
 			
 			// special handling for the otherwise element
-			if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
-				getParameters().put(OTHERWISE_NONE_NAME, element);
+			if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
+				getParameters().put(OTHERWISE_NODE_NAME, element);
 			}
 		}
 	}
@@ -591,8 +612,8 @@ public abstract class AbstractCamelModelElement {
 			}
 		}
 		// special handling for the otherwise element
-		if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
-			getParameters().remove(OTHERWISE_NONE_NAME);
+		if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
+			getParameters().remove(OTHERWISE_NODE_NAME);
 		}
 	}
 
@@ -1009,7 +1030,7 @@ public abstract class AbstractCamelModelElement {
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null &&
 			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals("element") &&
-			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
+			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
 			return;
 		}
 
@@ -1391,7 +1412,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	protected boolean isSpecialCase(Node childNode) {
-		return CHOICE_NODE_NAME.equalsIgnoreCase(getTranslatedNodeName()) && OTHERWISE_NONE_NAME.equalsIgnoreCase(CamelUtils.getTranslatedNodeName(childNode));
+		return CHOICE_NODE_NAME.equalsIgnoreCase(getTranslatedNodeName()) && OTHERWISE_NODE_NAME.equalsIgnoreCase(CamelUtils.getTranslatedNodeName(childNode));
 	}
 
 	/**
@@ -1696,7 +1717,7 @@ public abstract class AbstractCamelModelElement {
 		return !isFirstNodeInRoute() && // not working on the From node
 				!WHEN_NODE_NAME.equals(getNodeTypeId()) && // not working for
 															// When nodes
-				!OTHERWISE_NONE_NAME.equals(getNodeTypeId()); // not working for
+				!OTHERWISE_NODE_NAME.equals(getNodeTypeId()); // not working for
 														// Otherwise nodes
 	}
 

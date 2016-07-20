@@ -69,13 +69,13 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
                 		// TODO: now we need to check:
                 		// - can sourceNode be wired to newNode?
                 		// - can newNode be wired to targetNode?
-                		return 	NodeUtils.haveSameParent(sourceNode, newNode) &&
-                				NodeUtils.haveSameParent(newNode, targetNode);
+                		return 	sourceNode.hasSameParent(newNode) &&
+                				newNode.hasSameParent(targetNode);
                 	} else {
                 		// append new node and connect to source node
                 		// TODO: now we need to check:
                 		// - can sourceNode be wired to newNode?
-                		return NodeUtils.haveSameParent(sourceNode, newNode);
+                		return sourceNode.hasSameParent(newNode);
                 	}
             	}
             }

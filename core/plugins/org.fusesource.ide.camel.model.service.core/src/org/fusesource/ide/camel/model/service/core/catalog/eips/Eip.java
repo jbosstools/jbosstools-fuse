@@ -221,4 +221,15 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 		}
 		return allowedNodeTypes;
 	}
+	
+	/**
+     * returns true if the EIP is allowed to be created on the Camel Context
+     * 
+     * @return
+     */
+    public boolean canBeAddedToCamelContextDirectly() {
+    	return 	getName().equalsIgnoreCase("route") || 
+				getName().equalsIgnoreCase("rest") || 
+				getName().equalsIgnoreCase("restConfiguration"); 
+    }
 }
