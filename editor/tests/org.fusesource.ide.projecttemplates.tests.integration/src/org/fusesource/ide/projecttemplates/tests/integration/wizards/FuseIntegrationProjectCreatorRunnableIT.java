@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -34,6 +36,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -258,7 +261,19 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
-		final ExecutePomAction executePomAction = new ExecutePomAction();
+		final File parent = new File("target/MavenLaunchOutputs");
+		parent.mkdirs();
+		final String mavenOutputFilePath = new File(parent, "MavenLaunchOutput-"+project.getName()+".txt").getAbsolutePath();
+		final ExecutePomAction executePomAction = new ExecutePomAction(){
+			
+			@Override
+			protected void appendAttributes(IContainer basedir, ILaunchConfigurationWorkingCopy workingCopy, String goal) {
+				super.appendAttributes(basedir, workingCopy, goal);
+				System.out.println("Maven output file path: "+mavenOutputFilePath);
+				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+			}
+			
+		};
 
 		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
 
@@ -292,7 +307,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 			Thread.sleep(500);
 			currentAwaitedTime += 500;
 		}
-		assertThat(isDeploymentOk).isTrue();
+		assertThat(isDeploymentOk).as("build/deployment failed, you can have a look to the file "+ mavenOutputFilePath + " for more information.").isTrue();
 		launch = executePomAction.getLaunch();
 		assertThat(Stream.of(launch.getDebugTargets())
 				.filter(debugTarget -> debugTarget instanceof CamelDebugTarget)
