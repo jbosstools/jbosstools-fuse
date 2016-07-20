@@ -35,18 +35,20 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.jboss.tools.maven.core;bundle-version="1.7.0",
  org.jboss.tools.foundation.core;bundle-version="1.2.1",
  org.jboss.tools.foundation.ui;bundle-version="1.2.1",
+ org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.branding;bundle-version="8.0.0",
  org.fusesource.ide.foundation.core;bundle-version="8.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
  org.fusesource.ide.camel.editor;bundle-version="8.0.0",
- org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.project;bundle-version="8.0.0",
  org.fusesource.ide.camel.validation;bundle-version="8.0.0",
  org.eclipse.m2e.archetype.common;bundle-version="1.6.3",
  org.eclipse.jdt.ui;bundle-version="3.11.2"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator
-Export-Package: org.fusesource.ide.projecttemplates.adopters.util,
+Export-Package: org.fusesource.ide.projecttemplates.adopters,
+ org.fusesource.ide.projecttemplates.adopters.util,
+ org.fusesource.ide.projecttemplates.impl.simple,
  org.fusesource.ide.projecttemplates.util;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.util.camel;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.wizards;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"
