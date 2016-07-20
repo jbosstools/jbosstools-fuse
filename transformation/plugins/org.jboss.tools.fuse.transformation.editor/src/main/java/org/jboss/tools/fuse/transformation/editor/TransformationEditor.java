@@ -379,7 +379,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         }
     }
 
-	private void waitJavaBuild(IProgressMonitor monitor) throws InterruptedException {
+	private void waitJavaBuild(IProgressMonitor monitor) {
 		try{
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
 		} catch(InterruptedException ie){
