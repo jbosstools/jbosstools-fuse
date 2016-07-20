@@ -141,7 +141,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			// if we got an EIP reference then we can check if thats allowed
 			// to be added to the camel context
 			if (eip != null) {
-				return NodeUtils.canBeAddedToCamelContextDirectly(eip);
+				return eip.canBeAddedToCamelContextDirectly();
 			// if we only have a class defined
 			} else if (clazz != null) { 
 				// then we need to instantiate it

@@ -169,18 +169,6 @@ public class NodeUtils {
 	}
     
     /**
-     * returns true if the EIP is allowed to be created on the Camel Context
-     * 
-     * @param eip
-     * @return
-     */
-    public static boolean canBeAddedToCamelContextDirectly(Eip eip) {
-    	return 	eip.getName().equalsIgnoreCase("route") || 
-				eip.getName().equalsIgnoreCase("rest") || 
-				eip.getName().equalsIgnoreCase("restConfiguration"); 
-    }
-    
-    /**
 	 * Returns the EClass belonging to the anchor, or null if not available.
 	 */
 	public static AbstractCamelModelElement getNode(IFeatureProvider fp, Anchor anchor) {
