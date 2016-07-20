@@ -4,11 +4,12 @@
     <groupId>org.apache.cxf.archetype</groupId>
     <artifactId>cxf-jaxrs-service</artifactId>
     <version>3.0.4.redhat-620133</version>
-    <packaging>war</packaging>
-    <name>Simple CXF JAX-RS webapp service using spring configuration</name>
-    <description>Simple CXF JAX-RS webapp service using spring configuration</description>
+    <packaging>bundle</packaging>
+    <name>Simple CXF JAX-RS service using spring configuration</name>
+    <description>Simple CXF JAX-RS service using spring configuration</description>
     <properties>
         <jackson.version>1.8.6</jackson.version>
+        <skipTests>true</skipTests>
     </properties>
       <repositories>
     <repository>
@@ -87,11 +88,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>3.2.6.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -101,24 +97,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.0</version>
-                    <executions>
-                        <execution>
-                            <id>default-cli</id>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <port>13000</port>
-                                <path>/jaxrs-service</path>
-                                <useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -141,77 +119,48 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>reserve-network-port</id>
-                        <goals>
-                            <goal>reserve-network-port</goal>
-                        </goals>
-                        <phase>process-test-resources</phase>
-                        <configuration>
-                            <portNames>
-                                <portName>test.server.port</portName>
-                            </portNames>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>start-tomcat</id>
-                        <goals>
-                            <goal>run-war</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <port>${test.server.port}</port>
-                            <path>/jaxrs-service</path>
-                            <fork>true</fork>
-                            <useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-tomcat</id>
-                        <goals>
-                            <goal>shutdown</goal>
-                        </goals>
-                        <phase>post-integration-test</phase>
-                        <configuration>
-                            <path>/jaxrs-service</path>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.8.1</version>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <service.url>http://localhost:${test.server.port}/jaxrs-service</service.url>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>verify</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Import-Package>
+                            com.fasterxml.jackson.annotation, 
+                            com.fasterxml.jackson.core, 
+                            com.fasterxml.jackson.databind,
+                            com.fasterxml.jackson.jaxrs.json, 
+                            javax.ws.rs.ext,
+                            javax.wsdl,
+                            javax.xml.bind,
+                            javax.xml.bind.annotation,
+                            javax.ws.rs,
+                            javax.ws.rs.core,
+                            org.springframework.beans.factory.config,
+                            *
+                        </Import-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+            <build>
+                <defaultGoal>verify</defaultGoal>
+            </build>
+        </profile>
+    </profiles>
 </project>

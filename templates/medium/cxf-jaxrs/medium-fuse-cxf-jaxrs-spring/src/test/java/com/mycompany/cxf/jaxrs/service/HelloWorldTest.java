@@ -15,12 +15,12 @@ import org.codehaus.jackson.map.MappingJsonFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class HelloWorldIT {
+public class HelloWorldTest {
     private static String endpointUrl;
 
     @BeforeClass
     public static void beforeClass() {
-        endpointUrl = System.getProperty("service.url");
+        endpointUrl = "http://localhost:8181/cxf/rest";
     }
 
     @Test
