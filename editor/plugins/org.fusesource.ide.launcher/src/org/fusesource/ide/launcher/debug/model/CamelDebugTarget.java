@@ -150,7 +150,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @return
 	 */
 	public CamelThread getThreadForId(String uniqueId) {
-		CamelThread t = null;
+		CamelThread t;
 		if (threads.containsKey(uniqueId)) {
 			t = threads.get(uniqueId);
 		} else {
@@ -444,7 +444,9 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		if (this.debugger != null) {
 			this.debugger.disableDebugger();
 			this.debugger.resumeAll();
-			for (CamelThread t : threads.values()) t.terminate();
+			for (CamelThread t : threads.values()){
+				t.terminate();
+			}
 			this.debugger = null;
 		}
 	}
