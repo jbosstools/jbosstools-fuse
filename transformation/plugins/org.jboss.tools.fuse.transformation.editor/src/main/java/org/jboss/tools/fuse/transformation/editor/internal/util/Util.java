@@ -720,7 +720,7 @@ public class Util {
 
         Image SEARCH = Activator.imageDescriptor("search16.gif").createImage(); //$NON-NLS-1$
 
-        Image SHOW_TYPES = Activator.imageDescriptor("showTypes32x16.gif").createImage(); //$NON-NLS-1$
+        Image SHOW_TYPES = Activator.imageDescriptor("type16.png").createImage(); //$NON-NLS-1$
 
         Image TRANSFORMATION = Activator.imageDescriptor("transformation16.gif").createImage(); //$NON-NLS-1$
 
