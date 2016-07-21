@@ -561,6 +561,11 @@ public abstract class AbstractCamelModelElement {
 	public void addChildElement(AbstractCamelModelElement element) {
 		if (this.childElements.contains(element) == false) {
 			this.childElements.add(element);
+			
+			// special handling for the otherwise element
+			if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
+				getParameters().put(OTHERWISE_NONE_NAME, element);
+			}
 		}
 	}
 
