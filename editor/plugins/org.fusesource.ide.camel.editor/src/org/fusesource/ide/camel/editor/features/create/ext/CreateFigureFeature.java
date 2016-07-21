@@ -129,10 +129,10 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		ContainerShape container = context.getTargetContainer();
 		Object containerBO = getBusinessObjectForPictogramElement(container);
 		
-		// creating on the Camel Context / Diagram
+		// creating a figure on the Camel Context / Diagram directly (for instance Route)
 		if (container instanceof Diagram) {
 			CamelFile cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
-			// check if the CamelFile has a Camel Context
+			// sanity check if the CamelFile has a Camel Context
 			if (cf.isEmpty()) {
 				// if not, then we need to add one right away to prevent further problems
 				cf.addChildElement(new CamelContextElement(cf, null));
@@ -153,50 +153,33 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				}
 				return false;
 			}
-
+		}
+		
+		AbstractCamelModelElement containerNode = containerBO instanceof AbstractCamelModelElement ? (AbstractCamelModelElement)containerBO : null;
+	
 		// special handling for creating on choices (only one otherwise allowed)
-		} else if (	containerBO instanceof AbstractCamelModelElement && 
-				AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(((AbstractCamelModelElement)containerBO).getNodeTypeId())) {
-			// only one otherwise per choice
-			AbstractCamelModelElement choice = (AbstractCamelModelElement)containerBO;
-			
-			if (this.eip != null) {
-				if (AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(this.eip.getName()) && 
-					choice.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) != null) {
-					// this choice already has an otherwise case - adding more isn't allowed
-					return false;
-				}
-				// allow when and otherwise children on choice
-				return 	AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(this.eip.getName()) || 
-						AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(this.eip.getName());
-			
-			} else if (clazz != null) {
-				Object obj = newInstance(clazz);
-				if (obj instanceof AbstractCamelModelElement && 
-					AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(((AbstractCamelModelElement)obj).getNodeTypeId()) && 
-					choice.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) != null) {
-					// this choice already has an otherwise case - adding more isn't allowed
-					return false;
-				}
+		if (containerNode != null && 
+			AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(containerNode.getNodeTypeId())) {
+			boolean validChoiceDrop = isValidChoiceDrop(containerNode);
+			if (!validChoiceDrop) {
+				return false;
 			}
 		}
 		
-		// we have to prevent some eips being dropped on the route even if camel catalog says its allowed
-		// probably issues in the catalog which will be fixed at later time, then we can
-		// remove the handling for these exceptions
-		if (AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(eip.getName()) || 
-			AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(eip.getName()) && 
-			containerBO != null && 
-			!AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(((AbstractCamelModelElement)containerBO).getNodeTypeId())) {
+		// check if we try to drop a second Otherwise onto a Choice
+		if (isInvalidAction(containerNode)) {
 			return false;
 		}
 		
 		if (containerBO instanceof AbstractCamelModelElement) {
 			AbstractCamelModelElement sourceNode = (AbstractCamelModelElement)containerBO;
-			
+
+			// checking if the new node is a valid child of the container its dropped on
 			if (NodeUtils.isValidChild(sourceNode, eip)) {
 				return true;
 			} else {
+				// this case is when user drops a figure onto a NON-container which then
+				// causes the new figure created with a connection to the other one
 				// only allow drop on node if the node has no outgoing or no incoming connection
 				return sourceNode.getOutputElement() == null || sourceNode.getInputElement() == null;
 			}
@@ -229,7 +212,48 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		}
 		return iconName;
 	}
+	
+	/**
+	 * checks if the drop on the choice is valid
+	 * 
+	 * @param choice
+	 * @return
+	 */
+	private boolean isValidChoiceDrop(AbstractCamelModelElement choice) {
+		if (this.eip != null) {
+			if (AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(this.eip.getName()) && 
+				choice.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) != null) {
+				// this choice already has an otherwise case - adding more isn't allowed
+				return false;
+			}
+			// allow when and otherwise children on choice
+			return 	AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(this.eip.getName()) || 
+					AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(this.eip.getName());
+		
+		} else if (clazz != null) {
+			Object obj = newInstance(clazz);
+			if (obj instanceof AbstractCamelModelElement && 
+				AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(((AbstractCamelModelElement)obj).getNodeTypeId()) && 
+				choice.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) != null) {
+				// this choice already has an otherwise case - adding more isn't allowed
+				return false;
+			}
+		}
+		return true;
+	}
 
+	/**
+	 * checks for edge cases where the catalog doesn't provide correct information
+	 * 
+	 * @param containerBO	the node to check
+	 * @return	true if its an invalid action
+	 */
+	private boolean isInvalidAction(AbstractCamelModelElement containerBO) {
+		return 	(AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(eip.getName()) || AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(eip.getName())) && 
+				containerBO != null && 
+				!AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(containerBO.getNodeTypeId());
+	}
+	
 	/**
 	 * retrieves the icon name for the given class via reflection
 	 * 
@@ -300,7 +324,10 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 
 			// add the node to the diagram
 			addNodeToDiagram(ctxNew != null ? ctxNew : context, ctxNew != null, node, container);
-	        
+
+			// select the new node
+			NodeUtils.setSelectedNode(node, getFeatureProvider());	        
+	        			
 			// return newly created business object(s)
 			return new Object[] { node };
 		}

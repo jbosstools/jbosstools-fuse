@@ -23,6 +23,7 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -167,6 +168,17 @@ public class NodeUtils {
 		}
 		return answer;
 	}
+    
+    public static void setSelectedNode(final AbstractCamelModelElement node, final IFeatureProvider fp) {
+    	// select the new node
+		Display.getCurrent().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				PictogramElement pe = fp.getPictogramElementForBusinessObject(node);
+		        fp.getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer().selectPictogramElements(new PictogramElement[] {pe});		
+			}
+		});
+    }
     
     /**
 	 * Returns the EClass belonging to the anchor, or null if not available.
