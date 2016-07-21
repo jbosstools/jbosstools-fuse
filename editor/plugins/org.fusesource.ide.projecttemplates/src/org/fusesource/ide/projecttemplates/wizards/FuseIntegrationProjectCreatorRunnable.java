@@ -225,7 +225,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						try {
 							if (!holder[0].exists()) {
 								try {
-									waitJob();
+									waitJob(20);
 								} catch (OperationCanceledException | InterruptedException e) {
 									ProjectTemplatesActivator.pluginLog().logError(e);
 									return;
@@ -285,7 +285,10 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 	}
 
-	private static void waitJob() throws OperationCanceledException, InterruptedException {
+	private static void waitJob(int decreasingCounter) throws InterruptedException {
+		if(decreasingCounter > 0){
+			return;
+		}
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
@@ -294,7 +297,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		} catch (InterruptedException e) {
 			// Workaround to bug
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			waitJob();
+			waitJob(decreasingCounter--);
 		}
 	}
 	
@@ -312,7 +315,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		}
 		try {
-			waitJob();
+			waitJob(20);
 		} catch (OperationCanceledException | InterruptedException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 			return null;
