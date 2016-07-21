@@ -16,7 +16,6 @@ import static org.mockito.Mockito.doReturn;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -30,8 +29,6 @@ public class ChoiceManipulationTest {
 	private Eip underlyingChoiceMetaModel;
 	@Mock
 	private Eip underlyingOtherwiseMetaModel;
-	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
-	private CamelFile camelFile;
 	
 	@Test
 	public void testAddingOtherwiseChild() throws Exception {
