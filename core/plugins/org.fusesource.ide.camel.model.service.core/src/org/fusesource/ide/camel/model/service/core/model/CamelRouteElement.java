@@ -11,9 +11,10 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -95,12 +96,25 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 	}
 
 	Set<CamelFile> findCamelFilesInSameProject() {
+		// grab ab camel files
 		Set<IFile> allCamelFilesInProject = new CamelFilesFinder().findFiles(getCamelFile().getResource().getProject());
-		return allCamelFilesInProject.stream()
-				.map(file -> new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor()))
-				.collect(Collectors.toSet());
+		Set<CamelFile> cfSet = new HashSet<>();
+		Iterator<IFile> cfIt = allCamelFilesInProject.iterator();
+		while (cfIt.hasNext()) {
+			IFile file = cfIt.next();
+			// try to grab from opened editors
+			CamelFile cf = CamelFilesFinder.getFileFromEditor(file);
+			if (cf != null) {
+				// use the model of the open editor
+				cfSet.add(cf);
+			} else {
+				// use what is available in the file
+				cfSet.add(new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor()));
+			}
+		}
+		return cfSet;
 	}
-
+	
 	private boolean isNewIDAvailable(Set<CamelFile> resolvedCamelFiles, String answer) {
 		for (CamelFile camelFile : resolvedCamelFiles) {
 			if(!camelFile.isNewIDAvailable(answer)){

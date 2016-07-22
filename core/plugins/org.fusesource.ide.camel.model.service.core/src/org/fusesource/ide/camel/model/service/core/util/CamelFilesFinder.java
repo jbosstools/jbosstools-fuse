@@ -18,11 +18,17 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 
 public class CamelFilesFinder {
-	
-	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
 	
 	/**
 	 * @param resource the resource in which the search occurs
@@ -35,7 +41,8 @@ public class CamelFilesFinder {
 				IResource[] children = ((IContainer)resource).members();
 				for (IResource f : children) {
 					if (f instanceof IContainer) {
-						if (!isWorkProjectFolder(resource.getProject(), f)){
+						if (!isWorkProjectFolder(resource.getProject(), f) && 
+							!isTestProjectFolder(resource.getProject(), f)) {
 							res.addAll(findFiles(f));
 						}
 					} else {
@@ -61,6 +68,20 @@ public class CamelFilesFinder {
 		return ("target".equalsIgnoreCase(resourceName) || "bin".equalsIgnoreCase(resourceName))
 				&& f.getParent().getName().equalsIgnoreCase(project.getName());
 	}
+	
+	/**
+	 * checks if the resource f is projectname/src/test/ folder
+	 * 
+	 * @param project
+	 * @param f
+	 * @return
+	 */
+	private boolean isTestProjectFolder(IProject project, IResource f) {
+		String resourceName = f.getName();
+		return "test".equalsIgnoreCase(resourceName) && 
+			   "src".equalsIgnoreCase(f.getParent().getName()) && 
+			   f.getParent().getParent().getName().equalsIgnoreCase(project.getName());
+	}
 
 	/**
 	 * @param ifile
@@ -74,7 +95,32 @@ public class CamelFilesFinder {
 				&& ifile.getContentDescription()
 							.getContentType()
 							.getId()
-							.equals(FUSE_CAMEL_CONTENT_TYPE);
+							.equals(CamelUtils.FUSE_CAMEL_CONTENT_TYPE);
 	}
-
+	
+	/**
+	 * this method checks if the given file is opened in one of the camel editors
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static CamelFile getFileFromEditor(IFile file) {
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+		    for (IWorkbenchPage page : window.getPages()) {
+		        for (IEditorReference editor : page.getEditorReferences()) {
+		            if (editor.getId().equals(CamelUtils.CAMEL_EDITOR_ID)) {
+		            	IEditorPart oEditor = editor.getEditor(false);
+		            	if (oEditor != null) {
+			            	CamelXMLEditorInput editorInput = oEditor.getEditorInput() != null ? (CamelXMLEditorInput)oEditor.getEditorInput() : null;
+			            	if (editorInput != null && editorInput.getCamelContextFile().equals(file)) {
+			            		// file is currently opened in editor -> use its model
+			            		return oEditor.getAdapter(CamelFile.class);
+			            	}
+		            	}
+		            }
+		        }
+		    }
+		}
+		return null;
+	}
 }

@@ -1009,7 +1009,7 @@ public abstract class AbstractCamelModelElement {
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null &&
 			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals("element") &&
- !elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
+			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
 			return;
 		}
 

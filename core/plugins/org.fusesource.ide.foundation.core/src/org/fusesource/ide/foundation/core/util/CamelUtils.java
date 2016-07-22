@@ -50,6 +50,7 @@ import org.xml.sax.InputSource;
 public class CamelUtils {
 	
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
+	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
 	
 	private static FindNamespaceHandlerSupport blueprintXmlMatcher = new BlueprintNamespaceHandler();
 	private static FindNamespaceHandlerSupport springXmlMatcher = new SpringNamespaceHandler();
@@ -179,9 +180,8 @@ public class CamelUtils {
 								throw e;
 							}
 						}						
-						if (contentDescription != null
-								&& "org.fusesource.ide.camel.editor.camelContentType"
-										.equals(contentDescription.getContentType().getId())) {
+						if (contentDescription != null && 
+							FUSE_CAMEL_CONTENT_TYPE.equals(contentDescription.getContentType().getId())) {
 							files.add(file);
 						}
 					}

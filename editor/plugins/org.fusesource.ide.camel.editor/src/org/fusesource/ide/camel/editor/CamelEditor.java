@@ -124,7 +124,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 		PreferenceManager.getInstance().getUnderlyingStorage().addPropertyChangeListener(this);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
@@ -655,6 +655,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == TextEditor.class) {
 			return this.sourceEditor;
+		} else if (adapter == CamelFile.class) {
+			return this.designEditor.getModel();
 		} else if (adapter == CamelDesignEditor.class) {
 			return this.designEditor;
 		} else if (adapter == CamelGlobalConfigEditor.class) {
