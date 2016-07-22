@@ -805,6 +805,15 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		});
 	}
 	
+	/**
+	 * returns the model
+	 * 
+	 * @return
+	 */
+	public CamelFile getModel() {
+		return this.designEditor != null ? this.designEditor.getModel() : null;
+	}
+	
 	public CamelXMLEditorInput getCamelXMLInput() {
 		return this.editorInput;
 	}
