@@ -68,7 +68,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			IProject project = facade.getProject();
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
-			installDefaultFacets(project, mavenProject, fproj, monitor);
+			if (fproj != null && checkCamelContextsExist(project)) {
+				installDefaultFacets(project, mavenProject, fproj, monitor);	
+			}
 		}
 		super.mavenProjectChanged(event, monitor);
 	}
