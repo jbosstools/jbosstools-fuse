@@ -114,14 +114,7 @@ public class CamelFilesFinder {
 			            	CamelXMLEditorInput editorInput = oEditor.getEditorInput() != null ? (CamelXMLEditorInput)oEditor.getEditorInput() : null;
 			            	if (editorInput != null && editorInput.getCamelContextFile().equals(file)) {
 			            		// file is currently opened in editor -> use its model
-			            		try {
-			            			Object oModel = oEditor.getClass().getMethod("getModel").invoke(oEditor);
-			            			if (oModel instanceof CamelFile) {
-			            				return (CamelFile)oModel;
-			            			}
-			            		} catch (Exception ex) {
-			            			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-			            		}
+			            		return oEditor.getAdapter(CamelFile.class);
 			            	}
 		            	}
 		            }
