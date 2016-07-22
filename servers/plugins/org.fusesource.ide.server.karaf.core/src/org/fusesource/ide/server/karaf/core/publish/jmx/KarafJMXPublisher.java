@@ -148,12 +148,18 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		try {
 			// insert a project refresh here
 			IProject project = module[0].getProject();
-			project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-			// first check if there is a bundle installed with that name and version already
-			long bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, version.replaceAll("qualifier", ""));
-			// second if not found previously, check if there is a bundle with that name
-			if (bundleId == -1) {
-				bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, null);
+			if (project != null) {
+			    project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+			}
+			
+			long bundleId = -1;
+			if (symbolicName != null && version != null) {
+    			// first check if there is a bundle installed with that name and version already
+    			bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, version.replaceAll("qualifier", ""));
+    			// second if not found previously, check if there is a bundle with that name
+    			if (bundleId == -1) {
+    				bundleId = jmxPublisher.getBundleId(mbsc, symbolicName, null);
+    			}
 			}
 			if (bundleId != -1) {
 				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
