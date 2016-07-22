@@ -81,10 +81,7 @@ public class GlobalNewIdIT {
 	}
 	
 	private CamelRouteElement createRoute(CamelFile cf, CamelContextElement parent) {
-		Node newNode = null;
-		final String nodeTypeId = "route";
-		final String namespace = null;
-		newNode = cf.createElement(nodeTypeId, namespace);
+		Node newNode = cf.createElement("route", null);
 		return new CamelRouteElement(parent, newNode);
 	}
 	
