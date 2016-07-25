@@ -11,6 +11,7 @@
 package org.fusesource.ide.projecttemplates.adopters.creators;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -26,5 +27,5 @@ public interface TemplateCreatorSupport {
 	 * @param metadata	the metadata of the new project
 	 * @return	true on success, otherwise false
 	 */
-	boolean create(IProject project, NewProjectMetaData metadata);
+	boolean create(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor);
 }

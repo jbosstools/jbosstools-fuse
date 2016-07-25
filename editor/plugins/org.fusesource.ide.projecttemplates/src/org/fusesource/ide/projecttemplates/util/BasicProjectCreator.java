@@ -17,6 +17,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
@@ -41,6 +43,7 @@ public class BasicProjectCreator {
 	 * @return	true on success
 	 */
 	public boolean create(IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.BasicProjectCreator_CreatingProjectMonitorMessage, 2);
 		try {
 			// first create the project
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -49,11 +52,11 @@ public class BasicProjectCreator {
 			if (specificLocationPath != null) {
 				IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(metadata.getProjectName());
 				description.setLocation(specificLocationPath);
-				project.create(description, monitor);
+				project.create(description, subMonitor.newChild(1));
 			} else {
-				project.create(monitor);
+				project.create(subMonitor.newChild(1));
 			}
-			project.open(monitor);
+			project.open(subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;

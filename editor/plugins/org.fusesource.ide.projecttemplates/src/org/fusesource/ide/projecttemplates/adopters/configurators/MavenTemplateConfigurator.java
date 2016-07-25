@@ -23,12 +23,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
@@ -46,16 +47,17 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 */
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		boolean ok = super.configure(project, metadata, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.MavenTemplateConfigurator_ConfiguringTemplatesMonitorMessage, 3);
+		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
 		if (ok) {
 			// by default add the maven nature
-			ok = configureMavenNature(project, monitor);
+			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
 		
 		if (ok) {
 			// by default configure the version of camel used in the pom.xml
-			ok = configurePomCamelVersion(project, metadata, monitor);
+			ok = configurePomCamelVersion(project, metadata, subMonitor.newChild(1));
 		}
 		
 		return ok;
@@ -69,23 +71,18 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success
 	 */
 	protected boolean configureMavenNature(IProject project, IProgressMonitor monitor) {
-		if (monitor == null) {
-			monitor = new NullProgressMonitor();
-		}
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage, 3);
 		try {
-			monitor.beginTask("Configuring Maven Nature...", IProgressMonitor.UNKNOWN);
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
-			waitAllJobsComplete(monitor);
+			waitAllJobsComplete(subMonitor.newChild(1));
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-			configurationManager.enableMavenNature(project, configuration, monitor);
-			configurationManager.updateProjectConfiguration(project, monitor);
+			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
+			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
         } catch(CoreException ex) {
         	ProjectTemplatesActivator.pluginLog().logError(ex.getMessage(), ex);
         	return false;
-        } finally {
-        	monitor.done();
         }
 		return true;
 	}
@@ -111,29 +108,28 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success, otherwise false
 	 */
 	protected boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) {
-		if (monitor == null) {
-			monitor = new NullProgressMonitor();
-		}
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 5);
 		try {
-			monitor.beginTask("Adapting the project to the new Camel version...", IProgressMonitor.UNKNOWN);
-			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString());
+			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
-
+			subMonitor.worked(1);
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {
 				MavenUtils.updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
 			}
+			subMonitor.worked(1);
 			MavenUtils.updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
 			if (m2m.getBuild().getPluginManagement() != null) {
 				MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 			}
+			subMonitor.worked(1);
 			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
-
+			subMonitor.worked(1);
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
-			IFile pomIFile2 = project.getProject().getFile("pom.xml");
+			IFile pomIFile2 = project.getProject().getFile("pom.xml"); //$NON-NLS-1$
 			if (pomIFile2 != null) {
-				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, subMonitor.newChild(1));
 		    }
 			os.close();
 		} catch (Exception ex) {

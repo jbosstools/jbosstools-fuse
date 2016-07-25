@@ -20,6 +20,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
@@ -34,8 +37,8 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	 * @see org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport#create(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
 	 */
 	@Override
-	public boolean create(IProject project, NewProjectMetaData metadata) {
-		return unzipStream(project, metadata);
+	public boolean create(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+		return unzipStream(project, metadata, monitor);
 	}
 	
 	/**
@@ -44,7 +47,8 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	 * @param project
 	 * @return
 	 */
-	protected boolean unzipStream(IProject project, NewProjectMetaData metadata) {
+	protected boolean unzipStream(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UnzipStreamCreator_UnzippingTemplateFileMonitorMessage,  2);
 	     try {
 	    	 // create output directory is not exists
 	    	 File folder = new File(project.getLocation().toOSString());
@@ -52,6 +56,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	    		 folder.mkdir();
 	    	 }
 	    	 InputStream is = getTemplateStream(metadata);
+	    	 subMonitor.worked(1);
 	    	 
 			 if (is instanceof ZipInputStream) {
 				// get the zip file content
@@ -75,8 +80,9 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 				}
 				zis.closeEntry();
 				zis.close();
+				subMonitor.worked(1);
 			 } else {
-				ProjectTemplatesActivator.pluginLog().logError("Unable to unzip stream of type " + is.getClass().getName());
+				ProjectTemplatesActivator.pluginLog().logError("Unable to unzip stream of type " + is.getClass().getName()); //$NON-NLS-1$
 				return false;
 			 }
 	     } catch(IOException ex) {

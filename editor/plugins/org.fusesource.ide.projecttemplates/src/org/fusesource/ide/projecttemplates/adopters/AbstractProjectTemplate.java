@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
@@ -47,18 +48,18 @@ public abstract class AbstractProjectTemplate {
 	 * @return	true on success, otherwise false
 	 * @throws CoreException	on any error
 	 */
-	public final boolean create(IProject project, NewProjectMetaData projectMetaData) throws CoreException {
-		IProgressMonitor monitor = new NullProgressMonitor();
+	public final boolean create(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 		// first we create the project template		
-		boolean ok = getCreator(projectMetaData).create(project, projectMetaData);
+		boolean ok = getCreator(projectMetaData).create(project, projectMetaData, subMonitor.newChild(30));
 		// then we configure the project
 		if (ok) {
 			refreshProjectSync(project, monitor);
-			ok = getConfigurator().configure(project, projectMetaData, monitor);
-			refreshProjectSync(project, monitor);
-			project.getFolder("bin").delete(true, monitor);
-			project.getFolder("build").delete(true, monitor);
-			refreshProjectSync(project, monitor);
+			ok = getConfigurator().configure(project, projectMetaData, subMonitor.newChild(30));
+			refreshProjectSync(project,  subMonitor.newChild(15));
+			project.getFolder("bin").delete(true,  subMonitor.newChild(5)); //$NON-NLS-1$
+			project.getFolder("build").delete(true,  subMonitor.newChild(5)); //$NON-NLS-1$
+			refreshProjectSync(project,  subMonitor.newChild(15));
 		}
 		return ok;
 	}
