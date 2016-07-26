@@ -81,6 +81,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	private String goalName;
 	private boolean showDialog = false;
 	private ExecutePomActionPostProcessor postProcessor;
+	private ILaunch launch;
 
 	public ExecutePomActionSupport(String launchConfigurationId, String launchConfigTypeId, String defaultMavenGoals) {
 		this.launchConfigurationId = launchConfigurationId;
@@ -126,16 +127,16 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			Object object = structuredSelection.getFirstElement();
 
 			if (object instanceof IFile) {
-				launchCamelContext((IFile)object, mode);
+				launch = launchCamelContext((IFile)object, mode);
 			} else if (object instanceof IProject) {
-				launchCamelContextOnProject((IProject)object, mode);					
+				launch = launchCamelContextOnProject((IProject)object, mode);					
 			}
 		}
 	}
 
-	private void launchCamelContext(IFile camelFile, String mode) {
+	private ILaunch launchCamelContext(IFile camelFile, String mode) {
 		if (camelFile == null) {
-			return;
+			return null;
 		}
 
 		IContainer basedir = findPomXmlBasedir(camelFile.getParent());
@@ -146,11 +147,11 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			if (launchConfiguration == null) {
 				launchConfiguration = createLaunchConfiguration(basedir, defaultMavenGoals, camelFile);
 				if (launchConfiguration == null) {
-					return;
+					return null;
 				}
 			}
 		} catch (InvalidConfigurationException e) {
-			return;
+			return null;
 		}
 
 		boolean isWARPackaging = false;
@@ -166,7 +167,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		} catch (CoreException ex) {
 			Activator.getLogger().error(ex);
 			MessageDialog.openError(getShell(), "Unable to launch...", "An error occured when trying to launch the project. Message: " + ex.getMessage());
-			return;
+			return null;
 		}
 		boolean openDialog = showDialog;
 		if (!openDialog) {
@@ -201,16 +202,18 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				category = "org.fusesource.ide.launcher.ui.debugCamelLaunchGroup";
 			}
 			if (DebugUITools.openLaunchConfigurationPropertiesDialog(getShell(), lc, category, null) == Window.CANCEL) {
-				return;
+				return null;
 			}
 		} 
 		
 		try {
 			final ILaunch launch = lc.doSave().launch(mode, new NullProgressMonitor());
 			handlePostLaunch(launch);
+			return launch;
 		} catch (CoreException ex) {
 			DebugUITools.launch(lc, mode);
 		}
+		return null;
 	}
 
 	/**
@@ -242,7 +245,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 							Activator.getLogger().error("Failed to get exit code of build process", e);
 						}
 					}
-					// only invoke post processor on sucess
+					// only invoke post processor on success
 					if (!failed) {
 						postProcessor.executeOnSuccess();
 					} else {
@@ -510,11 +513,11 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		return basedir.getFile(Path.fromOSString("pom.xml"));		
 	}
 	
-	private void launchCamelContextOnProject(IProject project, String mode) {
+	private ILaunch launchCamelContextOnProject(IProject project, String mode) {
 		try{
 			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);		
 			if (files.size() == 1) {
-				launchCamelContext(files.get(0), mode);
+				return launchCamelContext(files.get(0), mode);
 			} else if (files.size() > 1) {
 				//org.jboss.tools.fuse.transformation.editor.internal.util.Util.selectCamelResourceFromWorkspace(Shell, IProject)
 				FilteredItemsSelectionDialog selector = new FilteredResourcesSelectionDialog(getShell(), false, project, IResource.FILE){
@@ -535,14 +538,18 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				if (selector.open() == Window.OK) {
 					Object[] resultArray = selector.getResult();
 					if (resultArray != null && resultArray.length > 0 && resultArray[0] instanceof IFile) {
-						launchCamelContext((IFile) resultArray[0],mode);
+						return launchCamelContext((IFile) resultArray[0],mode);
 					}
 				}
 			}
 		} catch (CoreException e) {
 			Activator.getLogger().error("Failed to launch camel context: " + e, e);
 		}
+		return  null;
 	}
 
+	public ILaunch getLaunch() {
+		return launch;
+	}
 
 }

@@ -30,7 +30,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	private static final boolean DEVELOPER_MODE = false;
 	
 	private static final String CAMEL_PROCESSOR_MBEAN = "org.apache.camel:type=processors,name=\"%s\",*";
-	private static final String CAMEL_DEBUGGER_MBEAN_DEFAULT = "org.apache.camel:type=tracer,name=BacklogDebugger,*";
+	public static final String CAMEL_DEBUGGER_MBEAN_DEFAULT = "org.apache.camel:type=tracer,name=BacklogDebugger,*";
 	private static final String CAMEL_CONTEXT_MBEAN = "org.apache.camel:type=context,name=\"%s\",*";
 	
 	

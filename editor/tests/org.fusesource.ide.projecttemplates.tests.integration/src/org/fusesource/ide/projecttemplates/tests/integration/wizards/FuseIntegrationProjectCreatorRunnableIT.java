@@ -10,14 +10,21 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.File;
-import java.nio.file.Files;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.management.MBeanServerConnection;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
+
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -26,8 +33,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -42,6 +51,9 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
+import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
@@ -51,8 +63,9 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -68,9 +81,11 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
 
-	private IProject project = null;
+	protected IProject project = null;
 	boolean deploymentFinished = false;
 	boolean isDeploymentOk = false;
+	private ILaunch launch = null;
+	protected String camelVersion;
 
 	@Before
 	public void setup() {
@@ -80,42 +95,32 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	@After
-	public void tearDown() throws CoreException, OperationCanceledException, InterruptedException {
+	public void tearDown() throws CoreException, InterruptedException, IOException {
+		if(launch != null){
+			launch.terminate();
+		}
 		if (project != null) {
+			//refresh otherwise cannot delete due to target folder created
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			waitJob();
-			project.delete(true, new NullProgressMonitor());
+			readAndDispatch(0);
+			boolean projectSuccesfullyDeleted = false;
+			while(!projectSuccesfullyDeleted ){
+				try{
+					project.delete(true, true, new NullProgressMonitor());
+				} catch(Exception e){
+					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
+					readAndDispatch(0);
+					waitJob();
+					continue;
+				}
+				projectSuccesfullyDeleted = true;
+			}
 		}
 	}
 
-	@Test
-	public void testEmptyBlueprintProjectCreation() throws Exception {
-		testEmptyProjectCreation("-SimpleBlueprintProject", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
-	}
-
-	@Test
-	public void testEmptySpringProjectCreation() throws Exception {
-		testEmptyProjectCreation("-SimpleSpringProject", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
-	}
-
-	@Test
-	public void testEmptySpringProjectCreationOnLocationOutsideWorkspace() throws Exception {
-		NewProjectMetaData metadata = createDefaultNewProjectMetadata(CamelDSLType.SPRING,
-				FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName() + "-SimpleSpringProject_outsideProject");
-		File folderForprojectOutsiddeWorkspaceLocation = tmpFolder.newFolder("folderForProjectOutsideWorkspaceLocation");
-		final Path locationPath = new Path(folderForprojectOutsiddeWorkspaceLocation.getAbsolutePath());
-		metadata.setLocationPath(locationPath);
-		testEmptyProjectCreation("-SimpleSpringProject_outsideProject", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", metadata);
-
-		assertThat(Files.isSameFile(project.getLocation().toFile().toPath(), locationPath.toFile().toPath())).isTrue();
-	}
-
-	@Test
-	public void testEmptyJavaProjectCreation() throws Exception {          
-		testEmptyProjectCreation("-SimpleJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/CamelRoute.java", null);
-	}
-
-	private void testEmptyProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
-		final String projectName = FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName() + projectNameSuffix;
+	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
+		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
 
 		if (metadata == null) {
@@ -126,7 +131,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		assertThat(project.exists()).isTrue();
+		assertThat(project.exists()).describedAs("The project "+ project.getName()+ " doesn't exist.").isTrue();
 		final IFile camelResource = project.getFile(camelFilePath);
 		assertThat(camelResource.exists()).isTrue();
 
@@ -135,14 +140,17 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 
 		checkCorrectEditorOpened(camelResource);
 		// TODO: fix project to activate no validation error check
-		// checkNoValidationError();
+		//checkNoValidationError();
 		waitJob();
 		checkCorrectFacetsEnabled(project);
 		waitJob();
 		checkCorrectNatureEnabled(project);
-		// TODO: currently we generate completely project which are not valid so
-		// cannot be launched
-		// launchDebug(project);
+		
+		if(!CamelDSLType.JAVA.equals(dsl)){
+			launchDebug(project);
+		} else {
+			//TODO: different Run? or implement the java local camel context?
+		}
 	}
 
 	/**
@@ -150,14 +158,14 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	 * @param projectName
 	 * @return
 	 */
-	private NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, final String projectName) {
+	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, final String projectName) {
 		NewProjectMetaData metadata;
 		metadata = new NewProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		// TODO use latest version, or a parameterized test to test all versions
 		// available CamelModelFactory.getLatestCamelVersion()
-		metadata.setCamelVersion("2.15.1.redhat-621084");
+		metadata.setCamelVersion(camelVersion);
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(dsl);
 		metadata.setBlankProject(true);
@@ -206,9 +214,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 			currentAwaitedTime += 100;
 			System.out.println("awaited activation of editor " + currentAwaitedTime);
 		}
-		// @formatter:off
 		IEditorPart editor = getCurrentActiveEditor();
-		// @formatter:on
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
 	}
@@ -254,20 +260,31 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
-	private void launchDebug(IProject project) throws InterruptedException {
-		final ExecutePomAction executePomAction = new ExecutePomAction();
+	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
+		final File parent = new File("target/MavenLaunchOutputs");
+		parent.mkdirs();
+		final String mavenOutputFilePath = new File(parent, "MavenLaunchOutput-"+project.getName()+".txt").getAbsolutePath();
+		final ExecutePomAction executePomAction = new ExecutePomAction(){
+			
+			@Override
+			protected void appendAttributes(IContainer basedir, ILaunchConfigurationWorkingCopy workingCopy, String goal) {
+				super.appendAttributes(basedir, workingCopy, goal);
+				System.out.println("Maven output file path: "+mavenOutputFilePath);
+				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+			}
+			
+		};
 
 		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
 
 			@Override
 			public void executeOnSuccess() {
-				// TODO: shutdown
-				deploymentFinished = true;
-				isDeploymentOk = true;
+				//Won't happen
 			}
 
 			@Override
 			public void executeOnFailure() {
+				//if there is a Maven build failure
 				deploymentFinished = true;
 				isDeploymentOk = false;
 			}
@@ -275,9 +292,26 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		executePomAction.launch(new StructuredSelection(project), ILaunchManager.DEBUG_MODE);
 		int currentAwaitedTime = 0;
 		while (currentAwaitedTime < 30000 && !deploymentFinished) {
-			Thread.sleep(100);
-			currentAwaitedTime += 100;
+			readAndDispatch(0);
+			try{
+				JMXConnector jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI));
+				MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
+				deploymentFinished = !mbsc.queryMBeans(new ObjectName(CamelDebugFacade.CAMEL_DEBUGGER_MBEAN_DEFAULT), null).isEmpty();
+				isDeploymentOk = deploymentFinished;
+				System.out.println("JMX connection succeeded");
+				System.out.println("isDeployment Finished? " + isDeploymentOk);
+				jmxc.close();
+			} catch(IOException ioe){
+				System.out.println("JMX connection attempt failed");
+			}
+			Thread.sleep(500);
+			currentAwaitedTime += 500;
 		}
-		assertThat(isDeploymentOk).isTrue();
+		assertThat(isDeploymentOk).as("build/deployment failed, you can have a look to the file "+ mavenOutputFilePath + " for more information.").isTrue();
+		launch = executePomAction.getLaunch();
+		assertThat(Stream.of(launch.getDebugTargets())
+				.filter(debugTarget -> debugTarget instanceof CamelDebugTarget)
+				.collect(Collectors.toList()))
+		.isNotEmpty();
 	}
 }
