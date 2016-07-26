@@ -13,10 +13,12 @@ package org.fusesource.ide.projecttemplates.adopters.configurators;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
@@ -36,19 +38,20 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	 */
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion();
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.DefaultTemplateConfigurator_ConfiguringJavaProjectMonitorMessage, 8);
+		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
 			// add java facet
-			installFacet(project, "jst.java", javaFacet.getVersionString(), null, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.newChild(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 			// add m2 facet
-			installFacet(project, "jboss.m2", null, null, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			installFacet(project, "jboss.m2", null, null, subMonitor.newChild(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 			// now add jst utility
-			installFacet(project, "jst.utility", null, null, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
-			project.getFile(".classpath").delete(true, monitor);
-			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+			installFacet(project, "jst.utility", null, null, subMonitor.newChild(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			project.getFile(".classpath").delete(true, subMonitor.newChild(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;

@@ -21,8 +21,8 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
@@ -56,6 +56,7 @@ import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
@@ -66,7 +67,7 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
  */
 public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWithProgress {
 
-	public static final String FUSE_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective";
+	public static final String FUSE_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective"; //$NON-NLS-1$
 
 	private final NewProjectMetaData metadata;
 
@@ -79,10 +80,10 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 6);
 		// first create the project skeleton
-		monitor.beginTask("Creating the project...", IProgressMonitor.UNKNOWN);
 		BasicProjectCreator c = new BasicProjectCreator(metadata);
-		boolean ok = c.create(monitor);
+		boolean ok = c.create(subMonitor.newChild(1));
 		if (ok) {
 			// then configure the project for the given template
 			AbstractProjectTemplate template = metadata.getTemplate();
@@ -92,9 +93,9 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 			// now execute the template
 			try {
-				template.create(c.getProject(), metadata);
+				template.create(c.getProject(), metadata, subMonitor.newChild(1));
 			} catch (CoreException ex) {
-				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex);
+				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 			}
 		}
 
@@ -106,25 +107,26 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (switchPerspective) {
 			// switch to Fuse perspective if necessary.
 			switchToFusePerspective(workbenchWindow);
+			subMonitor.worked(1);
 		}
 		// refresh
 		try {
-			c.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+			c.getProject().refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
 		// delete invalid MANIFEST files
-		IResource rs = c.getProject().findMember("src/META-INF/");
+		IResource rs = c.getProject().findMember("src/META-INF/"); //$NON-NLS-1$
 		if (rs.exists()) {
 			try {
-				rs.delete(true, monitor);
+				rs.delete(true, subMonitor.newChild(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
 		}
 		// finally open the camel context file
-		openCamelContextFile(c.getProject(), monitor);
-		monitor.done();
+		openCamelContextFile(c.getProject(), subMonitor.newChild(1));
+		subMonitor.done();
 	}
 
 	/**
@@ -209,7 +211,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (project != null) {
 			final IFile[] holder = new IFile[1];
 			searchCamelContextXMLFile(project, holder);
-			ProjectTemplatesActivator.pluginLog().logWarning("xml file found? " + holder[0]);
+			ProjectTemplatesActivator.pluginLog().logWarning("xml file found? " + holder[0]); //$NON-NLS-1$
 			try {
 				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
 					searchCamelContextJavaFile(project, monitor, holder);
@@ -233,7 +235,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 							}
 							IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), holder[0], OpenStrategy.activateOnOpen());
 						} catch (PartInitException e) {
-							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e);
+							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
 						}
 					}
 				});
@@ -268,10 +270,10 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						//@formatter:off
 						final IContentDescription fileContentDescription = file.getContentDescription();
 						String firstSegmentPathInProject = file.getProjectRelativePath().segment(0);
-						if (!"target".equals(firstSegmentPathInProject)
-								&& !"bin".equals(firstSegmentPathInProject)
+						if (!"target".equals(firstSegmentPathInProject) //$NON-NLS-1$
+								&& !"bin".equals(firstSegmentPathInProject) //$NON-NLS-1$
 								&& fileContentDescription != null
-								&& "org.fusesource.ide.camel.editor.camelContentType".equals(fileContentDescription.getContentType().getId())) {
+								&& "org.fusesource.ide.camel.editor.camelContentType".equals(fileContentDescription.getContentType().getId())) { //$NON-NLS-1$
 						//@formatter:on
 							holder[0] = file;
 						}
@@ -322,12 +324,12 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 		IJavaProject javaProject = JavaCore.create(project);
 		try {
-			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder");
+			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder"); //$NON-NLS-1$
 			if (routeBuilderType != null) {
 				IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
 				CollectingSearchRequestor requestor = new CollectingSearchRequestor();
 				// @formatter:off
-				final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH);
+				final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
 				new SearchEngine().search(searchPattern,
 						new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
 						searchScope,
@@ -335,7 +337,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						monitor);
 				// @formatter:on
 				List<SearchMatch> results = requestor.getResults();
-				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results);
+				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results); //$NON-NLS-1$
 				for (SearchMatch searchMatch : results) {
 					final Object element = searchMatch.getElement();
 					if (element instanceof ResolvedSourceType) {
