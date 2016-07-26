@@ -26,14 +26,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
-import org.eclipse.jst.common.project.facet.JavaFacetInstallDataModelProvider;
 import org.eclipse.jst.common.project.facet.WtpUtils;
-import org.eclipse.jst.j2ee.internal.project.facet.UtilityFacetInstallDataModelProvider;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
-import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -52,6 +49,8 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
+	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-";
+	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel";
 	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
@@ -135,7 +134,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 
-		if (!isCamelConfigurable(mavenProject, project, monitor)) {
+		if (!isCamelConfigurable(project, monitor)) {
 			return;
 		}
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -154,21 +153,19 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor)
 			throws CoreException {
-		String camelVersion = getCamelVersion(project, mavenProject);
+		String camelVersion = getCamelVersion(mavenProject);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
-			IDataModel javaModel = DataModelFactory.createDataModel(new JavaFacetInstallDataModelProvider());
-			installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), javaModel, monitor);
-			installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), null, monitor);
-			IDataModel utilityModel = (IDataModel) new UtilityFacetInstallDataModelProvider().create();
-			installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion(), utilityModel, monitor);
+			installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), monitor);
+			installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), monitor);
+			installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion(), monitor);
 			installCamelFacet(fproj, fpwc, camelVersion, monitor);
 			fpwc.commitChanges(monitor);
 			configureNature(project, mavenProject, monitor); 
 		}
 	}
 	
-	private boolean isCamelConfigurable(MavenProject mavenProject, IProject project, IProgressMonitor monitor) {
+	private boolean isCamelConfigurable(IProject project, IProgressMonitor monitor) {
 		// Look for a file that has parent "blueprint" and grandparent "OSGI-INF" or
 		// spring in folder META-INF
 		final Boolean[] found = new Boolean[1];
@@ -207,10 +204,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return found[0];
 	}
 
-	private String getCamelVersion(IProject project, MavenProject mavenProject) throws CoreException {
+	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
 		for (Dependency dep : mavenProject.getDependencies()) {
-			if (dep.getGroupId().equals("org.apache.camel") && 
-				dep.getArtifactId().startsWith("camel-")) {
+			if (isCamelDependency(dep)) {
 				return dep.getVersion();
 			}
 		}
@@ -222,7 +218,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
 		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
-		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion, config, monitor);
+		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion, monitor);
 		if (camelFacetVersion == null) {
 			// we need to switch dependency versions
 			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
@@ -276,8 +272,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return false;
 	}
 	
-	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion,
-			IDataModel config, IProgressMonitor mon) throws CoreException {
+	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion, IProgressMonitor mon) throws CoreException {
 		if (facet != null && !fproj.hasProjectFacet(facet)) {
 			fpwc.addProjectFacet(facetVersion);
 		} else {
@@ -296,12 +291,12 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @return
 	 */
 	private boolean checkCamelDependencies(MavenProject m2Project) {
-		for (Dependency dep : m2Project.getDependencies()) {
-			if (dep.getGroupId().equalsIgnoreCase("org.apache.camel") && 
-				dep.getArtifactId().toLowerCase().startsWith("camel-")) {
-				return true;
-			}
-		}
-		return false;
+		return m2Project.getDependencies().stream()
+				.anyMatch(this::isCamelDependency);
+	}
+	
+	private boolean isCamelDependency(Dependency dep) {
+		return GROUP_ID_ORG_APACHE_CAMEL.equals(dep.getGroupId()) && 
+			dep.getArtifactId().startsWith(ARTFIFACT_ID_CAMEL_PREFIX);
 	}
 }
