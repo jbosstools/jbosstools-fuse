@@ -21,9 +21,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.maven-surefire-plugin>2.15</version.maven-surefire-plugin>
-		<skipTests>true</skipTests>
-		<cxf-version>3.0.2</cxf-version>
+	<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
+	<skipTests>true</skipTests>
+	<cxf-version>3.0.2</cxf-version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -234,14 +234,12 @@
 				</configuration>
 			</plugin>
 
-			<!-- Compiler plugin enforces Java 1.7 compatibility and activates annotation 
-				processors -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.5.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 

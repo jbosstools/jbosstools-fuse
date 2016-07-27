@@ -18,9 +18,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<version.maven-surefire-plugin>2.15</version.maven-surefire-plugin>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
 		<skipTests>true</skipTests>
 		<cxf-version>3.0.2</cxf-version>
 
@@ -231,10 +231,10 @@
 				processors -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.5.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 
