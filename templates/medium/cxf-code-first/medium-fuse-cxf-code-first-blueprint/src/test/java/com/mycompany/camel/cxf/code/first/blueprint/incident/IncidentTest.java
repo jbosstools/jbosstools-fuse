@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mycompany.camel;
+package com.mycompany.camel.cxf.code.first.blueprint.incident;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,8 +27,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class OrderTest {
-    private static final Logger LOG = LoggerFactory.getLogger(OrderTest.class);
+public class IncidentTest {
+    private static final Logger LOG = LoggerFactory.getLogger(IncidentTest.class);
 
     /**
      * Helper method to copy bytes from an InputStream to an OutputStream.
@@ -57,10 +57,11 @@ public class OrderTest {
     @Test
     public void sendRequest() throws Exception {
 
+        String res;
         /*
          * Set up the URL connection to the web service address
          */
-        URLConnection connection = new URL("http://localhost:8181/cxf/order").openConnection();
+        URLConnection connection = new URL("http://localhost:8181/cxf/report/").openConnection();
         connection.setDoInput(true);
         connection.setDoOutput(true);
 
@@ -68,7 +69,7 @@ public class OrderTest {
          * We have prepared a SOAP request in an XML file, so we send the contents of that file to our web service...
          */
         OutputStream os = connection.getOutputStream();
-        InputStream fis = OrderTest.class.getResourceAsStream("/generated.xml");
+        InputStream fis = IncidentTest.class.getResourceAsStream("/generated.xml");
         copyInputStream(fis, os);
 
         /*
@@ -76,9 +77,9 @@ public class OrderTest {
          */
         InputStream is = connection.getInputStream();
         LOG.info("the response is ====> ");
-        String res = getStringFromInputStream(is);
+        res = getStringFromInputStream(is);
         LOG.info(res);
-        Assert.assertTrue(res.contains("OK"));
+        Assert.assertTrue(res.contains("30"));
     }
 
 }

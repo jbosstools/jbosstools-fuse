@@ -14,6 +14,7 @@ public class CamelRoute extends RouteBuilder {
 		CxfComponent cxfComponent = new CxfComponent(getContext());
 		CxfEndpoint serviceEndpoint = new CxfEndpoint(SERVICE_ADDRESS, cxfComponent);
 		serviceEndpoint.setServiceClass(IncidentService.class);
+		serviceEndpoint.setBeanId("reportEndpoint");
 		// Here we just pass the exception back, don't need to use errorHandler
 		errorHandler(noErrorHandler());
 		
