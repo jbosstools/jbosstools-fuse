@@ -239,6 +239,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 						try {
 							if (process.getExitValue() != 0) {
 								failed = true;
+								System.out.println("failed for process: "+process.getLabel() + " exits with value " + process.getExitValue());
 								break;
 							}
 						} catch (DebugException e) {
