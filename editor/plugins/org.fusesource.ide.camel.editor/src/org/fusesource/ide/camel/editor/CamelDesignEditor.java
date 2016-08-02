@@ -119,7 +119,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		DebugPlugin.getDefault().addDebugEventListener(this);
 		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
 			ISelectionService sel = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-			if (sel != null) sel.addSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
+			if (sel != null){
+				sel.addSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
+			}
 		}
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
 	}
@@ -146,7 +148,11 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 */
 	@Override
 	public void dispose() {
-		if (getModel() != null) getModel().removeModelListener(this);
+		DebugPlugin.getDefault().removeDebugEventListener(this);
+		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
+		if (getModel() != null){
+			getModel().removeModelListener(this);
+		}
 		super.dispose();
 	}
 	
@@ -181,7 +187,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		        		// first highlight the suspended node
 		        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null) {
 			        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
-			        		if (ids != null && ids.size()>0) {
+			        		if (ids != null && !ids.isEmpty()) {
 			        			endpointId = ids.iterator().next();
 			        		}
 			        		highlightBreakpointNodeWithID(endpointId);
