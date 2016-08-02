@@ -51,7 +51,7 @@ public abstract class AbstractCamelModelElement {
 	protected static final String ID_ATTRIBUTE = "id";
 	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
 	protected static final String ENDPOINT_NODE_NAME = "endpoint";
-	protected static final String ROUTE_NODE_NAME = "route";
+	public static final String ROUTE_NODE_NAME = "route";
 	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
 	private static final String CHOICE_NODE_NAME = "choice";
 	private static final String WHEN_NODE_NAME = "when";
