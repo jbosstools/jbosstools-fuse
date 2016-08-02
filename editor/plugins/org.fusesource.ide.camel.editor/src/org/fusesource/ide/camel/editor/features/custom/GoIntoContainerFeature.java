@@ -83,7 +83,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		// - selected element is a route
 		// - selected container is the camel context
 		// - context contains more than one route
-		return 	"route".equalsIgnoreCase(cme.getNodeTypeId()) && 
+		return 	AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(cme.getNodeTypeId()) && 
 				editor.getSelectedContainer() instanceof CamelContextElement &&
 				cme.getCamelContext().getChildElements().size() > 1;
 	}
