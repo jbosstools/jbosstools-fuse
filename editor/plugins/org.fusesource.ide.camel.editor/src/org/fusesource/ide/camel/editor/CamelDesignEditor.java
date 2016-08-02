@@ -449,6 +449,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void setSelectedContainer(AbstractCamelModelElement route) {
 		this.selectedContainer = route;
 		switchContainer();
+		if(selectedContainer == null){
+			selectedContainer = getModel().getCamelContext();
+		}
 	}
 	
 	/**
@@ -467,9 +470,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(CamelDesignEditor.this, getEditingDomain(), container, null);
 		        getEditingDomain().getCommandStack().execute(importCommand);
 		        initializeDiagram(importCommand.getDiagram());
-		        refreshDiagramContents(importCommand.getDiagram());
 		        update();
 		        parent.updateSelectedContainer(getSelectedContainer() != null ? getSelectedContainer().getId() : getModel().getCamelContext().getId());
+		        refreshDiagramContents(importCommand.getDiagram());
 		        outlinePage.changeInput(container);
 			}
 		};

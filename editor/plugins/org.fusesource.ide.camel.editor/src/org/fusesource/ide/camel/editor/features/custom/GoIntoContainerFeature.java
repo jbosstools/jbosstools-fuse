@@ -75,8 +75,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		// go up is allowed if:
 		// - selected container is a route
 		// - selected container is the selected element
-		return  editor.getSelectedContainer().equals(cme) && 
-				cme instanceof CamelRouteElement;
+		return cme instanceof CamelRouteElement && cme.equals(editor.getSelectedContainer());
 	}
 	
 	private boolean isGoInto(AbstractCamelModelElement cme, CamelDesignEditor editor) {
@@ -84,7 +83,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		// - selected element is a route
 		// - selected container is the camel context
 		// - context contains more than one route
-		return 	cme.getNodeTypeId().equalsIgnoreCase("route") && 
+		return 	"route".equalsIgnoreCase(cme.getNodeTypeId()) && 
 				editor.getSelectedContainer() instanceof CamelContextElement &&
 				cme.getCamelContext().getChildElements().size() > 1;
 	}
