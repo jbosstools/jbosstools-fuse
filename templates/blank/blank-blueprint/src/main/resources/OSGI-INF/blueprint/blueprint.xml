@@ -34,7 +34,7 @@
       to set those for runtime management purposes (logging, JMX MBeans, ...)
     -->
     <camelContext id="_context1"
-        xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://fabric8.com/examples/order/v7">
+        xmlns="http://camel.apache.org/schema/blueprint">
         <route id="_route1"/>
     </camelContext>
 </blueprint>
