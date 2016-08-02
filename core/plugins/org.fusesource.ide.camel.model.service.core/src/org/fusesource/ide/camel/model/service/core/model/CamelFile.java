@@ -405,7 +405,8 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	public CamelContextElement getCamelContext() {
 		for (AbstractCamelModelElement e : getChildElements()) {
 			String translatedNodeName = e.getTranslatedNodeName();
-			if (translatedNodeName.equalsIgnoreCase("camelContext") || translatedNodeName.equalsIgnoreCase("routes")) {
+			if (AbstractCamelModelElement.CAMEL_CONTEXT_NODE_NAME.equalsIgnoreCase(translatedNodeName)
+					|| AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(translatedNodeName)) {
 				return (CamelContextElement) e;
 			}
 		}

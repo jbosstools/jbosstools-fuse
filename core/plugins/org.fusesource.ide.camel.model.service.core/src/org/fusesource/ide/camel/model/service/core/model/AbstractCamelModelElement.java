@@ -1625,7 +1625,7 @@ public abstract class AbstractCamelModelElement {
 		if (newId == null || newId.trim().isEmpty()) {
 			return false;
 		}
-		return getCamelContext().findNode(newId) == null;
+		return getCamelContext() == null || getCamelContext().findNode(newId) == null;
 	}
 
 	/**
@@ -1641,15 +1641,11 @@ public abstract class AbstractCamelModelElement {
 
 		if (this instanceof CamelContextElement) {
 			CamelContextElement ctx = (CamelContextElement)this;
-			if (!ctx.getDataformats().isEmpty()) {
-				if (ctx.getDataformats().containsKey(nodeId)) {
-					return ctx.getDataformats().get(nodeId);
-				}
+			if (ctx.getDataformats().containsKey(nodeId)) {
+				return ctx.getDataformats().get(nodeId);
 			}
-			if (!ctx.getEndpointDefinitions().isEmpty()) {
-				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
-					return ctx.getEndpointDefinitions().get(nodeId);
-				}
+			if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
+				return ctx.getEndpointDefinitions().get(nodeId);
 			}
 		}
 
