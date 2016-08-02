@@ -32,8 +32,7 @@ public class ExecutePomAction extends ExecutePomActionSupport {
 	}
 
 	@Override
-	protected void appendAttributes(IContainer basedir,
-			ILaunchConfigurationWorkingCopy workingCopy, String goal) {
+	protected void appendAttributes(IContainer basedir, ILaunchConfigurationWorkingCopy workingCopy, String goal) {
 		String path = getSelectedFilePath();
 		workingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, path == null ? "" : path); // basedir.getLocation().toOSString()
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, false);

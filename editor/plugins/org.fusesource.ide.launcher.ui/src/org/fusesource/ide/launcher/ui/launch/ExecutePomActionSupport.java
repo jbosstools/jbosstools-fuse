@@ -11,9 +11,11 @@
 
 package org.fusesource.ide.launcher.ui.launch;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -187,7 +189,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				}
 				// no rider file selection
 				if (Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""))) {
-					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, camelFile.getLocation().toOSString());
+					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, getAttributeURIFormatStorage(camelFile));
 				}
 				openDialog = Strings.isBlank(goals) || Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""));
 				lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
@@ -425,13 +427,9 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	private List<ILaunchConfiguration> findMatchingLaunchConfiguration(IFile camelFile, ILaunchManager launchManager, ILaunchConfigurationType launchConfigurationType,
 			IPath basedirLocation) throws CoreException {
 		ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations(launchConfigurationType);
-		List<ILaunchConfiguration> matchingConfigs = new ArrayList<ILaunchConfiguration>();
-		for (ILaunchConfiguration configuration : launchConfigurations) {
-			if (isLaunchConfigurationMatching(camelFile, basedirLocation, configuration)) {
-				matchingConfigs.add(configuration);
-			}
-		}
-		return matchingConfigs;
+		return Stream.of(launchConfigurations)
+				.filter(configuration -> isLaunchConfigurationMatching(camelFile, basedirLocation, configuration))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -441,7 +439,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 * @throws CoreException
 	 */
-	private boolean isLaunchConfigurationMatching(IFile camelFile, IPath basedirLocation, ILaunchConfiguration configuration) throws CoreException {
+	private boolean isLaunchConfigurationMatching(IFile camelFile, IPath basedirLocation, ILaunchConfiguration configuration) {
 		return isSameBaseDir(basedirLocation, configuration) && isSameCamelFile(camelFile, configuration) && isTestStrategyMatching(configuration);
 	}
 
@@ -466,13 +464,17 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @param configuration
 	 * @throws CoreException
 	 */
-	private boolean isSameBaseDir(IPath basedirLocation, ILaunchConfiguration configuration) throws CoreException {
-		String workDir = MavenLaunchUtils.substituteVar(configuration.getAttribute(MavenLaunchConstants.ATTR_POM_DIR, (String) null));
-		if (workDir == null) {
+	private boolean isSameBaseDir(IPath basedirLocation, ILaunchConfiguration configuration) {
+		try {
+			String workDir = MavenLaunchUtils.substituteVar(configuration.getAttribute(MavenLaunchConstants.ATTR_POM_DIR, (String) null));
+			if (workDir == null) {
+				return false;
+			}
+			IPath workPath = new Path(workDir);
+			return basedirLocation.equals(workPath);
+		} catch (CoreException e) {
 			return false;
 		}
-		IPath workPath = new Path(workDir);
-		return basedirLocation.equals(workPath);
 	}
 
 	/**
@@ -481,9 +483,14 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 * @throws CoreException
 	 */
-	private boolean isSameCamelFile(IFile camelFile, ILaunchConfiguration configuration) throws CoreException {
-		String camelFileFromLaunchConfig = configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
-		return camelFile.getLocationURI().compareTo(new File(camelFileFromLaunchConfig).toURI()) == 0;
+	private boolean isSameCamelFile(IFile camelFile, ILaunchConfiguration configuration) {
+		try {
+			String camelFileFromLaunchConfig = configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
+			return camelFile.getLocationURI().compareTo(new URI(camelFileFromLaunchConfig)) == 0;
+		} catch (CoreException | URISyntaxException e) {
+			Activator.getLogger().warning(e);
+			return false;
+		}
 	}
 
 	/**
@@ -497,11 +504,14 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			StructuredSelection ssel = (StructuredSelection)isel;
 			Object elem = ssel.getFirstElement();
 			if (elem != null && elem instanceof IFile) {
-				IFile f = (IFile)elem;
-				return f.getLocationURI().toString();
+				return getAttributeURIFormatStorage((IFile)elem);
 			}
 		}
 		return null;
+	}
+
+	private String getAttributeURIFormatStorage(IFile file) {
+		return file.getLocationURI().toString();
 	}
 
 	/**
