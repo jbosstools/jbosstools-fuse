@@ -103,17 +103,14 @@ public class CamelDebugUtils {
 	 * @param projectName	the project name
 	 * @return				true if matched
 	 */
-	private static boolean breakpointMatchesSelection(final CamelEndpointBreakpoint breakpoint, final String fileName, final String endpointId, final String projectName) {
+	static boolean breakpointMatchesSelection(final CamelEndpointBreakpoint breakpoint, final String fileName, final String endpointId, final String projectName) {
         return  fileName != null &&
         		endpointId != null &&
         		projectName != null &&
         		breakpoint != null &&
-        		breakpoint.getEndpointNodeId() != null && 
-        		breakpoint.getEndpointNodeId().equalsIgnoreCase(endpointId) && 
-        		breakpoint.getFileName() != null &&
-        		breakpoint.getFileName().equals(fileName) &&
-        		breakpoint.getProjectName() != null &&
-        		breakpoint.getProjectName().equals(projectName);
+        		endpointId.equals(breakpoint.getEndpointNodeId()) && 
+        		fileName.equals(breakpoint.getFileName()) &&
+        		projectName.equals(breakpoint.getProjectName());
     }
 	
 	/**
