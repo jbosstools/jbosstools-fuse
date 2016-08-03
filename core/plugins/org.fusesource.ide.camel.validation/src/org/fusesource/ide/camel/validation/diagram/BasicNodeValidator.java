@@ -56,7 +56,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	public ValidationResult validate(AbstractCamelModelElement camelModelElement) {
 		ValidationResult result = new ValidationResult();
 
-		if (camelModelElement != null && camelModelElement.getCamelContext() != null) { // TODO: check why camel context can be null?!?
+		if (camelModelElement != null && camelModelElement.getCamelContext() != null) {
 			// we check if all mandatory fields are filled
 			validateDetailProperties(camelModelElement, result);
 			final Component component = PropertiesUtils.getComponentFor(camelModelElement);
@@ -142,8 +142,18 @@ public class BasicNodeValidator implements ValidationSupport {
 	 */
 	private void checkFor(ValidationResult result, Parameter prop, Object value, final IValidator validator) {
 		IStatus status = validator.validate(value);
-		if (!status.isOK()) {
+		switch (status.getSeverity()) {
+		case IStatus.ERROR:
 			result.addError(status.getMessage());
+			break;
+		case IStatus.WARNING:
+			result.addWarning(status.getMessage());
+			break;
+		case IStatus.INFO:
+			result.addInfo(status.getMessage());
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -180,15 +190,15 @@ public class BasicNodeValidator implements ValidationSupport {
 		for (AbstractCamelModelElement node : nodes) {
 			if (node.getChildElements() != null) {
 				noDoubledIDs = checkAllUniqueIDs(nodeUnderValidation, node.getChildElements(), processedNodeIDs);
-				if (noDoubledIDs == false) return false;
+				if (!noDoubledIDs){
+					return false;
+				}
 			}
-			if (noDoubledIDs) {
-				if (!Strings.isBlank(node.getId())) {
-					if (processedNodeIDs.contains(node.getId()) && node.equals(nodeUnderValidation)) {
-						return false;
-					} else {
-						processedNodeIDs.add(node.getId());
-					}
+			if (noDoubledIDs && !Strings.isBlank(node.getId())) {
+				if (processedNodeIDs.contains(node.getId()) && node.equals(nodeUnderValidation)) {
+					return false;
+				} else {
+					processedNodeIDs.add(node.getId());
 				}
 			}
 		}
