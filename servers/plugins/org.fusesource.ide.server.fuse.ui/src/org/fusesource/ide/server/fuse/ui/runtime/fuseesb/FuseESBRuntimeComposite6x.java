@@ -43,18 +43,12 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 		wizardHandle.setDescription(Messages.FuseESBRuntimeComposite_wizard_desc);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.servicemix.ui.runtime.AbstractKarafRuntimeComposite#doClassPathEntiresExist(java.lang.String)
-	 */
 	@Override
 	protected boolean doClassPathEntiresExist(String karafInstallDir) {
-		File libServiceMixVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FUSE_VERSION_JAR));
-		return super.doClassPathEntiresExist(karafInstallDir) && libServiceMixVersionJar.exists();
+		File libESBVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FUSE_VERSION_JAR));
+		return super.doClassPathEntiresExist(karafInstallDir) && libESBVersionJar.exists();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.servicemix.ui.runtime.AbstractKarafRuntimeComposite#validate()
-	 */
 	@Override
 	public boolean validate() {
 		valid = super.validate();

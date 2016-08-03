@@ -60,9 +60,6 @@
     <activemq.version>5.11.0.redhat-620133</activemq.version>
     <geronimo.jms.version>1.1.1</geronimo.jms.version>
 
-    <!-- SMX JMX plugin -->
-    <servicemix-nmr.version>1.6.1</servicemix-nmr.version>
-
     <!-- codegen/buildtools fabric8 versions (only build time deps) -->
     <fabric.version>1.2.0.redhat-133</fabric.version>
 

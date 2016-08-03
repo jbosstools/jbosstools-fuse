@@ -13,7 +13,7 @@ package org.fusesource.ide.jmx.commons.messages;
 import java.util.Map;
 
 /**
- * Represents a message exchange in ActiveMQ, Camel, CXF or ServiceMix
+ * Represents a message exchange in ActiveMQ, Camel or CXF
  *
  */
 public interface IExchange extends Comparable<IExchange> {
