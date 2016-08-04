@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.camel.editor.features.create.ext;
 
+import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement.ENDPOINT_TYPE_FROM;
+import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement.ENDPOINT_TYPE_TO;
+
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -199,7 +202,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public Object[] create(ICreateContext context) {
 		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 		ContainerShape container = context.getTargetContainer();
-		AbstractCamelModelElement selectedContainer = null;
+		AbstractCamelModelElement selectedContainer;
 		if (container instanceof Diagram) {
 			selectedContainer = editor.getModel().getCamelContext();
 		} else {
@@ -319,5 +322,15 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// and return it
 		return eip;
+	}
+
+	protected Eip determineEIP(AbstractCamelModelElement parent) {
+		if (eip == null ||
+				ENDPOINT_TYPE_TO.equals(eip.getName())
+				&& parent instanceof CamelRouteElement
+				&& parent.getChildElements().isEmpty()) {
+			return getEipByName(ENDPOINT_TYPE_FROM);
+		}		
+		return getEip();
 	}
 }

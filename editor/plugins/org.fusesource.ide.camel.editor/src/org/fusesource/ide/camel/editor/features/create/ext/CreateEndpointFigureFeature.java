@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.camel.editor.features.create.ext;
 
+import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement.ENDPOINT_TYPE_TO;
+
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -19,6 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.w3c.dom.Node;
@@ -40,17 +43,9 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 		super(fp, name, description, (Class<? extends AbstractCamelModelElement>)null);
 		this.endpointUri = endpointUri;
 		this.deps = deps;
-		setEip(getEipByName("to"));
+		setEip(getEipByName(ENDPOINT_TYPE_TO));
 	}
 
-//	/* (non-Javadoc)
-//	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
-//	 */
-//	@Override
-//	public boolean canCreate(ICreateContext context) {
-//		return true;
-//	}
-	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
 	 */
@@ -59,12 +54,13 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 		if (editor.getModel() != null) { 
 			Node newNode = null;
+			final Eip determinedEIP = determineEIP(parent);
 			if (createDOMNode) {
-				newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				newNode = editor.getModel().createElement(determinedEIP.getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
 			}
 			CamelEndpoint ep = new CamelEndpoint(this.endpointUri);
 			ep.setParent(parent);
-			ep.setUnderlyingMetaModelObject(getEip());
+			ep.setUnderlyingMetaModelObject(determinedEIP);
 			if (createDOMNode) {
 				ep.setXmlNode(newNode);
 				ep.updateXMLNode();
@@ -88,10 +84,10 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	 */
 	@Override
 	public Object[] create(ICreateContext context) {
-		if (this.deps != null && this.deps.isEmpty() == false) {
+		if (deps != null && !deps.isEmpty()) {
 			// add maven dependency to pom.xml if needed
 	        try {
-	            updateMavenDependencies(this.deps);
+	            updateMavenDependencies(deps);
 	        } catch (CoreException ex) {
 	            CamelEditorUIActivator.pluginLog().logError("Unable to add the component dependency to the project maven configuration file.", ex);
 	        }
