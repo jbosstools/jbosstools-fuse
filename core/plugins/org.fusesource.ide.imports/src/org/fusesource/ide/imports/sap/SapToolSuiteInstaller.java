@@ -35,6 +35,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.equinox.p2.ui.ProvisioningUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
@@ -148,6 +149,11 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 					
 					// Delete SAP Library repository
 					ImportUtils.deleteTemporarySapLibrariesRepository();
+					
+					final IStatus jobResult = job.getResult();
+					if(IStatus.ERROR == jobResult.getSeverity()){
+						ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.SapToolSuiteInstaller_errorDuringInstallationTitle, Messages.SapToolSuiteInstaller_errorDuringInstallationMessage, jobResult);
+					}
 				}
 			});
 			ui.schedule(job, StatusManager.SHOW | StatusManager.LOG);
