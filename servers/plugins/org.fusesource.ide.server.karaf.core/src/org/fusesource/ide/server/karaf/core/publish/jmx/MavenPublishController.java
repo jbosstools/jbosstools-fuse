@@ -29,7 +29,7 @@ import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IPublishControllerDeleg
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.util.PublishControllerUtil;
 
 public class MavenPublishController extends AbstractSubsystemController implements IPublishControllerDelegate {
-	public static final List<String> GOALS = Arrays.asList(new String[] {"clean", "package"});
+	public static final List<String> GOALS = Arrays.asList("clean", "package");
 
 	@Override
 	public int publishModule(int kind, int deltaKind, IModule[] module,
