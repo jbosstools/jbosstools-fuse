@@ -6,6 +6,7 @@ Bundle-Version: 8.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.camel.validation.CamelValidationActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.core.databinding;bundle-version="1.5.0",
  org.jboss.tools.common.validation,
  org.jboss.tools.common;bundle-version="3.7.1",
  org.eclipse.core.resources,
@@ -14,7 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.branding;bundle-version="8.0.0",
  org.eclipse.jdt.core;bundle-version="3.11.1",
- org.eclipse.core.databinding;bundle-version="1.5.0",
  org.eclipse.e4.core.contexts;bundle-version="1.4.0",
  org.eclipse.e4.core.services;bundle-version="2.0.0",
  org.eclipse.osgi.services;bundle-version="3.5.0"

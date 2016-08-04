@@ -34,6 +34,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.JsonHelper;
@@ -75,12 +76,12 @@ public final class CamelComponentUtils {
 		ArrayList<String> refs = new ArrayList<>();
 
 		refs.add("");
-		refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet()
-				.toArray(new String[cf.getCamelFile().getGlobalDefinitions().keySet().size()])));
-		refs.addAll(Arrays.asList(cf.getCamelContext().getEndpointDefinitions().keySet()
-				.toArray(new String[cf.getCamelContext().getEndpointDefinitions().size()])));
-		refs.addAll(Arrays.asList(cf.getCamelContext().getDataformats().keySet()
-				.toArray(new String[cf.getCamelContext().getDataformats().size()])));
+		refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet().toArray(new String[cf.getCamelFile().getGlobalDefinitions().keySet().size()])));
+		final CamelContextElement camelContext = cf.getCamelContext();
+		if(camelContext != null){
+			refs.addAll(Arrays.asList(camelContext.getEndpointDefinitions().keySet().toArray(new String[camelContext.getEndpointDefinitions().size()])));
+			refs.addAll(Arrays.asList(camelContext.getDataformats().keySet().toArray(new String[camelContext.getDataformats().size()])));
+		}
 
 		return refs.toArray(new String[refs.size()]);
 	}

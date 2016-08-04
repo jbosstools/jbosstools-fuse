@@ -215,7 +215,7 @@ public class PropertiesUtils {
 	 * @return
 	 */
 	public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP) {
-		ArrayList<Parameter> result = new ArrayList<Parameter>();
+		ArrayList<Parameter> result = new ArrayList<>();
 
 		if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
 			Eip eip = selectedEP.getUnderlyingMetaModelObject();
