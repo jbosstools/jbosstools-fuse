@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -102,25 +103,22 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	}
 
 	public void validate() {
+		String msg = null;
 		if (componentValidator != null) {
-			if (setWarning(componentValidator.isValid(componentCombo.getCombo().getText()))) {
-				return;
-			}
+			msg = componentValidator.isValid(componentCombo.getCombo().getText());
 		}
-		if (parameterValidator != null) {
-			setWarning(parameterValidator.isValid(parameterCombo.getCombo().getText()));
+		if (msg == null && parameterValidator != null) {
+			msg = parameterValidator.isValid(parameterCombo.getCombo().getText());
 		}
+		setWarning(msg);
 	}
 
-	public boolean setWarning(String msg) {
-		if ((msg == null || msg.isEmpty()) && getButton(IDialogConstants.OK_ID) != null) {
-			getButton(IDialogConstants.OK_ID).setEnabled(true);
-			setMessage(null, IMessageProvider.NONE);
-			return false;
+	public void setWarning(String msg) {
+		Button okButton = getButton(IDialogConstants.OK_ID);
+		if (okButton != null) {
+			setMessage(msg, msg == null ? IMessageProvider.NONE : IMessageProvider.WARNING);
+			okButton.setEnabled(msg == null);
 		}
-		setMessage(msg, IMessageProvider.WARNING);
-		getButton(IDialogConstants.OK_ID).setEnabled(false);
-		return true;
 	}
 
 	@Override
