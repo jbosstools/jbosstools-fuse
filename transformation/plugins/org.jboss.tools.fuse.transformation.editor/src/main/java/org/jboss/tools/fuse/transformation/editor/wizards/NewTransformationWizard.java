@@ -35,6 +35,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -277,7 +278,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
 
-                        if (saveCamelConfig) new CamelIOHandler().saveCamelModel(camelModel, camelModel.getResource(), monitor);
+                        if (saveCamelConfig){
+                        	new CamelIOHandler().saveCamelModel(camelModel, camelModel.getResource(), monitor);
+                        }
                         dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
                     }
                     dozerConfigBuilder.saveConfig(configStream);
@@ -323,12 +326,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         try {
             getContainer().run(false, false, op);
             return true;
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
         } catch (Exception e) {
-            e.fillInStackTrace();
+            e.printStackTrace();
         }
         return false;
     }
@@ -430,21 +429,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         File targetSourceFolder = new File(CamelUtils.project().getFolder(javaSourceFolder).getLocationURI());
         switch (type) {
         case OTHER:
-        case CLASS: {
-            final IJavaProject javaProject = JavaCore.create(CamelUtils.project());
-            IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
-            if (pkg != null) {
-                return pkg.getFullyQualifiedName();
-            }
-            return null;
-        }
+        case CLASS:
         case JAVA: {
-            final IJavaProject javaProject = JavaCore.create(CamelUtils.project());
-            IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
-            if (pkg != null) {
-                return pkg.getFullyQualifiedName();
-            }
-            return null;
+            return getJavaQualifiedName(filePath, monitor);
         }
         case JSON: {
             final JsonModelGenerator generator = new JsonModelGenerator();
@@ -476,6 +463,15 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
     }
 
+	private String getJavaQualifiedName(String filePath, IProgressMonitor monitor) throws JavaModelException {
+		final IJavaProject javaProject = JavaCore.create(CamelUtils.project());
+		IType pkg = javaProject.findType(filePath, monitor);
+		if (pkg != null) {
+		    return pkg.getFullyQualifiedName();
+		}
+		return null;
+	}
+
     private String generateXmlModel(XmlModelGenerator generator,
                                     JCodeModel model,
                                     boolean isSource,
@@ -486,13 +482,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         } else {
             elementName = uiModel.getTargetClassName();
         }
-        String modelClassName = null;
-        Map<String, String> mappings = generator.elementToClassMapping(model);
-        if (mappings != null && !mappings.isEmpty()) {
-            modelClassName = mappings.get(elementName);
-        } else {
-            modelClassName = selectModelClass(model);
-        }
+        String modelClassName = getModelClassName(generator, model, elementName);
         // Rename packages to avoid conflicts with existing classes
         CamelUtils.project().refreshLocal(IProject.DEPTH_INFINITE, monitor);
         long time = System.currentTimeMillis();
@@ -529,6 +519,15 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         return null;
     }
+
+	private String getModelClassName(XmlModelGenerator generator, JCodeModel model, String elementName) {
+        Map<String, String> mappings = generator.elementToClassMapping(model);
+        if (mappings != null && !mappings.isEmpty()) {
+            return mappings.get(elementName);
+        } else {
+            return selectModelClass(model);
+        }
+	}
 
     private String selectModelClass(final JCodeModel model) {
         for (final Iterator<JPackage> pkgIter = model.packages(); pkgIter.hasNext();) {

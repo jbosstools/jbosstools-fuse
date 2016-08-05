@@ -42,7 +42,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
      */
     @Override
     public Object[] create(ICreateContext context) {
-    	if (requiredDependencies != null && requiredDependencies.isEmpty() == false) {
+    	if (requiredDependencies != null && !requiredDependencies.isEmpty()) {
 			// add maven dependency to pom.xml if needed
 	        try {
 	            updateMavenDependencies(requiredDependencies);
@@ -77,8 +77,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
         		ep.setParent(parent);
         		ep.setUnderlyingMetaModelObject(getEip());
         		if (createDOMNode) {
-        			Node newNode = null;
-        			newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+        			Node newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
         			ep.setXmlNode(newNode);
         			ep.updateXMLNode();
         		}
