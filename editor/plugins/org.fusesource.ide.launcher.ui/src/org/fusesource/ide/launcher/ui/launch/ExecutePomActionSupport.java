@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
@@ -68,6 +69,7 @@ import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;
@@ -107,8 +109,28 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			IEditorInput editorInput = editor.getEditorInput();
 			if (editorInput instanceof IFileEditorInput) {
 				launchCamelContext(((IFileEditorInput) editorInput).getFile(), mode);
+			} else if(editorInput instanceof CamelXMLEditorInput){
+				launchCamelContext(((CamelXMLEditorInput) editorInput).getCamelContextFile(), mode);
+			} else {
+				IFile targetedFile = editorInput.getAdapter(IFile.class);
+				if (isCamelContentType(targetedFile)) {
+					launchCamelContext(targetedFile, mode);
+				}
 			}
 		}
+	}
+	
+	boolean isCamelContentType(IFile file){
+		if(file != null){
+			try {
+				IContentDescription contentDescription = file.getContentDescription();
+				return contentDescription != null
+						&& CamelUtils.FUSE_CAMEL_CONTENT_TYPE.equals(contentDescription.getContentType().getId());
+			} catch (CoreException e) {
+				Activator.getLogger().error(e);
+			}
+		}
+		return false;
 	}
 
 	public void setPostProcessor(ExecutePomActionPostProcessor postProcessor) {
@@ -136,7 +158,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		}
 	}
 
-	private ILaunch launchCamelContext(IFile camelFile, String mode) {
+	ILaunch launchCamelContext(IFile camelFile, String mode) {
 		if (camelFile == null) {
 			return null;
 		}
