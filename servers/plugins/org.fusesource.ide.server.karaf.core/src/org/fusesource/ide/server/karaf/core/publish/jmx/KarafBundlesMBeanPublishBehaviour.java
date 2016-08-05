@@ -90,15 +90,13 @@ public class KarafBundlesMBeanPublishBehaviour extends
 		try {
 			this.objectName = new ObjectName(KARAF_BUNDLES_MBEAN);
 			
-			Set mbeans = mbsc.queryMBeans(this.objectName, null); 	    
+			Set<ObjectInstance> mbeans = mbsc.queryMBeans(this.objectName, null); 	    
 		    if (mbeans.size() == 1) {
 		    	// remember the mbean
 		    	Object oMbean = mbeans.iterator().next();
-		    	if (oMbean instanceof ObjectInstance) {
-		    		ObjectInstance oi = (ObjectInstance)oMbean;
-		    		this.objectName = oi.getObjectName();
-		    		return true;
-		    	}
+		    	ObjectInstance oi = (ObjectInstance)oMbean;
+		    	this.objectName = oi.getObjectName();
+		    	return true;
 		    }
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
