@@ -44,9 +44,9 @@ extends FieldEditorPreferencePage
 implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 	private ComboFieldEditor defaultLanguageEditor;
-	private BooleanFieldEditor preferIdAsLabelEditor;
 	private ComboFieldEditor layoutOrientationEditor;
 	private BooleanFieldEditor gridVisibilityEditor;
+	private PreferredLabelEditor preferredLabelEditor;
 
 	/**
 	 * 
@@ -70,13 +70,6 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(this.defaultLanguageEditor);
 
-		this.preferIdAsLabelEditor = new BooleanFieldEditor(
-				PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL,
-				UIMessages.editorPreferencePagePreferIdAsLabelSetting,
-				getFieldEditorParent());
-
-		addField(this.preferIdAsLabelEditor);
-
 		namesAndValues = new String[][] {
 				{ UIMessages.editorPreferencePageLayoutOrientationEAST,  String.valueOf(PositionConstants.EAST) },
 				{ UIMessages.editorPreferencePageLayoutOrientationSOUTH, String.valueOf(PositionConstants.SOUTH) }
@@ -95,7 +88,15 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 				getFieldEditorParent());
 
 		addField(this.gridVisibilityEditor);
+		
+		this.preferredLabelEditor = new PreferredLabelEditor(
+				PreferencesConstants.EDITOR_PREFERRED_LABEL, 
+				UIMessages.editorPreferencePageUserLabels,
+				getFieldEditorParent());
 
+		addField(preferredLabelEditor);
+		
+		
 		// Sets up the context sensitive help for this page
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}

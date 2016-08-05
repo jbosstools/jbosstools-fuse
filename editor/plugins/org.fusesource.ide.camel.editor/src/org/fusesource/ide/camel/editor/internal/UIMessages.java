@@ -43,11 +43,11 @@ public class UIMessages extends NLS {
     
     public static String editorPreferencePageDescription;
 	public static String editorPreferencePageDefaultLanguageSetting;
-	public static String editorPreferencePagePreferIdAsLabelSetting;
 	public static String editorPreferencePageLayoutOrientationSetting;
 	public static String editorPreferencePageLayoutOrientationSOUTH;
 	public static String editorPreferencePageLayoutOrientationEAST;
 	public static String editorPreferencePageGridVisibilitySetting;
+	public static String editorPreferencePageUserLabels;
 
 	public static String colorPreferencePageDescription;
 	public static String colorPreferencePageGridColorSetting;
@@ -96,6 +96,22 @@ public class UIMessages extends NLS {
 	public static String SelectEndpointWizard_pageSelectionComponentDescription;
 	public static String SelectEndpointWizard_pageSelectionComponentTitle;
 	public static String SelectEndpointWizard_windowTitle;
+	
+	public static String preferredLabels_newDialogTitle;
+	public static String preferredLabels_editDialogTitle;
+	public static String preferredLabels_title;
+	public static String preferredLabels_component;
+	public static String preferredLabels_componentHeader;
+	public static String preferredLabels_parameter;
+	public static String preferredLabels_parameterHeader;
+	public static String preferredLabels_errorMessage;
+	public static String preferredLabels_errorMessageEmptyComponent;
+	public static String preferredLabels_errorMessageEmptyParameter;
+	public static String preferredLabels_errorMessageWrongCharacter;
+	public static String preferredLabels_errorMessageDuplicateComponent;
+	public static String preferredLabels_addButtonText;
+	public static String preferredLabels_editButtonText;
+	public static String preferredLabels_removeButtonText;
 
 	static {
         // initialize resource bundle
