@@ -8,8 +8,8 @@ To build this project use
 
     mvn install
 
-To deploy the project in OSGi. For example using Apache ServiceMix
-or Apache Karaf. You need to install the following features first:
+To deploy the project in OSGi. For example using Apache Karaf.
+You need to install the following features first:
 
     features:install camel-jaxb
     features:install camel-cxf
