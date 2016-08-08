@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -27,20 +28,14 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class CamelIOHandlerIT {
 
 	private CamelIOHandler marshaller = new CamelIOHandler();
-
-	@Rule
-	public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject("External Files");
