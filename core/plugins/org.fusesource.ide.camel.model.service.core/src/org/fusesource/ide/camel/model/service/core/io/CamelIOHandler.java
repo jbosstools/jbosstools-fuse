@@ -107,7 +107,7 @@ public class CamelIOHandler {
 			DocumentBuilder docBuilder = createDocumentBuilder();
 			document = docBuilder.parse(xmlFile);
 
-	        IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(xmlFile.getPath()));
+	        IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(xmlFile.getCanonicalPath()));
 			cf = readDocumentToModel(document, documentLocation);
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + xmlFile.getPath(), ex);
