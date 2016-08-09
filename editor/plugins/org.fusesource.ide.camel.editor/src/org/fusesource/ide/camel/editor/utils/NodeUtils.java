@@ -97,7 +97,8 @@ public class NodeUtils {
 	 */
 	public static boolean isValidChild(AbstractCamelModelElement parent, Eip child) {
 		return 	parent.getUnderlyingMetaModelObject().canHaveChildren() && 
-				parent.getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(child.getName());
+				(parent.getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(child.getName()) || 
+						(child.getName().equalsIgnoreCase("otherwise") && parent.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("choice")));
 	}
 	
 	/**
