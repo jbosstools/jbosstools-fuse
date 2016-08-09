@@ -73,10 +73,10 @@ public class NodeUtils {
     		String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
     		CamelModel metaModel = CamelModelFactory.getModelForVersion(camelVersion);
     		
-			if (parent.getNodeTypeId().equalsIgnoreCase("choice")) {
+			if (parent.getNodeTypeId().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) {
 				// special case for choice
-				return 	 child.getNodeTypeId().equalsIgnoreCase("when") || 
-						(child.getNodeTypeId().equalsIgnoreCase("otherwise") && (parent.getParameter("otherwise") == null || parent.getParameter("otherwise") == child));
+				return 	 child.getNodeTypeId().equalsIgnoreCase(AbstractCamelModelElement.WHEN_NODE_NAME) || 
+						(child.getNodeTypeId().equalsIgnoreCase(AbstractCamelModelElement.OTHERWISE_NODE_NAME) && (parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == null || parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == child));
 			} else {
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
 	        	if (containerEip == null) {
@@ -98,7 +98,7 @@ public class NodeUtils {
 	public static boolean isValidChild(AbstractCamelModelElement parent, Eip child) {
 		return 	parent.getUnderlyingMetaModelObject().canHaveChildren() && 
 				(parent.getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(child.getName()) || 
-						(child.getName().equalsIgnoreCase("otherwise") && parent.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("choice")));
+						(child.getName().equalsIgnoreCase(AbstractCamelModelElement.OTHERWISE_NODE_NAME) && parent.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)));
 	}
 	
 	/**

@@ -16,6 +16,7 @@ import java.util.Collection;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,19 +28,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author lhein
  */
 @RunWith(Parameterized.class)
-public class ChoiceEipIT {
+public class EipChecksIT {
 
 	private String versionToTest;
 
-	public ChoiceEipIT(final String versionToTest) {
+	public EipChecksIT(final String versionToTest) {
 		this.versionToTest = versionToTest;
 	}
 	
 	@Parameters(name = "{0}")
 	public static Collection<String> params() {
-		//@formatter:off
 		return CamelModelFactory.getSupportedCamelVersions();
-		//@formatter:on
 	}
 	
 	@Test
@@ -47,10 +46,22 @@ public class ChoiceEipIT {
 		assertChoiceEipModelCorrect(versionToTest);
 	}
 	
+	@Test
+	public void testRouteEipModel() throws IOException, CoreException {
+		assertRouteEipModelCorrect(versionToTest);
+	}
+	
 	private void assertChoiceEipModelCorrect(String camelVersion) {
-		Eip choiceEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName("choice");
+		Eip choiceEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.CHOICE_NODE_NAME);
 		assertThat(choiceEip).isNotNull();
 		assertThat(choiceEip.canHaveChildren()).isTrue();
-		assertThat(choiceEip.getAllowedChildrenNodeTypes()).contains("when");
+		assertThat(choiceEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WHEN_NODE_NAME);
+	}
+	
+	private void assertRouteEipModelCorrect(String camelVersion) {
+		Eip routeEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.ROUTE_NODE_NAME);
+		assertThat(routeEip).isNotNull();
+		assertThat(routeEip.canHaveChildren()).isTrue();
+		assertThat(routeEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WIRETAP_NODE_NAME);
 	}
 }
