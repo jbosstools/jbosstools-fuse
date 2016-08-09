@@ -14,8 +14,13 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.List;
 
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginManagement;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -59,13 +64,23 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 		Model m2m = MavenPlugin.getMaven().readModel(pomFile);
 
 		if (m2m.getDependencyManagement() != null) {
-			MavenUtils.updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
+			final List<Dependency> dependencies = m2m.getDependencyManagement().getDependencies();
+			MavenUtils.updateCamelVersionDependencies(dependencies, camelVersion);
+			MavenUtils.updateContributedDependencies(dependencies, camelVersion);
 		}
 		MavenUtils.updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
-		if (m2m.getBuild().getPluginManagement() != null) {
-			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
+		MavenUtils.updateContributedDependencies(m2m.getDependencies(), camelVersion);
+		final Build m2Build = m2m.getBuild();
+		if(m2Build != null){
+			final PluginManagement pluginManagement = m2Build.getPluginManagement();
+			if (pluginManagement != null) {
+				final List<Plugin> pluginManagementPlugins = pluginManagement.getPlugins();
+				MavenUtils.updateCamelVersionPlugins(pluginManagementPlugins, camelVersion);
+				MavenUtils.updateContributedPlugins(pluginManagementPlugins, camelVersion);
+			}
+			MavenUtils.updateCamelVersionPlugins(m2Build.getPlugins(), camelVersion);
+			MavenUtils.updateContributedPlugins(m2Build.getPlugins(), camelVersion);
 		}
-		MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
 		
 		// TODO: this block ensures that we have the staging repo for camel 2.17 in our pom.xml
 		// so we can find that unreleased camel version. this becomes obsolete once the camel version 
@@ -74,8 +89,7 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), CAMEL_STAGING_REPO_URI, "camelStaging");
 		// END OF TODO block
 		
-		try {
-			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
+		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))){
 		    MavenPlugin.getMaven().writeModel(m2m, os);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
