@@ -35,7 +35,7 @@ public class CamelRunMavenLaunchDelegateTest {
 		Mockito.doReturn(false).when(camelRunMavenLaunchDelegate).isWarPackaging(Mockito.any(IFile.class));
 
 		Assertions.assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
-				.isEqualTo("clean package org.apache.camel:camel-maven-plugin:run  -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
+				.isEqualTo("clean package org.apache.camel:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
 	}
 
 }
