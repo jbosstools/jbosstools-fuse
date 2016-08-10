@@ -48,7 +48,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 public class MavenProjectHelper {
 
 
-	protected IProject[] importProjects(File src, String[] pomNames) throws IOException, CoreException {
+	public IProject[] importProjects(File src, String[] pomNames) throws IOException, CoreException {
 		MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();

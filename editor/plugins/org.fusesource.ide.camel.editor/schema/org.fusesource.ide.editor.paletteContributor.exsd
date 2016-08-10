@@ -117,6 +117,16 @@ MISCELLANEOUS
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="dependenciesManager" type="string">
+            <annotation>
+               <documentation>
+                  A class which updates versions of maven dependencies based on Camel version.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

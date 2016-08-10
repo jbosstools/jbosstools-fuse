@@ -56,17 +56,23 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public List<Dependency> getRequiredDependencies() {
-        List<Dependency> deps = new ArrayList<Dependency>();
-        Dependency dep = new Dependency();
-        dep.setGroupId("org.apache.activemq");
-        dep.setArtifactId("activemq-camel");
-        dep.setVersion("5.11.0.redhat-620133");
-        deps.add(dep);
-        dep = new Dependency();
-        dep.setGroupId("org.apache.camel");
-        dep.setArtifactId("camel-jms");
-        dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
-        deps.add(dep);
+        List<Dependency> deps = new ArrayList<>();
+        deps.add(createDependency(
+        		ActiveMQPaletteEntryDependenciesManager.ORG_APACHE_ACTIVEMQ,
+        		ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL,
+        		new ActiveMQPaletteEntryDependenciesManager().getActiveMQVersion(CamelUtils.getCurrentProjectCamelVersion())));
+        deps.add(createDependency(
+        		"org.apache.camel",
+        		"camel-jms",
+        		CamelUtils.getCurrentProjectCamelVersion()));
         return deps;
+    }
+
+    private Dependency createDependency(String groupId, String artifactId, String version) {
+    	Dependency dep = new Dependency();
+    	dep.setGroupId(groupId);
+    	dep.setArtifactId(artifactId);
+    	dep.setVersion(version);
+    	return dep;
     }
 }

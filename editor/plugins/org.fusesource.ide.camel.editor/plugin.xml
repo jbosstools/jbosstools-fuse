@@ -134,6 +134,7 @@
       <PaletteContribution
             categoryName="COMPONENTS"
             class="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry"
+            dependenciesManager="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager"
             diagramImage="icons/activemq.png"
             id="activemq"
             paletteIcon="icons/activemq.png">

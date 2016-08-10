@@ -16,6 +16,13 @@ import java.util.List;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Repository;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
+import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
+import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
+import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
+import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
  * @author lhein
@@ -33,6 +40,26 @@ public class MavenUtils {
 			}
 		}
 	}
+	
+	public static void updateContributedPlugins(List<Plugin> plugins, String camelVersion) {
+		for (IConfigurationElement e : getExtensionPoints()) {
+			try {
+				if(e.getAttribute(IDependenciesManager.EXT_POINT_NAME) != null){
+					Object o = e.createExecutableExtension(IDependenciesManager.EXT_POINT_NAME);
+					if (o instanceof IDependenciesManager) {
+						IDependenciesManager dm = (IDependenciesManager) o;
+						dm.updatePluginDependencies(plugins, camelVersion);
+					}
+				}
+			} catch (CoreException e1) {
+				ProjectTemplatesActivator.pluginLog().logError(e1);
+			}
+		}
+	}
+
+	private static IConfigurationElement[] getExtensionPoints() {
+		return Platform.getExtensionRegistry().getConfigurationElementsFor(ToolBehaviourProvider.PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
+	}
 
 	/**
 	 * @param dependencies
@@ -42,6 +69,22 @@ public class MavenUtils {
 		for (Dependency dep : dependencies) {
 			if ("org.apache.camel".equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
 				dep.setVersion(camelVersion);
+			}
+		}
+	}
+
+	public static void updateContributedDependencies(List<Dependency> dependencies, String camelVersion) {
+		for (IConfigurationElement e : getExtensionPoints()) {
+			try {
+				if(e.getAttribute(IDependenciesManager.EXT_POINT_NAME) != null){
+					Object o = e.createExecutableExtension(IDependenciesManager.EXT_POINT_NAME);
+					if (o instanceof IDependenciesManager) {
+						IDependenciesManager dm = (IDependenciesManager) o;
+						dm.updateDependencies(dependencies, camelVersion);
+					}
+				}
+			} catch (CoreException e1) {
+				ProjectTemplatesActivator.pluginLog().logError(e1);
 			}
 		}
 	}
@@ -67,4 +110,5 @@ public class MavenUtils {
 			repositories.add(repo);
 		}
 	}
+
 }
