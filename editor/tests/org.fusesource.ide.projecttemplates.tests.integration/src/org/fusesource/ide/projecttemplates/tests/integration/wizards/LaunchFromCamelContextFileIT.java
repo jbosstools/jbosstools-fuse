@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate;
@@ -37,6 +38,7 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 		launchDebug(project);
 		
 		assertThat(launch.getLaunchConfiguration()).isEqualTo(initialLC);
+		assertThat(launch.getLaunchConfiguration().getAttribute(MavenLaunchConstants.ATTR_GOALS, "")).isEqualTo("clean package org.apache.camel:camel-maven-plugin:run");		
 	}
 
 	private void reInitializeServer() throws CoreException, InterruptedException {

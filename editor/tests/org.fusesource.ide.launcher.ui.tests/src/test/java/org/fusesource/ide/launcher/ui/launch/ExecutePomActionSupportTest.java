@@ -10,18 +10,17 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.ui.launch;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentDescription;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
+import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +29,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExecutePomActionSupportTest {
@@ -48,6 +53,8 @@ public class ExecutePomActionSupportTest {
 	private IContentDescription contentDescription;
 	@Spy
 	private ExecutePomAction executePomAction = new ExecutePomAction();
+	@Mock
+	private ILaunchConfigurationWorkingCopy lc;
 	
 	@Before
 	public void setup() throws CoreException{
@@ -85,5 +92,116 @@ public class ExecutePomActionSupportTest {
 		
 		verify(executePomAction).launchCamelContext(camelFileFromAdapter, "");
 	}
+	
+	@Test
+	public void testSetGoals_War() throws Exception {
+		doReturn("clean package").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(true, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+	}
+	
+	@Test
+	public void testSetGoals_War_forEmpty() throws Exception {
+		doReturn("").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(true, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+	}
+	
+	@Test
+	public void testSetGoals_War_ForExistingValue() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR).when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(true, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+	}
+	
+	@Test
+	public void testSetGoals_War_ForJARExistingValue() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR).when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(true, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
+	}
+	
+	@Test
+	public void testSetGoals_War_KeepOtherValues() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR + "anotherGoal").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(true, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR+ "anotherGoal");
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR+ "anotherGoal");
+	}
+	
+	@Test
+	public void testSetGoals_Jar() throws Exception {
+		doReturn("clean package").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+	}
+	
+	@Test
+	public void testSetGoals_Jar_forEmpty() throws Exception {
+		doReturn("").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+	}
+	
+	@Test
+	public void testSetGoals_Jar_ForExistingValue() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR).when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+	}
+	
+	@Test
+	public void testSetGoals_Jar_ForWARExistingValue() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR).when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+	}
+	
+	@Test
+	public void testSetGoals_Jar_KeepOtherValues() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR + "anotherGoal").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR+ "anotherGoal");
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR+ "anotherGoal");
+	}
+	
+	@Test
+	public void testSetGoals_Jar_KeepOtherValuesForTest() throws Exception {
+		doReturn(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL + " -Dmaven.test.skip=true").when(lc).getAttribute(MavenLaunchConstants.ATTR_GOALS, (String)null);
+		
+		String setGoals = executePomAction.setGoals(false, lc);
+		
+		verify(lc).setAttribute(MavenLaunchConstants.ATTR_GOALS, CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL + " -Dmaven.test.skip=true " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR);
+		assertThat(setGoals).isEqualTo(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL + " -Dmaven.test.skip=true " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR);
+	}
+	
 
 }

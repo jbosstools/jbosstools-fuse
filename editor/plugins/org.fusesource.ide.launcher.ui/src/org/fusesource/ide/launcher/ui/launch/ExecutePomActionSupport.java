@@ -197,24 +197,12 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		if (!openDialog) {
 			try {
 				// if no goals specified
-				String goals = lc.getAttribute(MavenLaunchConstants.ATTR_GOALS, (String) null);
-				if (Strings.isBlank(goals)) {
-					goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
-				} else {
-					if (goals.indexOf(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL) != -1) {
-						// replace
-						goals = goals.replaceAll(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL, isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
-					} else {
-						// add
-						goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
-					}
-				}
+				String goals = setGoals(isWARPackaging, lc);
 				// no rider file selection
 				if (Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""))) { //$NON-NLS-1$
 					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, getAttributeURIFormatStorage(camelFile));
 				}
 				openDialog = Strings.isBlank(goals) || Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, "")); //$NON-NLS-1$
-				lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
 			} catch (CoreException ex) {
 				Activator.getLogger().error("Error getting the maven goals from the configuration.", ex); //$NON-NLS-1$
 			}
@@ -238,6 +226,33 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			DebugUITools.launch(lc, mode);
 		}
 		return null;
+	}
+
+	protected String setGoals(boolean isWARPackaging, ILaunchConfigurationWorkingCopy lc) throws CoreException {
+		String goals = lc.getAttribute(MavenLaunchConstants.ATTR_GOALS, (String) null);
+		if (Strings.isBlank(goals)) {
+			goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+		} else {
+			if (goals.contains(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL)) {
+				// replace
+				if(isWARPackaging){
+					goals = goals.replaceAll(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR, CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR);
+					if(!goals.contains(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR)){
+						goals += " " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR;
+					}
+				} else {
+					goals = goals.replaceAll(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR, CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR);
+					if(!goals.contains(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR)){
+						goals += " " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR;
+					}
+				}
+			} else {
+				// add
+				goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+			}
+		}
+		lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
+		return goals;
 	}
 
 	/**
