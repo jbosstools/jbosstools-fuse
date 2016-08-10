@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -260,7 +261,9 @@ public class CamelContextNode 	extends NodeSupport
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(".FuseRemoteCamelContextData");
 			if (!project.exists()) {
 			    project.create(new NullProgressMonitor());
-			    project.open(new NullProgressMonitor());
+			}
+			if(!project.isOpen()){
+				project.open(new NullProgressMonitor());
 			}
 			if (tempContextFile == null) {
 				tempContextFile = File.createTempFile("camelContext--" + getContextId() + "--", ".xml", project.getLocation().toFile());
@@ -271,6 +274,8 @@ public class CamelContextNode 	extends NodeSupport
 			IOUtils.writeText(tempContextFile, xml);
 
 			IFile camelContextFile = project.getFile(tempContextFile.getName());
+			
+			camelContextFile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
 			
 			return camelContextFile;
 		} catch (Exception e) {
