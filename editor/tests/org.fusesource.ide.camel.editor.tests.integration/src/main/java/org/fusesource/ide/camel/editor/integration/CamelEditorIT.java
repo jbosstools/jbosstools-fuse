@@ -37,6 +37,7 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
+import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
@@ -151,7 +152,6 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	@Ignore("Get rid of popup asking if we are sure wantign to delete the element")
 	public void deleteElementFromFlow() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
 		assertThat(openEditorOnFileStore).isNotNull();
@@ -183,6 +183,7 @@ public class CamelEditorIT {
 		// delete the endpoint
 		PictogramElement deleteNodePE = fp.getPictogramElementForBusinessObject(deleteNode);
 		DeleteContext deleteCtx = new DeleteContext(deleteNodePE);
+		deleteCtx.putProperty(DeleteFigureFeature.SKIP_ASKING_DELETE_CONFIRMATION, "true");
 		IDeleteFeature deleteFeature = fp.getDeleteFeature(deleteCtx);
 		if (deleteFeature.canExecute(deleteCtx)) {
 			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
