@@ -16,9 +16,13 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
+import org.eclipse.graphiti.internal.command.CommandExec;
+import org.eclipse.graphiti.internal.command.GenericFeatureCommandWithContext;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
@@ -33,6 +37,7 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -110,7 +115,6 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	@Ignore("doesn't work because of EMF transaction errors")
 	public void insertElementIntoFlow() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/insert.xml");
 		assertThat(openEditorOnFileStore).isNotNull();
@@ -147,7 +151,7 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	@Ignore("doesn't work because of EMF transaction errors")
+	@Ignore("Get rid of popup asking if we are sure wantign to delete the element")
 	public void deleteElementFromFlow() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
 		assertThat(openEditorOnFileStore).isNotNull();
@@ -179,8 +183,10 @@ public class CamelEditorIT {
 		// delete the endpoint
 		PictogramElement deleteNodePE = fp.getPictogramElementForBusinessObject(deleteNode);
 		DeleteContext deleteCtx = new DeleteContext(deleteNodePE);
-		if (fp.getDeleteFeature(deleteCtx).canExecute(deleteCtx)) {
-			fp.getDeleteFeature(deleteCtx).execute(deleteCtx);
+		IDeleteFeature deleteFeature = fp.getDeleteFeature(deleteCtx);
+		if (deleteFeature.canExecute(deleteCtx)) {
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(deleteFeature, deleteCtx), editingDomain);
 		}
 	}
 	
@@ -195,7 +201,8 @@ public class CamelEditorIT {
 		createCtx.setY(container.getGraphicsAlgorithm().getY()+5);
 		CreateConnectorFigureFeature ccff = new CreateConnectorFigureFeature(fp, component);
 		if (ccff.canExecute(createCtx)) {
-			ccff.execute(createCtx);
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(ccff, createCtx), editingDomain);
 		}
 	}
 	
