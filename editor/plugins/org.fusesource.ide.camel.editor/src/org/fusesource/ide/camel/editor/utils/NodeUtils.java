@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
@@ -29,6 +30,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.HasOwner;
 
@@ -192,5 +195,75 @@ public class NodeUtils {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * deletes a BO from our model
+	 * 
+	 * @param fp
+	 * @param nodeToRemove
+	 */
+	public static void deleteBOFromModel(IFeatureProvider fp, AbstractCamelModelElement nodeToRemove) {
+		// we can't remove null objects or the root of the routes
+		if (nodeToRemove == null || nodeToRemove instanceof CamelContextElement) return;
+
+		// remove from parent
+		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
+		 
+		// lets remove all connections
+		if (nodeToRemove.getInputElement() != null && nodeToRemove.getOutputElement() != null) {
+			// removing a node between 2 other nodes -> connect input and output
+			AbstractCamelModelElement src = nodeToRemove.getInputElement();
+			AbstractCamelModelElement dest = nodeToRemove.getOutputElement();
+			
+			// reset the connection points
+			nodeToRemove.setInputElement(null);
+			nodeToRemove.setOutputElement(null);
+			src.setOutputElement(null);
+			dest.setInputElement(null);
+			
+			// finally reconnect the remaining nodes
+			reconnectNodes(fp, src, dest);
+		} else if (nodeToRemove.getInputElement() != null) {
+			nodeToRemove.getInputElement().setOutputElement(null);
+		} else if (nodeToRemove.getOutputElement() != null) {
+			nodeToRemove.getOutputElement().setInputElement(null);
+		}
+	}
+
+	/**
+	 * disconnects 2 elements which deletes the connection figure
+	 * 
+	 * @param bo
+	 */
+	public static void deleteFlowFromModel(CamelElementConnection bo) {
+		bo.disconnect();
+	}
+	
+	/**
+	 * the figure has been dropped on a connection between 2 figures. We insert
+	 * the new node between the 2 figures that connection wire.
+	 * 
+	 * @param fp			the feature provider
+	 * @param newNode		the new (to be inserted) node
+	 * @param dropTarget	the connection to insert into
+	 */
+	public static void reconnectNodes(IFeatureProvider fp, AbstractCamelModelElement oldInput, AbstractCamelModelElement oldOutput) {
+		PictogramElement srcState  = fp.getPictogramElementForBusinessObject(oldInput);
+		PictogramElement destState = fp.getPictogramElementForBusinessObject(oldOutput);
+
+		Anchor srcAnchor  = DiagramUtils.getAnchor(srcState);
+		Anchor destAnchor = DiagramUtils.getAnchor(destState);
+
+		CreateConnectionContext ctx = new CreateConnectionContext();
+		ctx.setSourcePictogramElement(srcState);
+		ctx.setSourceAnchor(srcAnchor);
+		ctx.setTargetPictogramElement(destState);
+		ctx.setTargetAnchor(destAnchor);
+				
+		if (fp.getCreateConnectionFeatures()[0] != null && 
+			fp.getCreateConnectionFeatures()[0].canExecute(ctx)) {
+			fp.getCreateConnectionFeatures()[0].execute(ctx);
+		}
 	}
 }

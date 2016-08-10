@@ -15,8 +15,9 @@ import org.eclipse.graphiti.ui.features.DefaultDeleteFeature;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 
 /**
  * @author lhein
@@ -39,25 +40,14 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 		
 		if (bo != null ) {
 			if (bo instanceof CamelElementConnection) {
-				deleteFlowFromModel((CamelElementConnection) bo);
+				NodeUtils.deleteFlowFromModel((CamelElementConnection) bo);
 			} else if (bo instanceof AbstractCamelModelElement) {
-				deleteBOFromModel((AbstractCamelModelElement)bo);
+				NodeUtils.deleteBOFromModel(getFeatureProvider(), (AbstractCamelModelElement)bo);
 			} else {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
 		}
 		
 		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
-	}
-
-	private void deleteBOFromModel(AbstractCamelModelElement nodeToRemove) {
-		// lets remove all connections
-		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
-		if (nodeToRemove.getInputElement() != null) nodeToRemove.getInputElement().setOutputElement(null);
-		if (nodeToRemove.getOutputElement() != null) nodeToRemove.getOutputElement().setInputElement(null);
-	}
-
-	private void deleteFlowFromModel(CamelElementConnection bo) {
-		bo.disconnect();
 	}
 }

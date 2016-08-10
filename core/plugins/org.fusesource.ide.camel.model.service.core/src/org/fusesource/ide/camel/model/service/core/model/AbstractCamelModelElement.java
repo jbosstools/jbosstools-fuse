@@ -599,6 +599,9 @@ public abstract class AbstractCamelModelElement {
 	public void removeChildElement(AbstractCamelModelElement element) {
 		if (childElements.contains(element)) {
 			childElements.remove(element);
+			// set the parent to null - otherwise this will cause
+			// the node still to reappear in the source code for unknown reasons
+			element.setParent(null);
 			boolean childFound = false;
 			for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
 				if (getXmlNode().getChildNodes().item(i).isEqualNode(element.getXmlNode())) {
