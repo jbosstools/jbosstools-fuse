@@ -222,8 +222,6 @@ public class NodeUtils {
 			src.setOutputElement(null);
 			dest.setInputElement(null);
 			
-			// finally reconnect the remaining nodes
-			reconnectNodes(fp, src, dest);
 		} else if (nodeToRemove.getInputElement() != null) {
 			nodeToRemove.getInputElement().setOutputElement(null);
 		} else if (nodeToRemove.getOutputElement() != null) {
