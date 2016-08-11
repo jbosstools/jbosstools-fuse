@@ -48,7 +48,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -181,7 +180,7 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	public void deleteElementThanInsert2Elements() throws Exception {
+	public void deleteElementThenInsert2Elements() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
 		
