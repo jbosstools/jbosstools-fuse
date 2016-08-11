@@ -73,7 +73,7 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 			NodeUtils.reconnectNodes(getFeatureProvider(), inputOfDeletedElement, outputOfDeletedElement);
 		}
 		super.postDelete(context);
-		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor(), true);
 	}
 	
 	/** 

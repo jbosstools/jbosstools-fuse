@@ -40,6 +40,7 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -182,7 +183,6 @@ public class CamelEditorIT {
 	@Test
 	public void deleteElementThenInsert2Elements() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
-		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
 		
 		readAndDispatch(20);
 		
@@ -237,6 +237,28 @@ public class CamelEditorIT {
 		assertThat(insertedEP2.getOutputElement()).isEqualTo(outbox);
 		assertThat(connections.size()).isEqualTo(3);
 
+	}
+	
+	@Test
+	public void deleteElement_respectComponentHeightWhenThereAreHighHeightChoiceContainer() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/deleteKeepHeight.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement inbox = model.findNode("inbox");
+		AbstractCamelModelElement outbox = model.findNode("outbox");
+		AbstractCamelModelElement deleteNode = model.findNode("deleteMe");
+		
+		// now delete the node
+		deleteNode(fp, deleteNode);
+		
+		readAndDispatch(20);
+		
+		assertThat(fp.getPictogramElementForBusinessObject(inbox).getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
+		assertThat(fp.getPictogramElementForBusinessObject(outbox).getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
 	}
 	
 	private void deleteNode(IFeatureProvider fp, AbstractCamelModelElement deleteNode) throws Exception {

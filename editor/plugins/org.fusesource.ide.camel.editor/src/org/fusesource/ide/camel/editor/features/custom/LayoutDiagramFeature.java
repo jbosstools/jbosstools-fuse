@@ -184,7 +184,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 */
 	private boolean isExpanded(PictogramElement container) {
 		final String collapsedPropertyValue = Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE);
-		return collapsedPropertyValue == null || collapsedPropertyValue.equals("false");
+		return collapsedPropertyValue == null || "false".equals(collapsedPropertyValue);
 	}
 	
 	/**
@@ -193,7 +193,9 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 * @param containerPE
 	 */
 	private void resizeContainer(PictogramElement containerPE) {
-		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null) return;
+		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null){
+			return;
+		}
 		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
 		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
 
@@ -204,8 +206,12 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 				GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
 				int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
 				int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
-				if (w > newWidth) newWidth = w;
-				if (h > newHeight) newHeight = h;
+				if (w > newWidth){
+					newWidth = w;
+				}
+				if (h > newHeight){
+					newHeight = h;
+				}
 			}
 			maxContentArea.width = newWidth;
 			maxContentArea.height = newHeight;
