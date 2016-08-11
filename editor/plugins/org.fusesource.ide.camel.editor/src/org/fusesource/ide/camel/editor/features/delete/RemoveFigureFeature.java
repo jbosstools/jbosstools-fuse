@@ -17,9 +17,9 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 
 /**
  * @author lhein
@@ -46,9 +46,9 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 		if (businessObjectsForPictogramElement != null && businessObjectsForPictogramElement.length > 0) {
 			Object bo = businessObjectsForPictogramElement[0];
 			if (bo instanceof CamelElementConnection) {
-				deleteFlowFromModel((CamelElementConnection) bo);
+				NodeUtils.deleteFlowFromModel((CamelElementConnection) bo);
 			} else if (bo instanceof AbstractCamelModelElement) {
-				deleteBOFromModel((AbstractCamelModelElement)bo);
+				NodeUtils.deleteBOFromModel(getFeatureProvider(), (AbstractCamelModelElement)bo);
 			} else {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
@@ -62,19 +62,5 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 	public void postRemove(IRemoveContext context) {
 		super.postRemove(context);
 		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
-	}
-
-	private void deleteBOFromModel(AbstractCamelModelElement nodeToRemove) {
-		// we can't remove null objects or the root of the routes
-		if (nodeToRemove == null || nodeToRemove instanceof CamelContextElement) return;
-
-		// lets remove all connections
-		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
-		if (nodeToRemove.getInputElement() != null) nodeToRemove.getInputElement().setOutputElement(null);
-		if (nodeToRemove.getOutputElement() != null) nodeToRemove.getOutputElement().setInputElement(null);
-	}
-
-	private void deleteFlowFromModel(CamelElementConnection bo) {
-		bo.disconnect();
 	}
 }

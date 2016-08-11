@@ -313,6 +313,16 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	}
 	
 	/**
+	 * returns true if there are neither childelements nor a Camel Context element
+	 * 
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return 	getCamelContext() == null && 
+				getChildElements().isEmpty();
+	}
+	
+	/**
 	 * returns the string representing the dom model
 	 * 
 	 * @return	the dom model as string or null on error

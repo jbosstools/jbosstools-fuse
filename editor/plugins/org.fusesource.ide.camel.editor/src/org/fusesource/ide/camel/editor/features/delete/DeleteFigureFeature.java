@@ -11,17 +11,26 @@
 package org.fusesource.ide.camel.editor.features.delete;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.IDeleteContext;
 import org.eclipse.graphiti.ui.features.DefaultDeleteFeature;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 
 /**
  * @author lhein
  */
 public class DeleteFigureFeature extends DefaultDeleteFeature {
+	
+	/**
+	 * Used in test only
+	 */
+	public static final String SKIP_ASKING_DELETE_CONFIRMATION = "SKIP_ASKING_DELETE_CONFIRMATION";
+	private AbstractCamelModelElement inputOfDeletedElement = null;
+	private AbstractCamelModelElement outputOfDeletedElement = null;
 
 	/**
 	 * @param fp
@@ -39,9 +48,9 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 		
 		if (bo != null ) {
 			if (bo instanceof CamelElementConnection) {
-				deleteFlowFromModel((CamelElementConnection) bo);
+				NodeUtils.deleteFlowFromModel((CamelElementConnection) bo);
 			} else if (bo instanceof AbstractCamelModelElement) {
-				deleteBOFromModel((AbstractCamelModelElement)bo);
+				NodeUtils.deleteBOFromModel(getFeatureProvider(), (AbstractCamelModelElement)bo);
 			} else {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
@@ -49,15 +58,35 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 		
 		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
-
-	private void deleteBOFromModel(AbstractCamelModelElement nodeToRemove) {
-		// lets remove all connections
-		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
-		if (nodeToRemove.getInputElement() != null) nodeToRemove.getInputElement().setOutputElement(null);
-		if (nodeToRemove.getOutputElement() != null) nodeToRemove.getOutputElement().setInputElement(null);
+	
+	@Override
+	public void preDelete(IDeleteContext context) {
+		Object bo = getFeatureProvider().getBusinessObjectForPictogramElement(context.getPictogramElement());
+		if(bo instanceof AbstractCamelModelElement){
+			inputOfDeletedElement = ((AbstractCamelModelElement) bo).getInputElement();
+			outputOfDeletedElement = ((AbstractCamelModelElement) bo).getOutputElement();
+		}
+		super.preDelete(context);
 	}
-
-	private void deleteFlowFromModel(CamelElementConnection bo) {
-		bo.disconnect();
+	
+	@Override
+	public void postDelete(IDeleteContext context) {
+		if(inputOfDeletedElement != null && outputOfDeletedElement != null){
+			NodeUtils.reconnectNodes(getFeatureProvider(), inputOfDeletedElement, outputOfDeletedElement);
+		}
+		super.postDelete(context);
+	}
+	
+	/** 
+	 * Overridden for test purpose
+	 */
+	@Override
+	protected boolean getUserDecision(IDeleteContext context) {
+		Object shouldSkipAskingDeleteConfirmation = context.getProperty(SKIP_ASKING_DELETE_CONFIRMATION);
+		if("true".equals(shouldSkipAskingDeleteConfirmation)){
+			return true;
+		} else {
+			return super.getUserDecision(context);
+		}
 	}
 }
