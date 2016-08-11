@@ -55,8 +55,6 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
 		}
-		
-		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
 	
 	@Override
@@ -75,6 +73,7 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 			NodeUtils.reconnectNodes(getFeatureProvider(), inputOfDeletedElement, outputOfDeletedElement);
 		}
 		super.postDelete(context);
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
 	
 	/** 
