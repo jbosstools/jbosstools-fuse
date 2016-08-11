@@ -16,6 +16,7 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -176,6 +177,66 @@ public class CamelEditorIT {
 		assertThat(deleteNode.getOutputElement()).isNull();
 		assertThat(inbox.getOutputElement()).isEqualTo(outbox);
 		assertThat(outbox.getInputElement()).isEqualTo(inbox);
+	}
+	
+	@Test
+	public void deleteElementThenInsert2Elements() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement inbox = model.findNode("inbox");
+		AbstractCamelModelElement outbox = model.findNode("outbox");
+		AbstractCamelModelElement deleteNode = model.findNode("deleteMe");
+		
+		// now delete the node
+		deleteNode(fp, deleteNode);
+		
+		readAndDispatch(20);
+		
+		assertThat(deleteNode.getInputElement()).isNull();
+		assertThat(deleteNode.getOutputElement()).isNull();
+		assertThat(inbox.getOutputElement()).isEqualTo(outbox);
+		assertThat(outbox.getInputElement()).isEqualTo(inbox);
+		
+		EList<Connection> connections = fp.getDiagramTypeProvider().getDiagram().getConnections();
+		assertThat(connections.size()).isEqualTo(1);
+
+		Connection con = connections.get(0);
+		CamelModel metaModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		// now drop another file endpoint onto the connection
+		createConnector(fp, 
+						(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
+						con,
+						metaModel.getComponentModel().getComponentForScheme("file"));
+		
+		readAndDispatch(20);
+		
+		AbstractCamelModelElement insertedEP = model.findNode("_to1");
+		assertThat(insertedEP.isToEndpoint()).isTrue();
+		assertThat(insertedEP.getInputElement()).isEqualTo(inbox);
+		assertThat(insertedEP.getOutputElement()).isEqualTo(outbox);
+		assertThat(connections.size()).isEqualTo(2);
+		
+		
+		// now drop another second file endpoint onto the connection
+		createConnector(fp, 
+				(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
+				connections.get(1),
+				metaModel.getComponentModel().getComponentForScheme("file"));
+
+		readAndDispatch(20);
+
+		AbstractCamelModelElement insertedEP2 = model.findNode("_to2");
+		assertThat(insertedEP2.isToEndpoint()).isTrue();
+		assertThat(insertedEP2.getInputElement()).isEqualTo(model.findNode("_to1"));
+		assertThat(insertedEP2.getOutputElement()).isEqualTo(outbox);
+		assertThat(connections.size()).isEqualTo(3);
+
 	}
 	
 	private void deleteNode(IFeatureProvider fp, AbstractCamelModelElement deleteNode) throws Exception {
