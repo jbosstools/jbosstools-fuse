@@ -24,6 +24,7 @@ import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
 import org.eclipse.graphiti.internal.command.CommandExec;
 import org.eclipse.graphiti.internal.command.GenericFeatureCommandWithContext;
+import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
@@ -38,6 +39,7 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
+import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
@@ -259,6 +261,31 @@ public class CamelEditorIT {
 		
 		assertThat(fp.getPictogramElementForBusinessObject(inbox).getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
 		assertThat(fp.getPictogramElementForBusinessObject(outbox).getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
+	}
+	
+	@Test
+	public void createASecondRoute() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement route = model.findNode("_route5");
+		CreateContext createCtx = new CreateContext();
+		GraphicsAlgorithm exisitngRoutegraphic = fp.getPictogramElementForBusinessObject(route).getGraphicsAlgorithm();
+		createCtx.setX(exisitngRoutegraphic.getX());
+		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
+		createCtx.setTargetContainer(fp.getDiagramTypeProvider().getDiagram());
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		if(createRouteFigureFeature.canExecute(createCtx)){
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(createRouteFigureFeature, createCtx), editingDomain);
+		}
+		
+		AbstractCamelModelElement createdRoute = model.findNode("_route1");
+		assertThat(createdRoute).isNotNull();
 	}
 	
 	private void deleteNode(IFeatureProvider fp, AbstractCamelModelElement deleteNode) throws Exception {

@@ -370,9 +370,11 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	}
 	
 	private boolean isAttemptToCreateWiredFigure(AbstractCamelModelElement selectedContainer, ICreateContext context) {
-		return 	selectedContainer != null && 
-					(!selectedContainer.getUnderlyingMetaModelObject().canHaveChildren() || 
-					 context.getTargetConnection() != null);
+		if(selectedContainer != null){
+			Eip underlyingMetaModelObject = selectedContainer.getUnderlyingMetaModelObject();
+			return (underlyingMetaModelObject != null && !underlyingMetaModelObject.canHaveChildren()) || context.getTargetConnection() != null;
+		}
+		return false;
 	}
 
 	/**
