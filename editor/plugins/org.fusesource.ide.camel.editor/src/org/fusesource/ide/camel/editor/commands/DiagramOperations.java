@@ -32,11 +32,20 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 public class DiagramOperations {
 
 	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor) {
-		if (designEditor == null) return null;
+		return layoutDiagram(designEditor, false);
+	}
+	
+	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor, boolean modelChanged) {
+		if (designEditor == null){
+			return null;
+		}
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-		LayoutCommand operation = new LayoutCommand(designEditor.getFeatureProvider(), designEditor.getDiagramTypeProvider().getDiagram(),
-				designEditor.getModel().getCamelContext(), editingDomain);
-		execute(editingDomain, operation, false);
+		LayoutCommand operation = new LayoutCommand(
+				designEditor.getFeatureProvider(),
+				designEditor.getDiagramTypeProvider().getDiagram(),
+				designEditor.getModel().getCamelContext(),
+				editingDomain);
+		execute(editingDomain, operation, modelChanged);
 		return operation;
 	}
 
