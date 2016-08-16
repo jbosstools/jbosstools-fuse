@@ -264,7 +264,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public AbstractCamelModelElement getFirstInFlow() {
 		AbstractCamelModelElement node = this.getInputElement();
-		while (node.getInputElement() != null) {
+		while (node != null && node.getInputElement() != null) {
 			node = node.getInputElement();
 		}
 		return node;
