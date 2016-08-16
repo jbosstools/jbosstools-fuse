@@ -66,15 +66,10 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
                 	if (sourceNode.getOutputElement() != null) {
                 		// insert between 2 nodes
                 		AbstractCamelModelElement targetNode =  sourceNode.getOutputElement();
-                		// TODO: now we need to check:
-                		// - can sourceNode be wired to newNode?
-                		// - can newNode be wired to targetNode?
                 		return 	sourceNode.hasSameParent(newNode) &&
                 				newNode.hasSameParent(targetNode);
                 	} else {
                 		// append new node and connect to source node
-                		// TODO: now we need to check:
-                		// - can sourceNode be wired to newNode?
                 		return sourceNode.hasSameParent(newNode);
                 	}
             	}

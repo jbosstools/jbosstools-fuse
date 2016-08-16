@@ -146,8 +146,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			} else if (clazz != null) { 
 				// then we need to instantiate it
 				Object obj = newInstance(clazz);
-				if (obj != null && 
-					obj instanceof AbstractCamelModelElement) {
+				if (obj instanceof AbstractCamelModelElement) {
 					// and check if the element can be added to a context
 					return ((AbstractCamelModelElement)obj).canBeAddedToCamelContextDirectly();
 				}

@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -228,7 +229,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
      * @return
      */
     public boolean canBeAddedToCamelContextDirectly() {
-    	return 	getName().equalsIgnoreCase("route") || 
+    	return 	getName().equalsIgnoreCase(AbstractCamelModelElement.ROUTE_NODE_NAME) || 
 				getName().equalsIgnoreCase("rest") || 
 				getName().equalsIgnoreCase("restConfiguration"); 
     }

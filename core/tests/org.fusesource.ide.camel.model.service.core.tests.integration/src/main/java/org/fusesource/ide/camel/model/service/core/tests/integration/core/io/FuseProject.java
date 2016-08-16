@@ -37,7 +37,7 @@ public class FuseProject extends ExternalResource {
 			+ "  <artifactId>testproject</artifactId>\n" + "  <version>1.0.0-SNAPSHOT</version>\n"
 			+ "  <packaging>bundle</packaging>\n" + "  <name>Some Dummy Project</name>\n" + "  <build>\n"
 			+ "    <defaultGoal>install</defaultGoal>\n" + "    <plugins>\n" + "      <plugin>\n"
-			+ "        <artifactId>maven-compiler-plugin</artifactId>\n" + "        <version>2.5.1</version>\n"
+			+ "        <artifactId>maven-compiler-plugin</artifactId>\n" + "        <version>3.5.1</version>\n"
 			+ "        <configuration>\n" + "          <source>1.7</source>\n" + "          <target>1.7</target>\n"
 			+ "        </configuration>\n" + "      </plugin>\n" + "      <plugin>\n"
 			+ "        <artifactId>maven-resources-plugin</artifactId>\n" + "        <version>2.6</version>\n"

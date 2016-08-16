@@ -53,14 +53,12 @@ public class EipChecksIT {
 	
 	private void assertChoiceEipModelCorrect(String camelVersion) {
 		Eip choiceEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.CHOICE_NODE_NAME);
-		assertThat(choiceEip).isNotNull();
 		assertThat(choiceEip.canHaveChildren()).isTrue();
 		assertThat(choiceEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WHEN_NODE_NAME);
 	}
 	
 	private void assertRouteEipModelCorrect(String camelVersion) {
 		Eip routeEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.ROUTE_NODE_NAME);
-		assertThat(routeEip).isNotNull();
 		assertThat(routeEip.canHaveChildren()).isTrue();
 		assertThat(routeEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WIRETAP_NODE_NAME);
 	}

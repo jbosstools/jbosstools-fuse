@@ -254,9 +254,7 @@ public abstract class AbstractCamelModelElement {
      * @return
      */
     public boolean canBeAddedToCamelContextDirectly() {
-    	return 	getNodeTypeId().equalsIgnoreCase("route") || 
-    			getNodeTypeId().equalsIgnoreCase("rest") || 
-    			getNodeTypeId().equalsIgnoreCase("restConfiguration"); 
+    	return getUnderlyingMetaModelObject().canBeAddedToCamelContextDirectly(); 
     }
 
 	/**
