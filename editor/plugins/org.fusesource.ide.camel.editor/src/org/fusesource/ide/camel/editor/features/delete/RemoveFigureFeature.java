@@ -11,15 +11,8 @@
 package org.fusesource.ide.camel.editor.features.delete;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.features.context.IRemoveContext;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.impl.DefaultRemoveFeature;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.commands.DiagramOperations;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -32,49 +25,12 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 	public RemoveFigureFeature(IFeatureProvider fp) {
 		super(fp);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.DefaultRemoveFeature#preRemove(org.eclipse.graphiti.features.context.IRemoveContext)
-	 */
-	@Override
-	public void preRemove(IRemoveContext context) {
-		super.preRemove(context);
-		
-		// now delete the BO from our model
-		PictogramElement pe = context.getPictogramElement();
-		Object[] businessObjectsForPictogramElement = getAllBusinessObjectsForPictogramElement(pe);
-		if (businessObjectsForPictogramElement != null && businessObjectsForPictogramElement.length > 0) {
-			Object bo = businessObjectsForPictogramElement[0];
-			if (bo instanceof CamelElementConnection) {
-				deleteFlowFromModel((CamelElementConnection) bo);
-			} else if (bo instanceof AbstractCamelModelElement) {
-				deleteBOFromModel((AbstractCamelModelElement)bo);
-			} else {
-				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
-			}
-		}
-	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.DefaultRemoveFeature#postRemove(org.eclipse.graphiti.features.context.IRemoveContext)
-	 */
 	@Override
-	public void postRemove(IRemoveContext context) {
-		super.postRemove(context);
-		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+	public boolean isAvailable(IContext context) {
+		// We want to keep the UI always synchronized with Model.
+		// So don't want to be able to remove only the graphical element.
+		return false;
 	}
 
-	private void deleteBOFromModel(AbstractCamelModelElement nodeToRemove) {
-		// we can't remove null objects or the root of the routes
-		if (nodeToRemove == null || nodeToRemove instanceof CamelContextElement) return;
-
-		// lets remove all connections
-		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
-		if (nodeToRemove.getInputElement() != null) nodeToRemove.getInputElement().setOutputElement(null);
-		if (nodeToRemove.getOutputElement() != null) nodeToRemove.getOutputElement().setInputElement(null);
-	}
-
-	private void deleteFlowFromModel(CamelElementConnection bo) {
-		bo.disconnect();
-	}
 }

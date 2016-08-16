@@ -1620,7 +1620,7 @@
          <parameters>
          <parameter name="otherwise" type="object" javaType="org.apache.camel.model.OtherwiseDefinition" kind="element" deprecated="false" required="false" originalFieldName="otherwise" description="Sets the otherwise node"/>
          <parameter name="description" type="object" javaType="org.apache.camel.model.DescriptionDefinition" kind="element" deprecated="false" required="false" originalFieldName="description" description="Sets the description of this node"/>
-         <parameter name="whenClauses" type="array" javaType="java.util.List&lt;org.apache.camel.model.WhenDefinition&gt;" kind="element" deprecated="false" required="false" originalFieldName="whenClauses" description="Sets the when clauses"/>
+         <parameter name="whenClauses" type="array" javaType="java.util.List&lt;org.apache.camel.model.WhenDefinition&gt;" kind="element" oneOf="when" deprecated="false" required="false" originalFieldName="whenClauses" description="Sets the when clauses"/>
          <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="id" description="Sets the id of this node"/>
       </parameters>
    </eip>

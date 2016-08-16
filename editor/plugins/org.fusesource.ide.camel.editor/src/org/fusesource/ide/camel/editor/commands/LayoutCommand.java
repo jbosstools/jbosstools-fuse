@@ -46,6 +46,9 @@ public class LayoutCommand extends RecordingCommand {
 	}
 	
 	private void layout(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
+		if (container == null){
+			return;
+		}
 		for (AbstractCamelModelElement cme : container.getChildElements()) {
 			layout(featureProvider, cme);
 		}
