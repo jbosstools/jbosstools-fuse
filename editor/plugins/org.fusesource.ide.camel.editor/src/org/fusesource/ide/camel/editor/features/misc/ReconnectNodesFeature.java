@@ -83,12 +83,13 @@ public class ReconnectNodesFeature extends DefaultReconnectionFeature {
 	private boolean isReconnectValid(IReconnectionContext context) {
 		AbstractCamelModelElement source = getNode(context.getConnection().getStart());
 		AbstractCamelModelElement newTarget = getNode(context.getNewAnchor());
-
+		
 		return 	source != null && 
 				newTarget != null && 
 				source.getParent().equals(newTarget.getParent()) && 
 				newTarget.getInputElement() == null &&
 				source instanceof CamelRouteElement == false && 
-				newTarget instanceof CamelRouteElement == false;
+				newTarget instanceof CamelRouteElement == false &&
+				!newTarget.equals(source.getFirstInFlow());
 	}
 }

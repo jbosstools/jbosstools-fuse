@@ -257,6 +257,19 @@ public abstract class AbstractCamelModelElement {
     	return getUnderlyingMetaModelObject().canBeAddedToCamelContextDirectly(); 
     }
 
+	/**    
+	 * returns the first element in a flow 
+	 * 
+	 * @return
+	 */
+	public AbstractCamelModelElement getFirstInFlow() {
+		AbstractCamelModelElement node = this.getInputElement();
+		while (node.getInputElement() != null) {
+			node = node.getInputElement();
+		}
+		return node;
+	}
+
 	/**
 	 * returns the route this endpoint belongs to
 	 *
