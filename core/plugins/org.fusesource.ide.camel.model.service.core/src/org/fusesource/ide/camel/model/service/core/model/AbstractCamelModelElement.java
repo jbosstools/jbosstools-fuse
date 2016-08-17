@@ -41,7 +41,6 @@ import org.w3c.dom.NodeList;
 public abstract class AbstractCamelModelElement {
 
 	static final String URI_PARAMETER_KEY = "uri";
-	private static final String WIRE_TAP_NODE_NAME = "wireTap";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
@@ -52,7 +51,7 @@ public abstract class AbstractCamelModelElement {
 	public static final String CHOICE_NODE_NAME = "choice";
 	public static final String WHEN_NODE_NAME = "when";
 	public static final String OTHERWISE_NODE_NAME = "otherwise";
-	public static final String WIRETAP_NODE_NAME = WIRE_TAP_NODE_NAME;
+	public static final String WIRETAP_NODE_NAME = "wireTap";
 	public static final String ROUTE_NODE_NAME = "route";
 	public static final String ID_ATTRIBUTE = "id";
 	public static final String DATA_FORMATS_NODE_NAME = "dataFormats";
