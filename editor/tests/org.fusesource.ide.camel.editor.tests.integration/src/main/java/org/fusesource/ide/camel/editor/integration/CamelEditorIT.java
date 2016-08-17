@@ -287,6 +287,25 @@ public class CamelEditorIT {
 		AbstractCamelModelElement createdRoute = model.findNode("_route1");
 		assertThat(createdRoute).isNotNull();
 	}
+
+	@Test
+	public void dropRouteOnRoute() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement route = model.findNode("_route5");
+		CreateContext createCtx = new CreateContext();
+		GraphicsAlgorithm exisitngRoutegraphic = fp.getPictogramElementForBusinessObject(route).getGraphicsAlgorithm();
+		createCtx.setX(exisitngRoutegraphic.getX());
+		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
+		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
+	}
 	
 	private void deleteNode(IFeatureProvider fp, AbstractCamelModelElement deleteNode) throws Exception {
 		// delete the endpoint
