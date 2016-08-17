@@ -111,6 +111,17 @@ public class ReconnectNodesFeature extends DefaultReconnectionFeature {
 	 * @param newTarget
 	 * @return
 	 */
+	public static boolean canElementsConnect(AbstractCamelModelElement source, AbstractCamelModelElement target) {
+		return canElementsConnect(source, target, ReconnectionContext.RECONNECT_TARGET);
+	}
+	
+	/**
+	 * checks wether 2 elements can be reconnected to each other
+	 * 
+	 * @param source
+	 * @param newTarget
+	 * @return
+	 */
 	public static boolean canElementsConnect(AbstractCamelModelElement source, AbstractCamelModelElement target, String reconnectType) {
 		if (ReconnectionContext.RECONNECT_SOURCE.equals(reconnectType)) {
 			return 	source != null && 
