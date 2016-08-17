@@ -61,6 +61,10 @@ public class ReconnectNodesFeature extends DefaultReconnectionFeature {
 				target.setInputElement(null);
 				oldSource.setOutputElement(null);
 			}
+			if (oldSource.equals(target.getOutputElement())) {
+				target.setOutputElement(null);
+				oldSource.setInputElement(null);
+			}
 			new CamelElementConnection(newSource, target);
 		} else {
 			// dragging the target anchor
@@ -72,6 +76,10 @@ public class ReconnectNodesFeature extends DefaultReconnectionFeature {
 			if (oldTarget.equals(source.getOutputElement())) {
 				source.setOutputElement(null);
 				oldTarget.setInputElement(null);
+			}
+			if (oldTarget.equals(source.getInputElement())) {
+				source.setInputElement(null);
+				oldTarget.setOutputElement(null);
 			}
 			new CamelElementConnection(source, newTarget);
 		}

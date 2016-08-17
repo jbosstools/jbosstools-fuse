@@ -267,7 +267,6 @@ public abstract class AbstractCamelModelElement {
 		while (node != null && node.getInputElement() != null) {
 			node = node.getInputElement();
 		}
-		if (node != null) System.err.println("First in flow: " + node.getDisplayText());
 		return node;
 	}
 
@@ -281,7 +280,6 @@ public abstract class AbstractCamelModelElement {
 		while (node != null && node.getOutputElement() != null) {
 			node = node.getOutputElement();
 		}
-		if (node != null) System.err.println("last in flow: " + node.getDisplayText());
 		return node;
 	}
 	
