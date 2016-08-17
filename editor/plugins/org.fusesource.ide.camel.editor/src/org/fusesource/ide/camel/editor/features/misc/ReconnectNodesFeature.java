@@ -84,12 +84,23 @@ public class ReconnectNodesFeature extends DefaultReconnectionFeature {
 		AbstractCamelModelElement source = getNode(context.getConnection().getStart());
 		AbstractCamelModelElement newTarget = getNode(context.getNewAnchor());
 		
+		return canElementsConnect(source, newTarget);
+	}
+	
+	/**
+	 * checks wether 2 elements can be reconnected to each other
+	 * 
+	 * @param source
+	 * @param newTarget
+	 * @return
+	 */
+	public static boolean canElementsConnect(AbstractCamelModelElement source, AbstractCamelModelElement newTarget) {
 		return 	source != null && 
 				newTarget != null && 
 				source.getParent().equals(newTarget.getParent()) && 
 				newTarget.getInputElement() == null &&
 				source instanceof CamelRouteElement == false && 
 				newTarget instanceof CamelRouteElement == false &&
-				!newTarget.equals(source.getFirstInFlow());
+				!newTarget.equals(source.getFirstInFlow());		
 	}
 }
