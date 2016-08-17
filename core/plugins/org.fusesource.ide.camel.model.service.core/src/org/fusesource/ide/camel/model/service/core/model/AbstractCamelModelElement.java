@@ -263,13 +263,28 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	public AbstractCamelModelElement getFirstInFlow() {
-		AbstractCamelModelElement node = this.getInputElement();
+		AbstractCamelModelElement node = this;
 		while (node != null && node.getInputElement() != null) {
 			node = node.getInputElement();
 		}
+		if (node != null) System.err.println("First in flow: " + node.getDisplayText());
 		return node;
 	}
 
+	/**    
+	 * returns the last element in a flow 
+	 * 
+	 * @return
+	 */
+	public AbstractCamelModelElement getLastInFlow() {
+		AbstractCamelModelElement node = this;
+		while (node != null && node.getOutputElement() != null) {
+			node = node.getOutputElement();
+		}
+		if (node != null) System.err.println("last in flow: " + node.getDisplayText());
+		return node;
+	}
+	
 	/**
 	 * returns the route this endpoint belongs to
 	 *
