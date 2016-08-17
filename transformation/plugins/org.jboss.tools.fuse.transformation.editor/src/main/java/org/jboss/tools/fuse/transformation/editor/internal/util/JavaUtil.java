@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -14,7 +14,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -52,7 +51,7 @@ public final class JavaUtil {
         List<URL> urls = new ArrayList<>();
         urls.add(new File(project.getLocation()
                 + "/" + javaProject.getOutputLocation().removeFirstSegments(1) //$NON-NLS-1$
-                + "/") //$NON-NLS-1$ //$NON-NLS-2$
+                + "/") //$NON-NLS-1$
                 .toURI().toURL());
         for (IClasspathEntry classpathEntry : javaProject.getResolvedClasspath(true)) {
             if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
@@ -253,9 +252,9 @@ public final class JavaUtil {
      * Returns the resource path relative to its containing
      * IPackageFragmentRoot. If the resource is not located within a Java source
      * directory, the project name is stripped from the path.
-     * 
+     *
      * @param resource the resource.
-     * 
+     *
      * @return the relative path.
      */
     public static IPath getJavaPathForResource(final IResource resource) {

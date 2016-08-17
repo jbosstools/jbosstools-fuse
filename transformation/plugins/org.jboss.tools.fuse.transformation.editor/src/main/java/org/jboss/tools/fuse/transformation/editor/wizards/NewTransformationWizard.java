@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -400,18 +398,18 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                  boolean isSource,
                                  IProgressMonitor monitor) throws Exception {
         // Build class name from file name
-        final StringBuilder className = new StringBuilder();
+        final StringBuilder classNameBuilder = new StringBuilder();
         final StringCharacterIterator iter = new StringCharacterIterator(filePath.substring(
                 filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.')));
         boolean wordStart = true;
         for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
-            if (className.length() == 0) {
+            if (classNameBuilder.length() == 0) {
                 if (Character.isJavaIdentifierStart(chr)) {
-                    className.append(wordStart ? Character.toUpperCase(chr) : chr);
+                    classNameBuilder.append(wordStart ? Character.toUpperCase(chr) : chr);
                     wordStart = false;
                 }
             } else if (Character.isJavaIdentifierPart(chr)) {
-                className.append(wordStart ? Character.toUpperCase(chr) : chr);
+                classNameBuilder.append(wordStart ? Character.toUpperCase(chr) : chr);
                 wordStart = false;
             } else {
                 wordStart = true;
@@ -419,10 +417,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         // Build package name from class name
         int sequencer = 1;
-        String pkgName = className.toString();
+        String pkgName = classNameBuilder.toString();
         String javaSourceFolder = new MavenUtils().javaSourceFolder();
         while (CamelUtils.project().exists(new Path(javaSourceFolder + pkgName))) {
-            pkgName = className.toString() + sequencer++;
+            pkgName = classNameBuilder.toString() + sequencer++;
         }
         pkgName = pkgName.toLowerCase();
         // Generate model
@@ -434,14 +432,16 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             return getJavaQualifiedName(filePath, monitor);
         }
         case JSON: {
+            String className = classNameBuilder.toString().replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
             final JsonModelGenerator generator = new JsonModelGenerator();
-            generator.generateFromInstance(className.toString(), pkgName, CamelUtils.project().findMember(filePath)
+            generator.generateFromInstance(className, pkgName, CamelUtils.project().findMember(filePath)
                     .getLocationURI().toURL(), targetSourceFolder);
             return pkgName + "." + className; //$NON-NLS-1$
         }
         case JSON_SCHEMA: {
+            String className = classNameBuilder.toString().replace("_", ""); //$NON-NLS-1$ //$NON-NLS-2$
             final JsonModelGenerator generator = new JsonModelGenerator();
-            generator.generateFromSchema(className.toString(), pkgName, CamelUtils.project().findMember(filePath)
+            generator.generateFromSchema(className, pkgName, CamelUtils.project().findMember(filePath)
                     .getLocationURI().toURL(), targetSourceFolder);
             return pkgName + "." + className; //$NON-NLS-1$
         }
@@ -524,9 +524,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         Map<String, String> mappings = generator.elementToClassMapping(model);
         if (mappings != null && !mappings.isEmpty()) {
             return mappings.get(elementName);
-        } else {
-            return selectModelClass(model);
         }
+        return selectModelClass(model);
 	}
 
     private String selectModelClass(final JCodeModel model) {

@@ -425,10 +425,10 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 } else if (chr == quote) {
                     final String keyword = builder.toString();
                     switch (keyword) {
-                    case "$schema":
-                    case "title":
-                    case "type":
-                    case "id":
+                    case "$schema": //$NON-NLS-1$
+                    case "title": //$NON-NLS-1$
+                    case "type": //$NON-NLS-1$
+                    case "id": //$NON-NLS-1$
                         return true;
                     default:
                         // all other cases ignored
