@@ -25,6 +25,7 @@ import org.eclipse.graphiti.features.context.impl.DeleteContext;
 import org.eclipse.graphiti.internal.command.CommandExec;
 import org.eclipse.graphiti.internal.command.GenericFeatureCommandWithContext;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
+import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
@@ -309,7 +310,7 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	public void reconnectToUnwiredNode() throws Exception {
+	public void reconnectToUnwiredNodeShouldBePossible() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
 		
 		readAndDispatch(20);
@@ -340,7 +341,7 @@ public class CamelEditorIT {
 	}
 
 	@Test
-	public void reconnectToWiredNode() throws Exception {
+	public void reconnectToWiredNodeShouldNotBepossible() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
 		
 		readAndDispatch(20);
@@ -356,7 +357,7 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	public void reconnectToFirstInFlow() throws Exception {
+	public void reconnectToFirstInFlowShouldNotBePossible() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
 		
 		readAndDispatch(20);
@@ -372,7 +373,7 @@ public class CamelEditorIT {
 	}
 
 	@Test
-	public void reconnectToNestedNode() throws Exception {
+	public void reconnectToNestedNodeShouldNotBePossible() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
 		
 		readAndDispatch(20);
@@ -385,6 +386,54 @@ public class CamelEditorIT {
 		
 		// now check if the reconnect is possible - it should NOT be
 		assertThat(ReconnectNodesFeature.canElementsConnect(inbox, to1)).isFalse();
+	}
+	
+	@Test
+	public void reconnectSourceToLastElementOfFlowShouldBePossible() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect2.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+
+		AbstractCamelModelElement logger = model.findNode("logger");
+		AbstractCamelModelElement bean = model.findNode("bean");
+		
+		EList<Connection> connections = fp.getDiagramTypeProvider().getDiagram().getConnections();
+		Connection con = findConnection(fp, connections, logger, bean);
+		// delete the connection
+		DeleteContext delcon = new DeleteContext(con);
+		delcon.putProperty(DeleteFigureFeature.SKIP_ASKING_DELETE_CONFIRMATION, "true");
+		IDeleteFeature deleteFeature = fp.getDeleteFeature(delcon);
+		if (deleteFeature.canExecute(delcon)) {
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(deleteFeature, delcon), editingDomain);
+		}
+
+		// now check if the reconnect is possible - it should be
+		assertThat(ReconnectNodesFeature.canElementsConnect(logger, bean)).isTrue();
+	}
+	
+	private Connection findConnection(IFeatureProvider fp, EList<Connection> connections, AbstractCamelModelElement source, AbstractCamelModelElement target) {
+		for (Connection con : connections) {
+			if (source.equals(getNode(fp, con.getStart())) &&
+				target.equals(getNode(fp, con.getEnd()))) {
+				return con;
+			}
+		}
+		return null;
+	}
+	
+	private AbstractCamelModelElement getNode(IFeatureProvider fp, Anchor anchor) {
+		if (anchor != null) {
+			Object obj = fp.getBusinessObjectForPictogramElement(anchor.getParent());
+			if (obj instanceof AbstractCamelModelElement) {
+				return (AbstractCamelModelElement) obj;
+			}
+		}
+		return null;
 	}
 	
 	private void deleteNode(IFeatureProvider fp, AbstractCamelModelElement deleteNode) throws Exception {
