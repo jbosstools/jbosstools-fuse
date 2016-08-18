@@ -4,17 +4,15 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.spring.CamelSpringTestSupport;
+import org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
 import org.junit.Test;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.mycompany.templates.camel.activemq.OrderGenerator;
 
 /**
  * A unit test to verify the Camel route works as designed.
  */
-public class CamelContextXmlTest extends CamelSpringTestSupport {
+public class ActiveMQBlueprintTest extends CamelBlueprintTestSupport {    
     @EndpointInject(uri = "activemq:incomingOrders")
     private ProducerTemplate in;
 
@@ -63,11 +61,8 @@ public class CamelContextXmlTest extends CamelSpringTestSupport {
         assertMockEndpointsSatisfied();
     }
 
-	@Override
-	protected AbstractApplicationContext createApplicationContext() {
-		return new ClassPathXmlApplicationContext(
-            "META-INF/spring/camel-context.xml", 
-            "camel-context-test.xml"
-        );
-	}
+    @Override
+    protected String getBlueprintDescriptor() {
+        return "OSGI-INF/blueprint/camel-blueprint.xml";
+    }
 }
