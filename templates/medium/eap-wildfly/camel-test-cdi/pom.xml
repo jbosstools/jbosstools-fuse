@@ -21,14 +21,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.wildfly.camel.archetypes</groupId>
-    <artifactId>wildfly-camel-archetype-spring</artifactId>
-    <version>2.3.0.redhat-621031</version>
+    <groupId>org.test</groupId>
+    <artifactId>camel-test-cdi</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>WildFly Camel Spring Application</name>
+    <name>WildFly Camel CDI Application</name>
     <url>http://www.myorganization.org</url>
 
+    <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -37,13 +38,14 @@
         <version.jboss.bom.eap>6.4.0.GA</version.jboss.bom.eap>
 
         <!-- Other versions -->
-        <version.apache.camel>2.15.1.redhat-621084</version.apache.camel>
-        <version.junit>4.12</version.junit>
+        <version.apache.camel>2.17.0.redhat-630157</version.apache.camel>
+        <version.junit>4.11</version.junit>
+        <version.wildfly.camel>2.4.0.redhat-630157</version.wildfly.camel>
 
         <!-- Plugin versions -->
         <version.maven.compiler.plugin>3.5.1</version.maven.compiler.plugin>
         <version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
-        <version.maven.war.plugin>2.6</version.maven.war.plugin>
+        <version.maven.war.plugin>2.5</version.maven.war.plugin>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
         <!-- maven-compiler-plugin -->
@@ -52,9 +54,10 @@
 
         <!-- Arquillian application server properties -->
         <jboss.home>${env.JBOSS_HOME}</jboss.home>
-        <server.config>standalone-camel.xml</server.config>
+        <server.config>standalone.xml</server.config>
     </properties>
 
+    <!-- DependencyManagement -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -67,12 +70,35 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- Dependencies -->
     <dependencies>
         <!-- Provided -->
         <dependency>
+            <groupId>org.wildfly.camel</groupId>
+            <artifactId>wildfly-camel-subsystem</artifactId>
+            <version>${version.wildfly.camel}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-cdi</artifactId>
             <version>${version.apache.camel}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -127,7 +153,6 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
-                    <version>${version.wildfly}</version>
                     <serverConfig>${server.config}</serverConfig>
                     <port>9999</port>
                 </configuration>
@@ -184,9 +209,19 @@
 
     <!-- Repositories -->
     <repositories>
+       <repository>
+            <id>redhat-ga-repository</id>
+            <url>https://maven.repository.redhat.com/ga</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
-            <id>jboss-ga-repository</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
+            <id>redhat-ea-repository</id>
+            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -227,8 +262,8 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>jboss-earlyaccess-plugin-repository</id>
-            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
+            <id>redhat-ga-repository</id>
+            <url>https://maven.repository.redhat.com/ga</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -237,8 +272,18 @@
             </snapshots>
         </pluginRepository>
         <pluginRepository>
-            <id>jboss-ga-plugin-repository</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
+            <id>redhat-ea-repository</id>
+            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jboss-earlyaccess-plugin-repository</id>
+            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
