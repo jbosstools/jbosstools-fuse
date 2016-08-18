@@ -147,7 +147,7 @@ public class StringFunctions {
                           description = "The substring that will be removed from the source string"))
     public String remove(String source,
                          String substring) {
-        return source.replaceFirst(substring, "");
+        return source.replaceFirst(substring, ""); //$NON-NLS-1$
     }
 
     @Function(description = "Removes all occurrences of the supplied substring from the source string.",
@@ -156,7 +156,7 @@ public class StringFunctions {
                           description = "The substring for which all occurrences will be removed from the source string"))
     public String removeAll(String source,
                             String substring) {
-        return source.replaceAll(substring, "");
+        return source.replaceAll(substring, ""); //$NON-NLS-1$
     }
 
     @Function(description = "Replaces the first occurrence of the supplied old substring with the supplied new substring in the source string.",

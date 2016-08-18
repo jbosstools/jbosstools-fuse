@@ -331,7 +331,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         }
         ClasspathResourceSelectionDialog dialog = null;
         HashSet<String> extensions = new HashSet<>();
-        if (!"xsd".equals(extension)) extensions.add("xml"); //$NON-NLS-1$
+        if (!"xsd".equals(extension)) extensions.add("xml"); //$NON-NLS-1$ //$NON-NLS-2$
         extensions.add("xsd"); //$NON-NLS-1$
         extensions.add("wsdl"); //$NON-NLS-1$
         if (javaProject == null) {

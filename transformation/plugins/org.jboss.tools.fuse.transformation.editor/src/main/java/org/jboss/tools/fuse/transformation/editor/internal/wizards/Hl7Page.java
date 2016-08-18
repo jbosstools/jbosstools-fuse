@@ -76,8 +76,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
      */
     public Hl7Page(final String pageName, final Model model, final boolean isSource) {
         super(pageName, model);
-        setTitle("HL7 Page");
-        setImageDescriptor(Activator.imageDescriptor("transform.png"));
+        setTitle("HL7 Page"); //$NON-NLS-1$
+        setImageDescriptor(Activator.imageDescriptor("transform.png")); //$NON-NLS-1$
         this.isSource = isSource;
         observablesManager.addObservablesFromContext(context, true, true);
     }
@@ -88,9 +88,9 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(hl7FileText);
         IObservableValue modelValue = null;
         if (isSourcePage()) {
-            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
-            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
+            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model); //$NON-NLS-1$
         }
         final UpdateValueStrategy strategy = new UpdateValueStrategy();
 
@@ -158,7 +158,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
                     String inputLine;
                     while ((inputLine = in.readLine()) != null) {
-                        buffer.append(inputLine + "\n");
+                        buffer.append(inputLine + "\n"); //$NON-NLS-1$
                     }
                 }
                 hl7PreviewText.setText(buffer.toString());
@@ -199,11 +199,11 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
     @Override
     public void createControl(final Composite parent) {
         if (this.isSource) {
-            setTitle("Source Type (JSON)");
-            setDescription("Specify details for the source JSON for this transformation.");
+            setTitle("Source Type (JSON)"); //$NON-NLS-1$
+            setDescription("Specify details for the source JSON for this transformation."); //$NON-NLS-1$
         } else {
-            setTitle("Target Type (JSON)");
-            setDescription("Specify details for the target JSON for this transformation.");
+            setTitle("Target Type (JSON)"); //$NON-NLS-1$
+            setDescription("Specify details for the target JSON for this transformation."); //$NON-NLS-1$
         }
         observablesManager.runAndCollect(new Runnable() {
 
@@ -229,17 +229,17 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         _page.setLayout(layout);
 
         final Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
-        group.setText("JSON Type Definition");
+        group.setText("JSON Type Definition"); //$NON-NLS-1$
         group.setLayout(new GridLayout(1, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
 
         hl7SchemaOption = new Button(group, SWT.RADIO);
-        hl7SchemaOption.setText("JSON Schema");
+        hl7SchemaOption.setText("JSON Schema"); //$NON-NLS-1$
         hl7SchemaOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         hl7SchemaOption.setSelection(true);
 
         hl7InstanceOption = new Button(group, SWT.RADIO);
-        hl7InstanceOption.setText("JSON Instance Document");
+        hl7InstanceOption.setText("JSON Instance Document"); //$NON-NLS-1$
         hl7InstanceOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
         hl7SchemaOption.addSelectionListener(new SelectionAdapter() {
@@ -251,8 +251,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 } else {
                     model.setTargetType(ModelType.JSON_SCHEMA);
                 }
-                model.setTargetFilePath("");
-                hl7PreviewText.setText("");
+                model.setTargetFilePath(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 Hl7Page.this.resetFinish();
             }
         });
@@ -266,8 +266,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 } else {
                     model.setTargetType(ModelType.JSON);
                 }
-                model.setTargetFilePath("");
-                hl7PreviewText.setText("");
+                model.setTargetFilePath(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 Hl7Page.this.resetFinish();
             }
         });
@@ -275,9 +275,9 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         // Create file path widgets
         Label label;
         if (isSourcePage()) {
-            label = createLabel(_page, "Source File:", "The source JSON file for the transformation.");
+            label = createLabel(_page, "Source File:", "The source JSON file for the transformation."); //$NON-NLS-1$ //$NON-NLS-2$
         } else {
-            label = createLabel(_page, "Target File:", "The target JSON file for the transformation.");
+            label = createLabel(_page, "Target File:", "The target JSON file for the transformation."); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         hl7FileText = new Text(_page, SWT.BORDER);
@@ -286,17 +286,17 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
 
         final Button jsonFileBrowseButton = new Button(_page, SWT.NONE);
         jsonFileBrowseButton.setLayoutData(new GridData());
-        jsonFileBrowseButton.setText("...");
-        jsonFileBrowseButton.setToolTipText("Browse to specify the JSON file.");
+        jsonFileBrowseButton.setText("..."); //$NON-NLS-1$
+        jsonFileBrowseButton.setToolTipText("Browse to specify the JSON file."); //$NON-NLS-1$
 
         jsonFileBrowseButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                final String extension = "json";
+                final String extension = "json"; //$NON-NLS-1$
                 final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
                     try {
-                        hl7PreviewText.setText("");
+                        hl7PreviewText.setText(""); //$NON-NLS-1$
                         if (fileIsEmpty(path)) {
                             hl7FileText.setText(path);
                             notifyControl(hl7FileText, SWT.Modify);
@@ -340,7 +340,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         });
 
         final Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
-        group2.setText("JSON Structure Preview");
+        group2.setText("JSON Structure Preview"); //$NON-NLS-1$
         group2.setLayout(new FillLayout());
         group2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
@@ -358,7 +358,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 try (final BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
                     String inputLine;
                     while ((inputLine = in.readLine()) != null) {
-                        buffer.append(inputLine + "\n");
+                        buffer.append(inputLine + "\n"); //$NON-NLS-1$
                     }
                 }
                 return buffer.toString();
@@ -423,10 +423,10 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 } else if (chr == quote) {
                     final String keyword = builder.toString();
                     switch (keyword) {
-                    case "$schema":
-                    case "title":
-                    case "type":
-                    case "id":
+                    case "$schema": //$NON-NLS-1$
+                    case "title": //$NON-NLS-1$
+                    case "type": //$NON-NLS-1$
+                    case "id": //$NON-NLS-1$
                         return true;
                     default:
                         // all other cases ignored
@@ -451,8 +451,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
-        dialog.setTitle("Select " + extension.toUpperCase() + " From Project");
-        dialog.setInitialPattern("*." + extension);
+        dialog.setTitle("Select " + extension.toUpperCase() + " From Project"); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
         if (result == null || result.length == 0 || !(result[0] instanceof IResource)) {
@@ -471,8 +471,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
     @Override
     public void clearControls() {
         if (hl7FileText != null && !hl7FileText.isDisposed()) {
-            hl7FileText.setText("");
-            hl7PreviewText.setText("");
+            hl7FileText.setText(""); //$NON-NLS-1$
+            hl7PreviewText.setText(""); //$NON-NLS-1$
         }
         notifyListeners();
     }
@@ -500,23 +500,23 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
             String pathEmptyError = null;
             String unableToFindError = null;
             if (isSourcePage()) {
-                pathEmptyError = "A source file path must be supplied for the transformation.";
-                unableToFindError = "Unable to find a source file with the supplied path";
+                pathEmptyError = "A source file path must be supplied for the transformation."; //$NON-NLS-1$
+                unableToFindError = "Unable to find a source file with the supplied path"; //$NON-NLS-1$
             } else {
-                pathEmptyError = "A target file path must be supplied for the transformation.";
-                unableToFindError = "Unable to find a target file with the supplied path";
+                pathEmptyError = "A target file path must be supplied for the transformation."; //$NON-NLS-1$
+                unableToFindError = "Unable to find a target file with the supplied path"; //$NON-NLS-1$
             }
             if (path == null || path.isEmpty()) {
-                hl7PreviewText.setText("");
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(pathEmptyError);
             }
             if (CamelUtils.project().findMember(path) == null) {
-                hl7PreviewText.setText("");
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
             }
             IResource resource = CamelUtils.project().findMember(path);
             if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
-                hl7PreviewText.setText("");
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
             }
             return ValidationStatus.ok();
@@ -530,19 +530,19 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
             final String path = value == null ? null : value.toString().trim();
             String fileEmptyError = null;
             if (isSourcePage()) {
-                fileEmptyError = "Source file selected is empty.";
+                fileEmptyError = "Source file selected is empty."; //$NON-NLS-1$
             } else {
-                fileEmptyError = "Target file selected is empty.";
+                fileEmptyError = "Target file selected is empty."; //$NON-NLS-1$
             }
             if (fileIsEmpty(path)) {
-                hl7PreviewText.setText("");
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(fileEmptyError);
             }
             IResource resource = CamelUtils.project().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (jsonText == null || jsonText.trim().isEmpty()) {
-                    hl7PreviewText.setText("");
+                    hl7PreviewText.setText(""); //$NON-NLS-1$
                     return ValidationStatus.error(fileEmptyError);
                 }
             }
@@ -559,8 +559,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (!Util.jsonValid(jsonText)) {
-                    hl7PreviewText.setText("");
-                    return ValidationStatus.error("Invalid JSON");
+                    hl7PreviewText.setText(""); //$NON-NLS-1$
+                    return ValidationStatus.error("Invalid JSON"); //$NON-NLS-1$
                 }
             }
             return ValidationStatus.ok();
