@@ -248,8 +248,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * @return	true if its an invalid action
 	 */
 	private boolean isInvalidAction(AbstractCamelModelElement containerBO) {
-		return isWhenOtherwiseDropOnNonChoice(containerBO) ||
-			   isInvalidRouteDrop(containerBO);
+		return isOtherwiseDropOnNonChoice(containerBO) ||
+				isInvalidRouteDrop(containerBO);
 	}
 
 	/**
@@ -270,8 +270,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * @param containerBO
 	 * @return
 	 */
-	private boolean isWhenOtherwiseDropOnNonChoice(AbstractCamelModelElement containerBO) {
-		return 	(AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(eip.getName()) || AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(eip.getName())) && 
+	private boolean isOtherwiseDropOnNonChoice(AbstractCamelModelElement containerBO) {
+		return 	AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(eip.getName()) && 
 				containerBO != null && 
 				!AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(containerBO.getNodeTypeId());
 	}

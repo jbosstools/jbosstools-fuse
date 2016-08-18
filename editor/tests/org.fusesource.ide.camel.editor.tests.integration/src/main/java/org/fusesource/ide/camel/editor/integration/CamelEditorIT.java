@@ -310,6 +310,34 @@ public class CamelEditorIT {
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
+	@Test	
+	public void dropWhenOnRoute() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement route = model.findNode("_route5");
+		
+		CreateContext createCtx = new CreateContext();
+		GraphicsAlgorithm exisitngRoutegraphic = fp.getPictogramElementForBusinessObject(route).getGraphicsAlgorithm();
+		createCtx.setX(exisitngRoutegraphic.getX());
+		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
+		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
+		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("when"));
+		assertThat(createWhenFigureFeature.canExecute(createCtx)).isTrue();
+		if(createWhenFigureFeature.canExecute(createCtx)){
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(createWhenFigureFeature, createCtx), editingDomain);
+		}
+		AbstractCamelModelElement when = model.findNode("_when1");
+		assertThat(when).isNotNull();
+		PictogramElement pe = fp.getPictogramElementForBusinessObject(when);
+		assertThat(pe).isNotNull();
+	}
+	
 	@Test
 	public void dropRouteOnLog() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/basic.xml");
@@ -359,7 +387,7 @@ public class CamelEditorIT {
 		
 		AbstractCamelModelElement route = model.findNode("route1");
 		AbstractCamelModelElement inbox = model.findNode("inbox");
-		
+
 		CreateContext createCtx = new CreateContext();
 		GraphicsAlgorithm exisitngRoutegraphic = fp.getPictogramElementForBusinessObject(route).getGraphicsAlgorithm();
 		createCtx.setX(exisitngRoutegraphic.getX());
