@@ -28,6 +28,7 @@ import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
@@ -307,6 +308,43 @@ public class CamelEditorIT {
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
 		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
+	}
+	
+	@Test
+	public void dropRouteOnLog() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/basic.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		AbstractCamelModelElement log = model.findNode("log1");
+		CreateContext createCtx = new CreateContext();
+		GraphicsAlgorithm exisitngLoggraphic = fp.getPictogramElementForBusinessObject(log).getGraphicsAlgorithm();
+		createCtx.setX(exisitngLoggraphic.getX());
+		createCtx.setY(exisitngLoggraphic.getY() + exisitngLoggraphic.getWidth() + 5);
+		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(log));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
+	}
+	
+	@Test
+	public void dropRouteOnCamelContext() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		Diagram dia = fp.getDiagramTypeProvider().getDiagram();
+
+		CreateContext createCtx = new CreateContext();
+		createCtx.setX(1);
+		createCtx.setY(1);
+		createCtx.setTargetContainer(dia);
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		assertThat(createRouteFigureFeature.canExecute(createCtx)).isTrue();
 	}
 	
 	@Test
