@@ -28,6 +28,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
@@ -517,18 +518,27 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
      */
-    public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
+    public void updateMavenDependencies(final List<Dependency> compDeps) throws CoreException {
     	CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
     	IFacetedProject fproj = ProjectFacetsManager.create(editor.getWorkspaceProject());
     	IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
     	if (fproj != null && fproj.hasProjectFacet(camelFacet)) {
     		String facetVersion = fproj.getInstalledVersion(camelFacet).getVersionString();
-    		String m2CamelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
+    		final String m2CamelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
     		if (m2CamelVersion != null) {
-    			updateDepsVersion(compDeps, m2CamelVersion);
+    			Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						updateDepsVersion(compDeps, m2CamelVersion);
+						try {
+							new MavenUtils().updateMavenDependencies(compDeps);
+						} catch (CoreException ex) {
+							CamelEditorUIActivator.pluginLog().logError(ex);
+						}
+					}
+				});
     		}
     	}
-		new MavenUtils().updateMavenDependencies(compDeps);
     }
     
     private void updateDepsVersion(List<Dependency> compDeps, String newCamelVersion) {

@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Resource;
@@ -32,6 +33,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
@@ -66,14 +68,22 @@ public class MavenUtils {
 	 * @param compDeps the Maven dependencies to be updated
 	 * @throws CoreException
      */
-	public void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        IProject project = CamelUtils.project();
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
+        final IProject project = CamelUtils.project();
         if (project == null) {
             CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
-
-        updateMavenDependencies(compDeps, project);
+        Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					updateMavenDependencies(compDeps, project);
+				} catch (CoreException ex) {
+					CamelEditorUIActivator.pluginLog().logError(ex);
+				}
+			}
+		});
     }
 
 	/**
