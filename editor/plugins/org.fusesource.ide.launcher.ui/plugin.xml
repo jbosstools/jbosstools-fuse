@@ -238,12 +238,13 @@
       </image>
    </extension>
  
-  <extension
+    <extension
        point="org.eclipse.core.expressions.definitions">
     	<definition id="org.fusesource.ide.launcher.ui.launchCamelEnable">
                  <with variable="selection">
                      <count value="1"/>
                      <iterate>
+                       <and>
                        <or>
                          <adapt
                                type="org.eclipse.core.resources.IFile">
@@ -255,11 +256,27 @@
 						 <and>
 							<instanceof value="org.eclipse.core.resources.IProject" />
           					<test property="org.eclipse.core.resources.projectNature" value="org.fusesource.ide.project.RiderProjectNature" />
-						 </and>                         
-                       </or>  
+						 </and>
+                       </or>
+                       <test
+                             forcePluginActivation="true"
+                             property="org.fusesource.ide.launcher.ui.isLocalLaunchAvailable">
+                       </test>
+                        
+						 </and>                 
                      </iterate>
                  </with>
     	</definition>
-   </extension>   
+   </extension>
+  <extension
+        point="org.eclipse.core.expressions.propertyTesters">
+     <propertyTester
+           class="org.fusesource.ide.launcher.ui.propertytester.CamelLocalLaunchPropertyTester"
+           id="org.fusesource.ide.launcher.ui.localLaunchPropertyTester"
+           namespace="org.fusesource.ide.launcher.ui"
+           properties="isLocalLaunchAvailable"
+           type="org.eclipse.core.resources.IResource">
+     </propertyTester>
+  </extension>  
    
 </plugin>
