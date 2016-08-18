@@ -42,6 +42,14 @@ public class AbstractCamelModelElementTest {
 	}
 	
 	@Test
+	public void testIsEndpointElement_returnTrueForEndpointWithNoURI() throws Exception {
+		doReturn(null).when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		doReturn("endpoint").when(cme).getNodeTypeId();
+		
+		assertThat(cme.isEndpointElement()).isTrue();
+	}
+	
+	@Test
 	public void testIsEndpointElement_returnTrueForTo() throws Exception {
 		doReturn("to").when(cme).getNodeTypeId();
 		assertThat(cme.isEndpointElement()).isTrue();

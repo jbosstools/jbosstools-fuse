@@ -439,12 +439,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	public boolean isEndpointElement() {
-		if(Arrays.asList(ENDPOINT_TYPE_FROM, ENDPOINT_TYPE_TO, ENDPOINT_NODE_NAME).contains(getNodeTypeId())){
-			Object uriParameter = getParameter(URI_PARAMETER_KEY);
-			return uriParameter != null && ((String) uriParameter).trim().length() > 0;
-		} else {
-			return false;
-		}
+		return Arrays.asList(ENDPOINT_TYPE_FROM, ENDPOINT_TYPE_TO, ENDPOINT_NODE_NAME).contains(getNodeTypeId());
 	}
 
 	/**
