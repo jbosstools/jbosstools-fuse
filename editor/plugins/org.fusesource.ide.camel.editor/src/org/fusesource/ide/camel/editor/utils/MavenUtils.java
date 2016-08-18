@@ -39,6 +39,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author lhein
@@ -87,7 +88,7 @@ public class MavenUtils {
 	        	 */
 	        	@Override
 	        	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-	        		monitor.beginTask("Updating Maven project file for new connector...", 100); 
+	        		monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100); 
 	        		try {
 						updateMavenDependencies(compDeps, project);
 					} catch (CoreException ex) {
