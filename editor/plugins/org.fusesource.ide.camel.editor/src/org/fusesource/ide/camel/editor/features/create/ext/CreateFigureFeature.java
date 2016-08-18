@@ -28,7 +28,6 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
@@ -526,17 +525,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
     		String facetVersion = fproj.getInstalledVersion(camelFacet).getVersionString();
     		final String m2CamelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
     		if (m2CamelVersion != null) {
-    			Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						updateDepsVersion(compDeps, m2CamelVersion);
-						try {
-							new MavenUtils().updateMavenDependencies(compDeps);
-						} catch (CoreException ex) {
-							CamelEditorUIActivator.pluginLog().logError(ex);
-						}
-					}
-				});
+    			updateDepsVersion(compDeps, m2CamelVersion);
+				new MavenUtils().updateMavenDependencies(compDeps);
     		}
     	}
     }
