@@ -15,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +28,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -74,16 +78,27 @@ public class MavenUtils {
             CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
-        Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					updateMavenDependencies(compDeps, project);
-				} catch (CoreException ex) {
-					CamelEditorUIActivator.pluginLog().logError(ex);
-				}
-			}
-		});
+        // show progress dialog to user to signal ongoing changes to the pom
+        ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell()); 
+        try {
+	        dialog.run(true, true, new IRunnableWithProgress() {
+	        	/* (non-Javadoc)
+	        	 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+	        	 */
+	        	@Override
+	        	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	        		monitor.beginTask("Updating Maven project file for new connector...", 100); 
+	        		try {
+						updateMavenDependencies(compDeps, project);
+					} catch (CoreException ex) {
+						CamelEditorUIActivator.pluginLog().logError(ex);
+					}
+	        		monitor.done(); 
+	        	}
+	        });
+        } catch (Exception ex) {
+        	CamelEditorUIActivator.pluginLog().logError(ex);
+        }
     }
 
 	/**
