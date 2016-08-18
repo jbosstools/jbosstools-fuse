@@ -15,8 +15,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Resource;
@@ -26,13 +28,18 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author lhein
@@ -66,14 +73,33 @@ public class MavenUtils {
 	 * @param compDeps the Maven dependencies to be updated
 	 * @throws CoreException
      */
-	public void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        IProject project = CamelUtils.project();
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
+        final IProject project = CamelUtils.project();
         if (project == null) {
             CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
-
-        updateMavenDependencies(compDeps, project);
+        // show progress dialog to user to signal ongoing changes to the pom
+        ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell()); 
+        try {
+	        dialog.run(true, true, new IRunnableWithProgress() {
+	        	/* (non-Javadoc)
+	        	 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+	        	 */
+	        	@Override
+	        	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	        		monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100); 
+	        		try {
+						updateMavenDependencies(compDeps, project);
+					} catch (CoreException ex) {
+						CamelEditorUIActivator.pluginLog().logError(ex);
+					}
+	        		monitor.done(); 
+	        	}
+	        });
+        } catch (Exception ex) {
+        	CamelEditorUIActivator.pluginLog().logError(ex);
+        }
     }
 
 	/**
