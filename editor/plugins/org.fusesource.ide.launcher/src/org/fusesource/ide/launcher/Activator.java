@@ -69,10 +69,12 @@ public class Activator extends Plugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		if (idRenamingEventHandler != null) {
-			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		if(eventBroker != null && idRenamingEventHandler != null){
 			eventBroker.unsubscribe(idRenamingEventHandler);
 			idRenamingEventHandler = null;
+		}
+		if(eventBroker != null && camelElementRemovalEventHandler != null){
 			eventBroker.unsubscribe(camelElementRemovalEventHandler);
 			camelElementRemovalEventHandler = null;
 		}
