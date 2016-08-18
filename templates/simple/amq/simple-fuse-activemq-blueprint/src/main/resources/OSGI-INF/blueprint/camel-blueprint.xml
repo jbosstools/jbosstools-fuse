@@ -24,14 +24,10 @@
    The root element for any OSGi Blueprint file is 'blueprint' - you also see 
    the namespace definitions for both the Blueprint and the Camel namespaces.
 -->
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
     xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
-    xsi:schemaLocation="
-        http://www.osgi.org/xmlns/blueprint/v1.0.0 
-        https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">       
-    
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="         http://www.osgi.org/xmlns/blueprint/v1.0.0          https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
     <!-- 
       blueprint property placeholders, that will use etc/camel.activemq.blueprint.cfg 
       as the properties file with content like.       
@@ -39,26 +35,23 @@
         amq.username = ${activemq.username}
         amq.password = ${activemq.password}
     -->
-    <cm:property-placeholder id="camel.activemq.blueprint" persistent-id="camel.activemq.blueprint"> 
-      <cm:default-properties>
-        <cm:property name="broker.url"       value="vm://amq?broker.persistent=false"/>
-        <cm:property name="broker.username"  value=""/>
-        <cm:property name="broker.password"  value=""/>
-      </cm:default-properties>
+    <cm:property-placeholder id="camel.activemq.blueprint" persistent-id="camel.activemq.blueprint">
+        <cm:default-properties>
+            <cm:property name="broker.url" value="vm://amq?broker.persistent=false"/>
+            <cm:property name="broker.username" value=""/>
+            <cm:property name="broker.password" value=""/>
+        </cm:default-properties>
     </cm:property-placeholder>
-
-    <bean id="orderGenerator" class="com.mycompany.templates.camel.activemq.OrderGenerator"/>
-
+    <bean class="com.mycompany.templates.camel.activemq.OrderGenerator" id="orderGenerator"/>
     <!-- 
          Lets connect the Camel ActiveMQ component to the broker.
     -->
-    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-      <property name="brokerURL" value="${broker.url}"/>
-      <property name="userName"  value="${broker.username}"/>
-      <property name="password"  value="${broker.password}"/>      
-      <property name="usePooledConnection" value="false"/>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="brokerURL" value="${broker.url}"/>
+        <property name="userName" value="${broker.username}"/>
+        <property name="password" value="${broker.password}"/>
+        <property name="usePooledConnection" value="false"/>
     </bean>
-
     <!--
         The namespace for the camelContext element in Blueprint is 'http://camel.apache.org/schema/blueprint'. 
         Additionally,  we can also define namespace prefixes we want to use them 
@@ -68,21 +61,17 @@
         elements, it is a good idea to set those for runtime management purposes 
         (logging, JMX MBeans, ...)
     -->
-    <camelContext 
-        xmlns="http://camel.apache.org/schema/blueprint"
-        xmlns:order="http://com.mycompany/examples/order"
-        id="amq-example-context">
-
+    <camelContext id="amq-example-context"
+        xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://com.mycompany/examples/order">
         <!-- a route to generate a random order every 5th second -->
         <route id="generate-order">
-            <from uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
-            <bean ref="orderGenerator" method="generateOrder"/>
-            <setHeader headerName="Exchange.FILE_NAME">
-                <method ref="orderGenerator" method="generateFileName"/>
+            <from id="timer" uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
+            <bean id="generateOrder" method="generateOrder" ref="orderGenerator"/>
+            <setHeader headerName="Exchange.FILE_NAME" id="updateFileNameHeader">
+                <method method="generateFileName" ref="orderGenerator"/>
             </setHeader>
-            <to uri="file:work/in"/>
+            <to id="initializerFolder" uri="file:work/in"/>
         </route>
-
         <!--
           When this route is started, it will automatically create the work/jms/input 
           directory where you can drop thefile that need to be processed.
@@ -94,11 +83,10 @@
           to the JMS queue incomingOrders on the ActiveMQ broker.
         -->
         <route id="file-to-jms-route">
-            <from uri="file:work/in"/>
-            <log message="Receiving order ${file:name}"/>
-            <to uri="activemq:incomingOrders"/>
+            <from id="incomingFolder" uri="file:work/in"/>
+            <log id="logReceivingOrder" message="Receiving order ${file:name}"/>
+            <to id="sendIncomingOrder" uri="activemq:incomingOrders"/>
         </route>
-
         <!--
           This route consumes messages from the JMS queue incomingOrders on the 
           ActiveMQ broker within the ESB.
@@ -111,24 +99,24 @@
           the <when/> elements will be moved to the work/jms/output/others directory.
         -->
         <route id="jms-cbr-route" streamCache="true">
-            <from uri="activemq:incomingOrders"/>
-            <choice>
-                <when>
+            <from id="listenToIncomingOrder" uri="activemq:incomingOrders"/>
+            <choice id="countrySelection">
+                <when id="UKCustomer">
                     <xpath>/order:order/order:customer/order:country = 'UK'</xpath>
-                    <log message="Sending order ${file:name} to the UK"/>
-                    <to uri="file:work/out/uk"/>
+                    <log id="logUK" message="Sending order ${file:name} to the UK"/>
+                    <to id="outputUKFolder" uri="file:work/out/uk"/>
                 </when>
-                <when>
-                  <xpath>/order:order/order:customer/order:country = 'US'</xpath>
-                  <log message="Sending order ${file:name} to the US"/>
-                  <to uri="file:work/out/us"/>
-              </when>
-              <otherwise>
-                  <log message="Sending order ${file:name} to another country"/>
-                  <to uri="file:work/out/others"/>
-              </otherwise>
-          </choice>
-          <log message="Done processing ${file:name}"/>
+                <when id="USCustomer">
+                    <xpath>/order:order/order:customer/order:country = 'US'</xpath>
+                    <log id="logUS" message="Sending order ${file:name} to the US"/>
+                    <to id="outputUSFolder" uri="file:work/out/us"/>
+                </when>
+                <otherwise id="OtherCustomer">
+                    <log id="logOtherCountry" message="Sending order ${file:name} to another country"/>
+                    <to id="outputOtherCountryFolder" uri="file:work/out/others"/>
+                </otherwise>
+            </choice>
+            <log id="logEndProcessing" message="Done processing ${file:name}"/>
         </route>
     </camelContext>
 </blueprint>

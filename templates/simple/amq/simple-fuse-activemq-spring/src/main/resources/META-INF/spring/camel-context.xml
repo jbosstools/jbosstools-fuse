@@ -57,9 +57,9 @@
           to the JMS queue incomingOrders on the ActiveMQ broker.
         -->
         <route id="file-to-jms-route">
-            <from uri="file:work/in"/>
-            <log message="Receiving order ${file:name}"/>
-            <to uri="activemq:incomingOrders"/>
+            <from id="incomingFolder" uri="file:work/in"/>
+            <log id="logReceivingOrder" message="Receiving order ${file:name}"/>
+            <to id="sendIncomingOrder" uri="activemq:incomingOrders"/>
         </route>
 
         <!--
@@ -74,24 +74,24 @@
           the <when/> elements will be moved to the work/jms/output/others directory.
         -->
         <route id="jms-cbr-route" streamCache="true">
-            <from uri="activemq:incomingOrders"/>
-            <choice>
-                <when>
+            <from id="listenToIncomingOrder" uri="activemq:incomingOrders"/>
+            <choice id="countrySelection">
+                <when id="UKCustomer">
                     <xpath>/order:order/order:customer/order:country = 'UK'</xpath>
-                    <log message="Sending order ${file:name} to the UK"/>
-                    <to uri="file:work/out/uk"/>
+                    <log id="logUK" message="Sending order ${file:name} to the UK"/>
+                    <to id="outputUKFolder" uri="file:work/out/uk"/>
                 </when>
-                <when>
+                <when id="USCustomer">
                     <xpath>/order:order/order:customer/order:country = 'US'</xpath>
-                    <log message="Sending order ${file:name} to the US"/>
-                    <to uri="file:work/out/us"/>
+                    <log id="logUS" message="Sending order ${file:name} to the US"/>
+                    <to id="outputUSFolder" uri="file:work/out/us"/>
                 </when>
-                <otherwise>
-                    <log message="Sending order ${file:name} to another country"/>
-                    <to uri="file:work/out/others"/>
+                <otherwise id="OtherCustomer">
+                    <log id="logOtherCountry" message="Sending order ${file:name} to another country"/>
+                    <to id="outputOtherCountryFolder" uri="file:work/out/others"/>
                 </otherwise>
-          </choice>
-          <log message="Done processing ${file:name}"/>
+            </choice>
+            <log id="logEndProcessing" message="Done processing ${file:name}"/>
         </route>
     </camelContext>
 </beans>
