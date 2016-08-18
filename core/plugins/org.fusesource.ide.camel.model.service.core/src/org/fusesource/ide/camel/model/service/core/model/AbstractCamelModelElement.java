@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
+	static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
@@ -151,7 +152,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public AbstractCamelModelElement findEndpoint(String uri) {
 		if (getChildElements().isEmpty()) {
-			if (getParameter("uri") != null && ((String)getParameter("uri")).equals(uri)) {
+			if (getParameter(URI_PARAMETER_KEY) != null && ((String)getParameter(URI_PARAMETER_KEY)).equals(uri)) {
 				return this;
 			}
 		} else {
@@ -394,7 +395,7 @@ public abstract class AbstractCamelModelElement {
 		}
 
 		if (isEndpointElement()) {
-			String uri = (String)this.getParameter("uri");
+			String uri = (String)this.getParameter(URI_PARAMETER_KEY);
 			if (uri != null && uri.trim().length() > 0) {
 				// uri specified, use it
 				result = uri;
@@ -413,13 +414,13 @@ public abstract class AbstractCamelModelElement {
 		Map<String, String> singlePropertyDisplay = new HashMap<>();
 		singlePropertyDisplay.put("bean", "ref");
 		singlePropertyDisplay.put("convertBodyTo", "type");
-		singlePropertyDisplay.put("enrich", "uri");
-		singlePropertyDisplay.put("inOnly", "uri");
-		singlePropertyDisplay.put("inOut", "uri");
-		singlePropertyDisplay.put("interceptSendToEndpoint", "uri");
+		singlePropertyDisplay.put("enrich", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("inOnly", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("inOut", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("interceptSendToEndpoint", URI_PARAMETER_KEY);
 		singlePropertyDisplay.put("log", "logName");
 		singlePropertyDisplay.put("onException", "exception");
-		singlePropertyDisplay.put("pollEnrich", "uri");
+		singlePropertyDisplay.put("pollEnrich", URI_PARAMETER_KEY);
 		singlePropertyDisplay.put("removeHeader", "headerName");
 		singlePropertyDisplay.put("removeProperty", "propertyName");
 		singlePropertyDisplay.put("rollback", "message");
@@ -464,7 +465,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	public boolean isEndpointElement() {
-		return getParameter("uri") != null && ((String) getParameter("uri")).trim().length() > 0;
+		return Arrays.asList(ENDPOINT_TYPE_FROM, ENDPOINT_TYPE_TO, ENDPOINT_NODE_NAME).contains(getNodeTypeId());
 	}
 
 	/**
@@ -1532,7 +1533,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public String getIconName() {
 		if (isEndpointElement()) {
-			String u = (String) getParameter("uri");
+			String u = (String) getParameter(URI_PARAMETER_KEY);
 			if (u != null && u.trim().length() > 0) {
 				String scheme = null;
 				if (u.startsWith("ref:")) {
@@ -1540,7 +1541,7 @@ public abstract class AbstractCamelModelElement {
 					String refId = u.substring(u.indexOf(":") + 1);
 					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
 					if (endpointRef != null) {
-						String refUri = (String) endpointRef.getParameter("uri");
+						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
 						if (refUri != null) {
 							scheme = refUri.substring(0, refUri.indexOf(":"));
 						} else {
@@ -1582,18 +1583,6 @@ public abstract class AbstractCamelModelElement {
 			return "endpoint";
 		}
 		return String.format("%sEIP", getNodeTypeId());
-	}
-
-	/**
-	 * returns the category this item belongs to
-	 *
-	 * @return
-	 */
-	public String getCategoryName() {
-		if (isEndpointElement()) {
-			return "Components";
-		}
-		return getUnderlyingMetaModelObject().getTags().get(getUnderlyingMetaModelObject().getTags().size() - 1);
 	}
 
 	/**
