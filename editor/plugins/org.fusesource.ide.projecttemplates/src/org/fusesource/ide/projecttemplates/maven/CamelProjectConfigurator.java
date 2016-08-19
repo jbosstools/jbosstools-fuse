@@ -162,13 +162,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	        IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
 	        // adjust facets we install based on the packaging type we find
-	        String packaging = null;
-	        if (mavenProject.getPackaging() != null) {
-	            packaging = mavenProject.getPackaging().toUpperCase();
-	        }
 	        installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), monitor);
 	        installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), monitor);
-	        if (packaging != null) {
+            if (mavenProject.getPackaging() != null) {
+                String packaging = mavenProject.getPackaging();
 	            if (WAR_PACKAGE.equalsIgnoreCase(packaging)) {
 	                installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion(), monitor);
 	            } else if (BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || JAR_PACKAGE.equalsIgnoreCase(packaging)) {
