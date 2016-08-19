@@ -12,8 +12,10 @@
 package org.fusesource.ide.projecttemplates.util.maven;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Repository;
 import org.eclipse.core.runtime.CoreException;
@@ -22,6 +24,7 @@ import org.eclipse.core.runtime.Platform;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
@@ -29,6 +32,11 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
  *
  */
 public class MavenUtils {
+	
+	private static final String JBOSS_FUSE_PARENT = "jboss-fuse-parent";
+	private static final String ORG_JBOSS_FUSE_BOM = "org.jboss.fuse.bom";
+	private static final String MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION = "jboss.fuse.bom.version";
+	
 	/**
 	 * @param plugins
 	 * @param camelVersion
@@ -108,6 +116,28 @@ public class MavenUtils {
 			repo.setId(newId);
 			repo.setUrl(repoURI);
 			repositories.add(repo);
+		}
+	}
+
+	/**
+	 * Align the Fuse Version to the Camel version
+	 * 
+	 * @param mavenModel
+	 * @param camelVersion
+	 */
+	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion) {
+		Properties properties = mavenModel.getProperties();
+		if(properties != null && properties.getProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION) != null){
+			properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelModelFactory.getFuseVersionForCamelVersion(camelVersion));
+		} else {
+			if(mavenModel.getDependencyManagement() != null){
+				for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
+					if(ORG_JBOSS_FUSE_BOM.equals(dependency.getGroupId()) && JBOSS_FUSE_PARENT.equals(dependency.getArtifactId())){
+						dependency.setVersion(CamelModelFactory.getFuseVersionForCamelVersion(camelVersion));
+						return;
+					}
+				}
+			}
 		}
 	}
 

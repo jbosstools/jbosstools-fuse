@@ -30,30 +30,21 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
  */
 public class AMQTemplate extends AbstractProjectTemplate {
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#supportsDSL(org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType)
-	 */
 	@Override
 	public boolean supportsDSL(CamelDSLType type) {
 		switch (type) {
-		case BLUEPRINT:	return false;
+		case BLUEPRINT:	return true;
 		case SPRING:	return true;
-		case JAVA:		return true;
+		case JAVA:		return false;
 		default:		return false;
-	}	
+		}	
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getConfigurator()
-	 */
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
 		return new MavenTemplateConfigurator();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
-	 */
 	@Override
 	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
 		return new AMQUnzipTemplateCreator();
@@ -67,11 +58,7 @@ public class AMQTemplate extends AbstractProjectTemplate {
 		private static final String TEMPLATE_FOLDER = "templates/simple/amq/";
 		private static final String TEMPLATE_BLUEPRINT = "simple-fuse-activemq-blueprint.zip";
 		private static final String TEMPLATE_SPRING = "simple-fuse-activemq-spring.zip";
-		private static final String TEMPLATE_JAVA = "simple-fuse-activemq-java.zip";
 		
-		/* (non-Javadoc)
-		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
-		 */
 		@Override
 		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {
 			String bundleEntry = null;
@@ -79,8 +66,6 @@ public class AMQTemplate extends AbstractProjectTemplate {
 				case BLUEPRINT:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_BLUEPRINT);
 								break;
 				case SPRING:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_SPRING);
-								break;
-				case JAVA:		bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_JAVA);
 								break;
 				default:
 			}

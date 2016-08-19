@@ -65,7 +65,7 @@
         xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://com.mycompany/examples/order">
         <!-- a route to generate a random order every 5th second -->
         <route id="generate-order">
-            <from id="timer" uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
+            <from id="timerToGenerateOrder" uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
             <bean id="generateOrder" method="generateOrder" ref="orderGenerator"/>
             <setHeader headerName="Exchange.FILE_NAME" id="updateFileNameHeader">
                 <method method="generateFileName" ref="orderGenerator"/>
