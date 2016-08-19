@@ -41,10 +41,6 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
  */
 public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.configurators.DefaultTemplateConfigurator#configure(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewProjectMetaData, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.MavenTemplateConfigurator_ConfiguringTemplatesMonitorMessage, 3);
@@ -108,7 +104,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success, otherwise false
 	 */
 	protected boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 5);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 6);
 		try {
 			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
@@ -125,6 +121,12 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			subMonitor.worked(1);
 			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
 			subMonitor.worked(1);
+			
+			if(projectMetaData.getTargetRuntime() == null){
+				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+			}
+			subMonitor.worked(1);
+			
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
 		    MavenPlugin.getMaven().writeModel(m2m, os);
 			IFile pomIFile2 = project.getProject().getFile("pom.xml"); //$NON-NLS-1$
@@ -138,4 +140,6 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		}
 		return true;
 	}
+
+
 }

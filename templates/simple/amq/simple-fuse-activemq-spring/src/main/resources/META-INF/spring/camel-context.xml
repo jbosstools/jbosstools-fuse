@@ -38,12 +38,12 @@
 
         <!-- a route to generate a random order every 5th second -->
         <route id="generate-order">
-            <from uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
-            <bean ref="orderGenerator" method="generateOrder"/>
-            <setHeader headerName="Exchange.FILE_NAME">
+            <from id="timerToGenerateOrder" uri="timer:order?period=5000&amp;delay=2000&amp;fixedRate=true"/>
+            <bean id="generatorOrder" ref="orderGenerator" method="generateOrder"/>
+            <setHeader id="updateFileNameHeader" headerName="Exchange.FILE_NAME">
                 <method ref="orderGenerator" method="generateFileName"/>
             </setHeader>
-            <to uri="file:work/in"/>
+            <to id="initializerFolder" uri="file:work/in"/>
         </route>
 
         <!--
