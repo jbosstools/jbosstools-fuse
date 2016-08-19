@@ -21,6 +21,7 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -38,11 +39,14 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if(receiver instanceof IResource && IS_LOCAL_LAUNCH_AVAILABLE.equals(property)){
-			Model mavenModel = retrieveMavenModel((IResource) receiver);
-			if(mavenModel != null){
-				List<Plugin> plugins = retrievePlugins(mavenModel);
-				return containsCamelMavenPlugin(plugins);
+		if(receiver instanceof IAdaptable){
+			IResource resource = ((IAdaptable) receiver).getAdapter(IResource.class);
+			if(resource != null && IS_LOCAL_LAUNCH_AVAILABLE.equals(property)){
+				Model mavenModel = retrieveMavenModel(resource);
+				if(mavenModel != null){
+					List<Plugin> plugins = retrievePlugins(mavenModel);
+					return containsCamelMavenPlugin(plugins);
+				}
 			}
 		}
 		return false;

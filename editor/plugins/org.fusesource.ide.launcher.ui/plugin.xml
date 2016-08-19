@@ -275,7 +275,7 @@
            id="org.fusesource.ide.launcher.ui.localLaunchPropertyTester"
            namespace="org.fusesource.ide.launcher.ui"
            properties="isLocalLaunchAvailable"
-           type="org.eclipse.core.resources.IResource">
+           type="org.eclipse.core.runtime.IAdaptable">
      </propertyTester>
   </extension>  
    
