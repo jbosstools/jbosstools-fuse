@@ -25,6 +25,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.osgi.framework.Version;
 
 /**
  * @author lhein
@@ -100,6 +101,14 @@ public class CamelModelFactory {
 	public static CamelModel getModelForVersion(String camelVersion) {
 		CamelModel cm = supportedCamelModels.get(camelVersion);
 		
+		if (!supportedCamelModels.containsKey(camelVersion)) {
+			// seems user wants a version we don't have - look for compatible
+			// alternative supported version of camel
+			String alternateVersion = getCompatibleCamelVersion(camelVersion);
+			CamelModelServiceCoreActivator.pluginLog().logWarning("Selected Camel version " + camelVersion + " is not directly supported. Using alternative version: " + alternateVersion);
+			cm = supportedCamelModels.get(alternateVersion);
+		}
+		
 		if (cm == null) {
 			// not initialized yet
 			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(camelVersion);
@@ -111,6 +120,63 @@ public class CamelModelFactory {
 		}
 		
 		return cm;
+	}
+	
+	/**
+	 * returns an alternative for the requested camel version
+	 * 
+	 * @param requestedCamelVersion
+	 * @param supportedVersions
+	 * @param latestCamelVersion
+	 * @return
+	 */
+	static String getCompatibleCamelVersion(String requestedCamelVersion, List<String> supportedVersions, String latestCamelVersion) {
+		String alternative = null;
+		String lastFound = null;
+		String smallestVersion = null;
+		Version reqVersion = new Version(requestedCamelVersion);
+		for (String supV : supportedVersions) {
+			Version testVersion = new Version(supV);
+			if (testVersion.compareTo(reqVersion) < 0) {
+				if (lastFound == null) {
+					lastFound = supV;
+				} else {
+					Version lastCompatible = new Version(lastFound);
+					if (testVersion.compareTo(lastCompatible)>0) {
+						lastFound = supV;
+					}
+				}
+			} else {
+				// this case is determining the smallest available camel version
+				if (smallestVersion == null) {
+					smallestVersion = supV;
+				} else {
+					Version smallest = new Version(smallestVersion);
+					if (testVersion.compareTo(smallest)<0) {
+						smallestVersion = supV;
+					}
+				}
+			}
+		}
+		alternative = lastFound;
+		
+		// in case the requested version is earlier than all we have available
+		// then we simply return our earliest available version
+		if (lastFound == null) {
+			alternative = smallestVersion;
+		}
+		
+		return alternative != null ? alternative : latestCamelVersion;
+	}
+	
+	/**
+	 * retrieves a compatible version of camel which is shipped with the tools
+	 * 
+	 * @param requestedCamelVersion
+	 * @return
+	 */
+	public static String getCompatibleCamelVersion(String requestedCamelVersion) {
+		return getCompatibleCamelVersion(requestedCamelVersion, getSupportedCamelVersions(), getLatestCamelVersion());
 	}
 	
 	/**
