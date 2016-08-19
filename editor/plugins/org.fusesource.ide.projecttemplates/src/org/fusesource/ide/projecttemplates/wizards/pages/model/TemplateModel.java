@@ -128,10 +128,12 @@ public class TemplateModel {
 		Iterator<CategoryItem> catIt = templateCategories.iterator();
 		while (catIt.hasNext()) {
 			CategoryItem cat = catIt.next();
-			if (Strings.isBlank(cat.getParent())) continue;
-			CategoryItem parentCat = getCategory(cat.getParent());
-			parentCat.addSubCategory(cat);
-			catIt.remove();
+			String parentCategory = cat.getParent();
+			if (!Strings.isBlank(parentCategory)){
+				CategoryItem parentCat = getCategory(parentCategory);
+				parentCat.addSubCategory(cat);
+				catIt.remove();
+			}
 		}
 		
 		// now sort the root list of categories
@@ -144,9 +146,14 @@ public class TemplateModel {
 	
 	private CategoryItem findCategory(List<CategoryItem> categories, String catId) {
 		for (CategoryItem cat : categories) {
-			if (cat.getId().equals(catId)) return cat;
+			if (cat.getId().equals(catId)){
+				return cat;
+			}
 			if (!cat.getSubCategories().isEmpty()) {
-				return findCategory(cat.getSubCategories(), catId);
+				CategoryItem catItemFoundInSubCategory = findCategory(cat.getSubCategories(), catId);
+				if(catItemFoundInSubCategory != null){
+					return catItemFoundInSubCategory;
+				}
 			}
 		}
 		return null;

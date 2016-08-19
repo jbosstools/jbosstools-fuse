@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  #%L
-  Wildfly Camel
-  %%
-  Copyright (C) 2013 - 2015 RedHat
-  %%
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  #L%
-  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.test</groupId>
+    <groupId>com.mycompany</groupId>
     <artifactId>camel-test-spring</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <name>WildFly Camel Spring Application</name>
-    <url>http://www.myorganization.org</url>
-
+    <name>Fuse on EAP Camel Spring Application</name>
+    <description>Fuse on EAP Camel Example using Spring</description>
+  
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,7 +20,7 @@
         <version.jboss.bom.eap>6.4.0.GA</version.jboss.bom.eap>
 
         <!-- Other versions -->
-        <version.apache.camel>2.17.0.redhat-630157</version.apache.camel>
+        <camel.version>2.17.0.redhat-630157</camel.version>
         <version.junit>4.11</version.junit>
 
         <!-- Plugin versions -->
@@ -75,7 +57,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>${version.apache.camel}</version>
+            <version>${camel.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -88,7 +70,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -52,4 +52,5 @@ Export-Package: org.fusesource.ide.projecttemplates.adopters,
  org.fusesource.ide.projecttemplates.maven;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.util;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.util.camel;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
- org.fusesource.ide.projecttemplates.wizards;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"
+ org.fusesource.ide.projecttemplates.wizards;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.wizards.pages.model;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"
