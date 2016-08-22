@@ -104,13 +104,13 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			IFeatureProvider featureProvider = dtp.getFeatureProvider();
 			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
 			try {
-				context = (CamelContextElement)camelContextFile.getChildElements().get(0);
+				context = camelContextFile.getChildElements().isEmpty() ? null : (CamelContextElement)camelContextFile.getChildElements().get(0);
 				diagramReader.loadModel(editingDomain, this.container != null && this.container instanceof CamelFile == false ? this.container : context);
 			} catch (Exception e) {
 				CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			CamelEditorUIActivator.pluginLog().logError(ex);
 		} finally {
 			if (designEditor.getDiagramTypeProvider() != null){
 				designEditor.getDiagramTypeProvider().resourceReloaded(diagram);
