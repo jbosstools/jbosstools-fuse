@@ -77,6 +77,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+    public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
 		
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -223,7 +224,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(project.getNature(RiderProjectNature.NATURE_ID)).isNotNull();
 	}
 	
-	private void checkCorrectFacetsEnabled(IProject project) throws CoreException {
+	protected void checkCorrectFacetsEnabled(IProject project) throws CoreException {
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 
 		boolean camelFacetFound = fproj.hasProjectFacet(camelFacet);
