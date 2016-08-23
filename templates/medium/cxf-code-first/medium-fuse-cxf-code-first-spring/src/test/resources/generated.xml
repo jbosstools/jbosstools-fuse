@@ -4,7 +4,7 @@
    <soapenv:Body>
       <inc:reportIncident>
          <!--Optional:-->
-         <inc:arg0>
+         <arg0>
             <!--Optional:-->
             <details>?</details>
             <!--Optional:-->
@@ -21,7 +21,7 @@
             <phone>?</phone>
             <!--Optional:-->
             <summary>?</summary>
-         </inc:arg0>
+         </arg0>
       </inc:reportIncident>
    </soapenv:Body>
 </soapenv:Envelope>

@@ -61,7 +61,7 @@ public class IncidentTest {
         /*
          * Set up the URL connection to the web service address
          */
-        URLConnection connection = new URL("http://localhost:8181/cxf/report/").openConnection();
+        URLConnection connection = new URL("http://localhost:12345/cxf/report").openConnection();
         connection.setDoInput(true);
         connection.setDoOutput(true);
 
@@ -76,9 +76,9 @@ public class IncidentTest {
          * ... and afterwards, we just read the SOAP response message that is sent back by the server.
          */
         InputStream is = connection.getInputStream();
-        LOG.info("the response is ====> ");
+        System.out.println("the response is ====> ");
         res = getStringFromInputStream(is);
-        LOG.info(res);
+        System.out.println(res);
         Assert.assertTrue(res.contains("30"));
     }
 
