@@ -19,12 +19,14 @@ import org.junit.Test;
 
 public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrationProjectCreatorRunnableIT{
 
+	private static final String FUSE_CAMEL_2_15_1 = "2.15.1.redhat-621084";
+	
 	//TODO: use parameterized test when https://issues.jboss.org/browse/FUSETOOLS-1986 is fixed
 	
 	@Test
 	@Ignore("Waiting fix for https://issues.jboss.org/browse/FUSETOOLS-1986")
 	public void testCBRBluePrintCreation215() throws Exception {
-		camelVersion = "2.15.1.redhat-621084";
+		camelVersion = FUSE_CAMEL_2_15_1;
 		testProjectCreation("-CBRBlueprint", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
 	
@@ -36,7 +38,7 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 	
 	@Test
 	public void testCBRSpringCreation215() throws Exception {
-		camelVersion = "2.15.1.redhat-621084";
+		camelVersion = FUSE_CAMEL_2_15_1;
 		testProjectCreation("-CBRSpring", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
@@ -48,7 +50,7 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 	
 	@Test
 	public void testCBRJavaProjectCreation215() throws Exception {
-		camelVersion = "2.15.1.redhat-621084";
+		camelVersion = FUSE_CAMEL_2_15_1;
 		testProjectCreation("-CBRJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
 	}
 	
