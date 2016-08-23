@@ -22,7 +22,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
@@ -111,8 +113,10 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 			rt.setName(runtimeName);
 			// We don't need to set a vm, it can use default
 			IRuntime rtret = rt.save(true, new NullProgressMonitor());
-			return rtret != null;
-			// TODO create the server also
+			
+			IServerWorkingCopy wc = serverType.createServer(name, null, rtret, new NullProgressMonitor());
+			IServer saved = wc.save(true, new NullProgressMonitor());
+			return saved != null;
 		} catch(CoreException ce) {
 			Activator.getLogger().error(ce);
 		}
