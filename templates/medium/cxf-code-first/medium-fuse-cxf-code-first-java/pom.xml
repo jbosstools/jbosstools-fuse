@@ -17,7 +17,7 @@
   </licenses>
   <properties>
     <camel.version>2.15.1.redhat-621084</camel.version>
-    <version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
+    <version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -195,35 +195,7 @@
   </pluginRepositories>
 	<build>
 		<finalName>shared</finalName>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.felix</groupId>
-                                        <artifactId>maven-bundle-plugin</artifactId>
-                                        <versionRange>[1.0.0,)</versionRange>
-                                        <goals>
-                                            <goal>manifest</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-		<plugins>
+        <plugins>
 			<!-- Skip Test by default and enable them only in Test profile -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -265,11 +237,15 @@
 					</instructions>
 				</configuration>
 			</plugin>
-                        <plugin>
-                            <groupId>org.apache.camel</groupId>
-                            <artifactId>camel-maven-plugin</artifactId>
-                        </plugin>
-
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<mainClass>com.mycompany.camel.Launcher</mainClass>
+					<includePluginDependencies>false</includePluginDependencies>
+				</configuration>
+			</plugin>
 		</plugins>
 
 	</build>

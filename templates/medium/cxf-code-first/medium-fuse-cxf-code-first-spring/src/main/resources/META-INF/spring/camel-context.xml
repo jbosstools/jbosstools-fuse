@@ -19,8 +19,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:cxf="http://camel.apache.org/schema/cxf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd    ">
-    
-  <cxf:cxfEndpoint address="http://localhost:12345/cxf/report" id="reportEndpoint" serviceClass="com.mycompany.camel.cxf.code.first.spring.incident.IncidentService"/>
+    <cxf:cxfEndpoint address="http://localhost:12345/cxf/report"
+        id="reportEndpoint" serviceClass="com.mycompany.camel.cxf.code.first.spring.incident.IncidentService"/>
     <bean
         class="com.mycompany.camel.cxf.code.first.spring.incident.ReportIncidentProcessor" id="reportIncidentProcessor"/>
     <bean
@@ -28,21 +28,21 @@
     <camelContext id="camelContext-c1100b64-c8cb-4fa6-b382-5eea0e303c95" xmlns="http://camel.apache.org/schema/spring">
         <route id="cxf">
             <!-- route starts from the cxf webservice in POJO mode -->
-            <from id="_from1" uri="cxf:bean:reportEndpoint"/>
-            <recipientList id="_recipientList1">
+            <from id="reportEndpointListener" uri="cxf:bean:reportEndpoint"/>
+            <recipientList id="dispatchToCorrectRoute">
                 <simple>direct:${header.operationName}</simple>
             </recipientList>
         </route>
         <route id="report">
-            <from id="_from2" uri="direct:reportIncident"/>
-            <log id="_log1" message="reportIncident Call"/>
-            <process id="_process1" ref="reportIncidentProcessor"/>
+            <from id="reportIncidentStarter" uri="direct:reportIncident"/>
+            <log id="logReportIncident" message="reportIncident Call"/>
+            <process id="reportIncidentProcess" ref="reportIncidentProcessor"/>
             <to id="_to1" uri="log:output"/>
         </route>
         <route id="status">
-            <from id="_from3" uri="direct:statusIncident"/>
-            <log id="_log2" message="statusIncident Call"/>
-            <process id="_process2" ref="statusIncidentProcessor"/>
+            <from id="statusIncidentStarter" uri="direct:statusIncident"/>
+            <log id="logStatusIncident" message="statusIncident Call"/>
+            <process id="statusIncidentProcess" ref="statusIncidentProcessor"/>
             <to id="_to2" uri="log:output"/>
         </route>
     </camelContext>

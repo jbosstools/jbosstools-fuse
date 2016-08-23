@@ -16,7 +16,7 @@ You need to install the following features first:
 
 And then you can install this example from its shell:
 
-    osgi:install -s mvn:org.apache.camel.archetypes/camel-archetype-cxf-code-first-spring/2.15.1.redhat-620133
+    osgi:install -s mvn:com.mycompany/camel-archetype-cxf-code-first-spring/2.15.1.redhat-620133
 
 The web services from Apache CXF is usually listed at:
 

@@ -117,7 +117,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 		// delete invalid MANIFEST files
 		IResource rs = c.getProject().findMember("src/META-INF/"); //$NON-NLS-1$
-		if (rs.exists()) {
+		if (rs != null && rs.exists()) {
 			try {
 				rs.delete(true, subMonitor.newChild(1));
 			} catch (CoreException ex) {

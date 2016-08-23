@@ -44,7 +44,7 @@ public class TemplateModel {
 	private static final String PROJECT_TEMPLATE_PROVIDER_ATTR_CONFIGURATOR = "class";
 	private static final String PROJECT_TEMPLATE_PROVIDER_ATTR_WEIGHT = "weight";
 
-	private List<CategoryItem> templateCategories = new ArrayList<CategoryItem>();
+	private List<CategoryItem> templateCategories = new ArrayList<>();
 
 	private NameAndWeightComparator comparator = new NameAndWeightComparator();
 	
@@ -95,7 +95,7 @@ public class TemplateModel {
 				if (category == null) {
 					category = getCategory(DEFAULT_CAT_ID);
 				}
-				TemplateItem item = new TemplateItem(id, name, description, iWeight, category, template, keywords);
+				TemplateItem item = new TemplateItem(id, name, description, iWeight, category, template, keywords != null ? keywords : "");
 				category.addTemplate(item);
 			}
 		} catch (Exception ex) {
@@ -111,13 +111,7 @@ public class TemplateModel {
 			String id = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_ID);
 			String name = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_NAME);
 			String parent = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_PARENT);
-			String weight = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_WEIGHT);
-			int iWeight = 10;
-			try {
-				iWeight = Integer.parseInt(weight);
-			} catch (NumberFormatException ex) {
-				ProjectTemplatesActivator.pluginLog().logError("Error in Template Category definition for ID: " + id, ex);
-			}
+			int iWeight = getWeight(e, id);
 			CategoryItem item = new CategoryItem(id, name, iWeight, parent);
 			templateCategories.add(item);
 		} catch (Exception ex) {
@@ -138,6 +132,17 @@ public class TemplateModel {
 		
 		// now sort the root list of categories
 		Collections.sort(templateCategories, comparator);
+	}
+
+	private int getWeight(IConfigurationElement e, String id) {
+		String weight = e.getAttribute(PROJECT_TEMPLATE_CATEGORY_ATTR_WEIGHT);
+		int iWeight = 10;
+		try {
+			iWeight = Integer.parseInt(weight);
+		} catch (NumberFormatException ex) {
+			ProjectTemplatesActivator.pluginLog().logError("Error in Template Category definition for ID: " + id, ex);
+		}
+		return iWeight;
 	}
 
 	private CategoryItem getCategory(String id) {

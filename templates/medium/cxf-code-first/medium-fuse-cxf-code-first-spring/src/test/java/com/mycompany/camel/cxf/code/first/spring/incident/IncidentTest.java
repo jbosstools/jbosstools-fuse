@@ -30,30 +30,6 @@ import java.net.URLConnection;
 public class IncidentTest {
     private static final Logger LOG = LoggerFactory.getLogger(IncidentTest.class);
 
-    /**
-     * Helper method to copy bytes from an InputStream to an OutputStream.
-     */
-    private static void copyInputStream(InputStream in, OutputStream out) throws Exception {
-        int c = 0;
-        try {
-            while ((c = in.read()) != -1) {
-                out.write(c);
-            }
-        } finally {
-            in.close();
-        }
-    }
-
-    /**
-     * Helper method to read bytes from an InputStream and return them as a String.
-     */
-    private static String getStringFromInputStream(InputStream in) throws Exception {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        copyInputStream(in, bos);
-        bos.close();
-        return bos.toString();
-    }
-
     @Test
     public void sendRequest() throws Exception {
 
@@ -82,4 +58,27 @@ public class IncidentTest {
         Assert.assertTrue(res.contains("30"));
     }
 
+    /**
+     * Helper method to copy bytes from an InputStream to an OutputStream.
+     */
+    private void copyInputStream(InputStream in, OutputStream out) throws Exception {
+    	int c = 0;
+    	try {
+    		while ((c = in.read()) != -1) {
+    			out.write(c);
+    		}
+    	} finally {
+    		in.close();
+    	}
+    }
+    
+    /**
+     * Helper method to read bytes from an InputStream and return them as a String.
+     */
+    private String getStringFromInputStream(InputStream in) throws Exception {
+    	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    	copyInputStream(in, bos);
+    	bos.close();
+    	return bos.toString();
+    }
 }
