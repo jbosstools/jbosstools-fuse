@@ -37,18 +37,18 @@
         <version.jboss.bom.eap>6.4.0.GA</version.jboss.bom.eap>
 
         <!-- Other versions -->
-        <version.apache.camel>2.15.1.redhat-621031</version.apache.camel>
-        <version.junit>4.11</version.junit>
+        <version.apache.camel>2.15.1.redhat-621084</version.apache.camel>
+        <version.junit>4.12</version.junit>
 
         <!-- Plugin versions -->
-        <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
-        <version.maven.surefire.plugin>2.18.1</version.maven.surefire.plugin>
-        <version.maven.war.plugin>2.5</version.maven.war.plugin>
+        <version.maven.compiler.plugin>3.5.1</version.maven.compiler.plugin>
+        <version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
+        <version.maven.war.plugin>2.6</version.maven.war.plugin>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
         <!-- maven-compiler-plugin -->
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <!-- Arquillian application server properties -->
         <jboss.home>${env.JBOSS_HOME}</jboss.home>

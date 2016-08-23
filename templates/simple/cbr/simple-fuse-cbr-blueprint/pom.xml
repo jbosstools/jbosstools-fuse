@@ -19,7 +19,7 @@
 	<properties>
 		<camel.version>2.15.1.redhat-621084</camel.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
+		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
 		<jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -127,15 +127,15 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>3.5.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.0.1</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>

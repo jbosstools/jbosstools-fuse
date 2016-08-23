@@ -44,7 +44,9 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
 		if (bo != null && bo instanceof AbstractCamelModelElement) {
 			AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-			if (cme.getUnderlyingMetaModelObject().canHaveChildren()) return true;
+			if (cme.getUnderlyingMetaModelObject().canHaveChildren()){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -73,25 +75,21 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 		
 		for (GraphicsAlgorithm ga : shape.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
 			
-			if (ga instanceof Image) continue;
+			if (ga instanceof Image){
+				continue;
+			}
 			
-			if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && 
-				Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_TITLE)) {
-				
+			if (isTitleKind(ga)) {
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH) != null) {
 					int imgWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH));
 					ga.setWidth(w - imgWidth - FigureUIFactory.DEFAULT_LABEL_OFFSET_H * 6);
 				}	
-				
-			} else if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && 
-					   Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_EXPANDABLE)) {
-				
+			} else if (isExpandableKind(ga)) {
 				ga.setWidth(w-FigureUIFactory.BORDER_SIZE*3);
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT) != null) {
 					int origHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT));
 					ga.setHeight(h - origHeight - FigureUIFactory.BORDER_SIZE);
 				}
-			
 			} else {
 				ga.setWidth(w);
 			}
@@ -103,4 +101,17 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 		
 		layoutPictogramElement(shape);
 	}
+
+	private boolean isExpandableKind(GraphicsAlgorithm ga) {
+		return getShapeKind(ga) != null && getShapeKind(ga).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_EXPANDABLE);
+	}
+
+	private boolean isTitleKind(GraphicsAlgorithm ga) {
+		return getShapeKind(ga) != null && getShapeKind(ga).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_TITLE);
+	}
+	
+	private String getShapeKind(GraphicsAlgorithm ga) {
+		return Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND);
+	}
+
 }

@@ -10,12 +10,15 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
@@ -24,6 +27,7 @@ import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.publish.jmx.KarafJMXPublisher;
 import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility;
 import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility.BundleDetails;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilter;
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilterProvider;
 import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
@@ -40,8 +44,8 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerModelUtilities;
 /**
  * @author lhein
  */
-public class Karaf2xPublishController extends AbstractSubsystemController 
-	implements IPublishController, IPrimaryPublishController  {
+public class Karaf2xPublishController extends AbstractSubsystemController implements IPublishController, IPrimaryPublishController  {
+	private static final List<String> GOALS = Arrays.asList("package");
 	
 	protected IPublishBehaviour publisher2 = new KarafJMXPublisher();
 	
@@ -53,7 +57,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	public IStatus canPublish() {
 		// workaround for bug in WTP (https://bugs.eclipse.org/bugs/show_bug.cgi?id=465141), should be removed once its fixed upstream
 		// also switch back startBeforePublish=true to all kind of servers in the plugin.xml files
-		if (getServer().getServerState() != Server.STATE_STARTED) return Status.CANCEL_STATUS;
+		if (getServer().getServerState() != Server.STATE_STARTED){
+			return Status.CANCEL_STATUS;
+		}
 		return Status.OK_STATUS;
 	}
 
@@ -103,29 +109,31 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 * @see org.jboss.ide.eclipse.as.wtp.core.server.behavior.IPublishController#publishModule(int, int, org.eclipse.wst.server.core.IModule[], org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
-	public int publishModule(int kind, int deltaKind, IModule[] module,
-			IProgressMonitor monitor) throws CoreException {
-		monitor = monitor == null ? new NullProgressMonitor() : monitor; // nullsafe
+	public int publishModule(int kind, int deltaKind, IModule[] modules, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
 		validate();
 		
 		// first see if we need to delegate to another custom publisher, such as bpel / osgi
-		IPublishControllerDelegate delegate = PublishControllerUtil.findDelegatePublishController(getServer(),module, true);
+		IPublishControllerDelegate delegate = PublishControllerUtil.findDelegatePublishController(getServer(),modules, true);
 		if( delegate != null ) {
-			return delegate.publishModule(kind, deltaKind, module, monitor);
+			return delegate.publishModule(kind, deltaKind, modules, subMonitor.newChild(2));
 		}
 		
-		int publishType = PublishControllerUtil.getPublishType(getServer(), module, kind, deltaKind);
+		int publishType = PublishControllerUtil.getPublishType(getServer(), modules, kind, deltaKind);
 		if( publishType == PublishControllerUtil.REMOVE_PUBLISH){
-			return removeModule(module, monitor);
+			return removeModule(modules, subMonitor.newChild(2));
 		}
 
-		if( ServerModelUtilities.isAnyDeleted(module) ) {
+		if( ServerModelUtilities.isAnyDeleted(modules) ) {
 			return IServer.PUBLISH_STATE_UNKNOWN;
 		}
 		
-		boolean isBinaryObject = ServerModelUtilities.isBinaryModule(module);
+		boolean isBinaryObject = ServerModelUtilities.isBinaryModule(modules);
 		if( !isBinaryObject ) {
-			return handleZippedPublish(module, publishType, false, monitor);
+			for (IModule module : modules) {
+				KarafUtils.runBuild(GOALS, module, subMonitor.newChild(1));
+			}
+			return handleZippedPublish(modules, publishType, false, subMonitor.newChild(1));
 		}
 		
 		return IServer.PUBLISH_STATE_UNKNOWN;

@@ -44,8 +44,10 @@ public class CamelValidationActivator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		eventHandler = new ClearValidationMarkerOnRemoveEventHandler(new BasicNodeValidator());
-		eventBroker.subscribe(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, eventHandler);
+		if(eventBroker != null){
+			eventHandler = new ClearValidationMarkerOnRemoveEventHandler(new BasicNodeValidator());
+			eventBroker.subscribe(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, eventHandler);
+		}
 	}
 
 	/*
@@ -55,7 +57,7 @@ public class CamelValidationActivator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		if (eventHandler != null) {
+		if (eventHandler != null && eventBroker != null) {
 			eventBroker.unsubscribe(eventHandler);
 		}
 		super.stop(context);

@@ -114,8 +114,10 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 */
 	@Override
 	public void execute(ICustomContext context) {
-		PictogramElement selectedContainer =  context.getPictogramElements()[0];
-		
+		doLayout(context.getPictogramElements()[0]);
+	}
+	
+	private void doLayout(PictogramElement selectedContainer) {
 		// put all connection and shape info into the directed graph
 		final CompoundDirectedGraph graph = mapDiagramToGraph(selectedContainer);
 		graph.setDefaultPadding(new Insets(PADDING_V, PADDING_H, PADDING_V, PADDING_H));
@@ -184,7 +186,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 */
 	private boolean isExpanded(PictogramElement container) {
 		final String collapsedPropertyValue = Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE);
-		return collapsedPropertyValue == null || collapsedPropertyValue.equals("false");
+		return collapsedPropertyValue == null || "false".equals(collapsedPropertyValue);
 	}
 	
 	/**
@@ -193,19 +195,28 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 * @param containerPE
 	 */
 	private void resizeContainer(PictogramElement containerPE) {
-		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null) return;
+		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null){
+			return;
+		}
 		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
-		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
-
-		if (isExpanded(containerPE)) {
+	
+		EList<Shape> children = ((ContainerShape)containerPE).getChildren();		
+		if (isExpanded(containerPE) && children.size()>0) {
 			int newWidth = 0;
 			int newHeight = 0;
 			for (Shape shape : children) {
+				if (isExpanded(shape)) {
+					resizeContainer(shape);
+				} 
 				GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
 				int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
 				int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
-				if (w > newWidth) newWidth = w;
-				if (h > newHeight) newHeight = h;
+				if (w > newWidth){
+					newWidth = w;
+				}
+				if (h > newHeight){
+					newHeight = h;
+				}
 			}
 			maxContentArea.width = newWidth;
 			maxContentArea.height = newHeight;
@@ -222,12 +233,6 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		cc.setWidth(maxContentArea.width);
 		cc.setHeight(maxContentArea.height);
 		getFeatureProvider().getResizeShapeFeature(cc).execute(cc);
-
-		if (isExpanded(containerPE)) {
-			for (Shape shape : children) {
-				resizeContainer(shape);
-			}
-		}
 	}
 
 	/**

@@ -32,6 +32,9 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
  */
 public class CamelModelFactory {
 	
+	private static final String CAMEL_VERSION_2_15 = "2.15";
+	private static final String FUSE_VERSION_6_3_0_REDHAT_077 = "6.3.0.redhat-077";
+	private static final String FUSE_VERSION_6_2_1_REDHAT_084 = "6.2.1.redhat-084";
 	private static HashMap<String, CamelModel> supportedCamelModels;
 	
 	/**
@@ -175,5 +178,13 @@ public class CamelModelFactory {
         	CamelModelServiceCoreActivator.pluginLog().logError("Unable to load camel version from " + pomPath, ex);
         }
         return null;
+	}
+
+	public static String getFuseVersionForCamelVersion(String camelVersion) {
+		if(camelVersion.startsWith(CAMEL_VERSION_2_15)){
+			return FUSE_VERSION_6_2_1_REDHAT_084;
+		} else {
+			return FUSE_VERSION_6_3_0_REDHAT_077;
+		}
 	}
 }

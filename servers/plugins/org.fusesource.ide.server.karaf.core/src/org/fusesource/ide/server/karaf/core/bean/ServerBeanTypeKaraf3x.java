@@ -47,7 +47,7 @@ public class ServerBeanTypeKaraf3x extends ServerBeanType {
 
 		/**
 		 * checks if the karaf is a standalone karaf or an integrated version
-		 * used in Apache ServiceMix or JBoss Fuse
+		 * used in JBoss Fuse
 		 * @param location
 		 * @return
 		 */

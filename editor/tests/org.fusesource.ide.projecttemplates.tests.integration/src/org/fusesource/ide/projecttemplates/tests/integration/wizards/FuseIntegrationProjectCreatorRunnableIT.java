@@ -77,6 +77,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+    public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
 		
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -84,7 +85,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	protected IProject project = null;
 	boolean deploymentFinished = false;
 	boolean isDeploymentOk = false;
-	private ILaunch launch = null;
+	protected ILaunch launch = null;
 	protected String camelVersion;
 
 	@Before
@@ -173,7 +174,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		return metadata;
 	}
 
-	private void waitJob() throws OperationCanceledException, InterruptedException {
+	protected void waitJob() throws OperationCanceledException, InterruptedException {
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
@@ -223,7 +224,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(project.getNature(RiderProjectNature.NATURE_ID)).isNotNull();
 	}
 	
-	private void checkCorrectFacetsEnabled(IProject project) throws CoreException {
+	protected void checkCorrectFacetsEnabled(IProject project) throws CoreException {
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 
 		boolean camelFacetFound = fproj.hasProjectFacet(camelFacet);
@@ -237,7 +238,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(utilityFacetFound).isTrue();
 	}
 
-	private void readAndDispatch(int currentNumberOfTry) {
+	protected void readAndDispatch(int currentNumberOfTry) {
 		try{
 			while (Display.getDefault().readAndDispatch()) {
 				
@@ -289,7 +290,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 				isDeploymentOk = false;
 			}
 		});
-		executePomAction.launch(new StructuredSelection(project), ILaunchManager.DEBUG_MODE);
+		executePomAction.launch(getSelectionForLaunch(project), ILaunchManager.DEBUG_MODE);
 		int currentAwaitedTime = 0;
 		while (currentAwaitedTime < 30000 && !deploymentFinished) {
 			readAndDispatch(0);
@@ -313,5 +314,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 				.filter(debugTarget -> debugTarget instanceof CamelDebugTarget)
 				.collect(Collectors.toList()))
 		.isNotEmpty();
+	}
+
+	protected StructuredSelection getSelectionForLaunch(IProject project) {
+		return new StructuredSelection(project);
 	}
 }

@@ -21,6 +21,7 @@ import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author lhein
@@ -61,7 +62,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		
 		if (target != null && source != target) {
 			// if we only support a single output and we already have one then we can't connect to another output
-			return source.getOutputElement() == null && source.getParent().equals(target.getParent()) && target.getInputElement() == null;
+			return source.getOutputElement() == null && source.getParent().equals(target.getParent()) && target.getInputElement() == null && source instanceof CamelRouteElement == false && target instanceof CamelRouteElement == false;
 		}
 		return false;
 	}

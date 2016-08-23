@@ -24,6 +24,13 @@ public class Messages extends NLS {
 	public static String choosePomDir;
 	public static String browseFs;
 	public static String browseVariables;
+	public static String ExecutePomActionSupport_NoCamelXMLFileFoundMessage;
+	public static String ExecutePomActionSupport_NoCamelXMLFileFoundTitle;
+	public static String ExecutePomActionSupport_SelectConfigurationDialogTitle;
+	public static String ExecutePomActionSupport_SelectDebugConfigurationmessage;
+	public static String ExecutePomActionSupport_SelectRunConfigurationmessage;
+	public static String ExecutePomActionSupport_UnableToLaunchMessage;
+	public static String ExecutePomActionSupport_UnableToLaunchTitle;
 	public static String goalsLabel;
 	public static String goals;
 	public static String profilesLabel;

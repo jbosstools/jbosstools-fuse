@@ -49,12 +49,16 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
-	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-";
-	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel";
-	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
-	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
-	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
-	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
+	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
+	private static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
+	private static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
+	private static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
+	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
+	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
+	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");  //$NON-NLS-1$
+	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
+	public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
 	
 	/*
 	 * (non-Javadoc)
@@ -152,17 +156,26 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor)
-			throws CoreException {
-		String camelVersion = getCamelVersion(mavenProject);
-		if (camelVersion != null) {
-			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
-			installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), monitor);
-			installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), monitor);
-			installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion(), monitor);
-			installCamelFacet(fproj, fpwc, camelVersion, monitor);
-			fpwc.commitChanges(monitor);
-			configureNature(project, mavenProject, monitor); 
-		}
+	        throws CoreException {
+	    String camelVersion = getCamelVersion(mavenProject);
+	    if (camelVersion != null) {
+	        IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
+
+	        // adjust facets we install based on the packaging type we find
+	        installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), monitor);
+	        installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), monitor);
+            if (mavenProject.getPackaging() != null) {
+                String packaging = mavenProject.getPackaging();
+	            if (WAR_PACKAGE.equalsIgnoreCase(packaging)) {
+	                installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion(), monitor);
+	            } else if (BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || JAR_PACKAGE.equalsIgnoreCase(packaging)) {
+	                installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion(), monitor);
+	            }
+	        }
+	        installCamelFacet(fproj, fpwc, camelVersion, monitor);
+	        fpwc.commitChanges(monitor);
+	        configureNature(project, mavenProject, monitor); 
+	    }
 	}
 	
 	private boolean isCamelConfigurable(IProject project, IProgressMonitor monitor) {
@@ -175,15 +188,15 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			project.accept(new IResourceVisitor() {
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
-					if (isMatchingPath(resource, "blueprint", "OSGI-INF")
-							|| isMatchingPath(resource, "spring", "META-INF")) {
+					if (isMatchingPath(resource, "blueprint", "OSGI-INF") //$NON-NLS-1$ //$NON-NLS-2$
+							|| isMatchingPath(resource, "spring", "META-INF")) { //$NON-NLS-1$ //$NON-NLS-2$
 						found[0] = true;
 					}				
 					return !found[0];
 				}
 
 				private boolean isMatchingPath(IResource resource, String parentName, String grandParentName) {
-					return resource.getName().endsWith(".xml")
+					return resource.getName().endsWith(".xml") //$NON-NLS-1$
 							&& resource.getParent().getName().equals(parentName)
 							&& resource.getParent().getParent().getName().equals(grandParentName);
 				}
@@ -227,10 +240,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
-		String[] vparts = camelVersionString.split("\\.");
+		String[] vparts = camelVersionString.split("\\."); //$NON-NLS-1$
 		if (vparts.length>1) {
 			try {
-				return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1]));
+				return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1])); //$NON-NLS-1$
 			} catch (IllegalArgumentException ex) {
 				ProjectTemplatesActivator.pluginLog().logWarning("Tried to retrieve non existing version of Camel facet", ex);
 				return null;

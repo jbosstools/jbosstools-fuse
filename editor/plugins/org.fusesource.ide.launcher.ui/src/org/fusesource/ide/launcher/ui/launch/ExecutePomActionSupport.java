@@ -11,9 +11,11 @@
 
 package org.fusesource.ide.launcher.ui.launch;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -27,6 +29,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
@@ -66,6 +69,7 @@ import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;
@@ -92,7 +96,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 
 	@Override
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) {
-		if ("WITH_DIALOG".equals(data)) {
+		if ("WITH_DIALOG".equals(data)) { //$NON-NLS-1$
 			this.showDialog = true;
 		} else {
 			this.goalName = (String) data;
@@ -105,8 +109,28 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			IEditorInput editorInput = editor.getEditorInput();
 			if (editorInput instanceof IFileEditorInput) {
 				launchCamelContext(((IFileEditorInput) editorInput).getFile(), mode);
+			} else if(editorInput instanceof CamelXMLEditorInput){
+				launchCamelContext(((CamelXMLEditorInput) editorInput).getCamelContextFile(), mode);
+			} else {
+				IFile targetedFile = editorInput.getAdapter(IFile.class);
+				if (isCamelContentType(targetedFile)) {
+					launchCamelContext(targetedFile, mode);
+				}
 			}
 		}
+	}
+	
+	boolean isCamelContentType(IFile file){
+		if(file != null){
+			try {
+				IContentDescription contentDescription = file.getContentDescription();
+				return contentDescription != null
+						&& CamelUtils.FUSE_CAMEL_CONTENT_TYPE.equals(contentDescription.getContentType().getId());
+			} catch (CoreException e) {
+				Activator.getLogger().error(e);
+			}
+		}
+		return false;
 	}
 
 	public void setPostProcessor(ExecutePomActionPostProcessor postProcessor) {
@@ -134,7 +158,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 		}
 	}
 
-	private ILaunch launchCamelContext(IFile camelFile, String mode) {
+	ILaunch launchCamelContext(IFile camelFile, String mode) {
 		if (camelFile == null) {
 			return null;
 		}
@@ -156,7 +180,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 
 		boolean isWARPackaging = false;
 		try {
-			isWARPackaging = MavenLaunchUtils.isPackagingTypeWAR(basedir.getFile(Path.fromOSString("pom.xml")));
+			isWARPackaging = MavenLaunchUtils.isPackagingTypeWAR(basedir.getFile(Path.fromOSString("pom.xml"))); //$NON-NLS-1$
 		} catch (CoreException ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -166,40 +190,28 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			lc = launchConfiguration.getWorkingCopy();
 		} catch (CoreException ex) {
 			Activator.getLogger().error(ex);
-			MessageDialog.openError(getShell(), "Unable to launch...", "An error occured when trying to launch the project. Message: " + ex.getMessage());
+			MessageDialog.openError(getShell(), Messages.ExecutePomActionSupport_UnableToLaunchTitle, Messages.ExecutePomActionSupport_UnableToLaunchMessage + ex.getMessage());
 			return null;
 		}
 		boolean openDialog = showDialog;
 		if (!openDialog) {
 			try {
 				// if no goals specified
-				String goals = lc.getAttribute(MavenLaunchConstants.ATTR_GOALS, (String) null);
-				if (Strings.isBlank(goals)) {
-					goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
-				} else {
-					if (goals.indexOf(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL) != -1) {
-						// replace
-						goals = goals.replaceAll(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL, isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
-					} else {
-						// add
-						goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
-					}
-				}
+				String goals = setGoals(isWARPackaging, lc);
 				// no rider file selection
-				if (Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""))) {
-					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, camelFile.getLocation().toOSString());
+				if (Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""))) { //$NON-NLS-1$
+					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, getAttributeURIFormatStorage(camelFile));
 				}
-				openDialog = Strings.isBlank(goals) || Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""));
-				lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
+				openDialog = Strings.isBlank(goals) || Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, "")); //$NON-NLS-1$
 			} catch (CoreException ex) {
-				Activator.getLogger().error("Error getting the maven goals from the configuration.", ex);
+				Activator.getLogger().error("Error getting the maven goals from the configuration.", ex); //$NON-NLS-1$
 			}
 		}
 
 		if (openDialog) {
-			String category = "org.fusesource.ide.launcher.ui.runCamelLaunchGroup";
+			String category = "org.fusesource.ide.launcher.ui.runCamelLaunchGroup"; //$NON-NLS-1$
 			if (mode == ILaunchManager.DEBUG_MODE) {
-				category = "org.fusesource.ide.launcher.ui.debugCamelLaunchGroup";
+				category = "org.fusesource.ide.launcher.ui.debugCamelLaunchGroup"; //$NON-NLS-1$
 			}
 			if (DebugUITools.openLaunchConfigurationPropertiesDialog(getShell(), lc, category, null) == Window.CANCEL) {
 				return null;
@@ -214,6 +226,33 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			DebugUITools.launch(lc, mode);
 		}
 		return null;
+	}
+
+	protected String setGoals(boolean isWARPackaging, ILaunchConfigurationWorkingCopy lc) throws CoreException {
+		String goals = lc.getAttribute(MavenLaunchConstants.ATTR_GOALS, (String) null);
+		if (Strings.isBlank(goals)) {
+			goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+		} else {
+			if (goals.contains(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL)) {
+				// replace
+				if(isWARPackaging){
+					goals = goals.replaceAll(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR, CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR);
+					if(!goals.contains(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR)){
+						goals += " " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR;
+					}
+				} else {
+					goals = goals.replaceAll(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_WAR, CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR);
+					if(!goals.contains(CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR)){
+						goals += " " + CamelContextLaunchConfigConstants.SPECIFIC_MAVEN_GOAL_JAR;
+					}
+				}
+			} else {
+				// add
+				goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+			}
+		}
+		lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
+		return goals;
 	}
 
 	/**
@@ -242,7 +281,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 								break;
 							}
 						} catch (DebugException e) {
-							Activator.getLogger().error("Failed to get exit code of build process", e);
+							Activator.getLogger().error("Failed to get exit code of build process", e); //$NON-NLS-1$
 						}
 					}
 					// only invoke post processor on success
@@ -299,7 +338,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, launchConfigName);
 			workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedir.getLocation().toOSString());
 			workingCopy.setAttribute(MavenLaunchConstants.ATTR_GOALS, goal);
-			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}");
+			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}"); //$NON-NLS-1$
 			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_RECURSIVE, true);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, basedir.getProject().getName());
 
@@ -320,7 +359,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			workingCopy.setMappedResources(new IResource[] { basedir, camelFile });
 			return workingCopy.doSave();
 		} catch (CoreException ex) {
-			Activator.getLogger().error("Unable to create launch configuration", ex);
+			Activator.getLogger().error("Unable to create launch configuration", ex); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -384,7 +423,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				List<ILaunchConfiguration> matchingConfigs = findMatchingLaunchConfiguration(camelFile, launchManager, launchConfigurationType, basedirLocation);
 
 				if (matchingConfigs.size() == 1) {
-					Activator.getLogger().info("Using existing launch configuration");
+					Activator.getLogger().info("Using existing launch configuration"); //$NON-NLS-1$
 					return matchingConfigs.get(0);
 				} else if (matchingConfigs.size() > 1) {
 					final IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
@@ -392,11 +431,11 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 							getShell(), 
 							new CustomLaunchConfigurationLabelProvider(labelProvider));
 					dialog.setElements(matchingConfigs.toArray(new ILaunchConfiguration[matchingConfigs.size()]));
-					dialog.setTitle("Select Configuration");
+					dialog.setTitle(Messages.ExecutePomActionSupport_SelectConfigurationDialogTitle);
 					if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-						dialog.setMessage("Select a launch configuration to debug:");
+						dialog.setMessage(Messages.ExecutePomActionSupport_SelectDebugConfigurationmessage);
 					} else {
-						dialog.setMessage("Select a launch configuration to run:");
+						dialog.setMessage(Messages.ExecutePomActionSupport_SelectRunConfigurationmessage);
 					}
 					dialog.setMultipleSelection(false);
 					int result = dialog.open();
@@ -405,11 +444,11 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				}
 
 			} catch (CoreException ex) {
-				Activator.getLogger().error("Unable to get the launch configuration.", ex);
+				Activator.getLogger().error("Unable to get the launch configuration.", ex); //$NON-NLS-1$
 			}
 		}
 
-		Activator.getLogger().info("Creating new launch configuration");
+		Activator.getLogger().info("Creating new launch configuration"); //$NON-NLS-1$
 
 		return createLaunchConfiguration(basedir, goalName, camelFile);
 	}
@@ -425,13 +464,9 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	private List<ILaunchConfiguration> findMatchingLaunchConfiguration(IFile camelFile, ILaunchManager launchManager, ILaunchConfigurationType launchConfigurationType,
 			IPath basedirLocation) throws CoreException {
 		ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations(launchConfigurationType);
-		List<ILaunchConfiguration> matchingConfigs = new ArrayList<ILaunchConfiguration>();
-		for (ILaunchConfiguration configuration : launchConfigurations) {
-			if (isLaunchConfigurationMatching(camelFile, basedirLocation, configuration)) {
-				matchingConfigs.add(configuration);
-			}
-		}
-		return matchingConfigs;
+		return Stream.of(launchConfigurations)
+				.filter(configuration -> isLaunchConfigurationMatching(camelFile, basedirLocation, configuration))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -441,7 +476,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 * @throws CoreException
 	 */
-	private boolean isLaunchConfigurationMatching(IFile camelFile, IPath basedirLocation, ILaunchConfiguration configuration) throws CoreException {
+	private boolean isLaunchConfigurationMatching(IFile camelFile, IPath basedirLocation, ILaunchConfiguration configuration) {
 		return isSameBaseDir(basedirLocation, configuration) && isSameCamelFile(camelFile, configuration) && isTestStrategyMatching(configuration);
 	}
 
@@ -466,13 +501,17 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @param configuration
 	 * @throws CoreException
 	 */
-	private boolean isSameBaseDir(IPath basedirLocation, ILaunchConfiguration configuration) throws CoreException {
-		String workDir = MavenLaunchUtils.substituteVar(configuration.getAttribute(MavenLaunchConstants.ATTR_POM_DIR, (String) null));
-		if (workDir == null) {
+	private boolean isSameBaseDir(IPath basedirLocation, ILaunchConfiguration configuration) {
+		try {
+			String workDir = MavenLaunchUtils.substituteVar(configuration.getAttribute(MavenLaunchConstants.ATTR_POM_DIR, (String) null));
+			if (workDir == null) {
+				return false;
+			}
+			IPath workPath = new Path(workDir);
+			return basedirLocation.equals(workPath);
+		} catch (CoreException e) {
 			return false;
 		}
-		IPath workPath = new Path(workDir);
-		return basedirLocation.equals(workPath);
 	}
 
 	/**
@@ -481,9 +520,14 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 * @throws CoreException
 	 */
-	private boolean isSameCamelFile(IFile camelFile, ILaunchConfiguration configuration) throws CoreException {
-		String camelFileFromLaunchConfig = configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
-		return camelFile.getLocationURI().compareTo(new File(camelFileFromLaunchConfig).toURI()) == 0;
+	private boolean isSameCamelFile(IFile camelFile, ILaunchConfiguration configuration) {
+		try {
+			String camelFileFromLaunchConfig = configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
+			return camelFile.getLocationURI().compareTo(new URI(camelFileFromLaunchConfig)) == 0;
+		} catch (CoreException | URISyntaxException e) {
+			Activator.getLogger().warning(e);
+			return false;
+		}
 	}
 
 	/**
@@ -497,11 +541,14 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			StructuredSelection ssel = (StructuredSelection)isel;
 			Object elem = ssel.getFirstElement();
 			if (elem != null && elem instanceof IFile) {
-				IFile f = (IFile)elem;
-				return f.getLocationURI().toString();
+				return getAttributeURIFormatStorage((IFile)elem);
 			}
 		}
 		return null;
+	}
+
+	private String getAttributeURIFormatStorage(IFile file) {
+		return file.getLocationURI().toString();
 	}
 
 	/**
@@ -510,13 +557,16 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 */
 	protected IFile getPomFile(IContainer basedir) {
-		return basedir.getFile(Path.fromOSString("pom.xml"));		
+		return basedir.getFile(Path.fromOSString("pom.xml"));		 //$NON-NLS-1$
 	}
 	
 	private ILaunch launchCamelContextOnProject(IProject project, String mode) {
 		try{
-			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);		
-			if (files.size() == 1) {
+			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);
+			if (files.isEmpty()) {
+				MessageDialog.openInformation(getShell(), Messages.ExecutePomActionSupport_NoCamelXMLFileFoundTitle, Messages.ExecutePomActionSupport_NoCamelXMLFileFoundMessage);
+				return null;
+			} else if (files.size() == 1) {
 				return launchCamelContext(files.get(0), mode);
 			} else if (files.size() > 1) {
 				//org.jboss.tools.fuse.transformation.editor.internal.util.Util.selectCamelResourceFromWorkspace(Shell, IProject)
@@ -534,7 +584,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 							}					
 				};
 				selector.setTitle(Messages.xmlSelectionDialogOnRunAndDebugTitle);
-				selector.setInitialPattern("*.xml");
+				selector.setInitialPattern("*.xml"); //$NON-NLS-1$
 				if (selector.open() == Window.OK) {
 					Object[] resultArray = selector.getResult();
 					if (resultArray != null && resultArray.length > 0 && resultArray[0] instanceof IFile) {
@@ -543,7 +593,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 				}
 			}
 		} catch (CoreException e) {
-			Activator.getLogger().error("Failed to launch camel context: " + e, e);
+			Activator.getLogger().error("Failed to launch camel context: " + e, e); //$NON-NLS-1$
 		}
 		return  null;
 	}

@@ -97,6 +97,8 @@ public class UIMessages extends NLS {
 	public static String SelectEndpointWizard_pageSelectionComponentTitle;
 	public static String SelectEndpointWizard_windowTitle;
 
+	public static String updatePomDependenciesProgressDialogLabel;
+	
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);

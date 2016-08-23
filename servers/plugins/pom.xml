@@ -15,8 +15,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.server.fuse.ui</module>
 		<module>org.fusesource.ide.server.karaf.core</module>
 		<module>org.fusesource.ide.server.karaf.ui</module>
-		<module>org.fusesource.ide.server.servicemix.core</module>
-		<module>org.fusesource.ide.server.servicemix.ui</module>
 		<module>org.fusesource.ide.server.commons</module>
 	</modules>
 </project>

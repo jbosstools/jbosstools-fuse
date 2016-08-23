@@ -477,7 +477,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     }
 
     private void doStatusUpdate() {
-        if (fContainerStatus.getMessage() != null && fContainerStatus.getMessage().endsWith("does not exist.")) {
+        if (fContainerStatus.getMessage() != null && fContainerStatus.getMessage().endsWith("does not exist.")) { //$NON-NLS-1$
             if (getPackageFragmentRootText().endsWith("src/test/java")) { //$NON-NLS-1$
                 // override this particular case, since we'll create it
                 fContainerStatus = new StatusInfo(NONE, null);
@@ -489,7 +489,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             // override this particular case, since the default package is ok, though not great
             fPackageStatus = new StatusInfo(NONE, null);
         } else if (fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null
-                && fPackageStatus.getMessage().contains("default package is discouraged")) {
+                && fPackageStatus.getMessage().contains("default package is discouraged")) { //$NON-NLS-1$
             // override this particular case, since the default package is ok, though not great
             fPackageStatus = new StatusInfo(NONE, null);
         }

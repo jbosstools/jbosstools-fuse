@@ -56,6 +56,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
@@ -166,6 +167,18 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.MultiPageEditorPart#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		// this will assure the diagram is alway layed out correctly which
+		// wasn't always the case (for instance when adding a new data 
+		// transformation endpoint which opened another editor underneath
+		if (designEditor != null) DiagramOperations.layoutDiagram(designEditor);
+	}
+	
 	/**
 	 * closes all editors with no valid inputs
 	 */

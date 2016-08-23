@@ -15,7 +15,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -23,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.foundation.ui.util.Widgets;
@@ -49,7 +49,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	private Button btn_javaDSL;
 	
 	private FilteredTree list_templates;
-	private StyledText templateInfoText;
+	private Text templateInfoText;
 	
 	/**
 	 * 
@@ -117,7 +117,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    
 	    list_templates = createFilteredTree(templates);
 	    
-	    templateInfoText = new StyledText(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+	    templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 	    templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	    
 	    Label spacer = new Label(container, SWT.None);
@@ -241,6 +241,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		list_templates.getViewer().getTree().setEnabled(active);
 		list_templates.getViewer().getTree().getParent().setEnabled(active);
 		list_templates.getFilterControl().setEnabled(active);
+		list_templates.setEnabled(active);
 		templateInfoText.setEnabled(active);
 		if (!active) {
 			// user selected Empty Project -> activate all DSL buttons
@@ -248,7 +249,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 			btn_springDSL.setEnabled(true);
 			btn_javaDSL.setEnabled(true);
 		} else {
-			// user wants to use template -> activatre dsl buttons if supported
+			// user wants to use template -> activate dsl buttons if supported
 			btn_blueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
 			btn_springDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
 			btn_javaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));

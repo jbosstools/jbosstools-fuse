@@ -93,5 +93,28 @@ public class GenerateNewIDTest {
 		assertThat(camelRouteModelElement2.getNewID()).isEqualTo("_route2");
 	}
 	
+	@Test
+	public void getNewId_supportFileWithoutContext() throws Exception {
+		Set<CamelFile> camelFiles = new HashSet<>();
+		camelFiles.add(camelFile);
+		when(camelFile.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+
+		doReturn("route").when(underlyingMetaModel).getName();
+		doReturn(null).when(camelFile).getCamelContext();
+		
+		/*Artificially add the second camelfile in the project*/
+		camelFiles.add(camelFile2);
+		when(camelFile2.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
+		/*Configure the second CamelFile*/
+		CamelContextElement parent2 = new CamelContextElement(camelFile2, null);
+		doReturn(parent2).when(camelFile2).getCamelContext();
+		CamelRouteElement camelRouteModelElement2 = spy(new CamelRouteElement(parent2, null));
+		doReturn(camelFiles).when(camelRouteModelElement2).findCamelFilesInSameProject();
+		camelRouteModelElement2.setUnderlyingMetaModelObject(underlyingMetaModel);
+		parent2.addChildElement(camelRouteModelElement2);
+		
+		assertThat(camelRouteModelElement2.getNewID()).isEqualTo("_route1");
+	}
+	
 	
 }

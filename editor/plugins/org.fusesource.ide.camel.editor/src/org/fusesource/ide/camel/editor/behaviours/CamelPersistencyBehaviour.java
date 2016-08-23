@@ -23,6 +23,7 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
 /**
@@ -60,7 +61,10 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
         // name the editor tab correctly
         this.editor.getParent().onFileLoading(camelFile.getResource().getName());
         
-        if (this.camelFile != null) this.camelFile.getCamelContext().ensureUniqueID(this.camelFile.getCamelContext());
+        final CamelContextElement camelContext = camelFile.getCamelContext();
+		if (camelContext != null) {
+			camelContext.ensureUniqueID(camelContext);
+        }
         
         return importCommand.getDiagram();
 	}

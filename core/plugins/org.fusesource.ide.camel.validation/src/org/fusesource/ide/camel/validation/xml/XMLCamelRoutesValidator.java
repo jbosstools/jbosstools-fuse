@@ -84,7 +84,9 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 	 */
 	private void checkCamelModelElement(AbstractCamelModelElement cme, ValidationResult validationResult, IResource resource) {
 		org.fusesource.ide.camel.validation.ValidationResult result = new BasicNodeValidator().validate(cme);
-		validationResult.incrementError(result.getErrors().size());
+		validationResult.incrementError(result.getErrorCount());
+		validationResult.incrementWarning(result.getWarningCount());
+		validationResult.incrementInfo(result.getInformationCount());
 		for (AbstractCamelModelElement cmeChild : cme.getChildElements()) {
 			checkCamelModelElement(cmeChild, validationResult, resource);
 		}

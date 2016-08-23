@@ -72,6 +72,8 @@ public class Messages extends NLS {
 	public static String SAPToolSuiteImportWizard_SAPImportErrorTitle;
 	public static String SAPToolSuiteImportWizard_SAPImportCancelledMessage;
 	public static String SAPToolSuiteImportWizard_SAPImportCancelledTitle;
+	public static String SapToolSuiteInstaller_errorDuringInstallationMessage;
+	public static String SapToolSuiteInstaller_errorDuringInstallationTitle;
 	public static String SapToolSuiteInstaller_InstallingJBossFuseSapToolSuite;
 	public static String SapToolSuiteInstaller_JBossFuseSapToolSuiteCouldNotBeInstalled;
 	public static String SapToolSuiteInstaller_JBossFuseSAPToolSuiteInstallFailed;

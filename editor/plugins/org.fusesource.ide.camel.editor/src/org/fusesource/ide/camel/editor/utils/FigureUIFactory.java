@@ -348,11 +348,11 @@ public class FigureUIFactory {
 	 * @param gaService
 	 * @return
 	 */
-	private static Color computeBackGroundColor(AbstractCamelModelElement element, Diagram diagram, IGaService gaService) {
+	public static Color computeBackGroundColor(AbstractCamelModelElement element, Diagram diagram, IGaService gaService) {
 		Color figureBackgroundColor = null;
 		if (element.isEndpointElement()) {
 			// endpoint
-			if (element.getNodeTypeId().equalsIgnoreCase("from")) {
+			if (element.getNodeTypeId().equalsIgnoreCase(AbstractCamelModelElement.ENDPOINT_TYPE_FROM)) {
 				// from endpoint
 				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.FROM_FIGURE_BACKGROUND_COLOR);
 			} else {

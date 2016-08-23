@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
+	static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
@@ -47,15 +48,16 @@ public abstract class AbstractCamelModelElement {
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
-
-	protected static final String ID_ATTRIBUTE = "id";
-	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
-	protected static final String ENDPOINT_NODE_NAME = "endpoint";
-	protected static final String ROUTE_NODE_NAME = "route";
-	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
-	private static final String CHOICE_NODE_NAME = "choice";
-	private static final String WHEN_NODE_NAME = "when";
-	private static final String OTHERWISE_NONE_NAME = "otherwise";
+	public static final String CHOICE_NODE_NAME = "choice";
+	public static final String WHEN_NODE_NAME = "when";
+	public static final String OTHERWISE_NODE_NAME = "otherwise";
+	public static final String WIRETAP_NODE_NAME = "wireTap";
+	public static final String ROUTE_NODE_NAME = "route";
+	public static final String ID_ATTRIBUTE = "id";
+	public static final String DATA_FORMATS_NODE_NAME = "dataFormats";
+	public static final String ENDPOINT_NODE_NAME = "endpoint";
+	public static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
+	
 	// children is a list of objects which are no route outputs
 	private List<AbstractCamelModelElement> childElements = new ArrayList<>();
 
@@ -116,14 +118,14 @@ public abstract class AbstractCamelModelElement {
 					if (this.getNodeTypeId().equals(WHEN_NODE_NAME)) {
 						Node otherwiseNode = null;
 						for (int i = 0; i < siblingNodes.getLength(); i++) {
-							if (CamelUtils.getTranslatedNodeName(siblingNodes.item(i)).equals(OTHERWISE_NONE_NAME)) {
+							if (CamelUtils.getTranslatedNodeName(siblingNodes.item(i)).equals(OTHERWISE_NODE_NAME)) {
 								otherwiseNode = siblingNodes.item(i);
 								break;
 							}
 						}
 						// move all when nodes before the otherwise
 						parent.getXmlNode().insertBefore(getXmlNode(), otherwiseNode);
-					} else if (getNodeTypeId().equals(OTHERWISE_NONE_NAME)) {
+					} else if (getNodeTypeId().equals(OTHERWISE_NODE_NAME)) {
 						parent.getXmlNode().appendChild(getXmlNode());
 					}
 				} else {
@@ -150,7 +152,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public AbstractCamelModelElement findEndpoint(String uri) {
 		if (getChildElements().isEmpty()) {
-			if (getParameter("uri") != null && ((String)getParameter("uri")).equals(uri)) {
+			if (getParameter(URI_PARAMETER_KEY) != null && ((String)getParameter(URI_PARAMETER_KEY)).equals(uri)) {
 				return this;
 			}
 		} else {
@@ -236,7 +238,52 @@ public abstract class AbstractCamelModelElement {
 	public AbstractCamelModelElement getParent() {
 		return this.parent;
 	}
+	
+	/**
+	 * checks if the given other node has the same parent than this node
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public boolean hasSameParent(AbstractCamelModelElement other) {
+		return getParent().equals(other.getParent());
+	}
+	
+	/**
+     * returns true if the element can be added on a camel context 
+     * 
+     * @return
+     */
+    public boolean canBeAddedToCamelContextDirectly() {
+    	return getUnderlyingMetaModelObject().canBeAddedToCamelContextDirectly(); 
+    }
 
+	/**    
+	 * returns the first element in a flow 
+	 * 
+	 * @return
+	 */
+	public AbstractCamelModelElement getFirstInFlow() {
+		AbstractCamelModelElement node = this;
+		while (node != null && node.getInputElement() != null) {
+			node = node.getInputElement();
+		}
+		return node;
+	}
+
+	/**    
+	 * returns the last element in a flow 
+	 * 
+	 * @return
+	 */
+	public AbstractCamelModelElement getLastInFlow() {
+		AbstractCamelModelElement node = this;
+		while (node != null && node.getOutputElement() != null) {
+			node = node.getOutputElement();
+		}
+		return node;
+	}
+	
 	/**
 	 * returns the route this endpoint belongs to
 	 *
@@ -348,7 +395,7 @@ public abstract class AbstractCamelModelElement {
 		}
 
 		if (isEndpointElement()) {
-			String uri = (String)this.getParameter("uri");
+			String uri = (String)this.getParameter(URI_PARAMETER_KEY);
 			if (uri != null && uri.trim().length() > 0) {
 				// uri specified, use it
 				result = uri;
@@ -358,7 +405,7 @@ public abstract class AbstractCamelModelElement {
 
 		String eipType = getNodeTypeId();
 		// For some nodes, we just return their node name
-		String[] nodeNameOnly = new String[] { CHOICE_NODE_NAME, "try", "finally", OTHERWISE_NONE_NAME, "marshal", "unmarshal" };
+		String[] nodeNameOnly = new String[] { CHOICE_NODE_NAME, "try", "finally", OTHERWISE_NODE_NAME, "marshal", "unmarshal" };
 		if (Arrays.asList(nodeNameOnly).contains(eipType)) {
 			return result.trim();
 		}
@@ -367,13 +414,13 @@ public abstract class AbstractCamelModelElement {
 		Map<String, String> singlePropertyDisplay = new HashMap<>();
 		singlePropertyDisplay.put("bean", "ref");
 		singlePropertyDisplay.put("convertBodyTo", "type");
-		singlePropertyDisplay.put("enrich", "uri");
-		singlePropertyDisplay.put("inOnly", "uri");
-		singlePropertyDisplay.put("inOut", "uri");
-		singlePropertyDisplay.put("interceptSendToEndpoint", "uri");
+		singlePropertyDisplay.put("enrich", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("inOnly", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("inOut", URI_PARAMETER_KEY);
+		singlePropertyDisplay.put("interceptSendToEndpoint", URI_PARAMETER_KEY);
 		singlePropertyDisplay.put("log", "logName");
 		singlePropertyDisplay.put("onException", "exception");
-		singlePropertyDisplay.put("pollEnrich", "uri");
+		singlePropertyDisplay.put("pollEnrich", URI_PARAMETER_KEY);
 		singlePropertyDisplay.put("removeHeader", "headerName");
 		singlePropertyDisplay.put("removeProperty", "propertyName");
 		singlePropertyDisplay.put("rollback", "message");
@@ -418,7 +465,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	public boolean isEndpointElement() {
-		return getParameter("uri") != null && ((String) getParameter("uri")).trim().length() > 0;
+		return Arrays.asList(ENDPOINT_TYPE_FROM, ENDPOINT_TYPE_TO, ENDPOINT_NODE_NAME).contains(getNodeTypeId());
 	}
 
 	/**
@@ -443,7 +490,7 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
-	protected void checkEndpointType() {
+	public void checkEndpointType() {
 		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_TO)) {
 			switchEndpointType(ENDPOINT_TYPE_FROM);
 		} else if (isToEndpoint() && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getName().equalsIgnoreCase(ENDPOINT_TYPE_FROM)) {
@@ -563,8 +610,8 @@ public abstract class AbstractCamelModelElement {
 			this.childElements.add(element);
 			
 			// special handling for the otherwise element
-			if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
-				getParameters().put(OTHERWISE_NONE_NAME, element);
+			if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
+				getParameters().put(OTHERWISE_NODE_NAME, element);
 			}
 		}
 	}
@@ -577,6 +624,9 @@ public abstract class AbstractCamelModelElement {
 	public void removeChildElement(AbstractCamelModelElement element) {
 		if (childElements.contains(element)) {
 			childElements.remove(element);
+			// set the parent to null - otherwise this will cause
+			// the node still to reappear in the source code for unknown reasons
+			element.setParent(null);
 			boolean childFound = false;
 			for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
 				if (getXmlNode().getChildNodes().item(i).isEqualNode(element.getXmlNode())) {
@@ -591,8 +641,8 @@ public abstract class AbstractCamelModelElement {
 			}
 		}
 		// special handling for the otherwise element
-		if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
-			getParameters().remove(OTHERWISE_NONE_NAME);
+		if (getNodeTypeId().equalsIgnoreCase(CHOICE_NODE_NAME) && element.getNodeTypeId().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
+			getParameters().remove(OTHERWISE_NODE_NAME);
 		}
 	}
 
@@ -1009,7 +1059,7 @@ public abstract class AbstractCamelModelElement {
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null &&
 			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals("element") &&
-			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NONE_NAME)) {
+			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
 			return;
 		}
 
@@ -1391,7 +1441,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	protected boolean isSpecialCase(Node childNode) {
-		return CHOICE_NODE_NAME.equalsIgnoreCase(getTranslatedNodeName()) && OTHERWISE_NONE_NAME.equalsIgnoreCase(CamelUtils.getTranslatedNodeName(childNode));
+		return CHOICE_NODE_NAME.equalsIgnoreCase(getTranslatedNodeName()) && OTHERWISE_NODE_NAME.equalsIgnoreCase(CamelUtils.getTranslatedNodeName(childNode));
 	}
 
 	/**
@@ -1483,7 +1533,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public String getIconName() {
 		if (isEndpointElement()) {
-			String u = (String) getParameter("uri");
+			String u = (String) getParameter(URI_PARAMETER_KEY);
 			if (u != null && u.trim().length() > 0) {
 				String scheme = null;
 				if (u.startsWith("ref:")) {
@@ -1491,7 +1541,7 @@ public abstract class AbstractCamelModelElement {
 					String refId = u.substring(u.indexOf(":") + 1);
 					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
 					if (endpointRef != null) {
-						String refUri = (String) endpointRef.getParameter("uri");
+						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
 						if (refUri != null) {
 							scheme = refUri.substring(0, refUri.indexOf(":"));
 						} else {
@@ -1533,18 +1583,6 @@ public abstract class AbstractCamelModelElement {
 			return "endpoint";
 		}
 		return String.format("%sEIP", getNodeTypeId());
-	}
-
-	/**
-	 * returns the category this item belongs to
-	 *
-	 * @return
-	 */
-	public String getCategoryName() {
-		if (isEndpointElement()) {
-			return "Components";
-		}
-		return getUnderlyingMetaModelObject().getTags().get(getUnderlyingMetaModelObject().getTags().size() - 1);
 	}
 
 	/**
@@ -1625,7 +1663,7 @@ public abstract class AbstractCamelModelElement {
 		if (newId == null || newId.trim().isEmpty()) {
 			return false;
 		}
-		return getCamelContext().findNode(newId) == null;
+		return getCamelContext() == null || getCamelContext().findNode(newId) == null;
 	}
 
 	/**
@@ -1641,15 +1679,11 @@ public abstract class AbstractCamelModelElement {
 
 		if (this instanceof CamelContextElement) {
 			CamelContextElement ctx = (CamelContextElement)this;
-			if (!ctx.getDataformats().isEmpty()) {
-				if (ctx.getDataformats().containsKey(nodeId)) {
-					return ctx.getDataformats().get(nodeId);
-				}
+			if (ctx.getDataformats().containsKey(nodeId)) {
+				return ctx.getDataformats().get(nodeId);
 			}
-			if (!ctx.getEndpointDefinitions().isEmpty()) {
-				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
-					return ctx.getEndpointDefinitions().get(nodeId);
-				}
+			if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
+				return ctx.getEndpointDefinitions().get(nodeId);
 			}
 		}
 
@@ -1700,7 +1734,7 @@ public abstract class AbstractCamelModelElement {
 		return !isFirstNodeInRoute() && // not working on the From node
 				!WHEN_NODE_NAME.equals(getNodeTypeId()) && // not working for
 															// When nodes
-				!OTHERWISE_NONE_NAME.equals(getNodeTypeId()); // not working for
+				!OTHERWISE_NODE_NAME.equals(getNodeTypeId()); // not working for
 														// Otherwise nodes
 	}
 

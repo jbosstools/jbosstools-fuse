@@ -21,6 +21,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
@@ -71,21 +72,25 @@ public class Fuse6xStartupLaunchConfigurator extends
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainProgram);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArguments);
 
-			List<String> classPathList = new LinkedList<String>();
-			String[] classPathEntries = getClassPathEntries(karafInstallDir);
-			if (classPathEntries != null && classPathEntries.length > 0) {
-				for (String jarName : classPathEntries) {
-					IPath jarPath = new Path(jarName);
-					IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(jarPath);
-					classPathList.add(entry.getMemento());
-				}
-			} else {
-				// FIXME No jar files.
-			}
-			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
-			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classPathList);
-			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH, getJreContainerPath(runtime));
+			configureJRE(workingCopy, runtime, karafInstallDir);
 		}
+	}
+
+	private void configureJRE(ILaunchConfigurationWorkingCopy workingCopy, IKarafRuntime runtime, String karafInstallDir) throws CoreException {
+		List<String> classPathList = new LinkedList<>();
+		String[] classPathEntries = getClassPathEntries(karafInstallDir);
+		if (classPathEntries != null && classPathEntries.length > 0) {
+			for (String jarName : classPathEntries) {
+				IPath jarPath = new Path(jarName);
+				IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(jarPath);
+				classPathList.add(entry.getMemento());
+			}
+		} else {
+			// FIXME No jar files.
+		}
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classPathList);
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH, getJreContainerPath(runtime));
 	}
 	
 	protected String get6xMainProgram() {
@@ -135,5 +140,16 @@ public class Fuse6xStartupLaunchConfigurator extends
 		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
 			
 		return vmArguments.toString();
+	}
+	
+	@Override
+	protected void doOverrides(ILaunchConfigurationWorkingCopy launchConfig) throws CoreException {
+		super.doOverrides(launchConfig);
+		IRuntime serverRuntime = server.getRuntime();
+		if (serverRuntime != null) {
+			IKarafRuntime runtime = (IKarafRuntime)serverRuntime.loadAdapter(IKarafRuntime.class, null);
+			String karafInstallDir = serverRuntime.getLocation().toOSString();
+			configureJRE(launchConfig, runtime, karafInstallDir);
+		}
 	}
 }

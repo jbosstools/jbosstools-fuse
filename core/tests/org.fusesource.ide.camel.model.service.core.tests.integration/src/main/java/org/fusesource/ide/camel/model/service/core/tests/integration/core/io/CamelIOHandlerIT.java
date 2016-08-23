@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -27,20 +28,14 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class CamelIOHandlerIT {
 
 	private CamelIOHandler marshaller = new CamelIOHandler();
-
-	@Rule
-	public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject("External Files");
@@ -65,7 +60,8 @@ public class CamelIOHandlerIT {
 				"unmarshalSample.xml",
 				"withGlobalDefinitionSample.xml",
 				"testWithCXFGlobalEndpoint.xml",
-				"emptyOtherwiseSample.xml");
+				"emptyOtherwiseSample.xml",
+				"JMXBeanAnswer--camelContext--11--11.xml");
 		//@formatter:on
 	}
 
@@ -86,16 +82,22 @@ public class CamelIOHandlerIT {
 
 		CamelFile model1 = marshaller.loadCamelModel(fileInProject, new NullProgressMonitor());
 
-		File outFile = new File(testFolder.newFolder(), name);
+		File outFile = fuseProject.getProject().getFile("reloaded-"+name).getLocation().toFile();
 		marshaller.saveCamelModel(model1, outFile, new NullProgressMonitor());
 
 		CamelFile model2 = marshaller.loadCamelModel(outFile, new NullProgressMonitor());
 
 		String model1String = model1.getDocumentAsXML();
 		String model2String = model2.getDocumentAsXML();
-
-		assertThat(model1String).isXmlEqualToContentOf(baseFile);
+		
+		if("JMXBeanAnswer--camelContext--11--11.xml".equals(name)){
+			//special case, the id are not provided initially on purpose because JMX MBean are putting them in title of the file
+		} else {
+			assertThat(model1String).isXmlEqualToContentOf(baseFile);
+		}
 		assertEquals("Should have the same content", model1String, model2String);
+		
+		assertThat(model1.getCamelContext()).isNotNull();
 
 		return model2;
 	}
