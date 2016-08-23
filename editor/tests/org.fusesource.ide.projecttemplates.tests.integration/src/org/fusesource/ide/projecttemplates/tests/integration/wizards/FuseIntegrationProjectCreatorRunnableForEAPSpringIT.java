@@ -38,7 +38,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -59,7 +58,6 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	}
 	
 	@Test
-	@Ignore("EAP test is not working yet")
 	public void testEAPSpringProjectCreation() throws Exception {
         testProjectCreation("-EAPSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/webapp/META-INF/jboss-camel-context.xml", null);
 	}
