@@ -51,7 +51,7 @@ public class CamelFacetVersionChangeDelegateIT {
 		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{POM_XML})[0];
 		
 		testUpdate(CamelProjectConfigurator.camelFacet.getLatestVersion(), ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_VERSION_FOR_CAMEL_2_17);
-		testUpdate(CamelProjectConfigurator.camelFacet.getVersion("2.15"), ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_VERSION_FOR_CAMEL_2_15);
+		testUpdate(CamelProjectConfigurator.camelFacet.getVersion("2.15.1.redhat-621084"), ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_VERSION_FOR_CAMEL_2_15);
 	}
 
 	private void testUpdate(final IProjectFacetVersion facetVersion, final String expectedDependencyVersion) throws CoreException {
