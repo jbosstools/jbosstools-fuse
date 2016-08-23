@@ -240,16 +240,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
-		String[] vparts = camelVersionString.split("\\."); //$NON-NLS-1$
-		if (vparts.length>1) {
-			try {
-				return camelFacet.getVersion(String.format("%s.%s", vparts[0], vparts[1])); //$NON-NLS-1$
-			} catch (IllegalArgumentException ex) {
-				ProjectTemplatesActivator.pluginLog().logWarning("Tried to retrieve non existing version of Camel facet", ex);
-				return null;
-			}
+		IProjectFacetVersion facetVersion = camelFacet.getVersion(camelVersionString);
+		if (facetVersion == null) {
+			facetVersion = camelFacet.getLatestVersion();
 		}
-		return camelFacet.getLatestVersion();
+		return facetVersion;
 	}
 	
 	/**

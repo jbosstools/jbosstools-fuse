@@ -47,9 +47,9 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	
 	private String getCamelVersionForFacetVersion(IProjectFacetVersion fv) {
 		String facetVersion = fv.getVersionString();
-		String camelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
+		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(facetVersion);
 		if (camelVersion == null) {
-			camelVersion = facetVersion + ".0";
+			camelVersion = CamelModelFactory.getLatestCamelVersion();
 		}
 		return camelVersion;
 	}

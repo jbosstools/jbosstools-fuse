@@ -79,7 +79,7 @@ public class CamelModelFactory {
 	 * @param majorMinorVersion	a version string in format major.minor (2.17)
 	 * @return	the full supported camel version (2.17.1.redhat-630xxx) or null if not supported
 	 */
-	public static String getCamelVersionFor(String majorMinorVersion) {
+	private static String getCamelVersionFor(String majorMinorVersion) {
 		String resVal = null;
 		for (String supportedVersion : getSupportedCamelVersions()) {
 			if (supportedVersion.startsWith(majorMinorVersion + ".")) {
@@ -137,6 +137,11 @@ public class CamelModelFactory {
 		Version reqVersion = new Version(requestedCamelVersion);
 		for (String supV : supportedVersions) {
 			Version testVersion = new Version(supV);
+			if (testVersion.compareTo(reqVersion) == 0) {
+				// in case we support the requested version directly we
+				// should use it
+				return supV;
+			}
 			if (testVersion.compareTo(reqVersion) < 0) {
 				if (lastFound == null) {
 					lastFound = supV;

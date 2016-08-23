@@ -161,11 +161,14 @@
          	<description>
              	Adds support for Camel to the project.
          	</description>
+          <version-comparator
+                class="org.fusesource.ide.projecttemplates.util.CamelFacetVersionComparator">
+          </version-comparator>
       	</project-facet>
       
       	<project-facet-version
             facet="jst.camel"
-            version="2.15">
+            version="2.15.1.redhat-621084">
         	
         	<constraint>
             	<and>
@@ -193,7 +196,7 @@
       	
       	<project-facet-version
             facet="jst.camel"
-            version="2.17">
+            version="2.17.0.redhat-630077">
        	
         	<constraint>
             	<and>
