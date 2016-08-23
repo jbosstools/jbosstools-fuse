@@ -284,7 +284,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				if (CamelGlobalConfigEditor.this.parentEditor.getActiveEditor().equals(CamelGlobalConfigEditor.this)) {
+				if (CamelGlobalConfigEditor.this.parentEditor != null
+						&& CamelGlobalConfigEditor.this.equals(CamelGlobalConfigEditor.this.parentEditor.getActiveEditor())) {
 					reload();
 					parentEditor.setDirtyFlag(true);
 				}
