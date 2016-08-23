@@ -343,7 +343,7 @@ public class CamelEditorIT {
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
-	@Test	
+	@Test
 	public void dropWhenOnRoute() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
 		
@@ -585,8 +585,12 @@ public class CamelEditorIT {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+		
+		readAndDispatch(20);
 		contentOutlineView  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ContentOutline");
 		readAndDispatch(20);
+		//Workaround to ignore Widget is disposed for JMX Navigator, issue fixed in JBoss Tools 10.0 (by side effect of a larger modification)
+		statusHandlerCalled = false;
 		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
 		page.activate(editor);
 		editor.setFocus();

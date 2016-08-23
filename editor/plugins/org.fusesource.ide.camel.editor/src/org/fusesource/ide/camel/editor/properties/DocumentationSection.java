@@ -241,12 +241,12 @@ public class DocumentationSection extends NodeSectionSupport {
 		browser = new Browser(sbody, SWT.NONE);
 		GridData data = new GridData(GridData.FILL_BOTH);
 		browser.setLayoutData(data);
-		IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench()
-				.getHelpSystem();
-		URL url = helpSystem
-				.resolve("org.fusesource.ide.help/index.html", true);
-		browser.setUrl(url.toExternalForm());
-		browser.addLocationListener(locationListener);
+		IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem();
+		URL url = helpSystem.resolve("org.fusesource.ide.help/index.html", true);
+		if(url != null){
+			browser.setUrl(url.toExternalForm());
+			browser.addLocationListener(locationListener);
+		}
 
 		// section.pack();
 		// form.pack();
