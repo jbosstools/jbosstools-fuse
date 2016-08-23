@@ -58,10 +58,16 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		viewer.setContentProvider(new CamelModelOutlineContentProvider());
 		viewer.setLabelProvider(new CamelModelOutlineLabelProvider());
 		viewer.addSelectionChangedListener(this);
-		AbstractCamelModelElement selectedContainer = this.designEditor.getSelectedContainer();
-		if (selectedContainer == null) selectedContainer = this.designEditor.getModel().getCamelContext();
-		viewer.setInput(getModelRoots(selectedContainer));
+		viewer.setInput(computeInput());
 		viewer.expandAll();
+	}
+
+	private AbstractCamelModelElement[] computeInput() {
+		AbstractCamelModelElement selectedContainer = designEditor.getSelectedContainer();
+		if (selectedContainer == null){
+			selectedContainer = designEditor.getModel().getCamelContext();
+		}
+		return getModelRoots(selectedContainer);
 	}
 	
 	/**
@@ -72,7 +78,9 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	public void setOutlineSelection(AbstractCamelModelElement cme) {
 		if (cme == null || cme.getId() == null || Widgets.isDisposed(getTreeViewer()))
 			return;
-		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
+		if (getTreeViewer() != null){
+			getTreeViewer().setSelection(new StructuredSelection(cme), true);
+		}
 		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
 			getTreeViewer().expandAll();
 			TreeItem ti = findTreeItemForElement(cme, getTreeViewer().getTree().getItems());
@@ -124,11 +132,13 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	}
 	
 	private AbstractCamelModelElement[] getModelRoots(AbstractCamelModelElement selectedContainer) {
-		AbstractCamelModelElement[] container = null;
+		AbstractCamelModelElement[] container;
 		if (selectedContainer instanceof CamelFile) {
 			container = selectedContainer.getChildElements().get(0).getChildElements().toArray(new AbstractCamelModelElement[selectedContainer.getChildElements().size()]);
 		} else if (selectedContainer instanceof CamelContextElement) {
 			container = selectedContainer.getChildElements().toArray(new AbstractCamelModelElement[selectedContainer.getChildElements().size()]);
+		} else if(selectedContainer == null){
+			container = new AbstractCamelModelElement[]{};
 		} else {
 			container = new AbstractCamelModelElement[] { selectedContainer };
 		}

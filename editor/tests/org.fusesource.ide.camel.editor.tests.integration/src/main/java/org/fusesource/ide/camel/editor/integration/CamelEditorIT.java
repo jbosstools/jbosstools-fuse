@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -30,9 +31,13 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.jface.util.Policy;
+import org.eclipse.jface.util.SafeRunnable;
+import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -61,6 +66,12 @@ public class CamelEditorIT {
 	
 	@Rule
 	public FuseProject fuseProject = new FuseProject(CamelEditorIT.class.getName());
+	
+	private boolean safeRunnableIgnoreErrorStateBeforeTests;
+	boolean statusHandlerCalled = false;
+	private IViewPart contentOutlineView = null;
+
+	private StatusHandler statusHandlerBeforetest;
 
 	@Before
 	public void setup() throws Exception {
@@ -69,20 +80,42 @@ public class CamelEditorIT {
 		welcomePage.dispose();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
+		SafeRunnable.setIgnoreErrors(false);
+		statusHandlerBeforetest = Policy.getStatusHandler();
+		statusHandlerCalled = false;
+		Policy.setStatusHandler(new StatusHandler() {
+			
+			@Override
+			public void show(IStatus status, String title) {
+				statusHandlerCalled = true;
+			}
+		});
 	}
 	
 	@After
 	public void tearDown() throws Exception {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
+		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
+		Policy.setStatusHandler(statusHandlerBeforetest);
 	}
 	
 	@Test
 	public void openFileWithoutContext() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/beans.xml");
-		assertThat(openEditorOnFileStore).isNotNull();
-		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+		
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+	}
+	
+	@Test
+	public void openFileWithoutContextWhenOutlinePageOpened() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditorWithOutlineViewOpened("/beans.xml");
+		
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		assertThat(statusHandlerCalled).isFalse();
+		
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(contentOutlineView);
 	}
 	
 	@Test
@@ -541,6 +574,23 @@ public class CamelEditorIT {
 		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
 		page.activate(editor);
 		editor.setFocus();
+		readAndDispatch(20);
+		return editor;
+	}
+	
+	private IEditorPart openFileInEditorWithOutlineViewOpened(String filePath) throws Exception {
+		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
+		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
+		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		page.closeAllPerspectives(false, false);
+		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+		contentOutlineView  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ContentOutline");
+		readAndDispatch(20);
+		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
+		page.activate(editor);
+		editor.setFocus();
+		readAndDispatch(20);
 		return editor;
 	}
 	
