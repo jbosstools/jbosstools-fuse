@@ -11,19 +11,23 @@ To run this project
 
     mvn camel:run
 
-To run this project on JBoss Fuse
+To run this project from JBoss Fuse shell :
 
-    - create a pid file etc/camel.activemq.spring.conf containing ActiveMQ
-      connection options on JBoss Fuse, i.e :
+    - create a properties file named camel.activemq.spring.conf in etc folder of JBoss Fuse containing ActiveMQ
+      connection options, i.e :
 
       broker.url       = tpc://localhost:61616
       broker.username  = admin
       broker.password  = admin
 
-    - install the bundle from Fuse shell
+    - install the bundle from Fuse shell :
 
       install -s mvn:com.mycompany/camel-spring-blueprint/1.0.0-SNAPSHOT
 
 For more help see the Apache Camel documentation
 
     http://camel.apache.org/
+    
+For more help on ActiveMQ Camel component see the Apache Camel documentation for ActiveMQ
+
+	http://camel.apache.org/activemq.html
