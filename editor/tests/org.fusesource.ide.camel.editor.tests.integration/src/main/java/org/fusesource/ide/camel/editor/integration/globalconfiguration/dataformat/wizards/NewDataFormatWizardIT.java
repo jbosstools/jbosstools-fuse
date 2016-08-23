@@ -63,8 +63,7 @@ public class NewDataFormatWizardIT {
 	@Parameters(name = "{0} - {1}")
 	public static Collection<Object[]> data() {
 		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
-		// TODO: update when a new version is available
-		Assertions.assertThat(supportedCamelVersions).hasSize(2);
+		Assertions.assertThat(supportedCamelVersions.size()>0).isTrue();
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
@@ -101,7 +100,7 @@ public class NewDataFormatWizardIT {
 	 * @param camelFile
 	 */
 	private void check(final String id, CamelFile camelFile) {
-		Assertions.assertThat(camelFile.getCamelContext().getDataformats().keySet()).containsExactly(id);
+		Assertions.assertThat(camelFile.getCamelContext().getDataformats().keySet()).contains(id);
 		AbstractCamelModelElement dataFormatCME = camelFile.getCamelContext().getDataformats().get(id);
 		checkSpecialParameterLoaded(id, dataFormatCME);
 		assertThat(new DataFormatContributor().canHandle(dataFormatCME)).isTrue();

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Foundation UI Plugin
-Bundle-SymbolicName: org.fusesource.ide.camel.model.service.v2_15_1;singleton:=true
+Bundle-SymbolicName: org.fusesource.ide.camel.model.service.v2_17_3;singleton:=true
 Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -15,12 +15,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
 Bundle-Activator: org.fusesource.ide.camel.model.service.internal.CamelServiceImplementationActivator
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- libs/camel-blueprint-2.15.1.redhat-621084.jar,
- libs/camel-catalog-2.15.1.redhat-621084.jar,
- libs/camel-core-2.15.1.redhat-621084.jar,
- libs/camel-spring-2.15.1.redhat-621084.jar,
- libs/log4j-over-slf4j-1.7.5.jar,
- libs/slf4j-api-1.7.5.jar,
- libs/slf4j-simple-1.7.5.jar
+ libs/camel-blueprint-2.17.3.jar,
+ libs/camel-catalog-2.17.3.jar,
+ libs/camel-core-2.17.3.jar,
+ libs/camel-spring-2.17.3.jar,
+ libs/log4j-over-slf4j-1.7.21.jar,
+ libs/slf4j-api-1.7.21.jar,
+ libs/slf4j-simple-1.7.21.jar
 Service-Component: OSGI-INF/*.xml
-Export-Package: org.apache.camel.model;x-friends:="org.jboss.tools.fuse.transformation.core.tests.integration"
+Export-Package: org.fusesource.ide.camel.model.service.internal;x-friends:="org.fusesource.ide.camel.tests.util"

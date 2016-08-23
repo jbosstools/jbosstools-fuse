@@ -64,7 +64,9 @@ public class ValidateSyntaxInCatalogIT {
 		StringBuilder sb = new StringBuilder();
 		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
 		// TODO: update when a new version is added
-		assertThat(supportedCamelVersions).containsExactly("2.15.1.redhat-621084", "2.17.0.redhat-630077");
+		assertThat(supportedCamelVersions).contains("2.15.1.redhat-621084", 
+													"2.17.0.redhat-630077",
+													"2.17.3");
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
 			for (Component component : camelModel.getComponentModel().getSupportedComponents()) {

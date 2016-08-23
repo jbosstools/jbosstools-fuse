@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" 
 		enabled="true" immediate="false" 
-		name="org.fusesource.ide.camel.model.service.2.15.1">
+		name="org.fusesource.ide.camel.model.service.2.15.1_redhat_621084">
    <implementation class="org.fusesource.ide.camel.model.service.internal.CamelService"/>
    <service>
       <provide interface="org.fusesource.ide.camel.model.service.core.ICamelManagerService"/>

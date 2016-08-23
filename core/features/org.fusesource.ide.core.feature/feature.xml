@@ -87,14 +87,21 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.v2_15_1"
+         id="org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.v2_17_0"
+         id="org.fusesource.ide.camel.model.service.v2_17_0_redhat_630077"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.v2_17_3"
          download-size="0"
          install-size="0"
          version="0.0.0"
