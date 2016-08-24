@@ -221,6 +221,34 @@
             	</and>
          	</constraint>
       	</project-facet-version>
+      	
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.17.3">
+       	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.7">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
 	  	<action
         	facet="jst.camel"
             id="jst.camel.install"

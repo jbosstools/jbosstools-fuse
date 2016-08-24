@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse Foundation UI Plugin
+Bundle-Name: Fuse Camel Service Plugin (2.15.1.redhat-621084)
 Bundle-SymbolicName: org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084;singleton:=true
 Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
