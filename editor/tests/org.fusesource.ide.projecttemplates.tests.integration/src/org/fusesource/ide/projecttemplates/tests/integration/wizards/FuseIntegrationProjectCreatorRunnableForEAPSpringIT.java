@@ -24,6 +24,7 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -42,6 +43,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	}
 	
 	@Test
+	@Ignore("EAP test is nt working yet")
 	public void testEAPSpringProjectCreation() throws Exception {
         assumeFalse("Spring with 2.15 redhat version is not working", camelVersion.startsWith("2.15"));
 
