@@ -80,8 +80,8 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
         boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
         boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
         boolean webFacetFound = fproj.hasProjectFacet(webFacet);
-
-        assertThat(camelFacetFound).isTrue();
+                
+        assertThat(camelFacetFound).describedAs("The camel facet has not been found.").isTrue();
         assertThat(javaFacetFound).isTrue();
         assertThat(mavenFacetFound).isTrue();
         assertThat(utilityFacetFound).isFalse();
@@ -129,5 +129,5 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
     protected void launchDebug(IProject project)throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
     	// Local launch is not configured for EAP projects
     }
-    
+
 }
