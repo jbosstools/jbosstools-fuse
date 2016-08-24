@@ -29,14 +29,14 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class FuseIntegrationProjectCreatorRunnableForEAPSpring extends FuseIntegrationProjectCreatorRunnableIT {
+public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseIntegrationProjectCreatorRunnableIT {
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
 		return CamelModelFactory.getSupportedCamelVersions(); 
 	}
 	
-	public FuseIntegrationProjectCreatorRunnableForEAPSpring(String version) {
+	public FuseIntegrationProjectCreatorRunnableForEAPSpringIT(String version) {
 		super();
 		camelVersion = version;
 	}

@@ -236,6 +236,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(javaFacetFound).isTrue();
 		assertThat(mavenFacetFound).isTrue();
 		assertThat(utilityFacetFound).isTrue();
+		
+		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(camelVersion).as("The Camel Facet version is not the right one.");
 	}
 
 	protected void readAndDispatch(int currentNumberOfTry) {
