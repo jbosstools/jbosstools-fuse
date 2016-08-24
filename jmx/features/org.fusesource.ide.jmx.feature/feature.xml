@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.jmx.feature"
       label="%featureName"
-      version="8.0.0.qualifier"
+      version="9.0.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
@@ -26,8 +26,8 @@
    </url>
 
    <requires>
-      <import feature="org.fusesource.ide.core.feature" version="8.0.0" match="greaterOrEqual"/>
-      <import feature="org.fusesource.ide.server.extensions.feature" version="8.0.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="9.0.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.server.extensions.feature" version="9.0.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.jmx.core" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.jmx.ui" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.10.0" match="greaterOrEqual"/>
