@@ -27,37 +27,37 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 	@Ignore("Waiting fix for https://issues.jboss.org/browse/FUSETOOLS-1986")
 	public void testCBRBluePrintCreation215() throws Exception {
 		camelVersion = FUSE_CAMEL_2_15_1;
-		testProjectCreation("-CBRBlueprint", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
+		testProjectCreation("-CBRBlueprint-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
 	
 	@Test
 	public void testCBRBluePrintCreation217() throws Exception {
 		camelVersion = CamelModelFactory.getLatestCamelVersion();
-		testProjectCreation("-CBRBlueprint", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
+		testProjectCreation("-CBRBlueprint-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
 	
 	@Test
 	public void testCBRSpringCreation215() throws Exception {
 		camelVersion = FUSE_CAMEL_2_15_1;
-		testProjectCreation("-CBRSpring", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
+		testProjectCreation("-CBRSpring-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
 	@Test
 	public void testCBRSpringCreation217() throws Exception {
 		camelVersion = CamelModelFactory.getLatestCamelVersion();
-		testProjectCreation("-CBRSpring", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
+		testProjectCreation("-CBRSpring-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
 	@Test
 	public void testCBRJavaProjectCreation215() throws Exception {
 		camelVersion = FUSE_CAMEL_2_15_1;
-		testProjectCreation("-CBRJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
+		testProjectCreation("-CBRJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
 	}
 	
 	@Test
 	public void testCBRJavaProjectCreation217() throws Exception {
 		camelVersion = CamelModelFactory.getLatestCamelVersion();
-		testProjectCreation("-CBRJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
+		testProjectCreation("-CBRJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
 	}
 	
 	@Override
