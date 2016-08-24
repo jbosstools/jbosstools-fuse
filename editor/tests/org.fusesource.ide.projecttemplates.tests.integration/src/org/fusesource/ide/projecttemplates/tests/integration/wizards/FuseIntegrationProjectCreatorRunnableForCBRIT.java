@@ -10,53 +10,45 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import static org.junit.Assume.assumeFalse;
+
+import java.util.List;
+
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Parameterized.class)
 public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrationProjectCreatorRunnableIT{
 
-	private static final String FUSE_CAMEL_2_15_1 = "2.15.1.redhat-621084";
+	@Parameters(name = "{0}")
+	public static List<String> parameters(){
+		return CamelModelFactory.getSupportedCamelVersions(); 
+	}
 	
-	//TODO: use parameterized test when https://issues.jboss.org/browse/FUSETOOLS-1986 is fixed
-	
-	@Test
-	@Ignore("Waiting fix for https://issues.jboss.org/browse/FUSETOOLS-1986")
-	public void testCBRBluePrintCreation215() throws Exception {
-		camelVersion = FUSE_CAMEL_2_15_1;
-		testProjectCreation("-CBRBlueprint-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
+	public FuseIntegrationProjectCreatorRunnableForCBRIT(String version) {
+		super();
+		camelVersion = version;
 	}
 	
 	@Test
-	public void testCBRBluePrintCreation217() throws Exception {
-		camelVersion = CamelModelFactory.getLatestCamelVersion();
+	public void testCBRBluePrintCreation() throws Exception {
+		assumeFalse("Blueprint with 2.15 redhat version is not working, see https://issues.jboss.org/browse/FUSETOOLS-1986", camelVersion.startsWith("2.15"));
 		testProjectCreation("-CBRBlueprint-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
-	
+		
 	@Test
-	public void testCBRSpringCreation215() throws Exception {
-		camelVersion = FUSE_CAMEL_2_15_1;
+	public void testCBRSpringCreation() throws Exception {
 		testProjectCreation("-CBRSpring-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
 	@Test
-	public void testCBRSpringCreation217() throws Exception {
-		camelVersion = CamelModelFactory.getLatestCamelVersion();
-		testProjectCreation("-CBRSpring-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
-	}
-	
-	@Test
-	public void testCBRJavaProjectCreation215() throws Exception {
-		camelVersion = FUSE_CAMEL_2_15_1;
-		testProjectCreation("-CBRJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
-	}
-	
-	@Test
-	public void testCBRJavaProjectCreation217() throws Exception {
-		camelVersion = CamelModelFactory.getLatestCamelVersion();
+	public void testCBRJavaProjectCreation() throws Exception {
 		testProjectCreation("-CBRJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/CamelRoute.java", null);
 	}
 	
@@ -67,6 +59,5 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
-	
 	
 }
