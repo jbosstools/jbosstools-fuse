@@ -10,14 +10,17 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.commons.backlogtracermessage;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class BacklogTracerEventMessageParserTest {
 
@@ -64,14 +67,16 @@ public class BacklogTracerEventMessageParserTest {
 	 */
 	private String backlogTracerEventMessageDump() throws IOException {
 		InputStream stream = this.getClass().getResourceAsStream("backlogTracerEventMessage.xml");
-		return org.apache.commons.io.IOUtils.toString(stream);
+		return new BufferedReader(new InputStreamReader(stream)).lines()
+				   .parallel().collect(Collectors.joining("\n"));
 	}
 
 
 	@Test
 	public void testGetBacklogTracerEventMessages() throws Exception {
 		InputStream stream = this.getClass().getResourceAsStream("backlogTracerEventMessages.xml");
-		String xmlDump = org.apache.commons.io.IOUtils.toString(stream);
+		String xmlDump = new BufferedReader(new InputStreamReader(stream)).lines()
+				   .parallel().collect(Collectors.joining("\n"));
 
 		BacklogTracerEventMessages backlogTracerEventMessage = new BacklogTracerEventMessageParser().getBacklogTracerEventMessages(xmlDump);
 

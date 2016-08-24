@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JBoss Fuse Tooling Tests Util
 Bundle-SymbolicName: org.fusesource.ide.camel.tests.util
-Bundle-Version: 8.0.0.qualifier
+Bundle-Version: 9.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
- org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
- org.fusesource.ide.camel.model.service.v2_17_0;bundle-version="8.0.0"
+ org.fusesource.ide.camel.model.service.core;bundle-version="9.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_0;bundle-version="9.0.0"
 Export-Package: org.fusesource.ide.camel.tests.util

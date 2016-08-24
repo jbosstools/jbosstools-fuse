@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.text.StringCharacterIterator;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;

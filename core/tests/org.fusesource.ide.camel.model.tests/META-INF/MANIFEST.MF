@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Plugins for Eclipse Model Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.camel.model.tests;singleton:=true
-Bundle-Version: 8.0.0.qualifier
+Bundle-Version: 9.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.junit,
- org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
- org.fusesource.ide.foundation.core;bundle-version="8.0.0",
- org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
- org.assertj.core;bundle-version="2.1.0",
- org.fusesource.ide.camel.model.service.v2_15_1;bundle-version="8.0.0",
- org.fusesource.ide.camel.model.service.v2_17_0;bundle-version="8.0.0",
- org.jboss.tools.locus.mockito;bundle-version="1.9.5"
+Require-Bundle: org.assertj.core;bundle-version="2.1.0",
+ org.jboss.tools.locus.mockito;bundle-version="1.9.5",
+ org.junit,
+ org.fusesource.ide.foundation.core;bundle-version="9.0.0",
+ org.fusesource.ide.foundation.ui;bundle-version="9.0.0",
+ org.fusesource.ide.camel.model.service.core;bundle-version="9.0.0",
+ org.fusesource.ide.camel.model.service.v2_15_1;bundle-version="9.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_0;bundle-version="9.0.0"
 
 

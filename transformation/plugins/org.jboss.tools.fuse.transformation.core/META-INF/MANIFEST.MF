@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.jboss.tools.fuse.transformation.core;singleton:=true
-Bundle-Version: 8.0.0.qualifier
+Bundle-Version: 9.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Activator: org.jboss.tools.fuse.transformation.core.internal.DataTransformationCoreActivator
@@ -20,10 +20,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.jboss.tools.locus.jaxb-core;bundle-version="2.2.7";visibility:=reexport,
  org.jboss.tools.locus.jaxb-impl;bundle-version="2.2.7";visibility:=reexport,
  org.jboss.tools.locus.jaxb-xjc;bundle-version="2.2.7";visibility:=reexport,
- org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
- org.fusesource.ide.foundation.core;bundle-version="8.0.0",
- org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
- org.fusesource.ide.camel.editor;bundle-version="8.0.0",
+ org.fusesource.ide.camel.model.service.core;bundle-version="9.0.0",
+ org.fusesource.ide.foundation.core;bundle-version="9.0.0",
+ org.fusesource.ide.foundation.ui;bundle-version="9.0.0",
+ org.fusesource.ide.camel.editor;bundle-version="9.0.0",
  javax.xml.bind;bundle-version="2.2.0";visibility:=reexport
 Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.editor",
  com.google.gson.annotations;x-friends:="org.jboss.tools.fuse.transformation.editor",
