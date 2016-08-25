@@ -74,11 +74,6 @@ public class PropertiesUtilsTestIT {
 	public void testUpdateURIParamsWithPathParams() throws Exception {
 		for (Parameter p : component.getUriParameters()) {
 			if (p.getKind().equalsIgnoreCase("path")) {
-				// Sometimes it returns a path param which is not in the syntax
-				// (then it causes NPE), e.g openshift
-				if (!component.getSyntax().contains(p.getName())) {
-					continue;
-				}
 				// This is really weird because, see FUSETOOLS-1803
 				if (component.getScheme().equals("http4s")) {
 					continue;
