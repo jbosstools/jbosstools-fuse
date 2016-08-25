@@ -197,7 +197,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public boolean canHaveChildren() {
 		for (Parameter p : getParameters()) {
-			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element")) return true;
+			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element") && getInput().equalsIgnoreCase("true")) return true;
 		}
 		return false;
 	}
