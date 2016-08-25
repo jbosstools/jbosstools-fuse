@@ -95,7 +95,7 @@ public class TemplateModel {
 				if (category == null) {
 					category = getCategory(DEFAULT_CAT_ID);
 				}
-				TemplateItem item = new TemplateItem(id, name, description, iWeight, category, template, keywords != null ? keywords : "");
+				TemplateItem item = new TemplateItem(id, name, description, iWeight, category, template, keywords);
 				category.addTemplate(item);
 			}
 		} catch (Exception ex) {
