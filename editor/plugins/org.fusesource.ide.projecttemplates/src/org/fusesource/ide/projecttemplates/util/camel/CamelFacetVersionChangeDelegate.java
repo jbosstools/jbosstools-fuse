@@ -37,8 +37,8 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 public class CamelFacetVersionChangeDelegate implements IDelegate {
 
 	// TODO: remove me after release of 8.0.0 or reuse me for another new unreleased camel version
-	private static final String CAMEL_STAGING_REPO_URI = "https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384";
-	
+	private static final String CAMEL_STAGING_REPO_URI = "https://repository.jboss.org/nexus/service/local/repositories/product-fuse-06_03_00_Alpha/content/";
+
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor) throws CoreException {
 		String newVersion = getCamelVersionForFacetVersion(fv);

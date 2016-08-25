@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -33,9 +34,16 @@ import org.osgi.framework.Version;
  */
 public class CamelModelFactory {
 	
-	private static final String CAMEL_VERSION_2_15 = "2.15";
-	private static final String FUSE_VERSION_6_3_0_REDHAT_077 = "6.3.0.redhat-077";
-	private static final String FUSE_VERSION_6_2_1_REDHAT_084 = "6.2.1.redhat-084";
+	private static final Map<String, String> camelVersionToFuseBOMMapping;
+	static {
+		camelVersionToFuseBOMMapping = new HashMap<>();
+		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
+		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
+		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630175", "6.3.0.redhat-175");
+		camelVersionToFuseBOMMapping.put("2.17.3", 				 "6.3.0.redhat-175");
+	}
+	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-175";
+			
 	private static HashMap<String, CamelModel> supportedCamelModels;
 	
 	/**
@@ -232,10 +240,10 @@ public class CamelModelFactory {
 	}
 
 	public static String getFuseVersionForCamelVersion(String camelVersion) {
-		if(camelVersion.startsWith(CAMEL_VERSION_2_15)){
-			return FUSE_VERSION_6_2_1_REDHAT_084;
-		} else {
-			return FUSE_VERSION_6_3_0_REDHAT_077;
+		String bomVersion = camelVersionToFuseBOMMapping.get(camelVersion);
+		if (bomVersion == null) {
+			bomVersion = LATEST_BOM_VERSION;
 		}
+		return bomVersion;
 	}
 }
