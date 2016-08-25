@@ -35,10 +35,10 @@ public class ActiveMQPaletteEntryDependenciesManagerTest {
 	}
 
 	@Test
-	public void testUpdateDependenciesFor2170_630077Branded() throws Exception {
+	public void testUpdateDependenciesFor2170_630175Branded() throws Exception {
 		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
-		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.17.0.redhat-630077");
-		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.17.0")+".redhat-630077");
+		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.17.0.redhat-630175");
+		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.17.0")+".redhat-630175");
 	}
 
 	@Test
