@@ -73,26 +73,6 @@ public class CamelModelFactory {
 	}
 	
 	/**
-	 * returns the supported major.minor.micro version for the given major.minor version
-	 * (for instance handing over 2.17 will return 2.17.1.redhat-xxxxx)
-	 * 
-	 * @param majorMinorVersion	a version string in format major.minor (2.17)
-	 * @return	the full supported camel version (2.17.1.redhat-630xxx) or null if not supported
-	 */
-	private static String getCamelVersionFor(String majorMinorVersion) {
-		String resVal = null;
-		for (String supportedVersion : getSupportedCamelVersions()) {
-			if (supportedVersion.startsWith(majorMinorVersion + ".")) {
-				// we want to return the latest greatest for the version
-				if (resVal == null || supportedVersion.compareTo(resVal)>0) {
-					resVal = supportedVersion;
-				}
-			}
-		}
-		return resVal;
-	}
-	
-	/**
 	 * returns the model for a given camel version or null if not supported
 	 * 
 	 * @param camelVersion
