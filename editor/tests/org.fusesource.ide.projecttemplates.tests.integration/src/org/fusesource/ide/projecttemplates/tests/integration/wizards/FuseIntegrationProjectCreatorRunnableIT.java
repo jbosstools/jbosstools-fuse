@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,12 +99,12 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
 		File f = new File(SCREENSHOT_FOLDER);
 		f.mkdirs();
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/%s-%s_BEFORE_%s.png", SCREENSHOT_FOLDER, getClass().getName(), camelVersion, LocalDateTime.now()), SWT.IMAGE_PNG);
 	}
 
 	@After
 	public void tearDown() throws CoreException, InterruptedException, IOException {
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/%s-%s_AFTER_%s.png", SCREENSHOT_FOLDER, getClass().getName(), camelVersion, LocalDateTime.now()), SWT.IMAGE_PNG);
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 		
 		if(launch != null){
 			launch.terminate();
