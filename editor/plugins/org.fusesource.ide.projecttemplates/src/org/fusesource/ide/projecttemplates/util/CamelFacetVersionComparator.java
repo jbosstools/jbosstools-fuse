@@ -19,15 +19,13 @@ import org.osgi.framework.Version;
  * 
  * @author lhein
  */
-public class CamelFacetVersionComparator implements Comparator {
+public class CamelFacetVersionComparator implements Comparator<String> {
 
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public int compare(Object arg0, Object arg1) {
-		String v1 = (String)arg0;
-		String v2 = (String)arg1;
+	public int compare(String v1, String v2) {
 		Version cv1 = new Version(v1);
 		Version cv2 = new Version(v2);
 		return cv1.compareTo(cv2);

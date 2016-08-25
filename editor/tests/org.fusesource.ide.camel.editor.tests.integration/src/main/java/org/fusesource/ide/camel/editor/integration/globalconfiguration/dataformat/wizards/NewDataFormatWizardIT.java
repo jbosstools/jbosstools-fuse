@@ -48,6 +48,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
 
+	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 4;
+	
 	@Rule
 	public FuseProject fuseproject = new FuseProject(NewDataFormatWizardIT.class.getName());
 
@@ -63,7 +65,7 @@ public class NewDataFormatWizardIT {
 	@Parameters(name = "{0} - {1}")
 	public static Collection<Object[]> data() {
 		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
-		Assertions.assertThat(supportedCamelVersions.size()>0).isTrue();
+		Assertions.assertThat(supportedCamelVersions).hasSize(CURRENTLY_SHIPPED_MODEL_BUNDLES);
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
@@ -100,7 +102,7 @@ public class NewDataFormatWizardIT {
 	 * @param camelFile
 	 */
 	private void check(final String id, CamelFile camelFile) {
-		Assertions.assertThat(camelFile.getCamelContext().getDataformats().keySet()).contains(id);
+		Assertions.assertThat(camelFile.getCamelContext().getDataformats().keySet()).containsExactly(id);
 		AbstractCamelModelElement dataFormatCME = camelFile.getCamelContext().getDataformats().get(id);
 		checkSpecialParameterLoaded(id, dataFormatCME);
 		assertThat(new DataFormatContributor().canHandle(dataFormatCME)).isTrue();
