@@ -586,7 +586,7 @@
          <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" label="advanced" group="advanced" description="Sets the default exchange pattern when creating an exchange"/>
          <uriParameter name="branchName" type="string" javaType="java.lang.String" kind="path" deprecated="false" label="consumer" group="consumer" description="Name of branch"/>
          <uriParameter name="type" type="string" javaType="org.apache.camel.component.github.GitHubType" kind="path" choice="CLOSEPULLREQUEST,PULLREQUESTCOMMENT,COMMIT,PULLREQUEST,TAG,PULLREQUESTSTATE,PULLREQUESTFILES,GETCOMMITFILE" deprecated="false" required="true" group="common" description="What git operation to execute"/>
-         <uriParameter name="oauthToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="GitHub OAuth token required unless username & password are provided"/>
+         <uriParameter name="oauthToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="GitHub OAuth token required unless username &amp; password are provided"/>
          <uriParameter name="encoding" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer" group="producer" description="To use the given encoding when getting a git commit file"/>
          <uriParameter name="password" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="GitHub password required unless oauthToken is provided"/>
          <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
@@ -2114,7 +2114,7 @@
          <tag>testing</tag>
       </tags>
       <title>Dataset</title>
-      <description>The dataset component provides a mechanism to easily perform load & soak testing of your system.</description>
+      <description>The dataset component provides a mechanism to easily perform load &amp; soak testing of your system.</description>
       <syntax>dataset:name</syntax>
       <class>org.apache.camel.component.dataset.DataSetComponent</class>
       <kind>component</kind>
@@ -2971,8 +2971,8 @@
       <componentProperties>
       </componentProperties>
       <uriParameters>
-         <uriParameter name="delimiterStop" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue=">" group="producer" description="The variable end delimiter"/>
-         <uriParameter name="delimiterStart" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue="<" group="producer" description="The variable start delimiter"/>
+         <uriParameter name="delimiterStop" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue="&gt;" group="producer" description="The variable end delimiter"/>
+         <uriParameter name="delimiterStart" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue="&lt;" group="producer" description="The variable start delimiter"/>
          <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
          <uriParameter name="contentCache" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="producer" description="Sets whether to use resource content cache or not"/>
          <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" label="advanced" group="advanced" description="Sets the default exchange pattern when creating an exchange"/>
@@ -3341,7 +3341,7 @@
          <uriParameter name="httpURI" type="string" javaType="java.net.URI" kind="path" deprecated="false" required="true" group="common" description="The url of the HTTP endpoint to use."/>
          <uriParameter name="transferException" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="Option to disable throwing the HttpOperationFailedException in case of failed responses from the remote server. This allows you to get all responses regardless of the HTTP status code."/>
          <uriParameter name="headerFilterStrategy" type="object" javaType="org.apache.camel.spi.HeaderFilterStrategy" kind="parameter" deprecated="false" label="advanced" group="advanced" description="To use a custom HeaderFilterStrategy to filter header to and from Camel message."/>
-         <uriParameter name="options" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="producer" group="producer" description="Sets additional channel options. The options that can be used are defined in org.xnio.Options. To configure from endpoint uri then prefix each option with option. such as option.close-abort=true&option.send-buffer=8192"/>
+         <uriParameter name="options" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="producer" group="producer" description="Sets additional channel options. The options that can be used are defined in org.xnio.Options. To configure from endpoint uri then prefix each option with option. such as option.close-abort=true&amp;option.send-buffer=8192"/>
          <uriParameter name="optionsEnabled" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Specifies whether to enable HTTP OPTIONS for this Servlet consumer. By default OPTIONS is turned off."/>
          <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
          <uriParameter name="tcpNoDelay" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" defaultValue="true" label="producer" group="producer" description="Setting to improve TCP protocol performance"/>
@@ -3827,7 +3827,7 @@
          <uriParameter name="addressFactory" type="object" javaType="javax.sip.address.AddressFactory" kind="parameter" deprecated="false" group="common" description="To use a custom AddressFactory"/>
          <uriParameter name="messageFactory" type="object" javaType="javax.sip.message.MessageFactory" kind="parameter" deprecated="false" group="common" description="To use a custom MessageFactory"/>
          <uriParameter name="contentTypeHeader" type="object" javaType="javax.sip.header.ContentTypeHeader" kind="parameter" deprecated="false" group="common" description="A custom Header object containing message content details. Must implement the type javax.sip.header.ContentTypeHeader"/>
-         <uriParameter name="presenceAgent" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="This setting is used to distinguish between a Presence Agent & a consumer. This is due to the fact that the SIP Camel component ships with a basic Presence Agent (for testing purposes only). Consumers have to set this flag to true."/>
+         <uriParameter name="presenceAgent" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="This setting is used to distinguish between a Presence Agent &amp; a consumer. This is due to the fact that the SIP Camel component ships with a basic Presence Agent (for testing purposes only). Consumers have to set this flag to true."/>
          <uriParameter name="eventHeader" type="object" javaType="javax.sip.header.EventHeader" kind="parameter" deprecated="false" group="common" description="A custom Header object containing event details. Must implement the type javax.sip.header.EventHeader"/>
          <uriParameter name="fromPort" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" group="common" description="Port of the message originator. Mandatory setting unless a registry based FromHeader is specified"/>
          <uriParameter name="fromUser" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Username of the message originator. Mandatory setting unless a registry based custom FromHeader is specified."/>
@@ -4286,7 +4286,7 @@
          <uriParameter name="addressFactory" type="object" javaType="javax.sip.address.AddressFactory" kind="parameter" deprecated="false" group="common" description="To use a custom AddressFactory"/>
          <uriParameter name="messageFactory" type="object" javaType="javax.sip.message.MessageFactory" kind="parameter" deprecated="false" group="common" description="To use a custom MessageFactory"/>
          <uriParameter name="contentTypeHeader" type="object" javaType="javax.sip.header.ContentTypeHeader" kind="parameter" deprecated="false" group="common" description="A custom Header object containing message content details. Must implement the type javax.sip.header.ContentTypeHeader"/>
-         <uriParameter name="presenceAgent" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="This setting is used to distinguish between a Presence Agent & a consumer. This is due to the fact that the SIP Camel component ships with a basic Presence Agent (for testing purposes only). Consumers have to set this flag to true."/>
+         <uriParameter name="presenceAgent" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="This setting is used to distinguish between a Presence Agent &amp; a consumer. This is due to the fact that the SIP Camel component ships with a basic Presence Agent (for testing purposes only). Consumers have to set this flag to true."/>
          <uriParameter name="eventHeader" type="object" javaType="javax.sip.header.EventHeader" kind="parameter" deprecated="false" group="common" description="A custom Header object containing event details. Must implement the type javax.sip.header.EventHeader"/>
          <uriParameter name="fromPort" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" group="common" description="Port of the message originator. Mandatory setting unless a registry based FromHeader is specified"/>
          <uriParameter name="fromUser" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Username of the message originator. Mandatory setting unless a registry based custom FromHeader is specified."/>
@@ -8824,7 +8824,7 @@
          <tag>cloud</tag>
       </tags>
       <title>JClouds</title>
-      <description>For interacting with cloud compute & blobstore service via jclouds.</description>
+      <description>For interacting with cloud compute &amp; blobstore service via jclouds.</description>
       <syntax>jclouds:command:providerId</syntax>
       <class>org.apache.camel.component.jclouds.JcloudsComponent</class>
       <kind>component</kind>
