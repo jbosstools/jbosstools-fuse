@@ -82,7 +82,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
     public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
 		
-    public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutput";
+    public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
     
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
