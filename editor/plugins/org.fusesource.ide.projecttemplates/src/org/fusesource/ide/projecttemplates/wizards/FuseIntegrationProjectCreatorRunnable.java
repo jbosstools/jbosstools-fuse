@@ -337,7 +337,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						monitor);
 				// @formatter:on
 				List<SearchMatch> results = requestor.getResults();
-				ProjectTemplatesActivator.pluginLog().logWarning("Found potential match: " + results); //$NON-NLS-1$
 				for (SearchMatch searchMatch : results) {
 					final Object element = searchMatch.getElement();
 					if (element instanceof ResolvedSourceType) {
