@@ -20,11 +20,11 @@ And then you can install this example from its shell:
 
 The web services from Apache CXF is usually listed at:
 
-    http://localhost:8181/cxf
+    http://localhost:12345/cxf
 
 And the WSDL file for this example at:
 
-    http://localhost:8181/cxf/report/?wsdl
+    http://localhost:12345/cxf/report/?wsdl
 
 For more help see the Apache Camel documentation
 
