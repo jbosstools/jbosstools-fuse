@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -124,6 +125,16 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			}
 		}
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+	}
+	
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		this.parent.doSave(monitor);
+	}
+
+	@Override
+	public void doSaveAs() {
+		this.parent.doSaveAs();
 	}
 	
 	/* (non-Javadoc)

@@ -353,12 +353,13 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			if (getActivePage() == DESIGN_PAGE_INDEX) {
-				getDesignEditor().doSave(monitor);
+			if (getActivePage() == DESIGN_PAGE_INDEX || 
+				getActivePage() == GLOBAL_CONF_INDEX) {
+				// we need to generate the source from our model
+				updateSourceFromModel(false);
+				this.sourceEditor.doSave(monitor);
 			} else if (getActivePage() == SOURCE_PAGE_INDEX) {
 				this.sourceEditor.doSave(monitor);
-			} else if (getActivePage() == GLOBAL_CONF_INDEX) {
-				this.globalConfigEditor.doSave(monitor);
 			} else {
 				// unknown tab -> ignore
 			}
@@ -377,12 +378,13 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSaveAs() {
 		try {
-			if (getActivePage() == DESIGN_PAGE_INDEX) {
-				getDesignEditor().doSaveAs();
+			if (getActivePage() == DESIGN_PAGE_INDEX || 
+				getActivePage() == GLOBAL_CONF_INDEX) {
+				// we need to generate the source from our model
+				updateSourceFromModel(false); 
+				this.sourceEditor.doSaveAs();
 			} else if (getActivePage() == SOURCE_PAGE_INDEX) {
 				this.sourceEditor.doSaveAs();			
-			} else if (getActivePage() == GLOBAL_CONF_INDEX) {
-				this.globalConfigEditor.doSaveAs();
 			} else {
 				// unknown tab -> ignore
 			}
