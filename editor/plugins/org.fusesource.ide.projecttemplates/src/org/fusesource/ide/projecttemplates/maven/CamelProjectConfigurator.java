@@ -18,19 +18,27 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jst.common.project.facet.WtpUtils;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -49,11 +57,11 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
-	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
-	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
-	private static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
-	private static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
-	private static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
+	public static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
+	public static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
+	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
+	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
+	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
 	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");  //$NON-NLS-1$
@@ -93,9 +101,56 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				// enable the camel nature
 				configureNature(request.getProject(), request.getMavenProject(), monitor);
 			}
+			// handle linked resources for WAR deployments
+			if (isWARProject(request.getProject())) {
+				configureWARStructureMapping(request.getProject());	
+			}		
 		}
 	}
+	
+	private void configureWARStructureMapping(IProject project) throws CoreException {
+		final IVirtualComponent c = ComponentCore.createComponent(project, false);
+		c.create(0, null);
+		final IVirtualFolder webroot = c.getRootFolder();
+		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
+		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder);
+		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder);
+	}
+	
+	/**
+	 * this methods maps a given set of local paths to a path on runtime / in the WAR
+	 * 
+	 * @param paths
+	 * @param project
+	 * @param vFolder
+	 * @throws CoreException
+	 */
+	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder) throws CoreException {
+		for (IPath sourceLoc : paths) {
+			IFolder srcFolder = project.getFolder(sourceLoc);
+			IVirtualResource[] mappings = ComponentCore.createResources(srcFolder);
+			boolean found = false;
+			for (IVirtualResource mapping : mappings) {
+				if (mapping.getProjectRelativePath().toOSString().equals("/" + srcFolder.getProjectRelativePath().toOSString())) {
+					mapping.createLink(new Path("/").append(sourceLoc), 0, null);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				//create link for source folder only when it is not mapped
+				vFolder.createLink(new Path("/").append(sourceLoc), 0, null);
+			}
+		}
+	}
+	
+	private boolean isWARProject(IProject project) {
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
+		return m2prj.getPackaging().equalsIgnoreCase(CamelProjectConfigurator.WAR_PACKAGE);
+	}
 
+	
 	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
