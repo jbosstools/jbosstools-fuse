@@ -43,6 +43,10 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
 		</dependency>
+                <dependency>
+                        <groupId>org.apache.camel</groupId>
+                        <artifactId>camel-jaxb</artifactId>
+                </dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
@@ -257,6 +261,10 @@
 				<artifactId>fabric8-maven-plugin</artifactId>
 				<version>1.2.0.redhat-621084</version>
 			</plugin>
+                        <plugin>
+                            <groupId>org.apache.camel</groupId>
+                            <artifactId>camel-maven-plugin</artifactId>
+                        </plugin>
 		</plugins>
 
 	</build>

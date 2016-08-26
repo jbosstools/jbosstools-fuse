@@ -19,7 +19,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:cxf="http://camel.apache.org/schema/cxf"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd    ">
-    <cxf:cxfEndpoint address="/order/" id="orderEndpoint" serviceClass="ws.camel.mycompany.com.OrderEndpoint"/>
+    <cxf:cxfEndpoint address="http://localhost:12345/cxf/order" id="orderEndpoint" serviceClass="ws.camel.mycompany.com.OrderEndpoint"/>
     <camelContext id="_camelContext1"
         xmlns="http://camel.apache.org/schema/spring" xmlns:order="http://com.mycompany.camel.ws">
         <route id="_route1">

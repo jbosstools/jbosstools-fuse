@@ -7,7 +7,7 @@ import org.apache.camel.component.cxf.CxfEndpoint;
 
 public class CamelRoute extends RouteBuilder {
 
-	public static final String SERVICE_ADDRESS = "/order";
+	public static final String SERVICE_ADDRESS = "http://localhost:12345/cxf/order";
 	
 	@Override
 	public void configure() throws Exception {
