@@ -11,6 +11,7 @@
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -60,6 +61,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 
 	private static final String UNKNOWN_CAMEL_VERSION = "unknown";
 	private static final String FUSE_RUNTIME_PREFIX = "org.fusesource.ide.fuseesb.runtime.";
+	private static final String EAP_RUNTIME_PREFIX = "org.jboss.ide.eclipse.as.runtime.eap.";
+	private static final String CAMEL_CORE_LIB_PREFIX = "camel-core-";
+	private static final String CAMEL_CORE_LIB_SUFFIX = ".jar";
+
 	
 	private Label runtimeLabel;
 	private Combo runtimeCombo;
@@ -427,24 +432,49 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	private String determineRuntimeCamelVersion(IRuntime runtime) {
-		if (runtime != null && isRuntimeContainingCamel(runtime)) {
-			File camelFolder = runtime.getLocation().append("system").append("org").append("apache").append("camel").append("camel-core").toFile();
-			String[] versions = camelFolder.list();
-			if (versions.length==1) {
-				return versions[0];
+		if (runtime != null) {
+			if (isJBossFuseRuntime(runtime)) {
+				File camelFolder = runtime.getLocation().append("system").append("org").append("apache").append("camel").append("camel-core").toFile();
+				String[] versions = camelFolder.list();
+				if (versions.length==1) {
+					return versions[0];
+				}
+			} else if (isFuseOnEAPRuntime(runtime)) {
+				File camelFolder = runtime.getLocation().append("modules").append("system").append("layers").append("fuse").append("org").append("apache").append("camel").append("core").append("main").toFile();
+				String[] versions = camelFolder.list(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return 	name.toLowerCase().startsWith(CAMEL_CORE_LIB_PREFIX) &&
+								name.toLowerCase().endsWith(CAMEL_CORE_LIB_SUFFIX);
+					}
+				});
+				if (versions.length==1) {
+					String jarName = versions[0];
+					String version = jarName.substring(jarName.indexOf(CAMEL_CORE_LIB_PREFIX)+CAMEL_CORE_LIB_PREFIX.length(), jarName.indexOf(CAMEL_CORE_LIB_SUFFIX));
+					return version;
+				}
 			}
 		}
 		return UNKNOWN_CAMEL_VERSION;
 	}
 	
 	/**
-	 * checks whether the given runtime embeds camel libraries
+	 * checks whether the given runtime is an EAP runtime
 	 * 
 	 * @param runtime	the runtime to check
-	 * @return	true if the runtime contains camel libs
+	 * @return	true if the runtime is an EAP runtime
 	 */
-	private boolean isRuntimeContainingCamel(IRuntime runtime) {
-		// atm we only support the fuse runtime
+	private boolean isFuseOnEAPRuntime(IRuntime runtime) {
+		return runtime.getRuntimeType().getId().startsWith(EAP_RUNTIME_PREFIX);
+	}
+	
+	/**
+	 * checks whether the given runtime is a fuse runtime
+	 * 
+	 * @param runtime	the runtime to check
+	 * @return	true if the runtime is a jboss fuse runtime
+	 */
+	private boolean isJBossFuseRuntime(IRuntime runtime) {
 		return runtime.getRuntimeType().getId().startsWith(FUSE_RUNTIME_PREFIX);
 	}
 	
