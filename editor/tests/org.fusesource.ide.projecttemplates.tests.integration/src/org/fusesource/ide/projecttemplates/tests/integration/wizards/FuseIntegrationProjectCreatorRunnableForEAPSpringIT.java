@@ -13,18 +13,29 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assume.assumeFalse;
 
+import java.io.File;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -43,7 +54,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	}
 	
 	@Test
-	@Ignore("EAP test is nt working yet")
+	@Ignore("EAP test is not working yet")
 	public void testEAPSpringProjectCreation() throws Exception {
         assumeFalse("Spring with 2.15 redhat version is not working", camelVersion.startsWith("2.15"));
 
@@ -68,11 +79,38 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
         boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
         boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
         boolean webFacetFound = fproj.hasProjectFacet(webFacet);
-                
+
         assertThat(camelFacetFound).isTrue();
         assertThat(javaFacetFound).isTrue();
         assertThat(mavenFacetFound).isTrue();
         assertThat(utilityFacetFound).isFalse();
         assertThat(webFacetFound).isTrue();
+        
+        checkWARMappingCorrect(project);
+    }
+    
+    private void checkWARMappingCorrect(IProject project) throws CoreException {
+    	assertThat(project).isNotNull();
+    	IProgressMonitor monitor = new NullProgressMonitor();
+    	final IVirtualComponent c = ComponentCore.createComponent(project, false);
+		c.create(IVirtualResource.NONE, monitor);
+		final IVirtualFolder webroot = c.getRootFolder();
+		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
+		checkMappingsForSourcePathCorrect(m2prj.getCompileSourceLocations(), classesFolder, monitor);
+		checkMappingsForSourcePathCorrect(m2prj.getTestCompileSourceLocations(), classesFolder, monitor);
+    }
+    
+    private void checkMappingsForSourcePathCorrect(IPath[] paths, IVirtualFolder vFolder, IProgressMonitor monitor) throws CoreException {
+    	for (IPath sourceLoc : paths) {
+			IFolder srcFolder = project.getFolder(sourceLoc);
+			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();
+			IVirtualResource[] mappings = ComponentCore.createResources(srcFolder);
+			for (IVirtualResource mapping : mappings) {
+				if (mapping.getProjectRelativePath().equals(absSourcePath)) {
+					assertThat(mapping.getRuntimePath()).isEqualTo(vFolder.getRuntimePath());
+				}
+			}
+		}
     }
 }

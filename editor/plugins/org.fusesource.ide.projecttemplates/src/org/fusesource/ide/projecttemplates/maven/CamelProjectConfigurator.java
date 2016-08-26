@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.maven;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -57,8 +58,8 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
-	public static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
-	public static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
+	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
+	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
 	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
 	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
@@ -102,20 +103,20 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				configureNature(request.getProject(), request.getMavenProject(), monitor);
 			}
 			// handle linked resources for WAR deployments
-			if (isWARProject(request.getProject())) {
-				configureWARStructureMapping(request.getProject());	
+			if (isWARProject(request.getProject(), monitor)) {
+				configureWARStructureMapping(request.getProject(), monitor);	
 			}		
 		}
 	}
 	
-	private void configureWARStructureMapping(IProject project) throws CoreException {
+	private void configureWARStructureMapping(IProject project, IProgressMonitor monitor) throws CoreException {
 		final IVirtualComponent c = ComponentCore.createComponent(project, false);
-		c.create(0, null);
+		c.create(IVirtualResource.NONE, monitor);
 		final IVirtualFolder webroot = c.getRootFolder();
 		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
-		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
-		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder);
-		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder);
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
+		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder, monitor);
+		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder, monitor);
 	}
 	
 	/**
@@ -124,30 +125,32 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @param paths
 	 * @param project
 	 * @param vFolder
+	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder) throws CoreException {
+	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor) throws CoreException {
 		for (IPath sourceLoc : paths) {
 			IFolder srcFolder = project.getFolder(sourceLoc);
+			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();
 			IVirtualResource[] mappings = ComponentCore.createResources(srcFolder);
 			boolean found = false;
 			for (IVirtualResource mapping : mappings) {
-				if (mapping.getProjectRelativePath().toOSString().equals("/" + srcFolder.getProjectRelativePath().toOSString())) {
-					mapping.createLink(new Path("/").append(sourceLoc), 0, null);
+				if (mapping.getProjectRelativePath().equals(absSourcePath)) {
+					mapping.createLink(absSourcePath, IVirtualResource.NONE, monitor);
 					found = true;
 					break;
 				}
 			}
 			if (!found) {
 				//create link for source folder only when it is not mapped
-				vFolder.createLink(new Path("/").append(sourceLoc), 0, null);
+				vFolder.createLink(absSourcePath, IVirtualResource.NONE, monitor);
 			}
 		}
 	}
 	
-	private boolean isWARProject(IProject project) {
-		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
-		return m2prj.getPackaging().equalsIgnoreCase(CamelProjectConfigurator.WAR_PACKAGE);
+	private boolean isWARProject(IProject project, IProgressMonitor monitor) {
+		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
+		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 
 	
