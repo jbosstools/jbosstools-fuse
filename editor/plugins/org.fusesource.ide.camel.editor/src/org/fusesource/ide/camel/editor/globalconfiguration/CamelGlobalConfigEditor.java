@@ -121,12 +121,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		this.parentEditor.getDesignEditor().doSave(monitor);
+		this.parentEditor.doSave(monitor);
 	}
 
 	@Override
 	public void doSaveAs() {
-		this.parentEditor.getDesignEditor().doSaveAs();
+		this.parentEditor.doSaveAs();
 	}
 
 	@Override
