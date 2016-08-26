@@ -102,12 +102,12 @@
             <from id="listenToIncomingOrder" uri="activemq:incomingOrders"/>
             <choice id="countrySelection">
                 <when id="UKCustomer">
-                    <xpath>/order:order/order:customer/order:country = 'UK'</xpath>
+                    <xpath id="_xpath1">/order:order/order:customer/order:country = 'UK'</xpath>
                     <log id="logUK" message="Sending order ${file:name} to the UK"/>
                     <to id="outputUKFolder" uri="file:work/out/uk"/>
                 </when>
                 <when id="USCustomer">
-                    <xpath>/order:order/order:customer/order:country = 'US'</xpath>
+                    <xpath id="_xpath2">/order:order/order:customer/order:country = 'US'</xpath>
                     <log id="logUS" message="Sending order ${file:name} to the US"/>
                     <to id="outputUSFolder" uri="file:work/out/us"/>
                 </when>

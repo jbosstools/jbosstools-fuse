@@ -47,7 +47,7 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	 */
 	public final static String CAMEL_EXTENSION = ".jar";//$NON-NLS-1$
 	public final static String CAMEL_PROJECT_FACET = "jst.camel";//$NON-NLS-1$
-	public final static String CAMEL_PROJECT_FACET_TEMPLATE = "template.jst.camel.jar_2.15";//$NON-NLS-1$
+	public final static String CAMEL_PROJECT_FACET_TEMPLATE = "template.jst.camel.jar_2.15.1.redhat-621084";//$NON-NLS-1$
 	public final static String OSGI_INF = "OSGI-INF";//$NON-NLS-1$
 	public final static String META_INF = "META-INF";//$NON-NLS-1$
 	

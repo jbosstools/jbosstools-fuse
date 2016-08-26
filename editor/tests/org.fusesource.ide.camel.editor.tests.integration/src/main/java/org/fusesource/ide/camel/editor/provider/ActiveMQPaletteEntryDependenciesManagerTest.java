@@ -21,19 +21,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ActiveMQPaletteEntryDependenciesManagerTest {
 
 	@Test
-	public void testUpdateDependenciesFor215() throws Exception {
+	public void testUpdateDependenciesFor2151_621084Branded() throws Exception {
 		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
-		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.15.1");
-		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_VERSION_FOR_CAMEL_2_15);
-	}
-	
-	@Test
-	public void testUpdateDependenciesFor217() throws Exception {
-		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
-		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.17.0");
-		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_VERSION_FOR_CAMEL_2_17);
+		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.15.1.redhat-621084");
+		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.15.1")+".redhat-621084");
 	}
 
+	@Test
+	public void testUpdateDependenciesFor2151_621117Branded() throws Exception {
+		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
+		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.15.1.redhat-621117");
+		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.15.1")+".redhat-621117");
+	}
+
+	@Test
+	public void testUpdateDependenciesFor2170_630175Branded() throws Exception {
+		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
+		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.17.0.redhat-630175");
+		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.17.0")+".redhat-630175");
+	}
+
+	@Test
+	public void testUpdateDependenciesFor2173Community() throws Exception {
+		List<Dependency> currentDependencies = createDependenciesListWithActiveMQ();
+		new ActiveMQPaletteEntryDependenciesManager().updateDependencies(currentDependencies , "2.17.3");
+		assertThat(currentDependencies.get(0).getVersion()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.camelToAMQVersionMapping.get("2.17.3"));
+	}
+	
 	private List<Dependency> createDependenciesListWithActiveMQ() {
 		List<Dependency> currentDependencies = new ArrayList<>();
 		Dependency dep = new Dependency();

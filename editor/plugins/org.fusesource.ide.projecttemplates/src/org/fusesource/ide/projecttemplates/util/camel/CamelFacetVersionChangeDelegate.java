@@ -37,7 +37,9 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 public class CamelFacetVersionChangeDelegate implements IDelegate {
 
 	// TODO: remove me after release of 8.0.0 or reuse me for another new unreleased camel version
-	private static final String CAMEL_STAGING_REPO_URI = "https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384";
+	private static final String PRODUCT_STAGING_REPO_URI = "http://origin-repository.jboss.org/nexus/content/groups/ea";
+	private static final String THIRD_PARTY_STAGING_REPO_URI = "https://maven.repository.redhat.com/earlyaccess/all";
+	private static final String REDHAT_GA_PUBLIC_REPO = "https://maven.repository.redhat.com/ga";
 	
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor) throws CoreException {
@@ -47,9 +49,9 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	
 	private String getCamelVersionForFacetVersion(IProjectFacetVersion fv) {
 		String facetVersion = fv.getVersionString();
-		String camelVersion = CamelModelFactory.getCamelVersionFor(facetVersion);
+		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(facetVersion);
 		if (camelVersion == null) {
-			camelVersion = facetVersion + ".0";
+			camelVersion = CamelModelFactory.getLatestCamelVersion();
 		}
 		return camelVersion;
 	}
@@ -85,8 +87,12 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 		// TODO: this block ensures that we have the staging repo for camel 2.17 in our pom.xml
 		// so we can find that unreleased camel version. this becomes obsolete once the camel version 
 		// has been released and can be disabled / removed / used for a new unreleased camel version 
-		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), CAMEL_STAGING_REPO_URI, "camelStaging");
-		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), CAMEL_STAGING_REPO_URI, "camelStaging");
+		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), PRODUCT_STAGING_REPO_URI, "fuse-ea");
+		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), PRODUCT_STAGING_REPO_URI, "fuse-ea");
+		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), THIRD_PARTY_STAGING_REPO_URI, "redhat-ea-repository");
+		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), THIRD_PARTY_STAGING_REPO_URI, "redhat-ea-repository");
+		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");
+		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");
 		// END OF TODO block
 		
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))){

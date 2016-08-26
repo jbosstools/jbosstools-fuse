@@ -7,10 +7,13 @@
  * 
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.CoreException;
@@ -21,8 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author lhein
@@ -35,31 +36,39 @@ public class EipChecksIT {
 	public EipChecksIT(final String versionToTest) {
 		this.versionToTest = versionToTest;
 	}
-	
+
 	@Parameters(name = "{0}")
 	public static Collection<String> params() {
 		return CamelModelFactory.getSupportedCamelVersions();
 	}
+
+	@Test
+	public void testChoiceEipModelCanContainWhen() throws IOException, CoreException {
+		assertThisEIPCanContainThat(versionToTest, AbstractCamelModelElement.CHOICE_NODE_NAME, AbstractCamelModelElement.WHEN_NODE_NAME);
+	}
+
+	@Test
+	public void testRouteEipModelCanContainWireTap() throws IOException, CoreException {
+		assertThisEIPCanContainThat(versionToTest, AbstractCamelModelElement.ROUTE_NODE_NAME, AbstractCamelModelElement.WIRETAP_NODE_NAME);
+	}
+
+	@Test
+	public void testWhenEipModelCanContainWireTap() throws IOException, CoreException {
+		assertThisEIPCanContainThat(versionToTest, AbstractCamelModelElement.WHEN_NODE_NAME, AbstractCamelModelElement.WIRETAP_NODE_NAME);
+	}
 	
 	@Test
-	public void testChoiceEipModel() throws IOException, CoreException {
-		assertChoiceEipModelCorrect(versionToTest);
+	public void testWireTapCanBeChildOfAllContainers() throws IOException, CoreException {
+		ArrayList<Eip> eips = CamelModelFactory.getModelForVersion(versionToTest).getEipModel().getSupportedEIPs();
+		for (Eip eip : eips) {
+			if (eip.canHaveChildren() == false || eip.getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) continue;
+			assertThisEIPCanContainThat(versionToTest, eip.getName(), AbstractCamelModelElement.WIRETAP_NODE_NAME);
+		}
 	}
-	
-	@Test
-	public void testRouteEipModel() throws IOException, CoreException {
-		assertRouteEipModelCorrect(versionToTest);
-	}
-	
-	private void assertChoiceEipModelCorrect(String camelVersion) {
-		Eip choiceEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.CHOICE_NODE_NAME);
-		assertThat(choiceEip.canHaveChildren()).isTrue();
-		assertThat(choiceEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WHEN_NODE_NAME);
-	}
-	
-	private void assertRouteEipModelCorrect(String camelVersion) {
-		Eip routeEip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(AbstractCamelModelElement.ROUTE_NODE_NAME);
-		assertThat(routeEip.canHaveChildren()).isTrue();
-		assertThat(routeEip.getAllowedChildrenNodeTypes()).contains(AbstractCamelModelElement.WIRETAP_NODE_NAME);
+
+	private void assertThisEIPCanContainThat(String camelVersion, String eipContainer, String eipChild){
+		Eip container = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(eipContainer);
+		assertThat(container.canHaveChildren()).isTrue();
+		assertThat(container.getAllowedChildrenNodeTypes()).describedAs("Container " + eipContainer + " is not defined to allow child of type " + eipChild).contains(eipChild);
 	}
 }

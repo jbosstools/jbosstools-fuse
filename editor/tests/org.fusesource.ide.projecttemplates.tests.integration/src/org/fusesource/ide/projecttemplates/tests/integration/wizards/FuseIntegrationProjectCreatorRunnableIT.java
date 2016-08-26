@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,6 +43,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -51,6 +54,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -65,8 +69,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * @author Aurelien Pupier
  *
@@ -79,6 +81,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
     public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
 		
+    public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
+    
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
 
@@ -93,10 +97,15 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
 		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
+		File f = new File(SCREENSHOT_FOLDER);
+		f.mkdirs();
 	}
 
 	@After
 	public void tearDown() throws CoreException, InterruptedException, IOException {
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
+		
 		if(launch != null){
 			launch.terminate();
 		}
@@ -119,7 +128,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 			}
 		}
 	}
-
+	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
@@ -236,6 +245,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(javaFacetFound).isTrue();
 		assertThat(mavenFacetFound).isTrue();
 		assertThat(utilityFacetFound).isTrue();
+		
+		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(camelVersion).as("The Camel Facet version is not the right one.");
 	}
 
 	protected void readAndDispatch(int currentNumberOfTry) {

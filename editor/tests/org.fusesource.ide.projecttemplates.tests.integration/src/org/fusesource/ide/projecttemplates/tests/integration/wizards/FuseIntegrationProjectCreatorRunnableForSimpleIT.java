@@ -42,12 +42,12 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 	
 	@Test
 	public void testEmptyBlueprintProjectCreation() throws Exception {
-		testProjectCreation("-SimpleBlueprintProject", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
+		testProjectCreation("-SimpleBlueprintProject-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
 
 	@Test
 	public void testEmptySpringProjectCreation() throws Exception {
-		testProjectCreation("-SimpleSpringProject", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
+		testProjectCreation("-SimpleSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 
 	@Test
 	public void testEmptyJavaProjectCreation() throws Exception {          
-		testProjectCreation("-SimpleJavaProject", CamelDSLType.JAVA, "src/main/java/com/mycompany/CamelRoute.java", null);
+		testProjectCreation("-SimpleJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/CamelRoute.java", null);
 	}
 	
 	@Override

@@ -14,4 +14,4 @@ Require-Bundle: org.assertj.core;bundle-version="2.1.0",
  org.fusesource.ide.camel.model.service.core,
  org.eclipse.wst.validation,
  org.eclipse.ui;bundle-version="3.107.0",
- org.fusesource.ide.camel.model.service.v2_17_0;bundle-version="8.0.0"
+ org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="8.0.0"

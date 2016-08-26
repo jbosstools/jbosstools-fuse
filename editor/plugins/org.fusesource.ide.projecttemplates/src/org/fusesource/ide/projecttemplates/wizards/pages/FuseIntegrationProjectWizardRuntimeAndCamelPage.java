@@ -170,7 +170,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT | SWT.READ_ONLY);
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
-		camelVersionCombo.setItems(CamelModelFactory.getSupportedCamelVersions().toArray(new String[CamelModelFactory.getSupportedCamelVersions().size()]));
+		camelVersionCombo.setItems(getSupportedCamelVersions());
 		camelVersionCombo.select(Math.max(camelVersionCombo.getItemCount()-1, 0));
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
@@ -259,6 +259,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		};
 		ServerCore.addRuntimeLifecycleListener(listener);
 		validate();
+	}
+	
+	private String[] getSupportedCamelVersions() {
+		return CamelModelFactory.getSupportedCamelVersions().stream().sorted().toArray(String[]::new);
 	}
 	
 	private void configureRuntimeCombo() throws CoreException {
