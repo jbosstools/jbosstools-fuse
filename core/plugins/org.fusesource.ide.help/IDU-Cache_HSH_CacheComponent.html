@@ -1,13 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Cache Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Cache.html" title="Cache"><link rel="prev" href="IDU-Cache.html" title="Cache"><link rel="next" href="IDU-cacheReplicationJMSExample.html" title="cacheReplicationJMSExample"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Cache_HSH_CacheComponent"></a>Cache Component</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37227"></a>Available as of Camel 2.1</h3></div></div></div><p>The <span class="bold"><strong>cache</strong></span> component enables you to perform caching operations using EHCache as the Cache Implementation. The cache itself is created on demand or if a cache of that name already exists then it is simply utilized with its original settings.</p><p>This component supports producer and event based consumer endpoints.</p><p>The Cache consumer is an event based consumer and can be used to listen and respond to specific cache activities. If you need to perform selections from a pre-existing cache, use the processors defined for the cache component.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+   <title>Cache Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Cache.html" title="Cache"><link rel="prev" href="IDU-Cache.html" title="Cache"><link rel="next" href="IDU-cacheReplicationJMSExample.html" title="cacheReplicationJMSExample"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Cache_HSH_CacheComponent"></a>Cache Component</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37227"></a>Available as of Camel 2.1</h3></div></div></div><p>The <span class="bold"><strong>cache</strong></span> component enables you to perform caching operations using EHCache as the Cache Implementation. The cache itself is created on demand or if a cache of that name already exists then it is simply utilized with its original settings.</p><p>This component supports producer and event based consumer endpoints.</p><p>The Cache consumer is an event based consumer and can be used to listen and respond to specific cache activities. If you need to perform selections from a pre-existing cache, use the processors defined for the cache component.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-cache&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_URIformat"></a>URI format</h3></div></div></div><pre class="programlisting">cache://cacheName[?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=#beanRef&amp;...</code>
       </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_Options"></a>Options</h3></div></div></div><p>The Cache component supports the following
-        options:</p><table id="d0e30357"><tr>
+        options:</p><table id="d0e60183"><tr>
           <th> Name </th>
           <th> Default Value </th>
           <th> Description </th>
@@ -154,7 +154,7 @@
                       <code class="code">org.apache.camel.component.cache.CacheConfiguration</code>
                       configuration.</p>
               </td>
-          </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e30689"></a>Cache component options</h3></div></div></div><p></p><table id="d0e30693"><tbody><tr>
+          </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e60515"></a>Cache component options</h3></div></div></div><p></p><table id="d0e60519"><tbody><tr>
             <th>
               <p>Name</p></th>
             <th>
@@ -183,7 +183,7 @@
                   <code class="code">classpath:com/foo/mycache.xml</code> to load from classpath. If no
                 configuration is given, then the default settings from EHCache is used.</p></td></tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_MessageHeadersCamel2.8"></a>Message Headers Camel 2.8+</h3></div></div></div><p>
 
-      </p><table id="d0e30781"><tr>
+      </p><table id="d0e60607"><tr>
           <th> Header </th>
           <th> Description </th>
         </tr><tr>
@@ -207,7 +207,7 @@
                     these headers are now removed from the exchange after the cache operation is
                     performed.</p></td></tr></table></div><p>The <code class="literal">CamelCacheAdd</code> and <code class="literal">CamelCacheUpdate</code> operations support additional headers: 
 
-      </p><table id="d0e30867"><tr>
+      </p><table id="d0e60693"><tr>
           <th> Header </th>
           <th> Type </th>
           <th>  Description </th>
@@ -330,7 +330,7 @@
         .setHeader(CacheConstants.CACHE_KEY, constant("Ralph_Waldo_Emerson"))
         .to("cache://TestCache1")
     .end();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_ManagementofEHCache"></a>Management of EHCache</h3></div></div></div><p>
-        <a class="link" href="http://ehcache.org/" target="_top">EHCache</a> has its own statistics and management from <a class="link" href="Camel JMX" target="_top">JMX</a>.</p><p>Here's a snippet on how to expose them via JMX in a Spring application context:</p><pre class="programlisting">&lt;bean id="ehCacheManagementService" class="net.sf.ehcache.management.ManagementService" init-method="init" lazy-init="false"&gt;
+        <a class="link" href="http://ehcache.org/" target="_top">EHCache</a> has its own statistics and management from <a class="link" href="http://camel.apache.org/camel-jmx.html" target="_top">JMX</a>.</p><p>Here's a snippet on how to expose them via JMX in a Spring application context:</p><pre class="programlisting">&lt;bean id="ehCacheManagementService" class="net.sf.ehcache.management.ManagementService" init-method="init" lazy-init="false"&gt;
   &lt;constructor-arg&gt;
     &lt;bean class="net.sf.ehcache.CacheManager" factory-method="getInstance"/&gt;
   &lt;/constructor-arg&gt;
@@ -342,4 +342,4 @@
   &lt;constructor-arg value="true"/&gt;
   &lt;constructor-arg value="true"/&gt;
 &lt;/bean&gt;</pre><p>Of course you can do the same thing in straight Java:</p><pre class="programlisting">ManagementService.registerMBeans(CacheManager.getInstance(), mbeanServer, true, true, true, true);</pre><p>You can get cache hits, misses, in-memory hits, disk hits, size stats this way. You can also change CacheConfiguration parameters on the fly.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_CachereplicationCamel2.8"></a>Cache replication Camel 2.8+</h3></div></div></div><p>The Camel Cache component is able to distribute a cache across server nodes using several different replication mechanisms including: RMI, JGroups, JMS and Cache Server.</p><p>There are two different ways to make it work:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>You can configure <code class="literal">ehcache.xml</code> manually, or</p></li><li class="listitem"><p>You can configure these three options:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">cacheManagerFactory</code></p></li><li class="listitem"><p><code class="code">eventListenerRegistry</code></p></li><li class="listitem"><p><code class="code">cacheLoaderRegistry</code></p></li></ul></div></li></ol></div><p>Configuring Camel Cache replication using the first option is a bit of hard work as you have to configure all caches separately. So in a situation when the all names of caches are not known, using <code class="literal">ehcache.xml</code> is not a good idea.</p><p>The second option is much better when you want to use many different caches as you do not need to define options per cache. This is because replication options are set per <code class="literal">CacheManager</code> and per <code class="literal">CacheEndpoint</code>. Also it is the only way when cache names are not know at the development phase.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>It might be useful to read the <a class="link" href="http://ehcache.org/documentation" target="_top">EHCache manual</a> to get a better understanding of the Camel Cache replication mechanism.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-Cache_HSH_ExampleJMScachereplication"></a>Example: JMS cache replication</h3></div></div></div><p>JMS replication is the most powerful and secured replication method. Used together with Camel Cache replication makes it also rather simple.
-An example is available on <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-cacheReplicationJMSExample.html" class="olink">a separate page</a>.</p></div></div></body></html>
+An example is available on <a href="IDU-cacheReplicationJMSExample.html" class="olink">a separate page</a>.</p></div></div></body></html>

@@ -1,0 +1,24 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Java DSL</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="Simple.html" title="The Simple Language"><link rel="prev" href="Simple.html" title="The Simple Language"><link rel="next" href="Simple-SpringDSL.html" title="XML DSL"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Simple-JavaDSL"></a>Java DSL</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33930"></a>Simple expressions in Java DSL</h3></div></div></div><p>In the Java DSL, there are two styles for using the <code class="code">simple()</code> command
+                in a route. You can either pass the <code class="code">simple()</code> command as an argument to
+                a processor, as follows:</p><pre class="programlisting">from("seda:order")
+  .filter(simple("${in.header.foo}"))
+  .to("mock:fooOrders");</pre><p>Or you can call the <code class="code">simple()</code> command as a sub-clause on the
+                processor, for example:</p><pre class="programlisting">from("seda:order")
+  .filter()
+  .simple("${in.header.foo}")
+  .to("mock:fooOrders");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33931"></a>Embedding in a string</h3></div></div></div><p>If you are embedding a simple expression inside a plain text string, you must use
+                the placeholder syntax, <code class="code">${<em class="replaceable"><code>Expression</code></em>}</code>. For
+                example, to embed the <code class="code">in.header.name</code> expression in a string:</p><pre class="programlisting">simple("Hello ${in.header.name}, how are you?")</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33932"></a>Customizing the start and end tokens</h3></div></div></div><p>From Java, you can customize the start and end tokens (<code class="code">{</code> and
+                    <code class="code">}</code>, by default) by calling the <code class="code">changeFunctionStartToken</code>
+                static method and the <code class="code">changeFunctionEndToken</code> static method on the
+                    <code class="code">SimpleLanguage</code> object.</p><p>For example, you can change the start and end tokens to <code class="code">[</code> and
+                    <code class="code">]</code> in Java, as follows:</p><pre class="programlisting">// Java
+import org.apache.camel.language.simple.SimpleLanguage;
+...
+SimpleLanguage.changeFunctionStartToken("[");
+SimpleLanguage.changeFunctionEndToken("]");</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Customizing the start and end tokens affects all Apache Camel applications that
+                    share the same <code class="code">camel-core</code> library on their classpath. For example,
+                    in an OSGi server this might affect many applications; whereas in a Web
+                    application (WAR file) it would affect only the Web application itself.</p></td></tr></table></div></div></div></body></html>

@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Server Configuration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP-Config.html" title="Configuration"><link rel="prev" href="SAP-DestConfig.html" title="Destination Configuration"><link rel="next" href="SAP-RepoConfig.html" title="Repository Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-ServConfig"></a>Server Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37526"></a>Overview</h4></div></div></div><p>The configurations for servers are maintained in the
+   <title>Server Configuration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP-Config.html" title="Configuration"><link rel="prev" href="SAP-DestConfig.html" title="Destination Configuration"><link rel="next" href="SAP-RepoConfig.html" title="Repository Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-ServConfig"></a>Server Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37526"></a>Overview</h4></div></div></div><p>The configurations for servers are maintained in the
                         <code class="code">serverDataStore</code> property of the SAP component. Each entry in
                     this map configures a distinct inbound connection from an SAP instance. The key
                     for each entry is the name of the outbound connection and is used in the
@@ -8,7 +8,7 @@
                     the URI format section.</p><p>The value for each entry is a <em class="firstterm">server data configuration
                         object</em>,
                         <code class="code">org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl</code>,
-                    that defines the configuration of an inbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e107774"></a>Sample server configuration</h4></div></div></div><p>The following Blueprint XML code shows how to create a sample server
+                    that defines the configuration of an inbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e146234"></a>Sample server configuration</h4></div></div></div><p>The following Blueprint XML code shows how to create a sample server
                     configuration with the name, <code class="code">quickstartServer</code>.</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;blueprint ... &gt;
     ...
@@ -58,7 +58,7 @@
                         <a class="xref" href="SAP-RepoConfig.html" title="Repository Configuration">Repository Configuration</a>).</p><p>For example, after configuring the destination as shown in the preceding
                     Blueprint XML file, you could handle the <code class="code">BAPI_FLCUST_GETLIST</code> remote
                     function call from an invoking client, using the following URI:</p><pre class="programlisting">sap-srfc-server:quickstartServer:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37527"></a>Required options</h4></div></div></div><p>The required options for the server data configuration object are, as
-                    follows:</p><table width="761" id="d0e107807"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    follows:</p><table width="761" id="d0e146267"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -110,7 +110,7 @@
                         <td> The number of connections that should be
                             registered at the gateway. </td>
                     </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37528"></a>Secure network connection options</h4></div></div></div><p>The secure network connection options for the server data configuration object
-                    are, as follows:</p><table width="761" id="d0e107913"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    are, as follows:</p><table width="761" id="d0e146373"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -152,7 +152,7 @@
                             this property is not provided, the value of the
                                 <code class="code">jco.middleware.snc_lib</code> property is used instead </td>
                     </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37529"></a>Other options</h4></div></div></div><p>The other options for the server data configuration object are, as
-                    follows:</p><table width="761" id="d0e108017"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    follows:</p><table width="761" id="d0e146477"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>

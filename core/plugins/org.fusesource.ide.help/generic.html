@@ -1,0 +1,42 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Generic</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEndptRef.html" title="Components"><link rel="prev" href="RiderEndptRef.html" title="Components"><link rel="next" href="beanEndpt.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="generic"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Generic &#8212; Acts as either a message source or a message sink</p></div><div class="refsection"><a name="d0e25663"></a><h2>Usage</h2><p>Components can be placed at any point along a route. A route must start with 
+    the Generic and typically finishes with the Generic.</p></div><div class="refsection"><a name="d0e25668"></a><h2>Properties</h2><p><a class="xref" href="generic.html#RiderEndptRefTbl1" title="Table&nbsp;6.&nbsp;Generic Properties">Table&nbsp;6</a> describes the properties you can specify 
+    using the properties editor.</p><div class="table"><a name="RiderEndptRefTbl1"></a><p class="title"><b>Table&nbsp;6.&nbsp;Generic Properties</b></p><div class="table-contents"><table summary="Generic Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><span class="property">Uri</span></td><td>Specifies the URI for the Generic. The URI determines the type of component 
+              used to  read or send message data. For more information see 
+              <a href="CompRefIntro.html" class="olink"><i>Components Overview</i></a>.</td></tr><tr><td><span class="property">Id</span></td><td><p>Specifies a unique identifier for the Generic.</p>
+                    <p>The tooling automatically generates an id for a node when it is
+                        created, but you can remove  that id or replace it with your own.
+                        The Camel debugger requires all nodes with a breakpoint set to have
+                        a unique id.</p>
+                    <p>You can use the id to refer to components in your Camel XML
+                        file.</p></td></tr><tr><td><span class="property">Exchange Pattern</span></td><td><p>Specifies the pattern of the exchange: </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">InOnly</code>&#8212;Standard one-way
+                                            exchange. Consumer sends message exchange to service
+                                            provider, and service provider responds with
+                                            status.</p></li><li class="listitem"><p><code class="literal">RobustInOnly</code>&#8212;Reliable
+                                            one-way exchange. Consumer sends message exchange to
+                                            service provider, and service provider responds. If
+                                            response is a status message, the exchange is completed.
+                                            If the response is a fault message, the consumer must
+                                            respond with a status message.</p></li><li class="listitem"><p><code class="literal">InOut</code>&#8212;Equivalent to a
+                                            request-reply exchange.  Consumer sends the initial
+                                            message to the service provider, and the service
+                                            provider responds with either a response message or a
+                                            fault message. The consumer then responds with a status
+                                            message.</p></li><li class="listitem"><p><code class="literal">InOptionalOut</code>&#8212;Standard
+                                            two-way exchange in which the service provider's
+                                            response is optional. </p></li><li class="listitem"><p><code class="literal">OutOnly</code>&#8212;Reverse of
+                                                <code class="literal">InOnly</code> in that the service
+                                            provider sends out a message, which cannot trigger a
+                                            fault message. This pattern supports event
+                                            notification.</p></li><li class="listitem"><p><code class="literal">RobustOutOnly</code>&#8212;Similar to
+                                                <code class="literal">OutOnly</code>, except that it can
+                                            trigger a fault message. The outbound message initiates
+                                            the exchange.</p></li><li class="listitem"><p><code class="literal">OutIn</code>&#8212;Reverse of
+                                                <code class="literal">InOut</code> in that the service
+                                            provider transmits the request initiating the
+                                            exchange.</p></li><li class="listitem"><p><code class="literal">OutOptionalIn</code>&#8212;Reverse of
+                                                <code class="literal">InOptionalOut</code> in that the service
+                                            provider initiates an exchange by sending an outbound
+                                            message, and consumer response is optional.</p></li></ul></div></td></tr><tr><td><span class="property">Description</span></td><td>Specifies a text description for the node. This description is included in the
+              generated XML file, but it is informational only. It is not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>

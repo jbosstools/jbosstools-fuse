@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Netty4</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Netty.html" title="Netty"><link rel="next" href="IDU-NettyHTTP.html" title="Netty HTTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty4"></a>Netty4</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty4_HSH_Netty4Component"></a>Netty4 Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The <span class="strong"><strong>Netty4</strong></span> component in Camel is a socket
+   <title>Netty4</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Netty.html" title="Netty"><link rel="next" href="IDU-NettyHTTP.html" title="Netty HTTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty4"></a>Netty4</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty4_HSH_Netty4Component"></a>Netty4 Component</h2></div></div></div><p>The <span class="strong"><strong>Netty4</strong></span> component in Camel is a socket
             communication component, based on the <a class="link" href="http://netty.io/" target="_top">Netty</a>
             project version 4. Netty is a NIO client server framework which enables quick and easy
             development of  <code class="code">netwServerInitializerFactoryork</code> applications such as
@@ -13,9 +13,11 @@
     &lt;artifactId&gt;camel-netty4&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-341"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><div class="informalexample"><pre class="programlisting">netty4:tcp://localhost:99999[?options]
+&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e131460"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
+ </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-341"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><div class="informalexample"><pre class="programlisting">netty4:tcp://localhost:99999[?options]
 netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports producer and consumer endpoints for both TCP and UDP.</p><p>You can append query options to the URI in the following format,
-                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e95022"><tbody><tr>
+                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e131482"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -60,8 +62,8 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">synchronous</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
-                    <td class="confluenceTd"><p>Whether <a class="link" href="/confluence/display/CAMEL/Asynchronous+Routing+Engine" target="_top">Asynchronous Routing Engine</a> is not in use.
-                                <code class="code">false</code> then the <a class="link" href="/confluence/display/CAMEL/Asynchronous+Routing+Engine" target="_top">Asynchronous Routing Engine</a> is used, <code class="code">true</code> to
+                    <td class="confluenceTd"><p>Whether <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is not in use.
+                                <code class="code">false</code> then the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is used, <code class="code">true</code> to
                             force processing synchronous.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">ssl</code></p></td>
@@ -72,7 +74,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                     <td class="confluenceTd"><p><code class="code">sslClientCertHeaders</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
                     <td class="confluenceTd"><p>When enabled and in SSL mode, then the Netty
-                            consumer will enrich the Camel <a class="link" href="/confluence/display/CAMEL/Message" target="_top">Message</a> with
+                            consumer will enrich the Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> with
                             headers having information about the client certificate such as subject
                             name, issuer name, serial number, and the valid date range.</p></td>
                 </tr><tr>
@@ -201,7 +203,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
                     <td class="confluenceTd"><p> SSL configuration using an
                                 <code class="code">org.apache.camel.util.jsse.SSLContextParameters</code>
-                            instance. See Using the JSSE Configuration Utility.</p></td>
+                        instance. See <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Using the JSSE Configuration Utility</a>.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">receiveBufferSizePredictor</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
@@ -210,10 +212,12 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">requestTimeout</code></p></td>
                     <td class="confluenceTd"><p><code class="code">0</code></p></td>
-                    <td class="confluenceTd"><p>Allows to use a timeout for the Netty producer when calling a remote server. By default no
+                    <td class="confluenceTd"><p>Allows you to use a timeout for the Netty producer when calling a remote server. By default no
                             timeout is in use. The value is in milli seconds. The
                                 <code class="code">requestTimeout</code> uses Netty's
-                                <code class="code">ReadTimeoutHandler</code> to trigger the timeout.</p></td>
+                                <code class="code">ReadTimeoutHandler</code> to trigger the timeout.  <span class="bold"><strong>Camel 2.16, 2.15.3:</strong></span> you can also override
+                            this setting by setting the <code class="code">CamelNettyRequestTimeout</code>
+                            header.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">needClientAuth</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
@@ -228,8 +232,9 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">maximumPoolSize</code></p></td>
                     <td class="confluenceTd"><p><code class="code">16</code></p></td>
-                    <td class="confluenceTd"><p>The core pool size for the ordered thread pool,
-                            if its in use.</p></td>
+                    <td class="confluenceTd"><p>The core pool size for the ordered thread pool, if its in use. <span class="bold"><strong>Note:</strong></span> you can just set this on the
+                                <code class="code">NettyComponent</code> level since <span class="bold"><strong>Camel
+                                2.15, 2.14.1</strong></span>.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">producerPoolEnabled</code></p></td>
                     <td class="confluenceTd"><p><code class="code">true</code></p></td>
@@ -257,7 +262,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                             "idle" instances in the pool.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">producerPoolMinEvictableIdle</code></p></td>
-                    <td class="confluenceTd"><p><code class="code">30000</code></p></td>
+                    <td class="confluenceTd"><p><code class="code">300000</code></p></td>
                     <td class="confluenceTd"><p>Producer only. Sets the minimum amount of time
                             (value in millis) an object may sit idle in the pool before it is
                             eligible for eviction by the idle object evictor.</p></td>
@@ -270,7 +275,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                             instance. This can be used to reuse the same configuration for multiple
                             consumers, to align their configuration more easily.</p></td>
                 </tr><tr>
-                    <td class="confluenceTd"><p><code class="code">bossPoll</code></p></td>
+                    <td class="confluenceTd"><p><code class="code">bossGroup</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
                     <td class="confluenceTd"><p>To use a explicit
                                 <code class="code">io.netty.channel.EventLoopGroup</code> as the boss thread
@@ -278,13 +283,21 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                             default each consumer has their own boss pool with 1 core
                         thread.</p></td>
                 </tr><tr>
-                    <td class="confluenceTd"><p><code class="code">workerPool</code></p></td>
+                    <td class="confluenceTd"><p><code class="code">workerGroup</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
                     <td class="confluenceTd"><p>To use a explicit
                                 <code class="code">io.netty.channel.EventLoopGroup</code> as the worker thread
                             pool. For example to share a thread pool with multiple consumers. By
                             default each consumer has their own worker pool with 2 x cpu count core
                             threads.</p></td>
+                </tr><tr>
+                    <td><code class="literal">channelGroup</code>
+                    </td>
+                    <td><code class="literal">null</code>
+                    </td>
+                    <td><span class="bold"><strong>Camel 2.17:</strong></span> To use an explicit
+                            <code class="code">io.netty.channel.group.ChannelGroup</code>&#8212;for example to
+                        broadact a message to multiple channels.</td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">networkInterface</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
@@ -322,8 +335,44 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                     <td><code class="code">false</code></td>
                     <td><span class="bold"><strong>Camel 2.15:</strong></span> Consumer only. If
                             <code class="code">clientMode</code> is <code class="code">true</code>, the Netty consumer
-                        connects to the address as a TCP client.</td></tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-343"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://localhost:8090/display/CAMEL/Registry" target="_top">Registry</a>, such as in
-            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e95921"><col width="203pt"><col width="648pt"><tbody><tr>
+                        connects to the address as a TCP client.</td></tr><tr>
+                    <td><code class="code">reconnect</code></td>
+                    <td><code class="code">true</code></td>
+                    <td><span class="bold"><strong>Camel 2.16:</strong></span> Consumer only. Used only in
+                            <code class="code">clientMode</code> in consumer, the consumer will attempt to
+                        reconnect on disconnection automatically.</td>
+                </tr><tr>
+                    <td><code class="code">reconnectInterval</code></td>
+                    <td><code class="code">10000</code></td>
+                    <td><span class="bold"><strong>Camel 2.16:</strong></span> Consumer only. Used if
+                            <code class="code">reconnect</code> and <code class="code">clientMode</code> is enabled. The
+                        interval in milliseconds to attempt reconnection.</td>
+                </tr><tr>
+                    <td><code class="code">useByteBuf</code></td>
+                    <td><code class="code">false</code></td>
+                    <td><span class="bold"><strong>Camel 2.16:</strong></span> Producer only. If
+                            <code class="code">useByteBuf </code>is <code class="code">true</code>, the Netty producer turns
+                        the message body into <code class="code">ByteBuf</code> before sending it out.</td>
+                </tr><tr>
+                    <td><code class="code">udpByteArrayCodec</code></td>
+                    <td><code class="code">false</code></td>
+                    <td><span class="bold"><strong>Camel 2.16:</strong></span> When using UDP protocol then
+                        turning this option to <code class="code">true</code> sends the data as a byte array
+                        instead of the default object serialization codec.</td>
+                </tr><tr>
+                    <td><code class="code">reuseChannel</code></td>
+                    <td><code class="code">false</code></td>
+                    <td><span class="bold"><strong>Camel 2.17:</strong></span> Producer only. This option
+                        allows producers to reuse the same Netty Channel for the life cycle of
+                        processing the Exchange. This is usable if you need to call a server
+                        multiple times in a Camel route and want to use the same network connection.
+                        When using this the channel is not returned to the connection pool until the
+                        Exchange is done; or disconnected if the disconnect option is set to true.
+                        The reused Channel is stored on the Exchange as an exchange property with
+                        the key <code class="code">NettyConstants#NETTY_CHANNEL</code> which allows you to obtain
+                        the channel during routing and use it as well.</td>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-343"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://localhost:8090/display/CAMEL/Registry" target="_top">Registry</a>, such as in
+            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e132515"><col width="203pt"><col width="648pt"><tbody><tr>
                     <th class="confluenceTh">
                         <p>Name</p>
                     </th>
@@ -411,7 +460,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                     </td>
                 </tr><tr>
                     <td class="confluenceTd">
-                        <p><code class="code">encorders</code></p>
+                        <p><code class="code">encoders</code></p>
                     </td>
                     <td class="confluenceTd">
                         <p>A list of encoders to be used. You can use a String which have values
@@ -465,7 +514,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
        from("netty4:tcp://localhost:5150")
            .to("mock:result");
   }
-};</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-351"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply communication</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-352"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.9, the Netty component supports SSL/TLS configuration through the <a class="link" href="http://localhost:8090/display/CAMEL/Camel+Configuration+Utilities" target="_top">Camel
+};</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-351"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply communication</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-352"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.9, the Netty component supports SSL/TLS configuration through the <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Camel
                 JSSE Configuration Utility</a>. This utility greatly decreases the amount of
             component specific code you need to write and is configurable at the endpoint and
             component levels. The following examples demonstrate how to use the utility with the
@@ -627,7 +676,7 @@ registry.bind("decoders", decoders);
                     insert custom handler(s), encoder(s) and decoder(s). Not overriding the
                         <code class="code">initChannel()</code> method creates a pipeline with no handlers,
                     encoders or decoders wired to the pipeline.</p></li></ul></div><p>The example below shows how <code class="code">ServerInitializerFactory</code> factory may be
-            created</p><div class="example"><a name="d0e96389"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
+            created</p><div class="example"><a name="d0e132983"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
     private int maxLineSize = 1024;
  
      protected void initChannel(Channel ch) throws Exception {

@@ -1,11 +1,11 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>XML Security component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-XmlRpc.html" title="XmlRpc"><link rel="next" href="IDU-XMPP.html" title="XMPP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-XMLSecuritycomponent"></a>XML Security component</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_XMLSecuritycomponent"></a>XML Security component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12.0</strong></span>
+   <title>XML Security component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-XmlRpc.html" title="XmlRpc"><link rel="next" href="IDU-XMPP.html" title="XMPP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-XMLSecuritycomponent"></a>XML Security component</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_XMLSecuritycomponent"></a>XML Security component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12.0</strong></span>
         </p><p>With this Apache Camel component, you can generate and validate XML signatures as
             described in the W3C standard <a class="link" href="http://www.w3.org/TR/xmldsig-core/" target="_top">XML
                 Signature Syntax and Processing</a> or as described in the successor <a class="link" href="http://www.w3.org/TR/xmldsig-core1/" target="_top">version 1.1</a>. For XML Encryption
-            support, please refer to the XML Security <a class="link" href="Data Format" target="_top">Data
-            Format</a>.</p><p>You can find an introduction to XML signature <a class="link" href="http://www.oracle.com/technetwork/articles/javase/dig-signatures-141823.html/" target="_top">here</a>. The implementation of the component is based on <a class="link" href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/xmldsig/overview.html" target="_top">JSR 105</a>, the Java API corresponding to the W3C standard and supports the
+            support, please refer to the XML Security <a class="link" href="http://camel.apache.org/data-format.html" target="_top">Data
+            Format</a>.</p><p>You can find an introduction to XML signature <a class="link" href="http://www.oracle.com/technetwork/articles/javase/dig-signatures-141823.html" target="_top">here</a>. The implementation of the component is based on <a class="link" href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/xmldsig/overview.html" target="_top">JSR 105</a>, the Java API corresponding to the W3C standard and supports the
             Apache Santuario and the JDK provider for JSR 105. The implementation will first try to
             use the Apache Santuario provider; if it does not find the Santuario provider, it will
             use the JDK provider. Further, the implementation is DOM based.</p><p>Since Camel 2.15.0 we also provide support for XAdES-BES/EPES for the signer endpoint;
@@ -119,30 +119,46 @@
             parent element of the Signature element; see option <code class="literal">parentLocalName</code>
             for more details. </p><p>For creating detached XML signatures, see <a class="xref" href="IDU-XMLSecuritycomponent.html#scroll-bookmark-2001" title="Detached XML Signatures as Siblings of the Signed Elements">Detached XML Signatures as Siblings of the Signed Elements</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_CommonSigningandVerifyingOptions"></a>Common Signing and Verifying Options</h2></div></div></div><p>There are options which can be used for both endpoints, signer and verifier.</p><p>
             
-        </p><table width="1046" id="d0e129520"><col width="161pt"><col width="228pt"><col width="115pt"><col width="534pt"><tr>
+        </p><table width="1046" id="d0e172557"><col width="161pt"><col width="228pt"><col width="115pt"><col width="534pt"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
                 <th> Description </th>
             </tr><tr>
-                <td> uriDereferencer </td>
+                <td>
+                    <code class="code">uriDereferencer</code>
+                </td>
                 <td>
                     <a class="link" href="http://docs.oracle.com/javase/7/docs/api/javax/xml/crypto/URIDereferencer.html" target="_top">javax.xml.crypto.URIDereferencer</a>
                 </td>
-                <td> null </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> URI dereferencer. You can specify here your own URI dereferencer, if you want
                     to restrict the dereferencing or have special requirements for dereferencing.
                 </td>
             </tr><tr>
-                <td> baseUri </td>
-                <td> String </td>
-                <td> null </td>
+                <td>
+                    <code class="code">baseUri</code>
+                </td>
+                <td>
+                    <code class="code">String</code>
+                </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> Base URI used in the URI dereferencer. Relative URIs are concatenated with the
                     base URI. </td>
             </tr><tr>
-                <td> cryptoContextProperties </td>
-                <td> Map&lt;String, ? extends Object&gt; </td>
-                <td> null </td>
+                <td>
+                    <code class="code">cryptoContextProperties</code>
+                </td>
+                <td>
+                    <code class="code">Map&lt;String, ? extends Object&gt;</code>
+                </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> Crypto context properties. See
                         <code class="literal">javax.xml.crypto.XMLCryptoContext.setProperty(String,
                         Object)</code>. The properties can depend on the provider. For example,
@@ -159,65 +175,95 @@
                     features off you must set the property values to
                     <code class="code">Boolean.FALSE</code>.</td>
             </tr><tr>
-                <td> disallowDoctypeDecl </td>
-                <td> Boolean </td>
-                <td> Boolean.TRUE </td>
+                <td>
+                    <code class="code">disallowDoctypeDecl</code>
+                </td>
+                <td>
+                    <code class="code">Boolean</code>
+                </td>
+                <td><code class="code">Boolean.TRUE</code></td>
                 <td> Indicator whether DTD DOCTYPE declarations shall be disallowed in the incoming
                     XML message. </td>
             </tr><tr>
-                <td> omitXmlDeclaration </td>
-                <td> Boolean </td>
-                <td> Boolean.FALSE </td>
+                <td>
+                    <code class="code">omitXmlDeclaration</code>
+                </td>
+                <td>
+                    <code class="code">Boolean</code>
+                </td>
+                <td><code class="code">Boolean.FALSE</code></td>
                 <td> Indicator whether the XML declaration header shall be omitted in the output XML
                     message. </td>
             </tr><tr>
-                <td> clearHeaders </td>
-                <td> Boolean </td>
-                <td> Boolean.TRUE </td>
+                <td>
+                    <code class="code">clearHeaders</code>
+                </td>
+                <td>
+                    <code class="code">Boolean</code>
+                </td>
+                <td><code class="code">Boolean.TRUE</code></td>
                 <td> Indicator whether the XML signature message headers defined in <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureConstants.java" target="_top">XmlSignatureConstants</a> shall be deleted at the end of the signer or
                     verifier processing. </td>
             </tr><tr>
-                <td> schemaResourceUri </td>
-                <td> String </td>
-                <td> null </td>
+                <td>
+                    <code class="code">schemaResourceUri</code>
+                </td>
+                <td>
+                    <code class="code">String</code>
+                </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> Since <span class="bold"><strong>Camel 2.14.0</strong></span>. Classpath to the XML
                     Schema file. If set, the XML document is validated against the XML schema. Must
                     be set in the case of detached signatures in order to determine the attributes
                     of type ID. This value can be overwritten by the header
                         <code class="code">CamelXmlSignatureSchemaResourceUri</code>. For further information,
-                    see <a class="xref" href="IDU-XMLSecuritycomponent.html#scroll-bookmark-2001" title="Detached XML Signatures as Siblings of the Signed Elements">Detached XML Signatures as Siblings of the Signed Elements</a>. </td>
+                    see <a class="xref" href="IDU-XMLSecuritycomponent.html#scroll-bookmark-2001" title="Detached XML Signatures as Siblings of the Signed Elements">Detached XML Signatures as Siblings of the Signed Elements</a>. The schema is also necessary in the
+                    case of enveloped signature with a reference URI to an ID attribute (see Signing
+                    Option <code class="code">contentReferenceUri</code>).</td>
             </tr><tr>
-                <td> outputXmlEncoding </td>
-                <td> String </td>
-                <td> null </td>
+                <td>
+                    <code class="code">outputXmlEncoding</code>
+                </td>
+                <td>
+                    <code class="code">String</code>
+                </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> Since <span class="bold"><strong>Camel 2.15.0</strong></span>. Character encoding of the
                     output XML document. If null then UTF-8 is used. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_SigningOptions"></a>Signing Options</h2></div></div></div><p>The signer endpoint has the following options.</p><p>
-            
-        </p><table id="d0e129714"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_SigningOptions"></a>Signing Options</h2></div></div></div><p>The signer endpoint has the following options.</p><table id="d0e172813"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
                 <th> Description </th>
             </tr><tr>
-                <td> keyAccessor </td>
+                <td>
+                    <code class="code">keyAccessor</code>
+                </td>
                 <td>
                     <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/KeyAccessor.java" target="_top">KeyAccessor</a>
                 </td>
-                <td> null </td>
+                <td><code class="code">null</code></td>
                 <td> Provides the signing key and the KeyInfo instance. There is an example
                     implementation which uses a keystore, see <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/DefaultKeyAccessor.java" target="_top">DefaultKeyAccessor</a>
                 </td>
             </tr><tr>
-                <td> addKeyInfoReference </td>
-                <td> Boolean </td>
-                <td> Boolean.TRUE </td>
+                <td>
+                    <code class="code">addKeyInfoReference</code>
+                </td>
+                <td><code class="code">Boolean</code></td>
+                <td><code class="code">Boolean.TRUE</code></td>
                 <td> Indicates whether a <code class="code">Reference</code> element referring to the
                         <code class="code">KeyInfo</code> element provided by the key accessor should be added to
                     the XML signature. </td>
             </tr><tr>
-                <td> signatureAlgorithm </td>
-                <td> String </td>
+                <td>
+                    <code class="code">signatureAlgorithm</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td>
                     <code class="code">http://www.w3.org/2000/09/xmldsig#rsa-sha1</code>
                 </td>
@@ -230,8 +276,10 @@
                         <code class="code">http://www.w3.org/2001/04/xmldsig-more#rsa-sha384</code>,
                         <code class="code">http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</code></td>
             </tr><tr>
-                <td> digestAlgorithm </td>
-                <td> String </td>
+                <td>
+                    <code class="code">digestAlgorithm</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> see description </td>
                 <td> Digest algorithm for calculating the digest of the in-message body. If not
                     specified then the digest algorithm of the signature algorithm is used. Possible
@@ -240,8 +288,10 @@
                         <code class="code">http://www.w3.org/2001/04/xmldsig-more#sha384</code>,
                         <code class="code">http://www.w3.org/2001/04/xmlenc#sha512</code>. </td>
             </tr><tr>
-                <td> parentLocalName </td>
-                <td> String </td>
+                <td>
+                    <code class="code">parentLocalName</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> null </td>
                 <td> Local name of the parent of the <code class="code">Signature</code> element. The
                         <code class="code">Signature</code> element will be added at the end of the children of
@@ -251,15 +301,19 @@
                     Alternatively you can specify the parent via the option
                     <code class="code">parentXpath</code>. </td>
             </tr><tr>
-                <td> parentNamespace </td>
-                <td> String </td>
+                <td>
+                    <code class="code">parentNamespace</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> null </td>
                 <td> Namespace of the parent of the Signature element. See option
                         <code class="literal">parentLocalName</code>
                 </td>
             </tr><tr>
-                <td> parentXpath </td>
-                <td> XPathFilterParameterSpec </td>
+                <td>
+                    <code class="code">parentXpath</code>
+                </td>
+                <td><code class="code">XPathFilterParameterSpec</code></td>
                 <td> null </td>
                 <td> Since <span class="bold"><strong>Camel 2.15.0</strong></span>. XPath to the parent of the
                         <code class="code">Signature</code> element. The <code class="code">Signature</code> element will be
@@ -271,7 +325,8 @@
                     last sibling with the name <code class="code">SecurityItem</code>. Such kind of selection is
                     not possible with the option <code class="code">parentLocalName</code>.</td>
             </tr><tr>
-                <td> canonicalizationMethod </td>
+                <td>
+                    <code class="code">canonicalizationMethod</code></td>
                 <td>
                     <a class="link" href="http://docs.oracle.com/javase/7/docs/api/javax/xml/crypto/AlgorithmMethod.html" target="_top">javax.xml.crypto.AlgorithmMethod</a>
                 </td>
@@ -281,23 +336,40 @@
                     getCanonicalizationMethod(String algorithm, List&lt;String&gt;
                     inclusiveNamespacePrefixes) to create a canonicalization method. </td>
             </tr><tr>
-                <td> transformMethods </td>
-                <td> List&lt;javax.xml.crypto.AlgorithmMethod&gt; </td>
+                <td>
+                    <code class="code">transformMethods</code></td>
+                <td><code class="code">List&lt;javax.xml.crypto.AlgorithmMethod&gt;</code></td>
                 <td> see description </td>
-                <td> Transforms which are executed on the message body before the digest is
-                    calculated. By default, C14n is added and in the case of enveloped signature
-                    (see option <code class="literal">parentLocalName</code>) also <a class="link" href="http://www.w3.org/2000/09/xmldsig#enveloped-signature" target="_top">http://www.w3.org/2000/09/xmldsig#enveloped-signature</a> is added at
-                    position 0 of the list. Use methods in <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureHelper.java" target="_top">XmlSignatureHelper</a> to create the transform methods. </td>
+                <td>
+                    <p> Transforms which are executed on the message body before the digest is
+                        calculated. By default, C14n is added and in the case of enveloped signature
+                        (see option <code class="literal">parentLocalName</code>) also <a class="link" href="http://www.w3.org/2000/09/xmldsig#enveloped-signature" target="_top">http://www.w3.org/2000/09/xmldsig#enveloped-signature</a> is added
+                        at position 0 of the list. Use methods in <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureHelper.java" target="_top">XmlSignatureHelper</a> to create the transform methods.</p>
+                    <p>The Camel header, <code class="code">CamelXmlSignatureTransformMethods</code>,
+                        overwrites this option (since <span class="bold"><strong>Camel
+                        2.17.0</strong></span>). The header value must be of <code class="code">String</code> type;
+                        you specify the transform algorithms in a comma separated list&#8212; for
+                        example,
+                            <code class="code">http://www.w3.org/2000/09/xmldsig#enveloped-signature,http://www.w3.org/TR/2001/REC-xml-c14n-20010315</code>.
+                        In the header you cannot specify transform algorithms which need parameters,
+                        like <code class="code">http://www.w3.org/TR/1999/REC-xslt-19991116</code>,
+                            <code class="code">http://www.w3.org/2002/06/xmldsig-filter2</code>, or
+                            <code class="code">http://www.w3.org/TR/1999/REC-xpath-19991116</code>.</p>
+                </td>
             </tr><tr>
-                <td> prefixForXmlSignatureNamespace </td>
-                <td> String </td>
+                <td>
+                    <code class="code">prefixForXmlSignatureNamespace</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td><code class="literal">ds</code>
                 </td>
                 <td> Prefix for the XML signature namespace. If <code class="literal">null</code> is specified
                     or an empty string then no prefix is used for the signature namespace. </td>
             </tr><tr>
-                <td> contentReferenceUri </td>
-                <td> String </td>
+                <td>
+                    <code class="code">contentReferenceUri</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> See description </td>
                 <td> The URI of the reference to the signed content (in-message body). If
                         <code class="literal">null</code> and we are in the enveloped XML signature case then
@@ -310,18 +382,25 @@
                     header <code class="code">CamelXmlSignatureContentReferenceUri</code>. Please be aware, if
                     you want to use a value of an XML ID attribute (example:
                     <code class="code">#ID_value</code>), you must provide the information about the ID attribute
-                    via a <code class="code">doctype</code> definition contained in the input XML document. This
-                    option is ignored in the case of detached signature, when the option
-                        <code class="code">xpathsToIdAttributes</code> is set.</td>
+                    either via a <code class="code">doctype</code> definition contained in the input XML document
+                    or via a XML schema document which you can specify in the option
+                        <code class="code">schemaResourceUri</code>. The defining of the ID attributes via XML
+                    schema with the <code class="code">schemaResourceURi</code> option works only in the
+                    enveloped signature case. This option is ignored in the case of detached
+                    signature, when the option <code class="code">xpathsToIdAttributes</code> is set.</td>
             </tr><tr>
-                <td> contentReferenceType </td>
-                <td> String </td>
+                <td>
+                    <code class="code">contentReferenceType</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> null </td>
                 <td> Value of the type attribute of the content reference. This value can be
                     overwritten by the header "CamelXmlSignatureContentReferenceType" </td>
             </tr><tr>
-                <td> plainText </td>
-                <td> Boolean </td>
+                <td>
+                    <code class="code">plainText</code>
+                </td>
+                <td><code class="code">Boolean</code></td>
                 <td> Boolean.FALSE </td>
                 <td> Indicates whether the in-message body contains plain text. Normally, the
                     signature generator treats the incoming message body as XML. If the message body
@@ -329,15 +408,19 @@
                     value can be overwritten by the header
                         <code class="code">CamelXmlSignatureMessageIsPlainText</code>. </td>
             </tr><tr>
-                <td> plainTextEncoding </td>
-                <td> String </td>
+                <td>
+                    <code class="code">plainTextEncoding</code>
+                </td>
+                <td><code class="code">String</code></td>
                 <td> null </td>
                 <td> Only used when the option <code class="literal">plainText</code> is set to
                         <code class="literal">true</code>. Then you can specify the encoding of the plain
                     text. If <code class="literal">null</code> then UTF-8 is used. The value can be
                     overwritten by the header "CamelXmlSignatureMessageIsPlainTextEncoding". </td>
             </tr><tr>
-                <td> properties </td>
+                <td>
+                    <code class="code">properties</code>
+                </td>
                 <td>
                     <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureProperties.java" target="_top">XmlSignatureProperties</a>
                 </td>
@@ -345,18 +428,21 @@
                 <td> For adding additional References and Objects to the XML signature which contain
                     additional properties, you can provide a bean which implements the <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureProperties.java" target="_top">XmlSignatureProperties</a> interface. </td>
             </tr><tr>
-                <td> contentObjectId </td>
-                <td> String </td>
+                <td>
+                    <code class="code">contentObjectId</code>
+                </td>
+                <td><code class="code">String</code>
+                </td>
                 <td> null </td>
                 <td> Value of the <code class="code">Id</code> attribute of the <code class="code">Object</code> element. Only
                     used in the enveloping XML signature case. If <code class="code">null</code>, a unique value
                     is generated. Available as of 2.12.2</td>
             </tr><tr>
                 <td>
-                    <p>xpathsToIdAttributes</p>
+                    <p><code class="code">xpathsToIdAttributes</code></p>
                 </td>
                 <td>
-                    <p>List&lt;XPathFilterParameterSpec&gt;</p>
+                    <p><code class="code">List&lt;XPathFilterParameterSpec&gt;</code></p>
                 </td>
                 <td>
                     <p>empty list</p>
@@ -376,10 +462,10 @@
                 </td>
             </tr><tr>
                 <td>
-                    <p>signatureId</p>
+                    <p><code class="code">signatureId</code></p>
                 </td>
                 <td>
-                    <p>String</p>
+                    <p><code class="code">String</code></p>
                 </td>
                 <td>
                     <p>null</p>
@@ -392,30 +478,40 @@
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_VerifyingOptions"></a>Verifying Options</h2></div></div></div><p>The verifier endpoint has the following options.</p><p>
             
-        </p><table id="d0e130204"><tr>
+        </p><table id="d0e173402"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
                 <th> Description </th>
             </tr><tr>
-                <td> keySelector </td>
+                <td>
+                    <code class="code">keySelector</code>
+                </td>
                 <td>
                     <a class="link" href="http://docs.oracle.com/javase/7/docs/api/javax/xml/crypto/KeySelector.html" target="_top">javax.xml.crypto.KeySelector</a>
                 </td>
-                <td> null </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> Provides the key for validating the XML signature. There is an example
                     implementation which uses a keystore, see <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/DefaultKeySelector.java" target="_top">DefaultKeySelector</a>. </td>
             </tr><tr>
-                <td> xmlSignatureChecker </td>
+                <td>
+                    <code class="code">xmlSignatureChecker</code>
+                </td>
                 <td>
                     <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignatureChecker.java" target="_top">XmlSignatureChecker</a>
                 </td>
-                <td> null </td>
+                <td>
+                    <code class="code">null</code>
+                </td>
                 <td> This interface allows the application to check the XML signature before the
                     validation is executed. This step is recommended in <a class="link" href="http://www.w3.org/TR/xmldsig-bestpractices/#check-what-is-signed" target="_top">http://www.w3.org/TR/xmldsig-bestpractices/#check-what-is-signed</a>
                 </td>
             </tr><tr>
-                <td> validationFailedHandler </td>
+                <td>
+                    <code class="code">validationFailedHandler</code>
+                </td>
                 <td>
                     <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/ValidationFailedHandler.java" target="_top">ValidationFailedHandler</a>
                 </td>
@@ -432,7 +528,9 @@
                         <code class="literal">XmlSignatureInvalidContentHashException</code> is thrown. For
                     more detailed information, see the JavaDoc. </td>
             </tr><tr>
-                <td> xmlSignature2Message </td>
+                <td>
+                    <code class="code">xmlSignature2Message</code>
+                </td>
                 <td>
                     <a class="link" href="https://github.com/apache/camel/blob/master/components/camel-xmlsecurity/src/main/java/org/apache/camel/component/xmlsecurity/api/XmlSignature2Message.java" target="_top">XmlSignature2Message</a>
                 </td>
@@ -461,17 +559,25 @@
                     referenced Object; this is explained in more detail in chapter "Output Node
                     Determination in Enveloping XML Signature Case". </td>
             </tr><tr>
-                <td> outputNodeSearchType </td>
-                <td> String </td>
-                <td> "Default" </td>
+                <td>
+                    <code class="code">outputNodeSearchType</code>
+                </td>
+                <td>
+                    <code class="code">String</code>
+                </td>
+                <td><code class="code">Default</code></td>
                 <td> Determines the type of the search of the output node. See option
                         <code class="literal">xmlSignature2Message</code>. The default implementation
                         <code class="literal">DefaultXmlSignature2Message</code> supports the three search
                     types "Default", "ElementName", and "XPath". </td>
             </tr><tr>
-                <td> outputNodeSearch </td>
-                <td> Object </td>
-                <td> null </td>
+                <td>
+                    <code class="code">outputNodeSearch</code>
+                </td>
+                <td>
+                    <code class="code">Object</code>
+                </td>
+                <td><code class="code">null</code></td>
                 <td> Search value of the output node search. The type depends on the search type.
                     For the default search implementation
                         <code class="literal">DefaultXmlSignature2Message</code> the following values can be
@@ -485,18 +591,26 @@
                         String&gt; namespaceMap)</code>. The XPath determines the output node which
                     can be of type Element, TextNode, or Document. </td>
             </tr><tr>
-                <td> removeSignatureElements </td>
-                <td> Boolean </td>
-                <td> Boolean.FALSE </td>
+                <td>
+                    <code class="code">removeSignatureElements</code>
+                </td>
+                <td>
+                    <code class="code">Boolean</code>
+                </td>
+                <td><code class="code">Boolean.FALSE</code></td>
                 <td> Indicator for removing Signature elements in the output message in the
                     enveloped XML signature case. Used in the
                         <code class="literal">XmlSignature2Message</code> instance. The default implementation
                     does use this indicator for the two search types "ElementName" and "XPath".
                 </td>
             </tr><tr>
-                <td> secureValidation </td>
-                <td> Boolean </td>
-                <td> Boolean.TRUE </td>
+                <td>
+                    <code class="code">secureValidation</code>
+                </td>
+                <td>
+                    <code class="code">Boolean</code>
+                </td>
+                <td><code class="code">Boolean.TRUE</code></td>
                 <td> Enables secure validation. If true then secure validation is enabled - see
                         <a class="link" href="http://santuario.apache.org/java150releasenotes.html" target="_top">here</a> for more information. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_OutputNodeDeterminationinEnvelopingXMLSignatureCase"></a>Output Node Determination in Enveloping XML Signature Case</h2></div></div></div><p>After the validation the node is extracted from the XML signature document which is
@@ -540,7 +654,7 @@
             element. The following example contains two detached signatures. The first signature
             is for the element "C" and the second signature is for element "A". The signatures
             are <span class="strong"><strong>nested</strong></span>; the second signature is for the
-            element A which also contains the first signature.</p><div class="example"><a name="d0e130452"></a><p class="title"><b>Example&nbsp;13.&nbsp;Example Detached XML Signatures</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+            element A which also contains the first signature.</p><div class="example"><a name="d0e173696"></a><p class="title"><b>Example&nbsp;13.&nbsp;Example Detached XML Signatures</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;root&gt;
     &lt;A ID="IDforA"&gt;
         &lt;B&gt;
@@ -582,10 +696,10 @@
             elements to be signed. The elements are signed by the same key given by the
             <span class="italics">keyAccessor</span> bean. Ements with higher
             (=deeper) hierarachy level are signed first. In the example, the element "C" is
-            signed before the element "A".</p><div class="example"><a name="d0e130468"></a><p class="title"><b>Example&nbsp;14.&nbsp;Java DSL Example</b></p><div class="example-contents"><pre class="programlisting">from("direct:detached")
+            signed before the element "A".</p><div class="example"><a name="d0e173712"></a><p class="title"><b>Example&nbsp;14.&nbsp;Java DSL Example</b></p><div class="example-contents"><pre class="programlisting">from("direct:detached")
   .to("xmlsecurity:sign://detached?keyAccessor=#keyAccessorBeant&amp;xpathsToIdAttributes=#xpathsToIdAttributesBean&amp;schemaResourceUri=Test.xsd")
   .to("xmlsecurity:verify://detached?keySelector=#keySelectorBean&amp;schemaResourceUri=org/apache/camel/component/xmlsecurity/Test.xsd")
-  .to("mock:result");</pre></div></div><br class="example-break"><div class="example"><a name="d0e130473"></a><p class="title"><b>Example&nbsp;15.&nbsp;Spring Example</b></p><div class="example-contents"><pre class="programlisting">   
+  .to("mock:result");</pre></div></div><br class="example-break"><div class="example"><a name="d0e173717"></a><p class="title"><b>Example&nbsp;15.&nbsp;Spring Example</b></p><div class="example-contents"><pre class="programlisting">   
   &lt;bean id="xpathsToIdAttributesBean" class="java.util.ArrayList"&gt;
         &lt;constructor-arg type="java.util.Collection"&gt;
             &lt;list&gt;
@@ -619,7 +733,7 @@
                 Signature (XAdES-EPES) for the Signer Endpoint. The forms Electronic Signature with
                 Validation Data</em></span> XAdES-T and XAdES-C are not supported. We support the
             following properties of the XAdES-EPES form ("?" denotes zero or one
-            occurrence):</p><table id="d0e130500"><tr>
+            occurrence):</p><table id="d0e173744"><tr>
                 <td>
                     <pre class="programlisting">        &lt;QualifyingProperties Target&gt;
             &lt;SignedProperties&gt;
@@ -649,7 +763,7 @@
                 <code class="code">DefaultXAdESSignatureProperties</code> overwrites the method
                 <code class="code">getSigningCertificate()</code> and allows you to specify the signing
             certificate via a keystore and alias. The following example shows all parameters you can
-            specify. If you do not need certain parameters you can just omit them.</p><table id="d0e130540"><tr>
+            specify. If you do not need certain parameters you can just omit them.</p><table id="d0e173784"><tr>
                 <td>
                     <pre class="programlisting">        Keystore keystore = ... // load a keystore
         DefaultKeyAccessor accessor = new DefaultKeyAccessor();
@@ -728,7 +842,7 @@
 
 </pre>
                 </td>
-            </tr></table><table id="d0e130549"><tr>
+            </tr></table><table id="d0e173793"><tr>
                 <td>
                     <pre class="programlisting">   ...
    &lt;from uri="direct:xades" /&gt;
@@ -760,7 +874,7 @@
         &lt;/constructor-arg&gt;
     &lt;/bean&gt;</pre>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e130558"></a>Headers</h2></div></div></div><table id="d0e130561"><tbody><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173802"></a>Headers</h2></div></div></div><table id="d0e173805"><tbody><tr>
                     <th>Header</th>
                     <th>Type</th>
                     <th>Description</th>
@@ -795,7 +909,7 @@
                     <td>String</td>
                     <td>overwrites the XAdES prefix parameter
                         value</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e130666"></a>Limitations with regard to XAdES version 1.4.2</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>No support for signature form XAdES-T and XAdES-C</p></li><li class="listitem"><p>Only signer part implemented. Verifier part currently not available.</p></li><li class="listitem"><p>No support for the '<code class="code">QualifyingPropertiesReference</code>' element (see
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173910"></a>Limitations with regard to XAdES version 1.4.2</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>No support for signature form XAdES-T and XAdES-C</p></li><li class="listitem"><p>Only signer part implemented. Verifier part currently not available.</p></li><li class="listitem"><p>No support for the '<code class="code">QualifyingPropertiesReference</code>' element (see
                 section 6.3.2 of spec).</p></li><li class="listitem"><p>No support for the <code class="code">Transforms</code> element contained in the
                 <code class="code">SignaturePolicyId</code> element contained in the
                 <code class="code">SignaturePolicyIdentifier element</code></p></li><li class="listitem"><p>No support of the <code class="code">CounterSignature</code> element --&gt; no support for
@@ -808,4 +922,4 @@
                 XML signer endpoint).</p></li><li class="listitem"><p>A <code class="code">CommitmentTypeIndication</code> element contains always the
                 <code class="code">AllSignedDataObjects</code> element. The
                 <code class="code">ObjectReference</code> element within
-                <code class="code">CommitmentTypeIndication</code> element is not supported.</p></li><li class="listitem"><p>The<code class="code"> AllDataObjectsTimeStamp</code> element is not supported</p></li><li class="listitem"><p>The<code class="code"> IndividualDataObjectsTimeStamp</code> element is not supported</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e130747"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://www.w3.org/TR/xmldsig-bestpractices/" target="_top">Best Practices</a></p></li></ul></div></div></div></body></html>
+                <code class="code">CommitmentTypeIndication</code> element is not supported.</p></li><li class="listitem"><p>The<code class="code"> AllDataObjectsTimeStamp</code> element is not supported</p></li><li class="listitem"><p>The<code class="code"> IndividualDataObjectsTimeStamp</code> element is not supported</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173991"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://www.w3.org/TR/xmldsig-bestpractices/" target="_top">Best Practices</a></p></li></ul></div></div></div></body></html>

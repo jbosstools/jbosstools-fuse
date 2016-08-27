@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>RabbitMQ</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Quickfix.html" title="Quickfix"><link rel="next" href="IDU-Ref.html" title="Ref"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-RabbitMQ"></a>RabbitMQ</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_RabbitMQComponent"></a>RabbitMQ Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
+   <title>RabbitMQ</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Quickfix.html" title="Quickfix"><link rel="next" href="IDU-Ref.html" title="Ref"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-RabbitMQ"></a>RabbitMQ</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_RabbitMQComponent"></a>RabbitMQ Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
         </p><p>The <span class="bold"><strong>rabbitmq:</strong></span> component allows you produce and
             consume messages from <a class="link" href="http://www.rabbitmq.com/" target="_top">RabbitMQ</a>
             instances. Using the RabbitMQ AMQP client, this component offers a pure RabbitMQ
@@ -9,13 +9,13 @@
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-rabbitmq&lt;/artifactId&gt;
-    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;version&gt;2.17.0.redhat-630067&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">rabbitmq://hostname[:port]/exchangeName?[options]</pre><p>Where <span class="bold"><strong>hostname</strong></span> is the hostname of the running
             rabbitmq instance or cluster. Port is optional and if not specified then defaults to the
             RabbitMQ client default (5672). The exchange name determines which exchange produced
             messages will sent to. In the case of consumers, the exchange name determines which
-            exchange the queue will bind to.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e102801"><tr>
+            exchange the queue will bind to.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e140479"><tr>
                 <th> Property </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -185,7 +185,7 @@
                 <td><code class="code">1</code></td>
                 <td><span class="emphasis"><em>Camel 2.14:</em></span> Number of
                     concurrent consumers when consuming from broker. (eg similar as to the same
-                    option for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="olink">JMS</a> component).</td>
+                    option for the <a href="IDU-JMS.html" class="olink">JMS</a> component).</td>
             </tr><tr>
                 <td><code class="code">deadLetterRoutingKey</code></td>
                 <td> </td>
@@ -221,7 +221,51 @@
                 <td><span class="emphasis"><em>Camel 2.15.1:</em></span> The custom <code class="code">ArgsConfigurer</code>
                     instance which could be used to configure the <code class="code">Args</code> map when
                     declaring the exchange.</td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e103429"></a>Custom connection factory</h2></div></div></div><div class="informalexample"><pre class="programlisting">&lt;bean id="customConnectionFactory" class="com.rabbitmq.client.ConnectionFactory"&gt;
+            </tr><tr>
+                <td><code class="code">requestTimeout</code></td>
+                <td><code class="code">20000</code></td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Producer Only. The timeout for
+                    waiting for a reply when using the InOut Exchange Pattern (in milliseconds). The
+                    default is 20 seconds. See also the <code class="code">requestTimeoutCheckerInterval</code>
+                    option.</td>
+            </tr><tr>
+                <td><code class="code">requestTimeoutCheckerInterval</code></td>
+                <td><code class="code">1000</code></td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Configures how often Camel should
+                    check for timed out Exchanges when doing request/reply over RabbitMQ. By default
+                    Camel checks once per second. But if you must react faster when a timeout
+                    occurs, then you can lower this interval, to check more frequently. The timeout
+                    is determined by the option <code class="code">requestTimeout</code>.</td>
+            </tr><tr>
+                <td><code class="code">transferException</code></td>
+                <td><code class="code">false</code></td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> If enabled and you are using
+                    Request Reply messaging (InOut) and an Exchange failed on the consumer side,
+                    then the caused Exception will be sent back in the response as a
+                        <code class="code">byte[]</code>. If the client is Camel, the returned Exception is
+                    rethrown. This allows you to use Camel RabbitMQ as a bridge in your routing -
+                    for example, using persistent queues to enable robust routing. The caught
+                    exception is required to be serializable. The original Exception on the consumer
+                    side can be wrapped in an outer exception such as
+                        <code class="code">org.apache.camel.RuntimeCamelException</code> when returned to the
+                    producer.</td>
+            </tr><tr>
+                <td><code class="code">skipQueueDeclare</code></td>
+                <td><code class="code">false</code></td>
+                <td><span class="bold"><strong>Camel 2.16.1:</strong></span> If <code class="code">true</code>, the
+                    producer will not declare and bind a queue. This can be used for directing
+                    messages via an existing routing key.</td>
+            </tr><tr>
+                <td><code class="code">publisherAcknowledgements</code></td>
+                <td><code class="code">false</code></td>
+                <td><span class="bold"><strong>Camel 2.17:</strong></span> If <code class="code">true</code>, the message
+                    will be published with publisher acknowledgements turned on.</td>
+            </tr><tr>
+                <td><code class="code">publisherAcknowledgementsTimeout</code></td>
+                <td><code class="code">0</code></td>
+                <td><span class="bold"><strong>Camel 2.17:</strong></span> The amount of time in milliseconds
+                    to wait for a <code class="code">basic.ack</code> response from RabbitMQ server.</td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e141218"></a>Custom connection factory</h2></div></div></div><div class="informalexample"><pre class="programlisting">&lt;bean id="customConnectionFactory" class="com.rabbitmq.client.ConnectionFactory"&gt;
   &lt;property name="host" value="localhost"/&gt;
   &lt;property name="port" value="5672"/&gt;
   &lt;property name="username" value="camel"/&gt;
@@ -234,7 +278,7 @@
   &lt;/route&gt;
 &lt;/camelContext&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RabbitMQ_HSH_Headers"></a>Headers</h2></div></div></div><p>The following headers are set on exchanges when consuming messages.
             
-        </p><table id="d0e103443"><tr>
+        </p><table id="d0e141232"><tr>
                 <th> Property </th>
                 <th> Value </th>
             </tr><tr>
@@ -264,7 +308,7 @@
             </tr></table><p>The following headers are used by the producer. If these are set on the camel exchange
             then they will be set on the RabbitMQ message.
             
-        </p><table id="d0e103508"><tr>
+        </p><table id="d0e141297"><tr>
                 <th> Property </th>
                 <th> Value </th>
             </tr><tr>

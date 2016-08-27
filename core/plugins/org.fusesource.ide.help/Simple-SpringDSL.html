@@ -1,0 +1,43 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>XML DSL</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="Simple.html" title="The Simple Language"><link rel="prev" href="Simple-JavaDSL.html" title="Java DSL"><link rel="next" href="Simple-InvokeScript.html" title="Invoking an External Script"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Simple-SpringDSL"></a>XML DSL</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33933"></a>Simple expressions in XML DSL</h3></div></div></div><p>In the XML DSL, you can use a simple expression by putting the expression inside a
+                    <code class="code">simple</code> element. For example, to define a route that performs
+                filtering based on the contents of the <code class="code">foo</code> header:</p><pre class="programlisting">&lt;route id="simpleExample"&gt;
+  &lt;from uri="seda:orders"/&gt;
+  &lt;filter&gt;
+    &lt;simple&gt;${in.header.foo}&lt;/simple&gt;
+    &lt;to uri="mock:fooOrders"/&gt;
+  &lt;/filter&gt;
+&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33934"></a>Alternative placeholder syntax</h3></div></div></div><p>Sometimes&#8212;for example, if you have enabled Spring property placeholders or
+                OSGi blueprint property placeholders&#8212;you might find that the
+                        <code class="code">${<em class="replaceable"><code>Expression</code></em>}</code> syntax clashes with
+                another property placeholder syntax. In this case, you can disambiguate the
+                placeholder using the alternative syntax,
+                        <code class="code">$simple{<em class="replaceable"><code>Expression</code></em>}</code>, for the simple
+                expression. For example:</p><pre class="programlisting">&lt;simple&gt;Hello $simple{in.header.name}, how are you?&lt;/simple&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33935"></a>Customizing the start and end tokens</h3></div></div></div><p>From XML configuration, you can customize the start and end tokens (<code class="code">{</code>
+                and <code class="code">}</code>, by default) by overriding the <code class="code">SimpleLanguage</code>
+                instance. For example, to change the start and end tokens to <code class="code">[</code> and
+                    <code class="code">]</code>, define a new <code class="code">SimpleLanguage</code> bean in your XML
+                configuration file, as follows:</p><pre class="programlisting">&lt;bean id="simple" class="org.apache.camel.language.simple.SimpleLanguage"&gt;
+  &lt;constructor-arg name="functionStartToken" value="["/&gt;
+  &lt;constructor-arg name="functionEndToken" value="]"/&gt;
+&lt;/bean&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Customizing the start and end tokens affects all Apache Camel applications that
+                    share the same <code class="code">camel-core</code> library on their classpath. For example,
+                    in an OSGi server this might affect many applications; whereas in a Web
+                    application (WAR file) it would affect only the Web application itself.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33936"></a>Whitespace and auto-trim in XML DSL</h3></div></div></div><p>By default, whitespace preceding and following a simple expression is
+                automatically trimmed in XML DSL. So this expression with surrounding
+                whitespace:</p><div class="informalexample"><pre class="programlisting">&lt;transform&gt; 
+  &lt;simple&gt; 
+    data=${body} 
+  &lt;/simple&gt; 
+&lt;/transform&gt;</pre></div><p>is automatically trimmed, so that it is equivalent to this expression (no
+                surrounding whitespace):</p><div class="informalexample"><pre class="programlisting">&lt;transform&gt; 
+  &lt;simple&gt;data=${body}&lt;/simple&gt; 
+&lt;/transform&gt;</pre></div><p>If you want to include newlines before or after the expression, you can either
+                explicitly add a newline character, as follows:</p><div class="informalexample"><pre class="programlisting">&lt;transform&gt; 
+  &lt;simple&gt;data=${body}\n&lt;/simple&gt; 
+&lt;/transform&gt;</pre></div><p>or you can switch off auto-trimming, by setting the <code class="code">trim</code> attribute to
+                    <code class="code">false</code>, as follows:</p><div class="informalexample"><pre class="programlisting">&lt;transform trim="false"&gt; 
+  &lt;simple&gt;data=${body}
+&lt;/simple&gt; 
+&lt;/transform&gt;</pre></div></div></div></body></html>

@@ -1,16 +1,20 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Destination Configuration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP-Config.html" title="Configuration"><link rel="prev" href="SAP-Config-Overview.html" title="Configuration Overview"><link rel="next" href="SAP-ServConfig.html" title="Server Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-DestConfig"></a>Destination Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37518"></a>Overview</h4></div></div></div><p>The configurations for destinations are maintained in the
+   <title>Destination Configuration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP-Config.html" title="Configuration"><link rel="prev" href="SAP-Config-Overview.html" title="Configuration Overview"><link rel="next" href="SAP-ServConfig.html" title="Server Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-DestConfig"></a>Destination Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37518"></a>Overview</h4></div></div></div><p>The configurations for destinations are maintained in the
                         <code class="code">destinationDataStore</code> property of the SAP component. Each entry
                     in this map configures a distinct outbound connection to an SAP instance. The
                     key for each entry is the name of the outbound connection and is used in the
                             <code class="code"><em class="replaceable"><code>destinationName</code></em></code> component of a
                     destination endpoint URI as described in the URI format section.</p><p>The value for each entry is a destination data configuration object -
                         <code class="code">org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl</code>
-                    - that specifies the configuration of an outbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e106899"></a>Sample destination configuration</h4></div></div></div><p>The following Blueprint XML code shows how to configure a sample destination
+                    - that specifies the configuration of an outbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e145322"></a>Sample destination configuration</h4></div></div></div><p>The following Blueprint XML code shows how to configure a sample destination
                     with the name, <code class="code">quickstartDest</code>.</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;blueprint ... &gt;
     ...
+    &lt;!-- Create interceptor to support tRFC processing --&gt;
+    &lt;bean id="currentProcessorDefinitionInterceptor"
+          class="org.fusesource.camel.component.sap.CurrentProcessorDefinitionInterceptStrategy" /&gt;
+
     &lt;!-- Configures the Inbound and Outbound SAP Connections --&gt;
     &lt;bean id="sap-configuration"
         class="org.fusesource.camel.component.sap.SapConnectionConfiguration"&gt;
@@ -22,8 +26,7 @@
     &lt;/bean&gt;
 
     &lt;!-- Configures an Outbound SAP Connection --&gt;
-    &lt;!-- *** Please enter the connection property values for your environment 
-        *** --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment *** --&gt;
     &lt;bean id="quickstartDestinationData"
         class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl"&gt;
         &lt;property name="ashost" value="example.com" /&gt;
@@ -37,7 +40,19 @@
 &lt;/blueprint&gt;</pre><p>For example, after configuring the destination as shown in the preceding
                     Blueprint XML file, you could invoke the <code class="code">BAPI_FLCUST_GETLIST</code> remote
                     function call on the <code class="code">quickstartDest</code> destination using the following
-                    URI:</p><pre class="programlisting">sap-srfc-destination:quickstartDest:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37519"></a>Logon and authentication options</h4></div></div></div><p></p><table width="761" id="d0e106924"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    URI:</p><pre class="programlisting">sap-srfc-destination:quickstartDest:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="SAP-DestConfig-Intercept"></a>Interceptor for tRFC and qRFC destinations</h4></div></div></div><p>The preceding sample destination configuration shows the instantiation of a
+                        <code class="code">CurrentProcessorDefinitionInterceptStrategy</code> object. This object
+                    installs an interceptor in the Camel runtime, which enables the Camel SAP
+                    component to keep track of its position within a Camel route while it is
+                    handling RFC transactions. For more details, see <a class="xref" href="SAP-Txn.html#SAP-Txn-RFCDestination" title="Transactional RFC destination endpoints">Transactional RFC destination endpoints</a>.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>This interceptor is critically important for transactional RFC destination
+                        endpoints (such as <code class="code">sap-trfc-destination</code> and
+                            <code class="code">sap-qrfc-destination</code>) and must be installed in the Camel
+                        runtime in order for outbound transactional RFC communication to be properly
+                        managed. The Destination RFC Transaction Handlers will issue warnings into
+                        the Camel log if the strategy is not found at runtime and in this situation
+                        the Camel runtime will need to be re-provisioned and restarted to properly
+                        manage outbound transactional RFC communication.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37519"></a>Logon and authentication options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>logon and authentication</em></span>
+                    options for configuring a destination in the SAP destination data store:</p><table width="761" id="d0e145369"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -142,7 +157,8 @@
                         <td> </td>
                         <td> If set to <code class="code">1</code>, using initial
                             passwords will lead to an exception (default is <code class="code">0</code>).</td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37520"></a>Connection options</h4></div></div></div><p></p><table width="761" id="d0e107141"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37520"></a>Connection options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>connection</em></span> options for
+                    configuring a destination in the SAP destination data store:</p><table width="761" id="d0e145589"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -228,7 +244,8 @@
                         <td> </td>
                         <td> Group of SAP application servers, mandatory
                             property for a load balancing connection </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37521"></a>Connection pool options</h4></div></div></div><p></p><table width="761" id="d0e107302"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37521"></a>Connection pool options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>connection pool</em></span> options for
+                    configuring a destination in the SAP destination data store:</p><table width="761" id="d0e145753"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -284,7 +301,8 @@
                         <td> Maximum time in milliseconds to wait for a
                             connection, if the maximum allowed number of connections has already
                             been allocated by the application.</td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37522"></a>Secure network connection options</h4></div></div></div><p></p><table width="761" id="d0e107427"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37522"></a>Secure network connection options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>secure network</em></span> options for
+                    configuring a destination in the SAP destination data store:</p><table width="761" id="d0e145881"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -330,7 +348,8 @@
                         </td>
                         <td> </td>
                         <td> Path to library that provides SNC service </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37523"></a>Repository options</h4></div></div></div><p></p><table width="761" id="d0e107541"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37523"></a>Repository options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>repository</em></span> options for
+                    configuring a destination in the SAP destination data store:</p><table width="761" id="d0e145998"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -391,9 +410,11 @@
                                 destination) this property does not have any effect. Generally, this
                                 property is related to the ABAP System, and should have the same
                                 value on all destinations pointing to the same ABAP System. See note
-                                    <a class="link" href="https://service.sap.com/sap/support/notes/1456826" target="_top">1456826</a> for backend prerequisites.</p>
+                                    <a class="link" href="https://support.sap.com/home.html" target="_top">1456826</a>
+                                for backend prerequisites.</p>
                         </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37524"></a>Trace configuration options</h4></div></div></div><p></p><table width="761" id="d0e107691"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37524"></a>Trace configuration options</h4></div></div></div><p>The following table lists the <span class="emphasis"><em>trace configuration</em></span> options
+                    for configuring a destination in the SAP destination data store:</p><table width="761" id="d0e146151"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>

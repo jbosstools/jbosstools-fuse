@@ -1,8 +1,8 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>StringTemplate</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Stream.html" title="Stream"><link rel="next" href="IDU-Stub.html" title="Stub"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-StringTemplate"></a>StringTemplate</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_StringTemplate"></a>String Template</h2></div></div></div><p>The <span class="bold"><strong>string-template:</strong></span> component allows you to process
+   <title>StringTemplate</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Stream.html" title="Stream"><link rel="next" href="IDU-Stub.html" title="Stub"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-StringTemplate"></a>StringTemplate</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_StringTemplate"></a>String Template</h2></div></div></div><p>The <span class="bold"><strong>string-template:</strong></span> component allows you to process
             a message using a <a class="link" href="http://www.stringtemplate.org/" target="_top">String Template</a>.
-            This can be ideal when using <a class="link" href="Templating" target="_top">Templating</a> to generate
+            This can be ideal when using <a class="link" href="http://camel.apache.org/templating.html" target="_top">Templating</a> to generate
             responses for requests.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-stringtemplate&lt;/artifactId&gt;
@@ -11,7 +11,7 @@
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">string-template:templateName[?options]</pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the
             template to invoke; or the complete URL of the remote template.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_Options"></a>Options</h2></div></div></div><table id="d0e125431"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_Options"></a>Options</h2></div></div></div><table id="d0e167079"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -42,7 +42,7 @@
             loads the resource only once and hot-reloading is not possible. This scenario can be
             used in production when the resource never changes.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-StringTemplate_HSH_StringTemplateAttributes"></a>StringTemplate Attributes</h2></div></div></div><p>Apache Camel will provide exchange information as attributes (just a
                 <code class="literal">java.util.Map</code>) to the string template. The Exchange is transfered
-            as:</p><table id="d0e125528"><tr>
+            as:</p><table id="d0e167176"><tr>
         <th> key </th>
         <th> value </th>
       </tr><tr>

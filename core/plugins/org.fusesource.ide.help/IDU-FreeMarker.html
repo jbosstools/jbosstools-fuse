@@ -1,8 +1,8 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>FreeMarker</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-FOP.html" title="FOP"><link rel="next" href="IDU-FTP2.html" title="FTP2"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-FreeMarker"></a>FreeMarker</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_FreeMarker"></a>FreeMarker</h2></div></div></div><p>The <span class="bold"><strong>freemarker:</strong></span> component allows you to process a message
+   <title>FreeMarker</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-FOP.html" title="FOP"><link rel="next" href="IDU-FTP2.html" title="FTP2"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-FreeMarker"></a>FreeMarker</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_FreeMarker"></a>FreeMarker</h2></div></div></div><p>The <span class="bold"><strong>freemarker:</strong></span> component allows you to process a message
       using a <a class="link" href="http://freemarker.org/" target="_top">FreeMarker</a> template. This can be ideal
-      when using <a class="link" href="Templating" target="_top">Templating</a> to generate responses for
+      when using <a class="link" href="http://camel.apache.org/templating.html" target="_top">Templating</a> to generate responses for
       requests.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
       for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -13,7 +13,7 @@
       template to invoke; or the complete URL of the remote template (for example,
         <code class="code">file://folder/myfile.ftl</code>).</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_Options"></a>Options</h2></div></div></div><table id="d0e50486"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_Options"></a>Options</h2></div></div></div><table id="d0e82258"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -38,7 +38,7 @@
         </td>
         <td> *Camel 2.9:* Number of seconds the loaded template resource will remain in the cache. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_FreeMarkerContext"></a>FreeMarker Context</h2></div></div></div><p>Apache Camel will provide exchange information in the FreeMarker context (just a
-        <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transferred as:</p><table id="d0e50561"><tr>
+        <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transferred as:</p><table id="d0e82333"><tr>
         <th> Key </th>
         <th> Value </th>
       </tr><tr>
@@ -80,7 +80,7 @@ exchange.getIn().setHeader("CamelFreemarkerDataModel", variableMap);</pre></div>
       reloading is thus enabled. This scenario can be used in development.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FreeMarker_HSH_Dynamictemplates"></a>Dynamic templates</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.1</strong></span> Camel provides two headers by
       which you can define a different resource location for a template or the template content
       itself. If any of these headers is set then Camel uses this over the endpoint configured
-      resource. This allows you to provide a dynamic template at runtime.</p><table id="d0e50674"><tr>
+      resource. This allows you to provide a dynamic template at runtime.</p><table id="d0e82446"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

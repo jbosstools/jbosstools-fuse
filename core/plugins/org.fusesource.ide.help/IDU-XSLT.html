@@ -1,13 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>XSLT</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-XQueryEndpoint.html" title="XQuery Endpoint"><link rel="next" href="IDU-Yammer.html" title="Yammer"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-XSLT"></a>XSLT</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_XSLT"></a>XSLT</h2></div></div></div><p>The <span class="bold"><strong>xslt:</strong></span> component allows you to process a message
+   <title>XSLT</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-XQueryEndpoint.html" title="XQuery Endpoint"><link rel="next" href="IDU-XStream.html" title="XStream"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-XSLT"></a>XSLT</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_XSLT"></a>XSLT</h2></div></div></div><p>The <span class="bold"><strong>xslt:</strong></span> component allows you to process a message
             using an <a class="link" href="http://www.w3.org/TR/xslt" target="_top">XSLT</a> template. This can be
-            ideal when using <a class="link" href="Templating" target="_top">Templating</a> to generate respopnses for
+            ideal when using <a class="link" href="http://camel.apache.org/templating.html" target="_top">Templating</a> to generate respopnses for
             requests.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">xslt:templateName[?options]</pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the
             template to invoke; or the complete URL of the remote template. Refer to the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/core/io/DefaultResourceLoader.html" target="_top">Spring Documentation for more detail of the URI syntax</a>
         </p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p><p>Here are some example URIs</p><table id="d0e131128"><tr>
+        </p><p>Here are some example URIs</p><table id="d0e174372"><tr>
                 <th> URI </th>
                 <th> Description </th>
             </tr><tr>
@@ -28,8 +28,8 @@
                     <code class="code">xslt:http://acme.com/cheese/foo.xsl</code>
                 </td>
                 <td> Refers to the remote HTTP resource.</td>
-            </tr></table><p>From Camel 2.9 onwards the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-XSLT.html" class="olink">XSLT</a> component is
-            provided directly in the camel-core.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Options"></a>Options</h2></div></div></div><table id="d0e131192"><tr>
+            </tr></table><p>From Camel 2.9 onwards the <a href="IDU-XSLT.html" class="olink">XSLT</a> component is
+            provided directly in the camel-core.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Options"></a>Options</h2></div></div></div><table id="d0e174436"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -58,8 +58,24 @@
                         <code class="code">TransformerFactoryClass</code> instance and set it to the converter.
                 </td>
             </tr><tr>
-                <td><code class="literal">uriResolver</code>
+                <td><code class="literal">uriResolverFactory</code></td>
+                <td><code class="literal">DefaultXsltUriResolverFactory</code>
                 </td>
+                <td><span class="bold"><strong>Camel 2.17:</strong></span> Reference to an
+                        <code class="code">org.apache.camel.component.xslt.XsltUriResolverFactory</code>, which
+                    creates an URI resolver per endpoint.The default implementation returns an
+                    instance of
+                        <code class="code">org.apache.camel.component.xslt.DefaultXsltUriResolverFactory</code>
+                    which creates the default URI resolver
+                    org.apache.camel.builder.xml.XsltUriResolver per endpoint. The default URI
+                    resolver reads XSLT documents from the classpath and the file system. This
+                    option instead of the option <code class="code">uriResolver</code> shall be used when the URI
+                    resolver depends on the resource URI of the root XSLT document specified in the
+                    endpoint; for example, if you want to extend the default URI resolver. This
+                    option is also available on the XSLT component, so that you can set the resource
+                    resolver factory only once for all endpoints. </td>
+            </tr><tr>
+                <td><code class="literal">uriResolver</code></td>
                 <td><code class="literal">null</code>
                 </td>
                 <td><span class="bold"><strong>Camel 2.3</strong></span>: Allows you to use a custom
@@ -133,14 +149,19 @@
                         <code class="literal">javax.xml.transform.Transformer</code> object that are cached
                     for reuse to avoid calls to <code class="literal">Template.newTransformer()</code>. </td>
             </tr><tr>
-                <td><code class="literal">saxon</code>
-                </td>
-                <td><code class="literal">false</code>
-                </td>
+                <td><code class="literal">saxon</code></td>
+                <td><code class="literal">false</code></td>
                 <td><span class="bold"><strong>Camel 2.11:</strong></span> Whether to use Saxon as the
                         <code class="literal">transformerFactoryClass</code>. If enabled then the class
                         <code class="literal">net.sf.saxon.TransformerFactoryImpl</code>. You would need to
                     add Saxon to the classpath. </td>
+            </tr><tr>
+                <td><code class="literal">saxonExtensionFunctions</code></td>
+                <td><code class="literal">null</code></td>
+                <td><span class="bold"><strong>Camel 2.17:</strong></span> Allows you to configure one or more
+                    custom <code class="code">net.sf.saxon.lib.ExtensionFunctionDefinition</code>. You would need
+                    to add Saxon to the classpath. By setting this option, the <code class="code">saxon</code>
+                    option will be turned on automatically.</td>
             </tr><tr>
                 <td><code class="literal">errorListener</code>
                 </td>
@@ -177,23 +198,38 @@
             the example <code class="literal">org/apache/camel/component/xslt</code>.</p><p>You can use the following two prefixes <code class="literal">classpath:</code> or
                 <code class="literal">file:</code> to instruct Camel to look either in classpath or file
             system. If you omit the prefix then Camel uses the prefix from the endpoint
-            configuration. If that neither has one, then classpath is assumed.</p><p>You can also refer back in the paths such as</p><pre class="programlisting">    &lt;xsl:include href="../staff_other_template.xsl"/&gt;</pre><p>Which then will resolve the xsl file under
-                <code class="literal">org/apache/camel/component</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Usingxslincludeanddefaultprefix"></a>Using xsl:include and default prefix</h2></div></div></div><p>When using xsl:include such as: </p><pre class="programlisting">
-&lt;xsl:include href="staff_template.xsl"/&gt;
-</pre><p>Then in Camel 2.10.3 and older, then Camel will use "classpath:" as the default
+            configuration. If that neither has one, then classpath is assumed.</p><p>You can also refer back in the paths such as</p><pre class="programlisting">&lt;xsl:include href="../staff_other_template.xsl"/&gt;</pre><p>Which then will resolve the xsl file under
+                <code class="literal">org/apache/camel/component</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Usingxslincludeanddefaultprefix"></a>Using xsl:include and default prefix</h2></div></div></div><p>When using xsl:include such as: </p><pre class="programlisting">&lt;xsl:include href="staff_template.xsl"/&gt;</pre><p>Then in Camel 2.10.3 and older, then Camel will use "classpath:" as the default
             prefix, and load the resource from the classpath. This works for most cases, but if you
-            configure the starting resource to load from file, </p><pre class="programlisting">
-.to("xslt:file:etc/xslt/staff_include_relative.xsl")
-</pre><p>.. then you would have to prefix all your includes with "file:" as well.</p><pre class="programlisting">
-&lt;xsl:include href="file:staff_template.xsl"/&gt;
-</pre><p>From Camel 2.10.4 onwards we have made this easier as Camel will use the prefix from
+            configure the starting resource to load from file, </p><pre class="programlisting">.to("xslt:file:etc/xslt/staff_include_relative.xsl")</pre><p>.. then you would have to prefix all your includes with "file:" as well.</p><pre class="programlisting">&lt;xsl:include href="file:staff_template.xsl"/&gt;</pre><p>From Camel 2.10.4 onwards we have made this easier as Camel will use the prefix from
             the endpoint configuration as the default prefix. So from Camel 2.10.4 onwards you can
-            do:</p><pre class="programlisting">
-&lt;xsl:include href="staff_template.xsl"/&gt;
-</pre><p>Which will load the staff_template.xsl resource from the file system, as the endpoint
+            do:</p><pre class="programlisting">&lt;xsl:include href="staff_template.xsl"/&gt;</pre><p>Which will load the staff_template.xsl resource from the file system, as the endpoint
             was configured with "file:" as prefix. You can still though explicit configure a prefix,
             and then mix and match. And have both file and classpath loading. But that would be
-            unusual, as most people either use file or classpath based resources.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Dynamicstylesheets"></a>Dynamic stylesheets</h2></div></div></div><p>To provide a dynamic stylesheet at runtime you can define a dynamic URI. For example,
+            unusual, as most people either use file or classpath based resources.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+  XSLT can load the resource file from the Registry by using <em class="parameter"><code>ref:</code></em> as prefix.
+  </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e174901"></a>Using Saxon extension functions</h2></div></div></div><p>Since Saxon 9.2, writing extension functions has been supplemented by a new mechanism,
+            referred to as integrated extension functions you can now easily use camel:</p><p>Java example:</p><pre class="programlisting">SimpleRegistry registry = new SimpleRegistry();
+registry.put("function1", new MyExtensionFunction1());
+registry.put("function2", new MyExtensionFunction2());
+
+CamelContext context = new DefaultCamelContext(registry);
+context.addRoutes(new RouteBuilder() {
+    @Override
+    public void configure() throws Exception {
+        from("direct:start")
+            .to("xslt:org/apache/camel/component/xslt/extensions/extensions.xslt?saxonExtensionFunctions=#function1,#function2");
+    }
+});</pre><p>Spring XML example:</p><pre class="programlisting">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+  &lt;route&gt;
+    &lt;from uri="direct:extensions"/&gt;
+    &lt;to uri="xslt:org/apache/camel/component/xslt/extensions/extensions.xslt?saxonExtensionFunctions=#function1,#function2"/&gt;
+  &lt;/route&gt;
+&lt;/camelContext&gt;
+
+
+&lt;bean id="function1" class="org.apache.camel.component.xslt.extensions.MyExtensionFunction1"/&gt;
+&lt;bean id="function2" class="org.apache.camel.component.xslt.extensions.MyExtensionFunction2"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Dynamicstylesheets"></a>Dynamic stylesheets</h2></div></div></div><p>To provide a dynamic stylesheet at runtime you can define a dynamic URI. For example,
             you can do this using the Recipient List Enterprise Integration Pattern (EIP), which is
             invoked using the <code class="code">.recipientList</code> command in the Java DSL.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-2018"></a>Accessing warnings, errors and fatalErrors from XSLT ErrorListener</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>From Camel 2.14 onwards, any warning/error or fatalError is stored on the current
             Exchange as a property with the keys <code class="code">Exchange.XSLT_ERROR</code>,

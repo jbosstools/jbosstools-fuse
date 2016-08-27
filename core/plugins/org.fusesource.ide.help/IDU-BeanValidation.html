@@ -1,9 +1,9 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Bean Validator</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Bean.html" title="Bean"><link rel="next" href="IDU-Beanstalk.html" title="Beanstalk"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-BeanValidation"></a>Bean Validator</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-BeanValidation_HSH_BeanValidationComponent"></a>Bean Validator Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
+   <title>Bean Validator</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Bean.html" title="Bean"><link rel="next" href="IDU-Beanstalk.html" title="Beanstalk"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-BeanValidation"></a>Bean Validator</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-BeanValidation_HSH_BeanValidationComponent"></a>Bean Validator Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
         </p><p>The Validator component performs bean validation of the message body using the Java
             Bean Validation API (<a class="link" href="http://jcp.org/en/jsr/detail?id=303" target="_top">JSR
-            303</a>). Camel uses the reference implementation, which is <a class="link" href="http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/" target="_top">Hibernate Validator</a>.</p><p>Maven users will need to add the following dependency to their
+            303</a>). Camel uses the reference implementation, which is <a class="link" href="https://docs.jboss.org/hibernate/validator/4.0.1/reference/en/html_single/" target="_top">Hibernate Validator</a>.</p><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-bean-validator&lt;/artifactId&gt;
@@ -13,7 +13,7 @@
             append query options to the URI in the following format,
                 <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-BeanValidation_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>The following URI options are supported:</p><p>
             
-        </p><table id="d0e29611"><tr>
+        </p><table id="d0e54522"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -30,7 +30,7 @@
                         ResourceBundleMessageInterpolator</code>
                 </td>
                 <td> Reference to a custom <code class="literal">javax.validation.MessageInterpolator</code>
-                    in the <a class="link" href="Registry" target="_top">Registry</a>. </td>
+                    in the Registry. </td>
             </tr><tr>
                 <td><code class="literal">traversableResolver</code>
                 </td>
@@ -38,7 +38,7 @@
                         DefaultTraversableResolver</code>
                 </td>
                 <td> Reference to a custom <code class="literal">javax.validation.TraversableResolver</code>
-                    in the <a class="link" href="Registry" target="_top">Registry</a>. </td>
+                    in the Registry. </td>
             </tr><tr>
                 <td><code class="literal">constraintValidatorFactory</code>
                 </td>
@@ -46,7 +46,7 @@
                         ConstraintValidatorFactoryImpl</code>
                 </td>
                 <td> Reference to a custom
-                        <code class="literal">javax.validation.ConstraintValidatorFactory</code> in the <a class="link" href="Registry" target="_top">Registry</a>. </td>
+                        <code class="literal">javax.validation.ConstraintValidatorFactory</code> in the Registry. </td>
             </tr></table><p>
             
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-543"></a>OSGi deployment</h2></div></div></div><p>To use Hibernate Validator in the OSGi environment use dedicated
@@ -54,7 +54,7 @@
             <code class="code">org.apache.camel.component.bean.validator.HibernateValidationProviderResolver</code>.
             The snippet below demonstrates this approach. Keep in mind that you can use
             <code class="code">HibernateValidationProviderResolver</code> starting from the Camel
-            2.13.0.</p><div class="example"><a name="d0e29719"></a><p class="title"><b>Example&nbsp;1.&nbsp;Using HibernateValidationProviderResolver</b></p><div class="example-contents"><pre class="programlisting">from("direct:test")
+            2.13.0.</p><div class="example"><a name="d0e54621"></a><p class="title"><b>Example&nbsp;1.&nbsp;Using HibernateValidationProviderResolver</b></p><div class="example-contents"><pre class="programlisting">from("direct:test")
   .to("bean-validator://ValidationProviderResolverTest?validationProviderResolver=#myValidationProviderResolver");
 
 ...

@@ -1,15 +1,15 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Netty HTTP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Netty4.html" title="Netty4"><link rel="next" href="IDU-Netty4-HTTP.html" title="Netty4-HTTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-NettyHTTP"></a>Netty HTTP</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_NettyHTTPComponent"></a>Netty HTTP Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
-        </p><p>The <span class="bold"><strong>netty-http</strong></span> component is an extension to <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a> component to facilitiate HTTP transport with
-                <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a>.</p><p>This camel component supports both producer and consumer endpoints.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Upgrade to Netty 4.0 planned"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Upgrade to Netty 4.0 planned</th></tr><tr><td align="left" valign="top"><p>This component is intended to be upgraded to use Netty 4.0 when
+   <title>Netty HTTP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Netty4.html" title="Netty4"><link rel="next" href="IDU-Netty4-HTTP.html" title="Netty4-HTTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-NettyHTTP"></a>Netty HTTP</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_NettyHTTPComponent"></a>Netty HTTP Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
+        </p><p>The <span class="bold"><strong>netty-http</strong></span> component is an extension to <a href="IDU-Netty.html" class="olink">Netty</a> component to facilitiate HTTP transport with
+                <a href="IDU-Netty.html" class="olink">Netty</a>.</p><p>This camel component supports both producer and consumer endpoints.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Upgrade to Netty 4.0 planned"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Upgrade to Netty 4.0 planned</th></tr><tr><td align="left" valign="top"><p>This component is intended to be upgraded to use Netty 4.0 when
                     <code class="literal">camel-netty4</code> component has finished being upgraded. At the
                 time being this component is still based on Netty 3.x. The upgrade is intended to be
                 as backwards compatible as possible.</p></td></tr></table></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Stream"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Stream</th></tr><tr><td align="left" valign="top"><p>Netty is stream based, which means the input it receives is submitted to Camel as
                 a stream. That means you will only be able to read the content of the stream
                     <span class="bold"><strong>once</strong></span>. If you find a situation where the message
                 body appears to be empty or you need to access the data multiple times (eg: doing
-                multicasting, or redelivery error handling) you should use <a class="link" href="Stream Caching" target="_top">Stream Caching</a> or convert the message body to a
+                multicasting, or redelivery error handling) you should use <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream Caching</a> or convert the message body to a
                     <code class="literal">String</code> which is safe to be re-read multiple times.</p></td></tr></table></div><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -32,13 +32,13 @@
                 (like <code class="code">CamelHttpQuery</code>). Endpoint options can be specified only at the
                 endpoint URI definition level (like <code class="code">to</code> or <code class="code">from</code> DSL
                 elements).</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_HTTPOptions"></a>HTTP Options</h2></div></div></div><p></p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: A lot more options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">A lot more options</th></tr><tr><td align="left" valign="top"><p><span class="bold"><strong>Important:</strong></span> This component inherits all the
-                options from <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a>. So make sure to look at the
-                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a> documentation as well. Notice that
-                some options from <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a> is not applicable when
-                using this <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> component, such as
+                options from <a href="IDU-Netty.html" class="olink">Netty</a>. So make sure to look at the
+                    <a href="IDU-Netty.html" class="olink">Netty</a> documentation as well. Notice that
+                some options from <a href="IDU-Netty.html" class="olink">Netty</a> is not applicable when
+                using this <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> component, such as
                 options related to UDP transport.</p></td></tr></table></div><p>
             
-        </p><table id="d0e96567"><tr>
+        </p><table id="d0e133161"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -73,14 +73,13 @@
                 </td>
                 <td><code class="literal">true</code>
                 </td>
-                <td> If this option is enabled, then during binding from Netty to Camel <span class="olink">Message</span> then the headers
-                    will be mapped as well (eg added as header to the Camel <span class="olink">Message</span> as well). You
+                <td>When this option is enabled, during binding from Netty to Camel <span class="phrase">Message</span>, the headers
+                    will be mapped as well (for example, added as header to the Camel <span class="phrase">Message</span> as well). You
                     can turn off this option to disable this. The headers can still be accessed from
                     the <code class="literal">org.apache.camel.component.netty.http.NettyHttpMessage</code>
                     message with the method <code class="literal">getHttpRequest()</code> that returns the
                     Netty HTTP request
-                        <code class="literal">org.jboss.netty.handler.codec.http.HttpRequest</code> instance.
-                </td>
+                        <code class="literal">org.jboss.netty.handler.codec.http.HttpRequest</code> instance. </td>
             </tr><tr>
                 <td><code class="literal">matchOnUriPrefix</code>
                 </td>
@@ -128,7 +127,7 @@
                 </td>
                 <td><code class="literal">false</code>
                 </td>
-                <td> If enabled and an <a class="link" href="Exchange" target="_top">Exchange</a> failed processing on
+                <td> If enabled and an <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a> failed processing on
                     the consumer side, and if the caused Exception was send back serialized in the
                     response as a <code class="literal">application/x-java-serialized-object</code> content
                     type. On the producer side the exception will be deserialized and thrown as is,
@@ -139,7 +138,7 @@
                 </td>
                 <td><code class="literal">false</code>
                 </td>
-                <td> If this option is enabled, then during binding from Netty to Camel <span class="olink">Message</span> then the header
+                <td> When this option is enabled, during binding from Netty to Camel <span class="phrase">Message</span>, the header
                     values will be URL decoded (eg %20 will be a space character. Notice this option
                     is used by the default
                         <code class="literal">org.apache.camel.component.netty.http.NettyHttpBinding</code>
@@ -151,8 +150,8 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> To use a shared <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> server. See
-                        <a class="link" href="Netty HTTP Server Example" target="_top">Netty HTTP Server Example</a>
+                <td> To use a shared <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> server. See
+                        <a class="link" href="http://camel.apache.org/netty-http-server-example.html" target="_top">Netty HTTP Server Example</a>
                     for more details. </td>
             </tr><tr>
                 <td><code class="literal">disableStreamCache</code>
@@ -186,9 +185,36 @@
                     code 503 when the consumer has been suspended. If the option is
                         <code class="literal">false</code> then the Netty Acceptor is unbound when the
                     consumer is suspended, so clients cannot connect anymore. </td>
+            </tr><tr>
+                <td><code class="literal">maxHeaderSize</code>
+                </td>
+                <td><code class="literal">8192</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.15.3:</strong></span>
+                    <span class="bold"><strong>Consumer only</strong></span>. The maximum length of all
+                    headers. If the sum of the length of each header exceeds this value, a
+                        <code class="code">TooLongFrameException</code> will be raised.</td>
+            </tr><tr>
+                <td><code class="literal">okStatusCodeRange</code>
+                </td>
+                <td><code class="literal">200-299</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> The status codes which is
+                    considered a success response. The values are inclusive. The range must be
+                    defined using the syntax,
+                            <code class="code"><em class="replaceable"><code>from</code></em>-<em class="replaceable"><code>to</code></em></code>.</td>
+            </tr><tr>
+                <td><code class="literal">useRelativePath</code>
+                </td>
+                <td><code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span>
+                    <span class="bold"><strong>Producer only</strong></span>. Whether to use a path
+                        (<code class="code">/myapp</code>) in the request line or an absolute URI
+                        (<code class="code">http://0.0.0.0:8080/myapp</code>), which is the default.</td>
             </tr></table><p>The <code class="literal">NettyHttpSecurityConfiguration</code> has the following options:
             
-        </p><table id="d0e96899"><tr>
+        </p><table id="d0e133566"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -240,13 +266,13 @@
                 <td><code class="literal">null</code>
                 </td>
                 <td> To specify FQN class names of <code class="literal">Principal</code> implementations that
-                    contains user roles. If none has been specified, then the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> component will by default
+                    contains user roles. If none has been specified, then the <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> component will by default
                     assume a <code class="literal">Principal</code> is role based if its FQN classname has the
                     lower-case word <code class="literal">role</code> in its classname. You can specify
                     multiple class names separated by comma. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following headers can be used on the producer to control the HTTP request.</p><p>
             
-        </p><table id="d0e97044"><tr>
+        </p><table id="d0e133711"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -290,11 +316,11 @@
                 </td>
                 <td> Allows to set the HTTP Status code to use. By default 200 is used for success,
                     and 500 for failure.</td>
-            </tr></table><p>The following headers is provided as meta-data when a route starts from an <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> endpoint:</p><p>The description in the table takes offset in a route having:
+            </tr></table><p>The following headers is provided as meta-data when a route starts from an <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> endpoint:</p><p>The description in the table takes offset in a route having:
                 <code class="literal">from("netty-http:http:0.0.0.0:8080/myapp")...</code>
         </p><p>
             
-        </p><table id="d0e97162"><tr>
+        </p><table id="d0e133829"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -368,15 +394,15 @@
                 <code class="literal">org.apache.camel.component.netty.http.NettyHttpMessage</code> as the
             message implementation on the <a class="link" href="Exchange" target="_top">Exchange</a>. This allows end
             users to get access to the original Netty request/response instances if needed, as shown
-            below. Mind that the original response may not be accessible at all times.</p><pre class="programlisting">org.jboss.netty.handler.codec.http.HttpRequest request = exchange.getIn(NettyHttpMessage.class).getHttpRequest();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_Examples"></a>Examples</h2></div></div></div><p>In the route below we use <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> as a
+            below. Mind that the original response may not be accessible at all times.</p><pre class="programlisting">org.jboss.netty.handler.codec.http.HttpRequest request = exchange.getIn(NettyHttpMessage.class).getHttpRequest();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_Examples"></a>Examples</h2></div></div></div><p>In the route below we use <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> as a
             HTTP server, which returns back a hardcoded "Bye World" message. </p><pre class="programlisting">    from("netty-http:http://0.0.0.0:8080/foo")
-      .transform().constant("Bye World");</pre><p>And we can call this HTTP server using Camel also, with the <a class="link" href="ProducerTemplate" target="_top">ProducerTemplate</a> as shown below:</p><pre class="programlisting">    String out = template.requestBody("netty-http:http://localhost:8080/foo", "Hello World", String.class);
-    System.out.println(out);</pre><p>And we get back "Bye World" as the output.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_HowdoIletNettymatchwildcards"></a>How do I let Netty match wildcards</h2></div></div></div><p>By default <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> will only match on
-            exact uri's. But you can instruct Netty to match prefixes. For example</p><pre class="programlisting">from("netty-http:http://0.0.0.0:8123/foo").to("mock:foo");</pre><p>In the route above <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> will only match
+      .transform().constant("Bye World");</pre><p>And we can call this HTTP server using Camel also, with the <a class="link" href="http://camel.apache.org/producertemplate.html" target="_top">ProducerTemplate</a> as shown below:</p><pre class="programlisting">    String out = template.requestBody("netty-http:http://localhost:8080/foo", "Hello World", String.class);
+    System.out.println(out);</pre><p>And we get back "Bye World" as the output.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_HowdoIletNettymatchwildcards"></a>How do I let Netty match wildcards</h2></div></div></div><p>By default <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> will only match on
+            exact uri's. But you can instruct Netty to match prefixes. For example</p><pre class="programlisting">from("netty-http:http://0.0.0.0:8123/foo").to("mock:foo");</pre><p>In the route above <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> will only match
             if the uri is an exact match, so it will match if you enter
                 <code class="literal">http://0.0.0.0:8123/foo</code> but not match if you do
                 <code class="literal">http://0.0.0.0:8123/foo/bar</code>.</p><p>So if you want to enable wildcard matching you do as follows: </p><pre class="programlisting">from("netty-http:http://0.0.0.0:8123/foo?matchOnUriPrefix=true").to("mock:foo");</pre><p>So now Netty matches any endpoints with starts with <code class="literal">foo</code>.</p><p>To match <span class="bold"><strong>any</strong></span> endpoint you can do:</p><pre class="programlisting">from("netty-http:http://0.0.0.0:8123?matchOnUriPrefix=true").to("mock:foo");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_Usingmultiplerouteswithsameport"></a>Using multiple routes with same port</h2></div></div></div><p>In the same <a class="link" href="CamelContext" target="_top">CamelContext</a> you can have multiple
-            routes from <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> that shares the same
+            routes from <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> that shares the same
             port (eg a <code class="literal">org.jboss.netty.bootstrap.ServerBootstrap</code> instance). Doing
             this requires a number of bootstrap options to be identical in the routes, as the routes
             will share the same <code class="literal">org.jboss.netty.bootstrap.ServerBootstrap</code>
@@ -405,7 +431,7 @@ from("netty-http:http://0.0.0.0:{{port}}/bar?ssl=true")
   .to("mock:bar")
   .transform().constant("Bye Camel");</pre></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_Reusingsameserverbootstrapconfigurationwithmultipleroutes"></a>Reusing same server bootstrap configuration with multiple routes</h2></div></div></div><p>By configuring the common server bootstrap option in an single instance of a
                 <code class="literal">org.apache.camel.component.netty.NettyServerBootstrapConfiguration</code>
-            type, we can use the <code class="literal">bootstrapConfiguration</code> option on the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> consumers to refer and reuse the same
+            type, we can use the <code class="literal">bootstrapConfiguration</code> option on the <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> consumers to refer and reuse the same
             options across all consumers.</p><pre class="programlisting">&lt;bean id="nettyHttpBootstrapOptions" class="org.apache.camel.component.netty.NettyServerBootstrapConfiguration"&gt;
   &lt;property name="backlog" value="200"/&gt;
   &lt;property name="connectTimeout" value="20000"/&gt;
@@ -424,8 +450,8 @@ from("netty-http:http://0.0.0.0:{{port}}/bar?ssl=true")
   &lt;from uri="netty-http:http://0.0.0.0:{{port}}/beer?bootstrapConfiguration=#nettyHttpBootstrapOptions"/&gt;
   ...
 &lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_ReusingsameserverbootstrapconfigurationwithmultipleroutesacrossmultiplebundlesinOSGicontainer"></a>Reusing same server bootstrap configuration with multiple routes across multiple
-            bundles in OSGi container</h2></div></div></div><p>See the <a class="link" href="Netty HTTP Server Example" target="_top">Netty HTTP Server Example</a> for
-            more details and example how to do that.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_UsingHTTPBasicAuthentication"></a>Using HTTP Basic Authentication</h2></div></div></div><p>The <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a> consumer supports HTTP basic
+            bundles in OSGi container</h2></div></div></div><p>See the <a class="link" href="http://camel.apache.org/netty-http-server-example.html" target="_top">Netty HTTP Server Example</a> for
+            more details and example how to do that.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-NettyHTTP_HSH_UsingHTTPBasicAuthentication"></a>Using HTTP Basic Authentication</h2></div></div></div><p>The <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a> consumer supports HTTP basic
             authentication by specifying the security realm name to use, as shown below</p><pre class="programlisting">&lt;route&gt;
    &lt;from uri="netty-http:http://0.0.0.0:{{port}}/foo?securityConfiguration.realm=karaf"/&gt;
    ...
@@ -461,9 +487,9 @@ from("netty-http:http://0.0.0.0:{{port}}/bar?ssl=true")
 &lt;/route&gt;</pre><p>
             
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a>
+                    <a href="IDU-Netty.html" class="olink">Netty</a>
                 </p></li><li class="listitem"><p>
-                    <a class="link" href="Netty HTTP Server Example" target="_top">Netty HTTP Server Example</a>
+                    <a class="link" href="http://camel.apache.org/netty-http-server-example.html" target="_top">Netty HTTP Server Example</a>
                 </p></li><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a>
+                    <a href="IDU-Jetty.html" class="olink">Jetty</a>
                 </p></li></ul></div></div></div></body></html>

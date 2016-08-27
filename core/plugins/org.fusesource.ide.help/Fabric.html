@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Fabric Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="The Fabric component implements a location discovery mechanism for Apache Camel endpoints. This mechanism can also be used to provide load-balancing over a cluster of endpoints. On the client side (producer endpoints), endpoints are represented by an abstract ID and at run time, the ID is resolved to a specific endpoint URI. Because the URI is stored in a distributed registry (provided by Fuse Fabric), this enables you to create flexible applications whose topology can be specified at deploy time and updated dynamically."><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Exec.html" title="Exec"><link rel="next" href="IDU-Facebook.html" title="Facebook"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Fabric"></a>Fabric Component</h1></div><div><div class="abstract"><p>The Fabric component implements a location discovery mechanism
+   <title>Fabric Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="The Fabric component implements a location discovery mechanism for Apache Camel endpoints. This mechanism can also be used to provide load-balancing over a cluster of endpoints. On the client side (producer endpoints), endpoints are represented by an abstract ID and at run time, the ID is resolved to a specific endpoint URI. Because the URI is stored in a distributed registry (provided by Fuse Fabric), this enables you to create flexible applications whose topology can be specified at deploy time and updated dynamically."><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Exec.html" title="Exec"><link rel="next" href="IDU-Facebook.html" title="Facebook"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="Fabric"></a>Fabric Component</h1></div><div><div class="abstract"><p>The Fabric component implements a location discovery mechanism
                 for Apache Camel endpoints. This mechanism can also be used to
                 provide load-balancing over a cluster of endpoints. On the
                 client side (producer endpoints), endpoints are represented by
@@ -11,18 +11,10 @@
                 time and updated dynamically.</p></div></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38597"></a>Dependencies</h2></div></div></div><p>The Fabric component can only be used in the context of a
             fabric-enabled Red Hat JBoss Fuse container. You must ensure that
             the <code class="code">fabric-camel</code> feature is installed. If necessary,
-            you can install it using the following console command:</p><pre class="programlisting">karaf@root&gt; features:install fabric-camel</pre><p>Alternatively, if you decide to use a custom feature to deploy
-            your application, you can ensure that the <code class="code">fabric-camel</code>
-            feature is installed by including it in your feature definition. For
-            example:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;features&gt;
-    &lt;feature name="fabric-component-example"&gt;
-        &lt;feature&gt;fabric-camel&lt;/feature&gt;
-        &lt;bundle&gt;<em class="replaceable"><code>URIforMyBundle</code></em>&lt;/bundle&gt;
-        &lt;!-- Specify any other required bundles or features --&gt;
-        ...
-    &lt;/feature&gt;
-&lt;/features&gt;</pre><p>For more details about features, see <span class="olink">Deploying Features</span>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38598"></a>URI format</h2></div></div></div><p>A fabric endpoint has the following URI format:</p><pre class="programlisting">fabric:<em class="replaceable"><code>ClusterID</code></em>[:<em class="replaceable"><code>PublishedURI</code></em>[?<em class="replaceable"><code>Options</code></em>]]</pre><p>The format of the URI depends on whether it is used to specify a consumer endpoint or a
+            you can install it using the following console command:</p><p>In the context of Fabric, you install a feature by adding it to the relevant profile.
+            For example, if you are using a profile called <code class="code">my-master-profile</code>, you would
+            add the <code class="code">fabric-camel</code> feature by entering the following console
+            command:</p><pre class="programlisting">karaf@root&gt; fabric:profile-edit --features fabric-camel my-master-profile</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38598"></a>URI format</h2></div></div></div><p>A fabric endpoint has the following URI format:</p><pre class="programlisting">fabric:<em class="replaceable"><code>ClusterID</code></em>[:<em class="replaceable"><code>PublishedURI</code></em>[?<em class="replaceable"><code>Options</code></em>]]</pre><p>The format of the URI depends on whether it is used to specify a consumer endpoint or a
          producer endpoint.</p><p>For a Fabric <span class="emphasis"><em>producer endpoint</em></span>, the URI format is:</p><pre class="programlisting">fabric:<em class="replaceable"><code>ClusterID</code></em>:<em class="replaceable"><code>PublishedURI</code></em>[?<em class="replaceable"><code>Options</code></em>]</pre><p>Where the specified URI, <code class="code"><em class="replaceable"><code>PublishedURI</code></em></code>, is
          published in the fabric registry and associated with the
                <code class="code"><em class="replaceable"><code>ClusterId</code></em></code> cluster. The options,
@@ -36,7 +28,7 @@
                the client are applied to the client endpoint (producer endpoint) at run time.</p></li><li class="listitem"><p><span class="emphasis"><em>Common options</em></span>&#8212;options common to the client and the
                server are applied to both.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38600"></a>Use cases for fabric endpoints</h2></div></div></div><p>Fabric endpoints essentially provide a discovery mechanism for Apache Camel endpoints. For
          example, they support the following basic use cases:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="Fabric.html#Fabric-LocationDiscovery" title="Location discovery">Location discovery</a>.</p></li><li class="listitem"><p><a class="xref" href="Fabric.html#Fabric-LoadBalancing" title="Load-balancing cluster">Load-balancing cluster</a>.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Fabric-LocationDiscovery"></a>Location discovery</h2></div></div></div><p><a class="xref" href="Fabric.html#Fabric-FigLDTF" title="Figure&nbsp;1.&nbsp;Location Discovery through Fabric">Figure&nbsp;1, &#8220;Location Discovery through Fabric&#8221;</a> gives an overview of how Fabric endpoints enable
-         location discovery at run time.</p><div class="figure"><a name="Fabric-FigLDTF"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Location Discovery through Fabric</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/fabric_01.png" align="middle" width="216" alt="Location Discovery through Fabric"></div></div></div><br class="figure-break"><p>The server side of this application is defined by a route that starts with a Fabric
+         location discovery at run time.</p><div class="figure"><a name="Fabric-FigLDTF"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Location Discovery through Fabric</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/fabric_01.png" align="middle" width="595.2000000000002" alt="Location Discovery through Fabric"></div></div></div><br class="figure-break"><p>The server side of this application is defined by a route that starts with a Fabric
          endpoint, where the Fabric endpoint publishes the URI,
             <code class="code">jetty:http://0.0.0.0:9090</code>. When this route is started, it automatically
          registers the Jetty URI in the fabric registry, under the cluster ID,
@@ -45,7 +37,7 @@
          looks up the ID, <code class="code">foo</code>, in the fabric registry and retrieves the associated
          Jetty endpoint URI. The client then creates a producer endpoint using the discovered Jetty
          URI and connects to the corresponding server port.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Fabric-LoadBalancing"></a>Load-balancing cluster</h2></div></div></div><p><a class="xref" href="Fabric.html#Fabric-FigLBTF" title="Figure&nbsp;2.&nbsp;Load Balancing through Fabric">Figure&nbsp;2, &#8220;Load Balancing through Fabric&#8221;</a> gives an overview of how Fabric endpoints enable you to
-         create a load-balancing cluster.</p><div class="figure"><a name="Fabric-FigLBTF"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Load Balancing through Fabric</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/fabric_02.png" align="middle" width="216" alt="Load Balancing through Fabric"></div></div></div><br class="figure-break"><p>In this case, two Jetty servers are created, with the URIs,
+         create a load-balancing cluster.</p><div class="figure"><a name="Fabric-FigLBTF"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Load Balancing through Fabric</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/fabric_02.png" align="middle" width="595.2000000000002" alt="Load Balancing through Fabric"></div></div></div><br class="figure-break"><p>In this case, two Jetty servers are created, with the URIs,
             <code class="code">jetty:http://0.0.0.0:9090</code> and <code class="code">jetty:http://0.0.0.0:9191</code>.
          Because these published URIs are both prefixed by <code class="code">fabric:foo:</code>, both of the
          Jetty URIs are registered under the <span class="emphasis"><em>same</em></span> cluster ID, <code class="code">foo</code>,
@@ -68,11 +60,7 @@
            http://www.osgi.org/xmlns/blueprint/v1.0.0
            https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"&gt;
 
-<span class="bold"><strong>    &lt;reference id="curator" interface="org.apache.curator.framework.CuratorFramework"/&gt;</strong></span>
-
-<span class="bold"><strong>    &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"&gt;
-        &lt;property name="curator" ref="curator"/&gt;
-    &lt;/bean&gt;</strong></span>
+<span class="bold"><strong>    &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"/&gt;</strong></span>
 
     &lt;camelContext id="camel" trace="false" xmlns="http://camel.apache.org/schema/blueprint"&gt;
         &lt;route id="fabric-server"&gt;
@@ -87,13 +75,9 @@
         &lt;/route&gt;
     &lt;/camelContext&gt;
 
-&lt;/blueprint&gt;</pre></div></div><br class="example-break"><p>Note the following points about the preceding sample:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>A reference to the <code class="code">org.apache.curator.framework.CuratorFramework</code>
-                    OSGi service is created using the <code class="code">reference</code> element. <a class="link" href="https://curator.apache.org/" target="_top">Apache Curator</a> is a ZooKeeper
-                    client component that manages connections to the ZooKeeper server, providing a
-                    high quality of service (including automatic reconnection).</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <code class="code">CuratorFramework</code> OSGi service is provided by the fabric
-                        agent. Hence, a fabric agent must already be installed and running in the
-                        container where the route is deployed.</p></td></tr></table></div></li><li class="listitem"><p>The Fabric component uses the <code class="code">CuratorFramework</code> object to connect
-                    to the ZooKeeper server (Fabric registry).</p></li><li class="listitem"><p>The <code class="code">from</code> DSL command defines the fabric URI,
+&lt;/blueprint&gt;</pre></div></div><br class="example-break"><p>Note the following points about the preceding sample:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The Fabric component uses the <code class="code">CuratorFramework</code> object to connect
+                    to the ZooKeeper server (Fabric registry), where the reference to the
+                        <code class="code">CuratorFramework</code> object is provided automatically.</p></li><li class="listitem"><p>The <code class="code">from</code> DSL command defines the fabric URI,
                         <code class="code">fabric-camel:cluster:jetty:http://0.0.0.0:9090/fabric</code>. At run
                     time, this causes two things to happen:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>The specified <code class="code">jetty</code> URI is published to the fabric
                             registry under the cluster ID, <code class="code">cluster</code>.</p></li><li class="listitem"><p>The Jetty endpoint is activated and used as the consumer endpoint of
@@ -114,11 +98,7 @@
            http://www.osgi.org/xmlns/blueprint/v1.0.0
            https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd"&gt;
 
-<span class="bold"><strong>  &lt;reference id="curator" interface="org.apache.curator.framework.CuratorFramework"/&gt;</strong></span>
-
-<span class="bold"><strong>  &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"&gt;
-    &lt;property name="curator" ref="curator"/&gt;
-  &lt;/bean&gt;</strong></span>
+<span class="bold"><strong>  &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"/&gt;</strong></span>
 
   &lt;camelContext id="camel" trace="false" xmlns="http://camel.apache.org/schema/blueprint"&gt;
 
@@ -136,9 +116,7 @@
 <span class="bold"><strong>  &lt;reference interface="org.apache.camel.spi.ComponentResolver"
               filter="(component=jetty)"/&gt;</strong></span>
 
-&lt;/blueprint&gt;</pre></div></div><br class="example-break"><p>The client route also needs a reference to the
-                <code class="code">org.apache.curator.framework.CuratorFramework</code> OSGi service, which the
-            Fabric component uses to connect to the underlying fabric.</p><p>Because the route is implemented in blueprint XML, you would
+&lt;/blueprint&gt;</pre></div></div><br class="example-break"><p>Because the route is implemented in blueprint XML, you would
             normally add the file containing this code to the
                 <code class="code">src/main/resources/OSGI-INF/blueprint</code> directory of
             a Maven project.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38606"></a>Load-balancing example</h2></div></div></div><p>In principle, implementing load balancing is easy using fabric
@@ -165,11 +143,7 @@
         id="myConfig"
         persistent-id="io.fabric8.examples.camel.loadbalancing.server"/&gt;</strong></span>
 
-    &lt;reference id="curator" interface="org.apache.curator.framework.CuratorFramework"/&gt;
-
-    &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"&gt;
-        &lt;property name="curator" ref="curator"/&gt;
-    &lt;/bean&gt;
+    &lt;bean id="fabric-camel" class="io.fabric8.camel.FabricComponent"/&gt;
 
     &lt;camelContext id="camel" trace="false" xmlns="http://camel.apache.org/schema/blueprint"&gt;
         &lt;!-- using Camel properties component and refer
@@ -201,13 +175,11 @@
                     <code class="code">[[<em class="replaceable"><code>PropName</code></em>]]</code>.</p><p>The Fabric endpont URI exploits the property placeholder mechanism to substitute the
             value of the Jetty port, <code class="code">[[portNumber]]</code>, at run time. At deploy time, you
             can specify the value of the <code class="code">portName</code> property. For example, if using a
-            custom feature, you could specify the property in the feature definition (see <span class="olink">Add OSGi
-                configurations to the feature</span>). Alternatively, you can specify configuration
+            custom feature, you could specify the property in the feature definition. Alternatively, you can specify configuration
             properties when defining deployment profiles in the <span class="emphasis"><em>Fuse Management
                 Console</em></span>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38607"></a>OSGi bundle plug-in configuration</h2></div></div></div><p>When defining an OSGi bundle that uses Fabric endpoints, the
                 <code class="code">Import-Package</code> bundle header must be configured to
-            import the following Java packages:</p><pre class="programlisting">io.fabric8.zookeeper.spring
-io.fabric8.zookeeper</pre><p>For example, assuming that you use Maven to build your
+            import the following Java packages:</p><pre class="programlisting">io.fabric8.zookeeper</pre><p>For example, assuming that you use Maven to build your
             application, <a class="xref" href="Fabric.html#Fabric-ExMBPIC" title="Example&nbsp;5.&nbsp;Maven Bundle Plug-In Configuration">Example&nbsp;5, &#8220;Maven Bundle Plug-In Configuration&#8221;</a> shows how you can
             configure the Maven bundle plug-in to import the required
             packages.</p><div class="example"><a name="Fabric-ExMBPIC"></a><p class="title"><b>Example&nbsp;5.&nbsp;Maven Bundle Plug-In Configuration</b></p><div class="example-contents"><pre class="programlisting">&lt;project ... &gt;
@@ -224,7 +196,6 @@ io.fabric8.zookeeper</pre><p>For example, assuming that you use Maven to build y
           &lt;instructions&gt;
             &lt;Bundle-SymbolicName&gt;${project.groupId}.${project.artifactId}&lt;/Bundle-SymbolicName&gt;
 <span class="bold"><strong>            &lt;Import-Package&gt;
-              io.fabric8.zookeeper.spring,
               io.fabric8.zookeeper,
               *
             &lt;/Import-Package&gt;</strong></span>

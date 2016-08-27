@@ -1,22 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>APNS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-AMQP.html" title="AMQP"><link rel="next" href="IDU-Atmosphere-Websocket.html" title="Atmosphere-Websocket"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-APNS"></a>APNS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_ApnsComponent"></a>Apns Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.8</strong></span>
+   <title>APNS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-AMQP.html" title="AMQP"><link rel="next" href="IDU-Atmosphere-Websocket.html" title="Atmosphere-Websocket"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-APNS"></a>APNS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_ApnsComponent"></a>Apns Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.8</strong></span>
     </p><p>The <span class="bold"><strong>apns</strong></span> component is used for sending notifications to iOS devices. The apns components use <a class="link" href="https://github.com/notnoop/java-apns" target="_top">javapns</a> library.
-The component supports sending notifications to Apple Push Notification Servers (APNS) and consuming feedback from the servers.</p><p>The consumer is configured with 3600 seconds for polling by default because it is a best practice to consume feedback stream from Apple Push Notification Servers only from time to time. For example: every 1 hour to avoid flooding the servers.</p><p>The feedback stream gives informations about inactive devices. You only need to get this informations every some hours if your mobile application is not a heavily used one.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
-&lt;dependency&gt;
+The component supports sending notifications to Apple Push Notification Servers (APNS) and consuming feedback from the servers.</p><p>The consumer is configured with a default polling time of 3600 seconds. It is advisable to consume the feedback stream from Apple Push Notification Servers regularly at larger intervals to avoid flooding the servers.</p><p>The feedback stream gives information about inactive devices. This information can be consumed infrequently (every two or three hours) if your mobile application is not heavily used.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-apns&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;
-
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><p>To send notifications:</p><pre class="programlisting">
-apns:notify[?options]
-
-</pre><p>To consume feedback:</p><pre class="programlisting">
-apns:consumer[?options]
-
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Options"></a>Options</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Producer"></a>Producer</h2></div></div></div><p></p><table id="d0e22572"><tr>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><p>To send notifications:</p><pre class="programlisting">apns:notify<em class="replaceable"><code>[?options]</code></em></pre><p>To consume feedback:</p><pre class="programlisting">apns:consumer<em class="replaceable"><code>[?options]</code></em></pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Options"></a>Options</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Producer"></a>Producer</h2></div></div></div><p></p><table id="d0e46164"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -25,7 +16,7 @@ apns:consumer[?options]
         </td>
         <td></td>
         <td> Empty by default. Configure this property in case you want to statically declare tokens related to devices you want to notify. Tokens are separated by comma. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Consumer"></a>Consumer</h2></div></div></div><p></p><table id="d0e22601"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Consumer"></a>Consumer</h2></div></div></div><p></p><table id="d0e46193"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -54,7 +45,7 @@ apns:consumer[?options]
         </td>
         <td> If <code class="literal">true</code>, use fixed delay between pools, otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td>
       </tr></table><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Component"></a>Component</h2></div></div></div><p></p><p>The <code class="literal">ApnsComponent</code> must be configured with a <code class="literal">com.notnoop.apns.ApnsService</code>. The service can be created and configured using the <code class="literal">org.apache.camel.component.apns.factory.ApnsServiceFactory</code>. See further below for an example. And as well in the <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-apns/" target="_top">test source code</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p></p><p>When Camel will fetch feedback data corresponding to inactive devices, it will retrieve a List of InactiveDevice objects. Each InactiveDevice object of the retrieved list will be setted as the In body, and then processed by the consumer endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>Camel Apns uses these headers.</p><table id="d0e22717"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Component"></a>Component</h2></div></div></div><p>The <code class="literal">ApnsComponent</code> must be configured with a <code class="literal">com.notnoop.apns.ApnsService</code>. The service can be created and configured using the <code class="literal">org.apache.camel.component.apns.factory.ApnsServiceFactory</code>. See further below for an example. For further information, see the <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-apns/" target="_top">test source code</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p>When Camel fetches feedback data corresponding to inactive devices, it retrieves a List of InactiveDevice objects. Each InactiveDevice object on the retrieved list will be set as the In body, and then processed by the consumer endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>Camel Apns uses these headers.</p><table id="d0e46307"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -66,10 +57,26 @@ apns:consumer[?options]
       </tr><tr>
         <td><code class="literal">CamelApnsMessageType</code>
         </td>
-        <td><code class="literal">STRING, PAYLOAD</code>
-        </td>
-        <td> In case you choose PAYLOAD for the message type, then the message will be considered as a APNS payload and sent as is. In case you choose STRING, message will be converted as a APNS payload </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Samples"></a>Samples</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_CamelXmlroute"></a>Camel Xml route</h2></div></div></div><p></p><pre class="programlisting">
+        <td><code class="literal">STRING, PAYLOAD, APNS_NOTIFICATION</code>
+                </td>
+        <td> If you choose PAYLOAD as the message type, the message will be considered an APNS
+                    payload and sent as is. If you choose STRING, the message will be converted to
+                    an APNS payload. APNS_NOTIFICATION is used for sending message body as
+                        <code class="code">com.notnoop.apns.ApnsNotification</code> types.</td>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_ServiceFactory"></a>ApnsServiceFactory Builder Callback</h2></div></div></div><p><code class="literal">ApnsServiceFactory</code> comes with an empty callback method that can be used to
+            configure or replace the default <code class="literal">ApnsServiceBuilder</code> instance. The
+            method has the following format:
+            </p><pre class="programlisting">protected ApnsServiceBuilder configureServiceBuilder(ApnsServiceBuilder serviceBuilder);</pre><p>
+            It is used in the following way:
+            </p><pre class="programlisting">ApnsServiceFactory proxiedApnsServiceFactory = new ApnsServiceFactory(){
+
+  @Override
+  protected ApnsServiceBuilder configureServiceBuilder(ApnsServiceBuilder serviceBuilder) {
+    return serviceBuilder.withSocksProxy("my.proxy.com", 6666);
+  }
+
+};</pre><p>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_Samples"></a>Samples</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-APNS_HSH_CamelXmlroute"></a>Camel Xml route</h2></div></div></div><p></p><pre class="programlisting">
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:camel="http://camel.apache.org/schema/spring"

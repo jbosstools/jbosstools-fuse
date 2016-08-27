@@ -1,0 +1,5 @@
+<html><head></head><body><div id="url" data-url="https://password.corp.redhat.com/RH-IT-Root-CA.crt"></div><script type="text/javascript">
+    var newUrl = document.getElementById("url").getAttribute("data-url");
+    window.opener = null;
+    window.location.href = newUrl;
+</script></body></html>

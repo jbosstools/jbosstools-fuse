@@ -1,15 +1,32 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JMX</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JMS.html" title="JMS"><link rel="next" href="IDU-JPA.html" title="JPA"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-JMX"></a>JMX</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_JMXComponent"></a>JMX Component</h2></div></div></div><p>The JMX component enables consumers to subscribe to an MBean's notifications. The
+   <title>JMX</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-JMS.html" title="JMS"><link rel="next" href="IDU-Jolt.html" title="Jolt"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-JMX"></a>JMX</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_JMXComponent"></a>JMX Component</h2></div></div></div><p>The JMX component enables consumers to subscribe to an MBean's notifications. The
       component supports passing the <code class="code">Notification</code> object directly through the exchange
       or serializing it to XML according to the schema provided within this project. This is a
       consumer-only component. Exceptions are thrown if you attempt to create a producer for
-      it.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_URIFormat"></a>URI Format</h2></div></div></div><p>The component can connect to the local platform MBean server with the following
+      it.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e111698"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
+ </p><p>In the context of the JBoss EAP container, the JMX component integrates with the
+            JBoss EAP JMX subsystem as follows:</p><pre class="programlisting">CamelContext camelctx = contextFactory.createWildflyCamelContext(getClass().getClassLoader());
+camelctx.addRoutes(new RouteBuilder() {
+    @Override
+    public void configure() throws Exception {
+        String host = InetAddress.getLocalHost().getHostName();
+        from("jmx:platform?format=raw&amp;objectDomain=org.apache.camel&amp;key.context=" + host + "/system-context-1&amp;key.type=routes&amp;key.name=\"route1\"" +
+        "&amp;monitorType=counter&amp;observedAttribute=ExchangesTotal&amp;granularityPeriod=500").
+        to("direct:end");
+    }
+});
+camelctx.start();
+
+ConsumerTemplate consumer = camelctx.createConsumerTemplate();
+MonitorNotification notifcation = consumer.receiveBody("direct:end", MonitorNotification.class);
+Assert.assertEquals("ExchangesTotal", notifcation.getObservedAttribute());</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_URIFormat"></a>URI Format</h2></div></div></div><p>The component can connect to the local platform MBean server with the following
       URI:</p><pre class="programlisting">jmx://platform?options</pre><p>A remote MBean server URL can be specified after the <code class="code">jmx:</code> scheme prefix, as
       follows:</p><pre class="programlisting">jmx:service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi?options</pre><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>
       
-    </p><table id="d0e78088"><tr>
+    </p><table id="d0e111735"><tr>
         <th>Property </th>
         <th> Required </th>
         <th> Default </th>
@@ -119,7 +136,7 @@
       mbean server that monitors the <code class="code">MonitorNumber</code> attribute on the
         <code class="code">simpleBean</code>. Additional types of monitor beans and options are detailed below.
       The newly deployed monitor bean is automatically undeployed when the consumer is stopped.
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_URIOptionsforMonitorType"></a>URI Options for Monitor Type</h2></div></div></div><table id="d0e78393"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMX_HSH_URIOptionsforMonitorType"></a>URI Options for Monitor Type</h2></div></div></div><table id="d0e112040"><tr>
         <th>property</th>
         <th>type</th>
         <th>applies to</th>

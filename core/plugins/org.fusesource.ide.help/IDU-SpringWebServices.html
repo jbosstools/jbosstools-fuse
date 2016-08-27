@@ -1,11 +1,11 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Spring Web Services</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-SpringRedis.html" title="Spring Redis"><link rel="next" href="IDU-SQLComponent.html" title="SQL Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SpringWebServices"></a>Spring Web Services</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_SpringWebServicesComponent"></a>Spring Web Services Component</h2></div></div></div><p>The <span class="bold"><strong>spring-ws:</strong></span> component allows you to integrate with
+   <title>Spring Web Services</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-SpringRedis.html" title="Spring Redis"><link rel="next" href="IDU-SQLComponent.html" title="SQL Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SpringWebServices"></a>Spring Web Services</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_SpringWebServicesComponent"></a>Spring Web Services Component</h2></div></div></div><p>The <span class="bold"><strong>spring-ws:</strong></span> component allows you to integrate with
         <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/" target="_top">Spring Web
         Services</a>. It offers both <span class="emphasis"><em>client</em></span><span class="del">side
         support, for accessing web services, and <span class="emphasis"><em>server</em></span></span>side support
       for creating your own contract-first web services.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Dependencies"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Dependencies</th></tr><tr><td align="left" valign="top"><p>As of Camel 2.8 this component ships with Spring-WS 2.0.x which (like the rest of Camel) requires Spring 3.0.x. </p><p>Earlier Camel versions shipped Spring-WS 1.5.9 which is compatible with Spring 2.5.x and 3.0.x. In order to run earlier versions of <code class="literal">camel-spring-ws</code> on Spring 2.5.x you need to add the <code class="literal">spring-webmvc</code> module from Spring 2.5.x. In order to run Spring-WS 1.5.9 on Spring 3.0.x you need to exclude the OXM module from Spring 3.0.x as this module is also included in Spring-WS 1.5.9 (see <a class="link" href="http://stackoverflow.com/questions/3313314/can-spring-ws-1-5-be-used-with-spring-3" target="_top">this post</a>)</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI scheme for this component is as follows</p><pre class="programlisting">spring-ws:[mapping-type:]address[?options]</pre><p>To expose a web service, <code class="code">mapping-type</code> needs to be set to one of the following
-      values:</p><table id="d0e121662"><tr>
+      values:</p><table id="d0e162727"><tr>
         <th> Mapping type </th>
         <th> Description </th>
       </tr><tr>
@@ -40,7 +40,7 @@
     </p><p>As a consumer the <code class="code">address</code> should contain a value relevant to the specified
       mapping-type (e.g. a SOAP action, XPath expression). As a producer the address should be set
       to the URI of the web service you are calling upon.</p><p>You can append query options to the URI in the following format,
-        <code class="literal">?option=value&amp;option=value&amp;...</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e121755"><tr>
+        <code class="literal">?option=value&amp;option=value&amp;...</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e162820"><tr>
         <th> Name </th>
         <th> Required? </th>
         <th> Description </th>
@@ -59,6 +59,34 @@
             <code class="literal">To</code> header is set to the <span class="emphasis"><em>address</em></span> of the web
           service as specified in the endpoint URI (default Spring-WS behavior). </td>
       </tr><tr>
+                <td><code class="literal">outputAction</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td>Signifies the value for the response WS-Addressing Action header that is
+                    provided by the method.</td>
+            </tr><tr>
+                <td><code class="literal">faultAction</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td>Signifies the value for the <code class="code">faultAction</code> response WS-Addressing
+                    Fault Action header that is provided by the method.</td>
+            </tr><tr>
+                <td><code class="literal">faultTo</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td>Signifies the value for the <code class="code">faultAction</code> response WS-Addressing
+                    FaultTo header that is provided by the method.</td>
+            </tr><tr>
+                <td><code class="literal">replyTo</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td>Signifies the value for the <code class="code">replyTo</code> response WS-Addressing ReplyTo
+                    header that is provided by the method.</td>
+            </tr><tr>
         <td><code class="literal">expression</code>
         </td>
         <td> Only when <span class="emphasis"><em>mapping-type</em></span> is <code class="literal">xpathresult</code>
@@ -84,68 +112,71 @@
             
             <span class="bold"><strong>Camel 2.12:</strong></span>&nbsp;he built-in message sender&nbsp;<span class="emphasis"><em>HttpComponentsMessageSender</em></span>&nbsp;s considered <span class="bold"><strong>instead of</strong></span>&nbsp;<span class="emphasis"><em>CommonsHttpMessageSender</em></span>&nbsp;hich has been deprecated. </p>
         </td>
-      </tr></table><p>
-      
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Registrybasedoptions"></a>Registry based options</h2></div></div></div><p>The following options can be specified in the registry (most likely a Spring application
-      context) and referenced from the endpoint URI using the
-          <code class="code">#<em class="replaceable"><code>beanID</code></em></code> notation.</p><p>
-      
-    </p><table id="d0e121934"><tr>
-        <th> Name </th>
-        <th> Required? </th>
-        <th> Description </th>
       </tr><tr>
-        <td><code class="literal">webServiceTemplate</code>
-        </td>
-        <td>
-          <span class="emphasis"><em>No</em></span></td>
-        <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/client/core/WebServiceTemplate.html" target="_top">WebServiceTemplate</a>. This allows for full control over client-side web services
-          handling; like adding a custom interceptor or specifying a fault resolver, message sender
-          or message factory. </td>
-      </tr><tr>
-        <td><code class="literal">messageSender</code>
-        </td>
-        <td>
-          <span class="emphasis"><em>No</em></span></td>
-        <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/transport/WebServiceMessageSender.html" target="_top">WebServiceMessageSender</a>. For example to perform authentication or use
-          alternative transports </td>
-      </tr><tr>
-        <td><code class="literal">messageFactory</code>
-        </td>
-        <td>
-          <span class="emphasis"><em>No</em></span></td>
-        <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/WebServiceMessageFactory.html" target="_top">WebServiceMessageFactory</a>. For example when you want Apache Axiom to handle web
-          service messages instead of SAAJ </td>
-      </tr><tr>
-        <td><code class="literal">transformerFactory</code>
-        </td>
-        <td>
-          <span class="emphasis"><em>No</em></span></td>
-        <td> Option to override the default <code class="code">TransformerFactory</code>. The provided
-          transformer factory must be of type
-            <code class="literal">javax.xml.transform.TransformerFactory</code>
-        </td>
-      </tr><tr>
-        <td><code class="literal">endpointMapping</code>
-        </td>
-        <td> Only when <span class="emphasis"><em>mapping-type</em></span> is <code class="literal">rootqname</code>,
-            <code class="literal">soapaction</code>, <code class="literal">uri</code> or <code class="literal">xpathresult</code>
-        </td>
-        <td> Reference to
-            <code class="literal">org.apache.camel.component.spring.ws.bean.CamelEndpointMapping</code> in the
-          Registry/ApplicationContext. Only one bean is required in the registry to serve all
-          Camel/Spring-WS endpoints. This bean is auto-discovered by the <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/server/MessageDispatcher.html" target="_top">MessageDispatcher</a> and used to map requests to Camel endpoints based on
-          characteristics specified on the endpoint (like root QName, SOAP action, etc) </td>
-      </tr><tr>
-        <td><code class="literal">messageFilter</code>
-        </td>
-        <td> No </td>
-        <td> Option to provide a custom MessageFilter since 2.10.3. For example when you want to process your headers or attachments by your own. </td>
-      </tr></table><p>
-      
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p>
-      
-    </p><table id="d0e122080"><tr>
+                <td><code class="literal">webServiceTemplate</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/client/core/WebServiceTemplate.html" target="_top">WebServiceTemplate</a>. This allows for full control over client-side
+                    web services handling; like adding a custom interceptor or specifying a fault
+                    resolver, message sender or message factory. </td>
+            </tr><tr>
+                <td><code class="literal">messageSender</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/transport/WebServiceMessageSender.html" target="_top">WebServiceMessageSender</a>. For example to perform authentication or
+                    use alternative transports </td>
+            </tr><tr>
+                <td><code class="literal">messageFactory</code>
+                </td>
+                <td>
+                    <span class="emphasis"><em>No</em></span></td>
+                <td> Option to provide a custom <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/WebServiceMessageFactory.html" target="_top">WebServiceMessageFactory</a>. For example when you want Apache Axiom to
+                    handle web service messages instead of SAAJ </td>
+            </tr><tr>
+                <td><code class="literal">endpointMappingKey</code>
+                </td>
+                <td><span class="emphasis"><em>No</em></span></td>
+                <td>Reference to an instance of
+                        <code class="code">org.apache.camel.component.spring.ws.type.EndpointMappingKey</code>.</td>
+            </tr><tr>
+                <td><code class="literal">endpointMapping</code>
+                </td>
+                <td> Only when <span class="emphasis"><em>mapping-type</em></span> is <code class="literal">rootqname</code>,
+                        <code class="literal">soapaction</code>, <code class="literal">uri</code> or
+                        <code class="literal">xpathresult</code>
+                </td>
+                <td> Reference to
+                        <code class="literal">org.apache.camel.component.spring.ws.bean.CamelEndpointMapping</code>
+                    in the Registry/ApplicationContext. Only one bean is required in the registry to
+                    serve all Camel/Spring-WS endpoints. This bean is auto-discovered by the <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/apidocs/org/springframework/ws/server/MessageDispatcher.html" target="_top">MessageDispatcher</a> and used to map requests to Camel endpoints based
+                    on characteristics specified on the endpoint (like root QName, SOAP action, etc)
+                </td>
+            </tr><tr>
+                <td><code class="literal">endpointDispatcher</code>
+                </td>
+                <td> No</td>
+                <td>Spring <code class="code">org.springframework.ws.server.endpoint.MessageEndpoint</code> for
+                    dispatching messages received by Spring-WS to a Camel endpoint, to integrate
+                    with existing (legacy) endpoint mappings like
+                        <code class="code">PayloadRootQNameEndpointMapping</code>,
+                        <code class="code">SoapActionEndpointMapping</code>, and so on.</td>
+            </tr><tr>
+                <td><code class="literal">messageFilter</code></td>
+                <td> No </td>
+                <td> Option to provide a custom MessageFilter since 2.10.3. For example when you
+                    want to process your headers or attachments by your own. </td>
+            </tr><tr>
+                <td><code class="literal">messageIdStrategy</code></td>
+                <td> No </td>
+                <td>A custom <code class="code">MessageIdStrategy</code> to control generation of unique message
+                    IDs.</td>
+            </tr><tr>
+                <td><code class="literal">webServiceEndpointUri</code></td>
+                <td> No </td>
+                <td>The default Web Service endpoint URI to use for the producer.</td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><table id="d0e163220"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -166,6 +197,12 @@
         <td> Header to specify the SOAP action of the message; overrides the
             <code class="literal">soapAction</code> option, if present </td>
       </tr><tr>
+                <td><code class="literal">CamelSpringWebserviceSoapHeader</code>
+                </td>
+                <td> Source </td>
+                <td><span class="bold"><strong>Camel 2.11.1:</strong></span> Use this header to specify/access
+                    the SOAP headers of the message. </td>
+            </tr><tr>
         <td><code class="literal">CamelSpringWebserviceAddressingAction</code>
         </td>
         <td>
@@ -174,14 +211,39 @@
         <td> Use this header to specify the WS-Addressing action of the message; overrides the
             <code class="literal">wsAddressingAction</code> option, if present </td>
       </tr><tr>
-        <td><code class="literal">CamelSpringWebserviceSoapHeader</code>
-        </td>
-        <td> Source </td>
-        <td><span class="bold"><strong>Camel 2.11.1:</strong></span> Use this header to specify/access the SOAP headers of the message. </td>
-      </tr></table><p>
-      
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Accessingwebservices"></a>Accessing web services</h2></div></div></div><p>To call a web service at <code class="literal">
-        <a class="link" href="http://foo.com/bar" target="_top">http://foo.com/bar</a></code> simply define a
+                <td><code class="literal">CamelSpringWebserviceAddressingFaultTo</code>
+                </td>
+                <td>
+                    <code class="code">URI</code>
+                </td>
+                <td>Use this header to specify the WS-Addressing FaultTo , overrides
+                        <code class="code">faultTo</code> option, if present.</td>
+            </tr><tr>
+                <td><code class="literal">CamelSpringWebserviceAddressingReplyTo</code>
+                </td>
+                <td>
+                    <code class="code">URI</code>
+                </td>
+                <td>Use this header to specify the WS-Addressing ReplyTo , overrides
+                        <code class="code">replyTo</code> option, if present.</td>
+            </tr><tr>
+                <td><code class="literal">CamelSpringWebserviceAddressingOutputAction</code>
+                </td>
+                <td>
+                    <code class="code">URI</code>
+                </td>
+                <td>Use this header to specify the WS-Addressing Action, overrides
+                        <code class="code">outputAction</code> option, if present.</td>
+            </tr><tr>
+                <td><code class="literal">CamelSpringWebserviceAddressingFaultAction</code>
+                </td>
+                <td>
+                    <code class="code">URI</code>
+                </td>
+                <td>Use this header to specify the WS-Addressing Fault Action , overrides
+                        <code class="code">faultAction</code> option, if present.</td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Accessingwebservices"></a>Accessing web services</h2></div></div></div><p>To call a <code class="literal">
+        <a class="link" href="http://camel.apache.org/spring-web-services.html" target="_top">web service</a></code> simply define a
       route:</p><pre class="programlisting">from("direct:example").to("spring-ws:http://foo.com/bar")</pre><p>And sent a message:</p><pre class="programlisting">template.requestBody("direct:example", "&lt;foobar xmlns=\"http://foo.com\"&gt;&lt;msg&gt;test message&lt;/msg&gt;&lt;/foobar&gt;");</pre><p>Remember, if it's a SOAP service you're calling you don't have to include SOAP tags. Spring-WS will perform the XML-to-SOAP marshaling.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_SendingSOAPandWSAddressingactionheaders"></a>Sending SOAP and WS-Addressing action headers</h2></div></div></div><p>When a remote web service requires a SOAP action or use of the WS-Addressing standard you
       define your route as:</p><pre class="programlisting">from("direct:example")
 .to("spring-ws:http://foo.com/bar?soapAction=http://foo.com&amp;wsAddressingAction=http://bar.com")</pre><p>Optionally you can override the endpoint options with header values:</p><pre class="programlisting">template.requestBodyAndHeader("direct:example", 
@@ -331,7 +393,8 @@ protected void doProcessSoapAttachements(Message inOrOut, SoapMessage response)
 &lt;/bean&gt;
 
 &lt;bean id="QuoteEndpointDispatcher" class="org.apache.camel.component.spring.ws.bean.CamelEndpointDispatcher" /&gt;
-&lt;bean id="FutureEndpointDispatcher" class="org.apache.camel.component.spring.ws.bean.CamelEndpointDispatcher" /&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_POJOunmarshalling"></a>POJO (un)marshalling</h2></div></div></div><p>Camel's <span class="olink">pluggable data formats</span> offer support for POJO/XML
+&lt;bean id="FutureEndpointDispatcher" class="org.apache.camel.component.spring.ws.bean.CamelEndpointDispatcher" /&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_POJOunmarshalling"></a>POJO (un)marshalling</h2></div></div></div><p>Camel's <a class="link" href="http://camel.apache.org/data-format.html" target="_top">pluggable data
+          formats</a> offer support for POJO/XML
       marshalling using libraries such as JAXB, XStream, JibX, Castor and XMLBeans. You can use these data
       formats in your route to sent and receive POJOs (Plain Old Java Objects), to and from web
       services. </p><p>When <span class="emphasis"><em>accessing</em></span> web services you can marshal the request and unmarshal
