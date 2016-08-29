@@ -106,7 +106,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	public void widgetSelected(SelectionEvent event) {
 	    		setTemplatesActive(true);
 	    		validate();
-	    	};
+	    	}
 	    });
 
 	    Composite templates = new Composite(grp_emptyVsTemplate, SWT.None);
@@ -209,6 +209,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 					Object selObj = Selections.getFirstSelection(event.getSelection());
 					if (selObj instanceof TemplateItem) {
 						updateTemplateInfo((TemplateItem)selObj);
+						updateDSLButtonGroup((TemplateItem)selObj);
 						return;
 					}
 				} 
@@ -253,7 +254,40 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 			btn_blueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
 			btn_springDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
 			btn_javaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));
+			updateDSLButtonGroup(getSelectedTemplate());
 		}
+	}
+	
+	private void updateDSLButtonGroup(TemplateItem template) {
+		if (template == null || !disabledDSLSelected()) return;
+		for (CamelDSLType dslType : CamelDSLType.values()) {
+			if (template.getTemplate().supportsDSL(dslType)) {
+				selectButtonForDSL(dslType);
+				return;
+			}
+		}
+	}
+	
+	private void selectButtonForDSL(CamelDSLType dsltype) {
+		if (dsltype.equals(CamelDSLType.BLUEPRINT)) {
+			btn_blueprintDSL.setSelection(true);
+			btn_javaDSL.setSelection(false);
+			btn_springDSL.setSelection(false);
+		} else if (dsltype.equals(CamelDSLType.JAVA)) {
+			btn_blueprintDSL.setSelection(false);
+			btn_javaDSL.setSelection(true);
+			btn_springDSL.setSelection(false);
+		} else {
+			btn_blueprintDSL.setSelection(false);
+			btn_javaDSL.setSelection(false);
+			btn_springDSL.setSelection(true);
+		}
+	}
+	
+	private boolean disabledDSLSelected() {
+		return 	(btn_blueprintDSL.getSelection() == true && btn_blueprintDSL.isEnabled() == false) ||
+				(btn_javaDSL.getSelection() == true && btn_javaDSL.isEnabled() == false) ||
+				(btn_springDSL.getSelection() == true && btn_springDSL.isEnabled() == false);
 	}
 	
 	private void validate() {
