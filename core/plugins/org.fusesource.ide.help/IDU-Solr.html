@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Solr</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-SNMP.html" title="SNMP"><link rel="next" href="IDU-Splunk.html" title="Splunk"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Solr"></a>Solr</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_SolrComponent"></a>Solr Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.9</strong></span>
+   <title>Solr</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-SNMP.html" title="SNMP"><link rel="next" href="IDU-ApacheSpark.html" title="Apache Spark"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Solr"></a>Solr</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_SolrComponent"></a>Solr Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.9</strong></span>
     </p><p>The Solr component allows you to interface with an <a class="link" href="http://lucene.apache.org/solr/" target="_top">Apache Lucene Solr</a> server (based on SolrJ 3.5.0).</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-solr&lt;/artifactId&gt;
@@ -8,7 +8,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI format is as follows:</p><pre class="programlisting">solr://host[:port]/solr?[options]
 solrs://host[:port]/solr ?[options]
-solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following <a class="link" href="http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/impl/CommonsHttpSolrServer.html" target="_top">SolrServer</a> options may be configured on the Solr endpoint.</p><table id="d0e117924"><tr>
+solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following <a class="link" href="https://lucene.apache.org/solr/4_6_0/solr-solrj/org/apache/solr/client/solrj/SolrServer.html" target="_top">SolrServer</a> options may be configured on the Solr endpoint.</p><table id="d0e158340"><tr>
         <th>name </th>
         <th>default value </th>
         <th>description</th>
@@ -47,12 +47,12 @@ solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div c
       </tr><tr>
         <td><code class="code">streamingThreadCount</code></td>
         <td><code class="code">2</code></td>
-        <td><span class="bold"><strong>Camel 2.9.2</strong></span> set the number of threads for the <a class="link" href="http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a>
+        <td><span class="bold"><strong>Camel 2.9.2</strong></span> set the number of threads for the <a class="link" href="http://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a>
         </td>
       </tr><tr>
         <td><code class="code">streamingQueueSize</code></td>
         <td><code class="code">10</code></td>
-        <td><span class="bold"><strong>Camel 2.9.2</strong></span> set the queue size for the <a class="link" href="http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a>
+        <td><span class="bold"><strong>Camel 2.9.2</strong></span> set the queue size for the <a class="link" href="http://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a>
         </td>
       </tr><tr>
             <td>
@@ -79,8 +79,8 @@ solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div c
             </td>
         </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_MessageOperations"></a>Message Operations</h2></div></div></div><p>The following Solr operations are currently supported. Simply set an exchange header with
             a key of <code class="code">SolrOperation</code> and a value set to one of the following. Some
-            operations also require the message body to be set.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>the <code class="code">INSERT</code> operations use the <a class="link" href="http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/impl/CommonsHttpSolrServer.html" target="_top">CommonsHttpSolrServer</a>
-        </p></li><li class="listitem"><p>the <code class="code">INSERT_STREAMING</code> operations use the <a class="link" href="http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a> (<span class="bold"><strong>Camel 2.9.2</strong></span>)</p></li></ul></div><table width="859" id="d0e118157"><col width="306pt"><col width="170pt"><col width="375pt"><tr>
+            operations also require the message body to be set.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>the <code class="code">INSERT</code> operations use the <a class="link" href="https://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/CommonsHttpSolrServer.html" target="_top">CommonsHttpSolrServer</a>
+        </p></li><li class="listitem"><p>the <code class="code">INSERT_STREAMING</code> operations use the <a class="link" href="http://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a> (<span class="bold"><strong>Camel 2.9.2</strong></span>)</p></li></ul></div><table width="859" id="d0e158573"><col width="306pt"><col width="170pt"><col width="375pt"><tr>
                 <th>operation </th>
                 <th>message body</th>
                 <th>description</th>
@@ -170,7 +170,7 @@ from("direct:commit")
 &lt;/route&gt;</pre><p>A client would simply need to pass a message body to the insert route or to the delete route, and then call the commit route.</p><pre class="programlisting">    template.sendBody("direct:insert", "1234");
     template.sendBody("direct:commit", null);
     template.sendBody("direct:delete", "1234");
-    template.sendBody("direct:commit", null);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_QueryingSolr"></a>Querying Solr</h2></div></div></div><p>Currently, this component doesn't support querying data natively (may be added later).  For now, you can query Solr using <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">HTTP</a> as follows:  </p><pre class="programlisting">//define the route to perform a basic query
+    template.sendBody("direct:commit", null);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_QueryingSolr"></a>Querying Solr</h2></div></div></div><p>Currently, this component doesn't support querying data natively (may be added later).  For now, you can query Solr using <a href="IDU-HTTP.html" class="olink">HTTP</a> as follows:  </p><pre class="programlisting">//define the route to perform a basic query
 from("direct:query")
     .recipientList(simple("http://localhost:8983/solr/select/?q=${body}"))
     .convertBodyTo(String.class);

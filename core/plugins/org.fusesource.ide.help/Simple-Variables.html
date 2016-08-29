@@ -1,0 +1,110 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Variable Reference</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="Simple.html" title="The Simple Language"><link rel="prev" href="Simple-Predicates.html" title="Predicates"><link rel="next" href="Simple-Operators.html" title="Operator Reference"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Simple-Variables"></a>Variable Reference</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33954"></a>Table of variables</h3></div></div></div><p><a class="xref" href="Simple-Variables.html#FMRS.Dsl.TableVSL" title="Table&nbsp;12.&nbsp;Variables for the Simple Language">Table&nbsp;12, &#8220;Variables for the Simple Language&#8221;</a> shows all of the variables supported by the
+                simple language.</p><div class="table"><a name="FMRS.Dsl.TableVSL"></a><p class="title"><b>Table&nbsp;12.&nbsp;Variables for the Simple Language</b></p><div class="table-contents"><table summary="Variables for the Simple Language" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Variable</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">camelContext</code></td><td><code class="code">Object</code></td><td>The Camel context. <span class="emphasis"><em>Supports OGNL
+                                    expressions.</em></span></td></tr><tr><td><code class="code">camelId</code></td><td><code class="code">String</code></td><td>The Camel context's ID value.</td></tr><tr><td><code class="code">exchangeId</code></td><td><code class="code">String</code></td><td>The exchange's ID value.</td></tr><tr><td><code class="code">id</code></td><td><code class="code">String</code></td><td>The <span class="emphasis"><em>In</em></span> message ID value.</td></tr><tr><td><code class="literal">body</code>
+                            </td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>In</em></span> message body. <span class="emphasis"><em>Supports
+                                        OGNL expressions.</em></span></p>
+                            </td></tr><tr><td><code class="code">in.body</code></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message body. <span class="emphasis"><em>Supports OGNL
+                                    expressions.</em></span></td></tr><tr><td><code class="literal">out.body</code>
+                            </td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>Out</em></span> message body.</p>
+                            </td></tr><tr><td><code class="code">bodyAs(<em class="replaceable"><code>Type</code></em>)</code></td><td><em class="replaceable"><code>Type</code></em></td><td>The <span class="emphasis"><em>In</em></span> message body, converted to the
+                                specified type. All types, <em class="replaceable"><code>Type</code></em>, must be
+                                specified using their fully-qualified Java name, except for the
+                                types: <code class="code">byte[]</code>, <code class="code">String</code>,
+                                    <code class="code">Integer</code>, and <code class="code">Long</code>. The converted body
+                                can be null.</td></tr><tr><td><code class="code">mandatoryBodyAs(<em class="replaceable"><code>Type</code></em>)</code></td><td><em class="replaceable"><code>Type</code></em></td><td>The <span class="emphasis"><em>In</em></span> message body, converted to the
+                                specified type. All types, <em class="replaceable"><code>Type</code></em>, must be
+                                specified using their fully-qualified Java name, except for the
+                                types: <code class="code">byte[]</code>, <code class="code">String</code>,
+                                    <code class="code">Integer</code>, and <code class="code">Long</code>. The converted body
+                                is expected to be non-null.</td></tr><tr><td><code class="literal">header.</code><em class="replaceable"><code>HeaderName</code></em></td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>In</em></span> message's
+                                        <em class="replaceable"><code>HeaderName</code></em> header.
+                                        <span class="emphasis"><em>Supports OGNL expressions.</em></span></p>
+                            </td></tr><tr><td><code class="literal">header[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>In</em></span> message's
+                                        <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                    syntax).</p>
+                            </td></tr><tr><td><code class="literal">headers.</code><em class="replaceable"><code>HeaderName</code></em></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header.</td></tr><tr><td><code class="literal">headers[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                syntax).</td></tr><tr><td><code class="literal">in.header.</code><em class="replaceable"><code>HeaderName</code></em></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header. <span class="emphasis"><em>Supports
+                                    OGNL expressions.</em></span></td></tr><tr><td><code class="literal">in.header[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                syntax).</td></tr><tr><td><code class="literal">in.headers.</code><em class="replaceable"><code>HeaderName</code></em></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header. <span class="emphasis"><em>Supports
+                                    OGNL expressions.</em></span></td></tr><tr><td><code class="literal">in.headers[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>In</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                syntax).</td></tr><tr><td><code class="literal">out.header.</code><em class="replaceable"><code>HeaderName</code></em>
+                            </td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>Out</em></span> message's
+                                        <em class="replaceable"><code>HeaderName</code></em> header.</p>
+                            </td></tr><tr><td><code class="literal">out.header[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>
+                                <p>The <span class="emphasis"><em>Out</em></span> message's
+                                        <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                    syntax).</p>
+                            </td></tr><tr><td><code class="literal">out.headers.</code><em class="replaceable"><code>HeaderName</code></em></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>Out</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header.</td></tr><tr><td><code class="literal">out.headers[</code><em class="replaceable"><code>HeaderName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>The <span class="emphasis"><em>Out</em></span> message's
+                                    <em class="replaceable"><code>HeaderName</code></em> header (alternative
+                                syntax).</td></tr><tr><td><code class="code">headerAs(<em class="replaceable"><code>Key</code></em>,<em class="replaceable"><code>Type</code></em>)</code></td><td><em class="replaceable"><code>Type</code></em></td><td>The <em class="replaceable"><code>Key</code></em> header, converted to the
+                                specified type. All types, <em class="replaceable"><code>Type</code></em>, must be
+                                specified using their fully-qualified Java name, except for the
+                                types: <code class="code">byte[]</code>, <code class="code">String</code>,
+                                    <code class="code">Integer</code>, and <code class="code">Long</code>. The converted value
+                                can be null.</td></tr><tr><td><code class="code">headers</code></td><td><code class="code">Map</code></td><td>All of the <span class="emphasis"><em>In</em></span> headers (as a
+                                    <code class="code">java.util.Map</code> type).</td></tr><tr><td><code class="code">in.headers</code></td><td><code class="code">Map</code></td><td>All of the <span class="emphasis"><em>In</em></span> headers (as a
+                                    <code class="code">java.util.Map</code> type).</td></tr><tr><td><code class="literal">property.</code><em class="replaceable"><code>PropertyName</code></em>
+                            </td><td><code class="code">Object</code></td><td>
+                                <p>The <em class="replaceable"><code>PropertyName</code></em> property on the
+                                    exchange.</p>
+                            </td></tr><tr><td><code class="literal">property[</code><em class="replaceable"><code>PropertyName</code></em><code class="literal">]</code></td><td><code class="code">Object</code></td><td>
+                                <p>The <em class="replaceable"><code>PropertyName</code></em> property on the
+                                    exchange (alternative syntax).</p>
+                            </td></tr><tr><td><code class="code">sys.</code><em class="replaceable"><code>SysPropertyName</code></em></td><td><code class="code">String</code></td><td>The <em class="replaceable"><code>SysPropertyName</code></em> Java system
+                                property.</td></tr><tr><td><code class="code">sysenv.</code><em class="replaceable"><code>SysEnvVar</code></em></td><td><code class="code">String</code></td><td>The <em class="replaceable"><code>SysEnvVar</code></em> system environment
+                                variable.</td></tr><tr><td><code class="code">exception</code></td><td><code class="code">String</code></td><td>Either the exception object from
+                                    <code class="code">Exchange.getException()</code> or, if this value is null,
+                                the caught exception from the <code class="code">Exchange.EXCEPTION_CAUGHT</code>
+                                property; otherwise null. <span class="emphasis"><em>Supports OGNL
+                                    expressions.</em></span></td></tr><tr><td><code class="code">exception.message</code></td><td><code class="code">String</code></td><td>If an exception is set on the exchange, returns the value of
+                                    <code class="code">Exception.getMessage()</code>; otherwise, returns
+                                    <code class="code">null</code>.</td></tr><tr><td><code class="code">exception.stacktrace</code></td><td><code class="code">String</code></td><td>If an exception is set on the exchange, returns the value of
+                                    <code class="code">Exception.getStackTrace()</code>; otherwise, returns
+                                    <code class="code">null</code>. <span class="bold"><strong>Note:</strong></span> The
+                                simple language first tries to retrieve an exception from
+                                    <code class="code">Exchange.getException()</code>. If that property is not
+                                set, it checks for a caught exception, by calling
+                                    <code class="code">Exchange.getProperty(Exchange.CAUGHT_EXCEPTION)</code>.</td></tr><tr><td><code class="code">date:</code><em class="replaceable"><code>command</code></em><code class="code">:</code><em class="replaceable"><code>pattern</code></em></td><td><code class="code">String</code></td><td>A date formatted using a <a class="link" href="http://download.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html" target="_top">java.text.SimpleDateFormat</a> pattern. The following
+                                commands are supported: <code class="code">now</code>, for the current date and
+                                time; <code class="code">header.</code><em class="replaceable"><code>HeaderName</code></em>, or
+                                    <code class="code">in.header.</code><em class="replaceable"><code>HeaderName</code></em> to
+                                use a <a class="link" href="http://download.oracle.com/javase/6/docs/api/java/util/Date.html" target="_top">java.util.Date</a> object in the
+                                    <em class="replaceable"><code>HeaderName</code></em> header from the
+                                    <span class="emphasis"><em>In</em></span> message;
+                                    <code class="code">out.header.</code><em class="replaceable"><code>HeaderName</code></em> to
+                                use a <a class="link" href="http://download.oracle.com/javase/6/docs/api/java/util/Date.html" target="_top">java.util.Date</a> object in the
+                                    <em class="replaceable"><code>HeaderName</code></em> header from the
+                                    <span class="emphasis"><em>Out</em></span> message;</td></tr><tr><td><code class="code">bean:</code><code class="code"><em class="replaceable"><code>beanID</code></em>.<em class="replaceable"><code>Method</code></em></code></td><td><code class="code">Object</code></td><td>Invokes a method on the referenced bean and <span class="emphasis"><em>returns the
+                                    result of the method invocation</em></span>. To specify a method
+                                name, you can either use the
+                                        <code class="code"><em class="replaceable"><code>beanID</code></em>.<em class="replaceable"><code>Method</code></em></code>
+                                syntax; or you can use the
+                                    <code class="code"><em class="replaceable"><code>beanID</code></em>?method=</code><em class="replaceable"><code>methodName</code></em>
+                                syntax.</td></tr><tr><td><code class="code">ref:</code><code class="code"><em class="replaceable"><code>beanID</code></em></code></td><td><code class="code">Object</code></td><td>Looks up the bean with the ID, <em class="replaceable"><code>beanID</code></em>,
+                                in the registry and <span class="emphasis"><em>returns a reference to the bean
+                                    itself</em></span>. For example, if you are using the splitter
+                                EIP, you could use this variable to reference the bean that
+                                implements the splitting algorithm.</td></tr><tr><td><code class="code">properties:<em class="replaceable"><code>Key</code></em></code></td><td><code class="code">String</code></td><td>The value of the <em class="replaceable"><code>Key</code></em> property
+                                placeholder .</td></tr><tr><td><code class="code">properties:<em class="replaceable"><code>Location</code></em>:<em class="replaceable"><code>Key</code></em></code></td><td><code class="code">String</code></td><td>The value of the <em class="replaceable"><code>Key</code></em> property
+                                placeholder, where the location of the properties file is given by
+                                <em class="replaceable"><code>Location</code></em> .</td></tr><tr><td><code class="code">threadName</code></td><td><code class="code">String</code></td><td>The name of the current thread.</td></tr><tr><td><code class="code">routeId</code></td><td><code class="code">String</code></td><td>Returns the ID of the current route through which the
+                                    <code class="code">Exchange</code> is being routed. </td></tr><tr><td><code class="code">type:<em class="replaceable"><code>Name</code></em>[.<em class="replaceable"><code>Field</code></em>]</code></td><td><code class="code">Object</code></td><td>References a type or field by its Fully-Qualified-Name (FQN). To
+                                refer to a field, append
+                                    <code class="code">.<em class="replaceable"><code>Field</code></em></code>. For example, you
+                                can refer to the <code class="code">FILE_NAME</code> constant field from the
+                                    <code class="code">Exchange</code> class as
+                                    <code class="code">type:org.apache.camel.Exchange.FILE_NAME</code></td></tr><tr><td><code class="code">collate(group)</code></td><td><code class="code">List</code></td><td>From Camel 2.17, the collate function iterates the message body and groups the data into the sub lists of specific size. You can use with the Splitter EIP to split a message body and group or batch the submessages into a group of N sublists.</td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>

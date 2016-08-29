@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>SJMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Sip.html" title="Sip"><link rel="next" href="IDU-SMPP.html" title="SMPP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SJMS"></a>SJMS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_SJMSComponent"></a>SJMS Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
+   <title>SJMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Sip.html" title="Sip"><link rel="next" href="IDU-SJMS-Batch.html" title="SJMS Batch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SJMS"></a>SJMS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_SJMSComponent"></a>SJMS Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
     </p><p>The Simple JMS Component, or SJMS, is a JMS client for use with Camel that uses well known
             best practices when it comes to JMS client creation and configuration. SJMS contains a
             brand new JMS client API written explicitly for Camel eliminating third party messaging
             implementations keeping it light and resilient. The following features are
             included:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Standard Queue and Topic Support (Durable &amp; Non-Durable)</p></li><li class="listitem"><p>InOnly &amp; InOut MEP Support</p></li><li class="listitem"><p>Asynchronous Producer and Consumer Processing</p></li><li class="listitem"><p>Internal JMS Transaction Support</p></li></ul></div><p>Additional key features include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Plugable Connection Resource Management</p></li><li class="listitem"><p>Session, Consumer, &amp; Producer Pooling &amp; Caching Management</p></li><li class="listitem"><p>Batch Consumers and Producers</p></li><li class="listitem"><p>Transacted Batch Consumers &amp; Producers</p></li><li class="listitem"><p>Support for Customizable Transaction Commit Strategies (Local JMS Transactions only)</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Why the S in SJMS"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Why the S in SJMS</th></tr><tr><td align="left" valign="top"><p>S stands for Simple and Standard and Springless. Also camel-jms was already taken. :-)</p></td></tr></table></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>This is a rather new component in a complex world of JMS messaging. So this component is ongoing development and hardening.
-The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="olink">JMS</a> component based on Spring JMS has been hardened and battle tested extensively.</p></td></tr></table></div><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+The classic <a href="IDU-JMS.html" class="olink">JMS</a> component based on Spring JMS has been hardened and battle tested extensively.</p></td></tr></table></div><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
 &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
 &lt;artifactId&gt;camel-sjms&lt;/artifactId&gt;
 &lt;version&gt;x.x.x&lt;/version&gt;
@@ -14,7 +14,7 @@ The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="o
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">sjms:[queue:|topic:]destinationName[?options]</pre><p>Where <code class="literal">destinationName</code> is a JMS queue or topic name. By default, the <code class="literal">destinationName</code> is interpreted as a queue name. For example, to connect to the queue, <code class="literal">FOO.BAR</code> use:</p><pre class="programlisting">sjms:FOO.BAR</pre><p>You can include the optional <code class="literal">queue:</code> prefix, if you prefer:</p><pre class="programlisting">sjms:queue:FOO.BAR</pre><p>To connect to a topic, you <span class="emphasis"><em>must</em></span> include the <code class="literal">topic:</code> prefix. For example, to connect to the topic, <code class="literal">Stocks.Prices</code>, use:</p><pre class="programlisting">sjms:topic:Stocks.Prices</pre><p>You append query options to the URI using the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ComponentOptionsandConfigurations"></a>Component Options and Configurations</h2></div></div></div><p>The SJMS Component supports the following configuration options:</p><p>
 
-    </p><table id="d0e113892"><tr>
+    </p><table id="d0e153712"><tr>
         <th> Option </th>
         <th> Required </th>
         <th> Default Value </th>
@@ -39,7 +39,8 @@ The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="o
         <td></td>
         <td><code class="literal">null</code>
         </td>
-        <td> A ConnectionResource is an interface that allows for customization and container control of the ConnectionFactory. See Plugable Connection Resource Management for further details. </td>
+        <td>A ConnectionResource is an interface that allows for customization and container control
+                    of the ConnectionFactory.  </td>
       </tr><tr>
         <td><code class="literal">headerFilterStrategy</code>
         </td>
@@ -48,13 +49,22 @@ The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="o
         </td>
         <td></td>
       </tr><tr>
-        <td><code class="literal">keyFormatStrategy</code>
-        </td>
-        <td></td>
-        <td><code class="literal">DefaultJmsKeyFormatStrategy</code>
-        </td>
-        <td></td>
-      </tr><tr>
+                <td><code class="literal">jmsKeyFormatStrategy</code>
+                </td>
+                <td></td>
+                <td><code class="literal">DefaultJmsKeyFormatStrategy</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Pluggable strategy for encoding and
+                    decoding JMS keys so they can be compliant with the JMS specification. Camel
+                    provides two implementations out of the box: <code class="code">default</code> and
+                        <code class="code">passthrough</code>. The <code class="code">default</code> strategy will safely
+                    marshal dots and hyphens (<code class="code">.</code> and <code class="code">-</code>). The
+                        <code class="code">passthrough</code> strategy leaves the key as is. Can be used for JMS
+                    brokers which do not care whether JMS header keys contain illegal characters.
+                    You can provide your own implementation of the
+                        <code class="code">org.apache.camel.component.jms.JmsKeyFormatStrategy</code> and
+                    reference it using the <code class="code">#</code> notation.</td>
+            </tr><tr>
         <td><code class="literal">transactionCommitStrategy</code>
         </td>
         <td></td>
@@ -69,6 +79,15 @@ The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="o
                 </td>
                 <td><span class="bold"><strong>Camel 2.15.0:</strong></span> Enables you to set a custom
                         <code class="code">DestinationCreationStrategy</code> on the SJMS Component.</td>
+            </tr><tr>
+                <td><code class="literal">messageCreatedStrategy</code>
+                </td>
+                <td></td>
+                <td> </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> To use the given
+                        <code class="code">MessageCreatedStrategy</code> which are invoked when Camel creates new
+                    instances of <code class="code">javax.jms.Message</code> objects when Camel is sending a JMS
+                    message.</td>
             </tr></table><p>Below is an example of how to configure the SjmsComponent with its required ConnectionFactory provider. It will create a single connection by default and store it using the components internal pooling APIs to ensure that it is able to service Session creation requests in a thread safe manner.</p><pre class="programlisting">SjmsComponent component = new SjmsComponent();
 component.setConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
 getContext().addComponent("sjms", component);</pre><p>For a SjmsComponent that is required to support a durable subscription, you can override the default ConnectionFactoryResource instance and set the <span class="bold"><strong>clientId</strong></span> property.</p><pre class="programlisting">ConnectionFactoryResource connectionResource = new ConnectionFactoryResource();
@@ -79,7 +98,7 @@ SjmsComponent component = new SjmsComponent();
 component.setConnectionResource(connectionResource);
 component.setMaxConnections(1);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ProducerConfigurationOptions"></a>Producer Configuration Options</h2></div></div></div><p>The SjmsProducer Endpoint supports the following properties:</p><p>
 
-    </p><table id="d0e114056"><tr>
+    </p><table id="d0e153923"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -160,12 +179,52 @@ component.setMaxConnections(1);</pre></div><div class="simplesect"><div class="t
                     <span class="bold"><strong>Camel 2.15.1:</strong></span> Whether to allow sending messages
                     with no body. If <code class="code">false</code> and the message body is <code class="code">null</code>, a
                         <code class="code">JMSException</code> is thrown.</td>
+            </tr><tr>
+                <td><code class="literal">mapJmsMessage</code>
+                </td>
+                <td><code class="literal">true</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Specifies whether Camel should auto
+                    map the received JMS message to an appropiate payload type, such as
+                        <code class="code">javax.jms.TextMessage</code> or to a <code class="code">String</code> etc. </td>
+            </tr><tr>
+                <td><code class="literal">messageCreatedStrategy</code>
+                </td>
+                <td> </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> To use the given
+                        <code class="code">MessageCreatedStrategy</code> which are invoked when Camel creates new
+                    instances of <code class="code">javax.jms.Message</code> objects when Camel is sending a JMS
+                    message.</td>
+            </tr><tr>
+                <td><code class="literal">jmsKeyFormatStrategy</code>
+                </td>
+                <td> </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Pluggable strategy for encoding and
+                    decoding JMS keys so they can be compliant with the JMS specification. Camel
+                    provides two implementations out of the box: <code class="code">default</code> and
+                        <code class="code">passthrough</code>. The <code class="code">default</code> strategy will safely
+                    marshal dots and hyphens (<code class="code">.</code> and <code class="code">-</code>). The
+                        <code class="code">passthrough</code> strategy leaves the key as is. Can be used for JMS
+                    brokers which do not care whether JMS header keys contain illegal characters.
+                    You can provide your own implementation of the
+                        <code class="code">org.apache.camel.component.jms.JmsKeyFormatStrategy</code> and
+                    reference it using the <code class="code">#</code> notation.</td>
+            </tr><tr>
+                <td><code class="literal">includeAllJMSXProperties</code>
+                </td>
+                <td> </td>
+                <td><span class="bold"><strong>Camel 2.16:</strong></span> Whether to include all
+                            <code class="code">JMSX<em class="replaceable"><code>xxx</code></em></code> properties when mapping
+                    from JMS to Camel Message. Setting this to <code class="code">true</code> will include
+                    properties such as <code class="code">JMSXAppID</code>, and <code class="code">JMSXUserID</code> etc.
+                    Note: If you are using a custom <code class="code">headerFilterStrategy</code> then this
+                    option does not apply.</td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ProducerUsage"></a>Producer Usage</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_InOnlyProducerDefault"></a>InOnly Producer - (Default)</h2></div></div></div><p></p><p>The InOnly Producer is the default behavior of the SJMS Producer Endpoint.</p><pre class="programlisting">from("direct:start")
 .to("sjms:queue:bar");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_InOutProducer"></a>InOut Producer</h2></div></div></div><p></p><p>To enable InOut behavior append the <code class="literal">exchangePattern</code> attribute to the URI. By default it will use a dedicated TemporaryQueue for each consumer.</p><pre class="programlisting">from("direct:start")
 .to("sjms:queue:bar?exchangePattern=InOut");</pre><p>You can specify a <code class="literal">namedReplyTo</code> though which can provide a better monitor point.</p><pre class="programlisting">from("direct:start")
 .to("sjms:queue:bar?exchangePattern=InOut&amp;namedReplyTo=my.reply.to.queue");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ConsumersConfigurationOptions"></a>Consumers Configuration Options</h2></div></div></div><p>The SjmsConsumer Endpoint supports the following properties:</p><p>
 
-    </p><table id="d0e114330"><tr>
+    </p><table id="d0e154312"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -236,7 +295,13 @@ from("sjms:queue:bar")
 from("sjms:queue:in.out.test?exchangePattern=InOut")
 .transform(constant("Bye Camel"));
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_AdvancedUsageNotes"></a>Advanced Usage Notes</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_PlugableConnectionResourceManagementanchorconnectionresource"></a>Plugable Connection Resource Management 
-    </h2></div></div></div><p>SJMS provides JMS <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/Connection.html" target="_top">Connection</a> resource management through built-in connection pooling. This eliminates the need to depend on third party API pooling logic. However there may be times that you are required to use an external Connection resource manager such as those provided by J2EE or OSGi containers. For this SJMS provides an interface that can be used to override the internal SJMS Connection pooling capabilities. This is accomplished through the <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/main/java/org/apache/camel/component/sjms/jms/ConnectionResource.java" target="_top">ConnectionResource</a> interface.</p><p>The <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/main/java/org/apache/camel/component/sjms/jms/ConnectionResource.java" target="_top">ConnectionResource</a> provides methods for borrowing and returning Connections as needed is the contract used to provide <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/Connection.html" target="_top">Connection</a> pools to the SJMS component. A user should use when it is necessary to integrate SJMS with an external connection pooling manager.</p><p>It is recommended though that for standard <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/ConnectionFactory.html" target="_top">ConnectionFactory</a> providers you use the <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/test/java/org/apache/camel/component/sjms/it/ConnectionResourceIT.java" target="_top">ConnectionFactoryResource</a> implementation that is provided with SJMS as-is or extend as it is optimized for this component.</p><p>Below is an example of using the pluggable ConnectionResource with the ActiveMQ PooledConnectionFactory:</p><pre class="programlisting">public class AMQConnectionResource implements ConnectionResource {
+    </h2></div></div></div><p>SJMS provides JMS <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/Connection.html" target="_top">Connection</a> 
+        resource management through built-in connection pooling. This eliminates the need to depend on third party API 
+        pooling logic. However there may be times that you are required to use an external Connection resource manager 
+        such as those provided by J2EE or OSGi containers. For this SJMS provides an interface that can be used to override 
+        the internal SJMS Connection pooling capabilities. This is accomplished through the 
+        <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/main/java/org/apache/camel/component/sjms/jms/ConnectionResource.java" target="_top">ConnectionResource</a> 
+        interface.</p><p>The <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/main/java/org/apache/camel/component/sjms/jms/ConnectionResource.java" target="_top">ConnectionResource</a> provides methods for borrowing and returning Connections as needed is the contract used to provide <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/Connection.html" target="_top">Connection</a> pools to the SJMS component. A user should use when it is necessary to integrate SJMS with an external connection pooling manager.</p><p>It is recommended though that for standard <a class="link" href="http://docs.oracle.com/javaee/5/api/javax/jms/ConnectionFactory.html" target="_top">ConnectionFactory</a> providers you use the <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sjms/src/test/java/org/apache/camel/component/sjms/it/ConnectionResourceIT.java" target="_top">ConnectionFactoryResource</a> implementation that is provided with SJMS as-is or extend as it is optimized for this component.</p><p>Below is an example of using the pluggable ConnectionResource with the ActiveMQ PooledConnectionFactory:</p><pre class="programlisting">public class AMQConnectionResource implements ConnectionResource {
 private PooledConnectionFactory pcf;
 
 public AMQConnectionResource(String connectString, int maxConnections) {

@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>CXF</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-CryptoDigitalSignatures.html" title="Crypto (Digital Signatures)"><link rel="next" href="IDU-CXFBeanComponent.html" title="CXF Bean Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CXF"></a>CXF</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_CXFComponent"></a>CXF Component</h2></div></div></div><p>The <span class="bold"><strong>cxf:</strong></span> component provides integration with <a class="link" href="http://incubator.apache.org/cxf/" target="_top">Apache CXF</a> for connecting to
+   <title>CXF</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-CryptoDigitalSignatures.html" title="Crypto (Digital Signatures)"><link rel="next" href="IDU-CXFBeanComponent.html" title="CXF Bean Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CXF"></a>CXF</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_CXFComponent"></a>CXF Component</h2></div></div></div><p>The <span class="bold"><strong>cxf:</strong></span> component provides integration with <a class="link" href="http://incubator.apache.org/cxf/" target="_top">Apache CXF</a> for connecting to
             JAX-WS services hosted in CXF.</p><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -8,16 +8,21 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you want to learn about CXF dependencies, see the <code class="literal">
-                    <a class="link" href="http://svn.apache.org/repos/asf/cxf/trunk/distribution/src/main/release/lib/WHICH_JARS" target="_top">WHICH-JARS</a></code> text file.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF as a consumer, the <span class="olink">CAMEL:CXF Bean
-                    Component</span> allows you to factor out how message payloads are received
+                    <a class="link" href="http://svn.apache.org/repos/asf/cxf/trunk/distribution/src/main/release/lib/WHICH_JARS" target="_top">WHICH-JARS</a></code> text file.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF as a consumer, the <a href="IDU-CXFBeanComponent.html" class="olink">CAMEL:CXF Bean
+                    Component</a> allows you to factor out how message payloads are received
                 from their processing as a RESTful or SOAP web service. This has the potential of
                 using a multitude of transports to consume web services. The bean component's
                 configuration is also simpler and provides the fastest method to implement web
-                services using Camel and CXF.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF in streaming modes (see DataFormat option), then also read about <a class="link" href="Stream caching" target="_top">Stream caching</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">cxf:bean:cxfEndpoint[?options]</pre><p>Where <span class="bold"><strong>cxfEndpoint</strong></span> represents a bean ID that
+                services using Camel and CXF.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF in streaming modes (see DataFormat option), then also read about <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream caching</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e64197"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
+ </p><p> The CXF component integrates with the JBoss EAP <code class="code">webservices</code> susbsystem
+            that also uses Apache CXF. For more information, see <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/javaee/jaxws.html" target="_top">JAX-WS</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>At present, the Camel on EAP subsystem does <span class="emphasis"><em>not</em></span> support CXF
+                or Restlet consumers. However, it is possible to mimic CXF consumer behaviour, using
+                the <code class="filename">CamelProxy</code>. </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">cxf:bean:cxfEndpoint[?options]</pre><p>Where <span class="bold"><strong>cxfEndpoint</strong></span> represents a bean ID that
             references a bean in the Spring bean registry. With this URI format, most of the
             endpoint details are specified in the bean definition.</p><pre class="programlisting">cxf://someAddress[?options]</pre><p>Where <span class="bold"><strong>someAddress</strong></span> specifies the CXF endpoint's
             address. With this URI format, most of the endpoint details are specified using
-            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e34342"><tr>
+            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e64245"><tr>
                 <th> Name </th>
                 <th>Required</th>
                 <th> Description </th>
@@ -113,9 +118,20 @@
                 <td><code class="literal">setDefaultBus</code>
                 </td>
                 <td>No</td>
-                <td>Specifies whether or not to use the default CXF bus for this endpoint. Possible
-                    values are: <code class="literal">true</code>, <code class="literal">false</code>
-                    <span class="emphasis"><em>(default)</em></span>.</td>
+                <td><span class="bold"><strong>Deprecated:</strong></span> Specifies whether or not to use the
+                    default CXF bus for this endpoint. Possible values are: <code class="literal">true</code>,
+                        <code class="literal">false</code>
+                    <span class="emphasis"><em>(default)</em></span>. This option is deprecated and you should use
+                        <code class="code">defaultBus</code> from Camel 2.16 onwards.</td>
+            </tr><tr>
+                <td><code class="literal">defaultBus</code>
+                </td>
+                <td>No</td>
+                <td><span class="bold"><strong>Deprecated:</strong></span> Specifies whether or not to use the
+                    default CXF bus for this endpoint. Possible values are: <code class="literal">true</code>,
+                        <code class="literal">false</code>
+                    <span class="emphasis"><em>(default)</em></span>. This option is deprecated and you should use
+                        <code class="code">defaultBus</code> from Camel 2.16 onwards.</td>
             </tr><tr>
                 <td><code class="literal">bus</code>
                 </td>
@@ -273,7 +289,7 @@
                 </td>
             </tr></table><p> The <code class="code">serviceName</code> and <code class="code">portName</code> are <a class="link" href="http://en.wikipedia.org/wiki/QName" target="_top">QNames</a>, so if you provide them
             be sure to prefix them with their <code class="literal">{namespace}</code> as shown in the
-            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e34985"><tr>
+            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e64920"><tr>
                 <th> DataFormat </th>
                 <th> Description </th>
             </tr><tr>
@@ -453,7 +469,7 @@
     &lt;/property&gt;
 &lt;/bean&gt;
 </pre></li><li class="listitem"><p>Other than <code class="literal">relayHeaders</code>, there are new properties that can
-                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e35259"><tr>
+                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e65194"><tr>
                 <th> Name </th>
                 <th> Description </th>
                 <th> type </th>
@@ -509,7 +525,7 @@
             the namespace declarations at the end of the <code class="literal">&lt;cxf:cxfEndpoint/&gt;</code>
             tag--these are required because the combined <code class="code">{namespace}localName</code> syntax is
             presently not supported for this tag's attribute values.</p><p>The <code class="literal">cxf:cxfEndpoint</code> element supports many additional
-            attributes:</p><table id="d0e35416"><tr>
+            attributes:</p><table id="d0e65351"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>
@@ -548,7 +564,7 @@
                 </td>
                 <td> The class name of the SEI (Service Endpoint Interface) class which could have
                     JSR181 annotation or not. </td>
-            </tr></table><p>It also supports many child elements:</p><table id="d0e35518"><tr>
+            </tr></table><p>It also supports many child elements:</p><table id="d0e65453"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>
@@ -655,7 +671,7 @@
  Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
  map.put("org.apache.cxf.stax.force-start-document", Boolean.TRUE);
  exchange.getOut().setHeader(Client.RESPONSE_CONTEXT, map); </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_HowtoconsumeamessagefromacamelcxfendpointinPOJOdataformat"></a>How to consume a message from a camel-cxf endpoint in POJO data format</h2></div></div></div><p>The <code class="literal">camel-cxf</code> endpoint consumer <code class="code">POJO</code> data format is
-            based on the <a class="link" href="http://cwiki.apache.org/CXF20DOC/invokers.html" target="_top">cxf
+            based on the <a class="link" href="http://cxf.apache.org/docs/invokers.html" target="_top">cxf
                 invoker</a>, so the message header has a property with the name of
                 <code class="literal">CxfConstants.OPERATION_NAME</code> and the message body is a list of the
             SEI method parameters.</p><pre class="programlisting">public class PersonProcessor implements Processor {
@@ -700,7 +716,7 @@
     }
 
 }
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_HowtopreparethemessageforthecamelcxfendpointinPOJOdataformat"></a>How to prepare the message for the camel-cxf endpoint in POJO data format</h2></div></div></div><p>The <code class="literal">camel-cxf</code> endpoint producer is based on the <a class="link" href="https://svn.apache.org/repos/asf/cxf/trunk/api/src/main/java/org/apache/cxf/endpoint/Client.java" target="_top">cxf client API</a>. First you need to specify the operation name in the message
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_HowtopreparethemessageforthecamelcxfendpointinPOJOdataformat"></a>How to prepare the message for the camel-cxf endpoint in POJO data format</h2></div></div></div><p>The <code class="literal">camel-cxf</code> endpoint producer is based on the <a class="link" href="https://cxf.apache.org/javadoc/latest/org/apache/cxf/endpoint/ClientImpl.html" target="_top">cxf client API</a>. First you need to specify the operation name in the message
             header, then add the method parameters to a list, and initialize the message with this
             parameter list. The response message's body is a <code class="code">messageContentsList</code>, you
             can get the result from that list.</p><p>If you don't specify the operation name in the message header,
@@ -781,8 +797,8 @@ assertEquals("Reply body on Camel is wrong", "echo " + TEST_MESSAGE, result.get(
     &lt;process ref="InsertRequestOutHeaderProcessor" /&gt;
     &lt;to uri="cxf:bean:serviceRelayEndpointWithInsertion"/&gt;
     &lt;process ref="InsertResponseOutHeaderProcessor" /&gt;
-&lt;/route&gt;     </pre><p><span class="bold"><strong>In 2.x</strong></span> SOAP headers are propagated to
-            and from Apache Camel Message headers. The Apache Camel message header name is
+&lt;/route&gt;     </pre><p><span class="bold"><strong>In 2.x</strong></span> SOAP headers are propagated to and from
+            Apache Camel Message headers. The Apache Camel message header name is
                 <code class="code">org.apache.cxf.headers.Header.list</code>, which is a constant defined in CXF
                 (<code class="code">org.apache.cxf.headers.Header.HEADER_LIST</code>). The header value is a
                 <code class="code">List&lt;&gt;</code> of CXF <code class="code">SoapHeader</code> objects
@@ -844,7 +860,13 @@ public static class InsertResponseOutHeaderProcessor implements Processor {
     
 })
 .to(getServiceEndpointURI());
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_SOAPheadersarenotavailableinMESSAGEmode"></a>SOAP headers are not available in MESSAGE mode</h2></div></div></div><p>SOAP headers are not available in <code class="code">MESSAGE</code> mode as SOAP processing is
+</pre><p>Since Camel 2.16.0, you can use the same approach as described in <a class="xref" href="IDU-CXF.html#IDU-CXF_HSH_HowtogetandsetSOAPheadersinPOJOmode" title="How to get and set SOAP headers in POJO mode">How to get and set SOAP headers in POJO mode</a> to set or get the SOAP
+            headers. You can now use the <code class="code">org.apache.cxf.headers.Header.list</code> header to
+            get and set a list of SOAP headers. This means that if you have a route that forwards
+            from one Camel CXF endpoint to another (SOAP Client -&gt; Camel -&gt; CXF service), the SOAP
+            headers sent by the SOAP client are now also forwarded to the CXF service. If you do not
+            want the headers to be forwarded, remove them from the
+                <code class="code">org.apache.cxf.headers.Header.list</code> Camel header.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_SOAPheadersarenotavailableinMESSAGEmode"></a>SOAP headers are not available in MESSAGE mode</h2></div></div></div><p>SOAP headers are not available in <code class="code">MESSAGE</code> mode as SOAP processing is
             skipped.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_HowtothrowaSOAPFaultfromCamel"></a>How to throw a SOAP Fault from Apache Camel</h2></div></div></div><p>If you are using a CXF endpoint to consume the SOAP request, you may need to throw the
             SOAP <code class="code">Fault</code> from the camel context. Basically, you can use the
                 <code class="literal">throwFault</code> DSL to do that; it works for <code class="literal">POJO</code>,
@@ -878,7 +900,7 @@ detail.appendChild(tn);</pre><p>Then throw it as you like:</p><pre class="progra
 
     }).end().to(serviceURI);
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Howtopropagateacamelcxfendpointsrequestandresponsecontext"></a>How to propagate a CXF endpoint's request and response context</h2></div></div></div><p>
-            <a class="link" href="https://svn.apache.org/repos/asf/cxf/trunk/api/src/main/java/org/apache/cxf/endpoint/Client.java" target="_top">cxf client API</a> provides a way to invoke the operation with request and
+            <a class="link" href="https://cxf.apache.org/javadoc/latest/org/apache/cxf/endpoint/ClientImpl.html" target="_top">cxf client API</a> provides a way to invoke the operation with request and
             response context. If you are using a CXF endpoint producer to invoke the external Web
             service, you can set the request context and get the response context with the following
             code:</p><pre class="programlisting">
@@ -1063,10 +1085,10 @@ Assert.assertEquals(300, image.getHeight());</pre><p>You can also consume a Came
             mode</a> that can transport messages of arbitrary structures (i.e., not bound
             to a specific XML schema). To use this mode, you simply omit specifying the wsdlURL
             and serviceClass attributes of the CXF endpoint.</p><div class="informalexample"><pre class="programlisting">&lt;cxf:cxfEndpoint id="testEndpoint" address="http://localhost:9000/SoapContext/SoapAnyPort"&gt;
-     &lt;cxf:properties&gt;
-       &lt;entry key="dataFormat" value="PAYLOAD"/&gt;
-     &lt;/cxf:properties&gt;
-   &lt;/cxf:cxfEndpoint&gt;</pre></div><p>It is noted that the default CXF dispatch client does not send a specific
+  &lt;cxf:properties&gt;
+    &lt;entry key="dataFormat" value="PAYLOAD"/&gt;
+  &lt;/cxf:properties&gt;
+&lt;/cxf:cxfEndpoint&gt;</pre></div><p>It is noted that the default CXF dispatch client does not send a specific
             SOAPAction header. Therefore, when the target service requires a specific SOAPAction
             value, it is supplied in the Camel header using the key SOAPAction
             (case-insensitive).</p></div></div></body></html>

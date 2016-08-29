@@ -1,6 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Restlet</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Ref.html" title="Ref"><link rel="next" href="IDU-RMI.html" title="RMI"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Restlet"></a>Restlet</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_RestletComponent"></a>Restlet Component</h2></div></div></div><p>The <span class="bold"><strong>Restlet</strong></span> component provides <a class="link" href="http://www.restlet.org" target="_top">Restlet</a> based <a class="link" href="Endpoint" target="_top">endpoints</a> for consuming and producing RESTful resources.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>The Restlet component enables asynchronous mode by default, but this setting
+   <title>Restlet</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Rest.html" title="REST"><link rel="next" href="IDU-RMI.html" title="RMI"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Restlet"></a>Restlet</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_RestletComponent"></a>Restlet Component</h2></div></div></div><p>The <span class="bold"><strong>Restlet</strong></span> component provides <a class="link" href="http://www.restlet.org" target="_top">Restlet</a>-based <span class="phrase">endpoints</span> for consuming and producing RESTful
+            resources.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>The Restlet component enables asynchronous mode by default, but this setting
                 appears to cause a performance hit. If this is an issue, you can set the option,
                     <code class="code">synchronous=true</code>, on the endpoint URI to improve
                 performance.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">restlet:restletUrl[?options]</pre><p>Format of restletUrl:</p><pre class="programlisting">protocol://hostname[:port][/resourcePattern]</pre><p>Restlet promotes decoupling of protocol and application concerns. The reference
@@ -8,8 +9,9 @@
                 Engine</a> supports a number of protocols. However, we have tested the HTTP
             protocol only. The default port is port 80. We do not automatically switch default port
             based on the protocol yet.</p><p>You can append query options to the URI in the following format,
-                <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_Options"></a>Options</h2></div></div></div><table id="d0e103816"><tr>
+                <code class="literal">?option=value&amp;option=value&amp;...</code></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>It seems Restlet is case sensitive in understanding headers. For example, to use
+                    <code class="code">content-type</code>, use <code class="code">Content-Type</code>, and for
+                    <code class="code">location</code> use <code class="code">Location</code>, and so on.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_Options"></a>Options</h2></div></div></div><table id="d0e141815"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -42,7 +44,7 @@
                 <td> On a producer endpoint, specifies the request method to use. On a consumer
                     endpoint, specifies that the endpoint consumes only
                         <code class="literal">restletMethod</code> requests. The string value is converted to
-                        <a class="link" href="http://www.restlet.org/documentation/1.1/api/org/restlet/data/Method.html" target="_top">org.restlet.data.Method</a> by the
+                      <code class="literal">org.restlet.data.Method</code> by the
                         <code class="literal">Method.valueOf(String)</code> method. </td>
             </tr><tr>
                 <td>
@@ -136,7 +138,7 @@
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The Restlet component can be configured with the following options. Notice these are
                 <span class="bold"><strong>component</strong></span> options and cannot be configured on the
-            endpoint, see further below for an example. </p><table id="d0e104103"><tr>
+            endpoint, see further below for an example. </p><table id="d0e142102"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -323,7 +325,7 @@
                             </span><code class="code">false</code><span class="color:#000000"> to
                                 support reading the stream multiple times.</span></p>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_Camel20"></a>Message Headers</h2></div></div></div><table id="d0e104464"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Restlet_HSH_Camel20"></a>Message Headers</h2></div></div></div><table id="d0e142463"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Description </th>

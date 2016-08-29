@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Metrics</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="Master.html" title="Master Component"><link rel="next" href="IDU-MINA2.html" title="MINA2 - Deprecated"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Metrics"></a>Metrics</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Metrics_HSH_MetricsComponent"></a>Metrics Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The <span class="strong"><strong>metrics:</strong></span> component allows to collect various
+   <title>Metrics</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="Master.html" title="Master Component"><link rel="next" href="IDU-MINA2.html" title="MINA2 - Deprecated"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Metrics"></a>Metrics</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Metrics_HSH_MetricsComponent"></a>Metrics Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The <span class="strong"><strong>metrics:</strong></span> component allows to collect various
             metrics directly from Camel routes. Supported metric types are <a class="link" href="IDU-Metrics.html#scroll-bookmark-311" title="Metrics type counter">counter</a>, <a class="link" href="IDU-Metrics.html#scroll-bookmark-314" title="Metric type histogram">histogram</a>, <a class="link" href="IDU-Metrics.html#scroll-bookmark-317" title="Metric type meter">meter</a> and <a class="link" href="IDU-Metrics.html#scroll-bookmark-320" title="Metrics type timer">timer</a>. <a class="link" href="http://metrics.codahale.com/" target="_top">Metrics</a> provides simple way to
             measure behaviour of application. Configurable reporting backend is enabling different
             integration options for collecting and visualizing statistics. The component also
@@ -46,7 +46,7 @@ public static class MyConfig extends SingleRouteCamelConfiguration {
                         <code class="code">name.not.used</code>.</p><p>All Metrics specific headers are removed from the message once Metrics
                     endpoint finishes processing of exchange. While processing exchange Metrics
                     endpoint will catch all exceptions and write log entry using level
-                        <code class="code">warn</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-311"></a>Metrics type counter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:counter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-312"></a>Options</h2></div></div></div><table id="d0e87904"><colgroup> </colgroup><thead><tr>
+                        <code class="code">warn</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-311"></a>Metrics type counter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:counter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-312"></a>Options</h2></div></div></div><table id="d0e123474"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -89,7 +89,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:counter:simple.counter?decrement=3")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-313"></a>Headers</h2></div></div></div><p>Message headers can be used to override <code class="code">increment</code> and
-                        <code class="code">decrement</code> values specified in Metrics component URI.</p><table id="d0e88003"><colgroup> </colgroup><thead><tr>
+                        <code class="code">decrement</code> values specified in Metrics component URI.</p><table id="d0e123573"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -127,7 +127,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_COUNTER_INCREMENT, simple("${body.length}"))
     .to("metrics:counter:body.length")
-    .to("mock:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-314"></a>Metric type histogram</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:histogram:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-315"></a>Options</h2></div></div></div><table id="d0e88083"><colgroup> </colgroup><thead><tr>
+    .to("mock:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-314"></a>Metric type histogram</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:histogram:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-315"></a>Options</h2></div></div></div><table id="d0e123653"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -155,7 +155,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:histogram:simple.histogram")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-316"></a>Headers</h2></div></div></div><p>Message header can be used to override value specified in Metrics component
-                    URI.</p><table id="d0e88144"><colgroup> </colgroup><thead><tr>
+                    URI.</p><table id="d0e123714"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -179,7 +179,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_HISTOGRAM_VALUE, constant(992L))
     .to("metric:histogram:simple.histogram?value=700")
-    .to("direct:out")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-317"></a>Metric type meter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:meter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-318"></a>Options</h2></div></div></div><table id="d0e88201"><colgroup> </colgroup><thead><tr>
+    .to("direct:out")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-317"></a>Metric type meter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:meter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-318"></a>Options</h2></div></div></div><table id="d0e123771"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -207,7 +207,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:meter:simple.meter?mark=81")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-319"></a>Headers</h2></div></div></div><p>Message header can be used to override <code class="code">mark</code> value specified in
-                    Metrics component URI.</p><table id="d0e88268"><colgroup> </colgroup><thead><tr>
+                    Metrics component URI.</p><table id="d0e123838"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -231,7 +231,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_METER_MARK, constant(345L))
     .to("metric:meter:simple.meter?mark=123")
-    .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-320"></a>Metrics type timer</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:timer:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-321"></a>Options</h2></div></div></div><table id="d0e88325"><colgroup> </colgroup><thead><tr>
+    .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-320"></a>Metrics type timer</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:timer:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-321"></a>Options</h2></div></div></div><table id="d0e123895"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -260,7 +260,7 @@ from("direct:in")
     .to("direct:calculate")
     .to("metrics:timer:simple.timer?action=stop");</pre></div><p><code class="code">TimerContext</code> objects are stored as Exchange properties between
                     different Metrics component calls.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-322"></a>Headers</h2></div></div></div><p>Message header can be used to override action value specified in Metrics
-                    component URI.</p><table id="d0e88393"><colgroup> </colgroup><thead><tr>
+                    component URI.</p><table id="d0e123963"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -289,9 +289,9 @@ from("direct:in")
                 This factory can be used in Java and XML as the examples below demonstrates.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Instead of using the MetricsRoutePolicyFactory you can define a
                     MetricsRoutePolicy per route you want to instrument, in case you only want to
                     instrument a few selected routes.</p></td></tr></table></div><p>From Java you just add the factory to the <code class="code">CamelContext</code> as shown
-                below:</p><div class="informalexample"><pre class="programlisting">context.addRoutePolicyFactory(new MetricsRoutePolicyFactory());</pre></div><p>And from XML DSL you define a &lt;bean&gt; as follows:</p><div class="informalexample"><pre class="programlisting">  &lt;!-- use camel-metrics route policy to gather metrics for all routes --&gt;
-  &lt;bean id="metricsRoutePolicyFactory" class="org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory"/&gt;</pre></div><p>The <code class="code">MetricsRoutePolicyFactory</code> and <code class="code">MetricsRoutePolicy</code>
-                supports the following options:</p><table id="d0e88474"><colgroup> </colgroup><thead><tr>
+                below:</p><div class="informalexample"><pre class="programlisting">context.addRoutePolicyFactory(new MetricsRoutePolicyFactory());</pre></div><p>And from XML DSL you define a &lt;bean&gt; as follows:</p><div class="informalexample"><pre class="programlisting">&lt;!-- use camel-metrics route policy to gather metrics for all routes --&gt;
+&lt;bean id="metricsRoutePolicyFactory" class="org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory"/&gt;</pre></div><p>The <code class="code">MetricsRoutePolicyFactory</code> and <code class="code">MetricsRoutePolicy</code>
+                supports the following options:</p><table id="d0e124044"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Name</p>
                         </td>
@@ -303,10 +303,10 @@ from("direct:in")
                         </td>
                     </tr></thead><tbody><tr>
                         <td>
-                            <p>useJmx</p>
+                            <p><code class="code">useJmx</code></p>
                         </td>
                         <td>
-                            <p>false</p>
+                            <p><code class="code">false</code></p>
                         </td>
                         <td>
                             <p>Whether to report fine grained statistics to JMX by using the
@@ -319,20 +319,20 @@ from("direct:in")
                         </td>
                     </tr><tr>
                         <td>
-                            <p>jmxDomain</p>
+                            <p><code class="code">jmxDomain</code></p>
                         </td>
                         <td>
-                            <p>org.apache.camel.metrics</p>
+                            <p><code class="code">org.apache.camel.metrics</code></p>
                         </td>
                         <td>
                             <p>The JMX domain name</p>
                         </td>
                     </tr><tr>
                         <td>
-                            <p>prettyPrint</p>
+                            <p><code class="code">prettyPrint</code></p>
                         </td>
                         <td>
-                            <p>false</p>
+                            <p><code class="code">false</code></p>
                         </td>
                         <td>
                             <p>Whether to use pretty print when outputting statistics in json
@@ -340,7 +340,7 @@ from("direct:in")
                         </td>
                     </tr><tr>
                         <td>
-                            <p>metricsRegistry</p>
+                            <p><code class="code">metricsRegistry</code></p>
                         </td>
                         <td>
                             <p></p>
@@ -353,10 +353,10 @@ from("direct:in")
                         </td>
                     </tr><tr>
                         <td>
-                            <p>rateUnit</p>
+                            <p><code class="code">rateUnit</code></p>
                         </td>
                         <td>
-                            <p>TimeUnit.SECONDS</p>
+                            <p><code class="code">TimeUnit.SECONDS</code></p>
                         </td>
                         <td>
                             <p>The unit to use for rate in the metrics reporter or when dumping
@@ -364,20 +364,60 @@ from("direct:in")
                         </td>
                     </tr><tr>
                         <td>
-                            <p>durationUnit</p>
+                            <p><code class="code">durationUnit</code></p>
                         </td>
                         <td>
-                            <p>TimeUnit.MILLISECONDS</p>
+                            <p><code class="code">TimeUnit.MILLISECONDS</code></p>
                         </td>
                         <td>
                             <p>The unit to use for duration in the metrics reporter or when
                                 dumping the statistics as json.</p>
                         </td>
-                    </tr></tbody></table><p></p><p>From Java code tou can get hold of the
+                    </tr><tr>
+                    <td>
+                        <p><code class="code">namePattern</code></p>
+                    </td>
+                    <td>
+                        <p><code class="code">##name##.##routeId##.##type##</code></p>
+                    </td>
+                    <td>
+                        <p><span class="bold"><strong>Camel 2.17:</strong></span> The name pattern to use.
+                            Uses dot as separators, but you can change that. The values
+                                <code class="code">##name##</code>, <code class="code">##routeId##</code>, and
+                                <code class="code">##type##</code> will be replaced with actual value. Where
+                                <code class="code">###name###</code> is the name of the CamelContext,
+                                <code class="code">###routeId###</code> is the name of the route, and
+                                <code class="code">###type###</code> is the value of responses.</p>
+                    </td>
+                </tr></tbody></table><p>From Java code tou can get hold of the
                     <code class="code">com.codahale.metrics.MetricRegistry</code> from the
                     <code class="code">org.apache.camel.component.metrics.routepolicy.MetricsRegistryService</code>
                 as shown below:</p><div class="informalexample"><pre class="programlisting">MetricRegistryService registryService = context.hasService(MetricsRegistryService.class);
 if (registryService != null) {
   MetricsRegistry registry = registryService.getMetricsRegistry();
   ...
-}</pre></div></div></div></body></html>
+}</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e124267"></a>MetricsMessageHistoryFactory</h2></div></div></div><p>This factory allows to use metrics to capture Message History performance statistics
+            while routing messages. It works by using a metrics Timer for each node in all the
+            routes. This factory can be used in Java and XML as the examples below demonstrates. </p><p>From Java you just set the factory to the CamelContext as shown below:</p><pre class="programlisting">context.setMessageHistoryFactory(new MetricsMessageHistoryFactory());</pre><p>And from XML DSL you define a &lt;bean&gt; as follows:</p><pre class="programlisting">&lt;!-- use camel-metrics message history to gather metrics for all messages being routed --&gt;
+&lt;bean id="metricsMessageHistoryFactory" class="org.apache.camel.component.metrics.messagehistory.MetricsMessageHistoryFactory"/&gt;</pre><p>The following options are supported on the factory:</p><div class="informaltable"><table border="1"><colgroup><col width="29%" class="c1"><col width="16%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">useJmx</code></td><td><code class="code">false</code></td><td>Whether to report fine-grained statistics to JMX using the
+                                <code class="code">com.codahale.metrics.JmxReporter</code>. Note that if JMX is
+                            enabled on CamelContext, a <code class="code">MetricsRegistryService</code> MBean is
+                            enlisted under the services type in the JMX tree. That MBean has a
+                            single operation to output the statistics using JSon. Setting
+                                <code class="code">useJmx</code> to <code class="code">true</code> is needed only if you want
+                            fine-grained MBeans per statistics type.</td></tr><tr><td><code class="code">jmxDomain</code></td><td><code class="code">org.apache.camel.metrics</code></td><td>The JMX domain name.</td></tr><tr><td><code class="code">prettyPrint</code></td><td><code class="code">false</code></td><td>Whether to use pretty print when outputting statistics in JSon
+                            format</td></tr><tr><td><code class="code">metricsRegistry</code></td><td>&nbsp;</td><td>Enable a shared <code class="code">com.codahale.metrics.MetricRegistry</code>. If
+                            none is provided, Camel will create a shared instance for this
+                            CamelContext.</td></tr><tr><td><code class="code">rateUnit</code></td><td><code class="code">TimeUnit.SECONDS</code></td><td>The unit to use for rate in the metrics reporter or when dumping the
+                            statistics as JSon.</td></tr><tr><td><code class="code">durationUnit</code></td><td><code class="code">TimeUnit.MILLISECONDS</code></td><td>The unit to use for duration in the metrics reporter or when dumping
+                            the statistics as JSon.</td></tr><tr><td><code class="code">namePattern</code></td><td><code class="code">##name##.##routeId##.###id###.##type##</code></td><td>The name pattern to use. Uses dot as separators, but you can change
+                            that. The values <code class="code">##name##</code>, <code class="code">##routeId##</code>,
+                                <code class="code">##type##</code>, and <code class="code">###id###</code> will be replaced
+                            with actual value. Where <code class="code">###name###</code> is the name of the
+                            CamelContext, <code class="code">###routeId###</code> is the name of the route, the
+                                <code class="code">###id###</code> pattern represents the node ID, and
+                                <code class="code">###type###</code> is the value of history.</td></tr></tbody></table></div><p>At runtime the metrics can be accessed from Java API or JMX, which enable you to
+            gather the data as JSon output. From Java code you can get the service from the
+            CamelContext as follows:</p><pre class="programlisting">MetricsMessageHistoryService service = context.hasService(MetricsMessageHistoryService.class);
+String json = service.dumpStatisticsAsJson();</pre><p>And the JMX API the MBean is registered in the <code class="code">type=services</code> tree with
+                <code class="code">name=MetricsMessageHistoryService</code>.</p></div></div></body></html>

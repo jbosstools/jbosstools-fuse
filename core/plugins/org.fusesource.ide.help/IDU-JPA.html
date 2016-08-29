@@ -1,14 +1,18 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JPA</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JMX.html" title="JMX"><link rel="next" href="IDU-Jsch.html" title="Jsch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-JPA"></a>JPA</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_JPAComponent"></a>JPA Component</h2></div></div></div><p>The <span class="bold"><strong>jpa</strong></span> component enables you to store and retrieve Java
+   <title>JPA</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Jolt.html" title="Jolt"><link rel="next" href="IDU-Jsch.html" title="Jsch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-JPA"></a>JPA</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_JPAComponent"></a>JPA Component</h2></div></div></div><p>The <span class="bold"><strong>jpa</strong></span> component enables you to store and retrieve Java
       objects from persistent storage using EJB 3's Java Persistence Architecture (JPA), which is a
       standard interface layer that wraps Object/Relational Mapping (ORM) products such as OpenJPA,
-      Hibernate, TopLink, and so on.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Sendingtotheendpoint"></a>Sending to the endpoint</h2></div></div></div><p>You can store a Java entity bean in a database by sending it to a JPA producer endpoint.
-      The body of the <span class="emphasis"><em>In</em></span> message is assumed to be an entity bean (that is, a
-      POJO with an <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Entity.html" target="_top">@Entity</a>
-      annotation on it) or a collection or an array of entity beans. </p><p>If the body does not contain one of the preceding types, put a <span class="phrase">Message
-        TranslatorMessage Translator</span> in front of the endpoint to perform the necessary
-      conversion first.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Consumingfromtheendpoint"></a>Consuming from the endpoint</h2></div></div></div><p>Consuming messages from a JPA consumer endpoint removes (or updates) entity beans in the
+      Hibernate, TopLink, and so on.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e112476"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
+ </p><p>For more information about using the JPA component in a JBoss EAP container, see <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/javaee/jpa.html" target="_top">Integration with JPA</a>. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Sendingtotheendpoint"></a>Sending to the endpoint</h2></div></div></div><p>You can store a Java entity bean in a database by sending it to a JPA producer endpoint.
+            The body of the <span class="emphasis"><em>In</em></span> message is assumed to be an entity bean (that
+            is, a POJO with an <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Entity.html" target="_top">@Entity</a> annotation on it) or a collection or an array of entity
+            beans.</p><p>If the body is a List of entities, make sure to use
+                <code class="code">entityType=java.util.ArrayList</code> as a configuration passed to the
+            producer endpoint.</p><p>If the body does not contain one of the preceding types, put a <em class="firstterm">Message
+                Translator</em> in front of the endpoint to perform the necessary conversion
+            first.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Consumingfromtheendpoint"></a>Consuming from the endpoint</h2></div></div></div><p>Consuming messages from a JPA consumer endpoint removes (or updates) entity beans in the
       database. This allows you to use a database table as a logical queue: consumers take messages
       from the queue and then delete/update them to logically remove them from the queue.</p><p>If you do not wish to delete the entity bean when it has been processed (and when routing is done), you can specify <code class="literal">consumeDelete=false</code> on the URI. This will result in the entity being processed each poll.</p><p>If you would rather perform some update on the entity to mark it as processed (such as to exclude it from a future query) then you can annotate a method with <a class="link" href="http://camel.apache.org/maven/current/camel-jpa/apidocs/org/apache/camel/component/jpa/Consumed.html" target="_top">@Consumed</a> which will be invoked on your entity bean when the entity bean when it has been processed (and when routing is done).</p><p>From <span class="bold"><strong>Camel 2.13</strong></span> onwards you can use
                 <code class="code">@PreConsumed</code> which will be invoked on your entity bean before it has
@@ -16,7 +20,7 @@
       specified, it helps the <a class="link" href="Type Converter" target="_top">Type Converter</a> to ensure the
       body is of the correct type.</p><p>For consuming, the <span class="emphasis"><em>entityClassName</em></span> is mandatory.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Options"></a>Options</h2></div></div></div><table id="d0e78751"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Options"></a>Options</h2></div></div></div><table id="d0e112560"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -173,16 +177,48 @@
           (where the EntityManager has to execute an UPDATE instead of an INSERT query)! </td>
       </tr><tr>
             <td>
-                <p><code class="code">consumer.SkipLockedEntity</code></p>
+                <p><code class="code">joinTransaction</code></p>
             </td>
             <td>
-                <p><code class="code">false</code></p>
+                <p><code class="code">true</code></p>
             </td>
             <td>
-                <p><span class="strong"><strong>Camel 2.13:</strong></span> To configure
-                    whether to use NOWAIT on lock and silently skip the entity.</p>
+                <p><span class="bold"><strong>Camel 2.12.3:</strong></span> camel-jpa will join transaction
+                        by default from Camel 2.12 onwards. You can use this option to turn this
+                        off, for example if you use <code class="code">LOCAL_RESOURCE</code> and join transaction
+                        doesn't work with your JPA provider. This option can also be set globally on
+                        the <code class="code">JpaComponent</code>, instead of having to set it on all
+                        endpoints.</p>
             </td>
-        </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message headers to the exchange:</p><table id="d0e79179"><tr>
+        </tr><tr>
+                <td>
+                    <p><code class="code">usePassedInEntityManager</code></p>
+                </td>
+                <td>
+                    <p><code class="code">false</code></p>
+                </td>
+                <td>
+                    <p><span class="bold"><strong>Camel 2.12.4/2.13.1:</strong></span> JPA producer only.
+                        If <code class="code">true</code>, Camel will use the <code class="code">EntityManager</code> from the
+                        header <code class="code">JpaConstants.ENTITYMANAGER</code> instead of the configured
+                        entity manager on the component/endpoint. This allows end users to control
+                        which entity manager will be in use.</p>
+                </td>
+            </tr><tr>
+                <td>
+                    <p><code class="code">sharedEntityManager</code></p>
+                </td>
+                <td>
+                    <p><code class="code">false</code></p>
+                </td>
+                <td>
+                    <p><span class="bold"><strong>Camel 2.16:</strong></span> whether to use Spring's
+                            <code class="code">SharedEntityManager</code> for the consumer/producer. A good idea
+                        might be to set <code class="code">joinTransaction=false</code> if this option is
+                            <code class="code">true</code>, as sharing the entity manager and mixing transactions
+                        is not a good idea.</p>
+                </td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message headers to the exchange:</p><table id="d0e113060"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -203,7 +239,7 @@
    &lt;property name="entityManagerFactory" ref="myEMFactory"/&gt;
 &lt;/bean&gt;</pre><p>In <span class="bold"><strong>Camel 2.3</strong></span> the
         <code class="literal">JpaComponent</code> will auto lookup the <code class="literal">EntityManagerFactory</code>
-      from the <a class="link" href="Registry" target="_top">Registry</a> which means you do not need to configure
+      from the Registry which means you do not need to configure
       this on the <code class="literal">JpaComponent</code> as shown above. You only need to do so if there is
       ambiguity, in which case Camel will log a WARN.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_ConfiguringTransactionManager"></a>Configuring TransactionManager</h2></div></div></div><p>Since Camel 2.3 the <code class="code">JpaComponent</code> will auto lookup the
                 <code class="code">TransactionManager</code> from the Registry. If Camel does not find any

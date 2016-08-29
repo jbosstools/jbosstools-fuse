@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Stream</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Stomp.html" title="Stomp"><link rel="next" href="IDU-StringTemplate.html" title="StringTemplate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Stream"></a>Stream</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_StreamComponent"></a>Stream Component</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component provides access to the
+   <title>Stream</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Stomp.html" title="Stomp"><link rel="next" href="IDU-StringTemplate.html" title="StringTemplate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Stream"></a>Stream</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_StreamComponent"></a>Stream Component</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component provides access to the
                 <code class="literal">System.in</code>, <code class="literal">System.out</code> and
                 <code class="literal">System.err</code> streams as well as allowing streaming of file and
             URL.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">stream:in[?options]
@@ -13,7 +13,9 @@ stream:url[?options]</pre><p>If the <code class="literal">stream:header</code> U
             is available only for stream producers (that is, it cannot appear in
                 <code class="literal">from()</code>).</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_Options"></a>Options</h2></div></div></div><table id="d0e125029"><tr>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e166668"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
+ </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_Options"></a>Options</h2></div></div></div><table id="d0e166677"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -113,7 +115,13 @@ stream:url[?options]</pre><p>If the <code class="literal">stream:header</code> U
                 </td>
                 <td><code class="literal">false</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.11.0:</strong></span> This option is used in combination with <span class="olink">Splitter</span> and streaming to the same file. The idea is to keep the stream open and only close when the <span class="olink">Splitter</span> is done, to improve performance. Mind this requires that you only stream to the same file, and not 2 or more files. </td>
+                <td><span class="bold"><strong>Camel 2.11.0:</strong></span> This option is used in
+                    combination with <span class="phrase">Splitter</span> and
+                    streaming to the same file. The idea is to keep the stream open and only close
+                    when the <span class="phrase">Splitter</span> is done, to improve performance. Mind
+                    this requires that you only stream to the same file, and not two or more files,
+                    and that the last split message that carries the information that its the last,
+                    is routed to the stream endpoint so it gets the signal to close. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Stream_HSH_Messagecontent"></a>Message content</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component supports either <code class="literal">String</code> or
             <code class="literal">byte[]</code> for writing to streams. Just add either
             <code class="literal">String</code> or <code class="literal">byte[]</code> content to the <code class="literal">message.in.body</code>.

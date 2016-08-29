@@ -4,15 +4,15 @@
         <description>Aggregator Pattern</description>
         <topic href="aggregate.html" label="Aggregator"/>
     </context>
-    <context id="AOPEIP">
+    <context id="aopEIP">
         <description>Aspect Oriented Programming Pattern</description>
         <topic href="aop.html" label="Aspect Oriented Programming"/>
     </context>
-    <context id="beanComp">
+  <!--  <context id="beanEIP">
         <description>Bean Integration Pattern</description>
         <topic href="beanEndpt.html" label="Bean Integration"/>
-    </context>
-    <context id="catchEIP">
+    </context> -->
+    <context id="doCatchEIP">
         <description>Catch Pattern</description>
         <topic href="catch.html" label="Catch Exceptions"/>
     </context>
@@ -40,11 +40,11 @@
         <description>Content Filter Pattern</description>
         <topic href="filter.html" label="Content Filter"/>
     </context>
-    <context id="finallyEIP">
+    <context id="doFinallyEIP">
         <description>Finally Pattern</description>
         <topic href="finally.html" label="Exception Handling"/>
     </context>
-    <context id="idempotentConsumer">
+    <context id="idempotentConsumerEIP">
         <description>Idempotent Consumer</description>
         <topic href="idempotentConsumer.html" label="Idempotent Consumer"/>
     </context>
@@ -72,10 +72,10 @@
         <description>Load Balancing Pattern</description>
         <topic href="loadBalance.html" label="Load Balancer"/>
     </context>
-    <context id="logEIP">
+   <!-- <context id="logEIP">
         <description>Logging Pattern</description>
         <topic href="logEIP.html" label="Log"/>
-    </context>
+    </context> -->
     <context id="loopEIP">
         <description>Loop Pattern</description>
         <topic href="loop.html" label="Loop"/>
@@ -88,7 +88,7 @@
         <description>Multicast Pattern</description>
         <topic href="multicast.html" label="Multicast"/>
     </context>
-    <context id="onCompleteEIP">
+    <context id="onCompletionEIP">
         <description>On Completion Pattern</description>
         <topic href="onCompletion.html" label="On Completion"/>
     </context>
@@ -104,7 +104,7 @@
         <description>Pipeline Pattern</description>
         <topic href="pipeline.html" label="Pipeline"/>
     </context>
-    <context id="policyNode">
+    <context id="policyEIP">
         <description>Policy Pattern</description>
         <topic href="policy.html" label="Policy"/>
     </context>
@@ -112,7 +112,7 @@
         <description>Polling Enrichment Pattern</description>
         <topic href="pollEnrich.html" label="Polling Message Enricher"/>
     </context>
-    <context id="processor">
+    <context id="processEIP">
         <description>Processor Pattern</description>
         <topic href="process.html" label="Processor"/>
     </context>
@@ -120,15 +120,15 @@
         <description>Recipient List Pattern</description>
         <topic href="recipientList.html" label="Recipient List"/>
     </context>
-    <context id="removeHeaderNode">
+    <context id="removeHeaderEIP">
         <description>Remove Header Pattern</description>
         <topic href="removeHeader.html" label="Remove Named Header"/>
     </context>
-    <context id="removeHeadersNode">
+    <context id="removeHeadersEIP">
         <description>Remove Headers Pattern</description>
         <topic href="removeHeaders.html" label="Remove Headers"/>
     </context>
-    <context id="removePropertyNode">
+    <context id="removePropertyEIP">
         <description>Remove Property Pattern</description>
         <topic href="removeProperty.html" label="Remove Property"/>
     </context>
@@ -136,7 +136,7 @@
         <description>Resequence Pattern</description>
         <topic href="resequence.html" label="Resequence"/>
     </context>
-    <context id="rolbackNode">
+    <context id="rollbackEIP">
         <description>Rollback Pattern</description>
         <topic href="rollback.html" label="Rollback"/>
     </context>
@@ -144,33 +144,33 @@
         <description>Routing Slip Pattern</description>
         <topic href="routingSlip.html" label="Routing Slip"/>
     </context>
-    <context id="samplingNode">
+    <context id="samplingEIP">
         <description>Sampling Pattern</description>
         <topic href="sampling.html" label="Sampler"/>
     </context>
-    <context id="setBodyNode">
+    <context id="setBodyEIP">
         <description>Set Body Pattern</description>
         <topic href="setBody.html" label="Set Body"/>
     </context>
-    <context id="setExchangePatternNode">
+    <context id="setExchangePatternEIP">
         <description>Set Exchange Pattern</description>
         <topic href="setExchangePattern.html" label="Set Exchange Pattern"/>
     </context>
 
-    <context id="setFaultBodyNode">
+    <context id="setFaultBodyEIP">
         <description>Set Fault Body Pattern</description>
         <topic href="setFaultBody.html" label="Set Fault Body"/>
     </context>
 
-    <context id="setHeaderNode">
+    <context id="setHeaderEIP">
         <description>Set Header Patterns</description>
         <topic href="setHeader.html" label="Set Header"/>
     </context>
-    <context id="setOutHeaderNode">
+    <context id="setOutHeaderEIP">
         <description>Set Out Header Patterns</description>
         <topic href="setOutHeader.html" label="Set Out Header"/>
     </context>
-    <context id="setPropertyNode">
+    <context id="setPropertyEIP">
         <description>Set Property Pattern</description>
         <topic href="setProperty.html" label="Set Property"/>
     </context>
@@ -182,23 +182,23 @@
         <description>Splitter Pattern</description>
         <topic href="split.html" label="Splitter"/>
     </context>
-    <context id="stopNode">
+    <context id="stopEIP">
         <description>Stop Pattern</description>
         <topic href="stop.html" label="Stop"/>
     </context>
-    <context id="threadNode">
+    <context id="threadsEIP">
         <description>Threads Pattern</description>
         <topic href="threads.html" label="Threads"/>
     </context>
-    <context id="throttleNode">
+    <context id="throttleEIP">
         <description>Throttle Pattern</description>
         <topic href="throttle.html" label="Throttler"/>
     </context>
-    <context id="throwExceptionNode">
+    <context id="throwExceptionEIP">
         <description>Throw Exception Pattern</description>
         <topic href="throwException.html" label="Throw Exception"/>
     </context>
-    <context id="transactedNode">
+    <context id="transactedEIP">
         <description>Transactional Client Pattern</description>
         <topic href="transacted.html" label="Transactional Client"/>
     </context>
@@ -206,19 +206,19 @@
         <description>Transform Pattern</description>
         <topic href="transform.html" label="Transform"/>
     </context>
-    <context id="tryNode">
+    <context id="doTryEIP">
         <description>Exception Handling Pattern</description>
         <topic href="try.html" label="Exception Handling"/>
     </context>
-    <context id="unmarshalNode">
+    <context id="unmarshalEIP">
         <description>Unmarshal Pattern</description>
         <topic href="unmarshal.html" label="Unmarshal"/>
     </context>
-    <context id="validateNode">
+    <context id="validateEIP">
         <description>Validation Pattern</description>
         <topic href="validate.html" label="Validator"/>
     </context>
-    <context id="whenNode">
+    <context id="whenEIP">
         <description>Content Based Routing Pattern</description>
         <topic href="when.html" label="Content Based Router"/>
     </context>
@@ -226,17 +226,17 @@
         <description>Wire Tap Pattern</description>
         <topic href="wiretap.html" label="Wire Tap"/>
     </context>
-    <context id="endpoint">
+   <!-- <context id="endpoint">
         <description>Endpoint</description>
         <topic href="endpoint.html" label="Endpoint"/>
-    </context>
+    </context> -->
     <context id="allEIPs">
         <description>List of EIP Patterns on the Pallet</description>
         <topic href="RefIntroToEIP.html" label="List of EIP Patterns"/>
     </context>
-    <context id="route">
+    <context id="routeEIP">
         <description>Route</description>
-        <topic href="routeIcon.html" label="List of EIP Patterns"/>
+        <topic href="routeIcon.html" label="Route"/>
     </context>
 
 
@@ -258,6 +258,10 @@
     <context id="ahc-ws">
         <description>AHC-WS Component Options</description>
         <topic href="IDU-AHC-WS.html" label="AHC-WS"/>
+    </context>
+    <context id="ahc-wss">
+        <description>AHC-WSS Component Options</description>
+        <topic href="IDU-AHC-WS.html" label="AHC-WSS"/>
     </context>
     <context id="amqp">
         <description>AMQP Component Options</description>
@@ -287,6 +291,19 @@
         <description>AWS-DDB Component Options</description>
         <topic href="IDU-AWS-DDB.html" label="AWS-DDB"/>
     </context>
+    <context id="aws-ddbstream">
+        <description>AWS-DDBSTREAM Component Options</description>
+        <topic href="IDU-AWS-DDBSTREAM.html" label="AWS-DDBSTREAM"/>
+    </context>
+    <context id="aws-ec2">
+        <description>AWS-EC2 Component Options</description>
+        <topic href="IDU-AWS-EC2.html" label="AWS-EC2"/>
+    </context>
+    <context id="aws-kinesis">
+        <description>AWS-Kinesis Component Options</description>
+        <topic href="IDU-AWS-Kinesis.html" label="AWS-Kinesis"/>
+    </context>
+    
     <context id="aws-s3">
         <description>AWS-S3 Component Options</description>
         <topic href="IDU-AWS-S3.html" label="AWS-S3"/>
@@ -311,7 +328,7 @@
         <description>AWS-SWF Component Options</description>
         <topic href="IDU-AWS-SWF.html" label="AWS-SWF"/>
     </context>
-    <context id="bean">
+    <context id="beanEIP">
         <description>Bean Component Options</description>
         <topic href="IDU-Bean.html" label="Bean"/>
     </context>
@@ -322,6 +339,14 @@
     <context id="bean-validator">
         <description>Bean Validator Component Options</description>
         <topic href="IDU-BeanValidation.html" label="Bean Validation"/>
+    </context>
+    <context id="braintree">
+        <description>Braintree Component Options</description>
+        <topic href="IDU-Braintree.html" label="Braintree"/>
+    </context>
+    <context id="box">
+        <description>Box Component Options</description>
+        <topic href="IDU-Box.html" label="Box"/>
     </context>
     <context id="browse">
         <description>Browse Component Options</description>
@@ -346,6 +371,10 @@
     <context id="cometd">
         <description>Cometd Component Options</description>
         <topic href="IDU-Cometd.html" label="Cometd"/>
+    </context>
+    <context id="context">
+        <description>Context Component Options</description>
+        <topic href="IDU-Context.html" label="Context"/>
     </context>
     <context id="controlbus">
         <description>ControlBus Component Options</description>
@@ -404,6 +433,10 @@
         <description>Disruptor Component Options</description>
         <topic href="IDU-Disruptor.html" label="Disruptor-VM"/>
     </context>
+    <context id="dns">
+        <description>DNS Component Options</description>
+        <topic href="IDU-DNS.html" label="DNS"/>
+    </context>
     <context id="docker">
         <description>Docker Component Options</description>
         <topic href="IDU-Docker.html" label="Docker"/>
@@ -416,13 +449,25 @@
         <description>Dropbox Component Options</description>
         <topic href="IDU-Dropbox.html" label="Dropbox"/>
     </context>
+    <context id="ejb">
+        <description>Enterprise Java Bean</description>
+        <topic href="IDU-EJB.html" label="EJB"/>
+    </context>
     <context id="elasticsearch">
         <description>ElasticSearch Component Options</description>
         <topic href="IDU-ElasticSearch.html" label="ElasticSearch"/>
     </context>
+    <context id="elsql">
+        <description>ElSql Component Options</description>
+        <topic href="IDU-ElSql.html" label="ElSql"/>
+    </context>
     <context id="esper">
         <description>Esper Component Options</description>
         <topic href="esper.html" label="Esper"/>
+    </context>
+    <context id="etcd">
+        <description>Etcd Component Options</description>
+        <topic href="IDU-Etcd.html" label="Etcd"/>
     </context>
     <context id="event">
         <description>Event Component Options</description>
@@ -436,10 +481,10 @@
         <description>Exec Component Options</description>
         <topic href="IDU-Exec.html" label="Exec"/>
     </context>
-    <context id="fabric">
+  <!--  <context id="fabric">
         <description>Fabric Component Options</description>
         <topic href="Fabric.html" label="Fabric"/>
-    </context>
+    </context> -->
     <context id="facebook">
         <description>Facebook Component Options</description>
         <topic href="IDU-Facebook.html" label="Facebook"/>
@@ -469,7 +514,7 @@
         <description>FTP Component Options</description>
         <topic href="IDU-FTP2.html" label="FTP"/>
     </context>
-    <context id="sftp">
+    <context id="ftps">
         <description>SFTP Component Options</description>
         <topic href="IDU-FTP2.html" label="SFTP"/>
     </context>
@@ -484,6 +529,10 @@
     <context id="ghttp">
         <description>Google App Engine Component Options</description>
         <topic href="IDU-ghttp.html" label="GHTTP"/>
+    </context>
+    <context id="git">
+        <description>Git Component Options</description>
+        <topic href="IDU-Git.html" label="Git"/>
     </context>
     <context id="github">
         <description>GitHub Component Options</description>
@@ -509,6 +558,10 @@
         <description>Google Mail Component Options</description>
         <topic href="IDU-GoogleMail.html" label="Google Mail"/>
     </context>
+    <context id="grape">
+        <description>Grape Component Options</description>
+        <topic href="IDU-Grape.html" label="Grape"/>
+    </context>
     <context id="gtask">
         <description>Google App Engine Task Queueing Component Options</description>
         <topic href="IDU-gtask.html" label="GTask"/>
@@ -517,9 +570,9 @@
         <description>Google Guava EventBus Component Options</description>
         <topic href="IDU-GuavaEventBus.html" label="Google Guava EventBus"/>
     </context>
-    <context id="hawtdb">
-        <description>HawtDB Component Options</description>
-        <topic href="IDU-HawtDB.html" label="HawtDB"/>
+    <context id="hazelcast">
+        <description>Hazelcast Component Options</description>
+        <topic href="IDU-HazelcastComponent.html" label="Hazelcast"/>
     </context>
     <context id="hbase">
         <description>HBase Component Options</description>
@@ -541,6 +594,14 @@
         <description>HTTP Component Options</description>
         <topic href="IDU-HTTP.html" label="HTTP"/>
     </context>
+    <context id="http4">
+        <description>HTTP4 Component Options</description>
+        <topic href="IDU-HTTP4.html" label="HTTP4"/>
+    </context>
+    <context id="http4s">
+        <description>HTTP4S Component Options</description>
+        <topic href="IDU-HTTP4.html" label="HTTP4"/>
+    </context>
     <context id="hipchat">
         <description>Hipchat Component Options</description>
         <topic href="IDU-Hipchat.html" label="Hipchat"/>
@@ -553,13 +614,30 @@
         <description>iBATIS Component Options</description>
         <topic href="IDU-iBATIS.html" label="iBATIS"/>
     </context>
+    <context id="ignite">
+        <description>Ignite Component Options</description>
+        <topic href="IDU-Ignite.html" label="Ignite"/>
+    </context>
     <context id="imap">
         <description>Mail Component Options</description>
         <topic href="IDU-Mail.html" label="IMap"/>
     </context>
+    <context id="imaps">
+        <description>Mail Component Options</description>
+        <topic href="IDU-Mail.html" label="IMaps"/>
+    </context>
+   <!-- not supported as of 6.2.0 -->
+   <!-- <context id="infinispan">
+        <description>Infinispan Component Options</description>
+        <topic href="IDU-Infinispan.html" label="Infinispan"/>
+    </context> -->
     <context id="irc">
         <description>IRC Component Options</description>
         <topic href="IDU-IRC.html" label="IRC"/>
+    </context>
+    <context id="ironmq">
+        <description>IronMQ Component Options</description>
+        <topic href="IDU-IronMQ.html" label="IronMQ"/>
     </context>
     <!-- Not supported -->
     <!--context id="javaspace">
@@ -569,6 +647,14 @@
     <context id="jbi">
         <description>JBI Component Options</description>
         <topic href="jbi.html" label="JBI"/>
+    </context>
+    <context id="jbpm">
+        <description>jBPM Component Options</description>
+        <topic href="IDU-jBPM.html" label="jBPM"/>
+    </context>
+    <context id="jcache">
+        <description>JCache Component Options</description>
+        <topic href="IDU-JCache.html" label="JCache"/>
     </context>
     <context id="jclouds">
         <description>JClouds Component Options</description>
@@ -610,6 +696,10 @@
         <description>JMS Component Options</description>
         <topic href="IDU-JMS.html" label="JMS"/>
     </context>
+    <context id="jolt">
+        <description>Jolt Component Options</description>
+        <topic href="IDU-Jolt.html" label="Jolt"/>
+    </context>
     <context id="jpa">
         <description>JPA Component Options</description>
         <topic href="IDU-JPA.html" label="JPA"/>
@@ -630,9 +720,21 @@
         <description>Krati Component Options</description>
         <topic href="IDU-Krati.html" label="Krati"/>
     </context>
+    <context id="kubernetes">
+        <description>Kubernetes Component Options</description>
+        <topic href="IDU-Kubernetes.html" label="Kubernetes"/>
+    </context>
+    <context id="kura">
+        <description>Kura Component Options</description>
+        <topic href="IDU-Kura.html" label="Kura"/>
+    </context>
     <context id="language">
         <description>Language Component Options</description>
         <topic href="IDU-Language.html" label="Language"/>
+    </context>
+    <context id="leveldb">
+        <description>LevelDB Component Options</description>
+        <topic href="IDU-LevelDB.html" label="LevelDB"/>
     </context>
     <context id="linkedin">
         <description>Linkedin Component Options</description>
@@ -646,7 +748,7 @@
         <description>List Component Options</description>
         <topic href="IDU-List.html" label="List"/>
     </context>
-    <context id="log">
+    <context id="logEIP">
         <description>Log Component Options</description>
         <topic href="IDU-Log.html" label="Log"/>
     </context>
@@ -669,6 +771,10 @@
     <context id="mina2">
         <description>MINA2 Component Options</description>
         <topic href="IDU-MINA2.html" label="MINA2"/>
+    </context>
+    <context id="mllp">
+        <description>MLLP Component Options</description>
+        <topic href="IDU-MLLP.html" label="MLLP"/>
     </context>
     <context id="mock">
         <description>Mock Component Options</description>
@@ -698,9 +804,17 @@
         <description>MVEL Component Options</description>
         <topic href="IDU-MVELComponent.html" label="MVEL"/>
     </context>
+    <context id="mybatis">
+        <description>mMBatis Component Options</description>
+        <topic href="IDU-MyBatis.html" label="mybatis"/>
+    </context>
     <context id="nagios">
         <description>Nagios Component Options</description>
         <topic href="IDU-Nagios.html" label="Nagios"/>
+    </context>
+    <context id="nats">
+        <description>NATS Component Options</description>
+        <topic href="IDU-NATS.html" label="NATS"/>
     </context>
     <context id="netty">
         <description>Netty Component Options</description>
@@ -722,15 +836,35 @@
         <description>Olingo2 Component Options</description>
         <topic href="IDU-Olingo2.html" label="Olingo2"/>
     </context>
+    <context id="openshift">
+        <description>OpenShift Component Options</description>
+        <topic href="IDU-Openshift.html" label="Openshift"/>
+    </context>
+    <context id="optaplanner">
+        <description>OptaPlanner Component Options</description>
+        <topic href="IDU-OptaPlanner.html" label="OptaPlanner"/>
+    </context>
+    <context id="paho">
+        <description>Paho Component Options</description>
+        <topic href="IDU-Paho.html" label="Paho"/>
+    </context>
     <context id="paxlogging">
         <description>Pax-Logging Component Options</description>
         <topic href="IDU-Pax-Logging.html" label="Pax-Logging"/>
+    </context>
+    <context id="pdf">
+        <description>PDF Component Options</description>
+        <topic href="IDU-PDF.html" label="PDF"/>
     </context>
     <context id="pgevent">
         <description>PGEvent Component Options</description>
         <topic href="IDU-PGEvent.html" label="PGEvent"/>
     </context>
     <context id="pop3">
+        <description>Mail Component Options</description>
+        <topic href="IDU-Mail.html" label="POP"/>
+    </context>
+    <context id="pop3s">
         <description>Mail Component Options</description>
         <topic href="IDU-Mail.html" label="POP"/>
     </context>
@@ -762,6 +896,10 @@
         <description>Registry Look-up Component Options</description>
         <topic href="registry.html" label="Ref"/>
     </context>
+    <context id="rest">
+        <description>Rest Component Options</description>
+        <topic href="IDU-Rest.html" label="Rest Component"/>
+    </context>
     <context id="restlet">
         <description>Restlet Component Options</description>
         <topic href="IDU-Restlet.html" label="Restlet"/>
@@ -769,6 +907,10 @@
     <context id="rmi">
         <description>RMI Component Options</description>
         <topic href="IDU-RMI.html" label="RMI"/>
+    </context>
+    <context id="routebox">
+        <description>Routebox Component Options</description>
+        <topic href="IDU-Routebox.html" label="Routebox"/>
     </context>
     <context id="rss">
         <description>RSS Component Options</description>
@@ -850,13 +992,29 @@
         <description>SJMS Component Options</description>
         <topic href="IDU-SJMS.html" label="SJMS"/>
     </context>
+    <context id="sjms-batch">
+        <description>SJMS-Batch Component Options</description>
+        <topic href="IDU-SJMS-Batch.html" label="SJMS-Batch"/>
+    </context>
+    <context id="slack">
+        <description>Slack Component Options</description>
+        <topic href="IDU-Slack.html" label="Slack"/>
+    </context>    
     <context id="smpp">
         <description>SMPP Component Options</description>
         <topic href="IDU-SMPP.html" label="SMPP"/>
     </context>
+    <context id="smpps">
+        <description>SMPP Component Options</description>
+        <topic href="IDU-SMPP.html" label="SMPPS"/>
+    </context>
     <context id="smtp">
         <description>Mail Component Options</description>
         <topic href="IDU-Mail.html" label="SMTP"/>
+    </context>
+    <context id="smtps">
+        <description>Mail Component Options</description>
+        <topic href="IDU-Mail.html" label="SMTPS"/>
     </context>
     <context id="snmp">
         <description>SNMP Component Options</description>
@@ -866,6 +1024,23 @@
         <description>Solr Component Options</description>
         <topic href="IDU-Solr.html" label="Solr"/>
     </context>
+    <context id="solrs">
+        <description>Solr Component Options</description>
+        <topic href="IDU-Solr.html" label="Solr"/>
+    </context>
+    <context id="solrCloud">
+        <description>Solr Component Options</description>
+        <topic href="IDU-Solr.html" label="Solr"/>
+    </context>
+    <context id="spark">
+        <description>Spark Component Options</description>
+        <topic href="IDU-ApacheSpark" label="Apache Spark"/>
+    </context>
+    <!-- Spark REST component approved by PM -->
+    <context id="sparkrest">
+        <description>Spark REST Component Options</description>
+        <topic href="IDU-SparkREST" label="Spark REST"/>
+    </context>
     <context id="splunk">
         <description>Splunk Component Options</description>
         <topic href="IDU-Splunk.html" label="Splunk"/>
@@ -874,6 +1049,11 @@
         <description>Spring Batch Component Options</description>
         <topic href="IDU-SpringBatch.html" label="Spring Batch"/>
     </context>
+    <!-- TBD for F6.3/FT8.0 release -->
+    <!--  <context id="springboot">
+        <description>Spring Boot Component Options</description>
+        <topic href="IDU-SpringBoot.html" label="Spring Boot"/>
+    </context> -->
     <context id="spring-event">
         <description>Event Component Options</description>
         <topic href="IDU-SpringEvent.html" label="Event"/>
@@ -893,6 +1073,10 @@
     <context id="sql">
         <description>SQL Component Options</description>
         <topic href="IDU-SQLComponent.html" label="SQL"/>
+    </context>
+    <context id="sql-stored">
+        <description>SQL Stored Component Options</description>
+        <topic href="IDU-SQL-Stored.html" label="SQL Stored"/>
     </context>
     <context id="ssh">
         <description>SSH Component Options</description>
@@ -930,6 +1114,14 @@
         <description>Spring Web Services Component Options</description>
         <topic href="IDU-SpringWebServices.html" label="Spring Web Services"/>
     </context>
+    <context id="swagger">
+        <description>Swagger Component Options</description>
+        <topic href="IDU-Swagger.html" label="Swagger"/>
+    </context>
+    <context id="swagger-java">
+        <description>Swagger Java Component Options</description>
+        <topic href="IDU-SwaggerJava.html" label="Swagger Java"/>
+    </context>
     <context id="test">
         <description>Test Component Options</description>
         <topic href="IDU-Test.html" label="Test"/>
@@ -942,6 +1134,15 @@
         <description>Twitter Component Options</description>
         <topic href="IDU-Twitter.html" label="Twitter"/>
     </context>
+    <context id="undertow">
+        <description>Undertow Component Options</description>
+        <topic href="IDU-Undertow.html" label="Undertow"/>
+    </context>
+    <!-- TBD for F6.3/FT8.0 release -->
+    <!--  <context id="urlrewrite">
+        <description>URLRewrite Component Options</description>
+        <topic href="IDU-URLRewrite.html" label="URLRewrite"/>
+    </context> -->
     <context id="validator">
         <description>Validation Component Options</description>
         <topic href="IDU-Validation.html" label="Validation"/>
@@ -996,7 +1197,7 @@
     </context>
 
     <!-- Wizard pages -->
-    <context id="newCamelXML" title="New Camel Context File">
+  <!--  <context id="newCamelXML" title="New Camel Context File">
         <description>New Camel Context File</description>
         <topic href="FIDENewContextRef.html" label="New Camel Context File"/>
     </context>
@@ -1015,10 +1216,10 @@
     <context id="newFuseProjectArchetype" title="New Fuse Project Archetype">
         <description>New Fuse Project Archetype</description>
         <topic href="RiderNewProjectRef.html" label="New Fuse Project Archetype"/>
-    </context>
+    </context> -->
 
     <!-- Configuration -->
-    <context id="editorConfig" title="Camel Route Editor Configuration">
+  <!--  <context id="editorConfig" title="Camel Route Editor Configuration">
         <description>Camel Route Editor Configuration</description>
         <topic href="RiderEditorPrefRef.html" label="Camel Route Editor Configuration"/>
     </context>
@@ -1029,5 +1230,5 @@
     <context id="deployFolderPref" title="Fuse Deployment Folder Preferences">
         <description>Fuse Deployment Folder Preferences</description>
         <topic href="RiderDeployPrefRef.html" label="Fuse Deployment Folder Preferences"/>
-    </context>
+    </context> -->
 </contexts>

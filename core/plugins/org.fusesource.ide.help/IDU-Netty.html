@@ -1,11 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Netty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Nagios.html" title="Nagios"><link rel="next" href="IDU-Netty4.html" title="Netty4"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty"></a>Netty</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_NettyComponent"></a>Netty Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.3</strong></span>
+   <title>Netty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-NATS.html" title="NATS"><link rel="next" href="IDU-Netty4.html" title="Netty4"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty"></a>Netty</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_NettyComponent"></a>Netty Component</h2></div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>The Camel Netty component is deprecated since JBoss Fuse 6.3 and will be removed
+                from a future release. You should switch to using the newer Camel Netty4 component
+                instead.</p></td></tr></table></div><p><span class="bold"><strong>Available as of Camel 2.3</strong></span>
     </p><p>The <span class="bold"><strong>Netty</strong></span> component in Camel is a socket communication
             component, based on the <a class="link" href="http://netty.io/" target="_top">Netty</a> project. Netty is
             a NIO client server framework which enables quick and easy development of network
             applications such as protocol servers and clients. Netty greatly simplifies and
-            streamlines network programming such as TCP and UDP socket server.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>There is a <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a> component that is using
+            streamlines network programming such as TCP and UDP socket server.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>There is a <a href="IDU-Netty4.html" class="olink">Netty4</a> component that is using
                 the newer Netty 4 which is recommend to use as this component is using the older
                 Netty 3 library.</p></td></tr></table></div><p>This camel component supports both producer and consumer endpoints.</p><p>The Netty component has several options and allows fine-grained control of a number of TCP/UDP communication parameters (buffer sizes, keepAlives, tcpNoDelay etc) and facilitates both In-Only and In-Out communication on a Camel route.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -14,7 +16,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><pre class="programlisting">netty:tcp://localhost:99999[?options]
 netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer and consumer endpoints for both TCP and UDP.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e93572"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e129978"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -63,7 +65,7 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
         </td>
         <td><code class="literal">false</code>
         </td>
-        <td> <span class="bold"><strong>Camel 2.10:</strong></span> Whether <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing Engine</a> is not in use. <code class="literal">false</code> then the <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing Engine</a> is used, <code class="literal">true</code> to force processing synchronous. </td>
+        <td> <span class="bold"><strong>Camel 2.10:</strong></span> Whether <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is not in use. <code class="literal">false</code> then the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is used, <code class="literal">true</code> to force processing synchronous. </td>
       </tr><tr>
         <td><code class="literal">ssl</code>
         </td>
@@ -75,7 +77,7 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
         </td>
         <td><code class="literal">false</code>
         </td>
-        <td><span class="bold"><strong>Camel 2.12:</strong></span> When enabled and in SSL mode, then the Netty consumer will enrich the Camel <span class="olink">Message</span> with headers having information about the client certificate such as subject name, issuer name, serial number, and the valid date range. </td>
+        <td><span class="bold"><strong>Camel 2.12:</strong></span> When enabled and in SSL mode, then the Netty consumer will enrich the Camel <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Message.html" target="_top">Message</a> with headers having information about the client certificate such as subject name, issuer name, serial number, and the valid date range. </td>
       </tr><tr>
         <td><code class="literal">sendBufferSize</code>
         </td>
@@ -195,7 +197,9 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
         </td>
         <td><code class="literal">null</code>
         </td>
-        <td><span class="bold"><strong>Camel 2.9:</strong></span> SSL configuration using an <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> instance. See Using the JSSE Configuration Utility. </td>
+        <td><span class="bold"><strong>Camel 2.9:</strong></span> SSL configuration using an 
+            <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> instance. 
+            See <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Using the JSSE Configuration Utility</a>. </td>
       </tr><tr>
         <td><code class="literal">receiveBufferSizePredictor</code>
         </td>
@@ -210,7 +214,8 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
         <td><span class="bold"><strong>Camel 2.11.1:</strong></span> Allows to use a timeout for the Netty
                     producer when calling a remote server. By default no timeout is in use. The
                     value is in milliseconds. The <code class="code">requestTimeout</code> option uses Netty's
-                        <code class="code">ReadTimeoutHandler</code> to trigger the timeout.</td>
+                        <code class="code">ReadTimeoutHandler</code> to trigger the timeout. <span class="bold"><strong>Camel 2.16, 2.15.3:</strong></span> you can also override this
+                    setting by setting the <code class="code">CamelNettyRequestTimeout</code> header.</td>
       </tr><tr>
         <td><code class="literal">needClientAuth</code>
         </td>
@@ -256,8 +261,8 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
       </tr><tr>
         <td><code class="literal">producerPoolMinEvictableIdle</code>
         </td>
-        <td><code class="literal">30000</code>
-        </td>
+        <td><code class="literal">300000</code>
+                </td>
         <td><span class="bold"><strong>Camel 2.10.3:</strong></span> Producer only. Sets the minimum amount of time (value in millis) an object may sit idle in the pool before it is eligible for eviction by the idle object evictor. </td>
       </tr><tr>
         <td><code class="literal">bootstrapConfiguration</code>
@@ -266,18 +271,26 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
         </td>
         <td><span class="bold"><strong>Camel 2.12:</strong></span> Consumer only. Allows to configure the Netty ServerBootstrap options using a <code class="literal">org.apache.camel.component.netty.NettyServerBootstrapConfiguration</code> instance. This can be used to reuse the same configuration for multiple consumers, to align their configuration more easily. </td>
       </tr><tr>
-        <td><code class="literal">bossPoll</code>
-        </td>
+        <td><code class="literal">bossGroup</code>
+                </td>
         <td><code class="literal">null</code>
         </td>
         <td><span class="bold"><strong>Camel 2.12:</strong></span> To use a explicit <code class="literal">org.jboss.netty.channel.socket.nio.BossPool</code> as the boss thread pool. For example to share a thread pool with multiple consumers. By default each consumer has their own boss pool with 1 core thread. </td>
       </tr><tr>
-        <td><code class="literal">workerPool</code>
-        </td>
+        <td><code class="literal">workerGroup</code>
+                </td>
         <td><code class="literal">null</code>
         </td>
         <td><span class="bold"><strong>Camel 2.12:</strong></span> To use a explicit <code class="literal">org.jboss.netty.channel.socket.nio.WorkerPool</code> as the worker thread pool. For example to share a thread pool with multiple consumers. By default each consumer has their own worker pool with 2 x cpu count core threads. </td>
       </tr><tr>
+                <td><code class="literal">channelGroup</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.17:</strong></span> To use an explicit
+                        <code class="code">io.netty.channel.group.ChannelGroup</code>&#8212;for example to
+                    broadact a message to multiple channels.</td>
+            </tr><tr>
         <td><code class="literal">networkInterface</code>
         </td>
         <td><code class="literal">null</code>
@@ -302,10 +315,19 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                 <td><span class="bold"><strong>Camel 2.15:</strong></span> Consumer only. If
                         <code class="code">clientMode</code> is <code class="code">true</code>, the Netty consumer connects to
                     the address as a TCP client. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="Registry" target="_top">Registry</a>, such as in the Spring XML file.
+            </tr><tr>
+                <td><code class="literal">useChannelBuffer</code>
+                </td>
+                <td><code class="literal">false</code>
+                </td>
+                <td>
+                    <span class="bold"><strong>Camel 2.16:</strong></span> Producer only. If
+                        <code class="code">useChannelBuffer</code> is <code class="code">true</code>, the Netty producer turns
+                    the message body into <code class="code">channelBuffer</code> before sending it out.</td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a>, such as in the Spring XML file.
 The values that could be passed in, are the following:</p><p>
 
-    </p><table id="d0e94442"><tr>
+    </p><table id="d0e130901"><tr>
         <th> Name </th>
         <th> Description </th>
       </tr><tr>
@@ -347,7 +369,7 @@ The values that could be passed in, are the following:</p><p>
       </tr><tr>
         <td><code class="literal">encorders</code>
         </td>
-        <td> A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just remember to prefix the value with # so Camel knows it should lookup. </td>
+        <td> A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a>. Just remember to prefix the value with # so Camel knows it should lookup. </td>
       </tr><tr>
         <td><code class="literal">decoder</code>
         </td>
@@ -355,10 +377,10 @@ The values that could be passed in, are the following:</p><p>
       </tr><tr>
         <td><code class="literal">decoders</code>
         </td>
-        <td> A list of decoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just remember to prefix the value with # so Camel knows it should lookup.</td>
+        <td> A list of decoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a>. Just remember to prefix the value with # so Camel knows it should lookup.</td>
       </tr></table><p><span class="bold"><strong>Important:</strong></span> Read below about using non shareable encoders/decoders.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_Usingnonshareableencodersordecoders"></a>Using non shareable encoders or decoders</h2></div></div></div><p>If your encoders or decoders is not shareable (eg they have the @Shareable class annotation), then your encoder/decoder must implement the <code class="literal">org.apache.camel.component.netty.ChannelHandlerFactory</code> interface, and return a new instance in the <code class="literal">newChannelHandler</code> method. This is to ensure the encoder/decoder can safely be used. If this is not the case, then the Netty component will log a WARN when
 an endpoint is created.</p><p>The Netty component offers a <code class="literal">org.apache.camel.component.netty.ChannelHandlerFactories</code> factory class, that has a number of commonly used methods.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_SendingMessagestofromaNettyendpoint"></a>Sending Messages to/from a Netty endpoint</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_NettyProducer"></a>Netty Producer</h2></div></div></div><p>In Producer mode, the component provides the ability to send payloads to a socket endpoint
-using either TCP or UDP protocols (with optional SSL support).</p><p>The producer mode supports both one-way and request-response based operations.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_NettyConsumer"></a>Netty Consumer</h2></div></div></div><p>In Consumer mode, the component provides the ability to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>listen on a specified socket using either TCP or UDP protocols (with optional SSL support),</p></li><li class="listitem"><p>receive requests on the socket using text/xml, binary and serialized object based payloads and</p></li><li class="listitem"><p>send them along on a route as message exchanges.</p></li></ul></div><p>The consumer mode supports both one-way and request-response based operations.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94668"></a>Headers</h2></div></div></div><p>The following headers are filled for the exchanges created by the Netty
+using either TCP or UDP protocols (with optional SSL support).</p><p>The producer mode supports both one-way and request-response based operations.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_NettyConsumer"></a>Netty Consumer</h2></div></div></div><p>In Consumer mode, the component provides the ability to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>listen on a specified socket using either TCP or UDP protocols (with optional SSL support),</p></li><li class="listitem"><p>receive requests on the socket using text/xml, binary and serialized object based payloads and</p></li><li class="listitem"><p>send them along on a route as message exchanges.</p></li></ul></div><p>The consumer mode supports both one-way and request-response based operations.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e131127"></a>Headers</h2></div></div></div><p>The following headers are filled for the exchanges created by the Netty
             consumer:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="c1"><col width="33%" class="c2"><col width="34%" class="c3"></colgroup><thead><tr><th>Header Key</th><th>Class</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">NettyConstants.NETTY_CHANNEL_HANDLER_CONTEXT /
                                 CamelNettyChannelHandlerContext</code></td><td><code class="code">org.jboss.netty.channel.ChannelHandlerContext</code></td><td><code class="code">ChannelHandlerContext</code> instance associated with the
                             connection received by Netty.</td></tr><tr><td><code class="code">NettyConstants.NETTY_MESSAGE_EVENT /
@@ -385,7 +407,10 @@ RouteBuilder builder = new RouteBuilder() {
            .to("mock:result");
   }
 };
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_AnSSLTCPbasedNettyconsumerendpointusingRequestReplycommunication"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply communication</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.9, the Netty component supports SSL/TLS configuration through the <span class="olink">Camel JSSE Configuration Utility</span>.&nbsp; This utility greatly decreases the amount of component specific code  you need to write and is configurable at the endpoint and component  levels.&nbsp;The following examples demonstrate how to use the utility with  the Netty component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_Programmaticconfigurationofthecomponent"></a>Programmatic configuration of the component</h2></div></div></div><pre class="programlisting">
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_AnSSLTCPbasedNettyconsumerendpointusingRequestReplycommunication"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply communication</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.9, the Netty component supports SSL/TLS configuration through the <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">http://camel.apache.org/camel-configuration-utilities.html</a>. This utility
+            greatly decreases the amount of component specific code you need to write and is
+            configurable at the endpoint and component levels.&nbsp;The following examples
+            demonstrate how to use the utility with the Netty component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_Programmaticconfigurationofthecomponent"></a>Programmatic configuration of the component</h2></div></div></div><pre class="programlisting">
 KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/keystore.jks");
 ksp.setPassword("keystorePassword");
@@ -438,12 +463,20 @@ context.addRoutes(new RouteBuilder() {
   }
 });
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_GettingaccesstoSSLSessionandtheclientcertificate"></a>Getting access to SSLSession and the client certificate</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
-    </p><p>You can get access to the <code class="literal">javax.net.ssl.SSLSession</code> if you eg need to get details about the client certificate. When <code class="literal">ssl=true</code> then the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty.html" class="olink">Netty</a> component will store the <code class="literal">SSLSession</code> as a header on the Camel <span class="olink">Message</span> as shown below:</p><pre class="programlisting">
+    </p><p>You can get access to the <code class="literal">javax.net.ssl.SSLSession</code> if you eg need to get details 
+        about the client certificate. When <code class="literal">ssl=true</code> then the 
+        <a href="IDU-Netty.html" class="olink">Netty</a> component will store the <code class="literal">SSLSession</code> 
+        as a header on the Camel <span class="phrase">Message</span>, 
+        as shown below:</p><pre class="programlisting">
 SSLSession session = exchange.getIn().getHeader(NettyConstants.NETTY_SSL_SESSION, SSLSession.class);
 // get the first certificate which is client certificate
 javax.security.cert.X509Certificate cert = session.getPeerCertificateChain()[0];
 Principal principal = cert.getSubjectDN();
-</pre><p>Remember to set <code class="literal">needClientAuth=true</code> to authenticate the client, otherwise <code class="literal">SSLSession</code> cannot access information about the client certificate, and you may get an exception <code class="literal">javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>. You may also get this exception if the client certificate is expired or not valid etc.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>The option <code class="literal">sslClientCertHeaders</code> can be set to <code class="literal">true</code> which then enriches the Camel <span class="olink">Message</span> with headers having details about the client certificate. For example the subject name is readily available in the header <code class="literal">CamelNettySSLClientCertSubjectName</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_UsingMultipleCodecs"></a>Using Multiple Codecs</h2></div></div></div><p>In certain cases it may be necessary to add chains of encoders and decoders to the netty pipeline. To add multpile codecs to a camel netty endpoint the 'encoders' and 'decoders' uri parameters should be used. Like the 'encoder' and 'decoder' parameters they are used to supply references (to lists of ChannelUpstreamHandlers and ChannelDownstreamHandlers) that should be added to the  pipeline. Note that if encoders is specified then the encoder param will be ignored, similarly for decoders and the decoder param.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Read further above about using non shareable encoders/decoders.</p></td></tr></table></div><p>The lists of codecs need to be added to the Camel's registry so they can be resolved when the endpoint is created.</p><pre class="programlisting">ChannelHandlerFactory lengthDecoder = ChannelHandlerFactories.newLengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4);
+</pre><p>Remember to set <code class="literal">needClientAuth=true</code> to authenticate the client, otherwise <code class="literal">SSLSession</code> cannot access information about the client certificate, and you may get an exception <code class="literal">javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>. You may also get this exception if the client certificate is expired or not valid etc.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>The option <code class="literal">sslClientCertHeaders</code> can be set to
+          <code class="literal">true</code>, which then enriches the Camel <span class="phrase">Message</span> with
+                headers having details about the client certificate. For example the subject name is
+                readily available in the header
+                    <code class="literal">CamelNettySSLClientCertSubjectName</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_UsingMultipleCodecs"></a>Using Multiple Codecs</h2></div></div></div><p>In certain cases it may be necessary to add chains of encoders and decoders to the netty pipeline. To add multpile codecs to a camel netty endpoint the 'encoders' and 'decoders' uri parameters should be used. Like the 'encoder' and 'decoder' parameters they are used to supply references (to lists of ChannelUpstreamHandlers and ChannelDownstreamHandlers) that should be added to the  pipeline. Note that if encoders is specified then the encoder param will be ignored, similarly for decoders and the decoder param.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Read further above about using non shareable encoders/decoders.</p></td></tr></table></div><p>The lists of codecs need to be added to the Camel's registry so they can be resolved when the endpoint is created.</p><pre class="programlisting">ChannelHandlerFactory lengthDecoder = ChannelHandlerFactories.newLengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4);
 
 StringDecoder stringDecoder = new StringDecoder();
 registry.bind("length-decoder", lengthDecoder);
@@ -567,7 +600,7 @@ context.addRoutes(new RouteBuilder() {
 });
 
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty_HSH_ReusingNettybossandworkerthreadpools"></a>Reusing Netty boss and worker thread pools</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
-    </p><p>Netty has two kind of thread pools: boss and worker. By default each Netty consumer and producer has their private thread pools. If you want to reuse these thread pools among multiple consumers or producers then the thread pools must be created and enlisted in the <a class="link" href="Registry" target="_top">Registry</a>.</p><p>For example using Spring XML we can create a shared worker thread pool using the <code class="literal">NettyWorkerPoolBuilder</code> with 2 worker threads as shown below:</p><pre class="programlisting">
+    </p><p>Netty has two kind of thread pools: boss and worker. By default each Netty consumer and producer has their private thread pools. If you want to reuse these thread pools among multiple consumers or producers then the thread pools must be created and enlisted in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a>.</p><p>For example using Spring XML we can create a shared worker thread pool using the <code class="literal">NettyWorkerPoolBuilder</code> with 2 worker threads as shown below:</p><pre class="programlisting">
   &lt;!-- use the worker pool builder to create to help create the shared thread pool --&gt;
   &lt;bean id="poolBuilder" class="org.apache.camel.component.netty.NettyWorkerPoolBuilder"&gt;
     &lt;property name="workerCount" value="2"/&gt;
@@ -577,7 +610,7 @@ context.addRoutes(new RouteBuilder() {
   &lt;bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool"
         factory-bean="poolBuilder" factory-method="build" destroy-method="shutdown"&gt;
   &lt;/bean&gt;
-</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>For boss thread pool there is a <code class="literal">org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code class="literal">org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty produces.</p></td></tr></table></div><p>Then in the Camel routes we can refer to this worker pools by configuring the <code class="literal">workerPool</code> option in the <a class="link" href="URI" target="_top">URI</a> as shown below:</p><pre class="programlisting">
+</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>For boss thread pool there is a <code class="literal">org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code class="literal">org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty produces.</p></td></tr></table></div><p>Then in the Camel routes we can refer to this worker pools by configuring the <code class="literal">workerPool</code> option in the <a class="link" href="http://camel.apache.org/uris.html" target="_top">URI</a> as shown below:</p><pre class="programlisting">
     &lt;route&gt;
       &lt;from uri="netty:tcp://localhost:5021?textline=true&amp;ync=true&amp;orkerPool=#sharedPool&amp;rderedThreadPoolExecutor=false"/&gt;
       &lt;to uri="log:result"/&gt;
@@ -590,7 +623,7 @@ context.addRoutes(new RouteBuilder() {
       ...
     &lt;/route&gt;
 </pre><p>... and so forth.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-37794"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-NettyHTTP.html" class="olink">Netty HTTP</a>
+          <a href="IDU-NettyHTTP.html" class="olink">Netty HTTP</a>
         </p></li><li class="listitem"><p>
-          <span class="olink">Mina</span>
+          <span class="phrase">Mina2</span>
         </p></li></ul></div></div></div></body></html>

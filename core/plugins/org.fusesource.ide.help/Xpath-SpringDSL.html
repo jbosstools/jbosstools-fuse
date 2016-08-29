@@ -1,0 +1,56 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>XML DSL</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="XPath.html" title="The XPath Language"><link rel="prev" href="Xpath-JavaDSL.html" title="Java DSL"><link rel="next" href="Xpath-Injection.html" title="XPath Injection"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-SpringDSL"></a>XML DSL</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33464"></a>Basic expressions</h3></div></div></div><p>To evaluate an XPath expression in the XML DSL, put the XPath expression inside an
+                    <code class="code">xpath</code> element. The XPath expression is applied to the body of the
+                current <span class="emphasis"><em>In</em></span> message and returns an XML node (or node set).
+                Typically, the returned XML node is automatically converted to a string.</p><p>For example, to extract the contents of the <code class="code">/person/name</code> element from
+                the current <span class="emphasis"><em>In</em></span> message body and use it to set a header named
+                    <code class="code">user</code>, you could define a route like the following:</p><pre class="programlisting">&lt;beans ...&gt;
+
+  &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    &lt;route&gt;
+      &lt;from uri="queue:foo"/&gt;
+      &lt;setHeader headerName="user"&gt;
+        &lt;xpath&gt;/person/name/text()&lt;/xpath&gt;
+      &lt;/setHeader&gt;
+      &lt;to uri="direct:tie"/&gt;
+    &lt;/route&gt;
+  &lt;/camelContext&gt;
+
+&lt;/beans&gt;</pre><p>If you want to convert the result to a specific type, specify the result type by
+                setting the <code class="code">resultType</code> attribute to a Java type name (where you must
+                specify the fully-qualified type name). For example, to specify explicitly that the
+                result type is <code class="code">java.lang.String</code> (you can omit the
+                    <code class="code">java.lang.</code> prefix here):</p><pre class="programlisting">&lt;xpath resultType="String"&gt;/person/name/text()&lt;/xpath&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33465"></a>Namespaces</h3></div></div></div><p>When processing documents whose elements belong to one or more XML schemas, it is
+                typically necessary to associate namespace URIs with prefixes, so that you can
+                identify element names unambiguously in your XPath expressions. It is possible to
+                use the standard XML mechanism for associating prefixes with namespace URIs. That
+                is, you can set an attribute like this:
+                        <code class="code">xmlns:<em class="replaceable"><code>Prefix</code></em>="<em class="replaceable"><code>NamespaceURI</code></em>"</code>.</p><p>For example, to associate the prefix, <code class="code">cust</code>, with the namespace,
+                    <code class="code">http://acme.com/customer/record</code>, and then extract the contents of
+                the element, <code class="code">/cust:person/cust:name</code>, you could define a route like the
+                following:</p><pre class="programlisting">&lt;beans ...&gt;
+
+  &lt;camelContext xmlns="http://camel.apache.org/schema/spring"
+                <span class="bold"><strong>xmlns:cust="http://acme.com/customer/record"</strong></span> &gt;
+    &lt;route&gt;
+      &lt;from uri="queue:foo"/&gt;
+      &lt;setHeader headerName="user"&gt;
+        &lt;xpath&gt;/cust:person/cust:name/text()&lt;/xpath&gt;
+      &lt;/setHeader&gt;
+      &lt;to uri="direct:tie"/&gt;
+    &lt;/route&gt;
+  &lt;/camelContext&gt;
+
+&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33466"></a>Auditing namespaces</h3></div></div></div><p>One of the most frequent problems that can occur when using XPath expressions is
+                that there is a mismatch between the namespaces appearing in the incoming messages
+                and the namespaces used in the XPath expression. To help you troubleshoot this kind
+                of problem, the XPath language supports an option to dump all of the namespaces from
+                all of the incoming messages into the system log.</p><p>To enable namespace logging at the <code class="code">INFO</code> log level, enable the
+                    <code class="code">logNamespaces</code> option in the XML DSL, as follows:</p><div class="informalexample"><pre class="programlisting">&lt;xpath logNamespaces="true" resultType="String"&gt;/foo:person/@id&lt;/xpath&gt;</pre></div><p>Alternatively, you could configure your logging system to enable
+                    <code class="code">TRACE</code> level logging on the
+                    <code class="code">org.apache.camel.builder.xml.XPathBuilder</code> logger.</p><p>When namespace logging is enabled, you will see log messages like the following
+                for each processed message:</p><div class="informalexample"><pre class="programlisting">2012-01-16 13:23:45,878 [stSaxonWithFlag] INFO  XPathBuilder  -
+Namespaces discovered in message: {xmlns:a=[http://apache.org/camel],
+DEFAULT=[http://apache.org/default], 
+xmlns:b=[http://apache.org/camelA, http://apache.org/camelB]}</pre></div></div></div></body></html>
