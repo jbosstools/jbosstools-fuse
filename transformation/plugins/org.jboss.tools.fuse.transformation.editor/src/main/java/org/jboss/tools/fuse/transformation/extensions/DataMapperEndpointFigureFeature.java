@@ -12,13 +12,14 @@
 package org.jboss.tools.fuse.transformation.extensions;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -68,7 +69,8 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
         // we will have the camel config builder make the updates
         wizard.setSaveCamelConfig(false);
 
-        WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+        WizardDialog dialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+        dialog.setBlockOnOpen(true);
         int status = dialog.open();
         AbstractCamelModelElement ep = (status == IStatus.OK) ? wizard.getRouteEndpoint() : null;
         if (ep != null && getEip() != null) {
