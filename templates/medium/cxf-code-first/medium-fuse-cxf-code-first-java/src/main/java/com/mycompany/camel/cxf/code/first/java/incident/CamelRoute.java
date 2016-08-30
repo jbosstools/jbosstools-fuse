@@ -6,7 +6,7 @@ import org.apache.camel.component.cxf.CxfEndpoint;
 
 public class CamelRoute extends RouteBuilder {
 
-	public static final String SERVICE_ADDRESS = "http://localhost:12345/cxf/report";
+	public static final String SERVICE_ADDRESS = "http://localhost:9292/cxf/report";
 	
 	@Override
 	public void configure() throws Exception {

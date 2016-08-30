@@ -37,7 +37,7 @@ public class IncidentTest {
         /*
          * Set up the URL connection to the web service address
          */
-        URLConnection connection = new URL("http://localhost:12345/cxf/report").openConnection();
+        URLConnection connection = new URL("http://localhost:9292/cxf/report").openConnection();
         connection.setDoInput(true);
         connection.setDoOutput(true);
 
