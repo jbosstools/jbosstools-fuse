@@ -430,7 +430,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			}
 			if (compatibleVersions.size()>0) {
 				Collections.sort(compatibleVersions);
-				camelVersionCombo.setText(compatibleVersions.get(compatibleVersions.size()-1));
+				if (compatibleVersions.contains(runtimeCamelVersion)) {
+					camelVersionCombo.setText(runtimeCamelVersion);
+				} else {
+					camelVersionCombo.setText(compatibleVersions.get(compatibleVersions.size()-1));
+				}
 				return;
 			}
 			camelVersionCombo.select(Math.max(0, camelVersionCombo.getItemCount()-1));
