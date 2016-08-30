@@ -12,10 +12,14 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.Assert;
@@ -421,13 +425,19 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
 		} else {
-			for (String camelVersion : camelVersionCombo.getItems()) {
-				if (isCompatible(runtimeCamelVersion, camelVersion)) {
-					camelVersionCombo.setText(camelVersion);
-					return;
+			List<String> compatibleVersions = Arrays.stream(camelVersionCombo.getItems())
+					.filter(camelVersion -> isCompatible(runtimeCamelVersion, camelVersion))
+					.collect(Collectors.toList());
+			if (!compatibleVersions.isEmpty()) {
+				if (compatibleVersions.contains(runtimeCamelVersion)) {
+					camelVersionCombo.setText(runtimeCamelVersion);
+				} else {
+					Collections.sort(compatibleVersions);
+					camelVersionCombo.setText(compatibleVersions.get(compatibleVersions.size()-1));
 				}
+			} else {
+				camelVersionCombo.select(Math.max(0, camelVersionCombo.getItemCount()-1));
 			}
-			camelVersionCombo.select(Math.max(0, camelVersionCombo.getItemCount()-1));
 		}		
 	}
 	
