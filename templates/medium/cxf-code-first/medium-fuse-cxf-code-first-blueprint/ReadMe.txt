@@ -1,9 +1,6 @@
 Camel Project for Apache CXF code-first using Blueprint (OSGi)
 =========================================================================
 
-Note: This project does not currently work. It has some issues. It is based
-on the archetype.  
-
 To build this project use
 
     mvn install
@@ -16,15 +13,15 @@ You need to install the following features first:
 
 And then you can install this example from its shell:
 
-    osgi:install -s mvn:org.apache.camel.archetypes/camel-archetype-cxf-code-first-blueprint/2.15.1.redhat-620133
+    osgi:install -s mvn:com.mycompany/camel-blueprint-cxf-code-first/1.0.0-SNAPSHOT
 
 The web services from Apache CXF is usually listed at:
 
-    http://localhost:8181/cxf
+    http://localhost:9292/cxf
 
 And the WSDL file for this example at:
 
-    http://localhost:8181/cxf/report/?wsdl
+    http://localhost:9292/cxf/report/?wsdl
 
 For more help see the Apache Camel documentation
 

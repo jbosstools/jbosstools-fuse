@@ -48,6 +48,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator
 Export-Package: org.fusesource.ide.projecttemplates.adopters,
  org.fusesource.ide.projecttemplates.adopters.util,
+ org.fusesource.ide.projecttemplates.impl.medium,
  org.fusesource.ide.projecttemplates.impl.simple,
  org.fusesource.ide.projecttemplates.maven;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.util;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",

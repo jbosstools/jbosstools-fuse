@@ -49,11 +49,13 @@ public class TemplateItem implements NameAndWeightSupport {
 	}
 	
 	private void initKeywords(String keywordsString) {
-		String[] words = keywordsString.split(" ");
-		for (String word : words) {
-			word = word.trim();
-			if (!Strings.isBlank(word) && !keywords.contains(word)) {
-				keywords.add(word);
+		if(keywordsString != null){
+			String[] words = keywordsString.split(" ");
+			for (String word : words) {
+				word = word.trim();
+				if (!Strings.isBlank(word) && !keywords.contains(word)) {
+					keywords.add(word);
+				}
 			}
 		}
 	}

@@ -1,8 +1,5 @@
-Camel Project for Apache CXF code-first using Blueprint (OSGi)
+Camel Project for Apache CXF code-first using Java DSL
 =========================================================================
-
-Note: This project does not currently work. It has some issues. It is based
-on the archetype.  
 
 To build this project use
 
@@ -16,7 +13,7 @@ You need to install the following features first:
 
 And then you can install this example from its shell:
 
-    osgi:install -s mvn:com.mycompany/camel-archetype-cxf-code-first-spring/2.15.1.redhat-620133
+    osgi:install -s mvn:com.mycompany/camel-java-cxf-code-first/1.0.0-SNAPSHOT
 
 The web services from Apache CXF is usually listed at:
 

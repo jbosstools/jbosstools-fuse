@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>org.apache.camel.archetypes</groupId>
-  <artifactId>camel-blueprint-cxf-code-first</artifactId>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mycompany</groupId>
+	<artifactId>camel-blueprint-cxf-code-first</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>Camel Blueprint CXF Contract-first Quickstart</name>
@@ -16,21 +16,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<version.maven-surefire-plugin>2.15</version.maven-surefire-plugin>
-		<skipTests>true</skipTests>
-		<cxf-version>3.0.2</cxf-version>
-
-		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
+	<properties>
 		<jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
-  </properties>
-
+		<cxf-version>3.0.2</cxf-version>
+		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
+		<skipTests>true</skipTests>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -40,8 +36,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- assuming camel is pulling aries 1.0.0, pull asm 4.0 first -->
-			<!-- this is needed when unit testing camel-cxf with camel-test-blueprint -->
 			<dependency>
 				<groupId>org.ow2.asm</groupId>
 				<artifactId>asm-all</artifactId>
@@ -50,27 +44,26 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-blueprint</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-cxf</artifactId>
-    </dependency>
-
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>2.15.1.redhat-621084</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-blueprint</artifactId>
+			<version>2.15.1.redhat-621084</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+			<version>2.15.1.redhat-621084</version>
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
-
-		<!-- cxf using slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -79,18 +72,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-
-		<!-- using Jetty with CXF -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http-jetty</artifactId>
 		</dependency>
-		<!-- explicit dependency to exclude asm:asm:3.3.1 -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -106,15 +95,16 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-blueprint</artifactId>
+			<version>2.15.1.redhat-621084</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
-					<groupId>org.apache.felix</groupId>
 					<artifactId>org.apache.felix.fileinstall</artifactId>
+					<groupId>org.apache.felix</groupId>
 				</exclusion>
 				<exclusion>
-					<groupId>biz.aQute</groupId>
 					<artifactId>bndlib</artifactId>
+					<groupId>biz.aQute</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -148,32 +138,28 @@
 			<artifactId>pax-swissbox-bnd</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-       <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <scope>test</scope>
-        </dependency>
-       <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <scope>test</scope>
-        </dependency>
-  </dependencies>
-
-  <repositories>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<repositories>
 		<repository>
 			<releases>
 				<enabled>true</enabled>
@@ -186,53 +172,20 @@
 			<name>FuseSource Community Release Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/groups/public</url>
 		</repository>
-    <repository>
-      <id>release.fusesource.org</id>
-      <name>FuseSource Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    <repository>
-     <id>ea.fusesource.org</id>
-     <name>FuseSource Community Early Access Release Repository</name>
-     <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
-     <snapshots>
-      <enabled>false</enabled>
-     </snapshots>
-     <releases>
-      <enabled>true</enabled>
-     </releases>
-    </repository>    
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>release.fusesource.org</id>
-      <name>FuseSource Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-     <id>ea.fusesource.org</id>
-     <name>FuseSource Community Early Access Release Repository</name>
-     <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
-     <snapshots>
-      <enabled>false</enabled>
-     </snapshots>
-     <releases>
-      <enabled>true</enabled>
-     </releases>
-    </pluginRepository>      
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>red-hat-ga-repository</id>
+			<name>Red Hat GA Repository</name>
+			<url>https://maven.repository.redhat.com/ga</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
 		<pluginRepository>
 			<releases>
 				<enabled>true</enabled>
@@ -245,76 +198,76 @@
 			<name>FuseSource Community Release Repository</name>
 			<url>https://repo.fusesource.com/nexus/content/groups/public</url>
 		</pluginRepository>
-  </pluginRepositories>
-
-  <build>
-    <defaultGoal>install</defaultGoal>
-
-    <plugins>
-      <!-- Skip Test by default and enable them only in Test profile -->
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${version.maven-surefire-plugin}</version>
-          <configuration>
-              <skipTests>${skipTests}</skipTests>
-          </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
-        <configuration>
-          <source>${maven.compiler.target}</source>
-          <target>${maven.compiler.source}</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.1</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
-
-      <!-- to generate the MANIFEST-FILE of the bundle -->
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${version.maven-bundle-plugin}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>camel-blueprint-cxf-code-first</Bundle-SymbolicName>
-            <Private-Package>com.mycompany.camel.cxf.code.first.blueprint.*</Private-Package>
-            <Import-Package>*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-
-      <plugin>
-          <groupId>org.apache.camel</groupId>
-          <artifactId>camel-maven-plugin</artifactId>
-          <configuration>
-              <useBlueprint>true</useBlueprint>
-          </configuration>
-      </plugin>    
-
-    </plugins>
-  </build>
-
+		<pluginRepository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>red-hat-ga-repository</id>
+			<name>Red Hat GA Repository</name>
+			<url>https://maven.repository.redhat.com/ga</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.maven-surefire-plugin}</version>
+				<configuration>
+					<skipTests>${skipTests}</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${maven.compiler.target}</source>
+					<target>${maven.compiler.source}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${version.maven-bundle-plugin}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>camel-blueprint-cxf-code-first</Bundle-SymbolicName>
+						<Private-Package>com.mycompany.camel.cxf.code.first.blueprint.*</Private-Package>
+						<Import-Package>*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-maven-plugin</artifactId>
+				<version>2.15.1.redhat-621084</version>
+				<configuration>
+					<useBlueprint>true</useBlueprint>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	<profiles>
 		<profile>
 			<id>test</id>
-			<properties>
-				<skipTests>false</skipTests>
-			</properties>
 			<build>
 				<defaultGoal>verify</defaultGoal>
 			</build>
+			<properties>
+				<skipTests>false</skipTests>
+			</properties>
 		</profile>
 	</profiles>
-
 </project>

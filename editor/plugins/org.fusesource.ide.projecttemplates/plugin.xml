@@ -133,6 +133,15 @@
           name="%template.medium.eapspring.name"
           weight="0">
     </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.advanced"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplate"
+          description="%template.medium.cxf.code.first.description"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMedium"
+          keywords="cxf"
+          name="%template.medium.cxf.code.first.name"
+          weight="50">
+    </projectTemplate>
  </extension>
  
  <!-- Maven configurator  -->
