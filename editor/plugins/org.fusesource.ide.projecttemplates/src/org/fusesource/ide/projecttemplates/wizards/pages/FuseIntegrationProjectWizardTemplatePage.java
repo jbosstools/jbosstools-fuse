@@ -258,14 +258,18 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		}
 	}
 	
-	private void updateDSLButtonGroup(TemplateItem template) {
-		if (template == null || !disabledDSLSelected()) return;
+	private void selectFirstSupportedDSLType(TemplateItem template) {
 		for (CamelDSLType dslType : CamelDSLType.values()) {
 			if (template.getTemplate().supportsDSL(dslType)) {
 				selectButtonForDSL(dslType);
 				return;
 			}
 		}
+	}
+	
+	private void updateDSLButtonGroup(TemplateItem template) {
+		if (template == null || !disabledDSLSelected()) return;
+		selectFirstSupportedDSLType(template);
 	}
 	
 	private void selectButtonForDSL(CamelDSLType dsltype) {
