@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.maven;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -28,7 +27,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -144,8 +142,23 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			if (!found) {
 				//create link for source folder only when it is not mapped
 				vFolder.createLink(absSourcePath, IVirtualResource.NONE, monitor);
+			} else {
+				removeRedundantMappingToRootRuntimePath(monitor, absSourcePath, mappings);
 			}
 		}
+	}
+
+	private void removeRedundantMappingToRootRuntimePath(IProgressMonitor monitor, IPath absSourcePath, IVirtualResource[] mappings) {
+		Arrays.stream(mappings)
+			.filter(mapping -> mapping.getProjectRelativePath().equals(absSourcePath))
+			.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString()))
+			.forEach(mapping -> {
+					try {
+						mapping.delete(IVirtualResource.IGNORE_UNDERLYING_RESOURCE, monitor);
+					} catch (CoreException e) {
+						ProjectTemplatesActivator.pluginLog().logError(e);
+					}
+				});
 	}
 	
 	private boolean isWARProject(IProject project, IProgressMonitor monitor) {
