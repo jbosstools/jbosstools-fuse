@@ -234,7 +234,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		validate();
 	}
 	
-	private TemplateModel getTemplates() {
+	TemplateModel getTemplates() {
 		return new TemplateModel();
 	}
 	
@@ -374,5 +374,40 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		if (btn_springDSL.getSelection()) return CamelDSLType.SPRING;
 		if (btn_javaDSL.getSelection()) return CamelDSLType.JAVA;
 		return null;
+	}
+	
+	/**
+	 * @return the list_templates
+	 */
+	FilteredTree getList_templates() {
+		return this.list_templates;
+	}
+	
+	/**
+	 * @return the btn_blueprintDSL
+	 */
+	Button getBtn_blueprintDSL() {
+		return this.btn_blueprintDSL;
+	}
+	
+	/**
+	 * @return the btn_javaDSL
+	 */
+	Button getBtn_javaDSL() {
+		return this.btn_javaDSL;
+	}
+	
+	/**
+	 * @return the btn_springDSL
+	 */
+	Button getBtn_springDSL() {
+		return this.btn_springDSL;
+	}
+	
+	/**
+	 * @return the btn_templateProject
+	 */
+	public Button getBtn_templateProject() {
+		return this.btn_templateProject;
 	}
 }
