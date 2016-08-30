@@ -284,10 +284,14 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		}
 	}
 	
+	private boolean isSelectedAndDisabled(Button button) {
+		return button.getSelection() && !button.isEnabled();
+	}
+	
 	private boolean disabledDSLSelected() {
-		return 	(btn_blueprintDSL.getSelection() == true && btn_blueprintDSL.isEnabled() == false) ||
-				(btn_javaDSL.getSelection() == true && btn_javaDSL.isEnabled() == false) ||
-				(btn_springDSL.getSelection() == true && btn_springDSL.isEnabled() == false);
+		return 	isSelectedAndDisabled(btn_blueprintDSL) ||
+				isSelectedAndDisabled(btn_javaDSL) ||
+				isSelectedAndDisabled(btn_springDSL);
 	}
 	
 	private void validate() {
