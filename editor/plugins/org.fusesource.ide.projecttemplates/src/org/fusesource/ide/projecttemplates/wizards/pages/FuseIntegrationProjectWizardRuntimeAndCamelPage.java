@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -421,11 +422,16 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
 		} else {
+			ArrayList<String> compatibleVersions = new ArrayList<>();
 			for (String camelVersion : camelVersionCombo.getItems()) {
 				if (isCompatible(runtimeCamelVersion, camelVersion)) {
-					camelVersionCombo.setText(camelVersion);
-					return;
+					compatibleVersions.add(camelVersion);
 				}
+			}
+			if (compatibleVersions.size()>0) {
+				Collections.sort(compatibleVersions);
+				camelVersionCombo.setText(compatibleVersions.get(compatibleVersions.size()-1));
+				return;
 			}
 			camelVersionCombo.select(Math.max(0, camelVersionCombo.getItemCount()-1));
 		}		
