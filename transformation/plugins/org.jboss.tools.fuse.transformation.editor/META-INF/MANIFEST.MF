@@ -30,3 +30,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
+Export-Package: org.jboss.tools.fuse.transformation.editor

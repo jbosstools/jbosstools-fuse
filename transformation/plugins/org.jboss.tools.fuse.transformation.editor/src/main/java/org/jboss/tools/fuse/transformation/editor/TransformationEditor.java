@@ -11,14 +11,23 @@ package org.jboss.tools.fuse.transformation.editor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -39,6 +48,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -361,17 +371,23 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
 
             // Ensure Maven will compile transformations folder
-            final IProject project = manager.project();
+            IProject project = manager.project();
 			File pomFile = project.getLocation().append("pom.xml").toFile(); //$NON-NLS-1$
-			final MavenUtils mavenUtils = new MavenUtils();
+			MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
 			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
 
-            IProgressMonitor monitor = new NullProgressMonitor();
+			IProgressMonitor monitor = new NullProgressMonitor();
+			
+			// Ensure import of package com.sun.el (FUSETOOLS-2039)
+			updateManifestPackageImports(project, pomFile, monitor);
+
+
             // Ensure Java project source classpath entry exists for main Java source & transformations folder
             Util.ensureSourceFolderExists(javaProject, Util.TRANSFORMATIONS_FOLDER, monitor);
             Util.ensureSourceFolderExists(javaProject, new MavenUtils().javaSourceFolder(), monitor);
             project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
             // Ensure build of Java classes has completed
             waitJavaBuild(monitor);
         } catch (final Exception e) {
@@ -513,5 +529,69 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             helpText.setText(""); //$NON-NLS-1$
         }
         helpText.getParent().layout();
+    }
+
+    public void updateManifestPackageImports(IProject project, File pomFile, IProgressMonitor monitor) throws Exception {
+        IPath pomPath = project.getRawLocation() != null
+                        ? project.getRawLocation()
+                        : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath());
+        Model pomModel = MavenPlugin.getMaven().readModel(new File(pomPath.append("pom.xml").toOSString()));  //$NON-NLS-1$
+        if ("war".equals(pomModel.getPackaging())){ //$NON-NLS-1$
+        	return; 
+        }
+        Build build = pomModel.getBuild();
+        Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
+        Plugin plugin = pluginsByName.get("org.apache.felix:maven-bundle-plugin"); //$NON-NLS-1$
+        if (plugin == null) {
+            plugin = new Plugin();
+            plugin.setGroupId("org.apache.felix"); //$NON-NLS-1$
+            plugin.setArtifactId("maven-bundle-plugin"); //$NON-NLS-1$
+            plugin.setVersion("3.2.0"); //$NON-NLS-1$
+            plugin.setExtensions(true);
+            build.addPlugin(plugin);
+        }
+        Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
+        if (config == null) {
+            config = Xpp3DomBuilder.build(new ByteArrayInputStream(("<configuration>" + //$NON-NLS-1$
+                                                                    "    <excludeDependencies>false</excludeDependencies>" + //$NON-NLS-1$
+                                                                    "    <archive>" + //$NON-NLS-1$
+                                                                    "        <manifestEntries>" + //$NON-NLS-1$
+                                                                    "            <Project-Group-Id>${project.groupId}</Project-Group-Id>" + //$NON-NLS-1$
+                                                                    "            <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>" + //$NON-NLS-1$
+                                                                    "            <Project-Version>${project.version}</Project-Version>" + //$NON-NLS-1$
+                                                                    "        </manifestEntries>" + //$NON-NLS-1$
+                                                                    "    </archive>" + //$NON-NLS-1$
+                                                                    "</configuration>").getBytes()), //$NON-NLS-1$
+                                          StandardCharsets.UTF_8.name());
+            plugin.setConfiguration(config);
+        } else {
+        	
+        }
+        Xpp3Dom instructions = config.getChild("instructions"); //$NON-NLS-1$
+        if (instructions == null) {
+            instructions = Xpp3DomBuilder.build(new ByteArrayInputStream(("<instructions>" + //$NON-NLS-1$
+                                                                          "</instructions>").getBytes()), //$NON-NLS-1$
+                                                StandardCharsets.UTF_8.name());
+            config.addChild(instructions);
+        }
+        Xpp3Dom importPkg = instructions.getChild("Import-Package"); //$NON-NLS-1$
+        if (importPkg == null) {
+            importPkg = Xpp3DomBuilder.build(new ByteArrayInputStream(("<Import-Package>" + //$NON-NLS-1$
+                                                                       "</Import-Package>").getBytes()), //$NON-NLS-1$
+                                             StandardCharsets.UTF_8.name());
+            instructions.addChild(importPkg);
+        }
+        String importPkgs = importPkg.getValue().trim();
+        if (!importPkgs.contains("com.sun.el;version=")) { //$NON-NLS-1$
+            if (!importPkgs.isEmpty()){
+            	importPkgs += ",\n"; //$NON-NLS-1$
+            }
+            importPkgs += "*,com.sun.el;version=\"[2,3)\";resolution:=optional"; //$NON-NLS-1$
+            importPkg.setValue(importPkgs);
+            try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
+                MavenPlugin.getMaven().writeModel(pomModel, out);
+                project.getFile("pom.xml").refreshLocal(IResource.DEPTH_ZERO, monitor);
+            }
+        }
     }
 }
