@@ -33,4 +33,5 @@ Require-Bundle: org.junit,
  org.fusesource.ide.projecttemplates;bundle-version="8.0.0",
  org.fusesource.ide.project;bundle-version="8.0.0",
  org.eclipse.jst.common.frameworks,
- org.eclipse.m2e.launching
+ org.eclipse.m2e.launching,
+ org.jboss.tools.locus.mockito;bundle-version="1.9.5"
