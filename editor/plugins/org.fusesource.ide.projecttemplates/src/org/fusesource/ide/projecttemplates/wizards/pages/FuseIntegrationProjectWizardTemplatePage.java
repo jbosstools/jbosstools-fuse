@@ -106,7 +106,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	public void widgetSelected(SelectionEvent event) {
 	    		setTemplatesActive(true);
 	    		validate();
-	    	};
+	    	}
 	    });
 
 	    Composite templates = new Composite(grp_emptyVsTemplate, SWT.None);
@@ -209,6 +209,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 					Object selObj = Selections.getFirstSelection(event.getSelection());
 					if (selObj instanceof TemplateItem) {
 						updateTemplateInfo((TemplateItem)selObj);
+						updateDSLButtonGroup((TemplateItem)selObj);
 						return;
 					}
 				} 
@@ -233,7 +234,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		validate();
 	}
 	
-	private TemplateModel getTemplates() {
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public TemplateModel getTemplates() {
 		return new TemplateModel();
 	}
 	
@@ -253,7 +257,48 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 			btn_blueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
 			btn_springDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
 			btn_javaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));
+			updateDSLButtonGroup(getSelectedTemplate());
 		}
+	}
+	
+	private void selectFirstSupportedDSLType(TemplateItem template) {
+		for (CamelDSLType dslType : CamelDSLType.values()) {
+			if (template.getTemplate().supportsDSL(dslType)) {
+				selectButtonForDSL(dslType);
+				return;
+			}
+		}
+	}
+	
+	private void updateDSLButtonGroup(TemplateItem template) {
+		if (template == null || !disabledDSLSelected()) return;
+		selectFirstSupportedDSLType(template);
+	}
+	
+	private void selectButtonForDSL(CamelDSLType dsltype) {
+		if (dsltype.equals(CamelDSLType.BLUEPRINT)) {
+			btn_blueprintDSL.setSelection(true);
+			btn_javaDSL.setSelection(false);
+			btn_springDSL.setSelection(false);
+		} else if (dsltype.equals(CamelDSLType.JAVA)) {
+			btn_blueprintDSL.setSelection(false);
+			btn_javaDSL.setSelection(true);
+			btn_springDSL.setSelection(false);
+		} else {
+			btn_blueprintDSL.setSelection(false);
+			btn_javaDSL.setSelection(false);
+			btn_springDSL.setSelection(true);
+		}
+	}
+	
+	private boolean isSelectedAndDisabled(Button button) {
+		return button.getSelection() && !button.isEnabled();
+	}
+	
+	private boolean disabledDSLSelected() {
+		return 	isSelectedAndDisabled(btn_blueprintDSL) ||
+				isSelectedAndDisabled(btn_javaDSL) ||
+				isSelectedAndDisabled(btn_springDSL);
 	}
 	
 	private void validate() {
@@ -332,5 +377,40 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		if (btn_springDSL.getSelection()) return CamelDSLType.SPRING;
 		if (btn_javaDSL.getSelection()) return CamelDSLType.JAVA;
 		return null;
+	}
+	
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public FilteredTree getList_templates() {
+		return this.list_templates;
+	}
+	
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public Button getBtn_blueprintDSL() {
+		return this.btn_blueprintDSL;
+	}
+	
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public Button getBtn_javaDSL() {
+		return this.btn_javaDSL;
+	}
+	
+	/**
+	 * @return the btn_springDSL
+	 */
+	public Button getBtn_springDSL() {
+		return this.btn_springDSL;
+	}
+	
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public Button getBtn_templateProject() {
+		return this.btn_templateProject;
 	}
 }
