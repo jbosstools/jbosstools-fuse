@@ -35,6 +35,67 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
 		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
 		dlg.create();
+		FuseIntegrationProjectWizardTemplatePage page = getWizardTemplatePage(wiz);
+		
+		TemplateModel tm = page.getTemplates();
+		List<CategoryItem> cats = tm.getTemplateCategories();
+		
+		TemplateItem cbrTemplate = findCBRTemplate(cats);
+		assertThat(cbrTemplate).isNotNull();
+		
+		TemplateItem eapTemplate = findEAPTemplate(cats);
+		assertThat(eapTemplate).isNotNull();
+		
+		page.getBtn_templateProject().setSelection(true);
+		assertThat(page.getBtn_templateProject().getSelection());
+		
+		page.getList_templates().getViewer().setSelection(new StructuredSelection(cbrTemplate));
+		assertThat(page.getBtn_javaDSL().isEnabled());
+		
+		page.getBtn_javaDSL().setSelection(true);
+		assertThat(page.getBtn_javaDSL().getSelection());
+		
+		page.getList_templates().getViewer().setSelection(new StructuredSelection(eapTemplate));
+		assertThat(page.getBtn_blueprintDSL().getSelection());
+	}
+
+	private TemplateItem findEAPTemplate(List<CategoryItem> cats) {
+		for (CategoryItem cat : cats) {
+			if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.eap")) {
+				for (CategoryItem subCat : cat.getSubCategories()) {
+					if (subCat.getId().equals("fuse.projecttemplates.eap.medium")) {
+						List<TemplateItem> templates = subCat.getTemplates();
+						for (TemplateItem ti : templates) {
+							if (ti.getId().equals("org.fusesource.ide.projecttemplates.eapSpringTemplateMedium")) {
+								return ti;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private TemplateItem findCBRTemplate(List<CategoryItem> cats) {
+		for (CategoryItem cat : cats) {
+			if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.jbossfuse")) {
+				for (CategoryItem subCat : cat.getSubCategories()) {
+					if (subCat.getId().equals("fuse.projecttemplates.jbossfuse.simple")) {
+						List<TemplateItem> templates = subCat.getTemplates();
+						for (TemplateItem ti : templates) {
+							if (ti.getId().equals("org.fusesource.ide.projecttemplates.cbrTemplateSimple")) {
+								return ti;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private FuseIntegrationProjectWizardTemplatePage getWizardTemplatePage(FuseIntegrationProjectWizard wiz) {
 		FuseIntegrationProjectWizardTemplatePage page = null;
 		for (IWizardPage p : wiz.getPages()) {
 			if (p instanceof FuseIntegrationProjectWizardTemplatePage) {
@@ -43,49 +104,6 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 			}
 		}
 		assertThat(page).isNotNull();
-		
-		TemplateModel tm = page.getTemplates();
-		List<CategoryItem> cats = tm.getTemplateCategories();
-		TemplateItem cbrTemplate = null;
-		TemplateItem eapTemplate = null;
-		for (CategoryItem cat : cats) {
-			if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.eap")) {
-				for (CategoryItem subCat : cat.getSubCategories()) {
-					if (subCat.getId().equals("fuse.projecttemplates.eap.medium")) {
-						List<TemplateItem> templates = subCat.getTemplates();
-						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.eapSpringTemplateMedium")) {
-								eapTemplate = ti;
-								break;
-							}
-						}
-					}
-				}
-			} else if (cat.getId().equalsIgnoreCase("fuse.projecttemplates.jbossfuse")) {
-				for (CategoryItem subCat : cat.getSubCategories()) {
-					if (subCat.getId().equals("fuse.projecttemplates.jbossfuse.simple")) {
-						List<TemplateItem> templates = subCat.getTemplates();
-						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.cbrTemplateSimple")) {
-								cbrTemplate = ti;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		assertThat(cbrTemplate).isNotNull();
-		assertThat(eapTemplate).isNotNull();
-		
-		page.getBtn_templateProject().setSelection(true);
-		assertThat(page.getBtn_templateProject().getSelection());
-		page.getList_templates().getViewer().setSelection(new StructuredSelection(cbrTemplate));
-		assertThat(page.getBtn_javaDSL().isEnabled());
-		page.getBtn_javaDSL().setSelection(true);
-		assertThat(page.getBtn_javaDSL().getSelection());
-		page.getList_templates().getViewer().setSelection(new StructuredSelection(eapTemplate));
-		assertThat(page.getBtn_blueprintDSL().getSelection());
+		return page;
 	}
 }
