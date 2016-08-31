@@ -95,7 +95,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	}
 	
 	/**
-	 * changes all occurances of Camel version in the pom.xml file with the
+	 * changes all occurrences of Camel version in the pom.xml file with the
 	 * version defined in the wizard
 	 * 
 	 * @param project			the project
@@ -123,6 +123,10 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			subMonitor.worked(1);
 			
 			if(projectMetaData.getTargetRuntime() == null){
+				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+			} else {
+				// we suppose that only one version of Fuse Runtime is possible for a Camel Version
+				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
 				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
 			}
 			subMonitor.worked(1);
