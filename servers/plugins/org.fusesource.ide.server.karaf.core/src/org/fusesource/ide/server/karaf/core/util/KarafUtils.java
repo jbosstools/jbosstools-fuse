@@ -24,8 +24,13 @@ import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.settings.Server;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
@@ -285,7 +290,19 @@ public class KarafUtils {
 		for (Throwable t : result.getExceptions()) {
 			Activator.getLogger().error(t);
 		}
+		
+		refreshTargetFolder(module, monitor);
+		
 		return !result.hasExceptions();
+	}
+
+	private static void refreshTargetFolder(IModule module, IProgressMonitor monitor) throws CoreException {
+		module.getProject().getFolder("target").refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		try {
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
+		} catch (OperationCanceledException | InterruptedException e) {
+			Activator.getLogger().error(e);
+		}
 	}
 
 	public static String getBundleSymbolicName(IModule module) throws CoreException {
