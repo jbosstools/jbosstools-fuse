@@ -212,6 +212,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
 			status = IServer.PUBLISH_STATE_NONE;
 		}
+		// TODO consider throwing a CoreException here if we can't publish. 
 		return status;
 	}
 
