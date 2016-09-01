@@ -210,6 +210,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 					if (selObj instanceof TemplateItem) {
 						updateTemplateInfo((TemplateItem)selObj);
 						updateDSLButtonGroup((TemplateItem)selObj);
+						validate();
 						return;
 					}
 				} 
