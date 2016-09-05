@@ -17,6 +17,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -53,8 +54,14 @@ public class ModuleBundleVersionUtility {
 			return getJBossOSGiDetails(module, srcFile);
 		} else if( moduleTypeId.equals("jst.utility") || moduleTypeId.equals("jst.web")) {
 			if( srcFile != null ) {
-				return getJBossOSGiDetailsFromJar(srcFile);
+				// Try to get bundleDetails from the assembled jar file
+				BundleDetails ret = getJBossOSGiDetailsFromJar(srcFile);
+				if( ret != null ) {
+					return ret;
+				}
 			}
+			// Otherwise, try to find a manifest in the project somewhere, 
+			// to workaround a poorly-assembled project
 			return getJBossOSGiDetailsFromProject(module);
 		}
 		Activator.getLogger().warning("Unhandled module type for deployment: " + moduleTypeId);
@@ -80,13 +87,15 @@ public class ModuleBundleVersionUtility {
 		}
 	}
 	
-	private BundleDetails getJBossOSGiDetailsFromJar(IPath srcFile) {
-		try (JarFile jf = new JarFile(srcFile.toOSString())){
-			Manifest m = jf.getManifest();
-			return createBundleDetails(m);
-		} catch(IOException ioe) {
-			Activator.getLogger().error(ioe);
-		}
+ 	private BundleDetails getJBossOSGiDetailsFromJar(IPath srcFile) {
+ 		try (JarFile jf = new JarFile(srcFile.toOSString())){
+ 			Manifest m = jf.getManifest();
+ 			if( m != null ) {
+ 				return createBundleDetails(m);
+ 			}
+ 		} catch(IOException ioe) {
+ 			Activator.getLogger().error(ioe);
+ 		}
 		return null;
 	}
 	
@@ -131,15 +140,18 @@ public class ModuleBundleVersionUtility {
 	private BundleDetails findBuildArtifactInProjectsOutputFolder(IModule[] module) {
 		BundleDetails bd = null;
 		IProject prj = module[0].getProject();
-		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(prj, new NullProgressMonitor());
-		String path = m2prj.getMavenProject().getBuild().getOutputDirectory();
-		String file = m2prj.getMavenProject().getBuild().getFinalName();
-		File out = new File(path, file);
-		if (out.exists() && out.isFile()) {
-			try (JarFile jf = new JarFile(out)) {
-				bd = createBundleDetails(jf.getManifest());
-			} catch (IOException ex) {
-				Activator.getLogger().error(ex);
+		IMavenProjectFacade m2prjFacade = MavenPlugin.getMavenProjectRegistry().create(prj, new NullProgressMonitor());
+		MavenProject m2Project = m2prjFacade.getMavenProject();
+		if (m2Project != null) {
+			String path = m2prjFacade.getMavenProject().getBuild().getOutputDirectory();
+			String file = m2prjFacade.getMavenProject().getBuild().getFinalName();
+			File out = new File(path, file);
+			if (out.exists() && out.isFile()) {
+				try (JarFile jf = new JarFile(out)) {
+					bd = createBundleDetails(jf.getManifest());
+				} catch (IOException ex) {
+					Activator.getLogger().error(ex);
+				}
 			}
 		}
 		return bd;

@@ -211,6 +211,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
 			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
 			status = IServer.PUBLISH_STATE_NONE;
+		} else {
+			Activator.getLogger().error("Deployment problem: Binary archive " + srcFile.toOSString() + " is not valid or lacking a valid MANIFEST.MF!");
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to retrieve the bundle details for deployment. Possible reason is a missing or invalid Manifest."));
 		}
 		return status;
 	}
