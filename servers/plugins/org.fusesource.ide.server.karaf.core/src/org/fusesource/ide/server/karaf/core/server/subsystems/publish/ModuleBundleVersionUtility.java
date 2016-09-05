@@ -53,8 +53,13 @@ public class ModuleBundleVersionUtility {
 			return getJBossOSGiDetails(module, srcFile);
 		} else if( moduleTypeId.equals("jst.utility") || moduleTypeId.equals("jst.web")) {
 			if( srcFile != null ) {
-				return getJBossOSGiDetailsFromJar(srcFile);
+				// Try to get bundleDetails from the assembled jar file
+				BundleDetails ret = getJBossOSGiDetailsFromJar(srcFile);
+				if( ret != null )
+					return ret;
 			}
+			// Otherwise, try to find a manifest in the project somewhere, 
+			// to workaround a poorly-assembled project
 			return getJBossOSGiDetailsFromProject(module);
 		}
 		Activator.getLogger().warning("Unhandled module type for deployment: " + moduleTypeId);
@@ -83,7 +88,8 @@ public class ModuleBundleVersionUtility {
 	private BundleDetails getJBossOSGiDetailsFromJar(IPath srcFile) {
 		try (JarFile jf = new JarFile(srcFile.toOSString())){
 			Manifest m = jf.getManifest();
-			return createBundleDetails(m);
+			if( m != null )
+				return createBundleDetails(m);
 		} catch(IOException ioe) {
 			Activator.getLogger().error(ioe);
 		}
