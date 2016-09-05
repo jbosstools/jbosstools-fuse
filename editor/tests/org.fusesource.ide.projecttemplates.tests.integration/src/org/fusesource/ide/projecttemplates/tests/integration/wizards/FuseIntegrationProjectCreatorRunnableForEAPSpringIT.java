@@ -49,7 +49,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelModelFactory.getSupportedCamelVersions(); 
+		return CamelModelFactory.getSupportedCamelVersions();
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForEAPSpringIT(String version) {
@@ -80,7 +80,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
         boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
         boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
         boolean webFacetFound = fproj.hasProjectFacet(webFacet);
-                
+        
         assertThat(camelFacetFound).describedAs("The camel facet has not been found.").isTrue();
         assertThat(javaFacetFound).as("The java facet has not been found.").isTrue();
         assertThat(mavenFacetFound).as("The maven facet has not been found.").isTrue();
@@ -88,6 +88,8 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
         assertThat(webFacetFound).as("The web facet has not been found.").isTrue();
         
         checkWARMappingCorrect(project);
+        
+        checkNoConflictingFacets(fproj);
     }
     
     private void checkWARMappingCorrect(IProject project) throws CoreException {
