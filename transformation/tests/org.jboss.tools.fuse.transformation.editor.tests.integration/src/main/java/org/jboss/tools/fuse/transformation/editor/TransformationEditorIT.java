@@ -10,17 +10,20 @@
 package org.jboss.tools.fuse.transformation.editor;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.StringCharacterIterator;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.util.SafeRunnable;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.After;
 import org.junit.Before;
@@ -136,10 +139,10 @@ public class TransformationEditorIT {
 		SafeRunnable.setIgnoreErrors(false);
 		editor = new TransformationEditor();
 		project = fuseProject.getProject();
-		pomIFile = project.getFile("pom.xml");
+		pomIFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 		pomIFile.delete(true, monitor);
 		monitor = new NullProgressMonitor();
-		pomFile = project.getLocation().append("pom.xml").toFile();
+		pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
 	}
 
 	@After
