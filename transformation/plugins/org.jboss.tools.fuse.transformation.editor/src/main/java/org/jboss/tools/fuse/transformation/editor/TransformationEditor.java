@@ -587,7 +587,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             if (!importPkgs.isEmpty()){
             	importPkgs += ",\n"; //$NON-NLS-1$
             }
-            importPkgs += "*,com.sun.el;version=\"[2,3)\";resolution:=optional"; //$NON-NLS-1$
+            importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
             importPkg.setValue(importPkgs);
             try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
                 MavenPlugin.getMaven().writeModel(pomModel, out);

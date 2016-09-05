@@ -63,7 +63,7 @@ public class TransformationEditorIT {
 			"            </manifestEntries>" +
 			"		   </archive>\n" +
 			"          <instructions>\n" +
-			"		     <Import-Package>*,com.sun.el;version=\"[2,3)\";resolution:=optional</Import-Package>\n" +
+			"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
 			"		   </instructions>\n" +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
