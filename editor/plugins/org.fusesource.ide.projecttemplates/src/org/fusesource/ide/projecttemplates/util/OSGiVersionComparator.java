@@ -19,7 +19,7 @@ import org.osgi.framework.Version;
  * 
  * @author lhein
  */
-public class CamelFacetVersionComparator implements Comparator<String> {
+public class OSGiVersionComparator implements Comparator<String> {
 
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)

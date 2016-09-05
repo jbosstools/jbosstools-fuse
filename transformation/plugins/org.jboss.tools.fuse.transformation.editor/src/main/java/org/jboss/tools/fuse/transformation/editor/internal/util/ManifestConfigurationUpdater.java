@@ -29,12 +29,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.osgi.framework.Version;
 
 public class ManifestConfigurationUpdater {
 
+	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "6.3.0";
+	private static final String CAMEL_CORE = "camel-core";
+	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0";
@@ -43,7 +49,7 @@ public class ManifestConfigurationUpdater {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
-			if ("war".equals(pomModel.getPackaging())){ //$NON-NLS-1$
+			if (!shouldAddImportPackage(pomModel)){ //$NON-NLS-1$
 				return; 
 			}
 			managePlugins(pomModel);
@@ -52,12 +58,43 @@ public class ManifestConfigurationUpdater {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
 				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
 			}
-
 		} catch (CoreException | XmlPullParserException | IOException e1) {
 			Activator.error(e1);
 			return;
 		}
+	}
 
+	boolean shouldAddImportPackage(Model pomModel) {
+		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63(pomModel);
+	}
+
+	private boolean isCamelDependencyHigherThan63(Model pomModel) {
+		try{
+			Build build = pomModel.getBuild();
+			Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
+			Plugin plugin = pluginsByName.get(ORG_APACHE_CAMEL+":"+CAMEL_CORE); //$NON-NLS-1$
+			if(plugin == null || plugin.getVersion() == null){
+				return true;
+			}
+			String pluginVersion = plugin.getVersion();
+			if(pluginVersion.startsWith("${") && pluginVersion.endsWith("}") && pomModel.getProperties() != null){
+				String camelCoreVersionFromProperty = pomModel.getProperties().getProperty(pluginVersion.substring(2, pluginVersion.length() -1));
+				if(camelCoreVersionFromProperty ==  null){
+					return true;
+				} else {
+					return isVersionHigherThanLimitForImportPackage(camelCoreVersionFromProperty);
+				}
+			} else {
+				return isVersionHigherThanLimitForImportPackage(pluginVersion);
+			}
+		} catch(IllegalArgumentException e){
+			Activator.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, "The version of camel-core has not been resolved correctly.", e));
+			return true;
+		}
+	}
+
+	private boolean isVersionHigherThanLimitForImportPackage(String camelCoreVersion) {
+		return new Version(camelCoreVersion).compareTo(new Version(LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE)) >= 0;
 	}
 
 	private void managePlugins(Model pomModel) throws XmlPullParserException, IOException {

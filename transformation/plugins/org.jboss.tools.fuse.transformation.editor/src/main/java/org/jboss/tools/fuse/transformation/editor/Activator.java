@@ -87,8 +87,7 @@ public class Activator extends AbstractUIPlugin {
         return img;
     }
 
-    public static void log(int status,
-                           String message) {
+    public static void log(int status, String message) {
         log(new Status(status, plugin.getBundle().getSymbolicName(), message));
     }
 
@@ -96,7 +95,9 @@ public class Activator extends AbstractUIPlugin {
      * @param status
      */
     public static void log(Status status) {
-        plugin.getLog().log(status);
+    	if(plugin != null){
+    		plugin.getLog().log(status);
+    	}
     }
 
     /**

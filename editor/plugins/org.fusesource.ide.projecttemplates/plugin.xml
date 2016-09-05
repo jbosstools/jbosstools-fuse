@@ -171,7 +171,7 @@
              	Adds support for Camel to the project.
          	</description>
           <version-comparator
-                class="org.fusesource.ide.projecttemplates.util.CamelFacetVersionComparator">
+                class="org.fusesource.ide.projecttemplates.util.OSGiVersionComparator">
           </version-comparator>
       	</project-facet>
       
