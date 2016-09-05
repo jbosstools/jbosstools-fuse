@@ -143,8 +143,8 @@ public class ModuleBundleVersionUtility {
 		IMavenProjectFacade m2prjFacade = MavenPlugin.getMavenProjectRegistry().create(prj, new NullProgressMonitor());
 		MavenProject m2Project = m2prjFacade.getMavenProject();
 		if (m2Project != null) {
-			String path = m2prjFacade.getMavenProject().getBuild().getOutputDirectory();
-			String file = m2prjFacade.getMavenProject().getBuild().getFinalName();
+			String path = m2Project.getBuild().getOutputDirectory();
+			String file = m2Project.getBuild().getFinalName();
 			File out = new File(path, file);
 			if (out.exists() && out.isFile()) {
 				try (JarFile jf = new JarFile(out)) {

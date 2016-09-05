@@ -42,6 +42,9 @@ public class Messages extends NLS {
 
 	public static String CreateDownloadRuntimes;
 	public static String LoadRemoteRuntimes;
+	
+	public static String DeployErrorMissingManifest;
+	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
