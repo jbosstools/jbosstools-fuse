@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jst.common.project.facet.WtpUtils;
+import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
@@ -65,8 +66,8 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");  //$NON-NLS-1$
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
-	public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
-	
+	public static IProjectFacet webFacet    = WebFacetUtils.WEB_FACET;
+	      
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
