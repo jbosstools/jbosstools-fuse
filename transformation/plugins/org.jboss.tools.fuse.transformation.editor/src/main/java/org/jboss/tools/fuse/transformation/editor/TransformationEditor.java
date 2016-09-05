@@ -49,6 +49,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -372,7 +373,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
             // Ensure Maven will compile transformations folder
             IProject project = manager.project();
-			File pomFile = project.getLocation().append("pom.xml").toFile(); //$NON-NLS-1$
+			File pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile(); //$NON-NLS-1$
 			MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
 			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
@@ -535,7 +536,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         IPath pomPath = project.getRawLocation() != null
                         ? project.getRawLocation()
                         : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath());
-        Model pomModel = MavenPlugin.getMaven().readModel(new File(pomPath.append("pom.xml").toOSString()));  //$NON-NLS-1$
+        Model pomModel = MavenPlugin.getMaven().readModel(new File(pomPath.append(IMavenConstants.POM_FILE_NAME).toOSString()));  //$NON-NLS-1$
         if ("war".equals(pomModel.getPackaging())){ //$NON-NLS-1$
         	return; 
         }
@@ -590,7 +591,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             importPkg.setValue(importPkgs);
             try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
                 MavenPlugin.getMaven().writeModel(pomModel, out);
-                project.getFile("pom.xml").refreshLocal(IResource.DEPTH_ZERO, monitor);
+                project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
             }
         }
     }
