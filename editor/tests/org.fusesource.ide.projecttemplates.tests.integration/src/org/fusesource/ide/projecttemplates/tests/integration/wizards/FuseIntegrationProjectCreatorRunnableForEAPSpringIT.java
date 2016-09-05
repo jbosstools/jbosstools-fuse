@@ -82,10 +82,10 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
         boolean webFacetFound = fproj.hasProjectFacet(webFacet);
                 
         assertThat(camelFacetFound).describedAs("The camel facet has not been found.").isTrue();
-        assertThat(javaFacetFound).isTrue();
-        assertThat(mavenFacetFound).isTrue();
-        assertThat(utilityFacetFound).isFalse();
-        assertThat(webFacetFound).isTrue();
+        assertThat(javaFacetFound).as("The java facet has not been found.").isTrue();
+        assertThat(mavenFacetFound).as("The maven facet has not been found.").isTrue();
+        assertThat(utilityFacetFound).as("The utility facet has been found but shouldn't be installed.").isFalse();
+        assertThat(webFacetFound).as("The web facet has not been found.").isTrue();
         
         checkWARMappingCorrect(project);
     }
