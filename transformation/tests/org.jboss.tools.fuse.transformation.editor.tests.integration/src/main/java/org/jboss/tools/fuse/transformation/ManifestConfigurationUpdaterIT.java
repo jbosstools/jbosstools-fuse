@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.tools.fuse.transformation.editor;
+package org.jboss.tools.fuse.transformation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,12 +25,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.jboss.tools.fuse.transformation.ManifestConfigurationUpdater;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class TransformationEditorIT {
+public class ManifestConfigurationUpdaterIT {
 
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
@@ -124,25 +125,21 @@ public class TransformationEditorIT {
 			POM_END;
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(TransformationEditorIT.class.getName());
+	public FuseProject fuseProject = new FuseProject(ManifestConfigurationUpdaterIT.class.getName());
 
 	private boolean safeRunnableIgnoreErrorStateBeforeTests;
-	private TransformationEditor editor;
 	private IProject project;
 	private IFile pomIFile;
 	private IProgressMonitor monitor;
-	private File pomFile;
 
 	@Before
 	public void setup() throws Exception {
 		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
 		SafeRunnable.setIgnoreErrors(false);
-		editor = new TransformationEditor();
 		project = fuseProject.getProject();
 		pomIFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 		pomIFile.delete(true, monitor);
 		monitor = new NullProgressMonitor();
-		pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
 	}
 
 	@After
@@ -187,7 +184,7 @@ public class TransformationEditorIT {
 
 	private void updatePom(String pom, String expectedPom) throws Exception {
 		pomIFile.create(new ByteArrayInputStream(pom.getBytes(StandardCharsets.UTF_8)), true, monitor);
-		editor.updateManifestPackageImports(project, pomFile, new NullProgressMonitor());
+		new ManifestConfigurationUpdater().updateManifestPackageImports(project, new NullProgressMonitor());
 		InputStream pomContentsToCheck = pomIFile.getContents();
 		char[] buf = new char[pomContentsToCheck.available()];
 		try (InputStreamReader reader = new InputStreamReader(pomContentsToCheck, StandardCharsets.UTF_8)) {
