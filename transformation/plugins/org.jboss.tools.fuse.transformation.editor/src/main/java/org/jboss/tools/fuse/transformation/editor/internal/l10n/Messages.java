@@ -203,6 +203,7 @@ public class Messages extends NLS {
 	public static String TransformationEditor_ConfirmDialogTtile;
 	public static String TransformationEditor_helptextSource;
 	public static String TransformationEditor_helpTextTarget;
+    public static String TransformationEditor_invalidPomConfiguration;
 	public static String TransformationEditor_invalidTransformationFile;
 	public static String TransformationEditor_messageDialogConfirmation;
 	public static String TransformationEditor_mustBeOpenedViaCamelEditor;

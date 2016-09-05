@@ -18,6 +18,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<modules>
 		<module>org.jboss.tools.fuse.transformation.core.tests</module>
 		<module>org.jboss.tools.fuse.transformation.core.tests.integration</module>
+		<module>org.jboss.tools.fuse.transformation.editor.tests.integration</module>
 	</modules>
 </project>
 	
