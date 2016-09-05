@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.fuse.transformation;
+package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;

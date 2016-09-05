@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.tools.fuse.transformation;
+package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.jboss.tools.fuse.transformation.ManifestConfigurationUpdater;
+import org.jboss.tools.fuse.transformation.editor.internal.util.ManifestConfigurationUpdater;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
