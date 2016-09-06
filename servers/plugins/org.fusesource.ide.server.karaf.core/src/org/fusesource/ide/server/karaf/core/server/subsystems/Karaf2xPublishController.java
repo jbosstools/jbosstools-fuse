@@ -23,6 +23,7 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.Messages;
 import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.publish.jmx.KarafJMXPublisher;
 import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility;
@@ -211,6 +212,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
 			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
 			status = IServer.PUBLISH_STATE_NONE;
+		} else {
+			Activator.getLogger().error("Deployment problem: Binary archive " + srcFile.toOSString() + " is not valid or lacking a valid MANIFEST.MF!");
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.DeployErrorMissingManifest));
 		}
 		return status;
 	}
