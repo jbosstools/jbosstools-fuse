@@ -19,7 +19,6 @@ import java.text.StringCharacterIterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -29,7 +28,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ManifestConfigurationUpdaterIT {
+public class ImportELPackageUpdaterForPomIT {
 
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
@@ -123,26 +122,16 @@ public class ManifestConfigurationUpdaterIT {
 			POM_END;
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ManifestConfigurationUpdaterIT.class.getName());
+	public FuseProject fuseProject = new FuseProject(ImportELPackageUpdaterForPomIT.class.getName());
 
-	private boolean safeRunnableIgnoreErrorStateBeforeTests;
 	private IProject project;
 	private IFile pomIFile;
-	private IProgressMonitor monitor;
 
 	@Before
 	public void setup() throws Exception {
-		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
-		SafeRunnable.setIgnoreErrors(false);
 		project = fuseProject.getProject();
 		pomIFile = project.getFile(IMavenConstants.POM_FILE_NAME);
-		pomIFile.delete(true, monitor);
-		monitor = new NullProgressMonitor();
-	}
-
-	@After
-	public void tearDown() {
-		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
+		pomIFile.delete(true, new NullProgressMonitor());
 	}
 
 	@Test
@@ -181,8 +170,8 @@ public class ManifestConfigurationUpdaterIT {
 	}
 
 	private void updatePom(String pom, String expectedPom) throws Exception {
-		pomIFile.create(new ByteArrayInputStream(pom.getBytes(StandardCharsets.UTF_8)), true, monitor);
-		new ManifestConfigurationUpdater().updateManifestPackageImports(project, new NullProgressMonitor());
+		pomIFile.create(new ByteArrayInputStream(pom.getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
+		new ImportELPackageUpdater().updatePackageImports(project, new NullProgressMonitor());
 		InputStream pomContentsToCheck = pomIFile.getContents();
 		char[] buf = new char[pomContentsToCheck.available()];
 		try (InputStreamReader reader = new InputStreamReader(pomContentsToCheck, StandardCharsets.UTF_8)) {

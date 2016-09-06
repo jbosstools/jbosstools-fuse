@@ -17,7 +17,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -25,6 +28,7 @@ import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -33,19 +37,55 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.osgi.util.ManifestElement;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 
-public class ManifestConfigurationUpdater {
+/**
+ * This class is responsible to configure the project to import the Expression Language package if needed.
+ * 
+ */
+public class ImportELPackageUpdater {
 
+	private static final String COM_SUN_EL_VERSION = "com.sun.el;version=";
 	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "6.3.0";
-	private static final String CAMEL_CORE = "camel-core";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
+	private static final String CAMEL_CORE = "camel-core";
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0";
 
-	public void updateManifestPackageImports(IProject project, IProgressMonitor monitor) {
+	public void updatePackageImports(IProject project, IProgressMonitor monitor) {
+		IFile manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF");
+		if(manifestFile.exists()){
+			updateImportPackageForExisitngManifest(project, manifestFile);
+		} else {
+			updateImportPackageForGeneratedManifest(project, monitor);
+		}
+	}
+
+	private void updateImportPackageForExisitngManifest(IProject project, IFile manifestFile) {
+		File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
+		Model pomModel = null;
+		try {
+			pomModel = MavenPlugin.getMaven().readModel(pomFile);
+		} catch (CoreException e) {
+			Activator.error(e);
+		}
+		if(pomModel == null || shouldAddImportPackage(pomModel)){
+			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+			String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
+			if(importPackage == null || !importPackage.contains(COM_SUN_EL_VERSION)){
+				importPackage = addELPackage(importPackage);
+				bundleModel.getBundle().setHeader(Constants.IMPORT_PACKAGE, importPackage);
+				bundleModel.save();
+			}
+		}
+	}
+
+	private void updateImportPackageForGeneratedManifest(IProject project, IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
@@ -53,7 +93,7 @@ public class ManifestConfigurationUpdater {
 				return; 
 			}
 			managePlugins(pomModel);
-			
+
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
 				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
@@ -156,13 +196,21 @@ public class ManifestConfigurationUpdater {
 
 	private void manageImportPkgs(Xpp3Dom importPkg) {
 		String importPkgs = importPkg.getValue().trim();
-		if (!importPkgs.contains("com.sun.el;version=")) { //$NON-NLS-1$
-			if (!importPkgs.isEmpty()){
-				importPkgs += ",\n"; //$NON-NLS-1$
-			}
-			importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		if (!importPkgs.contains(COM_SUN_EL_VERSION)) { //$NON-NLS-1$
+			importPkgs = addELPackage(importPkgs);
 			importPkg.setValue(importPkgs);
 		}
+	}
+
+	private String addELPackage(String importPkgs) {
+		if(importPkgs == null){
+			importPkgs = "";
+		}
+		if (!importPkgs.isEmpty()){
+			importPkgs += ",\n"; //$NON-NLS-1$
+		}
+		importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		return importPkgs;
 	}
 
 }
