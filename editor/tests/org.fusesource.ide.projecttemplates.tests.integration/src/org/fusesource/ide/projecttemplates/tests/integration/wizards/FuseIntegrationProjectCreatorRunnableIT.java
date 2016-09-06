@@ -53,6 +53,7 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -247,7 +248,19 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(utilityFacetFound).isTrue();
 		
 		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(camelVersion).as("The Camel Facet version is not the right one.");
+		
+        checkNoConflictingFacets(fproj);
 	}
+	
+    protected void checkNoConflictingFacets(IFacetedProject fproj) {
+    	for (IProjectFacetVersion existingFacetVersion : fproj.getProjectFacets()) {
+    		for (IProjectFacetVersion existingFacetVersion2 : fproj.getProjectFacets()) {
+    			assertThat(existingFacetVersion.conflictsWith(existingFacetVersion2))
+    			.as("2 facets are conflicting: "+existingFacetVersion+ " and "+ existingFacetVersion2)
+    			.isFalse();
+    		}
+    	}
+    }
 
 	protected void readAndDispatch(int currentNumberOfTry) {
 		try{
