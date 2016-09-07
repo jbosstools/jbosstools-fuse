@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -39,6 +40,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -361,17 +363,21 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
 
             // Ensure Maven will compile transformations folder
-            final IProject project = manager.project();
-			File pomFile = project.getLocation().append("pom.xml").toFile(); //$NON-NLS-1$
-			final MavenUtils mavenUtils = new MavenUtils();
+            IProject project = manager.project();
+			File pomFile = project.getLocation().append(IMavenConstants.POM_FILE_NAME).toFile(); //$NON-NLS-1$
+			MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
 			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
 
-            IProgressMonitor monitor = new NullProgressMonitor();
+			IProgressMonitor monitor = new NullProgressMonitor();
+			
+
+
             // Ensure Java project source classpath entry exists for main Java source & transformations folder
             Util.ensureSourceFolderExists(javaProject, Util.TRANSFORMATIONS_FOLDER, monitor);
             Util.ensureSourceFolderExists(javaProject, new MavenUtils().javaSourceFolder(), monitor);
             project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
             // Ensure build of Java classes has completed
             waitJavaBuild(monitor);
         } catch (final Exception e) {

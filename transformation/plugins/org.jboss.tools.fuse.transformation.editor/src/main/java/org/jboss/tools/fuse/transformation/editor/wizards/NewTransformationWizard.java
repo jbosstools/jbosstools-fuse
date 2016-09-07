@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -39,6 +40,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -60,6 +62,7 @@ import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
+import org.jboss.tools.fuse.transformation.editor.internal.util.ImportELPackageUpdater;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JSONPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JavaPage;
@@ -70,6 +73,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
+
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -273,6 +277,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
+                        new ImportELPackageUpdater().updatePackageImports(project, monitor);
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
 

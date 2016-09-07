@@ -25,8 +25,10 @@ Require-Bundle: org.eclipse.m2e.core;bundle-version="1.5.0",
  org.fusesource.ide.camel.editor,
  org.fusesource.ide.project,
  org.eclipse.jdt.launching,
- org.jboss.tools.fuse.transformation.core;bundle-version="8.0.0"
+ org.jboss.tools.fuse.transformation.core;bundle-version="8.0.0",
+ org.eclipse.pde.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
+Export-Package: org.jboss.tools.fuse.transformation.editor.internal.util;x-friends:="org.jboss.tools.fuse.transformation.editor.tests.integration"
