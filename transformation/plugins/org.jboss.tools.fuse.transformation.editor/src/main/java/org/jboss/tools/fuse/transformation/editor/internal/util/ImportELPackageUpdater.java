@@ -209,7 +209,11 @@ public class ImportELPackageUpdater {
 		if (!importPkgs.isEmpty()){
 			importPkgs += ",\n"; //$NON-NLS-1$
 		}
-		importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		if(importPkgs.contains("*")){ //$NON-NLS-1$
+			importPkgs += "com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		} else {
+			importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
+		}
 		return importPkgs;
 	}
 

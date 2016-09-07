@@ -30,6 +30,20 @@ import org.junit.Test;
 
 public class ImportELPackageUpdaterForPomIT {
 
+	private static final String VALID_INSTRUCTIONS =
+				"          <instructions>\n" +
+				"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
+				"		   </instructions>\n";
+
+	private static final String ARCHIVE_VALID_CONTENT =
+				"		   <archive>\n" +
+				"            <manifestEntries>" +
+				"		 	   <Project-Group-Id>${project.groupId}</Project-Group-Id>\n" +
+				"		 	   <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>\n" +
+				"		 	   <Project-Version>${project.version}</Project-Version>\n" +
+				"            </manifestEntries>" +
+				"		   </archive>\n";
+
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
 			"		  xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +
@@ -56,15 +70,23 @@ public class ImportELPackageUpdaterForPomIT {
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
 			"          <excludeDependencies>false</excludeDependencies>" +
-			"		   <archive>\n" +
-			"            <manifestEntries>" +
-			"		 	   <Project-Group-Id>${project.groupId}</Project-Group-Id>\n" +
-			"		 	   <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>\n" +
-			"		 	   <Project-Version>${project.version}</Project-Version>\n" +
-			"            </manifestEntries>" +
-			"		   </archive>\n" +
+						ARCHIVE_VALID_CONTENT +
+						VALID_INSTRUCTIONS +
+			"        </configuration>\n" +
+			"      </plugin>\n" +
+			POM_END;
+	
+	private static final String POM_WITH_ASTERISK_IMPORT_PACKAGE = POM_START +
+			"      <plugin>\n" +
+			"		 <groupId>org.apache.felix</groupId>\n" +
+			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
+			"        <version>3.2.0</version>\n" +
+			"		 <extensions>true</extensions>\n" +
+			"        <configuration>\n" +
+			"          <excludeDependencies>false</excludeDependencies>" +
+						ARCHIVE_VALID_CONTENT +
 			"          <instructions>\n" +
-			"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
+			"		     <Import-Package>*</Import-Package>\n" +
 			"		   </instructions>\n" +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
@@ -89,13 +111,7 @@ public class ImportELPackageUpdaterForPomIT {
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
 			"          <excludeDependencies>false</excludeDependencies>" +
-			"		   <archive>\n" +
-			"            <manifestEntries>" +
-			"		 	   <Project-Group-Id>${project.groupId}</Project-Group-Id>\n" +
-			"		 	   <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>\n" +
-			"		 	   <Project-Version>${project.version}</Project-Version>\n" +
-			"            </manifestEntries>" +
-			"		   </archive>\n" +
+			ARCHIVE_VALID_CONTENT +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
 			POM_END;
@@ -108,13 +124,7 @@ public class ImportELPackageUpdaterForPomIT {
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
 			"          <excludeDependencies>false</excludeDependencies>" +
-			"		   <archive>\n" +
-			"            <manifestEntries>" +
-			"		 	   <Project-Group-Id>${project.groupId}</Project-Group-Id>\n" +
-			"		 	   <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>\n" +
-			"		 	   <Project-Version>${project.version}</Project-Version>\n" +
-			"            </manifestEntries>" +
-			"		   </archive>\n" +
+			ARCHIVE_VALID_CONTENT +
 			"          <instructions>\n" +
 			"		   </instructions>\n" +
 			"        </configuration>\n" +
@@ -151,11 +161,16 @@ public class ImportELPackageUpdaterForPomIT {
 
 	@Test
 	public void shouldUpdatePomWithoutImportPackage() throws Exception {
-		updatePom(POM_WITHOUT_IMPORT_PACKAGE);
+		updatePom(POM_WITH_ASTERISK_IMPORT_PACKAGE);
 	}
 
 	@Test
 	public void shouldNotModifyExpectedPom() throws Exception {
+		updatePom(EXPECTED_POM);
+	}
+	
+	@Test
+	public void shouldSupportAsteriskAlreadyProvided() throws Exception {
 		updatePom(EXPECTED_POM);
 	}
 
