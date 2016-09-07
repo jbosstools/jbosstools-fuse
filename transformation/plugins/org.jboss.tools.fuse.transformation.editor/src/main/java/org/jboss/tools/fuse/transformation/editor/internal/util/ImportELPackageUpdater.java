@@ -157,14 +157,6 @@ public class ImportELPackageUpdater {
 		if (config == null) {
 			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
 					"<configuration>" + //$NON-NLS-1$
-							"    <excludeDependencies>false</excludeDependencies>" + //$NON-NLS-1$
-							"    <archive>" + //$NON-NLS-1$
-							"        <manifestEntries>" + //$NON-NLS-1$
-							"            <Project-Group-Id>${project.groupId}</Project-Group-Id>" + //$NON-NLS-1$
-							"            <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>" + //$NON-NLS-1$
-							"            <Project-Version>${project.version}</Project-Version>" + //$NON-NLS-1$
-							"        </manifestEntries>" + //$NON-NLS-1$
-							"    </archive>" + //$NON-NLS-1$
 					"</configuration>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
 					StandardCharsets.UTF_8.name());
 			plugin.setConfiguration(config);

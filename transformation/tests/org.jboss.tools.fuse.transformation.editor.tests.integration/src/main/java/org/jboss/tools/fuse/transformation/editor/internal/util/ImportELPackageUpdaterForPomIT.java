@@ -35,15 +35,6 @@ public class ImportELPackageUpdaterForPomIT {
 				"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
 				"		   </instructions>\n";
 
-	private static final String ARCHIVE_VALID_CONTENT =
-				"		   <archive>\n" +
-				"            <manifestEntries>" +
-				"		 	   <Project-Group-Id>${project.groupId}</Project-Group-Id>\n" +
-				"		 	   <Project-Artifact-Id>${project.artifactId}</Project-Artifact-Id>\n" +
-				"		 	   <Project-Version>${project.version}</Project-Version>\n" +
-				"            </manifestEntries>" +
-				"		   </archive>\n";
-
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
 			"		  xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +
@@ -69,8 +60,6 @@ public class ImportELPackageUpdaterForPomIT {
 			"        <version>3.2.0</version>\n" +
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
-			"          <excludeDependencies>false</excludeDependencies>" +
-						ARCHIVE_VALID_CONTENT +
 						VALID_INSTRUCTIONS +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
@@ -83,8 +72,6 @@ public class ImportELPackageUpdaterForPomIT {
 			"        <version>3.2.0</version>\n" +
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
-			"          <excludeDependencies>false</excludeDependencies>" +
-						ARCHIVE_VALID_CONTENT +
 			"          <instructions>\n" +
 			"		     <Import-Package>*</Import-Package>\n" +
 			"		   </instructions>\n" +
@@ -110,8 +97,6 @@ public class ImportELPackageUpdaterForPomIT {
 			"        <version>3.2.0</version>\n" +
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
-			"          <excludeDependencies>false</excludeDependencies>" +
-			ARCHIVE_VALID_CONTENT +
 			"        </configuration>\n" +
 			"      </plugin>\n" +
 			POM_END;
@@ -123,8 +108,6 @@ public class ImportELPackageUpdaterForPomIT {
 			"        <version>3.2.0</version>\n" +
 			"		 <extensions>true</extensions>\n" +
 			"        <configuration>\n" +
-			"          <excludeDependencies>false</excludeDependencies>" +
-			ARCHIVE_VALID_CONTENT +
 			"          <instructions>\n" +
 			"		   </instructions>\n" +
 			"        </configuration>\n" +
@@ -161,7 +144,7 @@ public class ImportELPackageUpdaterForPomIT {
 
 	@Test
 	public void shouldUpdatePomWithoutImportPackage() throws Exception {
-		updatePom(POM_WITH_ASTERISK_IMPORT_PACKAGE);
+		updatePom(POM_WITHOUT_IMPORT_PACKAGE);
 	}
 
 	@Test
@@ -171,7 +154,7 @@ public class ImportELPackageUpdaterForPomIT {
 	
 	@Test
 	public void shouldSupportAsteriskAlreadyProvided() throws Exception {
-		updatePom(EXPECTED_POM);
+		updatePom(POM_WITH_ASTERISK_IMPORT_PACKAGE);
 	}
 
 	@Test
