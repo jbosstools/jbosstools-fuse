@@ -48,7 +48,7 @@ Build and Deploy the Quickstart
 * Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * In the JBoss Fuse console, enter the following command:
 
-        osgi:install -s mvn:com.mycompany/camel-blueprint-cbr/1.0.0-SNAPSHOT
+        osgi:install -s mvn:com.mycompany/camel-spring-cbr/1.0.0-SNAPSHOT
 
 * Fuse should give you an id when the bundle is deployed
 

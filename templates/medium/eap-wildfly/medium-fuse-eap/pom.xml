@@ -23,7 +23,7 @@
 
     <groupId>org.wildfly.camel.archetypes</groupId>
     <artifactId>wildfly-camel-archetype-spring</artifactId>
-    <version>2.3.0.redhat-621031</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>WildFly Camel Spring Application</name>

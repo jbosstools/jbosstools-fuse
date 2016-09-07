@@ -55,9 +55,9 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	 */
 	private class AMQUnzipTemplateCreator extends UnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/simple/amq/";
-		private static final String TEMPLATE_BLUEPRINT = "simple-fuse-activemq-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "simple-fuse-activemq-spring.zip";
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_BLUEPRINT = "template-simple-amq-blueprint.zip";
+		private static final String TEMPLATE_SPRING = "template-simple-amq-spring.zip";
 		
 		@Override
 		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {

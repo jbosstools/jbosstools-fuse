@@ -22,7 +22,7 @@ To run this project from JBoss Fuse shell :
 
     - install the bundle from Fuse shell :
 
-      install -s mvn:com.mycompany/camel-spring-blueprint/1.0.0-SNAPSHOT
+      install -s mvn:com.mycompany/camel-activemq-spring/1.0.0-SNAPSHOT
 
 For more help see the Apache Camel documentation
 

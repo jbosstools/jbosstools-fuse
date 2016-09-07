@@ -65,10 +65,10 @@ public class CBRTemplate extends AbstractProjectTemplate {
 	 */
 	private class CBRUnzipTemplateCreator extends UnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/simple/cbr/";
-		private static final String TEMPLATE_BLUEPRINT = "simple-fuse-cbr-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "simple-fuse-cbr-spring.zip";
-		private static final String TEMPLATE_JAVA = "simple-fuse-cbr-java.zip";
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_BLUEPRINT = "template-simple-cbr-blueprint.zip";
+		private static final String TEMPLATE_SPRING = "template-simple-cbr-spring.zip";
+		private static final String TEMPLATE_JAVA = "template-simple-cbr-java.zip";
 		
 		/* (non-Javadoc)
 		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)

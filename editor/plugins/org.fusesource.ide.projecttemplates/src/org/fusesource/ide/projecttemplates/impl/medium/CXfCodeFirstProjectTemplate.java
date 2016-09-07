@@ -49,10 +49,10 @@ public class CXfCodeFirstProjectTemplate extends AbstractProjectTemplate {
 	
 	private class CXfCodeFirstUnzipTemplateCreator extends UnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/medium/cxf-code-first/";
-		private static final String TEMPLATE_BLUEPRINT = "medium-fuse-cxf-code-first-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "medium-fuse-cxf-code-first-spring.zip";
-		private static final String TEMPLATE_JAVA = "medium-fuse-cxf-code-first-java.zip";
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_BLUEPRINT = "template-medium-cxf-codefirst-blueprint.zip";
+		private static final String TEMPLATE_SPRING = "template-medium-cxf-codefirst-spring.zip";
+		private static final String TEMPLATE_JAVA = "template-medium-cxf-codefirst-java.zip";
 		
 		@Override
 		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {

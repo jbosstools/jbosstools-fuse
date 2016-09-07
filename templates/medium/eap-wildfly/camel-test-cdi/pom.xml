@@ -23,7 +23,7 @@
 
     <groupId>org.test</groupId>
     <artifactId>camel-test-cdi</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>WildFly Camel CDI Application</name>

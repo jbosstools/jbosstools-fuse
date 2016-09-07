@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.cxf.archetype</groupId>
     <artifactId>cxf-jaxrs-service</artifactId>
-    <version>3.0.4.redhat-620133</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Simple CXF JAX-RS service using spring configuration</name>
     <description>Simple CXF JAX-RS service using spring configuration</description>

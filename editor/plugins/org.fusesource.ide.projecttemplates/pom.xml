@@ -1,16 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-    <groupId>org.fusesource.ide.editor</groupId>
-    <artifactId>plugins</artifactId>
-    <version>8.0.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-  
-  <artifactId>org.fusesource.ide.projecttemplates</artifactId>
-  <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Project Templates</name>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.fusesource.ide.editor</groupId>
+		<artifactId>plugins</artifactId>
+		<version>8.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>org.fusesource.ide.projecttemplates</artifactId>
+	<packaging>eclipse-plugin</packaging>
+	<name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Project Templates</name>
+
+	<build>
+		<plugins>
+			<!-- Generate the template binaries -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<finalName>template</finalName>
+					<descriptors>
+						<descriptor>.descriptors/blank-blueprint.xml</descriptor>
+						<descriptor>.descriptors/blank-java.xml</descriptor>
+						<descriptor>.descriptors/blank-spring.xml</descriptor>
+						<descriptor>.descriptors/simple-cbr-blueprint.xml</descriptor>
+						<descriptor>.descriptors/simple-cbr-java.xml</descriptor>
+						<descriptor>.descriptors/simple-cbr-spring.xml</descriptor>
+						<descriptor>.descriptors/simple-amq-blueprint.xml</descriptor>
+						<descriptor>.descriptors/simple-amq-spring.xml</descriptor>
+						<descriptor>.descriptors/medium-eap-wildfly-spring.xml</descriptor>
+						<descriptor>.descriptors/medium-cxf-codefirst-java.xml</descriptor>
+						<descriptor>.descriptors/medium-cxf-codefirst-spring.xml</descriptor>
+					</descriptors>
+					<outputDirectory>templates</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<!-- make sure templates dir is removed after clean to avoid "dirty" 
+					build -->
+				<artifactId>maven-clean-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>clean-assembly-garbage</id>
+						<phase>package</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<excludeDefaultDirectories>true</excludeDefaultDirectories>
+							<filesets>
+								<fileset>
+									<directory>${basedir}/templates</directory>
+									<includes>
+										<include>*template.zip</include>
+									</includes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+					<execution>
+						<id>clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${basedir}/templates</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
