@@ -50,7 +50,7 @@ import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 public class ImportELPackageUpdater {
 
 	private static final String COM_SUN_EL_VERSION = "com.sun.el;version=";
-	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "6.3.0";
+	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
 	private static final String CAMEL_CORE = "camel-core";
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";

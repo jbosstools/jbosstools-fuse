@@ -23,8 +23,8 @@ import org.junit.Test;
 public class ImportELPackageUpdaterTest {
 
 	@Test
-	public void testDependencyLowerTo63() throws Exception {
-		Model pomModel = createModelWithVersion("6.2.1");
+	public void testDependencyLowerTo217() throws Exception {
+		Model pomModel = createModelWithVersion("2.15.1");
 		
 		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
 		
@@ -32,8 +32,8 @@ public class ImportELPackageUpdaterTest {
 	}
 	
 	@Test
-	public void testDependencyEqualTo63() throws Exception {
-		Model pomModel = createModelWithVersion("6.3.0");
+	public void testDependencyEqualTo217() throws Exception {
+		Model pomModel = createModelWithVersion("2.17.0");
 		
 		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
 		
@@ -41,8 +41,8 @@ public class ImportELPackageUpdaterTest {
 	}
 	
 	@Test
-	public void testDependencyHigherTo63() throws Exception {
-		Model pomModel = createModelWithVersion("6.4.0");
+	public void testDependencyHigherTo217() throws Exception {
+		Model pomModel = createModelWithVersion("2.18.0");
 		
 		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
 		
@@ -71,7 +71,7 @@ public class ImportELPackageUpdaterTest {
 	
 	@Test
 	public void testWarpackaging_returnsFalse() throws Exception {
-		Model pomModel = createModelWithVersion("6.3.0");
+		Model pomModel = createModelWithVersion("2.17.0");
 		pomModel.setPackaging("war");
 		
 		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
@@ -80,10 +80,10 @@ public class ImportELPackageUpdaterTest {
 	}
 	
 	@Test
-	public void testDependencySpecifiedWithProperty_LowerThan63() throws Exception {
+	public void testDependencySpecifiedWithProperty_LowerThan217() throws Exception {
 		Model pomModel = createModelWithVersion("${camel.version}");
 		Properties properties = new Properties();
-		properties.setProperty("camel.version", "6.2.1");
+		properties.setProperty("camel.version", "2.15.1");
 		pomModel.setProperties(properties);
 		
 		
@@ -93,10 +93,10 @@ public class ImportELPackageUpdaterTest {
 	}
 	
 	@Test
-	public void testDependencySpecifiedWithProperty_HigherThan63() throws Exception {
+	public void testDependencySpecifiedWithProperty_HigherThan217() throws Exception {
 		Model pomModel = createModelWithVersion("${camel.version}");
 		Properties properties = new Properties();
-		properties.setProperty("camel.version", "6.3.0");
+		properties.setProperty("camel.version", "2.17.0");
 		pomModel.setProperties(properties);
 		
 		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
