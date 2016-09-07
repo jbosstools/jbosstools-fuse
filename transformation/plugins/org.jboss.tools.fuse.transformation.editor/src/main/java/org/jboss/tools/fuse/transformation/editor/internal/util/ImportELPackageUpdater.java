@@ -60,13 +60,13 @@ public class ImportELPackageUpdater {
 	public void updatePackageImports(IProject project, IProgressMonitor monitor) {
 		IFile manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF");
 		if(manifestFile.exists()){
-			updateImportPackageForExisitngManifest(project, manifestFile);
+			updateImportPackageForExistingManifest(project, manifestFile);
 		} else {
 			updateImportPackageForGeneratedManifest(project, monitor);
 		}
 	}
 
-	private void updateImportPackageForExisitngManifest(IProject project, IFile manifestFile) {
+	private void updateImportPackageForExistingManifest(IProject project, IFile manifestFile) {
 		File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 		Model pomModel = null;
 		try {
