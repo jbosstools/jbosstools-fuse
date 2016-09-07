@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/blank/blank-blueprint</directory>
+			<directory>template-sources/blank/blank-blueprint</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

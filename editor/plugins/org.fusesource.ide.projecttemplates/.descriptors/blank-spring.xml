@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/blank/blank-spring</directory>
+			<directory>template-sources/blank/blank-spring</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

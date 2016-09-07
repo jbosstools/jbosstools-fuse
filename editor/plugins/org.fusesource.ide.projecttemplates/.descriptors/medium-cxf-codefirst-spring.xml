@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/medium/cxf-code-first/medium-fuse-cxf-code-first-spring</directory>
+			<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-spring</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

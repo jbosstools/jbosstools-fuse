@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/simple/cbr/simple-fuse-cbr-java</directory>
+			<directory>template-sources/simple/cbr/simple-fuse-cbr-java</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/simple/amq/simple-fuse-activemq-spring</directory>
+			<directory>template-sources/simple/amq/simple-fuse-activemq-spring</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

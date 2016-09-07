@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/medium/eap-wildfly/camel-test-spring</directory>
+			<directory>template-sources/medium/eap-wildfly/camel-test-spring</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>

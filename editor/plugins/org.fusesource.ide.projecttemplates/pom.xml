@@ -52,40 +52,14 @@
 				<!-- make sure templates dir is removed after clean to avoid "dirty" 
 					build -->
 				<artifactId>maven-clean-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>clean-assembly-garbage</id>
-						<phase>package</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-						<configuration>
-							<excludeDefaultDirectories>true</excludeDefaultDirectories>
-							<filesets>
-								<fileset>
-									<directory>${basedir}/templates</directory>
-									<includes>
-										<include>*template.zip</include>
-									</includes>
-								</fileset>
-							</filesets>
-						</configuration>
-					</execution>
-					<execution>
-						<id>clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-						<configuration>
-							<filesets>
-								<fileset>
-									<directory>${basedir}/templates</directory>
-								</fileset>
-							</filesets>
-						</configuration>
-					</execution>
-				</executions>
+				<configuration>
+					<skip>true</skip>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/templates/</directory>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

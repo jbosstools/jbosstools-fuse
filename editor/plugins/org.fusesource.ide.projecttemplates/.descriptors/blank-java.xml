@@ -9,7 +9,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/../../../templates/blank/blank-java</directory>
+			<directory>template-sources/blank/blank-java</directory>
 			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
