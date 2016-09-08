@@ -376,11 +376,12 @@
    
    
   <!-- 		NEW_SERVER_ADAPTER add id for new runtime in the runtimeIds field below -->
-   <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
+  <!--      THIS IS COMMENTED OUT FOR NOW TO AVOID AN ISSUE WITH DEPLOYMENT ON SY PROJECTS -->
+<!--   <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
      <runtimeClasspathProvider
         id="org.fusesource.ide.server.karaf.core.runtime.classpath.runtimeTarget"
         runtimeTypeIds="org.fusesource.ide.karaf.runtime.22,org.fusesource.ide.karaf.runtime.23,org.fusesource.ide.karaf.runtime.24,org.fusesource.ide.karaf.runtime.30"
         class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafProjectRuntimeClasspathProvider"/>
-   </extension>
+   </extension> -->
    
 </plugin>
