@@ -150,12 +150,15 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		waitJob();
 
 		checkCorrectEditorOpened(camelResource);
-		// TODO: fix project to activate no validation error check
-		//checkNoValidationError();
 		waitJob();
 		checkCorrectFacetsEnabled(project);
 		waitJob();
 		checkCorrectNatureEnabled(project);
+		// TODO: fix project to activate no validation error check
+		if(!camelVersion.startsWith("2.17")){ //excluding 2.17 because the temporary maven repository seems whacky
+			checkNoValidationError();
+			//checkNoValidationWarning();
+		}
 		
 		if(!CamelDSLType.JAVA.equals(dsl)){
 			launchDebug(project);
@@ -202,8 +205,25 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	 * @throws CoreException
 	 */
 	private void checkNoValidationError() throws CoreException {
+		checkNoValidationIssueWithSeverity(IMarker.SEVERITY_ERROR);
+	}
+	
+	private void checkNoValidationWarning() throws CoreException {
+		checkNoValidationIssueWithSeverity(IMarker.SEVERITY_WARNING);
+	}
+
+	private void checkNoValidationIssueWithSeverity(int severity) throws CoreException {
 		final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		final List<Object> readableMarkers = Arrays.asList(markers).stream().map(marker -> {
+		final List<Object> readableMarkers = Arrays.asList(markers).stream()
+				.filter(marker -> {
+					try {
+						return marker.getAttribute(IMarker.SEVERITY).equals(severity);
+					} catch (CoreException e1) {
+						return true;
+					}
+				})
+				
+				.map(marker -> {
 			try {
 				return marker.getAttributes();
 			} catch (Exception e) {
