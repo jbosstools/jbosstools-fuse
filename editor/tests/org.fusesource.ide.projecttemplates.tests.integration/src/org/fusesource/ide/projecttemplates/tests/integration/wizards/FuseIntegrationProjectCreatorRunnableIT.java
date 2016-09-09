@@ -69,6 +69,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestWatcher;
 
 /**
  * @author Aurelien Pupier
@@ -86,6 +87,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
     
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
+	
+	@Rule
+	public TestWatcher printStackTraceOnFailure = new PrintThreadStackOnFailureRule();
 
 	protected IProject project = null;
 	boolean deploymentFinished = false;
