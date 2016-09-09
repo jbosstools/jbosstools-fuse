@@ -13,12 +13,17 @@ package org.fusesource.ide.server.karaf.core.server.subsystems;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
@@ -131,9 +136,11 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		
 		boolean isBinaryObject = ServerModelUtilities.isBinaryModule(modules);
 		if( !isBinaryObject ) {
-			for (IModule module : modules) {
-				KarafUtils.runBuild(GOALS, module, subMonitor.newChild(1));
-			}
+		    // commented out after the updates to m2e-wtp which now handles
+		    // cleanVersions as an option (FUSETOOLS-2018)
+//			for (IModule module : modules) {
+//				KarafUtils.runBuild(GOALS, module, subMonitor.newChild(1));
+//			}
 			return handleZippedPublish(modules, publishType, false, subMonitor.newChild(1));
 		}
 		
@@ -231,10 +238,25 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		return IServer.PUBLISH_STATE_FULL;
 	}
 
-	private IPath getTempBundlePath(IModule[] module) {
-		IPath localTempLocation = getMetadataTemporaryLocation(getServer());
-		String archiveName = module[0].getName() + ServerModelUtilities.getDefaultSuffixForModule(module[0]);
-		IPath tempBundlePath = localTempLocation.append(archiveName);
-		return tempBundlePath;
-	}
+    private IPath getTempBundlePath(IModule[] module) {
+        IPath localTempLocation = getMetadataTemporaryLocation(getServer());
+        String moduleVersion = null;
+        try {
+            moduleVersion = getModuleVersion(module[0]);
+        } catch (CoreException e) {
+            moduleVersion = Long.toString(System.currentTimeMillis());
+        }
+        String archiveName = module[0].getName() + "-" + moduleVersion + //$NON-NLS-1$
+                ServerModelUtilities.getDefaultSuffixForModule(module[0]);
+        IPath tempBundlePath = localTempLocation.append(archiveName);
+        return tempBundlePath;
+    }
+
+    private String getModuleVersion(IModule module) throws CoreException {
+        IProgressMonitor monitor = new NullProgressMonitor();
+        IProject project = module.getProject();
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
+        MavenProject mavenProject = facade.getMavenProject(monitor);
+        return mavenProject.getVersion();
+    }
 }
