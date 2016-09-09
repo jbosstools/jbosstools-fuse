@@ -71,8 +71,11 @@ public class CamelProblemDecorator implements ILightweightLabelDecorator {
 	 */
 	private IMarker[] getFuseMarkers(AbstractCamelModelElement cme) throws CoreException {
 		IResource resource = cme.getCamelFile().getResource();
-		IMarker[] markers = resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
-		return markers;
+		if(resource.exists()){
+			return resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+		} else {
+			return new IMarker[]{};
+		}
 	}
 
 	/**
