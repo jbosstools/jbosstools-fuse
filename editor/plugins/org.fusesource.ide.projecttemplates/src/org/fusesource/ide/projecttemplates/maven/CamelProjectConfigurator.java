@@ -16,18 +16,12 @@ import java.util.Set;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -47,7 +41,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
@@ -79,7 +73,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			IProject project = facade.getProject();
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
-			if (fproj != null && checkCamelContextsExist(project)) {
+			if (fproj != null && checkCamelContextsExist(project, monitor)) {
 				installDefaultFacets(project, mavenProject, fproj, monitor);	
 			}
 		}
@@ -92,7 +86,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		if (checkCamelContextsExist(request.getProject())) {
+		if (checkCamelContextsExist(request.getProject(), monitor)) {
 			if (!isCamelFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
@@ -197,7 +191,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		// now determine if we have camel context files in the project 
 		// (only if we don't have any camel deps already)		
 		if (!hasCamelDeps) {
-			hasCamelContextXML = checkCamelContextsExist(project);
+			hasCamelContextXML = checkCamelContextsExist(project, monitor);
 		}
 		
 		// if we got camel deps and/or camel context files we add the fuse 
@@ -210,7 +204,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 
-		if (!isCamelConfigurable(project, monitor)) {
+		if (!checkCamelContextsExist(project, monitor)) {
 			return;
 		}
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -234,14 +228,14 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	        IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
 	        // adjust facets we install based on the packaging type we find
-	        installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion(), monitor);
-	        installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion(), monitor);
+	        installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion());
+	        installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion());
             if (mavenProject.getPackaging() != null) {
                 String packaging = mavenProject.getPackaging();
 	            if (WAR_PACKAGE.equalsIgnoreCase(packaging)) {
-	                installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion(), monitor);
+	                installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion());
 	            } else if (BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || JAR_PACKAGE.equalsIgnoreCase(packaging)) {
-	                installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion(), monitor);
+	                installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
 	            }
 	        }
 	        installCamelFacet(fproj, fpwc, camelVersion, monitor);
@@ -250,45 +244,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	    }
 	}
 	
-	private boolean isCamelConfigurable(IProject project, IProgressMonitor monitor) {
-		// Look for a file that has parent "blueprint" and grandparent "OSGI-INF" or
-		// spring in folder META-INF
-		final Boolean[] found = new Boolean[1];
-		found[0] = false;
-
-		try {
-			project.accept(new IResourceVisitor() {
-				@Override
-				public boolean visit(IResource resource) throws CoreException {
-					if (isMatchingPath(resource, "blueprint", "OSGI-INF") //$NON-NLS-1$ //$NON-NLS-2$
-							|| isMatchingPath(resource, "spring", "META-INF")) { //$NON-NLS-1$ //$NON-NLS-2$
-						found[0] = true;
-					}				
-					return !found[0];
-				}
-
-				private boolean isMatchingPath(IResource resource, String parentName, String grandParentName) {
-					return resource.getName().endsWith(".xml") //$NON-NLS-1$
-							&& resource.getParent().getName().equals(parentName)
-							&& resource.getParent().getParent().getName().equals(grandParentName);
-				}
-			});
-		} catch (CoreException ce) {
-			ProjectTemplatesActivator.pluginLog().logError(ce);
-		}
-
-		if (!found[0]) {
-			// check for java dsl
-			IFile f = FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, monitor);
-			if (f != null) {
-				// java dsl found
-				found[0] = true;
-			}
-		}
-
-		return found[0];
-	}
-
 	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
 		for (Dependency dep : mavenProject.getDependencies()) {
 			if (isCamelDependency(dep)) {
@@ -303,7 +258,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
 		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
-		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion, monitor);
+		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
 		if (camelFacetVersion == null) {
 			// we need to switch dependency versions
 			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
@@ -325,34 +280,12 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @param project
 	 * @return
 	 */
-	private boolean checkCamelContextsExist(IProject project) throws CoreException {
-		return findFiles(project) || FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, new NullProgressMonitor()) != null;
+	private boolean checkCamelContextsExist(IProject project, IProgressMonitor monitor) throws CoreException {
+		return !new CamelFilesFinder().findFiles(project).isEmpty()
+				|| FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, monitor) != null;
 	}
 	
-	private boolean findFiles(IResource resource) throws CoreException {
-		if (resource instanceof IContainer) {
-			IResource[] children = ((IContainer) resource).members();
-			for (IResource f : children) {
-				if (f instanceof IContainer) {
-					boolean found = findFiles(f);
-					if (found)
-						return true;
-				} else {
-					IFile ifile = (IFile) f;
-					if (ifile != null) {
-						IContentDescription contentDescription = ifile.getContentDescription();
-						if (contentDescription != null
-								&& CamelUtils.FUSE_CAMEL_CONTENT_TYPE.equals(contentDescription.getContentType().getId())) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
-	
-	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion, IProgressMonitor mon) throws CoreException {
+	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion) throws CoreException {
 		if (facet != null && !fproj.hasProjectFacet(facet)) {
 			fpwc.addProjectFacet(facetVersion);
 		} else {
