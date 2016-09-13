@@ -49,10 +49,10 @@ public class EmptyProjectTemplate extends AbstractProjectTemplate {
 	
 	private class BlankProjectCreator extends UnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/blank/";
-		private static final String TEMPLATE_BLUEPRINT = "blank-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "blank-spring.zip";
-		private static final String TEMPLATE_JAVA = "blank-java.zip";
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_BLUEPRINT = "template-blank-blueprint.zip";
+		private static final String TEMPLATE_SPRING = "template-blank-spring.zip";
+		private static final String TEMPLATE_JAVA = "template-blank-java.zip";
 		
 		/* (non-Javadoc)
 		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)

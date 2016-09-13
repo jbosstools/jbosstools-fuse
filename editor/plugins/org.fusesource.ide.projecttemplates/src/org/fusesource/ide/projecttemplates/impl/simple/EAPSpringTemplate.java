@@ -65,8 +65,8 @@ public class EAPSpringTemplate extends AbstractProjectTemplate {
 	 */
 	private class EAPSpringUnzipTemplateCreator extends UnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/medium/eap-wildfly/";
-		private static final String TEMPLATE_SPRING = "camel-test-spring.zip";
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_SPRING = "template-medium-eap-wildfly-spring.zip";
 		
 		/* (non-Javadoc)
 		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
