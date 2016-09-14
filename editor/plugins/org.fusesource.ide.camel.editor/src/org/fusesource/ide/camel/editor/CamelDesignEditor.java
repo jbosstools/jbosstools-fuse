@@ -512,7 +512,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         	return;
 	        
         // set Diagram as contents for the graphical viewer and refresh
-        graphicalViewer.setContents(getDiagramTypeProvider().getDiagram());	        
+        graphicalViewer.setContents(getDiagramTypeProvider().getDiagram());
 		getDiagramBehavior().getRefreshBehavior().initRefresh();
         getDiagramBehavior().refreshContent();
         

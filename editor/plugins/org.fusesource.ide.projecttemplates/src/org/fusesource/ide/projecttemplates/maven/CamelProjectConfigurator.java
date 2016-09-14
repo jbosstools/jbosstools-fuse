@@ -267,11 +267,15 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
-		IProjectFacetVersion facetVersion = camelFacet.getVersion(camelVersionString);
-		if (facetVersion == null) {
-			facetVersion = camelFacet.getLatestVersion();
+		try{
+			IProjectFacetVersion facetVersion = camelFacet.getVersion(CamelModelFactory.getCompatibleCamelVersion(camelVersionString));
+			if(facetVersion != null){
+				return facetVersion;
+			}
+		} catch (IllegalArgumentException iae){
+			return camelFacet.getLatestVersion();
 		}
-		return facetVersion;
+		return camelFacet.getLatestVersion();
 	}
 	
 	/**
