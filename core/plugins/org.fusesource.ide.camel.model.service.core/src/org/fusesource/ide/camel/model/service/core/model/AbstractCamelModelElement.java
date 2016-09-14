@@ -1535,26 +1535,24 @@ public abstract class AbstractCamelModelElement {
 		if (isEndpointElement()) {
 			String u = (String) getParameter(URI_PARAMETER_KEY);
 			if (u != null && u.trim().length() > 0) {
-				String scheme = null;
 				if (u.startsWith("ref:")) {
 					// if its a ref we lookup what is the reference scheme
-					String refId = u.substring(u.indexOf(":") + 1);
+					String refId = u.substring(u.indexOf(':') + 1);
 					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
 					if (endpointRef != null) {
 						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
 						if (refUri != null) {
-							scheme = refUri.substring(0, refUri.indexOf(":"));
+							return refUri.substring(0, refUri.indexOf(':'));
 						} else {
 							// seems we have a broken ref
 							return "endpoint";
 						}
 					}
 				} else {
-					if (u.indexOf(":") != -1) {
-						scheme = u.substring(0, u.indexOf(":"));
+					if (u.indexOf(':') != -1) {
+						return u.substring(0, u.indexOf(':'));
 					}
 				}
-				return scheme;
 			}
 			return "endpoint";
 		}

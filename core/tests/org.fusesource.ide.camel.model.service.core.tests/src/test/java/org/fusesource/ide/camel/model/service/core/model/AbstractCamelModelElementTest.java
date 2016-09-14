@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 
@@ -28,11 +29,16 @@ public class AbstractCamelModelElementTest {
 	private Node underlyingNode;
 	@Mock
 	private AbstractCamelModelElement cme;
+	@Mock
+	private CamelContextElement context;
 	
 	@Before
 	public void setup() {
 		doReturn("notEmptyUri").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		doCallRealMethod().when(cme).isEndpointElement();
+		doCallRealMethod().when(cme).getIconName();
+		doReturn(context).when(cme).getCamelContext();
+		
 	}
 
 	@Test
@@ -67,6 +73,15 @@ public class AbstractCamelModelElementTest {
 		assertThat((String)cme.getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY)).isNotEmpty();
 		
 		assertThat(cme.isEndpointElement()).isFalse();
+	}
+	
+	@Test
+	public void testgetIconNameReturnsDefaultValueForBadRef() throws Exception {
+		doReturn("to").when(cme).getNodeTypeId();
+		doReturn("ref:unknow").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		
+		assertThat(cme.getIconName()).isEqualTo("endpoint");
+		
 	}
 
 }
