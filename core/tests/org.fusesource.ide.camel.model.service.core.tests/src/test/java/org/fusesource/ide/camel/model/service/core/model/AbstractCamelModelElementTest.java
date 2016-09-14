@@ -11,14 +11,17 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Node;
 
@@ -81,7 +84,32 @@ public class AbstractCamelModelElementTest {
 		doReturn("ref:unknow").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		
 		assertThat(cme.getIconName()).isEqualTo("endpoint");
+	}
+	
+	@Test
+	public void testgetIconNameReturnsReference() throws Exception {
+		doReturn("to").when(cme).getNodeTypeId();
+		doReturn("ref:aRef").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		AbstractCamelModelElement referencedEndpoint = Mockito.mock(AbstractCamelModelElement.class);
+		doReturn("bean:example").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		Map<String, AbstractCamelModelElement> map = new HashMap<>();
+		map.put("aRef", referencedEndpoint);
+		doReturn(map).when(context).getEndpointDefinitions();
 		
+		assertThat(cme.getIconName()).isEqualTo("bean");
+	}
+	
+	@Test
+	public void testgetIconNamehandleReferenceWithBadScheme() throws Exception {
+		doReturn("to").when(cme).getNodeTypeId();
+		doReturn("ref:aRef").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		AbstractCamelModelElement referencedEndpoint = Mockito.mock(AbstractCamelModelElement.class);
+		doReturn("bean").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
+		Map<String, AbstractCamelModelElement> map = new HashMap<>();
+		map.put("aRef", referencedEndpoint);
+		doReturn(map).when(context).getEndpointDefinitions();
+		
+		assertThat(cme.getIconName()).isEqualTo("endpoint");
 	}
 
 }

@@ -1541,7 +1541,7 @@ public abstract class AbstractCamelModelElement {
 					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
 					if (endpointRef != null) {
 						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
-						if (refUri != null) {
+						if (refUri != null && refUri.contains(":")) {
 							return refUri.substring(0, refUri.indexOf(':'));
 						} else {
 							// seems we have a broken ref
