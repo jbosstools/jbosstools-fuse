@@ -53,6 +53,12 @@ public class CamelModelFactoryTest {
 	}
 	
 	@Test
+	public void testBleedingEdgeUnSupportedRedhatCamelVersionWillReturnLatestSupported() {
+		String version = CamelModelFactory.getCompatibleCamelVersion("2.17.0.redhat-630999", AVAILABLE_VERSIONS, "2.15.1.redhat-621199");
+		assertThat(version).isEqualTo("2.17.0.redhat-630159");
+	}
+	
+	@Test
 	public void testTooEarlyCamelVersionWillReturnEarliestShipped() {
 		String version = CamelModelFactory.getCompatibleCamelVersion("2.14.1", AVAILABLE_VERSIONS, "2.17.0.redhat-630159");
 		assertThat(version).isEqualTo("2.15.1");
