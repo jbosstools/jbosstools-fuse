@@ -14,6 +14,11 @@
 	<artifactId>org.fusesource.ide.projecttemplates</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	<name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Project Templates</name>
+	
+	<properties>
+		<!-- Set to false to regenerate locally the template zips -->
+		<skip.assembly>true</skip.assembly>
+	</properties>
 
 	<build>
 		<plugins>
@@ -22,6 +27,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
+					<skipAssembly>${skip.assembly}</skipAssembly>
 					<finalName>template</finalName>
 					<descriptors>
 						<descriptor>.descriptors/blank-blueprint.xml</descriptor>
@@ -40,7 +46,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>compile</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
