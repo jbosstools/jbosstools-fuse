@@ -24,35 +24,209 @@
 		<plugins>
 			<!-- Generate the template binaries -->
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<skipAssembly>${skip.assembly}</skipAssembly>
-					<finalName>template</finalName>
-					<descriptors>
-						<descriptor>.descriptors/blank-blueprint.xml</descriptor>
-						<descriptor>.descriptors/blank-java.xml</descriptor>
-						<descriptor>.descriptors/blank-spring.xml</descriptor>
-						<descriptor>.descriptors/simple-cbr-blueprint.xml</descriptor>
-						<descriptor>.descriptors/simple-cbr-java.xml</descriptor>
-						<descriptor>.descriptors/simple-cbr-spring.xml</descriptor>
-						<descriptor>.descriptors/simple-amq-blueprint.xml</descriptor>
-						<descriptor>.descriptors/simple-amq-spring.xml</descriptor>
-						<descriptor>.descriptors/medium-eap-wildfly-spring.xml</descriptor>
-						<descriptor>.descriptors/medium-cxf-codefirst-java.xml</descriptor>
-						<descriptor>.descriptors/medium-cxf-codefirst-spring.xml</descriptor>
-					</descriptors>
-					<outputDirectory>templates</outputDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
+				<groupId>org.codehaus.mojo</groupId>
+        		<artifactId>truezip-maven-plugin</artifactId>
+        		<version>1.2</version>
+        		<executions>
+              		<!-- BLANK-BLUEPRINT TEMPLATE -->
+          			<execution>
+            			<id>create-template-blank-blueprint</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-blueprint</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/blank-blueprint.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- BLANK-SPRING TEMPLATE -->
+          			<execution>
+            			<id>create-template-blank-spring</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-spring</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/blank-spring.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- BLANK-JAVA TEMPLATE -->
+          			<execution>
+            			<id>create-template-blank-java</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/blank/blank-java</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/blank-java.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-CXF-CODEFIRST-JAVA TEMPLATE -->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-java</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-java</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/medium-cxf-codefirst-java.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-CXF-CODEFIRST-SPRING TEMPLATE -->
+          			<execution>
+            			<id>create-template-medium-cxf-codefirst-spring</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/cxf-code-first/medium-fuse-cxf-code-first-spring</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/medium-cxf-codefirst-spring.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- MEDIUM-EAP-WILDFLY-SPRING TEMPLATE -->
+          			<execution>
+            			<id>create-template-medium-eap-wildfly-spring</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/medium/eap-wildfly/camel-test-spring</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/medium-eap-wildfly-spring.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-AMQ-BLUEPRINT TEMPLATE -->
+          			<execution>
+            			<id>create-template-simple-amq-blueprint</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/amq/simple-fuse-activemq-blueprint</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/simple-amq-blueprint.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-AMQ-SPRING TEMPLATE -->
+          			<execution>
+            			<id>create-template-simple-amq-spring</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/amq/simple-fuse-activemq-spring</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/simple-amq-spring.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-BLUEPRINT TEMPLATE -->
+          			<execution>
+            			<id>create-template-simple-cbr-blueprint</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-blueprint</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/simple-cbr-blueprint.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-SPRING TEMPLATE -->
+          			<execution>
+            			<id>create-template-simple-cbr-spring</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-spring</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/simple-cbr-spring.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			
+          			<!-- SIMPLE-CBR-JAVA TEMPLATE -->
+          			<execution>
+            			<id>create-template-simple-cbr-java</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/simple/cbr/simple-fuse-cbr-java</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/simple-cbr-java.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
 				</executions>
-			</plugin>
+      		</plugin>
 
 			<plugin>
 				<!-- make sure templates dir is removed after clean to avoid "dirty" 
