@@ -270,6 +270,7 @@ public class Messages extends NLS {
 	public static String XMLPage_tooltipCombo;
 	public static String XMLPage_tooltipErrorOnlyOneElement;
 	public static String XMLPage_tooltipSelectFromList;
+	public static String UpdatingMANIFESTMF;
 
 	static {
 		// initialize resource bundle

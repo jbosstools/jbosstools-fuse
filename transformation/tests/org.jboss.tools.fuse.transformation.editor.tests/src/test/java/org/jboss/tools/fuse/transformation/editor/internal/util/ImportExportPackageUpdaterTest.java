@@ -20,13 +20,13 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.junit.Test;
 
-public class ImportELPackageUpdaterTest {
+public class ImportExportPackageUpdaterTest {
 
 	@Test
 	public void testDependencyLowerTo217() throws Exception {
 		Model pomModel = createModelWithVersion("2.15.1");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isFalse();
 	}
@@ -35,7 +35,7 @@ public class ImportELPackageUpdaterTest {
 	public void testDependencyEqualTo217() throws Exception {
 		Model pomModel = createModelWithVersion("2.17.0");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -44,7 +44,7 @@ public class ImportELPackageUpdaterTest {
 	public void testDependencyHigherTo217() throws Exception {
 		Model pomModel = createModelWithVersion("2.18.0");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -53,7 +53,7 @@ public class ImportELPackageUpdaterTest {
 	public void testDependencyWithInvalidVersion_returnsTrueToEnsureAddingTheImportPackage() throws Exception {
 		Model pomModel = createModelWithVersion("Invalid");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -64,7 +64,7 @@ public class ImportELPackageUpdaterTest {
 		Build build = new Build();
 		pomModel.setBuild(build);
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -74,7 +74,7 @@ public class ImportELPackageUpdaterTest {
 		Model pomModel = createModelWithVersion("2.17.0");
 		pomModel.setPackaging("war");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isFalse();
 	}
@@ -87,7 +87,7 @@ public class ImportELPackageUpdaterTest {
 		pomModel.setProperties(properties);
 		
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isFalse();
 	}
@@ -99,7 +99,7 @@ public class ImportELPackageUpdaterTest {
 		properties.setProperty("camel.version", "2.17.0");
 		pomModel.setProperties(properties);
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -111,7 +111,7 @@ public class ImportELPackageUpdaterTest {
 		properties.setProperty("camel.version", "Invalid");
 		pomModel.setProperties(properties);
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}
@@ -120,7 +120,7 @@ public class ImportELPackageUpdaterTest {
 	public void testDependencySpecifiedWithPropertyNotDefined() throws Exception {
 		Model pomModel = createModelWithVersion("${camel.version}");
 		
-		boolean shouldImport = new ImportELPackageUpdater().shouldAddImportPackage(pomModel);
+		boolean shouldImport = new ImportExportPackageUpdater().shouldAddImportExportPackage(pomModel);
 		
 		assertThat(shouldImport).isTrue();
 	}

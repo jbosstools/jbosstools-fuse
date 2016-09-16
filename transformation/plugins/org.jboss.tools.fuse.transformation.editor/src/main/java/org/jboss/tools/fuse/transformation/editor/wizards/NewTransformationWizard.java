@@ -62,7 +62,7 @@ import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
-import org.jboss.tools.fuse.transformation.editor.internal.util.ImportELPackageUpdater;
+import org.jboss.tools.fuse.transformation.editor.internal.util.ImportExportPackageUpdater;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JSONPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JavaPage;
@@ -277,7 +277,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
-                        new ImportELPackageUpdater().updatePackageImports(project, monitor);
+                        new ImportExportPackageUpdater().updatePackageImports(project, sourceClassName, targetClassName, monitor);
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
 
