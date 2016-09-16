@@ -37,7 +37,7 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 public class CamelFacetVersionChangeDelegate implements IDelegate {
 
 	// TODO: remove me after release of 8.0.0 or reuse me for another new unreleased camel version
-	private static final String PRODUCT_STAGING_REPO_URI = "http://origin-repository.jboss.org/nexus/content/groups/ea";
+	private static final String PRODUCT_STAGING_REPO_URI = "http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven";
 	private static final String THIRD_PARTY_STAGING_REPO_URI = "https://maven.repository.redhat.com/earlyaccess/all";
 	private static final String REDHAT_GA_PUBLIC_REPO = "https://maven.repository.redhat.com/ga";
 	

@@ -39,10 +39,10 @@ public class CamelModelFactory {
 		camelVersionToFuseBOMMapping = new HashMap<>();
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
-		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630175", "6.3.0.redhat-175");
-		camelVersionToFuseBOMMapping.put("2.17.3", 				 "6.3.0.redhat-175");
+		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
+		camelVersionToFuseBOMMapping.put("2.17.3", 				 "6.3.0.redhat-187");
 	}
-	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-175";
+	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-187";
 			
 	private static HashMap<String, CamelModel> supportedCamelModels;
 	

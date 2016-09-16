@@ -54,17 +54,17 @@
     <ide-version>${project.version}</ide-version>
     
     <!-- camel version -->
-    <camel.version>2.15.1.redhat-620133</camel.version>
+    <camel.version>2.17.0.redhat-630187</camel.version>
 
     <!-- AMQ JMX plugin -->
-    <activemq.version>5.11.0.redhat-620133</activemq.version>
+    <activemq.version>5.11.0.redhat-630187</activemq.version>
     <geronimo.jms.version>1.1.1</geronimo.jms.version>
 
     <!-- codegen/buildtools fabric8 versions (only build time deps) -->
     <fabric.version>1.2.0.redhat-133</fabric.version>
 
     <!-- wildfly archetypes version -->
-    <wildfly.version>2.3.0.redhat-621031</wildfly.version>
+    <wildfly.version>2.3.0.redhat-630187</wildfly.version>
     
     <!-- data transformation versions -->
     <version.xmlbeans>2.6.0</version.xmlbeans>
