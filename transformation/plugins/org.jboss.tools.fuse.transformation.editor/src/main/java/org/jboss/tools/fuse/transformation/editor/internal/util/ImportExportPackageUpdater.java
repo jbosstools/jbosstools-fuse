@@ -32,8 +32,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
@@ -57,17 +63,28 @@ public class ImportExportPackageUpdater {
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0";
+	
+	private IProject project;
+	private String sourceClassName;
+	private String targetClassName;
+	
+	
+	public ImportExportPackageUpdater(IProject project, String sourceClassName, String targetClassName) {
+		this.project = project;
+		this.sourceClassName= sourceClassName;
+		this.targetClassName = targetClassName;
+	}
 
-	public void updatePackageImports(IProject project, String sourceClassName, String targetClassName, IProgressMonitor monitor) {
+	public void updatePackageImports(IProgressMonitor monitor) {
 		IFile manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF"); //$NON-NLS-1$
 		if(manifestFile.exists()){
-			updateImportExportPackageForExistingManifest(project, manifestFile, sourceClassName, targetClassName, monitor);
+			updateImportExportPackageForExistingManifest(manifestFile, monitor);
 		} else {
-			updateImportExportPackageForGeneratedManifest(project, monitor, sourceClassName, targetClassName);
+			updateImportExportPackageForGeneratedManifest(monitor);
 		}
 	}
 
-	private void updateImportExportPackageForExistingManifest(IProject project, IFile manifestFile, String sourceClassName, String targetClassName, IProgressMonitor monitor) {
+	private void updateImportExportPackageForExistingManifest(IFile manifestFile, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UpdatingMANIFESTMF, 3);
 		Model pomModel = retrievePomModel(project);
 		subMonitor.worked(1);
@@ -75,7 +92,7 @@ public class ImportExportPackageUpdater {
 			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 			updateImportPackage(bundleModel);
 			subMonitor.worked(1);
-			updateExportPackage(sourceClassName, targetClassName, bundleModel);
+			updateExportPackage(bundleModel);
 		}
 		subMonitor.done();
 	}
@@ -91,7 +108,7 @@ public class ImportExportPackageUpdater {
 		return pomModel;
 	}
 
-	private void updateExportPackage(String sourceClassName, String targetClassName, WorkspaceBundleModel bundleModel) {
+	private void updateExportPackage(WorkspaceBundleModel bundleModel) {
 		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
 		String initialExportPackage = exportPackage;
 		exportPackage = addPackageForClass(sourceClassName, exportPackage);
@@ -107,13 +124,28 @@ public class ImportExportPackageUpdater {
 			String packageName = getPackage(className);
 			if(exportPackage == null || !exportPackage.contains(packageName)){
 				if(packageName != null){
-					return addPackage(exportPackage, packageName);
+					if(isPackageInsideSource(packageName)){
+						return addPackage(exportPackage, packageName);
+					}
 				} else {
 					return addPackage(exportPackage, DEFAULT_PACKAGE_EXPORT);
 				}
 			}
 		}
 		return exportPackage;
+	}
+
+	private boolean isPackageInsideSource(String packageName) {
+		IJavaProject jProject = JavaCore.create(project);
+		try{
+			IJavaElement findElement = jProject.findElement(Path.fromPortableString(packageName.replaceAll("\\.", "/")));
+			if(findElement instanceof IPackageFragment){
+				return IPackageFragmentRoot.K_SOURCE == ((IPackageFragment) findElement).getKind();
+			}
+		} catch (Exception e) {
+			Activator.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Cannot determine where the package "+ packageName+ " comes from.", e)); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return true;
 	}
 
 	private void updateImportPackage(WorkspaceBundleModel bundleModel) {
@@ -137,14 +169,14 @@ public class ImportExportPackageUpdater {
 		}
 	}
 
-	private void updateImportExportPackageForGeneratedManifest(IProject project, IProgressMonitor monitor, String sourceClassName, String targetClassName) {
+	private void updateImportExportPackageForGeneratedManifest(IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
 			if (!shouldAddImportExportPackage(pomModel)){ //$NON-NLS-1$
 				return; 
 			}
-			managePlugins(pomModel, sourceClassName, targetClassName);
+			managePlugins(pomModel);
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
@@ -189,7 +221,7 @@ public class ImportExportPackageUpdater {
 		return new Version(camelCoreVersion).compareTo(new Version(LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE)) >= 0;
 	}
 
-	private void managePlugins(Model pomModel, String sourceClassName, String targetClassName) throws XmlPullParserException, IOException {
+	private void managePlugins(Model pomModel) throws XmlPullParserException, IOException {
 		Build build = pomModel.getBuild();
 		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
 		Plugin plugin = pluginsByName.get(ORG_APACHE_FELIX+":"+MAVEN_BUNDLE_PLUGIN); //$NON-NLS-1$
@@ -201,10 +233,10 @@ public class ImportExportPackageUpdater {
 			plugin.setExtensions(true);
 			build.addPlugin(plugin);
 		}
-		manageConfigurations(plugin, sourceClassName, targetClassName);
+		manageConfigurations(plugin);
 	}
 
-	private void manageConfigurations(Plugin plugin, String sourceClassName, String targetClassName) throws XmlPullParserException, IOException {
+	private void manageConfigurations(Plugin plugin) throws XmlPullParserException, IOException {
 		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
 		if (config == null) {
 			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
@@ -213,10 +245,10 @@ public class ImportExportPackageUpdater {
 					StandardCharsets.UTF_8.name());
 			plugin.setConfiguration(config);
 		}
-		manageInstructions(config, sourceClassName, targetClassName);
+		manageInstructions(config);
 	}
 
-	private void manageInstructions(Xpp3Dom config, String sourceClassName, String targetClassName) throws XmlPullParserException, IOException {
+	private void manageInstructions(Xpp3Dom config) throws XmlPullParserException, IOException {
 		Xpp3Dom instructions = config.getChild("instructions"); //$NON-NLS-1$
 		if (instructions == null) {
 			instructions = Xpp3DomBuilder.build(new ByteArrayInputStream(("<instructions>" + //$NON-NLS-1$
@@ -225,20 +257,20 @@ public class ImportExportPackageUpdater {
 			config.addChild(instructions);
 		}
 		manageImportPkg(instructions);
-		manageExportPkg(instructions, sourceClassName, targetClassName);
+		manageExportPkg(instructions);
 	}
 
-	private void manageExportPkg(Xpp3Dom instructions, String sourceClassName, String targetClassName) throws XmlPullParserException, IOException {
+	private void manageExportPkg(Xpp3Dom instructions) throws XmlPullParserException, IOException {
 		Xpp3Dom exporttPkg = instructions.getChild("Export-Package"); //$NON-NLS-1$
 		if (exporttPkg == null) {
 			//By default, all packages are exported
 			return;
 		} else {
-			manageExportPkgs(exporttPkg, sourceClassName, targetClassName);
+			manageExportPkgs(exporttPkg);
 		}
 	}
 
-	private void manageExportPkgs(Xpp3Dom exportPkg, String sourceClassName, String targetClassName) {
+	private void manageExportPkgs(Xpp3Dom exportPkg) {
 		String exportPkgs = exportPkg.getValue().trim();
 		exportPkgs = addPackageForClass(sourceClassName, exportPkgs);
 		exportPkgs = addPackageForClass(targetClassName, exportPkgs);

@@ -19,9 +19,15 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
@@ -75,7 +81,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	
 	@Test
 	public void testImportPackageAdded() {
-		new ImportExportPackageUpdater().updatePackageImports(project, null, null, new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
@@ -84,7 +90,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	
 	@Test
 	public void testExportPackageAdded() {
-		new ImportExportPackageUpdater().updatePackageImports(project, "source.pack.MyClass", "target.pack.MyOtherClass", new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
@@ -93,7 +99,7 @@ public class ImportExportPackageUpdaterForManifestIT {
 	
 	@Test
 	public void testExportDefaultPackageAdded() {
-		new ImportExportPackageUpdater().updatePackageImports(project, "MyClass", "target.pack.MyOtherClass", new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, "MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
@@ -101,9 +107,24 @@ public class ImportExportPackageUpdaterForManifestIT {
 	}
 	
 	@Test
+	public void testExportPackageNotAddedForExternalClasses() throws CoreException {
+		IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
+		description.setNatureIds(new String[]{JavaCore.NATURE_ID});
+		project.setDescription(description, new NullProgressMonitor());
+		
+		JavaCore.create(project).setRawClasspath(new IClasspathEntry[]{JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))}, new NullProgressMonitor());
+		
+		new ImportExportPackageUpdater(project, "java.util.List", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		assertThat(normalize(exportPackage)).isEqualTo(normalize("target.pack"));
+	}
+	
+	@Test
 	public void testExportPackageNotAddedTwice() {
-		new ImportExportPackageUpdater().updatePackageImports(project, "source.pack.MyClass", "target.pack.MyOtherClass", new NullProgressMonitor());
-		new ImportExportPackageUpdater().updatePackageImports(project, "source.pack.MyClass", "target.pack.MyOtherClass", new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
@@ -112,8 +133,8 @@ public class ImportExportPackageUpdaterForManifestIT {
 	
 	@Test
 	public void testImportPackageNotAddedTwice() {
-		new ImportExportPackageUpdater().updatePackageImports(project, null, null, new NullProgressMonitor());
-		new ImportExportPackageUpdater().updatePackageImports(project, null, null, new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
