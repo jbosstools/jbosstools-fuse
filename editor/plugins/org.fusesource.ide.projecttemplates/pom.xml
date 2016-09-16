@@ -233,7 +233,6 @@
 					build -->
 				<artifactId>maven-clean-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
 					<filesets>
 						<fileset>
 							<directory>${basedir}/templates/</directory>
