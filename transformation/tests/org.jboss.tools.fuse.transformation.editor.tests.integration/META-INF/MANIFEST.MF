@@ -14,4 +14,6 @@ Require-Bundle: org.eclipse.ui,
  org.jboss.tools.fuse.transformation.editor;bundle-version="8.0.0",
  org.fusesource.ide.camel.model.service.core.tests.integration,
  org.eclipse.m2e.core,
- org.eclipse.pde.core;bundle-version="3.10.102"
+ org.eclipse.pde.core;bundle-version="3.10.102",
+ org.eclipse.jdt.core;bundle-version="3.11.2",
+ org.eclipse.jdt.launching;bundle-version="3.8.0"

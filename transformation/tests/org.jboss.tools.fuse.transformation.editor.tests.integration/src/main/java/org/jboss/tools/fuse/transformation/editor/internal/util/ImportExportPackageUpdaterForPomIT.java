@@ -20,15 +20,13 @@ import java.text.StringCharacterIterator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ImportELPackageUpdaterForPomIT {
+public class ImportExportPackageUpdaterForPomIT {
 
 	private static final String VALID_INSTRUCTIONS =
 				"          <instructions>\n" +
@@ -53,7 +51,7 @@ public class ImportELPackageUpdaterForPomIT {
 			"  </build>\n" +
 			"</project>";
 
-	private static final String EXPECTED_POM = POM_START +
+	private static final String EXPECTED_POM_WITHOUT_EXPORT_PACKAGE = POM_START +
 			"      <plugin>\n" +
 			"		 <groupId>org.apache.felix</groupId>\n" +
 			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
@@ -114,8 +112,37 @@ public class ImportELPackageUpdaterForPomIT {
 			"      </plugin>\n" +
 			POM_END;
 
+	private static final String EXPECTED_POM_WITH_EXPORT_PACKAGE = POM_START +
+			"      <plugin>\n" +
+			"		 <groupId>org.apache.felix</groupId>\n" +
+			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
+			"        <version>3.2.0</version>\n" +
+			"		 <extensions>true</extensions>\n" +
+			"        <configuration>\n" +
+			"          <instructions>\n" +
+			"            <Export-Package>dummy.pack,source.pack,target.pack</Export-Package>\n" +
+			"		     <Import-Package>*,com.sun.el;version=\"[2,3)\"</Import-Package>\n" +
+			"		   </instructions>\n" +
+			"        </configuration>\n" +
+			"      </plugin>\n" +
+			POM_END;
+
+	private static final String POM_WITH_SOME_EXPORT_PACKAGE = POM_START +
+			"      <plugin>\n" +
+			"		 <groupId>org.apache.felix</groupId>\n" +
+			"        <artifactId>maven-bundle-plugin</artifactId>\n" +
+			"        <version>3.2.0</version>\n" +
+			"		 <extensions>true</extensions>\n" +
+			"        <configuration>\n" +
+			"          <instructions>\n" +
+			"            <Export-Package>dummy.pack</Export-Package>" +
+			"		   </instructions>\n" +
+			"        </configuration>\n" +
+			"      </plugin>\n" +
+			POM_END;
+
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ImportELPackageUpdaterForPomIT.class.getName());
+	public FuseProject fuseProject = new FuseProject(ImportExportPackageUpdaterForPomIT.class.getName());
 
 	private IProject project;
 	private IFile pomIFile;
@@ -149,7 +176,7 @@ public class ImportELPackageUpdaterForPomIT {
 
 	@Test
 	public void shouldNotModifyExpectedPom() throws Exception {
-		updatePom(EXPECTED_POM);
+		updatePom(EXPECTED_POM_WITHOUT_EXPORT_PACKAGE);
 	}
 	
 	@Test
@@ -162,14 +189,28 @@ public class ImportELPackageUpdaterForPomIT {
 		String pom = POM_WITHOUT_PLUGIN.replace("bundle", "war");
 		updatePom(pom, pom);
 	}
+	
+	@Test
+	public void shouldNotAddExportedPackageIfNoExportPackageConfigured() throws Exception {
+		updatePom(EXPECTED_POM_WITHOUT_EXPORT_PACKAGE, EXPECTED_POM_WITHOUT_EXPORT_PACKAGE, "source.pack.MyClass", "target.pack.MyOtherClass");
+	}
+	
+	@Test
+	public void shouldAddExportedPackageIfExportPackageConfigured() throws Exception {
+		updatePom(POM_WITH_SOME_EXPORT_PACKAGE, EXPECTED_POM_WITH_EXPORT_PACKAGE, "source.pack.MyClass", "target.pack.MyOtherClass");
+	}
 
 	private void updatePom(String pom) throws Exception {
-		updatePom(pom, EXPECTED_POM);
+		updatePom(pom, EXPECTED_POM_WITHOUT_EXPORT_PACKAGE);
 	}
 
 	private void updatePom(String pom, String expectedPom) throws Exception {
+		updatePom(pom, expectedPom, null, null);
+	}
+	
+	private void updatePom(String pom, String expectedPom, String sourceClassName, String targetClassName) throws Exception {
 		pomIFile.create(new ByteArrayInputStream(pom.getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
-		new ImportELPackageUpdater().updatePackageImports(project, new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, sourceClassName, targetClassName).updatePackageImports(new NullProgressMonitor());
 		InputStream pomContentsToCheck = pomIFile.getContents();
 		char[] buf = new char[pomContentsToCheck.available()];
 		try (InputStreamReader reader = new InputStreamReader(pomContentsToCheck, StandardCharsets.UTF_8)) {

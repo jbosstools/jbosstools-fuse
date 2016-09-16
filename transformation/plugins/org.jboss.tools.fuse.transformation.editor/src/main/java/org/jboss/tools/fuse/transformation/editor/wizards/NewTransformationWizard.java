@@ -40,7 +40,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -61,8 +60,8 @@ import org.jboss.tools.fuse.transformation.core.model.json.JsonModelGenerator;
 import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
+import org.jboss.tools.fuse.transformation.editor.internal.util.ImportExportPackageUpdater;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
-import org.jboss.tools.fuse.transformation.editor.internal.util.ImportELPackageUpdater;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JSONPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JavaPage;
@@ -277,7 +276,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
-                        new ImportELPackageUpdater().updatePackageImports(project, monitor);
+                        new ImportExportPackageUpdater(project, sourceClassName, targetClassName).updatePackageImports(monitor);
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
 

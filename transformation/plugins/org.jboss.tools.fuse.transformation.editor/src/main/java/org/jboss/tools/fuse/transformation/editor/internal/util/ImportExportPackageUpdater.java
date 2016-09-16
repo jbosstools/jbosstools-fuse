@@ -17,10 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -34,21 +32,30 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.osgi.util.ManifestElement;
+import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
+
 
 /**
  * This class is responsible to configure the project to import the Expression Language package if needed.
  * 
  */
-public class ImportELPackageUpdater {
+public class ImportExportPackageUpdater {
 
+	private static final String DEFAULT_PACKAGE_EXPORT = ".";
 	private static final String COM_SUN_EL_VERSION = "com.sun.el;version=";
 	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
@@ -56,17 +63,41 @@ public class ImportELPackageUpdater {
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0";
+	
+	private IProject project;
+	private String sourceClassName;
+	private String targetClassName;
+	
+	
+	public ImportExportPackageUpdater(IProject project, String sourceClassName, String targetClassName) {
+		this.project = project;
+		this.sourceClassName= sourceClassName;
+		this.targetClassName = targetClassName;
+	}
 
-	public void updatePackageImports(IProject project, IProgressMonitor monitor) {
-		IFile manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF");
+	public void updatePackageImports(IProgressMonitor monitor) {
+		IFile manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF"); //$NON-NLS-1$
 		if(manifestFile.exists()){
-			updateImportPackageForExistingManifest(project, manifestFile);
+			updateImportExportPackageForExistingManifest(manifestFile, monitor);
 		} else {
-			updateImportPackageForGeneratedManifest(project, monitor);
+			updateImportExportPackageForGeneratedManifest(monitor);
 		}
 	}
 
-	private void updateImportPackageForExistingManifest(IProject project, IFile manifestFile) {
+	private void updateImportExportPackageForExistingManifest(IFile manifestFile, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UpdatingMANIFESTMF, 3);
+		Model pomModel = retrievePomModel(project);
+		subMonitor.worked(1);
+		if(pomModel == null || shouldAddImportExportPackage(pomModel)){
+			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+			updateImportPackage(bundleModel);
+			subMonitor.worked(1);
+			updateExportPackage(bundleModel);
+		}
+		subMonitor.done();
+	}
+
+	private Model retrievePomModel(IProject project) {
 		File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 		Model pomModel = null;
 		try {
@@ -74,22 +105,75 @@ public class ImportELPackageUpdater {
 		} catch (CoreException e) {
 			Activator.error(e);
 		}
-		if(pomModel == null || shouldAddImportPackage(pomModel)){
-			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
-			String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
-			if(importPackage == null || !importPackage.contains(COM_SUN_EL_VERSION)){
-				importPackage = addELPackage(importPackage);
-				bundleModel.getBundle().setHeader(Constants.IMPORT_PACKAGE, importPackage);
-				bundleModel.save();
-			}
+		return pomModel;
+	}
+
+	private void updateExportPackage(WorkspaceBundleModel bundleModel) {
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		String initialExportPackage = exportPackage;
+		exportPackage = addPackageForClass(sourceClassName, exportPackage);
+		exportPackage = addPackageForClass(targetClassName, exportPackage);
+		if(exportPackage != null && !exportPackage.equals(initialExportPackage)){
+			bundleModel.getBundle().setHeader(Constants.EXPORT_PACKAGE, exportPackage);
+			bundleModel.save();
 		}
 	}
 
-	private void updateImportPackageForGeneratedManifest(IProject project, IProgressMonitor monitor) {
+	private String addPackageForClass(String className, String exportPackage) {
+		if(className != null){
+			String packageName = getPackage(className);
+			if(exportPackage == null || !exportPackage.contains(packageName)){
+				if(packageName != null){
+					if(isPackageInsideSource(packageName)){
+						return addPackage(exportPackage, packageName);
+					}
+				} else {
+					return addPackage(exportPackage, DEFAULT_PACKAGE_EXPORT);
+				}
+			}
+		}
+		return exportPackage;
+	}
+
+	private boolean isPackageInsideSource(String packageName) {
+		IJavaProject jProject = JavaCore.create(project);
+		try{
+			IJavaElement findElement = jProject.findElement(Path.fromPortableString(packageName.replaceAll("\\.", "/")));
+			if(findElement instanceof IPackageFragment){
+				return IPackageFragmentRoot.K_SOURCE == ((IPackageFragment) findElement).getKind();
+			}
+		} catch (Exception e) {
+			Activator.log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Cannot determine where the package "+ packageName+ " comes from.", e)); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return true;
+	}
+
+	private void updateImportPackage(WorkspaceBundleModel bundleModel) {
+		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
+		if(importPackage == null || !importPackage.contains(COM_SUN_EL_VERSION)){
+			importPackage = addELPackage(importPackage);
+			bundleModel.getBundle().setHeader(Constants.IMPORT_PACKAGE, importPackage);
+			bundleModel.save();
+		}
+	}
+
+	/**
+	 * @param fullyQualifiedClassName
+	 * @return the package name or null if it is the default one.
+	 */
+	private String getPackage(String fullyQualifiedClassName) {
+		if(fullyQualifiedClassName.contains(DEFAULT_PACKAGE_EXPORT)){
+			return fullyQualifiedClassName.substring(0, fullyQualifiedClassName.lastIndexOf('.'));
+		} else {
+			return null;
+		}
+	}
+
+	private void updateImportExportPackageForGeneratedManifest(IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
-			if (!shouldAddImportPackage(pomModel)){ //$NON-NLS-1$
+			if (!shouldAddImportExportPackage(pomModel)){ //$NON-NLS-1$
 				return; 
 			}
 			managePlugins(pomModel);
@@ -104,7 +188,7 @@ public class ImportELPackageUpdater {
 		}
 	}
 
-	boolean shouldAddImportPackage(Model pomModel) {
+	boolean shouldAddImportExportPackage(Model pomModel) {
 		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63(pomModel);
 	}
 
@@ -173,6 +257,24 @@ public class ImportELPackageUpdater {
 			config.addChild(instructions);
 		}
 		manageImportPkg(instructions);
+		manageExportPkg(instructions);
+	}
+
+	private void manageExportPkg(Xpp3Dom instructions) throws XmlPullParserException, IOException {
+		Xpp3Dom exporttPkg = instructions.getChild("Export-Package"); //$NON-NLS-1$
+		if (exporttPkg == null) {
+			//By default, all packages are exported
+			return;
+		} else {
+			manageExportPkgs(exporttPkg);
+		}
+	}
+
+	private void manageExportPkgs(Xpp3Dom exportPkg) {
+		String exportPkgs = exportPkg.getValue().trim();
+		exportPkgs = addPackageForClass(sourceClassName, exportPkgs);
+		exportPkgs = addPackageForClass(targetClassName, exportPkgs);
+		exportPkg.setValue(exportPkgs);
 	}
 
 	private void manageImportPkg(Xpp3Dom instructions) throws XmlPullParserException, IOException {
@@ -199,7 +301,7 @@ public class ImportELPackageUpdater {
 			importPkgs = "";
 		}
 		if (!importPkgs.isEmpty()){
-			importPkgs += ",\n"; //$NON-NLS-1$
+			importPkgs += ",\n "; //$NON-NLS-1$
 		}
 		if(importPkgs.contains("*")){ //$NON-NLS-1$
 			importPkgs += "com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
@@ -207,6 +309,22 @@ public class ImportELPackageUpdater {
 			importPkgs += "*,com.sun.el;version=\"[2,3)\""; //$NON-NLS-1$
 		}
 		return importPkgs;
+	}
+	
+
+	private String addPackage(String initialPackageList, String packageToAdd) {
+		if(initialPackageList == null){
+			return packageToAdd;
+		}
+		if(!Arrays.asList(initialPackageList.split(",")).contains(packageToAdd)){ //$NON-NLS-1$
+			if(initialPackageList.isEmpty()){
+				return packageToAdd;
+			} else {
+				return initialPackageList + ",\n " + packageToAdd; //$NON-NLS-1$
+			}
+		} else {
+			return initialPackageList;
+		}
 	}
 
 }

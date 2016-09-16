@@ -19,9 +19,15 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
@@ -30,7 +36,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.osgi.framework.Constants;
 
-public class ImportELPackageUpdaterForManifestIT {
+public class ImportExportPackageUpdaterForManifestIT {
 	
 	private static final String POM_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"" +
@@ -52,7 +58,7 @@ public class ImportELPackageUpdaterForManifestIT {
 	
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(ImportELPackageUpdaterForManifestIT.class.getName());
+	public FuseProject fuseProject = new FuseProject(ImportExportPackageUpdaterForManifestIT.class.getName());
 	
 	private IProject project;
 	private IFile pomIFile;
@@ -70,12 +76,12 @@ public class ImportELPackageUpdaterForManifestIT {
 		pomIFile.create(new ByteArrayInputStream((POM_START + POM_END).getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
 		manifestFile = project.getFile("src/main/resources/META-INF/MANIFEST.MF");
 		prepareFolder(project.getFolder("src/main/resources/META-INF/"));
-		manifestFile.create(ImportELPackageUpdaterForManifestIT.class.getResourceAsStream("/MANIFEST-Minimal.MF"), IResource.FORCE, new NullProgressMonitor());
+		manifestFile.create(ImportExportPackageUpdaterForManifestIT.class.getResourceAsStream("/MANIFEST-Minimal.MF"), IResource.FORCE, new NullProgressMonitor());
 	}
 	
 	@Test
 	public void testImportPackageAdded() {
-		new ImportELPackageUpdater().updatePackageImports(project, new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
@@ -83,9 +89,52 @@ public class ImportELPackageUpdaterForManifestIT {
 	}
 	
 	@Test
+	public void testExportPackageAdded() {
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		assertThat(normalize(exportPackage)).isEqualTo(normalize("source.pack,target.pack"));
+	}
+	
+	@Test
+	public void testExportDefaultPackageAdded() {
+		new ImportExportPackageUpdater(project, "MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		assertThat(normalize(exportPackage)).isEqualTo(normalize(".,target.pack"));
+	}
+	
+	@Test
+	public void testExportPackageNotAddedForExternalClasses() throws CoreException {
+		IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
+		description.setNatureIds(new String[]{JavaCore.NATURE_ID});
+		project.setDescription(description, new NullProgressMonitor());
+		
+		JavaCore.create(project).setRawClasspath(new IClasspathEntry[]{JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER))}, new NullProgressMonitor());
+		
+		new ImportExportPackageUpdater(project, "java.util.List", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		assertThat(normalize(exportPackage)).isEqualTo(normalize("target.pack"));
+	}
+	
+	@Test
+	public void testExportPackageNotAddedTwice() {
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, "source.pack.MyClass", "target.pack.MyOtherClass").updatePackageImports(new NullProgressMonitor());
+		
+		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
+		String exportPackage = bundleModel.getBundle().getHeader(Constants.EXPORT_PACKAGE);
+		assertThat(normalize(exportPackage)).isEqualTo(normalize("source.pack,target.pack"));
+	}
+	
+	@Test
 	public void testImportPackageNotAddedTwice() {
-		new ImportELPackageUpdater().updatePackageImports(project, new NullProgressMonitor());
-		new ImportELPackageUpdater().updatePackageImports(project, new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
+		new ImportExportPackageUpdater(project, null, null).updatePackageImports(new NullProgressMonitor());
 		
 		WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
 		String importPackage = bundleModel.getBundle().getHeader(Constants.IMPORT_PACKAGE);
