@@ -1,4 +1,4 @@
-Camel Project for Apache CXF code-first using Blueprint (OSGi)
+Camel Project for Apache CXF code-first using Spring
 =========================================================================
 
 Note: This project does not currently work. It has some issues. It is based
