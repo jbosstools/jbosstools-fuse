@@ -62,6 +62,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -110,6 +111,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	private AbstractEditPart lastSelectedEditPart;
 	private KeyHandler keyHandler;
 	private CamelModelOutlinePage outlinePage;
+	private PaletteRefresherOnOpenPartListener paletteRefresher;
 	
 	/**
 	 * 
@@ -118,13 +120,18 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public CamelDesignEditor(CamelEditor parent) {
 		this.parent = parent;
 		DebugPlugin.getDefault().addDebugEventListener(this);
-		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
-			ISelectionService sel = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			ISelectionService sel = activeWorkbenchWindow.getSelectionService();
 			if (sel != null){
 				sel.addSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
 			}
+			
+			paletteRefresher = new PaletteRefresherOnOpenPartListener(this);
+			activeWorkbenchWindow.getActivePage().addPartListener(paletteRefresher);
 		}
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+		
 	}
 	
 	@Override
@@ -163,6 +170,12 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
 		if (getModel() != null){
 			getModel().removeModelListener(this);
+		}
+		if(paletteRefresher != null){
+			IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if(activeWorkbenchWindow != null){
+				activeWorkbenchWindow.getActivePage().removePartListener(paletteRefresher);
+			}
 		}
 		super.dispose();
 	}
@@ -373,7 +386,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @return
 	 */
 	public String getPaletteFilter() {
-        if (paletteComposite != null) {
+        if (paletteComposite != null && !paletteComposite.getFilter().isDisposed()) {
             return paletteComposite.getFilter().getText();
         }
         return null;
