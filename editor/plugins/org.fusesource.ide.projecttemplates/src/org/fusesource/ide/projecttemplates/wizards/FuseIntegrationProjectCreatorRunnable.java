@@ -10,8 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -112,6 +118,9 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		// refresh
 		try {
 			c.getProject().refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			// update the manifest to reflect project name as Bundle-SymbolicName
+			updateBundleSymbolicName(c.getProject(), subMonitor.newChild(1));
+			c.getProject().refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
@@ -129,6 +138,53 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		subMonitor.done();
 	}
 
+	/**
+	 * responsible to update the manifest.mf to use the project name as Bundle-SymbolicName
+	 * 
+	 * @param project
+	 * @param monitor
+	 * @throws CoreException
+	 */
+	protected void updateBundleSymbolicName(IProject project, IProgressMonitor monitor) throws CoreException {
+		List<IFile> files = new ArrayList<>();
+		project.accept(new IResourceVisitor(){
+			@Override
+			public boolean visit(IResource resource) throws CoreException {
+				if( resource instanceof IFile && "manifest.mf".equalsIgnoreCase(resource.getName())) {
+					files.add((IFile)resource);
+				}
+				return true;
+			}
+			
+		});
+		if (!files.isEmpty()) {
+			for (IFile f : files) {
+				try {
+					InputStream is = f.getContents();
+					Manifest mf = new Manifest(is);
+					is.close();
+					Attributes attributes = mf.getMainAttributes();
+					attributes.putValue("Bundle-SymbolicName", getBundleSymbolicNameForProjectName(project.getName()));
+					// lets also update the bundle name so Fuse Runtime shows a difference too
+					attributes.putValue("Bundle-Name", String.format("%s [%s]", attributes.getValue("Bundle-Name"), project.getName()));
+					mf.write(new FileOutputStream(f.getLocation().toFile()));
+				} catch(IOException ioe) {
+					ProjectTemplatesActivator.pluginLog().logError(ioe);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * converts a project name into a bundle symbolic name
+	 * 
+	 * @param projectName
+	 * @return
+	 */
+	protected String getBundleSymbolicNameForProjectName(String projectName) {
+		return projectName.replaceAll(" ", "-");
+	}
+	
 	/**
 	 * Switches, if necessary, the perspective of active workbench window to
 	 * Fuse perspective.
