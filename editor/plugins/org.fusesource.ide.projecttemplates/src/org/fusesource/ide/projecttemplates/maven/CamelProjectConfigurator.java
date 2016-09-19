@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -29,6 +30,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+import org.eclipse.m2e.core.ui.internal.UpdateMavenProjectJob;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
@@ -241,7 +243,18 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	        installCamelFacet(fproj, fpwc, camelVersion, monitor);
 	        fpwc.commitChanges(monitor);
 	        configureNature(project, mavenProject, monitor); 
+	        updateMavenProject(project, monitor);
 	    }
+	}
+	
+	 private void updateMavenProject(IProject project, IProgressMonitor monitor) throws CoreException {
+        // MANIFEST.MF is probably not built yet
+        if (project != null) {
+            // update the maven project so we start in a deployable state
+            // with a valid MANIFEST.MF built as part of the build process.
+            Job updateJob = new UpdateMavenProjectJob(new IProject[] {project });
+            updateJob.schedule();
+        }
 	}
 	
 	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
