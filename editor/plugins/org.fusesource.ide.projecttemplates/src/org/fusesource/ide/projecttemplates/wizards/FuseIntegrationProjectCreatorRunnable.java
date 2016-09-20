@@ -86,7 +86,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 8);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
 		// first create the project skeleton
 		BasicProjectCreator c = new BasicProjectCreator(metadata);
 		boolean ok = c.create(subMonitor.newChild(1));
@@ -122,7 +122,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 			// update the manifest to reflect project name as Bundle-SymbolicName
 			updateBundleSymbolicName(prj, subMonitor.newChild(1));
-			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
