@@ -31,6 +31,7 @@ import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.core.ui.internal.UpdateMavenProjectJob;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
@@ -247,13 +248,24 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	    }
 	}
 	
-	 private void updateMavenProject(IProject project, IProgressMonitor monitor) throws CoreException {
+	 private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
         // MANIFEST.MF is probably not built yet
         if (project != null) {
             // update the maven project so we start in a deployable state
             // with a valid MANIFEST.MF built as part of the build process.
-            Job updateJob = new UpdateMavenProjectJob(new IProject[] {project });
-            updateJob.schedule();
+            Display.getCurrent().asyncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					Job updateJob = new UpdateMavenProjectJob(new IProject[] {project });
+		            updateJob.schedule();	
+		            try {
+		            	updateJob.join();
+		            } catch (InterruptedException ex) {
+		            	ex.printStackTrace();
+		            }
+				}
+			}); 
         }
 	}
 	
