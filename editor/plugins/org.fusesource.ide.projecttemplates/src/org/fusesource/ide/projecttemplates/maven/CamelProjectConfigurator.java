@@ -260,9 +260,8 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
 		// MANIFEST.MF is probably not built yet
 		if (project != null) {
-			
 			try {
-				waitJob(0, monitor);
+				waitJob(100, monitor);
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 			}
