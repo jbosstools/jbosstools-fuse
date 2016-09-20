@@ -419,7 +419,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		return camelVersionAvailable;
 	}
 	
-	private void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
+	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
 		if (Widgets.isDisposed(camelVersionCombo)) return;
 		
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
