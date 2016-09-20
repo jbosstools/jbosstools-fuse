@@ -19,6 +19,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,7 +32,6 @@ import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.core.ui.internal.UpdateMavenProjectJob;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
@@ -60,14 +60,18 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
 	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
 	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
-	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
-	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");  //$NON-NLS-1$
-	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
-	public static IProjectFacet webFacet    = WebFacetUtils.WEB_FACET;
-	      
+	public static IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
+	public static IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2"); //$NON-NLS-1$
+	public static IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
+	public static IProjectFacet webFacet = WebFacetUtils.WEB_FACET;
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
+	 * 
+	 * @see
+	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
+	 * mavenProjectChanged(org.eclipse.m2e.core.project.
+	 * MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void mavenProjectChanged(MavenProjectChangedEvent event, IProgressMonitor monitor) throws CoreException {
@@ -77,15 +81,19 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
 			if (fproj != null && checkCamelContextsExist(project, monitor)) {
-				installDefaultFacets(project, mavenProject, fproj, monitor);	
+				installDefaultFacets(project, mavenProject, fproj, monitor);
 			}
 		}
 		super.mavenProjectChanged(event, monitor);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#configure(org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
+	 * 
+	 * @see
+	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
+	 * configure(org.eclipse.m2e.core.project.configurator.
+	 * ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
@@ -100,11 +108,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			}
 			// handle linked resources for WAR deployments
 			if (isWARProject(request.getProject(), monitor)) {
-				configureWARStructureMapping(request.getProject(), monitor);	
-			}		
+				configureWARStructureMapping(request.getProject(), monitor);
+			}
 		}
 	}
-	
+
 	private void configureWARStructureMapping(IProject project, IProgressMonitor monitor) throws CoreException {
 		final IVirtualComponent c = ComponentCore.createComponent(project, false);
 		c.create(IVirtualResource.NONE, monitor);
@@ -114,9 +122,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder, monitor);
 		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder, monitor);
 	}
-	
+
 	/**
-	 * this methods maps a given set of local paths to a path on runtime / in the WAR
+	 * this methods maps a given set of local paths to a path on runtime / in
+	 * the WAR
 	 * 
 	 * @param paths
 	 * @param project
@@ -124,7 +133,8 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor) throws CoreException {
+	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor)
+			throws CoreException {
 		for (IPath sourceLoc : paths) {
 			IFolder srcFolder = project.getFolder(sourceLoc);
 			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();
@@ -138,7 +148,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				}
 			}
 			if (!found) {
-				//create link for source folder only when it is not mapped
+				// create link for source folder only when it is not mapped
 				vFolder.createLink(absSourcePath, IVirtualResource.NONE, monitor);
 			} else {
 				removeRedundantMappingToRootRuntimePath(monitor, absSourcePath, mappings);
@@ -146,11 +156,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 	}
 
-	private void removeRedundantMappingToRootRuntimePath(IProgressMonitor monitor, IPath absSourcePath, IVirtualResource[] mappings) {
-		Arrays.stream(mappings)
-			.filter(mapping -> mapping.getProjectRelativePath().equals(absSourcePath))
-			.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString()))
-			.forEach(mapping -> {
+	private void removeRedundantMappingToRootRuntimePath(IProgressMonitor monitor, IPath absSourcePath,
+			IVirtualResource[] mappings) {
+		Arrays.stream(mappings).filter(mapping -> mapping.getProjectRelativePath().equals(absSourcePath))
+				.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString())).forEach(mapping -> {
 					try {
 						mapping.delete(IVirtualResource.IGNORE_UNDERLYING_RESOURCE, monitor);
 					} catch (CoreException e) {
@@ -158,13 +167,12 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					}
 				});
 	}
-	
+
 	private boolean isWARProject(IProject project, IProgressMonitor monitor) {
 		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
 		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 
-	
 	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -177,33 +185,34 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					return true;
 				}
 			}
-		}			
+		}
 		return false;
 	}
-	
+
 	private boolean isCamelNatureEnabled(IProject project) throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
 		return Arrays.stream(ids).anyMatch(RiderProjectNature.NATURE_ID::equals);
 	}
-	
-	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor) throws CoreException {
+
+	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor)
+			throws CoreException {
 		boolean hasCamelDeps = checkCamelDependencies(m2Project);
 		boolean hasCamelContextXML = false;
-						
-		// now determine if we have camel context files in the project 
-		// (only if we don't have any camel deps already)		
+
+		// now determine if we have camel context files in the project
+		// (only if we don't have any camel deps already)
 		if (!hasCamelDeps) {
 			hasCamelContextXML = checkCamelContextsExist(project, monitor);
 		}
-		
-		// if we got camel deps and/or camel context files we add the fuse 
+
+		// if we got camel deps and/or camel context files we add the fuse
 		// camel nature to this project
 		if (hasCamelDeps || hasCamelContextXML) {
 			addNature(project, RiderProjectNature.NATURE_ID, monitor);
 		}
 	}
-	
+
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 
@@ -211,64 +220,75 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			return;
 		}
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
-		
+
 		if (fproj == null) {
 			// Add the modulecore nature
 			WtpUtils.addNatures(project);
 			addNature(project, FacetedProjectNature.NATURE_ID, monitor);
 			fproj = ProjectFacetsManager.create(project);
 		}
-		
+
 		if (fproj != null) {
 			installDefaultFacets(project, mavenProject, fproj, monitor);
 		}
 	}
 
-	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor)
-	        throws CoreException {
-	    String camelVersion = getCamelVersion(mavenProject);
-	    if (camelVersion != null) {
-	        IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
+	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj,
+			IProgressMonitor monitor) throws CoreException {
+		String camelVersion = getCamelVersion(mavenProject);
+		if (camelVersion != null) {
+			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
-	        // adjust facets we install based on the packaging type we find
-	        installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion());
-	        installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion());
-            if (mavenProject.getPackaging() != null) {
-                String packaging = mavenProject.getPackaging();
-	            if (WAR_PACKAGE.equalsIgnoreCase(packaging)) {
-	                installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion());
-	            } else if (BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || JAR_PACKAGE.equalsIgnoreCase(packaging)) {
-	                installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
-	            }
-	        }
-	        installCamelFacet(fproj, fpwc, camelVersion, monitor);
-	        fpwc.commitChanges(monitor);
-	        configureNature(project, mavenProject, monitor); 
-	        updateMavenProject(project, monitor);
-	    }
-	}
-	
-	 private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
-        // MANIFEST.MF is probably not built yet
-        if (project != null) {
-            // update the maven project so we start in a deployable state
-            // with a valid MANIFEST.MF built as part of the build process.
-            Display.getCurrent().asyncExec(new Runnable() {
-				
-				@Override
-				public void run() {
-					Job updateJob = new UpdateMavenProjectJob(new IProject[] {project });
-		            updateJob.schedule();	
-		            try {
-		            	updateJob.join();
-		            } catch (InterruptedException ex) {
-		            	ex.printStackTrace();
-		            }
+			// adjust facets we install based on the packaging type we find
+			installFacet(fproj, fpwc, javaFacet, javaFacet.getLatestVersion());
+			installFacet(fproj, fpwc, m2eFacet, m2eFacet.getLatestVersion());
+			if (mavenProject.getPackaging() != null) {
+				String packaging = mavenProject.getPackaging();
+				if (WAR_PACKAGE.equalsIgnoreCase(packaging)) {
+					installFacet(fproj, fpwc, webFacet, javaFacet.getLatestVersion());
+				} else if (BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || JAR_PACKAGE.equalsIgnoreCase(packaging)) {
+					installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
 				}
-			}); 
-        }
+			}
+			installCamelFacet(fproj, fpwc, camelVersion, monitor);
+			fpwc.commitChanges(monitor);
+			configureNature(project, mavenProject, monitor);
+			updateMavenProject(project, monitor);
+		}
 	}
-	
+
+	private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
+		// MANIFEST.MF is probably not built yet
+		if (project != null) {
+			
+			try {
+				waitJob(0, monitor);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+			// update the maven project so we start in a deployable state
+			// with a valid MANIFEST.MF built as part of the build process.
+			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });
+			updateJob.schedule();
+		}
+	}
+
+	private static void waitJob(int decreasingCounter, IProgressMonitor monitor) throws InterruptedException {
+		if (decreasingCounter > 0) {
+			return;
+		}
+		try {
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
+			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
+		} catch (InterruptedException e) {
+			// Workaround to bug
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
+			waitJob(decreasingCounter--, monitor);
+		}
+	}
+
 	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
 		for (Dependency dep : mavenProject.getDependencies()) {
 			if (isCamelDependency(dep)) {
@@ -278,12 +298,13 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return CamelModelFactory.getLatestCamelVersion();
 	}
 
-	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString, IProgressMonitor monitor)
-			throws CoreException {
+	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
+			IProgressMonitor monitor) throws CoreException {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
 		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
-		installFacet(fproj, fpwc, camelFacet, camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
+		installFacet(fproj, fpwc, camelFacet,
+				camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
 		if (camelFacetVersion == null) {
 			// we need to switch dependency versions
 			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
@@ -292,17 +313,18 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
-		try{
-			IProjectFacetVersion facetVersion = camelFacet.getVersion(CamelModelFactory.getCompatibleCamelVersion(camelVersionString));
-			if(facetVersion != null){
+		try {
+			IProjectFacetVersion facetVersion = camelFacet
+					.getVersion(CamelModelFactory.getCompatibleCamelVersion(camelVersionString));
+			if (facetVersion != null) {
 				return facetVersion;
 			}
-		} catch (IllegalArgumentException iae){
+		} catch (IllegalArgumentException iae) {
 			return camelFacet.getLatestVersion();
 		}
 		return camelFacet.getLatestVersion();
 	}
-	
+
 	/**
 	 * checks whether the project contains any camel context xml file
 	 * 
@@ -313,8 +335,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return !new CamelFilesFinder().findFiles(project).isEmpty()
 				|| FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, monitor) != null;
 	}
-	
-	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet, IProjectFacetVersion facetVersion) throws CoreException {
+
+	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet,
+			IProjectFacetVersion facetVersion) throws CoreException {
 		if (facet != null && !fproj.hasProjectFacet(facet)) {
 			fpwc.addProjectFacet(facetVersion);
 		} else {
@@ -325,7 +348,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			}
 		}
 	}
-	
+
 	/**
 	 * checks whether the pom contains any apache camel dependency
 	 * 
@@ -333,12 +356,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @return
 	 */
 	private boolean checkCamelDependencies(MavenProject m2Project) {
-		return m2Project.getDependencies().stream()
-				.anyMatch(this::isCamelDependency);
+		return m2Project.getDependencies().stream().anyMatch(this::isCamelDependency);
 	}
-	
+
 	private boolean isCamelDependency(Dependency dep) {
-		return GROUP_ID_ORG_APACHE_CAMEL.equals(dep.getGroupId()) && 
-			dep.getArtifactId().startsWith(ARTFIFACT_ID_CAMEL_PREFIX);
+		return GROUP_ID_ORG_APACHE_CAMEL.equals(dep.getGroupId())
+				&& dep.getArtifactId().startsWith(ARTFIFACT_ID_CAMEL_PREFIX);
 	}
 }
