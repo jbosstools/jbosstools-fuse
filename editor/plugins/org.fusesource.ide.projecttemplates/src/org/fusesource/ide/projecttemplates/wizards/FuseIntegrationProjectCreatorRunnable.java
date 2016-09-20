@@ -10,8 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -80,10 +86,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 6);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
 		// first create the project skeleton
 		BasicProjectCreator c = new BasicProjectCreator(metadata);
 		boolean ok = c.create(subMonitor.newChild(1));
+		IProject prj = c.getProject();
 		if (ok) {
 			// then configure the project for the given template
 			AbstractProjectTemplate template = metadata.getTemplate();
@@ -93,7 +100,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 			// now execute the template
 			try {
-				template.create(c.getProject(), metadata, subMonitor.newChild(1));
+				template.create(prj, metadata, subMonitor.newChild(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 			}
@@ -109,14 +116,17 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			switchToFusePerspective(workbenchWindow);
 			subMonitor.worked(1);
 		}
+		
 		// refresh
 		try {
-			c.getProject().refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			// update the manifest to reflect project name as Bundle-SymbolicName
+			updateBundleSymbolicName(prj, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
 		// delete invalid MANIFEST files
-		IResource rs = c.getProject().findMember("src/META-INF/"); //$NON-NLS-1$
+		IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
 		if (rs != null && rs.exists()) {
 			try {
 				rs.delete(true, subMonitor.newChild(1));
@@ -125,8 +135,54 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 		}
 		// finally open the camel context file
-		openCamelContextFile(c.getProject(), subMonitor.newChild(1));
+		openCamelContextFile(prj, subMonitor.newChild(1));
 		subMonitor.done();
+	}
+
+	/**
+	 * responsible to update the manifest.mf to use the project name as Bundle-SymbolicName
+	 * 
+	 * @param project
+	 * @param monitor
+	 * @throws CoreException
+	 */
+	protected void updateBundleSymbolicName(IProject project, IProgressMonitor monitor) throws CoreException {
+		List<IFile> files = new ArrayList<>();
+		project.getFolder("src").accept(new IResourceVisitor(){
+			@Override
+			public boolean visit(IResource resource) throws CoreException {
+				if( resource instanceof IFile && "manifest.mf".equalsIgnoreCase(resource.getName())) {
+					files.add((IFile)resource);
+				}
+				return true;
+			}
+			
+		});
+		for (IFile f : files) {
+			try {
+				InputStream is = f.getContents();
+				Manifest mf = new Manifest(is);
+				is.close();
+				Attributes attributes = mf.getMainAttributes();
+				attributes.putValue("Bundle-SymbolicName", getBundleSymbolicNameForProjectName(project.getName()));
+				// lets also update the bundle name so Fuse Runtime shows a difference too
+				attributes.putValue("Bundle-Name", String.format("%s [%s]", attributes.getValue("Bundle-Name"), project.getName()));
+				mf.write(new FileOutputStream(f.getLocation().toFile()));
+				f.refreshLocal(IProject.DEPTH_ZERO, monitor);
+			} catch(IOException ioe) {
+				ProjectTemplatesActivator.pluginLog().logError(ioe);
+			}
+		}
+	}
+	
+	/**
+	 * converts a project name into a bundle symbolic name
+	 * 
+	 * @param projectName
+	 * @return
+	 */
+	public String getBundleSymbolicNameForProjectName(String projectName) {
+		return projectName.replaceAll("[^a-zA-Z0-9-_]","");
 	}
 
 	/**
