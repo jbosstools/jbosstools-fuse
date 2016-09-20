@@ -419,7 +419,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		return camelVersionAvailable;
 	}
 	
-	private void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
+	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
 		if (Widgets.isDisposed(camelVersionCombo)) return;
 		
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
@@ -498,10 +498,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private boolean isCompatible(String runtimeCamelVersion, String selectedCamelVersion) {
 		String[] runtimeVersionParts = runtimeCamelVersion.split("\\.");
 		String[] camelVersionParts = selectedCamelVersion.split("\\.");
+		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1; 
+		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1;
 		
 		return runtimeVersionParts.length>1 && camelVersionParts.length>1 &&
 			   runtimeVersionParts[0].equals(camelVersionParts[0]) &&
-			   runtimeVersionParts[1].equals(camelVersionParts[1]);
+			   runtimeVersionParts[1].equals(camelVersionParts[1]) && 
+			   rh_branded_rcv == rh_branded_scv;
 	}
 	
 	/**
