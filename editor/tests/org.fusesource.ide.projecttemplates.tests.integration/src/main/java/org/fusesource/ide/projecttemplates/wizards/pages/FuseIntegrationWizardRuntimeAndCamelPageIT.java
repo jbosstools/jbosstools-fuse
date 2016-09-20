@@ -17,6 +17,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -25,13 +27,26 @@ import org.junit.Test;
  */
 public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 	
+	private WizardDialog dlg;
+	private FuseIntegrationProjectWizard wiz;
+	private FuseIntegrationProjectWizardRuntimeAndCamelPage page;
+	
+	@Before
+	public void setup() {
+		wiz = new FuseIntegrationProjectWizard();
+		dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
+		dlg.create();
+		page = getWizardRuntimePage(wiz);
+	}
+	
+	@After
+	public void tearDown() {
+		dlg.close();
+		wiz.dispose();
+	}
+	
 	@Test
 	public void testCompatibleCamelVersionSelectedForUnsupportedBrandedVersion() throws Exception {
-		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
-		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
-		dlg.create();
-		FuseIntegrationProjectWizardRuntimeAndCamelPage page = getWizardRuntimePage(wiz);
-		
 		page.preselectCamelVersionForRuntime("2.17.0.redhat-630175");
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		assertThat(selectedCamelVersion.startsWith("2.17.0.redhat-630"));
