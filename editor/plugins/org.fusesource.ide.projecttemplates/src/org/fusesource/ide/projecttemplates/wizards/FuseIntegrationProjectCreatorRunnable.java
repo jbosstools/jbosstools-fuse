@@ -168,7 +168,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 				// lets also update the bundle name so Fuse Runtime shows a difference too
 				attributes.putValue("Bundle-Name", String.format("%s [%s]", attributes.getValue("Bundle-Name"), project.getName()));
 				mf.write(new FileOutputStream(f.getLocation().toFile()));
-				f.refreshLocal(0, monitor);
+				f.refreshLocal(IProject.DEPTH_ZERO, monitor);
 			} catch(IOException ioe) {
 				ProjectTemplatesActivator.pluginLog().logError(ioe);
 			}
