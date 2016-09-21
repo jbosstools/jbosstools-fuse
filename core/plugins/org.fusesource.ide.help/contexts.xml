@@ -20,9 +20,9 @@
         <description>Content Based Routing Pattern</description>
         <topic href="choice.html" label="Content Based Router"/>
     </context>
-    <context id="convertEIP">
-        <description>Convert Body Patterns</description>
-        <topic href="convertBody.html" label="Convert Body"/>
+    <context id="convertBodyToEIP">
+        <description>Convert Body To Pattern</description>
+        <topic href="convertBody.html" label="Convert Body To"/>
     </context>
     <context id="delayEIP">
         <description>Delay Patterns</description>
@@ -226,10 +226,10 @@
         <description>Wire Tap Pattern</description>
         <topic href="wiretap.html" label="Wire Tap"/>
     </context>
-   <!-- <context id="endpoint">
+   <context id="generic">
         <description>Endpoint</description>
         <topic href="endpoint.html" label="Endpoint"/>
-    </context> -->
+    </context> 
     <context id="allEIPs">
         <description>List of EIP Patterns on the Pallet</description>
         <topic href="RefIntroToEIP.html" label="List of EIP Patterns"/>

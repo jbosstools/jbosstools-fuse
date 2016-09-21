@@ -3,7 +3,7 @@
    <title>FTP2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-FreeMarker.html" title="FreeMarker"><link rel="next" href="IDU-GAE.html" title="GAE"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-FTP2"></a>FTP2</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_FTPSFTPFTPSComponentCamel20onwards"></a>FTP/SFTP Component </h2></div></div></div><p>This component provides access to remote file systems over the FTP and SFTP
       protocols.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Consuming from remote FTP server"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Consuming from remote FTP server</th></tr><tr><td align="left" valign="top"><p>Make sure you read the section titled <span class="emphasis"><em>Default when consuming files</em></span> further below for details related to consuming files.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Absolute path is not supported. <span class="bold"><strong>Camel 2.16</strong></span>
                 translates an absolute path to relative by trimming all leading slashes from
-                    <code class="code">directoryname</code>. A WARN message will be printed in the logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e82597"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+                    <code class="code">directoryname</code>. A WARN message will be printed in the logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e82641"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">ftp://[username@]hostname[:port]/directoryname[?options]
 sftp://[username@]hostname[:port]/directoryname[?options]
@@ -20,7 +20,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
         <a class="link" href="http://www.jcraft.com/jsch/" target="_top">JCraft JSCH</a>.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>The options below are exclusive to the FTP
-      component:</p><table id="d0e82659"><tr>
+      component:</p><table id="d0e82703"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -477,7 +477,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
       written over FTP; for instance, you can write to a temporary destination and move the file
       after it has been written. </p><p>The ftp producer does <span class="bold"><strong>not</strong></span> support appending to existing
       files. Any existing files on the remote server will be deleted before the file is
-      written.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following message headers can be used to affect the behavior of the component</p><table id="d0e84023"><tr>
+      written.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following message headers can be used to affect the behavior of the component</p><table id="d0e84067"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -508,7 +508,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
         </td>
         <td> Path to the local work file, if local work directory is used. </td>
       </tr></table><p>In addition the FTP/FTPS consumer and producer will enrich the Camel <code class="literal">Message</code> with the following headers:
-    </p><table id="d0e84097"><tr>
+    </p><table id="d0e84141"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

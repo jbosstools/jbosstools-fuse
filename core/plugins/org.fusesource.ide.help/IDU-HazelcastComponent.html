@@ -15,7 +15,7 @@
     &lt;artifactId&gt;camel-hazelcast&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">hazelcast:[ map | multimap | queue | topic | seda | set | atomicvalue | instance | list]:cachename[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-946"></a>Options</h2></div></div></div><table id="d0e93342"><colgroup> </colgroup><tbody><tr>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">hazelcast:[ map | multimap | queue | topic | seda | set | atomicvalue | instance | list]:cachename[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-946"></a>Options</h2></div></div></div><table id="d0e93386"><colgroup> </colgroup><tbody><tr>
           <td>
             <p>Name</p>
           </td>
@@ -68,7 +68,7 @@
       producer provides 5 operations (put, get, update, delete, query). For the first 4 you have to
       provide the operation inside the "hazelcast.operation.type" header variable. In Java DSL you
       can use the constants from
-        <code class="literal">org.apache.camel.component.hazelcast.HazelcastConstants</code>.</p><p>Header Variables for the request message:</p><table id="d0e93498"><tr>
+        <code class="literal">org.apache.camel.component.hazelcast.HazelcastConstants</code>.</p><p>Header Variables for the request message:</p><table id="d0e93542"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -85,7 +85,7 @@
         </td>
         <td> the object id to store / find your object inside the cache (not needed for the query
           operation) </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e93543"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e93587"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -160,7 +160,7 @@
 template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_mapcacheconsumerfromhazelcastmapfoo"></a>map cache consumer - from("hazelcast:map:foo")</h2></div></div></div><p>Hazelcast provides event listeners on their data grid. If you want to be notified if a
       cache will be manipulated, you can use the map consumer. There're 4 events: <span class="bold"><strong>put</strong></span>, <span class="bold"><strong>update</strong></span>, <span class="bold"><strong>delete</strong></span> and <span class="bold"><strong>envict</strong></span>. The event type will be
       stored in the "<span class="bold"><strong>hazelcast.listener.action</strong></span>" header variable.
-      The map consumer provides some additional information inside these variables:</p><p>Header Variables inside the response message:</p><table id="d0e93686"><tr>
+      The map consumer provides some additional information inside these variables:</p><p>Header Variables inside the response message:</p><table id="d0e93730"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -201,7 +201,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> the type of the cache - here map </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e93803"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e93847"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -271,7 +271,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
     .otherwise()
          .log("fail!");</pre><p><span class="phrase"><a name="IDU-HazelcastComponent_HSH_multimap"></a></span>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofMultiMap"></a>Usage of Multi Map</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_multimapcacheproducertohazelcastmultimapfoo"></a>multimap cache producer - to("hazelcast:multimap:foo")</h2></div></div></div><p>A multimap is a cache where you can store n values to one key. The multimap producer
-      provides 4 operations (put, get, removevalue, delete).</p><p>Header Variables for the request message:</p><table id="d0e93975"><tr>
+      provides 4 operations (put, get, removevalue, delete).</p><p>Header Variables for the request message:</p><table id="d0e94019"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -287,7 +287,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> the object id to store / find your object inside the cache </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><p>Header Variables for the request message in Apache Camel 2.8:</p><table id="d0e94022"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><p>Header Variables for the request message in Apache Camel 2.8:</p><table id="d0e94066"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -362,7 +362,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
 template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_mapcacheconsumerfromhazelcastmapfoo2"></a>map cache consumer - from("hazelcast:map:foo")</h2></div></div></div><p>Hazelcast provides event listeners on their data grid. If you want to be notified if a
       cache will be manipulated, you can use the map consumer. There're 4 events: <span class="bold"><strong>put</strong></span>, <span class="bold"><strong>update</strong></span>, <span class="bold"><strong>delete</strong></span> and <span class="bold"><strong>envict</strong></span>. The event type will be
       stored in the "<span class="bold"><strong>hazelcast.listener.action</strong></span>" header variable.
-      The map consumer provides some additional information inside these variables:</p><p>Header Variables inside the response message:</p><table id="d0e94163"><tr>
+      The map consumer provides some additional information inside these variables:</p><p>Header Variables inside the response message:</p><table id="d0e94207"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -403,7 +403,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> the type of the cache - here map </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94280"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94324"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -472,7 +472,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
          .to("mock:removed")
     .otherwise()
          .log("fail!");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofMultiMap2"></a>Usage of Multi Map</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_multimapcacheproducertohazelcastmultimapfoo2"></a>multimap cache producer - to("hazelcast:multimap:foo")</h2></div></div></div><p>A multimap is a cache where you can store n values to one key. The multimap producer
-      provides 4 operations (put, get, removevalue, delete).</p><p>Header Variables for the request message:</p><table id="d0e94449"><tr>
+      provides 4 operations (put, get, removevalue, delete).</p><p>Header Variables for the request message:</p><table id="d0e94493"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -488,7 +488,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> the object id to store / find your object inside the cache </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94494"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94538"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -568,7 +568,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
                 .log("...removed")
                 .to("mock:removed")
         .otherwise()
-                .log("fail!");</pre><p>Header Variables inside the response message:</p><table id="d0e94617"><tr>
+                .log("fail!");</pre><p>Header Variables inside the response message:</p><table id="d0e94661"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -608,7 +608,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> the type of the cache - here multimap </td>
-      </tr></table><p>Eviction will be added as feature, soon (this is a Hazelcast issue).</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94733"><tr>
+      </tr></table><p>Eviction will be added as feature, soon (this is a Hazelcast issue).</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e94777"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -684,9 +684,9 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
 		.to("mock:removed")
 	.otherwise()
 		.log("fail!");</pre><p><span class="phrase"><a name="IDU-HazelcastComponent_HSH_list"></a></span>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofTopic"></a>Usage of Topic</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94936"></a>Topic producer &#8211; to(&#8220;hazelcast:topic:foo&#8221;)</h2></div></div></div><p>The topic producer provides only one operation (publish).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94941"></a>Sample for publish</h2></div></div></div><p></p><pre class="programlisting">from("direct:add")
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofTopic"></a>Usage of Topic</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94980"></a>Topic producer &#8211; to(&#8220;hazelcast:topic:foo&#8221;)</h2></div></div></div><p>The topic producer provides only one operation (publish).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94985"></a>Sample for publish</h2></div></div></div><p></p><pre class="programlisting">from("direct:add")
 .setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.PUBLISH_OPERATION))
-.toF("hazelcast:%sbar", HazelcastConstants.PUBLISH_OPERATION);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94947"></a>Topic consumer &#8211; from(&#8220;hazelcast:topic:foo&#8221;)</h2></div></div></div><p>The topic consumer provides only one operation (received). This component is supposed to
+.toF("hazelcast:%sbar", HazelcastConstants.PUBLISH_OPERATION);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94991"></a>Topic consumer &#8211; from(&#8220;hazelcast:topic:foo&#8221;)</h2></div></div></div><p>The topic consumer provides only one operation (received). This component is supposed to
       support multiple consumption as it's expected when it comes to topics so you are free to have
       as much consumers as you need on the same hazelcast topic.</p><pre class="programlisting">fromF("hazelcast:%sfoo", HazelcastConstants.TOPIC_PREFIX)
   .choice()
@@ -715,7 +715,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
                 .otherwise()
                         .log("fail!");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofSEDA"></a>Usage of SEDA</h2></div></div></div><p>SEDA component differs from the rest components provided. It implements a work-queue in
       order to support asynchronous SEDA architectures, similar to the core "SEDA" component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_SEDAproducertohazelcastsedafoo"></a>SEDA producer to("hazelcast:seda:foo")</h2></div></div></div><p>The SEDA producer provides no operations. You only send data to the specified
-      queue.</p><table id="d0e95011"><tr>
+      queue.</p><table id="d0e95055"><tr>
         <th> Name </th>
         <th> default value </th>
         <th> Description </th>
@@ -732,7 +732,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
    &lt;from uri="direct:start" /&gt;
    &lt;to uri="hazelcast:seda:foo" /&gt;
 &lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_SEDAconsumerfromhazelcastsedafoo"></a>SEDA consumer from("hazelcast:seda:foo")</h2></div></div></div><p>The SEDA consumer provides no operations. You only retrieve data from the specified
-      queue.</p><table id="d0e95054"><tr>
+      queue.</p><table id="d0e95098"><tr>
         <th> Name </th>
         <th> default value </th>
         <th> Description </th>
@@ -778,7 +778,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
   &lt;to uri="mock:result" /&gt;
 &lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_UsageofAtomicNumber"></a>Usage of Atomic Number</h2></div></div></div><p></p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>There is no consumer for this endpoint\!</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HazelcastComponent_HSH_atomicnumberproducertohazelcastatomicnumberfoo"></a>atomic number producer - to("hazelcast:atomicnumber:foo")</h2></div></div></div><p>An atomic number is an object that simply provides a grid wide number (long). The
       operations for this producer are setvalue (set the number with a given value), get, increase
-      (+1), decrease (-1) and destroy.</p><p>Header Variables for the request message:</p><table id="d0e95172"><tr>
+      (+1), decrease (-1) and destroy.</p><p>Header Variables for the request message:</p><table id="d0e95216"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -788,7 +788,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">String</code>
         </td>
         <td> valid values are: setvalue, get, increase, decrease, destroy </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e95202"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e95246"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -858,7 +858,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
 		.to("mock:added")
 	.otherwise()
 		.log("...removed")
-		.to("mock:removed");</pre><p>Each event provides the following information inside the message header:</p><p>Header Variables inside the response message:</p><table id="d0e95332"><tr>
+		.to("mock:removed");</pre><p>Each event provides the following information inside the message header:</p><p>Header Variables inside the response message:</p><table id="d0e95376"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -893,7 +893,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td><code class="literal">Integer</code>
         </td>
         <td> port number of the instance </td>
-      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e95428"><tr>
+      </tr></table><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Header variables have changed in Apache Camel 2.8</p></td></tr></table></div><table id="d0e95472"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -937,7 +937,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         <td> port number of the instance <span class="bold"><strong>
             <a class="link" href="Version 2.8" target="_top">Version 2.8</a></strong></span>
         </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95546"></a>Using hazelcast reference</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95550"></a>By its name</h2></div></div></div><p></p><pre class="programlisting">
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95590"></a>Using hazelcast reference</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95594"></a>By its name</h2></div></div></div><p></p><pre class="programlisting">
 &lt;bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
       factory-bean="hazelcastInstance" factory-method="getLifecycleService"
       destroy-method="shutdown" /&gt;
@@ -967,7 +967,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         &lt;to uri="seda:out" /&gt;
     &lt;/route&gt;
 &lt;/camelContext&gt;
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95556"></a>By instance</h2></div></div></div><p></p><pre class="programlisting">
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95600"></a>By instance</h2></div></div></div><p></p><pre class="programlisting">
 &lt;bean id="hazelcastInstance" class="com.hazelcast.core.Hazelcast"
       factory-method="newHazelcastInstance" /&gt;
 &lt;bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
@@ -992,7 +992,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
         &lt;to uri="seda:out" /&gt;
     &lt;/route&gt;
 &lt;/camelContext&gt;
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95562"></a>Publishing hazelcast instance as an OSGI service</h2></div></div></div><p>If operating in an OSGI container and you would want to use one instance of hazelcast across all bundles in the same container. You can publish the instance as an OSGI service and bundles using the cache al need is to reference the service in the hazelcast endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95567"></a>Bundle A create an instance and publishes it as an OSGI service</h2></div></div></div><p></p><pre class="programlisting">
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95606"></a>Publishing hazelcast instance as an OSGI service</h2></div></div></div><p>If operating in an OSGI container and you would want to use one instance of hazelcast across all bundles in the same container. You can publish the instance as an OSGI service and bundles using the cache al need is to reference the service in the hazelcast endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95611"></a>Bundle A create an instance and publishes it as an OSGI service</h2></div></div></div><p></p><pre class="programlisting">
 &lt;bean id="config" class="com.hazelcast.config.FileSystemXmlConfig"&gt;
     &lt;argument type="java.lang.String" value="${hazelcast.config}"/&gt;
 &lt;/bean&gt;
@@ -1003,7 +1003,7 @@ template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);<
 
 &lt;!-- publishing the hazelcastInstance as a service --&gt;
 &lt;service ref="hazelcastInstance" interface="com.hazelcast.core.HazelcastInstance" /&gt;
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95573"></a>Bundle B uses the instance</h2></div></div></div><p></p><pre class="programlisting">
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95617"></a>Bundle B uses the instance</h2></div></div></div><p></p><pre class="programlisting">
 &lt;!-- referencing the hazelcastInstance as a service --&gt;
 &lt;reference ref="hazelcastInstance" interface="com.hazelcast.core.HazelcastInstance" /&gt;
 

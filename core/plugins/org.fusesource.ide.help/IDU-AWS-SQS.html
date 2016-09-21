@@ -2,7 +2,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>AWS-SQS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-SNS.html" title="AWS-SNS"><link rel="next" href="IDU-AWS-SWF.html" title="AWS-SWF"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-SQS"></a>AWS-SQS</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_SQSComponent"></a>SQS Component</h3></div></div></div><p><span class="bold"><strong>Available as of Camel 2.6</strong></span>
     </p><p>The sqs component supports sending and receiving messages to <a class="link" href="http://aws.amazon.com/sqs" target="_top">Amazon's SQS</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon SQS. More information are available at <a class="link" href="http://aws.amazon.com/sqs" target="_top">Amazon SQS</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_URIFormat"></a>URI Format</h3></div></div></div><pre class="programlisting">aws-sqs://queue-name[?options]</pre><p>The queue will be created if they don't already exists.
-You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e52401"><tr>
+You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e52445"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -212,7 +212,7 @@ You can append query options to the URI in the following format, ?options=value&
         let the <a class="link" href="https://camel.apache.org/aggregator.html" target="_top">Aggregator</a>
       aggregate this number of messages.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_Usage"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_MessageheaderssetbytheSQSproducer"></a>Message headers set by the SQS producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e52974"><tr>
+    </p><table id="d0e53018"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -238,7 +238,7 @@ You can append query options to the URI in the following format, ?options=value&
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SQS_HSH_MessageheaderssetbytheSQSconsumer"></a>Message headers set by the SQS consumer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e53047"><tr>
+    </p><table id="d0e53091"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
