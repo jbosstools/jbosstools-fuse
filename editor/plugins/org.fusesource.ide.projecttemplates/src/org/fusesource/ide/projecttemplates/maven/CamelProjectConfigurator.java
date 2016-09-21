@@ -159,7 +159,8 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void removeRedundantMappingToRootRuntimePath(IProgressMonitor monitor, IPath absSourcePath,
 			IVirtualResource[] mappings) {
 		Arrays.stream(mappings).filter(mapping -> mapping.getProjectRelativePath().equals(absSourcePath))
-				.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString())).forEach(mapping -> {
+				.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString()))
+				.forEach(mapping -> {
 					try {
 						mapping.delete(IVirtualResource.IGNORE_UNDERLYING_RESOURCE, monitor);
 					} catch (CoreException e) {
