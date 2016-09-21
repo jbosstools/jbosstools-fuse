@@ -45,12 +45,12 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
+import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
-import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
@@ -332,7 +332,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 */
 	private boolean checkCamelContextsExist(IProject project, IProgressMonitor monitor) throws CoreException {
 		return !new CamelFilesFinder().findFiles(project).isEmpty()
-				|| FuseIntegrationProjectCreatorRunnable.findJavaDSLRouteBuilderClass(project, monitor) != null;
+				|| new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor) != null;
 	}
 
 	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet,

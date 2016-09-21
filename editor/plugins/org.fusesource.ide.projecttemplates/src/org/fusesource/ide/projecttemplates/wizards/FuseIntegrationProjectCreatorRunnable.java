@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,17 +30,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchMatch;
-import org.eclipse.jdt.core.search.SearchParticipant;
-import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.internal.core.ResolvedSourceType;
-import org.eclipse.jdt.internal.corext.refactoring.CollectingSearchRequestor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -60,6 +49,7 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
+import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
 import org.fusesource.ide.projecttemplates.internal.Messages;
@@ -305,7 +295,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param holder
 	 */
 	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IFile f = findJavaDSLRouteBuilderClass(project, monitor);
+		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
 		if (f != null) {
 			holder[0] = f;
 		}
@@ -358,51 +348,5 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			waitJob(decreasingCounter--, monitor);
 		}
 	}
-	
-	/**
-	 * looks for the first best class extending RouteBuilder and returns it
-	 * 
-	 * @param project
-	 * @param monitor
-	 * @return	the routebuilder class or null
-	 */
-	public static IFile findJavaDSLRouteBuilderClass(IProject project, IProgressMonitor monitor) {
-		try {
-			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-		} catch (CoreException e) {
-			ProjectTemplatesActivator.pluginLog().logError(e);
-		}
-		try {
-			waitJob(20, monitor);
-		} catch (OperationCanceledException | InterruptedException e) {
-			ProjectTemplatesActivator.pluginLog().logError(e);
-			return null;
-		}
-		IJavaProject javaProject = JavaCore.create(project);
-		try {
-			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder"); //$NON-NLS-1$
-			if (routeBuilderType != null) {
-				IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
-				CollectingSearchRequestor requestor = new CollectingSearchRequestor();
-				// @formatter:off
-				final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
-				new SearchEngine().search(searchPattern,
-						new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
-						searchScope,
-						requestor,
-						monitor);
-				// @formatter:on
-				List<SearchMatch> results = requestor.getResults();
-				for (SearchMatch searchMatch : results) {
-					final Object element = searchMatch.getElement();
-					if (element instanceof ResolvedSourceType) {
-						return (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
-					}
-				}
-			}
-		} catch (Exception ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
-		}
-		return null;
-	}
+
 }
