@@ -33,7 +33,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
@@ -43,9 +42,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.Policy;
-import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -98,10 +94,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	@Rule
 	public TestWatcher printStackTraceOnFailure = new PrintThreadStackOnFailureRule();
 
-	private boolean safeRunnableIgnoreErrorStateBeforeTests;
-	boolean statusHandlerCalled = false;
-	private StatusHandler statusHandlerBeforetest;
-	
 	protected IProject project = null;
 	boolean deploymentFinished = false;
 	boolean isDeploymentOk = false;
@@ -121,17 +113,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		welcomePage.dispose();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
-		SafeRunnable.setIgnoreErrors(false);
-		statusHandlerBeforetest = Policy.getStatusHandler();
-		statusHandlerCalled = false;
-		Policy.setStatusHandler(new StatusHandler() {
-			
-			@Override
-			public void show(IStatus status, String title) {
-				statusHandlerCalled = true;
-			}
-		});
 	}
 
 	@After
@@ -162,8 +143,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		}
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
-		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
-		Policy.setStatusHandler(statusHandlerBeforetest);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
