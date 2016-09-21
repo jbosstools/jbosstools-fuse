@@ -48,6 +48,8 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
@@ -55,6 +57,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -98,12 +101,18 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	protected String camelVersion;
 
 	@Before
-	public void setup() {
+	public void setup() throws Exception {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
 		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
 		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
 		File f = new File(SCREENSHOT_FOLDER);
 		f.mkdirs();
+
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		welcomePage.dispose();
+		page.closeAllPerspectives(false, false);
+		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 	}
 
 	@After
@@ -132,6 +141,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 				projectSuccesfullyDeleted = true;
 			}
 		}
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		page.closeAllEditors(false);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
@@ -250,6 +261,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 			System.out.println("awaited activation of editor " + currentAwaitedTime);
 		}
 		IEditorPart editor = getCurrentActiveEditor();
+		assertThat(editor).as("No editor has been opened.").isNotNull();
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
 	}

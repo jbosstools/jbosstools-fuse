@@ -118,10 +118,6 @@
       <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
     </repository>
-    <repository>
-      <id>camelStaging</id>
-      <url>https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384</url>
-    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -158,10 +154,6 @@
       <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga</url>
     </pluginRepository>
-    <pluginRepository>
-      <id>camelStaging</id>
-      <url>https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384</url>
-    </pluginRepository>
   </pluginRepositories>
   <build>
     <defaultGoal>install</defaultGoal>
@@ -171,21 +163,6 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <version>${maven-bundle-plugin.version}</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>camel-activemq-blueprint</Bundle-SymbolicName>
-            <Import-Package>*</Import-Package>
-          </instructions>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

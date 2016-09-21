@@ -53,7 +53,7 @@ public class ModuleBundleVersionUtility {
 		if( moduleTypeId.equals("jboss.osgi")) { 
 			return getJBossOSGiDetails(module, srcFile);
 		} else if( moduleTypeId.equals("jst.utility") || moduleTypeId.equals("jst.web")) {
-			if( srcFile != null ) {
+			if( srcFile != null && srcFile.toFile().exists() ) {
 				// Try to get bundleDetails from the assembled jar file
 				BundleDetails ret = getJBossOSGiDetailsFromJar(srcFile);
 				if( ret != null ) {
