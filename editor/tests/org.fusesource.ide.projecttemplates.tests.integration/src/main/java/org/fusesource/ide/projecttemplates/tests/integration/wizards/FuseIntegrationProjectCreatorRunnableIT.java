@@ -250,6 +250,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 			System.out.println("awaited activation of editor " + currentAwaitedTime);
 		}
 		IEditorPart editor = getCurrentActiveEditor();
+		assertThat(editor).isNotNull().as("Can't determine opened editor");
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
 	}
