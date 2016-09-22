@@ -781,7 +781,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private boolean supportsDelete(Object selObj) {
-		return selObj instanceof AbstractCamelModelElement || selObj instanceof Element;
+		return selObj instanceof AbstractCamelModelElement && ((AbstractCamelModelElement) selObj).getId() != null || selObj instanceof Element;
 	}
 
 	/**

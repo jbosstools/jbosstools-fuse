@@ -61,7 +61,8 @@ public class CamelIOHandlerIT {
 				"withGlobalDefinitionSample.xml",
 				"testWithCXFGlobalEndpoint.xml",
 				"emptyOtherwiseSample.xml",
-				"JMXBeanAnswer--camelContext--11--11.xml");
+				"JMXBeanAnswer--camelContext--11--11.xml",
+				"jaas-blueprint.xml");
 		//@formatter:on
 	}
 
