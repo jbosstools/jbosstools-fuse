@@ -34,7 +34,8 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	private StyledString getStyledTextForCamelModelElement(AbstractCamelModelElement cme) {
 		StyledString text = new StyledString();
 		String type = getTypeFromExtensionPoint(cme);
-		text.append(cme.getId());
+		final String id = cme.getId();
+		text.append(id != null ? id : "<unknownId>");
 		if (!Strings.isEmpty(type)) {
 			text.append(" (" + type + ")", StyledString.COUNTER_STYLER);
 		}
