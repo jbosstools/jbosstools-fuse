@@ -67,20 +67,20 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 
 		if (m2m.getDependencyManagement() != null) {
 			final List<Dependency> dependencies = m2m.getDependencyManagement().getDependencies();
-			MavenUtils.updateCamelVersionDependencies(dependencies, camelVersion);
+			MavenUtils.updateCamelVersionDependencies(m2m, dependencies, camelVersion);
 			MavenUtils.updateContributedDependencies(dependencies, camelVersion);
 		}
-		MavenUtils.updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
+		MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencies(), camelVersion);
 		MavenUtils.updateContributedDependencies(m2m.getDependencies(), camelVersion);
 		final Build m2Build = m2m.getBuild();
 		if(m2Build != null){
 			final PluginManagement pluginManagement = m2Build.getPluginManagement();
 			if (pluginManagement != null) {
 				final List<Plugin> pluginManagementPlugins = pluginManagement.getPlugins();
-				MavenUtils.updateCamelVersionPlugins(pluginManagementPlugins, camelVersion);
+				MavenUtils.updateCamelVersionPlugins(m2m, pluginManagementPlugins, camelVersion);
 				MavenUtils.updateContributedPlugins(pluginManagementPlugins, camelVersion);
 			}
-			MavenUtils.updateCamelVersionPlugins(m2Build.getPlugins(), camelVersion);
+			MavenUtils.updateCamelVersionPlugins(m2m, m2Build.getPlugins(), camelVersion);
 			MavenUtils.updateContributedPlugins(m2Build.getPlugins(), camelVersion);
 		}
 		

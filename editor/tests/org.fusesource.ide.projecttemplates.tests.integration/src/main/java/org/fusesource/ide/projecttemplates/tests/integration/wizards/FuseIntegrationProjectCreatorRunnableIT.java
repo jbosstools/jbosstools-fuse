@@ -172,7 +172,10 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		// TODO: fix project to activate no validation error check
 		if(!camelVersion.startsWith("2.17")){ //excluding 2.17 because the temporary maven repository seems whacky
 			checkNoValidationError();
-			//checkNoValidationWarning();
+			if(camelVersion.contains("redhat")){
+				//only for Red hat version, For community we still have overriding version due to Fuse Bom version
+				//checkNoValidationWarning();
+			}
 		}
 		
 		if(!CamelDSLType.JAVA.equals(dsl)){

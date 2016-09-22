@@ -12,12 +12,12 @@
 	<properties>
 		<maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
 		<jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
+		<camel.version>2.15.1.redhat-084</camel.version>
 		<java.version>1.8</java.version>
 		<maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<camel.version>2.15.1.redhat-621084</camel.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencyManagement>
@@ -35,17 +35,14 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jms</artifactId>
-			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-blueprint</artifactId>
-			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
@@ -80,7 +77,6 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-blueprint</artifactId>
-			<version>${camel.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
