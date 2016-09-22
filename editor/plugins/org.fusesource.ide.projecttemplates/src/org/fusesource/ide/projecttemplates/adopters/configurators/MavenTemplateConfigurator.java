@@ -111,15 +111,15 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			subMonitor.worked(1);
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {
-				MavenUtils.updateCamelVersionDependencies(m2m.getDependencyManagement().getDependencies(), camelVersion);
+				MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencyManagement().getDependencies(), camelVersion);
 			}
 			subMonitor.worked(1);
-			MavenUtils.updateCamelVersionDependencies(m2m.getDependencies(), camelVersion);
+			MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencies(), camelVersion);
 			if (m2m.getBuild().getPluginManagement() != null) {
-				MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
+				MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPluginManagement().getPlugins(), camelVersion);
 			}
 			subMonitor.worked(1);
-			MavenUtils.updateCamelVersionPlugins(m2m.getBuild().getPlugins(), camelVersion);
+			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), camelVersion);
 			subMonitor.worked(1);
 			
 			if(projectMetaData.getTargetRuntime() == null){
