@@ -33,18 +33,25 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
  */
 public class MavenUtils {
 	
+	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
 	private static final String JBOSS_FUSE_PARENT = "jboss-fuse-parent";
 	private static final String ORG_JBOSS_FUSE_BOM = "org.jboss.fuse.bom";
 	private static final String MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION = "jboss.fuse.bom.version";
+	private static final String MAVEN_PROPERTY_CAMEL_VERSION = "camel.version";
 	
 	/**
 	 * @param plugins
 	 * @param camelVersion
 	 */
-	public static void updateCamelVersionPlugins(List<Plugin> plugins, String camelVersion) {
-		for (Plugin p : plugins) {
-			if ("org.apache.camel".equalsIgnoreCase(p.getGroupId()) && p.getArtifactId().startsWith("camel-")) {
-				p.setVersion(camelVersion);
+	public static void updateCamelVersionPlugins(Model mavenModel, List<Plugin> plugins, String camelVersion) {
+		Properties properties = mavenModel.getProperties();
+		if(properties != null && properties.getProperty(MAVEN_PROPERTY_CAMEL_VERSION) != null){
+			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
+		} else {
+			for (Plugin p : plugins) {
+				if (ORG_APACHE_CAMEL.equalsIgnoreCase(p.getGroupId()) && p.getArtifactId().startsWith("camel-")) {
+					p.setVersion(camelVersion);
+				}
 			}
 		}
 	}
@@ -73,10 +80,35 @@ public class MavenUtils {
 	 * @param dependencies
 	 * @param camelVersion
 	 */
-	public static void updateCamelVersionDependencies(List<Dependency> dependencies, String camelVersion) {
-		for (Dependency dep : dependencies) {
-			if ("org.apache.camel".equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
-				dep.setVersion(camelVersion);
+	public static void updateCamelVersionDependencies(Model mavenModel, List<Dependency> dependencies, String camelVersion) {
+		Properties properties = mavenModel.getProperties();
+		if(camelVersion.contains("redhat")){
+			if(properties != null && properties.getProperty(MAVEN_PROPERTY_CAMEL_VERSION) != null){
+				properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
+			}
+			for (Dependency dep : dependencies) {
+				if (ORG_APACHE_CAMEL.equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
+					if(properties != null && properties.getProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION) != null){
+						dep.setVersion(null);
+					} else {
+						if(properties != null && properties.getProperty(MAVEN_PROPERTY_CAMEL_VERSION) != null){
+							dep.setVersion("${"+MAVEN_PROPERTY_CAMEL_VERSION+"}");
+						} else {
+							dep.setVersion(camelVersion);
+						}
+					}
+				}
+			}
+		} else {
+			if(properties != null && properties.getProperty(MAVEN_PROPERTY_CAMEL_VERSION) != null){
+				properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
+			}
+			for (Dependency dep : dependencies) {
+				if (ORG_APACHE_CAMEL.equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith("camel-")) {
+					if(!("${"+MAVEN_PROPERTY_CAMEL_VERSION+"}").equals(dep.getVersion())){
+						dep.setVersion(camelVersion);
+					}
+				}
 			}
 		}
 	}
