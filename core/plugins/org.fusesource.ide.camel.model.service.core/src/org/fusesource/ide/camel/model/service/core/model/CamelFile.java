@@ -116,8 +116,8 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 				if (child.getNodeType() != Node.ELEMENT_NODE) {
 					continue;
 				}
-            	String name = CamelUtils.getTranslatedNodeName(child);            	
-            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
+            	String name = CamelUtils.getTranslatedNodeName(child);
+				String id = computeId(child);
             	if (name.equals(CAMEL_CONTEXT)) {
             		// found a camel context
             		CamelContextElement cce = new CamelContextElement(this, child);
@@ -133,6 +133,20 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 					addGlobalDefinition(id, cme);
 				}
             }
+		}
+	}
+
+	private String computeId(Node child) {
+		Node idNode = child.getAttributes().getNamedItem("id");
+		if (idNode != null){
+			return idNode.getNodeValue();
+		} else if(child.getNamespaceURI() != null
+				&& !(child.getNamespaceURI().startsWith("http://camel.apache.org/schema/")
+						|| child.getNamespaceURI().startsWith("http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/)
+						|| child.getNamespaceURI().startsWith("http://www.springframework.org/schema/beans"))){
+			return null;
+		} else {
+			return CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
 		}
 	}
 
