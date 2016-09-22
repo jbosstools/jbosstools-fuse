@@ -8,7 +8,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI format is as follows:</p><pre class="programlisting">solr://host[:port]/solr?[options]
 solrs://host[:port]/solr ?[options]
-solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following <a class="link" href="https://lucene.apache.org/solr/4_6_0/solr-solrj/org/apache/solr/client/solrj/SolrServer.html" target="_top">SolrServer</a> options may be configured on the Solr endpoint.</p><table id="d0e158340"><tr>
+solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following <a class="link" href="https://lucene.apache.org/solr/4_6_0/solr-solrj/org/apache/solr/client/solrj/SolrServer.html" target="_top">SolrServer</a> options may be configured on the Solr endpoint.</p><table id="d0e158357"><tr>
         <th>name </th>
         <th>default value </th>
         <th>description</th>
@@ -80,7 +80,7 @@ solrCloud://host[:port]/solr?[options]</pre></div><div class="simplesect"><div c
         </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Solr_HSH_MessageOperations"></a>Message Operations</h2></div></div></div><p>The following Solr operations are currently supported. Simply set an exchange header with
             a key of <code class="code">SolrOperation</code> and a value set to one of the following. Some
             operations also require the message body to be set.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>the <code class="code">INSERT</code> operations use the <a class="link" href="https://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/CommonsHttpSolrServer.html" target="_top">CommonsHttpSolrServer</a>
-        </p></li><li class="listitem"><p>the <code class="code">INSERT_STREAMING</code> operations use the <a class="link" href="http://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a> (<span class="bold"><strong>Camel 2.9.2</strong></span>)</p></li></ul></div><table width="859" id="d0e158573"><col width="306pt"><col width="170pt"><col width="375pt"><tr>
+        </p></li><li class="listitem"><p>the <code class="code">INSERT_STREAMING</code> operations use the <a class="link" href="http://lucene.apache.org/solr/3_6_0/org/apache/solr/client/solrj/impl/StreamingUpdateSolrServer.html" target="_top">StreamingUpdateSolrServer</a> (<span class="bold"><strong>Camel 2.9.2</strong></span>)</p></li></ul></div><table width="859" id="d0e158590"><col width="306pt"><col width="170pt"><col width="375pt"><tr>
                 <th>operation </th>
                 <th>message body</th>
                 <th>description</th>

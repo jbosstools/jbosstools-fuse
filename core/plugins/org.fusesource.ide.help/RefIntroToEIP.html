@@ -1,11 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Route Editor Patterns</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="prev" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="next" href="RiderEndptRef.html" title="Components"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="RefIntroToEIP"></a>Route Editor Patterns</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24689"></a>Endpoints</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEndptsTbl" title="Table&nbsp;1.&nbsp;Components">Table&nbsp;1</a> lists the endpoint
-            patterns available from the route editor's palette.</p><div class="table"><a name="RefEndptsTbl"></a><p class="title"><b>Table&nbsp;1.&nbsp;Components</b></p><div class="table-contents"><table summary="Components" width="100%" border="1"><colgroup><col width="20%" align="left" class="c1"><col width="20%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use</th></tr></thead><tbody><tr><td align="left">
+   <title>Route Editor Patterns</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="prev" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="next" href="RiderEndptRef.html" title="Components"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="RefIntroToEIP"></a>Route Editor Patterns</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24974"></a>Components</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEndptsTbl" title="Table&nbsp;1.&nbsp;Components">Table&nbsp;1</a> lists the components
+            available from the route editor's palette.</p><div class="table"><a name="RefEndptsTbl"></a><p class="title"><b>Table&nbsp;1.&nbsp;Components</b></p><div class="table-contents"><table summary="Components" width="100%" border="1"><colgroup><col width="19%" align="left" class="c1"><col width="21%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use</th></tr></thead><tbody><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/endpoint.png"></span>
                         </td><td align="left">
-                            <span class="olink">Endpoint</span>
-                        </td><td align="left">(Generic) Acts as either a message source or message sink</td></tr><tr><td align="left">
+                            <a href="generic.html" class="olink">Generic</a>
+                        </td><td align="left">Provides access to the <span class="guilabel">Select component</span> wizard
+                            from which to select any of the supported Camel connector components,
+                            including those listed in the <span class="guilabel">Palette</span>. </td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/bean.png"></span>
                         </td><td align="left">
                             <a href="beanEndpt.html" class="olink">Bean</a>
@@ -17,7 +19,7 @@
                             <span class="inlinemediaobject"><img src="images/process.png"></span>
                         </td><td align="left">
                             <a href="process.html" class="olink">Process</a>
-                        </td><td align="left">Process the message using a custom processor</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24767"></a>Routing</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMsgRouteTbl" title="Table&nbsp;2.&nbsp;Message Routing">Table&nbsp;2</a> describe the
+                        </td><td align="left">Process the message using a custom processor</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25058"></a>Routing</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMsgRouteTbl" title="Table&nbsp;2.&nbsp;Message Routing">Table&nbsp;2</a> describe the
             routing patterns available from the route editor palette.</p><div class="table"><a name="RefEIPMsgRouteTbl"></a><p class="title"><b>Table&nbsp;2.&nbsp;Message Routing</b></p><div class="table-contents"><table summary="Message Routing" width="100%" border="1"><colgroup><col width="20%" align="left" class="c1"><col width="20%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use</th></tr></thead><tbody><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/aggregate.png"></span></td><td align="left">
                             <a href="aggregate.html" class="olink">Aggregate</a>
@@ -26,11 +28,6 @@
                             <a href="choice.html" class="olink">Choice</a>
                         </td><td align="left">Routes messages based on a series of predicates. (This is one of
                             three components that make up a content-based router.)</td></tr><tr><td align="left">
-                            <span class="inlinemediaobject"><img src="images/dynamicRouter.png"></span></td><td align="left">
-                            <span class="olink">Dynamic
-                                Router</span>
-                        </td><td align="left">Routes messages based on rules specified by the recipients at start
-                            up</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/filter.png"></span>
                         </td><td align="left">
                             <a href="filter.html" class="olink">Filter</a>
@@ -94,11 +91,11 @@
                         </td><td align="left">
                             <a href="wiretap.html" class="olink">Wire Tap</a>
                         </td><td align="left">Routes a copy of a message to a secondary destination while passing
-                            the original message to the actual recipient</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25023"></a>Control flow</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefCtrlFlowTbl" title="Table&nbsp;3.&nbsp;Control flow">Table&nbsp;3</a> describes the control
+                            the original message to the actual recipient</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25302"></a>Control flow</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefCtrlFlowTbl" title="Table&nbsp;3.&nbsp;Control flow">Table&nbsp;3</a> describes the control
             flow patterns available from the route editor palette.</p><div class="table"><a name="RefCtrlFlowTbl"></a><p class="title"><b>Table&nbsp;3.&nbsp;Control flow</b></p><div class="table-contents"><table summary="Control flow" width="100%" border="1"><colgroup><col width="20%" align="left" class="c1"><col width="20%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use</th></tr></thead><tbody><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/generic.png"></span>
                         </td><td align="left">
-                            <a href="catch.html" class="olink">Catch</a>
+                            <a href="catch.html" class="olink">doCatch</a>
                         </td><td align="left">Catches exceptions as part of a <code class="methodname">try</code>,
                                 <code class="methodname">catch</code>, <code class="methodname">finally</code>
                             block</td></tr><tr><td align="left">
@@ -108,7 +105,7 @@
                         </td><td align="left">Delays processing for a set length of time</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/generic.png"></span>
                         </td><td align="left">
-                            <a href="finally.html" class="olink">Finally</a>
+                            <a href="finally.html" class="olink">doFinally</a>
                         </td><td align="left">Node traversed when a <code class="methodname">try</code>,
                                 <code class="methodname">catch</code>, <code class="methodname">finally</code>
                             block exits</td></tr><tr><td align="left">
@@ -160,15 +157,14 @@
                         </td><td align="left">Marks route as a transaction</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/generic.png"></span>
                         </td><td align="left">
-                            <a href="try.html" class="olink">Try</a>
+                            <a href="try.html" class="olink">doTry</a>
                         </td><td align="left">Marks the beginning of a <code class="methodname">try</code>,
                                 <code class="methodname">catch</code>, <code class="methodname">finally</code>
-                            block</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25270"></a>Transformation</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMessTransTbl" title="Table&nbsp;4.&nbsp;Transformation">Table&nbsp;4</a> describes the
+                            block</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25549"></a>Transformation</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMessTransTbl" title="Table&nbsp;4.&nbsp;Transformation">Table&nbsp;4</a> describes the
             transformation patterns available from the route editor palette.</p><div class="table"><a name="RefEIPMessTransTbl"></a><p class="title"><b>Table&nbsp;4.&nbsp;Transformation</b></p><div class="table-contents"><table summary="Transformation" width="100%" border="1"><colgroup><col width="20%" align="left" class="c1"><col width="20%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use Case</th></tr></thead><tbody><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
                         </td><td align="left">
-                            <a href="convertBody.html" class="olink">Convert
-                                Body</a>
+                            <a href="convertBody.html" class="olink">Convert Body To</a>
                         </td><td align="left">Converts the message body to a form usable by the next
                             endpoint</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/enrich.png"></span>
@@ -254,11 +250,11 @@
                         </td><td align="left">
                             <a href="unmarshal.html" class="olink">Unmarshal</a>
                         </td><td align="left">Converts the message data from the wire into a bean that Apache Camel
-                            processors can consume</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25544"></a>Miscellaneous</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefMiscTbl" title="Table&nbsp;5.&nbsp;Miscellaneous">Table&nbsp;5</a> describes the patterns on
+                            processors can consume</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e25823"></a>Miscellaneous</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefMiscTbl" title="Table&nbsp;5.&nbsp;Miscellaneous">Table&nbsp;5</a> describes the patterns on
             the <span class="guilabel">Miscellaneous</span> section of the palette.</p><div class="table"><a name="RefMiscTbl"></a><p class="title"><b>Table&nbsp;5.&nbsp;Miscellaneous</b></p><div class="table-contents"><table summary="Miscellaneous" width="100%" border="1"><colgroup><col width="20%" align="left" class="c1"><col width="20%" align="left" class="c2"><col width="60%" align="left" class="c3"></colgroup><thead><tr><th align="left">Icon</th><th align="left">Name</th><th align="left">Use</th></tr></thead><tbody><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/generic.png"></span>
                         </td><td align="left">
-                            <a href="aop.html" class="olink">AOP</a>
+                            <a href="aop.html" class="olink">Aop</a>
                         </td><td align="left">Does processing before and after the route is completed. (This
                             pattern is deprecated in Apache Camel.)</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/policy.png"></span>
@@ -267,7 +263,7 @@
                         </td><td align="left">Defines a policy the route will use</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/sample.png"></span>
                         </td><td align="left">
-                            <a href="sampling.html" class="olink">Sampling</a>
+                            <a href="sampling.html" class="olink">Sample</a>
                         </td><td align="left">Extract a sample of the exchanges passing through a route</td></tr><tr><td align="left">
                             <span class="inlinemediaobject"><img src="images/stop.png"></span>
                         </td><td align="left">

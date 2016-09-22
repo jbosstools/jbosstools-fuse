@@ -10,7 +10,7 @@
             various Camel features, such as <span class="phrase">Aggregator</span>. </p><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p></p><p>LevelDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_UsingLevelDBAggregationRepository"></a>Using LevelDBAggregationRepository</h2></div></div></div><p><code class="literal">LevelDBAggregationRepository</code> is an
                 <code class="literal">AggregationRepository</code> which on the fly persists the aggregated
             messages. This ensures that you will not loose messages, as the default aggregator will
-            use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e116934"><tr>
+            use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e116951"><tr>
                 <th> Option </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -95,7 +95,7 @@
             The recovery works as transactional which ensures that Camel will try to recover and
             redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored
             from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-            recovered/redelivered:</p><table id="d0e117156"><tr>
+            recovered/redelivered:</p><table id="d0e117173"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -156,7 +156,7 @@
 &lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>To use <a href="IDU-LevelDB.html" class="olink">LevelDB</a> in your camel routes you need to add the a dependency on <span class="bold"><strong>camel-leveldb</strong></span>. </p><p>If you use maven you could just add the following to your pom.xml, substituting the version number for the latest &amp; greatest release (see <a class="link" href="Download" target="_top">the download page for the latest versions</a>).</p><pre class="programlisting">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
   &lt;artifactId&gt;camel-leveldb&lt;/artifactId&gt;
-  &lt;version&gt;2.17.0.redhat-630067&lt;/version&gt;
+  &lt;version&gt;2.17.0.redhat-630177&lt;/version&gt;
 &lt;/dependency&gt;</pre><p>
 
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>

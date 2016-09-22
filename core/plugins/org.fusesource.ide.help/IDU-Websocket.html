@@ -5,7 +5,7 @@
 Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">websocket://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">WebsocketComponent</code> can be configured prior to use, to setup host, to act as a websocket server. </p><p>
 
-    </p><table id="d0e171430"><tr>
+    </p><table id="d0e171447"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -82,7 +82,7 @@ Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simple
         <td> <span class="bold"><strong>Consumer only</strong></span>: To use a custom thread pool for the server. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The <code class="literal">WebsocketEndpoint</code> can be configured prior to use</p><p>
 
-    </p><table id="d0e171644"><tr>
+    </p><table id="d0e171661"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -207,7 +207,7 @@ Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simple
             </td>
         </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The websocket component uses 2 headers to indicate to either send messages back to a single/current client, or to all clients.</p><p>
 
-    </p><table id="d0e171949"><tr>
+    </p><table id="d0e171966"><tr>
         <th> Key</th>
         <th> Description </th>
       </tr><tr>

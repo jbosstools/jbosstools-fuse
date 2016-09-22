@@ -184,9 +184,10 @@
          <topic label="Wire Tap" href="wiretap.html"/>
       </topic>
       <topic label="Control Flow" href="RiderControlFlowRef.html">
-         <topic label="DoCatch" href="catch.html"/>
          <topic label="Delay" href="delay.html"/>
-         <topic label="DoFinally" href="finally.html"/>
+         <topic label="Do Catch" href="catch.html"/>
+         <topic label="Do Finally" href="finally.html"/>
+         <topic label="Do Try" href="try.html"/>
          <topic label="Intercept" href="intercept.html"/>
          <topic label="Intercept From" href="interceptFrom.html"/>
          <topic label="Intercept Send To Endpoint" href="interceptSendToEndpoint.html"/>
@@ -197,7 +198,6 @@
          <topic label="Throttle" href="throttle.html"/>
          <topic label="Throw Exception" href="throwException.html"/>
          <topic label="Transacted" href="transacted.html"/>
-         <topic label="Try" href="try.html"/>
       </topic>
       <topic label="Transformation" href="RiderTransformRef.html">
          <topic label="Convert Body To" href="convertBody.html"/>
@@ -220,14 +220,13 @@
          <topic label="Unmarshal" href="unmarshal.html"/>
       </topic>
       <topic label="Miscellaneous" href="RiderMiscRef.html">
-         <topic label="AOP" href="aop.html"/>
+         <topic label="Aop" href="aop.html"/>
          <topic label="Policy" href="policy.html"/>
-         <topic label="Sampling" href="sampling.html"/>
+         <topic label="Sample" href="sampling.html"/>
          <topic label="Stop" href="stop.html"/>
          <topic label="Threads" href="threads.html"/>
          <topic label="Validate" href="validate.html"/>
       </topic>
-      <topic label="Route" href="routeIcon.html"/>
    </topic>
    <topic label="Apache Camel Component Reference" href="IDU-Components.html">
       <topic label="Components Overview" href="CompRefIntro.html">
