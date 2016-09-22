@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.core.feature"
       label="%featureName"
-      version="8.0.0.qualifier"
+      version="9.0.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
@@ -21,7 +21,7 @@
    </license>
 
    <url>
-      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/mars/"/>
+      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/neon/"/>
    </url>
 
    <requires>
