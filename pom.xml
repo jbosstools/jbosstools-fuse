@@ -21,7 +21,7 @@
   <groupId>org.fusesource.ide</groupId>
   <artifactId>project</artifactId>
   <packaging>pom</packaging>
-  <version>8.0.0-SNAPSHOT</version>
+  <version>9.0.0-SNAPSHOT</version>
   <name>JBoss Fuse Tooling</name>
   <url>http://tools.jboss.org/features/apachecamel.html</url>
 
@@ -41,7 +41,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
 
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.3.4.Final</jbtis.version>
+    <jbtis.version>4.4.0.Alpha2</jbtis.version>
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.26.0-SNAPSHOT</jboss-tycho-version>
@@ -177,24 +177,24 @@
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
         </configuration>
-				<executions>
-					<execution>
-						<id>compiletests</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-	</plugin>
-	<plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-resources-plugin</artifactId>
-		<version>2.7</version>
-		<configuration>
-			<encoding>UTF-8</encoding>
-		</configuration>
-	</plugin>
+	<executions>
+		<execution>
+			<id>compiletests</id>
+			<phase>test-compile</phase>
+			<goals>
+				<goal>testCompile</goal>
+			</goals>
+		</execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-resources-plugin</artifactId>
+	<version>2.7</version>
+	<configuration>
+		<encoding>UTF-8</encoding>
+	</configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -290,53 +290,53 @@
           </environments>
         </configuration>
       </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<executions>
-					<execution>
-						<id>test</id>
-						<phase>test</phase>
-						<configuration>
-							<systemProperties>
-								<osgi.nls.warnings>ignore</osgi.nls.warnings>
-							</systemProperties>
-						</configuration>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.19.1</version>
+	<executions>
+		<execution>
+			<id>test</id>
+			<phase>test</phase>
+			<configuration>
+				<systemProperties>
+					<osgi.nls.warnings>ignore</osgi.nls.warnings>
+				</systemProperties>
+			</configuration>
+			<goals>
+				<goal>test</goal>
+			</goals>
+		</execution>
+	</executions>
+      </plugin>
 			
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<configuration>
-					<useUIThread>true</useUIThread>
-					<useUIHarness>true</useUIHarness>
-					<includes>
-						<include>**/*IT.class</include>
-					</includes>
-					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false</argLine>
-					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+      <plugin>
+	<groupId>org.eclipse.tycho</groupId>
+	<artifactId>tycho-surefire-plugin</artifactId>
+	<version>${tychoVersion}</version>
+	<configuration>
+		<useUIThread>true</useUIThread>
+		<useUIHarness>true</useUIHarness>
+		<includes>
+			<include>**/*IT.class</include>
+		</includes>
+		<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false</argLine>
+		<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <dependencies>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+		<scope>test</scope>
+	</dependency>
+  </dependencies>
 
-<profiles>
+  <profiles>
     <profile>
       <id>osx</id>
       <activation>
