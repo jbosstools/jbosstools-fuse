@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://xmlns.oracle.com/EnterpriseObjects/Core/EBO/Invoice/V2" xmlns:corecom="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" xmlns:coreinvoicecust="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/EBO/Invoice/V2" targetNamespace="http://xmlns.oracle.com/EnterpriseObjects/Core/EBO/Invoice/V2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" schemaLocation="NBSCommonComponents.xsd"/>
+	<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/EBO/Invoice/V2" schemaLocation="NBSCustomInvoiceEBO.xsd"/>
+	<xsd:complexType name="CreateInvoiceListEBMType">
+		<xsd:complexContent>
+			<xsd:extension base="corecom:EBMType">
+				<xsd:sequence>
+					<xsd:element name="DataArea" type="CreateInvoiceListDataAreaType" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="DataArea" type="CreateInvoiceListDataAreaType"/>
+	<xsd:element name="CreateInvoiceListEBM" type="CreateInvoiceListEBMType"/>
+	<xsd:complexType name="CreateInvoiceListDataAreaType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Create"/>
+			<xsd:element ref="CreateInvoiceList"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CreateInvoiceListType">
+		<xsd:complexContent>
+			<xsd:extension base="InvoiceEBOType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="CreateInvoiceList" type="CreateInvoiceListType"/>
+	<xsd:complexType name="InvoiceEBOType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element name="Description" type="xsd:string"/>
+			<xsd:element name="TotalAmount" type="corecom:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation> 
+Total value of the items billed on the invoice  including taxes or charges, this value does not include the prior balance amount and should be derived from Invoice Lines.
+                                </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ExtendedAmount" type="corecom:AmountType" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="corecom:CodeType" minOccurs="0"/>
+			<xsd:element name="InvoiceDateTime" type="corecom:DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation> 
+Date printed on invoice, basis of due date calculation.
+                                </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="corecom:PaymentTerm" minOccurs="0"/>
+			<xsd:element ref="corecom:Note" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="corecom:Status" minOccurs="0"/>
+			<xsd:element ref="corecom:BillToPartyReference" minOccurs="0"/>
+			<xsd:element ref="corecom:ConsolidatedInvoiceReference" minOccurs="0"/>
+			<xsd:element ref="InvoiceLine" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="InvoiceTaxTotal" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Custom" type="coreinvoicecust:CustomInvoiceEBOType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InvoiceLineType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element name="Description" type="corecom:TextType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ExtendedAmount" type="corecom:AmountType" minOccurs="0"/>
+			<xsd:element name="TotalAmount" type="corecom:AmountType" minOccurs="0"/>
+			<xsd:element name="TransactionTypeCode" type="corecom:CodeType" minOccurs="0"/>
+			<xsd:element name="OrderQuantity" type="corecom:QuantityType" minOccurs="0"/>
+			<xsd:element name="Quantity" type="corecom:QuantityType" minOccurs="0"/>
+			<xsd:element ref="corecom:UnitPrice" minOccurs="0"/>
+			<xsd:element ref="corecom:Status" minOccurs="0"/>
+			<xsd:element ref="corecom:ItemReference" minOccurs="0"/>
+			<xsd:element ref="InvoiceLineAllowance" minOccurs="0"/>
+			<xsd:element ref="InvoiceLineTax" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="InvoiceLineCharge" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Custom" type="coreinvoicecust:CustomInvoiceLineType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="InvoiceLine" type="InvoiceLineType"/>
+	<xsd:element name="InvoiceLineCharge" type="InvoiceLineChargeType"/>
+	<xsd:complexType name="InvoiceLineChargeType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element ref="corecom:Charge" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InvoiceLineTaxType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element ref="corecom:Tax" minOccurs="0"/>
+			<xsd:element name="Custom" type="coreinvoicecust:CustomInvoiceLineTaxType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="InvoiceLineTax" type="InvoiceLineTaxType"/>
+	<xsd:complexType name="InvoiceTaxTotalType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element name="Amount" type="corecom:AmountType" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="corecom:CodeType" minOccurs="0"/>
+			<xsd:element name="Custom" type="coreinvoicecust:CustomInvoiceTaxTotalType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="InvoiceTaxTotal" type="InvoiceTaxTotalType"/>
+	<xsd:complexType name="InvoiceLineAllowanceType">
+		<xsd:sequence>
+			<xsd:element ref="corecom:Identification" minOccurs="0"/>
+			<xsd:element ref="corecom:Allowance" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="InvoiceLineAllowance" type="InvoiceLineAllowanceType"/>
+</xsd:schema>

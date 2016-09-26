@@ -1,0 +1,109 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!-- ** Oracle Corporation ** ** AIA Enterprise Object Library ** ** Version 
+	2.6 ** ** Date: June 2010 ** Copyright (c) 2007, 2010, Oracle and/or its 
+	affiliates. All rights reserved. License information for this file is provided 
+	in the file "Oracle AIA EBO License.txt" that is provided with this package. 
+	XML Schema Name: \EnterpriseObjectLibrary\Core\Custom\Common\V2\CustomCommonComponents.xsd -->
+<!-- ====================================================================== -->
+<!-- ===== Oracle EBO Custom Comomn Components Schema Module ===== -->
+<!-- ====================================================================== -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2"
+	xmlns:corecom="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2"
+	targetNamespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="2.7">
+	<!-- ====================================================================== -->
+	<!-- ===== Imports ===== -->
+	<!-- ====================================================================== -->
+	<xsd:include schemaLocation="NBSCustomMeta.xsd" />
+	<!--<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" 
+		schemaLocation="NBSCommonComponents.xsd"/> -->
+
+
+	<xsd:complexType name="CustomAmountType">
+		<xsd:annotation>
+			<xsd:documentation>An custom Amount type filed with qualifier
+				attributes</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="type" type="xsd:normalizedString"
+					use="optional" />
+				<xsd:attribute name="currencyCode" type="xsd:normalizedString"
+					use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="CustomTextAttrType">
+		<xsd:annotation>
+			<xsd:documentation>A custom type to have qualifier attributes for
+				text fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:normalizedString">
+				<xsd:attribute name="type" type="xsd:normalizedString"
+					use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="CustomDateTimeAttrType">
+		<xsd:annotation>
+			<xsd:documentation>A custom type to have qualifier attributes for
+				date fields</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:dateTime">
+				<xsd:attribute name="type" type="xsd:normalizedString"
+					use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="CustomQuantityType">
+		<xsd:annotation>
+			<xsd:documentation>A counted number of non-monetary units possibly
+				including fractions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="unitCode" type="xsd:normalizedString"
+					use="optional" />
+				<xsd:attribute name="type" type="xsd:normalizedString"
+					use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="CustomEventType">
+		<xsd:sequence>
+			<!-- <xsd:element name="EventID" type="corecom:IdentifierType"
+				nillable="true" minOccurs="0" />
+			<xsd:element name="EventDateTime" type="corecom:DateTimeType"
+				nillable="true" minOccurs="0" /> -->
+			<xsd:element name="EventDescription" type="CustomTextAttrType"
+				nillable="true" minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute name="type" />
+	</xsd:complexType>
+
+
+	<xsd:complexType name="CustomOrganizationType" />
+	<xsd:complexType name="CustomPersonType" />
+	<xsd:complexType name="CustomItemReferenceType" />
+
+
+	<xsd:complexType name="CustomBillToPartyReferenceType">
+		<xsd:sequence>
+			<xsd:element name="Amount" type="CustomAmountType"
+				nillable="true" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="Description" type="CustomTextAttrType"
+				nillable="true" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="Indicator" type="CustomTextAttrType"
+				nillable="true" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

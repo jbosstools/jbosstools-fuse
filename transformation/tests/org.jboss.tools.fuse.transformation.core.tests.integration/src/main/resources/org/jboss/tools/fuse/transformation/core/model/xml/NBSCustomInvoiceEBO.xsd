@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+** Oracle Corporation  **
+** AIA Enterprise Object Library **
+** Version: 2.01 **
+** Date: Aug 23, 2008 **
+ 
+Copyright (c) 2007, Oracle. All rights reserved
+License information for this file is provided in the file 
+"Oracle AIA EBO License.txt" that is provided with this package.
+ 
+    XML Schema 
+    Name: \EnterpriseObjectsLibrary\Core\EBO\Invoice\V2\InvoiceEBO.xsd 
+ 
+-->
+<!-- ====================================================================== -->
+<!-- =====      Oracle EBO Custom Invoice EBO Schema Module     ===== -->
+<!-- ====================================================================== -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/EBO/Invoice/V2" xmlns:corecom="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" xmlns:corecomcust="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" targetNamespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/EBO/Invoice/V2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.03.00">
+	<!-- ====================================================================== -->
+	<!-- ==============  Imports and Includes   =============================== -->
+	<!-- ====================================================================== -->
+	<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" schemaLocation="./NBSCommonComponents.xsd"/>
+	<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" schemaLocation="./NBSCustomCommonComponents.xsd"/>
+
+	<!-- ====================================================================== -->
+	<!-- ==============  Invoice Custom Components ================ -->
+	<!-- ====================================================================== -->
+	<!-- Start: iHub SOA Custom Elements -->
+	<xsd:complexType name="CustomInvoiceEBOType">
+		<xsd:sequence>
+			<xsd:element name="Amount" type="corecomcust:CustomAmountType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Description" type="corecomcust:CustomTextAttrType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Indicator" type="corecomcust:CustomTextAttrType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Quantity" type="corecomcust:CustomQuantityType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="BillingAccount" type="corecom:BillToPartyReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+
+
+
+	<xsd:complexType name="CustomInvoiceLineTaxType"/>
+	<xsd:complexType name="CustomInvoiceLineChargeType"/>	
+	
+	<xsd:complexType name="CustomInvoiceTaxTotalType">
+		<xsd:sequence>
+			<xsd:element name="Description" type="corecomcust:CustomTextAttrType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>	
+	
+	<xsd:complexType name="CustomInvoiceReferenceType"/>
+	<xsd:complexType name="CustomInvoiceLineType">
+		<xsd:sequence>
+			<xsd:element name="Amount" type="corecomcust:CustomAmountType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Description" type="corecomcust:CustomTextAttrType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Indicator" type="corecomcust:CustomTextAttrType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Quantity" type="corecomcust:CustomQuantityType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- End: iHub SOA Custom Elements -->
+</xsd:schema>

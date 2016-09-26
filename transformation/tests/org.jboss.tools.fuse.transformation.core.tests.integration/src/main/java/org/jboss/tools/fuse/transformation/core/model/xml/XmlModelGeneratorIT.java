@@ -13,6 +13,9 @@
  */
 package org.jboss.tools.fuse.transformation.core.model.xml;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -93,6 +96,24 @@ public class XmlModelGeneratorIT {
         Assert.assertEquals("com.bogus.a.Element1", mappings.get("element1"));
         Assert.assertEquals("com.bogus.b.Element2", mappings.get("element2"));
     }
+    
+    @Test
+    public void generateFromSchemaWithExternalFileAccessRequired() throws Exception {
+    	// The test need to be launched in an OSGi platform to have a real check
+    	assertThat(PlatformUI.getWorkbench()).isNotNull();
+    	File NBSCommonComponentsXsd = getXSDFile("NBSCommonComponents.xsd");
+    	File NBSCustomCommonComponentsXsd = getXSDFile("NBSCustomCommonComponents.xsd");
+    	File NBSCustomInvoiceEBOXsd = getXSDFile("NBSCustomInvoiceEBO.xsd");
+    	File NBSCustomMetaXsd = getXSDFile("NBSCustomMeta.xsd");
+    	File NBSInvoiceEBMXsd = getXSDFile("NBSInvoiceEBM.xsd");
+    	File targetFolder = tmpFolder.newFolder("target");
+    	XmlModelGenerator modelGen = new XmlModelGenerator();
+
+    	JCodeModel codeModel = modelGen.generateFromSchema(NBSInvoiceEBMXsd, "test.nbs", targetFolder);
+
+    	Map<String, String> mappings = modelGen.elementToClassMapping(codeModel);
+    	assertEquals(69, mappings.size());
+    }
 
     @Test
     public void getGeneratedElementsMultipleElements() throws Exception {
@@ -161,6 +182,17 @@ public class XmlModelGeneratorIT {
 		File tmpFile = null;
 		try {
 			tmpFile = File.createTempFile(fileName, ".xml", tmpFolder.getRoot());
+			Files.copy(this.getClass().getResourceAsStream(fileName), tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return tmpFile;
+	}
+	
+	private File getXSDFile(String fileName) {
+		File tmpFile = null;
+		try {
+			tmpFile = new File(tmpFolder.getRoot(),fileName);
 			Files.copy(this.getClass().getResourceAsStream(fileName), tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
