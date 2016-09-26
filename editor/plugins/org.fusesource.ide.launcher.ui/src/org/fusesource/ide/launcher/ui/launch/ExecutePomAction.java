@@ -37,6 +37,7 @@ public class ExecutePomAction extends ExecutePomActionSupport {
 		workingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, path == null ? "" : path); // basedir.getLocation().toOSString()
 		workingCopy.setAttribute(MavenLaunchConstants.ATTR_SKIP_TESTS, false);
 		workingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
+		workingCopy.setAttribute(MavenLaunchConstants.ATTR_DEBUG_OUTPUT, true);
 	}
 
 	/*
