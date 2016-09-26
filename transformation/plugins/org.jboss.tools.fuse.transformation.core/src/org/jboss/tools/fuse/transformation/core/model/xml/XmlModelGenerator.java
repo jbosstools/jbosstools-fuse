@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
@@ -30,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
@@ -43,6 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -284,14 +287,18 @@ public class XmlModelGenerator {
         // Step 2 - call generateFromSchema with generated schema
 		final JCodeModel generatedSchema = generateFromSchema(schemaFile, packageName, targetPath);
 
+		setBackAccessExternalSchemaProperty(initialValue_AccessExternalSchema);
+
+		return generatedSchema;
+    }
+
+	private void setBackAccessExternalSchemaProperty(final String initialValue_AccessExternalSchema) {
 		if (initialValue_AccessExternalSchema != null) {
 			System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, initialValue_AccessExternalSchema);
 		} else {
 			System.clearProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
 		}
-
-		return generatedSchema;
-    }
+	}
 
     /**
      * Generates Java classes in targetPath directory given an XML schema.
@@ -309,8 +316,14 @@ public class XmlModelGenerator {
     public JCodeModel generateFromSchema(final File schemaFile,
                                          final String packageName,
                                          final File targetPath) throws Exception {
+    	
+		final String initialValueAccessExternalSchema = System.getProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
+		System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all"); //$NON-NLS-1$
+		
         final SchemaCompiler sc = createSchemaCompiler(schemaFile);
-        if (packageName != null) sc.forcePackageName(packageName);
+        if (packageName != null){
+        	sc.forcePackageName(packageName);
+        }
         class SchemaErrorListener implements ErrorListener {
 
             Exception exception;
@@ -338,15 +351,24 @@ public class XmlModelGenerator {
         SchemaErrorListener listener = new SchemaErrorListener();
         sc.setErrorListener(listener);
         final S2JJAXBModel s2 = sc.bind();
-        if (listener.exception != null) throw listener.exception;
-        if (s2 == null) throw new Exception("Failed to parse schema into JAXB Model"); //$NON-NLS-1$
+        if (listener.exception != null){
+        	setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
+        	throw listener.exception;
+        }
+        if (s2 == null){
+        	setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
+        	throw new Exception("Failed to parse schema into JAXB Model"); //$NON-NLS-1$
+        }
         final JCodeModel jcm = s2.generateCode(null, null);
         for (Iterator<JPackage> iter = jcm.packages(); iter.hasNext();) {
             addMissingSettersForLists(iter.next().classes(), jcm.VOID);
         }
         try (PrintStream status = new PrintStream(new ByteArrayOutputStream())) {
             jcm.build(targetPath, status);
+        } finally {
+        	setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
         }
+        
         return jcm;
     }
 

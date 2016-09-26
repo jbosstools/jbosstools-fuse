@@ -1,0 +1,12 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" xmlns:corecom="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" targetNamespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.00">
+
+	<xsd:complexType name="CustomMessageProcessingInstructionType">
+		<xsd:sequence>
+			<xsd:element name="InterchangeID" type="xsd:string" nillable="true" minOccurs="0"/>
+			<xsd:element name="GroupID" type="xsd:string" nillable="true" minOccurs="0"/>
+			<xsd:element name="GroupTotalTransactionCount" type="xsd:string" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+   </xsd:complexType>		
+
+	
+</xsd:schema>

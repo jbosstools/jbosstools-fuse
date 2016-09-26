@@ -1,0 +1,1559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:corecomcust="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" xmlns="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" targetNamespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Common/V2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- ====================================================================== -->
+	<!-- ===== Imports ===== -->
+	<!-- ====================================================================== -->
+	<xsd:import namespace="http://xmlns.oracle.com/EnterpriseObjects/Core/Custom/Common/V2" schemaLocation="NBSCustomCommonComponents.xsd"/>
+	<xsd:element name="Identification" type="IdentificationType"/>
+	<xsd:complexType name="IdentifierType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:normalizedString">
+				<xsd:attribute name="schemeID" type="xsd:normalizedString" use="optional"/>
+				<xsd:attribute name="schemeAgencyID" type="xsd:normalizedString" use="optional"/>
+				<xsd:attribute name="schemeVersionID" type="xsd:normalizedString" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="NameType">
+		<xsd:annotation>
+			<xsd:documentation>A character string that consititues the
+				distinctive designation of a person, place, thing or concept
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="languageCode" type="xsd:normalizedString"/>
+				<xsd:attribute name="languageLocaleCode" type="xsd:normalizedString"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="AmountType">
+		<xsd:annotation>
+			<xsd:documentation>A number of monetary units specified in a currency
+				where the unit of the currency is explicit or implied
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="currencyCode" type="xsd:normalizedString" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="QuantityType">
+		<xsd:annotation>
+			<xsd:documentation>A counted number of non-monetary units possibly
+				including fractions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="unitCode" type="xsd:normalizedString" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="TextType">
+		<xsd:annotation>
+			<xsd:documentation>A character string (i.e. a finite set of
+				characters) generally in the form of words of a language
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:normalizedString">
+				<xsd:attribute name="languageCode" type="xsd:normalizedString"/>
+				<xsd:attribute name="languageLocaleCode" type="xsd:normalizedString"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="DateTimeType">
+		<xsd:annotation>
+			<xsd:documentation>A particular point in the progression of time
+				together with the relevant supplementary information
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="PercentType">
+		<xsd:annotation>
+			<xsd:documentation>A percent is a value representing a fraction of
+				one hundred, expressed as a quotient -- Usage Percent. Type is used
+				to represent a percentage that indicates how many hundredths of a
+				basic value are to be calculated. The result of the calculation is
+				the proportion in percent of, e.g., amounts, values, rates,
+				discounts, and taxes. For example, "8.25%" should be passed as
+				"8.25", "10%" should be passed as "10" or "10.0" etc, "150%" should
+				be passed as "150" or "150.0" etc. 
+</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:decimal"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="IndicatorType">
+		<xsd:annotation>
+			<xsd:documentation>A list of two mutually exclusive Boolean values
+				that express the only possible states of a Property
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:boolean">
+			<xsd:pattern value="false"/>
+			<xsd:pattern value="true"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MonthType">
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:pattern value="01"/>
+			<xsd:pattern value="02"/>
+			<xsd:pattern value="03"/>
+			<xsd:pattern value="04"/>
+			<xsd:pattern value="05"/>
+			<xsd:pattern value="06"/>
+			<xsd:pattern value="07"/>
+			<xsd:pattern value="08"/>
+			<xsd:pattern value="09"/>
+			<xsd:pattern value="10"/>
+			<xsd:pattern value="11"/>
+			<xsd:pattern value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ===== Note -->
+	<xsd:complexType name="NoteType">
+		<xsd:sequence>
+			<xsd:element name="Author" type="NameType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Author of the note</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EntryDateTime" type="DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date on which the note was created or last
+						updated</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LanguageCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The language in which the note is defined
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Content" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Content of the Note</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Status" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Note" type="NoteType">
+		<xsd:annotation>
+			<xsd:documentation>A free form note used to capture instructions or
+				information about an object or a transaction</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Time Period -->
+	<xsd:complexType name="TimePeriodType">
+		<xsd:sequence>
+			<xsd:element name="StartDateTime" type="DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Start DateTtime of the Time Period
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="Duration" type="xsd:duration" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Duration of the Time Period
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="EndDateTime" type="DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>End Date Time of the Time Period
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="EffectiveTimePeriod" type="TimePeriodType"/>
+	<xsd:complexType name="ObjectKeyType">
+		<xsd:sequence>
+			<xsd:element name="ID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="ContextID" type="IdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="AlternateObjectKey" type="ObjectKeyType"/>
+	<xsd:element name="ApplicationObjectKey" type="ObjectKeyType"/>
+	<xsd:complexType name="IdentificationType">
+		<xsd:sequence>
+			<xsd:element name="BusinessComponentID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="ID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="ContextID" type="IdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ApplicationObjectKey" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="AlternateObjectKey" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ResponseCodeType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ID"/>
+			<xsd:enumeration value="OBJECT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="CreateType">
+		<xsd:attribute name="responseCode" type="ResponseCodeType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Create" type="CreateType"/>
+	<xsd:complexType name="UpdateType">
+		<xsd:attribute name="responseCode" type="ResponseCodeType" use="optional"/>
+	</xsd:complexType>
+	<xsd:element name="Update" type="UpdateType"/>
+	<xsd:complexType name="CodeType">
+		<xsd:annotation>
+			<xsd:documentation>A character string (letters, figures, or symbols)
+				that for brevity and/or languange independence may be used to
+				represent or replace a definitive value or text of an attribute
+				together with relevant supplementary information</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:normalizedString">
+				<xsd:attribute name="listID" type="xsd:normalizedString" use="optional"/>
+				<xsd:attribute name="listAgencyID" type="xsd:normalizedString" use="optional"/>
+				<xsd:attribute name="listVersionID" type="xsd:normalizedString" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="MessageProcessingInstructionType">
+		<xsd:sequence>
+			<xsd:element name="EnvironmentCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="DefinitionID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="InstanceID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="Custom" type="corecomcust:CustomMessageProcessingInstructionType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="EBMType">
+		<xsd:sequence>
+			<xsd:element ref="EBMHeader"/>
+		</xsd:sequence>
+		<xsd:attribute name="versionID" type="xsd:string" use="optional"/>
+		<xsd:attribute name="languageCode" type="xsd:string" use="optional" default="en-US"/>
+	</xsd:complexType>
+	<xsd:complexType name="EBMHeaderType">
+		<xsd:sequence>
+			<xsd:element name="EBMID" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="EBMName" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="EBOName" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="CreationDateTime" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:element name="MessageProcessingInstruction" type="MessageProcessingInstructionType" minOccurs="0"/>
+			<xsd:element ref="Sender" minOccurs="0"/>
+			<xsd:element ref="Target" minOccurs="0"/>
+			<xsd:element ref="B2BProfile" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SenderType">
+		<xsd:sequence>
+			<xsd:element name="ID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="SenderMessageID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="TransactionCode" type="CodeType" minOccurs="0"/>
+			<xsd:element ref="Application" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Sender" type="SenderType"/>
+	<xsd:complexType name="TargetType">
+		<xsd:sequence>
+			<xsd:element name="ID" type="IdentifierType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Target" type="TargetType"/>
+	<xsd:element name="EBMHeader" type="EBMHeaderType"/>
+	<xsd:complexType name="ApplicationType">
+		<xsd:sequence>
+			<xsd:element name="ID" type="IdentifierType" minOccurs="0"/>
+			<xsd:element name="Version" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Application" type="ApplicationType"/>
+	<xsd:complexType name="PaymentTermType">
+		<xsd:sequence>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="Code" type="CodeType" minOccurs="0"/>
+			<xsd:element name="EffectiveDateTime" type="DateTimeType" minOccurs="0"/>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PaymentTerm" type="PaymentTermType">
+		<xsd:annotation>
+			<xsd:documentation>Identifies the payment term assoicated with any
+				procurment or billing document. Supports the abiility to specify an
+				absolute due date, a number of days from a start daye, a percent
+				discount or an absolute discount. A common term like "Net30Days" is
+				explicitly code as either a calculated DueDateTime or a
+				PaymentTermsDateTime and NumberOfDays</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="StatusType">
+		<xsd:sequence>
+			<xsd:element name="Code" type="CodeType" minOccurs="0"/>
+			<xsd:element name="EffectiveDateTime" type="DateTimeType" minOccurs="0"/>
+			<xsd:element name="ReasonCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Status" type="StatusType"/>
+	<xsd:complexType name="PartyIdentificationType">
+		<xsd:complexContent>
+			<xsd:extension base="IdentificationType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="PartyIdentification" type="PartyIdentificationType"/>
+	<!-- ===== Price -->
+	<xsd:complexType name="PriceType">
+		<xsd:sequence>
+			<xsd:element name="Amount" type="AmountType" minOccurs="0"/>
+			<xsd:element name="PerQuantity" type="QuantityType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="UnitPrice" type="PriceType"/>
+	<xsd:element name="MSRP" type="PriceType">
+		<xsd:annotation>
+			<xsd:documentation>The Manufacturer's Suggested Retail Price for an item</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>	
+	<xsd:complexType name="RateType">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:decimal">
+				<xsd:attribute name="unitCode" type="xsd:string" use="optional"/>
+				<xsd:attribute name="baseValue" type="xsd:decimal" use="optional"/>
+				<xsd:attribute name="baseUnitCode" type="xsd:string" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- ===== Person -->
+	<xsd:complexType name="PersonNameType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="FullName" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="FirstName" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="MiddleName" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="FamilyName" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PersonName" type="PersonNameType"/>
+	<!-- ====================================================================== -->
+	<!-- ===== Party Base Definition ===== -->
+	<!-- ====================================================================== -->
+	<xsd:complexType name="PartyType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Unique identification</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="PartyLocation" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Locations of the Party</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="PartyContact" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Contacts of the Party</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element ref="Person" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>An individual</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element ref="Organization" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>An organization</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Party" type="PartyType">
+		<xsd:annotation>
+			<xsd:documentation> A Party is an organization, individual or group
+				that plays different roles such as supplier, customer, BillTo etc in
+				transactions</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Party Contact (subcomponent of Party) -->
+	<xsd:complexType name="PartyContactType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element ref="Contact" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="PartyContact" type="PartyContactType"/>
+	<!-- ===== Party Location (subcomponent of Party) -->
+	<xsd:complexType name="PartyLocationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element ref="LocationReference" minOccurs="0"/>
+			<xsd:element name="SeasonalIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if the party seasonally occupies this
+						location. This is used, for example, in marketing campaign. The
+						marketing application will not send any marketing material to the
+						location during off-season period (determined by the location
+						information).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomPartyLocationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="PartyLocation" type="PartyLocationType"/>
+	<!-- ===== Person (subcomponent of Party) -->
+	<xsd:complexType name="PersonType">
+		<xsd:sequence>
+			<xsd:element name="PrimaryClassificationCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>This provides the user with the ability to
+						associate a particular classification to a person. It may be a
+						free-form text or a code. It may be defaulted to a primary Person
+						Affiliation or something else. It is configurable by the user.
+						Example values are Faculty, Student, Alumni, etc.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NameInitial" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Name initials</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GenderCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The gender (male, female, unknown) of the person
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MaritalStatusCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Marital status of the person.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BirthDateTime" type="DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date the person was born</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DeathDateTime" type="DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date the person died </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DeathPlace" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Place of Death - Free-text field. The customers
+						will decide whether they want to capture a Country only, or City,
+						State, Country combo.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DeathCertificateID" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Death Certificate Number. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VeteranBenefitEligibilityIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Veteran benefits designation. Indicator whether
+						a person is eligible for veteran's benefit</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Age" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Age in Years</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LanguageCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Native Language</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NationalityCountryCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Primary country of citizenship
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxPayerRegistrationNumber" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxpayer registration number, also known as the
+						VAT number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxPayerIdentificationNumber" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxpayer identification number, often unique
+						identifier of person or organization. Can be SSN or income
+						taxpayer ID in US, fiscal code or NIF in Europe
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PrimaryLocationTimezoneCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Refers to the person's time zone
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BirthPlace" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Where the person was born. Typically, the city
+						and country</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EthnicityCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The declared ethnicity of the person
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MaritalStatusEffectiveDate" type="xsd:date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Date when the person's marital status changed
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PersonalIncomeAmount" type="AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The estimated gross annual income of the person
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RentOrOwnCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if the person rents or owns his or her
+						residence. Example of values are: rent, own, lease, and so on
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DeceasedIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates whether the person is deceased or not
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BankruptcyIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates this person's record is currently
+						experiencing some form of bankruptcy.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ProblematicAccountIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates this person's record
+						is having derogatory accounts and may have impact on spending limits
+						setting,
+						extending offers, fraud, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxLienIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates the person has a tax lien on his/her
+						property</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EmployedIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates whether the Person is employed.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TotalDependentCount" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The number of dependents for the person has.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MinorIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates whether the person is a Minor
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="PersonName" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Details of the person's name  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Custom" type="corecomcust:CustomPersonType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Person" type="PersonType">
+		<xsd:annotation>
+			<xsd:documentation>An individual      </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Organization (subcomponent of Party) -->
+	<xsd:complexType name="OrganizationType">
+		<xsd:sequence>
+			<xsd:element name="Name" type="NameType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Name of a party of the Organization party type
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ShortName" type="NameType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Short name of the organization
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Salutation" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>This is the salutation that needs to be used to
+						refer to the organization. Ex. M/S ( Messrs)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="IncorporationDate" type="xsd:date" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Date on which the organization is legally
+								incorporated.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="IncorporationYear" type="xsd:integer" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Year that the business was incorporated
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="IncorporationLocation" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The incorporation place of the organization.
+						E.g. Dingle,Bangalore</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="IncorporationCountryCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The country in which the orgnization is
+						incorporated</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DUNSInquiryIdentifier" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifier used to query the Dun and Bradstreet
+						data. If a location is a branch, then in some countries the
+						headquarters DUNS number is used to do the query. Otherwise it is
+						the same as the DUNS number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LegalStructureCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Legal structure. For example, partnership,
+						corporation, and so on</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ControlYear" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Year when current ownership gained control
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TotalEmployeeCount" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Total number of employees    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LocationUsageCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of this site. Identifies if the location
+						is the HQ, a branch, or a single location</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OutOfBusinessIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this organization is out of
+						business   </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineOfBusiness" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Type of business activities performed at this
+						site    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CongressionalDistrictCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>U.S. Congressional District    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ImportIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is an importer
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ExportIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is an exporter
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LaborSurplusIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company operates in an area
+						with a labor surplus  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MinorityOwnedIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is primarily owned by
+						ethnic or racial minorities     </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MinorityOwnedTypeCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The type of minority-owned firm
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WonamOwnedIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is primarily owned by
+						women   </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DisadvantagedIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is considered
+						disadvantaged by the US governement under Title 8A.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SmallBusinessIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company is considered to be a
+						small business</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FacilityOccupancyCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if this company owns or rents its
+						place of business</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DunBradstreetCreditRating" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Dun and Bradstreet credit rating
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxPayerRegistrationID" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxpayer identification number, often unique
+						identifier of person or organization. Can be SSN or income
+						taxpayer ID in US, fiscal code or NIF in Europe (Deprecate since
+						FP 3.0. The reason is the name is incorrect. It is replaced with
+						the TaxPayerIdentificationNumberID.)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxPayerIdentificationNumberID" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxpayer identification number, often unique
+						identifier of person or organization. Can be SSN or income
+						taxpayer ID in US, fiscal code or NIF in Europe
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxPayerRegistrationNumberID" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxpayer registration number, also known as the
+						VAT number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FinancialAnalysisFiscalYear" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Fiscal year used as the source for financial
+						information     </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FiscalYearEndMonth" type="MonthType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Month that the fiscal year ends for organization
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CurrentFiscalYearPotentitalRevenue" type="AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Organization's potential revenue for this fiscal
+						year</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NextFiscalYearPotentitalRevenue" type="AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Organization's potential revenue for next fiscal
+						year </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EstablishmentYear" type="xsd:integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Year that the organization began doing business
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>User-defined organization types such as region,
+						division, and department    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperationalScopeCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The physical class of business in which a
+						business participates. For example, local, national, or
+						international   </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TaxationClassificationCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Taxation classification for corporation
+						entities. For example, Chapter S in the US</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LocalBusinessID" type="IdentifierType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Primary identifier assigned to businesses by
+						government agency, Chamber of Commerce, or other authority.
+						Generally used outside US. It is the most common business
+						identifier in a country. For example, Chamber of Commerce Number
+						in Italy, Government Registration Number in Taiwan
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PreferredFunctionalCurrencyCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Organization's default currency code
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RegistrationCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of registration, such as nonprofit
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SubsidiaryIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if organization is a parent or
+						subsidiary location</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SICCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Version of Standard Industry Classification
+						(SIC) code    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PrivateOwnershipIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates if the organization is privately owned
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Organization" type="OrganizationType">
+		<xsd:annotation>
+			<xsd:documentation>An organization entity    </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ====================================================================== -->
+	<!-- ===== Party Reference Base Definition ===== -->
+	<!-- ====================================================================== -->
+	<xsd:complexType name="PartyReferenceType" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="PartyIdentification" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="OrganizationName" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element ref="PersonName" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element ref="LocationReference" minOccurs="0"/>
+			<xsd:element ref="Contact"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PartyReference" type="PartyReferenceType"/>
+	<xsd:element name="BillToPartyReference" type="BillToPartyReferenceType">
+		<xsd:annotation>
+			<xsd:documentation>The party designated on purchase order, invoice,
+				or bill of lading as the one to whom the bill should be sent for
+				payment</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Bill To Party -->
+	<xsd:complexType name="BillToPartyReferenceType">
+		<xsd:complexContent>
+			<xsd:extension base="PartyReferenceType">
+				<xsd:sequence>
+					<xsd:element ref="CustomerPartyAccountIdentification" minOccurs="0"/>
+					<xsd:element name="Custom" type="corecomcust:CustomBillToPartyReferenceType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="CustomerPartyAccountIdentification" type="IdentificationType"/>
+	<!-- ===== Location -->
+	<xsd:element name="LocationReference" type="LocationReferenceType"/>
+	<xsd:complexType name="LocationReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="LocationIdentification" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:element ref="Address" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="LocationIdentification" type="IdentificationType"/>
+	<xsd:complexType name="AddressType">
+		<xsd:sequence>
+			<xsd:element name="LineOne" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The first free form line, expressed as text, of
+						an address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineTwo" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The first second form line, expressed as text,
+						of an address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineThree" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The third free form line, expressed as text, of
+						an address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineFour" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The fourth free form line, expressed as text, of
+						an address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CityName" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>The name, expressed as text, of the city, town
+						or village of this address</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StateName" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Name of the state in which the city falls, where
+						applicable</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ProvinceName" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Name of the province where the address is
+						located, if applicable</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CountyName" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>County Name, if applicable</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CountryCode" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="PostalCode" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Address" type="AddressType"/>
+	<!-- ===== Contact -->
+	<xsd:complexType name="ContactType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element name="PreferredLanguageCode" type="TextType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Preferred Language for communication with the
+						contact</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Department" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Department to which the contact is associated
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JobTitle" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Is the position or designation of the pesron
+						with whom associated within the given organization. Examples are
+						Director, Software Engineer, Purchasing Manager etc
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Responsibility" type="TextType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A text description of the responsibility of the
+						contact</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrganizationIndicator" type="TextType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicate whether this contact is an organization
+						contact or an individual. If it is an organization contact
+						person's field may not be populated such as the PersonName and
+						JobTitle.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PreferredCommunicationChannelCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>This indicates the preferred communication
+						channel whether it is address, phone, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrganizationName" type="NameType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>This capture the name of the Organization for
+						both of the cases when contact is an organization or an individual
+						person (organization of that individual).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="PersonName" minOccurs="0"/>
+			<xsd:element name="BirthDateTime" type="DateTimeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Birth date and time of the contact person
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="ContactAddressCommunication" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ContactPhoneCommunication" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ContactFaxCommunication" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ContactEmailCommunication" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="ContactWebsiteCommunication" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Preference" minOccurs="0"/>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactType" minOccurs="0"/ -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Contact" type="ContactType">
+		<xsd:annotation>
+			<xsd:documentation>A person or department that acts as a point of
+				contact with another person or department</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:element name="ContactAddressCommunication" type="ContactAddressCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Addresses associated with a Contact
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="ContactAddressCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element name="PreferredMediaTypeCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A preferred media type to be communicated to the
+						address such as tape, disk, DVD, printed etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PreferredMediaFormatCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A preferred media format for the communication
+						address. Possible value could be table, document, XML etc.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="AddressCommunication" minOccurs="0"/>
+			<xsd:element ref="Status" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the communication point. Example
+						values are Active, Inactive, Delete, Do Not Call.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactAddressCommunicationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="AddressCommunication" type="AddressCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Details about the location at which a particular
+				organization or person may be found or reached, including
+				information about how that location is used</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="AddressCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Address" minOccurs="0"/>
+			<xsd:element name="UseCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying the usage of the contact point
+						e.g. business, private, etc</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Preference" minOccurs="0"/>
+			<xsd:element ref="EffectiveTimePeriod" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ContactPhoneCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element name="PreferredMediaFormatCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A preferred media type to be communicated
+						through the phone such as HTML, SMS.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="PhoneCommunication" minOccurs="0"/>
+			<xsd:element ref="Status" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the communication point. Example
+						values are Active, Inactive, Delete, Do Not Call.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactPhoneCommunicationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="PhoneCommunication" type="PhoneCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Details about the phone number of an organization
+				or person, including information about how that phone number is used
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="PhoneCommunicationType">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="CompleteNumber" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The complete number without separation between
+								country code, area code etc</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="CountryCode" type="CodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The country dialing code for a communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AreaCode" type="CodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The area dialing code for a communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LocalNumber" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The commication number, not including country
+								dialing or area dialing codes</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ExtensionNumber" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The extension of the assoicated communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="Access" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The text that permits access to the electronic
+								network of the associated communication number such as telephone
+								network, for example 9, *70.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="UseCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying the usage of the contact point
+						e.g. business, private, etc</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates the type of Phone Communication. Eg.
+						wireless phone, landline phone etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Preference" minOccurs="0"/>
+			<!--xsd:element ref="PrivacyProfile" minOccurs="0" maxOccurs="unbounded"> 
+				<xsd:annotation> <xsd:documentation>Settings related to phone communication 
+				privacy profile </xsd:documentation> </xsd:annotation> </xsd:element -->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ContactPhoneCommunication" type="ContactPhoneCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Phone Numbers associated with a Contact
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Preference -->
+	<xsd:complexType name="PreferenceType">
+		<xsd:sequence>
+			<xsd:element name="PriorityRanking" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Priority of ranking of the associated object or
+						component</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PreferredIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicator if this is preferred
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Preference" type="PreferenceType"/>
+	<xsd:complexType name="FaxCommunicationType">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="CompleteNumber" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="CountryCode" type="CodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The country dialing code for a communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AreaCode" type="CodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The area dialing code for a communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LocalNumber" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The commication number, not including country
+								dialing or area dialing codes</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ExtensionNumber" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The extension of the assoicated communication
+								number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="Access" type="TextType" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>The text that permits access to the electronic
+								network of the associated communication number such as telephone
+								network, for example 9, *70.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="UseCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying the usage of the contact point
+						e.g. business, private, etc</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Preference" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="FaxCommunication" type="FaxCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Details about the fax number of an organization or
+				person, including information about how that fax number is used
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="ContactFaxCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element ref="FaxCommunication" minOccurs="0"/>
+			<xsd:element ref="Status" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the communication point. Example
+						values are Active, Inactive, Delete, Do Not Call.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactFaxCommunicationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="ContactFaxCommunication" type="ContactFaxCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Fax Numbers associated with a Contact
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="EmailCommunicationType">
+		<xsd:sequence>
+			<xsd:element name="HTMLPreferredIndicator" type="IndicatorType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates that the communication is preferred in
+						HTML format.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="URI" type="TextType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>URI in the case of email communication
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UseCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying the usage of the contact point
+						e.g. business, private, etc</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Preference" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="EmailCommunication" type="EmailCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Details about the email address of an organization
+				or person, including information about how that email address is
+				used</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="ContactEmailCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element name="PreferredMediaFormatCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A preferred media type to be communicated
+						through the phone such as HTML, SMS.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="EmailCommunication" minOccurs="0"/>
+			<xsd:element ref="Status" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the communication point. Example
+						values are Active, Inactive, Delete, Do Not Call.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactEmailCommunicationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="ContactEmailCommunication" type="ContactEmailCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Email Addresses associated with a Contact
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="WebsiteCommunicationType">
+		<xsd:sequence>
+			<xsd:element name="WebsiteURI" type="TextType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>URI or URL for the communication
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="UseCode" type="CodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying the usage of the web site, e.g.
+						Home Page, Marketing URL, Support URL, etc.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="Preference" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="WebsiteCommunication" type="WebsiteCommunicationType"/>
+	<xsd:complexType name="ContactWebsiteCommunicationType">
+		<xsd:sequence>
+			<xsd:element ref="Identification" minOccurs="0"/>
+			<xsd:element ref="WebsiteCommunication" minOccurs="0"/>
+			<xsd:element ref="Status" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the communication point. Example
+						values are Active, Inactive, Delete, Do Not Call.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<!--xsd:element name="Custom" type="corecomcust:CustomContactWebsiteCommunicationType" 
+				minOccurs="0"/ -->
+		</xsd:sequence>
+		<xsd:attribute name="actionCode" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:element name="ContactWebsiteCommunication" type="ContactWebsiteCommunicationType">
+		<xsd:annotation>
+			<xsd:documentation>Web Addresses associated with a Contact
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<!-- ===== Tax -->
+	<xsd:complexType name="TaxType">
+		<xsd:sequence>
+			<xsd:element name="Code" type="CodeType" minOccurs="0"/>
+			<xsd:element name="TaxJurisdictionCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="Amount" type="AmountType" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="Note" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="TaxRate" type="RateType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Tax" type="TaxType"/>
+	<!-- ===== Allowance -->
+	<xsd:element name="Allowance" type="AllowanceType"/>
+	<xsd:complexType name="AllowanceType">
+		<xsd:sequence>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="BasisAmount" type="AmountType" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="BasisQuantity" type="QuantityType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="Amount" type="AmountType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="CalculationPercent" type="PercentType" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="Calculation" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="ReasonCode" type="CodeType" minOccurs="0"/>
+			<xsd:element ref="EffectiveTimePeriod" minOccurs="0"/>
+			<xsd:element name="PrePaidIndicator" type="IndicatorType" minOccurs="0"/>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ===== Item -->
+	<xsd:complexType name="ItemIdentificationType">
+		<xsd:complexContent>
+			<xsd:extension base="IdentificationType">
+				<xsd:sequence>
+					<xsd:element name="GTIN" type="IdentifierType" minOccurs="0"/>
+					<xsd:element name="ManufacturerItemID" type="IdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="SupplierItemID" type="IdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="CustomerItemID" type="IdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="ItemIdentification" type="ItemIdentificationType"/>
+	<xsd:complexType name="ItemReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="ItemIdentification" minOccurs="0"/>
+			<xsd:element name="Name" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ClassificationCode" type="CodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ServiceIndicator" type="IndicatorType" minOccurs="0"/>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Custom" type="corecomcust:CustomItemReferenceType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ItemReference" type="ItemReferenceType"/>
+	<!-- ===== Charge -->
+	<xsd:complexType name="ChargeType">
+		<xsd:sequence>
+			<xsd:element name="TypeCode" type="CodeType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="DiscountAmount" type="AmountType" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="DiscountPercent" type="PercentType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="UnitListPrice" minOccurs="0"/>
+			<xsd:element ref="UnitSalePrice" minOccurs="0"/>
+			<xsd:element name="DiscountMethodCode" type="CodeType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="UnitListPrice" type="PriceType"/>
+	<xsd:element name="UnitSalePrice" type="PriceType"/>
+	<xsd:element name="Charge" type="ChargeType"/>
+	<!-- ===== Invoice -->
+	<xsd:complexType name="InvoiceIdentificationType">
+		<xsd:complexContent>
+			<xsd:extension base="IdentificationType">
+				<xsd:sequence>
+					<xsd:element name="Description" type="TextType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:element name="InvoiceIdentification" type="InvoiceIdentificationType"/>
+	<xsd:complexType name="InvoiceReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="InvoiceIdentification" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="InvoiceReference" type="InvoiceReferenceType"/>
+	<xsd:element name="ConsolidatedInvoiceReference" type="InvoiceReferenceType"/>
+	<!-- Added for Purchase Order -->
+	<xsd:element name="ShipToPartyReference" type="ShipToPartyReferenceType"/>
+	<xsd:complexType name="ShipToPartyReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="PartyIdentification"/>
+			<xsd:element ref="LocationReference"/>
+			<xsd:element ref="Contact"/>
+			<xsd:element ref="CustomerPartyAccountIdentification"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- Adding B2B Profile -->
+	<xsd:element name="B2BProfile" type="B2BProfileType"/>
+	<xsd:complexType name="B2BProfileType">
+		<xsd:sequence>
+			<xsd:element ref="SenderTradingPartner"/>
+			<xsd:element ref="ReceiverTradingPartner"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="SenderTradingPartner" type="SenderTradingPartnerType"/>
+	<xsd:complexType name="SenderTradingPartnerType">
+		<xsd:sequence>
+			<xsd:element ref="TradingPartnerID"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ReceiverTradingPartner" type="ReceiverTradingPartnerType"/>
+	<xsd:complexType name="ReceiverTradingPartnerType">
+		<xsd:sequence>
+			<xsd:element ref="TradingPartnerID"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="TradingPartnerID" type="IdentifierType"/>
+	<!-- Received Payment List -->
+	<xsd:element name="PayeePartyReference" type="PayeePartyReferenceType"/>
+	<xsd:element name="CustomerPartyReference" type="CustomerPartyReferenceType"/>
+	<xsd:complexType name="PayeePartyReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="PartyIdentification"/>
+			<xsd:element ref="LocationReference"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CustomerPartyReferenceType">
+		<xsd:sequence>
+			<xsd:element ref="PartyIdentification"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="OrganizationName" type="NameType" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:sequence>
+					<xsd:element ref="PersonName"/>
+				</xsd:sequence>
+			</xsd:choice>
+			<xsd:element ref="LocationReference"/>
+			<xsd:element ref="Contact"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
