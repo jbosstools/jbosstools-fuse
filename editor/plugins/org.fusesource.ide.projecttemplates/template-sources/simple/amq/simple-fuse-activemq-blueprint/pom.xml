@@ -164,11 +164,6 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>${maven-bundle-plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<_include>src/main/resources/META-INF/MANIFEST.MF</_include>
-					</instructions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

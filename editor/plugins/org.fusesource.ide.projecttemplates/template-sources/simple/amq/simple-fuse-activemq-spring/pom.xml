@@ -97,12 +97,6 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>${maven-bundle-plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Spring-Context>META-INF/spring/camel-context-osgi.xml</Spring-Context>
-						<_include>src/main/resources/META-INF/MANIFEST.MF</_include>
-					</instructions>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

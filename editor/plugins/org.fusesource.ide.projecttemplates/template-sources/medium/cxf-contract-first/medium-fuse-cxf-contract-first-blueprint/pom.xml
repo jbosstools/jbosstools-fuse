@@ -255,11 +255,6 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>${version.maven-bundle-plugin}</version>
 				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-  						<_include>src/main/resources/META-INF/MANIFEST.MF</_include>
-  					</instructions>					
-				</configuration>
 			</plugin>
 
 			<!-- this plugin will use the fabric.* properties to configure its behaviour 
