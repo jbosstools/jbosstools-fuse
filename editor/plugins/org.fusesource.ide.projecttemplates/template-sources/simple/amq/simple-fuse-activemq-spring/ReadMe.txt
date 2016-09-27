@@ -16,10 +16,14 @@ To run this project from JBoss Fuse shell :
     - create a properties file named camel.activemq.spring.conf in etc folder of JBoss Fuse containing ActiveMQ
       connection options, i.e :
 
-      broker.url       = tpc://localhost:61616
+      broker.url       = tcp://localhost:61616
       broker.username  = admin
       broker.password  = admin
-
+	
+	- install dependencies from Fuse shell:
+	
+	  features:install activemq-camel
+	
     - install the bundle from Fuse shell :
 
       install -s mvn:com.mycompany/camel-activemq-spring/1.0.0-SNAPSHOT
