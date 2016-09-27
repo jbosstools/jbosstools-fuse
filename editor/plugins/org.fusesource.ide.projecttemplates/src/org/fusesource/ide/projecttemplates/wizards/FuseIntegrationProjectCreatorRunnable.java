@@ -10,15 +10,22 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -36,6 +43,8 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.OpenStrategy;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPerspectiveDescriptor;
@@ -65,6 +74,9 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	public static final String FUSE_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective"; //$NON-NLS-1$
 
+	private static final String ORG_APACHE_FELIX = "org.apache.felix";
+	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
+	
 	private final NewProjectMetaData metadata;
 
 	/**
@@ -111,7 +123,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		try {
 			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 			// update the manifest to reflect project name as Bundle-SymbolicName
-			updateBundleSymbolicName(prj, subMonitor.newChild(1));
+			updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
@@ -136,32 +148,70 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	protected void updateBundleSymbolicName(IProject project, IProgressMonitor monitor) throws CoreException {
-		List<IFile> files = new ArrayList<>();
-		project.getFolder("src").accept(new IResourceVisitor(){
-			@Override
-			public boolean visit(IResource resource) throws CoreException {
-				if( resource instanceof IFile && "manifest.mf".equalsIgnoreCase(resource.getName())) {
-					files.add((IFile)resource);
-				}
-				return true;
+	protected void updateBundlePluginConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
+		try {
+			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
+			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
+
+			customizeBundlePlugin(pomModel, project);
+
+			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
+				MavenPlugin.getMaven().writeModel(pomModel, out);
+				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
 			}
-			
-		});
-		for (IFile f : files) {
-			try {
-				InputStream is = f.getContents();
-				Manifest mf = new Manifest(is);
-				is.close();
-				Attributes attributes = mf.getMainAttributes();
-				attributes.putValue("Bundle-SymbolicName", getBundleSymbolicNameForProjectName(project.getName()));
-				// lets also update the bundle name so Fuse Runtime shows a difference too
-				attributes.putValue("Bundle-Name", String.format("%s [%s]", attributes.getValue("Bundle-Name"), project.getName()));
-				mf.write(new FileOutputStream(f.getLocation().toFile()));
-				f.refreshLocal(IProject.DEPTH_ZERO, monitor);
-			} catch(IOException ioe) {
-				ProjectTemplatesActivator.pluginLog().logError(ioe);
-			}
+		} catch (CoreException | XmlPullParserException | IOException e1) {
+			ProjectTemplatesActivator.pluginLog().logError(e1);
+		}
+	}
+	
+	private void customizeBundlePlugin(Model pomModel, IProject project) throws XmlPullParserException, IOException {
+		Build build = pomModel.getBuild();
+		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
+		Plugin plugin = pluginsByName.get(ORG_APACHE_FELIX + ":" + MAVEN_BUNDLE_PLUGIN); //$NON-NLS-1$
+		if (plugin != null) {
+			manageConfigurations(plugin, project, pomModel);
+		}
+	}
+
+	private void manageConfigurations(Plugin plugin, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
+		if (config == null) {
+			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
+					"<configuration>" + //$NON-NLS-1$
+					"</configuration>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			plugin.setConfiguration(config);
+		}
+		manageInstructions(config, project, pomModel);
+	}
+
+	private void manageInstructions(Xpp3Dom config, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+		Xpp3Dom instructions = config.getChild("instructions"); //$NON-NLS-1$
+		if (instructions == null) {
+			instructions = Xpp3DomBuilder.build(new ByteArrayInputStream(("<instructions>" + //$NON-NLS-1$
+					"</instructions>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			config.addChild(instructions);
+		}
+		manageCustomInstructions(instructions, project, pomModel);
+	}
+	
+	private void manageCustomInstructions(Xpp3Dom instructions, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+		Xpp3Dom bundleSymbolicName = instructions.getChild("Bundle-SymbolicName"); //$NON-NLS-1$
+		if (bundleSymbolicName == null) {
+			bundleSymbolicName = Xpp3DomBuilder.build(
+					new ByteArrayInputStream(("<Bundle-SymbolicName>" + getBundleSymbolicNameForProjectName(project.getName()) + "</Bundle-SymbolicName>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			instructions.addChild(bundleSymbolicName);
+		}
+		String description = pomModel.getDescription();
+		String desc = description != null && description.trim().length()>0 ? description : String.format("%s.%s", pomModel.getGroupId(), pomModel.getArtifactId()); 
+		Xpp3Dom bundleName = instructions.getChild("Bundle-Name"); //$NON-NLS-1$
+		if (bundleName == null) {
+			bundleName = Xpp3DomBuilder.build(
+					new ByteArrayInputStream(("<Bundle-Name>" + String.format("%s [%s]", desc, project.getName()) + "</Bundle-Name>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			instructions.addChild(bundleName);
 		}
 	}
 	
