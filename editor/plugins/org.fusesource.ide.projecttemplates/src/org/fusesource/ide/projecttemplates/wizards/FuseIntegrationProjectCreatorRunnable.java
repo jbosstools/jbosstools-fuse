@@ -122,7 +122,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		// refresh
 		try {
 			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
-			// update the manifest to reflect project name as Bundle-SymbolicName
+			// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
 			updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
