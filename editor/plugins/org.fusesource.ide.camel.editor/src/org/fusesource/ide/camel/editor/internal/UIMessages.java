@@ -20,6 +20,7 @@ public class UIMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.editor.internal.l10n.messages";
 
+
     public static String AddGlobalEndpointWizard_windowTitle;
 
 	public static String editorSourcePageTitle;
@@ -92,6 +93,7 @@ public class UIMessages extends NLS {
 	public static String GlobalEndpointWizardPage_groupByCategories;
 	public static String GlobalEndpointWizardPage_idFieldLabel;
 	public static String GlobalEndpointWizardPage_idMandatoryMessage;
+	public static String GlobalEndpointWizardPage_idExistingMessage;
 	public static String GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText;
 	public static String SelectEndpointWizard_pageSelectionComponentDescription;
 	public static String SelectEndpointWizard_pageSelectionComponentTitle;

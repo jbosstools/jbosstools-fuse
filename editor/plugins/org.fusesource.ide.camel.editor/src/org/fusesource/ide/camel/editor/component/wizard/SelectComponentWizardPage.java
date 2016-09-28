@@ -40,6 +40,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author Aurelien Pupier
@@ -52,16 +53,18 @@ public class SelectComponentWizardPage extends WizardPage {
 
 	private Component componentSelected;
 	private String id;
+	private AbstractCamelModelElement parent;
 
 	/**
 	 * @param pageName
 	 */
-	public SelectComponentWizardPage(DataBindingContext dbc, ComponentModel componentModel, String title, String description) {
+	public SelectComponentWizardPage(DataBindingContext dbc, ComponentModel componentModel, String title, String description, AbstractCamelModelElement parent) {
 		super(UIMessages.SelectComponentWizardPage_pageName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
 		this.componentModel = componentModel;
+		this.parent = parent;
 	}
 
 	/* (non-Javadoc)
@@ -88,18 +91,7 @@ public class SelectComponentWizardPage extends WizardPage {
 		Text idText = new Text(composite, SWT.BORDER);
 		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new IValidator() {
-
-			@Override
-			public IStatus validate(Object value) {
-				String id = (String) value;
-				if (id == null || id.isEmpty()) {
-					return ValidationStatus.error(UIMessages.GlobalEndpointWizardPage_idMandatoryMessage);
-				}
-				// TODO: check unicity of ID
-				return ValidationStatus.ok();
-			}
-		});
+		strategy.setBeforeSetValidator(new NewEndpointIdValidator(parent));
 
 		final IObservableValue idObservable = PojoProperties.value(SelectComponentWizardPage.class, "id", String.class).observe(this); //$NON-NLS-1$
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), idObservable, strategy, null);

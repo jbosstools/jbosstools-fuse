@@ -38,7 +38,7 @@ public class GenericEndpointFigureFeature extends AbstractComponentBasedCreateFi
 		final String camelVersion = CamelModelFactory.getCamelVersion(camelFile.getResource().getProject());
 		final CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
 		final ComponentModel componentModel = camelModel.getComponentModel();
-		SelectEndpointWizard wizard = new SelectEndpointWizard(camelFile, componentModel);
+		SelectEndpointWizard wizard = new SelectEndpointWizard(parent, componentModel);
 		WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 		if (dialog.open() == IStatus.OK) {
 			setComponent(wizard.getComponent());

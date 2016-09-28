@@ -16,7 +16,7 @@ import org.fusesource.ide.camel.editor.component.wizard.SelectComponentWizardPag
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author Aurelien Pupier
@@ -26,13 +26,15 @@ public class SelectEndpointWizard extends Wizard {
 
 	private ComponentModel componentModel;
 	private SelectComponentWizardPage page;
+	private AbstractCamelModelElement parent;
 
 	/**
 	 * @param camelFile
 	 * @param componentModel
 	 */
-	public SelectEndpointWizard(CamelFile camelFile, ComponentModel componentModel) {
+	public SelectEndpointWizard(AbstractCamelModelElement parent, ComponentModel componentModel) {
 		this.componentModel = componentModel;
+		this.parent = parent;
 		setWindowTitle(UIMessages.SelectEndpointWizard_windowTitle);
 	}
 
@@ -40,7 +42,7 @@ public class SelectEndpointWizard extends Wizard {
 	public void addPages() {
 		super.addPages();
 		page = new SelectComponentWizardPage(new DataBindingContext(), componentModel, UIMessages.SelectEndpointWizard_pageSelectionComponentTitle,
-				UIMessages.SelectEndpointWizard_pageSelectionComponentDescription);
+				UIMessages.SelectEndpointWizard_pageSelectionComponentDescription, parent);
 		addPage(page);
 	}
 
