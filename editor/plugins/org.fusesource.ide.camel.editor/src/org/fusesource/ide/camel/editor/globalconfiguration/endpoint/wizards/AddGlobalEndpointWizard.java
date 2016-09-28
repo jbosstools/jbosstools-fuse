@@ -51,7 +51,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	public void addPages() {
 		super.addPages();
 		globalEndpointPage = new SelectComponentWizardPage(dbc, componentModel, UIMessages.SelectComponentWizardPage_pageName,
-				UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription);
+				UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription, camelFile);
 		addPage(globalEndpointPage);
 
 	}
