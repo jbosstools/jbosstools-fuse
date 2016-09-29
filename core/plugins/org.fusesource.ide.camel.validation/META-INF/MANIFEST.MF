@@ -24,3 +24,4 @@ Export-Package: org.fusesource.ide.camel.validation,
  org.fusesource.ide.camel.validation.diagram,
  org.fusesource.ide.camel.validation.model,
  org.fusesource.ide.camel.validation.xml
+Bundle-Vendor: Red Hat

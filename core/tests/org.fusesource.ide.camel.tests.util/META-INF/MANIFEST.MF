@@ -8,3 +8,4 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="9.0.0",
  org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="9.0.0"
 Export-Package: org.fusesource.ide.camel.tests.util
+Bundle-Vendor: Red Hat
