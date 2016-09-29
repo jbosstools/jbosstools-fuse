@@ -8,9 +8,9 @@
            class="org.fusesource.ide.jmx.diagram.view.DiagramView"
            icon="icons/diagram_view.gif"
            id="org.fusesource.ide.jmx.views.DiagramView"
-           name="Diagram View">
+           name="%view.name">
         <description>
-           This view shows a graphical diagram view of the current selection for example to show a Camel Route or set of ActiveMQ destinations
+           %view.description
         </description>
       </view>
    </extension>

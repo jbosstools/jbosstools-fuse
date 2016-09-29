@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JBoss Fuse Tooling JMX Commons Tests
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.commons.tests
 Bundle-Version: 9.0.0.qualifier
 Fragment-Host: org.fusesource.ide.jmx.commons;bundle-version="9.0.0"

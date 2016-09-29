@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.fusesource.ide.editor.paletteContributor" name="Fuse Camel Editor Palette Contributor" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
-   <extension-point id="org.fusesource.ide.editor.dblClickHandler" name="Fuse Camel Editor Double Click Handler" schema="schema/org.fusesource.ide.editor.dblClickHandler.exsd"/>
-   <extension-point id="org.fusesource.ide.editor.globalConfigContributor" name="Fuse Camel Editor Global Config Contributor" schema="schema/org.fusesource.ide.editor.globalConfigContributor.exsd"/>
+   <extension-point id="org.fusesource.ide.editor.paletteContributor" name="%extension-point.name" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
+   <extension-point id="org.fusesource.ide.editor.dblClickHandler" name="%extension-point.name.0" schema="schema/org.fusesource.ide.editor.dblClickHandler.exsd"/>
+   <extension-point id="org.fusesource.ide.editor.globalConfigContributor" name="%extension-point.name.1" schema="schema/org.fusesource.ide.editor.globalConfigContributor.exsd"/>
 
    <!-- definition for the camel editor -->
    <extension
@@ -32,7 +32,7 @@
             describer="org.fusesource.ide.foundation.core.xml.namespace.CamelNamespaceXmlContentDescriber"
             file-extensions="xml"
             id="org.fusesource.ide.camel.editor.camelContentType"
-            name="Camel XML"
+            name="%content-type.name"
             priority="high">
       </content-type> 
    </extension>
@@ -153,18 +153,18 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.fusesource.ide.camel.editor.commands.category"
-            name="JBoss Fuse Camel Editor Commands">
+            name="%category.name">
       </category>
       <command
             categoryId="org.fusesource.ide.camel.editor.commands.category"
             id="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
-            name="Auto Layout Diagram">
+            name="%command.name">
       </command>
       <command
             categoryId="org.fusesource.ide.camel.editor.commands.category"
             defaultHandler="org.fusesource.ide.camel.editor.commands.ShowPropertiesViewHandler"
             id="org.fusesource.ide.camel.editor.commands.ShowPropertiesView"
-            name="Show Properties view">
+            name="%command.name.0">
       </command>
    </extension>
    
@@ -210,7 +210,7 @@
       <page
             class="org.fusesource.ide.camel.editor.preferences.CamelEditorPreferencePage"
             id="org.fusesource.ide.camel.editor.propertyPage"
-            name="Editor Properties">
+            name="%page.name">
          <enabledWhen>
             <instanceof
                   value="org.eclipse.graphiti.ui.internal.parts.DiagramEditPart">
@@ -228,7 +228,7 @@
            icon="icons/editor/camel_project_16x16.png"
            id="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent"
            labelProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavLabelProvider"
-           name="Camel Context Model Content"
+           name="%navigatorContent.name"
            priority="normal">
         <enablement>
           <or>
@@ -315,7 +315,7 @@
             locationURI="popup:org.fusesource.ide.camel.editor">
          <command
                commandId="org.fusesource.ide.camel.editor.commands.ShowPropertiesView"
-               label="Show Properties view"
+               label="%command.label"
                style="push">
          </command>
       </menuContribution>

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse JMX Commons Plugin
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.commons;singleton:=true
 Bundle-Version: 9.0.0.qualifier
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.fusesource.ide.jmx.commons,
  org.fusesource.ide.jmx.commons.backlogtracermessage,

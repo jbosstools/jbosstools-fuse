@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse Tooling JMX Diagram View Tests
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.diagram.view.tests
 Bundle-Version: 9.0.0.qualifier
-Bundle-Vendor: Red Hat
+Bundle-Vendor: %Bundle-Vendor
 Fragment-Host: org.fusesource.ide.jmx.diagram.view;bundle-version="9.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.assertj.core;bundle-version="2.1.0",

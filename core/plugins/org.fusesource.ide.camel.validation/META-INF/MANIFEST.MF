@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JBoss Fuse Validation
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.camel.validation;singleton:=true
 Bundle-Version: 9.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.camel.validation.CamelValidationActivator
@@ -24,4 +24,4 @@ Export-Package: org.fusesource.ide.camel.validation,
  org.fusesource.ide.camel.validation.diagram,
  org.fusesource.ide.camel.validation.model,
  org.fusesource.ide.camel.validation.xml
-Bundle-Vendor: Red Hat
+Bundle-Vendor: %Bundle-Vendor

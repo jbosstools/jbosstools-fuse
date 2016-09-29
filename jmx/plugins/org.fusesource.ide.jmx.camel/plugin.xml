@@ -13,7 +13,7 @@
       point="org.eclipse.ui.navigator.navigatorContent">
        <navigatorContent
              id="org.fusesource.ide.camel.jmx.content"
-             name="Camel Contexts"
+             name="%navigatorContent.name"
              activeByDefault="true"
              icon="icons/camel.png"
              priority="normal"
@@ -89,21 +89,21 @@
                afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
                category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
-               label="Processors"/>
+               label="%propertyTab.label"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
                category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProfileTab"
-               label="Profile"/>
+               label="%propertyTab.label.0"/>
          <propertyTab
                afterTab="org.jboss.tools.jmx.ui.views.PropertiesTab"
                category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ContentsTab"
-               label="Contents"/>
+               label="%propertyTab.label.1"/>
          <propertyTab
                category="org.jboss.tools.jmx.ui.views"
                id="org.jboss.tools.jmx.ui.views.PropertiesTab"
-               label="Properties"/>
+               label="%propertyTab.label.2"/>
       </propertyTabs>
   </extension>
   <extension
@@ -113,21 +113,21 @@
                afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
                category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ProcessorsTab.server"
-               label="Processors"/>
+               label="%propertyTab.label.3"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
                category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ProfileTab.server"
-               label="Profile"/>
+               label="%propertyTab.label.4"/>
          <propertyTab
                afterTab="org.jboss.tools.jmx.ui.views.PropertiesTab"
                category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ContentsTab.server"
-               label="Contents"/>
+               label="%propertyTab.label.5"/>
          <propertyTab
                category="org.eclipse.wst.server.ui.ServersView"
                id="org.jboss.tools.jmx.ui.views.PropertiesTab.server"
-               label="Properties"/>
+               label="%propertyTab.label.6"/>
       </propertyTabs>
    </extension>
    <extension
