@@ -66,6 +66,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.junit.After;
@@ -113,6 +114,10 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		welcomePage.dispose();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+		
+		if("2.17.0.redhat-630187".equals(camelVersion)){
+			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
+		}
 	}
 
 	@After
@@ -143,6 +148,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		}
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
+		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
