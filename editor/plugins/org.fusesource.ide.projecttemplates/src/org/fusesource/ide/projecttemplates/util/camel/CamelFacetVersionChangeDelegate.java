@@ -37,6 +37,7 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 public class CamelFacetVersionChangeDelegate implements IDelegate {
 
 	private static final String REDHAT_GA_PUBLIC_REPO = "https://maven.repository.redhat.com/ga";
+	private static final String REDHAT_EARLY_ACCESS_PUBLIC_REPO = "https://maven.repository.redhat.com/earlyaccess/all";
 	
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor) throws CoreException {
@@ -83,6 +84,8 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 		
 		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");
 		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");
+		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), REDHAT_EARLY_ACCESS_PUBLIC_REPO, "redhat-early-access-repository");
+		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), REDHAT_EARLY_ACCESS_PUBLIC_REPO, "redhat-early-access-repository");
 		
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))){
 		    MavenPlugin.getMaven().writeModel(m2m, os);
