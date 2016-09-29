@@ -4,7 +4,7 @@ Bundle-Name: JBoss Fuse Tooling for Eclipse
 Bundle-SymbolicName: org.fusesource.ide.tooling
 Bundle-Version: 9.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime,
  org.jboss.tools.usage;resolution:=optional;x-installation:=greedy
 Bundle-ActivationPolicy: lazy
