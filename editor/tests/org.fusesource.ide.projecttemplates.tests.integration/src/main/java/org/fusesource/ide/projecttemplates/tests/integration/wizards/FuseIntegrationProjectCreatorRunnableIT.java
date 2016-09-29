@@ -14,6 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +48,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
@@ -70,6 +76,7 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestWatcher;
@@ -85,6 +92,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
 	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
     public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
+    private static Path settingsFileWithStagingRepo;
 		
     public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
     
@@ -99,6 +107,13 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	boolean isDeploymentOk = false;
 	protected ILaunch launch = null;
 	protected String camelVersion;
+	
+	@BeforeClass
+	public static void setupBeforeClass() throws IOException{
+		InputStream resourceAsStream = FuseIntegrationProjectCreatorRunnableIT.class.getResourceAsStream("/settings.xml");
+		settingsFileWithStagingRepo = Files.createTempFile("settings", "xml");
+		Files.copy(resourceAsStream, settingsFileWithStagingRepo, StandardCopyOption.REPLACE_EXISTING);
+	}
 
 	@Before
 	public void setup() throws Exception {
@@ -332,8 +347,10 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 				super.appendAttributes(basedir, workingCopy, goal);
 				System.out.println("Maven output file path: "+mavenOutputFilePath);
 				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+				if("2.17.0.redhat-630187".equals(camelVersion)){
+					workingCopy.setAttribute(MavenLaunchConstants.ATTR_USER_SETTINGS, settingsFileWithStagingRepo.toAbsolutePath().toString());
+				}
 			}
-			
 		};
 
 		executePomAction.setPostProcessor(new ExecutePomActionPostProcessor() {
