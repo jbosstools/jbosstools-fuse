@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension id="RiderProjectNature" name="JBoss Fuse Nature" point="org.eclipse.core.resources.natures">
+	<extension id="RiderProjectNature" name="%extension.name" point="org.eclipse.core.resources.natures">
     	<runtime>
         	<run class="org.fusesource.ide.project.RiderProjectNature"/>
 		</runtime>
@@ -17,7 +17,7 @@
  
  	<extension
         id="org.fusesource.ide.project.RiderProjectBuilder"
-        name="Fuse Integration Project Builder"
+        name="%extension.name.0"
         point="org.eclipse.core.resources.builders">
     	<builder
         	callOnEmptyDelta="false"
@@ -35,7 +35,7 @@
 	        contentProvider="org.fusesource.ide.project.providers.CamelFilesContentProvider"
 	        icon="icons/camel_project_16x16.png"
 	        labelProvider="org.fusesource.ide.project.providers.CamelFilesLabelProvider"
-	        name="Camel Contexts"
+	        name="%navigatorContent.name"
 	        priority="highest">
 	     	<triggerPoints>
           		<or>
@@ -104,7 +104,7 @@
     <decorator
           class="org.fusesource.ide.project.decorator.CamelProblemDecorator"
           id="org.fusesource.ide.project.decorator.problem.route"
-          label="Camel Problem Decorator"
+          label="%decorator.label"
           lightweight="true"
           location="BOTTOM_LEFT"
           state="true">

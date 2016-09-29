@@ -18,7 +18,7 @@
    <extension
          point="org.eclipse.debug.core.sourceLocators">
       <sourceLocator
-            name="Camel Context Source Lookup Director"
+            name="%sourceLocator.name"
             class="org.fusesource.ide.launcher.debug.launching.CamelSourceLookupDirector"
             id="org.fusesource.ide.launcher.debug.sourceLookupDirector.camel">
       </sourceLocator>
@@ -38,13 +38,13 @@
             class="org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint"
             id="org.fusesource.ide.launcher.debug.camel.endpointBreakpoint"
             markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
-            name="Camel Endpoint Breakpoint">
+            name="%breakpoint.name">
       </breakpoint>
       <breakpoint
             class="org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint"
             id="org.fusesource.ide.launcher.debug.camel.conditionalEndpointBreakpoint"
             markerType="org.fusesource.ide.launcher.debug.camel.conditionalbreakpoint.marker"
-            name="Camel Conditional Breakpoint">
+            name="%breakpoint.name.0">
       </breakpoint>
    </extension>
    

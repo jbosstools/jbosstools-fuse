@@ -173,7 +173,7 @@
            class="org.fusesource.ide.server.fuse.core.runtime.integration.FuseRuntimeDetector"
            enabled="true"
            id="org.fusesource.ide.server.fuse.core.runtime.integration.FuseRuntimeDetection"
-           name="JBoss Fuse">
+           name="%runtimeDetector.name">
      </runtimeDetector>
   </extension>
   

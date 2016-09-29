@@ -13,7 +13,7 @@
       point="org.eclipse.ui.navigator.navigatorContent">
        <navigatorContent
              id="org.fusesource.ide.amq.jmx.content"
-             name="ActiveMQ Brokers"
+             name="%navigatorContent.name"
              activeByDefault="true"
              icon="icons/queue.png"
              priority="normal"

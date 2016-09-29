@@ -13,7 +13,7 @@
       point="org.eclipse.ui.navigator.navigatorContent">
        <navigatorContent
              id="org.fusesource.ide.osgi.jmx.content"
-             name="OSGi Bundles"
+             name="%navigatorContent.name"
              activeByDefault="true"
              icon="icons/bundle.png"
              priority="normal"
@@ -62,7 +62,7 @@
          <propertyTab
                category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.BundlesTab"
-               label="Bundles"/>
+               label="%propertyTab.label"/>
       </propertyTabs>
    </extension>
    <extension
@@ -71,7 +71,7 @@
          <propertyTab
                category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.BundlesTab.server"
-               label="Bundles"/>
+               label="%propertyTab.label.0"/>
       </propertyTabs>
    </extension>
    

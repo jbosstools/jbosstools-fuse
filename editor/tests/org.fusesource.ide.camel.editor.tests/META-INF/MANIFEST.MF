@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse Plugins for Eclipse Camel Editor Plugin Tests
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.camel.editor.tests;singleton:=true
 Bundle-Version: 9.0.0.qualifier
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Fragment-Host: org.fusesource.ide.camel.editor
 Require-Bundle: org.junit,

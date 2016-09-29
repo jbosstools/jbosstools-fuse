@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jboss Fuse Tooling Server Karaf Core Tests
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.karaf.core.tests
 Bundle-Version: 9.0.0.qualifier
 Fragment-Host: org.fusesource.ide.server.karaf.core;bundle-version="9.0.0"
