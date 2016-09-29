@@ -4,5 +4,5 @@ Bundle-Name: Fuse Catalogs Plugin
 Bundle-SymbolicName: org.fusesource.ide.catalogs;singleton:=true
 Bundle-Version: 9.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.wst.xml.core

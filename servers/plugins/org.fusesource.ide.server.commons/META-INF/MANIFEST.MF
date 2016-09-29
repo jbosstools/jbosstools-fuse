@@ -4,7 +4,7 @@ Bundle-Name: Fuse Commons Plugin
 Bundle-SymbolicName: org.fusesource.ide.server.commons;singleton:=true
 Bundle-Version: 9.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Activator: org.fusesource.ide.server.commons.Activator
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.9.0",
