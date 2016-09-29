@@ -300,6 +300,12 @@
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>		
    	</extension>
+    <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer
+             class="org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer">
+       </initializer>
+    </extension>
 
 </plugin>
 
