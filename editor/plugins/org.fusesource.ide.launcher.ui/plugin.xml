@@ -246,17 +246,26 @@
                      <iterate>
                        <and>
                        <or>
-                         <adapt
-                               type="org.eclipse.core.resources.IFile">
-                            <test
-                                  property="org.eclipse.core.resources.contentTypeId"
-                                  value="org.fusesource.ide.camel.editor.camelContentType">
-                            </test>
-                         </adapt>
 						 <and>
 							<instanceof value="org.eclipse.core.resources.IProject" />
           					<test property="org.eclipse.core.resources.projectNature" value="org.fusesource.ide.project.RiderProjectNature" />
 						 </and>
+       <or>
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+             <test
+                   property="org.eclipse.core.resources.contentTypeId"
+                   value="org.fusesource.ide.camel.editor.camelContentType">
+             </test>
+          </adapt>
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+             <test
+                   property="org.eclipse.core.resources.contentTypeId"
+                   value="com.springsource.sts.config.ui.beanConfigFile">
+             </test>
+          </adapt>
+       </or>
                        </or>
                        <test
                              forcePluginActivation="true"

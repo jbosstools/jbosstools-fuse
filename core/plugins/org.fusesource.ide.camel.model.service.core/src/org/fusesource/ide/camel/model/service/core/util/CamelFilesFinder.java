@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +21,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.content.IContentDescription;
+import org.eclipse.core.runtime.content.XMLContentDescriber;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -26,10 +31,13 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.xml.namespace.CamelNamespaceXmlContentDescriber;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 
 public class CamelFilesFinder {
 	
+	private static final String COM_SPRINGSOURCE_STS_CONFIG_UI_BEAN_CONFIG_FILE_CONTENT_TYPE = "com.springsource.sts.config.ui.beanConfigFile"; //$NON-NLS-1$
+
 	/**
 	 * @param resource the resource in which the search occurs
 	 * @return the Set of IFile with Camel Content Type
@@ -89,13 +97,25 @@ public class CamelFilesFinder {
 	 * @throws CoreException
 	 */
 	public boolean isFuseCamelContentType(IFile ifile) throws CoreException {
-		return ifile != null
-				&& ifile.isSynchronized(IResource.DEPTH_ZERO)
-				&& ifile.getContentDescription() != null
-				&& ifile.getContentDescription()
-							.getContentType()
-							.getId()
-							.equals(CamelUtils.FUSE_CAMEL_CONTENT_TYPE);
+		if( ifile != null
+				&& ifile.isSynchronized(IResource.DEPTH_ZERO)){
+			IContentDescription contentDescription = ifile.getContentDescription();
+			if(contentDescription != null){
+				String contentTypeId = contentDescription.getContentType().getId();
+				if(COM_SPRINGSOURCE_STS_CONFIG_UI_BEAN_CONFIG_FILE_CONTENT_TYPE.equals(contentTypeId)){
+					// Should we filter only for known conflicting content types? If not, it might impact performance.
+					try {
+						ByteArrayInputStream markableAndResettableStream = new ByteArrayInputStream(Files.readAllBytes(ifile.getLocation().toFile().toPath()));
+						return XMLContentDescriber.VALID == new CamelNamespaceXmlContentDescriber().describe(markableAndResettableStream, null);
+					} catch (IOException e) {
+						CamelModelServiceCoreActivator.pluginLog().logInfo("Cannot check Content type of "+ ifile.getName(), e); //$NON-NLS-1$
+					}
+				} else {
+					return CamelUtils.FUSE_CAMEL_CONTENT_TYPE.equals(contentTypeId);
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
