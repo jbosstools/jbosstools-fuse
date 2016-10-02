@@ -1,16 +1,16 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Swagger Java</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="swagOSGIcngf.html" title="Configuring OSGi deployments"><link rel="next" href="IDU-Test.html" title="Test"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SwaggerJava"></a>Swagger Java</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167872"></a>Swagger Java Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.16</strong></span></p><p>The Rest DSL can be integrated with the <code class="code">camel-swagger-java</code> module which
+   <title>Swagger Java</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="swagOSGIcngf.html" title="Configuring OSGi deployments"><link rel="next" href="IDU-Test.html" title="Test"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SwaggerJava"></a>Swagger Java</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167813"></a>Swagger Java Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.16</strong></span></p><p>The Rest DSL can be integrated with the <code class="code">camel-swagger-java</code> module which
             is used for exposing the REST services and their APIs using Swagger.</p><p>Maven users will need to add the following dependency to their <code class="code">pom.xml</code>
             for this component:</p><p>From <span class="bold"><strong>Camel 2.16</strong></span> onwards the swagger component is
             purely Java based, and its </p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-swagger-java&lt;/artifactId&gt;
-    &lt;version&gt;2.17.0.redhat-630177&lt;/version&gt;
+    &lt;version&gt;2.17.0.redhat-630187&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><p>The camel-swagger-java module can be used as a Servlet or directly from the REST
             components (without the need for servlet)</p><p> For an example see the <code class="code">camel-example-swagger-cdi</code> in the examples
-            directory of the Apache Camel distribution.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167902"></a>Using Swagger as a Servlet</h2></div></div></div><p>You configure the swagger in the web.xml as shown below:</p><pre class="programlisting">  &lt;servlet&gt;
+            directory of the Apache Camel distribution.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167843"></a>Using Swagger as a Servlet</h2></div></div></div><p>You configure the swagger in the web.xml as shown below:</p><pre class="programlisting">  &lt;servlet&gt;
  
     &lt;servlet-name&gt;SwaggerServlet&lt;/servlet-name&gt;
     &lt;servlet-class&gt;org.apache.camel.swagger.servlet.RestSwaggerServlet&lt;/servlet-class&gt;
@@ -47,7 +47,7 @@
   &lt;servlet-mapping&gt;
     &lt;servlet-name&gt;SwaggerServlet&lt;/servlet-name&gt;
     &lt;url-pattern&gt;/api-docs/*&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167909"></a>Using Swagger in rest-dsl</h2></div></div></div><p>You can enable the swagger api from the rest-dsl by configuring the
+  &lt;/servlet-mapping&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167850"></a>Using Swagger in rest-dsl</h2></div></div></div><p>You can enable the swagger api from the rest-dsl by configuring the
                 <code class="code">apiContextPath</code> dsl as shown below:</p><pre class="programlisting">public class UserRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
@@ -76,11 +76,11 @@
             .get("/findAll").description("Find all users").outTypeList(User.class)
                 .to("bean:userService?method=listUsers");
     }
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167919"></a>Options</h2></div></div></div><p>The swagger module can be configured using the following options. To configure using a
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167860"></a>Options</h2></div></div></div><p>The swagger module can be configured using the following options. To configure using a
             servlet you use the init-param as shown above. When configuring directly in the
             rest-dsl, you use the appropriate method, such as <code class="code">enableCORS</code>,
                 <code class="code">host,contextPath,</code> dsl. The options with <code class="code">api.xxx</code> is
-            configured using <code class="code">apiProperty</code> dsl.</p><table id="d0e167936"><tbody><tr>
+            configured using <code class="code">apiProperty</code> dsl.</p><table id="d0e167877"><tbody><tr>
                     <th>
                         <p>Option</p>
                     </th>
@@ -190,7 +190,7 @@
                     <td>A pattern that allows to filter which CamelContext names is
                         shown in the context listing. The pattern is using regular expression and *
                         as wildcard. Its the same pattern matching as used by Intercep</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168178"></a>CorsFilter</h2></div></div></div><p>If you use the swagger ui to view the REST api then you likely need to enable support
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168119"></a>CorsFilter</h2></div></div></div><p>If you use the swagger ui to view the REST api then you likely need to enable support
             for CORS. This is needed if the swagger ui is hosted and running on another
             hostname/port than the actual REST apis. When doing this the swagger ui needs to be
             allowed to access the REST resources across the origin (CORS). The CorsFilter adds the
@@ -211,14 +211,14 @@
                     CONNECT, PATCH</p></li><li class="listitem"><p>Access-Control-Max-Age = 3600</p></li><li class="listitem"><p>Access-Control-Allow-Headers = Origin, Accept, X-Requested-With, Content-Type,
                     Access-Control-Request-Method, Access-Control-Request-Headers</p></li></ul></div><p>Notice this is a very simple CORS filter. You may need to use a more sophisticated
             filter to set the header values differently for a given client. Or block certain clients
-            etc.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168207"></a>ContextIdListing enabled</h2></div></div></div><p>When contextIdListing is enabled then its detecting all the running CamelContexts in
+            etc.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168148"></a>ContextIdListing enabled</h2></div></div></div><p>When contextIdListing is enabled then its detecting all the running CamelContexts in
             the same JVM. These contexts are listed in the root path, eg `/api-docs` as a simple
             list of names in json format. To access the swagger documentation then the context-path
             must be appended with the Camel context id, such as `api-docs/myCamel`. The option
-            apiContextIdPattern can be used to filter the names in this list.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168212"></a>JSon or Yaml</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.17</strong></span></p><p>The camel-swagger-java module supports both JSon and Yaml out of the box. You can
+            apiContextIdPattern can be used to filter the names in this list.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168153"></a>JSon or Yaml</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.17</strong></span></p><p>The camel-swagger-java module supports both JSon and Yaml out of the box. You can
             specify in the request url what you want returned by using /swagger.json or
             /swagger.yaml for either one. If none is specified then the HTTP Accept header is used
             to detect if json or yaml can be accepted. If either both is accepted or none was set as
-            accepted then json is returned as the default format.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168220"></a>Examples</h2></div></div></div><p>In the Apache Camel distribution we ship the <code class="code">camel-example-swagger-cdi</code>
+            accepted then json is returned as the default format.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168161"></a>Examples</h2></div></div></div><p>In the Apache Camel distribution we ship the <code class="code">camel-example-swagger-cdi</code>
             and <code class="code">camel-example-swagger-java</code> which demonstrates using this Swagger
             component.</p></div></div></body></html>
