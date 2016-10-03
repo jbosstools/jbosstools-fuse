@@ -37,7 +37,10 @@ public class Component {
 	@JsonProperty(required=false)
 	private String alternativeSyntax;
 	@JsonProperty(required=false)
+	private String alternativeSchemes;
+	@JsonProperty(required=false)
 	private String deprecated;
+	private String async;
 	
 	/**
 	 * @return the alternativeSyntax
@@ -280,5 +283,13 @@ public class Component {
 	 */
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getAsync() {
+		return async;
+	}
+
+	public void setAsync(String async) {
+		this.async = async;
 	}
 }

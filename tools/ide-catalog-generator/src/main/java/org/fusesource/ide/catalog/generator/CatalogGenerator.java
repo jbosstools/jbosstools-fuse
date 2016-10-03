@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.fusesource.ide.catalog.generator.model.component.Component;
 import org.fusesource.ide.catalog.generator.model.component.ComponentModel;
 import org.fusesource.ide.catalog.generator.model.component.ComponentParam;
@@ -119,7 +120,7 @@ public class CatalogGenerator {
             }
             out.println("      </tags>");
             if (comp.getTitle() != null) out.println("      <title>" + comp.getTitle() + "</title>");
-            out.println("      <description>" + comp.getDescription() + "</description>");
+            out.println("      <description>" + StringEscapeUtils.escapeXml(comp.getDescription()) + "</description>");
             out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
             out.println("      <class>" + comp.getJavaType() + "</class>");
             out.println("      <kind>" + comp.getKind() + "</kind>");
@@ -167,7 +168,7 @@ public class CatalogGenerator {
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
                 if (p.getDefaultValue() != null) { 
-                	out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                	out.print("defaultValue=\"" + StringEscapeUtils.escapeXml(p.getDefaultValue()) + "\" ");
                 } else {
                 	if (p.getJavaType().equalsIgnoreCase("java.lang.boolean") || 
                 		p.getJavaType().equalsIgnoreCase("boolean")) {
@@ -184,7 +185,7 @@ public class CatalogGenerator {
                 if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
                 if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
                 if (p.getGroup() != null) out.print("group=\"" + p.getGroup() + "\" ");
-                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+                out.println("description=\"" + (p.getDescription() != null ? StringEscapeUtils.escapeXml(p.getDescription()) : "") + "\"/>");
             }           
             out.println("      </uriParameters>");            
             out.println("   </component>");

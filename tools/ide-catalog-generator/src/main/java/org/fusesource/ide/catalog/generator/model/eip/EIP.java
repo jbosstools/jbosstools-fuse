@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.catalog.generator.model.eip;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author lhein
  *
@@ -24,6 +26,17 @@ public class EIP {
     private String label;
     private String input;
     private String output;
+	@JsonProperty(required=false)
+	private String deprecated;
+
+	public String getDeprecated() {
+		return deprecated;
+	}
+
+	public void setDeprecated(String deprecated) {
+		this.deprecated = deprecated;
+	}
+    
 	/**
 	 * @return the kind
 	 */

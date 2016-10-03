@@ -28,6 +28,7 @@ public class LanguageProperty {
 	private String name;
 	@JsonProperty("enum")
 	private String[] choice;
+	private String secret;
 	
 	/**
 	 * @return the choice
@@ -171,5 +172,13 @@ public class LanguageProperty {
 			retVal += c;
 		}
 		return retVal;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 }

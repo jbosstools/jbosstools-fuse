@@ -36,6 +36,7 @@ public class UriParam {
 	private String optionalPrefix;
 	@JsonProperty(required=false)
 	private String multiValue;
+	private String secret;
 
 	/**
 	 * @return the optionalPrefix
@@ -249,5 +250,13 @@ public class UriParam {
 			retVal += c;
 		}
 		return retVal;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 }
