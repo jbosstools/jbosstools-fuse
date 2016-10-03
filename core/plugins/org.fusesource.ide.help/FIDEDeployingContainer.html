@@ -62,14 +62,20 @@
                             Publish</span> results in a full publish. </p></td></tr></table></div></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="verifyPublished"></a>Verifying the project was published to the server</h2></div></div></div><p>After you have published a Fuse project to a server runtime, you can connect to the
             server and check that the project's bundle was installed on it.</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>Connect to the server runtime. For details see <a href="FIDEconnectServer.html#connectServerPanel" class="olink">Connecting to a running server in Servers panel</a>.</p></li><li class="step"><p>In the <span class="guilabel">Servers</span> panel, expand the server runtime tree to
                     expose the <span class="guilabel">Bundles</span> node and select it.</p><p>The tooling populates <span class="guilabel">Properties</span> view with a list of
-                    bundles that are installed on the server:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/UGsrvVerifyPublishedProj.png" width="370.2"></div></div></li><li class="step"><p>To find your project's bundle, either scroll down to the bottom of the list,
-                    or start typing the bundle's symbolic name in <span class="guilabel">Properties</span>
-                    view's <span class="guilabel">Search</span> box.</p><p>The bundle's symbolic name is the combined
-                        <span class="property">groupId.artifactId</span> elements, found in the beginning
-                    lines of the project's <code class="filename">pom.xml</code> file. To open it in the
-                    tooling's XML editor, double-click <code class="filename">pom.xml</code> in
-                        <span class="guilabel">Project Explorer</span>, and then click the
-                        <span class="guilabel">pom.xml</span> tab in the XML editor. </p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e10811"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                    bundles that are installed on the server:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/UGsrvVerifyPublishedProj.png" width="364.8"></div></div></li><li class="step"><p>To find your project's bundle, either scroll down to the bottom of the list,
+                    or start typing the bundle's <span class="guimenuitem">Symbolic Name</span> in
+                        <span class="guilabel">Properties</span> view's <span class="guilabel">Search</span> box. The
+                    bundle's <span class="guimenuitem">Symbolic Name</span> is the name you gave your
+                    project when you created it.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Alternatively, you can issue the <span class="command"><strong>osgi:list</strong></span> command in
+                            <span class="guimenuitem">Terminal</span> view to see a generated list of
+                        bundles installed on the JBoss Fuse server runtime. The tooling uses a
+                        different naming scheme for OSGi bundles displayed by the
+                            <span class="command"><strong>osgi:list</strong></span> command. </p><p>In the <span class="property">&lt;build&gt;</span> section of project's
+                            <code class="filename">pom.xml</code> file, you can find the bundle's symbolic
+                        name and its bundle name (OSGi) listed in the
+                            <code class="literal">maven-bundle-plugin</code> entry; for example:
+                            </p><div class="informalfigure"><a name="bundlenames"></a><div class="mediaobject"><img src="images/ugBundleNamesPomFile.png" width="419.25"></div></div><p>
+                    </p></td></tr></table></div></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e10828"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <span class="phrase"><a class="link" href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.3/html/Tooling_Tutorials/RidertutDeployFESB.html" target="_top">https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.3/html/Tooling_Tutorials/RidertutDeployFESB.html</a></span>
                 
             </td></tr></table></div></div></body></html>
