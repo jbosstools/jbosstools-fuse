@@ -181,6 +181,10 @@ public class CamelModelFactory {
 	 */
 	public static String getLatestCamelVersion() {
 		String latest = null;
+		// make sure we're initialized here
+		if (supportedCamelModels == null || supportedCamelModels.keySet() == null) {
+		    initializeModels();
+		}
 		for (String v : supportedCamelModels.keySet()) {
 			if (latest == null) {
 				latest = v;
