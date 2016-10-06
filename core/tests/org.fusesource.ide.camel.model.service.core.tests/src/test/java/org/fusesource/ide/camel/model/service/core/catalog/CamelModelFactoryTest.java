@@ -27,6 +27,12 @@ public class CamelModelFactoryTest {
 																		 "2.15.1",
 																		 "2.17.0.redhat-630077", 
 																		 "2.17.0.redhat-630159");
+	@Test
+	public void testGetLatestCamelVersion() {
+	    String version = CamelModelFactory.getLatestCamelVersion();
+	    assertThat(version).isNotNull();
+	    assertThat(version).isEqualTo("2.17.3");
+	}
 	
 	@Test
 	public void testQualifierDecrease() {
