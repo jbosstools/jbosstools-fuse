@@ -10,9 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.jmx.camel;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
-
 /**
  * @author Aurelien Pupier
  *
