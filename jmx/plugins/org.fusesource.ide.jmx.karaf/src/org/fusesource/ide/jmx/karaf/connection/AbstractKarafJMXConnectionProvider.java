@@ -162,7 +162,6 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 		return false;
 	}
 
-	@SuppressWarnings(value={"unchecked"})
 	public IConnectionWrapper createConnection(Map map) throws CoreException {
 		throw new CoreException(new Status(IStatus.ERROR, KarafJMXPlugin.PLUGIN_ID, "", null));
 	}
