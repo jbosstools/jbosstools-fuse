@@ -14,7 +14,6 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelEndpointMBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
-import org.fusesource.ide.jmx.camel.navigator.EndpointNode;
 import org.fusesource.ide.jmx.camel.navigator.ProcessorNode;
 import org.fusesource.ide.jmx.camel.navigator.RouteNode;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;

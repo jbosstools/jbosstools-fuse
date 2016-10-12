@@ -51,7 +51,6 @@ import org.eclipse.wst.server.ui.internal.wizard.fragment.LicenseWizardFragment;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.fusesource.ide.server.karaf.core.Activator;
-import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
 @SuppressWarnings("restriction")

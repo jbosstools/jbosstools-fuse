@@ -17,7 +17,6 @@ import java.util.List;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplate;
-import org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Ignore;
 import org.junit.Test;
