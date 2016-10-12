@@ -84,7 +84,7 @@ public class PropertiesUtilsTestIT {
 			}
 		}
 	}
-
+	
 	private CamelEndpoint createCamelEndpoint(String uri) {
 		CamelFile camelFile = new CamelFile(resource);
 		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
@@ -95,12 +95,12 @@ public class PropertiesUtilsTestIT {
 		return endpoint;
 	}
 
-	private IObservableMap modelMap(List<Parameter> params) {
+	private IObservableMap<String, String> modelMap(List<Parameter> params) {
 		Map<String, String> map = new HashMap<String, String>();
 		for (Parameter param : params) {
 			map.put(param.getName(), param.getName());
 		}
-		return new ObservableMap(map);
+		return new ObservableMap<String, String>(map);
 	}
 
 	private static void assertUri(String uri, Component component, Parameter param, String value) {
