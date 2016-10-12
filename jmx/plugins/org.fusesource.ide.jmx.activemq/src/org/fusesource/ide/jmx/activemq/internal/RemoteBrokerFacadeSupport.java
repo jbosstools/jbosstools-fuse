@@ -107,7 +107,6 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
      * @throws javax.management.MalformedObjectNameException
      *
      */
-    @SuppressWarnings("unchecked")
     protected Set<ObjectName> findBrokers(MBeanServerConnection connection)
             throws IOException, MalformedObjectNameException {
         ObjectName name;
@@ -131,7 +130,6 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         throw new IllegalStateException("not supported");
     }
 
-    @SuppressWarnings("unchecked")
     protected <T> Collection<T> getManagedObjects(ObjectName[] names,
                                                   Class<T> type) {
         MBeanServerConnection connection;

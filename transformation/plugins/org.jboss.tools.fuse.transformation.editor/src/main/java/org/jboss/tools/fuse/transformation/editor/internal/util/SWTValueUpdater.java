@@ -44,7 +44,6 @@ public final class SWTValueUpdater implements Listener, IDisposeListener, IValue
      * @param binding the binding to attach to.
      * @return the binding, useful for chaining.
      */
-    @SuppressWarnings("unused")
     public static Binding attach(final Binding binding) {
         new SWTValueUpdater(binding);
         return binding;

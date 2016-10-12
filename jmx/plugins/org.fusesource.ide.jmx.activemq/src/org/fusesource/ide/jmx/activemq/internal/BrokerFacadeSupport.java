@@ -117,7 +117,6 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     protected <T> Collection<T> getManagedObjects(ObjectName[] names, Class<?> type, Class<T> type2) throws Exception {
         List<T> answer = new ArrayList<T>();
         for (int i = 0; i < names.length; i++) {
