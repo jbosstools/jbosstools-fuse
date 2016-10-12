@@ -19,7 +19,6 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)

@@ -14,8 +14,6 @@ package org.fusesource.ide.camel.editor.provider;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
