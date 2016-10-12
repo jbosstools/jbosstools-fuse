@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +39,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 
@@ -97,7 +99,7 @@ public class PropertiesUtils {
 	}
 
 	public static List<Parameter> getPathProperties(AbstractCamelModelElement selectedEP, Component componentModel) {
-		ArrayList<Parameter> result = new ArrayList<Parameter>();
+		List<Parameter> result = new ArrayList<>();
 
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
 			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
@@ -235,7 +237,7 @@ public class PropertiesUtils {
 		// char
 		final String kind = p.getKind();
 		final String uriParameterValue = (String) selectedEP.getParameter("uri");
-		if (kind != null && kind.equalsIgnoreCase("parameter")) {
+		if ("parameter".equalsIgnoreCase(kind)) {
 			int idx = uriParameterValue.indexOf(p.getName() + "=");
 			if (idx != -1) {
 				return uriParameterValue.substring(idx + (p.getName() + "=").length(),
@@ -248,23 +250,52 @@ public class PropertiesUtils {
 			}
 			// and those which are part of the part between the scheme: and the
 			// ? char
-		} else if (kind != null && kind.equalsIgnoreCase("path")) {
+		} else if ("path".equalsIgnoreCase(kind)) {
 			// first get the delimiters
 			String delimiters = getDelimitersAsString(c.getSyntax(), c.getUriParameters());
+			
 			// now get the uri without scheme and options
-			String uri = uriParameterValue.substring(uriParameterValue.indexOf(":") + 1,
-					uriParameterValue.indexOf("?") != -1 ? uriParameterValue.indexOf("?") : uriParameterValue.length());
-
+			String uri = uriParameterValue.substring(uriParameterValue.indexOf(':') + 1,
+					uriParameterValue.lastIndexOf('?') != -1 ? uriParameterValue.lastIndexOf('?') : uriParameterValue.length());
+			
+			String pathParameters = findParameterOfTheUriPath(selectedEP, c, uriParameterValue);
+			
 			// sometimes there is only one field, so there are no delimiters
 			if (delimiters.length() < 1) {
-				// we just return the full uri
-				return uri;
+				if(pathParameters != null){
+					return uri + "?" + pathParameters;
+				} else {
+					return uri;
+				}
 			} else {
 				return getPathMap(selectedEP, c).get(p.getName());
 			}
 		}
 		// all other cases are unsupported atm
 		return null;
+	}
+
+	private static String findParameterOfTheUriPath(AbstractCamelModelElement selectedEP, Component c, final String uriParameterValue) {
+		String pathParameters = null;
+		if(uriParameterValue.lastIndexOf('?') != -1){
+			String parameters = uriParameterValue.substring(uriParameterValue.lastIndexOf('?') +1, uriParameterValue.length());
+			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(CamelModelFactory.getCamelVersion(selectedEP.getCamelFile().getResource().getProject()));
+			try {
+				Map<String, Object> parseQuery = svc.parseQuery(parameters);
+				for (Parameter componentParameter : c.getUriParameters()) {
+					String componentParameterName = componentParameter.getName();
+					if(parseQuery.containsKey(componentParameterName)){
+						parseQuery.remove(componentParameterName);
+					}
+				}
+				if(!parseQuery.isEmpty()){
+					pathParameters = svc.createQuery(parseQuery);
+				}
+			} catch (URISyntaxException e) {
+				CamelModelServiceCoreActivator.pluginLog().logError(e);
+			}
+		}
+		return pathParameters;
 	}
 
 	private static int getFieldIndex(String delimiters, String syntax, String fieldName) {
@@ -324,7 +355,7 @@ public class PropertiesUtils {
 	 * @return
 	 */
 	private static Map<String, String> getPathMap(AbstractCamelModelElement selectedEP, Component c) {
-		HashMap<String, String> retVal = new HashMap<String, String>();
+		Map<String, String> retVal = new HashMap<>();
 
 		// get all path params
 		List<Parameter> pathParams = getPathProperties(selectedEP, c);
@@ -332,15 +363,14 @@ public class PropertiesUtils {
 		final String syntax = c.getSyntax();
 		String delimiters = getDelimitersAsString(syntax, pathParams);
 		// now get the uri without scheme and options
-		String uri = ((String) selectedEP.getParameter("uri")).substring(
-				((String) selectedEP.getParameter("uri")).indexOf(":") + 1,
-				((String) selectedEP.getParameter("uri")).indexOf("?") != -1
-						? ((String) selectedEP.getParameter("uri")).indexOf("?")
-						: ((String) selectedEP.getParameter("uri")).length());
+		String initialURIValue = (String) selectedEP.getParameter("uri");
+		String uri = initialURIValue.substring(
+				initialURIValue.indexOf(':') + 1,
+				initialURIValue.indexOf('?') != -1 ? initialURIValue.indexOf('?') : initialURIValue.length());
 
-		Map<Integer, Parameter> fieldMapping = new HashMap<Integer, Parameter>();
+		Map<Integer, Parameter> fieldMapping = new HashMap<>();
 		for (Parameter param : pathParams) {
-			int idx = getFieldIndex(delimiters, syntax.substring(syntax.indexOf(":") + 1), param.getName());
+			int idx = getFieldIndex(delimiters, syntax.substring(syntax.indexOf(':') + 1), param.getName());
 			fieldMapping.put(idx, param);
 		}
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
 import org.apache.camel.converter.TimePatternConverter;
+import org.apache.camel.util.URISupport;
 import org.fusesource.ide.camel.model.service.core.CamelSchemaProvider;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.adopters.CamelModelLoader;
@@ -181,4 +182,15 @@ public class CamelService implements ICamelManagerService {
 	private URL getLanguageModelURL() {
 		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(LANGUAGES_CATALOG_FILE);
 	}
+
+	@Override
+	public Map<String, Object> parseQuery(String uri) throws URISyntaxException {
+		return URISupport.parseQuery(uri);
+	}
+	
+	@Override
+	public String createQuery(Map<String, Object> parameters) throws URISyntaxException {
+		return URISupport.createQueryString(parameters);
+	}
+	
 }

@@ -131,4 +131,14 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
 	public long durationToMillis(String duration) throws IllegalArgumentException {
 		return checkedGetService().durationToMillis(duration);
 	}
+
+	@Override
+	public Map<String, Object> parseQuery(String uri) throws URISyntaxException{
+		return checkedGetService().parseQuery(uri);
+	}
+
+	@Override
+	public String createQuery(Map<String, Object> parameters) throws URISyntaxException {
+		return checkedGetService().createQuery(parameters);
+	}
 }
