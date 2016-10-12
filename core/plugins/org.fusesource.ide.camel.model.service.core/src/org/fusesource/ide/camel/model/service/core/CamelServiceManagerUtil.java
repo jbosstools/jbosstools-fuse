@@ -49,7 +49,7 @@ public class CamelServiceManagerUtil {
 		try {
 			BundleContext context = CamelModelServiceCoreActivator.getBundleContext();
 			Collection<ServiceReference<ICamelManagerService>> refs = BundleUtils.findServiceReferences(context, ICamelManagerService.class);
-			ArrayList<String> ret = new ArrayList<String>();
+			ArrayList<String> ret = new ArrayList<>();
 			Iterator<ServiceReference<ICamelManagerService>> it = refs.iterator();
 			while(it.hasNext()) {
 				ServiceReference<ICamelManagerService> next = it.next();
@@ -57,7 +57,7 @@ public class CamelServiceManagerUtil {
 				if( !ret.contains(vers))
 					ret.add(vers);
 			}
-			return (String[]) ret.toArray(new String[ret.size()]);
+			return ret.toArray(new String[ret.size()]);
 		} catch(InvalidSyntaxException ise) {
 			throw new CamelManagerException(ise);
 		}

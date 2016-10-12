@@ -109,4 +109,9 @@ public interface ICamelManagerService {
 	 * @throws IllegalArgumentException	if the string is invalid
 	 */
 	long durationToMillis(String duration) throws IllegalArgumentException;
+	
+	Map<String, Object> parseQuery(String uri) throws URISyntaxException;
+
+	String createQuery(Map<String, Object> parameters) throws URISyntaxException;
+		
 }
