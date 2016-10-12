@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMavenConfiguration;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -255,7 +257,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
     private String getModuleVersion(IModule module) throws CoreException {
         IProgressMonitor monitor = new NullProgressMonitor();
         IProject project = module.getProject();
-        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project.getFile(IMavenConstants.POM_FILE_NAME), true, monitor);
         MavenProject mavenProject = facade.getMavenProject(monitor);
         return mavenProject.getVersion();
     }
