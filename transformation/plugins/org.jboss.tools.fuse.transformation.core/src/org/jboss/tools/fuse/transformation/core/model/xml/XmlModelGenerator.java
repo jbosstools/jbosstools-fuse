@@ -142,7 +142,6 @@ public class XmlModelGenerator {
         }
     }
 
-    @SuppressWarnings("resource")
     private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
         final SchemaCompiler sc = XJC.createSchemaCompiler();
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
