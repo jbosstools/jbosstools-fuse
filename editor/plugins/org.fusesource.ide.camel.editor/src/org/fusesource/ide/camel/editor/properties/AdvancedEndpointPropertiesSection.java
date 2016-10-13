@@ -141,18 +141,26 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
         	final Parameter prop = p;
         	
         	// atm we don't want to care about path parameters if thats not the path tab
-        	if (ignorePathProperties && p.getKind() != null && p.getKind().equalsIgnoreCase("path")) continue;
+        	if (ignorePathProperties && "path".equalsIgnoreCase(p.getKind())){
+        		continue;
+        	}
 
         	// we don't display items which don't fit the group
         	if (p.getGroup() != null && p.getGroup().trim().length()>0) {
         		// a group has been explicitely defined, so use it
-        		if (group.equalsIgnoreCase(p.getGroup()) == false && p.getKind().equalsIgnoreCase(GROUP_PATH) == false) continue;
+        		if (group.equalsIgnoreCase(p.getGroup()) == false && p.getKind().equalsIgnoreCase(GROUP_PATH) == false){
+        			continue;
+        		}
         	} else if (prop.getKind().equalsIgnoreCase(GROUP_PATH) && group.equalsIgnoreCase(GROUP_PATH)) {
         		// special handling for path properties - otherwise the else would kick all props of type path
         	} else {
         		// no group defined, fall back to use label
-        		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false) continue;
-        		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false) continue;
+        		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false){
+        			continue;
+        		}
+        		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false){
+        			continue;
+        		}
         	}
             
             ISWTObservableValue uiObservable = null;
