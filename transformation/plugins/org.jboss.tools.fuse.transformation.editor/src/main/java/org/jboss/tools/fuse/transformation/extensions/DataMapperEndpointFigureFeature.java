@@ -13,45 +13,21 @@ package org.jboss.tools.fuse.transformation.extensions;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 import org.w3c.dom.Node;
 
 public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature {
 
-	private List<Dependency> requiredDependencies;
-
     public DataMapperEndpointFigureFeature(IFeatureProvider fp, String name, String description, List<Dependency> deps) {
         super(fp, name, description, null, deps);
-        this.requiredDependencies = deps;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.graphiti.func.ICreate#create(org.eclipse.graphiti.features.context.ICreateContext)
-     */
-    @Override
-    public Object[] create(ICreateContext context) {
-    	if (requiredDependencies != null && !requiredDependencies.isEmpty()) {
-			// add maven dependency to pom.xml if needed
-	        try {
-	            updateMavenDependencies(requiredDependencies);
-	        } catch (CoreException ex) {
-	            Activator.log(Status.ERROR, "Unable to add the component dependency to the project maven configuration file.\n" + ex.getMessage()); //$NON-NLS-1$
-	        }
-		}
-		return super.create(context);
     }
 
     /* (non-Javadoc)
