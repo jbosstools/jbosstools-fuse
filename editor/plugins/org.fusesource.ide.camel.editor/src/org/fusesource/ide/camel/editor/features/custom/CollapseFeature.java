@@ -90,9 +90,9 @@ public class CollapseFeature extends AbstractCustomFeature {
 	 	   	if(bo instanceof AbstractCamelModelElement) {
 	 	   		AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
 	 	   		collapseShape(pes[0]);
-//	 	   		if (cme.getInputElement() != null || cme.getOutputElement() != null || (!(cme.getParent() instanceof CamelRouteElement)) && !(cme.getParent() instanceof CamelContextElement)) {
-//	 	   			((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).autoLayoutRoute();
-//	 	   		}
+	 	   		if (cme.getInputElement() != null || cme.getOutputElement() != null || (!(cme.getParent() instanceof CamelRouteElement)) && !(cme.getParent() instanceof CamelContextElement)) {
+	 	   			((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).autoLayoutRoute(cme.getRoute());
+	 	   		}
 	 	   	}
 		}
 		getDiagramBehavior().getDiagramContainer().selectPictogramElements(pes);

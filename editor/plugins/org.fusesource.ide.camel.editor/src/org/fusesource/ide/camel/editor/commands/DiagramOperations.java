@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author lhein
@@ -33,6 +34,10 @@ public class DiagramOperations {
 
 	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor) {
 		return layoutDiagram(designEditor, false);
+	}
+	
+	public static LayoutCommand layoutRoute(CamelDesignEditor designEditor, CamelRouteElement route) {
+		return layoutDiagram(designEditor, false, route);
 	}
 	
 	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor, boolean modelChanged) {
@@ -44,6 +49,20 @@ public class DiagramOperations {
 				designEditor.getFeatureProvider(),
 				designEditor.getDiagramTypeProvider().getDiagram(),
 				designEditor.getModel().getCamelContext(),
+				editingDomain);
+		execute(editingDomain, operation, modelChanged);
+		return operation;
+	}
+	
+	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor, boolean modelChanged, CamelRouteElement route) {
+		if (designEditor == null){
+			return null;
+		}
+		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+		LayoutCommand operation = new LayoutCommand(
+				designEditor.getFeatureProvider(),
+				designEditor.getDiagramTypeProvider().getDiagram(),
+				route,
 				editingDomain);
 		execute(editingDomain, operation, modelChanged);
 		return operation;

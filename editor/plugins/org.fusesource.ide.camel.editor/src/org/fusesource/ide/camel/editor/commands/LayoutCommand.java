@@ -22,6 +22,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 
@@ -44,7 +45,9 @@ public class LayoutCommand extends RecordingCommand {
 	@Override
 	protected void doExecute() {
 		layout(featureProvider, container);
-		layout(featureProvider, diagram);						
+		if (container instanceof CamelContextElement) {
+			layout(featureProvider, diagram);
+		}
 	}
 	
 	private void layout(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
@@ -60,10 +63,10 @@ public class LayoutCommand extends RecordingCommand {
 	}
 	
 	private void layout(IFeatureProvider featureProvider, PictogramElement pe) {
-//		if ("true".equals(Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE))) {
-//			// do not layout collapsed figures
-//			return;
-//		}
+		if ("true".equals(Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE))) {
+			// do not layout collapsed figures
+			return;
+		}
 		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
 		ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
 		for (ICustomFeature cf : cfs) {

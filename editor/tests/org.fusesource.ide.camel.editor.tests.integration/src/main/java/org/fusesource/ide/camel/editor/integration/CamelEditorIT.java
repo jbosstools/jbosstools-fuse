@@ -63,6 +63,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.After;
 import org.junit.Before;
@@ -85,6 +86,7 @@ public class CamelEditorIT {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		welcomePage.dispose();
+		page.closeAllEditors(false);
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
@@ -616,7 +618,32 @@ public class CamelEditorIT {
 		assertThat(otherwiseRightBoundary).isLessThan(choiceRightBoundary);
 	}		
 	
-	
+	@Test
+	public void collapsedOtherwiseStaysSmallInChoice() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		
+		CamelRouteElement route3 = (CamelRouteElement)model.findNode("jms-cbr-route");
+		
+		AbstractCamelModelElement otherwiseInRoute3 = route3.findNode("OtherCustomer");
+		PictogramElement otherwiseInRoute3PE = fp.getPictogramElementForBusinessObject(otherwiseInRoute3);
+		
+		// first collapse otherwise 
+		collapseExpand(fp, otherwiseInRoute3PE);
+		readAndDispatch(0);
+		
+		// then we check if the otherwise has small height
+		int otherwiseCollapsedHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(otherwiseInRoute3PE, CollapseFeature.PROP_COLLAPSED_HEIGHT));
+		assertThat(otherwiseInRoute3PE.getGraphicsAlgorithm().getHeight()).isEqualTo(otherwiseCollapsedHeight);
+	}	
 	
 	
 	
