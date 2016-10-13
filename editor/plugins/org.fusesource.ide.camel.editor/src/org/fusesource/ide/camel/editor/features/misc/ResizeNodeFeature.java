@@ -16,6 +16,7 @@ import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.impl.DefaultResizeShapeFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Image;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
@@ -57,6 +58,7 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 	@Override
 	public void resizeShape(IResizeShapeContext context) {
 		Shape shape = context.getShape();
+		//PictogramElement pe = (PictogramElement)shape;
 		int x = context.getX();
 		int y = context.getY();
 		int w = context.getWidth(); // -1

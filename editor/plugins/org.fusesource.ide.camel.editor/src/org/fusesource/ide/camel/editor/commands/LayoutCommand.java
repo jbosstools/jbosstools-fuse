@@ -18,6 +18,8 @@ import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.services.Graphiti;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
@@ -42,7 +44,7 @@ public class LayoutCommand extends RecordingCommand {
 	@Override
 	protected void doExecute() {
 		layout(featureProvider, container);
-		layout(featureProvider, diagram);
+		layout(featureProvider, diagram);						
 	}
 	
 	private void layout(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
@@ -52,12 +54,16 @@ public class LayoutCommand extends RecordingCommand {
 		for (AbstractCamelModelElement cme : container.getChildElements()) {
 			layout(featureProvider, cme);
 		}
-		if (container instanceof CamelRouteElement || container.getUnderlyingMetaModelObject() != null && container.getUnderlyingMetaModelObject().canHaveChildren()) {
+		if (container instanceof CamelRouteElement || (container.getUnderlyingMetaModelObject() != null && container.getUnderlyingMetaModelObject().canHaveChildren())) {
 			layout(featureProvider, featureProvider.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(container));
 		}
 	}
 	
 	private void layout(IFeatureProvider featureProvider, PictogramElement pe) {
+//		if ("true".equals(Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE))) {
+//			// do not layout collapsed figures
+//			return;
+//		}
 		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
 		ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
 		for (ICustomFeature cf : cfs) {

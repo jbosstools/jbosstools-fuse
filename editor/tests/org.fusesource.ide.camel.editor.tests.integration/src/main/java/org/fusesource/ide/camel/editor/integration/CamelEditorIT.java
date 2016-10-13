@@ -19,10 +19,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.datatypes.ILocation;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.impl.CreateContext;
+import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
+import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.internal.command.CommandExec;
 import org.eclipse.graphiti.internal.command.GenericFeatureCommandWithContext;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
@@ -31,6 +35,8 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.mm.pictograms.Shape;
+import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.util.StatusHandler;
@@ -47,6 +53,7 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
@@ -513,6 +520,125 @@ public class CamelEditorIT {
 
 		// now check if the reconnect is possible - it should be
 		assertThat(ReconnectNodesFeature.canElementsConnect(logger, bean)).isTrue();
+	}
+	
+	@Test
+	public void collapsedRoutesStaySmallWhenCollapseExpandChoiceInOtherRoute() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		
+		AbstractCamelModelElement route1 = model.findNode("generate-order");
+		PictogramElement route1PE = fp.getPictogramElementForBusinessObject(route1);
+		
+		AbstractCamelModelElement route2 = model.findNode("file-to-jms-route");
+		PictogramElement route2PE = fp.getPictogramElementForBusinessObject(route2);
+		
+		AbstractCamelModelElement route3 = model.findNode("jms-cbr-route");
+		
+		AbstractCamelModelElement choiceInRoute3 = route3.findNode("countrySelection");
+		PictogramElement choiceInRoute3PE = fp.getPictogramElementForBusinessObject(choiceInRoute3);
+		
+		// first collapse routes 1 & 2
+		collapseExpand(fp, route1PE);
+		readAndDispatch(0);
+		collapseExpand(fp, route2PE);
+		readAndDispatch(0);
+		
+		// then we collapse and expand choice in route 3
+		collapseExpand(fp, choiceInRoute3PE);
+		readAndDispatch(0);
+		collapseExpand(fp, choiceInRoute3PE);
+		readAndDispatch(0);
+		
+		// then we check if the routes 1 & 2 still have minimum height
+		assertThat(route1PE.getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
+		assertThat(route2PE.getGraphicsAlgorithm().getHeight()).isEqualTo(FigureUIFactory.IMAGE_DEFAULT_HEIGHT);
+
+		// then expand the routes again
+		collapseExpand(fp, route1PE);
+		readAndDispatch(0);
+		collapseExpand(fp, route2PE);
+		readAndDispatch(0);
+		
+		// then we check if the routes 1 & 2 have more than minimum height
+		int route1OriginalHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(route1PE, CollapseFeature.PROP_EXPANDED_HEIGHT));
+		assertThat(route1PE.getGraphicsAlgorithm().getHeight()).isEqualTo(route1OriginalHeight);
+		int route2OriginalHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(route2PE, CollapseFeature.PROP_EXPANDED_HEIGHT));
+		assertThat(route2PE.getGraphicsAlgorithm().getHeight()).isEqualTo(route2OriginalHeight);
+	}
+	
+	@Test
+	public void collapsedAndExpandedOtherwiseStaysInChoiceBounds() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		
+		AbstractCamelModelElement route3 = model.findNode("jms-cbr-route");
+		
+		AbstractCamelModelElement choiceInRoute3 = route3.findNode("countrySelection");
+		PictogramElement choiceInRoute3PE = fp.getPictogramElementForBusinessObject(choiceInRoute3);
+		
+		AbstractCamelModelElement otherwiseInRoute3 = route3.findNode("OtherCustomer");
+		PictogramElement otherwiseInRoute3PE = fp.getPictogramElementForBusinessObject(otherwiseInRoute3);
+		
+		// first collapse otherwise and then choice
+		collapseExpand(fp, otherwiseInRoute3PE);
+		readAndDispatch(0);
+		collapseExpand(fp, choiceInRoute3PE);
+		readAndDispatch(0);
+		
+		// then expand the choice and then the otherwise
+		collapseExpand(fp, choiceInRoute3PE);
+		readAndDispatch(0);
+		collapseExpand(fp, otherwiseInRoute3PE);
+		readAndDispatch(0);
+		
+		// then we check if the otherwise width exceeds the bounds of the choice
+		ILocation locChoice = Graphiti.getPeLayoutService().getLocationRelativeToDiagram((Shape)choiceInRoute3PE);
+		ILocation locOtherw = Graphiti.getPeLayoutService().getLocationRelativeToDiagram((Shape)otherwiseInRoute3PE);
+		int choiceRightBoundary = locChoice.getX() + choiceInRoute3PE.getGraphicsAlgorithm().getWidth();
+		int otherwiseRightBoundary = locOtherw.getX() + otherwiseInRoute3PE.getGraphicsAlgorithm().getWidth();
+		assertThat(otherwiseRightBoundary).isLessThan(choiceRightBoundary);
+	}		
+	
+	
+	
+	
+	
+	private void collapseExpand(IFeatureProvider fp, PictogramElement pe) {
+		CustomContext cc = new CustomContext(new PictogramElement[] {pe});
+		CollapseFeature cf = getCollapseFeature(fp, cc);
+		if (cf != null && cf.canExecute(cc)) {
+			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
+			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(cf, cc), editingDomain);
+		}
+	}
+	
+	private CollapseFeature getCollapseFeature(IFeatureProvider fp, ICustomContext cc) {
+		ICustomFeature[] features = fp.getCustomFeatures(cc);
+		CollapseFeature cf = null;
+		for (ICustomFeature custF : features) {
+			if (custF instanceof CollapseFeature) {
+				cf = (CollapseFeature)custF;
+				break;
+			}
+		}
+		return cf;
 	}
 	
 	private Connection findConnection(IFeatureProvider fp, EList<Connection> connections, AbstractCamelModelElement source, AbstractCamelModelElement target) {
