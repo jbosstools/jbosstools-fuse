@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.model.service.core.util;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,10 +82,10 @@ public class PropertiesUtils {
 	}
 
 	public static List<Parameter> getPathProperties(AbstractCamelModelElement selectedEP) {
-		ArrayList<Parameter> result = new ArrayList<Parameter>();
+		ArrayList<Parameter> result = new ArrayList<>();
 
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -101,14 +100,12 @@ public class PropertiesUtils {
 	public static List<Parameter> getPathProperties(AbstractCamelModelElement selectedEP, Component componentModel) {
 		List<Parameter> result = new ArrayList<>();
 
-		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+		if (selectedEP != null && selectedEP.getParameter("uri") != null && componentModel != null) {
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
-				if (componentModel != null) {
-					for (Parameter p : componentModel.getUriParameters()) {
-						if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
-							result.add(p);
-						}
+				for (Parameter p : componentModel.getUriParameters()) {
+					if ("path".equalsIgnoreCase(p.getKind())) {
+						result.add(p);
 					}
 				}
 			}
@@ -320,23 +317,12 @@ public class PropertiesUtils {
 	 */
 	private static String getDelimitersAsString(String syntax, List<Parameter> params) {
 		String delimiterString = syntax;
-		final String syntaxWithoutScheme = delimiterString.substring(delimiterString.indexOf(":") + 1);
+		final String syntaxWithoutScheme = delimiterString.substring(delimiterString.indexOf(':') + 1);
 
 		// first strip off the <scheme>:
 		delimiterString = syntaxWithoutScheme;
 
-		Collections.sort(params, new Comparator<Parameter>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 * java.lang.Object)
-			 */
-			@Override
-			public int compare(Parameter o1, Parameter o2) {
-				return o2.getName().length() - o1.getName().length();
-			}
-		});
+		Collections.sort(params, (o1, o2) -> o2.getName().length() - o1.getName().length());
 
 		// then strip off the remaining variable names
 		for (Parameter p : params) {
@@ -378,13 +364,11 @@ public class PropertiesUtils {
 		int skippedDelimiters = 0;
 		for (int field = 0; field < delimiters.length() + 1; field++) {
 			Parameter uriParam = fieldMapping.get(field);
-			boolean required = uriParam.getRequired() != null && uriParam.getRequired().equalsIgnoreCase("true");
-			if (skippedDelimiters > 0) {
-				if (!required) {
-					retVal.put(uriParam.getName(), null);
-					skippedDelimiters--;
-					continue;
-				}
+			boolean required = "true".equalsIgnoreCase(uriParam.getRequired());
+			if (skippedDelimiters > 0 && !required){
+				retVal.put(uriParam.getName(), null);
+				skippedDelimiters--;
+				continue;
 			}
 			int foundPos = -1;
 			for (int delIdx = field + skippedDelimiters; delIdx < delimiters.length(); delIdx++) {
@@ -403,8 +387,6 @@ public class PropertiesUtils {
 			} else {
 				// no delimiters found, so we have only one value
 				String v = uri.substring(lastPos);
-				if (delimiters.endsWith("/") && field == delimiters.length())
-					v = "/" + v;
 				String fieldName = null;
 				while (fieldName == null && uriParam != null) {
 					// this check is required if we start with an optional field
@@ -539,11 +521,10 @@ public class PropertiesUtils {
 	 *            current model map
 	 * @return
 	 */
-	public static String updatePathParams(String syntax, Parameter param, Object value, List<Parameter> pathParams,
-			Map modelMap) {
-		String withoutScheme = syntax.substring(syntax.indexOf(":") + 1);
+	public static String updatePathParams(String syntax, Parameter param, Object value, List<Parameter> pathParams, Map<?,?> modelMap) {
+		String withoutScheme = syntax.substring(syntax.indexOf(':') + 1);
 		for (Parameter pparam : pathParams) {
-			String val = "";
+			String val;
 			if (param.getName().equals(pparam.getName())) {
 				val = value.toString();
 			} else {
@@ -551,8 +532,6 @@ public class PropertiesUtils {
 			}
 			if (val.trim().length() < 1)
 				val = pparam.getDefaultValue();
-			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam))
-				val = val.substring(1);
 
 			if (val != null) {
 				// sap components have some parameters with the same prefix (see
@@ -566,7 +545,7 @@ public class PropertiesUtils {
 				}
 			}
 		}
-		return String.format("%s:%s", syntax.substring(0, syntax.indexOf(":")), withoutScheme);
+		return String.format("%s:%s", syntax.substring(0, syntax.indexOf(':')), withoutScheme);
 	}
 
 	/**
