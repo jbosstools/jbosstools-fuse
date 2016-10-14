@@ -37,6 +37,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2XsdOptions;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
+import org.jboss.tools.fuse.transformation.core.internal.DataTransformationCoreActivator;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -147,6 +148,28 @@ public class XmlModelGenerator {
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
         final InputSource is = new InputSource(schemaStream);
         is.setSystemId(schemaFile.toURI().toString());
+        sc.setErrorListener(new ErrorListener() {
+			
+			@Override
+			public void warning(SAXParseException arg0) {
+				DataTransformationCoreActivator.pluginLog().logWarning(arg0);
+			}
+			
+			@Override
+			public void info(SAXParseException arg0) {
+				DataTransformationCoreActivator.pluginLog().logInfo("Info while parsing the xsd", arg0);
+			}
+			
+			@Override
+			public void fatalError(SAXParseException arg0) {
+				DataTransformationCoreActivator.pluginLog().logError(arg0);
+			}
+			
+			@Override
+			public void error(SAXParseException arg0) {
+				DataTransformationCoreActivator.pluginLog().logError(arg0);
+			}
+		});
         sc.parseSchema(is);
         return sc;
     }
@@ -403,16 +426,19 @@ public class XmlModelGenerator {
      * @throws Exception
      */
     public List<QName> getElementsFromSchema(final File schemaFile) throws Exception {
+    	final String initialValueAccessExternalSchema = System.getProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
+		System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all"); //$NON-NLS-1$
         List<QName> elements = new LinkedList<>();
         SchemaCompiler sc = createSchemaCompiler(schemaFile);
         final S2JJAXBModel s2 = sc.bind();
         if (s2 == null) {
+        	setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
             throw new Exception("Failed to parse schema into JAXB Model"); //$NON-NLS-1$
         }
         for (Mapping mapping : s2.getMappings()) {
             elements.add(mapping.getElement());
         }
-
+        setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
         return elements;
     }
 
