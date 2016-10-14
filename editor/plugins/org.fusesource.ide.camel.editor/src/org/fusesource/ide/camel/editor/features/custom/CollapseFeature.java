@@ -27,8 +27,6 @@ import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author lhein
@@ -88,13 +86,10 @@ public class CollapseFeature extends AbstractCustomFeature {
 		if (pes != null && pes.length == 1) {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 	 	   	if(bo instanceof AbstractCamelModelElement) {
-	 	   		AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
 	 	   		collapseShape(pes[0]);
-	 	   		if (cme.getInputElement() != null || cme.getOutputElement() != null || (!(cme.getParent() instanceof CamelRouteElement)) && !(cme.getParent() instanceof CamelContextElement)) {
-	 	   			((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).autoLayoutRoute(cme.getRoute());
-	 	   		}
-	 	   	}
+ 	 	   	}
 		}
+		((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).autoLayoutRoute();
 		getDiagramBehavior().getDiagramContainer().selectPictogramElements(pes);
 	}
 	
@@ -216,5 +211,18 @@ public class CollapseFeature extends AbstractCustomFeature {
 				}
 			}
 		}
+	}
+	
+	public static boolean isCollapsed(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
+		PictogramElement pe = featureProvider.getPictogramElementForBusinessObject(container);
+		return isCollapsed(pe);
+	}
+	
+	public static boolean isCollapsed(PictogramElement pe) {
+		if (pe != null) {
+			return Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE) != null && 
+				   Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE).equals("true");
+		}
+		return false;
 	}
 }

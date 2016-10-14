@@ -90,7 +90,7 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 				ga.setWidth(w-FigureUIFactory.BORDER_SIZE*3);
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT) != null) {
 					int origHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT));
-					ga.setHeight(h - origHeight - FigureUIFactory.BORDER_SIZE);
+					ga.setHeight(h - origHeight); // - FigureUIFactory.BORDER_SIZE
 				}
 			} else {
 				ga.setWidth(w);

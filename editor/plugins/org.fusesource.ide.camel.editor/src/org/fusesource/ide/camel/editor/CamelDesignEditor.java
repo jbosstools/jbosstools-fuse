@@ -79,7 +79,6 @@ import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
@@ -751,20 +750,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			}
 		});		
 	}
-	
-	public void autoLayoutRoute(CamelRouteElement route) {
-		Display.getCurrent().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				DiagramOperations.layoutRoute(CamelDesignEditor.this, route);	
-			}
-		});
-	}
-	
+
 	/**
 	 * changes the grid visibility
 	 */

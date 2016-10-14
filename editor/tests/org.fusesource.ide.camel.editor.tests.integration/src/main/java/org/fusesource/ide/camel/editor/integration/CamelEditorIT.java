@@ -578,7 +578,7 @@ public class CamelEditorIT {
 	}
 	
 	@Test
-	public void collapsedAndExpandedOtherwiseStaysInChoiceBounds() throws Exception {
+	public void collapsedAndExpandedOtherwiseAndChoiceStaysInParentBounds() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
@@ -591,6 +591,7 @@ public class CamelEditorIT {
 		CamelFile model = ed.getModel();
 		
 		AbstractCamelModelElement route3 = model.findNode("jms-cbr-route");
+		PictogramElement route3PE = fp.getPictogramElementForBusinessObject(route3);
 		
 		AbstractCamelModelElement choiceInRoute3 = route3.findNode("countrySelection");
 		PictogramElement choiceInRoute3PE = fp.getPictogramElementForBusinessObject(choiceInRoute3);
@@ -616,6 +617,13 @@ public class CamelEditorIT {
 		int choiceRightBoundary = locChoice.getX() + choiceInRoute3PE.getGraphicsAlgorithm().getWidth();
 		int otherwiseRightBoundary = locOtherw.getX() + otherwiseInRoute3PE.getGraphicsAlgorithm().getWidth();
 		assertThat(otherwiseRightBoundary).isLessThan(choiceRightBoundary);
+		
+		// then we check if the choice width exceeds the bounds of the route
+		ILocation locRoute = Graphiti.getPeLayoutService().getLocationRelativeToDiagram((Shape)route3PE);
+		locChoice = Graphiti.getPeLayoutService().getLocationRelativeToDiagram((Shape)choiceInRoute3PE);
+		int routeRightBoundary = locRoute.getX() + route3PE.getGraphicsAlgorithm().getWidth();
+		choiceRightBoundary = locChoice.getX() + choiceInRoute3PE.getGraphicsAlgorithm().getWidth();
+		assertThat(choiceRightBoundary).isLessThan(routeRightBoundary);
 	}		
 	
 	@Test
@@ -645,7 +653,50 @@ public class CamelEditorIT {
 		assertThat(otherwiseInRoute3PE.getGraphicsAlgorithm().getHeight()).isEqualTo(otherwiseCollapsedHeight);
 	}	
 	
-	
+	@Test
+	public void collapsedAndRestoredChoiceWithCollapsedOtherwiseKeepsOtherwiseSmall() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		assertThat(openEditorOnFileStore).isNotNull();
+		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
+		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+		
+		readAndDispatch(20);
+		
+		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
+		IFeatureProvider fp = ed.getFeatureProvider();
+		CamelFile model = ed.getModel();
+		
+		CamelRouteElement route3 = (CamelRouteElement)model.findNode("jms-cbr-route");
+		PictogramElement route3PE = fp.getPictogramElementForBusinessObject(route3);
+		
+		AbstractCamelModelElement choiceInRoute3 = route3.findNode("countrySelection");
+		PictogramElement choiceInRoute3PE = fp.getPictogramElementForBusinessObject(choiceInRoute3);
+		
+		AbstractCamelModelElement otherwiseInRoute3 = route3.findNode("OtherCustomer");
+		PictogramElement otherwiseInRoute3PE = fp.getPictogramElementForBusinessObject(otherwiseInRoute3);
+		
+		// first collapse otherwise, then choice, then route3 
+		collapseExpand(fp, otherwiseInRoute3PE);
+		collapseExpand(fp, choiceInRoute3PE);
+		collapseExpand(fp, route3PE);
+		readAndDispatch(0);
+		
+		// now expand route
+		collapseExpand(fp, route3PE);
+		readAndDispatch(0);
+		
+		// now check if choice has still collapsed height
+		int choiceCollapsedHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(choiceInRoute3PE, CollapseFeature.PROP_COLLAPSED_HEIGHT));
+		assertThat(choiceInRoute3PE.getGraphicsAlgorithm().getHeight()).isEqualTo(choiceCollapsedHeight);		
+		
+		// now expand choice
+		collapseExpand(fp, choiceInRoute3PE);
+		readAndDispatch(0);
+		
+		// then we check if the otherwise has small height
+		int otherwiseCollapsedHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(otherwiseInRoute3PE, CollapseFeature.PROP_COLLAPSED_HEIGHT));
+		assertThat(otherwiseInRoute3PE.getGraphicsAlgorithm().getHeight()).isEqualTo(otherwiseCollapsedHeight);
+	}	
 	
 	private void collapseExpand(IFeatureProvider fp, PictogramElement pe) {
 		CustomContext cc = new CustomContext(new PictogramElement[] {pe});
