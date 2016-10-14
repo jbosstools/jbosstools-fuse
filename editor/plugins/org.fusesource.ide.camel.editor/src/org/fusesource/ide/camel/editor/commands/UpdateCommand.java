@@ -15,11 +15,10 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 
 /**
  * @author lhein
@@ -50,7 +49,6 @@ public class UpdateCommand extends RecordingCommand {
 
 		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-//			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
 			return;
 		}
 		
@@ -60,7 +58,7 @@ public class UpdateCommand extends RecordingCommand {
 			designEditor.getFeatureProvider().link(pe, bo2);
 		}
 		
-		if ("true".equals(Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE))) {
+		if (CollapseFeature.isCollapsed(pe)) {
 			// do not layout collapsed figures
 			return;
 		}
