@@ -19,13 +19,18 @@ import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.impl.ResizeShapeContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.algorithms.Ellipse;
+import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
+import org.eclipse.graphiti.mm.algorithms.styles.Color;
+import org.eclipse.graphiti.mm.algorithms.styles.LineStyle;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.graphiti.services.IGaService;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -150,6 +155,8 @@ public class CollapseFeature extends AbstractCustomFeature {
 		
 		//visible/invisible all the children
 		makeChildrenInvisible(cs, childFiguresVisible);
+		//set the border to reflect collapse state
+		updateBorderStyle(cs, !childFiguresVisible);
 		
 		ResizeShapeContext context1 = new ResizeShapeContext(cs);
 		context1.setSize(changeWidth, changeHeight);
@@ -160,6 +167,20 @@ public class CollapseFeature extends AbstractCustomFeature {
 		}
 	}
 
+	/**
+	 * updates the border color to reflect the collapse state of the figure
+	 * 
+	 * @param cs
+	 * @param collapsed
+	 */
+	public void updateBorderStyle(ContainerShape cs, boolean collapsed) {
+		IGaService gaService = Graphiti.getGaService();
+		Color col = collapsed ? gaService.manageColor(getDiagram(), StyleUtil.CONTAINER_FIGURE_COLLAPSED_BORDER_COLOR) : gaService.manageColor(getDiagram(), StyleUtil.CONTAINER_FIGURE_BORDER_COLOR); 
+		GraphicsAlgorithm ga = cs.getGraphicsAlgorithm();
+		ga.setLineStyle(collapsed ? LineStyle.DOT : LineStyle.SOLID);
+		ga.setForeground(col);
+	}
+	
 	/**
 	 * Recursive function that makes all the children inside a shape visible/invisible
 	 *

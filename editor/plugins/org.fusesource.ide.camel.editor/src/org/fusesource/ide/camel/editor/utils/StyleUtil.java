@@ -41,6 +41,7 @@ public class StyleUtil {
 	public static final IColorConstant CONTAINER_FIGURE_BACKGROUND_COLOR = getColorConstant("229,248,255");
 	public static final IColorConstant CONTAINER_FIGURE_TEXT_COLOR = getColorConstant("54,54,54");
 	public static final IColorConstant CONTAINER_FIGURE_BORDER_COLOR = getColorConstant("107,159,218");
+	public static final IColorConstant CONTAINER_FIGURE_COLLAPSED_BORDER_COLOR = getColorConstant("22,22,22");
 	public static final IColorConstant FROM_FIGURE_BACKGROUND_COLOR = getColorConstant("200,235,121"); //158,224,189
 	public static final IColorConstant TO_FIGURE_BACKGROUND_COLOR = getColorConstant("206,190,225"); 
 	public static final IColorConstant EIP_FIGURE_BACKGROUND_COLOR = getColorConstant("240,171,0"); 
