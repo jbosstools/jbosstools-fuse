@@ -213,15 +213,27 @@ public class CollapseFeature extends AbstractCustomFeature {
 		}
 	}
 	
+	/**
+	 * returns whether the figure is collapsed or not
+	 * 
+	 * @param featureProvider	the feature provider
+	 * @param container			the container model element
+	 * @return		true if collapsed otherwise false
+	 */
 	public static boolean isCollapsed(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
 		PictogramElement pe = featureProvider.getPictogramElementForBusinessObject(container);
 		return isCollapsed(pe);
 	}
 	
+	/**
+	 * returns whether the figure is collapsed or not
+	 * 
+	 * @param pe	the diagram figure
+	 * @return		true if collapsed otherwise false
+	 */
 	public static boolean isCollapsed(PictogramElement pe) {
 		if (pe != null) {
-			return Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE) != null && 
-				   Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE).equals("true");
+			return "true".equals(Graphiti.getPeService().getPropertyValue(pe, CollapseFeature.PROP_COLLAPSED_STATE));
 		}
 		return false;
 	}

@@ -33,6 +33,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
@@ -156,6 +157,11 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		
 		AbstractCamelModelElement containerNode = containerBO instanceof AbstractCamelModelElement ? (AbstractCamelModelElement)containerBO : null;
 	
+		if (CollapseFeature.isCollapsed(getFeatureProvider(), containerNode)) {
+    		// we don't allow drop on a collapsed figure
+    		return false;
+    	}
+		
 		// special handling for creating on choices (only one otherwise allowed)
 		if (containerNode != null && 
 			AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(containerNode.getNodeTypeId())) {
