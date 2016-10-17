@@ -250,6 +250,7 @@ public final class CamelComponentUtils {
 				if (isJarFile(cpEntryFile)) {
 					zf = new ZipFile(cpEntryFile);
 					ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
+					System.out.println("Scheme: "+scheme);
 					if (ze != null) {
 						break;
 					}
