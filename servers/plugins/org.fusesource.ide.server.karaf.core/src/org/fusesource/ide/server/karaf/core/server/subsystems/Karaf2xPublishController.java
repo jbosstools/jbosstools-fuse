@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IModule;
@@ -233,8 +232,11 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, tmpArchive);   
 		if( bd != null ) {
 			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
-			if( removed )
+			if( removed ) {
+				// remove the temp deploy file from file system once we undeploy or latest at shutdown of VM
+				if (!tmpArchive.toFile().delete()) tmpArchive.toFile().deleteOnExit();
 				return IServer.PUBLISH_STATE_NONE;
+			}
 		}
 		return IServer.PUBLISH_STATE_FULL;
 	}
