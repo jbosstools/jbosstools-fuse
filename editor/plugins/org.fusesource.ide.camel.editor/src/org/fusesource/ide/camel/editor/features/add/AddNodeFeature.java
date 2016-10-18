@@ -20,6 +20,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.internal.editor.DiagramEditorDummy;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
@@ -57,6 +58,10 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
             } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof AbstractCamelModelElement) {
             	AbstractCamelModelElement container =  (AbstractCamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
             	AbstractCamelModelElement child = (AbstractCamelModelElement)newObject;
+            	if (CollapseFeature.isCollapsed(getFeatureProvider(), container)) {
+            		// we don't allow drop on a collapsed figure
+            		return false;
+            	}
             	if (NodeUtils.isValidChild(container, child)) {
             		return true;
             	} else {

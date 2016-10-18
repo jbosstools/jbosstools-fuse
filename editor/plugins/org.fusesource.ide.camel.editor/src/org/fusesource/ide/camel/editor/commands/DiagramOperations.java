@@ -48,6 +48,16 @@ public class DiagramOperations {
 		execute(editingDomain, operation, modelChanged);
 		return operation;
 	}
+	
+	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor, boolean modelChanged, AbstractCamelModelElement container) {
+		if (designEditor == null){
+			return null;
+		}
+		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+		LayoutCommand operation = new LayoutCommand(designEditor.getFeatureProvider(), designEditor.getDiagramTypeProvider().getDiagram(), container, editingDomain);
+		execute(editingDomain, operation, modelChanged);
+		return operation;
+	}
 
 	public static LayoutCommand layoutDiagram(TransactionalEditingDomain editingDomain, IFeatureProvider featureProvider, Diagram diagram, AbstractCamelModelElement container) {
 		LayoutCommand operation = new LayoutCommand(featureProvider, diagram, container, editingDomain);

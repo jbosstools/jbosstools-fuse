@@ -750,7 +750,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			}
 		});		
 	}
-	
+
 	/**
 	 * changes the grid visibility
 	 */
