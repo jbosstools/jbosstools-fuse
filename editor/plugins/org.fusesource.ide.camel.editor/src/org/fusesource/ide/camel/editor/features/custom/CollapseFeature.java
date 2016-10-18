@@ -177,7 +177,7 @@ public class CollapseFeature extends AbstractCustomFeature {
 		IGaService gaService = Graphiti.getGaService();
 		Color col = collapsed ? gaService.manageColor(getDiagram(), StyleUtil.CONTAINER_FIGURE_COLLAPSED_BORDER_COLOR) : gaService.manageColor(getDiagram(), StyleUtil.CONTAINER_FIGURE_BORDER_COLOR); 
 		GraphicsAlgorithm ga = cs.getGraphicsAlgorithm();
-		ga.setLineStyle(collapsed ? LineStyle.DOT : LineStyle.SOLID);
+		ga.setLineStyle(collapsed ? LineStyle.DASH : LineStyle.SOLID);
 		ga.setForeground(col);
 	}
 	
