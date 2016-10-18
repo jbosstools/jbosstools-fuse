@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -233,8 +234,11 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		if( bd != null ) {
 			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
 			if( removed ) {
+				File tmpDeployArtifact = tmpArchive.toFile();
 				// remove the temp deploy file from file system once we undeploy or latest at shutdown of VM
-				if (!tmpArchive.toFile().delete()) tmpArchive.toFile().deleteOnExit();
+				if (!tmpDeployArtifact.delete()) {
+					tmpDeployArtifact.deleteOnExit();
+				}
 				return IServer.PUBLISH_STATE_NONE;
 			}
 		}
