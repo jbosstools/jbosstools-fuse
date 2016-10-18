@@ -42,11 +42,8 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
 	
 	private IProject project;
-	private Set<IResource> camelFiles = new HashSet<IResource>();
+	private Set<IResource> camelFiles = new HashSet<>();
 
-	/**
-	 * 
-	 */
 	public CamelVirtualFolder(IProject prj) {
 		this.project = prj;
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new CamelVirtualFolderListener(project), IResourceChangeEvent.POST_CHANGE);

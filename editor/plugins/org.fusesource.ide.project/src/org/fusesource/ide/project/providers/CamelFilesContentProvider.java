@@ -24,7 +24,7 @@ import org.eclipse.jface.viewers.Viewer;
  */
 public class CamelFilesContentProvider implements ITreeContentProvider {
 
-	private HashMap<IProject, CamelVirtualFolder> cache = new HashMap<IProject, CamelVirtualFolder>();
+	private HashMap<IProject, CamelVirtualFolder> cache = new HashMap<>();
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
