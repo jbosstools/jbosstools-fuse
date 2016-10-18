@@ -9,6 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.fusesource.ide.camel.editor,
  org.fusesource.ide.camel.editor.component.wizard;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.features.create.ext,
+ org.fusesource.ide.camel.editor.features.custom;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.features.delete;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.features.misc;x-friends:="org.fusesource.ide.camel.editor.tests.integration",
  org.fusesource.ide.camel.editor.globalconfiguration;x-friends:="org.fusesource.ide.camel.editor.tests.integration",

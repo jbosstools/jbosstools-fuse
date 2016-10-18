@@ -18,8 +18,10 @@ import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 
@@ -42,22 +44,33 @@ public class LayoutCommand extends RecordingCommand {
 	@Override
 	protected void doExecute() {
 		layout(featureProvider, container);
-		layout(featureProvider, diagram);
+		if (container instanceof CamelContextElement) {
+			layout(featureProvider, diagram);
+		}
 	}
 	
 	private void layout(IFeatureProvider featureProvider, AbstractCamelModelElement container) {
-		if (container == null){
+		if (container == null) {
 			return;
 		}
-		for (AbstractCamelModelElement cme : container.getChildElements()) {
-			layout(featureProvider, cme);
+
+		if (!CollapseFeature.isCollapsed(featureProvider, container)) {
+			for (AbstractCamelModelElement cme : container.getChildElements()) {
+				layout(featureProvider, cme);
+			}
 		}
-		if (container instanceof CamelRouteElement || container.getUnderlyingMetaModelObject() != null && container.getUnderlyingMetaModelObject().canHaveChildren()) {
-			layout(featureProvider, featureProvider.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(container));
+		
+		if (container instanceof CamelRouteElement || (container.getUnderlyingMetaModelObject() != null && container.getUnderlyingMetaModelObject().canHaveChildren())) {
+			layout(featureProvider, featureProvider.getPictogramElementForBusinessObject(container));
 		}
 	}
 	
 	private void layout(IFeatureProvider featureProvider, PictogramElement pe) {
+		// do not layout collapsed figures
+		if (CollapseFeature.isCollapsed(pe)) {
+			return;
+		}
+		
 		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
 		ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
 		for (ICustomFeature cf : cfs) {

@@ -34,7 +34,6 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
-import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.swt.graphics.Rectangle;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -148,8 +147,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 
 		if (container == null) return dg;
 		
-		if (isExpanded(container)) {
-
+		if (!CollapseFeature.isCollapsed(container)) {
 			EList<Shape> children = ((ContainerShape)container).getChildren();
 			for (Shape shape : children) {
 				Node node = new Node();
@@ -181,15 +179,6 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	}
 
 	/**
-	 * @param container
-	 * @return
-	 */
-	private boolean isExpanded(PictogramElement container) {
-		final String collapsedPropertyValue = Graphiti.getPeService().getPropertyValue(container, CollapseFeature.PROP_COLLAPSED_STATE);
-		return collapsedPropertyValue == null || "false".equals(collapsedPropertyValue);
-	}
-	
-	/**
 	 * resizes the container element to fit all children 
 	 * 
 	 * @param containerPE
@@ -198,16 +187,18 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null){
 			return;
 		}
-		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
+
+		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), 
+												 containerPE.getGraphicsAlgorithm().getY(), 
+												 containerPE.getGraphicsAlgorithm().getWidth(), 
+												 containerPE.getGraphicsAlgorithm().getHeight());
 	
 		EList<Shape> children = ((ContainerShape)containerPE).getChildren();		
-		if (isExpanded(containerPE) && children.size()>0) {
+		if (!CollapseFeature.isCollapsed(containerPE) && children.size()>0) {
 			int newWidth = 0;
 			int newHeight = 0;
 			for (Shape shape : children) {
-				if (isExpanded(shape)) {
-					resizeContainer(shape);
-				} 
+				resizeContainer(shape);
 				GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
 				int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
 				int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
@@ -221,8 +212,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 			maxContentArea.width = newWidth;
 			maxContentArea.height = newHeight;
 		} else {
-			// this is needed as workaround because the diagram GA still has 
-			// old height and width values set for some reason
+			// if the container is collapsed we always assume the max collapsed height
 			maxContentArea.height = FigureUIFactory.IMAGE_DEFAULT_HEIGHT;
 		}
 		
