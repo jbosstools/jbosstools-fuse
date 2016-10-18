@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -48,6 +49,7 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -58,6 +60,8 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
@@ -78,6 +82,8 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	
 	private final NewProjectMetaData metadata;
+	
+	private boolean isJavaEditorToOpen = false;
 
 	/**
 	 * @param metadata
@@ -311,6 +317,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			try {
 				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
 					searchCamelContextJavaFile(project, monitor, holder);
+					isJavaEditorToOpen = true;
 				}
 			} catch (CoreException e1) {
 				ProjectTemplatesActivator.pluginLog().logError(e1);
@@ -329,7 +336,12 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 									return;
 								}
 							}
-							IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), holder[0], OpenStrategy.activateOnOpen());
+							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+							if(isJavaEditorToOpen){
+								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
+							} else {
+								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
+							}
 						} catch (PartInitException e) {
 							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
 						}
@@ -356,30 +368,9 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param holder
 	 */
 	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-		try {
-			// look for camel content types in the project
-			project.accept(new IResourceVisitor() {
-				@Override
-				public boolean visit(IResource resource) throws CoreException {
-					if (resource instanceof IFile) {
-						IFile file = (IFile) resource;
-						//@formatter:off
-						final IContentDescription fileContentDescription = file.getContentDescription();
-						String firstSegmentPathInProject = file.getProjectRelativePath().segment(0);
-						if (!"target".equals(firstSegmentPathInProject) //$NON-NLS-1$
-								&& !"bin".equals(firstSegmentPathInProject) //$NON-NLS-1$
-								&& fileContentDescription != null
-								&& "org.fusesource.ide.camel.editor.camelContentType".equals(fileContentDescription.getContentType().getId())) { //$NON-NLS-1$
-						//@formatter:on
-							holder[0] = file;
-						}
-					}
-					return holder[0] == null;// keep looking if we haven't
-												// found one yet
-				}
-			});
-		} catch (CoreException e1) {
-			ProjectTemplatesActivator.pluginLog().logError(e1);
+		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
+		if(!camelFiles.isEmpty()){
+			holder[0] = camelFiles.iterator().next();
 		}
 	}
 
