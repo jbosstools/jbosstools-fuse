@@ -340,6 +340,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 							if(isJavaEditorToOpen){
 								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
 							} else {
+								IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
 								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
 							}
 						} catch (PartInitException e) {
