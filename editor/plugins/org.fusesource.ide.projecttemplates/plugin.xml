@@ -306,6 +306,15 @@
              class="org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer">
        </initializer>
     </extension>
+    <extension
+          point="org.eclipse.ui.preferencePages">
+       <page
+             category="org.fusesource.ide.branding.preferences.root"
+             class="org.fusesource.ide.projecttemplates.preferences.page.StagingRepositoryiesPreferencePage"
+             id="org.fusesource.ide.projecttemplates.stagingrepositoriespage"
+             name="%preference.stagingrepositoriespage.name">
+       </page>
+    </extension>
 
 </plugin>
 

@@ -27,77 +27,27 @@ import org.fusesource.ide.preferences.PreferencesConstants;
 public class CamelEditorColorPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
 
-	private ColorFieldEditor gridColorEditor;
-	private ColorFieldEditor textColorEditor;
-	private ColorFieldEditor connectionColorEditor;
-	private ColorFieldEditor figureBackgroundColorEditor;
-	private ColorFieldEditor figureForegroundColorEditor;
-	private ColorFieldEditor tableChartBackgroundColorEditor;
-	
-	/**
-	 * 
-	 */
 	public CamelEditorColorPreferencePage() {
 		super(GRID);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
-	 */
 	@Override
 	public void createFieldEditors() {
-		this.gridColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_GRID_COLOR,
-				UIMessages.colorPreferencePageGridColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.gridColorEditor);
-		
-		this.connectionColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_CONNECTION_COLOR,
-				UIMessages.colorPreferencePageConnectionColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.connectionColorEditor);
-		
-		this.textColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_TEXT_COLOR,
-				UIMessages.colorPreferencePageTextColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.textColorEditor);
-		
-		this.figureBackgroundColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_FIGURE_BG_COLOR,
-				UIMessages.colorPreferencePageFigureBGColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.figureBackgroundColorEditor);
-		
-		this.figureForegroundColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_FIGURE_FG_COLOR,
-				UIMessages.colorPreferencePageFigureFGColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.figureForegroundColorEditor);
-		
-		this.tableChartBackgroundColorEditor = new ColorFieldEditor(
-				PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR,
-				UIMessages.colorPreferencePageTableChartBGColorSetting,
-				getFieldEditorParent());
-		
-		addField(this.tableChartBackgroundColorEditor);
+		addColorField(PreferencesConstants.EDITOR_GRID_COLOR,           UIMessages.colorPreferencePageGridColorSetting);
+		addColorField(PreferencesConstants.EDITOR_CONNECTION_COLOR,     UIMessages.colorPreferencePageConnectionColorSetting);
+		addColorField(PreferencesConstants.EDITOR_TEXT_COLOR,           UIMessages.colorPreferencePageTextColorSetting);
+		addColorField(PreferencesConstants.EDITOR_FIGURE_BG_COLOR,      UIMessages.colorPreferencePageFigureBGColorSetting);
+		addColorField(PreferencesConstants.EDITOR_FIGURE_FG_COLOR,      UIMessages.colorPreferencePageFigureFGColorSetting);
+		addColorField(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, UIMessages.colorPreferencePageTableChartBGColorSetting);
 		
 		// Sets up the context sensitive help for this page
         PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}
+	
+	private void addColorField(String preferenceName, String label){
+		addField(new ColorFieldEditor(preferenceName, label, getFieldEditorParent()));
+	}
 
-	/* (non-Javadoc)
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
 	@Override
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
