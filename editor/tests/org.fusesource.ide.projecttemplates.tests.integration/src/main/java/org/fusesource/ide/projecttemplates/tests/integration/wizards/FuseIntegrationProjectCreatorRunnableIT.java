@@ -273,6 +273,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(editor).as("No editor has been opened.").isNotNull();
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
+		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
 	}
 	
 	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
