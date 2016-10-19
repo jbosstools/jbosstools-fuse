@@ -5,10 +5,10 @@
     &lt;groupId&gt;org.fusesource&lt;/groupId&gt;
     &lt;artifactId&gt;camel-sap&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
-&lt;dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144262"></a>Additional platform restrictions for the SAP component</h3></div></div></div><p>Because the SAP component depends on the third-party JCo 3.0 and IDoc 3.0
+&lt;dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144203"></a>Additional platform restrictions for the SAP component</h3></div></div></div><p>Because the SAP component depends on the third-party JCo 3.0 and IDoc 3.0
                 libraries, it can only be installed on the platforms that these libraries support.
                 For more details about the platform restrictions, see <a class="link" href="https://access.redhat.com/site/articles/310603" target="_top">Red Hat JBoss Fuse
-                    Supported Configurations</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144270"></a>SAP JCo and SAP IDoc libraries</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
+                    Supported Configurations</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144211"></a>SAP JCo and SAP IDoc libraries</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
                 JCo) libraries and the SAP IDoc library are installed into the <code class="code">lib/</code>
                 directory of the Java runtime. You must make sure that you download the appropriate
                 set of SAP libraries for your target operating system from the SAP Service
@@ -27,7 +27,7 @@
                                 <p><code class="code">sapidoc3.jar</code></p>
                             </td><td>
                                 <p><code class="code">sapidoc3.jar</code></p>
-                            </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144342"></a>Deploying in a Fuse OSGi Container (non-Fabric)</h3></div></div></div><p>You can install the SAP JCo libraries and the SAP IDoc library into the JBoss Fuse
+                            </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144283"></a>Deploying in a Fuse OSGi Container (non-Fabric)</h3></div></div></div><p>You can install the SAP JCo libraries and the SAP IDoc library into the JBoss Fuse
                 OSGi container (non-Fabric) as follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Download the SAP JCo libraries and the SAP IDoc library from the SAP
                         Service Marketplace (<a class="link" href="https://websmp210.sap-ag.de/public/connectors" target="_top">https://websmp210.sap-ag.de/public/connectors</a>), making sure to choose the
                         appropriate version of the libraries for your operating system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You require version 3.0.11 or greater of the JCo library and version
@@ -58,7 +58,7 @@
  com.sap.conn.jco.server</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>Don't forget to include a comma and a backslash, <code class="code">, \</code>, at
                             the end of each line preceding the new entries, so that the list is
                             properly continued.</p></td></tr></table></div></li><li class="listitem"><p>You need to restart the container for these changes to take effect.</p></li><li class="listitem"><p>You need to install the <code class="code">camel-sap</code> feature in the container.
-                        In the Karaf console, enter the following command:</p><pre class="programlisting">JBossFuse:karaf@root&gt; features:install camel-sap</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144426"></a>Deploying in a Fuse Fabric</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
+                        In the Karaf console, enter the following command:</p><pre class="programlisting">JBossFuse:karaf@root&gt; features:install camel-sap</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144367"></a>Deploying in a Fuse Fabric</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
                 JCo) libraries and the SAP IDoc library must be installed into the <code class="code">lib/</code>
                 directory of the Java runtime: that is, <code class="code">sapjco3.jar</code>,
                     <code class="code">libsapjco3.so</code> (or <code class="code">sapjco3.dll</code> on Windows), and
@@ -115,7 +115,7 @@ config.org.osgi.framework.system.packages.extra= \
                                         by a newline character.</p></td></tr></table></div></dd></dl></div><p>Type Ctrl-S to save the properties when you are finished.</p></li><li class="listitem"><p>You can now deploy the <code class="code">camel-sap-profile</code> profile to any
                         Fabric container where you want to run the SAP component. For example, to
                         deploy the <code class="code">camel-sap-profile</code>profile to the
-                            <code class="code">sap-instance</code> container:</p><pre class="programlisting">JBossFuse:karaf@root&gt; container-add-profile sap-instance came-sap-profile</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144587"></a>Deploying in a JBoss EAP container</h3></div></div></div><p>To deploy the SAP component in a JBoss EAP container, perform the following
+                            <code class="code">sap-instance</code> container:</p><pre class="programlisting">JBossFuse:karaf@root&gt; container-add-profile sap-instance came-sap-profile</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144528"></a>Deploying in a JBoss EAP container</h3></div></div></div><p>To deploy the SAP component in a JBoss EAP container, perform the following
                 steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Download the SAP JCo libraries and the SAP IDoc library from the SAP
                         Service Marketplace (<a class="link" href="https://websmp210.sap-ag.de/public/connectors" target="_top">https://websmp210.sap-ag.de/public/connectors</a>), making sure to
                         choose the appropriate version of the libraries for your operating
@@ -164,9 +164,9 @@ sap-idoclist-server:<em class="replaceable"><code>serverName</code></em>:<em cla
                             IDoc produced by this endpoint.</p></dd><dt><span class="term"><code class="code"><em class="replaceable"><code>idocTypeExtension</code></em></code></span></dt><dd><p>Specifies the IDoc Type Extension, if any, of an IDoc produced by this
                             endpoint.</p></dd><dt><span class="term"><code class="code"><em class="replaceable"><code>systemRelease</code></em></code></span></dt><dd><p>Specifies the associated SAP Basis Release, if any, of an IDoc
                             produced by this endpoint.</p></dd><dt><span class="term"><code class="code"><em class="replaceable"><code>applicationRelease</code></em></code></span></dt><dd><p>Specifes the associated Application Release, if any, of an IDoc
-                            produced by this endpoint.</p></dd><dt><span class="term"><code class="code"><em class="replaceable"><code>queueName</code></em></code></span></dt><dd><p>Specifies the queue this endpoint sends an SAP request to.</p></dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144866"></a>Options for RFC destination endpoints</h3></div></div></div><p>The RFC destination endpoints (<code class="code">sap-srfc-destination</code>,
+                            produced by this endpoint.</p></dd><dt><span class="term"><code class="code"><em class="replaceable"><code>queueName</code></em></code></span></dt><dd><p>Specifies the queue this endpoint sends an SAP request to.</p></dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144807"></a>Options for RFC destination endpoints</h3></div></div></div><p>The RFC destination endpoints (<code class="code">sap-srfc-destination</code>,
                     <code class="code">sap-trfc-destination</code>, and <code class="code">sap-qrfc-destination</code>)
-                support the following URI options:</p><table frame="void" id="d0e144880"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
+                support the following URI options:</p><table frame="void" id="d0e144821"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
                         <th>Name</th>
                         <th>Default</th>
                         <th>Description</th>
@@ -180,8 +180,8 @@ sap-idoclist-server:<em class="replaceable"><code>serverName</code></em>:<em cla
                         <td><code class="code">false</code></td>
                         <td>If <code class="code">true</code>, specifies that this endpoint initiates an SAP
                             transaction</td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144929"></a>Options for RFC server endpoints</h3></div></div></div><p>The SAP RFC server endpoints (<code class="code">sap-srfc-server</code> and
-                    <code class="code">sap-trfc-server</code>) support the following URI options:</p><table frame="void" id="d0e144940"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144870"></a>Options for RFC server endpoints</h3></div></div></div><p>The SAP RFC server endpoints (<code class="code">sap-srfc-server</code> and
+                    <code class="code">sap-trfc-server</code>) support the following URI options:</p><table frame="void" id="d0e144881"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
                         <th>Name</th>
                         <th>Default</th>
                         <th>Description</th>
@@ -197,8 +197,8 @@ sap-idoclist-server:<em class="replaceable"><code>serverName</code></em>:<em cla
                                 <code class="code">true</code>, specifies that this endpoint propagates
                             exceptions back to the caller in SAP, instead of the exchange's
                             exception handler</td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144991"></a>Options for the IDoc List Server endpoint</h3></div></div></div><p>The SAP IDoc List Server endpoint (<code class="code">sap-idoclist-server</code>) supports the
-                following URI options:</p><table frame="void" id="d0e144999"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144932"></a>Options for the IDoc List Server endpoint</h3></div></div></div><p>The SAP IDoc List Server endpoint (<code class="code">sap-idoclist-server</code>) supports the
+                following URI options:</p><table frame="void" id="d0e144940"><col width="23%"><col width="22%"><col width="55%"><thead><tr>
                         <th>Name</th>
                         <th>Default</th>
                         <th>Description</th>
@@ -213,7 +213,7 @@ sap-idoclist-server:<em class="replaceable"><code>serverName</code></em>:<em cla
                         <td>If <code class="code">true</code>, specifies that this endpoint propagates exceptions
                             back to the caller in SAP, instead of the exchange's exception
                             handler</td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e145048"></a>Summary of the RFC and IDoc endpoints</h3></div></div></div><p>The SAP component package provides the following RFC and IDoc endpoints:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">sap-srfc-destination</code></span></dt><dd><p>JBoss Fuse SAP Synchronous Remote Function Call Destination Camel
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e144989"></a>Summary of the RFC and IDoc endpoints</h3></div></div></div><p>The SAP component package provides the following RFC and IDoc endpoints:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="code">sap-srfc-destination</code></span></dt><dd><p>JBoss Fuse SAP Synchronous Remote Function Call Destination Camel
                             component. This endpoint should be used in cases where Camel routes
                             require synchronous delivery of requests to and responses from an SAP
                             system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The sRFC protocol used by this component delivers requests and
@@ -310,13 +310,13 @@ sap-idoclist-server:<em class="replaceable"><code>serverName</code></em>:<em cla
                 input message of an IN-OUT exchange. The output message of the exchange will be
                 returned as the response of the RFC call. Since SAP RFC server endpoints only
                 support inbound communication, an RFC server endpoint only supports the creation of
-                consumers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e145221"></a>SAP IDoc and IDoc list destination endpoints</h3></div></div></div><p>An IDoc destination endpoint supports outbound communication to SAP, which can
+                consumers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e145162"></a>SAP IDoc and IDoc list destination endpoints</h3></div></div></div><p>An IDoc destination endpoint supports outbound communication to SAP, which can
                 then perform further processing on the IDoc message. An IDoc document represents a
                 business transaction, which can easily be exchanged with non-SAP systems. An IDoc
                 destination is specified by a set of connection parameters called
                     <em class="firstterm">destination data</em>.</p><p>An IDoc list destination endpoint is similar to an IDoc destination endpoint,
                 except that the messages it handles consist of a <span class="emphasis"><em>list</em></span> of IDoc
-                documents.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e145234"></a>SAP IDoc list server endpoint</h3></div></div></div><p>An IDoc list server endpoint supports inbound communication from SAP, enabling a
+                documents.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e145175"></a>SAP IDoc list server endpoint</h3></div></div></div><p>An IDoc list server endpoint supports inbound communication from SAP, enabling a
                 Camel route to receive a list of IDoc documents from an SAP system. An IDoc list
                 server is specified by a set of connection parameters called <em class="firstterm">server
                     data</em>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37503"></a>Meta-data repositories</h3></div></div></div><p>A meta-data repository is used to store the following kinds of meta-data:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Interface descriptions of function modules</span></dt><dd><p>This meta-data is used by the JCo and ABAP runtimes to check RFC calls
