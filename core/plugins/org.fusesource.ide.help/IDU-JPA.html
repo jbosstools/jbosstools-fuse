@@ -3,7 +3,7 @@
    <title>JPA</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Jolt.html" title="Jolt"><link rel="next" href="IDU-Jsch.html" title="Jsch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-JPA"></a>JPA</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_JPAComponent"></a>JPA Component</h2></div></div></div><p>The <span class="bold"><strong>jpa</strong></span> component enables you to store and retrieve Java
       objects from persistent storage using EJB 3's Java Persistence Architecture (JPA), which is a
       standard interface layer that wraps Object/Relational Mapping (ORM) products such as OpenJPA,
-      Hibernate, TopLink, and so on.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e112493"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+      Hibernate, TopLink, and so on.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e112434"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p><p>For more information about using the JPA component in a JBoss EAP container, see <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/javaee/jpa.html" target="_top">Integration with JPA</a>. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Sendingtotheendpoint"></a>Sending to the endpoint</h2></div></div></div><p>You can store a Java entity bean in a database by sending it to a JPA producer endpoint.
             The body of the <span class="emphasis"><em>In</em></span> message is assumed to be an entity bean (that
@@ -20,7 +20,7 @@
       specified, it helps the <a class="link" href="Type Converter" target="_top">Type Converter</a> to ensure the
       body is of the correct type.</p><p>For consuming, the <span class="emphasis"><em>entityClassName</em></span> is mandatory.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Options"></a>Options</h2></div></div></div><table id="d0e112577"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_Options"></a>Options</h2></div></div></div><table id="d0e112518"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -218,7 +218,7 @@
                             <code class="code">true</code>, as sharing the entity manager and mixing transactions
                         is not a good idea.</p>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message headers to the exchange:</p><table id="d0e113077"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message headers to the exchange:</p><table id="d0e113018"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
