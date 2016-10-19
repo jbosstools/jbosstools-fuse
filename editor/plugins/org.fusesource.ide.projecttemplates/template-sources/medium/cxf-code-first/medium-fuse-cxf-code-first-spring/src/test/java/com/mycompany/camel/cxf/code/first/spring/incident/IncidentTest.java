@@ -52,9 +52,9 @@ public class IncidentTest {
          * ... and afterwards, we just read the SOAP response message that is sent back by the server.
          */
         InputStream is = connection.getInputStream();
-        System.out.println("the response is ====> ");
+        LOG.info("the response is ====> ");
         res = getStringFromInputStream(is);
-        System.out.println(res);
+        LOG.info(res);
         Assert.assertTrue(res.contains("30"));
     }
 
