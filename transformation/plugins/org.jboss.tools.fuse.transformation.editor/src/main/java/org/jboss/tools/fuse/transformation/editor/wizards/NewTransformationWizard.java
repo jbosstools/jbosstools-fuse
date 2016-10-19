@@ -35,7 +35,9 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.refactoring.RenameSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -250,6 +252,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                                   new MavenUtils().javaSourceFolder(),
                                                   monitor);
                     if (uiModel.getSourceFilePath() != null) {
+                        
                         // Generate models
                         final String sourceClassName
                             = generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType(), true, monitor);
@@ -401,6 +404,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                  ModelType type,
                                  boolean isSource,
                                  IProgressMonitor monitor) throws Exception {
+
         // Build class name from file name
         final StringBuilder classNameBuilder = new StringBuilder();
         final StringCharacterIterator iter = new StringCharacterIterator(filePath.substring(
@@ -497,10 +501,16 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             Iterator<JDefinedClass> classIter = modelPkg.classes();
             if (classIter.hasNext()) {
                 JDefinedClass modelClass = classIter.next();
+                IType foundType = project.findType(modelClass.fullName(), monitor);
                 IPackageFragment newPkg = project.findType(modelClass.fullName(), monitor).getPackageFragment();
                 String newPkgName = newPkg.getElementName() + '_' + time;
-                newPkg.rename(newPkgName, true, monitor);
+                
+                // handle refactoring via the refactor framework so we get package renaming
+                // as well as import handling and everything down the line for FUSETOOLS-2123
+                RenameSupport renameSupport = RenameSupport.create(newPkg, newPkgName, RenameSupport.UPDATE_REFERENCES);
+                renameSupport.perform(getShell(), new ProgressMonitorDialog(getShell()));
                 project.save(monitor, true);
+                
                 // Update transformation model class name if it's in this package
                 if (!modelClassFound) {
                     if (modelClass.fullName().equals(modelClassName)) {
