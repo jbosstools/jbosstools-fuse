@@ -974,13 +974,13 @@ public abstract class AbstractCamelModelElement {
 		String defaultValue = this.underlyingMetaModelObject != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
 		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue))) {
-			// default value -> no need to explicitely set it -> delete
+			// default value -> no need to explicitly set it -> delete
 			// existing
 			e.removeAttribute(name);
 		} else {
 			// not the default value, so set it
 			e.setAttribute(name, getMappedValue(newValue));
-			if ("id".equals(name)) {
+			if ("id".equals(name) && oldValue != null && !oldValue.equals(newValue)) {
 				IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 				Map<String, Object> eventMap = new HashMap<>();
 				eventMap.put(PROPERTY_KEY_OLD_ID, oldValue);
