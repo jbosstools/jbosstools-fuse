@@ -23,7 +23,7 @@
                 the need for a real mail server. However you should remember to not include the
                 mock-mail when you go into production or other environments where you need to send
                 mails to a real mail server. Just the presence of the mock-javamail.jar on the
-                classpath means that it will kick in and avoid sending the mails.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e121501"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+                classpath means that it will kick in and avoid sending the mails.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e121442"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p><p>By default, Camel creates its own mail session and uses this session to interact with
             your mail server. However, JBoss EAP already provides a mail subsystem with all the
@@ -43,7 +43,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
             options:</p><pre class="programlisting">smtp://host[:port]?password=somepwd&amp;username=someuser</pre><p>For example:</p><pre class="programlisting">smtp://mycompany.mailserver:30?password=tiger&amp;username=scott</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_anchorDefaultPortsDefaultports"></a>Default ports</h2></div></div></div><p>Default port numbers are supported. If the port number is omitted, Camel determines
             the port number to use based on the protocol.
             
-        </p><table id="d0e121557"><tr>
+        </p><table id="d0e121498"><tr>
                 <th> Protocol </th>
                 <th> Default Port Number </th>
             </tr><tr>
@@ -78,7 +78,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Options"></a>Options</h2></div></div></div><p>
             
-        </p><table id="d0e121646"><tr>
+        </p><table id="d0e121587"><tr>
                 <th> Property </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -638,7 +638,7 @@ producer.process(exchange);</pre></div><div class="simplesect"><div class="title
   &lt;to uri="bean:myBean"/&gt;
 &lt;/route&gt;</pre><p>
             
-        </p><table id="d0e122836"><tr>
+        </p><table id="d0e122777"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
