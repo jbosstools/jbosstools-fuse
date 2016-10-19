@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -175,14 +177,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		checkCorrectFacetsEnabled(project);
 		waitJob();
 		checkCorrectNatureEnabled(project);
-		// TODO: fix project to activate no validation error check
-		if(!camelVersion.startsWith("2.17")){ //excluding 2.17 because the temporary maven repository seems whacky
-			checkNoValidationError();
-			if(camelVersion.contains("redhat")){
-				//only for Red hat version, For community we still have overriding version due to Fuse Bom version
-				//checkNoValidationWarning();
-			}
-		}
+		checkNoValidationError();
+		checkNoValidationWarning();
 		
 		if(!CamelDSLType.JAVA.equals(dsl)){
 			launchDebug(project);
@@ -225,35 +221,56 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		}
 	}
 
-	/**
-	 * @throws CoreException
-	 */
 	private void checkNoValidationError() throws CoreException {
-		checkNoValidationIssueWithSeverity(IMarker.SEVERITY_ERROR);
+		checkNoValidationIssueOfType(filterError());
+	}
+	
+	private Predicate<IMarker> filterError(){
+		return marker -> {
+			try {
+				return marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR);
+			} catch (CoreException e1) {
+				return true;
+			}
+		};
 	}
 	
 	private void checkNoValidationWarning() throws CoreException {
-		checkNoValidationIssueWithSeverity(IMarker.SEVERITY_WARNING);
+		checkNoValidationIssueOfType(filterWarning());
+	}
+	
+	private Predicate<IMarker> filterWarning(){
+		return marker -> {
+			try {
+				boolean isWarning = marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_WARNING);
+				String message = (String)marker.getAttribute(IMarker.MESSAGE);
+				return isWarning
+						//TODO: managed other dependencies than camel
+						&& !message.startsWith("Duplicating managed version")
+						//TODO: manage community version
+						&& (!message.startsWith("Overriding managed version") || camelVersion.contains("redhat"));
+			} catch (CoreException e1) {
+				return true;
+			}
+		};
 	}
 
-	private void checkNoValidationIssueWithSeverity(int severity) throws CoreException {
+	private void checkNoValidationIssueOfType(Predicate<IMarker> filter) throws CoreException {
 		final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		final List<Object> readableMarkers = Arrays.asList(markers).stream()
-				.filter(marker -> {
-					try {
-						return marker.getAttribute(IMarker.SEVERITY).equals(severity);
-					} catch (CoreException e1) {
-						return true;
-					}
-				})
-				
+				.filter(filter)
 				.map(marker -> {
-			try {
-				return marker.getAttributes();
-			} catch (Exception e) {
-				return marker;
-			}
-		}).collect(Collectors.toList());
+						try {
+							Map<String, Object> markerInformations = marker.getAttributes();
+							if(marker.getResource() != null){
+								markerInformations.put("resource affected", marker.getResource().getLocation().toOSString());
+							}
+							return markerInformations;
+						} catch (Exception e) {
+							return marker;
+						}
+					})
+				.collect(Collectors.toList());
 		assertThat(readableMarkers).isEmpty();
 	}
 
