@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE xml>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:inc="http://incident.java.first.code.cxf.camel.mycompany.com/">
    <soapenv:Header/>
    <soapenv:Body>
