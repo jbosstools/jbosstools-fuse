@@ -36,7 +36,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.refactoring.RenameSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -502,7 +501,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 IPackageFragment newPkg = project.findType(modelClass.fullName(), monitor).getPackageFragment();
                 String newPkgName = newPkg.getElementName() + '_' + time;
                 RenameSupport renameSupport = RenameSupport.create(newPkg, newPkgName, RenameSupport.UPDATE_REFERENCES);
-                renameSupport.perform(getShell(), new ProgressMonitorDialog(getShell()));
+                renameSupport.perform(getShell(), getContainer());
                 project.save(monitor, true);
 
                 // Update transformation model class name if it's in this package
