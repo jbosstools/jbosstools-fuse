@@ -49,34 +49,34 @@ public class PropertiesUtilsTest {
 	@Test
 	public void testUpdatePathParams() {
 		assertEquals(SCHEMA + ":myDest:name:nameExt",
-				updatePathParams(SYNTAX, pathParam("destination"), "myDest", pathParams, modelMap));
+				updatePathParams(null, null, SYNTAX, pathParam("destination"), "myDest", pathParams, modelMap));
 	}
 
 	@Test
 	public void testUpdatePathParamsWithPrefixNames() {
 		assertEquals(SCHEMA + ":destination:abc:nameExt",
-				updatePathParams(SYNTAX, pathParam("name"), "abc", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX, pathParam("name"), "abc", pathParams, modelMap));
 		assertEquals(SCHEMA + ":destination:name:xyz",
-				updatePathParams(SYNTAX, pathParam("nameExt"), "xyz", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX, pathParam("nameExt"), "xyz", pathParams, modelMap));
 	}
 
 	@Test
 	public void testUpdatePathParamsWithOptions() {
 		assertEquals(SCHEMA + ":myDest:name:nameExt?option=123",
-				updatePathParams(SYNTAX + "?option=123", pathParam("destination"), "myDest", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX + "?option=123", pathParam("destination"), "myDest", pathParams, modelMap));
 	}
 
 	@Test
 	public void testUpdatePathParamsWithNonexistingParam() {
 		assertEquals(SCHEMA + ":destination:name:nameExt",
-				updatePathParams(SYNTAX, pathParam("destinatio"), "myDest", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX, pathParam("destinatio"), "myDest", pathParams, modelMap));
 	}
 
 	@Test
 	public void testUpdatePathParamsWithChangedModelMap() {
 		modelMap.put("name", "abc");
 		assertEquals(SCHEMA + ":myDest:abc:nameExt",
-				updatePathParams(SYNTAX, pathParam("destination"), "myDest", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX, pathParam("destination"), "myDest", pathParams, modelMap));
 	}
 
 	@Test
@@ -90,9 +90,9 @@ public class PropertiesUtilsTest {
 		modelMap.put("path", "path");
 
 		assertEquals(SCHEMA + ":destination:name:nameExt:transport:123/path",
-				updatePathParams(SYNTAX + ":transport:port/path", pathParam("port"), "123", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX + ":transport:port/path", pathParam("port"), "123", pathParams, modelMap));
 		assertEquals(SCHEMA + ":destination:name:nameExt:transport:port/xyz",
-				updatePathParams(SYNTAX + ":transport:port/path", pathParam("path"), "xyz", pathParams, modelMap));
+				updatePathParams(null, null,SYNTAX + ":transport:port/path", pathParam("path"), "xyz", pathParams, modelMap));
 	}
 
 	@Test
