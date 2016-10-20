@@ -15,23 +15,21 @@ package org.jboss.tools.fuse.transformation.core.model.xml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.namespace.QName;
-
 import org.assertj.core.api.Assertions;
 import org.eclipse.ui.PlatformUI;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
 import com.sun.codemodel.JCodeModel;
 
 
@@ -96,15 +94,36 @@ public class XmlModelGeneratorIT {
         Assert.assertEquals("com.bogus.a.Element1", mappings.get("element1"));
         Assert.assertEquals("com.bogus.b.Element2", mappings.get("element2"));
     }
-    
+
+    @Test
+    public void generateFromSchemaWhereListFieldNamesDontMatchSetterNames() throws Exception {
+    	assertThat(PlatformUI.getWorkbench()).isNotNull();
+    	getXSDFile("NBSCommonComponents.xsd");
+    	getXSDFile("NBSCustomCommonComponents.xsd");
+    	getXSDFile("NBSCustomInvoiceEBO.xsd");
+    	getXSDFile("NBSCustomMeta.xsd");
+    	File NBSInvoiceEBMXsd = getXSDFile("NBSInvoiceEBM.xsd");
+    	File targetFolder = tmpFolder.newFolder("target");
+    	new XmlModelGenerator().generateFromSchema(NBSInvoiceEBMXsd, "test.nbs", targetFolder);
+		int state = 0;
+    	try (BufferedReader reader = new BufferedReader(new FileReader(new File(targetFolder, "test/nbs/EBMHeaderType.java")))) {
+    		for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+    			if (state == 0 && line.contains("List<String> eboName")) state = 1;
+    			else if (state == 1 && line.contains("public void setEBOName(List<String> eboName) {")) state = 2;
+    			else if (state == 2 && line.contains("this.eboName = eboName;")) state = 3;
+    		}
+    	}
+    	assertThat(state).isEqualTo(3);
+    }
+
     @Test
     public void generateFromSchemaWithExternalFileAccessRequired() throws Exception {
     	// The test need to be launched in an OSGi platform to have a real check
     	assertThat(PlatformUI.getWorkbench()).isNotNull();
-    	File NBSCommonComponentsXsd = getXSDFile("NBSCommonComponents.xsd");
-    	File NBSCustomCommonComponentsXsd = getXSDFile("NBSCustomCommonComponents.xsd");
-    	File NBSCustomInvoiceEBOXsd = getXSDFile("NBSCustomInvoiceEBO.xsd");
-    	File NBSCustomMetaXsd = getXSDFile("NBSCustomMeta.xsd");
+    	getXSDFile("NBSCommonComponents.xsd");
+    	getXSDFile("NBSCustomCommonComponents.xsd");
+    	getXSDFile("NBSCustomInvoiceEBO.xsd");
+    	getXSDFile("NBSCustomMeta.xsd");
     	File NBSInvoiceEBMXsd = getXSDFile("NBSInvoiceEBM.xsd");
     	File targetFolder = tmpFolder.newFolder("target");
     	XmlModelGenerator modelGen = new XmlModelGenerator();
@@ -188,7 +207,7 @@ public class XmlModelGeneratorIT {
 		}
 		return tmpFile;
 	}
-	
+
 	private File getXSDFile(String fileName) {
 		File tmpFile = null;
 		try {

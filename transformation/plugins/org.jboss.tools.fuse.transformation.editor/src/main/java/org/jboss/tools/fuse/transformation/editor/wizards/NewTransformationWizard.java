@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -74,7 +73,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
-
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -252,7 +250,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                                   new MavenUtils().javaSourceFolder(),
                                                   monitor);
                     if (uiModel.getSourceFilePath() != null) {
-                        
+
                         // Generate models
                         final String sourceClassName
                             = generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType(), true, monitor);
@@ -501,16 +499,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             Iterator<JDefinedClass> classIter = modelPkg.classes();
             if (classIter.hasNext()) {
                 JDefinedClass modelClass = classIter.next();
-                IType foundType = project.findType(modelClass.fullName(), monitor);
                 IPackageFragment newPkg = project.findType(modelClass.fullName(), monitor).getPackageFragment();
                 String newPkgName = newPkg.getElementName() + '_' + time;
-                
-                // handle refactoring via the refactor framework so we get package renaming
-                // as well as import handling and everything down the line for FUSETOOLS-2123
                 RenameSupport renameSupport = RenameSupport.create(newPkg, newPkgName, RenameSupport.UPDATE_REFERENCES);
                 renameSupport.perform(getShell(), new ProgressMonitorDialog(getShell()));
                 project.save(monitor, true);
-                
+
                 // Update transformation model class name if it's in this package
                 if (!modelClassFound) {
                     if (modelClass.fullName().equals(modelClassName)) {
