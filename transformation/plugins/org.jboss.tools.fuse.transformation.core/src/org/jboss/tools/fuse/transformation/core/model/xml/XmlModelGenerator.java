@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
@@ -31,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
@@ -46,7 +44,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -103,9 +100,14 @@ public class XmlModelGenerator {
                     JMethod setMethod = definedClass.method(getMethod.mods().getValue(),
                                                             voidType,
                                                             "set" + name); //$NON-NLS-1$
-                    name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-                    JVar prm = setMethod.param(0, getMethod.type(), name);
-                    setMethod.body().assign(JExpr._this().ref(name), prm);
+                    // Find matching field to set and create setter
+                    for (String key : definedClass.fields().keySet()) {
+                    	if (key.equalsIgnoreCase(name)) {
+                            JVar prm = setMethod.param(0, getMethod.type(), key);
+                            setMethod.body().assign(JExpr._this().ref(key), prm);
+                            break;
+                    	}
+                    }
                 }
             }
         }
@@ -149,22 +151,22 @@ public class XmlModelGenerator {
         final InputSource is = new InputSource(schemaStream);
         is.setSystemId(schemaFile.toURI().toString());
         sc.setErrorListener(new ErrorListener() {
-			
+
 			@Override
 			public void warning(SAXParseException arg0) {
 				DataTransformationCoreActivator.pluginLog().logWarning(arg0);
 			}
-			
+
 			@Override
 			public void info(SAXParseException arg0) {
 				DataTransformationCoreActivator.pluginLog().logInfo("Info while parsing the xsd", arg0);
 			}
-			
+
 			@Override
 			public void fatalError(SAXParseException arg0) {
 				DataTransformationCoreActivator.pluginLog().logError(arg0);
 			}
-			
+
 			@Override
 			public void error(SAXParseException arg0) {
 				DataTransformationCoreActivator.pluginLog().logError(arg0);
@@ -338,10 +340,10 @@ public class XmlModelGenerator {
     public JCodeModel generateFromSchema(final File schemaFile,
                                          final String packageName,
                                          final File targetPath) throws Exception {
-    	
+
 		final String initialValueAccessExternalSchema = System.getProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA);
 		System.setProperty(JAVAX_XML_ACCESS_EXTERNAL_SCHEMA, "all"); //$NON-NLS-1$
-		
+
         final SchemaCompiler sc = createSchemaCompiler(schemaFile);
         if (packageName != null){
         	sc.forcePackageName(packageName);
@@ -390,7 +392,7 @@ public class XmlModelGenerator {
         } finally {
         	setBackAccessExternalSchemaProperty(initialValueAccessExternalSchema);
         }
-        
+
         return jcm;
     }
 
