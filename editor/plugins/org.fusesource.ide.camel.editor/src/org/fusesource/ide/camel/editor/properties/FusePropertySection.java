@@ -24,12 +24,14 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -53,7 +55,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -487,7 +488,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	CamelModel model = getCamelModel(dataFormatElement);
     	
     	// now create the new fields
-    	DataFormat df = model.getDataformatModel().getDataFormatByName(dataformat);
+    	Eip df = model.getEipModel().getEIPByName(dataformat);
     	if (df != null) {
     		List<Parameter> props = df.getParameters();
     		props.sort(new ParameterPriorityComparator()); 
@@ -514,8 +515,40 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected Control getControlForParameter(final Parameter p, Composite parent, final AbstractCamelModelElement camelModelElement, IParameterContainer parameterContainer) {
     	Control c = null;
     	
+    	// CHOICE
+    	if (CamelComponentUtils.isChoiceProperty(p)) {
+    		String initialTextValue = null;
+			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
+				initialTextValue = (String) camelModelElement.getParameter(p.getName());
+			} else {
+				if (parameterContainer != null) {
+					initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+				}
+			}
+			CCombo txtField = getWidgetFactory().createCCombo(parent, SWT.DROP_DOWN | SWT.LEFT | SWT.READ_ONLY);
+			txtField.setItems(CamelComponentUtils.getChoices(p));
+	        txtField.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+	                CCombo txt = (CCombo)e.getSource();
+	                camelModelElement.setParameter(p.getName(), txt.getText());
+				}
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					widgetSelected(e);
+				}
+			});
+			txtField.setLayoutData(createPropertyFieldLayoutData());
+			for (int idx = 0; idx < txtField.getItemCount(); idx++) {
+				if (txtField.getItem(idx).equalsIgnoreCase(initialTextValue)) {
+					txtField.select(idx);
+					break;
+				}
+			}
+	        c = txtField;
+	        
     	// BOOLEAN PROPERTIES
-    	if (CamelComponentUtils.isBooleanProperty(p)) {
+    	} else if (CamelComponentUtils.isBooleanProperty(p)) {
 			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
 			Boolean b = false;
 			if(camelModelElement != null && camelModelElement.getParameter(p.getName()) != null){
@@ -541,7 +574,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			checkBox.setLayoutData(createPropertyFieldLayoutData());
     		c = checkBox;
         
-    		// TEXT PROPERTIES
+    	// TEXT PROPERTIES
     	} else if (CamelComponentUtils.isTextProperty(p)) {
 			String initialTextValue = null;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
