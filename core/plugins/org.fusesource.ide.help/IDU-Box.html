@@ -16,7 +16,7 @@
     	&lt;version&gt;${camel-version}&lt;/version&gt;
 	&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-244"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">    box://endpoint-prefix/endpoint?[options]</pre></div><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>collaborations</p></li><li class="listitem"><p>comments</p></li><li class="listitem"><p>events</p></li><li class="listitem"><p>files</p></li><li class="listitem"><p>folders</p></li><li class="listitem"><p>groups</p></li><li class="listitem"><p>poll-events</p></li><li class="listitem"><p>search</p></li><li class="listitem"><p>shared-comments</p></li><li class="listitem"><p>shared-files</p></li><li class="listitem"><p>shared-folders</p></li><li class="listitem"><p>shared-items</p></li><li class="listitem"><p>users</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-245"></a>Box Component</h2></div></div></div><p>The Box Component can be configured with the options below. These options can be
                 provided using the component's bean property <span class="strong"><strong><code class="code">configuration</code></strong></span> of type <span class="strong"><strong><code class="code">org.apache.camel.component.box.BoxConfiguration</code></strong></span>.
-                These options can also be specified in the endpoint URI.</p><table id="d0e55323"><colgroup> </colgroup><thead><tr>
+                These options can also be specified in the endpoint URI.</p><table id="d0e55264"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Option</p>
                         </td>
@@ -185,7 +185,7 @@
                 only be used if other options do not satisfy matching endpoints.</p><p>In case of Box API errors the endpoint will throw a RuntimeCamelException with a
                     <span class="strong"><strong>com.box.restclientv2.exceptions.BoxSDKException</strong></span> derived exception
                 cause.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-247"></a>Endpoint Prefix collaborations</h2></div></div></div><p>For more information on Box collaborations see <a class="link" href="https://developers.box.com/docs/#collaborations" target="_top">https://developers.box.com/docs/#collaborations</a>. The following
-                    endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">collaborations</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://collaborations/endpoint?[options]</pre></div><table id="d0e55674"><colgroup> </colgroup><thead><tr>
+                    endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">collaborations</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://collaborations/endpoint?[options]</pre></div><table id="d0e55615"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -263,7 +263,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxCollaboration</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-248"></a>URI Options for collaborations</h2></div></div></div><table id="d0e55837"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-248"></a>URI Options for collaborations</h2></div></div></div><table id="d0e55778"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -308,7 +308,7 @@
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-249"></a>Endpoint Prefix events</h2></div></div></div><p>For more information on Box events see <a class="link" href="https://developers.box.com/docs/#events" target="_top">https://developers.box.com/docs/#events</a>. Although this endpoint can
                     be used by producers, Box events are better used as a consumer endpoint using
                     the <span class="strong"><strong>poll-events</strong></span> endpoint prefix. The
-                    following endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">events</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">  box://events/endpoint?[options]</pre></div><table id="d0e55944"><colgroup> </colgroup><thead><tr>
+                    following endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">events</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">  box://events/endpoint?[options]</pre></div><table id="d0e55885"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -347,7 +347,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxEventCollection</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-250"></a>URI Options for events</h2></div></div></div><table id="d0e56030"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-250"></a>URI Options for events</h2></div></div></div><table id="d0e55971"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -369,7 +369,7 @@
                                     <p>com.box.boxjavalibv2.requests.requestobjects.BoxEventRequestObject</p>
                                 </td>
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-251"></a>Endpoint Prefix groups</h2></div></div></div><p>For more information on Box groups see <a class="link" href="https://developers.box.com/docs/#groups" target="_top">https://developers.box.com/docs/#groups</a>. The following endpoints can
-                    be invoked with the prefix <span class="strong"><strong><code class="code">groups</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://groups/endpoint?[options]</pre></div><table id="d0e56092"><colgroup> </colgroup><thead><tr>
+                    be invoked with the prefix <span class="strong"><strong><code class="code">groups</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://groups/endpoint?[options]</pre></div><table id="d0e56033"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -512,7 +512,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxGroupMembership</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-252"></a>URI Options for groups</h2></div></div></div><table id="d0e56382"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-252"></a>URI Options for groups</h2></div></div></div><table id="d0e56323"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -576,7 +576,7 @@
                                     <p>String</p>
                                 </td>
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-253"></a>Endpoint Prefix search</h2></div></div></div><p>For more information on Box search API see <a class="link" href="https://developers.box.com/docs/#search" target="_top">https://developers.box.com/docs/#search</a>. The following endpoints can
-                    be invoked with the prefix <span class="strong"><strong><code class="code">search</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://search/endpoint?[options]</pre></div><table id="d0e56528"><colgroup> </colgroup><thead><tr>
+                    be invoked with the prefix <span class="strong"><strong><code class="code">search</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://search/endpoint?[options]</pre></div><table id="d0e56469"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -602,7 +602,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxCollection</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-254"></a>URI Options for search</h2></div></div></div><table id="d0e56587"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-254"></a>URI Options for search</h2></div></div></div><table id="d0e56528"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -627,7 +627,7 @@
                     can be invoked with the prefix <span class="strong"><strong>comments</strong></span> or
                         <span class="strong"><strong><code class="code">shared-comments</code></strong></span> as follows.
                     The <span class="strong"><strong>shared-comments</strong></span> prefix requires <span class="strong"><strong>sharedLink</strong></span> and <span class="strong"><strong>sharedPassword</strong></span> properties.</p><div class="informalexample"><pre class="programlisting">    box://comments/endpoint?[options]
-    box://shared-comments/endpoint?[options]</pre></div><table id="d0e56661"><colgroup> </colgroup><thead><tr>
+    box://shared-comments/endpoint?[options]</pre></div><table id="d0e56602"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -693,7 +693,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxComment</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-256"></a>URI Options for comments and shared-comments</h2></div></div></div><table id="d0e56797"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-256"></a>URI Options for comments and shared-comments</h2></div></div></div><table id="d0e56738"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -747,7 +747,7 @@
                     or <span class="strong"><strong><code class="code">shared-files</code></strong></span> as follows. The
                         <span class="strong"><strong><code class="code">shared-files </code></strong></span>prefix requires
                         <span class="strong"><strong>sharedLink</strong></span> and <span class="strong"><strong>sharedPassword</strong></span> properties.</p><div class="informalexample"><pre class="programlisting">   box://files/endpoint?[options]
-   box://shared-files/endpoint?[options]</pre></div><table id="d0e56929"><colgroup> </colgroup><thead><tr>
+   box://shared-files/endpoint?[options]</pre></div><table id="d0e56870"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -930,7 +930,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxFile</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-258"></a>URI Options for files and shared-files</h2></div></div></div><table id="d0e57298"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-258"></a>URI Options for files and shared-files</h2></div></div></div><table id="d0e57239"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -1017,7 +1017,7 @@
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-259"></a>Endpoint Prefix folders and shared-folders</h2></div></div></div><p>For more information on Box folders see <a class="link" href="https://developers.box.com/docs/#folders" target="_top">https://developers.box.com/docs/#folders</a>. The following endpoints
                     can be invoked with the prefix <span class="strong"><strong><code class="code">folders</code></strong></span> or <span class="strong"><strong><code class="code">shared-folders</code></strong></span> as follows. The prefix <span class="strong"><strong>shared-folders</strong></span> requires <span class="strong"><strong>sharedLink</strong></span> and <span class="strong"><strong>sharedPassword</strong></span>
                     properties.</p><div class="informalexample"><pre class="programlisting">    box://folders/endpoint?[options]
-    box://shared-folders/endpoint?[options]</pre></div><table id="d0e57499"><colgroup> </colgroup><thead><tr>
+    box://shared-folders/endpoint?[options]</pre></div><table id="d0e57440"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -1134,7 +1134,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxFolder</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-260"></a>URI Options for folders or shared-folders</h2></div></div></div><p></p><table id="d0e57740"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-260"></a>URI Options for folders or shared-folders</h2></div></div></div><p></p><table id="d0e57681"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -1191,7 +1191,7 @@
                                     <p>com.box.boxjavalibv2.requests.requestobjects.BoxSharedLinkRequestObject</p>
                                 </td>
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-261"></a>Endpoint Prefix shared-items</h2></div></div></div><p>For more information on Box shared items see <a class="link" href="https://developers.box.com/docs/#shared-items" target="_top">https://developers.box.com/docs/#shared-items</a>. The following
-                    endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">shared-items</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://shared-items/endpoint?[options]</pre></div><table id="d0e57872"><colgroup> </colgroup><thead><tr>
+                    endpoints can be invoked with the prefix <span class="strong"><strong><code class="code">shared-items</code></strong></span> as follows:</p><div class="informalexample"><pre class="programlisting">    box://shared-items/endpoint?[options]</pre></div><table id="d0e57813"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -1217,7 +1217,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxItem</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-262"></a>URI Options for shared-items</h2></div></div></div><table id="d0e57932"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-262"></a>URI Options for shared-items</h2></div></div></div><table id="d0e57873"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -1233,7 +1233,7 @@
                                 </td>
                             </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-263"></a>Endpoint Prefix users</h2></div></div></div><p>For information on Box users see <a class="link" href="https://developers.box.com/docs/#users" target="_top">https://developers.box.com/docs/#users</a>. The following endpoints can
                     be invoked with the prefix <span class="strong"><strong><code class="code">users</code></strong></span>
-                    as follows:</p><div class="informalexample"><pre class="programlisting">    box://users/endpoint?[options]</pre></div><table id="d0e57980"><colgroup> </colgroup><thead><tr>
+                    as follows:</p><div class="informalexample"><pre class="programlisting">    box://users/endpoint?[options]</pre></div><table id="d0e57921"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Endpoint</p>
                             </td>
@@ -1376,7 +1376,7 @@
                             <td>
                                 <p>com.box.boxjavalibv2.dao.BoxUser</p>
                             </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-264"></a>URI Options for users</h2></div></div></div><table id="d0e58268"><colgroup> </colgroup><thead><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-264"></a>URI Options for users</h2></div></div></div><table id="d0e58209"><colgroup> </colgroup><thead><tr>
                                 <td>
                                     <p>Name</p>
                                 </td>
@@ -1458,7 +1458,7 @@
                 shown in the example next. By default the consumer will split the
                 com.box.boxjavalibv2.dao.BoxEventCollection from every long poll and create an
                 exchange for every com.box.boxjavalibv2.dao.BoxEvent. To make the consumer return
-                the entire collection in a single exchange, use the URI option <span class="strong"><strong>consumer.splitResult=false</strong></span>.</p><div class="informalexample"><pre class="programlisting">    box://poll-events/endpoint?[options]</pre></div><table id="d0e58447"><colgroup> </colgroup><thead><tr>
+                the entire collection in a single exchange, use the URI option <span class="strong"><strong>consumer.splitResult=false</strong></span>.</p><div class="informalexample"><pre class="programlisting">    box://poll-events/endpoint?[options]</pre></div><table id="d0e58388"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Endpoint</p>
                         </td>
@@ -1486,7 +1486,7 @@
                                 com.box.boxjavalibv2.dao.BoxEventCollection when
                                 consumer.splitResult=false</p>
                         </td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-266"></a>URI Options for poll-events</h2></div></div></div><table id="d0e58506"><colgroup> </colgroup><thead><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-266"></a>URI Options for poll-events</h2></div></div></div><table id="d0e58447"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>

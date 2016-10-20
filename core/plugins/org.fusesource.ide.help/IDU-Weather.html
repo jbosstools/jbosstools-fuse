@@ -14,9 +14,9 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Since the 9th of October 2015, an API Key is required to access the OpenWeather
                 service. This key is passed as a parameter to the URI definition of the weather
-                endpoint, using the <code class="code">appid</code> paramater!</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e171111"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+                endpoint, using the <code class="code">appid</code> paramater!</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e171052"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
- </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">weather://&lt;unused name&gt;[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e171125"><tr>
+ </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">weather://&lt;unused name&gt;[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e171066"><tr>
                 <th> Property </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -104,7 +104,7 @@
             </tr></table><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p>Camel will deliver the body as a json formatted java.lang.String (see the
-                <code class="literal">mode</code> option above).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><table id="d0e171340"><tr>
+                <code class="literal">mode</code> option above).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><table id="d0e171281"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>

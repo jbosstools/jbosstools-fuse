@@ -7,7 +7,7 @@
             the messaging M2M gateway. For example you might want to install Kura on
             Raspberry PI, then read temperature from the sensor attached to
             that Raspberry PI using Kura services and finally forward the current temperature
-            value to your data center service using Camel EIP and components.</p><div class="mediaobject"><img src="images/fabric_docker.png"></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116128"></a>KuraRouter
+            value to your data center service using Camel EIP and components.</p><div class="mediaobject"><img src="images/fabric_docker.png"></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116069"></a>KuraRouter
                     activator</h2></div></div></div><p>Bundles deployed to the Eclipse Kura are usually <a class="link" href="http://eclipse.github.io/kura/doc/hello-example.html#create-java-class" target="_top">developed as bundle activators</a>. So the easiest way to deploy Apache Camel
                         routes into the Kura is to create an OSGi bundle containing the class extending
                         <code class="code">org.apache.camel.kura.KuraRouter</code> class:</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
@@ -24,7 +24,7 @@
                                     OSGi-aware <code class="code">CamelContext</code>. It means that for every class extending
                                     <code class="code">KuraRouter</code>, there will be a dedicated <code class="code">CamelContext</code>
                                     instance. Ideally we recommend to deploy one <code class="code">KuraRouter</code> per OSGi
-                                    bundle.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116172"></a>Deploying KuraRouter</h2></div></div></div><p>Bundle containing your Kura router class
+                                    bundle.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116113"></a>Deploying KuraRouter</h2></div></div></div><p>Bundle containing your Kura router class
                                         should import the following packages in the OSGi manifest:</p><pre class="programlisting">Import-Package: org.osgi.framework;version="1.3.0",
   org.slf4j;version="1.6.4",
   org.apache.camel,org.apache.camel.impl,org.apache.camel.core.osgi,org.apache.camel.builder,org.apache.camel.model,
@@ -38,8 +38,8 @@ start &lt;camel-core-osgi-bundle-id&gt;
 install file:///home/user/.m2/repository/org/apache/camel/camel-kura/2.15.0/camel-kura-2.15.0.jar 
 start &lt;camel-kura-bundle-id&gt;</pre><p>...and all the components you plan to use in your routes:</p><pre class="programlisting">install file:///home/user/.m2/repository/org/apache/camel/camel-stream/2.15.0/camel-stream-2.15.0.jar
 start &lt;camel-stream-bundle-id&gt;</pre><p>Then finally deploy your router bundle:</p><pre class="programlisting">install file:///home/user/.m2/repository/com/example/myrouter/1.0/myrouter-1.0.jar
-start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116193"></a>KuraRouter utilities </h2></div></div></div><p> Kura router base class provides many useful utilities.
-                                                        This section explores each of them.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116198"></a>SLF4J logger</h2></div></div></div><p>Kura uses SLF4J
+start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116134"></a>KuraRouter utilities </h2></div></div></div><p> Kura router base class provides many useful utilities.
+                                                        This section explores each of them.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116139"></a>SLF4J logger</h2></div></div></div><p>Kura uses SLF4J
                                                                 facade for logging purposes. Protected member <code class="code">log</code> returns SLF4J logger
                                                                 instance associated with the given Kura router.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
 
@@ -49,7 +49,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
 
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116208"></a>BundleContext</h2></div></div></div><p>Protected member <code class="code">bundleContext</code> returns bundle
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116149"></a>BundleContext</h2></div></div></div><p>Protected member <code class="code">bundleContext</code> returns bundle
                                                                     context associated with the given Kura router.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
 
     @Override
@@ -59,7 +59,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
 
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116218"></a>CamelContext</h2></div></div></div><p>Protected member <code class="code">camelContext</code> is the
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116159"></a>CamelContext</h2></div></div></div><p>Protected member <code class="code">camelContext</code> is the
                                                                         <code class="code">CamelContext</code> associated with the given Kura router.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
 
     @Override
@@ -68,7 +68,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
 
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116231"></a>ProducerTemplate</h2></div></div></div><p>Protected member <code class="code">producerTemplate</code> is the <code class="code">ProducerTemplate</code>
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116172"></a>ProducerTemplate</h2></div></div></div><p>Protected member <code class="code">producerTemplate</code> is the <code class="code">ProducerTemplate</code>
             instance associated with the given Camel context.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
  
     @Override
@@ -77,7 +77,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
  
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116244"></a>ConsumerTemplate</h2></div></div></div><p>Protected member <code class="code">consumerTemplate</code> is the <code class="code">ConsumerTemplate</code>
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116185"></a>ConsumerTemplate</h2></div></div></div><p>Protected member <code class="code">consumerTemplate</code> is the <code class="code">ConsumerTemplate</code>
             instance associated with the given Camel context.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
  
     @Override
@@ -86,7 +86,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
  
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116257"></a>OSGi service resolver</h2></div></div></div><p>OSGi service resolver (<code class="code">service(Class&lt;T&gt;
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116198"></a>OSGi service resolver</h2></div></div></div><p>OSGi service resolver (<code class="code">service(Class&lt;T&gt;
                                                                             serviceType)</code>) can be used to easily retrieve service by type from the OSGi
                                                                             bundle context.</p><pre class="programlisting">public class MyKuraRouter extends KuraRouter {
 
@@ -107,7 +107,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         ...
     }
  
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116283"></a>KuraRouter activator callbacks</h2></div></div></div><p>Kura router comes with the lifecycle
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116224"></a>KuraRouter activator callbacks</h2></div></div></div><p>Kura router comes with the lifecycle
                                                                                 callbacks that can be used to customize the way the Camel router works. For example to
                                                                                 configure the <code class="code">CamelContext</code> instance associated with the router just before
                                                                                 the former is started, override <code class="code">beforeStart</code> method of the
@@ -120,7 +120,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
     osgiContext.setName("NameOfTheRouter");
   }
 
-}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116299"></a>Loading XML routes from ConfigurationAdmin</h2></div></div></div><p>Sometimes it is desired to read the XML definition of the routes from the server
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116240"></a>Loading XML routes from ConfigurationAdmin</h2></div></div></div><p>Sometimes it is desired to read the XML definition of the routes from the server
             configuration. This a common scenario for IoT gateways where over-the-air redeployment
             cost may be significant. To address this requirement each <code class="code">KuraRouter</code> looks
             for the <code class="code">kura.camel.BUNDLE-SYMBOLIC-NAME.route</code> property from the
@@ -134,7 +134,7 @@ start &lt;your-bundle-id&gt;</pre></div><div class="simplesect"><div class="titl
         &lt;from uri="direct:bar"/&gt;
         &lt;to uri="mock:bar"/&gt;
     &lt;/route&gt;
-&lt;/routes&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116324"></a>Deploying Kura router as a declarative OSGi service</h2></div></div></div><p>If you would like to deploy your Kura router as a declarative OSGi service, you can
+&lt;/routes&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e116265"></a>Deploying Kura router as a declarative OSGi service</h2></div></div></div><p>If you would like to deploy your Kura router as a declarative OSGi service, you can
             use the <code class="code">activate</code> and <code class="code">deactivate</code> methods provided by
                 <code class="code">KuraRouter</code>:</p><pre class="programlisting">&lt;scr:component name="org.eclipse.kura.example.camel.MyKuraRouter" activate="activate" deactivate="deactivate" enabled="true" immediate="true"&gt;
   &lt;implementation class="org.eclipse.kura.example.camel.MyKuraRouter"/&gt;
