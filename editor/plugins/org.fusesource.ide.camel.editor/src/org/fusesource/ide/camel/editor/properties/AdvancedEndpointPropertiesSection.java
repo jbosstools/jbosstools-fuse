@@ -94,7 +94,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
         	}
         }        
         
-        List<String> tabsToCreate = new ArrayList<String>();
+        List<String> tabsToCreate = new ArrayList<>();
         // path tab is always there
         tabsToCreate.add(GROUP_PATH);
         if (createCommonsTab) tabsToCreate.add(GROUP_COMMON);

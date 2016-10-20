@@ -435,14 +435,13 @@ public class PropertiesUtils {
 	 * @param p
 	 * @param value
 	 */
-	public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c,
-			IObservableMap modelMap) {
+	public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap<?,?> modelMap) {
 		if ("path".equalsIgnoreCase(p.getKind())) {
 			// simply rebuild the uri
 			String newUri = "";
 
 			// first build the path part
-			newUri = updatePathParams(c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
+			newUri = updatePathParams(selectedEP, c, c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
 
 			// now build the options
 			for (Parameter uriParam : c.getUriParameters()) {
@@ -508,6 +507,8 @@ public class PropertiesUtils {
 
 	/**
 	 * Updates the path part of a given uri syntax
+	 * @param selectedEP 
+	 * @param component 
 	 * 
 	 * @param syntax
 	 *            uri syntax
@@ -521,16 +522,22 @@ public class PropertiesUtils {
 	 *            current model map
 	 * @return
 	 */
-	public static String updatePathParams(String syntax, Parameter param, Object value, List<Parameter> pathParams, Map<?,?> modelMap) {
+	public static String updatePathParams(AbstractCamelModelElement selectedEP, Component component, String syntax, Parameter param, Object value, List<Parameter> pathParams, Map<?,?> modelMap) {
 		String withoutScheme = syntax.substring(syntax.indexOf(':') + 1);
 		for (Parameter pparam : pathParams) {
 			String val;
 			if (param.getName().equals(pparam.getName())) {
 				val = value.toString();
 			} else {
-				val = modelMap.get(pparam.getName()).toString();
+				Object storedValue = modelMap.get(pparam.getName());
+				if(storedValue != null){
+					val = storedValue.toString();
+				} else {
+					//modelMap is not initialized yet, use the model
+					val = getPropertyFromUri(selectedEP, pparam, component);
+				}
 			}
-			if (val.trim().length() < 1)
+			if (val == null || val.trim().length() < 1)
 				val = pparam.getDefaultValue();
 
 			if (val != null) {

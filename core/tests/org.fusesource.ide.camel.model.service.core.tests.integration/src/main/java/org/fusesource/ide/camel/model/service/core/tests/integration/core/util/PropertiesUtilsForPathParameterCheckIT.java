@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.ObservableMap;
@@ -93,6 +94,28 @@ public class PropertiesUtilsForPathParameterCheckIT {
 		PropertiesUtils.updateURIParams(selectedEP, hostPathParameter, "//newlocalhost", ftpsComponent, modelMap(ftpsComponent.getUriParameters()));
 	
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, hostPathParameter, ftpsComponent)).isEqualTo("//newlocalhost");
+	}
+	
+	@Test
+	public void testWithNotFullyInitializedModelMap() throws Exception {
+		AbstractCamelModelElement selectedEP = importModel("withPathParameterStartingWithSlash.xml");
+		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		final Component ftpsComponent = camelModel.getComponentModel().getComponentForScheme("ftps");
+		List<Parameter> uriParameters = ftpsComponent.getUriParameters();
+		Parameter hostPathParameter = uriParameters.stream().filter(p -> "host".equals(p.getName())).findFirst().get();
+		Parameter portPathParameter = uriParameters.stream().filter(p -> "port".equals(p.getName())).findFirst().get();
+		
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, hostPathParameter, ftpsComponent)).isEqualTo("//localhost");
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, portPathParameter, ftpsComponent)).isEqualTo("32");
+		
+		
+		List<Parameter> allParametersExceptPort = uriParameters.stream().filter(param -> !("port".equals(param.getName()))).collect(Collectors.toList());
+		IObservableMap<String, String> modelMap = modelMap(allParametersExceptPort);
+		
+		PropertiesUtils.updateURIParams(selectedEP, hostPathParameter, "//newlocalhost", ftpsComponent, modelMap);
+	
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, hostPathParameter, ftpsComponent)).isEqualTo("//newlocalhost");
+		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, portPathParameter, ftpsComponent)).isEqualTo("32");
 	}
 	
 	private IObservableMap<String, String> modelMap(List<Parameter> params) {
