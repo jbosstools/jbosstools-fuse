@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.server.extensions.feature"
       label="%featureName"
-      version="9.0.0.qualifier"
+      version="9.1.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
@@ -50,7 +50,7 @@
       <import plugin="org.jboss.ide.eclipse.as.wtp.ui" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.ide.eclipse.as.wtp.ui" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.as.runtimes.integration" version="3.0.0" match="greaterOrEqual"/>
-      <import feature="org.fusesource.ide.core.feature" version="9.0.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="9.1.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.foundation.feature" version="1.1.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.stacks.core.feature" version="1.1.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.runtime.core.feature" version="3.0.0" match="greaterOrEqual"/>

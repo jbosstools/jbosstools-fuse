@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.graph;singleton:=true
-Bundle-Version: 9.0.0.qualifier
+Bundle-Version: 9.1.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.osgi,
@@ -17,9 +17,9 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.ui.views,
  org.eclipse.zest.core,
  org.eclipse.zest.layouts,
- org.fusesource.ide.preferences;bundle-version="9.0.0",
- org.fusesource.ide.foundation.core;bundle-version="9.0.0",
- org.fusesource.ide.foundation.ui;bundle-version="9.0.0"
+ org.fusesource.ide.preferences;bundle-version="9.1.0",
+ org.fusesource.ide.foundation.core;bundle-version="9.1.0",
+ org.fusesource.ide.foundation.ui;bundle-version="9.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: org.fusesource.ide.graph
