@@ -45,7 +45,7 @@
     <jbtis.classifier>base</jbtis.classifier> <!-- base-ea -->
     
     <!-- Tycho versions -->
-    <jboss-tycho-version>0.26.0-SNAPSHOT</jboss-tycho-version>
+    <jboss-tycho-version>0.26.0</jboss-tycho-version>
     <tychoVersion>0.26.0</tychoVersion>
     <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
