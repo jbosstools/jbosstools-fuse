@@ -45,6 +45,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -105,7 +106,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	/**
 	 * the debugger facade
 	 */
-	private CamelDebugFacade debugger;
+	private ICamelDebuggerMBeanFacade debugger;
 	
 	/**
 	 * Constructs a new debug target in the given launch for the 
@@ -531,7 +532,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * 
 	 * @return
 	 */
-	public CamelDebugFacade getDebugger() {
+	public ICamelDebuggerMBeanFacade getDebugger() {
 		return this.debugger;
 	}
 	

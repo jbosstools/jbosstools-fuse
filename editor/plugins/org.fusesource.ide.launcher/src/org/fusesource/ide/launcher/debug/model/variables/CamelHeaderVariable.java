@@ -14,10 +14,10 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.Header;
 import org.fusesource.ide.launcher.Activator;
-import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.values.CamelHeaderValue;
 
@@ -79,7 +79,7 @@ public class CamelHeaderVariable extends BaseCamelVariable {
 	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#updateValueOnRuntime(org.fusesource.ide.launcher.debug.model.CamelDebugFacade)
 	 */
 	@Override
-	protected void updateValueOnRuntime(CamelDebugFacade debugger)
+	protected void updateValueOnRuntime(ICamelDebuggerMBeanFacade debugger)
 			throws DebugException {
 		IBacklogTracerHeader h = ((CamelHeaderValue) getValue()).getHeader();
 		if (Strings.isBlank(h.getValue())) {

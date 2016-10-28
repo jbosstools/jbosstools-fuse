@@ -13,8 +13,8 @@ package org.fusesource.ide.launcher.debug.model.variables;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugElement;
-import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.values.BaseCamelValue;
 
@@ -142,6 +142,6 @@ public class BaseCamelVariable extends CamelDebugElement implements IVariable {
 	/**
 	 * this method should be used to update the value in the runtime
 	 */
-	protected void updateValueOnRuntime(CamelDebugFacade debugger) throws DebugException {
+	protected void updateValueOnRuntime(ICamelDebuggerMBeanFacade debugger) throws DebugException {
 	}
 }
