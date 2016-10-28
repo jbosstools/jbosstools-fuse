@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.Message;
 import org.fusesource.ide.launcher.Activator;
@@ -303,7 +304,7 @@ public class CamelStackFrame extends CamelDebugElement implements IStackFrame, I
 		return contextFile != null ? contextFile.getName() : null;
 	}
 	
-	public CamelDebugFacade getDebugger() {
+	public ICamelDebuggerMBeanFacade getDebugger() {
 		return ((CamelDebugTarget)getDebugTarget()).getDebugger();
 	}
 }

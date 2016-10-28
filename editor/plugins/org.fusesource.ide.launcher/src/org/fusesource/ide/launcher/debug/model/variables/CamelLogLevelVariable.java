@@ -11,7 +11,7 @@
 package org.fusesource.ide.launcher.debug.model.variables;
 
 import org.eclipse.debug.core.DebugException;
-import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 
 /**
@@ -52,7 +52,7 @@ public class CamelLogLevelVariable extends BaseWritableCamelVariable {
 	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#updateValueOnRuntime(org.fusesource.ide.launcher.debug.model.CamelDebugFacade)
 	 */
 	@Override
-	protected void updateValueOnRuntime(CamelDebugFacade debugger)
+	protected void updateValueOnRuntime(ICamelDebuggerMBeanFacade debugger)
 			throws DebugException {
 		// change value
 		debugger.setLoggingLevel(getValue().getValueString().toUpperCase().trim());

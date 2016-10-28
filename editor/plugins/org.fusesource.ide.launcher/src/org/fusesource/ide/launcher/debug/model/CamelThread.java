@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -279,7 +280,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	 * @see org.eclipse.debug.core.model.IStep#stepOver()
 	 */
 	public void stepOver() throws DebugException {
-		CamelDebugFacade debugger = ((CamelDebugTarget)getDebugTarget()).getDebugger();
+		ICamelDebuggerMBeanFacade debugger = ((CamelDebugTarget)getDebugTarget()).getDebugger();
 		String endpointId = ((CamelStackFrame)getTopStackFrame()).getEndpointId();
 		try {
 			// mark this thread as in stepping mode
