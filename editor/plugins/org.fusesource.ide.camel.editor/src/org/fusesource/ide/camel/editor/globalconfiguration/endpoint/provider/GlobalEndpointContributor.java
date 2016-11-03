@@ -14,6 +14,8 @@ package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.AddGlobalEndpointWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
@@ -72,6 +74,10 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	@Override
 	public void onGlobalElementDeleted(AbstractCamelModelElement camelModelElement) {
 		// possible actions if one of my nodes got deleted from the context
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		if(eventBroker != null){
+			eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT,camelModelElement);
+		}
 	}
 
 	@Override
