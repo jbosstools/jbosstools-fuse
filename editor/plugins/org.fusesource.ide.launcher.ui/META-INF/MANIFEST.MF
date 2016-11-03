@@ -32,7 +32,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text;bundle-version="3.9.0",
  org.fusesource.ide.launcher;bundle-version="9.1.0",
  org.fusesource.ide.foundation.core;bundle-version="9.1.0",
- org.fusesource.ide.foundation.ui;bundle-version="9.1.0"
+ org.fusesource.ide.foundation.ui;bundle-version="9.1.0",
+ org.fusesource.ide.camel.model.service.core
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.ui.Activator
 Bundle-ClassPath: .
