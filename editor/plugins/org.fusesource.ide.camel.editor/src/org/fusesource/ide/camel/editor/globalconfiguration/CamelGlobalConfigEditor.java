@@ -758,6 +758,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						if (extHandler != null) {
 							extHandler.onGlobalElementDeleted(cme);
 						}
+						new BasicNodeValidator().clearMarkers(cme);
 						treeViewer.remove(selObj);
 					}
 				}
