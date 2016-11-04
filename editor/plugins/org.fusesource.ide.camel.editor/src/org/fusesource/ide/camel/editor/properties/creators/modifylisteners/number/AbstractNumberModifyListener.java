@@ -16,6 +16,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author Aurelien Pupier
@@ -39,7 +40,9 @@ public abstract class AbstractNumberModifyListener implements ModifyListener {
 	    Text txt = (Text)e.getSource();
 	    String val = txt.getText();
 	    try {
-	    	PropertiesUtils.validateDuration(val);
+	    	if (val != null && !Strings.isEmpty(val)) {
+	    		PropertiesUtils.validateDuration(val);
+	    	}
 	    	txt.setBackground(ColorConstants.white);
 			updateModel(txt.getText());
 	    } catch (IllegalArgumentException ex) {
