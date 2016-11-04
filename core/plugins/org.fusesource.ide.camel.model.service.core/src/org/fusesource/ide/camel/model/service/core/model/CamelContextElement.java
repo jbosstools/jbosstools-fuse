@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Element;
@@ -108,9 +110,13 @@ public class CamelContextElement extends AbstractCamelModelElement {
 			if (childExists) {
 				getXmlNode().removeChild(def.getXmlNode());
 			}
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			if (eventBroker != null) {
+				eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, def);
+			}
 		}
 	}
-	
+
 	/**
 	 * deletes all endpoint definitions
 	 */
@@ -234,6 +240,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 						dataFormatsNode.getParentNode().removeChild(dataFormatsNode);
 					}
 				}
+			}
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			if (eventBroker != null) {
+				eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, df);
 			}
 		}
 	}
