@@ -22,6 +22,8 @@ import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
@@ -228,6 +230,10 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 			if (nodeToRemove != null) {
 				getDocument().getDocumentElement().removeChild(nodeToRemove);
 				fireModelChanged();
+				IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+				if (eventBroker != null) {
+					eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, cmeToremove);
+				}
 			}
 		}
 	}
