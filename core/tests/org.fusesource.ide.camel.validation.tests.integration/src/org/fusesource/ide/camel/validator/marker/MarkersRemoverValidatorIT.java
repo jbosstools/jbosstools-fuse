@@ -101,7 +101,9 @@ public class MarkersRemoverValidatorIT {
 		CamelGlobalConfigEditor globalEditor = camelEditor.getGlobalConfigEditor();
 		camelEditor.setActiveEditor(globalEditor);
 		globalEditor.setFocus();
-		readAndDispatch(30);
+		readAndDispatch(20); 
+		globalEditor.reload();
+		readAndDispatch(20);
 
 		Map<String, ArrayList<Object>> model = ((CamelEditor) openEditorOnFileStore).getGlobalConfigEditor().getModel();
 		List<Object> elements = model.get(CamelGlobalConfigEditor.FUSE_CAT_ID);
