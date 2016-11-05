@@ -74,7 +74,7 @@ public class MarkersRemoverValidatorIT {
 		SafeRunnable.setIgnoreErrors(false);
 		statusHandlerBeforetest = Policy.getStatusHandler();
 		statusHandlerCalled = false;
-		openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("/route.xml");
+		openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("route.xml");
 		Policy.setStatusHandler(new StatusHandler() {
 			
 			@Override
@@ -105,7 +105,7 @@ public class MarkersRemoverValidatorIT {
 		globalEditor.reload();
 		readAndDispatch(20);
 
-		Map<String, ArrayList<Object>> model = ((CamelEditor) openEditorOnFileStore).getGlobalConfigEditor().getModel();
+		Map<String, ArrayList<Object>> model = camelEditor.getGlobalConfigEditor().getModel();
 		List<Object> elements = model.get(CamelGlobalConfigEditor.FUSE_CAT_ID);
 		assertTrue(elements != null && elements.size() > 0);
 
@@ -149,8 +149,7 @@ public class MarkersRemoverValidatorIT {
 
 	private IEditorPart openFileInEditorWithProblemsViewOpened(String filePath) throws Exception {
 		InputStream inputStream = MarkersRemoverValidatorIT.class.getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject()
-				.getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
+		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
 		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllPerspectives(false, false);
