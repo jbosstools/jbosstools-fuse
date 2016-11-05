@@ -96,9 +96,10 @@ public class MarkersRemoverValidatorIT {
 	@Test
 	public void checkMarkers() throws Exception {
 		readAndDispatch(20);
-		CamelDesignEditor camelDesignEditor = ((CamelEditor) openEditorOnFileStore).getDesignEditor();
-		CamelGlobalConfigEditor globalEditor = ((CamelEditor) openEditorOnFileStore).getGlobalConfigEditor();
-		((CamelEditor) openEditorOnFileStore).setActiveEditor(globalEditor);
+		CamelEditor camelEditor =(CamelEditor) openEditorOnFileStore;
+		CamelDesignEditor camelDesignEditor = camelEditor.getDesignEditor();
+		CamelGlobalConfigEditor globalEditor = camelEditor.getGlobalConfigEditor();
+		camelEditor.setActiveEditor(globalEditor);
 		globalEditor.setFocus();
 		readAndDispatch(30);
 
