@@ -162,7 +162,6 @@ public class MarkersRemoverValidatorIT {
 		statusHandlerCalled = false;
 		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
 		page.activate(editor);
-		editor.setFocus();
 		readAndDispatch(20);
 		return editor;
 	}
