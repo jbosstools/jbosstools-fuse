@@ -44,23 +44,22 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 
-public class MarkersRemoverValidator {
+public class MarkersRemoverValidatorIT {
 	
 	@Rule
-	public FuseProject fuseProject = new FuseProject(MarkersRemoverValidator.class.getName());
-	
+	public FuseProject fuseProject = new FuseProject(MarkersRemoverValidatorIT.class.getName());
+
 	private boolean safeRunnableIgnoreErrorStateBeforeTests;
-	boolean statusHandlerCalled = false;
+	private boolean statusHandlerCalled = false;
 	private IViewPart problemView = null;
-
 	private StatusHandler statusHandlerBeforetest;
-
 	private IEditorPart openEditorOnFileStore;
 
 	@Before
@@ -82,10 +81,7 @@ public class MarkersRemoverValidator {
 			public void show(IStatus status, String title) {
 				statusHandlerCalled = true;
 			}
-		});
-		
-		
-		
+		});		
 	}
 	
 	@After
@@ -94,93 +90,77 @@ public class MarkersRemoverValidator {
 		page.closeAllEditors(false);
 		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
 		Policy.setStatusHandler(statusHandlerBeforetest);
-		
 	}
 	
 		
-	
 	@Test
-	public void checkMarkers() throws Exception{
+	public void checkMarkers() throws Exception {
 		readAndDispatch(20);
-		
-		CamelDesignEditor camelDesignEditor = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
-		CamelGlobalConfigEditor globalEditor = ((CamelEditor)openEditorOnFileStore).getGlobalConfigEditor();
-		((CamelEditor)openEditorOnFileStore).setActiveEditor(globalEditor);
+		CamelDesignEditor camelDesignEditor = ((CamelEditor) openEditorOnFileStore).getDesignEditor();
+		CamelGlobalConfigEditor globalEditor = ((CamelEditor) openEditorOnFileStore).getGlobalConfigEditor();
+		((CamelEditor) openEditorOnFileStore).setActiveEditor(globalEditor);
 		globalEditor.setFocus();
 		readAndDispatch(30);
-		
-		
-		
-		Map<String,ArrayList<Object>> model = ((CamelEditor)openEditorOnFileStore).getGlobalConfigEditor().getModel();
+
+		Map<String, ArrayList<Object>> model = ((CamelEditor) openEditorOnFileStore).getGlobalConfigEditor().getModel();
 		List<Object> elements = model.get(CamelGlobalConfigEditor.FUSE_CAT_ID);
-		
-		assertTrue(elements!=null && elements.size()>0);
-				
-		for(int i=0;i<elements.size();i++){
-			org.fusesource.ide.camel.validation.ValidationFactory.getInstance().validate((AbstractCamelModelElement)elements.get(i));
-			
+		assertTrue(elements != null && elements.size() > 0);
+
+		for (int i = 0; i < elements.size(); i++) {
+			ValidationFactory.getInstance().validate((AbstractCamelModelElement) elements.get(i));
 		}
 
-		
 		Thread.currentThread().sleep(1000);
-		
 		readAndDispatch(20);
-		
-		      
-        Method getAllMarkersMethod = ExtendedMarkersView.class.getDeclaredMethod("getAllMarkers", new Class[]{}); //$NON-NLS-1$
+
+		Method getAllMarkersMethod = ExtendedMarkersView.class.getDeclaredMethod("getAllMarkers", new Class[] {}); //$NON-NLS-1$
 		getAllMarkersMethod.setAccessible(true);
-		IMarker[] markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[]{});
-       
-       
-        int initial = markers.length;
-        //there are errors or warnings
-        assertThat(initial>0);
-        
-        Field deleteButtonField = CamelGlobalConfigEditor.class.getDeclaredField("btnDelete");
-        deleteButtonField.setAccessible(true);
-        Button deleteButton= (Button) deleteButtonField.get(globalEditor);
-        
-       
-        for(int i=0;i<elements.size();i++){
-        	//select element
-           globalEditor.setSelection((AbstractCamelModelElement)elements.get(i));
-            //delet selected element from the tree       
-           deleteButton.notifyListeners(SWT.Selection,null);
-           readAndDispatch(20);
-           
-			
+		IMarker[] markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
+
+		int initial = markers.length;
+		// there are errors or warnings
+		assertThat(initial > 0);
+
+		Field deleteButtonField = CamelGlobalConfigEditor.class.getDeclaredField("btnDelete");
+		deleteButtonField.setAccessible(true);
+		Button deleteButton = (Button) deleteButtonField.get(globalEditor);
+
+		for (int i = 0; i < elements.size(); i++) {
+			// select element
+			globalEditor.setSelection((AbstractCamelModelElement) elements.get(i));
+			// delete selected element from the tree
+			deleteButton.notifyListeners(SWT.Selection, null);
+			readAndDispatch(20);
 		}
-        
-        globalEditor.doSave(null);
-        
-        Thread.currentThread().sleep(3000);
+
+		globalEditor.doSave(null);
+
+		Thread.currentThread().sleep(3000);
         readAndDispatch(20);
         readAndDispatch(20);
        
         markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[]{});
         assertThat(markers.length==0);
-	    
-		
-		
+	   		
 	}
 
 	private IEditorPart openFileInEditorWithProblemsViewOpened(String filePath) throws Exception {
-		InputStream inputStream = MarkersRemoverValidator.class.getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
+		InputStream inputStream = MarkersRemoverValidatorIT.class.getClassLoader().getResourceAsStream(filePath);
+		final IFile fileWithoutContext = fuseProject.getProject()
+				.getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
 		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		
+
 		readAndDispatch(20);
-		this.problemView  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView");
+		this.problemView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView");
 		readAndDispatch(20);
-		//Workaround to ignore Widget is disposed for JMX Navigator, issue fixed in JBoss Tools 10.0 (by side effect of a larger modification)
+		// Workaround to ignore Widget is disposed for JMX Navigator, issue
+		// fixed in JBoss Tools 10.0 (by side effect of a larger modification)
 		statusHandlerCalled = false;
 		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
-		
 		page.activate(editor);
-		
 		editor.setFocus();
 		readAndDispatch(20);
 		return editor;
@@ -201,5 +181,5 @@ public class MarkersRemoverValidator {
 			}
 		}
 	}
-	
+
 }
