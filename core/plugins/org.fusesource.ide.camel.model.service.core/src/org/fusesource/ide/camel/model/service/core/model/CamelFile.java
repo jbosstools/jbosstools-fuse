@@ -230,10 +230,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 			if (nodeToRemove != null) {
 				getDocument().getDocumentElement().removeChild(nodeToRemove);
 				fireModelChanged();
-				IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-				if (eventBroker != null) {
-					eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, cmeToremove);
-				}
+				notifyAboutDeletion(cmeToremove);
 			}
 		}
 	}
