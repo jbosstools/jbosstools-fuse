@@ -636,8 +636,7 @@ public abstract class AbstractCamelModelElement {
 			}
 			if (childFound) {
 				getXmlNode().removeChild(element.getXmlNode());
-				IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-				eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, element);
+				notifyAboutDeletion(element);
 			}
 		}
 		// special handling for the otherwise element
@@ -1753,5 +1752,17 @@ public abstract class AbstractCamelModelElement {
 
 	public String getTranslatedNodeName() {
 		return CamelUtils.getTranslatedNodeName(getXmlNode());
+	}
+	
+	/**
+	 * Notify listeners after remove Context Element
+	 * 
+	 * @param modelElement deleted element
+	 */
+	protected void notifyAboutDeletion(AbstractCamelModelElement modelElement) {
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		if (eventBroker != null) {
+			eventBroker.post(AbstractCamelModelElement.TOPIC_REMOVE_CAMEL_ELEMENT, modelElement);
+		}
 	}
 }

@@ -74,7 +74,7 @@ public class MarkersRemoverValidatorIT {
 		SafeRunnable.setIgnoreErrors(false);
 		statusHandlerBeforetest = Policy.getStatusHandler();
 		statusHandlerCalled = false;
-		openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("route.xml");
+		openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("routeWithValidationErrorOnGlobalElements.xml");
 		Policy.setStatusHandler(new StatusHandler() {
 			
 			@Override
