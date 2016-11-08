@@ -1755,7 +1755,7 @@ public abstract class AbstractCamelModelElement {
 	}
 	
 	/**
-	 * Notify listeners after remove Context Element
+	 * Notify registered remove-listeners, that a given CamelModelElement was removed
 	 * 
 	 * @param modelElement deleted element
 	 */
