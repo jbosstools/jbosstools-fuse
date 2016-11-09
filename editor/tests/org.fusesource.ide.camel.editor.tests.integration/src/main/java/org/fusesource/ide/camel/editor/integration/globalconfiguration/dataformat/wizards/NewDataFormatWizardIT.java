@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
 
-	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 4;
+	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 5;
 	
 	@Rule
 	public FuseProject fuseproject = new FuseProject(NewDataFormatWizardIT.class.getName());

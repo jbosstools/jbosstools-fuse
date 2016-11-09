@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -14,12 +14,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
+import org.apache.camel.catalog.RuntimeProvider;
+import org.apache.camel.catalog.karaf.KarafRuntimeProvider;
+import org.apache.camel.catalog.springboot.SpringBootRuntimeProvider;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.fusesource.ide.catalog.generator.model.component.Component;
 import org.fusesource.ide.catalog.generator.model.component.ComponentModel;
@@ -45,6 +49,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CatalogGenerator {
 	public static Logger LOG = LoggerFactory.getLogger(CatalogGenerator.class);
+	
+	private static final List<RuntimeProvider> PROVIDERS;
+	
+	static {
+		PROVIDERS = new ArrayList<>();
+		PROVIDERS.add(new KarafRuntimeProvider());
+		PROVIDERS.add(new SpringBootRuntimeProvider());
+	}
 	
 	private String catalogsDir;
 	
@@ -74,15 +86,21 @@ public class CatalogGenerator {
         ObjectMapper mapper = new ObjectMapper();
         
         System.err.println(">>>>> OUTPUT FOLDER: " + catalogsVersionDir.getAbsolutePath());
-        
-        createComponentModel(catalogsVersionDir, cat, mapper);
-        createDataFormatModel(catalogsVersionDir, cat, mapper);
-        createLanguageModel(catalogsVersionDir, cat, mapper);
-        createEIPModel(catalogsVersionDir, cat, mapper);
+
+        // create model files for all supported runtime providers
+        for (RuntimeProvider provider : PROVIDERS) {
+	        cat.setRuntimeProvider(provider);
+	        createComponentModel(catalogsVersionDir, cat, mapper, provider.getProviderName());
+	        createDataFormatModel(catalogsVersionDir, cat, mapper, provider.getProviderName());
+	        createLanguageModel(catalogsVersionDir, cat, mapper, provider.getProviderName());
+	        createEIPModel(catalogsVersionDir, cat, mapper, provider.getProviderName());
+        }
 	}
 	
-    private void createComponentModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper) throws IOException {
-        File outputFile = new File(parentFolder, "components.xml");
+    private void createComponentModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper, String mapperPrefix) throws IOException {
+    	File subFolder = new File(parentFolder, mapperPrefix);
+    	if (!subFolder.exists()) subFolder.mkdirs();
+        File outputFile = new File(subFolder, "components.xml");
         if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
         // build component model
         HashMap<String, ComponentModel> knownComponents = new HashMap<String, ComponentModel>();
@@ -194,8 +212,10 @@ public class CatalogGenerator {
         out.close();
     }
         
-    private void createDataFormatModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper) throws IOException {
-        File outputFile = new File(parentFolder, "dataformats.xml");
+    private void createDataFormatModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper, String mapperPrefix) throws IOException {
+    	File subFolder = new File(parentFolder, mapperPrefix);
+    	if (!subFolder.exists()) subFolder.mkdirs();
+        File outputFile = new File(subFolder, "dataformats.xml");
         if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
     
         // build data format model
@@ -276,8 +296,10 @@ public class CatalogGenerator {
         out.close();
     }
     
-    private void createLanguageModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper) throws IOException {
-    	File outputFile = new File(parentFolder, "languages.xml");
+    private void createLanguageModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper, String mapperPrefix) throws IOException {
+    	File subFolder = new File(parentFolder, mapperPrefix);
+    	if (!subFolder.exists()) subFolder.mkdirs();
+        File outputFile = new File(subFolder, "languages.xml");
     	if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
         
         // build language model
@@ -357,8 +379,10 @@ public class CatalogGenerator {
         out.close();
     }
     
-    private void createEIPModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper) throws IOException {
-        File outputFile = new File(parentFolder, "eips.xml");
+    private void createEIPModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper, String mapperPrefix) throws IOException {
+    	File subFolder = new File(parentFolder, mapperPrefix);
+    	if (!subFolder.exists()) subFolder.mkdirs();
+        File outputFile = new File(subFolder, "eips.xml");
         if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
     
         // build eip model

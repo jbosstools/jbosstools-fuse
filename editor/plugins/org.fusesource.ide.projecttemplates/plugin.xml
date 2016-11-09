@@ -133,15 +133,6 @@
           name="%template.medium.eapspring.name"
           weight="0">
     </projectTemplate>
-    <projectTemplate
-          category="fuse.projecttemplates.jbossfuse.advanced"
-          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplate"
-          description="%template.medium.cxf.code.first.description"
-          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMedium"
-          keywords="cxf"
-          name="%template.medium.cxf.code.first.name"
-          weight="50">
-    </projectTemplate>
  </extension>
  
  <!-- Maven configurator  -->
@@ -286,6 +277,35 @@
             	</and>
          	</constraint>
       	</project-facet-version>
+      	
+      	<project-facet-version
+            facet="jst.camel"
+            version="2.18.1">
+       	
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.8">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      	</project-facet-version>
+      	
 	  	<action
         	facet="jst.camel"
             id="jst.camel.install"
@@ -300,7 +320,7 @@
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>		
    	</extension>
-    <extension
+        <extension
           point="org.eclipse.core.runtime.preferences">
        <initializer
              class="org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer">
@@ -318,4 +338,3 @@
    </extension>
 
 </plugin>
-
