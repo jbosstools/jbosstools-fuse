@@ -24,6 +24,7 @@ import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.adopters.CamelModelLoader;
 import org.fusesource.ide.camel.model.service.core.adopters.XmlCamelModelLoader;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 
 /**
  * @author lhein
@@ -32,18 +33,27 @@ public class CamelService implements ICamelManagerService {
 	
 	private CamelModelLoader loader;
 	private CamelCatalog catalog;
-	
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel()
 	 */
 	@Override
+	@Deprecated
 	public CamelModel getCamelModel() {
-		if (this.loader == null) this.loader = new XmlCamelModelLoader();
+		return getCamelModel(CamelModelFactory.RUNTIME_PROVIDER_KARAF);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String)
+	 */
+	@Override
+	public CamelModel getCamelModel(String runtimeProvider) {
+		this.loader = new XmlCamelModelLoader();
 		try {
-			return loader.getCamelModel(	getComponentModelURL(), 
-											getEipModelURL(), 
-											getLanguageModelURL(), 
-											getDataFormatModelURL());
+			return loader.getCamelModel(	getComponentModelURL(runtimeProvider), 
+											getEipModelURL(runtimeProvider), 
+											getLanguageModelURL(runtimeProvider), 
+											getDataFormatModelURL(runtimeProvider));
 		} catch (IOException ex) {
 			CamelServiceImplementationActivator.pluginLog().logError(ex);
 		}
@@ -160,25 +170,20 @@ public class CamelService implements ICamelManagerService {
 	private static final String LANGUAGES_FILENAME = "languages.xml";
 	private static final String DATAFORMATS_FILENAME = "dataformats.xml";
 	
-	private static final String COMPONENTS_CATALOG_FILE = String.format("%s/%s", CATALOG_FOLDER, COMPONENTS_FILENAME);
-	private static final String EIPS_CATALOG_FILE = String.format("%s/%s", CATALOG_FOLDER, EIPS_FILENAME);
-	private static final String LANGUAGES_CATALOG_FILE = String.format("%s/%s", CATALOG_FOLDER, LANGUAGES_FILENAME);
-	private static final String DATAFORMATS_CATALOG_FILE = String.format("%s/%s", CATALOG_FOLDER, DATAFORMATS_FILENAME);
-
-	private URL getComponentModelURL() {
-		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(COMPONENTS_CATALOG_FILE);
+	private URL getComponentModelURL(String runtimeProvider) {
+		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(String.format("%s/%s/%s", CATALOG_FOLDER, runtimeProvider, COMPONENTS_FILENAME));
 	}
 	
-	private URL getEipModelURL() {
-		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(EIPS_CATALOG_FILE);
+	private URL getEipModelURL(String runtimeProvider) {
+		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(String.format("%s/%s/%s", CATALOG_FOLDER, runtimeProvider, EIPS_FILENAME));
 	}
 	
-	private URL getDataFormatModelURL() {
-		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(DATAFORMATS_CATALOG_FILE);
+	private URL getDataFormatModelURL(String runtimeProvider) {
+		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(String.format("%s/%s/%s", CATALOG_FOLDER, runtimeProvider, DATAFORMATS_FILENAME));
 	}
 	
-	private URL getLanguageModelURL() {
-		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(LANGUAGES_CATALOG_FILE);
+	private URL getLanguageModelURL(String runtimeProvider) {
+		return CamelServiceImplementationActivator.getDefault().getBundle().getEntry(String.format("%s/%s/%s", CATALOG_FOLDER, runtimeProvider, LANGUAGES_FILENAME));
 	}
 	
 	@Override

@@ -23,8 +23,18 @@ public interface ICamelManagerService {
 	 * creates and returns the camel model for a specific version
 	 * 
 	 * @return	the camel model
+	 * @deprecated Please use getCamelModel(String runtimeProvider) in future!
 	 */
+	@Deprecated	
 	CamelModel getCamelModel();
+	
+	/**
+	 * creates and returns the camel model for a specific version and runtime
+	 * 
+	 * @param runtimeProvider	the name of the runtime provider
+	 * @return	the camel model
+	 */
+	CamelModel getCamelModel(String runtimeProvider);
 	
 	/**
 	 * returns the schema provider 

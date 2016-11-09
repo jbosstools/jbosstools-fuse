@@ -15,6 +15,7 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
@@ -52,8 +53,17 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
      */
     @Override
     public CamelModel getCamelModel() {
-    	CamelModel cm = checkedGetService().getCamelModel();
+    	return getCamelModel(CamelModelFactory.RUNTIME_PROVIDER_KARAF);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String)
+     */
+    @Override
+    public CamelModel getCamelModel(String runtimeProvider) {
+    	CamelModel cm = checkedGetService().getCamelModel(runtimeProvider);
     	cm.setCamelVersion(this.serviceVersion);
+    	cm.setRuntimeProvider(runtimeProvider);
     	return cm;
     }
     

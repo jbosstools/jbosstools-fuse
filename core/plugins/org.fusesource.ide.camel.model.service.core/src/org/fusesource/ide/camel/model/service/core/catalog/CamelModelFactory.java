@@ -41,17 +41,20 @@ public class CamelModelFactory {
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
 		camelVersionToFuseBOMMapping.put("2.17.3",				 "6.3.0.redhat-187");
-		camelVersionToFuseBOMMapping.put("2.18.0-SNAPSHOT",      "6.3.0.redhat-187");
+		camelVersionToFuseBOMMapping.put("2.18.1",      	 	 "6.3.0.redhat-187");
 	}
 	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-187";
-			
-	private static HashMap<String, CamelModel> supportedCamelModels;
+	
+	private static HashMap<String, Map<String, CamelModel>> supportedCamelModels;
+	
+	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
+	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
 	
 	/**
 	 * initializes all available models for the connectors group of the camel editor palette
 	 */
 	public static void initializeModels() {
-		supportedCamelModels = new HashMap<String, CamelModel>();
+		supportedCamelModels = new HashMap<>();
 		
 		String[] versions = CamelServiceManagerUtil.getAvailableVersions();
 		for (String version : versions) {
@@ -65,7 +68,7 @@ public class CamelModelFactory {
 	 * @param mockedSupportedCamelModels
 	 */
 	@Deprecated
-	public static void initializeModels(HashMap<String, CamelModel> mockedSupportedCamelModels) {
+	public static void initializeModels(HashMap<String, Map<String, CamelModel>> mockedSupportedCamelModels) {
 		supportedCamelModels = mockedSupportedCamelModels;
 	}
 
@@ -86,25 +89,46 @@ public class CamelModelFactory {
 	 * 
 	 * @param camelVersion
 	 * @return
+	 * @deprecated please use getModelForVersion(String camelVersion, String runtimeProvider) in future!
 	 */
+	@Deprecated
 	public static CamelModel getModelForVersion(String camelVersion) {
-		CamelModel cm = supportedCamelModels.get(camelVersion);
+		return getModelForVersion(camelVersion, RUNTIME_PROVIDER_KARAF);
+	}
+	
+	/**
+	 * returns the model for a given camel version or null if not supported
+	 * 
+	 * @param camelVersion
+	 * @param runtimeProvider
+	 * @return
+	 */
+	public static CamelModel getModelForVersion(String camelVersion, String runtimeProvider) {
+		Map<String, CamelModel> modelMap = supportedCamelModels.get(camelVersion);
+		CamelModel cm = null;
+		if (modelMap != null) {
+			cm = modelMap.get(runtimeProvider);
+		} else {
+			modelMap = new HashMap<>();
+		}
 		
 		if (!supportedCamelModels.containsKey(camelVersion)) {
 			// seems user wants a version we don't have - look for compatible
 			// alternative supported version of camel
 			String alternateVersion = getCompatibleCamelVersion(camelVersion);
 			CamelModelServiceCoreActivator.pluginLog().logWarning("Selected Camel version " + camelVersion + " is not directly supported. Using alternative version: " + alternateVersion);
-			cm = supportedCamelModels.get(alternateVersion);
+			cm = supportedCamelModels.get(alternateVersion).get(runtimeProvider);
 		}
 		
 		if (cm == null) {
 			// not initialized yet
 			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(camelVersion);
 			if (svc != null) {
-				cm = svc.getCamelModel();
+				cm = svc.getCamelModel(runtimeProvider);
 				cm.setCamelVersion(camelVersion);
-				supportedCamelModels.put(camelVersion, cm);
+				cm.setRuntimeProvider(runtimeProvider);
+				modelMap.put(runtimeProvider, cm);
+				supportedCamelModels.put(camelVersion, modelMap);
 			}
 		}
 		
