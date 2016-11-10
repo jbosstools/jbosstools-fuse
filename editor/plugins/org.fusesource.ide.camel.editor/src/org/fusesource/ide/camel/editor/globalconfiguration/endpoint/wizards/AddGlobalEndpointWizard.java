@@ -94,7 +94,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	@Override
 	public boolean performFinish() {
 		component = globalEndpointPage.getComponentSelected();
-		final String prefixNS = camelFile.getCamelContext().getXmlNode().getPrefix();
+		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		globalConfigurationNode = camelFile.createElement("endpoint", prefixNS); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("uri", component.getSyntax()); //$NON-NLS-1$
 		globalConfigurationNode.setAttribute("id", globalEndpointPage.getId()); //$NON-NLS-1$

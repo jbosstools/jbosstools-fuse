@@ -40,7 +40,7 @@ public class AbstractCamelModelElementTest {
 		doReturn("notEmptyUri").when(cme).getParameter(AbstractCamelModelElement.URI_PARAMETER_KEY);
 		doCallRealMethod().when(cme).isEndpointElement();
 		doCallRealMethod().when(cme).getIconName();
-		doReturn(context).when(cme).getCamelContext();
+		doReturn(context).when(cme).getRouteContainer();
 		
 	}
 

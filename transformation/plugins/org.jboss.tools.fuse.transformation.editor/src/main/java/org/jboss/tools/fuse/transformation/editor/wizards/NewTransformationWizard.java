@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -72,6 +73,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
+
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -289,19 +291,23 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
-                        CamelContextElement camelContext = camelModel.getCamelContext();
-
-                        // Wizard completed successfully; create the necessary
-                        // config
-                        addCamelContextEndpoint(camelContext, endpoint);
-                        if (sourceFormat != null) {
-                            addDataFormat(camelContext, sourceFormat);
-                        }
-                        if (targetFormat != null) {
-                            addDataFormat(camelContext, targetFormat);
-                        }
-                        // Create the route endpoint
-                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId()); //$NON-NLS-1$
+                    	if (camelModel.getRouteContainer() instanceof CamelContextElement) {
+	                        CamelContextElement camelContext = (CamelContextElement)camelModel.getRouteContainer();
+	
+	                        // Wizard completed successfully; create the necessary
+	                        // config
+	                        addCamelContextEndpoint(camelContext, endpoint);
+	                        if (sourceFormat != null) {
+	                            addDataFormat(camelContext, sourceFormat);
+	                        }
+	                        if (targetFormat != null) {
+	                            addDataFormat(camelContext, targetFormat);
+	                        }
+	                        // Create the route endpoint
+	                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId()); //$NON-NLS-1$
+                    	} else {
+                    		
+                    	}
                     }
 
                     project.refreshLocal(IProject.DEPTH_INFINITE, null);

@@ -443,7 +443,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	private AbstractCamelModelElement determineContainerElement(ContainerShape container) {
 		CamelDesignEditor editor = (CamelDesignEditor) getDiagramBehavior().getDiagramContainer();
 		if (container instanceof Diagram) {
-			return editor.getModel().getCamelContext();
+			return editor.getModel().getRouteContainer();
 		} else {
 			return (AbstractCamelModelElement) getBusinessObjectForPictogramElement(container);
 		}
@@ -452,7 +452,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	private boolean isAttemptToCreateWiredFigure(AbstractCamelModelElement selectedContainer, ICreateContext context) {
 		if (selectedContainer != null) {
 			Eip underlyingMetaModelObject = selectedContainer.getUnderlyingMetaModelObject();
-			return (underlyingMetaModelObject != null && !underlyingMetaModelObject.canHaveChildren())
+			return (underlyingMetaModelObject != null && !underlyingMetaModelObject.canHaveChildren() && !underlyingMetaModelObject.getName().equalsIgnoreCase(AbstractCamelModelElement.CAMEL_CONTEXT_NODE_NAME))
 					|| context.getTargetConnection() != null;
 		}
 		return false;

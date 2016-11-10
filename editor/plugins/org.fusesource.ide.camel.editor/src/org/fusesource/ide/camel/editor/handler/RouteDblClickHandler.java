@@ -47,7 +47,7 @@ public class RouteDblClickHandler implements ICustomDblClickHandler {
 		CamelDesignEditor designEditor = CamelUtils.getDiagramEditor();
 		if (designEditor != null && 
 			designEditor.getSelectedContainer() instanceof CamelContextElement && 
-			designEditor.getModel().getCamelContext().getChildElements().size()>1) {
+			designEditor.getModel().getRouteContainer().getChildElements().size()>1) {
 			// now execute the go into
 			designEditor.setSelectedContainer(route);
 		}

@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.transformation.core.camel;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.jboss.tools.fuse.transformation.core.TransformType;
@@ -171,21 +173,30 @@ public class CamelConfigBuilder {
     }
 
     public Collection<AbstractCamelModelElement> getDataFormats() {
-    	return getModel().getCamelContext().getDataformats().values();
+    	if (getModel().getRouteContainer() instanceof CamelContextElement) {
+    		return ((CamelContextElement)getModel().getRouteContainer()).getDataformats().values();
+    	}
+    	return new ArrayList<AbstractCamelModelElement>();
     }
 
     public Collection<AbstractCamelModelElement> getEndpoints() {
-    	return getModel().getCamelContext().getEndpointDefinitions().values();
+    	if (getModel().getRouteContainer() instanceof CamelContextElement) {
+    		return ((CamelContextElement)getModel().getRouteContainer()).getEndpointDefinitions().values();
+    	}
+    	return new ArrayList<AbstractCamelModelElement>();
     }
 
     protected AbstractCamelModelElement addEndpoint(String id, String uri) {
-    	AbstractCamelModelElement parent = getModel().getCamelContext();
-		CamelEndpoint ep = new CamelEndpoint(uri);
-		ep.setId(id);
-		ep.setParent(parent);
-		ep.setUnderlyingMetaModelObject(getEipByName("from")); //$NON-NLS-1$
-		getModel().getCamelContext().addEndpointDefinition(ep);
-		return ep;
+    	AbstractCamelModelElement parent = getModel().getRouteContainer();
+		if (parent instanceof CamelContextElement) {
+	    	CamelEndpoint ep = new CamelEndpoint(uri);
+			ep.setId(id);
+			ep.setParent(parent);
+			ep.setUnderlyingMetaModelObject(getEipByName("from")); //$NON-NLS-1$
+			((CamelContextElement)getModel().getRouteContainer()).addEndpointDefinition(ep);
+			return ep;
+		}
+		return null; // maybe better throw illegaloperationexception?
     }
 
     protected String getPackage(String type) {
@@ -199,13 +210,15 @@ public class CamelConfigBuilder {
         AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	AbstractCamelModelElement parent = getModel().getCamelContext();
-			dataFormat = new CamelBasicModelElement(parent, null);
-    		dataFormat.setId(id);
-    		dataFormat.setUnderlyingMetaModelObject(json);
-    		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
-    		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
-    		parent.getCamelContext().addDataFormat(dataFormat);
+        	AbstractCamelModelElement parent = getModel().getRouteContainer();
+        	if (parent instanceof CamelContextElement) {
+				dataFormat = new CamelBasicModelElement(parent, null);
+	    		dataFormat.setId(id);
+	    		dataFormat.setUnderlyingMetaModelObject(json);
+	    		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
+	    		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
+	    		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
+        	}
         }
         return dataFormat;
     }
@@ -217,12 +230,14 @@ public class CamelConfigBuilder {
         AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	AbstractCamelModelElement parent = getModel().getCamelContext();
-			dataFormat = new CamelBasicModelElement(parent, null);
-    		dataFormat.setId(id);
-    		dataFormat.setUnderlyingMetaModelObject(jaxb);
-    		dataFormat.setParameter("contextPath", contextPath); //$NON-NLS-1$
-    		parent.getCamelContext().addDataFormat(dataFormat);
+        	AbstractCamelModelElement parent = getModel().getRouteContainer();
+        	if (parent instanceof CamelContextElement) {
+				dataFormat = new CamelBasicModelElement(parent, null);
+	    		dataFormat.setId(id);
+	    		dataFormat.setUnderlyingMetaModelObject(jaxb);
+	    		dataFormat.setParameter("contextPath", contextPath); //$NON-NLS-1$
+	    		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
+        	}
         }
         return dataFormat;
     }

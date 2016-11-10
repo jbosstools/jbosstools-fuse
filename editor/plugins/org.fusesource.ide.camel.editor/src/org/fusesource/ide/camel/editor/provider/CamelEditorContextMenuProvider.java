@@ -74,7 +74,7 @@ public class CamelEditorContextMenuProvider extends ContextMenuProvider {
 		AbstractCamelModelElement node = nodeViewer.getSelectedNode();
 		if (node == null) {
 			// lets choose the root container
-			node = editor.getModel().getCamelContext();
+			node = editor.getModel().getRouteContainer();
 		}
 
 		// add a separator

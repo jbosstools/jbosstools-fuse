@@ -86,8 +86,8 @@ public abstract class AbstractCamelModelElement {
 	// the camel file
 	private CamelFile cf;
 
-	// the camel context
-	private CamelContextElement context;
+	// the camel route container
+	private CamelRouteContainerElement container;
 
 	private String name;
 	private String description;
@@ -1537,15 +1537,20 @@ public abstract class AbstractCamelModelElement {
 				if (u.startsWith("ref:")) {
 					// if its a ref we lookup what is the reference scheme
 					String refId = u.substring(u.indexOf(':') + 1);
-					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
-					if (endpointRef != null) {
-						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
-						if (refUri != null && refUri.contains(":")) {
-							return refUri.substring(0, refUri.indexOf(':'));
-						} else {
-							// seems we have a broken ref
-							return ENDPOINT_NODE_NAME;
+					CamelRouteContainerElement container = getRouteContainer();
+					if (container instanceof CamelContextElement) {
+						AbstractCamelModelElement endpointRef = ((CamelContextElement)container).getEndpointDefinitions().get(refId);
+						if (endpointRef != null) {
+							String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
+							if (refUri != null && refUri.contains(":")) {
+								return refUri.substring(0, refUri.indexOf(':'));
+							} else {
+								// seems we have a broken ref
+								return ENDPOINT_NODE_NAME;
+							}
 						}
+					} else {
+						CamelModelServiceCoreActivator.pluginLog().logWarning("ref: notation not supported for " + container.getNodeTypeId());
 					}
 				} else {
 					if (u.indexOf(':') != -1) {
@@ -1605,17 +1610,17 @@ public abstract class AbstractCamelModelElement {
 	 *
 	 * @return
 	 */
-	public CamelContextElement getCamelContext() {
-		if (this.context == null) {
+	public CamelRouteContainerElement getRouteContainer() {
+		if (this.container == null) {
 			AbstractCamelModelElement tmp = this;
-			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelContextElement)) {
+			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelRouteContainerElement)) {
 				tmp = tmp.getParent();
 			}
-			if (tmp.getParent() != null && tmp.getParent() instanceof CamelContextElement) {
-				this.context = (CamelContextElement) tmp.getParent();
+			if (tmp.getParent() != null && tmp.getParent() instanceof CamelRouteContainerElement) {
+				this.container = (CamelRouteContainerElement) tmp.getParent();
 			}
 		}
-		return this.context;
+		return this.container;
 	}
 
 	/**
@@ -1626,7 +1631,7 @@ public abstract class AbstractCamelModelElement {
 	public String getNewID() {
 		int i = 1;
 		String answer = String.format("_%s%d", getNodeTypeId(), i++);
-		while (!getCamelContext().isNewIDAvailable(answer)) {
+		while (!getRouteContainer().isNewIDAvailable(answer)) {
 			answer = String.format("_%s%d", getNodeTypeId(), i++);
 		}
 		return answer;
@@ -1643,7 +1648,7 @@ public abstract class AbstractCamelModelElement {
 			return false;
 		}
 
-		if (getCamelContext().findAllNodesWithId(id).size()>1) {
+		if (getRouteContainer().findAllNodesWithId(id).size()>1) {
 			return false;
 		}
 
@@ -1660,7 +1665,7 @@ public abstract class AbstractCamelModelElement {
 		if (newId == null || newId.trim().isEmpty()) {
 			return false;
 		}
-		return getCamelContext() == null || getCamelContext().findNode(newId) == null;
+		return getRouteContainer() == null || getRouteContainer().findNode(newId) == null;
 	}
 
 	/**

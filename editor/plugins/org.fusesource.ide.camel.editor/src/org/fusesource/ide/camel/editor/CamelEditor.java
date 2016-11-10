@@ -765,7 +765,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			Object o = Selections.getFirstSelection(selProvider.getSelection());
 			if (o != null && o instanceof IResource) {
 				IResource res = (IResource)o;
-				if (res.getLocationURI().getPath().equals(this.editorInput.getCamelContextFile().getLocationURI().getPath()) && editorInput.getSelectedContainerId() != null && editorInput.getSelectedContainerId().equals(getDesignEditor().getModel().getCamelContext().getId()) == false) {
+				if (res.getLocationURI().getPath().equals(this.editorInput.getCamelContextFile().getLocationURI().getPath()) && editorInput.getSelectedContainerId() != null && editorInput.getSelectedContainerId().equals(getDesignEditor().getModel().getRouteContainer().getId()) == false) {
 					editorInput.setSelectedContainerId(null);
 					getDesignEditor().setSelectedContainer(null);
 				}

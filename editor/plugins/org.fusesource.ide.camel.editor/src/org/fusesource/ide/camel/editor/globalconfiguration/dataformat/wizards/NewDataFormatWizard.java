@@ -85,7 +85,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	 * @return
 	 */
 	public Element createDataFormatNode(DataFormat dataformat, String id) {
-		final String prefixNS = camelFile.getCamelContext().getXmlNode().getPrefix();
+		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		Element newDataformatNode = camelFile.createElement(dataformat.getModelName(), prefixNS); // $NON-NLS-1$
 		newDataformatNode.setAttribute("id", id); //$NON-NLS-1$
 		for (Parameter parameter : dataformat.getParameters()) {

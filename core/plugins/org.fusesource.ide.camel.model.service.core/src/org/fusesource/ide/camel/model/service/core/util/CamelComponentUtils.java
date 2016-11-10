@@ -77,12 +77,14 @@ public final class CamelComponentUtils {
 
 		refs.add("");
 		refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet().toArray(new String[cf.getCamelFile().getGlobalDefinitions().keySet().size()])));
-		final CamelContextElement camelContext = cf.getCamelContext();
-		if(camelContext != null){
-			refs.addAll(Arrays.asList(camelContext.getEndpointDefinitions().keySet().toArray(new String[camelContext.getEndpointDefinitions().size()])));
-			refs.addAll(Arrays.asList(camelContext.getDataformats().keySet().toArray(new String[camelContext.getDataformats().size()])));
+		if (cf.getRouteContainer() instanceof CamelContextElement) {
+			final CamelContextElement camelContext = (CamelContextElement)cf.getRouteContainer();
+			if(camelContext != null){
+				refs.addAll(Arrays.asList(camelContext.getEndpointDefinitions().keySet().toArray(new String[camelContext.getEndpointDefinitions().size()])));
+				refs.addAll(Arrays.asList(camelContext.getDataformats().keySet().toArray(new String[camelContext.getDataformats().size()])));
+			}
 		}
-
+		
 		return refs.toArray(new String[refs.size()]);
 	}
 

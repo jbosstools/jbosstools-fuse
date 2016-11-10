@@ -234,7 +234,7 @@ public class DetailsSection extends FusePropertySection {
 							}	
 						} else {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								if (selectedEP.getCamelContext().findNode((String)value) == null &&
+								if (selectedEP.getRouteContainer().findNode((String)value) == null &&
 									selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value) == false) {
 									// no ref found - could be something the server provides
 									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");

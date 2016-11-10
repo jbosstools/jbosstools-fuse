@@ -361,7 +361,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			if (model != null && model.getCamelFile() != null) {
 				model.getCamelFile().addModelListener(this);
 				model.getCamelFile().addModelListener(getParent().getGlobalConfigEditor());
-				this.selectedContainer = model.getCamelContext();
+				this.selectedContainer = model.getRouteContainer();
 			}	
 		}		
 	}
@@ -480,7 +480,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		this.selectedContainer = route;
 		switchContainer();
 		if(selectedContainer == null){
-			selectedContainer = getModel().getCamelContext();
+			selectedContainer = getModel().getRouteContainer();
 		}
 	}
 	
@@ -501,7 +501,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		        getEditingDomain().getCommandStack().execute(importCommand);
 		        initializeDiagram(importCommand.getDiagram());
 		        update();
-		        parent.updateSelectedContainer(getSelectedContainer() != null ? getSelectedContainer().getId() : getModel().getCamelContext().getId());
+		        parent.updateSelectedContainer(getSelectedContainer() != null ? getSelectedContainer().getId() : getModel().getRouteContainer().getId());
 		        refreshDiagramContents(importCommand.getDiagram());
 		        outlinePage.changeInput(container);
 			}

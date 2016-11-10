@@ -48,6 +48,7 @@ import org.fusesource.ide.camel.editor.properties.creators.advanced.NumberParame
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -201,7 +202,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 							if (((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
 								// check for broken refs
 								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
-								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
+								if (refId == null || refId.trim().length()<1 || selectedEP.getRouteContainer() instanceof CamelContextElement == false || ((CamelContextElement)selectedEP.getRouteContainer()).getEndpointDefinitions().get(refId) == null) {
 									return ValidationStatus.warning("The entered reference does not exist in your context!");
 								}
 							}

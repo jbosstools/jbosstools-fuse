@@ -25,6 +25,8 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.foundation.ui.util.DialogUtils;
 import org.jboss.tools.fuse.transformation.core.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -50,9 +52,12 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 			if (uri != null && uri.trim().length()>0 && uri.trim().toLowerCase().startsWith("ref:")) { //$NON-NLS-1$
 				String id = uri.substring("ref:".length()); //$NON-NLS-1$
 				if (id != null) {
-					String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
-					if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
-						return true;
+					CamelRouteContainerElement container = clickedNode.getRouteContainer();
+					if (container instanceof CamelContextElement) {
+						String refUri = (String) ((CamelContextElement)container).getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
+						if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
+							return true;
+						}
 					}
 				}
 			}
@@ -92,38 +97,41 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 		if (clickedNode.isEndpointElement()) {
 			String id = ((String) clickedNode.getParameter("uri")).substring("ref:".length()); //$NON-NLS-1$ //$NON-NLS-2$
 			if (id != null) {
-				String refUri = (String) clickedNode.getCamelContext().getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
-				if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
-					String filename = getEndpointParameter(refUri, EndpointHelper.MAPPING_FILE);
-
-					// Open mapping editor
-					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getEditors(filename,
-							Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID))[0];
-
-					IResource res = clickedNode.getCamelFile().getResource();
-					try {
-						res.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-						IPath tempPath = new Path(filename);
-						IFile xmlFile = res.getProject().getFile(tempPath);
-						if (xmlFile != null && !xmlFile.exists()) {
-							tempPath = new Path(MavenUtils.RESOURCES_PATH + filename);
-							xmlFile = res.getProject().getFile(tempPath);
+				CamelRouteContainerElement container = clickedNode.getRouteContainer();
+				if (container instanceof CamelContextElement) {
+					String refUri = (String) ((CamelContextElement)container).getEndpointDefinitions().get(id).getParameter("uri"); //$NON-NLS-1$
+					if (refUri != null && refUri.startsWith("dozer:")) { //$NON-NLS-1$
+						String filename = getEndpointParameter(refUri, EndpointHelper.MAPPING_FILE);
+	
+						// Open mapping editor
+						final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getEditors(filename,
+								Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID))[0];
+	
+						IResource res = clickedNode.getCamelFile().getResource();
+						try {
+							res.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+							IPath tempPath = new Path(filename);
+							IFile xmlFile = res.getProject().getFile(tempPath);
 							if (xmlFile != null && !xmlFile.exists()) {
-								MessageDialog.openError(Display.getCurrent().getActiveShell(),
-										Messages.TransformationDblClickHandler_ErrorDialogTitle_TransdformationFileNotAccessible,
-										Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename));
-								return;
+								tempPath = new Path(MavenUtils.RESOURCES_PATH + filename);
+								xmlFile = res.getProject().getFile(tempPath);
+								if (xmlFile != null && !xmlFile.exists()) {
+									MessageDialog.openError(Display.getCurrent().getActiveShell(),
+											Messages.TransformationDblClickHandler_ErrorDialogTitle_TransdformationFileNotAccessible,
+											Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename));
+									return;
+								}
 							}
+	
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+									.openEditor(new FileEditorInput(xmlFile), desc.getId());
+						} catch (Exception e) {
+							DialogUtils.showUserError(Activator.plugin().getBundle().getSymbolicName(),
+									Messages.TransformationDblClickHandler_ErroDialogTitle_ExceptionOpeningTransformationFile,
+									Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename),
+									e);
+							Activator.error(e);
 						}
-
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-								.openEditor(new FileEditorInput(xmlFile), desc.getId());
-					} catch (Exception e) {
-						DialogUtils.showUserError(Activator.plugin().getBundle().getSymbolicName(),
-								Messages.TransformationDblClickHandler_ErroDialogTitle_ExceptionOpeningTransformationFile,
-								Messages.bind(Messages.TransformationDblClickHandler_errormessageCamelFileNotAccessible, filename),
-								e);
-						Activator.error(e);
 					}
 				}
 			}

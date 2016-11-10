@@ -13,6 +13,8 @@
  */
 package org.jboss.tools.fuse.transformation.core.camel;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -27,8 +29,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.assertj.core.api.Assertions;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.jboss.tools.fuse.transformation.core.TransformType;
-import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder.MarshalType;
 import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
 import org.junit.Assert;
@@ -54,11 +57,19 @@ public class CamelConfigBuilderIT {
     private static final String BLUEPRINT_CONFIG = "blueprint-config.xml";
     private static final String NEW_BLUEPRINT_CONFIG = "new-blueprint-config.xml";
 
+    private CamelContextElement getCamelContext(CamelRouteContainerElement container) {
+    	if (container instanceof CamelContextElement) {
+    		return (CamelContextElement)container;
+    	}
+    	fail("unable to work with route containers which are not CamelContext elements...");
+    	return null;
+    }
+    
     @Test
     public void createXmlToJson() throws Exception {
 		// Document xmlJsonDoc = loadDocument(XML_JSON);
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
 		AbstractCamelModelElement sourceFormat = config.createDataFormat(
                 TransformType.XML, "xml.ABCOrder", MarshalType.UNMARSHALLER);
 		AbstractCamelModelElement targetFormat = config.createDataFormat(
@@ -75,7 +86,7 @@ public class CamelConfigBuilderIT {
 	@Test
     public void createJavaToXml() throws Exception {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("java2xml", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.JAVA, "source.Input", 
                 TransformType.XML, "target.Output");
@@ -85,7 +96,7 @@ public class CamelConfigBuilderIT {
     @Test
     public void createXmlToJava() throws Exception {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("xml2java", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.XML, "source.Input", 
                 TransformType.JAVA, "target.Output");
@@ -95,7 +106,7 @@ public class CamelConfigBuilderIT {
     @Test
     public void createJavaToJava() throws Exception {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("java2java", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.JAVA, "source.Input", 
                 TransformType.JAVA, "target.Output");
@@ -105,7 +116,7 @@ public class CamelConfigBuilderIT {
     @Test
     public void createJsonToJava() throws Exception {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("json2java", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.JSON, "source.Input", 
                 TransformType.JAVA, "target.Output");
@@ -130,7 +141,7 @@ public class CamelConfigBuilderIT {
 	@Ignore("test is failing due to 2 missign attributes on camelContext: autoStart and streamCache")
     public void createBlueprintConfig() throws Exception {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(NEW_BLUEPRINT_CONFIG));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("xml2json", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.XML, "abcorder.ABCOrder", 
                 TransformType.JSON, "xyzorderschema.XyzOrderSchema");
@@ -141,7 +152,7 @@ public class CamelConfigBuilderIT {
     public void existingConfig() throws Exception {
         // Add another transform endpoint to a config that already has one
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(XML_JSON));
-		config.getModel().getCamelContext().setId("test-defined-id");
+		getCamelContext(config.getModel().getRouteContainer()).setId("test-defined-id");
         config.addTransformation("xml2json2", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
                 TransformType.XML, "org.foo.ABCOrder", 
                 TransformType.JSON, "json.XYZOrder");

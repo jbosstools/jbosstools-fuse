@@ -59,7 +59,7 @@ public class CamelConditionalBreakpoint extends CamelEndpointBreakpoint {
 	public CamelConditionalBreakpoint(final IResource resource, final AbstractCamelModelElement endpoint, final String projectName, final String fileName, String language, String conditionPredicate)
 			throws CoreException {
 		this.endpointNodeId = endpoint.getId();
-		this.contextId = endpoint.getCamelContext().getId();
+		this.contextId = endpoint.getRouteContainer().getId();
 		this.projectName = projectName;
 		this.fileName = fileName;
 		this.language = language;

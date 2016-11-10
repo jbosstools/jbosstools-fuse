@@ -24,7 +24,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
@@ -43,7 +43,7 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class RoutesNode extends RefreshableCollectionNode implements ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {
 	private final CamelContextNode camelContextNode;
-	private CamelContextElement camelContext;
+	private CamelRouteContainerElement camelContext;
 
 	public RoutesNode(CamelContextNode camelContextNode) {
 		super(camelContextNode);
@@ -80,7 +80,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 	@Override
 	protected void loadChildren() {
 		Map<String, RouteNode> routeMap = new HashMap<>();
-		camelContext = getCamelContextNode().getCamelContext();
+		camelContext = getCamelContextNode().getRouteContainer();
 		if (camelContext != null) {
 			List<AbstractCamelModelElement> children = camelContext.getChildElements();
 			for (AbstractCamelModelElement node : children) {

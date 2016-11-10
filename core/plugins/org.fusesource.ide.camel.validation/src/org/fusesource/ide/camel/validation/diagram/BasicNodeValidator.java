@@ -56,7 +56,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	public ValidationResult validate(AbstractCamelModelElement camelModelElement) {
 		ValidationResult result = new ValidationResult();
 
-		if (camelModelElement != null && camelModelElement.getCamelContext() != null) {
+		if (camelModelElement != null && camelModelElement.getRouteContainer() != null) {
 			// we check if all mandatory fields are filled
 			validateDetailProperties(camelModelElement, result);
 			final Component component = PropertiesUtils.getComponentFor(camelModelElement);

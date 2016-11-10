@@ -57,7 +57,7 @@ public class DataFormatsInCamelModelElementIT {
 
 		CamelFile model1 = new CamelIOHandler().loadCamelModel(fileInProject, new NullProgressMonitor());
 
-		final AbstractCamelModelElement unmarshallElement = model1.getCamelContext().getChildElements().get(0).getChildElements().get(0);
+		final AbstractCamelModelElement unmarshallElement = model1.getRouteContainer().getChildElements().get(0).getChildElements().get(0);
 		assertThat(unmarshallElement.getNodeTypeId()).isEqualTo("unmarshal");
 		unmarshallElement.setParameter("ref", "");
 		assertThat(((AbstractCamelModelElement) unmarshallElement.getParameter("dataFormatType")).getNodeTypeId()).isEqualTo("json");

@@ -44,9 +44,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.URIs;
 
@@ -367,13 +367,13 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		outputs.setParent(root);
 		root.setChildren(new TreeNode[] { inputs, outputs });
 
-		setChildren(inputs, getInputs(cf.getCamelContext()), true);
-		setChildren(outputs, getOutputs(cf.getCamelContext()), false);
+		setChildren(inputs, getInputs(cf.getRouteContainer()), true);
+		setChildren(outputs, getOutputs(cf.getRouteContainer()), false);
 
 		return root;
 	}
 
-	private List<AbstractCamelModelElement> getInputs(CamelContextElement context) {
+	private List<AbstractCamelModelElement> getInputs(CamelRouteContainerElement context) {
 		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
 		
 		for (AbstractCamelModelElement route : context.getChildElements()) {
@@ -386,7 +386,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		return eps;
 	}
 	
-	private List<AbstractCamelModelElement> getOutputs(CamelContextElement context) {
+	private List<AbstractCamelModelElement> getOutputs(CamelRouteContainerElement context) {
 		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
 		
 		for (AbstractCamelModelElement route : context.getChildElements()) {

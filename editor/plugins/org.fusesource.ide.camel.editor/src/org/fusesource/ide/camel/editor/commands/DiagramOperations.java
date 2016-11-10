@@ -43,7 +43,7 @@ public class DiagramOperations {
 		LayoutCommand operation = new LayoutCommand(
 				designEditor.getFeatureProvider(),
 				designEditor.getDiagramTypeProvider().getDiagram(),
-				designEditor.getModel().getCamelContext(),
+				designEditor.getModel().getRouteContainer(),
 				editingDomain);
 		execute(editingDomain, operation, modelChanged);
 		return operation;
@@ -77,7 +77,7 @@ public class DiagramOperations {
 		CamelFile designEditorModel = designEditor.getModel();
 		if(designEditorModel != null){
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditorModel.getCamelContext());
+		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditorModel.getRouteContainer());
 		execute(editingDomain, operation, true);
 
 		return operation;
