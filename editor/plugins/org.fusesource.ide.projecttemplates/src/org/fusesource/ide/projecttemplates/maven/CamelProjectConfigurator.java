@@ -48,6 +48,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
@@ -261,31 +262,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
 		// MANIFEST.MF is probably not built yet
 		if (project != null) {
-			try {
-				waitJob(100, monitor);
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-			}
+			new JobWaiterUtil().waitBuildAndRefreshJob(monitor);
 			// update the maven project so we start in a deployable state
 			// with a valid MANIFEST.MF built as part of the build process.
 			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });
 			updateJob.schedule();
-		}
-	}
-
-	private static void waitJob(int decreasingCounter, IProgressMonitor monitor) throws InterruptedException {
-		if (decreasingCounter > 0) {
-			return;
-		}
-		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
-		} catch (InterruptedException e) {
-			// Workaround to bug
-			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			waitJob(decreasingCounter--, monitor);
 		}
 	}
 

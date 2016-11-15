@@ -36,8 +36,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -69,6 +67,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.junit.After;
@@ -207,18 +206,8 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		return metadata;
 	}
 
-	protected void waitJob() throws OperationCanceledException, InterruptedException {
-		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
-		} catch (InterruptedException e) {
-			// Workaround to bug
-			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			System.out.println("Have a trace in case of infinite loop in FuseIntegrationProjectCreatorRunnableIT.waitJob()");
-			waitJob();
-		}
+	protected void waitJob() {
+		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
 	}
 
 	private void checkNoValidationError() throws CoreException {

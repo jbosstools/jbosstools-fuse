@@ -68,6 +68,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -329,12 +330,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 					public void run() {
 						try {
 							if (!holder[0].exists()) {
-								try {
-									waitJob(20, monitor);
-								} catch (OperationCanceledException | InterruptedException e) {
-									ProjectTemplatesActivator.pluginLog().logError(e);
-									return;
-								}
+								new JobWaiterUtil().waitBuildAndRefreshJob(monitor);
 							}
 							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 							if(isJavaEditorToOpen){
@@ -372,22 +368,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
 		if(!camelFiles.isEmpty()){
 			holder[0] = camelFiles.iterator().next();
-		}
-	}
-
-	private static void waitJob(int decreasingCounter, IProgressMonitor monitor) throws InterruptedException {
-		if(decreasingCounter > 0){
-			return;
-		}
-		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
-		} catch (InterruptedException e) {
-			// Workaround to bug
-			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			waitJob(decreasingCounter--, monitor);
 		}
 	}
 
