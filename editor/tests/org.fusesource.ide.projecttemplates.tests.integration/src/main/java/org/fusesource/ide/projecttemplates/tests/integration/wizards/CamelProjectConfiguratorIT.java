@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,7 +33,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -43,14 +44,13 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.project.RiderProjectNature;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author lhein
@@ -73,22 +73,8 @@ public class CamelProjectConfiguratorIT {
 	@After
 	public void tearDown() throws CoreException, OperationCanceledException, InterruptedException {
 		if (project != null) {
-			waitJob();
+			new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
 			project.delete(true, new NullProgressMonitor());
-		}
-	}
-
-	private void waitJob() throws OperationCanceledException, InterruptedException {
-		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, new NullProgressMonitor());
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
-		} catch (InterruptedException ex) {
-			// Workaround to bug
-			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			System.out.println("Have a trace in case of infinite loop in CamelProjectConfiguratorIT.waitJob()");
-			waitJob();
 		}
 	}
 
@@ -102,7 +88,7 @@ public class CamelProjectConfiguratorIT {
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		waitJob();
+		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
 		testFacetsAndNatures();
 	}
 	
@@ -127,7 +113,7 @@ public class CamelProjectConfiguratorIT {
 		checkCamelFacetAndNatureNotAdded();
 
 		modifyPOM(pom.getLocation().toFile());
-		waitJob();
+		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
 
 		checkCamelFacetAndNatureNotAdded();
 	}

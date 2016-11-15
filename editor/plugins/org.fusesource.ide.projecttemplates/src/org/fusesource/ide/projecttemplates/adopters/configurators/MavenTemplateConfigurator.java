@@ -20,17 +20,15 @@ import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
@@ -72,7 +70,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
-			waitAllJobsComplete(subMonitor.newChild(1));
+			new JobWaiterUtil().waitBuildAndRefreshJob(subMonitor.newChild(1));
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
 			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
@@ -81,17 +79,6 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
         	return false;
         }
 		return true;
-	}
-
-	private void waitAllJobsComplete(IProgressMonitor monitor) {
-		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
-		} catch (OperationCanceledException | InterruptedException e) {
-			ProjectTemplatesActivator.pluginLog().logError(e);
-		}
 	}
 	
 	/**
