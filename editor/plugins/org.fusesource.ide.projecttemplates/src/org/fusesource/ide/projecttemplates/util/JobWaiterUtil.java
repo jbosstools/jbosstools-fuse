@@ -18,6 +18,8 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 public class JobWaiterUtil {
 	
+	boolean isEndless = false;
+	
 	private Throwable exception = null;
 
 	public void waitBuildAndRefreshJob(IProgressMonitor monitor) {
@@ -25,14 +27,25 @@ public class JobWaiterUtil {
 	}
 	
 	private void waitBuildAndRefreshJob(int decreasingCounter, IProgressMonitor monitor) {
-		if (decreasingCounter <= 0) {
-			if(exception != null){
-				ProjectTemplatesActivator.pluginLog().logWarning(exception);
-			} else {
-				ProjectTemplatesActivator.pluginLog().logWarning("Waiting for build to finish unsuccessfully.");
+		int currentCounter;
+		if(isEndless){
+			currentCounter = decreasingCounter;
+			ProjectTemplatesActivator.pluginLog().logInfo("log trace to ensure it is not looping");
+		} else {
+			if (decreasingCounter <= 0) {
+				if(exception != null){
+					ProjectTemplatesActivator.pluginLog().logError(exception);
+				} else {
+					ProjectTemplatesActivator.pluginLog().logWarning("Waiting for build to finish unsuccessfully.");
+				}
+				return;
 			}
-			return;
+			currentCounter = decreasingCounter-1;
 		}
+		joinJobs(monitor, currentCounter);
+	}
+
+	private void joinJobs(IProgressMonitor monitor, int currentCounter) {
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
@@ -42,8 +55,16 @@ public class JobWaiterUtil {
 			// Workaround to bug
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
 			exception = e;
-			waitBuildAndRefreshJob(decreasingCounter-1, monitor);
+			waitBuildAndRefreshJob(currentCounter, monitor);
 		}
 	}
 
+	public boolean isEndless() {
+		return isEndless;
+	}
+
+	public void setEndless(boolean isEndless) {
+		this.isEndless = isEndless;
+	}
+	
 }

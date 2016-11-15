@@ -19,7 +19,6 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +47,6 @@ import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
@@ -255,14 +253,13 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			installCamelFacet(fproj, fpwc, camelVersion, monitor);
 			fpwc.commitChanges(monitor);
 			configureNature(project, mavenProject, monitor);
-			updateMavenProject(project, monitor);
+			updateMavenProject(project);
 		}
 	}
 
-	private void updateMavenProject(final IProject project, IProgressMonitor monitor) throws CoreException {
+	private void updateMavenProject(final IProject project) throws CoreException {
 		// MANIFEST.MF is probably not built yet
 		if (project != null) {
-			new JobWaiterUtil().waitBuildAndRefreshJob(monitor);
 			// update the maven project so we start in a deployable state
 			// with a valid MANIFEST.MF built as part of the build process.
 			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });

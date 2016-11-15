@@ -19,7 +19,9 @@ import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -28,6 +30,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
 public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegrationProjectCreatorRunnableIT{
+	
+	@Rule
+	public TemporaryFolder tmpFolder = new TemporaryFolder();
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){

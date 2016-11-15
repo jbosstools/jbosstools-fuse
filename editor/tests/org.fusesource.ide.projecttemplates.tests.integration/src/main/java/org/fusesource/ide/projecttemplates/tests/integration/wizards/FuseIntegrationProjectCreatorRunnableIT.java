@@ -67,6 +67,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -91,9 +92,6 @@ public class FuseIntegrationProjectCreatorRunnableIT {
     public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
     
 	@Rule
-	public TemporaryFolder tmpFolder = new TemporaryFolder();
-	
-	@Rule
 	public TestWatcher printStackTraceOnFailure = new PrintThreadStackOnFailureRule();
 
 	protected IProject project = null;
@@ -104,7 +102,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 
 	@Before
 	public void setup() throws Exception {
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("All editors closed");
 		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
 		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
 		File f = new File(SCREENSHOT_FOLDER);
@@ -114,11 +114,14 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		welcomePage.dispose();
 		page.closeAllPerspectives(false, false);
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("All perspectives closed");
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Opening Fuse perspective");
 		
 		if("2.17.0.redhat-630187".equals(camelVersion)){
 			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 		}
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
 	@After
@@ -154,6 +157,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
 
 		if (metadata == null) {
@@ -165,6 +169,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
 		assertThat(project.exists()).describedAs("The project "+ project.getName()+ " doesn't exist.").isTrue();
+		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Project created: "+projectName);
 		final IFile camelResource = project.getFile(camelFilePath);
 		assertThat(camelResource.exists()).isTrue();
 
@@ -207,7 +212,9 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	protected void waitJob() {
-		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
+		JobWaiterUtil jobWaiterUtil = new JobWaiterUtil();
+		jobWaiterUtil.setEndless(true);
+		jobWaiterUtil.waitBuildAndRefreshJob(new NullProgressMonitor());
 	}
 
 	private void checkNoValidationError() throws CoreException {
