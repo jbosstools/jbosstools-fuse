@@ -78,6 +78,12 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageDSLLabel;
 	public static String newProjectWizardTemplatePageFilterBoxText;
 
+	public static String StagingRepositoriesFieldEditor_ErrorMessageDuplicateRepoId;
+	public static String StagingRepositoriesFieldEditor_ErrorMessageWrongPattern;
+	public static String StagingRepositoriesFieldEditor_PageTitle;
+	public static String StagingRepositoryiesPreferencePage_EnableCheckboxLabel;
+	public static String StagingRepositoryiesPreferencePage_PageDescription;
+	
 	public static String UnzipStreamCreator_UnzippingTemplateFileMonitorMessage;
 	
 	static {
