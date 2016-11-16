@@ -77,4 +77,5 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 				.map(repoName -> Arrays.asList(repoName.split(StagingRepositoriesConstants.NAME_URL_SEPARATOR)))
 				.collect(Collectors.toList());
 	}
+
 }

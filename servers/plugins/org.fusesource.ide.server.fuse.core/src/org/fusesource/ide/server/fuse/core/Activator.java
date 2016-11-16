@@ -63,4 +63,4 @@ public class Activator extends Plugin {
 	public static RiderLogFacade getLogger() {
 		return RiderLogFacade.getLog(getDefault().getLog());
 	}
-}
+}

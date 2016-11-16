@@ -32,4 +32,4 @@ public class FuseESBRuntimeWizardFragment6x extends
 			Composite parent, IWizardHandle handle, KarafWizardDataModel model) {
 		return new FuseESBRuntimeComposite6x(parent, handle, model);
 	}
-}
+}
