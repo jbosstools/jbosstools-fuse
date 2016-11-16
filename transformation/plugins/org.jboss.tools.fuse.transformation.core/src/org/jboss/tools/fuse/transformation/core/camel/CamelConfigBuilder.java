@@ -189,7 +189,7 @@ public class CamelConfigBuilder {
     protected AbstractCamelModelElement addEndpoint(String id, String uri) {
     	AbstractCamelModelElement parent = getModel().getRouteContainer();
 		if (parent instanceof CamelContextElement) {
-	    	CamelEndpoint ep = new CamelEndpoint(uri);
+			CamelEndpoint ep = new CamelEndpoint(uri);
 			ep.setId(id);
 			ep.setParent(parent);
 			ep.setUnderlyingMetaModelObject(getEipByName("from")); //$NON-NLS-1$
@@ -212,12 +212,12 @@ public class CamelConfigBuilder {
             // Looks like we need to create a new one
         	AbstractCamelModelElement parent = getModel().getRouteContainer();
         	if (parent instanceof CamelContextElement) {
-				dataFormat = new CamelBasicModelElement(parent, null);
-	    		dataFormat.setId(id);
-	    		dataFormat.setUnderlyingMetaModelObject(json);
-	    		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
-	    		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
-	    		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
+        		dataFormat = new CamelBasicModelElement(parent, null);
+        		dataFormat.setId(id);
+        		dataFormat.setUnderlyingMetaModelObject(json);
+        		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
+        		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
+        		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
         	}
         }
         return dataFormat;

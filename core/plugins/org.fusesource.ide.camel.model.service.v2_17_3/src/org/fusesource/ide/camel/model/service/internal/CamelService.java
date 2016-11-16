@@ -104,8 +104,8 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException {
-		// not available in that camel version?
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.asEndpointUriXml(scheme, properties, ENCODE_DEFAULT);
 	}
 
 	/* (non-Javadoc)
@@ -114,8 +114,8 @@ public class CamelService implements ICamelManagerService {
 	@Override
 	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode)
 			throws URISyntaxException {
-		// not available in that camel version?
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.asEndpointUriXml(scheme, properties, encode);
 	}
 	
 	/* (non-Javadoc)
@@ -123,8 +123,8 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public String getEndpointScheme(String uri) {
-		// not available in this camel version
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.endpointComponentName(uri);
 	}
 	
 	/* (non-Javadoc)
