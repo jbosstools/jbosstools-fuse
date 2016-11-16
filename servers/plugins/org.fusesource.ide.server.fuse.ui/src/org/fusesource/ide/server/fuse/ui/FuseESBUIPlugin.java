@@ -58,4 +58,4 @@ public class FuseESBUIPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-}
+}

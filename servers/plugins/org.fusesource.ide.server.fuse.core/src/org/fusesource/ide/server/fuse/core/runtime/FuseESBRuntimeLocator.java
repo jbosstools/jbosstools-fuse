@@ -79,4 +79,4 @@ public class FuseESBRuntimeLocator extends KarafRuntimeLocator {
 		}
 		return null;
 	}
-}
+}

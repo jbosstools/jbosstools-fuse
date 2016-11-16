@@ -97,4 +97,4 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 		
 		wizardHandle.update();
 	}
-}
+}

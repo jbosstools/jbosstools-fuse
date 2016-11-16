@@ -36,4 +36,4 @@ public class FuseESBServerWizardFragment6x extends
 		handle.setImageDescriptor(ImageResource.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 		return c;
 	}
-}
+}
