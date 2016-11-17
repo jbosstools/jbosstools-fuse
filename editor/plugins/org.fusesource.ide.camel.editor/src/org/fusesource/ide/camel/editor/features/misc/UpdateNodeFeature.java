@@ -38,7 +38,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 	public boolean canUpdate(IUpdateContext context) {
 		// return true, if linked business object is an EClass
 		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
-		return (bo instanceof AbstractCamelModelElement);
+		return bo instanceof AbstractCamelModelElement;
 	}
 
 	public IReason updateNeeded(IUpdateContext context) {
@@ -71,8 +71,8 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		}
 
 		// update needed, if names are different
-		boolean updateNameNeeded = ((pictogramName == null && businessName != null) || (pictogramName != null && !pictogramName
-				.equals(businessName)));
+		boolean updateNameNeeded = (pictogramName == null && businessName != null) || (pictogramName != null && !pictogramName
+				.equals(businessName));
 		if (updateNameNeeded) {
 			return Reason.createTrueReason("Name is out of date"); //$NON-NLS-1$
 		} else {

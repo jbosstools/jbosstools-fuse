@@ -54,6 +54,7 @@ import org.fusesource.ide.camel.editor.features.custom.SetConditionalBreakpointF
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
+import org.fusesource.ide.camel.editor.features.misc.MoveNodeFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
 import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
@@ -198,7 +199,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	 */
 	@Override
 	public IMoveShapeFeature getMoveShapeFeature(IMoveShapeContext context) {
-		return null;
+		return new MoveNodeFeature(this);
 	}
 	
 
