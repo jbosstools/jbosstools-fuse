@@ -10,8 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -62,29 +60,18 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
  */
 public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage {
 
-	private static final String UNKNOWN_CAMEL_VERSION = "unknown";
-	private static final String FUSE_RUNTIME_PREFIX = "org.fusesource.ide.fuseesb.runtime.";
-	private static final String EAP_RUNTIME_PREFIX = "org.jboss.ide.eclipse.as.runtime.eap.";
-	private static final String CAMEL_CORE_LIB_PREFIX = "camel-core-";
-	private static final String CAMEL_CORE_LIB_SUFFIX = ".jar";
-
+	static final String UNKNOWN_CAMEL_VERSION = "unknown"; //$NON-NLS-1$
 	
-	private Label runtimeLabel;
 	private Combo runtimeCombo;
-	private Button runtimeNewButton;
 	
 	private Map<String, IRuntime> serverRuntimes;
-	private IRuntimeLifecycleListener listener;
 	private String lastSelectedRuntime;
 	
-	private Label camelVersionLabel;
 	private Combo camelVersionCombo;
 	private StyledText camelInfoText;
+
 	private Label warningIconLabel;
 	
-	/**
-	 * 
-	 */
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage() {
 		super(Messages.newProjectWizardRuntimePageName);
 		setTitle(Messages.newProjectWizardRuntimePageTitle);
@@ -107,7 +94,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeGrp.setLayoutData(runtimeGrpData);
 		runtimeGrp.setText(Messages.newProjectWizardRuntimePageRuntimeGroupLabel);
 		
-		runtimeLabel = new Label(runtimeGrp, SWT.NONE);
+		Label runtimeLabel = new Label(runtimeGrp, SWT.NONE);
 		GridData runtimeLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		runtimeLabel.setLayoutData(runtimeLabelData);
 		runtimeLabel.setText(Messages.newProjectWizardRuntimePageRuntimeLabel);
@@ -135,7 +122,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
 
-		runtimeNewButton = new Button(runtimeGrp, SWT.NONE);
+		Button runtimeNewButton = new Button(runtimeGrp, SWT.NONE);
 		GridData runtimeNewButtonData = new GridData(SWT.FILL, SWT.CENTER, false, false);
 		runtimeNewButton.setLayoutData(runtimeNewButtonData);
 		runtimeNewButton.setText(Messages.newProjectWizardRuntimePageRuntimeNewButtonLabel);
@@ -170,7 +157,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelGrp.setLayoutData(camelGrpData);
 		camelGrp.setText(Messages.newProjectWizardRuntimePageCamelGroupLabel);
 		
-		camelVersionLabel = new Label(camelGrp, SWT.NONE);
+		Label camelVersionLabel = new Label(camelGrp, SWT.NONE);
 		GridData camelLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		camelVersionLabel.setLayoutData(camelLabelData);
 		camelVersionLabel.setText(Messages.newProjectWizardRuntimePageCamelLabel);
@@ -233,7 +220,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		setControl(container);
 		
-		listener = new IRuntimeLifecycleListener() {
+		IRuntimeLifecycleListener listener = new IRuntimeLifecycleListener() {
 			
 			@Override
 			public void runtimeRemoved(IRuntime runtime) {
@@ -258,7 +245,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 						try {
 							configureRuntimeCombo();
 						} catch (CoreException ex) {
-							ProjectTemplatesActivator.pluginLog().logError("Unable to handle runtime change event", ex);
+							ProjectTemplatesActivator.pluginLog().logError("Unable to handle runtime change event", ex); //$NON-NLS-1$
 						}
 					}
 				});
@@ -325,34 +312,46 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 					break;
 				}
 			}
-			if (!found) return newRuntime;
+			if (!found){
+				return newRuntime;
+			}
 		}
 		return Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel;
 	}
 
-	private void validate() {
+	/**
+	 * /!\ Public for test purpose 
+	 */
+	public void validate() {
 		// if runtime is selected other than NO RUNTIME
 		if (getSelectedRuntime() != null) {
 			// determine the camel version of that runtime
 			String runtimeCamelVersion = determineRuntimeCamelVersion(getSelectedRuntime());
 
 			if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
-				if (!Widgets.isDisposed(camelVersionCombo)) camelVersionCombo.setEnabled(true);
+				if (!Widgets.isDisposed(camelVersionCombo)){
+					camelVersionCombo.setEnabled(true);
+				}
+				camelInfoText.setText(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
 			} else {
 				// and compare if selected camel version fits that version
 				if (!isCompatible(runtimeCamelVersion, getSelectedCamelVersion())) {
 					// Display warning and suggest the correct version
 					camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionsDontMatchWarning, runtimeCamelVersion));
 				} else {
-					camelInfoText.setText("");
+					camelInfoText.setText(""); //$NON-NLS-1$
 				}
-				if (!Widgets.isDisposed(camelVersionCombo)) camelVersionCombo.setEnabled(false);
+				if (!Widgets.isDisposed(camelVersionCombo)){
+					camelVersionCombo.setEnabled(false);
+				}
 			}
 		} else {
-			if (!Widgets.isDisposed(camelVersionCombo)) camelVersionCombo.setEnabled(true);
+			if (!Widgets.isDisposed(camelVersionCombo)){
+				camelVersionCombo.setEnabled(true);
+			}
 
 			if (!Widgets.isDisposed(camelInfoText)) {
-				camelInfoText.setText("");
+				camelInfoText.setText(""); //$NON-NLS-1$
 			}			
 		}
 // TODO: leaving that out until we decide to support other camel versions than the ones we ship
@@ -370,7 +369,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 //		}
 		
 		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
-			warningIconLabel.setVisible(camelInfoText.getText().length()>0);
+			warningIconLabel.setVisible(!camelInfoText.getText().isEmpty());
 		}
 		
 		if (!Widgets.isDisposed(runtimeCombo) && !Widgets.isDisposed(camelVersionCombo)) {
@@ -388,7 +387,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			}
 		} else {
 			if (!Widgets.isDisposed(camelInfoText)) {
-				camelInfoText.setText("");
+				camelInfoText.setText(""); //$NON-NLS-1$
 			}	
 		}
 		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
@@ -399,15 +398,17 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private boolean isCamelVersionValid(String camelVersion) {
 		// return true for supported versions from the combo list
 		for (String supportedVersion : camelVersionCombo.getItems()) {
-			if (supportedVersion.equals(camelVersion)) return true;
+			if (supportedVersion.equals(camelVersion)){
+				return true;
+			}
 		}
 		
 		boolean camelVersionAvailable = false;
 		try {
-			Artifact camelCore = MavenPlugin.getMaven().resolve("org.apache.camel", 
-																"camel-core", 
+			Artifact camelCore = MavenPlugin.getMaven().resolve("org.apache.camel",  //$NON-NLS-1$
+																"camel-core",  //$NON-NLS-1$
 																camelVersion, 
-																"jar", 
+																"jar",  //$NON-NLS-1$
 																null, 
 																null, 
 																new NullProgressMonitor());
@@ -419,7 +420,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
-		if (Widgets.isDisposed(camelVersionCombo)) return;
+		if (Widgets.isDisposed(camelVersionCombo)){
+			return;
+		}
 		
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
@@ -440,51 +443,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}		
 	}
 	
-	private String determineRuntimeCamelVersion(IRuntime runtime) {
-		if (runtime != null) {
-			if (isJBossFuseRuntime(runtime)) {
-				File camelFolder = runtime.getLocation().append("system").append("org").append("apache").append("camel").append("camel-core").toFile();
-				String[] versions = camelFolder.list();
-				if (versions.length==1) {
-					return versions[0];
-				}
-			} else if (isFuseOnEAPRuntime(runtime)) {
-				File camelFolder = runtime.getLocation().append("modules").append("system").append("layers").append("fuse").append("org").append("apache").append("camel").append("core").append("main").toFile();
-				String[] versions = camelFolder.list(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return 	name.toLowerCase().startsWith(CAMEL_CORE_LIB_PREFIX) &&
-								name.toLowerCase().endsWith(CAMEL_CORE_LIB_SUFFIX);
-					}
-				});
-				if (versions.length==1) {
-					String jarName = versions[0];
-					String version = jarName.substring(jarName.indexOf(CAMEL_CORE_LIB_PREFIX)+CAMEL_CORE_LIB_PREFIX.length(), jarName.indexOf(CAMEL_CORE_LIB_SUFFIX));
-					return version;
-				}
-			}
-		}
-		return UNKNOWN_CAMEL_VERSION;
-	}
-	
 	/**
-	 * checks whether the given runtime is an EAP runtime
-	 * 
-	 * @param runtime	the runtime to check
-	 * @return	true if the runtime is an EAP runtime
+	 * /!\ Public for test purpose 
 	 */
-	private boolean isFuseOnEAPRuntime(IRuntime runtime) {
-		return runtime.getRuntimeType().getId().startsWith(EAP_RUNTIME_PREFIX);
-	}
-	
-	/**
-	 * checks whether the given runtime is a fuse runtime
-	 * 
-	 * @param runtime	the runtime to check
-	 * @return	true if the runtime is a jboss fuse runtime
-	 */
-	private boolean isJBossFuseRuntime(IRuntime runtime) {
-		return runtime.getRuntimeType().getId().startsWith(FUSE_RUNTIME_PREFIX);
+	public String determineRuntimeCamelVersion(IRuntime runtime) {
+		return new RuntimeCamelVersionFinder().getVersion(runtime);
 	}
 	
 	/**
@@ -495,10 +458,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 * @return	true if compatible
 	 */
 	private boolean isCompatible(String runtimeCamelVersion, String selectedCamelVersion) {
-		String[] runtimeVersionParts = runtimeCamelVersion.split("\\.");
-		String[] camelVersionParts = selectedCamelVersion.split("\\.");
-		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1; 
-		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1;
+		String[] runtimeVersionParts = runtimeCamelVersion.split("\\."); //$NON-NLS-1$
+		String[] camelVersionParts = selectedCamelVersion.split("\\."); //$NON-NLS-1$
+		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1;  //$NON-NLS-1$
+		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1; //$NON-NLS-1$
 		
 		return runtimeVersionParts.length>1 && camelVersionParts.length>1 &&
 			   runtimeVersionParts[0].equals(camelVersionParts[0]) &&
@@ -567,5 +530,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		});
 
 		return image[0];
+	}
+	
+	/**
+	 * /!\ Public for test purpose 
+	 */
+	public void setCamelInfoText(StyledText camelInfoText) {
+		this.camelInfoText = camelInfoText;
 	}
 }

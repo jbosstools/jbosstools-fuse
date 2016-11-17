@@ -49,31 +49,32 @@ public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 	public void testCompatibleCamelVersionSelectedForUnsupportedBrandedVersion() throws Exception {
 		page.preselectCamelVersionForRuntime("2.17.0.redhat-630175");
 		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.startsWith("2.17.0.redhat-630"));
+		assertThat(selectedCamelVersion.startsWith("2.17.0.redhat-630")).isTrue();
 	}
 	
 	@Test
 	public void testCompatibleCamelVersionSelectedForUnsupportedCommunityVersion() throws Exception {
-		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
-		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
-		dlg.create();
-		FuseIntegrationProjectWizardRuntimeAndCamelPage page = getWizardRuntimePage(wiz);
+		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
 		
 		page.preselectCamelVersionForRuntime("2.17.0");
 		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.startsWith("2.17.3"));
+		assertThat(selectedCamelVersion.startsWith("2.17.3")).isTrue();
 	}
 
 	@Test
 	public void testExactCamelVersionSelectedForBrandedVersion() throws Exception {
-		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
-		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
-		dlg.create();
-		FuseIntegrationProjectWizardRuntimeAndCamelPage page = getWizardRuntimePage(wiz);
+		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
 		
 		page.preselectCamelVersionForRuntime("2.17.0.redhat-630187");
 		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.equalsIgnoreCase("2.17.0.redhat-630187"));
+		assertThat(selectedCamelVersion.equalsIgnoreCase("2.17.0.redhat-630187")).isTrue();
+	}
+	
+	private FuseIntegrationProjectWizardRuntimeAndCamelPage createWizardRuntimePage() {
+		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
+		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
+		dlg.create();
+		return getWizardRuntimePage(wiz);
 	}
 	
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage getWizardRuntimePage(FuseIntegrationProjectWizard wiz) {
