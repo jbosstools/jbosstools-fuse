@@ -104,7 +104,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 				((Connection) cc.getPictogramElements()[0]).getStart().getParent() : 
 				cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
-        return (bo != null && bo instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
+        return bo != null && bo instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren();
 	}
 	
 	/*
@@ -140,12 +140,14 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	 * @return
 	 */
 	private CompoundDirectedGraph mapDiagramToGraph(PictogramElement container) {
-		Map<AnchorContainer, Node> shapeToNode = new HashMap<AnchorContainer, Node>();
+		Map<AnchorContainer, Node> shapeToNode = new HashMap<>();
 		EdgeList edgeList = new EdgeList();
 		NodeList nodeList = new NodeList();
 		CompoundDirectedGraph dg = new CompoundDirectedGraph();
 
-		if (container == null) return dg;
+		if (container == null){
+			return dg;
+		}
 		
 		if (!CollapseFeature.isCollapsed(container)) {
 			EList<Shape> children = ((ContainerShape)container).getChildren();
@@ -166,7 +168,9 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		for (Connection connection : connections) {
 			AnchorContainer source = connection.getStart().getParent();
 			AnchorContainer target = connection.getEnd().getParent();
-			if (shapeToNode.containsKey(source) == false || shapeToNode.containsKey(target) == false) continue;
+			if (!shapeToNode.containsKey(source) || !shapeToNode.containsKey(target)){
+				continue;
+			}
 			Edge edge = new Edge(shapeToNode.get(source), shapeToNode.get(target));
 			edge.data = connection;
 			edgeList.add(edge);

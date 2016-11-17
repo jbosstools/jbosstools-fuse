@@ -89,7 +89,7 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 	@Override
 	public PictogramElement add(IAddContext context) {
 		AbstractCamelModelElement addedClass = (AbstractCamelModelElement)context.getNewObject();
-		ContainerShape targetContainer = (ContainerShape) context.getTargetContainer();
+		ContainerShape targetContainer = context.getTargetContainer();
 		Diagram diagram = Graphiti.getPeService().getDiagramForPictogramElement(targetContainer);
 		String label = addedClass.getDisplayText();
 		
@@ -108,7 +108,7 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		final Object deactivateLayout = context.getProperty(DEACTIVATE_LAYOUT);
 		if (!Boolean.TRUE.equals(deactivateLayout)) {
 			Object o_editor = getFeatureProvider().getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-			CamelDesignEditor editor = null;
+			CamelDesignEditor editor;
 			if (o_editor == null || o_editor instanceof DiagramEditorDummy) {
 				editor = CamelUtils.getDiagramEditor();
 			} else {

@@ -44,7 +44,6 @@ public class PasteNodeFeature extends AbstractPasteFeature {
 			}
 		}
 		return true;
-		// return false;
 	}
 
 	public void paste(IPasteContext context) {
