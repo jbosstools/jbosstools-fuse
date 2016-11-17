@@ -723,6 +723,10 @@ public abstract class AbstractCamelModelElement {
 			if (value != null && value.equals(oldValue)) {
 				return;
 			}
+			if (oldValue == null && value != null && value.equals(getUnderlyingMetaModelObject().getParameter(name).getDefaultValue())) {
+				// this catches false updates from the properties pages setting default values automatically
+				return;
+			}
 		}
 
 		// save param in internal map
