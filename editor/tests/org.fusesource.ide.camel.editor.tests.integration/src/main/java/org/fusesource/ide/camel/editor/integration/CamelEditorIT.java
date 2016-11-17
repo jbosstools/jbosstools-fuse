@@ -15,10 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.datatypes.ILocation;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -27,8 +25,6 @@ import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
-import org.eclipse.graphiti.internal.command.CommandExec;
-import org.eclipse.graphiti.internal.command.GenericFeatureCommandWithContext;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
@@ -37,15 +33,9 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
-import org.eclipse.jface.util.Policy;
-import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.util.StatusHandler;
-import org.eclipse.swt.SWTException;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.branding.perspective.FusePerspective;
@@ -56,7 +46,6 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
@@ -64,51 +53,11 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
-import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-public class CamelEditorIT {
+public class CamelEditorIT extends AbstractCamelEditorIT{
 	
-	@Rule
-	public FuseProject fuseProject = new FuseProject(CamelEditorIT.class.getName());
-	
-	private boolean safeRunnableIgnoreErrorStateBeforeTests;
-	boolean statusHandlerCalled = false;
 	private IViewPart contentOutlineView = null;
-
-	private StatusHandler statusHandlerBeforetest;
-
-	@Before
-	public void setup() throws Exception {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		welcomePage.dispose();
-		page.closeAllEditors(false);
-		page.closeAllPerspectives(false, false);
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
-		SafeRunnable.setIgnoreErrors(false);
-		statusHandlerBeforetest = Policy.getStatusHandler();
-		statusHandlerCalled = false;
-		Policy.setStatusHandler(new StatusHandler() {
-			
-			@Override
-			public void show(IStatus status, String title) {
-				statusHandlerCalled = true;
-			}
-		});
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.closeAllEditors(false);
-		SafeRunnable.setIgnoreErrors(safeRunnableIgnoreErrorStateBeforeTests);
-		Policy.setStatusHandler(statusHandlerBeforetest);
-	}
 	
 	@Test
 	public void openFileWithoutContext() throws Exception {
@@ -324,10 +273,7 @@ public class CamelEditorIT {
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer(fp.getDiagramTypeProvider().getDiagram());
 		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
-		if(createRouteFigureFeature.canExecute(createCtx)){
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(createRouteFigureFeature, createCtx), editingDomain);
-		}
+		executeCommandInTransactionDomain(createCtx, createRouteFigureFeature);
 		
 		AbstractCamelModelElement createdRoute = model.findNode("_route1");
 		assertThat(createdRoute).isNotNull();
@@ -370,10 +316,7 @@ public class CamelEditorIT {
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
 		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("when"));
 		assertThat(createWhenFigureFeature.canExecute(createCtx)).isTrue();
-		if(createWhenFigureFeature.canExecute(createCtx)){
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(createWhenFigureFeature, createCtx), editingDomain);
-		}
+		executeCommandInTransactionDomain(createCtx, createWhenFigureFeature);
 		AbstractCamelModelElement when = model.findNode("_when1");
 		assertThat(when).isNotNull();
 		PictogramElement pe = fp.getPictogramElementForBusinessObject(when);
@@ -436,10 +379,7 @@ public class CamelEditorIT {
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
 		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("bean"));
-		if(createFigureFeature.canExecute(createCtx)){
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(createFigureFeature, createCtx), editingDomain);
-		}
+		executeCommandInTransactionDomain(createCtx, createFigureFeature);
 		
 		AbstractCamelModelElement createdBean = model.findNode("_bean1");
 		assertThat(createdBean).isNotNull();
@@ -515,10 +455,7 @@ public class CamelEditorIT {
 		DeleteContext delcon = new DeleteContext(con);
 		delcon.putProperty(DeleteFigureFeature.SKIP_ASKING_DELETE_CONFIRMATION, "true");
 		IDeleteFeature deleteFeature = fp.getDeleteFeature(delcon);
-		if (deleteFeature.canExecute(delcon)) {
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(deleteFeature, delcon), editingDomain);
-		}
+		executeCommandInTransactionDomain(delcon, deleteFeature);
 
 		// now check if the reconnect is possible - it should be
 		assertThat(ReconnectNodesFeature.canElementsConnect(logger, bean)).isTrue();
@@ -701,10 +638,7 @@ public class CamelEditorIT {
 	private void collapseExpand(IFeatureProvider fp, PictogramElement pe) {
 		CustomContext cc = new CustomContext(new PictogramElement[] {pe});
 		CollapseFeature cf = getCollapseFeature(fp, cc);
-		if (cf != null && cf.canExecute(cc)) {
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(cf, cc), editingDomain);
-		}
+		executeCommandInTransactionDomain(cc, cf);
 	}
 	
 	private CollapseFeature getCollapseFeature(IFeatureProvider fp, ICustomContext cc) {
@@ -745,10 +679,7 @@ public class CamelEditorIT {
 		DeleteContext deleteCtx = new DeleteContext(deleteNodePE);
 		deleteCtx.putProperty(DeleteFigureFeature.SKIP_ASKING_DELETE_CONFIRMATION, "true");
 		IDeleteFeature deleteFeature = fp.getDeleteFeature(deleteCtx);
-		if (deleteFeature.canExecute(deleteCtx)) {
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(deleteFeature, deleteCtx), editingDomain);
-		}
+		executeCommandInTransactionDomain(deleteCtx, deleteFeature);
 	}
 	
 	private void createConnector(IFeatureProvider fp, ContainerShape container, Connection con, Component component) throws Exception {
@@ -761,27 +692,9 @@ public class CamelEditorIT {
 		createCtx.setX(container.getGraphicsAlgorithm().getX()+5);
 		createCtx.setY(container.getGraphicsAlgorithm().getY()+5);
 		CreateConnectorFigureFeature ccff = new CreateConnectorFigureFeature(fp, component);
-		if (ccff.canExecute(createCtx)) {
-			TransactionalEditingDomain editingDomain = CamelUtils.getDiagramEditor().getEditingDomain();
-			CommandExec.getSingleton().executeCommand(new GenericFeatureCommandWithContext(ccff, createCtx), editingDomain);
-		}
+		executeCommandInTransactionDomain(createCtx, ccff);
 	}
-	
-	private IEditorPart openFileInEditor(String filePath) throws Exception {
-		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
-		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.closeAllPerspectives(false, false);
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		readAndDispatch(20);
-		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
-		page.activate(editor);
-		editor.setFocus();
-		readAndDispatch(20);
-		return editor;
-	}
-	
+		
 	private IEditorPart openFileInEditorWithOutlineViewOpened(String filePath) throws Exception {
 		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
 		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
@@ -802,19 +715,4 @@ public class CamelEditorIT {
 		return editor;
 	}
 	
-	protected void readAndDispatch(int currentNumberOfTry) {
-		try{
-			while (Display.getDefault().readAndDispatch()) {
-				
-			}
-		} catch(SWTException swtException){
-			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)
-			swtException.printStackTrace();
-			if(currentNumberOfTry < 100){
-				readAndDispatch(currentNumberOfTry ++);
-			} else {
-				System.out.println("Tried 100 times to wait for UI... Continue and see what happens.");
-			}
-		}
-	}
 }

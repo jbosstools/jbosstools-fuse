@@ -27,7 +27,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 	public DirectEditNodeFeature(IFeatureProvider fp) {
 		super(fp);
 	}
-
+	
 	public int getEditingType() {
 		// there are several possible editor-types supported:
 		// text-field, checkbox, color-chooser, combobox, ...
@@ -77,7 +77,6 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		// set the new name for the EClass
 		PictogramElement pe = context.getPictogramElement();
 		//EClass eClass = (EClass) getBusinessObjectForPictogramElement(pe);
-		Object bo = getBusinessObjectForPictogramElement(pe);
 
 		// TODO: rework to fit new model - feature currently not in use
 //		if (bo instanceof Endpoint) {

@@ -16,6 +16,7 @@ import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelMod
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
@@ -23,6 +24,7 @@ import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.ReconnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
+import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
@@ -61,6 +63,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 
 	private Eip eip;
 	private Class<? extends AbstractCamelModelElement> clazz;
+	private Node nodeToDuplicateForCreation = null;
 
 	/**
 	 * 
@@ -72,6 +75,12 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Eip eip) {
 		super(fp, name, description);
 		this.eip = eip;
+	}
+	
+	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Eip eip, Node nodeToDuplicateForCreation) {
+		super(fp, name, description);
+		this.eip = eip;
+		this.nodeToDuplicateForCreation = nodeToDuplicateForCreation;
 	}
 
 	/**
@@ -322,7 +331,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		ContainerShape container = context.getTargetContainer();
 
 		CreateContext ctxNew = null;
-		AbstractCamelModelElement node = null;
+		AbstractCamelModelElement node;
 
 		// determine the parent figure of our new node
 		AbstractCamelModelElement selectedContainerElement = determineContainerElement(container);
@@ -350,8 +359,9 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			// simple drop on a container
 			node = createNode(selectedContainerElement, selectedContainerElement != null);
 		}
+		node.initialize();
 
-		if (selectedContainerElement != null && node != null) {
+		if (selectedContainerElement != null) {
 			// add the new node to the parent container
 			selectedContainerElement.addChildElement(node);
 			// and update the parent link
@@ -375,10 +385,10 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		return new Object[0];
 	}
 
-	private void addNodeToDiagram(ICreateContext context, boolean isCreationWithConnections,
-			AbstractCamelModelElement node, ContainerShape container) {
+	private void addNodeToDiagram(ICreateContext context, boolean isCreationWithConnections, AbstractCamelModelElement node, ContainerShape container) {
 		// add node to diagram
-		addGraphicalRepresentation(context, node);
+		PictogramElement newGraphicalRepresentation = addGraphicalRepresentation(context, node);
+		addChildrenGraphicalRepresentation(node, newGraphicalRepresentation);
 
 		// if we create with connections...
 		if (isCreationWithConnections) {
@@ -398,9 +408,31 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				}
 			}
 		}
+		
+		layoutPictogramElement(container);
 
 		// activate direct editing after object creation
 		getFeatureProvider().getDirectEditingInfo().setActive(true);
+	}
+
+	private void addChildrenGraphicalRepresentation(AbstractCamelModelElement node, PictogramElement newGraphicalRepresentation) {
+		PictogramElement previousChild = null;
+		for(AbstractCamelModelElement child: node.getChildElements()){
+			CreateContext childCreateContext = new CreateContext();
+			childCreateContext.setTargetContainer((ContainerShape) newGraphicalRepresentation);
+			PictogramElement currentChild = addGraphicalRepresentation(childCreateContext, child);
+			if(previousChild != null){
+				CreateFlowFeature createFeature = new CreateFlowFeature(getFeatureProvider());
+				CreateConnectionContext connectContext = new CreateConnectionContext();
+				connectContext.setSourcePictogramElement(previousChild);
+				connectContext.setSourceAnchor(getAnchor(previousChild));
+				connectContext.setTargetPictogramElement(currentChild);
+				connectContext.setTargetAnchor(getAnchor(currentChild));
+				createFeature.create(connectContext);
+			}
+			addChildrenGraphicalRepresentation(child, currentChild);
+			previousChild = currentChild;
+		}
 	}
 
 	private AbstractCamelModelElement determineContainerElement(ContainerShape container) {
@@ -500,11 +532,13 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			CamelDesignEditor editor = (CamelDesignEditor) getDiagramBehavior().getDiagramContainer();
 			if (editor.getModel() != null) {
 				Node newNode = null;
-				if (createDOMNode) {
+				if (createDOMNode && nodeToDuplicateForCreation == null) {
 					final String nodeTypeId = getEip().getName();
 					final String namespace = parent != null && parent.getXmlNode() != null
 							? parent.getXmlNode().getPrefix() : null;
 					newNode = editor.getModel().createElement(nodeTypeId, namespace);
+				} else if(nodeToDuplicateForCreation != null){
+					newNode = nodeToDuplicateForCreation;
 				}
 				// if we have a route eip we need to use the specific route
 				// model element
@@ -591,5 +625,16 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			return getEipByName(ENDPOINT_TYPE_FROM);
 		}
 		return getEip();
+	}
+	
+	private Anchor getAnchor(PictogramElement element) {
+		if (element instanceof AnchorContainer) {
+			AnchorContainer container = (AnchorContainer) element;
+			EList<Anchor> anchors = container.getAnchors();
+			if (anchors != null && !anchors.isEmpty()) {
+				return anchors.get(0);
+			}
+		}
+		return null;
 	}
 }

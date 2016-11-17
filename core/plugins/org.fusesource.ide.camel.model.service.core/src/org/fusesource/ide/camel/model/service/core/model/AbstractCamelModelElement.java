@@ -606,7 +606,7 @@ public abstract class AbstractCamelModelElement {
 	 * @param element
 	 */
 	public void addChildElement(AbstractCamelModelElement element) {
-		if (this.childElements.contains(element) == false) {
+		if (!childElements.contains(element)) {
 			this.childElements.add(element);
 			
 			// special handling for the otherwise element
