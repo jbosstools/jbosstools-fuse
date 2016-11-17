@@ -121,9 +121,8 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 				} else if (shape instanceof Image) {
 					// update the icon image
 					AbstractCamelModelElement addedClass = (AbstractCamelModelElement)bo;
-					String iconKey = null;
 					// set the new icon id - refresh will to the rest
-					iconKey = ImageProvider.getKeyForDiagramIcon(addedClass.isEndpointElement(), addedClass.getIconName());
+					String iconKey = ImageProvider.getKeyForDiagramIcon(addedClass.isEndpointElement(), addedClass.getIconName());
 					((Image)shape).setId(iconKey);
 					this.changed = true;
 				}

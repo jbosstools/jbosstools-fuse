@@ -82,11 +82,8 @@ public class AddFlowFeature extends AbstractAddFeature {
 		ConnectionDecorator textDecorator = peCreateService.createConnectionDecorator(connection, true, 0.5, true);
 		Text text = gaService.createDefaultText(getDiagram(), getDiagram().getGraphicsAlgorithm());
 		textDecorator.setConnection(connection);
-		text.setStyle(StyleUtil.getStyleForCamelText((getDiagram())));
+		text.setStyle(StyleUtil.getStyleForCamelText(getDiagram()));
 		gaService.setLocation(text, 10, 0);
-		// set reference name in the text decorator
-		CamelElementConnection flow = (CamelElementConnection) context.getNewObject();
-//		text.setValue(flow.getName());
 		
 		// add static graphical decorators (composition and navigable)
 		ConnectionDecorator cd = peCreateService.createConnectionDecorator(connection, false, 1.0, true);
@@ -100,11 +97,9 @@ public class AddFlowFeature extends AbstractAddFeature {
 		return connection;
 	}
 	
-	
-	
 	private Polyline createArrow(GraphicsAlgorithmContainer gaContainer) {
-		int xy[] = new int[] { -10, -5, 0, 0, -10, 5, -8, 0 };
-		int beforeAfter[] = new int[] { 3, 3, 0, 0, 3, 3, 3, 3 };
+		int[] xy = new int[] { -10, -5, 0, 0, -10, 5, -8, 0 };
+		int[] beforeAfter = new int[] { 3, 3, 0, 0, 3, 3, 3, 3 };
 		Polygon polyline = Graphiti.getGaCreateService().createPolygon(gaContainer, xy, beforeAfter);
 		polyline.setStyle(StyleUtil.getStyleForPolygon(getDiagram()));
 		return polyline;

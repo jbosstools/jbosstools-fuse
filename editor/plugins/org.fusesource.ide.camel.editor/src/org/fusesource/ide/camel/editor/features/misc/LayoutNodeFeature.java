@@ -12,6 +12,7 @@
 package org.fusesource.ide.camel.editor.features.misc;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.graphiti.datatypes.IDimension;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -23,15 +24,10 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.swt.graphics.Rectangle;
-import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
-
 public class LayoutNodeFeature extends AbstractLayoutFeature {
-
-	private static final int MIN_HEIGHT = 60;
-	private static final int MIN_WIDTH = FigureUIFactory.FIGURE_MAX_WIDTH;
 
 	public LayoutNodeFeature(IFeatureProvider fp) {
 		super(fp);
@@ -67,16 +63,19 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 		Object bo = getBusinessObjectForPictogramElement(containerShape);
 		Rectangle maxDim = new Rectangle(containerGa.getX(), containerGa.getY(), containerGa.getWidth(), containerGa.getHeight());
 		
-		ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();		
+		List<PictogramElement> containers = new ArrayList<>();		
 		NodeUtils.getAllContainers(getFeatureProvider(), (AbstractCamelModelElement)bo, containers);
 		containers.add(containerShape);
 		for (PictogramElement pe : containers) {
 			Object peBO = getBusinessObjectForPictogramElement(pe);
 			if (peBO instanceof AbstractCamelModelElement) {
-				AbstractCamelModelElement container = (AbstractCamelModelElement)peBO;
 				IDimension dPe = gaService.calculateSize(pe.getGraphicsAlgorithm(), true);
-				if (dPe.getWidth() + pe.getGraphicsAlgorithm().getX() > maxDim.width) maxDim.width = dPe.getWidth() + pe.getGraphicsAlgorithm().getX();
-				if (dPe.getHeight() + pe.getGraphicsAlgorithm().getY() > maxDim.height) maxDim.height = dPe.getHeight() + pe.getGraphicsAlgorithm().getY();
+				if (dPe.getWidth() + pe.getGraphicsAlgorithm().getX() > maxDim.width){
+					maxDim.width = dPe.getWidth() + pe.getGraphicsAlgorithm().getX();
+				}
+				if (dPe.getHeight() + pe.getGraphicsAlgorithm().getY() > maxDim.height){
+					maxDim.height = dPe.getHeight() + pe.getGraphicsAlgorithm().getY();
+				}
 			}
 		}
 		
@@ -108,16 +107,7 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 			anythingChanged = true;
 		}
 
-//		// width of text and line (same as visible rectangle)
-//		for (Shape shape : containerShape.getChildren()) {
-//			GraphicsAlgorithm graphicsAlgorithm = shape.getGraphicsAlgorithm();
-//			IDimension size = gaService.calculateSize(graphicsAlgorithm);
-//			if (rectangleWidth != size.getWidth()) {
-//				gaService.setWidth(graphicsAlgorithm, rectangleWidth);
-//				anythingChanged = true;
-//			}
-//		}
-
 		return anythingChanged;
 	}
 }
+
