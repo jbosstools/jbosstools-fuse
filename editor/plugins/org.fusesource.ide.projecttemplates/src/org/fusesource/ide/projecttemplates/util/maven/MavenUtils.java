@@ -47,6 +47,10 @@ public class MavenUtils {
 	 */
 	public static void updateCamelVersionPlugins(Model mavenModel, List<Plugin> plugins, String camelVersion) {
 		Properties properties = mavenModel.getProperties();
+		// TODO: remove me after 2.18.1 went GA
+		if (camelVersion.equalsIgnoreCase("2.18.1")) {
+			camelVersion = "2.18.1-SNAPSHOT";
+		}
 		if(isMavenPropertyCamelVersionSet(properties)){
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		} else {
@@ -83,6 +87,10 @@ public class MavenUtils {
 	 * @param camelVersion
 	 */
 	public static void updateCamelVersionDependencies(Model mavenModel, List<Dependency> dependencies, String camelVersion) {
+		// TODO: remove me after 2.18.1 went GA
+		if (camelVersion.equalsIgnoreCase("2.18.1")) {
+			camelVersion = "2.18.1-SNAPSHOT";
+		}
 		Properties properties = mavenModel.getProperties();
 		if(isMavenPropertyCamelVersionSet(properties)){
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
