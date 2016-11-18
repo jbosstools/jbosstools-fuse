@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractNumberParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.NumberParameterPropertyUICreatorForAdvanced;
@@ -73,16 +72,5 @@ public class NumberParameterPropertyUICreatorIT extends AbstractParameterPropert
 
 		assertThat(modelMap.get("testParameterName")).isEqualTo("2");
 		assertThat(PropertiesUtils.getTypedPropertyFromUri(camelModelElement, parameter, PropertiesUtils.getComponentFor(camelModelElement))).isEqualTo("2");
-	}
-	
-	@Test
-	public void testBackgroundDisplayedForIntegerParameter() throws Exception {
-		final AbstractNumberParameterPropertyUICreator numberParameterPropertyUICreator = new NumberParameterPropertyUICreatorForDetails(
-				dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
-		numberParameterPropertyUICreator.create();
-		final Text control = numberParameterPropertyUICreator.getControl();
-		assertThat(control.getBackground()).isNotEqualTo(ColorConstants.red);
-		control.setText("Invalid");
-		assertThat(control.getBackground()).isEqualTo(ColorConstants.red);
 	}
 }

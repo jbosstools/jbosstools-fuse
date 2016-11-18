@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConstants;
 
 public class StagingRepositoriesPreferenceInitializer extends AbstractPreferenceInitializer {
 	
-	private static final String PRODUCT_STAGING_REPO_URI = "fuse-internal"+ 
-			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
-			"http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven";
-	private static final String THIRD_PARTY_STAGING_REPO_URI = "redhat-ea"+
-			StagingRepositoriesConstants.NAME_URL_SEPARATOR+"https://maven.repository.redhat.com/earlyaccess/all";
+	private static final String NAME_URL_SEPARATOR = ",";
+	private static final String REPO_SEPARATOR = ";";
+	private static final String ENABLE_STAGING_REPOSITORIES = "enableStagingRepositories";
+	static final String STAGING_REPOSITORIES = "stagingRepositories";
+	private static final String PRODUCT_STAGING_REPO_URI = "fuse-internal"+NAME_URL_SEPARATOR+"http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven";
+	private static final String THIRD_PARTY_STAGING_REPO_URI = "redhat-ea"+NAME_URL_SEPARATOR+"https://maven.repository.redhat.com/earlyaccess/all";
 
 	public StagingRepositoriesPreferenceInitializer() {
 		// Keep for reflection initialization
@@ -34,8 +34,8 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore preferenceStore = getPreferenceStore();
-		preferenceStore.setDefault(StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES, false);
-		preferenceStore.setDefault(StagingRepositoriesConstants.STAGING_REPOSITORIES, PRODUCT_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR + THIRD_PARTY_STAGING_REPO_URI);
+		preferenceStore.setDefault(ENABLE_STAGING_REPOSITORIES, false);
+		preferenceStore.setDefault(STAGING_REPOSITORIES, PRODUCT_STAGING_REPO_URI + REPO_SEPARATOR + THIRD_PARTY_STAGING_REPO_URI);
 	}
 
 	IPreferenceStore getPreferenceStore() {
@@ -43,38 +43,21 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	}
 	
 	public boolean isStagingRepositoriesEnabled(){
-		return getPreferenceStore().getBoolean(StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES);
+		return getPreferenceStore().getBoolean(ENABLE_STAGING_REPOSITORIES);
 	}
 	
 	public void setStagingRepositoriesEnablement(boolean enable){
-		getPreferenceStore().setValue(StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES, enable);
+		getPreferenceStore().setValue(ENABLE_STAGING_REPOSITORIES, enable);
 	}
 	
 	/**
 	 * @return A list of pair in List for Name/URl of repositories
 	 */
 	public List<List<String>> getStagingRepositories(){
-		String storedValue = getStagingRepositoriesString();
-		return getStagingRepositoriesAsList(storedValue);
-	}
-
-	/**
-	 * @return the stored string list of repositories
-	 */
-	public String getStagingRepositoriesString(){
-		String storedValue = getPreferenceStore().getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
-		return storedValue;
-	}
-	
-	/**
-	 * Utility method to parse into a more digestible list
-	 * @param list
-	 * @return A list of pair in List for Name/URl of repositories
-	 */
-	public List<List<String>> getStagingRepositoriesAsList(String list){
-		return Arrays.asList(list.split(StagingRepositoriesConstants.REPO_SEPARATOR))
+		String storedValue = getPreferenceStore().getString(STAGING_REPOSITORIES);
+		return Arrays.asList(storedValue.split(REPO_SEPARATOR))
 				.stream()
-				.map(repoName -> Arrays.asList(repoName.split(StagingRepositoriesConstants.NAME_URL_SEPARATOR)))
+				.map(repoName -> Arrays.asList(repoName.split(NAME_URL_SEPARATOR)))
 				.collect(Collectors.toList());
 	}
 

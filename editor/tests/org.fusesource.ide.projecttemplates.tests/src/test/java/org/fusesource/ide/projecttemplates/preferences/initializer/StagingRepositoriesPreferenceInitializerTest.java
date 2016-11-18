@@ -16,7 +16,6 @@ import static org.mockito.Mockito.doReturn;
 import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ public class StagingRepositoriesPreferenceInitializerTest {
 	
 	@Test
 	public void testGetStagingRepositories() throws Exception {
-		doReturn("name1,http://my.url1;name2,http://my.url2").when(preferenceStore).getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
+		doReturn("name1,http://my.url1;name2,http://my.url2").when(preferenceStore).getString(StagingRepositoriesPreferenceInitializer.STAGING_REPOSITORIES);
 		List<List<String>> stagingRepositories = initializer.getStagingRepositories();
 		
 		assertThat(stagingRepositories.get(0)).containsExactly("name1", "http://my.url1");

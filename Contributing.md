@@ -1,15 +1,6 @@
 # Contribution Guide
 Please make sure you read and understand this document before starting development on Fuse Tooling as it helps us to merge your pull requests faster and keeps the commit history clean.
 
-## Git configuration
-
-For code review simplicity, all files should be pushed with LF for line-ending (Linux-style).
-The file .gitattributes at the root of the repository should ensure that but it is recommended to set this option also in your Eclipse environment.
-To configure Eclipse workspace preferences:
-- Windows -> Preferences
-- General -> Workspace
-- In group "New text file line delimiters", ensure you select a Linux style behavior.
-
 ## Get the code
 The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
 

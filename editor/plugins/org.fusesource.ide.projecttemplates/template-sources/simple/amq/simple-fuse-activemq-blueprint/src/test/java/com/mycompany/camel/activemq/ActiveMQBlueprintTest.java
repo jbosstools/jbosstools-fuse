@@ -18,7 +18,7 @@ public class ActiveMQBlueprintTest extends CamelBlueprintTestSupport {
 
     @Test
     public void testCamelRoute() throws Exception {
-        // Stop order generator route so it does not interfere with the test
+        // Stop order generator route so it does not interfear with the test
         context().stopRoute("generate-order");
 
         // intercept 
