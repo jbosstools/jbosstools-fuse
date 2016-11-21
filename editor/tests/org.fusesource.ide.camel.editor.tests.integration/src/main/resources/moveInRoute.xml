@@ -33,8 +33,8 @@
     -->
     <camelContext id="_context1" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="_route1">
-            <bean beanType="MyBeanType" id="_bean1"/>
-            <choice id="_choice1">
+            <bean beanType="MyBeanType" id="_bean_inRoute1"/>
+            <choice id="_choice_inRoute1">
                 <when id="_when1_inRoute1">
                     <bean beanType="MyBeanType" id="_bean_inWhen1_inRoute1"/>
                     <bean beanType="MyBeanType" id="_bean2_inWhen1_inRoute1"/>
@@ -43,10 +43,11 @@
                     <bean beanType="MyBeanType" id="_bean_inWhen2_inRoute1"/>
                 </when>
             </choice>
+            <bean beanType="MyBeanType" id="_bean2_inRoute1"/>
         </route>
         <route id="_route2">
-            <bean id="_bean2"/>
-            <choice id="_choice2">
+            <bean beanType="MyBeanType" id="_bean_inRoute2"/>
+            <choice id="_choice_inRoute2">
                 <when id="_when1_inRoute2">
                     <bean beanType="MyBeanType" id="_bean_inwhen1_inRoute2"/>
                 </when>
