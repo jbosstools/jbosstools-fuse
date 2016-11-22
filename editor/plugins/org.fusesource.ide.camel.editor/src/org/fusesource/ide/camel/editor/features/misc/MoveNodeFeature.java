@@ -17,6 +17,7 @@ import org.eclipse.graphiti.features.context.IMoveShapeContext;
 import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
 import org.eclipse.graphiti.features.impl.DefaultMoveShapeFeature;
+import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
@@ -38,12 +39,42 @@ public class MoveNodeFeature extends DefaultMoveShapeFeature {
 	@Override
 	public boolean canMoveShape(IMoveShapeContext context) {
 		PictogramElement pe = context.getPictogramElement();
-		Object modelToMove = getBusinessObjectForPictogramElement(pe);
-		Object sourceContainer = getBusinessObjectForPictogramElement(context.getSourceContainer());
-		Object targetContainer = getBusinessObjectForPictogramElement(context.getTargetContainer());
-		if(modelToMove instanceof CamelRouteElement){
-			return false;
+		Object modelToMoveObject = getBusinessObjectForPictogramElement(pe);
+		if(modelToMoveObject instanceof AbstractCamelModelElement){
+			AbstractCamelModelElement modelToMove = (AbstractCamelModelElement) modelToMoveObject;
+			if(modelToMove instanceof CamelRouteElement){
+				return false;
+			}
+			Object sourceContainer = getBusinessObjectForPictogramElement(context.getSourceContainer());
+			Object targetContainer = getBusinessObjectForPictogramElement(context.getTargetContainer());
+			Eip underlyingMetaModelObject = modelToMove.getUnderlyingMetaModelObject();
+			return (isMovingToAnotherContainer(modelToMove, sourceContainer, targetContainer)
+					|| isInsertingOnConnectionNotAdjacent(context, modelToMove, targetContainer)
+					|| isAppendOrPrepending(context, modelToMove, targetContainer))
+					&& new CreateFigureFeature(getFeatureProvider(), getName(), getDescription(), underlyingMetaModelObject).canCreate(createCreateContext(context));
 		}
+		return false;
+	}
+
+	private boolean isAppendOrPrepending(IMoveShapeContext context, AbstractCamelModelElement modelToMove, Object targetContainer) {
+		if(context.getTargetConnection() == null && targetContainer instanceof AbstractCamelModelElement){
+			return (((AbstractCamelModelElement) targetContainer).getInputElement() == null || ((AbstractCamelModelElement) targetContainer).getOutputElement() == null)
+					&& canContain(((AbstractCamelModelElement) targetContainer).getParent(), modelToMove);
+		}
+		return false;
+	}
+
+	private boolean isInsertingOnConnectionNotAdjacent(IMoveShapeContext context, AbstractCamelModelElement modelToMove, Object targetContainer) {
+		Connection targetConnection = context.getTargetConnection();
+		if(targetConnection != null){
+			AbstractCamelModelElement sourceOfConnection = NodeUtils.getNode(getFeatureProvider(), targetConnection.getStart());
+			AbstractCamelModelElement targetOfConnection = NodeUtils.getNode(getFeatureProvider(), targetConnection.getEnd());
+			return !modelToMove.equals(sourceOfConnection) && !modelToMove.equals(targetOfConnection) && canContain(targetContainer, modelToMove);
+		}
+		return false;
+	}
+
+	private boolean isMovingToAnotherContainer(AbstractCamelModelElement modelToMove, Object sourceContainer, Object targetContainer) {
 		return areDifferentContainers(sourceContainer, targetContainer) && canContain(targetContainer, modelToMove);
 	}
 
@@ -51,9 +82,9 @@ public class MoveNodeFeature extends DefaultMoveShapeFeature {
 		return sourceContainer != null && !sourceContainer.equals(targetContainer);
 	}
 	
-	private boolean canContain(Object targetContainer, Object movableModel) {
-		if(targetContainer instanceof AbstractCamelModelElement && movableModel instanceof AbstractCamelModelElement){
-			return NodeUtils.isValidChild((AbstractCamelModelElement)targetContainer, (AbstractCamelModelElement)movableModel);
+	private boolean canContain(Object targetContainer, AbstractCamelModelElement movableModel) {
+		if(targetContainer instanceof AbstractCamelModelElement){
+			return NodeUtils.isValidChild((AbstractCamelModelElement)targetContainer, movableModel);
 		}
 		return false;
 	}
@@ -73,11 +104,16 @@ public class MoveNodeFeature extends DefaultMoveShapeFeature {
 		deleteFigureFeature.delete(deleteContext);
 		
 		CreateFigureFeature createFigureFeature = new CreateFigureFeature(getFeatureProvider(), id, description, underlyingMetaModelObject, xmlNode);
-		CreateContext createContext = new CreateContext();
-		createContext.setTargetContainer(context.getTargetContainer());
+		CreateContext createContext = createCreateContext(context);
 		createFigureFeature.create(createContext);
 		
-		
+	}
+
+	private CreateContext createCreateContext(IMoveShapeContext context) {
+		CreateContext createContext = new CreateContext();
+		createContext.setTargetContainer(context.getTargetContainer());
+		createContext.setTargetConnection(context.getTargetConnection());
+		return createContext;
 	}
 	
 }
