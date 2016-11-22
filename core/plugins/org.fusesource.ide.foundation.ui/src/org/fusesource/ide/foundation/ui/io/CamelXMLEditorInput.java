@@ -166,9 +166,6 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 		this.selectedContainerId = selectedContainerId;
 	}
 	
-	/**
-	 * 
-	 */
 	public void onEditorInputSave() {
 	}
 }
