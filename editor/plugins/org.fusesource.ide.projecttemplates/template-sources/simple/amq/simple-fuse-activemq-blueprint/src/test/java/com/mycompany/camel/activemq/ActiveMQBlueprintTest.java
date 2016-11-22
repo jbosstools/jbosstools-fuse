@@ -13,7 +13,7 @@ import com.mycompany.templates.camel.activemq.OrderGenerator;
  * A unit test to verify the Camel route works as designed.
  */
 public class ActiveMQBlueprintTest extends CamelBlueprintTestSupport {    
-    @EndpointInject(uri = "activemq:incomingOrders")
+	@EndpointInject(uri = "activemq:incomingOrders?username=${broker.userName}&password=${broker.password}")
     private ProducerTemplate in;
 
     @Test
