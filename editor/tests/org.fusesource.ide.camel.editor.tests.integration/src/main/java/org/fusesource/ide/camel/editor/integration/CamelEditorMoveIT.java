@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.misc.MoveNodeFeature;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.junit.Test;
 
 public class CamelEditorMoveIT extends AbstractCamelEditorIT {

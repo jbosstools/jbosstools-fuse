@@ -53,6 +53,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.junit.Test;
 
 public class CamelEditorIT extends AbstractCamelEditorIT{

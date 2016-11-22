@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.integration;
+package org.fusesource.ide.camel.test.util.editor;
 
 import java.io.InputStream;
 
@@ -43,7 +43,7 @@ public class AbstractCamelEditorIT {
 	public FuseProject fuseProject = new FuseProject(getClass().getName());
 	
 	boolean safeRunnableIgnoreErrorStateBeforeTests;
-	boolean statusHandlerCalled = false;
+	protected boolean statusHandlerCalled = false;
 
 	StatusHandler statusHandlerBeforetest;
 
@@ -81,7 +81,7 @@ public class AbstractCamelEditorIT {
 	}
 
 	protected IEditorPart openFileInEditor(String filePath) throws Exception {
-		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
+		InputStream inputStream = AbstractCamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
 		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
 		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
