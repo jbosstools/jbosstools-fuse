@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IResource;
@@ -99,13 +100,13 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	static final int OFFSET_Y_VALIDATION_DECORATOR = 18;
 	static final int OFFSET_Y_BREAKPOINT_DECORATOR = 2;
 
-	private static HashMap<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<ICreateFeature, IConfigurationElement>();
+	private static Map<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<>();
 
-	private static final ArrayList<String> CONNECTORS_WHITELIST;
+	private static final List<String> CONNECTORS_WHITELIST;
 	private static final Set<String> COMPONENTS_FROM_EXTENSION_POINTS = new HashSet<>();
 
 	static {
-		CONNECTORS_WHITELIST = new ArrayList<String>();
+		CONNECTORS_WHITELIST = new ArrayList<>();
 
 		CONNECTORS_WHITELIST.add("activemq");
 		CONNECTORS_WHITELIST.add("atom");
@@ -260,7 +261,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			}
 
 			// 3.c. add context button, if it contains at least one feature
-			if (button.getDragAndDropFeatures().size() > 0) {
+			if (!button.getDragAndDropFeatures().isEmpty()) {
 				data.getDomainSpecificContextButtons().add(button);
 			}
 		}
@@ -289,7 +290,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public IContextMenuEntry[] getContextMenu(ICustomContext context) {
-		List<IContextMenuEntry> entries = new LinkedList<IContextMenuEntry>();
+		List<IContextMenuEntry> entries = new LinkedList<>();
 		// create a menu-entry in the sub-menu for each custom feature
 		IFeatureProvider fp = getFeatureProvider();
 		ICustomFeature[] customFeatures = fp.getCustomFeatures(context);
@@ -332,7 +333,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public IPaletteCompartmentEntry[] getPalette() {
-		List<IPaletteCompartmentEntry> ret = new ArrayList<IPaletteCompartmentEntry>();
+		List<IPaletteCompartmentEntry> ret = new ArrayList<>();
 
 		// the folder for component types
 		PaletteCompartmentEntry compartmentEntryComponents = new PaletteCompartmentEntry(
@@ -370,9 +371,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		ret.add(compartmentEntryMisc);
 		compartmentEntryMisc.setInitiallyOpen(false);
 
-		HashMap<String, PaletteCompartmentEntry> userdefinedEntries = new HashMap<String, PaletteCompartmentEntry>();
+		Map<String, PaletteCompartmentEntry> userdefinedEntries = new HashMap<>();
 
-		ArrayList<IToolEntry> paletteItems = getAggregatedToolEntries();
+		List<IToolEntry> paletteItems = getAggregatedToolEntries();
 		for (IToolEntry toolEntry : paletteItems) {
 			if (toolEntry instanceof ObjectCreationToolEntry) {
 				ObjectCreationToolEntry octe = (ObjectCreationToolEntry) toolEntry;
@@ -440,7 +441,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	@Override
 	public IDecorator[] getDecorators(PictogramElement pe) {
-		List<IDecorator> decorators = new LinkedList<IDecorator>();
+		List<IDecorator> decorators = new LinkedList<>();
 
 		// decorators only for visible elements
 		if (pe.isVisible()) {
@@ -645,8 +646,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * 
 	 * @return
 	 */
-	public ArrayList<IToolEntry> getPredefinedToolEntries() {
-		ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
+	public List<IToolEntry> getPredefinedToolEntries() {
+		List<IToolEntry> entries = new ArrayList<>();
 
 		// add compartments from super class and skip first as its the
 		// connection menu
@@ -664,18 +665,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		}
 
 		// sort the palette entries
-		Collections.sort(entries, new Comparator<IToolEntry>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 * java.lang.Object)
-			 */
-			@Override
-			public int compare(IToolEntry o1, IToolEntry o2) {
-				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-			}
-		});
+		Collections.sort(entries, Comparator.comparing(IToolEntry::getLabel));
 
 		return entries;
 	}
@@ -686,8 +676,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * 
 	 * @return
 	 */
-	public ArrayList<IToolEntry> getExtensionPointToolEntries() {
-		ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
+	public List<IToolEntry> getExtensionPointToolEntries() {
+		List<IToolEntry> entries = new ArrayList<>();
 
 		// inject palette entries delivered via extension points
 		IConfigurationElement[] extensions = Platform.getExtensionRegistry()
@@ -716,18 +706,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		}
 
 		// sort the palette entries
-		Collections.sort(entries, new Comparator<IToolEntry>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 * java.lang.Object)
-			 */
-			@Override
-			public int compare(IToolEntry o1, IToolEntry o2) {
-				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-			}
-		});
+		Collections.sort(entries, Comparator.comparing(IToolEntry::getLabel));
 
 		return entries;
 	}
@@ -738,8 +717,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * 
 	 * @return
 	 */
-	public ArrayList<IToolEntry> getConnectorsToolEntries() {
-		ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
+	public List<IToolEntry> getConnectorsToolEntries() {
+		List<IToolEntry> entries = new ArrayList<>();
 
 		// inject palette entries generated out of the component model file
 		CamelDesignEditor editor = null;
@@ -761,18 +740,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		}
 
 		// sort the palette entries
-		Collections.sort(entries, new Comparator<IToolEntry>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 * java.lang.Object)
-			 */
-			@Override
-			public int compare(IToolEntry o1, IToolEntry o2) {
-				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-			}
-		});
+		Collections.sort(entries, Comparator.comparing(IToolEntry::getLabel));
 
 		return entries;
 	}
@@ -782,26 +750,15 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 * 
 	 * @return
 	 */
-	public ArrayList<IToolEntry> getAggregatedToolEntries() {
-		ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
+	public List<IToolEntry> getAggregatedToolEntries() {
+		List<IToolEntry> entries = new ArrayList<>();
 
 		entries.addAll(getPredefinedToolEntries());
 		entries.addAll(getConnectorsToolEntries());
 		entries.addAll(getExtensionPointToolEntries());
 
 		// sort the palette entries
-		Collections.sort(entries, new Comparator<IToolEntry>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 * java.lang.Object)
-			 */
-			@Override
-			public int compare(IToolEntry o1, IToolEntry o2) {
-				return o1.getLabel().compareToIgnoreCase(o2.getLabel());
-			}
-		});
+		Collections.sort(entries, Comparator.comparing(IToolEntry::getLabel));
 
 		return entries;
 	}
