@@ -280,7 +280,7 @@
       	
       	<project-facet-version
             facet="jst.camel"
-            version="2.18.1">
+            version="2.18.1.fuse-000010">
        	
         	<constraint>
             	<and>

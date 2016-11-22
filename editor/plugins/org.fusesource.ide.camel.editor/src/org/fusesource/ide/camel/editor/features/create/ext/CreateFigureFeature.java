@@ -595,10 +595,6 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	}
 
 	private void updateDepsVersion(List<Dependency> compDeps, String newCamelVersion) {
-		// TODO: remove me after 2.18.1 went GA
-		if (newCamelVersion.equalsIgnoreCase("2.18.1")) {
-			newCamelVersion = "2.18.1-SNAPSHOT";
-		}
 		for (Dependency dep : compDeps) {
 			// we only update the versions of default camel components
 			if (dep.getGroupId().equalsIgnoreCase("org.apache.camel")

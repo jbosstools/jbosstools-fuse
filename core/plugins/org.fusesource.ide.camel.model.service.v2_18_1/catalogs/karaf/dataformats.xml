@@ -16,7 +16,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-protobuf</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -41,7 +41,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-boon</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -67,7 +67,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-johnzon</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -105,7 +105,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-tagsoup</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -131,7 +131,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -156,7 +156,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-csv</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -202,7 +202,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-base64</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -229,7 +229,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -255,7 +255,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-syslog</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -279,7 +279,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jaxb</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -318,7 +318,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rss</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -342,7 +342,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlrpc</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -367,7 +367,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jacksonxml</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -404,7 +404,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-crypto</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -441,7 +441,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-lzf</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -467,7 +467,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlsecurity</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -502,7 +502,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-snakeyaml</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -533,7 +533,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -561,7 +561,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-barcode</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -589,7 +589,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlbeans</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -614,7 +614,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-castor</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -642,7 +642,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-avro</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -667,7 +667,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-gson</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -706,7 +706,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -743,7 +743,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -768,7 +768,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-beanio</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -799,7 +799,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-zipfile</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -824,7 +824,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jibx</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -850,7 +850,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-flatpack</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -881,7 +881,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -905,7 +905,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -932,7 +932,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-tarfile</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -957,7 +957,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-crypto</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -990,7 +990,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1014,7 +1014,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-soap</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1045,7 +1045,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmljson</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1081,7 +1081,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jackson</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1119,7 +1119,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hessian</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1143,7 +1143,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hl7</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1168,7 +1168,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1208,7 +1208,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xstream</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1247,7 +1247,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1287,7 +1287,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ical</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1312,7 +1312,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1340,7 +1340,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xstream</artifactId>
-            <version>2.18.1-SNAPSHOT</version>
+            <version>2.18.1.fuse-000010</version>
          </dependency>
       </dependencies>
       <parameters>
