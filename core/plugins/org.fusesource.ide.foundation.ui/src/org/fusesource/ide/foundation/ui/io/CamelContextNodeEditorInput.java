@@ -31,7 +31,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 	public CamelContextNodeEditorInput(Node contextNode, IFile camelContextTempFile) {
 		super(camelContextTempFile, null);
 		this.contextNode = contextNode;
-		if (contextNode.getClass().getName().equals("org.fusesource.ide.jmx.camel.navigator.CamelContextNode")) {
+		if (isCamelContextNode(contextNode)) {
 			try {
 				Method m = contextNode.getClass().getMethod("getContextId", (Class[])null);
 				Object result = m.invoke(contextNode, (Object[])null);
@@ -66,10 +66,9 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 	@Override
 	public void onEditorInputSave() {
 		super.onEditorInputSave();
-		String xml = null;
 		try {
 			getCamelContextFile().getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-			xml = IOUtils.loadText(getCamelContextFile().getContents(), "utf-8");
+			String xml = IOUtils.loadText(getCamelContextFile().getContents(), "utf-8");
 			pushbackToRemoteContext(xml);
 		} catch (Exception ex) {
 			FoundationUIActivator.pluginLog().logError("Error saving changes to remote camel context " + this.contextId, ex);
@@ -77,7 +76,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 	}
 	
 	public void pushbackToRemoteContext(String xml) {
-		if (contextNode.getClass().getName().equals("org.fusesource.ide.jmx.camel.navigator.CamelContextNode")) {
+		if (isCamelContextNode(contextNode)) {
 			try {
 				Method m = contextNode.getClass().getMethod("updateXml", String.class);
 				m.invoke(contextNode, xml);
@@ -85,5 +84,9 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 				FoundationUIActivator.pluginLog().logError(ex.getCause() != null ? ex.getCause() : ex);
 			}
 		} 
+	}
+	
+	private boolean isCamelContextNode(Node contextNode) {
+		return "org.fusesource.ide.jmx.camel.navigator.CamelContextNode".equals(contextNode.getClass().getName());
 	}
 }
