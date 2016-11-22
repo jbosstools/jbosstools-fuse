@@ -102,6 +102,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	// event dispatcher
 	private EventDispatchJob dispatcher;
 	private ThreadGarbageCollector garbageCollector;
+	private JMXConnectJob conJob;
 
 	/**
 	 * the debugger facade
@@ -132,7 +133,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		initCamelContextId();
 		
 		// start connector job
-		JMXConnectJob conJob = new JMXConnectJob();
+		conJob = new JMXConnectJob();
 		conJob.schedule();
 		
 		this.dispatcher = new EventDispatchJob();
@@ -337,6 +338,10 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		fTerminated = true;
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
 		try {
+			// abort a possible stuck connect
+			if (conJob != null) {
+				conJob.cancel();
+			}
 			if (fProcess != null && !fProcess.isTerminated()) {
 				disconnect();
 				fProcess.terminate();
