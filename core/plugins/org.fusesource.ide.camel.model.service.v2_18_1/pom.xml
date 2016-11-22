@@ -82,6 +82,7 @@
 							<version>${bundle.slf4j.version}</version>
 					    </artifactItem>
 					</artifactItems>
+					<useBaseVersion>true</useBaseVersion>
 					<skip>false</skip>
 					<outputDirectory>${basedir}/libs/</outputDirectory>
 				</configuration>
