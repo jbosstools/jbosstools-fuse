@@ -91,6 +91,9 @@ public abstract class AbstractCamelModelElement {
 
 	private String name;
 	private String description;
+	
+	// flag which controls if default values are removed from file or not
+	private static boolean optimizedXML = true; 
 
 	/**
 	 * creates a camel node using the xml node
@@ -140,6 +143,23 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
+	/**
+	 * @return the optimizedXML
+	 */
+	public static boolean useOptimizedXML() {
+		return optimizedXML;
+	}
+	
+	/**
+	 * @param optimizedXML the optimizedXML to set
+	 */
+	public static void setOptimizedXML(boolean optimizedXML) {
+		AbstractCamelModelElement.optimizedXML = optimizedXML;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return getDisplayText();
@@ -977,7 +997,7 @@ public abstract class AbstractCamelModelElement {
 	private void updateAttribute(String name, Object newValue, Object oldValue, Element e) {
 		String defaultValue = this.underlyingMetaModelObject != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
-		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue))) {
+		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue)) && useOptimizedXML()) {
 			// default value -> no need to explicitly set it -> delete
 			// existing
 			e.removeAttribute(name);
