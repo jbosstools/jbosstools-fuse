@@ -81,7 +81,7 @@ public class AbstractCamelEditorIT {
 	}
 
 	protected IEditorPart openFileInEditor(String filePath) throws Exception {
-		InputStream inputStream = AbstractCamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
 		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
 		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
