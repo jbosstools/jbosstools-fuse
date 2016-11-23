@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes id="routes-d2454e43-cc7a-4b72-86f2-3ce1ab03030e" xmlns="http://camel.apache.org/schema/spring">
+    <route id="test">
+        <from id="_from1" uri="timer://trigger"/>
+        <transform id="_transform1">
+            <simple>ref:myBean</simple>
+        </transform>
+        <to id="_to1" uri="log:out"/>
+    </route>
+</routes>

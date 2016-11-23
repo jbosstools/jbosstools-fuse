@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 
 /**
  * @author lhein
@@ -87,7 +88,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 */
 	@Override
 	protected void doExecute() {
-		CamelContextElement context = null;
+		CamelRouteContainerElement context = null;
 		try {
 			designEditor.getParent().stopDirtyListener();
 			if (designEditor.getModel() != null) designEditor.getModel().unregisterDOMListener();
@@ -104,7 +105,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			IFeatureProvider featureProvider = dtp.getFeatureProvider();
 			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
 			try {
-				context = camelContextFile.getChildElements().isEmpty() ? null : (CamelContextElement)camelContextFile.getChildElements().get(0);
+				context = camelContextFile.getChildElements().isEmpty() ? null : (CamelRouteContainerElement)camelContextFile.getChildElements().get(0);
 				diagramReader.loadModel(editingDomain, this.container != null && this.container instanceof CamelFile == false ? this.container : context);
 			} catch (Exception e) {
 				CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);

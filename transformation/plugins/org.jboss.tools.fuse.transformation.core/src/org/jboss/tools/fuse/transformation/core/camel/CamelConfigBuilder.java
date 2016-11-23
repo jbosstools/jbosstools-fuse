@@ -188,12 +188,12 @@ public class CamelConfigBuilder {
 
     protected AbstractCamelModelElement addEndpoint(String id, String uri) {
     	AbstractCamelModelElement parent = getModel().getRouteContainer();
-		if (parent instanceof CamelContextElement) {
+    	if (parent instanceof CamelContextElement) {
 			CamelEndpoint ep = new CamelEndpoint(uri);
 			ep.setId(id);
 			ep.setParent(parent);
 			ep.setUnderlyingMetaModelObject(getEipByName("from")); //$NON-NLS-1$
-			((CamelContextElement)getModel().getRouteContainer()).addEndpointDefinition(ep);
+			((CamelContextElement)parent).addEndpointDefinition(ep);
 			return ep;
 		}
 		return null; // maybe better throw illegaloperationexception?
@@ -217,7 +217,7 @@ public class CamelConfigBuilder {
         		dataFormat.setUnderlyingMetaModelObject(json);
         		dataFormat.setParameter("library", "Jackson"); //$NON-NLS-1$ //$NON-NLS-2$
         		dataFormat.setParameter("unmarshalTypeName", className); //$NON-NLS-1$
-        		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
+        		((CamelContextElement)parent).addDataFormat(dataFormat);
         	}
         }
         return dataFormat;
@@ -236,7 +236,7 @@ public class CamelConfigBuilder {
 	    		dataFormat.setId(id);
 	    		dataFormat.setUnderlyingMetaModelObject(jaxb);
 	    		dataFormat.setParameter("contextPath", contextPath); //$NON-NLS-1$
-	    		((CamelContextElement)parent.getRouteContainer()).addDataFormat(dataFormat);
+	    		((CamelContextElement)parent).addDataFormat(dataFormat);
         	}
         }
         return dataFormat;

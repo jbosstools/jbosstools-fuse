@@ -306,7 +306,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 	                        // Create the route endpoint
 	                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId()); //$NON-NLS-1$
                     	} else {
-                    		
+                    		// dataformats and endpoints can be only added to a Camel Context
                     	}
                     }
 

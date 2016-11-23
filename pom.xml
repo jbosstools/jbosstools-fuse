@@ -89,18 +89,6 @@
   <repositories>
 
 	<repository>
-	  <id>apache.snapshot</id>
-	  <name>Apache Snapshots</name>
-	  <url> https://repository.apache.org/content/groups/snapshots</url>
-	  <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-	</repository>
-
-    <repository>
       <id>fusesource.ea.repo</id>
       <name>JBoss Fuse Early Access Repository</name>
       <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
