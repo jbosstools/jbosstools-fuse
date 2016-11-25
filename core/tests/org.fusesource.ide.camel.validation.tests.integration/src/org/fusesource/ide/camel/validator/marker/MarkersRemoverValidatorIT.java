@@ -86,10 +86,8 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		Method getAllMarkersMethod = ExtendedMarkersView.class.getDeclaredMethod("getAllMarkers", new Class[] {}); //$NON-NLS-1$
 		getAllMarkersMethod.setAccessible(true);
 		IMarker[] markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
-
-		int initial = markers.length;
-		// there are errors or warnings
-		assertThat(initial == 2).isTrue();
+		// there are 2 expected errors or warnings
+		assertThat(markers).hasSize(2);
 
 		Field deleteButtonField = CamelGlobalConfigEditor.class.getDeclaredField("btnDelete");
 		deleteButtonField.setAccessible(true);
@@ -110,7 +108,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		readAndDispatch(20);
 
 		markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
-		assertThat(markers.length == 0).isTrue();
+		assertThat(markers).isEmpty();
 
 	}
 
