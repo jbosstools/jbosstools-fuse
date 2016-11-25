@@ -89,7 +89,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 
 		int initial = markers.length;
 		// there are errors or warnings
-		assertThat(initial > 0);
+		assertThat(initial == 2).isTrue();
 
 		Field deleteButtonField = CamelGlobalConfigEditor.class.getDeclaredField("btnDelete");
 		deleteButtonField.setAccessible(true);
@@ -110,7 +110,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		readAndDispatch(20);
 
 		markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
-		assertThat(markers.length == 0);
+		assertThat(markers.length == 0).isTrue();
 
 	}
 
