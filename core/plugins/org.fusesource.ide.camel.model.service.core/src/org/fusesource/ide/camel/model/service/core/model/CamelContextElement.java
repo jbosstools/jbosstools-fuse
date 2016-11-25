@@ -108,9 +108,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 			if (childExists) {
 				getXmlNode().removeChild(def.getXmlNode());
 			}
+			notifyAboutDeletion(def);
 		}
 	}
-	
+
 	/**
 	 * deletes all endpoint definitions
 	 */
@@ -235,6 +236,7 @@ public class CamelContextElement extends AbstractCamelModelElement {
 					}
 				}
 			}
+			notifyAboutDeletion(df);
 		}
 	}
 	
