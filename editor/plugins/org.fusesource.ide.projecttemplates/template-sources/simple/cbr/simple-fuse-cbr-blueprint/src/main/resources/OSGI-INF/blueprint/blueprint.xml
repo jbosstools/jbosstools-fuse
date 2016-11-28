@@ -25,14 +25,13 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
     <!--
-      The namespace for the camelContext element in Blueprint is 'https://camel.apache.org/schema/blueprint'. Additionally,
-      we can also define namespace prefixes we want to use them in the XPath expressions in our CBR.
+      The namespace for the camelContext element in Blueprint is 'https://camel.apache.org/schema/blueprint'.
 
       While it is not required to assign id's to the <camelContext/> and <route/> elements, it is a good idea
       to set those for runtime management purposes (logging, JMX MBeans, ...)
     -->
     <camelContext id="cbr-example-context"
-        xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://fabric8.com/examples/order/v7">
+        xmlns="http://camel.apache.org/schema/blueprint">
         <!--
           When this route is started, it will automatically create the work/cbr/input directory where you can drop the
           file that need to be processed.
@@ -50,12 +49,12 @@
             <log id="_log1" message="Receiving order ${file:name}"/>
             <choice id="_choice1">
                 <when id="_when1">
-                    <xpath id="_xpath1">/order:order/order:customer/order:country = 'UK'</xpath>
+                    <xpath id="_xpath1">/order/customer/country = 'UK'</xpath>
                     <log id="_log2" message="Sending order ${file:name} to the UK"/>
                     <to id="_to1" uri="file:work/cbr/output/uk"/>
                 </when>
                 <when id="_when2">
-                    <xpath id="_xpath2">/order:order/order:customer/order:country = 'US'</xpath>
+                    <xpath id="_xpath2">/order/customer/country = 'US'</xpath>
                     <log id="_log3" message="Sending order ${file:name} to the US"/>
                     <to id="_to2" uri="file:work/cbr/output/us"/>
                 </when>

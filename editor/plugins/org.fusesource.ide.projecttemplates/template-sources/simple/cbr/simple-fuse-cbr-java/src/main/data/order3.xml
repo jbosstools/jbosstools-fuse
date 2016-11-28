@@ -16,7 +16,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<order xmlns="http://fabric8.com/examples/order/v7">
+<order>
 
     <customer id="C0003">
         <name>Columbus Zoo and Aquarium</name>

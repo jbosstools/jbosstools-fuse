@@ -18,7 +18,7 @@
 <!-- Configures the Camel Context-->
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <camelContext id="cbr-example-context" xmlns="http://camel.apache.org/schema/spring" xmlns:order="http://fabric8.com/examples/order/v7">
+    <camelContext id="cbr-example-context" xmlns="http://camel.apache.org/schema/spring">
         <!--
           When this route is started, it will automatically create the work/cbr/input directory where you can drop the
           file that need to be processed.
@@ -36,12 +36,12 @@
             <log id="_log1" message="Receiving order ${file:name}"/>
             <choice id="_choice1">
                 <when id="_when1">
-                    <xpath id="_xpath1">/order:order/order:customer/order:country = 'UK'</xpath>
+                    <xpath id="_xpath1">/order/customer/country = 'UK'</xpath>
                     <log id="_log2" message="Sending order ${file:name} to the UK"/>
                     <to id="_to1" uri="file:work/cbr/output/uk"/>
                 </when>
                 <when id="_when2">
-                    <xpath id="_xpath2">/order:order/order:customer/order:country = 'US'</xpath>
+                    <xpath id="_xpath2">/order/customer/country = 'US'</xpath>
                     <log id="_log3" message="Sending order ${file:name} to the US"/>
                     <to id="_to2" uri="file:work/cbr/output/us"/>
                 </when>
