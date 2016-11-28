@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
+import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.context.impl.ReconnectionContext;
@@ -33,6 +34,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
@@ -51,6 +53,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -417,21 +420,23 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 
 	private void addChildrenGraphicalRepresentation(AbstractCamelModelElement node, PictogramElement newGraphicalRepresentation) {
 		PictogramElement previousChild = null;
+		AbstractCamelModelElement previousModelChild = null;
 		for(AbstractCamelModelElement child: node.getChildElements()){
 			CreateContext childCreateContext = new CreateContext();
 			childCreateContext.setTargetContainer((ContainerShape) newGraphicalRepresentation);
 			PictogramElement currentChild = addGraphicalRepresentation(childCreateContext, child);
+			AbstractCamelModelElement currentModelChild = child;
 			if(previousChild != null){
-				CreateFlowFeature createFeature = new CreateFlowFeature(getFeatureProvider());
-				CreateConnectionContext connectContext = new CreateConnectionContext();
-				connectContext.setSourcePictogramElement(previousChild);
-				connectContext.setSourceAnchor(getAnchor(previousChild));
-				connectContext.setTargetPictogramElement(currentChild);
-				connectContext.setTargetAnchor(getAnchor(currentChild));
-				createFeature.create(connectContext);
+				AddFlowFeature addFlowFeature = new AddFlowFeature(getFeatureProvider());
+				AddConnectionContext connectContext = new AddConnectionContext(getAnchor(previousChild), getAnchor(currentChild));
+				connectContext.setNewObject(new CamelElementConnection(previousModelChild, currentModelChild));
+				if(addFlowFeature.canAdd(connectContext)){
+					addFlowFeature.add(connectContext);
+				}
 			}
 			addChildrenGraphicalRepresentation(child, currentChild);
 			previousChild = currentChild;
+			previousModelChild = currentModelChild;
 		}
 	}
 

@@ -115,6 +115,26 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	}
 	
 	@Test
+	public void testMoveAcontainerWithSeveralContainerToAnotherContainer() throws Exception {
+		testMove("_choice_inRoute1", "_route2");
+		
+		CamelFile model = editor.getModel();		
+		AbstractCamelModelElement movedElement = model.findNode("_route2");
+		assertThat(movedElement.getChildElements()).hasSize(3);
+		
+		//ensure children of the moved When are visible
+		IFeatureProvider fp = editor.getFeatureProvider();
+		assertThat(fp.hasPictogramElementForBusinessObject(model.findNode("_choice_inRoute1"))).isTrue();
+		assertThat(fp.hasPictogramElementForBusinessObject(model.findNode("_bean_inWhen1_inRoute1"))).isTrue();
+		assertThat(fp.hasPictogramElementForBusinessObject(model.findNode("_bean2_inWhen1_inRoute1"))).isTrue();
+		
+		//ensure Connection not created inside the choice
+		AnchorContainer firstBeanMovedGraphicalRepresentation = (AnchorContainer) fp.getPictogramElementForBusinessObject(model.findNode("_when1_inRoute1"));
+		Anchor anchor = firstBeanMovedGraphicalRepresentation.getAnchors().get(0);
+		assertThat(anchor.getOutgoingConnections()).isEmpty();
+	}
+	
+	@Test
 	public void testMoveAndInsertDropOnConnection() throws Exception {
 		testMoveAndInsert("_bean_inWhen1_inRoute1", "_bean_inRoute2", "_choice_inRoute2");
 	}

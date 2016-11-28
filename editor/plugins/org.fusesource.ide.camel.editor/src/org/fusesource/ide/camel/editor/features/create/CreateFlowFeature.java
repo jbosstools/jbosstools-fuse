@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.features.create;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateConnectionFeature;
@@ -49,10 +50,6 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		return CATEGORY_TYPE.getCategoryType(getCategoryName());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.func.ICreateConnection#canCreate(org.eclipse.graphiti.features.context.ICreateConnectionContext)
-	 */
 	@Override
 	public boolean canCreate(ICreateConnectionContext context) {
 		// return true if both anchors belong to a EClass
@@ -62,9 +59,36 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		
 		if (target != null && source != target) {
 			// if we only support a single output and we already have one then we can't connect to another output
-			return source.getOutputElement() == null && source.getParent().equals(target.getParent()) && target.getInputElement() == null && source instanceof CamelRouteElement == false && target instanceof CamelRouteElement == false;
+			return isFreeOfIntpuOutput(source, target)
+					&& isSourceAndTargetInSameContainer(source, target)
+					&& ensureNoCamelRouteImplied(source, target)
+					&& !isContainerAlternatives(source.getParent());
 		}
 		return false;
+	}
+	
+	private boolean isContainerAlternatives(AbstractCamelModelElement parentContainer) {
+		return AbstractCamelModelElement.CHOICE_NODE_NAME.equals(parentContainer.getNodeTypeId());
+	}
+
+	private boolean ensureNoCamelRouteImplied(AbstractCamelModelElement source, AbstractCamelModelElement target) {
+		return !(source instanceof CamelRouteElement) && !(target instanceof CamelRouteElement);
+	}
+
+	private boolean isFreeOfIntpuOutput(AbstractCamelModelElement source, AbstractCamelModelElement target){
+		return isSourceHavingNoOutput(source) && isTargetHavingNoInput(target);
+	}
+
+	private boolean isSourceAndTargetInSameContainer(AbstractCamelModelElement source, AbstractCamelModelElement target) {
+		return source.getParent().equals(target.getParent());
+	}
+
+	private boolean isTargetHavingNoInput(AbstractCamelModelElement target) {
+		return target.getInputElement() == null;
+	}
+
+	private boolean isSourceHavingNoOutput(AbstractCamelModelElement source) {
+		return source.getOutputElement() == null;
 	}
 
 	@Override
@@ -126,5 +150,18 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	 */
 	private CamelElementConnection createFlow(AbstractCamelModelElement source, AbstractCamelModelElement target) {
 		return new CamelElementConnection(source, target);
+	}
+	
+	@Override
+	public boolean isAvailable(IContext context) {
+		if(context instanceof ICreateConnectionContext){
+			AbstractCamelModelElement source = getNode(((ICreateConnectionContext)context).getSourceAnchor());
+			if(source.getParent() != null && AbstractCamelModelElement.CHOICE_NODE_NAME.equals(source.getParent().getNodeTypeId())){
+				return false;
+			} else {
+				return super.isAvailable(context);
+			}
+		}
+		return false;
 	}
 }
