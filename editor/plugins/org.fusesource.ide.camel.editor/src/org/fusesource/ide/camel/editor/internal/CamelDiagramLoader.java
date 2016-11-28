@@ -68,7 +68,7 @@ public class CamelDiagramLoader {
 		if (container == null) {
 			return;
 		}
-		List<AbstractCamelModelElement> processedNodes = new ArrayList<AbstractCamelModelElement>();
+		List<AbstractCamelModelElement> processedNodes = new ArrayList<>();
 		List<AbstractCamelModelElement> children = container instanceof CamelRouteElement ? Arrays.asList(container) : container.getChildElements();
 		int x = 40;
 		int y = 40;
@@ -98,8 +98,8 @@ public class CamelDiagramLoader {
 		
 		IAddFeature addFeature = featureProvider.getAddFeature(addContext);
 		if (addFeature.canAdd(addContext)) {
-			PictogramElement destState = null;
-			if (processedNodes.contains(node) == false) {
+			PictogramElement destState;
+			if (!processedNodes.contains(node)) {
 				destState = addFeature.add(addContext);
 				// remember the node
 				processedNodes.add(node);
@@ -135,7 +135,7 @@ public class CamelDiagramLoader {
 				}
 			}
 
-			if (node.getChildElements().size() > 0) {
+			if (!node.getChildElements().isEmpty()) {
 				int subX = 40, subY = 40;
 				AbstractCamelModelElement lastSub = null;
 				for (AbstractCamelModelElement subNode : node.getChildElements()) {
@@ -174,9 +174,8 @@ public class CamelDiagramLoader {
 		if (element instanceof AnchorContainer) {
 			AnchorContainer container = (AnchorContainer) element;
 			EList<Anchor> anchors = container.getAnchors();
-			if (anchors != null && anchors.size() > 0) {
-				Anchor answer = anchors.get(0);
-				return answer;
+			if (anchors != null && !anchors.isEmpty()) {
+				return anchors.get(0);
 			}
 		}
 		return null;
