@@ -16,7 +16,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<order xmlns="http://fabric8.com/examples/order/v7">
+<order>
 
 	<customer id="A0001">
 		<name>Antwerp Zoo</name>

@@ -1,7 +1,6 @@
 package com.mycompany.camel;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.builder.xml.Namespaces;
 
 public class CamelRoute extends RouteBuilder {
 
@@ -20,15 +19,14 @@ public class CamelRoute extends RouteBuilder {
         either of the <when/> elements will be moved to the work/cbr/output/others directory.
         
 		 */
-		Namespaces ns = new Namespaces("c", "http://fabric8.com/examples/order/v7");
 
 		from("file:work/cbr/input")
 			.log("Receiving order ${file:name}")
 			.choice()
-				.when(ns.xpath("//c:order/c:customer/c:country[text() = 'UK']"))
+				.when().xpath("//order/customer/country[text() = 'UK']")
 					.log("Sending order ${file:name} to the UK")
 					.to("file:work/cbr/output/uk")
-				.when(ns.xpath("//c:order/c:customer/c:country[text() = 'US']"))
+				.when().xpath("//order/customer/country[text() = 'US']")
 					.log("Sending order ${file:name} to the US")
 					.to("file:work/cbr/output/us")
 				.otherwise()
