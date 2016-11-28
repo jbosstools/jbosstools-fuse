@@ -28,6 +28,7 @@ import org.eclipse.graphiti.services.IPeCreateService;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -43,15 +44,15 @@ public class AddFlowFeature extends AbstractAddFeature {
 		super(fp);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.func.IAdd#canAdd(org.eclipse.graphiti.features.context.IAddContext)
-	 */
 	@Override
 	public boolean canAdd(IAddContext context) {
 		// return true if given business object is an EReference
 		// note, that the context must be an instance of IAddConnectionContext
 		if (context instanceof IAddConnectionContext && context.getNewObject() instanceof CamelElementConnection) {
-			return true;
+			CamelElementConnection connection = (CamelElementConnection) context.getNewObject();
+			AbstractCamelModelElement source = connection.getSource();
+			return source != null && connection.getTarget() != null && source.getParent() != null && !AbstractCamelModelElement.CHOICE_NODE_NAME.equals(source.getParent().getNodeTypeId());
+
 		}
 		return false;
 	}
