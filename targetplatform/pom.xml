@@ -35,7 +35,7 @@
 										<groupId>org.jboss.tools.integration-stack</groupId>
 										<artifactId>target-platform</artifactId>
 										<version>${jbtis.version}</version>
-										<classifier>base-ea</classifier>
+										<classifier>${jbtis.classifier}</classifier>
 									</sourceTargetArtifact>
 								</configuration>
 							</execution>
