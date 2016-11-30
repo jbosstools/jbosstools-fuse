@@ -127,11 +127,34 @@ public class XmlModelGeneratorIT {
     	File NBSInvoiceEBMXsd = getXSDFile("NBSInvoiceEBM.xsd");
     	File targetFolder = tmpFolder.newFolder("target");
     	XmlModelGenerator modelGen = new XmlModelGenerator();
-
+    	
+    	// override to ignore special processing of choice elements
+    	modelGen.setUseBindingsFile(false);
     	JCodeModel codeModel = modelGen.generateFromSchema(NBSInvoiceEBMXsd, "test.nbs", targetFolder);
 
     	Map<String, String> mappings = modelGen.elementToClassMapping(codeModel);
     	assertEquals(69, mappings.size());
+    }
+    
+    @Test
+    public void generateFromSchemaWithChoiceElementsProcessed() throws Exception {
+    	// The test need to be launched in an OSGi platform to have a real check
+    	assertThat(PlatformUI.getWorkbench()).isNotNull();
+    	getXSDFile("NBSCommonComponents.xsd");
+    	getXSDFile("NBSCustomCommonComponents.xsd");
+    	getXSDFile("NBSCustomInvoiceEBO.xsd");
+    	getXSDFile("NBSCustomMeta.xsd");
+    	File NBSInvoiceEBMXsd = getXSDFile("NBSInvoiceEBM.xsd");
+    	File targetFolder = tmpFolder.newFolder("target");
+
+    	XmlModelGenerator modelGen = new XmlModelGenerator();
+    	//modelGen.setUseBindingsFile(true); // this is the default
+    	
+    	JCodeModel codeModel = modelGen.generateFromSchema(NBSInvoiceEBMXsd, "test.nbs.choice", targetFolder);
+    	Map<String, String> mappings = modelGen.elementToClassMapping(codeModel);
+    	
+    	// we have a few extra classes now due to the JAXB choice processing
+    	assertEquals(75, mappings.size());
     }
 
     @Test

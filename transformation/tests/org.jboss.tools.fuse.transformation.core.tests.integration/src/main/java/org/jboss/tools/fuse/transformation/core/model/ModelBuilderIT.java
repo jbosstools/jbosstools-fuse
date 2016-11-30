@@ -32,33 +32,33 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class ModelBuilderIT {
-	
+
 	@Parameters(name = "{0}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {     
-                 { NoSuper.class, 2 },
-                 { SuperSuper.class, 3 },
-                 { ContainsNumber.class, 1 },
-                 { ClassWithEnum.class, 1 },
-                 { ClassWithDateEtc.class, 4 },
-                 { SelfReference.class, 2 },
-                 { Parent.class, 7 },
-                 { ListOfStringsAndNumbers.class, 3},
-                 { CollectionOfCollection.class, 1},
-                 { CollectionOfCollectionOfCollection.class, 1}
-           });
-    }
-    
-    @Parameter
-    public Class<?> classToTest;
-    @Parameter(value = 1)
-    public int expectedNumberOfFields;
-    
-    @Test
-    public void checkGenerationOfFields(){
-    	Model model = ModelBuilder.fromJavaClass(classToTest);
-        assertThat(model.listFields()).hasSize(expectedNumberOfFields);
-    }
+	public static Collection<Object[]> data() {
+		return Arrays.asList(new Object[][] {     
+			{ NoSuper.class, 2 },
+			{ SuperSuper.class, 3 },
+			{ ContainsNumber.class, 1 },
+			{ ClassWithEnum.class, 1 },
+			{ ClassWithDateEtc.class, 4 },
+			{ SelfReference.class, 2 },
+			{ Parent.class, 7 },
+			{ ListOfStringsAndNumbers.class, 3},
+			{ CollectionOfCollection.class, 1},
+			{ CollectionOfCollectionOfCollection.class, 1}
+		});
+	}
+
+	@Parameter
+	public Class<?> classToTest;
+	@Parameter(value = 1)
+	public int expectedNumberOfFields;
+
+	@Test
+	public void checkGenerationOfFields(){
+		Model model = ModelBuilder.fromJavaClass(classToTest);
+		assertThat(model.listFields()).hasSize(expectedNumberOfFields);
+	}
 
 }
 
@@ -75,99 +75,98 @@ class CollectionOfCollectionOfCollection{
 @SuppressWarnings("unused")
 class ListOfStringsAndNumbers {
 	private List<Number> numbers;
-    private List<String> strings;
-    private String field1;
+	private List<String> strings;
+	private String field1;
 }
 
 class NoSuper {
-    private String fieldOne;
-    private String fieldTwo;
+	private String fieldOne;
+	private String fieldTwo;
 
-    public String getFieldOne() {
-        return fieldOne;
-    }
+	public String getFieldOne() {
+		return fieldOne;
+	}
 
-    public void setFieldOne(String fieldOne) {
-        this.fieldOne = fieldOne;
-    }
+	public void setFieldOne(String fieldOne) {
+		this.fieldOne = fieldOne;
+	}
 
-    public String getFieldTwo() {
-        return fieldTwo;
-    }
+	public String getFieldTwo() {
+		return fieldTwo;
+	}
 
-    public void setFieldTwo(String fieldTwo) {
-        this.fieldTwo = fieldTwo;
-    }
+	public void setFieldTwo(String fieldTwo) {
+		this.fieldTwo = fieldTwo;
+	}
 }
 
 @SuppressWarnings("unused")
 class ClassWithDateEtc {
-    private String field1;
-    private Date field2;
-    private Calendar field3;
-    private InputStream field4;
+	private String field1;
+	private Date field2;
+	private Calendar field3;
+	private InputStream field4;
 }
 
 class ClassWithEnum {
-    enum MY_ENUM {one, two, three}
-    private MY_ENUM myEnum;
+	enum MY_ENUM {one, two, three}
+	private MY_ENUM myEnum;
 
-    public MY_ENUM getEnum() {
-        return myEnum;
-    }
+	public MY_ENUM getEnum() {
+		return myEnum;
+	}
 
-    public void setEnum(MY_ENUM myEnum) {
-        this.myEnum = myEnum;
-    }
+	public void setEnum(MY_ENUM myEnum) {
+		this.myEnum = myEnum;
+	}
 }
 
 class SuperSuper extends NoSuper {
-    private String fieldThree;
+	private String fieldThree;
 
-    public String getFieldThree() {
-        return fieldThree;
-    }
+	public String getFieldThree() {
+		return fieldThree;
+	}
 
-    public void setFieldThree(String fieldThree) {
-        this.fieldThree = fieldThree;
-    }
+	public void setFieldThree(String fieldThree) {
+		this.fieldThree = fieldThree;
+	}
 
 }
 
 class ContainsNumber {
-    private BigDecimal bigNum;
+	private BigDecimal bigNum;
 
-    public BigDecimal getBigNum() {
-        return bigNum;
-    }
+	public BigDecimal getBigNum() {
+		return bigNum;
+	}
 
-    public void setBigNum(BigDecimal bigNum) {
-        this.bigNum = bigNum;
-    }
+	public void setBigNum(BigDecimal bigNum) {
+		this.bigNum = bigNum;
+	}
 
 }
 
 @SuppressWarnings("unused")
 class SelfReference {
-    private String field1;
-    private SelfReference self;
+	private String field1;
+	private SelfReference self;
 }
 
 @SuppressWarnings("unused")
 class Parent {
-    private Child child;
-    private String field1;
+	private Child child;
+	private String field1;
 }
 
-@SuppressWarnings("unused")
 class Child {
-    private Parent parent;
-    private String field2;
-    private Grandchild grandchild;
+	private Parent parent;
+	private String field2;
+	private Grandchild grandchild;
 }
 
 @SuppressWarnings("unused")
 class Grandchild {
-    private Parent grandparent;
-    private String field3;
+	private Parent grandparent;
+	private String field3;
 }

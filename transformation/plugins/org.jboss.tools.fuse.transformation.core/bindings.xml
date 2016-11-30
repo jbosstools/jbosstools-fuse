@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="1.0">
+	<globalBindings choiceContentProperty="true" />
+</bindings> 
