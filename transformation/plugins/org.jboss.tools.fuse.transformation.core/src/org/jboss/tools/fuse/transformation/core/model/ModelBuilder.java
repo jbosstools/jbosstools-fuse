@@ -64,15 +64,22 @@ public class ModelBuilder {
                 isCollection = true;
                 fieldClass = field.getType().getComponentType();
             } else if (Collection.class.isAssignableFrom(field.getType())) {
-                isCollection = true;
-                Type ft = field.getGenericType();
-                if (ft instanceof ParameterizedType) {
-                    fieldClass = (Class<?>) ((ParameterizedType) ft).getActualTypeArguments()[0];
-                } else {
-                    fieldClass = Object.class;
-                }
+            	isCollection = true;
+            	Type ft = field.getGenericType();
+            	if (ft instanceof ParameterizedType) {
+            		Object testObject = ((ParameterizedType) ft).getActualTypeArguments()[0];
+            		if (testObject instanceof Class) {
+            			fieldClass = (Class<?>) testObject;
+            		} else if (testObject instanceof ParameterizedType) {
+            			fieldClass = (Class<?>) ((ParameterizedType) testObject).getActualTypeArguments()[0];
+            		} else {
+            			fieldClass = Object.class;
+            		}
+            	} else {
+            		fieldClass = Object.class;
+            	}
             } else {
-                fieldClass = field.getType();
+            	fieldClass = field.getType();
             }
             
             // Create the model for this field
