@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,11 @@ import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -61,15 +67,12 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage {
 
 	static final String UNKNOWN_CAMEL_VERSION = "unknown"; //$NON-NLS-1$
-	
-	private Combo runtimeCombo;
-	
+
+	private ComboViewer runtimeComboViewer;
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
-	
 	private Combo camelVersionCombo;
 	private StyledText camelInfoText;
-
 	private Label warningIconLabel;
 	
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage() {
@@ -99,18 +102,30 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeLabel.setLayoutData(runtimeLabelData);
 		runtimeLabel.setText(Messages.newProjectWizardRuntimePageRuntimeLabel);
 
-		runtimeCombo = new Combo(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
+		runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
+		runtimeComboViewer.setComparator(new ViewerComparator(new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				if(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
+					return -1;
+				}
+				return o1.compareTo(o2);
+			}
+		}));
+		
 		GridData runtimeComboData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-		runtimeCombo.setLayoutData(runtimeComboData);
-		runtimeCombo.setToolTipText(Messages.newProjectWizardRuntimePageRuntimeDescription);
-		runtimeCombo.addModifyListener(new ModifyListener() {
+		runtimeComboViewer.getCombo().setLayoutData(runtimeComboData);
+		runtimeComboViewer.getCombo().setToolTipText(Messages.newProjectWizardRuntimePageRuntimeDescription);
+		runtimeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		runtimeComboViewer.getCombo().addModifyListener(new ModifyListener() {
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
 			 */
 			@Override
 			public void modifyText(ModifyEvent e) {
-				lastSelectedRuntime = runtimeCombo.getText();
+				lastSelectedRuntime = runtimeComboViewer.getSelection().toString();
 				preselectCamelVersionForRuntime(determineRuntimeCamelVersion(getSelectedRuntime()));
 				validate();
 			}
@@ -132,18 +147,17 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			 * (non-Javadoc)
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
+	
+			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String[] oldRuntimes = runtimeCombo.getItems();
+				String[] oldRuntimes = runtimeComboViewer.getCombo().getItems();
 				boolean created = ServerUIUtil.showNewRuntimeWizard(getShell(), null, null);
 				if (created) {
-					String[] newRuntimes = runtimeCombo.getItems();
+					String[] newRuntimes = runtimeComboViewer.getCombo().getItems();
 					String newRuntime = getNewRuntime(oldRuntimes, newRuntimes);
-					for (int i=0; i<runtimeCombo.getItemCount(); i++) {
-						if (runtimeCombo.getItem(i).equalsIgnoreCase(newRuntime)) {
-							runtimeCombo.select(i);
-							break;
-						}
+					if(newRuntime != null){
+						runtimeComboViewer.setSelection(new StructuredSelection(newRuntime));
 					}
 				}
 			}
@@ -261,27 +275,28 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	private void configureRuntimeCombo() throws CoreException {
-		if (Widgets.isDisposed(runtimeCombo)) {
+		if (Widgets.isDisposed(runtimeComboViewer)) {
 			return;
 		}
-		int i =0, selectedRuntimeIdx = 0;
+		
 		String lastUsedRuntime = lastSelectedRuntime;
-
+		String selectedRuntime = null;
 		serverRuntimes = getServerRuntimes(null);
-		runtimeCombo.removeAll();
-		runtimeCombo.add(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel);
-		runtimeCombo.select(0);
+		runtimeComboViewer.setInput(null);
+		runtimeComboViewer.add(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel);
+		final ISelection selection = new StructuredSelection(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel);
+		runtimeComboViewer.setSelection(selection);
 		for (Map.Entry<String, IRuntime> entry : serverRuntimes.entrySet()) {
-			runtimeCombo.add(entry.getKey());
-			++i;
+			runtimeComboViewer.add(entry.getKey());
 			IRuntime runtime = entry.getValue();
 			if (lastUsedRuntime != null && lastUsedRuntime.equals(runtime.getId())) {
-				selectedRuntimeIdx = i;
+				selectedRuntime = lastUsedRuntime;
 			}
 		}
 				
-		if (selectedRuntimeIdx > 0) {
-			runtimeCombo.select(selectedRuntimeIdx);
+		if (selectedRuntime!=null) {
+			runtimeComboViewer.setSelection(new StructuredSelection(selectedRuntime));
+			selectedRuntime = null;
 		}
 	}
 	
@@ -293,7 +308,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			runtimesSet = RuntimeManager.getRuntimes(Collections.singleton(facetVersion));
 		}
 		
-		Map<String, IRuntime> runtimesMap = new LinkedHashMap<>();
+		Map<String, IRuntime> runtimesMap = new LinkedHashMap<String,IRuntime>();
 		for (org.eclipse.wst.common.project.facet.core.runtime.IRuntime r : runtimesSet) {
 			IRuntime serverRuntime = FacetUtil.getRuntime(r);
 			if (serverRuntime != null) {
@@ -372,8 +387,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			warningIconLabel.setVisible(!camelInfoText.getText().isEmpty());
 		}
 		
-		if (!Widgets.isDisposed(runtimeCombo) && !Widgets.isDisposed(camelVersionCombo)) {
-			setPageComplete(!Strings.isBlank(runtimeCombo.getText()) && 
+		if (!Widgets.isDisposed(runtimeComboViewer) && !Widgets.isDisposed(camelVersionCombo)) {
+			setPageComplete(!Strings.isBlank(runtimeComboViewer.getSelection().toString()) && 
 							!Strings.isBlank(camelVersionCombo.getText()) &&
 							!warningIconLabel.isVisible());
 		}
@@ -475,8 +490,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 * @return
 	 */
 	public IRuntime getSelectedRuntime() {
-		if (!Widgets.isDisposed(runtimeCombo)) {
-			String runtimeId = runtimeCombo.getText();
+		if (!Widgets.isDisposed(runtimeComboViewer)) {
+			String runtimeId = runtimeComboViewer.getSelection().toString();
 			if (!runtimeId.equalsIgnoreCase(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel)) {
 				return serverRuntimes.get(runtimeId);	
 			}			
