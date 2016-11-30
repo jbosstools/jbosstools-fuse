@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -216,7 +217,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 
 		// check whether project already exists
 		final IProject handle = ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
-		if(handle != null && handle.exists()) {
+		if ((handle != null && handle.exists()) || projectExistsIgnoreCase(getProjectName())) {
 			setErrorMessage(Messages.newProjectWizardLocationPageDuplicateProjectNameText);
 			setPageComplete(false);
 			return;
@@ -276,5 +277,20 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 			return ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		}
 		return Path.fromOSString(locationText.getText().trim());
+	}
+	
+	/**
+	 * Verify if there is a project in workspace, with the same project name given as parameter.
+	 * @param projectName
+	 * @return true if exist the project name
+	 */
+	private boolean projectExistsIgnoreCase(String projectName) {
+		final IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects(IWorkspaceRoot.INCLUDE_HIDDEN);
+		for (IProject iProject : projects) {
+			if (projectName.equalsIgnoreCase(iProject.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
