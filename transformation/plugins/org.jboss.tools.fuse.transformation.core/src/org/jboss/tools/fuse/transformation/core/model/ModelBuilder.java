@@ -18,10 +18,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ModelBuilder {
+	
+	private ModelBuilder(){
+	}
 
     public static Model fromJavaClass(Class<?> javaClass) {
         Model model = new Model(javaClass.getSimpleName(), javaClass.getName());
-        List<Field> fields = new LinkedList<Field>();
+        List<Field> fields = new LinkedList<>();
         getFields(javaClass, fields);
         addFieldsToModel(fields, model);
         model.setModelClass(javaClass);
@@ -70,9 +73,8 @@ public class ModelBuilder {
             		Object testObject = ((ParameterizedType) ft).getActualTypeArguments()[0];
             		if (testObject instanceof Class) {
             			fieldClass = (Class<?>) testObject;
-            		} else if (testObject instanceof ParameterizedType) {
-            			fieldClass = (Class<?>) ((ParameterizedType) testObject).getActualTypeArguments()[0];
             		} else {
+            			//TODO : support imbricated Collections
             			fieldClass = Object.class;
             		}
             	} else {
@@ -95,7 +97,7 @@ public class ModelBuilder {
     }
 
     private static List<Field> getFields(Class<?> clazz, Model parent) {
-        LinkedList<Field> fields = new LinkedList<Field>();
+        LinkedList<Field> fields = new LinkedList<>();
         boolean cycle = false;
         // convenient place to check for a cycle where a child field references an ancestor
         for (Model pm = parent; pm != null; pm = pm.getParent()) {
