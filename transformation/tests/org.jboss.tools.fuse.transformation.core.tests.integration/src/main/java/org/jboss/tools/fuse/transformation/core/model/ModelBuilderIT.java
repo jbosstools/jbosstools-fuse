@@ -13,72 +13,68 @@
  */
 package org.jboss.tools.fuse.transformation.core.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.jboss.tools.fuse.transformation.core.model.Model;
-import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 
-
+@RunWith(Parameterized.class)
 public class ModelBuilderIT {
-
+	
+	@Parameters(name = "{0}")
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {     
+                 { NoSuper.class, 2 },
+                 { SuperSuper.class, 3 },
+                 { ContainsNumber.class, 1 },
+                 { ClassWithEnum.class, 1 },
+                 { ClassWithDateEtc.class, 4 },
+                 { SelfReference.class, 2 },
+                 { Parent.class, 7 },
+                 { ListOfStringsAndNumbers.class, 3},
+                 { CollectionOfCollection.class, 1},
+                 { CollectionOfCollectionOfCollection.class, 1}
+           });
+    }
+    
+    @Parameter
+    public Class<?> classToTest;
+    @Parameter(value = 1)
+    public int expectedNumberOfFields;
+    
     @Test
-    public void noSuper() {
-        Model model = ModelBuilder.fromJavaClass(NoSuper.class);
-        Assert.assertEquals(2, model.listFields().size());
+    public void checkGenerationOfFields(){
+    	Model model = ModelBuilder.fromJavaClass(classToTest);
+        assertThat(model.listFields()).hasSize(expectedNumberOfFields);
     }
 
-    @Test
-    public void superSuper() {
-        Model model = ModelBuilder.fromJavaClass(SuperSuper.class);
-        Assert.assertEquals(3, model.listFields().size());
-    }
-
-    @Test
-    public void screenForNumbers() {
-        Model model = ModelBuilder.fromJavaClass(ContainsNumber.class);
-        Assert.assertEquals(1, model.listFields().size());
-    }
-
-    @Test
-    public void buildWithEnum() {
-        Model model = ModelBuilder.fromJavaClass(ClassWithEnum.class);
-        Assert.assertEquals(1, model.listFields().size());
-    }
-
-    @Test
-    public void buildWithDateEtc() {
-        Model model = ModelBuilder.fromJavaClass(ClassWithDateEtc.class);
-        Assert.assertEquals(4, model.listFields().size());
-    }
-
-    @Test
-    public void selfReferenceCycle() {
-        Model model = ModelBuilder.fromJavaClass(SelfReference.class);
-        Assert.assertEquals(2, model.listFields().size());
-    }
-
-    @Test
-    public void childAncestorCycle() {
-        Model model = ModelBuilder.fromJavaClass(Parent.class);
-        Assert.assertEquals(7, model.listFields().size());
-    }
-
-    @Test
-    public void listsOfStringsAndNumbers() {
-        Model model = ModelBuilder.fromJavaClass(ListOfStringsAndNumbers.class);
-        Assert.assertEquals(3, model.listFields().size());
-    }
 }
 
+class CollectionOfCollection{
+	@SuppressWarnings("unused")
+	private Collection<Collection<String>> collectionOfCollection;
+}
+
+class CollectionOfCollectionOfCollection{
+	@SuppressWarnings("unused")
+	private Collection<Collection<Collection<String>>> collectionOfCollectionOfCollection;
+}
+
+@SuppressWarnings("unused")
 class ListOfStringsAndNumbers {
-    private List<Number> numbers;
+	private List<Number> numbers;
     private List<String> strings;
     private String field1;
 }
@@ -104,6 +100,7 @@ class NoSuper {
     }
 }
 
+@SuppressWarnings("unused")
 class ClassWithDateEtc {
     private String field1;
     private Date field2;
@@ -150,22 +147,26 @@ class ContainsNumber {
 
 }
 
+@SuppressWarnings("unused")
 class SelfReference {
     private String field1;
     private SelfReference self;
 }
 
+@SuppressWarnings("unused")
 class Parent {
     private Child child;
     private String field1;
 }
 
+@SuppressWarnings("unused")
 class Child {
     private Parent parent;
     private String field2;
     private Grandchild grandchild;
 }
 
+@SuppressWarnings("unused")
 class Grandchild {
     private Parent grandparent;
     private String field3;
