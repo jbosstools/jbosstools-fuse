@@ -22,8 +22,6 @@ import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
@@ -142,16 +140,34 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		Node idNode = child.getAttributes().getNamedItem("id");
 		if (idNode != null){
 			return idNode.getNodeValue();
-		} else if(child.getNamespaceURI() != null
-				&& !(child.getNamespaceURI().startsWith("http://camel.apache.org/schema/")
-						|| child.getNamespaceURI().startsWith("http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/)
-						|| child.getNamespaceURI().startsWith("http://www.springframework.org/schema/beans"))){
+		} else if (omitIdAttributeGeneration(child)) {
 			return null;
 		} else {
 			return CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
 		}
 	}
+	
+	private boolean omitIdAttributeGeneration(Node child) {
+		return !isCamelNamespaceElement(child) && !isSupportedGlobalType(child);
+	}
+	
+	private boolean isCamelNamespaceElement(Node child) {
+		return 	child.getNamespaceURI() != null && (child.getNamespaceURI().startsWith("http://camel.apache.org/schema/"));
+	}
+	
+	private boolean isBlueprintNamespaceElement(Node child) {
+		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith("http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/);
+	}
 
+	private boolean isSpringNamespaceElement(Node child) {
+		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith("http://www.springframework.org/schema/beans");
+	}
+	
+	private boolean isSupportedGlobalType(Node child) {
+		// TODO: think about a better way to support storage without ID value
+		return child.getNodeName().equalsIgnoreCase("bean");
+	}
+	
 	/**
 	 * 
 	 * @param xmlString
