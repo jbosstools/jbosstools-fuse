@@ -140,32 +140,36 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		Node idNode = child.getAttributes().getNamedItem("id");
 		if (idNode != null){
 			return idNode.getNodeValue();
-		} else if (omitIdAttributeGeneration(child)) {
+		} else if (ignoreNode(child)) {
 			return null;
 		} else {
 			return CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
 		}
 	}
 	
-	private boolean omitIdAttributeGeneration(Node child) {
+	private boolean ignoreNode(Node child) {
 		return !isCamelNamespaceElement(child) && !isSupportedGlobalType(child);
 	}
 	
 	private boolean isCamelNamespaceElement(Node child) {
-		return 	child.getNamespaceURI() != null && (child.getNamespaceURI().startsWith("http://camel.apache.org/schema/"));
+		return startsWithNamespace(child, "http://camel.apache.org/schema/");
 	}
 	
 	private boolean isBlueprintNamespaceElement(Node child) {
-		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith("http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/);
+		return startsWithNamespace(child, "http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/);
 	}
 
 	private boolean isSpringNamespaceElement(Node child) {
-		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith("http://www.springframework.org/schema/beans");
+		return startsWithNamespace(child, "http://www.springframework.org/schema/beans");
+	}
+	
+	private boolean startsWithNamespace(Node child, String namespace) {
+		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith(namespace);
 	}
 	
 	private boolean isSupportedGlobalType(Node child) {
 		// TODO: think about a better way to support storage without ID value
-		return child.getNodeName().equalsIgnoreCase("bean");
+		return AbstractCamelModelElement.BEAN_NODE.equalsIgnoreCase(child.getNodeName());
 	}
 	
 	/**
