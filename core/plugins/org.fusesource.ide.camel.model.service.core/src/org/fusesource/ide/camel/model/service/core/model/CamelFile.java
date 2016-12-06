@@ -155,14 +155,6 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		return startsWithNamespace(child, "http://camel.apache.org/schema/");
 	}
 	
-	private boolean isBlueprintNamespaceElement(Node child) {
-		return startsWithNamespace(child, "http://www.osgi.org/xmlns/blueprint/"/*v1.0.0*/);
-	}
-
-	private boolean isSpringNamespaceElement(Node child) {
-		return startsWithNamespace(child, "http://www.springframework.org/schema/beans");
-	}
-	
 	private boolean startsWithNamespace(Node child, String namespace) {
 		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith(namespace);
 	}
