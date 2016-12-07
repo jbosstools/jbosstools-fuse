@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- some beans... -->
+  <bean
+        class="org.fusesource.camel.component.sap.SapConnectionConfiguration" id="sapCon" name="sapBean">
+        <property name="destinationDataStore">
+            <map>
+                <entry key="Pre-production destination">
+                    <bean class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl">
+                        <property name="authType" value="CONFIGURED_USER"/>
+                        <property name="denyInitialPassword" value="0"/>
+                        <property name="pingOnCreate" value="false"/>
+                        <property name="poolCapacity" value="1"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+        <property name="serverDataStore">
+            <map>
+                <entry key="Pre-production server">
+                    <bean class="org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl"/>
+                </entry>
+            </map>
+        </property>
+  </bean>
+
+  <alias name="sapBean" alias="sapCon"/>
+  
+  <import resource="test.xml"/>
+
+  <!-- some camel route stuff now... -->
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" streamCache="false" id="context1">
+    <endpoint id="something" uri="seda:myConfiguredEndpoint"/>
+
+    <route id="route3">
+      <description>edit file!</description>
+      <from uri="seda:someWhere"/>
+      <to uri="seda:anotherPlace"/>
+    </route>
+  </camelContext>
+
+  <!-- some other stuff here... -->
+
+</beans>

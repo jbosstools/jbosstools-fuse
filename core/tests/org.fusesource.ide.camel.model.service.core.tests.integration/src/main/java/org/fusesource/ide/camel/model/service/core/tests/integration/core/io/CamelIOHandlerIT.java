@@ -63,7 +63,8 @@ public class CamelIOHandlerIT {
 				"emptyOtherwiseSample.xml",
 				"JMXBeanAnswer--camelContext--11--11.xml",
 				"jaas-blueprint.xml",
-				"withQuestionMark.xml");
+				"withQuestionMark.xml",
+				"globalElementsSample.xml");
 		//@formatter:on
 	}
 
