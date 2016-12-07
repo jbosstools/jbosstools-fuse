@@ -11,11 +11,17 @@
 
 package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards;
 
+import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.pages.DataFormatSelectionPage;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
@@ -94,6 +100,15 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 				newDataformatNode.setAttribute(parameter.getName(), defaultValue);
 			}
 		}
+		
+		List<Dependency> dependencies = dataformat.getDependencies();
+		MavenUtils utils = new MavenUtils();
+		try {
+			utils.updateMavenDependencies(dependencies);
+		} catch (CoreException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
+		}
+		
 		return newDataformatNode;
 	}
 
