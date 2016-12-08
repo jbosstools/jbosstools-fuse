@@ -358,21 +358,6 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 */
 	public String getDocumentAsXML() {
     	try {
-//    		DOMSource domSource = new DOMSource(getDocument());
-//            StringWriter writer = new StringWriter();
-//            StreamResult result = new StreamResult(writer);
-//            TransformerFactory tf = TransformerFactory.newInstance();
-//            Transformer transformer = tf.newTransformer();
-//	        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-//	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-//	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-//	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + XML_INDENT_VALUE);
-//	        tf.setAttribute("indent-number", XML_INDENT_VALUE);
-//            transformer.transform(domSource, result);
-//            writer.flush();
-//            return writer.toString();
-            
     		// taking line width and indentation size from xml / editor preferences of eclipse -> we always use spaces for indentation...
     		int lineWidth = Integer.parseInt(XMLCorePlugin.getDefault().getPluginPreferences().getString("lineWidth"));
     		int indentValue = XMLCorePlugin.getDefault().getPluginPreferences().getInt("indentationSize");
