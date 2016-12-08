@@ -54,7 +54,7 @@ public class CamelRouteElement extends AbstractCamelModelElement implements IFus
 		inputs.clear();
 		outputs.clear();
 		for (AbstractCamelModelElement c : getChildElements()) {
-			if (c.getNodeTypeId().equalsIgnoreCase("from")) {
+			if (AbstractCamelModelElement.ENDPOINT_TYPE_FROM.equalsIgnoreCase(c.getNodeTypeId())) {
 				inputs.add(c);
 			} else {
 				outputs.add(c);

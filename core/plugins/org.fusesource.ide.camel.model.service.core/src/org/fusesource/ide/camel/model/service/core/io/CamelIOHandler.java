@@ -65,7 +65,6 @@ public class CamelIOHandler {
 
 			return loadCamelModel(xmlFile, monitor);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + res.getFullPath().toOSString(), ex);
 		}
 
@@ -80,24 +79,12 @@ public class CamelIOHandler {
      * @return	the camel file object representation or null on errors
      */
     public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
-		if (xmlFile == null || xmlFile.isFile() == false || xmlFile.exists() == false) return null;
+		if (xmlFile == null || !xmlFile.isFile() || !xmlFile.exists()){
+			return null;
+		}
 
 		CamelFile cf = null;
     	try {
-			// SAXParser parser;
-			// try {
-				// SAXParserFactory factory = SAXParserFactory.newInstance();
-				// parser = factory.newSAXParser();
-
-			// } catch (ParserConfigurationException e) {
-			// throw new RuntimeException("Can't create SAX parser / DOM
-			// builder.", e);
-			// }
-			// final SAXHandlerWithLineNumber saxHandlerWithLineNumber = new
-			// SAXHandlerWithLineNumber(document);
-			// parser.setProperty("http://xml.org/sax/properties/lexical-handler",
-			// saxHandlerWithLineNumber);
-			// parser.parse(xmlFile, saxHandlerWithLineNumber);
 			DocumentBuilder docBuilder = createDocumentBuilder();
 			document = docBuilder.parse(xmlFile);
 
@@ -124,7 +111,6 @@ public class CamelIOHandler {
 			document = db.parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
 			reloadedModel = readDocumentToModel(document, cf.getResource());
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML from string", ex);
 		}
 
@@ -154,7 +140,9 @@ public class CamelIOHandler {
      * @param monitor
      */
     public void saveCamelModel(CamelFile camelFile, File outputFile, IProgressMonitor monitor) {
-    	if (this.document == null) this.document = createDocumentBuilder().newDocument();
+    	if (this.document == null){
+    		this.document = createDocumentBuilder().newDocument();
+    	}
 
     	try {
 	    	// now the real save logic 
@@ -171,7 +159,7 @@ public class CamelIOHandler {
 	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + INDENTION_VALUE);
+	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(INDENTION_VALUE));
 	        transformer.transform(input, output);
     	} catch (Exception ex) {
     		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + outputFile.getPath(), ex);

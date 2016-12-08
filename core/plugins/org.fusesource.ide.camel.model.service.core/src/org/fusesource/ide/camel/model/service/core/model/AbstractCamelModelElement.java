@@ -40,6 +40,9 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
+	private static final String NODE_KIND_EXPRESSION = "expression";
+	private static final String NODE_KIND_ATTRIBUTE = "attribute";
+	private static final String NODE_KIND_ELEMENT = "element";
 	static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
@@ -137,9 +140,6 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return getDisplayText();
@@ -425,8 +425,8 @@ public abstract class AbstractCamelModelElement {
 		singlePropertyDisplay.put("removeHeader", "headerName");
 		singlePropertyDisplay.put("removeProperty", "propertyName");
 		singlePropertyDisplay.put("rollback", "message");
-		singlePropertyDisplay.put("sort", "expression");
-		singlePropertyDisplay.put(WHEN_NODE_NAME, "expression");
+		singlePropertyDisplay.put("sort", NODE_KIND_EXPRESSION);
+		singlePropertyDisplay.put(WHEN_NODE_NAME, NODE_KIND_EXPRESSION);
 
 		String propertyToCheck = singlePropertyDisplay.get(eipType);
 		if( propertyToCheck != null ) {
@@ -434,7 +434,7 @@ public abstract class AbstractCamelModelElement {
 			if (propVal != null) {
 				if( propVal instanceof AbstractCamelModelElement) {
 					// seems to be an expression
-					String expression = ((AbstractCamelModelElement)propVal).getParameter("expression") != null ? (String)((AbstractCamelModelElement)propVal).getParameter("expression") : null;
+					String expression = ((AbstractCamelModelElement)propVal).getParameter(NODE_KIND_EXPRESSION) != null ? (String)((AbstractCamelModelElement)propVal).getParameter(NODE_KIND_EXPRESSION) : null;
 					if (expression != null) {
 						return result + expression;
 					}
@@ -736,20 +736,20 @@ public abstract class AbstractCamelModelElement {
 		String javaType = getJavaType(name);
 
 		if (this instanceof CamelContextElement) {
-			kind = "attribute";
+			kind = NODE_KIND_ATTRIBUTE;
 		}
 
 		// this is needed for FUSETOOLS-1884, otherwise some global config
 		// elements lose their children and get corrupted
 		if (getEipByName(CamelUtils.getTranslatedNodeName(getXmlNode())) == null && name.equalsIgnoreCase("id")) {
-			kind="attribute";
+			kind=NODE_KIND_ATTRIBUTE;
 		}
 
 		if (value == null || value.toString().length() < 1) {
 			// seems the attribute has been deleted?
-			if (kind.equalsIgnoreCase("attribute") && e.hasAttribute(name)) {
+			if (kind.equalsIgnoreCase(NODE_KIND_ATTRIBUTE) && e.hasAttribute(name)) {
 				e.removeAttribute(name);
-			} else if ((kind.equalsIgnoreCase("element") || kind.equalsIgnoreCase("expression")) && value == null) {
+			} else if ((kind.equalsIgnoreCase(NODE_KIND_ELEMENT) || kind.equalsIgnoreCase(NODE_KIND_EXPRESSION)) && value == null) {
 				// value must be null because we are dealing with nodes, empty
 				// nodes will return empty String as value
 				for (int i = 0; i < e.getChildNodes().getLength(); i++) {
@@ -772,13 +772,13 @@ public abstract class AbstractCamelModelElement {
 				Node oldChild = getFirstChild(e);
 				Node newChild = ((AbstractCamelModelElement) value).getXmlNode();
 				e.replaceChild(newChild, oldChild);
-			} else if (kind.equalsIgnoreCase("attribute")) {
+			} else if (kind.equalsIgnoreCase(NODE_KIND_ATTRIBUTE)) {
 				updateAttribute(name, value, oldValue, e);
-			} else if (kind.equalsIgnoreCase("element") && name.equals("description")) {
+			} else if (kind.equalsIgnoreCase(NODE_KIND_ELEMENT) && name.equals("description")) {
 				updateElementDescription(name, value, e);
-			} else if (kind.equalsIgnoreCase("element") && javaType.equals("org.apache.camel.model.DataFormatDefinition")) {
+			} else if (kind.equalsIgnoreCase(NODE_KIND_ELEMENT) && javaType.equals("org.apache.camel.model.DataFormatDefinition")) {
 				updateDataFormatDefinition(value, e);
-			} else if (kind.equalsIgnoreCase("expression")) {
+			} else if (kind.equalsIgnoreCase(NODE_KIND_EXPRESSION)) {
 				updateExpression(name, value, e);
 			} else if (kind.equalsIgnoreCase("value")) {
 				e.setTextContent(getMappedValue(value));
@@ -829,7 +829,7 @@ public abstract class AbstractCamelModelElement {
 			boolean createSubNode = true;
 			Node subNode = null;
 
-			String comparedNodeName = name.equals("expression") ? exp.getNodeTypeId() : name;
+			String comparedNodeName = name.equals(NODE_KIND_EXPRESSION) ? exp.getNodeTypeId() : name;
 
 			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 				subNode = e.getChildNodes().item(c);
@@ -842,7 +842,7 @@ public abstract class AbstractCamelModelElement {
 			if (createSubNode) {
 				subNode = createElement(comparedNodeName, determineNSPrefixFromParent());
 				e.appendChild(subNode);
-				if (comparedNodeName.equals("expression") == false) {
+				if (!NODE_KIND_EXPRESSION.equals(comparedNodeName)) {
 					Node subSubNode = createElement(exp.getNodeTypeId(), determineNSPrefixFromParent());
 					subNode.appendChild(subSubNode);
 					subNode = subSubNode;
@@ -859,7 +859,7 @@ public abstract class AbstractCamelModelElement {
 				Object oValue = exp.getParameter(pKey);
 				// expressions shouldn't have expression attributes but
 				// values
-				if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+				if ("value".equalsIgnoreCase(subEip.getParameter(pKey).getKind())) {
 					if (oValue != null && oValue.toString().trim().length() > 0) {
 						((Element) subNode).setNodeValue(oValue.toString());
 					}
@@ -924,7 +924,7 @@ public abstract class AbstractCamelModelElement {
 				Object oValue = df.getParameter(pKey);
 				// expressions shouldn't have expression attributes but
 				// values
-				if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+				if ("value".equalsIgnoreCase(subEip.getParameter(pKey).getKind())) {
 					if (oValue != null && oValue.toString().trim().length() > 0) {
 						((Element) subNode).setNodeValue(oValue.toString());
 					}
@@ -1058,7 +1058,7 @@ public abstract class AbstractCamelModelElement {
 		// if this element is also a parent element parameter then we don't
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null &&
-			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals("element") &&
+			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals(NODE_KIND_ELEMENT) &&
 			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
 			return;
 		}
@@ -1095,7 +1095,7 @@ public abstract class AbstractCamelModelElement {
 					} else {
 						parseBasicElementAttribute(param);
 					}
-				} else if (param.getKind().equalsIgnoreCase("value")) {
+				} else if ("value".equalsIgnoreCase(param.getKind())) {
 					parseValueAttribute(param);
 				} else if (isAnExpressionGuessedByKind(param)) {
 					parseExpressionKindAttribute(param);
@@ -1140,7 +1140,7 @@ public abstract class AbstractCamelModelElement {
 			String val = descNode.getTextContent();
 			if (val != null) {
 				setParameter(param.getName(), val);
-				if (param.getName().equalsIgnoreCase("description")) {
+				if ("description".equalsIgnoreCase(param.getName())) {
 					setDescription(val);
 				}
 			}
@@ -1191,7 +1191,7 @@ public abstract class AbstractCamelModelElement {
 		String val = getXmlNode().getTextContent();
 		if (val != null) {
 			setParameter(param.getName(), val);
-			if (param.getName().equalsIgnoreCase("description")) {
+			if ("description".equalsIgnoreCase(param.getName())) {
 				setDescription(val);
 			}
 		}
@@ -1202,7 +1202,6 @@ public abstract class AbstractCamelModelElement {
 	 */
 	private void parseDataFormatElementAttribute(Parameter param) {
 		NodeList childNodes = getXmlNode().getChildNodes();
-		AbstractCamelModelElement dfNode = null;
 		String[] dfs = param.getOneOf().split(",");
 		List<String> dfList = new ArrayList<>(Arrays.asList(dfs));
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -1210,8 +1209,8 @@ public abstract class AbstractCamelModelElement {
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
-			if (subNode != null && dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
-				dfNode = new CamelBasicModelElement(this, subNode);
+			if (dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
+				AbstractCamelModelElement dfNode = new CamelBasicModelElement(this, subNode);
 				dfNode.initialize();
 				// expNode.setParent(this);
 				setParameter(param.getName(), dfNode);
@@ -1236,7 +1235,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	private void parseExpressionKindAttribute(Parameter param) {
 		NodeList childNodes = getXmlNode().getChildNodes();
-		AbstractCamelModelElement expNode = null;
+		AbstractCamelModelElement expNode;
 		String[] langs = param.getOneOf().split(",");
 		List<String> langList = new ArrayList<>(Arrays.asList(langs));
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -1271,7 +1270,7 @@ public abstract class AbstractCamelModelElement {
 						expNode = new CamelBasicModelElement(expContainer, subExpNode);
 						expNode.initialize();
 						// expNode.setParent(this);
-						expContainer.setParameter("expression", expNode);
+						expContainer.setParameter(NODE_KIND_EXPRESSION, expNode);
 						setParameter(param.getName(), expContainer);
 						break;
 					}
@@ -1285,7 +1284,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	private boolean isAnExpressionGuessedByKind(Parameter param) {
-		return param.getKind().equalsIgnoreCase("expression");
+		return NODE_KIND_EXPRESSION.equalsIgnoreCase(param.getKind());
 	}
 
 	/**
@@ -1293,7 +1292,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	private boolean isAnExpressionGuessedByName(Parameter param) {
-		return param.getName().equals("expression");
+		return NODE_KIND_EXPRESSION.equals(param.getName());
 	}
 
 	/**
@@ -1301,7 +1300,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	private boolean isArrayType(Parameter param) {
-		return param.getType().equalsIgnoreCase("array");
+		return "array".equalsIgnoreCase(param.getType());
 	}
 
 	/**
@@ -1309,7 +1308,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	public boolean isElementKind(Parameter param) {
-		return param.getKind().equalsIgnoreCase("element");
+		return NODE_KIND_ELEMENT.equalsIgnoreCase(param.getKind());
 	}
 
 	/**
@@ -1317,7 +1316,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	private boolean isAttributeKind(Parameter param) {
-		return param.getKind().equalsIgnoreCase("attribute");
+		return NODE_KIND_ATTRIBUTE.equalsIgnoreCase(param.getKind());
 	}
 
 	/**
@@ -1366,7 +1365,7 @@ public abstract class AbstractCamelModelElement {
 		// then we get the eip meta model
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// special case for context wide endpoint definitions
-		if (eip == null && name.equals("endpoint")) {
+		if (eip == null && name.equals(ENDPOINT_NODE_NAME)) {
 			eip = model.getEipModel().getEIPByName(ENDPOINT_TYPE_TO);
 		}
 		// and return it
@@ -1469,7 +1468,7 @@ public abstract class AbstractCamelModelElement {
 				}
 
 				// check if node name equals the language of an expression
-				if (p.getKind().equals("expression")) {
+				if (NODE_KIND_EXPRESSION.equals(p.getKind())) {
 					List<String> langs = Arrays.asList(p.getOneOf().split(","));
 					if (langs.contains(nodeName)) {
 						return true;
@@ -1492,7 +1491,7 @@ public abstract class AbstractCamelModelElement {
 		for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
 			if (isAnExpressionGuessedByKind(p) || isElementKind(p)) {
 				for (AbstractCamelModelElement child : getChildElements()) {
-					if (child.getNodeTypeId().equalsIgnoreCase(p.getName()) && p.getType().equalsIgnoreCase("object")) {
+					if (child.getNodeTypeId().equalsIgnoreCase(p.getName()) && "object".equalsIgnoreCase(p.getType())) {
 						// so we have a child of type element or expression
 						// which should be handled as an attribute
 						parameters.put(p.getName(), child);
@@ -1545,7 +1544,7 @@ public abstract class AbstractCamelModelElement {
 							return refUri.substring(0, refUri.indexOf(':'));
 						} else {
 							// seems we have a broken ref
-							return "endpoint";
+							return ENDPOINT_NODE_NAME;
 						}
 					}
 				} else {
@@ -1554,7 +1553,7 @@ public abstract class AbstractCamelModelElement {
 					}
 				}
 			}
-			return "endpoint";
+			return ENDPOINT_NODE_NAME;
 		}
 		return getNodeTypeId();
 	}
@@ -1578,7 +1577,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public String getDocumentationFileName() {
 		if (isEndpointElement()) {
-			return "endpoint";
+			return ENDPOINT_NODE_NAME;
 		}
 		return String.format("%sEIP", getNodeTypeId());
 	}
