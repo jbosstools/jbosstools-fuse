@@ -65,7 +65,8 @@ public class CamelIOHandlerIT {
 				"jaas-blueprint.xml",
 				"withQuestionMark.xml",
 				"globalElementsSample.xml",
-				"routes.xml");
+				"routes.xml",
+				"withMarshalCsvHeaders.xml");
 		//@formatter:on
 	}
 
