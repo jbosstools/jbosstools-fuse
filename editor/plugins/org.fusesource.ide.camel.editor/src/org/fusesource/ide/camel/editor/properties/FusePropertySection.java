@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
@@ -79,7 +80,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected FormToolkit toolkit;
 	protected Form form;
 	protected CTabFolder tabFolder;
-	protected List<CTabItem> tabs = new ArrayList<CTabItem>();
+	protected List<CTabItem> tabs = new ArrayList<>();
 	protected AbstractCamelModelElement selectedEP;
 	protected AbstractCamelModelElement lastSelectedEP;
 	protected DataBindingContext dbc;
@@ -681,6 +682,23 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			txtField.setLayoutData(createPropertyFieldLayoutData());
 			c = txtField;
 
+			// grand Children inside a list of nodes
+		} else if(camelModelElement != null && camelModelElement.getParameter(p.getName()) instanceof List){
+			//TODO: use something better than a text for a list of elements as we have the obvious limitation of not supporting the ","
+			List<String> initialValue = (List<String>)camelModelElement.getParameter(p.getName());
+			String delimiter = ",";
+			String collect = initialValue.stream().collect(Collectors.joining(delimiter));
+			Text txtField = getWidgetFactory().createText(parent, collect, SWT.SINGLE | SWT.LEFT);
+			txtField.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent e) {
+					Text txt = (Text) e.getSource();
+					camelModelElement.setParameter(p.getName(), Arrays.asList(txt.getText().split(delimiter)));
+				}
+			});
+			txtField.setLayoutData(createPropertyFieldLayoutData());
+			c = txtField;
+			
 			// OTHER
 		} else {
 			String initialValue = null;
