@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
@@ -80,6 +81,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected CTabFolder tabFolder;
 	protected List<CTabItem> tabs = new ArrayList<CTabItem>();
 	protected AbstractCamelModelElement selectedEP;
+	protected AbstractCamelModelElement lastSelectedEP;
 	protected DataBindingContext dbc;
 	protected IObservableMap modelMap = new WritableMap();
 	protected Composite parent;
@@ -126,46 +128,51 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 */
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
+
 		super.setInput(part, selection);
-
-		this.dbc = new DataBindingContext();
-
+		
 		AbstractCamelModelElement n = NodeUtils.getSelectedNode(selection);
 
-		createTabFolder();
-
-		if (n.getUnderlyingMetaModelObject() != null) {
-			this.selectedEP = n;
-			this.eip = PropertiesUtils.getEipFor(selectedEP);
-			String headerText = selectedEP.getDisplayText();
-			form.setText(headerText);
-			if (selectedEP.isEndpointElement()) {
-				this.component = PropertiesUtils.getComponentFor(selectedEP);
+		if (!Objects.equals(lastSelectedEP, n)) {
+			
+			this.dbc = new DataBindingContext();
+	
+			createTabFolder();
+	
+			if (n.getUnderlyingMetaModelObject() != null) {
+				this.selectedEP = n;
+				this.eip = PropertiesUtils.getEipFor(selectedEP);
+				String headerText = selectedEP.getDisplayText();
+				form.setText(headerText);
+				if (selectedEP.isEndpointElement()) {
+					this.component = PropertiesUtils.getComponentFor(selectedEP);
+				}
+			} else {
+				this.selectedEP = null;
+				form.setText("");
 			}
-		} else {
-			this.selectedEP = null;
-			form.setText("");
-		}
-
-		int idx = Math.max(tabFolder.getSelectionIndex(), 0);
-
-		if (this.tabs.isEmpty() == false) {
-			for (CTabItem tab : this.tabs) {
-				if (!tab.isDisposed())
-					tab.dispose();
+			this.lastSelectedEP = n;
+			
+			int idx = Math.max(tabFolder.getSelectionIndex(), 0);
+	
+			if (this.tabs.isEmpty() == false) {
+				for (CTabItem tab : this.tabs) {
+					if (!tab.isDisposed())
+						tab.dispose();
+				}
+				tabs.clear();
 			}
-			tabs.clear();
+	
+			// now generate the tab contents
+			createContentTabs(tabFolder);
+	
+			tabFolder.setSingle(tabFolder.getItemCount() == 1);
+			tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
+	
+			form.redraw();
+			form.layout();
+			form.update();
 		}
-
-		// now generate the tab contents
-		createContentTabs(tabFolder);
-
-		tabFolder.setSingle(tabFolder.getItemCount() == 1);
-		tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
-
-		form.redraw();
-		form.layout();
-		form.update();
 	}
 
 	/*
