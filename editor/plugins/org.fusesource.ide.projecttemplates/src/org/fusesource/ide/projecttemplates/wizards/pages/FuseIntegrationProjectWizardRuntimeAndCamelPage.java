@@ -310,7 +310,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			runtimesSet = RuntimeManager.getRuntimes(Collections.singleton(facetVersion));
 		}
 		
-		Map<String, IRuntime> runtimesMap = new LinkedHashMap<String,IRuntime>();
+		Map<String, IRuntime> runtimesMap = new LinkedHashMap<>();
 		for (org.eclipse.wst.common.project.facet.core.runtime.IRuntime r : runtimesSet) {
 			IRuntime serverRuntime = FacetUtil.getRuntime(r);
 			if (serverRuntime != null) {
