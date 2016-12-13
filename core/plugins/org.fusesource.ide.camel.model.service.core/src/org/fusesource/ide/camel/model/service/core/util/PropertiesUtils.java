@@ -468,7 +468,7 @@ public class PropertiesUtils {
 			selectedEP.setParameter("uri", newUri);
 		} else {
 			// normal uri options
-			boolean equalsDefaultValue = p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue());
+			boolean equalsDefaultValue = value != null && p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue());
 			boolean valueDeleted = (value == null) || value.toString().trim().length() < 1 || (equalsDefaultValue && AbstractCamelModelElement.useOptimizedXML());
 			String val = getPropertyFromUri(selectedEP, p, c);
 			String key = String.format("%s=", p.getName());

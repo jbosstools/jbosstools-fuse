@@ -31,7 +31,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
  */
 public class CamelService implements ICamelManagerService {
 	
-	private CamelModelLoader loader;
 	private CamelCatalog catalog;
 
 	/* (non-Javadoc)
@@ -48,7 +47,7 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public CamelModel getCamelModel(String runtimeProvider) {
-		this.loader = new XmlCamelModelLoader();
+		CamelModelLoader loader = new XmlCamelModelLoader();
 		try {
 			return loader.getCamelModel(	getComponentModelURL(runtimeProvider), 
 											getEipModelURL(runtimeProvider), 

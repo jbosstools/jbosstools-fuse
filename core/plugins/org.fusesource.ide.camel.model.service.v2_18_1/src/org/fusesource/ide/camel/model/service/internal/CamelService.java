@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2016 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -33,7 +33,6 @@ public class CamelService implements ICamelManagerService {
 	
 	private static final boolean ENCODE_DEFAULT = false;
 	
-	private CamelModelLoader loader;
 	private CamelCatalog catalog;
 
 	/* (non-Javadoc)
@@ -50,7 +49,7 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public CamelModel getCamelModel(String runtimeProvider) {
-		this.loader = new XmlCamelModelLoader();
+		CamelModelLoader loader = new XmlCamelModelLoader();
 		try {
 			return loader.getCamelModel(	getComponentModelURL(runtimeProvider), 
 											getEipModelURL(runtimeProvider), 

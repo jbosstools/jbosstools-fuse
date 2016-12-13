@@ -120,7 +120,7 @@ public class CamelUtils {
 	}
 
 	public static String getTranslatedNodeName(Node node) {
-		if (node == null) return null;
+		if (node == null || node.getNodeName() == null) return null;
 		String prefix = node.getPrefix();
 		String nodeName = node.getNodeName();
 		String resVal = nodeName;

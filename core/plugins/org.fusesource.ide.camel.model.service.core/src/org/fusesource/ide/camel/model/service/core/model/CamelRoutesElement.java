@@ -37,7 +37,7 @@ public class CamelRoutesElement extends CamelRouteContainerElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (CamelUtils.getTranslatedNodeName(tmp).equals(ROUTE_NODE_NAME)) {
+			if (ROUTE_NODE_NAME.equals(CamelUtils.getTranslatedNodeName(tmp))) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
