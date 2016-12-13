@@ -57,6 +57,7 @@ public abstract class AbstractCamelModelElement {
 	public static final String WIRETAP_NODE_NAME = "wireTap";
 	public static final String ROUTE_NODE_NAME = "route";
 	public static final String ID_ATTRIBUTE = "id";
+	public static final String ROUTE_ATTRIBUTE = "route";
 	public static final String DATA_FORMATS_NODE_NAME = "dataFormats";
 	public static final String ENDPOINT_NODE_NAME = "endpoint";
 	public static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
@@ -728,6 +729,12 @@ public abstract class AbstractCamelModelElement {
 	 *            if true params are written regardless if changed or not
 	 */
 	protected void setParameter(String name, Object value, boolean overrideChangeCheck) {
+
+		// never fill route parameter of routecontainers
+		if (this instanceof CamelRouteContainerElement && name.equals(ROUTE_ATTRIBUTE)) {
+			return;
+		}
+		
 		Object oldValue = this.parameters.get(name);
 
 		if (!overrideChangeCheck) {
