@@ -68,7 +68,7 @@ public class ValidateSyntaxInCatalogIT {
 													"2.15.1.redhat-621117",
 													"2.17.0.redhat-630187",
 													"2.17.3",
-													"2.18.1.fuse-000010");
+													"2.18.1");
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
 			for (Component component : camelModel.getComponentModel().getSupportedComponents()) {
