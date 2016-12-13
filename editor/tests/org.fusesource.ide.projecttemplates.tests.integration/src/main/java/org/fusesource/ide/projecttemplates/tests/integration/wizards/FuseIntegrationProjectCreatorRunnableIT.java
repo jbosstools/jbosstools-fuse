@@ -60,6 +60,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.branding.perspective.FusePerspective;
+import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -305,6 +306,14 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
+		
+		// if xml context we check if the design editor loads fine
+		if ("xml".equalsIgnoreCase(camelResource.getFileExtension()) && editor instanceof CamelEditor) {
+			CamelEditor ed = (CamelEditor)editor;
+			assertThat(ed.getDesignEditor()).as("The Camel Designer has not been created.").isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider()).as("Error retrieving the diagram type provider.").isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider().getDiagram()).as("Unable to access the camel context diagram.").isNotNull();
+		}
 	}
 	
 	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
