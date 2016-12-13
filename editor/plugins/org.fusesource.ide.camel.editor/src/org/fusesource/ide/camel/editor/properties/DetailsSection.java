@@ -114,7 +114,7 @@ public class DetailsSection extends FusePropertySection {
         	if (group.equals(DEFAULT_GROUP) && prop.getGroup() != null && prop.getGroup().trim().length()>0) continue;
         	
         	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
+        	if ((p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
         	
             ISWTObservableValue uiObservable = null;
             IObservableList uiListObservable = null;

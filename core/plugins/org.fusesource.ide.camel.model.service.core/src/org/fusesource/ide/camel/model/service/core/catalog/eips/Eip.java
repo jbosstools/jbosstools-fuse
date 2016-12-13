@@ -197,7 +197,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public boolean canHaveChildren() {
 		for (Parameter p : getParameters()) {
-			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element") && getInput().equalsIgnoreCase("true")) return true;
+			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && getInput().equalsIgnoreCase("true")) return true;
 		}
 		return false;
 	}
@@ -211,7 +211,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 		ArrayList<String> allowedNodeTypes = new ArrayList<String>();
 		if (canHaveChildren()) {
 			for (Parameter p : getParameters()) {
-				if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element") && p.getOneOf() != null) {
+				if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && p.getOneOf() != null) {
 					String oneOfList = p.getOneOf();
 					String[] types = oneOfList.split(",");
 					for (String type : types) {

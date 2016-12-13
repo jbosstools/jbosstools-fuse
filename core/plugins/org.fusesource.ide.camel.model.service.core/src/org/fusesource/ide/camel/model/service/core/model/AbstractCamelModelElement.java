@@ -40,10 +40,10 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
-	private static final String NODE_KIND_EXPRESSION = "expression";
-	private static final String NODE_KIND_ATTRIBUTE = "attribute";
-	private static final String NODE_KIND_ELEMENT = "element";
-	static final String URI_PARAMETER_KEY = "uri";
+	public static final String NODE_KIND_EXPRESSION = "expression";
+	public static final String NODE_KIND_ATTRIBUTE = "attribute";
+	public static final String NODE_KIND_ELEMENT = "element";
+	public static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
@@ -719,6 +719,11 @@ public abstract class AbstractCamelModelElement {
 		setParameter(name, value, false);
 	}
 
+	private boolean shouldIgnoreParameter(String name) {
+		return 	this instanceof CamelRouteContainerElement && 
+				getUnderlyingMetaModelObject().getParameter(name).getKind().equalsIgnoreCase(NODE_KIND_ELEMENT);
+	}
+	
 	/**
 	 * sets the parameter with the given name to the given value. If the
 	 * parameter doesn't exist it will be created
@@ -730,8 +735,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	protected void setParameter(String name, Object value, boolean overrideChangeCheck) {
 
-		// never fill route parameter of routecontainers
-		if (this instanceof CamelRouteContainerElement && name.equals(ROUTE_ATTRIBUTE)) {
+		if (shouldIgnoreParameter(name)) {
 			return;
 		}
 		

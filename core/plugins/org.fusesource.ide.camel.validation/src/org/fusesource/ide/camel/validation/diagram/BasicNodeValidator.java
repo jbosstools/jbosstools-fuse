@@ -164,7 +164,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	private void validateDetailProperties(AbstractCamelModelElement selectedEP, ValidationResult result) {
 		for (Parameter prop : PropertiesUtils.getPropertiesFor(selectedEP)) {
 			String property = prop.getName();
-			if ((prop.getKind().equalsIgnoreCase("element") && prop.getType().equalsIgnoreCase("array")) || prop.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition"))
+			if ((prop.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && prop.getType().equalsIgnoreCase("array")) || prop.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition"))
 				continue;
 
 			Object value = selectedEP.getParameter(property);

@@ -34,6 +34,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
@@ -98,7 +99,7 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isDescriptionProperty(Parameter p) {
-		return p.getKind().equals("element")
+		return p.getKind().equals(AbstractCamelModelElement.NODE_KIND_ELEMENT)
 				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition")
 				&& p.getName().equals("description");
 	}
@@ -135,7 +136,7 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isDataFormatProperty(Parameter p) {
-		return p.getKind().equalsIgnoreCase("element")
+		return p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT)
 				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition");
 	}
 
