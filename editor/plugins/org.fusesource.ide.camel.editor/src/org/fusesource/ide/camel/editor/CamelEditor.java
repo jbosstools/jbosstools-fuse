@@ -477,7 +477,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 						updateModelFromSource();
 						lastError = "";
 						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
-						if (newPageIndex == DESIGN_PAGE_INDEX) designEditor.refreshOutlineView();
+						if (newPageIndex == DESIGN_PAGE_INDEX) {
+							designEditor.switchContainer(); // needed to fix sync issue between props view and selected context element
+							designEditor.refreshOutlineView();
+						}
 						this.lastActivePageIdx = newPageIndex;
 						super.pageChange(newPageIndex);
 					} else {
