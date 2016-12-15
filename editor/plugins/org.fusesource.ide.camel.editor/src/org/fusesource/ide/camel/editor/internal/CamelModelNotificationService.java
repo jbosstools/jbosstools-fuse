@@ -54,10 +54,12 @@ public class CamelModelNotificationService extends DefaultNotificationService {
 				if (obo != null) {
 					AbstractCamelModelElement bo1 = (AbstractCamelModelElement)obo;
 					CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-					AbstractCamelModelElement bo2 = editor.getModel().findNode(bo1.getId());
-					if (bo2 != null && bo2.getXmlNode().isEqualNode(bo1.getXmlNode()) == false) {
-						relatedBOs.add(picElem);
-					}					
+					if (editor.getModel() != null) {
+						AbstractCamelModelElement bo2 = editor.getModel().findNode(bo1.getId());
+						if (bo2 != null && bo2.getXmlNode().isEqualNode(bo1.getXmlNode()) == false) {
+							relatedBOs.add(picElem);
+						}
+					}
 				}
 			}
 		}

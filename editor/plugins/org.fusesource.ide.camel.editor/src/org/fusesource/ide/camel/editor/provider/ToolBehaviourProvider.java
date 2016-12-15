@@ -474,7 +474,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		if (diagramContainer != null && diagramContainer instanceof CamelDesignEditor) {
 
 			CamelDesignEditor editor = (CamelDesignEditor) diagramContainer;
-			if (editor.getWorkspaceProject() != null) {
+			if (editor.getWorkspaceProject() != null && editor.getModel() != null) {
 				IResource file = editor.getModel().getResource();
 				String projectName = editor.getWorkspaceProject().getName();
 				IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), file.getName(), projectName);

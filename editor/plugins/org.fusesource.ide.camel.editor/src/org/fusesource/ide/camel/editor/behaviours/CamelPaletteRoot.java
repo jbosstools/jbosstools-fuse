@@ -92,58 +92,60 @@ public class CamelPaletteRoot extends PaletteRoot {
 		// create new entries
 		add(createModelIndependentTools());
 
-		IToolBehaviorProvider currentToolBehaviorProvider = cfgProvider.getDiagramTypeProvider()
-				.getCurrentToolBehaviorProvider();
+		if (cfgProvider != null && cfgProvider.getDiagramTypeProvider() != null) {
+			IToolBehaviorProvider currentToolBehaviorProvider = cfgProvider.getDiagramTypeProvider()
+					.getCurrentToolBehaviorProvider();
 
-		IPaletteCompartmentEntry[] paletteCompartments = currentToolBehaviorProvider.getPalette();
+			IPaletteCompartmentEntry[] paletteCompartments = currentToolBehaviorProvider.getPalette();
 
-		for (IPaletteCompartmentEntry compartmentEntry : paletteCompartments) {
-			PaletteDrawer drawer = new PaletteDrawer(compartmentEntry.getLabel(), getImageDescriptor(compartmentEntry));
-			if (isFiltered()) {
-				drawer.setInitialState(PaletteDrawer.INITIAL_STATE_PINNED_OPEN);
-			} else if (!compartmentEntry.isInitiallyOpen()) {
-				drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
-			}
-
-			List<IToolEntry> toolEntries = compartmentEntry.getToolEntries();
-
-			for (IToolEntry toolEntry : toolEntries) {
-
-				if (toolEntry instanceof ICreationToolEntry) {
-					ICreationToolEntry creationToolEntry = (ICreationToolEntry) toolEntry;
-
-					PaletteEntry createTool = createTool(creationToolEntry);
-					if (createTool != null && filter(createTool)) {
-						drawer.add(createTool);
-					}
-
-				} else if (toolEntry instanceof IStackToolEntry) {
-					IStackToolEntry stackToolEntry = (IStackToolEntry) toolEntry;
-					PaletteStack stack = new PaletteStack(stackToolEntry.getLabel(), stackToolEntry.getDescription(),
-							GraphitiUi.getImageService().getImageDescriptorForId(
-									cfgProvider.getDiagramTypeProvider().getProviderId(), stackToolEntry.getIconId()));
-					drawer.add(stack);
-					List<ICreationToolEntry> creationToolEntries = stackToolEntry.getCreationToolEntries();
-					for (ICreationToolEntry creationToolEntry : creationToolEntries) {
-						PaletteEntry createTool = createTool(creationToolEntry);
-						if (createTool != null && filter(createTool)) {
-							stack.add(createTool);
-						}
-					}
-				} else if (toolEntry instanceof IPaletteSeparatorEntry) {
-					drawer.add(new PaletteSeparator());
+			for (IPaletteCompartmentEntry compartmentEntry : paletteCompartments) {
+				PaletteDrawer drawer = new PaletteDrawer(compartmentEntry.getLabel(), getImageDescriptor(compartmentEntry));
+				if (isFiltered()) {
+					drawer.setInitialState(PaletteDrawer.INITIAL_STATE_PINNED_OPEN);
+				} else if (!compartmentEntry.isInitiallyOpen()) {
+					drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 				}
 
-			}
+				List<IToolEntry> toolEntries = compartmentEntry.getToolEntries();
 
-			if (!drawer.getChildren().isEmpty()) {
-				add(drawer);
+				for (IToolEntry toolEntry : toolEntries) {
+
+					if (toolEntry instanceof ICreationToolEntry) {
+						ICreationToolEntry creationToolEntry = (ICreationToolEntry) toolEntry;
+
+						PaletteEntry createTool = createTool(creationToolEntry);
+						if (createTool != null && filter(createTool)) {
+							drawer.add(createTool);
+						}
+
+					} else if (toolEntry instanceof IStackToolEntry) {
+						IStackToolEntry stackToolEntry = (IStackToolEntry) toolEntry;
+						PaletteStack stack = new PaletteStack(stackToolEntry.getLabel(), stackToolEntry.getDescription(),
+								GraphitiUi.getImageService().getImageDescriptorForId(
+										cfgProvider.getDiagramTypeProvider().getProviderId(), stackToolEntry.getIconId()));
+						drawer.add(stack);
+						List<ICreationToolEntry> creationToolEntries = stackToolEntry.getCreationToolEntries();
+						for (ICreationToolEntry creationToolEntry : creationToolEntries) {
+							PaletteEntry createTool = createTool(creationToolEntry);
+							if (createTool != null && filter(createTool)) {
+								stack.add(createTool);
+							}
+						}
+					} else if (toolEntry instanceof IPaletteSeparatorEntry) {
+						drawer.add(new PaletteSeparator());
+					}
+
+				}
+
+				if (!drawer.getChildren().isEmpty()) {
+					add(drawer);
+				}
 			}
+			
+			// PaletteEntry creationTools = createCreationTools();
+			// if (creationTools != null)
+			// add(creationTools);
 		}
-
-		// PaletteEntry creationTools = createCreationTools();
-		// if (creationTools != null)
-		// add(creationTools);
 	}
 
 	public boolean isFiltered() {
