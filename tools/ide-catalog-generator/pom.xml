@@ -17,15 +17,29 @@
 		<maven>2.0.9</maven>
 	</prerequisites>
 
+	<properties>
+		<camel.version>2.18.1</camel.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
-		    <version>2.4</version>
+		    <version>2.5</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.camel</groupId>
 		    <artifactId>camel-catalog</artifactId>
+		    <version>${camel.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-catalog-provider-karaf</artifactId>
+		    <version>${camel.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-catalog-provider-springboot</artifactId>
 		    <version>${camel.version}</version>
 		</dependency>
 		<dependency>
@@ -47,6 +61,16 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    <version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
 		</dependency>
 	</dependencies>
 
@@ -107,5 +131,5 @@
 			</dependencies>
 		</profile>
 	</profiles>
-
+	
 </project>

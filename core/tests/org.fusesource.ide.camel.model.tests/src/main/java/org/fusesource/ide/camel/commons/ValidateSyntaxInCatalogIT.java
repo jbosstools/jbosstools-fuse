@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.commons;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +24,6 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Aurelien Pupier
@@ -67,7 +67,8 @@ public class ValidateSyntaxInCatalogIT {
 		assertThat(supportedCamelVersions).contains("2.15.1.redhat-621084", 
 													"2.15.1.redhat-621117",
 													"2.17.0.redhat-630187",
-													"2.17.3");
+													"2.17.3",
+													"2.18.1");
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
 			for (Component component : camelModel.getComponentModel().getSupportedComponents()) {

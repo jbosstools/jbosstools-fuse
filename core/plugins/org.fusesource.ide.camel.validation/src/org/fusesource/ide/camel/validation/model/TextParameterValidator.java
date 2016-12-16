@@ -51,7 +51,7 @@ public final class TextParameterValidator implements IValidator {
 						return ValidationStatus.warning("One of Ref and Uri values have to be filled!");
 					} else {
 						// ref found - now check if REF has URI defined
-						AbstractCamelModelElement cme = camelModelElement.getCamelContext().findNode((String) refValue);
+						AbstractCamelModelElement cme = camelModelElement.getRouteContainer().findNode((String) refValue);
 						if (cme == null || cme.getParameter("uri") == null || ((String) cme.getParameter("uri")).trim().length() < 1) {
 							// no uri defined on ref
 							return ValidationStatus.warning("The referenced endpoint has no URI defined or does not exist.");
@@ -78,7 +78,7 @@ public final class TextParameterValidator implements IValidator {
 
 				if (value != null && value instanceof String && value.toString().trim().length() > 0) {
 					String refId = (String) value;
-					AbstractCamelModelElement cme = camelModelElement.getCamelContext().findNode(refId);
+					AbstractCamelModelElement cme = camelModelElement.getRouteContainer().findNode(refId);
 					if (cme == null) {
 						// check for global beans
 						if (camelModelElement.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
@@ -105,7 +105,7 @@ public final class TextParameterValidator implements IValidator {
 				if (value == null || value instanceof String == false || value.toString().trim().length() < 1) {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
 				} else {
-					if (camelModelElement.getCamelContext().isIDUnique((String) value) == false) {
+					if (camelModelElement.getRouteContainer().isIDUnique((String) value) == false) {
 						return ValidationStatus.warning("Parameter " + parameter.getName() + " does not contain a unique value.");
 					}
 				}

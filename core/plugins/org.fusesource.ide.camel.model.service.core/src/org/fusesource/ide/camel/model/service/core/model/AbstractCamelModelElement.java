@@ -40,10 +40,10 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractCamelModelElement {
 
-	private static final String NODE_KIND_EXPRESSION = "expression";
-	private static final String NODE_KIND_ATTRIBUTE = "attribute";
-	private static final String NODE_KIND_ELEMENT = "element";
-	static final String URI_PARAMETER_KEY = "uri";
+	public static final String NODE_KIND_EXPRESSION = "expression";
+	public static final String NODE_KIND_ATTRIBUTE = "attribute";
+	public static final String NODE_KIND_ELEMENT = "element";
+	public static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
@@ -57,6 +57,7 @@ public abstract class AbstractCamelModelElement {
 	public static final String WIRETAP_NODE_NAME = "wireTap";
 	public static final String ROUTE_NODE_NAME = "route";
 	public static final String ID_ATTRIBUTE = "id";
+	public static final String ROUTE_ATTRIBUTE = "route";
 	public static final String DATA_FORMATS_NODE_NAME = "dataFormats";
 	public static final String ENDPOINT_NODE_NAME = "endpoint";
 	public static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
@@ -86,11 +87,14 @@ public abstract class AbstractCamelModelElement {
 	// the camel file
 	private CamelFile cf;
 
-	// the camel context
-	private CamelContextElement context;
+	// the camel route container
+	private CamelRouteContainerElement container;
 
 	private String name;
 	private String description;
+	
+	// flag which controls if default values are removed from file or not
+	private static boolean optimizedXML = true; 
 
 	/**
 	 * creates a camel node using the xml node
@@ -140,6 +144,23 @@ public abstract class AbstractCamelModelElement {
 		}
 	}
 
+	/**
+	 * @return the optimizedXML
+	 */
+	public static boolean useOptimizedXML() {
+		return optimizedXML;
+	}
+	
+	/**
+	 * @param optimizedXML the optimizedXML to set
+	 */
+	public static void setOptimizedXML(boolean optimizedXML) {
+		AbstractCamelModelElement.optimizedXML = optimizedXML;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return getDisplayText();
@@ -698,6 +719,13 @@ public abstract class AbstractCamelModelElement {
 		setParameter(name, value, false);
 	}
 
+	private boolean shouldIgnoreParameter(String name) {
+		return 	this instanceof CamelRouteContainerElement &&
+				getUnderlyingMetaModelObject() != null &&
+				getUnderlyingMetaModelObject().getParameter(name) != null &&
+				NODE_KIND_ELEMENT.equalsIgnoreCase(getUnderlyingMetaModelObject().getParameter(name).getKind());
+	}
+	
 	/**
 	 * sets the parameter with the given name to the given value. If the
 	 * parameter doesn't exist it will be created
@@ -708,6 +736,11 @@ public abstract class AbstractCamelModelElement {
 	 *            if true params are written regardless if changed or not
 	 */
 	protected void setParameter(String name, Object value, boolean overrideChangeCheck) {
+
+		if (shouldIgnoreParameter(name)) {
+			return;
+		}
+		
 		Object oldValue = this.parameters.get(name);
 
 		if (!overrideChangeCheck) {
@@ -721,6 +754,10 @@ public abstract class AbstractCamelModelElement {
 				return;
 			}
 			if (value != null && value.equals(oldValue)) {
+				return;
+			}
+			if (oldValue == null && value != null && getUnderlyingMetaModelObject() != null && getUnderlyingMetaModelObject().getParameter(name) != null && value.equals(getUnderlyingMetaModelObject().getParameter(name).getDefaultValue())) {
+				// this catches false updates from the properties pages setting default values automatically
 				return;
 			}
 		}
@@ -973,7 +1010,7 @@ public abstract class AbstractCamelModelElement {
 	private void updateAttribute(String name, Object newValue, Object oldValue, Element e) {
 		String defaultValue = this.underlyingMetaModelObject != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
-		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue))) {
+		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue)) && useOptimizedXML()) {
 			// default value -> no need to explicitly set it -> delete
 			// existing
 			e.removeAttribute(name);
@@ -1537,15 +1574,20 @@ public abstract class AbstractCamelModelElement {
 				if (u.startsWith("ref:")) {
 					// if its a ref we lookup what is the reference scheme
 					String refId = u.substring(u.indexOf(':') + 1);
-					AbstractCamelModelElement endpointRef = getCamelContext().getEndpointDefinitions().get(refId);
-					if (endpointRef != null) {
-						String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
-						if (refUri != null && refUri.contains(":")) {
-							return refUri.substring(0, refUri.indexOf(':'));
-						} else {
-							// seems we have a broken ref
-							return ENDPOINT_NODE_NAME;
+					CamelRouteContainerElement container = getRouteContainer();
+					if (container instanceof CamelContextElement) {
+						AbstractCamelModelElement endpointRef = ((CamelContextElement)container).getEndpointDefinitions().get(refId);
+						if (endpointRef != null) {
+							String refUri = (String) endpointRef.getParameter(URI_PARAMETER_KEY);
+							if (refUri != null && refUri.contains(":")) {
+								return refUri.substring(0, refUri.indexOf(':'));
+							} else {
+								// seems we have a broken ref
+								return ENDPOINT_NODE_NAME;
+							}
 						}
+					} else {
+						CamelModelServiceCoreActivator.pluginLog().logWarning("ref: notation not supported for " + container.getNodeTypeId());
 					}
 				} else {
 					if (u.indexOf(':') != -1) {
@@ -1605,17 +1647,17 @@ public abstract class AbstractCamelModelElement {
 	 *
 	 * @return
 	 */
-	public CamelContextElement getCamelContext() {
-		if (this.context == null) {
+	public CamelRouteContainerElement getRouteContainer() {
+		if (this.container == null) {
 			AbstractCamelModelElement tmp = this;
-			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelContextElement)) {
+			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelRouteContainerElement)) {
 				tmp = tmp.getParent();
 			}
-			if (tmp.getParent() != null && tmp.getParent() instanceof CamelContextElement) {
-				this.context = (CamelContextElement) tmp.getParent();
+			if (tmp.getParent() != null && tmp.getParent() instanceof CamelRouteContainerElement) {
+				this.container = (CamelRouteContainerElement) tmp.getParent();
 			}
 		}
-		return this.context;
+		return this.container;
 	}
 
 	/**
@@ -1626,7 +1668,7 @@ public abstract class AbstractCamelModelElement {
 	public String getNewID() {
 		int i = 1;
 		String answer = String.format("_%s%d", getNodeTypeId(), i++);
-		while (!getCamelContext().isNewIDAvailable(answer)) {
+		while (!getRouteContainer().isNewIDAvailable(answer)) {
 			answer = String.format("_%s%d", getNodeTypeId(), i++);
 		}
 		return answer;
@@ -1643,7 +1685,7 @@ public abstract class AbstractCamelModelElement {
 			return false;
 		}
 
-		if (getCamelContext().findAllNodesWithId(id).size()>1) {
+		if (getRouteContainer().findAllNodesWithId(id).size()>1) {
 			return false;
 		}
 
@@ -1660,7 +1702,7 @@ public abstract class AbstractCamelModelElement {
 		if (newId == null || newId.trim().isEmpty()) {
 			return false;
 		}
-		return getCamelContext() == null || getCamelContext().findNode(newId) == null;
+		return getRouteContainer() == null || getRouteContainer().findNode(newId) == null;
 	}
 
 	/**

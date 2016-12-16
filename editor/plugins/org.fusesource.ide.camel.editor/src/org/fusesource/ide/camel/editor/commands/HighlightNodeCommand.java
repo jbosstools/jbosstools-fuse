@@ -54,7 +54,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 		
 		// check if we need to switch to another route for highlighting
 		if (this.node != null && highlight) {
-			if (node.getRoute() != null && designEditor.getSelectedContainer() != node.getCamelContext() && node.getRoute() != designEditor.getSelectedContainer()) {
+			if (node.getRoute() != null && designEditor.getSelectedContainer() != node.getRouteContainer() && node.getRoute() != designEditor.getSelectedContainer()) {
 				// switch the route
 				this.designEditor.setSelectedContainer(node.getRoute());											
 			}

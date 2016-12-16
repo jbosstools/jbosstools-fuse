@@ -22,6 +22,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.languages.LanguageMod
 public class CamelModel {
 	
 	private String camelVersion;
+	private String runtimeProvider;
 	
 	private ComponentModel componentModel;
 	private DataFormatModel dataformatModel;
@@ -40,8 +41,9 @@ public class CamelModel {
 	 * 
 	 * @param camelVersion	the camel version of the model
 	 */
-	public CamelModel(String camelVersion) {
+	public CamelModel(String camelVersion, String runtimeProvider) {
 		this.camelVersion = camelVersion;
+		this.runtimeProvider = runtimeProvider;
 	}
 	
 	/**
@@ -56,6 +58,20 @@ public class CamelModel {
 	 */
 	public void setCamelVersion(String camelVersion) {
 		this.camelVersion = camelVersion;
+	}
+	
+	/**
+	 * @return the runtimeProvider
+	 */
+	public String getRuntimeProvider() {
+		return this.runtimeProvider;
+	}
+	
+	/**
+	 * @param runtimeProvider the runtimeProvider to set
+	 */
+	public void setRuntimeProvider(String runtimeProvider) {
+		this.runtimeProvider = runtimeProvider;
 	}
 	
 	/**

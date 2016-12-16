@@ -70,6 +70,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
@@ -498,8 +499,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 
 			// we add all context wide endpoint elements
-			if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
-				for (AbstractCamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
+			CamelContextElement ctx = null;
+			if (cf.getRouteContainer() instanceof CamelContextElement) {
+				ctx = (CamelContextElement)cf.getRouteContainer();
+			}
+			if (ctx != null && ctx.getEndpointDefinitions() != null) {
+				for (AbstractCamelModelElement cme : ctx.getEndpointDefinitions().values()) {
 					boolean foundMatch = false;
 					for (GlobalConfigElementItem item : getElementContributions()) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
@@ -516,8 +521,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 
 			// we add all context wide data formats
-			if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
-				for (AbstractCamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
+			if (ctx != null && ctx.getDataformats() != null) {
+				for (AbstractCamelModelElement cme : ctx.getDataformats().values()) {
 					boolean foundMatch = false;
 					for (GlobalConfigElementItem item : getElementContributions()) {
 						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
@@ -639,11 +644,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param newXMLNode
 	 */
 	public CamelBasicModelElement addDataFormat(CamelFile cf, Element newXMLNode) {
-		CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getCamelContext(), newXMLNode);
-		final String eipName = org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(newXMLNode);
-		configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
-		cf.getCamelContext().addDataFormat(elemDF);
-		return elemDF;
+		if (cf.getRouteContainer() instanceof CamelContextElement) {
+			CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getRouteContainer(), newXMLNode);
+			final String eipName = org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(newXMLNode);
+			configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
+			((CamelContextElement)cf.getRouteContainer()).addDataFormat(elemDF);
+			return elemDF;
+		}
+		return null;
 	}
 
 	/**
@@ -651,11 +659,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param newXMLNode
 	 */
 	private CamelEndpoint addEndpointToGlobalContext(CamelFile cf, Element newXMLNode) {
-		CamelEndpoint elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
-		elemEP.setParent(cf.getCamelContext());
-		configureCamelModelElement(cf, newXMLNode, elemEP, "to");
-		cf.getCamelContext().addEndpointDefinition(elemEP);
-		return elemEP;
+		if (cf.getRouteContainer() instanceof CamelContextElement) {
+			CamelEndpoint elemEP = new CamelEndpoint(newXMLNode.getAttribute("uri"));
+			elemEP.setParent(cf.getRouteContainer());
+			configureCamelModelElement(cf, newXMLNode, elemEP, "to");
+			((CamelContextElement)cf.getRouteContainer()).addEndpointDefinition(elemEP);
+			return elemEP;
+		}
+		return null;
 	}
 
 	/**
@@ -748,11 +759,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						// either an endpoint or a data format definition
 						extHandler = getExtensionForElement(cme);
 						if (cme.isEndpointElement()) {
-							cme.getCamelContext().removeEndpointDefinition(cme);
+							if (cme.getRouteContainer() instanceof CamelContextElement) {
+								((CamelContextElement)cme.getRouteContainer()).removeEndpointDefinition(cme);
+							}
 						} else if (cme instanceof GlobalDefinitionCamelModelElement) {
 							cme.getCamelFile().removeGlobalDefinition(cme.getId());
 						} else {
-							cme.getCamelContext().removeDataFormat(cme);
+							if (cme.getRouteContainer() instanceof CamelContextElement) {
+								((CamelContextElement)cme.getRouteContainer()).removeDataFormat(cme);
+							}
 						}
 					} finally {
 						if (extHandler != null) {

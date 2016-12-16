@@ -98,18 +98,18 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		NodeList childNodes = document.getDocumentElement().getChildNodes();
         if (CAMEL_ROUTES.equals(CamelUtils.getTranslatedNodeName(document.getDocumentElement()))) {
         	// found a routes element
-    		CamelContextElement cce = new CamelContextElement(this, document.getDocumentElement());
+    		CamelRoutesElement cre = new CamelRoutesElement(this, document.getDocumentElement());
     		Node namedItem = document.getDocumentElement().getAttributes().getNamedItem("id");
-			String contextId = namedItem != null ? namedItem.getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
+			String containerId = namedItem != null ? namedItem.getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
     		int startIdx 	= resource.getFullPath().toOSString().indexOf("--");
     		int endIdx 		= resource.getFullPath().toOSString().indexOf("--", startIdx+1);
     		if (startIdx != endIdx && startIdx != -1) {
-    			contextId = resource.getFullPath().toOSString().substring(startIdx+2, endIdx);
+    			containerId = resource.getFullPath().toOSString().substring(startIdx+2, endIdx);
     		}
-    		cce.setId(contextId);
-    		cce.initialize();
-    		// then add the context to the file
-    		addChildElement(cce);
+    		cre.setId(containerId);
+    		cre.initialize();
+    		// then add the routes to the file
+    		addChildElement(cre);
         } else {
             for (int i = 0; i<childNodes.getLength(); i++) {
             	Node child = childNodes.item(i);
@@ -125,6 +125,13 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
             		cce.initialize();
             		// then add the context to the file
             		addChildElement(cce);
+            	} else if (name.equals(CAMEL_ROUTES)) {
+            		// found a camel context
+            		CamelRoutesElement cre = new CamelRoutesElement(this, child);
+            		cre.setId(id);
+            		cre.initialize();
+            		// then add the context to the file
+            		addChildElement(cre);
             	} else {
             		// found a global configuration element
 					GlobalDefinitionCamelModelElement cme = new GlobalDefinitionCamelModelElement(this, child);
@@ -347,7 +354,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 * @return
 	 */
 	public boolean isEmpty() {
-		return 	getCamelContext() == null && 
+		return 	getRouteContainer() == null && 
 				getChildElements().isEmpty();
 	}
 	
@@ -424,15 +431,15 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelContext()
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#getRouteContainer()
 	 */
 	@Override
-	public CamelContextElement getCamelContext() {
+	public CamelRouteContainerElement getRouteContainer() {
 		for (AbstractCamelModelElement e : getChildElements()) {
 			String translatedNodeName = e.getTranslatedNodeName();
-			if (AbstractCamelModelElement.CAMEL_CONTEXT_NODE_NAME.equalsIgnoreCase(translatedNodeName)
-					|| CAMEL_ROUTES.equalsIgnoreCase(translatedNodeName)) {
-				return (CamelContextElement) e;
+			if (CAMEL_CONTEXT.equalsIgnoreCase(translatedNodeName) || 
+				CAMEL_ROUTES.equalsIgnoreCase(translatedNodeName)) {
+				return (CamelRouteContainerElement) e;
 			}
 		}
 		return null;

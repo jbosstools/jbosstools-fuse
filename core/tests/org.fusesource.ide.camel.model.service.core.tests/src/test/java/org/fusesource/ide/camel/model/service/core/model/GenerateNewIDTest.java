@@ -70,7 +70,7 @@ public class GenerateNewIDTest {
 
 		doReturn("route").when(underlyingMetaModel).getName();
 		CamelContextElement parent = new CamelContextElement(camelFile, null);
-		doReturn(parent).when(camelFile).getCamelContext();
+		doReturn(parent).when(camelFile).getRouteContainer();
 		CamelRouteElement camelRouteModelElement = spy(new CamelRouteElement(parent, null));
 		doReturn(camelFiles).when(camelRouteModelElement).findCamelFilesInSameProject();
 		camelRouteModelElement.setUnderlyingMetaModelObject(underlyingMetaModel);
@@ -84,7 +84,7 @@ public class GenerateNewIDTest {
 		when(camelFile2.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
 		/*Configure the second CamelFile*/
 		CamelContextElement parent2 = new CamelContextElement(camelFile2, null);
-		doReturn(parent2).when(camelFile2).getCamelContext();
+		doReturn(parent2).when(camelFile2).getRouteContainer();
 		CamelRouteElement camelRouteModelElement2 = spy(new CamelRouteElement(parent2, null));
 		doReturn(camelFiles).when(camelRouteModelElement2).findCamelFilesInSameProject();
 		camelRouteModelElement2.setUnderlyingMetaModelObject(underlyingMetaModel);
@@ -100,14 +100,14 @@ public class GenerateNewIDTest {
 		when(camelFile.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
 
 		doReturn("route").when(underlyingMetaModel).getName();
-		doReturn(null).when(camelFile).getCamelContext();
+		doReturn(null).when(camelFile).getRouteContainer();
 		
 		/*Artificially add the second camelfile in the project*/
 		camelFiles.add(camelFile2);
 		when(camelFile2.isNewIDAvailable(Mockito.anyString())).thenCallRealMethod();
 		/*Configure the second CamelFile*/
 		CamelContextElement parent2 = new CamelContextElement(camelFile2, null);
-		doReturn(parent2).when(camelFile2).getCamelContext();
+		doReturn(parent2).when(camelFile2).getRouteContainer();
 		CamelRouteElement camelRouteModelElement2 = spy(new CamelRouteElement(parent2, null));
 		doReturn(camelFiles).when(camelRouteModelElement2).findCamelFilesInSameProject();
 		camelRouteModelElement2.setUnderlyingMetaModelObject(underlyingMetaModel);

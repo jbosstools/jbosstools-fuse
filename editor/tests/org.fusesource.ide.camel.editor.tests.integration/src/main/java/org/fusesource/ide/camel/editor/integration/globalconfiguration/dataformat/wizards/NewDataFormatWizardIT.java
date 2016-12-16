@@ -29,6 +29,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Rule;
@@ -48,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
 
-	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 4;
+	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 5;
 	
 	@Rule
 	public FuseProject fuseproject = new FuseProject(NewDataFormatWizardIT.class.getName());
@@ -102,8 +103,9 @@ public class NewDataFormatWizardIT {
 	 * @param camelFile
 	 */
 	private void check(final String id, CamelFile camelFile) {
-		Assertions.assertThat(camelFile.getCamelContext().getDataformats().keySet()).containsExactly(id);
-		AbstractCamelModelElement dataFormatCME = camelFile.getCamelContext().getDataformats().get(id);
+		Assertions.assertThat(camelFile.getRouteContainer() instanceof CamelContextElement).isTrue();
+		Assertions.assertThat(((CamelContextElement)camelFile.getRouteContainer()).getDataformats().keySet()).containsExactly(id);
+		AbstractCamelModelElement dataFormatCME = ((CamelContextElement)camelFile.getRouteContainer()).getDataformats().get(id);
 		checkSpecialParameterLoaded(id, dataFormatCME);
 		assertThat(new DataFormatContributor().canHandle(dataFormatCME)).isTrue();
 	}

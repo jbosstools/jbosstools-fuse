@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
@@ -71,7 +72,7 @@ public class CamelCtxNavRouteNode  {
 	 * @return the node that matches the current node in incoming model, null
 	 *         otherwise
 	 */
-	public CamelRouteElement getMatchingRouteFromEditorModel(CamelContextElement model) {
+	public CamelRouteElement getMatchingRouteFromEditorModel(CamelRouteContainerElement model) {
 		if(model!=null){
 			List<String> nodeKeys = getChildNodesDisplayText(this.mRouteSupport);
 			String nodeDisplayText = this.mRouteSupport.getDisplayText();

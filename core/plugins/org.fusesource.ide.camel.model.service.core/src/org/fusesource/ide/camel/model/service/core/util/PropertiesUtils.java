@@ -468,8 +468,8 @@ public class PropertiesUtils {
 			selectedEP.setParameter("uri", newUri);
 		} else {
 			// normal uri options
-			boolean valueDeleted = value == null || value.toString().trim().length() < 1
-					|| (p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue()));
+			boolean equalsDefaultValue = value != null && p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue());
+			boolean valueDeleted = (value == null) || value.toString().trim().length() < 1 || (equalsDefaultValue && AbstractCamelModelElement.useOptimizedXML());
 			String val = getPropertyFromUri(selectedEP, p, c);
 			String key = String.format("%s=", p.getName());
 			final String uri = (String) selectedEP.getParameter("uri");
@@ -479,10 +479,12 @@ public class PropertiesUtils {
 				// break the replacement
 				String newUri = "";
 				boolean firstParam = idx == -1 || uri.charAt(idx - 1) == '?';
-				newUri = valueDeleted ? uri.substring(0, firstParam ? idx : idx - 1)
-						: uri.substring(0, idx + key.length());
-				if (!valueDeleted)
-					newUri += value.toString();
+				if (valueDeleted) {
+					newUri = uri.substring(0, firstParam ? idx : idx - 1);
+				} else {
+					newUri = uri.substring(0, idx + key.length());
+					newUri += value.toString();	
+				}				
 				newUri += uri.substring(idx + key.length() + val.length());
 				if (newUri.indexOf("?&") != -1)
 					newUri = newUri.replace("?&", "?");
@@ -491,7 +493,7 @@ public class PropertiesUtils {
 				selectedEP.setParameter("uri", newUri);
 			} else {
 				String newUri = uri;
-				if (valueDeleted == false) {
+				if (!valueDeleted) {
 					if (uri.indexOf('?') == -1) {
 						newUri += '?';
 					}

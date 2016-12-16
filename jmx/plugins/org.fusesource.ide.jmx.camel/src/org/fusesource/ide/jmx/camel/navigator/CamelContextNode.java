@@ -41,8 +41,8 @@ import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFabricTracerMBean;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.foundation.core.functions.Function1;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -76,7 +76,7 @@ public class CamelContextNode 	extends NodeSupport
 	private final CamelContextsNode camelContextsNode;
 	private final CamelJMXFacade facade;
 	private final CamelContextMBean camelContextMBean;
-	private CamelContextElement camelContext;
+	private CamelRouteContainerElement camelContext;
 	private final RoutesNode routes;
 	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
@@ -94,14 +94,14 @@ public class CamelContextNode 	extends NodeSupport
 		setPropertyBean(camelContext);
 	}
 
-	public CamelContextElement getCamelContext() {
+	public CamelRouteContainerElement getRouteContainer() {
 		IFile camelContextFile = createTempContextFile();
 		if (camelContextFile != null) {
 			CamelIOHandler handler = new CamelIOHandler();
 			try {
 				camelContextFile.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 				CamelFile cf = handler.loadCamelModel(camelContextFile, new NullProgressMonitor());
-				this.camelContext = cf.getCamelContext();
+				this.camelContext = cf.getRouteContainer();
 			} catch (Exception ex) {
 				CamelJMXPlugin.getLogger().error(ex);
 			}			

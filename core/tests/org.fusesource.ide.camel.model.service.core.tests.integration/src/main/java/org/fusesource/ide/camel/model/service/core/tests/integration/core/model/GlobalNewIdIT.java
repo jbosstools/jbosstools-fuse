@@ -31,8 +31,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
@@ -68,7 +68,7 @@ public class GlobalNewIdIT {
 		assertThat(getCurrentActiveEditor()).isNotNull();
 		CamelFile model = CamelFilesFinder.getFileFromEditor(f);
 		assertThat(model).isNotNull();
-		CamelContextElement ctx = model.getCamelContext();
+		CamelRouteContainerElement ctx = model.getRouteContainer();
 		CamelRouteElement route1 = createRoute(model, ctx);
 		ctx.addChildElement(route1);
 		route1.ensureUniqueID(route1);
@@ -80,7 +80,7 @@ public class GlobalNewIdIT {
 		assertThat(route1.getId()).isNotEqualTo(route2.getId());
 	}
 	
-	private CamelRouteElement createRoute(CamelFile cf, CamelContextElement parent) {
+	private CamelRouteElement createRoute(CamelFile cf, CamelRouteContainerElement parent) {
 		Node newNode = cf.createElement("route", null);
 		return new CamelRouteElement(parent, newNode);
 	}

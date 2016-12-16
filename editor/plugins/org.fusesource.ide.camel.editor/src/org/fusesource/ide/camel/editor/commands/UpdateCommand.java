@@ -39,7 +39,7 @@ public class UpdateCommand extends RecordingCommand {
 		AbstractCamelModelElement selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
 		if (selectedNode == null) {
 			// use the route node in this case
-			selectedNode = designEditor.getModel().getCamelContext();
+			selectedNode = designEditor.getModel().getRouteContainer();
 		}
 		updateFigure(selectedNode);
 	}

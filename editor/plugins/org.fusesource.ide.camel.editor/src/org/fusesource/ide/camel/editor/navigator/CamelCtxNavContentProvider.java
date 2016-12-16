@@ -71,9 +71,9 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	private CamelCtxNavRouteNode[] getRoutes(IFile camelFile) {
 		CamelIOHandler ioHandler = new CamelIOHandler();
 		final CamelFile rc = ioHandler.loadCamelModel(camelFile, new NullProgressMonitor());
-		if (rc != null && rc.getCamelContext() != null) {
+		if (rc != null && rc.getRouteContainer() != null) {
 			List<CamelCtxNavRouteNode> routes = new ArrayList<CamelCtxNavRouteNode>();
-			for(AbstractCamelModelElement node : rc.getCamelContext().getChildElements()) {
+			for(AbstractCamelModelElement node : rc.getRouteContainer().getChildElements()) {
 				if(node instanceof CamelRouteElement) {
 					routes.add(new CamelCtxNavRouteNode((CamelRouteElement)node, camelFile));
 				}

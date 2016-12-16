@@ -26,11 +26,7 @@ import org.w3c.dom.NodeList;
  * 
  * @author lhein
  */
-public class CamelContextElement extends AbstractCamelModelElement {
-	
-	public static final String ATTR_Id = "id";
-	public static final String ATTR_UseMDCLogging = "useMDCLogging";
-	public static final String ATTR_UseBreadcrumb = "useBreadcrumb";
+public class CamelContextElement extends CamelRouteContainerElement {
 	
 	/**
 	 * contains endpoint definitions stored using their ID value
@@ -248,27 +244,6 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	}
 	
 	/**
-	 * parses direct attributes of the node
-	 */
-	@Override
-	protected void parseAttributes() {
-		Node tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_Id);
-		if (tmp != null && tmp.getNodeValue() != null && tmp.getNodeValue().trim().length()>0) {
-			setId(tmp.getNodeValue());
-		} 
-		tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_UseMDCLogging);
-		if (tmp != null) {
-			setParameter(ATTR_UseMDCLogging, tmp.getNodeValue());
-			
-		}
-		tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_UseBreadcrumb);
-		if (tmp != null) {
-			setParameter(ATTR_UseBreadcrumb, tmp.getNodeValue());
-			
-		}
-	}
-	
-	/**
 	 * parses the children of this node
 	 */
 	@Override
@@ -334,26 +309,10 @@ public class CamelContextElement extends AbstractCamelModelElement {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelContext()
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#getRouteContainer()
 	 */
 	@Override
-	public CamelContextElement getCamelContext() {
+	public CamelRouteContainerElement getRouteContainer() {
 		return this;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getNodeTypeId()
-	 */
-	@Override
-	public String getNodeTypeId() {
-		return CAMEL_CONTEXT_NODE_NAME;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#supportsBreakpoint()
-	 */
-	@Override
-	public boolean supportsBreakpoint() {
-		return false;
 	}
 }

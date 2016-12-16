@@ -65,7 +65,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	private AbstractCamelModelElement[] computeInput() {
 		AbstractCamelModelElement selectedContainer = designEditor.getSelectedContainer();
 		if (selectedContainer == null){
-			selectedContainer = designEditor.getModel().getCamelContext();
+			selectedContainer = designEditor.getModel().getRouteContainer();
 		}
 		return getModelRoots(selectedContainer);
 	}

@@ -64,7 +64,8 @@ public class CamelIOHandlerIT {
 				"JMXBeanAnswer--camelContext--11--11.xml",
 				"jaas-blueprint.xml",
 				"withQuestionMark.xml",
-				"globalElementsSample.xml");
+				"globalElementsSample.xml",
+				"routes.xml");
 		//@formatter:on
 	}
 
@@ -100,7 +101,7 @@ public class CamelIOHandlerIT {
 		}
 		assertEquals("Should have the same content", model1String, model2String);
 		
-		assertThat(model1.getCamelContext()).isNotNull();
+		assertThat(model1.getRouteContainer()).isNotNull();
 
 		return model2;
 	}

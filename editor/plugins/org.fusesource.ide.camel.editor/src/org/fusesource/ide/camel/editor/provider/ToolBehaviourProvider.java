@@ -222,7 +222,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 					CamelDesignEditor editor = CamelUtils.getDiagramEditor();
 					if (editor != null && 
 						editor.getModel() != null && 
-						editor.getModel().getCamelContext().getChildElements().size()>1 &&
+						editor.getModel().getRouteContainer().getChildElements().size()>1 &&
 						editor.getSelectedContainer() == route) {
 						// we can go up to context
 						goIntoButton.setDescription("Show the whole Camel Context");

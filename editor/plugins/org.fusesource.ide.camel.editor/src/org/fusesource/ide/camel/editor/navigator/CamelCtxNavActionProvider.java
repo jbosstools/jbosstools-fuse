@@ -94,7 +94,7 @@ public class CamelCtxNavActionProvider extends CommonActionProvider {
 								CamelEditor camelEditor = (CamelEditor)editorPart;
 								if(camelEditor.getActiveEditor() instanceof CamelDesignEditor){
 									CamelDesignEditor designEditor = (CamelDesignEditor)camelEditor.getActiveEditor();
-									CamelRouteElement selectedRoute = route.getMatchingRouteFromEditorModel(camelEditor.getDesignEditor().getModel().getCamelContext());
+									CamelRouteElement selectedRoute = route.getMatchingRouteFromEditorModel(camelEditor.getDesignEditor().getModel().getRouteContainer());
 									//switch to the appropriate route
 									if(selectedRoute != null && selectedRoute != designEditor.getSelectedContainer()) {
 										boolean wasDirty = designEditor.isDirty();

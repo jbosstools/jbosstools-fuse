@@ -114,7 +114,7 @@ public class DetailsSection extends FusePropertySection {
         	if (group.equals(DEFAULT_GROUP) && prop.getGroup() != null && prop.getGroup().trim().length()>0) continue;
         	
         	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
+        	if ((p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
         	
             ISWTObservableValue uiObservable = null;
             IObservableList uiListObservable = null;
@@ -234,7 +234,7 @@ public class DetailsSection extends FusePropertySection {
 							}	
 						} else {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								if (selectedEP.getCamelContext().findNode((String)value) == null &&
+								if (selectedEP.getRouteContainer().findNode((String)value) == null &&
 									selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value) == false) {
 									// no ref found - could be something the server provides
 									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");

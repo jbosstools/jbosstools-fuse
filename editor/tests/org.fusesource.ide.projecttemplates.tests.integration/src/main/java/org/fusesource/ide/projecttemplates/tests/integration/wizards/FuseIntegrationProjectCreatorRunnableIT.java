@@ -36,10 +36,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -58,6 +60,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.branding.perspective.FusePerspective;
+import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -74,7 +77,6 @@ import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreator
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestWatcher;
 
 /**
@@ -129,8 +131,18 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
 		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 		
-		if(launch != null){
-			launch.terminate();
+		if(launch != null) {
+			if (launch.canTerminate()) {
+				launch.terminate();
+			} else {
+				for (IProcess p : launch.getProcesses()) {
+					if (p.canTerminate()) {
+						while (!p.isTerminated()) {
+							p.terminate();
+						}
+					}
+				}
+			}
 		}
 		if (project != null) {
 			//refresh otherwise cannot delete due to target folder created
@@ -150,6 +162,13 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 				projectSuccesfullyDeleted = true;
 			}
 		}
+		
+		// kill all running jobs
+		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_BUILD);
+		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_REFRESH);
+		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_REFRESH);
+		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_BUILD);
+		
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
@@ -287,6 +306,14 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
+		
+		// if xml context we check if the design editor loads fine
+		if ("xml".equalsIgnoreCase(camelResource.getFileExtension()) && editor instanceof CamelEditor) {
+			CamelEditor ed = (CamelEditor)editor;
+			assertThat(ed.getDesignEditor()).as("The Camel Designer has not been created.").isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider()).as("Error retrieving the diagram type provider.").isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider().getDiagram()).as("Unable to access the camel context diagram.").isNotNull();
+		}
 	}
 	
 	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
@@ -377,16 +404,20 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		int currentAwaitedTime = 0;
 		while (currentAwaitedTime < 30000 && !deploymentFinished) {
 			readAndDispatch(0);
+			JMXConnector jmxc = null;
 			try{
-				JMXConnector jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI));
+				jmxc = JMXConnectorFactory.connect(new JMXServiceURL(ICamelDebugConstants.DEFAULT_JMX_URI));
 				MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
 				deploymentFinished = !mbsc.queryMBeans(new ObjectName(CamelDebugFacade.CAMEL_DEBUGGER_MBEAN_DEFAULT), null).isEmpty();
 				isDeploymentOk = deploymentFinished;
 				System.out.println("JMX connection succeeded");
 				System.out.println("isDeployment Finished? " + isDeploymentOk);
-				jmxc.close();
 			} catch(IOException ioe){
 				System.out.println("JMX connection attempt failed");
+			} finally {
+				if (jmxc != null) {
+					jmxc.close();
+				}
 			}
 			Thread.sleep(500);
 			currentAwaitedTime += 500;

@@ -64,7 +64,7 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	public CamelEndpointBreakpoint(final IResource resource, final AbstractCamelModelElement endpoint, final String projectName, final String fileName)
 			throws CoreException {
 		this.endpointNodeId = endpoint.getId();
-		this.contextId = endpoint.getCamelContext().getId();
+		this.contextId = endpoint.getRouteContainer().getId();
 		this.projectName = projectName;
 		this.fileName = fileName;
 		if (resource.getLocation().toFile().getPath().indexOf(String.format("%s%s%starget%s", File.separatorChar, projectName, File.separatorChar, File.separatorChar)) != -1) {

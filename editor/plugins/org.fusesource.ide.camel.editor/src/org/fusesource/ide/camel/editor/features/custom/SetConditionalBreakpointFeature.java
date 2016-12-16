@@ -74,7 +74,7 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
         			String language = dlg.getLanguage();
         			String condition = dlg.getCondition();
         		
-	            	if (Strings.isBlank(_ep.getCamelContext().getId()) ||
+	            	if (Strings.isBlank(_ep.getRouteContainer().getId()) ||
 	            		Strings.isBlank(_ep.getId()) ) {
 	            		// important ID fields are not yet set - ask the user if we
 	            		// can update those fields for him
@@ -82,9 +82,9 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
 
 	            		if (userWantsUpdate) {
 	            			// update the context id if needed
-	            			if (Strings.isBlank(_ep.getCamelContext().getId())) {
+	            			if (Strings.isBlank(_ep.getRouteContainer().getId())) {
 	            				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
-	            				_ep.getCamelContext().setId(newContextId);
+	            				_ep.getRouteContainer().setId(newContextId);
 	            			}
 	            			
 	            			// update the node id if blank

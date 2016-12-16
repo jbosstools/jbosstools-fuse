@@ -29,6 +29,7 @@ public class ComponentParam {
 	private String description;
 	private String defaultValue;
 	private String required;
+	private String secret;
 
 	/**
 	 * @return the label
@@ -186,5 +187,13 @@ public class ComponentParam {
 			retVal += c;
 		}
 		return retVal;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 }

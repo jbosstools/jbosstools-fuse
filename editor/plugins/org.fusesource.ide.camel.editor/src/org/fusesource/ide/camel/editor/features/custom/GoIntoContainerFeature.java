@@ -85,7 +85,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 		// - context contains more than one route
 		return 	AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(cme.getNodeTypeId()) && 
 				editor.getSelectedContainer() instanceof CamelContextElement &&
-				cme.getCamelContext().getChildElements().size() > 1;
+				cme.getRouteContainer().getChildElements().size() > 1;
 	}
 	
 	/* (non-Javadoc)
@@ -102,7 +102,7 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 	 	   		if (isGoInto(cme, editor)) {
 	 	   			editor.setSelectedContainer(cme);	
 	 	   		} else {
-	 	   			editor.setSelectedContainer(cme.getCamelContext());
+	 	   			editor.setSelectedContainer(cme.getRouteContainer());
 	 	   		}
 	 	   		
 	 	   	}

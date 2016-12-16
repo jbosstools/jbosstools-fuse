@@ -3,7 +3,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
-                <artifactId>core</artifactId>
+		<artifactId>core</artifactId>
 		<version>9.1.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.fusesource.ide.core</groupId>
@@ -18,14 +18,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117</module>
 		<module>org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187</module>
 		<module>org.fusesource.ide.camel.model.service.v2_17_3</module>
+		<module>org.fusesource.ide.camel.model.service.v2_18_1</module>
 		<module>org.fusesource.ide.camel.validation</module>
-                <module>org.fusesource.ide.cheatsheets</module>
-                <module>org.fusesource.ide.graph</module>
-                <module>org.fusesource.ide.help</module>
-                <module>org.fusesource.ide.imports</module>
-                <module>org.fusesource.ide.maven</module>
-                <module>org.fusesource.ide.preferences</module>
-                <module>org.fusesource.ide.tooling</module>
+		<module>org.fusesource.ide.cheatsheets</module>
+		<module>org.fusesource.ide.graph</module>
+		<module>org.fusesource.ide.help</module>
+		<module>org.fusesource.ide.imports</module>
+		<module>org.fusesource.ide.maven</module>
+		<module>org.fusesource.ide.preferences</module>
+		<module>org.fusesource.ide.tooling</module>
 	</modules>
 </project>
 	

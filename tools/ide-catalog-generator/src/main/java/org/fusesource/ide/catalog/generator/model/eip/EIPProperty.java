@@ -31,6 +31,7 @@ public class EIPProperty {
 	@JsonProperty("enum")
 	private String[] choice;
 	private String originalVariableName;
+	private String secret;
 	
 	/**
 	 * @return the oneOf
@@ -226,5 +227,13 @@ public class EIPProperty {
 	 */
 	public void setOriginalVariableName(String originalVariableName) {
 		this.originalVariableName = originalVariableName;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 }
