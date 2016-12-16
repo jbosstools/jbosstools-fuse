@@ -722,7 +722,8 @@ public abstract class AbstractCamelModelElement {
 	private boolean shouldIgnoreParameter(String name) {
 		return 	this instanceof CamelRouteContainerElement &&
 				getUnderlyingMetaModelObject() != null &&
-				getUnderlyingMetaModelObject().getParameter(name).getKind().equalsIgnoreCase(NODE_KIND_ELEMENT);
+				getUnderlyingMetaModelObject().getParameter(name) != null &&
+				NODE_KIND_ELEMENT.equalsIgnoreCase(getUnderlyingMetaModelObject().getParameter(name).getKind());
 	}
 	
 	/**
