@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 /**
  * @author lhein
@@ -138,12 +139,12 @@ public class MavenUtils {
 	}
 	
 	/**
-	 * 
 	 * @param repositories
 	 * @param repoURI
 	 * @param newId
+	 * @return if a modification has been done on the model
 	 */
-	public static void ensureRepositoryExists(List<Repository> repositories, String repoURI, String newId) {
+	public static boolean ensureRepositoryExists(List<Repository> repositories, String repoURI, String newId) {
 		boolean exists = false;
 		for (Repository rep : repositories) {
 			if (rep.getUrl().equalsIgnoreCase(repoURI)) {
@@ -157,6 +158,7 @@ public class MavenUtils {
 			repo.setUrl(repoURI);
 			repositories.add(repo);
 		}
+		return !exists;
 	}
 
 	/**
@@ -179,6 +181,26 @@ public class MavenUtils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * If staging repositories enabled, ensure to have them in the Maven model.
+	 * 
+	 * @param mavenModel
+	 * 
+	 * @return if a modification has been done on the model
+	 */
+	public static boolean manageStagingRepositories(Model mavenModel) {
+		if(new StagingRepositoriesPreferenceInitializer().isStagingRepositoriesEnabled()){
+			boolean hasBeenUpdated = false;
+			for(List<String> nameURlPair : new StagingRepositoriesPreferenceInitializer().getStagingRepositories()){
+				String repoURI = nameURlPair.get(1);
+				hasBeenUpdated |= MavenUtils.ensureRepositoryExists(mavenModel.getRepositories(), repoURI, nameURlPair.get(0));
+				hasBeenUpdated |= MavenUtils.ensureRepositoryExists(mavenModel.getPluginRepositories(), repoURI, nameURlPair.get(0));
+			}
+			return hasBeenUpdated;
+		}
+		return false;
 	}
 
 }
