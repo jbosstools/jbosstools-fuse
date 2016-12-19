@@ -32,7 +32,6 @@ import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 public class CamelFacetVersionChangeDelegate implements IDelegate {
@@ -82,13 +81,7 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 			MavenUtils.updateContributedPlugins(m2Build.getPlugins(), camelVersion);
 		}
 		
-		if(new StagingRepositoriesPreferenceInitializer().isStagingRepositoriesEnabled()){
-			for(List<String> nameURlPair : new StagingRepositoriesPreferenceInitializer().getStagingRepositories()){
-				String repoURI = nameURlPair.get(1);
-				MavenUtils.ensureRepositoryExists(m2m.getRepositories(), repoURI, nameURlPair.get(0));
-				MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), repoURI, nameURlPair.get(0));
-			}
-		}
+		MavenUtils.manageStagingRepositories(m2m);
 		
 		MavenUtils.ensureRepositoryExists(m2m.getRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");
 		MavenUtils.ensureRepositoryExists(m2m.getPluginRepositories(), REDHAT_GA_PUBLIC_REPO, "redhat-ga-repository");

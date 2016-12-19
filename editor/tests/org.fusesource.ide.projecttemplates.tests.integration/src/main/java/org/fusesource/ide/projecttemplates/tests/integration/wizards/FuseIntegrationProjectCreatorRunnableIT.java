@@ -83,7 +83,7 @@ import org.junit.rules.TestWatcher;
  * @author Aurelien Pupier
  *
  */
-public class FuseIntegrationProjectCreatorRunnableIT {
+public abstract class FuseIntegrationProjectCreatorRunnableIT {
 
 	public static IProjectFacet camelFacet  = ProjectFacetsManager.getProjectFacet("jst.camel");
 	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
@@ -120,7 +120,7 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Opening Fuse perspective");
 		
-		if("2.17.0.redhat-630187".equals(camelVersion)){
+		if("2.18.1".equals(camelVersion)){
 			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 		}
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
@@ -202,12 +202,16 @@ public class FuseIntegrationProjectCreatorRunnableIT {
 		checkCorrectNatureEnabled(project);
 		checkNoValidationError();
 		checkNoValidationWarning();
+		additionalChecks(project);
 		
 		if(!CamelDSLType.JAVA.equals(dsl)){
 			launchDebug(project);
 		} else {
 			//TODO: different Run? or implement the java local camel context?
 		}
+	}
+
+	protected void additionalChecks(IProject project2) {
 	}
 
 	/**

@@ -42,17 +42,20 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 	public void testCXFCodeFirstBlueprintProjectCreation() throws Exception {
 		//TODO: Known limitations see https://issues.jboss.org/browse/FUSETOOLS-1986
 		assumeFalse("Blueprint with 2.15 redhat version is not working, see https://issues.jboss.org/browse/FUSETOOLS-1986", camelVersion.startsWith("2.15"));
+		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
 		
 		testProjectCreation("-CXFCodeFirstBlueprintProject", CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/blueprint.xml", null);
 	}
 
 	@Test
 	public void testCXFCodeFirstSpringProjectCreation() throws Exception {
+		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
 		testProjectCreation("-CXFCodeFirstSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
 	@Test
 	public void testCXFCodeFirstJavaProjectCreation() throws Exception {
+		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
 		testProjectCreation("-CXFCodeFirstJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/cxf/code/first/java/incident/CamelRoute.java", null);
 	}
 	
