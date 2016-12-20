@@ -155,8 +155,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		CONNECTORS_WHITELIST.add("vm");
 		CONNECTORS_WHITELIST.add("xquery");
 		CONNECTORS_WHITELIST.add("xslt");
-
-		// CONNECTORS_WHITELIST.add("");
 	}
 
 	/**
@@ -272,12 +270,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		for (ICustomFeature f : cf) {
 			if (f instanceof DeleteAllEndpointBreakpointsFeature)
 				continue;
-			if (f instanceof SetEndpointBreakpointFeature) {
-				if (f.isAvailable(cc)) {
-					IContextButtonEntry button = new ContextButtonEntry(f, cc);
-					data.getDomainSpecificContextButtons().add(button);
-
-				}
+			if (f instanceof SetEndpointBreakpointFeature && f.isAvailable(cc)) {
+				IContextButtonEntry button = new ContextButtonEntry(f, cc);
+				data.getDomainSpecificContextButtons().add(button);
 			}
 		}
 
@@ -334,22 +329,20 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	@Override
 	public IPaletteCompartmentEntry[] getPalette() {
 		List<IPaletteCompartmentEntry> ret = new ArrayList<>();
+		
 
 		// the folder for component types
-		PaletteCompartmentEntry compartmentEntryComponents = new PaletteCompartmentEntry(
-				UIMessages.connectorsDrawerTitle, null);
+		PaletteCompartmentEntry compartmentEntryComponents = new PaletteCompartmentEntry(UIMessages.connectorsDrawerTitle, null);
 		ret.add(compartmentEntryComponents);
 		compartmentEntryComponents.setInitiallyOpen(true);
 
 		// the folder for endpoint types
-		PaletteCompartmentEntry compartmentEntryEndpoints = new PaletteCompartmentEntry(UIMessages.endpointsDrawerTitle,
-				null);
+		PaletteCompartmentEntry compartmentEntryEndpoints = new PaletteCompartmentEntry(UIMessages.endpointsDrawerTitle, null);
 		ret.add(compartmentEntryEndpoints);
 		compartmentEntryEndpoints.setInitiallyOpen(false);
 
 		// the folder for routing types
-		PaletteCompartmentEntry compartmentEntryRouting = new PaletteCompartmentEntry(UIMessages.routingDrawerTitle,
-				null);
+		PaletteCompartmentEntry compartmentEntryRouting = new PaletteCompartmentEntry(UIMessages.routingDrawerTitle, null);
 		ret.add(compartmentEntryRouting);
 		compartmentEntryRouting.setInitiallyOpen(false);
 
@@ -360,14 +353,12 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		compartmentEntryControlFlow.setInitiallyOpen(false);
 
 		// the folder for transformation types
-		PaletteCompartmentEntry compartmentEntryTransformation = new PaletteCompartmentEntry(
-				UIMessages.transformationDrawerTitle, null);
+		PaletteCompartmentEntry compartmentEntryTransformation = new PaletteCompartmentEntry(UIMessages.transformationDrawerTitle, null);
 		ret.add(compartmentEntryTransformation);
 		compartmentEntryTransformation.setInitiallyOpen(false);
 
 		// the folder for other types
-		PaletteCompartmentEntry compartmentEntryMisc = new PaletteCompartmentEntry(UIMessages.miscellaneousDrawerTitle,
-				null);
+		PaletteCompartmentEntry compartmentEntryMisc = new PaletteCompartmentEntry(UIMessages.miscellaneousDrawerTitle, null);
 		ret.add(compartmentEntryMisc);
 		compartmentEntryMisc.setInitiallyOpen(false);
 
@@ -378,8 +369,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			if (toolEntry instanceof ObjectCreationToolEntry) {
 				ObjectCreationToolEntry octe = (ObjectCreationToolEntry) toolEntry;
 				if (octe.getCreateFeature() instanceof PaletteCategoryItemProvider) {
-					PaletteCategoryItemProvider.CATEGORY_TYPE pcit = null;
-					String catname = null;
+					PaletteCategoryItemProvider.CATEGORY_TYPE pcit;
+					String catname;
 					if (paletteItemExtensions.containsKey(octe.getCreateFeature())) {
 						catname = paletteItemExtensions.get(octe.getCreateFeature())
 								.getAttribute(PALETTE_CATEGORY_NAME);
@@ -410,8 +401,8 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 						compartmentEntryMisc.addToolEntry(toolEntry);
 						break;
 					case USER_DEFINED:
-						PaletteCompartmentEntry def = null;
-						if (catname != null && userdefinedEntries.containsKey(catname) == false) {
+						PaletteCompartmentEntry def;
+						if (catname != null && !userdefinedEntries.containsKey(catname)) {
 							def = new PaletteCompartmentEntry(catname, null);
 							def.setInitiallyOpen(false);
 							userdefinedEntries.put(catname, def);
@@ -561,7 +552,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		PictogramElement pe = ga.getPictogramElement();
 		Object bo = getFeatureProvider().getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractCamelModelElement) {
-			String name = ((AbstractCamelModelElement) bo).getDisplayText(); // getDisplayToolTip();
+			String name = ((AbstractCamelModelElement) bo).getDisplayText();
 			if (name != null && !name.isEmpty()) {
 				return name;
 			}
@@ -603,8 +594,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public GraphicsAlgorithm getSelectionBorder(PictogramElement pe) {
 		Object bo = getBusinessObject(pe);
 		if (bo instanceof AbstractCamelModelElement) {
-			GraphicsAlgorithm rectangle = pe.getGraphicsAlgorithm();
-			return rectangle;
+			return pe.getGraphicsAlgorithm();
 		}
 		return super.getSelectionBorder(pe);
 	}
@@ -699,7 +689,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 					COMPONENTS_FROM_EXTENSION_POINTS.add(schemeId);
 				}
 			} catch (CoreException ex) {
-				ex.printStackTrace();
 				CamelEditorUIActivator.pluginLog().logError(ex);
 				continue;
 			}

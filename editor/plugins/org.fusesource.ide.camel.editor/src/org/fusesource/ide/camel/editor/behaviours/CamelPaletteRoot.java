@@ -83,10 +83,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 		// remove old entries
 		setDefaultEntry(null);
 		@SuppressWarnings("unchecked")
-		List<PaletteEntry> allEntries = new ArrayList<PaletteEntry>(getChildren()); // MUST
-																					// make
-																					// a
-																					// copy
+		List<PaletteEntry> allEntries = new ArrayList<>(getChildren()); // MUST make a copy
 		for (Iterator<PaletteEntry> iter = allEntries.iterator(); iter.hasNext();) {
 			PaletteEntry entry = iter.next();
 			remove(entry);
@@ -139,7 +136,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 
 			}
 
-			if (drawer.getChildren().size() > 0) {
+			if (!drawer.getChildren().isEmpty()) {
 				add(drawer);
 			}
 		}
@@ -194,7 +191,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 	 */
 	protected PaletteContainer createModelIndependentTools() {
 		PaletteGroup controlGroup = new PaletteGroup(Messages.GraphicsPaletteRoot_0_xmen);
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+		List<PaletteEntry> entries = new ArrayList<>();
 
 		// selection tool
 		ToolEntry tool = new GFPanningSelectionToolEntry();
@@ -212,17 +209,15 @@ public class CamelPaletteRoot extends PaletteRoot {
 
 			ICreateFeature feat = objectCreationToolEntry.getCreateFeature();
 
-			if (feat instanceof ICreateFeature) {
-				DefaultCreationFactory cf = new DefaultCreationFactory(feat, ICreateFeature.class);
-				Object template = (DND_FROM_PALETTE == true) ? cf : null;
+			DefaultCreationFactory cf = new DefaultCreationFactory(feat, ICreateFeature.class);
+			Object template = DND_FROM_PALETTE ? cf : null;
 
-				CombinedTemplateCreationEntry pe = new CombinedTemplateCreationEntry(feat.getCreateName(),
-						feat.getCreateDescription(), template, cf, getImageDescriptor(creationToolEntry, true),
-						getImageDescriptor(creationToolEntry, false));
-				pe.setToolClass(GFCreationTool.class);
+			CombinedTemplateCreationEntry pe = new CombinedTemplateCreationEntry(feat.getCreateName(),
+					feat.getCreateDescription(), template, cf, getImageDescriptor(creationToolEntry, true),
+					getImageDescriptor(creationToolEntry, false));
+			pe.setToolClass(GFCreationTool.class);
 
-				return pe;
-			}
+			return pe;
 
 		} else if (creationToolEntry instanceof IConnectionCreationToolEntry) {
 			IConnectionCreationToolEntry connectionCreationToolEntry = (IConnectionCreationToolEntry) creationToolEntry;
@@ -248,29 +243,16 @@ public class CamelPaletteRoot extends PaletteRoot {
 
 		private Object objType;
 
-		/**
-		 * 
-		 */
 		public DefaultCreationFactory(Object obj, Object objType) {
 			super();
 			this.obj = obj;
 			this.objType = objType;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
-		 */
 		public Object getNewObject() {
 			return obj;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.gef.requests.CreationFactory#getObjectType()
-		 */
 		public Object getObjectType() {
 			return objType;
 		}
@@ -278,11 +260,11 @@ public class CamelPaletteRoot extends PaletteRoot {
 	}
 
 	private ImageDescriptor getImageDescriptor(ICreationToolEntry creationToolEntry, boolean smallImage) {
-		ImageDescriptor imageDescriptor = null;
+		ImageDescriptor imageDescriptor;
 		if (creationToolEntry instanceof IEclipseImageDescriptor) {
 			imageDescriptor = ((IEclipseImageDescriptor) creationToolEntry).getImageDescriptor();
 		} else {
-			String iconId = (smallImage) ? creationToolEntry.getIconId() : creationToolEntry.getLargeIconId();
+			String iconId = smallImage ? creationToolEntry.getIconId() : creationToolEntry.getLargeIconId();
 			imageDescriptor = GraphitiUi.getImageService()
 					.getImageDescriptorForId(cfgProvider.getDiagramTypeProvider().getProviderId(), iconId);
 		}
@@ -290,7 +272,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 	}
 
 	private ImageDescriptor getImageDescriptor(IPaletteCompartmentEntry compartmentEntry) {
-		ImageDescriptor imageDescriptor = null;
+		ImageDescriptor imageDescriptor;
 		if (compartmentEntry instanceof IEclipseImageDescriptor) {
 			imageDescriptor = ((IEclipseImageDescriptor) compartmentEntry).getImageDescriptor();
 		} else {
