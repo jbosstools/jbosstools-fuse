@@ -49,5 +49,7 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	protected void additionalChecks(IProject project) {
 		assertThat(project.findMember("src/main/java/META-INF/MANIFEST.MF")).as("A bad Manifest has been generated").isNull();
+		assertThat(project.getFile(".settings/fusetooling/"+project.getName()+" deploy on OpenShift.launch").getLocation().toFile()).exists();
+		assertThat(project.getFile(".settings/fusetooling/Launch locally "+project.getName()+".launch").getLocation().toFile()).exists();
 	}
 }
