@@ -148,8 +148,8 @@ final class CamelDefaultConnectionEditPolicy extends DefaultConnectionEditPolicy
 
 		// create two lists with editparts to the root
 
-		List<EditPart> list1 = new ArrayList<EditPart>();
-		List<EditPart> list2 = new ArrayList<EditPart>();
+		List<EditPart> list1 = new ArrayList<>();
+		List<EditPart> list2 = new ArrayList<>();
 
 		EditPart editPart = source;
 
