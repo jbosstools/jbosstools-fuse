@@ -15,11 +15,12 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -28,7 +29,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -47,7 +48,7 @@ import org.jboss.dmr.ModelNode;
  */
 public final class CamelComponentUtils {
 
-	private static HashMap<String, Component> knownComponents = new HashMap<String, Component>();
+	private static Map<CamelModel, Map<String, Component>> knownComponentsForCamelModel = new WeakHashMap<>();
 
 	/**
 	 * returns the properties model for a given protocol
@@ -57,32 +58,41 @@ public final class CamelComponentUtils {
 	 * @param project
 	 * @return the properties model or null if not available
 	 */
-	public static Component getComponentModel(String protocol, IProject project) {
-		String componentClass = getComponentClass(protocol, project);
+	public static Component getComponentModel(String protocol, CamelFile camelFile) {
+		CamelModel camelModel = camelFile.getCamelModel();
+		Map<String, Component> knownComponents;
+		if (knownComponentsForCamelModel.containsKey(camelModel)) {
+			knownComponents = knownComponentsForCamelModel.get(camelModel);
+		} else {
+			knownComponents = new WeakHashMap<>();
+			knownComponentsForCamelModel.put(camelModel, knownComponents);
+		}
+		String componentClass = getComponentClass(protocol, camelFile);
 		if (knownComponents.containsKey(componentClass)) {
 			return knownComponents.get(componentClass);
+		} else {
+			Component c = buildModelForComponent(protocol, componentClass, camelFile);
+			if (c != null) {
+				knownComponents.put(componentClass, c);
+				return getComponentModel(protocol, camelFile);
+			}
+			return null;
 		}
-
-		// it seems we miss a model for the given protocol...lets try creating
-		// one on the fly
-		Component c = buildModelForComponent(protocol, componentClass, project);
-		if (c != null) {
-			knownComponents.put(componentClass, c);
-			return getComponentModel(protocol, project);
-		}
-		return null;
 	}
 
 	public static String[] getRefs(CamelFile cf) {
-		ArrayList<String> refs = new ArrayList<>();
+		List<String> refs = new ArrayList<>();
 
 		refs.add("");
-		refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet().toArray(new String[cf.getCamelFile().getGlobalDefinitions().keySet().size()])));
+		Set<String> globalDefinitionIds = cf.getCamelFile().getGlobalDefinitions().keySet();
+		refs.addAll(Arrays.asList(globalDefinitionIds.toArray(new String[globalDefinitionIds.size()])));
 		if (cf.getRouteContainer() instanceof CamelContextElement) {
 			final CamelContextElement camelContext = (CamelContextElement)cf.getRouteContainer();
 			if(camelContext != null){
-				refs.addAll(Arrays.asList(camelContext.getEndpointDefinitions().keySet().toArray(new String[camelContext.getEndpointDefinitions().size()])));
-				refs.addAll(Arrays.asList(camelContext.getDataformats().keySet().toArray(new String[camelContext.getDataformats().size()])));
+				Set<String> globalEndpointDefinitionIds = camelContext.getEndpointDefinitions().keySet();
+				refs.addAll(Arrays.asList(globalEndpointDefinitionIds.toArray(new String[globalEndpointDefinitionIds.size()])));
+				Set<String> globalDataformatIds = camelContext.getDataformats().keySet();
+				refs.addAll(Arrays.asList(globalDataformatIds.toArray(new String[globalDataformatIds.size()])));
 			}
 		}
 		
@@ -163,7 +173,7 @@ public final class CamelComponentUtils {
 
 	public static String[] getChoices(Parameter p) {
 		String[] choices = p.getChoice().split(",");
-		ArrayList<String> res = new ArrayList<String>();
+		List<String> res = new ArrayList<>();
 		res.add(" "); // empty entry
 		for (String choice : choices) {
 			res.add(choice);
@@ -173,7 +183,7 @@ public final class CamelComponentUtils {
 
 	public static String[] getOneOfList(Parameter p) {
 		String[] choices = p.getOneOf().split(",");
-		ArrayList<String> res = new ArrayList<String>();
+		List<String> res = new ArrayList<>();
 		res.add(" "); // empty entry
 		for (String choice : choices) {
 			res.add(choice);
@@ -187,12 +197,10 @@ public final class CamelComponentUtils {
 	 * @param scheme
 	 * @return the class or null if not found
 	 */
-	protected static String getComponentClass(String scheme, IProject project) {
+	protected static String getComponentClass(String scheme, CamelFile camelFile) {
 		String compClass = null;
-
-		String camelVersion = CamelModelFactory.getCamelVersion(project);
-		ArrayList<Component> components = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel()
-				.getSupportedComponents();
+		IProject project = camelFile.getResource().getProject();
+		List<Component> components = camelFile.getCamelModel().getComponentModel().getSupportedComponents();
 		for (Component c : components) {
 			if (c.supportsScheme(scheme)) {
 				compClass = c.getClazz();
@@ -285,25 +293,22 @@ public final class CamelComponentUtils {
 		return f.isFile() && f.getName().toLowerCase().endsWith(".jar");
 	}
 
-	protected static Component buildModelForComponent(String scheme, String clazz, IProject project) {
-		Component resModel = null;
-
-		String camelVersion = CamelModelFactory.getCamelVersion(project);
-
+	protected static Component buildModelForComponent(String scheme, String clazz, CamelFile camelFile) {
 		// 1. take what we have in our model xml
-		resModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getComponentForScheme(scheme);
+		CamelModel camelModel = camelFile.getCamelModel();
+		Component resModel = camelModel.getComponentModel().getComponentForScheme(scheme);
 
 		// 2. try to generate the model from json blob
 		if (resModel == null) {
-			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, project), clazz);
+			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, camelFile.getResource().getProject()), clazz, camelModel);
 		}
 
 		// 3. handling special cases
 		if (resModel == null) {
 			// while the activemq component still has no own json file we simply
 			// use the jms one for now
-			if (scheme.equalsIgnoreCase("activemq")) {
-				return CamelModelFactory.getModelForVersion(camelVersion).getComponentModel()
+			if ("activemq".equalsIgnoreCase(scheme)) {
+				return camelModel.getComponentModel()
 						.getComponentForScheme("jms").duplicateFor(scheme, clazz);
 			}
 		}
@@ -317,27 +322,31 @@ public final class CamelComponentUtils {
 	 *
 	 * @param clazz
 	 *            the component class
+	 * @param camelModel 
 	 * @return
 	 */
-	protected static Component buildModelFromJSON(String scheme, String oJSONBlob, String clazz) {
+	protected static Component buildModelFromJSON(String scheme, String oJSONBlob, String clazz, CamelModel camelModel) {
 		Component resModel = null;
 
 		try {
 			if (oJSONBlob != null) {
 				resModel = buildModelFromJSonBlob(oJSONBlob, clazz);
 				resModel.setScheme(scheme);
-				saveModel(resModel);
+				saveModel(camelModel, resModel);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 
 		return resModel;
 	}
 
-	private static void saveModel(Component component) {
-		knownComponents.put(component.getClazz(), component);
+	private static void saveModel(CamelModel camelModel, Component component) {
+		if(!knownComponentsForCamelModel.containsKey(camelModel)){
+			knownComponentsForCamelModel.put(camelModel, new WeakHashMap<>());
+		}
+		knownComponentsForCamelModel.get(camelModel).put(component.getClazz(), component);
+		
 		try {
 			// create JAXB context and instantiate marshaller
 			// JAXBContext context =
@@ -354,7 +363,7 @@ public final class CamelComponentUtils {
 		try {
 			IJavaProject javaProject = (IJavaProject) project.getNature(JavaCore.NATURE_ID);
 			IPackageFragmentRoot[] pfroots = javaProject.getAllPackageFragmentRoots();
-			List<URL> urls = new ArrayList<URL>();
+			List<URL> urls = new ArrayList<>();
 			for (IPackageFragmentRoot root : pfroots) {
 				URL rUrl = root.getPath().toFile().toURI().toURL();
 				urls.add(rUrl);
@@ -430,7 +439,7 @@ public final class CamelComponentUtils {
 				resModel.setDependencies(depList);
 			}
 
-			ArrayList<ComponentProperty> cProps = new ArrayList<ComponentProperty>();
+			ArrayList<ComponentProperty> cProps = new ArrayList<>();
 
 			ModelNode componentPropertiesNode = model.get("componentProperties");
 			Map<String, Object> cprops = JsonHelper.getAsMap(componentPropertiesNode);
@@ -466,7 +475,7 @@ public final class CamelComponentUtils {
 			props = JsonHelper.getAsMap(propsNode);
 			it = props.keySet().iterator();
 
-			ArrayList<Parameter> uriParams = new ArrayList<Parameter>();
+			ArrayList<Parameter> uriParams = new ArrayList<>();
 
 			while (it.hasNext()) {
 				String propName = it.next();

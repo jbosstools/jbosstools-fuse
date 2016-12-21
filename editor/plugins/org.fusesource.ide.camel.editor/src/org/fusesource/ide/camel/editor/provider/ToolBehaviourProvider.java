@@ -23,6 +23,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
@@ -717,8 +718,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
 		}
 		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
+		String runtimeprovider = editor != null ? CamelModelFactory.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor()) : CamelModelFactory.RUNTIME_PROVIDER_KARAF;
 
-		ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel();
+		ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion, runtimeprovider).getComponentModel();
 		for (Component component : componentModel.getSupportedComponents()) {
 			if (shouldBeIgnored(component.getSchemeTitle()))
 				continue;

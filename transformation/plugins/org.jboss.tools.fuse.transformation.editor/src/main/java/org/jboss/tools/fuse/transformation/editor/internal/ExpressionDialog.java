@@ -79,8 +79,7 @@ public class ExpressionDialog extends BaseDialog {
             this.expression = expressionInstance.getExpression();
             languageName = expressionInstance.getLanguage();
         }
-        final String version = CamelUtils.getCurrentProjectCamelVersion();
-        for (final Language language : CamelModelFactory.getModelForVersion(version)
+        for (final Language language : CamelModelFactory.getModelForProject(project)
                                                         .getLanguageModel()
                                                         .getSupportedLanguages()) {
             final String name = language.getName();

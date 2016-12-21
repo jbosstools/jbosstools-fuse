@@ -43,8 +43,11 @@ public class CamelModelRegistrationRule extends ExternalResource {
 		CamelModelFactory.initializeModels(mockedSupportedCamelModels);
 	}
 
+	/**
+	 * @return a Camel Model based on Karaf Runtime provider
+	 */
 	public CamelModel getCamelModel() {
-		return CamelModelFactory.getModelForVersion("2.16");
+		return CamelModelFactory.getModelForVersion("2.16", CamelModelFactory.RUNTIME_PROVIDER_KARAF);
 	}
 
 }

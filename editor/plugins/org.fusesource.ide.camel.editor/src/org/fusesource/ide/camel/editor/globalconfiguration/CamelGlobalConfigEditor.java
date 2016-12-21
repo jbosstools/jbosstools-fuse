@@ -22,9 +22,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -677,7 +679,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
 		cme.setXmlNode(newXMLNode);
-		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(cf.getResource().getProject()));
+		IProject project = cf.getResource().getProject();
+		final CamelModel camelModel = CamelModelFactory.getModelForProject(project);
 		cme.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName(eipName));
 		cme.setId(newXMLNode.getAttribute("id"));
 		cme.initialize();

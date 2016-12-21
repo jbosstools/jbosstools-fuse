@@ -34,7 +34,7 @@ public class AdvancedPropertiesFilter implements IFilter {
 			}
 			int protocolSeparatorIdx = uri.indexOf(":");
             if (protocolSeparatorIdx != -1) {
-				Component comp = CamelComponentUtils.getComponentModel(uri.substring(0, protocolSeparatorIdx), ep.getCamelFile().getResource().getProject());
+				Component comp = CamelComponentUtils.getComponentModel(uri.substring(0, protocolSeparatorIdx), ep.getCamelFile());
 				return comp != null && !comp.getUriParameters().isEmpty();
             }            
         }

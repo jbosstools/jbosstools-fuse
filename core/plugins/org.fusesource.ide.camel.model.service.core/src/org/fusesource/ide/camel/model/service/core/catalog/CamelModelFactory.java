@@ -22,7 +22,10 @@ import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
@@ -34,6 +37,8 @@ import org.osgi.framework.Version;
  */
 public class CamelModelFactory {
 	
+	private static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
+
 	private static final Map<String, String> camelVersionToFuseBOMMapping;
 	static {
 		camelVersionToFuseBOMMapping = new HashMap<>();
@@ -270,5 +275,33 @@ public class CamelModelFactory {
 			bomVersion = LATEST_BOM_VERSION;
 		}
 		return bomVersion;
+	}
+
+	public static String getRuntimeprovider(IProject camelProject, IProgressMonitor monitor) {
+		if(camelProject != null){
+			IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(camelProject, monitor);
+			if(m2prj != null && m2prj.getMavenProject() != null){
+				List<Dependency> dependencies = m2prj.getMavenProject().getDependencies();
+				if(hasSpringBootDependency(dependencies)){
+					return RUNTIME_PROVIDER_SPRINGBOOT;
+				} else {
+					return RUNTIME_PROVIDER_KARAF;
+				}
+			}
+		}
+		return RUNTIME_PROVIDER_KARAF;
+	}
+	
+	private static boolean hasSpringBootDependency(List<Dependency> dependencies){
+		return dependencies != null
+				&& dependencies.stream()
+					.filter(dependency -> CAMEL_SPRING_BOOT_STARTER.equals(dependency.getArtifactId()))
+					.findFirst().isPresent();
+	}
+	
+	public static CamelModel getModelForProject(IProject project){
+		String camelVersion = CamelModelFactory.getCamelVersion(project);
+		String runtimeProvider = CamelModelFactory.getRuntimeprovider(project, new NullProgressMonitor());
+		return CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider);
 	}
 }

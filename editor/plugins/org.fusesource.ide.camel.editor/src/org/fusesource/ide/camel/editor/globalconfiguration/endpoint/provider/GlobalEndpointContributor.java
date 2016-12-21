@@ -14,6 +14,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.AddGlobalEndpointWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
@@ -40,7 +41,8 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	 */
 	@Override
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
-		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(camelFile.getResource().getProject()));
+		IProject project = camelFile.getResource().getProject();
+		final CamelModel camelModel = CamelModelFactory.getModelForProject(project);
 		final ComponentModel componentModel = camelModel.getComponentModel();
 		wizard = new AddGlobalEndpointWizard(camelFile, componentModel);
 		return wizard;
