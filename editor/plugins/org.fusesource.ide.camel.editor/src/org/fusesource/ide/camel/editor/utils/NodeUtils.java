@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.utils;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -73,9 +74,14 @@ public class NodeUtils {
 	 */
 	public static boolean isValidChild(AbstractCamelModelElement parent, AbstractCamelModelElement child) {
 		if (parent != null && child != null) {
-    		String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
-    		CamelModel metaModel = CamelModelFactory.getModelForVersion(camelVersion);
-    		
+			IProject project;
+			if (parent.getCamelFile() != null && parent.getCamelFile().getResource() != null) {
+				project = parent.getCamelFile().getResource().getProject();
+			} else {
+				project = null;
+			}
+			CamelModel metaModel = CamelModelFactory.getModelForProject(project);
+			
 			if (AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(parent.getNodeTypeId())) {
 				// special case for choice
 				return 	 AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(child.getNodeTypeId()) || 
@@ -84,10 +90,10 @@ public class NodeUtils {
 				return !AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(child.getNodeTypeId());
 			} else {
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
-	        	if (containerEip == null) {
-	        		containerEip = metaModel.getEipModel().getEIPByName(parent.getNodeTypeId());
-	        	}
-	        	return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(child.getNodeTypeId());
+				if (containerEip == null) {
+					containerEip = metaModel.getEipModel().getEIPByName(parent.getNodeTypeId());
+				}
+				return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(child.getNodeTypeId());
 			}
 		}
 		return false;

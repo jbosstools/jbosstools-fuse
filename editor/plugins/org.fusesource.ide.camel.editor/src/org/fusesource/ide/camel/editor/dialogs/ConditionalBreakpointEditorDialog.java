@@ -45,8 +45,6 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	
-	private static final String[] SUPPORTED_LANGUAGES = LanguageUtils.languageArray();
-	
 	private static final String PATTERN_SIMPLE = "${%s}";
 	private static final String[] SIMPLE_VARS = new String[] {
 		"camelId",
@@ -252,7 +250,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	    
 	    combo_language = new Combo(grp_language, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 	    combo_language.setToolTipText("Please select a language from the drop down box...");
-	    combo_language.setItems(SUPPORTED_LANGUAGES);
+	    combo_language.setItems(getSupportedLanguages());
 	    combo_language.addSelectionListener(new SelectionAdapter() {
 	    	/* (non-Javadoc)
 	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -286,6 +284,10 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	    if (combo_language.getItemCount()>0) combo_language.select(0);
 	}
 	
+	private String[] getSupportedLanguages() {
+		return LanguageUtils.languageArray(node.getCamelFile());
+	}
+
 	/**
 	 * creates the condition text area and depending controls
 	 * 

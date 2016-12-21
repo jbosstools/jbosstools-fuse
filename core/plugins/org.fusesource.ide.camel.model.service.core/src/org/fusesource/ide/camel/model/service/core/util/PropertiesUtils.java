@@ -68,7 +68,7 @@ public class PropertiesUtils {
 			if (protocolSeparatorIdx != -1) {
 				return CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
-						selectedEP.getCamelFile().getResource().getProject());
+						selectedEP.getCamelFile());
 			}
 		}
 		return null;
@@ -89,7 +89,7 @@ public class PropertiesUtils {
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
-						selectedEP.getCamelFile().getResource().getProject());
+						selectedEP.getCamelFile());
 				return getPathProperties(selectedEP, componentModel);
 			}
 		}
@@ -125,7 +125,7 @@ public class PropertiesUtils {
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
-						selectedEP.getCamelFile().getResource().getProject());
+						selectedEP.getCamelFile());
 				if (componentModel != null) {
 					return getPropertiesFor(kind, componentModel);
 				}
@@ -171,7 +171,7 @@ public class PropertiesUtils {
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
-						selectedEP.getCamelFile().getResource().getProject());
+						selectedEP.getCamelFile());
 				if (componentModel != null) {
 					return componentModel.getUriParameters();
 				}

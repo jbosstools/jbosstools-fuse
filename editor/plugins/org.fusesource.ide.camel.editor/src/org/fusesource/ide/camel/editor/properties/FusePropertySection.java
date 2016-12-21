@@ -50,10 +50,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -286,9 +284,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 * @return
 	 */
 	protected CamelModel getCamelModel(AbstractCamelModelElement modelElement) {
-		String prjCamelVersion = CamelUtils.getCurrentProjectCamelVersion();
-		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
+		CamelModel model = modelElement.getCamelFile().getCamelModel();
 		if (model == null) {
 			return null;
 		}
@@ -323,7 +319,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 		AbstractCamelModelElement uiExpressionElement = null;
 
-		if (prop.getName().equalsIgnoreCase("expression")) {
+		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName())) {
 			// normal expression subnode - no cascading -> when.<expression>
 			// the content of expressionElement is the language node itself
 			if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
@@ -363,7 +359,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			// cascaded expression subnode -> onException.handled.<expression>
 			// the content of expressionElement is the container element which
 			// holds the expression as parameter "expression"
-			if (expressionElement != null && expressionElement.getParameter("expression") != null) {
+			if (expressionElement != null && expressionElement.getParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION) != null) {
 				// 1. container element exists and expression element exists
 				Node oldExpNode = null;
 				List<String> langs = Arrays.asList(CamelComponentUtils.getOneOfList(prop));
@@ -375,7 +371,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					}
 				}
 				AbstractCamelModelElement expElement = (AbstractCamelModelElement) expressionElement
-						.getParameter("expression");
+						.getParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION);
 				if (expElement.getTranslatedNodeName().equals(language) == false) {
 					if (language.trim().length() > 0) {
 						Node expNode = selectedEP.createElement(language,
@@ -383,7 +379,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 										? selectedEP.getXmlNode().getPrefix() : null);
 						uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 						expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
-						expressionElement.setParameter("expression", uiExpressionElement);
+						expressionElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, uiExpressionElement);
 					} else {
 						// user deletes the expression
 						selectedEP.getXmlNode().removeChild(expressionElement.getXmlNode());
@@ -393,13 +389,13 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					uiExpressionElement = expElement;
 				}
 
-			} else if (expressionElement != null && expressionElement.getParameter("expression") == null) {
+			} else if (expressionElement != null && expressionElement.getParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION) == null) {
 				// 2. container element exists but no expression element exists
 				Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null
 						? selectedEP.getXmlNode().getPrefix() : null);
 				uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 				expressionElement.getXmlNode().appendChild(expNode);
-				expressionElement.setParameter("expression", uiExpressionElement);
+				expressionElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, uiExpressionElement);
 
 			} else if (expressionElement == null && language.trim().length() > 0) {
 				// 3. No container but language set
@@ -413,7 +409,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				expressionElement = new CamelBasicModelElement(expContainerElement, expNode);
 				expContainerElement.getXmlNode().appendChild(expNode);
 				selectedEP.getXmlNode().insertBefore(expContainerNode, selectedEP.getXmlNode().getFirstChild());
-				expContainerElement.setParameter("expression", expressionElement);
+				expContainerElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, expressionElement);
 				this.selectedEP.setParameter(prop.getName(), expContainerElement);
 				uiExpressionElement = expressionElement;
 			}

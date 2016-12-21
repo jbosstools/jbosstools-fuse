@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
@@ -38,7 +39,7 @@ public class ProviderHelper {
 	private static final HashMap<String, String> categoryMap;
 
 	static {
-		categoryMap = new HashMap<String, String>();
+		categoryMap = new HashMap<>();
 		categoryMap.put("aggregate", CATEGORY_ROUTING);
 		categoryMap.put("aop", CATEGORY_MISC);
 		categoryMap.put("bean", CATEGORY_COMPONENTS);
@@ -118,20 +119,20 @@ public class ProviderHelper {
      * @return an array of create features for the palette
      */
     public static ICreateFeature[] getCreateFeatures(IFeatureProvider fp) {
-    	ArrayList<ICreateFeature> ret = new ArrayList<ICreateFeature>();
-    	CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+    	ArrayList<ICreateFeature> ret = new ArrayList<>();
+    	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
     	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
     	Iterator<Eip> it = list.iterator();
     	while(it.hasNext()) {
     		Eip next = it.next();
     		try {
     			ICreateFeature f = new CreateFigureFeature(fp, convertCamelCase(next.getName()), next.getDescription(), next);
-    			if( f != null ) ret.add(f);
+    			ret.add(f);
     		} catch(Exception e) {
     			CamelEditorUIActivator.pluginLog().logError(e);
     		}
     	}    	
-    	return (ICreateFeature[]) ret.toArray(new ICreateFeature[ret.size()]);
+    	return ret.toArray(new ICreateFeature[ret.size()]);
     }
 
     /**
@@ -140,7 +141,7 @@ public class ProviderHelper {
      * @param imageProvider the image provider to use
      */
     public static void addFigureIcons(ImageProvider imageProvider) {
-    	CamelModel model = CamelModelFactory.getModelForVersion(CamelUtils.getCurrentProjectCamelVersion());
+    	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
     	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
     	Iterator<Eip> it = list.iterator();
     	while(it.hasNext()) {

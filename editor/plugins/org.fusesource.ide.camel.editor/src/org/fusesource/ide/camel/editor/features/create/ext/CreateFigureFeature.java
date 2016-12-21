@@ -612,16 +612,13 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	public Eip getEipByName(String name) {
 		// TODO: project camel version vs latest camel version
-		String prjCamelVersion = CamelUtils.getCurrentProjectCamelVersion();
 		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
+		CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
 		if (model == null) {
 			return null;
 		}
 		// then we get the eip meta model
-		Eip eip = model.getEipModel().getEIPByName(name);
-		// and return it
-		return eip;
+		return model.getEipModel().getEIPByName(name);
 	}
 
 	protected Eip determineEIP(AbstractCamelModelElement parent) {

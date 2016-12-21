@@ -88,7 +88,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement logEP = model.findNode("log1");
 		PictogramElement logPE = fp.getPictogramElementForBusinessObject(logEP);
@@ -124,7 +124,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement inbox = model.findNode("inbox");
 		AbstractCamelModelElement outbox = model.findNode("outbox");
@@ -204,7 +204,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		assertThat(connections.size()).isEqualTo(1);
 
 		Connection con = connections.get(0);
-		CamelModel metaModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
 		// now drop another file endpoint onto the connection
 		createConnector(fp, 
 						(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
@@ -273,7 +273,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer(fp.getDiagramTypeProvider().getDiagram());
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
 		executeCommandInTransactionDomain(createCtx, createRouteFigureFeature);
 		
 		AbstractCamelModelElement createdRoute = model.findNode("_route1");
@@ -295,7 +295,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
@@ -315,7 +315,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("when"));
+		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("when"));
 		assertThat(createWhenFigureFeature.canExecute(createCtx)).isTrue();
 		executeCommandInTransactionDomain(createCtx, createWhenFigureFeature);
 		AbstractCamelModelElement when = model.findNode("_when1");
@@ -339,7 +339,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngLoggraphic.getX());
 		createCtx.setY(exisitngLoggraphic.getY() + exisitngLoggraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(log));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
@@ -357,7 +357,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(1);
 		createCtx.setY(1);
 		createCtx.setTargetContainer(dia);
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isTrue();
 	}
 	
@@ -379,7 +379,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "", CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getEipModel().getEIPByName("bean"));
+		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "",  CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("bean"));
 		executeCommandInTransactionDomain(createCtx, createFigureFeature);
 		
 		AbstractCamelModelElement createdBean = model.findNode("_bean1");

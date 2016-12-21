@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
@@ -35,8 +36,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	 */
 	@Override
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
-		final String camelVersion = CamelModelFactory.getCamelVersion(camelFile.getResource().getProject());
-		final DataFormatModel dataformatModel = CamelModelFactory.getModelForVersion(camelVersion).getDataformatModel();
+		IProject project = camelFile.getResource().getProject();
+		final DataFormatModel dataformatModel = CamelModelFactory.getModelForProject(project).getDataformatModel();
 		return new NewDataFormatWizard(camelFile, dataformatModel);
 	}
 
@@ -65,8 +66,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 		final Node nodeToHandle = camelModelElementToHandle.getXmlNode();
 		if ("dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode()))) {
 			String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
-			final String camelVersion = CamelModelFactory.getCamelVersion(camelModelElementToHandle.getCamelFile().getResource().getProject());
-			DataFormatModel dfModel = CamelModelFactory.getModelForVersion(camelVersion).getDataformatModel();
+			IProject project = camelModelElementToHandle.getCamelFile().getResource().getProject();
+			DataFormatModel dfModel = CamelModelFactory.getModelForProject(project).getDataformatModel();
 
 			return !dfModel.getDataFormatsByModelName(nodeName).isEmpty();
 		}

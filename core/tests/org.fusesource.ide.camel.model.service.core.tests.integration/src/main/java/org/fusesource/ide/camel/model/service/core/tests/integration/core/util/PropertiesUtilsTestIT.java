@@ -12,12 +12,15 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.util;
 
 import static org.fusesource.ide.camel.model.service.core.util.PropertiesUtils.updateURIParams;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,6 +41,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -51,17 +55,27 @@ public class PropertiesUtilsTestIT {
 	@Mock
 	private IResource resource;
 
-	@org.junit.runners.Parameterized.Parameter
+	@Parameterized.Parameter
 	public String componentName;
 
-	@org.junit.runners.Parameterized.Parameter(value = 1)
+	@Parameterized.Parameter(value = 1)
 	public Component component;
+	
+	@Parameterized.Parameter(value = 2)
+	public String runtimeProvider;
 
-	@Parameters(name = "{0}")
+	@Parameters(name = "{0} {2}")
 	public static Collection<Object[]> components() {
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		Set<Object[]> res = new HashSet<>();
+		res.addAll(retrieveComponents(CamelModelFactory.RUNTIME_PROVIDER_KARAF));
+		res.addAll(retrieveComponents(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT));
+		return res;
+	}
+
+	private static HashSet<Object[]> retrieveComponents(String runtimeProvider) {
+		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion(), runtimeProvider);
 		final List<Component> supportedComponents = camelModel.getComponentModel().getSupportedComponents();
-		Stream<Object[]> stream = supportedComponents.stream().map(component -> new Object[] { component.getName(), component });
+		Stream<Object[]> stream = supportedComponents.stream().map(component -> new Object[] { component.getName(), component, runtimeProvider });
 		return stream.collect(Collectors.toCollection(HashSet::new));
 	}
 
@@ -73,9 +87,9 @@ public class PropertiesUtilsTestIT {
 	@Test
 	public void testUpdateURIParamsWithPathParams() throws Exception {
 		for (Parameter p : component.getUriParameters()) {
-			if (p.getKind().equalsIgnoreCase("path")) {
+			if ("path".equalsIgnoreCase(p.getKind())) {
 				// This is really weird because, see FUSETOOLS-1803
-				if (component.getScheme().equals("http4s")) {
+				if ("http4s".equals(component.getScheme())) {
 					continue;
 				}
 				CamelEndpoint endpoint = createCamelEndpoint(component.getSyntax());
@@ -86,7 +100,8 @@ public class PropertiesUtilsTestIT {
 	}
 	
 	private CamelEndpoint createCamelEndpoint(String uri) {
-		CamelFile camelFile = new CamelFile(resource);
+		CamelFile camelFile = spy(new CamelFile(resource));
+		doReturn(CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion(), runtimeProvider)).when(camelFile).getCamelModel();
 		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
 		camelFile.addChildElement(route);
 		CamelEndpoint endpoint = new CamelEndpoint(uri);

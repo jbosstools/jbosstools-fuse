@@ -68,10 +68,10 @@ public class XMLCamelRoutesValidatorIT {
 	@Test
 	public void testValidate() throws Exception {
 		CamelFile camelFile = createRouteWithAnEndpointContainingError();
-		Mockito.doReturn("myNodeName").when(xmlNode).getNodeName();
-		Mockito.doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
-		Mockito.doReturn(marker).when(resource).createMarker(Mockito.anyString());
-		Mockito.doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
+		doReturn("myNodeName").when(xmlNode).getNodeName();
+		doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
+		doReturn(marker).when(resource).createMarker(Mockito.anyString());
+		doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
 		ValidationEvent event = new ValidationEvent(resource, IResourceDelta.CHANGED, null);
 		ValidationState state = new ValidationState();
 		
@@ -105,10 +105,10 @@ public class XMLCamelRoutesValidatorIT {
 		endPoint.setXmlNode(xmlNode);
 		camelContext.addEndpointDefinition(endPoint);
 		camelFile.addChildElement(camelContext);
-		Mockito.doReturn("myNodeName").when(xmlNode).getNodeName();
-		Mockito.doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
-		Mockito.doReturn(marker).when(resource).createMarker(Mockito.anyString());
-		Mockito.doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
+		doReturn("myNodeName").when(xmlNode).getNodeName();
+		doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
+		doReturn(marker).when(resource).createMarker(Mockito.anyString());
+		doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
 		ValidationEvent event = new ValidationEvent(resource, IResourceDelta.CHANGED, null);
 		ValidationState state = new ValidationState();
 

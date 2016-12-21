@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
@@ -32,14 +34,24 @@ import org.junit.runners.Parameterized.Parameters;
 public class EipChecksIT {
 
 	private String versionToTest;
+	private String runtimeProvider;
 
-	public EipChecksIT(final String versionToTest) {
+	public EipChecksIT(String versionToTest, String runtimeProvider) {
 		this.versionToTest = versionToTest;
+		this.runtimeProvider = runtimeProvider;
 	}
 
-	@Parameters(name = "{0}")
-	public static Collection<String> params() {
-		return CamelModelFactory.getSupportedCamelVersions();
+	@Parameters(name = "{0} {1}")
+	public static Collection<String[]> params() {
+		Collection<String[]> params = new HashSet<>();
+		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
+		for (String supportedCamelVersion : supportedCamelVersions) {
+			params.add(new String[]{supportedCamelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF});
+			if (supportedCamelVersion.compareTo("2.18") > 1) {
+				params.add(new String[]{supportedCamelVersion, CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT});
+			}
+		}
+		return params;
 	}
 
 	@Test
@@ -59,7 +71,7 @@ public class EipChecksIT {
 	
 	@Test
 	public void testWireTapCanBeChildOfAllContainers() throws IOException, CoreException {
-		ArrayList<Eip> eips = CamelModelFactory.getModelForVersion(versionToTest).getEipModel().getSupportedEIPs();
+		ArrayList<Eip> eips = CamelModelFactory.getModelForVersion(versionToTest, runtimeProvider).getEipModel().getSupportedEIPs();
 		for (Eip eip : eips) {
 			if (eip.canHaveChildren() == false || eip.getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) continue;
 			assertThisEIPCanContainThat(versionToTest, eip.getName(), AbstractCamelModelElement.WIRETAP_NODE_NAME);
@@ -67,7 +79,7 @@ public class EipChecksIT {
 	}
 
 	private void assertThisEIPCanContainThat(String camelVersion, String eipContainer, String eipChild){
-		Eip container = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(eipContainer);
+		Eip container = CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider).getEipModel().getEIPByName(eipContainer);
 		assertThat(container.canHaveChildren()).isTrue();
 		assertThat(container.getAllowedChildrenNodeTypes()).describedAs("Container " + eipContainer + " is not defined to allow child of type " + eipChild).contains(eipChild);
 	}

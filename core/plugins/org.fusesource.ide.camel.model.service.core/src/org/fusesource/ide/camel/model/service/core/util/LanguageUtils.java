@@ -11,47 +11,37 @@
 
 package org.fusesource.ide.camel.model.service.core.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
-import org.fusesource.ide.camel.model.service.core.catalog.languages.LanguageModel;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
 /**
  * @author lhein
  */
 public class LanguageUtils {
 
-	protected static LanguageModel getLanguageModel() {
-		return CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getLanguageModel();
-	}
-	
 	/**
 	 * returns an array of all supported language names
+	 * @param camelFile 
 	 * 
 	 * @return
 	 */
-	public static String[] languageArray() {
-		List<Language> languages = getLanguageModel().getSupportedLanguages();
-		List<String> answer = new ArrayList<String>(languages.size());
-		for (Language l : languages) {
-			answer.add(l.getName());
-		}
-		return answer.toArray(new String[languages.size()]);
+	public static String[] languageArray(CamelFile camelFile) {
+		List<Language> languages = camelFile.getCamelModel().getLanguageModel().getSupportedLanguages();
+		return languages.stream().map(Language::getName).toArray(String[]::new);
 	}
 
 	/**
 	 * returns an array of all supported language names and titles
 	 * 
-	 * @return
+	 * @return the name and languages array available with the latest version of Camel embedded.
 	 */
 	public static String[][] nameAndLanguageArray() {
-		List<Language> languages = getLanguageModel().getSupportedLanguages();
-		List<String[]> answer = new ArrayList<String[]>(languages.size());
-		for (Language l : languages) {
-			answer.add(new String[] { l.getTitle(), l.getName() });
-		}
-		return answer.toArray(new String[languages.size()][]);
+		List<Language> languages = CamelModelFactory.getModelForProject(null).getLanguageModel().getSupportedLanguages();
+		return languages.stream()
+				.map(lang -> new String[] { lang.getTitle(), lang.getName() })
+				.toArray(String[][]::new);
 	}
 }

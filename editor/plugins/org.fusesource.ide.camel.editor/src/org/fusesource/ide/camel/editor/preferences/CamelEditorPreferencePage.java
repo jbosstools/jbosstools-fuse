@@ -43,68 +43,51 @@ public class CamelEditorPreferencePage
 extends FieldEditorPreferencePage
 implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
-	private ComboFieldEditor defaultLanguageEditor;
-	private BooleanFieldEditor preferIdAsLabelEditor;
-	private ComboFieldEditor layoutOrientationEditor;
-	private BooleanFieldEditor gridVisibilityEditor;
-
-	/**
-	 * 
-	 */
 	public CamelEditorPreferencePage() {
 		super(GRID);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
-	 */
 	@Override
 	public void createFieldEditors() {
 		String[][] namesAndValues = LanguageUtils.nameAndLanguageArray();
 
-		this.defaultLanguageEditor = new ComboFieldEditor(
+		ComboFieldEditor defaultLanguageEditor = new ComboFieldEditor(
 				PreferencesConstants.EDITOR_DEFAULT_LANGUAGE,
 				UIMessages.editorPreferencePageDefaultLanguageSetting,
 				namesAndValues, getFieldEditorParent());
 
-		addField(this.defaultLanguageEditor);
+		addField(defaultLanguageEditor);
 
-		this.preferIdAsLabelEditor = new BooleanFieldEditor(
+		BooleanFieldEditor preferIdAsLabelEditor = new BooleanFieldEditor(
 				PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL,
 				UIMessages.editorPreferencePagePreferIdAsLabelSetting,
 				getFieldEditorParent());
 
-		addField(this.preferIdAsLabelEditor);
+		addField(preferIdAsLabelEditor);
 
 		namesAndValues = new String[][] {
 				{ UIMessages.editorPreferencePageLayoutOrientationEAST,  String.valueOf(PositionConstants.EAST) },
 				{ UIMessages.editorPreferencePageLayoutOrientationSOUTH, String.valueOf(PositionConstants.SOUTH) }
 		};
 
-		this.layoutOrientationEditor = new ComboFieldEditor(
+		ComboFieldEditor layoutOrientationEditor = new ComboFieldEditor(
 				PreferencesConstants.EDITOR_LAYOUT_ORIENTATION,
 				UIMessages.editorPreferencePageLayoutOrientationSetting,
 				namesAndValues, getFieldEditorParent());
 
-		addField(this.layoutOrientationEditor);
+		addField(layoutOrientationEditor);
 
-		this.gridVisibilityEditor = new BooleanFieldEditor(
+		BooleanFieldEditor gridVisibilityEditor = new BooleanFieldEditor(
 				PreferencesConstants.EDITOR_GRID_VISIBILITY,
 				UIMessages.editorPreferencePageGridVisibilitySetting,
 				getFieldEditorParent());
 
-		addField(this.gridVisibilityEditor);
+		addField(gridVisibilityEditor);
 
 		// Sets up the context sensitive help for this page
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}
 
-	/* (non-Javadoc)
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
 	@Override
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
@@ -123,7 +106,6 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	 */
 	@Override
 	public void setElement(IAdaptable element) {
-		//Activator.getLogger().debug("====== set from element: " + element);
 		setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
 		setDescription(UIMessages.editorPreferencePageDescription);
 	}

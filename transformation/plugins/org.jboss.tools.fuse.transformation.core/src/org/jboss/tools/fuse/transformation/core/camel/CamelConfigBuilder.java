@@ -264,15 +264,8 @@ public class CamelConfigBuilder {
 	 */
 	public Eip getEipByName(String name) {
 		IResource resource = getModel().getResource();
-		String camelVersion = null;
-		if (resource != null) {
-			camelVersion = CamelModelFactory.getCamelVersion(resource.getProject());
-		}
-		if (camelVersion == null) {
-			camelVersion = CamelModelFactory.getLatestCamelVersion();
-		}
 		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForVersion(camelVersion);
+		CamelModel model = CamelModelFactory.getModelForProject(resource != null ? resource.getProject() : null);
 		if (model == null) {
 			return null;
 		}

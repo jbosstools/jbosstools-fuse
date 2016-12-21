@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
@@ -1402,30 +1401,13 @@ public abstract class AbstractCamelModelElement {
 	 * @return the eip or null if not found
 	 */
 	public Eip getEipByName(String name) {
-		// TODO: project camel version vs latest camel version
-		String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
-		if (getCamelFile() != null) {
-			// get the project from the camel file resource
-			IResource camelResource = getCamelFile().getResource();
-			if (camelResource != null) {
-				IProject prj = camelResource.getProject();
-				// now try to determine the configured camel version from the
-				// project
-				prjCamelVersion = CamelModelFactory.getCamelVersion(prj);
-				// if project doesn't define a camel version we grab the latest
-				// supported
-				if (prjCamelVersion == null) {
-					prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
-				}
-			}
+		IProject project;
+		if(getCamelFile() != null && getCamelFile().getResource() != null){
+			project = getCamelFile().getResource().getProject();
+		} else {
+			project = null;
 		}
-		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
-		if (model == null) {
-			// if we don't support the defined camel version we take the latest
-			// supported instead
-			model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		}
+		CamelModel model = CamelModelFactory.getModelForProject(project);
 		// then we get the eip meta model
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// special case for context wide endpoint definitions
