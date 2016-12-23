@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.utils;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorMatchingStrategy;
 import org.eclipse.ui.IEditorReference;
@@ -23,14 +25,9 @@ import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
  */
 public class CamelEditorMatchingStrategy implements IEditorMatchingStrategy {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IEditorMatchingStrategy#matches(org.eclipse.ui.IEditorReference, org.eclipse.ui.IEditorInput)
-	 */
 	@Override
 	public boolean matches(IEditorReference editorRef, IEditorInput input) {
 		IEditorInput editorInput = null;
-		CamelXMLEditorInput currentOpenInput = null;
-		CamelXMLEditorInput toBeOpenedInput  = null;
 		
 		try {
 			editorInput = editorRef.getEditorInput();
@@ -41,6 +38,8 @@ public class CamelEditorMatchingStrategy implements IEditorMatchingStrategy {
 		if (editorInput == null || input == null)
 			return false;
 
+		CamelXMLEditorInput currentOpenInput;
+		CamelXMLEditorInput toBeOpenedInput;
 		if (editorInput instanceof CamelXMLEditorInput) {
 			currentOpenInput = (CamelXMLEditorInput)editorInput;
 		} else {
@@ -57,9 +56,15 @@ public class CamelEditorMatchingStrategy implements IEditorMatchingStrategy {
 		}
 
 		// we consider 2 inputs the same if their camel context file path is the same
-		if (currentOpenInput.getCamelContextFile().getLocation().toOSString().equals(toBeOpenedInput.getCamelContextFile().getLocation().toOSString())) {
-			return true;
-		} 
+		IFile currentInputCamelContextFile = currentOpenInput.getCamelContextFile();
+		IFile toBeOpenedInputCamelContextFile = toBeOpenedInput.getCamelContextFile();
+		if(currentInputCamelContextFile != null && toBeOpenedInputCamelContextFile != null) {
+			IPath currentEditorInputCamelContextFileLocation = currentInputCamelContextFile.getLocation();
+			IPath tobOpenedEditorInputCamelContextFileLocation = toBeOpenedInputCamelContextFile.getLocation();
+			if (currentEditorInputCamelContextFileLocation != null && tobOpenedEditorInputCamelContextFileLocation != null) {
+				return currentEditorInputCamelContextFileLocation.toOSString().equals(tobOpenedEditorInputCamelContextFileLocation.toOSString());
+			} 
+		}
 		return false;
 	}
 }
