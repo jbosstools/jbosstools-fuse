@@ -74,7 +74,11 @@ public class MavenUtils {
 	 * @throws CoreException
      */
 	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        final IProject project = CamelUtils.project();
+		if (compDeps == null || compDeps.isEmpty()) {
+            CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because no dependencies were specified.");
+            return;
+		}
+		final IProject project = CamelUtils.project();
         if (project == null) {
             CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;

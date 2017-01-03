@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
@@ -50,15 +51,21 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
+import org.fusesource.ide.camel.model.service.core.catalog.languages.LanguageModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -323,7 +330,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 		AbstractCamelModelElement uiExpressionElement = null;
 
-		if (prop.getName().equalsIgnoreCase("expression")) {
+		LanguageModel model = getCamelModel(expressionElement).getLanguageModel();
+		Language lang = model.getLanguageByName(language);
+		if (prop.getName().equalsIgnoreCase("expression") && lang != null) {
 			// normal expression subnode - no cascading -> when.<expression>
 			// the content of expressionElement is the language node itself
 			if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
@@ -343,6 +352,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
 					selectedEP.setParameter(prop.getName(), expressionElement);
 					selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
+
+					updateDependencies(lang.getDependencies());
 				} else {
 					// user wants to delete the expression
 					selectedEP.getXmlNode().removeChild(oldExpNode);
@@ -355,6 +366,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
 				selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 				this.selectedEP.setParameter(prop.getName(), expressionElement);
+
+				updateDependencies(lang.getDependencies());
 			}
 			uiExpressionElement = expressionElement;
 
@@ -384,6 +397,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 						uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 						expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
 						expressionElement.setParameter("expression", uiExpressionElement);
+
+						updateDependencies(lang.getDependencies());
 					} else {
 						// user deletes the expression
 						selectedEP.getXmlNode().removeChild(expressionElement.getXmlNode());
@@ -416,6 +431,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				expContainerElement.setParameter("expression", expressionElement);
 				this.selectedEP.setParameter(prop.getName(), expContainerElement);
 				uiExpressionElement = expressionElement;
+
+				updateDependencies(lang.getDependencies());
 			}
 		}
 
@@ -493,7 +510,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		client.setLayoutData(new GridData(GridData.FILL_BOTH));
 		client.setLayout(new GridLayout(4, false));
 
-		if (dataFormatElement != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
+		DataFormatModel model = getCamelModel(dataFormatElement).getDataformatModel();
+		DataFormat df = model.getDataFormatByName(dataformat);
+		if (dataFormatElement != null && df != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
 			Node oldExpNode = null;
 			for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
 				final Node childNode = selectedEP.getXmlNode().getChildNodes().item(i);
@@ -510,6 +529,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 				selectedEP.setParameter(prop.getName(), dataFormatElement);
 				selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
+
+				updateDependencies(df.getDependencies());
 			} else {
 				// user wants to delete the expression
 				selectedEP.getXmlNode().removeChild(oldExpNode);
@@ -522,6 +543,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 			selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 			this.selectedEP.setParameter(prop.getName(), dataFormatElement);
+
+			updateDependencies(df.getDependencies());
 		}
 
 		prepareDataFormatUIForDataFormat(dataformat, dataFormatElement, client);
@@ -529,6 +552,15 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		refresh();
 		eform.layout(true);
 		aTabbedPropertySheetPage.resizeScrolledComposite();
+	}
+	
+	private void updateDependencies(List<Dependency> dependencies) {
+		MavenUtils utils = new MavenUtils();
+		try {
+			utils.updateMavenDependencies(dependencies);
+		} catch (CoreException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
+		}
 	}
 
 	/**
