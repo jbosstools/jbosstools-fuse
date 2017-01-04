@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility.BundleDetails;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,6 +38,28 @@ public class KarafUtilsTest {
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 	
+	@Test
+	public void testStripParametersFromSymbolicName() throws CoreException {
+		assertThat(KarafUtils.stripParametersFromSymbolicName("mySampleApp;blueprint.aries.xml-validation:=false")).isEqualTo("mySampleApp");
+	}
+	
+	@Test
+	public void testBundleDetailsSymbolicNameStrippedParams() throws CoreException {
+		BundleDetails bd = new BundleDetails("mySampleApp;blueprint.aries.xml-validation:=false", "1.0.0");
+		assertThat(bd.getSymbolicName()).isEqualTo("mySampleApp");
+	}
+	
+	@Test
+	public void testStripParametersFromSymbolicNameWithoutParams() throws CoreException {
+		assertThat(KarafUtils.stripParametersFromSymbolicName("mySampleApp")).isEqualTo("mySampleApp");
+	}
+	
+	@Test
+	public void testBundleDetailsSymbolicNameStrippedParamsWithoutParams() throws CoreException {
+		BundleDetails bd = new BundleDetails("mySampleApp", "1.0.0");
+		assertThat(bd.getSymbolicName()).isEqualTo("mySampleApp");
+	}
+
 	@Test
 	public void testGetBundleVersionFromManifest() throws CoreException, IOException {
 		File mfFile = createTempManifest("1.0.0");
