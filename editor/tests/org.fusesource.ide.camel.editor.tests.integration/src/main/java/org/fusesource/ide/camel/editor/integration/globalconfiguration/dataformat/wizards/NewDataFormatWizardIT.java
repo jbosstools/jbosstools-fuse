@@ -57,7 +57,7 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
@@ -65,14 +65,12 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.w3c.dom.Element;
-import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 
 /**
  * @author Aurelien Pupier
@@ -83,9 +81,6 @@ public class NewDataFormatWizardIT {
 
 	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 5;
 	
-	@Rule
-	public FuseProject fuseproject = new FuseProject(NewDataFormatWizardIT.class.getName());
-
 	@Parameter
 	public String camelVersion;
 
@@ -98,6 +93,7 @@ public class NewDataFormatWizardIT {
 	public List<IProject> projectList = new ArrayList<IProject>();
 
 	protected IProject project = null;
+	
 	public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
 	
 	@Parameters(name = "{0} - {1}")
@@ -106,7 +102,7 @@ public class NewDataFormatWizardIT {
 		Assertions.assertThat(supportedCamelVersions).hasSize(CURRENTLY_SHIPPED_MODEL_BUNDLES);
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
-			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
+			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
 			List<DataFormat> supportedDataFormats = camelModel.getDataformatModel().getSupportedDataFormats();
 			Stream<Object[]> stream = supportedDataFormats.stream().map(dataFormat -> new Object[] { camelVersion, dataFormat.getName(), dataFormat });
 			res.addAll(stream.collect(Collectors.toCollection(HashSet::new)));
@@ -134,19 +130,17 @@ public class NewDataFormatWizardIT {
 				Display.getDefault().getActiveShell()).run(false, true, 
 						new FuseIntegrationProjectCreatorRunnable(metadata));
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		projectList.add(project);
-		this.project = project;
+		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		assertThat(project.exists()).describedAs("The project "+ project.getName()+ " doesn't exist.").isTrue();
-		CamelEditorUIActivator.pluginLog().logInfo("Project created: "+projectName);
+		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
+		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + projectName);
 		final IFile camelResource = project.getFile(camelFilePath);
 		assertThat(camelResource.exists()).isTrue();
 
 		// TODO: wait for all build job to finish?
 		waitJob();
 
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion);
+		CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
 
 		CamelIOHandler handler = new CamelIOHandler();
 		final CamelFile camelFile = handler.loadCamelModel(camelResource, new NullProgressMonitor());
@@ -255,28 +249,25 @@ public class NewDataFormatWizardIT {
 		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
 		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 
-		for (IProject project : projectList) {
-
-			if (project != null) {
-				//refresh otherwise cannot delete due to target folder created
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-				waitJob();
-				readAndDispatch(0);
-				boolean projectSuccesfullyDeleted = false;
-				while(!projectSuccesfullyDeleted ){
-					try{
-						project.delete(true, true, new NullProgressMonitor());
-					} catch(Exception e){
-						//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
-						readAndDispatch(0);
-						waitJob();
-						continue;
-					}
-					projectSuccesfullyDeleted = true;
+		if (project != null) {
+			//refresh otherwise cannot delete due to target folder created
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+			waitJob();
+			readAndDispatch(0);
+			boolean projectSuccesfullyDeleted = false;
+			while(!projectSuccesfullyDeleted ){
+				try{
+					project.delete(true, true, new NullProgressMonitor());
+				} catch(Exception e){
+					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
+					readAndDispatch(0);
+					waitJob();
+					continue;
 				}
+				projectSuccesfullyDeleted = true;
 			}
-			
 		}
+
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		page.closeAllEditors(false);
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
