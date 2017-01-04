@@ -63,11 +63,13 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 			AbstractCamelModelElement eClass = (AbstractCamelModelElement) bo;
 			// do check if underlying xml node changed / document changed
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
-			AbstractCamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
-			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
-				return Reason.createTrueReason("The Model has been changed. Please update the figure."); //$NON-NLS-1$
+			if (editor.getModel() != null) {
+				AbstractCamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
+				if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
+					return Reason.createTrueReason("The Model has been changed. Please update the figure."); //$NON-NLS-1$
+				}
+				businessName = eClass.getDisplayText();
 			}
-			businessName = eClass.getDisplayText();
 		}
 
 		// update needed, if names are different

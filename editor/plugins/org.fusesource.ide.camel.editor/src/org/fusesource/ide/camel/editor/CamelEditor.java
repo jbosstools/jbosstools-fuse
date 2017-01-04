@@ -62,6 +62,7 @@ import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEdit
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
@@ -176,7 +177,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		// this will assure the diagram is alway layed out correctly which
 		// wasn't always the case (for instance when adding a new data 
 		// transformation endpoint which opened another editor underneath
-		if (designEditor != null) DiagramOperations.layoutDiagram(designEditor);
+		if (designEditor != null && designEditor.getModel() != null) DiagramOperations.layoutDiagram(designEditor);
 	}
 	
 	/**
@@ -468,12 +469,15 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				IDocument document = getDocument();
 				if (document != null) {
 					String text = document.get();
-					boolean ignoreError = true;
 					if (!isValidXML(text)) {
 						// invalid XML -> could result in data loss...
-						ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
-					}
-					if (ignoreError) {
+						MessageDialog.openError(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
+						rollBackActive = true;
+						newPageIndex = SOURCE_PAGE_INDEX;
+						setActivePage(SOURCE_PAGE_INDEX);
+						super.pageChange(newPageIndex);
+						getDocument().set(text);
+					} else {
 						updateModelFromSource();
 						lastError = "";
 						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
@@ -483,12 +487,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 						this.lastActivePageIdx = newPageIndex;
 						super.pageChange(newPageIndex);
-					} else {
-						rollBackActive = true;
-						newPageIndex = SOURCE_PAGE_INDEX;
-						setActivePage(SOURCE_PAGE_INDEX);
-						super.pageChange(newPageIndex);
-						getDocument().set(text);
 					}
 				}
 			} else {
@@ -624,13 +622,22 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				String text = getDocument().get();
 				if (designEditor != null) {
 					designEditor.clearCache();
-					designEditor.setModel(designEditor.getModel().reloadModelFromXML(text));
+					if (designEditor.getModel() == null) {
+						// in this case we lost our model due to invalid xml and
+						// we need to regenerate it
+						CamelIOHandler ioHandler = new CamelIOHandler();
+						designEditor.setModel(ioHandler.reloadCamelModel(text, new NullProgressMonitor(), getCamelXMLInput().getCamelContextFile()));	
+					} else {
+						designEditor.setModel(designEditor.getModel().reloadModelFromXML(text));
+					}
 					// add the diagram contents
-					ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(),
-							(AbstractCamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
-					designEditor.getEditingDomain().getCommandStack().execute(importCommand);
-					designEditor.initializeDiagram(importCommand.getDiagram());
-					designEditor.refreshDiagramContents(null);
+					if (designEditor.getModel() != null) {
+						ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(),
+								(AbstractCamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
+						designEditor.getEditingDomain().getCommandStack().execute(importCommand);
+						designEditor.initializeDiagram(importCommand.getDiagram());
+						designEditor.refreshDiagramContents(null);
+					}
 				}
 			}
 		};
@@ -657,8 +664,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			builder.parse(new ByteArrayInputStream(text.getBytes()));
 		} catch (Exception ex) {
-			String error = ex.getMessage();
-			lastError = error;
+			lastError = ex.getMessage();				
 			return false;
 		}
 		return true;
@@ -811,7 +817,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 	
 	/**
-	 * 
+	 * switches to the design editor tab
 	 */
 	public void switchToDesignEditor() {
 		// lets switch async just in case we've not created the page yet
@@ -825,10 +831,35 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		});
 	}
 	
+	/**
+	 * switches to the source editor tab
+	 */
+	public void switchToSourceEditor() {
+		// lets switch async just in case we've not created the page yet
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				setActiveEditor(getSourceEditor());
+				setActivePage(SOURCE_PAGE_INDEX);
+				getSourceEditor().setFocus();
+			}
+		});
+	}
+	
+	/**
+	 * returns the editor input
+	 * 
+	 * @return	the editor input
+	 */
 	public CamelXMLEditorInput getCamelXMLInput() {
 		return this.editorInput;
 	}
 	
+	/**
+	 * updates the currently selected container id in the editor input
+	 * 
+	 * @param containerId
+	 */
 	public void updateSelectedContainer(String containerId) {
 		this.editorInput.setSelectedContainerId(containerId);
 	}

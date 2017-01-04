@@ -7,7 +7,7 @@
  * 
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.io;
 
 import java.io.ByteArrayInputStream;
@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Document;
@@ -40,73 +41,96 @@ import org.w3c.dom.Document;
  */
 public class CamelIOHandler {
 
-    protected static final int INDENTION_VALUE 	= 3;
-    protected static final String CAMEL_CONTEXT = "camelContext";
-    protected static final String CAMEL_ROUTES  = "routes";
+	protected static final int INDENTION_VALUE = 3;
+	protected static final String CAMEL_CONTEXT = "camelContext";
+	protected static final String CAMEL_ROUTES = "routes";
 	public static final String LINE_NUMBER_ATT_NAME = "LINE_NUMBER_ATT_NAME";
-    
-    private Document document;
+
+	private Document document;
 
 	/**
-     * loads the camel xml from a resource
-     * 
-     * @param res
-     * @param monitor
-     * @return	the camel file object representation or null on errors
-     */
-    public CamelFile loadCamelModel(IResource res, IProgressMonitor monitor) {
-    	CamelFile cf = null;
-    	try {
+	 * loads the camel xml from a resource
+	 * 
+	 * @param res
+	 * @param monitor
+	 * @return the camel file object representation or null on errors
+	 */
+	public CamelFile loadCamelModel(IResource res, IProgressMonitor monitor) {
+		CamelFile cf = null;
+		try {
 			File xmlFile = getFileFromResource(res);
 			if (xmlFile == null) {
-				CamelModelServiceCoreActivator.pluginLog().logError("Cannot determine the file path for resource " + res.getFullPath().toOSString());
+				CamelModelServiceCoreActivator.pluginLog()
+						.logError("Cannot determine the file path for resource " + res.getFullPath().toOSString());
 				return null;
 			}
 
 			return loadCamelModel(xmlFile, monitor);
 		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + res.getFullPath().toOSString(), ex);
+			CamelModelServiceCoreActivator.pluginLog()
+					.logError("Error loading Camel XML file from " + res.getFullPath().toOSString(), ex);
 		}
 
 		return cf;
 	}
 
-    /**
-     * loads the camel xml from a file
-     * 
-     * @param xmlFile
-     * @param monitor
-     * @return	the camel file object representation or null on errors
-     */
-    public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
-		if (xmlFile == null || !xmlFile.isFile() || !xmlFile.exists()){
+	/**
+	 * reloads a camel model from a resource and then reapplies the xmlContent
+	 * to it
+	 * 
+	 * @param xmlContent
+	 *            the xml content to reapply to the model
+	 * @param monitor
+	 *            the progress monitor
+	 * @param resource
+	 *            the original resource
+	 * @return the reloaded model
+	 */
+	public CamelFile reloadCamelModel(String xmlContent, IProgressMonitor monitor, IResource resource) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 20);
+		CamelFile cf = loadCamelModel(resource, subMonitor.split(10));
+		cf = loadCamelModel(xmlContent, subMonitor.split(10), cf);
+		return cf;
+	}
+
+	/**
+	 * loads the camel xml from a file
+	 * 
+	 * @param xmlFile
+	 * @param monitor
+	 * @return the camel file object representation or null on errors
+	 */
+	public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
+		if (xmlFile == null || !xmlFile.isFile() || !xmlFile.exists()) {
 			return null;
 		}
 
 		CamelFile cf = null;
-    	try {
+		try {
 			DocumentBuilder docBuilder = createDocumentBuilder();
 			document = docBuilder.parse(xmlFile);
 
-	        IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(xmlFile.getCanonicalPath()));
+			IFile documentLocation = ResourcesPlugin.getWorkspace().getRoot()
+					.getFileForLocation(new Path(xmlFile.getCanonicalPath()));
 			cf = readDocumentToModel(document, documentLocation);
 		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + xmlFile.getPath(), ex);
+			CamelModelServiceCoreActivator.pluginLog()
+					.logError("Error loading Camel XML file from " + xmlFile.getPath(), ex);
 		}
 
 		return cf;
 	}
-    
-    /**
-     * loads the camel xml from a string
-     * 
-     * @param text
-     * @param monitor
-     * @return	the camel file object representation or null on errors
-     */
-    public CamelFile loadCamelModel(String text, IProgressMonitor monitor, CamelFile cf) {
-    	CamelFile reloadedModel = null;
-    	try {
+
+	/**
+	 * loads the camel xml from a string
+	 * 
+	 * @param text
+	 * @param monitor
+	 * @return the camel file object representation or null on errors
+	 */
+	public CamelFile loadCamelModel(String text, IProgressMonitor monitor, CamelFile cf) {
+		CamelFile reloadedModel = null;
+		try {
 			DocumentBuilder db = createDocumentBuilder();
 			document = db.parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
 			reloadedModel = readDocumentToModel(document, cf.getResource());
@@ -116,75 +140,78 @@ public class CamelIOHandler {
 
 		return reloadedModel;
 	}
-    
-    /**
-     * reads the document into internal model
-     * 
-     * @param document
-     * @param res
-     * @return
-     */
-    protected CamelFile readDocumentToModel(Document document, IResource res) {
-        CamelFile cf = new CamelFile(null);
-        cf.setResource(res);
-        cf.setDocument(document);
-        cf.initialize();
-        return cf;
-    }
-    
-    /**
-     * saves the camel model to file
-     * 
-     * @param camelFile
-     * @param outputFile
-     * @param monitor
-     */
-    public void saveCamelModel(CamelFile camelFile, File outputFile, IProgressMonitor monitor) {
-    	if (this.document == null){
-    		this.document = createDocumentBuilder().newDocument();
-    	}
 
-    	try {
-	    	// now the real save logic 
-	        TransformerFactory tf = TransformerFactory.newInstance();
-	        tf.setAttribute("indent-number", INDENTION_VALUE);
-	
-	        Transformer transformer = tf.newTransformer();
-	
-	        // Save vs. Save as
-	        Result output = new StreamResult(outputFile);
-	        Source input = new DOMSource(this.document);
-	
-	        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(INDENTION_VALUE));
-	        transformer.transform(input, output);
-    	} catch (Exception ex) {
-    		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + outputFile.getPath(), ex);
-    	}
-    }
-    
-    /**
-     * saves the camel model to file
-     * 
-     * @param camelFile
-     * @param res
-     * @param monitor
-     */
-    public void saveCamelModel(CamelFile camelFile, IResource res, IProgressMonitor monitor) {
-    	File outputFile = getFileFromResource((res != null && res != camelFile.getResource()) ? res : camelFile.getResource());   	
-    	saveCamelModel(camelFile, outputFile, monitor);
-    }
-	
+	/**
+	 * reads the document into internal model
+	 * 
+	 * @param document
+	 * @param res
+	 * @return
+	 */
+	protected CamelFile readDocumentToModel(Document document, IResource res) {
+		CamelFile cf = new CamelFile(null);
+		cf.setResource(res);
+		cf.setDocument(document);
+		cf.initialize();
+		return cf;
+	}
+
+	/**
+	 * saves the camel model to file
+	 * 
+	 * @param camelFile
+	 * @param outputFile
+	 * @param monitor
+	 */
+	public void saveCamelModel(CamelFile camelFile, File outputFile, IProgressMonitor monitor) {
+		if (this.document == null) {
+			this.document = createDocumentBuilder().newDocument();
+		}
+
+		try {
+			// now the real save logic
+			TransformerFactory tf = TransformerFactory.newInstance();
+			tf.setAttribute("indent-number", INDENTION_VALUE);
+
+			Transformer transformer = tf.newTransformer();
+
+			// Save vs. Save as
+			Result output = new StreamResult(outputFile);
+			Source input = new DOMSource(this.document);
+
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
+					Integer.toString(INDENTION_VALUE));
+			transformer.transform(input, output);
+		} catch (Exception ex) {
+			CamelModelServiceCoreActivator.pluginLog()
+					.logError("Unable to save the camel file to " + outputFile.getPath(), ex);
+		}
+	}
+
+	/**
+	 * saves the camel model to file
+	 * 
+	 * @param camelFile
+	 * @param res
+	 * @param monitor
+	 */
+	public void saveCamelModel(CamelFile camelFile, IResource res, IProgressMonitor monitor) {
+		File outputFile = getFileFromResource(
+				(res != null && res != camelFile.getResource()) ? res : camelFile.getResource());
+		saveCamelModel(camelFile, outputFile, monitor);
+	}
+
 	/**
 	 * @return the document
 	 */
 	public Document getDocument() {
 		return this.document;
 	}
-	
+
 	/**
 	 * 
 	 * @param document
@@ -192,22 +219,22 @@ public class CamelIOHandler {
 	public void setDocument(Document document) {
 		this.document = document;
 	}
-	
-    /**
-     * converts the iresource into a file
-     * 
-     * @param res
-     * @return
-     */
-    protected File getFileFromResource(IResource res) {
-    	return new File(res.getLocationURI() != null ? res.getLocationURI().getPath() : res.getFullPath().toOSString());
-    }
-	
-    /**
-     * creates a document builder
-     * 
-     * @return	the document builder or null on errors
-     */
+
+	/**
+	 * converts the iresource into a file
+	 * 
+	 * @param res
+	 * @return
+	 */
+	protected File getFileFromResource(IResource res) {
+		return new File(res.getLocationURI() != null ? res.getLocationURI().getPath() : res.getFullPath().toOSString());
+	}
+
+	/**
+	 * creates a document builder
+	 * 
+	 * @return the document builder or null on errors
+	 */
 	protected DocumentBuilder createDocumentBuilder() {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setExpandEntityReferences(false);
@@ -219,7 +246,8 @@ public class CamelIOHandler {
 		try {
 			return dbf.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to create a document builder for loading the camel file.", e);
+			CamelModelServiceCoreActivator.pluginLog()
+					.logError("Unable to create a document builder for loading the camel file.", e);
 		}
 		return null;
 	}
