@@ -8,6 +8,11 @@
             class="org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages.CustomPaletteEntry1"
             id="org.fusesource.ide.camel.editor.tests.integration.PaletteContribution1">
       </PaletteContribution>
+      <PaletteContribution
+            categoryName="COMPONENTS"
+            class="org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages.CustomPaletteEntry2"
+            id="org.fusesource.ide.camel.editor.tests.integration.PaletteContribution2">
+      </PaletteContribution>
    </extension>
 
 </plugin>
