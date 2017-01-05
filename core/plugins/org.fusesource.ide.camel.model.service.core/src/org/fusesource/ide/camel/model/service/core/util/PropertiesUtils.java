@@ -421,6 +421,10 @@ public class PropertiesUtils {
 		if (CamelComponentUtils.isTextProperty(p)) {
 			return val;
 		}
+		
+		if (CamelComponentUtils.isClassProperty(p) && !AbstractCamelModelElement.NODE_KIND_ELEMENT.equals(p.getKind()) ) {
+			return val;
+		}
 
 		if (CamelComponentUtils.isNumberProperty(p)) {
 			return val;

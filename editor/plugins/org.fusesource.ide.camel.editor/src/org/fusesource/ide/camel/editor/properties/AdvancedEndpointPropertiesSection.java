@@ -42,14 +42,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.BooleanParameterPropertyUICreatorForAdvanced;
-import org.fusesource.ide.camel.editor.properties.creators.advanced.ClassBasedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.FileParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.NumberParameterPropertyUICreatorForAdvanced;
+import org.fusesource.ide.camel.editor.properties.creators.advanced.TextParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -142,28 +141,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
         for (Parameter p : props) {
         	final Parameter prop = p;
         	
-        	// atm we don't want to care about path parameters if thats not the path tab
-        	if (ignorePathProperties && "path".equalsIgnoreCase(p.getKind())){
-        		continue;
-        	}
-
-        	// we don't display items which don't fit the group
-        	if (p.getGroup() != null && p.getGroup().trim().length()>0) {
-        		// a group has been explicitely defined, so use it
-        		if (group.equalsIgnoreCase(p.getGroup()) == false && p.getKind().equalsIgnoreCase(GROUP_PATH) == false){
-        			continue;
-        		}
-        	} else if (prop.getKind().equalsIgnoreCase(GROUP_PATH) && group.equalsIgnoreCase(GROUP_PATH)) {
-        		// special handling for path properties - otherwise the else would kick all props of type path
-        	} else {
-        		// no group defined, fall back to use label
-        		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false){
-        			continue;
-        		}
-        		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false){
-        			continue;
-        		}
-        	}
+        	if (!shouldBeDisplayed(prop, group, ignorePathProperties)) continue;
             
             ISWTObservableValue uiObservable = null;
             IObservableValue modelObservable = null;
@@ -178,44 +156,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 				new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             // TEXT PROPERTIES
             } else if (CamelComponentUtils.isTextProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-                txtField.addModifyListener(new ModifyListener() {
-                    @Override
-                    public void modifyText(ModifyEvent e) {
-                        Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
-                    }
-                });
-				txtField.setLayoutData(createPropertyFieldLayoutData());
-				c = txtField;
-				// initialize the map entry
-				modelMap.put(p.getName(), txtField.getText());
-				// create observables for the control
-				uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
-				if (PropertiesUtils.isRequired(p) || p.getName().equalsIgnoreCase("id")) {
-					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
-						@Override
-						public IStatus validate(Object value) {
-							if (((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
-								// check for broken refs
-								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
-								if (refId == null || refId.trim().length()<1 || selectedEP.getRouteContainer() instanceof CamelContextElement == false || ((CamelContextElement)selectedEP.getRouteContainer()).getEndpointDefinitions().get(refId) == null) {
-									return ValidationStatus.warning("The entered reference does not exist in your context!");
-								}
-							}
-							
-							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
-							}
-							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
-						}
-					};
-                }
-                
+            	new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             // NUMBER PROPERTIES
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
 				new NumberParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, prop, page, getWidgetFactory()).create();
@@ -340,8 +281,9 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 				new UnsupportedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             // CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
             } else {
-				new ClassBasedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, prop, page, getWidgetFactory()).create();
+            	new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             }
+            
 			if (uiObservable != null) {
 				// create UpdateValueStrategy and assign to the binding
 				UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -396,5 +338,34 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
         
         form.layout();
         tabFolder.setSelection(0);
+    }
+    
+    private boolean shouldBeDisplayed(Parameter prop, String group, boolean ignorePathProperties) {
+    	// atm we don't want to care about path parameters if thats not the path tab
+    	if (ignorePathProperties && "path".equalsIgnoreCase(prop.getKind())){
+    		return false;
+    	}
+
+    	// we currently don't want to display class params of type element
+    	if (CamelComponentUtils.isClassProperty(prop) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(prop.getKind())) return false;
+    	
+    	// we don't display items which don't fit the group
+    	if (prop.getGroup() != null && prop.getGroup().trim().length()>0) {
+    		// a group has been explicitely defined, so use it
+    		if (group.equalsIgnoreCase(prop.getGroup()) == false && prop.getKind().equalsIgnoreCase(GROUP_PATH) == false) {
+    			return false;
+    		}
+    	} else if (prop.getKind().equalsIgnoreCase(GROUP_PATH) && group.equalsIgnoreCase(GROUP_PATH)) {
+    		// special handling for path properties - otherwise the else would kick all props of type path
+    	} else {
+    		// no group defined, fall back to use label
+    		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false){
+    			return false;
+    		}
+    		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false){
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }

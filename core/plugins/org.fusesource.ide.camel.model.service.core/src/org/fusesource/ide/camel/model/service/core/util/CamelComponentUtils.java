@@ -139,6 +139,10 @@ public final class CamelComponentUtils {
 	public static boolean isFileProperty(Parameter p) {
 		return p.getJavaType().equalsIgnoreCase("file") || p.getJavaType().equalsIgnoreCase("java.io.file");
 	}
+	
+	public static boolean isClassProperty(Parameter p) {
+		return p.getType().equalsIgnoreCase("object");
+	}
 
 	public static boolean isExpressionProperty(Parameter p) {
 		return p.getKind().equalsIgnoreCase("expression")
