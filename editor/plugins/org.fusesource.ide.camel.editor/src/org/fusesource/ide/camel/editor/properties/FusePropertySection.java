@@ -291,9 +291,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 * @return
 	 */
 	protected CamelModel getCamelModel(AbstractCamelModelElement modelElement) {
-		CamelModel model = modelElement.getCamelFile().getCamelModel();
-		if (model == null) {
-			return null;
+		CamelModel model = null;
+		if (modelElement != null) {
+			model = modelElement.getCamelFile().getCamelModel();
+		}
+		if (model == null && lastSelectedEP != null) {
+			model = lastSelectedEP.getCamelFile().getCamelModel();
 		}
 		return model;
 	}
