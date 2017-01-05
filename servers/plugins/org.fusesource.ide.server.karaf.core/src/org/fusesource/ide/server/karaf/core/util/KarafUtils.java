@@ -302,6 +302,7 @@ public class KarafUtils {
 			try {
 				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
 				symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
+				symbolicName = stripParametersFromSymbolicName(symbolicName);
 			} catch (IOException ex) {
 				symbolicName = null;
 			}
@@ -320,6 +321,16 @@ public class KarafUtils {
 		}
 		
 		return symbolicName;
+	}
+	
+	public static String stripParametersFromSymbolicName(String symbolicName) {
+		String resVal = symbolicName;
+		// sometimes parameters are added to the symbolic name - we should ignore them
+		int paramIdx = symbolicName.indexOf(';');
+		if (paramIdx != -1) {
+			resVal = symbolicName.substring(0, paramIdx);
+		}
+		return resVal;
 	}
 	
 	/**

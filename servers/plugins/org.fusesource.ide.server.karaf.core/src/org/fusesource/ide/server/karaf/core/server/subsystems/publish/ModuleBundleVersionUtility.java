@@ -37,7 +37,7 @@ public class ModuleBundleVersionUtility {
 		private String symbolicName, version;
 
 		public BundleDetails(String symbolicName, String version) {
-			this.symbolicName = symbolicName;
+			this.symbolicName = KarafUtils.stripParametersFromSymbolicName(symbolicName);
 			this.version = version;
 		}
 		public String getSymbolicName() {
