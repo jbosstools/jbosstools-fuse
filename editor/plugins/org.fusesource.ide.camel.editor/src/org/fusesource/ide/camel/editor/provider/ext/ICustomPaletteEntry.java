@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 
 /**
@@ -34,9 +35,10 @@ public interface ICustomPaletteEntry {
     * project. The ID's returned will be used to resolve component extensions,
     * adding the listed dependencies to the project's pom.
     *
-    * @return a list of maven dependencies that are required to use this object within a project.
+    * @param runtimeProvider the runtime provider currently used (SringBoot or Karaf for instance) see {@link CamelModelFactory}
+    * @return a list of Maven dependencies that are required to use this object within a project.
     */
-    public List<Dependency> getRequiredDependencies();
+    public List<Dependency> getRequiredDependencies(String runtimeProvider);
     
     /**
      * returns true if this palette entry creates endpoints with the given
@@ -53,4 +55,10 @@ public interface ICustomPaletteEntry {
      * @return	the camel endpoint protocol (like "sap" or "smtp")
      */
     public String getProtocol();
+    
+    /**
+     * @param runtimeProvider (SringBoot or Karaf for instance) see {@link CamelModelFactory}
+     * @return if the Palette entry should be displayed with the runtime provider provided
+     */
+    public boolean isValid(String runtimeProvider);
 }

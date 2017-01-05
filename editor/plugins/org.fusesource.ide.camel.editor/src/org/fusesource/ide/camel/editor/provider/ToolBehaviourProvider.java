@@ -330,7 +330,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	@Override
 	public IPaletteCompartmentEntry[] getPalette() {
 		List<IPaletteCompartmentEntry> ret = new ArrayList<>();
-		
 
 		// the folder for component types
 		PaletteCompartmentEntry compartmentEntryComponents = new PaletteCompartmentEntry(UIMessages.connectorsDrawerTitle, null);
@@ -348,8 +347,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		compartmentEntryRouting.setInitiallyOpen(false);
 
 		// the folder for control flow types
-		PaletteCompartmentEntry compartmentEntryControlFlow = new PaletteCompartmentEntry(
-				UIMessages.controlFlowDrawerTitle, null);
+		PaletteCompartmentEntry compartmentEntryControlFlow = new PaletteCompartmentEntry(UIMessages.controlFlowDrawerTitle, null);
 		ret.add(compartmentEntryControlFlow);
 		compartmentEntryControlFlow.setInitiallyOpen(false);
 
@@ -669,25 +667,26 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	 */
 	public List<IToolEntry> getExtensionPointToolEntries() {
 		List<IToolEntry> entries = new ArrayList<>();
+		String runtimeProvider = determineRuntimeProvider();
 
 		// inject palette entries delivered via extension points
-		IConfigurationElement[] extensions = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
+		IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
 		for (IConfigurationElement e : extensions) {
 			try {
 				final Object o = e.createExecutableExtension("class");
 
 				if (o instanceof ICustomPaletteEntry) {
 					ICustomPaletteEntry pe = (ICustomPaletteEntry) o;
-					ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
-					final String schemeId = e.getAttribute(EXT_ID_ATTR);
-					String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_SMALL;
-					String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId()
-							: ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_LARGE;
-					IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
-					entries.add(te);
-					paletteItemExtensions.put(cf, e);
-					COMPONENTS_FROM_EXTENSION_POINTS.add(schemeId);
+					if(pe.isValid(runtimeProvider)){
+						ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
+						final String schemeId = e.getAttribute(EXT_ID_ATTR);
+						String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_SMALL;
+						String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId() : ImageProvider.PREFIX + schemeId + ImageProvider.POSTFIX_LARGE;
+						IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
+						entries.add(te);
+						paletteItemExtensions.put(cf, e);
+						COMPONENTS_FROM_EXTENSION_POINTS.add(schemeId);
+					}
 				}
 			} catch (CoreException ex) {
 				CamelEditorUIActivator.pluginLog().logError(ex);
@@ -701,6 +700,14 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		return entries;
 	}
 
+	private String determineRuntimeProvider() {
+		CamelDesignEditor editor = CamelUtils.getDiagramEditor(getDiagramTypeProvider());
+		if(editor != null){
+			return CamelModelFactory.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor());
+		}
+		return CamelModelFactory.RUNTIME_PROVIDER_KARAF;
+	}
+
 	/**
 	 * returns a list of tool entries generated from the component/connector 
 	 * catalog entries
@@ -711,12 +718,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		List<IToolEntry> entries = new ArrayList<>();
 
 		// inject palette entries generated out of the component model file
-		CamelDesignEditor editor = null;
-		if (getDiagramTypeProvider() != null && 
-			getDiagramTypeProvider().getDiagramBehavior() != null &&
-			getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null) {
-			editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-		}
+		CamelDesignEditor editor = CamelUtils.getDiagramEditor(getDiagramTypeProvider());
 		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
 		String runtimeprovider = editor != null ? CamelModelFactory.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor()) : CamelModelFactory.RUNTIME_PROVIDER_KARAF;
 

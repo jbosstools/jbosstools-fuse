@@ -18,6 +18,7 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 
 /**
@@ -25,54 +26,73 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
  */
 public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
 
+	public static final String ACTIVE_MQ = "ActiveMQ";
+	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
+	public static final String CAMEL_JMS = "camel-jms";
+	public static final String CAMEL_JMS_STARTER = "camel-jms-starter";
 	private static final String PROTOCOL = "activemq";
-	
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
-     */
-    @Override
-    public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new CreateEndpointFigureFeature(fp, "ActiveMQ", "Creates an ActiveMQ endpoint...", "activemq:queue:foo", getRequiredDependencies());
-    }
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getProtocol()
-     */
-    @Override
-    public String getProtocol() {
-    	return PROTOCOL;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#providesProtocol(java.lang.String)
-     */
-    @Override
-    public boolean providesProtocol(String protocol) {
-    	return PROTOCOL.equalsIgnoreCase(protocol);
-    }
-    
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredDependencies()
-     */
-    @Override
-    public List<Dependency> getRequiredDependencies() {
-        List<Dependency> deps = new ArrayList<>();
-        deps.add(createDependency(
-        		ActiveMQPaletteEntryDependenciesManager.ORG_APACHE_ACTIVEMQ,
-        		ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL,
-        		new ActiveMQPaletteEntryDependenciesManager().getActiveMQVersion(CamelUtils.getCurrentProjectCamelVersion())));
-        deps.add(createDependency(
-        		"org.apache.camel",
-        		"camel-jms",
-        		CamelUtils.getCurrentProjectCamelVersion()));
-        return deps;
-    }
+	@Override
+	public ICreateFeature newCreateFeature(IFeatureProvider fp) {
+		List<Dependency> requiredDependencies = getRequiredDependencies(CamelUtils.getRuntimeProvider(fp));
+		return new CreateEndpointFigureFeature(fp, ACTIVE_MQ, "Creates an ActiveMQ endpoint...", "activemq:queue:foo", requiredDependencies);
+	}
 
-    private Dependency createDependency(String groupId, String artifactId, String version) {
-    	Dependency dep = new Dependency();
-    	dep.setGroupId(groupId);
-    	dep.setArtifactId(artifactId);
-    	dep.setVersion(version);
-    	return dep;
-    }
+	@Override
+	public String getProtocol() {
+		return PROTOCOL;
+	}
+
+	@Override
+	public boolean providesProtocol(String protocol) {
+		return PROTOCOL.equalsIgnoreCase(protocol);
+	}
+
+	@Override
+	public List<Dependency> getRequiredDependencies(String runtimeProvider) {
+		List<Dependency> deps = new ArrayList<>();
+		deps.add(createActiveMQDependency(runtimeProvider));
+		deps.add(createJMSDependency(runtimeProvider));
+		return deps;
+	}
+
+	private Dependency createJMSDependency(String runtimeProvider) {
+		return createDependency(
+				ORG_APACHE_CAMEL,
+				computeJMSArtifactId(runtimeProvider),
+				getCurrentProjectCamelVersion());
+	}
+
+	private String computeJMSArtifactId(String runtimeProvider) {
+		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+			return CAMEL_JMS_STARTER;
+		} else {
+			return CAMEL_JMS;
+		}
+	}
+
+	private Dependency createActiveMQDependency(String runtimeProvider) {
+		ActiveMQPaletteEntryDependenciesManager activeMQPaletteEntryDependenciesManager = new ActiveMQPaletteEntryDependenciesManager();
+		return createDependency(
+				ActiveMQPaletteEntryDependenciesManager.ORG_APACHE_ACTIVEMQ,
+				activeMQPaletteEntryDependenciesManager.getArtifactId(runtimeProvider),
+				activeMQPaletteEntryDependenciesManager.getActiveMQVersion(getCurrentProjectCamelVersion()));
+	}
+
+	String getCurrentProjectCamelVersion() {
+		return CamelUtils.getCurrentProjectCamelVersion();
+	}
+
+	private Dependency createDependency(String groupId, String artifactId, String version) {
+		Dependency dep = new Dependency();
+		dep.setGroupId(groupId);
+		dep.setArtifactId(artifactId);
+		dep.setVersion(version);
+		return dep;
+	}
+
+	@Override
+	public boolean isValid(String runtimeProvider) {
+		return true;
+	}
 }

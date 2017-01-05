@@ -22,17 +22,17 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 
-public class CustomPaletteEntry1 implements ICustomPaletteEntry {
+public class CustomPaletteEntry2 implements ICustomPaletteEntry {
 
-	public static final String INTEGRATION_TEST_KARAF_ONLY = "integration test - karaf only";
+	public static final String INTEGRATION_TEST_SPRING_BOOT_ONLY = "integration test - SpringBoot only";
 
-	public CustomPaletteEntry1() {
+	public CustomPaletteEntry2() {
 		//keep for reflection instantiation
 	}
 
 	@Override
 	public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-		return new CreateEndpointFigureFeature(new CamelFeatureProvider(new DiagramTypeProvider()), INTEGRATION_TEST_KARAF_ONLY, "used by integration test", "",
+		return new CreateEndpointFigureFeature(new CamelFeatureProvider(new DiagramTypeProvider()), INTEGRATION_TEST_SPRING_BOOT_ONLY, "used by integration test", "",
 				Collections.<Dependency> emptyList());
 	}
 
@@ -53,7 +53,7 @@ public class CustomPaletteEntry1 implements ICustomPaletteEntry {
 
 	@Override
 	public boolean isValid(String runtimeProvider) {
-		return CamelModelFactory.RUNTIME_PROVIDER_KARAF.equals(runtimeProvider);
+		return CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider);
 	}
 
 }

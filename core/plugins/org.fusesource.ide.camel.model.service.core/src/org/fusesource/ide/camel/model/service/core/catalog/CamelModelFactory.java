@@ -19,8 +19,10 @@ import java.util.Map;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -280,13 +282,20 @@ public class CamelModelFactory {
 	public static String getRuntimeprovider(IProject camelProject, IProgressMonitor monitor) {
 		if(camelProject != null){
 			IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(camelProject, monitor);
-			if(m2prj != null && m2prj.getMavenProject() != null){
-				List<Dependency> dependencies = m2prj.getMavenProject().getDependencies();
-				if(hasSpringBootDependency(dependencies)){
-					return RUNTIME_PROVIDER_SPRINGBOOT;
-				} else {
-					return RUNTIME_PROVIDER_KARAF;
+			try {
+				if(m2prj != null){
+					MavenProject mavenProject = m2prj.getMavenProject(monitor);
+					if(mavenProject != null){
+						List<Dependency> dependencies = mavenProject.getDependencies();
+						if(hasSpringBootDependency(dependencies)){
+							return RUNTIME_PROVIDER_SPRINGBOOT;
+						} else {
+							return RUNTIME_PROVIDER_KARAF;
+						}
+					}
 				}
+			} catch (CoreException e) {
+				CamelModelServiceCoreActivator.pluginLog().logWarning(e);
 			}
 		}
 		return RUNTIME_PROVIDER_KARAF;

@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
 
 public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	private String endpointUri;
-	private List<Dependency> deps;
+	private List<Dependency> dependencies;
 
 	/**
 	 * 
@@ -42,7 +42,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, String endpointUri, List<Dependency> deps) {
 		super(fp, name, description, (Class<? extends AbstractCamelModelElement>)null);
 		this.endpointUri = endpointUri;
-		this.deps = deps;
+		this.dependencies = deps;
 		setEip(getEipByName(ENDPOINT_TYPE_TO));
 	}
 
@@ -84,14 +84,23 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	 */
 	@Override
 	public Object[] create(ICreateContext context) {
-		if (deps != null && !deps.isEmpty()) {
+		if (dependencies != null && !dependencies.isEmpty()) {
 			// add maven dependency to pom.xml if needed
 	        try {
-	            updateMavenDependencies(deps);
+	            updateMavenDependencies(dependencies);
 	        } catch (CoreException ex) {
 	            CamelEditorUIActivator.pluginLog().logError("Unable to add the component dependency to the project maven configuration file.", ex);
 	        }
 		}
 		return super.create(context);
+	}
+
+	/**
+	 *  /!\ Public for test purpose only
+	 * @return
+	 */
+	@Deprecated
+	public List<Dependency> getDependencies() {
+		return dependencies;
 	}
 }

@@ -17,28 +17,30 @@ import java.util.Map;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesManager {
 
 	public static final String RED_HAT_SUFFIX = ".redhat-";
-	public static final Map<String, String> camelToAMQVersionMapping;
+	static final String ORG_APACHE_ACTIVEMQ = "org.apache.activemq";
+	public static final String ACTIVEMQ_CAMEL = "activemq-camel";
+	public static final String ACTIVEMQ_CAMEL_STARTER = "activemq-camel-starter";
+	
 	// TODO: change me after each release
 	public static final String LATEST_AMQ_VERSION = "5.11.0";
-	
+	public static final Map<String, String> CAMEL_TO_AMQ_VERSION_MAPPING;
 	static {
-		camelToAMQVersionMapping = new HashMap<>();
-		camelToAMQVersionMapping.put("2.15.1", "5.11.0");
-		camelToAMQVersionMapping.put("2.17.0", "5.11.0");
-		camelToAMQVersionMapping.put("2.17.3", "5.11.0");
+		CAMEL_TO_AMQ_VERSION_MAPPING = new HashMap<>();
+		CAMEL_TO_AMQ_VERSION_MAPPING.put("2.15.1", "5.11.0");
+		CAMEL_TO_AMQ_VERSION_MAPPING.put("2.17.0", "5.11.0");
+		CAMEL_TO_AMQ_VERSION_MAPPING.put("2.17.3", "5.11.0");
+		CAMEL_TO_AMQ_VERSION_MAPPING.put("2.18.1", "5.11.0");
 		// TODO: update me with every new release of camel and amq supported in tooling
 	}
-	
-	static final String ACTIVEMQ_CAMEL = "activemq-camel";
-	static final String ORG_APACHE_ACTIVEMQ = "org.apache.activemq";
 
 	public ActiveMQPaletteEntryDependenciesManager() {
-		// keep for reflection instanciation
+		// keep for reflection instantiation
 	}
 
 	@Override
@@ -57,13 +59,15 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 	}
 
 	private boolean isActiveMQCamelDependency(Dependency dependency) {
-		return ORG_APACHE_ACTIVEMQ.equals(dependency.getGroupId()) && ACTIVEMQ_CAMEL.equals(dependency.getArtifactId());
+		String artifactId = dependency.getArtifactId();
+		return ORG_APACHE_ACTIVEMQ.equals(dependency.getGroupId())
+				&& (ACTIVEMQ_CAMEL.equals(artifactId) || ACTIVEMQ_CAMEL_STARTER.equals(artifactId));
 	}
 
 	String getActiveMQVersion(String camelVersion) {
 		boolean productizedVersion = camelVersion.indexOf(RED_HAT_SUFFIX) != -1;		
 		String key = getVersionWithoutIdentifier(camelVersion);
-		String amqVersion = camelToAMQVersionMapping.get(key);
+		String amqVersion = CAMEL_TO_AMQ_VERSION_MAPPING.get(key);
 		if(amqVersion != null) {
 			if (productizedVersion) {
 				return String.format("%s%s%s", amqVersion, RED_HAT_SUFFIX, getBuildNumberFromVersion(camelVersion));
@@ -91,5 +95,13 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 			} 
 		}
 		throw new IllegalArgumentException("Given Camel Version " + camelVersion + " doesn't contain a valid value");
+	}
+
+	public String getArtifactId(String runtimeProvider) {
+		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER;
+		} else {
+			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL;
+		}
 	}
 }

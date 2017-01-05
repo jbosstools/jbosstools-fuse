@@ -25,7 +25,8 @@ public class GenericEndpointPaletteEntry implements ICustomPaletteEntry {
 	}
 
 	@Override
-	public List<Dependency> getRequiredDependencies() {
+	public List<Dependency> getRequiredDependencies(String runtimeProvider) {
+		//computation is delegated to the Wizard
 		return null;
 	}
 
@@ -37,6 +38,11 @@ public class GenericEndpointPaletteEntry implements ICustomPaletteEntry {
 	@Override
 	public String getProtocol() {
 		return null;
+	}
+	
+	@Override
+	public boolean isValid(String runtimeProvider) {
+		return true;
 	}
 
 }

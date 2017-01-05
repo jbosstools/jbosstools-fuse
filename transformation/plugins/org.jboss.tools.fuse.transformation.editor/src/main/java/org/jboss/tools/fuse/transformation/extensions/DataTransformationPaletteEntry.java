@@ -17,53 +17,56 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
-    private static final String PROTOCOL = "dozer"; //$NON-NLS-1$
+	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
+	private static final String CAMEL_DOZER = "camel-dozer";
+	private static final String CAMEL_DOZER_STARTER = CAMEL_DOZER + "-starter";
+	private static final String PROTOCOL = "dozer";
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
-     * #newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
-     */
-    @Override
-    public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new DataMapperEndpointFigureFeature(fp,
-                Messages.DataTransformationPaletteEntry_paletteName,
-                Messages.DataTransformationPaletteEntry_paletteDescription, getRequiredDependencies());
-    }
+	@Override
+	public ICreateFeature newCreateFeature(IFeatureProvider fp) {
+		List<Dependency> requiredDependencies = getRequiredDependencies(CamelUtils.getRuntimeProvider(fp));
+		return new DataMapperEndpointFigureFeature(fp,
+				Messages.DataTransformationPaletteEntry_paletteName,
+				Messages.DataTransformationPaletteEntry_paletteDescription, requiredDependencies);
+	}
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getProtocol()
-     */
-    @Override
-    public String getProtocol() {
-        return PROTOCOL;
-    }
+	@Override
+	public String getProtocol() {
+		return PROTOCOL;
+	}
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#providesProtocol(java.lang.String)
-     */
-    @Override
-    public boolean providesProtocol(String protocol) {
-        return PROTOCOL.equalsIgnoreCase(protocol);
-    }
+	@Override
+	public boolean providesProtocol(String protocol) {
+		return PROTOCOL.equalsIgnoreCase(protocol);
+	}
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredDependencies()
-     */
-    @Override
-    public List<Dependency> getRequiredDependencies() {
-        List<Dependency> deps = new ArrayList<>();
-        Dependency dep = new Dependency();
-        dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
-        dep.setArtifactId("camel-dozer"); //$NON-NLS-1$
-        dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
-        deps.add(dep);
-        return deps;
-    }
+	@Override
+	public List<Dependency> getRequiredDependencies(String runtimeProvider) {
+		List<Dependency> deps = new ArrayList<>();
+		Dependency dep = new Dependency();
+		dep.setGroupId(ORG_APACHE_CAMEL);
+		dep.setArtifactId(computeArtifactId(runtimeProvider));
+		dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
+		deps.add(dep);
+		return deps;
+	}
+
+	private String computeArtifactId(String runtimeProvider) {
+		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+			return CAMEL_DOZER_STARTER;
+		} else {
+			return CAMEL_DOZER;
+		}
+	}
+
+	@Override
+	public boolean isValid(String runtimeProvider) {
+		return true;
+	}
 }

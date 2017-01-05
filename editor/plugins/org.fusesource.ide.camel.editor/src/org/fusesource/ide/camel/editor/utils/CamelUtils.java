@@ -11,6 +11,9 @@
 package org.fusesource.ide.camel.editor.utils;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
+import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.ui.IEditorPart;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
@@ -58,6 +61,20 @@ public class CamelUtils {
 		return ep instanceof CamelEditor ? ((CamelEditor)ep).getDesignEditor() : null;
 	}
 
+	public static CamelDesignEditor getDiagramEditor(IDiagramTypeProvider diagramTypeProvider) {
+		if(diagramTypeProvider != null
+				&& diagramTypeProvider.getDiagramBehavior() != null
+				&& diagramTypeProvider.getDiagramBehavior().getDiagramContainer() instanceof CamelDesignEditor){
+			return (CamelDesignEditor)diagramTypeProvider.getDiagramBehavior().getDiagramContainer();
+		}
+		return null;
+	}
+	
+	public static String getRuntimeProvider(IFeatureProvider fp) {
+		CamelDesignEditor diagramEditor = CamelUtils.getDiagramEditor(fp.getDiagramTypeProvider());
+		return CamelModelFactory.getRuntimeprovider(diagramEditor != null ? diagramEditor.getWorkspaceProject() : project(), new NullProgressMonitor());
+	}
+	
 	public static IProject project() {
         CamelDesignEditor editor = CamelUtils.getDiagramEditor();
         return editor == null ? null : editor.getWorkspaceProject();
