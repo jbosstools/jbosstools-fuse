@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -425,13 +426,15 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
 		if (supportsBreakpoint(breakpoint)) {
+			IBreakpointManager bpManager = DebugPlugin.getDefault().getBreakpointManager();
 			try {
-				if (breakpoint.isEnabled()) {
+				if (breakpoint.isEnabled() && bpManager.isEnabled()) {
 					breakpointAdded(breakpoint);
-				} else {
+				} else if (!breakpoint.isEnabled() || !bpManager.isEnabled()) {
 					breakpointRemoved(breakpoint, null);
 				}
 			} catch (CoreException e) {
+				Activator.getLogger().error(e);
 			}
 		}
 	}
