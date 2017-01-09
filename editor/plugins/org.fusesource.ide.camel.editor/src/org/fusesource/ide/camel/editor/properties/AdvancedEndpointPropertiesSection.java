@@ -239,6 +239,9 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         PropertiesUtils.updateURIParams(selectedEP, prop, choice.getText(), component, modelMap);
+                        if (p.getName().equalsIgnoreCase("languagename")) {
+                        	updateDependenciesForLanguage(selectedEP, choice.getText());
+                        }
                     }
                 });
                 choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -301,6 +304,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+                        updateDependenciesForDataFormat(selectedEP, txt.getText());
                     }
                 });
                 txtField.setLayoutData(createPropertyFieldLayoutData());

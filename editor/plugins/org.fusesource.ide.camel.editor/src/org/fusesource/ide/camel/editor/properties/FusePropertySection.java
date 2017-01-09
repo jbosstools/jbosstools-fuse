@@ -55,6 +55,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -562,6 +563,30 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		}
 	}
 
+	protected void updateDependenciesForDataFormat(AbstractCamelModelElement selectedEP, String newValue) {
+		if (newValue != null) {
+			CamelModel m = CamelModelFactory.getModelForProject(selectedEP.getCamelFile().getResource().getProject());
+			if (m != null) {
+				DataFormat df = m.getDataformatModel().getDataFormatByName(newValue);
+				if (df != null) {
+					updateDependencies(df.getDependencies());
+				}
+			}
+		}
+	}
+	
+	protected void updateDependenciesForLanguage(AbstractCamelModelElement selectedEP, String newValue) {
+		if (newValue != null) {
+			CamelModel m = CamelModelFactory.getModelForProject(selectedEP.getCamelFile().getResource().getProject());
+			if (m != null) {
+				Language l = m.getLanguageModel().getLanguageByName(newValue);
+				if (l != null) {
+					updateDependencies(l.getDependencies());
+				}
+			}
+		}
+	}
+	
 	/**
 	 * prepares the ui for the data format element
 	 * 
