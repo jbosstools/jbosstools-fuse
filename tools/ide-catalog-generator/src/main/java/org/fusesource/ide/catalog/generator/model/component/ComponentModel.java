@@ -25,8 +25,8 @@ public class ComponentModel {
 	private Component component;
 	private HashMap<String, HashMap> componentProperties;
 	private HashMap<String, HashMap> properties;
-	private ArrayList<UriParam> uriParams = new ArrayList<UriParam>();
-	private ArrayList<ComponentParam> componentParams = new ArrayList<ComponentParam>();
+	private ArrayList<UriParam> uriParams = new ArrayList<>();
+	private ArrayList<ComponentParam> componentParams = new ArrayList<>();
 	
 	/**
 	 * @return the component
