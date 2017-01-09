@@ -54,6 +54,7 @@ public abstract class AbstractCamelModelElement {
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
+	public static final String PROPERTY_LANGUAGENAME = "languageName";
 	public static final String CHOICE_NODE_NAME = "choice";
 	public static final String WHEN_NODE_NAME = "when";
 	public static final String OTHERWISE_NODE_NAME = "otherwise";

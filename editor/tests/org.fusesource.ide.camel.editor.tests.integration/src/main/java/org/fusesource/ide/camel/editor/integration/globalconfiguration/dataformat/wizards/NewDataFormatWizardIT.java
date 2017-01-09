@@ -90,7 +90,7 @@ public class NewDataFormatWizardIT {
 	@Parameter(value = 2)
 	public DataFormat dataFormat;
 	
-	public List<IProject> projectList = new ArrayList<IProject>();
+	public List<IProject> projectList = new ArrayList<>();
 
 	protected IProject project = null;
 	
