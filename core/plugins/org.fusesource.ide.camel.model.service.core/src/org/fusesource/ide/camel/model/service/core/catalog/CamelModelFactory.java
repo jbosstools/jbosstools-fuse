@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -48,9 +51,11 @@ public class CamelModelFactory {
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
 		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-187");
-		camelVersionToFuseBOMMapping.put("2.18.1",               "6.3.0.redhat-187");
 	}
 	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-187";
+	
+	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000007").collect(Collectors.toSet());
+	
 	
 	private static HashMap<String, Map<String, CamelModel>> supportedCamelModels;
 	
@@ -214,13 +219,13 @@ public class CamelModelFactory {
 	public static String getLatestCamelVersion() {
 		String latest = null;
 		for (String v : supportedCamelModels.keySet()) {
-			if (latest == null) {
-				latest = v;
-			} else if (v.compareTo(latest)>0) {
+			if (latest == null || v.compareTo(latest)>0) {
 				latest = v;
 			}
 		}
-		if (latest != null) return latest;
+		if (latest != null){
+			return latest;
+		}
 		
 		return supportedCamelModels.keySet().iterator().next();
 	}
@@ -312,5 +317,9 @@ public class CamelModelFactory {
 		String camelVersion = CamelModelFactory.getCamelVersion(project);
 		String runtimeProvider = CamelModelFactory.getRuntimeprovider(project, new NullProgressMonitor());
 		return CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider);
+	}
+
+	public static boolean isPureFISVersion(String camelVersion) {
+		return pureFisVersions.contains(camelVersion);
 	}
 }

@@ -18,7 +18,7 @@
 	</prerequisites>
 
 	<properties>
-		<camel.version>2.18.1</camel.version>
+		<camel.version>2.18.1.redhat-000007</camel.version>
 	</properties>
 
 	<dependencies>

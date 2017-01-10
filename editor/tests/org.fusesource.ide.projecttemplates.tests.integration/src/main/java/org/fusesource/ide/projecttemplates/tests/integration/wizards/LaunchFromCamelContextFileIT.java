@@ -24,14 +24,21 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.junit.Before;
 import org.junit.Test;
 
 public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorRunnableIT{
 	
+	@Before
+	public void setup() throws Exception{
+		camelVersion = "2.17.0.redhat-630187";
+		super.setup();
+	}
+	
 	@Test
 	public void testReuseLaunchConfiguration() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting LaunchFromCamelContextFileIT.testReuseLaunchConfiguration");
-		camelVersion = CamelModelFactory.getLatestCamelVersion();
+		
 		testProjectCreation("-CBRSpring-TestReuseLaunchConfig", CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 		ILaunchConfiguration initialLC = launch.getLaunchConfiguration();
 		
