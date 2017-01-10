@@ -43,18 +43,23 @@ public abstract class AbstractCamelModelElement {
 
 	private static final String NODE_KIND_VALUE = "value";
 	private static final String DESCRIPTION_NODE_NAME = "description";
+	
 	public static final String NODE_KIND_EXPRESSION = "expression";
 	public static final String NODE_KIND_ATTRIBUTE = "attribute";
 	public static final String NODE_KIND_ELEMENT = "element";
+	
 	public static final String URI_PARAMETER_KEY = "uri";
 	public static final String ENDPOINT_TYPE_TO = "to";
 	public static final String ENDPOINT_TYPE_FROM = "from";
 	public static final String TOPIC_REMOVE_CAMEL_ELEMENT = "TOPIC_REMOVE_CAMEL_ELEMENT";
 	public static final String TOPIC_ID_RENAMING = "TOPIC_ID_RENAMING";
+	
 	public static final String PROPERTY_KEY_OLD_ID = "OLD_ID";
 	public static final String PROPERTY_KEY_NEW_ID = "NEW_ID";
 	public static final String PROPERTY_KEY_CAMEL_FILE = "CAMEL_FILE";
-	public static final String PROPERTY_LANGUAGENAME = "languageName";
+	
+	public static final String PARAMETER_LANGUAGENAME = "languageName";
+	
 	public static final String CHOICE_NODE_NAME = "choice";
 	public static final String WHEN_NODE_NAME = "when";
 	public static final String OTHERWISE_NODE_NAME = "otherwise";
