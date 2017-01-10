@@ -48,6 +48,7 @@ import org.fusesource.ide.camel.editor.properties.creators.advanced.NumberParame
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
@@ -238,7 +239,11 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     @Override
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, choice.getText(), component, modelMap);
+                        String newValue = choice.getText();
+                        PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
+                        if (AbstractCamelModelElement.PARAMETER_LANGUAGENAME.equalsIgnoreCase(p.getName())) {
+                        	updateDependenciesForLanguage(selectedEP, newValue);
+                        }
                     }
                 });
                 choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -300,7 +305,9 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+                        String newValue = txt.getText();
+                        PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
+                        updateDependenciesForDataFormat(selectedEP, newValue);
                     }
                 });
                 txtField.setLayoutData(createPropertyFieldLayoutData());
