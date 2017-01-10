@@ -21,11 +21,18 @@ import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConsta
 
 public class StagingRepositoriesPreferenceInitializer extends AbstractPreferenceInitializer {
 	
-	private static final String PRODUCT_STAGING_REPO_URI = "fuse-internal"+ 
+	private static final String PRODUCT_STAGING_REPO_URI =
+			"fuse-internal"+ 
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
 			"http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-common-build/latest/maven/";
-	private static final String THIRD_PARTY_STAGING_REPO_URI = "redhat-ea"+
-			StagingRepositoriesConstants.NAME_URL_SEPARATOR+"https://maven.repository.redhat.com/earlyaccess/all";
+	private static final String PRODUCT_FIS_STAGING_REPO_URI =
+			"fis-internal"+
+			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
+			"http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/";
+	private static final String THIRD_PARTY_STAGING_REPO_URI =
+			"redhat-ea"+
+			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
+			"https://maven.repository.redhat.com/earlyaccess/all";
 
 	public StagingRepositoriesPreferenceInitializer() {
 		// Keep for reflection initialization
@@ -35,7 +42,10 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	public void initializeDefaultPreferences() {
 		IPreferenceStore preferenceStore = getPreferenceStore();
 		preferenceStore.setDefault(StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES, false);
-		preferenceStore.setDefault(StagingRepositoriesConstants.STAGING_REPOSITORIES, PRODUCT_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR + THIRD_PARTY_STAGING_REPO_URI);
+		preferenceStore.setDefault(StagingRepositoriesConstants.STAGING_REPOSITORIES,
+				PRODUCT_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
+				THIRD_PARTY_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
+				PRODUCT_FIS_STAGING_REPO_URI);
 	}
 
 	IPreferenceStore getPreferenceStore() {

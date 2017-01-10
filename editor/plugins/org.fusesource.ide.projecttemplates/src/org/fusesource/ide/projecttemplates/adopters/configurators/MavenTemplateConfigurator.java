@@ -91,7 +91,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success, otherwise false
 	 */
 	protected boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 6);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
 			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
@@ -116,6 +116,9 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
 				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
 			}
+			subMonitor.worked(1);
+			
+			MavenUtils.manageStagingRepositories(m2m);
 			subMonitor.worked(1);
 			
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));

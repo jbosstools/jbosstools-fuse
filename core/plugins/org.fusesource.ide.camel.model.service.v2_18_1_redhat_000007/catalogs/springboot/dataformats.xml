@@ -16,7 +16,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-protobuf-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -41,7 +41,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-boon-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -67,7 +67,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-johnzon-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -105,7 +105,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-tagsoup-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -131,7 +131,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -156,7 +156,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-csv-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -202,7 +202,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-base64-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -229,7 +229,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -255,7 +255,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-syslog-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -279,7 +279,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jaxb-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -318,7 +318,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rss-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -342,7 +342,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlrpc-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -367,7 +367,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jacksonxml-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -404,7 +404,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-crypto-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -441,7 +441,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-lzf-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -467,7 +467,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlsecurity-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -502,14 +502,16 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-snakeyaml-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
          <parameter name="resolver" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Resolver to detect implicit type"/>
          <parameter name="library" type="string" javaType="org.apache.camel.model.dataformat.YAMLLibrary" kind="attribute" choice="SnakeYAML" deprecated="false" defaultValue="SnakeYAML" required="false" description="Which yaml library to use such. Is by default SnakeYAML"/>
          <parameter name="unmarshalTypeName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Class name of the java type to use when unarmshalling"/>
+         <parameter name="typeFilter" type="array" javaType="java.util.List&lt;org.apache.camel.model.dataformat.YAMLTypeFilterDefinition&gt;" kind="element" deprecated="false" required="false" description="Set the types SnakeYAML is allowed to un-marshall"/>
          <parameter name="prettyFlow" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Force the emitter to produce a pretty YAML document when using the flow style."/>
+         <parameter name="allowAnyType" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Allow any class to be un-marshaled"/>
          <parameter name="constructor" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="BaseConstructor to construct incoming documents."/>
          <parameter name="representer" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Representer to emit outgoing objects."/>
          <parameter name="dumperOptions" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="DumperOptions to configure outgoing objects."/>
@@ -533,7 +535,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -561,7 +563,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-barcode-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -589,7 +591,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlbeans-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -614,7 +616,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-castor-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -642,7 +644,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-avro-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -667,7 +669,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-gson-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -706,7 +708,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -743,7 +745,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -768,7 +770,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-beanio-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -799,7 +801,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-zipfile-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -824,7 +826,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jibx-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -850,7 +852,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-flatpack-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -881,7 +883,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -905,7 +907,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -932,7 +934,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-tarfile-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -957,7 +959,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-crypto-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -990,7 +992,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1014,7 +1016,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-soap-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1045,7 +1047,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmljson-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1081,7 +1083,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jackson-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1119,7 +1121,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hessian-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1143,7 +1145,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hl7-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1168,7 +1170,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1208,7 +1210,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xstream-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1247,7 +1249,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-univocity-parsers-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1287,7 +1289,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ical-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1312,7 +1314,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -1340,7 +1342,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xstream-starter</artifactId>
-            <version>2.18.1</version>
+            <version>2.18.1.redhat-000007</version>
          </dependency>
       </dependencies>
       <parameters>

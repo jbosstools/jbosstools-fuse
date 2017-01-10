@@ -129,8 +129,9 @@ public class MavenUtils {
 		for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
 			boolean found = false;
 			for (Dependency pomDep : deps) {
-				if (scope == null && pomDep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID)
-						&& pomDep.getArtifactId().equalsIgnoreCase(CAMEL_CORE_ARTIFACT_ID)) {
+				if (scope == null &&
+						CAMEL_GROUP_ID.equalsIgnoreCase(pomDep.getGroupId()) &&
+						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId())) {
 					if (SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
 						scope = pomDep.getScope();
 					}
@@ -153,7 +154,7 @@ public class MavenUtils {
 
 		addDependency(model, missingDeps, scope);
 
-		if (missingDeps.size() > 0) {
+		if (!missingDeps.isEmpty()) {
 			writeNewPomFile(project, pomFile, model);
 		}
 	}

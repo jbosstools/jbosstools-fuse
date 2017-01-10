@@ -248,8 +248,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 	}
 
-	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj,
-			IProgressMonitor monitor) throws CoreException {
+	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
 		String camelVersion = getCamelVersion(mavenProject);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();

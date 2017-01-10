@@ -54,6 +54,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -99,7 +100,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	public void setup() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
-		if("2.18.1".equals(camelVersion)){
+
+		if("2.18.1.redhat-000007".equals(camelVersion)){
 			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 		}
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
@@ -244,8 +246,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				return isWarning
 						//TODO: managed other dependencies than camel
 						&& !message.startsWith("Duplicating managed version")
-						//TODO: manage community version
-						&& (!message.startsWith("Overriding managed version") || camelVersion.contains("redhat"));
+						//TODO: manage community version and pure fis version
+						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelModelFactory.isPureFISVersion(camelVersion)));
 			} catch (CoreException e1) {
 				return true;
 			}

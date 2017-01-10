@@ -69,10 +69,10 @@ public class ValidateSyntaxInCatalogIT {
 													"2.15.1.redhat-621117",
 													"2.17.0.redhat-630187",
 													"2.17.3",
-													"2.18.1");
+													"2.18.1.redhat-000007");
 		
 		checkForRuntimeProvider(sb, supportedCamelVersions, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
-		checkForRuntimeProvider(sb, Arrays.asList("2.18.1"), CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT);
+		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000007"), CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT);
 		if (sb.length() != 0) {
 			fail(sb.toString());
 		}

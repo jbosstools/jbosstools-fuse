@@ -91,7 +91,7 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties)){
+					if(isMavenPropertyFuseBomVersionSet(properties) && !CamelModelFactory.isPureFISVersion(camelVersion)){
 						dep.setVersion(null);
 					} else if(isMavenPropertyCamelVersionSet(properties)){
 						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);

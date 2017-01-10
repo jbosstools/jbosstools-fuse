@@ -1489,7 +1489,9 @@
          <parameter name="resolver" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="resolver" description="Resolver to detect implicit type"/>
          <parameter name="library" type="string" javaType="org.apache.camel.model.dataformat.YAMLLibrary" kind="attribute" choice="SnakeYAML" deprecated="false" defaultValue="SnakeYAML" required="false" originalFieldName="library" description="Which yaml library to use such. Is by default SnakeYAML"/>
          <parameter name="unmarshalTypeName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="unmarshalTypeName" description="Class name of the java type to use when unarmshalling"/>
+         <parameter name="typeFilter" type="array" javaType="java.util.List&lt;org.apache.camel.model.dataformat.YAMLTypeFilterDefinition&gt;" kind="element" deprecated="false" required="false" originalFieldName="typeFilters" description="Set the types SnakeYAML is allowed to un-marshall"/>
          <parameter name="prettyFlow" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" originalFieldName="prettyFlow" description="Force the emitter to produce a pretty YAML document when using the flow style."/>
+         <parameter name="allowAnyType" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" originalFieldName="allowAnyType" description="Allow any class to be un-marshaled"/>
          <parameter name="constructor" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="constructor" description="BaseConstructor to construct incoming documents."/>
          <parameter name="representer" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="representer" description="Representer to emit outgoing objects."/>
          <parameter name="dumperOptions" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="dumperOptions" description="DumperOptions to configure outgoing objects."/>
@@ -2449,6 +2451,22 @@
          <parameter name="expression" type="object" javaType="org.apache.camel.model.language.ExpressionDefinition" kind="expression" oneOf="constant,el,exchangeProperty,groovy,header,javaScript,jsonpath,jxpath,language,method,mvel,ognl,php,python,ref,ruby,simple,spel,sql,terser,tokenize,xpath,xquery,xtokenize" deprecated="false" required="true" originalFieldName="expression" description="Expression to return the transformed message body (the new message body to use)"/>
          <parameter name="description" type="object" javaType="org.apache.camel.model.DescriptionDefinition" kind="element" deprecated="false" required="false" originalFieldName="description" description="Sets the description of this node"/>
          <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="id" description="Sets the id of this node"/>
+      </parameters>
+   </eip>
+   <eip>
+      <name>typeFilter</name>
+      <tags>
+         <tag></tag>
+      </tags>
+      <title>Type Filter</title>
+      <description></description>
+      <class>org.apache.camel.model.dataformat.YAMLTypeFilterDefinition</class>
+      <kind>model</kind>
+      <input>false</input>
+      <output>false</output>
+         <parameters>
+         <parameter name="type" type="string" javaType="org.apache.camel.model.dataformat.YAMLTypeFilterType" kind="attribute" choice="regexp,type" deprecated="false" required="false" originalFieldName="type" description=""/>
+         <parameter name="value" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" originalFieldName="value" description=""/>
       </parameters>
    </eip>
    <eip>
