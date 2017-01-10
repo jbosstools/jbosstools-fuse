@@ -25,46 +25,7 @@
   <name>JBoss Fuse Tooling :: Tools</name>
 
   <modules>
-    <module>ide-buildtools</module>
-    <module>ide-codegen</module>
+    <module>ide-catalog-generator</module>
   </modules>
-
-  <properties>
-    <slf4j-version>1.7.5</slf4j-version>
-    <scala-version>2.11.2</scala-version>
-    <scalate-version>1.5.3</scalate-version>
-  </properties>
-
-  <build>
-    <defaultGoal>install</defaultGoal>
-
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.scala-tools</groupId>
-          <artifactId>maven-scala-plugin</artifactId>
-          <version>2.15.2</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>compile</goal>
-                <goal>testCompile</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <jvmArgs>
-              <jvmArg>-Xmx1024m</jvmArg>
-            </jvmArgs>
-            <args>
-              <!-- arg>-unchecked</arg -->
-              <arg>-deprecation</arg>
-            </args>
-            <scalaVersion>${scala-version}</scalaVersion>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 
 </project>

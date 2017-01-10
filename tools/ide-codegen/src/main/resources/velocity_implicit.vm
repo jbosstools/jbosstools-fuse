@@ -1,6 +1,0 @@
-#* @implicitly included *#
-#* @vtlvariable name="isRoute" type="java.lang.Boolean" *#
-#* @vtlvariable name="importedTypes" type="java.util.Set" *#
-#* @vtlvariable name="generator" type="org.fusesource.ide.generator.Generator" *#
-#* @vtlvariable name="node" type="org.fusesource.ide.generator.NodeDefinition" *#
-#* @vtlvariable name="baseClass" type="java.lang.String" *#
