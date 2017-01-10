@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -426,14 +427,24 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
 		if (supportsBreakpoint(breakpoint)) {
 			try {
-				if (breakpoint.isEnabled()) {
+				if (breakpoint.isEnabled() && isBreakpointManagerEnabled()) {
 					breakpointAdded(breakpoint);
-				} else {
+				} else if (!breakpoint.isEnabled() || !isBreakpointManagerEnabled()) {
 					breakpointRemoved(breakpoint, null);
 				}
 			} catch (CoreException e) {
+				Activator.getLogger().error(e);
 			}
 		}
+	}
+
+	/**
+	 * Check if BreakpointManager is enabled
+	 * @return
+	 */
+	protected boolean isBreakpointManagerEnabled() {
+		IBreakpointManager bpManager = DebugPlugin.getDefault().getBreakpointManager();
+		return bpManager != null & bpManager.isEnabled();
 	}
 	
 	/* (non-Javadoc)
@@ -513,21 +524,23 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	/**
 	 * Install breakpoints that are already registered with the breakpoint
-	 * manager.
+	 * manager, only if BreakpointManager is enabled
 	 */
 	private void installDeferredBreakpoints() {
-		IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
-		for (IBreakpoint bp : breakpoints) {
-			if (bp instanceof CamelEndpointBreakpoint) {
-				CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint)bp;
-				// first get the file path from the launch config
-				String fileUnderDebug = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
-				// then get the project for the file
-				IProject p = CamelDebugUtils.getProjectForFilePath(fileUnderDebug);
-				// only add breakpoints for if project matches
-				if (p.getName().equals(ceb.getProjectName())) {
-					breakpointAdded(bp);	
-				}				
+		if (isBreakpointManagerEnabled()) {
+			IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
+			for (IBreakpoint bp : breakpoints) {
+				if (bp instanceof CamelEndpointBreakpoint) {
+					CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint) bp;
+					// first get the file path from the launch config
+					String fileUnderDebug = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
+					// then get the project for the file
+					IProject p = CamelDebugUtils.getProjectForFilePath(fileUnderDebug);
+					// only add breakpoints for if project matches
+					if (p.getName().equals(ceb.getProjectName())) {
+						breakpointAdded(bp);
+					}
+				}
 			}
 		}
 	}
