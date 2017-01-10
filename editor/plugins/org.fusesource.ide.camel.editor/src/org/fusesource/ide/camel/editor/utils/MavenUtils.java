@@ -94,13 +94,6 @@ public class MavenUtils {
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		try {
 			dialog.run(true, true, new IRunnableWithProgress() {
-				/*
-				 * (non-Javadoc)
-				 * 
-				 * @see
-				 * org.eclipse.jface.operation.IRunnableWithProgress#run(org.
-				 * eclipse.core.runtime.IProgressMonitor)
-				 */
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100);

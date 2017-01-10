@@ -241,7 +241,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         CCombo choice = (CCombo)e.getSource();
                         String newValue = choice.getText();
                         PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
-                        if (AbstractCamelModelElement.PROPERTY_LANGUAGENAME.equalsIgnoreCase(p.getName())) {
+                        if (AbstractCamelModelElement.PARAMETER_LANGUAGENAME.equalsIgnoreCase(p.getName())) {
                         	updateDependenciesForLanguage(selectedEP, newValue);
                         }
                     }
