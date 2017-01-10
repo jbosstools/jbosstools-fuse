@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.integration.globalconfiguration.dataformat.wizards;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -34,18 +32,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ide.IDEInternalPreferences;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
@@ -57,6 +47,7 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
@@ -216,25 +207,8 @@ public class NewDataFormatWizardIT {
 	@Before
 	public void setup() throws Exception {
 		CamelEditorUIActivator.pluginLog().logInfo("Starting setup for "+ NewDataFormatWizardIT.class.getSimpleName());
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		CamelEditorUIActivator.pluginLog().logInfo("All editors closed");
-		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
-		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
-		
-		File f = new File(SCREENSHOT_FOLDER);
-		f.mkdirs();		
-
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		if (welcomePage != null) {
-			welcomePage.dispose();
-		}
-		page.closeAllPerspectives(false, false);
-		CamelEditorUIActivator.pluginLog().logInfo("All perspectives closed");
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		CamelEditorUIActivator.pluginLog().logInfo("Opening Fuse perspective");
+		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 		waitJob();
-		
 		CamelEditorUIActivator.pluginLog().logInfo("End setup for "+ NewDataFormatWizardIT.class.getSimpleName());
 	}
 
@@ -253,14 +227,14 @@ public class NewDataFormatWizardIT {
 			//refresh otherwise cannot delete due to target folder created
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			waitJob();
-			readAndDispatch(0);
+			CommonTestUtils.readAndDispatch(0);
 			boolean projectSuccesfullyDeleted = false;
 			while(!projectSuccesfullyDeleted ){
 				try{
 					project.delete(true, true, new NullProgressMonitor());
 				} catch(Exception e){
 					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
-					readAndDispatch(0);
+					CommonTestUtils.readAndDispatch(0);
 					waitJob();
 					continue;
 				}
@@ -268,24 +242,7 @@ public class NewDataFormatWizardIT {
 			}
 		}
 
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.closeAllEditors(false);
+		CommonTestUtils.closeAllEditors();
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
-	}
-
-	protected void readAndDispatch(int currentNumberOfTry) {
-		try{
-			while (Display.getDefault().readAndDispatch()) {
-				
-			}
-		} catch(SWTException swtException){
-			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)
-			swtException.printStackTrace();
-			if(currentNumberOfTry < 100){
-				readAndDispatch(currentNumberOfTry ++);
-			} else {
-				System.out.println("Tried 100 times to wait for UI... Continue and see what happens.");
-			}
-		}
 	}
 }

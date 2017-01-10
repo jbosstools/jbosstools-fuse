@@ -43,24 +43,17 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ide.IDEInternalPreferences;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
-import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -105,21 +98,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	@Before
 	public void setup() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("All editors closed");
-		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
-		store.setValue(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE, IDEInternalPreferences.PSPM_ALWAYS);
-		File f = new File(SCREENSHOT_FOLDER);
-		f.mkdirs();
-
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		welcomePage.dispose();
-		page.closeAllPerspectives(false, false);
-		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("All perspectives closed");
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Opening Fuse perspective");
-		
+		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 		if("2.18.1".equals(camelVersion)){
 			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 		}
@@ -169,8 +148,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_REFRESH);
 		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_BUILD);
 		
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.closeAllEditors(false);
+		CommonTestUtils.closeAllEditors();
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
 	}
 	
@@ -300,12 +278,12 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	private void checkCorrectEditorOpened(IFile camelResource) throws InterruptedException {
 		readAndDispatch(0);
 		int currentAwaitedTime = 0;
-		while (getCurrentActiveEditor() == null && currentAwaitedTime < 30000) {
+		while (CommonTestUtils.getCurrentActiveEditor() == null && currentAwaitedTime < 30000) {
 			Thread.sleep(100);
 			currentAwaitedTime += 100;
 			System.out.println("awaited activation of editor " + currentAwaitedTime);
 		}
-		IEditorPart editor = getCurrentActiveEditor();
+		IEditorPart editor = CommonTestUtils.getCurrentActiveEditor();
 		assertThat(editor).as("No editor has been opened.").isNotNull();
 		IEditorInput editorInput = editor.getEditorInput();
 		assertThat(editorInput.getAdapter(IFile.class)).isEqualTo(camelResource);
@@ -353,26 +331,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
     }
 
 	protected void readAndDispatch(int currentNumberOfTry) {
-		try{
-			while (Display.getDefault().readAndDispatch()) {
-				
-			}
-		} catch(SWTException swtException){
-			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)
-			swtException.printStackTrace();
-			if(currentNumberOfTry < 100){
-				readAndDispatch(currentNumberOfTry ++);
-			} else {
-				System.out.println("Tried 100 times to wait for UI... Continue and see what happens.");
-			}
-		}
-	}
-
-	/**
-	 * @return
-	 */
-	private IEditorPart getCurrentActiveEditor() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		CommonTestUtils.readAndDispatch(currentNumberOfTry);
 	}
 
 	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
