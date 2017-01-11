@@ -24,7 +24,7 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	private static final String PRODUCT_STAGING_REPO_URI =
 			"fuse-internal"+ 
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
-			"http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-common-build/latest/maven/";
+			"http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven/";
 	private static final String PRODUCT_FIS_STAGING_REPO_URI =
 			"fis-internal"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+

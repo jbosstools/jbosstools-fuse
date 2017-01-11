@@ -230,34 +230,59 @@
             	</and>
          	</constraint>
       	</project-facet-version>
+       <project-facet-version
+             facet="jst.camel"
+             version="2.17.0.redhat-630187">
+          <constraint>
+             <and>
+                <requires
+                      facet="jst.java"
+                      version="[1.7">
+                </requires>
+                <requires
+                      facet="jboss.m2"
+                      version="[1.0">
+                </requires>
+                <or>
+                   <requires
+                         facet="jst.utility"
+                         version="1.0">
+                   </requires>
+                   <requires
+                         facet="jst.web"
+                         version="[1.0">
+                   </requires>
+                </or>
+             </and>
+          </constraint>
+       </project-facet-version>
+       <project-facet-version
+             facet="jst.camel"
+             version="2.17.0.redhat-630224">
+          <constraint>
+             <and>
+                <requires
+                      facet="jst.java"
+                      version="[1.7">
+                </requires>
+                <requires
+                      facet="jboss.m2"
+                      version="[1.0">
+                </requires>
+                <or>
+                   <requires
+                         facet="jst.utility"
+                         version="1.0">
+                   </requires>
+                   <requires
+                         facet="jst.web"
+                         version="[1.0">
+                   </requires>
+                </or>
+             </and>
+          </constraint>
+       </project-facet-version>
       	
-      	<project-facet-version
-            facet="jst.camel"
-            version="2.17.0.redhat-630187">
-       	
-        	<constraint>
-            	<and>
-               		<requires
-                    	facet="jst.java"
-                     	version="[1.7">
-               		</requires>
-                 <requires
-                       facet="jboss.m2"
-                       version="[1.0">
-                 </requires>
-               		<or>
-	               		<requires 
-	               			facet="jst.utility"
-	               			version="1.0">
-	               		</requires>
-	               		<requires 
-	               			facet="jst.web"
-	               			version="[1.0">
-	               		</requires>
-	            	</or>
-            	</and>
-         	</constraint>
-      	</project-facet-version>
       	
       	<project-facet-version
             facet="jst.camel"
@@ -327,7 +352,7 @@
         	id="jst.camel.version.change"
         	type="version-change">
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
-		</action>		
+		</action>
    	</extension>
         <extension
           point="org.eclipse.core.runtime.preferences">
