@@ -54,8 +54,17 @@ public class CamelFacetVersionChangeDelegateIT {
 		Files.copy(CamelFacetVersionChangeDelegateIT.class.getResourceAsStream(POM_XML), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{POM_XML})[0];
 		
-		testUpdate(CamelProjectConfigurator.camelFacet.getLatestVersion(), ActiveMQPaletteEntryDependenciesManager.LATEST_AMQ_VERSION);
-		testUpdate(CamelProjectConfigurator.camelFacet.getVersion("2.15.1.redhat-621084"), ActiveMQPaletteEntryDependenciesManager.CAMEL_TO_AMQ_VERSION_MAPPING.get("2.15.1")+".redhat-621084");
+		IProjectFacetVersion latestVersion = CamelProjectConfigurator.camelFacet.getLatestVersion();
+		testUpdate(latestVersion, ActiveMQPaletteEntryDependenciesManager.LATEST_AMQ_VERSION + getProductizedQualifier(latestVersion));
+		IProjectFacetVersion olderVersion = CamelProjectConfigurator.camelFacet.getVersion("2.15.1.redhat-621084");
+		testUpdate(olderVersion, ActiveMQPaletteEntryDependenciesManager.CAMEL_TO_AMQ_VERSION_MAPPING.get("2.15.1") + getProductizedQualifier(olderVersion));
+	}
+
+	private String getProductizedQualifier(IProjectFacetVersion latestVersion) {
+		String latestVersionString = latestVersion.getVersionString();
+		int productizedSeparation = latestVersionString.lastIndexOf('.');
+		String productizedPart = latestVersionString.substring(productizedSeparation, latestVersionString.length());
+		return productizedPart;
 	}
 
 	private void testUpdate(final IProjectFacetVersion facetVersion, final String expectedDependencyVersion) throws CoreException {
