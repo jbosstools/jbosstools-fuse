@@ -66,12 +66,9 @@ If you introduced new dependencies or changed versions it is always a good idea 
 
 - download and install a plain vanilla Eclipse Kepler, Luna or whatever version used currently  
 - run this vanilla Eclipse
-- in Eclipse choose _Install new software_, then _Add_ to add a new update site
+- in Eclipse choose _Install new software_, then _Add_ to add a new installation
 - choose _Local_ in the following dialog and set the location to file://<your path to fuseide>/site/target/repository
-- close the dialog with _OK_ and then select the new added update site from the drop down box
-- then in the tree below check all the _JBoss Fuse Tooling_ entries
-- hit _Next_ to install the software
-- if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
+- close the dialog with _Finish_
 
 ## Code generation
 __IMPORTANT:__
