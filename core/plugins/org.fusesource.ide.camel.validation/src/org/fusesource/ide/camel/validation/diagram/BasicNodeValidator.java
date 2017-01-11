@@ -113,7 +113,7 @@ public class BasicNodeValidator implements ValidationSupport {
 			final CamelFile camelFile = camelModelElement.getCamelFile();
 			if (camelFile != null) {
 				final IResource resource = camelFile.getResource();
-				if (resource != null) {
+				if (resource != null && resource.exists()) {
 					for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
 						if (camelModelElement.getId() != null && camelModelElement.getId().equals(marker.getAttribute(IFuseMarker.CAMEL_ID))) {
 							res.add(marker);
