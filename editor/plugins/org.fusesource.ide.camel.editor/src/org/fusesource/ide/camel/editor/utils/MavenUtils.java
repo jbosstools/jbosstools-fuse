@@ -76,18 +76,24 @@ public class MavenUtils {
 	 * @param compDeps
 	 *            the Maven dependencies to be updated
 	 * @throws CoreException
+	 * 
+	 * @Deprecated Please use the version which passing the project parameter. It avoids to rely on external system configuration.
 	 */
-	public void updateMavenDependencies(
-			final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-		if (compDeps == null || compDeps.isEmpty()) {
-			CamelEditorUIActivator.pluginLog()
-					.logWarning("Unable to add component dependencies because no dependencies were specified.");
-			return;
-		}
+	@Deprecated
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
 		final IProject project = CamelUtils.project();
 		if (project == null) {
 			CamelEditorUIActivator.pluginLog().logWarning(
 					"Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
+			return;
+		}
+		updateMavenDependencies(compDeps, project);
+	}
+	
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
+		if (compDeps == null || compDeps.isEmpty()) {
+			CamelEditorUIActivator.pluginLog()
+					.logWarning("Unable to add component dependencies because no dependencies were specified.");
 			return;
 		}
 		// show progress dialog to user to signal ongoing changes to the pom
@@ -98,7 +104,7 @@ public class MavenUtils {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100);
 					try {
-						updateMavenDependencies(compDeps, project);
+						internalUpdateMavenDependencies(compDeps, project);
 					} catch (CoreException ex) {
 						CamelEditorUIActivator.pluginLog().logError(ex);
 					}
@@ -115,16 +121,14 @@ public class MavenUtils {
 	 * @param project
 	 * @throws CoreException
 	 */
-	protected void updateMavenDependencies(
-			List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project)
-			throws CoreException {
+	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
 		final File pomFile = getPomFile(project);
 
 		final Model model = readMavenModel(pomFile);
 		List<Dependency> deps = getDependencies(project, model);
 
 		// then check if component dependency is already a dep
-		ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
+		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
 		String scope = null;
 		for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
 			boolean found = false;

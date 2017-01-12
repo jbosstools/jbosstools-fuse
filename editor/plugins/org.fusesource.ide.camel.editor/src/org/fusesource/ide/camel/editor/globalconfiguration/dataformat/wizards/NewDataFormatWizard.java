@@ -104,7 +104,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 		List<Dependency> dependencies = dataformat.getDependencies();
 		MavenUtils utils = new MavenUtils();
 		try {
-			utils.updateMavenDependencies(dependencies);
+			utils.updateMavenDependencies(dependencies, camelFile.getResource().getProject());
 		} catch (CoreException e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
 		}
