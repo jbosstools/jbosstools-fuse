@@ -78,7 +78,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.updateMavenDependencies(compDeps, project);
+		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
 		assertThat(mavenDependency.getVersion()).isEqualTo("test-version");
 	}
 
@@ -106,7 +106,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.updateMavenDependencies(compDeps, project);
+		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
 		assertThat(m2eDependency.getVersion()).isEqualTo("test-version");
 	}
 
@@ -129,7 +129,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.updateMavenDependencies(compDeps, project);
+		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
 		verify(mavenUtils).addDependency(eq(mavenModel), captor.capture(), eq((String) null));
 		assertThat(captor.getValue().get(0).getArtifactId()).isEqualTo("test-artifactID");
 	}

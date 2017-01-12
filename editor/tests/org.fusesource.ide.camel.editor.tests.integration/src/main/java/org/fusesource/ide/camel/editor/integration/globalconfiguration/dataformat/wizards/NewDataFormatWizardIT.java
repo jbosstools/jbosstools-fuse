@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +26,11 @@ import org.apache.maven.model.Model;
 import org.assertj.core.api.Assertions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
@@ -47,15 +42,10 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.tests.util.CommonTestUtils;
-import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
-import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
-import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -81,9 +71,8 @@ public class NewDataFormatWizardIT {
 	@Parameter(value = 2)
 	public DataFormat dataFormat;
 	
-	public List<IProject> projectList = new ArrayList<>();
-
-	protected IProject project = null;
+	@Rule
+	public FuseProject fuseProject = new FuseProject(NewDataFormatWizardIT.class.getName());
 	
 	public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
 	
@@ -104,37 +93,14 @@ public class NewDataFormatWizardIT {
 	@Test
 	public void testCreationWithDeps() throws CoreException, IOException, InterruptedException, InvocationTargetException {
 		final String id = dataFormat.getName() + "-id2";
-		final String projectName = dataFormat.getName() + "-project";
-		final String camelFilePath = "src/main/resources/META-INF/spring/camel-context.xml";
-		
-		NewProjectMetaData metadata;
-		metadata = new NewProjectMetaData();
-		metadata.setProjectName(projectName);
-		metadata.setLocationPath(null);
-		metadata.setCamelVersion(camelVersion);
-		metadata.setTargetRuntime(null);
-		metadata.setDslType(CamelDSLType.SPRING);
-		metadata.setBlankProject(true);
-		metadata.setTemplate(null);
-		
-		new ProgressMonitorDialog(
-				Display.getDefault().getActiveShell()).run(false, true, 
-						new FuseIntegrationProjectCreatorRunnable(metadata));
 
-		this.project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		IProject project = fuseProject.getProject();
+		final CamelFile camelFile = fuseProject.createEmptyCamelFile();
 
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
-		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + projectName);
-		final IFile camelResource = project.getFile(camelFilePath);
-		assertThat(camelResource.exists()).isTrue();
-
-		// TODO: wait for all build job to finish?
-		waitJob();
+		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + project.getName());
 
 		CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
-
-		CamelIOHandler handler = new CamelIOHandler();
-		final CamelFile camelFile = handler.loadCamelModel(camelResource, new NullProgressMonitor());
 
 		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel.getDataformatModel());
 		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id);
@@ -150,20 +116,28 @@ public class NewDataFormatWizardIT {
 		check(id, reloadedCamelFile);
 		
 		// check that dependencies were added
-		assertThat(dataFormat.getDependencies()).isNotEmpty(); 
+		List<Dependency> mavenProjectDependencies = getMavenProjectDependencies(project);
+		for(org.fusesource.ide.camel.model.service.core.catalog.Dependency dataFormatDependency : dataFormat.getDependencies()){
+			Stream<Dependency> filter = mavenProjectDependencies.stream()
+			.filter(dep -> dep.getGroupId().equals(dataFormatDependency.getGroupId()))
+			.filter(dep -> dep.getArtifactId().equals(dataFormatDependency.getArtifactId()));
+			assertThat(filter.findFirst().isPresent())
+				.as("The dependency "+ dataFormatDependency.getGroupId() + ":"+dataFormatDependency.getArtifactId() + " has not been added to the maven project dependency")
+				.isTrue();
+		}
 	}
 	
 	/**
 	 * @param project
 	 * @return the Maven pom dependencies corresponding to the supplied project
 	 */
-	List<Dependency> getMavenProjectDependencies(IProject project) throws CoreException {
+	private List<Dependency> getMavenProjectDependencies(IProject project) throws CoreException {
 		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
 		if (pomIFile.exists()) {
 			final Model m2m = MavenPlugin.getMaven().readModel(pomIFile.getLocation().toFile());
 			return m2m.getDependencies();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -207,7 +181,6 @@ public class NewDataFormatWizardIT {
 	@Before
 	public void setup() throws Exception {
 		CamelEditorUIActivator.pluginLog().logInfo("Starting setup for "+ NewDataFormatWizardIT.class.getSimpleName());
-		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 		waitJob();
 		CamelEditorUIActivator.pluginLog().logInfo("End setup for "+ NewDataFormatWizardIT.class.getSimpleName());
 	}
@@ -218,31 +191,4 @@ public class NewDataFormatWizardIT {
 		jobWaiterUtil.waitBuildAndRefreshJob(new NullProgressMonitor());
 	}
 
-	@After
-	public void tearDown() throws CoreException, InterruptedException, IOException {
-		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
-
-		if (project != null) {
-			//refresh otherwise cannot delete due to target folder created
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			waitJob();
-			CommonTestUtils.readAndDispatch(0);
-			boolean projectSuccesfullyDeleted = false;
-			while(!projectSuccesfullyDeleted ){
-				try{
-					project.delete(true, true, new NullProgressMonitor());
-				} catch(Exception e){
-					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
-					CommonTestUtils.readAndDispatch(0);
-					waitJob();
-					continue;
-				}
-				projectSuccesfullyDeleted = true;
-			}
-		}
-
-		CommonTestUtils.closeAllEditors();
-		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
-	}
 }

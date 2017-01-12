@@ -146,7 +146,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 List<Dependency> deps = new ArrayList<>();
                 deps.add(dep);
                 try {
-                    new MavenUtils().updateMavenDependencies(deps);
+                    new MavenUtils().updateMavenDependencies(deps, dataFormat.getCamelFile().getResource().getProject());
                 } catch (CoreException e) {
                     Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
                 }
