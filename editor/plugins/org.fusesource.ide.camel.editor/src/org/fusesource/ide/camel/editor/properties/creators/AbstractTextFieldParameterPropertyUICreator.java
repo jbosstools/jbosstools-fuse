@@ -75,7 +75,7 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 	public String getInitialValue() {
 		final String parameterName = parameter.getName();
 		final Object parameterValue = camelModelElement.getParameter(parameterName);
-		return (String) (parameterValue != null ? parameterValue : eip.getParameter(parameterName).getDefaultValue());
+		return (String) (parameterValue != null ? parameterValue : eip.getParameter(parameterName) != null ? eip.getParameter(parameterName).getDefaultValue() : "");
 	}
 
 	@Override

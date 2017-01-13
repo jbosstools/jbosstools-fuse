@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.details.BooleanParameterPropertyUICreatorForDetails;
-import org.fusesource.ide.camel.editor.properties.creators.details.ClassBasedParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.editor.properties.creators.details.DescriptionParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.details.FileParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.editor.properties.creators.details.NumberParameterPropertyUICreatorForDetails;
@@ -114,13 +113,17 @@ public class DetailsSection extends FusePropertySection {
         	if (group.equals(DEFAULT_GROUP) && prop.getGroup() != null && prop.getGroup().trim().length()>0) continue;
         	
         	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if ((p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
+        	if ((AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind()) && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || "org.apache.camel.model.OtherwiseDefinition".equals(p.getJavaType())) continue;
+
+        	// we currently don't want to display class params of type element
+        	if (CamelComponentUtils.isClassProperty(p) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())) continue;
         	
             ISWTObservableValue uiObservable = null;
             IObservableList uiListObservable = null;
             IObservableValue modelObservable = null;
             IObservableList modelListObservable = null;
             IValidator validator = null;
+            
 			createPropertyLabel(toolkit, page, p);
             
             Control c = null;
@@ -404,9 +407,8 @@ public class DetailsSection extends FusePropertySection {
             // UNSUPPORTED PROPERTIES / REFS
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
 				new UnsupportedParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-			} else if ("redeliveryPolicy".equals(prop.getName())) {
-				Object valueToDisplay = (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName())
-						: this.eip.getParameter(p.getName()).getDefaultValue());
+            } else if ("redeliveryPolicy".equals(prop.getName())) {
+				Object valueToDisplay = (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
 				if (valueToDisplay instanceof AbstractCamelModelElement) {
 					Group objectGroup = getWidgetFactory().createGroup(page, "");
 					objectGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).create());
@@ -422,10 +424,9 @@ public class DetailsSection extends FusePropertySection {
 					}
 					c = objectGroup;
 				}
-
-				// CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
+			// CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
 			} else {
-				new ClassBasedParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, prop, page, getWidgetFactory()).create();
+				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             }
             
 			// bind the observables

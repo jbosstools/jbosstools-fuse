@@ -39,6 +39,7 @@ public class NumberParameterPropertyUICreatorIT extends AbstractParameterPropert
 		parameter = new Parameter();
 		parameter.setName("testParameterName");
 		parameter.setJavaType(Integer.class.getName());
+		parameter.setType("integer");
 		parameter.setKind("parameter");
 		eip = new Eip();
 		final ArrayList<Parameter> parameters = new ArrayList<>();
