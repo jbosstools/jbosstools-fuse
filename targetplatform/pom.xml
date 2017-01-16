@@ -15,6 +15,30 @@
 	<packaging>pom</packaging>
 	<name>JBoss Fuse Tooling :: Target Platform Generation</name>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-tp</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/${jbtis.version}/aggregate-${jbtis.classifier}.target</url>
+							<overwrite>true</overwrite>
+							<skipCache>true</skipCache>
+							<outputDirectory>${project.build.directory}/tp</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<profiles>
 		<profile>
 			<id>multiple2repo</id>
