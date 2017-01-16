@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
@@ -104,7 +105,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 
 		runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
 		runtimeComboViewer.setComparator(new ViewerComparator(new Comparator<String>() {
-
 			@Override
 			public int compare(String o1, String o2) {
 				if(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
@@ -119,13 +119,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeComboViewer.getCombo().setToolTipText(Messages.newProjectWizardRuntimePageRuntimeDescription);
 		runtimeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		runtimeComboViewer.getCombo().addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
 			@Override
 			public void modifyText(ModifyEvent e) {
-				lastSelectedRuntime = runtimeComboViewer.getSelection().toString();
+				lastSelectedRuntime = getSelectedRuntimeAsString();
 				preselectCamelVersionForRuntime(determineRuntimeCamelVersion(getSelectedRuntime()));
 				validate();
 			}
@@ -143,12 +139,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeNewButton.setText(Messages.newProjectWizardRuntimePageRuntimeNewButtonLabel);
 		runtimeNewButton.setToolTipText(Messages.newProjectWizardRuntimePageRuntimeNewButtonDescription);
 		runtimeNewButton.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-	
-			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] oldRuntimes = runtimeComboViewer.getCombo().getItems();
@@ -280,7 +270,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 		
 		String lastUsedRuntime = lastSelectedRuntime;
-		List<String> runtimesList = new ArrayList<String>();
+		List<String> runtimesList = new ArrayList<>();
 		String selectedRuntime = null;
 	
 		serverRuntimes = getServerRuntimes(null);
@@ -390,7 +380,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 		
 		if (!Widgets.isDisposed(runtimeComboViewer) && !Widgets.isDisposed(camelVersionCombo)) {
-			setPageComplete(!Strings.isBlank(runtimeComboViewer.getSelection().toString()) && 
+			setPageComplete(!Strings.isBlank(getSelectedRuntimeAsString()) && 
 							!Strings.isBlank(camelVersionCombo.getText()) &&
 							!warningIconLabel.isVisible());
 		}
@@ -493,10 +483,18 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 */
 	public IRuntime getSelectedRuntime() {
 		if (!Widgets.isDisposed(runtimeComboViewer)) {
-			String runtimeId = runtimeComboViewer.getSelection().toString();
-			if (!runtimeId.equalsIgnoreCase(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel)) {
+			String runtimeId = getSelectedRuntimeAsString();
+			if (!Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equalsIgnoreCase(runtimeId)) {
 				return serverRuntimes.get(runtimeId);	
-			}			
+			}
+		}
+		return null;
+	}
+	
+	private String getSelectedRuntimeAsString(){
+		IStructuredSelection structuredSelection = runtimeComboViewer.getStructuredSelection();
+		if(!structuredSelection.isEmpty()){
+			return (String) structuredSelection.getFirstElement();
 		}
 		return null;
 	}
