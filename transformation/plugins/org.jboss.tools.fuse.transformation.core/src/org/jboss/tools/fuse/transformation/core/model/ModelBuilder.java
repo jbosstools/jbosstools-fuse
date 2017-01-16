@@ -17,13 +17,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
+
 public class ModelBuilder {
 
     public static Model fromJavaClass(Class<?> javaClass) {
         Model model = new Model(javaClass.getSimpleName(), javaClass.getName());
         List<Field> fields = new LinkedList<Field>();
         getFields(javaClass, fields);
-        addFieldsToModel(fields, model);
+        addFieldsToModel(fields, model, null);
         model.setModelClass(javaClass);
         return model;
     }
@@ -55,10 +57,12 @@ public class ModelBuilder {
         return listName.split("\\[")[1].split("\\]")[0]; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    private static void addFieldsToModel(List<Field> fields, Model model) {
+    private static void addFieldsToModel(List<Field> fields, Model model, Class<?> parameterizedType) {
         for (Field field : fields) {
             Class<?> fieldClass;
+            Type fieldType = null;
             boolean isCollection = false;
+            Class<?> innerParameterizedType = null;
 
             if (field.getType().isArray()) {
                 isCollection = true;
@@ -66,13 +70,32 @@ public class ModelBuilder {
             } else if (Collection.class.isAssignableFrom(field.getType())) {
                 isCollection = true;
                 Type ft = field.getGenericType();
-                if (ft instanceof ParameterizedType) {
+                if (ft instanceof ParameterizedType && ((ParameterizedType) ft).getActualTypeArguments()[0] instanceof Class) {
                     fieldClass = (Class<?>) ((ParameterizedType) ft).getActualTypeArguments()[0];
+                } else if (ft instanceof ParameterizedType && ((ParameterizedType) ft).getActualTypeArguments()[0] instanceof Type) {
+                	fieldType = (Type) ((ParameterizedType) ft).getActualTypeArguments()[0];
+                	if (fieldType instanceof ParameterizedType) {
+                		ParameterizedType pType = (ParameterizedType) fieldType;
+                		fieldClass = (Class<?>) pType.getRawType(); // JAXBElement
+                		innerParameterizedType = (Class<?>) pType.getActualTypeArguments()[0]; // java.lang.String
+                		// TODO: try and crawl back up if the fieldClass is JAXBElement
+                		// if it's a JAXBElement, look at the value and use the parameterized type
+                	} else {
+                        fieldClass = Object.class;
+                	}
                 } else {
                     fieldClass = Object.class;
                 }
             } else {
-                fieldClass = field.getType();
+            	if (field.getDeclaringClass().isAssignableFrom(JAXBElement.class) && parameterizedType != null) {
+            		if (field.getName().equals("value")) {
+            			fieldClass = parameterizedType;
+                	} else {
+                		fieldClass = field.getType();
+            		}
+            	} else {
+            		fieldClass = field.getType();
+            	}
             }
             
             // Create the model for this field
@@ -82,7 +105,7 @@ public class ModelBuilder {
 
             // Deal with child fields if necessary
             if (parseChildren(fieldClass)) {
-                addFieldsToModel(getFields(fieldClass, model), child);
+                addFieldsToModel(getFields(fieldClass, model), child, innerParameterizedType);
             }
         }
     }
@@ -110,10 +133,21 @@ public class ModelBuilder {
             return;
         }
 
-        for (Field field : clazz.getDeclaredFields()) {
-            if (!field.isSynthetic()) {
-                fields.add(field);
-            }
+        if (clazz.getName().equals(JAXBElement.class.getName())) {
+        	try {
+				Field valueField = clazz.getDeclaredField("value");
+        		fields.add(valueField);
+			} catch (NoSuchFieldException e) {
+				// ignore
+			} catch (SecurityException e) {
+				// ignore
+			}
+        } else {
+        	for (Field field : clazz.getDeclaredFields()) {
+        		if (!field.isSynthetic()) {
+        			fields.add(field);
+        		}
+        	}
         }
         getFields(clazz.getSuperclass(), fields);
     }
