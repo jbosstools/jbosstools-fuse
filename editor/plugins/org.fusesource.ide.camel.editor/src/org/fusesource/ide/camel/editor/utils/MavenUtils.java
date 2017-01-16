@@ -77,7 +77,7 @@ public class MavenUtils {
 	 *            the Maven dependencies to be updated
 	 * @throws CoreException
 	 * 
-	 * @Deprecated Please use the version which passing the project parameter. It avoids to rely on external system configuration.
+	 * @Deprecated Use {@link #updateMavenDependencies(`List<Dependency>, IProject)} instead to avoid relying upon external system configuration.
 	 */
 	@Deprecated
 	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
