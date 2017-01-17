@@ -190,7 +190,7 @@ public class MavenUtils {
 	 * @param pomFile
 	 * @param model
 	 */
-	void writeNewPomFile(IProject project, final File pomFile, final Model model) {
+	public void writeNewPomFile(IProject project, final File pomFile, final Model model) {
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 			MavenPlugin.getMaven().writeModel(model, os);
 			IFile pomIFile2 = project.getProject().getFile("pom.xml");

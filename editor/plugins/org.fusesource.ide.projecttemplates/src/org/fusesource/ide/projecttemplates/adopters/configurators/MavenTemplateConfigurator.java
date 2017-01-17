@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.apache.maven.model.Model;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -121,13 +122,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			MavenUtils.manageStagingRepositories(m2m);
 			subMonitor.worked(1);
 			
-			OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile));
-		    MavenPlugin.getMaven().writeModel(m2m, os);
-			IFile pomIFile2 = project.getProject().getFile("pom.xml"); //$NON-NLS-1$
-			if (pomIFile2 != null) {
-				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, subMonitor.newChild(1));
-		    }
-			os.close();
+			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
