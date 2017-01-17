@@ -33,7 +33,8 @@ public class CamelRunMavenLaunchDelegateTest {
 		Mockito.doReturn("file:C:\\my%20path%20with%20space").when(launchConfig).getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String) null);
 		Mockito.doReturn(null).when(camelRunMavenLaunchDelegate).getFileInWorkspace(Mockito.anyString());
 		Mockito.doReturn(false).when(camelRunMavenLaunchDelegate).isWarPackaging(Mockito.any(IFile.class));
-
+		Mockito.doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(Mockito.any(IFile.class));
+		
 		Assertions.assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
 				.isEqualTo("clean package org.apache.camel:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
 	}
