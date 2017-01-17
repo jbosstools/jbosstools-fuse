@@ -59,7 +59,9 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 			}
 		}
 		
-		if (isWarPackaging(pomFile)) {
+		if (MavenLaunchUtils.isSpringBootProject(pomFile)) {
+			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_SPRINGBOOT);
+		} else if (isWarPackaging(pomFile)) {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
 		} else {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);

@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.launcher.Activator;
 
 /**
@@ -74,5 +75,11 @@ public class MavenLaunchUtils {
 		if (pomFile == null || !pomFile.exists()) throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine packaging type because given pom file reference is null!"));
 		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
 		return "war".equalsIgnoreCase(model.getPackaging());
+	}
+	
+	public static boolean isSpringBootProject(IFile pomFile) throws CoreException {
+		if (pomFile == null || !pomFile.exists()) throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine project type because given pom file reference is null!"));
+		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+		return CamelModelFactory.hasSpringBootDependency(model.getDependencies());
 	}
 }

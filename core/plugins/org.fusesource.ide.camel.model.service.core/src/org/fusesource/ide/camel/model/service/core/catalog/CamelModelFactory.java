@@ -307,7 +307,7 @@ public class CamelModelFactory {
 		return RUNTIME_PROVIDER_KARAF;
 	}
 	
-	private static boolean hasSpringBootDependency(List<Dependency> dependencies){
+	public static boolean hasSpringBootDependency(List<Dependency> dependencies){
 		return dependencies != null
 				&& dependencies.stream()
 					.filter(dependency -> CAMEL_SPRING_BOOT_STARTER.equals(dependency.getArtifactId()))

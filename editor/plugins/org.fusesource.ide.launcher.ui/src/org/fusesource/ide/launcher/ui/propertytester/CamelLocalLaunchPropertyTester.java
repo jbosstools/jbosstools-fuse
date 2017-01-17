@@ -29,8 +29,10 @@ import org.fusesource.ide.launcher.ui.Activator;
 
 public class CamelLocalLaunchPropertyTester extends PropertyTester {
 
-	private static final String CAMEL_MAVEN_PLUGIN = "camel-maven-plugin";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
+	private static final String CAMEL_MAVEN_PLUGIN = "camel-maven-plugin";
+	private static final String ORG_SPRINGFRAMEWORK_BOOT = "org.springframework.boot";
+	private static final String SPRING_BOOT_MAVEN_PLUGIN = "spring-boot-maven-plugin";	
 	static final String IS_LOCAL_LAUNCH_AVAILABLE = "isLocalLaunchAvailable";
 
 	public CamelLocalLaunchPropertyTester() {
@@ -45,7 +47,7 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 				Model mavenModel = retrieveMavenModel(resource);
 				if(mavenModel != null){
 					List<Plugin> plugins = retrievePlugins(mavenModel);
-					return containsCamelMavenPlugin(plugins);
+					return containsCamelMavenPlugin(plugins) || containsSpringBootMavenPlugin(plugins);
 				}
 			}
 		}
@@ -80,8 +82,15 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 		return plugins.parallelStream().filter(this::isCamelMavenPlugin).findFirst().isPresent();
 	}
 	
+	private boolean containsSpringBootMavenPlugin(List<Plugin> plugins) {
+		return plugins.parallelStream().filter(this::isSpringBootMavenPlugin).findFirst().isPresent();
+	}
+	
 	private boolean isCamelMavenPlugin(Plugin plugin) {
 		return ORG_APACHE_CAMEL.equals(plugin.getGroupId()) && CAMEL_MAVEN_PLUGIN.equals(plugin.getArtifactId());
 	}
 
+	private boolean isSpringBootMavenPlugin(Plugin plugin) {
+		return ORG_SPRINGFRAMEWORK_BOOT.equals(plugin.getGroupId()) && SPRING_BOOT_MAVEN_PLUGIN.equals(plugin.getArtifactId());
+	}
 }
