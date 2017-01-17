@@ -10,16 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.maven;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -55,7 +50,6 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
-import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
@@ -116,14 +110,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				configureWARStructureMapping(request.getProject(), monitor);
 			}
 			
-			Model mavenModel = request.getMavenProject().getModel();
-			if(MavenUtils.manageStagingRepositories(mavenModel)){
-				try (OutputStream os = new BufferedOutputStream(new FileOutputStream(request.getMavenProject().getFile()))){
-					MavenPlugin.getMaven().writeModel(mavenModel, os);
-				} catch (IOException e) {
-					ProjectTemplatesActivator.pluginLog().logError(e);
-				}
-			}
 		}
 	}
 
