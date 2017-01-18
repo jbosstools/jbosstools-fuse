@@ -333,7 +333,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		LanguageModel model = getCamelModel(expressionElement).getLanguageModel();
 		Language lang = model.getLanguageByName(language);
 
-		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName()) && lang != null) {
+		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName())) {
 			// normal expression subnode - no cascading -> when.<expression>
 			// the content of expressionElement is the language node itself
 			if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
@@ -353,8 +353,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
 					selectedEP.setParameter(prop.getName(), expressionElement);
 					selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
-
-					updateDependencies(lang.getDependencies());
+					
+					if (lang != null) { // some languages are not defined in catalog like "method"
+						updateDependencies(lang.getDependencies());
+					}
 				} else {
 					// user wants to delete the expression
 					selectedEP.getXmlNode().removeChild(oldExpNode);
@@ -368,7 +370,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 				this.selectedEP.setParameter(prop.getName(), expressionElement);
 
-				updateDependencies(lang.getDependencies());
+				if (lang != null) { // some languages are not defined in catalog like "method"
+					updateDependencies(lang.getDependencies());
+				}
 			}
 			uiExpressionElement = expressionElement;
 
@@ -398,7 +402,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 						uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 						expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
 						expressionElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, uiExpressionElement);
-						updateDependencies(lang.getDependencies());
+						
+						if (lang != null) { // some languages are not defined in catalog like "method"
+							updateDependencies(lang.getDependencies());
+						}
 					} else {
 						// user deletes the expression
 						selectedEP.getXmlNode().removeChild(expressionElement.getXmlNode());
@@ -432,7 +439,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				this.selectedEP.setParameter(prop.getName(), expContainerElement);
 				uiExpressionElement = expressionElement;
 
-				updateDependencies(lang.getDependencies());
+				if (lang != null) { // some languages are not defined in catalog like "method"
+					updateDependencies(lang.getDependencies());
+				}
 			}
 		}
 
@@ -634,6 +643,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				initialTextValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
 				initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+			} else {
+				initialTextValue = p.getDefaultValue();
 			}
 			CCombo txtField = getWidgetFactory().createCCombo(parent, SWT.DROP_DOWN | SWT.LEFT | SWT.READ_ONLY);
 			txtField.setItems(CamelComponentUtils.getChoices(p));
@@ -658,7 +669,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			}
 			c = txtField;
 
-			// BOOLEAN PROPERTIES
+		// BOOLEAN PROPERTIES
 		} else if (CamelComponentUtils.isBooleanProperty(p)) {
 			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
 			Boolean b = false;
@@ -671,6 +682,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				}
 			} else if (parameterContainer != null) {
 				b = Boolean.parseBoolean(parameterContainer.getParameter(p.getName()).getDefaultValue());
+			} else {
+				b = Boolean.parseBoolean(p.getDefaultValue());
 			}
 			checkBox.setSelection(b);
 			checkBox.addSelectionListener(new SelectionAdapter() {
@@ -694,10 +707,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			String initialTextValue = null;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				initialTextValue = (String) camelModelElement.getParameter(p.getName());
+			} else if (parameterContainer != null) {
+				initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
 			} else {
-				if (parameterContainer != null) {
-					initialTextValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
-				}
+				initialTextValue = p.getDefaultValue();
 			}
 			Text txtField = getWidgetFactory().createText(parent, initialTextValue, SWT.SINGLE | SWT.LEFT);
 			txtField.addModifyListener(new ModifyListener() {
@@ -717,6 +730,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				initialValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
 				initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+			} else {
+				initialValue = p.getDefaultValue();
 			}
 			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.RIGHT);
 			txtField.addModifyListener(new ModifyListener() {
@@ -762,6 +777,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				initialValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
 				initialValue = parameterContainer.getParameter(p.getName()).getDefaultValue();
+			} else {
+				initialValue = p.getDefaultValue();
 			}
 			Text txtField = getWidgetFactory().createText(parent, initialValue, SWT.SINGLE | SWT.LEFT);
 			txtField.addModifyListener(new ModifyListener() {
