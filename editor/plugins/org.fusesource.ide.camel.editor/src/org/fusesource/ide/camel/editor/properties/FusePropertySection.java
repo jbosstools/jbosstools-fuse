@@ -432,7 +432,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				this.selectedEP.setParameter(prop.getName(), expContainerElement);
 				uiExpressionElement = expressionElement;
 
-				updateDependencies(lang.getDependencies());
+				if (lang != null) { // some languages are not defined in catalog like "method"
+					updateDependencies(lang.getDependencies());
+				}
 			}
 		}
 
