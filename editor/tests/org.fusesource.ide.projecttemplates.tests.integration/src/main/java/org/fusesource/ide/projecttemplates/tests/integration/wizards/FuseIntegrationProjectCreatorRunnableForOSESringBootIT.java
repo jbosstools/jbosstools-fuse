@@ -12,12 +12,7 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
-import javax.management.MalformedObjectNameException;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.debug.core.DebugException;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
@@ -40,11 +35,6 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 		newProjectMetadata.setTemplate(new OSESpringBootXMLTemplate());
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
-	}
-	
-	@Override
-	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
-		// Local launch is not configured for SpringBoot projects
 	}
 	
 	protected void additionalChecks(IProject project) {
