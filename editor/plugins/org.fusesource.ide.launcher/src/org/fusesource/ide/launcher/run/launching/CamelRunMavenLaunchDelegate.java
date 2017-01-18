@@ -59,7 +59,9 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 			}
 		}
 		
-		if (isWarPackaging(pomFile)) {
+		if (isSpringBoot(pomFile)) {
+			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_SPRINGBOOT);
+		} else if (isWarPackaging(pomFile)) {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
 		} else {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
@@ -76,6 +78,10 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 		return MavenLaunchUtils.isPackagingTypeWAR(pomFile);
 	}
 
+	protected boolean isSpringBoot(IFile pomFile) throws CoreException {
+		return MavenLaunchUtils.isSpringBootProject(pomFile);
+	}
+	
 	/**
 	 * @param filePath
 	 * @return

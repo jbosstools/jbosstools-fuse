@@ -673,7 +673,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	class JMXConnectJob extends Job {
 		
-		private static final long CONNECTION_TIMEOUT = 60 * 1000; // 60 seconds timeout
+		private static final long CONNECTION_TIMEOUT_IN_MILLIS = 1000 * 60 * 5; // 5 minutes timeout
 		
 		public JMXConnectJob() {
 			super("Connect to Camel Debugger...");
@@ -690,7 +690,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			boolean connected = false;
 			
 			// run until connected or timed out
-			while (!connected && System.currentTimeMillis()-startTime <= CONNECTION_TIMEOUT && !monitor.isCanceled()) {
+			while (!connected && System.currentTimeMillis()-startTime <= CONNECTION_TIMEOUT_IN_MILLIS && !monitor.isCanceled()) {
 				try {
 					if (connectToVM()) {
 						// connected to the camel vm
