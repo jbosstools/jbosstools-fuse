@@ -281,6 +281,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
 		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
+		if (camelFacetVersion == null) {
+			camelFacetVersion = getCamelFacetVersion(CamelModelFactory.getCamelVersion(fproj.getProject()));
+		}
 		installFacet(fproj, fpwc, camelFacet,
 				camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
 		if (camelFacetVersion == null) {
