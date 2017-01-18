@@ -333,7 +333,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		LanguageModel model = getCamelModel(expressionElement).getLanguageModel();
 		Language lang = model.getLanguageByName(language);
 
-		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName()) && lang != null) {
+		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName())) {
 			// normal expression subnode - no cascading -> when.<expression>
 			// the content of expressionElement is the language node itself
 			if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
@@ -353,8 +353,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					expressionElement = new CamelBasicModelElement(this.selectedEP, expNode);
 					selectedEP.setParameter(prop.getName(), expressionElement);
 					selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
-
-					updateDependencies(lang.getDependencies());
+					
+					if (lang != null) { // some languages are not defined in catalog like "method"
+						updateDependencies(lang.getDependencies());
+					}
 				} else {
 					// user wants to delete the expression
 					selectedEP.getXmlNode().removeChild(oldExpNode);
@@ -368,7 +370,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 				this.selectedEP.setParameter(prop.getName(), expressionElement);
 
-				updateDependencies(lang.getDependencies());
+				if (lang != null) { // some languages are not defined in catalog like "method"
+					updateDependencies(lang.getDependencies());
+				}
 			}
 			uiExpressionElement = expressionElement;
 
@@ -398,7 +402,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 						uiExpressionElement = new CamelBasicModelElement(expressionElement, expNode);
 						expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
 						expressionElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, uiExpressionElement);
-						updateDependencies(lang.getDependencies());
+						
+						if (lang != null) { // some languages are not defined in catalog like "method"
+							updateDependencies(lang.getDependencies());
+						}
 					} else {
 						// user deletes the expression
 						selectedEP.getXmlNode().removeChild(expressionElement.getXmlNode());
