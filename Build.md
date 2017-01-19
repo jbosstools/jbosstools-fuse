@@ -35,7 +35,7 @@ Here's how to retrieve the target files describing the Target Platform...
     $ cd fuseide/targetplatform
     $ mvn generate-sources
 
-Once the build is done you end up with a file aggregate-*.target older inside the *target/tp* subfolder. Now open this file with Target File editor from Eclipse IDE and click "Set as target Platform" at the top right. Be patient... and it will be ready.
+Once the build is done you end up with a file aggregate-\*.target folder inside the *target/tp* subfolder. Now open this file with Target File editor from Eclipse IDE and click "Set as target Platform" at the top right. Be patient... and it will be ready.
 
 ## Eclipse Setup
 At _master_ branch we always try to use the latest Eclipse version. Please refer to the target platform plugin to see which versions of Eclipse are supported. The _master_ branch was using *Eclipse Luna* when this document was created.
