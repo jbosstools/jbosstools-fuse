@@ -12,9 +12,13 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -227,7 +231,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	private Predicate<IMarker> filterError(){
 		return marker -> {
 			try {
-				return marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR);
+				Object severity = marker.getAttribute(IMarker.SEVERITY);
+				return severity == null || severity.equals(IMarker.SEVERITY_ERROR);
 			} catch (CoreException e1) {
 				return true;
 			}
@@ -241,7 +246,8 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	private Predicate<IMarker> filterWarning(){
 		return marker -> {
 			try {
-				boolean isWarning = marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_WARNING);
+				Object severity = marker.getAttribute(IMarker.SEVERITY);
+				boolean isWarning = severity ==null  || severity.equals(IMarker.SEVERITY_WARNING);
 				String message = (String)marker.getAttribute(IMarker.MESSAGE);
 				return isWarning
 						//TODO: managed other dependencies than camel
@@ -260,17 +266,40 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				.filter(filter)
 				.map(marker -> {
 						try {
-							Map<String, Object> markerInformations = marker.getAttributes();
-							if(marker.getResource() != null){
-								markerInformations.put("resource affected", marker.getResource().getLocation().toOSString());
-							}
-							return markerInformations;
+							return extractMarkerInformation(marker);
 						} catch (Exception e) {
-							return marker;
+							ProjectTemplatesIntegrationTestsActivator.pluginLog().logError(e);
+							try {
+								return "type: "+marker.getType()+"\n"+
+										"attributes:\n"+
+										marker.getAttributes().entrySet().stream()
+							            .map(entry -> entry.getKey() + " - " + entry.getValue())
+							            .collect(Collectors.joining(", "));
+							} catch (CoreException e1) {
+								ProjectTemplatesIntegrationTestsActivator.pluginLog().logError(e1);
+								return marker;
+							}
 						}
 					})
 				.collect(Collectors.toList());
 		assertThat(readableMarkers).isEmpty();
+	}
+
+	private Object extractMarkerInformation(IMarker marker) throws CoreException, IOException {
+		Map<String, Object> markerInformations = marker.getAttributes() != null ? marker.getAttributes() : new HashMap<>();
+		IResource resource = marker.getResource();
+		if(resource != null){
+			markerInformations.put("resource affected", resource.getLocation().toOSString());
+			if(resource instanceof IFile){
+				InputStream contents = ((IFile) resource).getContents();
+				try (BufferedReader buffer = new BufferedReader(new InputStreamReader(contents))) {
+					markerInformations.put("resource affected content", buffer.lines().collect(Collectors.joining("\n")));
+				}
+			}
+		}
+		markerInformations.put("type: ", marker.getType());
+		markerInformations.put("Creation time: ", marker.getCreationTime());
+		return markerInformations;
 	}
 
 	/**
