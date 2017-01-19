@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.jboss.tools</groupId>
     <artifactId>parent</artifactId>
-    <version>4.4.0.Alpha1-SNAPSHOT</version>
+    <version>4.4.2.Final-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -51,7 +51,6 @@
     <!-- fuse tooling related -->
     <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
     <forge-project-id>ide</forge-project-id>
-    <ide-version>${project.version}</ide-version>
     
     <!-- camel version -->
     <camel.version>2.17.0.redhat-630187</camel.version>
