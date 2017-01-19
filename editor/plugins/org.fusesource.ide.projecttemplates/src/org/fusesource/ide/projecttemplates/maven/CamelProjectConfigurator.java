@@ -269,11 +269,18 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
 		for (Dependency dep : mavenProject.getDependencies()) {
-			if (isCamelDependency(dep)) {
-				return dep.getVersion();
-			}
-		}
-		return CamelModelFactory.getLatestCamelVersion();
+            if (isCamelDependency(dep)) {
+                return dep.getVersion();
+            }
+        }
+        if (mavenProject.getDependencyManagement() != null) {
+            for (Dependency dep : mavenProject.getDependencyManagement().getDependencies()) {
+                if (isCamelDependency(dep)) {
+                    return dep.getVersion();
+                }
+            }
+        }
+        return CamelModelFactory.getLatestCamelVersion();		
 	}
 
 	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
