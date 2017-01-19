@@ -782,9 +782,9 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		}
 	}
 	
-	class ThreadGarbageCollector extends Job {
+	public class ThreadGarbageCollector extends Job {
 		
-		private final long THREAD_LIFE_DURATION = 5*30*1000; // 5 minutes
+		public static final long THREAD_LIFE_DURATION = 5*60*1000; // 5 minutes
 		
 		public ThreadGarbageCollector() {
 			super("Thread CleanUp Service");

@@ -396,7 +396,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		});
 		executePomAction.launch(getSelectionForLaunch(project), ILaunchManager.DEBUG_MODE);
 		int currentAwaitedTime = 0;
-		while (currentAwaitedTime < 30000 && !deploymentFinished) {
+		while (currentAwaitedTime < CamelDebugTarget.ThreadGarbageCollector.THREAD_LIFE_DURATION && !deploymentFinished) {
 			readAndDispatch(0);
 			JMXConnector jmxc = null;
 			try{
