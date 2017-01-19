@@ -40,13 +40,16 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor) throws CoreException {
-		String newVersion = getCamelVersionForFacetVersion(fv);
+		String newVersion = getCamelVersionForFacetVersion(fv, project);
 		updateCamelVersion(project, newVersion);
 	}
 	
-	private String getCamelVersionForFacetVersion(IProjectFacetVersion fv) {
+	private String getCamelVersionForFacetVersion(IProjectFacetVersion fv, IProject project) {
 		String facetVersion = fv.getVersionString();
 		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(facetVersion);
+		if (camelVersion == null) {
+			camelVersion = CamelModelFactory.getCamelVersion(project);
+		}
 		if (camelVersion == null) {
 			camelVersion = CamelModelFactory.getLatestCamelVersion();
 		}
