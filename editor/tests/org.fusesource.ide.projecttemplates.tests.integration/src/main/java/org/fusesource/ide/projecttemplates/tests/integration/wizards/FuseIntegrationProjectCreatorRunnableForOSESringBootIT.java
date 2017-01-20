@@ -21,7 +21,7 @@ import org.junit.Test;
 public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends FuseIntegrationProjectCreatorRunnableIT {
 	
 	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT() {
-		camelVersion = "2.18.1.redhat-000007";
+		camelVersion = "2.18.1.fuse-000025";
 	}
 	
 	@Test

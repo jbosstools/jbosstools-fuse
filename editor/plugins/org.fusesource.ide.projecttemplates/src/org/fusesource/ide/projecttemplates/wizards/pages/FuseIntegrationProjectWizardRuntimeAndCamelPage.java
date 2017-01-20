@@ -467,8 +467,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private boolean isCompatible(String runtimeCamelVersion, String selectedCamelVersion) {
 		String[] runtimeVersionParts = runtimeCamelVersion.split("\\."); //$NON-NLS-1$
 		String[] camelVersionParts = selectedCamelVersion.split("\\."); //$NON-NLS-1$
-		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1;  //$NON-NLS-1$
-		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1; //$NON-NLS-1$
+		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1 || runtimeCamelVersion.indexOf(".fuse-") != -1;  //$NON-NLS-1$
+		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1 || selectedCamelVersion.indexOf(".fuse-") != -1; //$NON-NLS-1$
 		
 		return runtimeVersionParts.length>1 && camelVersionParts.length>1 &&
 			   runtimeVersionParts[0].equals(camelVersionParts[0]) &&

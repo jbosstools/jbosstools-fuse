@@ -54,7 +54,7 @@ public class CamelModelFactory {
 		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-224");
 	}
 	
-	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000007").collect(Collectors.toSet());
+	private static final Set<String> pureFisVersions = Stream.of("2.18.1.fuse-000025").collect(Collectors.toSet());
 	
 	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-224";
 	

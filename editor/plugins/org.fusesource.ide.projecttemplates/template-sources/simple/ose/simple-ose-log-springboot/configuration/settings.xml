@@ -54,6 +54,19 @@
         </repository>
  
         
+        <repository>
+          <id>redhat.ea</id>
+          <name>Red Hat Early Access Repository</name>
+          <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+        </repository>
+ 
         
         <repository>
           <id>jboss.ea</id>
@@ -128,6 +141,19 @@
         </pluginRepository>
  
         
+        <pluginRepository>
+          <id>redhat.ea</id>
+          <name>Red Hat Early Access Repository</name>
+          <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+        </pluginRepository>
+ 
         
         <pluginRepository>
           <id>jboss.ea</id>

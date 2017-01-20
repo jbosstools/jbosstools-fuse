@@ -29,6 +29,10 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 			"fis-internal"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
 			"http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/";
+	private static final String PRODUCT_FUSE_NON_PRODUCTIZED_STAGING_REPO_URI =
+			"fuse-early-access"+
+			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
+			"https://origin-repository.jboss.org/nexus/content/groups/ea/";
 	private static final String THIRD_PARTY_STAGING_REPO_URI =
 			"redhat-ea"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
@@ -45,7 +49,8 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 		preferenceStore.setDefault(StagingRepositoriesConstants.STAGING_REPOSITORIES,
 				PRODUCT_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
 				THIRD_PARTY_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
-				PRODUCT_FIS_STAGING_REPO_URI);
+				PRODUCT_FIS_STAGING_REPO_URI+ StagingRepositoriesConstants.REPO_SEPARATOR +
+				PRODUCT_FUSE_NON_PRODUCTIZED_STAGING_REPO_URI);
 	}
 
 	IPreferenceStore getPreferenceStore() {
