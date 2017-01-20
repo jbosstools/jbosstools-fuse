@@ -23,6 +23,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesManager {
 
 	public static final String RED_HAT_SUFFIX = ".redhat-";
+	private static final String FUSE_SUFFIX = ".fuse-";
 	static final String ORG_APACHE_ACTIVEMQ = "org.apache.activemq";
 	public static final String ACTIVEMQ_CAMEL = "activemq-camel";
 	public static final String ACTIVEMQ_CAMEL_STARTER = "activemq-camel-starter";
@@ -65,12 +66,15 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 	}
 
 	String getActiveMQVersion(String camelVersion) {
-		boolean productizedVersion = camelVersion.indexOf(RED_HAT_SUFFIX) != -1;		
+		boolean redhatProductizedVersion = camelVersion.indexOf(RED_HAT_SUFFIX) != -1;
+		boolean fuseProductizedVersion = camelVersion.indexOf(FUSE_SUFFIX) != -1;	
 		String key = getVersionWithoutIdentifier(camelVersion);
 		String amqVersion = CAMEL_TO_AMQ_VERSION_MAPPING.get(key);
 		if(amqVersion != null) {
-			if (productizedVersion) {
+			if (redhatProductizedVersion) {
 				return String.format("%s%s%s", amqVersion, RED_HAT_SUFFIX, getBuildNumberFromVersion(camelVersion));
+			} else if(fuseProductizedVersion){
+				return String.format("%s%s%s", amqVersion, FUSE_SUFFIX, getBuildNumberFromVersion(camelVersion));
 			} else {
 				return amqVersion;
 			}
