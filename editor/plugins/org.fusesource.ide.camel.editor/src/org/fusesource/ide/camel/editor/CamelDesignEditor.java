@@ -518,7 +518,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		if (getDiagramTypeProvider() != null) {
 			getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
 		}
-        setPictogramElementsForSelection(null);
+		// Deselect to avoid refresh on a not well handled time by
+		// Graphiti which is disposing Font - see FUSETOOLS-1678 and FUSETOOLS-2246
+		getEditorSite().getSelectionProvider().setSelection(new StructuredSelection());
         GraphicalViewer graphicalViewer = getGraphicalViewer();
 	        
         if (graphicalViewer == null)
