@@ -34,6 +34,7 @@ import org.fusesource.ide.projecttemplates.preferences.initializer.StagingReposi
 public class MavenUtils {
 	
 	private static final String REDHAT_NAMING_USED_IN_VERSION = "redhat";
+	private static final String FUSE_NAMING_USED_IN_VERSION = "fuse";
 	private static final String CAMEL_ARTIFACT_ID_PREFIX = "camel-";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
 	private static final String JBOSS_FUSE_PARENT = "jboss-fuse-parent";
@@ -88,7 +89,7 @@ public class MavenUtils {
 		if(isMavenPropertyCamelVersionSet(properties)){
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		}
-		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION)){
+		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
 					if(isMavenPropertyFuseBomVersionSet(properties) && !CamelModelFactory.isPureFISVersion(camelVersion)){

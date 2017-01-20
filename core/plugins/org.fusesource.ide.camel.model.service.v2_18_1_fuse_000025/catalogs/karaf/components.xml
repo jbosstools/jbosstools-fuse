@@ -16,7 +16,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-elsql</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -94,7 +94,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-servlet</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -145,7 +145,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-asterisk</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -177,7 +177,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sjms</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -241,7 +241,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ssh</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -304,7 +304,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-geocoder</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -344,7 +344,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hazelcast</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -382,7 +382,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-apns</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -430,7 +430,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-batch</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -460,7 +460,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-chronicle</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -499,7 +499,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -535,7 +535,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jsch</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -580,7 +580,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cache</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -627,7 +627,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-github</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -666,7 +666,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mvel</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -694,7 +694,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-quartz2</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -747,7 +747,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-zookeeper</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -787,7 +787,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -819,7 +819,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-eventadmin</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -849,7 +849,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -938,7 +938,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1074,7 +1074,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-metrics</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1107,7 +1107,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ahc-ws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1155,7 +1155,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-lucene</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1187,7 +1187,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-freemarker</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1219,7 +1219,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rss</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1271,7 +1271,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sjms</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1317,7 +1317,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jcr</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1356,7 +1356,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1444,7 +1444,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-irc</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1493,7 +1493,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-kestrel</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1527,7 +1527,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1553,7 +1553,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1641,7 +1641,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1729,7 +1729,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-saxon</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1784,7 +1784,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-beanstalk</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1836,7 +1836,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hipchat</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1884,7 +1884,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stax</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1910,7 +1910,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cm-sms</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1939,7 +1939,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-splunk</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2007,7 +2007,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2051,7 +2051,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-lumberjack</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2084,7 +2084,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mina</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2133,7 +2133,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2178,7 +2178,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-kubernetes</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2230,7 +2230,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bean-validator</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2262,7 +2262,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2300,7 +2300,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2332,7 +2332,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-paho</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2371,7 +2371,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cxf</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2432,7 +2432,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2461,7 +2461,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlrpc</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2504,7 +2504,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2548,7 +2548,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty-http</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2660,7 +2660,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-solr</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2699,7 +2699,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2738,7 +2738,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mongodb-gridfs</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2779,7 +2779,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-restlet</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2844,7 +2844,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-schematron</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2872,7 +2872,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-routebox</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2915,7 +2915,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-braintree</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2955,7 +2955,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-dropbox</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2992,7 +2992,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3056,7 +3056,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-consul</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3102,7 +3102,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3146,7 +3146,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3201,7 +3201,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-exec</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3233,7 +3233,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-undertow</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3276,7 +3276,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-google-calendar</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3318,7 +3318,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-fop</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3347,7 +3347,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jdbc</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3386,7 +3386,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mustache</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3418,7 +3418,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3465,7 +3465,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-solr</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3503,7 +3503,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ahc-ws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3550,7 +3550,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty9</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3658,7 +3658,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-paxlogging</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3687,7 +3687,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sip</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3755,7 +3755,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stomp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3794,7 +3794,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3826,7 +3826,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cometd</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3876,7 +3876,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3973,7 +3973,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty4</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4073,7 +4073,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sip</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4141,7 +4141,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4231,7 +4231,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-pdf</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4265,7 +4265,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-atmosphere-websocket</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4330,7 +4330,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hdfs</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4397,7 +4397,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4433,7 +4433,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jbpm</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4483,7 +4483,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4537,7 +4537,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4566,7 +4566,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-disruptor</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4610,7 +4610,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jing</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4637,7 +4637,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-snmp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4698,7 +4698,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-influxdb</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4726,7 +4726,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-twitter</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4802,7 +4802,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-elasticsearch</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4839,7 +4839,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mqtt</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4905,7 +4905,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-slack</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4935,7 +4935,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-context</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4964,7 +4964,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-weather</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5032,7 +5032,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5087,7 +5087,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ahc</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5129,7 +5129,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-avro</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5169,7 +5169,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5205,7 +5205,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-dns</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5231,7 +5231,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-optaplanner</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5263,7 +5263,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jgroups</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5296,7 +5296,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-guava-eventbus</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5331,7 +5331,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-servicenow</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5402,7 +5402,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-kafka</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5503,7 +5503,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cxf</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5557,7 +5557,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cmis</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5587,7 +5587,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5616,7 +5616,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-pgevent</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5650,7 +5650,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-nats</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5693,7 +5693,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5744,7 +5744,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-nagios</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5777,7 +5777,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-openshift</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5832,7 +5832,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5865,7 +5865,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cometd</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5914,7 +5914,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5943,7 +5943,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mllp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5990,7 +5990,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ehcache</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6018,7 +6018,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-yammer</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6075,7 +6075,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6180,7 +6180,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6223,7 +6223,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6279,7 +6279,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-solr</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6317,7 +6317,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6384,7 +6384,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-smpp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6449,7 +6449,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6585,7 +6585,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hdfs2</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6651,7 +6651,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty4-http</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6762,7 +6762,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-disruptor</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6806,7 +6806,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6934,7 +6934,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-amqp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7114,7 +7114,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-facebook</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7243,7 +7243,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-ldap</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7270,7 +7270,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rabbitmq</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7350,7 +7350,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-printer</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7389,7 +7389,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7422,7 +7422,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-infinispan</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7461,7 +7461,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-quickfix</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7496,7 +7496,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7585,7 +7585,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-atom</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7636,7 +7636,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-etcd</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7677,7 +7677,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-google-mail</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7716,7 +7716,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7754,7 +7754,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-dozer</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7786,7 +7786,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ibatis</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7841,7 +7841,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmpp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7885,7 +7885,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-rmi</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7919,7 +7919,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-salesforce</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7999,7 +7999,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jms</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8180,7 +8180,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-msv</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8218,7 +8218,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jmx</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8274,7 +8274,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8322,7 +8322,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ldap</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8351,7 +8351,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-websocket</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8408,7 +8408,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8458,7 +8458,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8487,7 +8487,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jt400</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8546,7 +8546,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jclouds</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8589,7 +8589,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sap-netweaver</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8622,7 +8622,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8661,7 +8661,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-google-drive</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8701,7 +8701,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-ws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8749,7 +8749,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-crypto</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8795,7 +8795,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8863,7 +8863,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-coap</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8894,7 +8894,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8929,7 +8929,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jolt</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8961,7 +8961,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-xmlsecurity</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9024,7 +9024,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-couchdb</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9063,7 +9063,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cassandraql</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9105,7 +9105,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mybatis</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9160,7 +9160,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spark-rest</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9208,7 +9208,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-chunk</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9239,7 +9239,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-vertx</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9276,7 +9276,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-box</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9322,7 +9322,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ironmq</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9378,7 +9378,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-linkedin</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9419,7 +9419,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sql</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9492,7 +9492,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9528,7 +9528,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-git</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9567,7 +9567,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-aws</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9602,7 +9602,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-krati</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9657,7 +9657,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jcache</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9704,7 +9704,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jpa</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9774,7 +9774,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mongodb</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9820,7 +9820,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9863,7 +9863,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-flatpack</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9914,7 +9914,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-quartz</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9959,7 +9959,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-telegram</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10008,7 +10008,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-velocity</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10038,7 +10038,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-smpp</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10104,7 +10104,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mina2</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10158,7 +10158,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ganglia</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10199,7 +10199,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10246,7 +10246,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sql</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10279,7 +10279,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10310,7 +10310,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10356,7 +10356,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-redis</artifactId>
-            <version>2.18.1.redhat-000007</version>
+            <version>2.18.1.fuse-000025</version>
          </dependency>
       </dependencies>
       <componentProperties>
