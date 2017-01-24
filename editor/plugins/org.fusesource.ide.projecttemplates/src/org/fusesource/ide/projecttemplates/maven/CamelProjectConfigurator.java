@@ -280,6 +280,14 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
                 }
             }
         }
+        // use deprecated dependency method as a last resort 
+        if (mavenProject.getCompileDependencies() != null) {
+        	for (Dependency dep : mavenProject.getCompileDependencies()) {
+        		if (isCamelDependency(dep)) {
+        			return dep.getVersion();
+        		}
+        	}
+        }
         return CamelModelFactory.getLatestCamelVersion();		
 	}
 
