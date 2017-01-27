@@ -197,6 +197,16 @@
 		</execution>
 	</executions>
       </plugin>
+      
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-packaging-plugin</artifactId>
+        <version>${tychoVersion}</version>
+        <configuration>
+          <format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm</format>
+          <timestampProvider>default</timestampProvider>
+        </configuration>
+	</plugin>
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-resources-plugin</artifactId>
