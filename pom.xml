@@ -203,7 +203,7 @@
         <artifactId>tycho-packaging-plugin</artifactId>
         <version>${tychoVersion}</version>
         <configuration>
-          <format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm</format>
+          <format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm'-B${BUILD_NUMBER}'</format>
           <timestampProvider>default</timestampProvider>
         </configuration>
 	</plugin>
