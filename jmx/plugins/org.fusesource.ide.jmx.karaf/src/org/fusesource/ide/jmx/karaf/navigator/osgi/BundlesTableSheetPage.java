@@ -246,7 +246,7 @@ public class BundlesTableSheetPage extends PropertySourceTableSheetPage {
 		TableViewer viewer = getTableView().getViewer();
 		if (viewer != null) {
 			List<?> propertySources = getPropertySources();
-			List selected = new ArrayList();
+			List<Object> selected = new ArrayList<>();
 			for (Object object : propertySources) {
 				if (object instanceof IPropertySource) {
 					BundleStateFacade bundleState = new BundleStateFacade((IPropertySource) object);

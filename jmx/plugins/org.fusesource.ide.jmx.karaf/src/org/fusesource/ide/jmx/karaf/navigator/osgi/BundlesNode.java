@@ -35,7 +35,6 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 public class BundlesNode extends RefreshableCollectionNode implements ImageProvider, /** ProjectDropTarget **/ DropHandlerFactory {
 	private final OsgiFacade facade;
 	private String bundlefilterText;
-	private boolean startOnDeploy = true;
 
 	public BundlesNode(Node parent, OsgiFacade facade) {
 		super(parent);

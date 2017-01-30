@@ -29,7 +29,7 @@ public class TabularDataHelper {
 	 * Converts a TabularData to a list of IPropertySource
 	 */
 	public static List<IPropertySource> toPropertySources(TabularData tabularData) {
-		List<IPropertySource> answer = new ArrayList<IPropertySource>();
+		List<IPropertySource> answer = new ArrayList<>();
 		try {
 			if (tabularData != null) {
 				final Collection<?> rows = tabularData.values();

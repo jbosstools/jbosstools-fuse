@@ -37,9 +37,9 @@ import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 public class CompositeDataPropertySource implements IPropertySource {
 	final CompositeData cd;
 	private IPropertyDescriptor[] descriptors;
-	private Set<String> keyNames = new HashSet<String>();
+	private Set<String> keyNames = new HashSet<>();
 
-	private static Map<String, Class<?>> nameToClassIndex = new HashMap<String, Class<?>>();
+	private static Map<String, Class<?>> nameToClassIndex = new HashMap<>();
 
 	private static void addClasses(Class<?>... classes) {
 		for (Class<?> aClass : classes) {
@@ -53,7 +53,7 @@ public class CompositeDataPropertySource implements IPropertySource {
 
 	public CompositeDataPropertySource(CompositeData cd) {
 		this.cd = cd;
-		List<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor>();
+		List<IPropertyDescriptor> properties = new ArrayList<>();
 		final CompositeType compositeType = cd.getCompositeType();
 		Set<?> keys = compositeType.keySet();
 		for (Object key : keys) {
@@ -65,9 +65,9 @@ public class CompositeDataPropertySource implements IPropertySource {
 				IPropertyDescriptor descriptor;
 				if (type.isArray()) {
 					descriptor = new ListPropertyDescriptor(key, keyText);
-				} else if (className.equals("java.lang.String")) {
+				} else if ("java.lang.String".equals(className)) {
 					descriptor = new TextPropertyDescriptor(key, keyText);
-				} else if (className.equals("java.lang.Boolean")) {
+				} else if ("java.lang.Boolean".equals(className)) {
 					descriptor = new BooleanPropertyDescriptor(key, keyText);
 				} else {
 					Class<?> aClass = nameToClassIndex.get(className);

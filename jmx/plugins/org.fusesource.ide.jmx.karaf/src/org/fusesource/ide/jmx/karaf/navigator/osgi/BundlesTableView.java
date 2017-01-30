@@ -42,7 +42,7 @@ public class BundlesTableView extends PropertySourceTableView {
 	}
 
 	@Override
-	protected CellLabelProvider createColumnLabelProvider(String header, Function1 function) {
+	protected CellLabelProvider createColumnLabelProvider(String header, Function1<?,?> function) {
 		if (header.equals("State")) {
 			return new BundleStatusLabelProvider();
 		} else if (header.equals("Last Modified")) {

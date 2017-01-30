@@ -66,7 +66,6 @@ public class KarafActiveJvm extends AbstractJvm implements IActiveJvm {
 
     
     private KarafServerConnection jmxConnection;
-    private IActiveJvm delegateJvm;
     
     public KarafActiveJvm(KarafServerConnection connection, IActiveJvm delegate) throws JvmCoreException {
         super(delegate.getPid(), delegate.getHost());
@@ -75,7 +74,6 @@ public class KarafActiveJvm extends AbstractJvm implements IActiveJvm {
         isConnectSupported = true;
         isAttachSupported = true;
         this.jmxConnection = connection;
-        this.delegateJvm = delegate;
         initialize();
         connect();
         saveJvmProperties();
