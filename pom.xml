@@ -14,7 +14,7 @@
   <parent>
     <groupId>org.jboss.tools</groupId>
     <artifactId>parent</artifactId>
-    <version>4.4.2.Final-SNAPSHOT</version>
+    <version>4.4.0.Alpha1-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -198,15 +198,6 @@
 	</executions>
       </plugin>
       
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-packaging-plugin</artifactId>
-        <version>${tychoVersion}</version>
-        <configuration>
-          <format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm'-B${BUILD_NUMBER}'</format>
-          <timestampProvider>default</timestampProvider>
-        </configuration>
-	</plugin>
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-resources-plugin</artifactId>
