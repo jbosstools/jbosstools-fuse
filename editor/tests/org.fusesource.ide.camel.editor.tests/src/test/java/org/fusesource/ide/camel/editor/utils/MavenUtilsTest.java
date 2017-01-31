@@ -10,8 +10,17 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.utils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.model.Model;
@@ -20,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,16 +40,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MavenUtilsTest {
@@ -52,6 +52,8 @@ public class MavenUtilsTest {
 	private File pomFile;
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	private IMavenProjectFacade mavenProjectFacade;
+	@Spy
+	private CamelMavenUtils camelMavenUtils;
 
 	@Captor
 	private ArgumentCaptor<List<org.fusesource.ide.camel.model.service.core.catalog.Dependency>> captor;
@@ -60,11 +62,13 @@ public class MavenUtilsTest {
 	public void setup() throws CoreException {
 		doReturn(pomFile).when(mavenUtils).getPomFile(project);
 		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class));
+		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
+		mavenUtils.setCamelMavenUtils(camelMavenUtils);
 	}
 
 	@Test
 	public void testUpdateMavenDependencyWithNullVersion() throws Exception {
-		doReturn(null).when(mavenUtils).getMavenProjectFacade(project);
+		doReturn(null).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
 		final org.apache.maven.model.Dependency mavenDependency = new org.apache.maven.model.Dependency();
 		mavenDependency.setArtifactId("test-artifactID");
@@ -89,10 +93,10 @@ public class MavenUtilsTest {
 		org.apache.maven.model.Dependency m2eDependency = new org.apache.maven.model.Dependency();
 		m2eDependency.setArtifactId("test-artifactID");
 		m2eDependency.setGroupId("test-groupID");
-		m2eDependency.setVersion("differetnversion-test");
+		m2eDependency.setVersion("differentVersion-test");
 		m2eDependencies.add(m2eDependency);
 		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
-		doReturn(mavenProjectFacade).when(mavenUtils).getMavenProjectFacade(project);
+		doReturn(mavenProjectFacade).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
 		final org.apache.maven.model.Dependency mavenDependency = new org.apache.maven.model.Dependency();
 		mavenDependency.setArtifactId("test-artifactID");
@@ -115,7 +119,7 @@ public class MavenUtilsTest {
 		// so retrieved from the MavenprojectFacade
 		final ArrayList<org.apache.maven.model.Dependency> m2eDependencies = new ArrayList<org.apache.maven.model.Dependency>();
 		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getDependencies()).thenReturn(m2eDependencies);
-		doReturn(mavenProjectFacade).when(mavenUtils).getMavenProjectFacade(project);
+		doReturn(mavenProjectFacade).when(camelMavenUtils).getMavenProjectFacade(project);
 		final Model mavenModel = new Model();
 		final org.apache.maven.model.Dependency mavenDependency = new org.apache.maven.model.Dependency();
 		mavenDependency.setArtifactId("test-artifactID");

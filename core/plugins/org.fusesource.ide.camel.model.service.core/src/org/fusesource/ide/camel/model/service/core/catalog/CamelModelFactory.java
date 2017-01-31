@@ -34,6 +34,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.osgi.framework.Version;
 
 /**
@@ -264,7 +265,7 @@ public class CamelModelFactory {
         	final Model model = MavenPlugin.getMaven().readModel(pomFile);
 
         	// get camel-core or another camel dep
-	        List<Dependency> deps = model.getDependencies();
+	        List<Dependency> deps = new CamelMavenUtils().getDependencies(project, model);
 	        for (Dependency pomDep : deps) {
 	            if (pomDep.getGroupId().equalsIgnoreCase("org.apache.camel") &&
 	                pomDep.getArtifactId().startsWith("camel-")) {
@@ -315,7 +316,7 @@ public class CamelModelFactory {
 	}
 	
 	public static CamelModel getModelForProject(IProject project){
-		String camelVersion = CamelModelFactory.getCamelVersion(project);
+		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(CamelModelFactory.getCamelVersion(project));
 		String runtimeProvider = CamelModelFactory.getRuntimeprovider(project, new NullProgressMonitor());
 		return CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider);
 	}

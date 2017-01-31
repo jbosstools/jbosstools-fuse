@@ -30,16 +30,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 
 /**
  * @author lhein
@@ -55,7 +52,9 @@ public class MavenUtils {
 	public static final String RESOURCES_PATH = MAIN_PATH + "resources/"; //$NON-NLS-1$
 
 	private static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
-
+	
+	private CamelMavenUtils camelMavenUtils = new CamelMavenUtils();
+	
 	/**
 	 * @return the Java source folder for the project containing the Camel file
 	 *         currently being edited
@@ -125,7 +124,7 @@ public class MavenUtils {
 		final File pomFile = getPomFile(project);
 
 		final Model model = readMavenModel(pomFile);
-		List<Dependency> deps = getDependencies(project, model);
+		List<Dependency> deps = camelMavenUtils.getDependencies(project, model);
 
 		// then check if component dependency is already a dep
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
@@ -222,40 +221,6 @@ public class MavenUtils {
 	}
 
 	/**
-	 * @param project
-	 * @param model
-	 * @return The dependencies for the supplied Maven model in the supplied
-	 *         project
-	 */
-	private List<Dependency> getDependencies(IProject project, final Model model) {
-		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
-		List<Dependency> deps;
-		if (projectFacade != null) {
-			try {
-				deps = projectFacade.getMavenProject(new NullProgressMonitor()).getDependencies();
-			} catch (CoreException e) {
-				CamelEditorUIActivator.pluginLog().logError(
-						"Maven project has not been found (not imported?). Managed Dependencies won't be resolved.", e);
-				deps = model.getDependencies();
-			}
-		} else {
-			// In case the project was not imported in the workspace
-			deps = model.getDependencies();
-		}
-		return deps;
-	}
-
-	/**
-	 * @param project
-	 * @return the Maven project facade corresponding to the supplied project
-	 */
-	IMavenProjectFacade getMavenProjectFacade(IProject project) {
-		final IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
-		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
-		return projectRegistry.create(pomIFile, false, new NullProgressMonitor());
-	}
-
-	/**
 	 * adds a resource folder to the maven pom file if not yet there
 	 *
 	 * @param project
@@ -293,5 +258,9 @@ public class MavenUtils {
 				CamelEditorUIActivator.pluginLog().logError(ex);
 			}
 		}
+	}
+
+	void setCamelMavenUtils(CamelMavenUtils camelMavenUtils) {
+		this.camelMavenUtils = camelMavenUtils;
 	}
 }
