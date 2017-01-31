@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -318,8 +319,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 * @param prop
 	 *            the property which is currently used
 	 */
-	protected void languageChanged(String language, Composite eform, AbstractCamelModelElement expressionElement,
-			Composite page, Parameter prop) {
+	protected void languageChanged(String language, Composite eform, AbstractCamelModelElement expressionElement, Composite page, Parameter prop) {
+		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		for (Control co : eform.getChildren())
 			if (co.getData("fuseExpressionClient") != null)
 				co.dispose();
@@ -355,7 +356,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 					selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
 					
 					if (lang != null) { // some languages are not defined in catalog like "method"
-						updateDependencies(lang.getDependencies());
+						updateDependencies(lang.getDependencies(), project);
 					}
 				} else {
 					// user wants to delete the expression
@@ -371,7 +372,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				this.selectedEP.setParameter(prop.getName(), expressionElement);
 
 				if (lang != null) { // some languages are not defined in catalog like "method"
-					updateDependencies(lang.getDependencies());
+					updateDependencies(lang.getDependencies(), project);
 				}
 			}
 			uiExpressionElement = expressionElement;
@@ -404,7 +405,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 						expressionElement.setParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION, uiExpressionElement);
 						
 						if (lang != null) { // some languages are not defined in catalog like "method"
-							updateDependencies(lang.getDependencies());
+							updateDependencies(lang.getDependencies(), project);
 						}
 					} else {
 						// user deletes the expression
@@ -440,7 +441,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				uiExpressionElement = expressionElement;
 
 				if (lang != null) { // some languages are not defined in catalog like "method"
-					updateDependencies(lang.getDependencies());
+					updateDependencies(lang.getDependencies(), project);
 				}
 			}
 		}
@@ -509,8 +510,8 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 * @param prop
 	 *            the property which is currently used
 	 */
-	protected void dataFormatChanged(String dataformat, Composite eform, AbstractCamelModelElement dataFormatElement,
-			Composite page, Parameter prop) {
+	protected void dataFormatChanged(String dataformat, Composite eform, AbstractCamelModelElement dataFormatElement, Composite page, Parameter prop) {
+		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		for (Control co : eform.getChildren())
 			if (co.getData("fuseDataFormatClient") != null)
 				co.dispose();
@@ -539,7 +540,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				selectedEP.setParameter(prop.getName(), dataFormatElement);
 				selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
 
-				updateDependencies(df.getDependencies());
+				updateDependencies(df.getDependencies(), project);
 			} else {
 				// user wants to delete the expression
 				selectedEP.getXmlNode().removeChild(oldExpNode);
@@ -553,7 +554,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 			this.selectedEP.setParameter(prop.getName(), dataFormatElement);
 
-			updateDependencies(df.getDependencies());
+			updateDependencies(df.getDependencies(), project);
 		}
 
 		prepareDataFormatUIForDataFormat(dataformat, dataFormatElement, client);
@@ -563,10 +564,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		aTabbedPropertySheetPage.resizeScrolledComposite();
 	}
 	
-	private void updateDependencies(List<Dependency> dependencies) {
+	private void updateDependencies(List<Dependency> dependencies, IProject project) {
 		MavenUtils utils = new MavenUtils();
 		try {
-			utils.updateMavenDependencies(dependencies);
+			utils.updateMavenDependencies(dependencies, project);
 		} catch (CoreException e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
 		}
@@ -574,11 +575,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 	protected void updateDependenciesForDataFormat(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
-			CamelModel m = CamelModelFactory.getModelForProject(selectedEP.getCamelFile().getResource().getProject());
+			IProject project = selectedEP.getCamelFile().getResource().getProject();
+			CamelModel m = CamelModelFactory.getModelForProject(project);
 			if (m != null) {
 				DataFormat df = m.getDataformatModel().getDataFormatByName(newValue);
 				if (df != null) {
-					updateDependencies(df.getDependencies());
+					updateDependencies(df.getDependencies(), project);
 				}
 			}
 		}
@@ -586,11 +588,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	
 	protected void updateDependenciesForLanguage(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
-			CamelModel m = CamelModelFactory.getModelForProject(selectedEP.getCamelFile().getResource().getProject());
+			IProject project = selectedEP.getCamelFile().getResource().getProject();
+			CamelModel m = CamelModelFactory.getModelForProject(project);
 			if (m != null) {
 				Language l = m.getLanguageModel().getLanguageByName(newValue);
 				if (l != null) {
-					updateDependencies(l.getDependencies());
+					updateDependencies(l.getDependencies(), project);
 				}
 			}
 		}
