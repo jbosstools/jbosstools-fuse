@@ -75,7 +75,9 @@ public class CommonTestUtils {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		if (page != null) {
 			IWorkbenchPart welcomePage = page.getActivePart();
-			welcomePage.dispose();
+			if(welcomePage != null){
+				welcomePage.dispose();
+			}
 		}
 	}
 	
