@@ -209,7 +209,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		        		String endpointId = null;
 		        		
 		        		// first highlight the suspended node
-		        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null) {
+		        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null && entry.getDebugTarget().getDebugger().isEnabled()) {
 			        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
 			        		if (ids != null && !ids.isEmpty()) {
 			        			endpointId = ids.iterator().next();
