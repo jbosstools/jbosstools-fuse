@@ -18,7 +18,7 @@
 	</prerequisites>
 
 	<properties>
-		<camel.version>2.18.1.fuse-000025</camel.version>
+		<camel.version>2.18.1.redhat-000010</camel.version>
 	</properties>
 
 	<dependencies>

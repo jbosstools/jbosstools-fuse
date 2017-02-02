@@ -15,8 +15,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-elsql</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-elsql-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -93,8 +93,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-servlet</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-servlet-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -144,8 +144,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-asterisk</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-asterisk-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -176,8 +176,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sjms</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sjms-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -240,8 +240,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ssh</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ssh-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -303,8 +303,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-geocoder</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-geocoder-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -343,8 +343,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hazelcast</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-hazelcast-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -381,8 +381,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-apns</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-apns-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -429,8 +429,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-batch</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-spring-batch-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -459,8 +459,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-chronicle</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-chronicle-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -498,8 +498,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -534,8 +534,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jsch</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jsch-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -579,8 +579,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cache</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cache-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -626,8 +626,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-github</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-github-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -665,8 +665,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mvel</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mvel-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -693,8 +693,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-quartz2</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-quartz2-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -746,8 +746,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-zookeeper</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-zookeeper-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -786,8 +786,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -805,36 +805,6 @@
       </uriParameters>
    </component>
    <component>
-      <id>eventadmin</id>
-      <tags>
-         <tag>eventbus</tag>
-      </tags>
-      <title>OSGi EventAdmin</title>
-      <description>The eventadmin component can be used in an OSGi environment to receive OSGi EventAdmin events and process them.</description>
-      <syntax>eventadmin:topic</syntax>
-      <class>org.apache.camel.component.eventadmin.EventAdminComponent</class>
-      <kind>component</kind>
-      <scheme>eventadmin</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-eventadmin</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="bundleContext" type="object" javaType="org.osgi.framework.BundleContext" kind="property" deprecated="false" description="The OSGi BundleContext is automatic injected by Camel"/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="topic" type="string" javaType="java.lang.String" kind="path" deprecated="false" group="common" description="Name of topic to listen or send to"/>
-         <uriParameter name="send" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="Whether to use &apos;send&apos; or &apos;synchronous&apos; deliver. Default false (async delivery)"/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-      </uriParameters>
-   </component>
-   <component>
       <id>pop3</id>
       <tags>
          <tag>mail</tag>
@@ -848,8 +818,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -937,8 +907,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ftp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1073,8 +1043,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-metrics</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-metrics-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1106,8 +1076,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ahc-ws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ahc-ws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1154,8 +1124,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-lucene</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-lucene-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1186,8 +1156,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-freemarker</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-freemarker-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1218,8 +1188,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-rss</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-rss-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1256,6 +1226,40 @@
       </uriParameters>
    </component>
    <component>
+      <id>spark</id>
+      <tags>
+         <tag>bigdata</tag>
+         <tag>iot</tag>
+      </tags>
+      <title>Apache Spark</title>
+      <description>The spark component can be used to send RDD or DataFrame jobs to Apache Spark cluster.</description>
+      <syntax>spark:endpointType</syntax>
+      <class>org.apache.camel.component.spark.SparkComponent</class>
+      <kind>component</kind>
+      <producerOnly>true</producerOnly>
+      <scheme>spark</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spark-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+         <componentProperty name="rdd" type="object" javaType="org.apache.spark.api.java.JavaRDDLike" kind="property" deprecated="false" description="RDD to compute against."/>
+         <componentProperty name="rddCallback" type="object" javaType="org.apache.camel.component.spark.RddCallback" kind="property" deprecated="false" description="Function performing action against an RDD."/>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="endpointType" type="string" javaType="org.apache.camel.component.spark.EndpointType" kind="path" choice="rdd,dataframe,hive" deprecated="false" required="true" group="producer" description="Type of the endpoint (rdd dataframe hive)."/>
+         <uriParameter name="rdd" type="object" javaType="org.apache.spark.api.java.JavaRDDLike" kind="parameter" deprecated="false" group="producer" description="RDD to compute against."/>
+         <uriParameter name="dataFrame" type="object" javaType="org.apache.spark.sql.DataFrame" kind="parameter" deprecated="false" group="producer" description="DataFrame to compute against."/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="collect" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="producer" description="Indicates if results should be collected or counted."/>
+         <uriParameter name="rddCallback" type="object" javaType="org.apache.camel.component.spark.RddCallback" kind="parameter" deprecated="false" group="producer" description="Function performing action against an RDD."/>
+         <uriParameter name="dataFrameCallback" type="object" javaType="org.apache.camel.component.spark.DataFrameCallback" kind="parameter" deprecated="false" group="producer" description="Function performing action against an DataFrame."/>
+      </uriParameters>
+   </component>
+   <component>
       <id>sjms-batch</id>
       <tags>
          <tag>messaging</tag>
@@ -1270,8 +1274,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sjms</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sjms-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1316,8 +1320,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jcr</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jcr-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1355,8 +1359,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1443,8 +1447,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-irc</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-irc-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1492,8 +1496,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-kestrel</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-kestrel-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1526,8 +1530,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1552,8 +1556,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1640,8 +1644,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1728,8 +1732,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-saxon</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-saxon-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1783,8 +1787,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-beanstalk</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-beanstalk-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1835,8 +1839,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hipchat</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-hipchat-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1883,8 +1887,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stax</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-stax-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1892,6 +1896,44 @@
       <uriParameters>
          <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
          <uriParameter name="contentHandlerClass" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="producer" description="The FQN class name for the ContentHandler implementation to use."/>
+      </uriParameters>
+   </component>
+   <component>
+      <id>atmos</id>
+      <tags>
+         <tag>file</tag>
+         <tag>cloud</tag>
+      </tags>
+      <title>Atmos</title>
+      <description>The atmos component is used for integrating with EMC&apos;s Atomos Storage.</description>
+      <syntax>atmos:name/operation</syntax>
+      <class>org.apache.camel.component.atmos.AtmosComponent</class>
+      <kind>component</kind>
+      <scheme>atmos</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-atmos-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="remotePath" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Where to put files on Atmos"/>
+         <uriParameter name="secretKey" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Atmos shared secret"/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="query" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Search query on Atmos"/>
+         <uriParameter name="enableSslValidation" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="Atmos SSL validation"/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="uri" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Atomos server uri"/>
+         <uriParameter name="fullTokenId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Atmos client fullTokenId"/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="name" type="string" javaType="java.lang.String" kind="path" deprecated="false" group="common" description="Atmos name"/>
+         <uriParameter name="localPath" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Local path to put files"/>
+         <uriParameter name="newRemotePath" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="New path on Atmos when moving files"/>
+         <uriParameter name="operation" type="string" javaType="org.apache.camel.component.atmos.util.AtmosOperation" kind="path" choice="put,del,search,get,move" deprecated="false" required="true" group="common" description="Operation to perform"/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
       </uriParameters>
    </component>
    <component>
@@ -1909,8 +1951,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cm-sms</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cm-sms-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -1938,8 +1980,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-splunk</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-splunk-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2006,8 +2048,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2050,8 +2092,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-lumberjack</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-lumberjack-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2064,56 +2106,6 @@
          <uriParameter name="host" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="consumer" description="Network interface on which to listen for Lumberjack"/>
          <uriParameter name="sslContextParameters" type="object" javaType="org.apache.camel.util.jsse.SSLContextParameters" kind="parameter" deprecated="false" group="consumer" description="SSL configuration"/>
          <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-      </uriParameters>
-   </component>
-   <component>
-      <id>mina</id>
-      <tags>
-         <tag>networking</tag>
-         <tag>tcp</tag>
-         <tag>udp</tag>
-      </tags>
-      <title>Mina</title>
-      <description>Socket level networking using TCP or UDP with the Apache Mina 1.x library.</description>
-      <syntax>mina:protocol:host:port</syntax>
-      <class>org.apache.camel.component.mina.MinaComponent</class>
-      <kind>component</kind>
-      <scheme>mina</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="configuration" type="object" javaType="org.apache.camel.component.mina.MinaConfiguration" kind="property" deprecated="false" description="To use the shared mina configuration."/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="disconnect" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="Whether or not to disconnect(close) from Mina session right after use. Can be used for both consumer and producer."/>
-         <uriParameter name="lazySessionCreation" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="producer,advanced" group="producer (advanced)" description="Sessions can be lazily created to avoid exceptions if the remote server is not up and running when the Camel producer is started."/>
-         <uriParameter name="textlineDelimiter" type="string" javaType="org.apache.camel.component.mina.TextLineDelimiter" kind="parameter" choice="DEFAULT,AUTO,UNIX,WINDOWS,MAC" deprecated="false" label="codec" group="codec" description="Only used for TCP and if textline=true. Sets the text line delimiter to use. If none provided Camel will use DEFAULT. This delimiter is used to mark the end of text."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="disconnectOnNoReply" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer,advanced" group="consumer (advanced)" description="If sync is enabled then this option dictates MinaConsumer if it should disconnect where there is no reply to send back."/>
-         <uriParameter name="encoderMaxLineLength" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="-1" label="codec" group="codec" description="To set the textline protocol encoder max line length. By default the default value of Mina itself is used which are Integer.MAX_VALUE."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="filters" type="array" javaType="java.util.List&lt;org.apache.mina.common.IoFilter&gt;" kind="parameter" deprecated="false" label="codec" group="codec" description="You can set a list of Mina IoFilters to use."/>
-         <uriParameter name="encoding" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="codec" group="codec" description="You can configure the encoding (a charset name) to use for the TCP textline codec and the UDP protocol. If not provided Camel will use the JVM default Charset"/>
-         <uriParameter name="sync" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="common" description="Setting to set endpoint as one-way or request-response."/>
-         <uriParameter name="minaLogger" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="You can enable the Apache MINA logging filter. Apache MINA uses slf4j logging at INFO level to log all input and output."/>
-         <uriParameter name="timeout" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="30000" group="common" description="You can configure the timeout that specifies how long to wait for a response from a remote server. The timeout unit is in milliseconds so 60000 is 60 seconds."/>
-         <uriParameter name="codec" type="object" javaType="org.apache.mina.filter.codec.ProtocolCodecFactory" kind="parameter" deprecated="false" label="codec" group="codec" description="To use a custom minda codec implementation."/>
-         <uriParameter name="protocol" type="string" javaType="java.lang.String" kind="path" choice="tcp,udp,vm" deprecated="false" required="true" group="common" description="Protocol to use"/>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="port" type="integer" javaType="int" kind="path" deprecated="false" defaultValue="0" required="true" group="common" description="Port number"/>
-         <uriParameter name="host" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="Hostname to use. Use localhost or 0.0.0.0 for local server as consumer. For producer use the hostname or ip address of the remote server."/>
-         <uriParameter name="noReplyLogLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="TRACE,DEBUG,INFO,WARN,ERROR,OFF" deprecated="false" defaultValue="WARN" label="consumer,advanced" group="consumer (advanced)" description="If sync is enabled this option dictates MinaConsumer which logging level to use when logging a there is no reply to send back."/>
-         <uriParameter name="allowDefaultCodec" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="codec" group="codec" description="The mina component installs a default codec if both codec is null and textline is false. Setting allowDefaultCodec to false prevents the mina component from installing a default codec as the first element in the filter chain. This is useful in scenarios where another filter must be the first in the filter chain like the SSL filter."/>
-         <uriParameter name="transferExchange" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body Out body fault body In headers Out headers fault headers exchange properties exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level."/>
-         <uriParameter name="textline" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="codec" group="codec" description="Only used for TCP. If no codec is specified you can use this flag to indicate a text line based codec; if not specified or the value is false then Object Serialization is assumed over TCP."/>
-         <uriParameter name="clientMode" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="If the clientMode is true mina consumer will connect the address as a TCP client."/>
-         <uriParameter name="decoderMaxLineLength" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="1024" label="codec" group="codec" description="To set the textline protocol decoder max line length. By default the default value of Mina itself is used which are 1024."/>
          <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
       </uriParameters>
    </component>
@@ -2132,8 +2124,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2177,8 +2169,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-kubernetes</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-kubernetes-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2229,8 +2221,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-bean-validator</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-bean-validator-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2261,8 +2253,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2299,8 +2291,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2331,8 +2323,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-paho</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-paho-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2370,8 +2362,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cxf-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2431,8 +2423,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2460,8 +2452,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-xmlrpc</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-xmlrpc-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2503,8 +2495,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2547,8 +2539,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty-http</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-netty-http-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2659,8 +2651,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-solr</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-solr-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2698,8 +2690,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2737,8 +2729,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mongodb-gridfs</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mongodb-gridfs-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2765,6 +2757,34 @@
       </uriParameters>
    </component>
    <component>
+      <id>grape</id>
+      <tags>
+         <tag>management</tag>
+         <tag>deployment</tag>
+      </tags>
+      <title>Grape</title>
+      <description>Grape component allows you to fetch, load and manage additional jars when CamelContext is running.</description>
+      <syntax>grape:defaultCoordinates</syntax>
+      <class>org.apache.camel.component.grape.GrapeEndpoint</class>
+      <kind>component</kind>
+      <producerOnly>true</producerOnly>
+      <scheme>grape</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-grape-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="defaultCoordinates" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description="Maven coordinates to use as default to grab if the message body is empty."/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange."/>
+      </uriParameters>
+   </component>
+   <component>
       <id>restlet</id>
       <tags>
          <tag>rest</tag>
@@ -2778,8 +2798,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-restlet</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-restlet-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2843,8 +2863,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-schematron</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-schematron-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2855,6 +2875,41 @@
          <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
          <uriParameter name="rules" type="object" javaType="javax.xml.transform.Templates" kind="parameter" deprecated="false" group="producer" description="To use the given schematron rules instead of loading from the path"/>
          <uriParameter name="uriResolver" type="object" javaType="javax.xml.transform.URIResolver" kind="parameter" deprecated="false" label="advanced" group="advanced" description="Set the URIResolver to be used for resolving schematron includes in the rules file."/>
+      </uriParameters>
+   </component>
+   <component>
+      <id>flink</id>
+      <tags>
+         <tag>hadoop</tag>
+      </tags>
+      <title>Apache Flink</title>
+      <description>The flink component can be used to send DataSet jobs to Apache Flink cluster.</description>
+      <syntax>flink:endpointType</syntax>
+      <class>org.apache.camel.component.flink.FlinkComponent</class>
+      <kind>component</kind>
+      <producerOnly>true</producerOnly>
+      <scheme>flink</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-flink-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+         <componentProperty name="dataStream" type="object" javaType="org.apache.flink.streaming.api.datastream.DataStream" kind="property" deprecated="false" description="DataStream to compute against."/>
+         <componentProperty name="dataSetCallback" type="object" javaType="org.apache.camel.component.flink.DataSetCallback" kind="property" deprecated="false" description="Function performing action against a DataSet."/>
+         <componentProperty name="dataSet" type="object" javaType="org.apache.flink.api.java.DataSet" kind="property" deprecated="false" description="DataSet to compute against."/>
+         <componentProperty name="dataStreamCallback" type="object" javaType="org.apache.camel.component.flink.DataStreamCallback" kind="property" deprecated="false" description="Function performing action against a DataStream."/>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="endpointType" type="string" javaType="org.apache.camel.component.flink.EndpointType" kind="path" choice="dataset,datastream" deprecated="false" required="true" group="producer" description="Type of the endpoint (dataset datastream)."/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="dataStream" type="object" javaType="org.apache.flink.streaming.api.datastream.DataStream" kind="parameter" deprecated="false" group="producer" description="DataStream to compute against."/>
+         <uriParameter name="dataSetCallback" type="object" javaType="org.apache.camel.component.flink.DataSetCallback" kind="parameter" deprecated="false" group="producer" description="Function performing action against a DataSet."/>
+         <uriParameter name="collect" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="producer" description="Indicates if results should be collected or counted."/>
+         <uriParameter name="dataSet" type="object" javaType="org.apache.flink.api.java.DataSet" kind="parameter" deprecated="false" group="producer" description="DataSet to compute against."/>
+         <uriParameter name="dataStreamCallback" type="object" javaType="org.apache.camel.component.flink.DataStreamCallback" kind="parameter" deprecated="false" group="producer" description="Function performing action against a DataStream."/>
       </uriParameters>
    </component>
    <component>
@@ -2871,8 +2926,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-routebox</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-routebox-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2914,8 +2969,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-braintree</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-braintree-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2954,8 +3009,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-dropbox</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-dropbox-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -2991,8 +3046,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3055,8 +3110,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-consul</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-consul-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3101,8 +3156,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3145,8 +3200,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-http-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3200,8 +3255,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-exec</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-exec-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3232,8 +3287,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-undertow</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-undertow-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3275,8 +3330,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-google-calendar</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-google-calendar-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3317,8 +3372,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-fop</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-fop-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3346,8 +3401,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jdbc</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jdbc-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3385,8 +3440,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mustache</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mustache-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3399,6 +3454,52 @@
          <uriParameter name="contentCache" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="producer" description="Sets whether to use resource content cache or not"/>
          <uriParameter name="resourceUri" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="producer" description="Path to the resource or a reference to lookup a bean in the Registry to use as the resource"/>
          <uriParameter name="encoding" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="producer" description="Character encoding of the resource content."/>
+      </uriParameters>
+   </component>
+   <component>
+      <id>docker</id>
+      <tags>
+         <tag>container</tag>
+         <tag>cloud</tag>
+         <tag>paas</tag>
+      </tags>
+      <title>Docker</title>
+      <description>The docker component is used for managing Docker containers.</description>
+      <syntax>docker:operation</syntax>
+      <class>org.apache.camel.component.docker.DockerComponent</class>
+      <kind>component</kind>
+      <scheme>docker</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-docker-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+         <componentProperty name="configuration" type="object" javaType="org.apache.camel.component.docker.DockerConfiguration" kind="property" deprecated="false" description="To use the shared docker configuration"/>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="followRedirectFilter" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Whether to follow redirect filter"/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="tlsVerify" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="security" group="security" description="Check TLS"/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="maxTotalConnections" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" defaultValue="100" label="advanced" group="advanced" description="Maximum total connections"/>
+         <uriParameter name="serverAddress" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" defaultValue="https://index.docker.io/v1/" label="advanced" group="advanced" description="Server address for docker registry."/>
+         <uriParameter name="secure" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="security" group="security" description="Use HTTPS communication"/>
+         <uriParameter name="maxPerRouteConnections" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" defaultValue="100" label="advanced" group="advanced" description="Maximum route connections"/>
+         <uriParameter name="password" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="security" group="security" description="Password to authenticate with"/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="certPath" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="security" group="security" description="Location containing the SSL certificate chain"/>
+         <uriParameter name="port" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" defaultValue="2375" required="true" group="common" description="Docker port"/>
+         <uriParameter name="loggingFilter" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Whether to use logging filter"/>
+         <uriParameter name="host" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" defaultValue="localhost" required="true" group="common" description="Docker host"/>
+         <uriParameter name="socket" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="advanced" group="advanced" description="Socket connection mode"/>
+         <uriParameter name="operation" type="string" javaType="org.apache.camel.component.docker.DockerOperation" kind="path" choice="events,stats,auth,info,ping,version,imagebuild,imagecreate,imageinspect,imagelist,imagepull,imagepushimageremove,imagesearch,imagetag,containerattach,containercommit,containercopyfile,containercreate,containerdiffinspectcontainer,containerkill,containerlist,containerlog,containerpause,containerrestart,containerremove,containerstartcontainerstop,containertop,containerunpause,containerwait,execcreate,execstart" deprecated="false" required="true" group="common" description="Which operation to use"/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="email" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="Email address associated with the user"/>
+         <uriParameter name="requestTimeout" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" group="common" description="Request timeout for response (in seconds)"/>
+         <uriParameter name="username" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="security" group="security" description="User name to authenticate with"/>
       </uriParameters>
    </component>
    <component>
@@ -3417,8 +3518,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3464,8 +3565,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-solr</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-solr-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3502,8 +3603,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ahc-ws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ahc-ws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3549,8 +3650,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty9</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jetty9-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3643,36 +3744,6 @@
       </uriParameters>
    </component>
    <component>
-      <id>paxlogging</id>
-      <tags>
-         <tag>monitoring</tag>
-      </tags>
-      <title>OSGi PAX Logging</title>
-      <description>The paxlogging component can be used in an OSGi environment to receive PaxLogging events and process them.</description>
-      <syntax>paxlogging:appender</syntax>
-      <class>org.apache.camel.component.paxlogging.PaxLoggingComponent</class>
-      <kind>component</kind>
-      <consumerOnly>true</consumerOnly>
-      <scheme>paxlogging</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-paxlogging</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="bundleContext" type="object" javaType="org.osgi.framework.BundleContext" kind="property" deprecated="false" description="The OSGi BundleContext is automatic injected by Camel"/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="appender" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="consumer" description="Appender is the name of the pax appender that need to be configured in the PaxLogging service configuration."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-      </uriParameters>
-   </component>
-   <component>
       <id>sip</id>
       <tags>
          <tag>mobile</tag>
@@ -3686,8 +3757,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sip</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sip-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3754,8 +3825,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stomp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-stomp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3793,8 +3864,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3825,8 +3896,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cometd</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cometd-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3860,6 +3931,48 @@
       </uriParameters>
    </component>
    <component>
+      <id>hbase</id>
+      <tags>
+         <tag>hadoop</tag>
+      </tags>
+      <title>HBase</title>
+      <description>For reading/writing from/to an HBase store (Hadoop database).</description>
+      <syntax>hbase:tableName</syntax>
+      <class>org.apache.camel.component.hbase.HBaseComponent</class>
+      <kind>component</kind>
+      <scheme>hbase</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-hbase-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+         <componentProperty name="poolMaxSize" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Maximum number of references to keep for each table in the HTable pool. The default value is 10."/>
+         <componentProperty name="configuration" type="object" javaType="org.apache.hadoop.conf.Configuration" kind="property" deprecated="false" description="To use the shared configuration"/>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="rowMapping" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" group="common" description="To map the key/values from the Map to a HBaseRow. The following keys is supported: rowId - The id of the row. This has limited use as the row usually changes per Exchange. rowType - The type to covert row id to. Supported operations: CamelHBaseScan. family - The column family. Supports a number suffix for referring to more than one columns. qualifier - The column qualifier. Supports a number suffix for referring to more than one columns. value - The value. Supports a number suffix for referring to more than one columns valueType - The value type. Supports a number suffix for referring to more than one columns. Supported operations: CamelHBaseGet and CamelHBaseScan."/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="filters" type="array" javaType="java.util.List&lt;org.apache.hadoop.hbase.filter.Filter&gt;" kind="parameter" deprecated="false" group="common" description="A list of filters to use."/>
+         <uriParameter name="removeHandler" type="object" javaType="org.apache.camel.component.hbase.HBaseRemoveHandler" kind="parameter" deprecated="false" label="consumer" group="consumer" description="To use a custom HBaseRemoveHandler that is executed when a row is to be removed."/>
+         <uriParameter name="mappingStrategyName" type="string" javaType="java.lang.String" kind="parameter" choice="header,body" deprecated="false" group="common" description="The strategy to use for mapping Camel messages to HBase columns. Supported values: header or body."/>
+         <uriParameter name="remove" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" group="consumer" description="If the option is true Camel HBase Consumer will remove the rows which it processes."/>
+         <uriParameter name="tableName" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="The name of the table"/>
+         <uriParameter name="cellMappingStrategyFactory" type="object" javaType="org.apache.camel.component.hbase.mapping.CellMappingStrategyFactory" kind="parameter" deprecated="false" group="common" description="To use a custom CellMappingStrategyFactory that is responsible for mapping cells."/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="rowModel" type="object" javaType="org.apache.camel.component.hbase.model.HBaseRow" kind="parameter" deprecated="false" group="common" description="An instance of org.apache.camel.component.hbase.model.HBaseRow which describes how each row should be modeled"/>
+         <uriParameter name="maxResults" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="100" label="producer" group="producer" description="The maximum number of rows to scan."/>
+         <uriParameter name="userGroupInformation" type="object" javaType="org.apache.hadoop.security.UserGroupInformation" kind="parameter" deprecated="false" group="common" description="Defines privileges to communicate with HBase such as using kerberos."/>
+         <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="Gets the maximum number of messages as a limit to poll at each polling. Is default unlimited but use 0 or negative number to disable it as unlimited."/>
+         <uriParameter name="mappingStrategyClassName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="The class name of a custom mapping strategy implementation."/>
+         <uriParameter name="operation" type="string" javaType="java.lang.String" kind="parameter" choice="CamelHBasePut,CamelHBaseGet,CamelHBaseScan,CamelHBaseDelete" deprecated="false" label="consumer" group="consumer" description="The HBase operation to perform"/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+      </uriParameters>
+   </component>
+   <component>
       <id>netty</id>
       <tags>
          <tag>networking</tag>
@@ -3875,8 +3988,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-netty-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -3957,6 +4070,38 @@
       </uriParameters>
    </component>
    <component>
+      <id>spring-integration</id>
+      <tags>
+         <tag>spring</tag>
+         <tag>eventbus</tag>
+      </tags>
+      <title>Spring Integration</title>
+      <description>Bridges Camel with Spring Integration.</description>
+      <syntax>spring-integration:defaultChannel</syntax>
+      <class>org.apache.camel.component.spring.integration.SpringIntegrationComponent</class>
+      <kind>component</kind>
+      <scheme>spring-integration</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-integration-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="inOut" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="The exchange pattern that the Spring integration endpoint should use. If inOut=true then a reply channel is expected either from the Spring Integration Message header or configured on the endpoint."/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="outputChannel" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer" group="producer" description="The Spring integration output channel name that is used to send messages to Spring integration."/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="defaultChannel" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="The default channel name which is used by the Spring Integration Spring context. It will equal to the inputChannel name for the Spring Integration consumer and the outputChannel name for the Spring Integration provider."/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="inputChannel" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The Spring integration input channel name that this endpoint wants to consume from Spring integration."/>
+      </uriParameters>
+   </component>
+   <component>
       <id>netty4</id>
       <tags>
          <tag>networking</tag>
@@ -3972,8 +4117,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty4</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-netty4-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4072,8 +4217,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sip</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sip-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4140,8 +4285,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4215,6 +4360,40 @@
       </uriParameters>
    </component>
    <component>
+      <id>javaspace</id>
+      <tags>
+         <tag>messaging</tag>
+      </tags>
+      <title>JavaSpace</title>
+      <description>Sending and receiving messages through JavaSpace.</description>
+      <syntax>javaspace:url</syntax>
+      <class>org.apache.camel.component.javaspace.JavaSpaceComponent</class>
+      <kind>component</kind>
+      <scheme>javaspace</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-javaspace-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="spaceName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" required="true" group="common" description="Specifies the JavaSpace name."/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="transactionTimeout" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" group="common" description="Specifies the transaction timeout in millis. By default there is no timeout."/>
+         <uriParameter name="verb" type="string" javaType="java.lang.String" kind="parameter" choice="take,read" deprecated="false" defaultValue="take" label="consumer" group="consumer" description="Specifies the verb for getting JavaSpace entries."/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="templateId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" group="consumer" description="If present this option specifies the Spring bean ID of the template to use for reading/taking entries."/>
+         <uriParameter name="concurrentConsumers" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="1" label="consumer" group="consumer" description="Specifies the number of concurrent consumers getting entries from the JavaSpace."/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="url" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="The URL to the JavaSpace server"/>
+         <uriParameter name="transactional" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="common" description="If true sending and receiving entries is performed within a transaction."/>
+      </uriParameters>
+   </component>
+   <component>
       <id>pdf</id>
       <tags>
          <tag>pdf</tag>
@@ -4230,8 +4409,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-pdf</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-pdf-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4264,8 +4443,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-atmosphere-websocket</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-atmosphere-websocket-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4329,8 +4508,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hdfs</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-hdfs-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4396,8 +4575,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4432,8 +4611,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jbpm</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jbpm-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4482,8 +4661,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4536,8 +4715,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4565,8 +4744,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-disruptor</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-disruptor-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4609,8 +4788,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jing</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jing-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4636,8 +4815,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-snmp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-snmp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4697,8 +4876,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-influxdb</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-influxdb-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4725,8 +4904,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-twitter</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-twitter-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4801,8 +4980,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-elasticsearch</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-elasticsearch-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4838,8 +5017,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mqtt</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mqtt-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4904,8 +5083,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-slack</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-slack-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4934,8 +5113,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-context</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-context-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -4963,8 +5142,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-weather</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-weather-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5031,8 +5210,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-http-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5086,8 +5265,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ahc</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ahc-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5128,8 +5307,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-avro</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-avro-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5168,8 +5347,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5190,6 +5369,53 @@
       </uriParameters>
    </component>
    <component>
+      <id>gora</id>
+      <tags>
+         <tag>database</tag>
+         <tag>hadoop</tag>
+         <tag>nosql</tag>
+      </tags>
+      <title>Gora</title>
+      <description>The gora component allows you to work with NoSQL databases using the Apache Gora framework.</description>
+      <syntax>gora:name</syntax>
+      <class>org.apache.camel.component.gora.GoraComponent</class>
+      <kind>component</kind>
+      <scheme>gora</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-gora-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="startKey" type="object" javaType="java.lang.Object" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The Start Key"/>
+         <uriParameter name="dataStoreClass" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="The type of the dataStore"/>
+         <uriParameter name="flushOnEveryOperation" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="producer" group="producer" description="Flush on every operation"/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="hadoopConfiguration" type="object" javaType="org.apache.hadoop.conf.Configuration" kind="parameter" deprecated="false" label="advanced" group="advanced" description="Hadoop Configuration"/>
+         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
+         <uriParameter name="keyClass" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="The type class of the key"/>
+         <uriParameter name="concurrentConsumers" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="1" label="consumer" group="consumer" description="Number of concurrent consumers"/>
+         <uriParameter name="timeRangeFrom" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The Time Range From"/>
+         <uriParameter name="endKey" type="object" javaType="java.lang.Object" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The End Key"/>
+         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="timeRangeTo" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The Time Range To"/>
+         <uriParameter name="name" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="Instance name"/>
+         <uriParameter name="keyRangeFrom" type="object" javaType="java.lang.Object" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The Key Range From"/>
+         <uriParameter name="limit" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The Limit"/>
+         <uriParameter name="keyRangeTo" type="object" javaType="java.lang.Object" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The Key Range To"/>
+         <uriParameter name="startTime" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The Start Time"/>
+         <uriParameter name="valueClass" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="common" description="The type of the value"/>
+         <uriParameter name="endTime" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The End Time"/>
+         <uriParameter name="fields" type="object" javaType="com.google.common.base.Strings" kind="parameter" deprecated="false" label="consumer" group="consumer" description="The Fields"/>
+         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
+         <uriParameter name="timestamp" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="The Timestamp"/>
+      </uriParameters>
+   </component>
+   <component>
       <id>dns</id>
       <tags>
          <tag>networking</tag>
@@ -5204,8 +5430,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-dns</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-dns-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5230,8 +5456,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-optaplanner</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-optaplanner-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5262,8 +5488,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jgroups</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jgroups-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5295,8 +5521,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-guava-eventbus</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-guava-eventbus-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5330,8 +5556,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-servicenow</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-servicenow-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5401,8 +5627,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-kafka</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-kafka-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5502,8 +5728,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cxf-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5556,8 +5782,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cmis</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cmis-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5586,8 +5812,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5615,8 +5841,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-pgevent</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-pgevent-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5649,8 +5875,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-nats</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-nats-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5692,8 +5918,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5743,8 +5969,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-nagios</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-nagios-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5776,8 +6002,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-openshift</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-openshift-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5831,8 +6057,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5864,8 +6090,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cometd</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cometd-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5913,8 +6139,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-spring-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5942,8 +6168,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mllp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mllp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -5989,8 +6215,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ehcache</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ehcache-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6017,8 +6243,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-yammer</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-yammer-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6074,8 +6300,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6179,8 +6405,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-stream-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6222,8 +6448,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-http4-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6278,8 +6504,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-solr</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-solr-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6316,8 +6542,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-http4-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6383,8 +6609,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-smpp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-smpp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6448,8 +6674,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ftp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6584,8 +6810,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hdfs2</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-hdfs2-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6650,8 +6876,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-netty4-http</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-netty4-http-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6761,8 +6987,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-disruptor</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-disruptor-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6805,8 +7031,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ftp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ftp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -6933,8 +7159,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-amqp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-amqp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7113,8 +7339,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-facebook</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-facebook-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7242,8 +7468,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-ldap</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-spring-ldap-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7269,8 +7495,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-rabbitmq</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-rabbitmq-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7349,8 +7575,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-printer</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-printer-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7388,8 +7614,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7421,8 +7647,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-infinispan</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-infinispan-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7460,8 +7686,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-quickfix</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-quickfix-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7495,8 +7721,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7584,8 +7810,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-atom</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-atom-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7635,8 +7861,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-etcd</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-etcd-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7676,8 +7902,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-google-mail</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-google-mail-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7715,8 +7941,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7753,8 +7979,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-dozer</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-dozer-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7768,61 +7994,6 @@
          <uriParameter name="marshalId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="producer" description="The id of a dataFormat defined within the Camel Context to use for marshalling the mapping output to a non-Java type."/>
          <uriParameter name="sourceModel" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="producer" description="Fully-qualified class name for the source type used in the mapping. If specified the input to the mapping is converted to the specified type before being mapped with Dozer."/>
          <uriParameter name="mappingConfiguration" type="object" javaType="org.apache.camel.converter.dozer.DozerBeanMapperConfiguration" kind="parameter" deprecated="false" group="producer" description="The name of a DozerBeanMapperConfiguration bean in the Camel registry which should be used for configuring the Dozer mapping. This is an alternative to the mappingFile option that can be used for fine-grained control over how Dozer is configured. Remember to use a prefix in the value to indicate that the bean is in the Camel registry (e.g. myDozerConfig)."/>
-      </uriParameters>
-   </component>
-   <component>
-      <id>ibatis</id>
-      <tags>
-         <tag>database</tag>
-         <tag>sql</tag>
-      </tags>
-      <title>iBatis</title>
-      <description>Performs a query poll insert update or delete in a relational database using Apache iBATIS.</description>
-      <syntax>ibatis:statement</syntax>
-      <class>org.apache.camel.component.ibatis.IBatisComponent</class>
-      <kind>component</kind>
-      <scheme>ibatis</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ibatis</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="sqlMapConfig" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Location of iBatis xml configuration file. The default value is: SqlMapConfig.xml loaded from the classpath"/>
-         <componentProperty name="useTransactions" type="boolean" javaType="boolean" kind="property" deprecated="false" defaultValue="false" description="Whether to use transactions. This option is by default true."/>
-         <componentProperty name="sqlMapClient" type="object" javaType="com.ibatis.sqlmap.client.SqlMapClient" kind="property" deprecated="false" description="To use the given com.ibatis.sqlmap.client.SqlMapClient"/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" label="consumer,scheduler" group="scheduler" description="To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured."/>
-         <uriParameter name="onConsume" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" group="consumer" description="Statement to run after data has been processed in the route"/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer,scheduler" group="scheduler" description="Milliseconds before the first poll starts. You can also specify time values using units such as 60s (60 seconds) 5m30s (5 minutes and 30 seconds) and 1h (1 hour)."/>
-         <uriParameter name="useIterator" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" group="consumer" description="Process resultset individually or as a list"/>
-         <uriParameter name="scheduler" type="string" javaType="org.apache.camel.spi.ScheduledPollConsumerScheduler" kind="parameter" choice="none,spring,quartz2" deprecated="false" defaultValue="none" label="consumer,scheduler" group="scheduler" description="To use a cron scheduler from either camel-spring or camel-quartz2 component"/>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="useFixedDelay" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer,scheduler" group="scheduler" description="Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details."/>
-         <uriParameter name="runLoggingLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="TRACE,DEBUG,INFO,WARN,ERROR,OFF" deprecated="false" defaultValue="TRACE" label="consumer,scheduler" group="scheduler" description="The consumer logs a start/complete log line when it polls. This option allows you to configure the logging level for that."/>
-         <uriParameter name="backoffErrorThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" label="consumer,scheduler" group="scheduler" description="The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in."/>
-         <uriParameter name="statement" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="The statement name in the iBatis XML mapping file which maps to the query insert update or delete operation you wish to evaluate."/>
-         <uriParameter name="greedy" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer,scheduler" group="scheduler" description="If greedy is enabled then the ScheduledPollConsumer will run immediately again if the previous run polled 1 or more messages."/>
-         <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" label="consumer" group="consumer" description="This option is intended to split results returned by the database pool into the batches and deliver them in multiple exchanges. This integer defines the maximum messages to deliver in single exchange. By default no maximum is set. Can be used to set a limit of e.g. 1000 to avoid when starting up the server that there are thousands of files. Set a value of 0 or negative to disable it."/>
-         <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer,scheduler" group="scheduler" description="Allows for configuring a custom/shared thread pool to use for the consumer. By default each consumer has its own single threaded thread pool."/>
-         <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer,scheduler" group="scheduler" description="Time unit for initialDelay and delay options."/>
-         <uriParameter name="useTransactions" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="common" description="Whether to use transactions. This option is by default true."/>
-         <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="If the polling consumer did not poll any files you can enable this option to send an empty message (no body) instead."/>
-         <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer,scheduler" group="scheduler" description="To configure additional properties when using a custom scheduler or any of the Quartz2 Spring based scheduler."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="isolation" type="string" javaType="java.lang.String" kind="parameter" choice="TRANSACTION_NONE,TRANSACTION_READ_UNCOMMITTED,TRANSACTION_READ_COMMITTED,TRANSACTION_REPEATABLE_READ,TRANSACTION_SERIALIZABLE" deprecated="false" defaultValue="TRANSACTION_REPEATABLE_READ" group="common" description="Transaction isolation level"/>
-         <uriParameter name="routeEmptyResultSet" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Whether allow empty resultset to be routed to the next hop"/>
-         <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" label="consumer,scheduler" group="scheduler" description="The number of subsequent idle polls that should happen before the backoffMultipler should kick-in."/>
-         <uriParameter name="delay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="500" label="consumer,scheduler" group="scheduler" description="Milliseconds before the next poll. You can also specify time values using units such as 60s (60 seconds) 5m30s (5 minutes and 30 seconds) and 1h (1 hour)."/>
-         <uriParameter name="pollStrategy" type="object" javaType="org.apache.camel.spi.PollingConsumerPollStrategy" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel."/>
-         <uriParameter name="startScheduler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer,scheduler" group="scheduler" description="Whether the scheduler should be auto started."/>
-         <uriParameter name="statementType" type="string" javaType="org.apache.camel.component.ibatis.StatementType" kind="parameter" choice="QueryForObject,QueryForList,Insert,Update,Delete" deprecated="false" label="producer" group="producer" description="Mandatory to specify for the producer to control which kind of operation to invoke."/>
-         <uriParameter name="strategy" type="object" javaType="org.apache.camel.component.ibatis.strategy.IBatisProcessingStrategy" kind="parameter" deprecated="false" label="consumer" group="consumer" description="Allows to plugin a custom IBatisProcessingStrategy to use by the consumer."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
       </uriParameters>
    </component>
    <component>
@@ -7840,8 +8011,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-xmpp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-xmpp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7884,8 +8055,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-rmi</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-rmi-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7918,8 +8089,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-salesforce</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-salesforce-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -7998,8 +8169,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jms</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jms-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8179,8 +8350,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-msv</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-msv-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8217,8 +8388,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jmx</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jmx-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8273,8 +8444,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8321,8 +8492,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ldap</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ldap-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8350,8 +8521,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-websocket</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-websocket-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8407,8 +8578,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8457,8 +8628,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8486,8 +8657,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jt400</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jt400-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8531,49 +8702,6 @@
       </uriParameters>
    </component>
    <component>
-      <id>jclouds</id>
-      <tags>
-         <tag>api</tag>
-         <tag>cloud</tag>
-      </tags>
-      <title>JClouds</title>
-      <description>For interacting with cloud compute &amp; blobstore service via jclouds.</description>
-      <syntax>jclouds:command:providerId</syntax>
-      <class>org.apache.camel.component.jclouds.JcloudsComponent</class>
-      <kind>component</kind>
-      <scheme>jclouds</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jclouds</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="blobStores" type="array" javaType="java.util.List&lt;org.jclouds.blobstore.BlobStore&gt;" kind="property" deprecated="false" description="To use the given BlobStore which must be configured when using blobstore."/>
-         <componentProperty name="computeServices" type="array" javaType="java.util.List&lt;org.jclouds.compute.ComputeService&gt;" kind="property" deprecated="false" description="To use the given ComputeService which must be configured when use compute."/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="blobName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,blobstore" group="blobstore" description="The name of the blob."/>
-         <uriParameter name="container" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="blobstore" group="blobstore" description="The name of the blob container."/>
-         <uriParameter name="imageId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The imageId that will be used for creating a node. Values depend on the actual cloud provider."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="directory" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer,blobstore" group="blobstore" description="An optional directory name to use"/>
-         <uriParameter name="command" type="string" javaType="org.apache.camel.component.jclouds.JcloudsCommand" kind="path" choice="blobstore,compute" deprecated="false" required="true" group="common" description="What command to execute such as blobstore or compute."/>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="hardwareId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The hardware that will be used for creating a node. Values depend on the actual cloud provider."/>
-         <uriParameter name="nodeState" type="string" javaType="java.lang.String" kind="parameter" choice="PENDING,TERMINATED,SUSPENDED,RUNNING,ERROR,UNRECOGNIZED" deprecated="false" label="producer,compute" group="compute" description="To filter by node status to only select running nodes etc."/>
-         <uriParameter name="providerId" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="common" description="The name of the cloud provider that provides the target service (e.g. aws-s3 or aws_ec2)."/>
-         <uriParameter name="locationId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The location that will be used for creating a node. Values depend on the actual cloud provider."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="nodeId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The id of the node that will run the script or destroyed."/>
-         <uriParameter name="operation" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="Specifies the type of operation that will be performed to the blobstore."/>
-         <uriParameter name="user" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The user on the target node that will run the script."/>
-         <uriParameter name="group" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer,compute" group="compute" description="The group that will be assigned to the newly created node. Values depend on the actual cloud provider."/>
-      </uriParameters>
-   </component>
-   <component>
       <id>sap-netweaver</id>
       <tags>
          <tag>sap</tag>
@@ -8588,8 +8716,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sap-netweaver</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sap-netweaver-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8621,8 +8749,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8660,8 +8788,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-google-drive</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-google-drive-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8700,8 +8828,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-ws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-spring-ws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8748,8 +8876,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-crypto</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-crypto-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8794,8 +8922,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8862,8 +8990,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-coap</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-coap-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8893,8 +9021,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8928,8 +9056,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jolt</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jolt-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -8960,8 +9088,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-xmlsecurity</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-xmlsecurity-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9023,8 +9151,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-couchdb</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-couchdb-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9062,8 +9190,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cassandraql</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-cassandraql-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9104,8 +9232,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mybatis</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mybatis-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9145,54 +9273,6 @@
       </uriParameters>
    </component>
    <component>
-      <id>spark-rest</id>
-      <tags>
-         <tag>rest</tag>
-      </tags>
-      <title>Spark Rest</title>
-      <description>The spark-rest component is used for hosting REST services which has been defined using Camel rest-dsl.</description>
-      <syntax>spark-rest:verb:path</syntax>
-      <class>org.apache.camel.component.sparkrest.SparkComponent</class>
-      <kind>component</kind>
-      <consumerOnly>true</consumerOnly>
-      <scheme>spark-rest</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spark-rest</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="truststorePassword" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Configures connection to be secure to use the truststore password"/>
-         <componentProperty name="sparkConfiguration" type="object" javaType="org.apache.camel.component.sparkrest.SparkConfiguration" kind="property" deprecated="false" description="To use the shared SparkConfiguration"/>
-         <componentProperty name="sparkBinding" type="object" javaType="org.apache.camel.component.sparkrest.SparkBinding" kind="property" deprecated="false" description="To use a custom SparkBinding to map to/from Camel message."/>
-         <componentProperty name="keystorePassword" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Configures connection to be secure to use the keystore password"/>
-         <componentProperty name="port" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Port number. Will by default use 4567"/>
-         <componentProperty name="minThreads" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Minimum number of threads in Spark thread-pool (shared globally)"/>
-         <componentProperty name="ipAddress" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Set the IP address that Spark should listen on. If not called the default address is '0.0.0.0'."/>
-         <componentProperty name="timeOutMillis" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Thread idle timeout in millis where threads that has been idle for a longer period will be terminated from the thread pool"/>
-         <componentProperty name="keystoreFile" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Configures connection to be secure to use the keystore file"/>
-         <componentProperty name="truststoreFile" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="Configures connection to be secure to use the truststore file"/>
-         <componentProperty name="maxThreads" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Maximum number of threads in Spark thread-pool (shared globally)"/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="sparkBinding" type="object" javaType="org.apache.camel.component.sparkrest.SparkBinding" kind="parameter" deprecated="false" label="advanced" group="advanced" description="To use a custom SparkBinding to map to/from Camel message."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="matchOnUriPrefix" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Whether or not the consumer should try to find a target consumer by matching the URI prefix if no exact match is found."/>
-         <uriParameter name="verb" type="string" javaType="java.lang.String" kind="path" choice="get,post,put,patch,delete,head,trace,connect,options" deprecated="false" required="true" group="consumer" description="get post put patch delete head trace connect or options."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="accept" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="consumer" description="Accept type such as: &apos;text/xml&apos; or &apos;application/json&apos;. By default we accept all kinds of types."/>
-         <uriParameter name="path" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="consumer" description="The content path which support Spark syntax."/>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="disableStreamCache" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="Determines whether or not the raw input stream from Spark HttpRequestgetContent() is cached or not (Camel will read the stream into a in light-weight memory based Stream caching) cache. By default Camel will cache the Netty input stream to support reading it multiple times to ensure Camel can retrieve all data from the stream. However you can set this option to true when you for example need to access the raw stream such as streaming it directly to a file or other persistent store. Mind that if you enable this option then you cannot read the Netty stream multiple times out of the box and you would need manually to reset the reader index on the Spark raw stream."/>
-         <uriParameter name="transferException" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="If enabled and an Exchange failed processing on the consumer side and if the caused Exception was send back serialized in the response as a application/x-java-serialized-object content type. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk."/>
-         <uriParameter name="urlDecodeHeaders" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="If this option is enabled then during binding from Spark to Camel Message then the header values will be URL decoded (eg 20 will be a space character.)"/>
-         <uriParameter name="mapHeaders" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="consumer" description="If this option is enabled then during binding from Spark to Camel Message then the headers will be mapped as well (eg added as header to the Camel Message as well). You can turn off this option to disable this. The headers can still be accessed from the org.apache.camel.component.sparkrest.SparkMessage message with the method getRequest() that returns the Spark HTTP request instance."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-      </uriParameters>
-   </component>
-   <component>
       <id>chunk</id>
       <tags>
          <tag>transformation</tag>
@@ -9207,8 +9287,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-chunk</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-chunk-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9238,8 +9318,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-vertx</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-vertx-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9275,8 +9355,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-box</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-box-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9321,8 +9401,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ironmq</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ironmq-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9377,8 +9457,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-linkedin</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-linkedin-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9418,8 +9498,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sql</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sql-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9491,8 +9571,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9527,8 +9607,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-git</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-git-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9566,8 +9646,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-aws</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-aws-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9601,8 +9681,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-krati</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-krati-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9656,8 +9736,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jcache</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jcache-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9703,8 +9783,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jpa</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-jpa-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9773,8 +9853,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mongodb</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mongodb-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9819,8 +9899,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9862,8 +9942,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-flatpack</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-flatpack-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -9899,52 +9979,6 @@
       </uriParameters>
    </component>
    <component>
-      <id>quartz</id>
-      <tags>
-         <tag>scheduling</tag>
-      </tags>
-      <title>Quartz</title>
-      <description>Provides a scheduled delivery of messages using the Quartz 1.x scheduler.</description>
-      <syntax>quartz:groupName/timerName</syntax>
-      <class>org.apache.camel.component.quartz.QuartzComponent</class>
-      <kind>component</kind>
-      <consumerOnly>true</consumerOnly>
-      <scheme>quartz</scheme>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-quartz</artifactId>
-            <version>2.18.1.fuse-000025</version>
-         </dependency>
-      </dependencies>
-      <componentProperties>
-         <componentProperty name="scheduler" type="object" javaType="org.quartz.Scheduler" kind="property" deprecated="false" description="To use the custom configured Quartz scheduler instead of creating a new Scheduler."/>
-         <componentProperty name="propertiesFile" type="string" javaType="java.lang.String" kind="property" deprecated="false" description="File name of the properties to load from the classpath"/>
-         <componentProperty name="autoStartScheduler" type="boolean" javaType="boolean" kind="property" deprecated="false" defaultValue="false" description="Whether or not the scheduler should be auto started. This options is default true"/>
-         <componentProperty name="factory" type="object" javaType="org.quartz.SchedulerFactory" kind="property" deprecated="false" description="To use the custom SchedulerFactory which is used to create the Scheduler."/>
-         <componentProperty name="startDelayedSeconds" type="integer" javaType="int" kind="property" deprecated="false" defaultValue="0" description="Seconds to wait before starting the quartz scheduler."/>
-         <componentProperty name="enableJmx" type="boolean" javaType="boolean" kind="property" deprecated="false" defaultValue="false" description="Whether to enable Quartz JMX which allows to manage the Quartz scheduler from JMX. This options is default true"/>
-         <componentProperty name="properties" type="object" javaType="java.util.Properties" kind="property" deprecated="false" description="Properties to configure the Quartz scheduler."/>
-      </componentProperties>
-      <uriParameters>
-         <uriParameter name="cron" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" group="consumer" description="Specifies a cron expression to define when to trigger."/>
-         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-         <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="Sets the exchange pattern when the consumer creates an exchange."/>
-         <uriParameter name="deleteJob" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" group="consumer" description="If set to true then the trigger automatically delete when route stop. Else if set to false it will remain in scheduler. When set to false it will also mean user may reuse pre-configured trigger with camel Uri. Just ensure the names match. Notice you cannot have both deleteJob and pauseJob set to true."/>
-         <uriParameter name="pauseJob" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="If set to true then the trigger automatically pauses when route stop. Else if set to false it will remain in scheduler. When set to false it will also mean user may reuse pre-configured trigger with camel Uri. Just ensure the names match. Notice you cannot have both deleteJob and pauseJob set to true."/>
-         <uriParameter name="groupName" type="string" javaType="java.lang.String" kind="path" deprecated="false" defaultValue="Camel" group="consumer" description="The quartz group name to use. The combination of group name and timer name should be unique."/>
-         <uriParameter name="bridgeErrorHandler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" group="consumer" description="Allows for bridging the consumer to the Camel routing Error Handler which mean any exceptions occurred while the consumer is trying to pickup incoming messages or the likes will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="triggerParameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" group="consumer" description="To configure additional options on the trigger."/>
-         <uriParameter name="startDelayedSeconds" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" group="consumer" description="Seconds to wait before starting the quartz scheduler."/>
-         <uriParameter name="timerName" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="consumer" description="The quartz timer name to use. The combination of group name and timer name should be unique."/>
-         <uriParameter name="jobParameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" group="consumer" description="To configure additional options on the job."/>
-         <uriParameter name="usingFixedCamelContextName" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="If it is true JobDataMap uses the CamelContext name directly to reference the CamelContext if it is false JobDataMap uses use the CamelContext management name which could be changed during the deploy time."/>
-         <uriParameter name="exceptionHandler" type="object" javaType="org.apache.camel.spi.ExceptionHandler" kind="parameter" deprecated="false" label="consumer,advanced" group="consumer (advanced)" description="To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this options is not in use. By default the consumer will deal with exceptions that will be logged at WARN/ERROR level and ignored."/>
-         <uriParameter name="fireNow" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="Whether to fire the scheduler asap when its started using the simple trigger (this option does not support cron)"/>
-         <uriParameter name="stateful" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="consumer" description="Uses a Quartz StatefulJob instead of the default job."/>
-      </uriParameters>
-   </component>
-   <component>
       <id>telegram</id>
       <tags>
          <tag>chat</tag>
@@ -9958,8 +9992,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-telegram</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-telegram-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10007,8 +10041,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-velocity</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-velocity-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10037,8 +10071,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-smpp</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-smpp-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10088,6 +10122,35 @@
       </uriParameters>
    </component>
    <component>
+      <id>string-template</id>
+      <tags>
+         <tag>transformation</tag>
+      </tags>
+      <title>String Template</title>
+      <description>Transforms the message using a String template.</description>
+      <syntax>string-template:resourceUri</syntax>
+      <class>org.apache.camel.component.stringtemplate.StringTemplateComponent</class>
+      <kind>component</kind>
+      <producerOnly>true</producerOnly>
+      <scheme>string-template</scheme>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stringtemplate-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
+         </dependency>
+      </dependencies>
+      <componentProperties>
+      </componentProperties>
+      <uriParameters>
+         <uriParameter name="delimiterStop" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue="&gt;" group="producer" description="The variable end delimiter"/>
+         <uriParameter name="delimiterStart" type="string" javaType="char" kind="parameter" deprecated="false" defaultValue="&lt;" group="producer" description="The variable start delimiter"/>
+         <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="advanced" group="advanced" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
+         <uriParameter name="contentCache" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" group="producer" description="Sets whether to use resource content cache or not"/>
+         <uriParameter name="resourceUri" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" group="producer" description="Path to the resource or a reference to lookup a bean in the Registry to use as the resource"/>
+      </uriParameters>
+   </component>
+   <component>
       <id>mina2</id>
       <tags>
          <tag>networking</tag>
@@ -10103,8 +10166,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina2</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-mina2-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10157,8 +10220,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ganglia</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-ganglia-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10198,8 +10261,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10245,8 +10308,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-sql</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-sql-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10278,8 +10341,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10309,8 +10372,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-core-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
@@ -10355,8 +10418,8 @@
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-redis</artifactId>
-            <version>2.18.1.fuse-000025</version>
+            <artifactId>camel-spring-redis-starter</artifactId>
+            <version>2.18.1.redhat-000010</version>
          </dependency>
       </dependencies>
       <componentProperties>
