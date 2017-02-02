@@ -15,7 +15,7 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187;bundle-version="9.1.0",
  org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224;bundle-version="9.1.0",
  org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="9.1.0",
- org.fusesource.ide.camel.model.service.v2_18_1_fuse_000025;bundle-version="9.1.0",
+ org.fusesource.ide.camel.model.service.v2_18_1_redhat_000010;bundle-version="9.1.0",
  org.jboss.tools.locus.mockito;bundle-version="1.9.5"
 
 

@@ -14,22 +14,25 @@
  * permissions and limitations under the License.
  *
  */
-package org.fromForge;
+package org.mycompany;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication
-// load regular Spring XML file from the classpath that contains the Camel XML DSL
-@ImportResource({"classpath:spring/camel-context.xml"})
-public class Application {
+/**
+ * A sample transform
+ */
+@Component(value = "myTransformer")
+public class MyTransformer {
 
-    /**
-     * A main method to start this application.
-     */
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    public String transform() {
+        // let's return a random string
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < 3; i++) {
+            int number = (int) (Math.round(Math.random() * 1000) % 10);
+            char letter = (char) ('0' + number);
+            buffer.append(letter);
+        }
+        return buffer.toString();
     }
 
 }

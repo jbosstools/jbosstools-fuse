@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: org.fusesource.ide.camel.model.service.v2_18_1_fuse_000025;singleton:=true
+Bundle-SymbolicName: org.fusesource.ide.camel.model.service.v2_18_1_redhat_000010;singleton:=true
 Bundle-Version: 9.1.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -15,12 +15,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
 Bundle-Activator: org.fusesource.ide.camel.model.service.internal.CamelServiceImplementationActivator
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- libs/camel-blueprint-2.18.1.fuse-000025.jar,
- libs/camel-catalog-2.18.1.fuse-000025.jar,
- libs/camel-catalog-provider-karaf-2.18.1.fuse-000025.jar,
- libs/camel-catalog-provider-springboot-2.18.1.fuse-000025.jar,
- libs/camel-core-2.18.1.fuse-000025.jar,
- libs/camel-spring-2.18.1.fuse-000025.jar,
+ libs/camel-blueprint-2.18.1.redhat-000010.jar,
+ libs/camel-catalog-2.18.1.redhat-000010.jar,
+ libs/camel-catalog-provider-karaf-2.18.1.redhat-000010.jar,
+ libs/camel-catalog-provider-springboot-2.18.1.redhat-000010.jar,
+ libs/camel-core-2.18.1.redhat-000010.jar,
+ libs/camel-spring-2.18.1.redhat-000010.jar,
  libs/log4j-over-slf4j-1.7.21.jar,
  libs/slf4j-api-1.7.21.jar,
  libs/slf4j-simple-1.7.21.jar

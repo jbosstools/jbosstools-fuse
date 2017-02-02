@@ -6,5 +6,5 @@
    <service>
       <provide interface="org.fusesource.ide.camel.model.service.core.ICamelManagerService"/>
    </service>
-   <property name="camel.version" type="String" value="2.18.1.fuse-000025"/>
+   <property name="camel.version" type="String" value="2.18.1.redhat-000010"/>
 </scr:component>
