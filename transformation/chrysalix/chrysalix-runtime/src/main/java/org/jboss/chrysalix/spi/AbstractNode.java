@@ -142,6 +142,12 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     }
 
     @Override
+    public boolean removeAttribute(String namespace,
+                                   String name) {
+    	return attributes.remove(attribute(namespace, name));
+    }
+
+    @Override
     public void setList(boolean list) {
         this.list = list;
     }

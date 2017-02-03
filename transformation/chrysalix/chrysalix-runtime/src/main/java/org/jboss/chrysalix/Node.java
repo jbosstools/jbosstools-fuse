@@ -65,7 +65,8 @@ public interface Node extends Entity {
 
     boolean list();
 
-    void remove();
+    boolean removeAttribute(String namespace,
+                            String name);
 
     void setList(boolean list);
 }

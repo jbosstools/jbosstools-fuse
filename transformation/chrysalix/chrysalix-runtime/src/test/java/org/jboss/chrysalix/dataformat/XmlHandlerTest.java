@@ -21,7 +21,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.chrysalix.internal;
+package org.jboss.chrysalix.dataformat;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,26 +34,15 @@ import org.jboss.chrysalix.InMemoryRepository;
 import org.jboss.chrysalix.Node;
 import org.jboss.chrysalix.Repository;
 import org.jboss.chrysalix.dataformat.XmlHandler;
-import org.jboss.chrysalix.dataformat.XsdHandler;
 import org.junit.Test;
 
-public class EngineImplTest {
+public class XmlHandlerTest {
 
-    private static final String RESOURCES_FOLDER = "src/test/resources/" + EngineImplTest.class.getPackage().getName().replace('.', '/') + '/';
+    private static final String RESOURCES_FOLDER = "src/test/resources/" + XmlHandlerTest.class.getPackage().getName().replace('.', '/') + '/';
     private static final String SOURCE_XML = RESOURCES_FOLDER + "source.xml";
-    private static final String SOURCE_XSD = RESOURCES_FOLDER + "report.xsd";
     private static final String TARGET_XML = RESOURCES_FOLDER + "target.xml";
     private static final String EXPECTED_XML = RESOURCES_FOLDER + "expectedTarget.xml";
     private static final String MAPPINGS = RESOURCES_FOLDER + "mappings.txt";
-
-    @Test
-    public void loadXsdModel() throws Exception {
-        Engine engine = new Engine(RESOURCES_FOLDER);
-        XsdHandler handler = new XsdHandler();
-        Repository repository = new InMemoryRepository();
-        Node sourceFileNode = engine.toNode(SOURCE_XSD, handler, repository);
-        assertThat(sourceFileNode.children().length, is(19));
-    }
 
     @Test
     public void mapXml() throws Exception {

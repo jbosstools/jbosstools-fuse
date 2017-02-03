@@ -23,9 +23,9 @@
  */
 package org.jboss.chrysalix.dataformat;
 
-import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,6 @@ import org.jboss.chrysalix.DataFormatHandler;
 import org.jboss.chrysalix.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.ext.DefaultHandler2;
 
 public class XmlHandler implements DataFormatHandler {
@@ -61,17 +60,17 @@ public class XmlHandler implements DataFormatHandler {
 
     @Override
     public void load(Node fileNode) throws Exception {
-        try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(fileNode.path()))) {
+        try (InputStream stream = new FileInputStream(fileNode.path())) {
             parse(fileNode, stream);
         }
     }
 
-    XmlSaxHandler newSaxHandler(Node fileNode) {
+    protected XmlSaxHandler newSaxHandler(Node fileNode) {
         return new XmlSaxHandler(fileNode);
     }
 
-    void parse(Node fileNode,
-               BufferedInputStream stream) throws IOException, ParserConfigurationException, SAXException {
+    protected void parse(Node fileNode,
+                         InputStream stream) throws IOException, ParserConfigurationException, SAXException {
         SAXParser parser = FACTORY.newSAXParser();
         XmlSaxHandler xmlSaxHandler = newSaxHandler(fileNode);
         parser.setProperty("http://xml.org/sax/properties/lexical-handler", xmlSaxHandler);
@@ -133,11 +132,11 @@ public class XmlHandler implements DataFormatHandler {
         }
     }
 
-    class XmlSaxHandler extends DefaultHandler2 {
+    protected class XmlSaxHandler extends DefaultHandler2 {
 
-        Node node;
+        protected Node node;
 
-        XmlSaxHandler(Node fileNode) {
+        protected XmlSaxHandler(Node fileNode) {
             node = fileNode;
         }
 
@@ -166,18 +165,6 @@ public class XmlHandler implements DataFormatHandler {
             node = node.parent();
         }
 
-        @Override
-        public void error(SAXParseException e) {
-            // jpav: remove
-            System.out.println("error " + e);
-        }
-
-        @Override
-        public void fatalError(SAXParseException e) {
-            // jpav: remove
-            System.out.println("fatalError " + e);
-        }
-
         @SuppressWarnings("unused")
         @Override
         public void startElement(String uri,
@@ -200,12 +187,6 @@ public class XmlHandler implements DataFormatHandler {
         public void startPrefixMapping(String prefix,
                                        String uri) {
             prefixByNamespace.putIfAbsent(uri, prefix);
-        }
-
-        @Override
-        public void warning(SAXParseException e) {
-            // jpav: remove
-            System.out.println("warning " + e);
         }
     }
 }
