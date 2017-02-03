@@ -36,6 +36,11 @@ public class AttributeImpl extends AbstractEntity implements Attribute {
     }
 
     @Override
+    public void remove() {
+        parent.removeAttribute(namespace, name);
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("Attribute");
         builder.append(super.toString());

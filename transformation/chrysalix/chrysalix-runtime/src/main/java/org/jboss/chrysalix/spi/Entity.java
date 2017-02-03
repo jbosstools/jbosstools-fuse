@@ -37,6 +37,8 @@ public interface Entity {
 
     String qualifiedName();
 
+    void remove();
+
     Node root();
 
     void setType(String type);

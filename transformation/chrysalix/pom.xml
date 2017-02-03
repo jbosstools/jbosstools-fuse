@@ -1,19 +1,61 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.jboss.tools.fuse</groupId>
         <artifactId>transformation</artifactId>
         <version>9.1.0-SNAPSHOT</version>
-    	<relativePath>../pom.xml</relativePath>
+    		<relativePath>../pom.xml</relativePath>
     </parent>
+
     <groupId>org.jboss.chrysalix</groupId>
     <artifactId>chrysalix</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>JBoss :: Chrysalix</name>
 
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://repository.jboss.org/licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <properties>
+        <hamcrest.version>1.3</hamcrest.version>
+    </properties>
+
     <modules>
-      <module>chrysalix-common</module>
-      <module>chrysalix-runtime</module>
+        <module>chrysalix-common</module>
+        <module>chrysalix-runtime</module>
+        <module>chrysalix-designer</module>
     </modules>
+
+  	<dependencyManagement>
+    		<dependencies>
+      		<dependency>
+        			<groupId>org.jboss.chrysalix</groupId>
+        			<artifactId>chrysalix-common</artifactId>
+        			<version>${project.version}</version>
+      		</dependency>
+      		<dependency>
+        			<groupId>org.jboss.chrysalix</groupId>
+        			<artifactId>chrysalix-runtime</artifactId>
+        			<version>1.0.0-SNAPSHOT</version>
+      		</dependency>
+      		<dependency>
+        			<groupId>org.jboss.chrysalix</groupId>
+        			<artifactId>chrysalix-designer</artifactId>
+        			<version>${project.version}</version>
+      		</dependency>
+      		<dependency>
+            		<groupId>org.hamcrest</groupId>
+            		<artifactId>hamcrest-all</artifactId>
+           		<version>${hamcrest.version}</version>
+            		<scope>test</scope>
+      		</dependency>
+    		</dependencies>
+  	</dependencyManagement>
 </project>

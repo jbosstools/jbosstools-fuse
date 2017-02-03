@@ -37,8 +37,7 @@ import org.jboss.chrysalix.internal.transformer.StoreTransformer;
 import org.jboss.chrysalix.internal.transformer.ToUppercaseTransformer;
 import org.jboss.chrysalix.spi.Transformer;
 
-// TODO list simpletype
-// TODO designer
+// TODO API for individual mappings, including blocks
 // TODO mult. sources/targets
 // TODO twitter to salesforce, soap to rest
 // TODO recursive elements
@@ -49,9 +48,7 @@ import org.jboss.chrysalix.spi.Transformer;
 // TODO file repository
 public class Engine {
 
-    public static final String MAP = "map";
-
-    private static String[] splitLine(String line,
+	private static String[] splitLine(String line,
                                       String transformerName,
                                       Map<String, Object> context) throws MappingException {
         boolean inString = false;
@@ -177,7 +174,9 @@ public class Engine {
         String name = transformerClass.getSimpleName();
         name = Character.toLowerCase(name.charAt(0)) + name.substring(1, name.length());
         String suffix = Transformer.class.getSimpleName();
-        if (name.endsWith(suffix)) name = name.substring(0, name.length() - suffix.length());
+        if (name.endsWith(suffix)) {
+        	name = name.substring(0, name.length() - suffix.length());
+        }
         return transformerByName.putIfAbsent(name, transformerClass) == null;
     }
 
@@ -199,11 +198,15 @@ public class Engine {
         filePath = file.getAbsolutePath();
         Node node = null;
         for (String name : splitPath(filePath)) {
-            if (name.isEmpty()) continue;
+            if (name.isEmpty()) {
+            	continue;
+            }
             node = node == null ? repository.newRootNode(name) : node.addChild(null, name, null);
         }
         // Create file node's contents using applicable handler
-        if (file.exists()) handler.load(node);
+        if (file.exists()) {
+        	handler.load(node);
+        }
         return node;
     }
 
@@ -226,7 +229,9 @@ public class Engine {
         Transformer transformer = transformerClass.newInstance();
         line = line.substring(ndx + 1);
         boolean hasBlock = line.endsWith(" {");
-        if (hasBlock) line = line.substring(0, line.lastIndexOf(' '));
+        if (hasBlock) {
+        	line = line.substring(0, line.lastIndexOf(' '));
+        }
         try {
             String[] args = splitLine(line, transformerName, context);
             // Process transformations if supplied
