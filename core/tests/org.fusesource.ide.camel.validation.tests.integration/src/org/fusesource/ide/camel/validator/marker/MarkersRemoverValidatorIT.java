@@ -23,23 +23,25 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.views.markers.ExtendedMarkersView;
+import org.eclipse.ui.internal.views.markers.ProblemsView;
 import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
+import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -55,7 +57,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 
 	private boolean safeRunnableIgnoreErrorStateBeforeTests;
 	private boolean statusHandlerCalled = false;
-	private IViewPart problemView = null;
+	private ProblemsView problemsView = null;
 	private StatusHandler statusHandlerBeforetest;
 	private IEditorPart openEditorOnFileStore;
 
@@ -79,13 +81,12 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		for (int i = 0; i < elements.size(); i++) {
 			ValidationFactory.getInstance().validate((AbstractCamelModelElement) elements.get(i));
 		}
-
-		Thread.currentThread().sleep(1000);
-		readAndDispatch(20);
-
+		
+		waitProblemViewJob();
+		
 		Method getAllMarkersMethod = ExtendedMarkersView.class.getDeclaredMethod("getAllMarkers", new Class[] {}); //$NON-NLS-1$
 		getAllMarkersMethod.setAccessible(true);
-		IMarker[] markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
+		IMarker[] markers = (IMarker[]) getAllMarkersMethod.invoke(problemsView, new Object[] {});
 		// there are 2 expected errors or warnings
 		assertThat(markers).hasSize(2);
 
@@ -103,13 +104,20 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 
 		globalEditor.doSave(null);
 
-		Thread.currentThread().sleep(3000);
-		readAndDispatch(20);
-		readAndDispatch(20);
-
-		markers = (IMarker[]) getAllMarkersMethod.invoke(problemView, new Object[] {});
+		waitProblemViewJob();
+		
+		markers = (IMarker[]) getAllMarkersMethod.invoke(problemsView, new Object[] {});
 		assertThat(markers).isEmpty();
 
+	}
+
+	private void waitProblemViewJob() {
+		try {
+			Job.getJobManager().join(problemsView.MARKERSVIEW_UPDATE_JOB_FAMILY, new NullProgressMonitor());
+		} catch (OperationCanceledException | InterruptedException e) {
+			waitProblemViewJob();
+			System.out.println("issue while waiting for MarkersView jobs");
+		}
 	}
 
 	private IEditorPart openFileInEditorWithProblemsViewOpened(String filePath) throws Exception {
@@ -121,7 +129,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 
 		readAndDispatch(20);
-		this.problemView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView");
+		this.problemsView = (ProblemsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView");
 		readAndDispatch(20);
 		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
 		page.activate(editor);
