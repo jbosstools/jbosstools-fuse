@@ -41,7 +41,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -88,10 +87,6 @@ public class PropertiesUtilsTestIT {
 	public void testUpdateURIParamsWithPathParams() throws Exception {
 		for (Parameter p : component.getUriParameters()) {
 			if ("path".equalsIgnoreCase(p.getKind())) {
-				// This is really weird because, see FUSETOOLS-1803
-				if ("http4s".equals(component.getScheme())) {
-					continue;
-				}
 				CamelEndpoint endpoint = createCamelEndpoint(component.getSyntax());
 				updateURIParams(endpoint, p, "abc", component, modelMap(component.getUriParameters()));
 				assertUri(endpoint.getUri(), component, p, "abc");
