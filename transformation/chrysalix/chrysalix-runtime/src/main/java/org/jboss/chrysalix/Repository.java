@@ -23,8 +23,22 @@
  */
 package org.jboss.chrysalix;
 
-
+/**
+ * A container for {@link Node nodes} representing data and its structure.
+ */
 public interface Repository {
 
+	/**
+	 * @param name
+	 * 		The name of the root node to create
+	 * @return a new root node with the supplied name
+	 */
     Node newRootNode(String name);
+
+    /**
+	 * @param name
+	 * 		The name of a root node
+     * @return the root node with the supplied name, or <code>null</code>.
+     */
+    Node rootNode(String name);
 }

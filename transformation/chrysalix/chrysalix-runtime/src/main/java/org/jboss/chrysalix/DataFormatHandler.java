@@ -23,9 +23,39 @@
  */
 package org.jboss.chrysalix;
 
+/**
+ * Handles the interpretation and conversion of data to and from {@link Node nodes}.
+ */
 public interface DataFormatHandler {
 
-    void load(Node fileNode) throws Exception;
+    /**
+     * @param data
+     * 		The non-<code>null</code> source data to be converted to nodes. The data's type is dependent upon the handler's
+     * 		implementation.
+     * @param parent
+     * 		The parent node under which the data should be stored.
+     * @return the node representing the root of the supplied data.
+     * @throws Exception if any error occurs.
+     */
+    Node toSourceNode(Object data,
+                      Node parent) throws Exception;
 
-    void save(Node fileNode) throws Exception;
+    /**
+     * @param targetNode
+     * 		The target node to be converted to data in the format determined by the handler's implementation.
+     * @return the node representing the root of the target data.
+     * @throws Exception if any error occurs.
+     */
+    Object toTargetData(Node targetNode) throws Exception;
+
+    /**
+     * @param data The data used to create a new, empty target node or to convert existing data into a target node. The data's type
+     * 		is dependent upon the handler's implementation.
+     * @param parent
+     * 		The parent node under which the data should be stored.
+     * @return the node representing the root of the supplied data.
+     * @throws Exception if any error occurs.
+     */
+    Node toTargetNode(Object data,
+                      Node parent) throws Exception;
 }

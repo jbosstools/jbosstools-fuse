@@ -23,7 +23,5 @@
  */
 package org.jboss.chrysalix;
 
-import org.jboss.chrysalix.spi.Entity;
-
 public interface Attribute extends Entity {
 }

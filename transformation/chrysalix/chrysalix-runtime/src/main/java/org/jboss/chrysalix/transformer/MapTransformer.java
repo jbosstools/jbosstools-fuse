@@ -21,15 +21,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.chrysalix.internal.transformer;
+package org.jboss.chrysalix.transformer;
 
 import java.util.Map;
 import org.jboss.chrysalix.Attribute;
 import org.jboss.chrysalix.Engine;
+import org.jboss.chrysalix.Entity;
 import org.jboss.chrysalix.MappingException;
 import org.jboss.chrysalix.Node;
-import org.jboss.chrysalix.spi.Entity;
-import org.jboss.chrysalix.spi.Transformer;
+import org.jboss.chrysalix.Transformer;
 
 public class MapTransformer implements Transformer {
 

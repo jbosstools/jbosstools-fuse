@@ -23,8 +23,6 @@
  */
 package org.jboss.chrysalix;
 
-import org.jboss.chrysalix.spi.Entity;
-
 public interface Node extends Entity {
 
     Attribute addAttribute(String qualifiedName,
@@ -63,10 +61,10 @@ public interface Node extends Entity {
 
     int index();
 
-    boolean list();
+    boolean isList();
 
     boolean removeAttribute(String namespace,
                             String name);
 
-    void setList(boolean list);
+    void setList(boolean isList);
 }

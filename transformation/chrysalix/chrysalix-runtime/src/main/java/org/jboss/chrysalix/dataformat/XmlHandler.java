@@ -23,27 +23,32 @@
  */
 package org.jboss.chrysalix.dataformat;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.jboss.chrysalix.Attribute;
 import org.jboss.chrysalix.DataFormatHandler;
 import org.jboss.chrysalix.Node;
+import org.jboss.chrysalix.common.I18n;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
 
+/**
+ * Handles the interpretation and conversion of <a href="https://www.w3.org/XML/">XML documents</a> to and from {@link Node nodes}.
+ */
 public class XmlHandler implements DataFormatHandler {
 
-    public static final String COMMENT = "<comment>";
-    static final SAXParserFactory FACTORY = SAXParserFactory.newInstance();
+    static final String COMMENT = "<comment>";
+
+    private static final SAXParserFactory FACTORY = SAXParserFactory.newInstance();
 
     static {
         FACTORY.setNamespaceAware(true);
@@ -51,95 +56,204 @@ public class XmlHandler implements DataFormatHandler {
 
     Map<String, String> prefixByNamespace = new HashMap<>();
 
-    private void indent(PrintWriter writer,
+    private void indent(StringBuilder builder,
                         int indent) {
         for (int ndx = indent; --ndx >= 0;) {
-            writer.print(' ');
+            builder.append(' ');
         }
     }
 
-    @Override
-    public void load(Node fileNode) throws Exception {
-        try (InputStream stream = new FileInputStream(fileNode.path())) {
-            parse(fileNode, stream);
-        }
+    /**
+     * @param documentNode
+     * 		The node representing the XML document
+     * @return the SAX handler used to populate the supplied documentNode
+     */
+    protected SaxHandler newSaxHandler(Node documentNode) {
+        return new SaxHandler(documentNode);
     }
 
-    protected XmlSaxHandler newSaxHandler(Node fileNode) {
-        return new XmlSaxHandler(fileNode);
-    }
-
-    protected void parse(Node fileNode,
-                         InputStream stream) throws IOException, ParserConfigurationException, SAXException {
+    /**
+     * Populates the supplied documentNode with the XML document read by the supplied stream.
+     *
+     * @param documentNode
+     * 		The node representing the XML document
+     * @param stream
+     * 		The stream used to read the XML document
+     * @throws Exception if any error occurs
+     */
+    protected void parse(Node documentNode,
+                         InputStream stream) throws Exception {
         SAXParser parser = FACTORY.newSAXParser();
-        XmlSaxHandler xmlSaxHandler = newSaxHandler(fileNode);
-        parser.setProperty("http://xml.org/sax/properties/lexical-handler", xmlSaxHandler);
-        parser.parse(stream, xmlSaxHandler);
+        SaxHandler saxHandler = newSaxHandler(documentNode);
+        parser.setProperty("http://xml.org/sax/properties/lexical-handler", saxHandler);
+        parser.parse(stream, saxHandler);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param data
+     * 		The file path of the source as a {@link String}
+     * @see org.jboss.chrysalix.DataFormatHandler#toSourceNode(java.lang.Object, org.jboss.chrysalix.Node)
+     */
     @Override
-    public void save(Node fileNode) throws Exception {
-        if (fileNode.children().length == 0) return;
-        try (PrintWriter writer = new PrintWriter(fileNode.path())) {
-            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            for (Node child : fileNode.children()) {
-                save(child, writer, 0, prefixByNamespace);
-            }
+    public Node toSourceNode(Object data,
+                             Node parent) throws Exception {
+        // Create file node, using its path as a namespace
+        File file = new File(data.toString());
+        if (!file.exists()) {
+        	throw new IllegalArgumentException(I18n.localize(getClass(), "Source file does not exist: %s", file));
         }
+        Node node = parent.addChild(file.getParentFile().getAbsolutePath(), file.getName(), null);
+        // Create file node's contents
+        try (InputStream stream = new FileInputStream(file)) {
+            parse(node, stream);
+        }
+        return node;
     }
 
-    private void save(Node node,
-                      PrintWriter writer,
-                      int indent,
-                      Map<String, String> prefixByNamespace) throws Exception {
-        indent(writer, indent);
+    /**
+     * {@inheritDoc}
+     *
+     * @return the XML document as an array of strings representing each line
+     * @see org.jboss.chrysalix.DataFormatHandler#toTargetData(org.jboss.chrysalix.Node)
+     */
+    @Override
+    public Object toTargetData(Node targetNode) throws Exception {
+        if (targetNode.children().length == 0) {
+        	return null;
+        }
+        List<String> lines = new ArrayList<>();
+        lines.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    	StringBuilder builder = new StringBuilder();
+        for (Node child : targetNode.children()) {
+            toTargetData(child, lines, builder, 0, prefixByNamespace);
+        }
+        return lines.toArray(new String[lines.size()]);
+    }
+
+    private void toTargetData(Node node,
+                              List<String> lines,
+                              StringBuilder builder,
+                              int indent,
+                              Map<String, String> prefixByNamespace) throws Exception {
+        indent(builder, indent);
         if (COMMENT.equals(node.qualifiedName())) {
-            writer.println("<!--" + node.value() + "-->");
+        	builder.append("<!--");
+        	builder.append(node.value());
+        	builder.append("-->");
+        	lines.add(builder.toString());
+        	builder.setLength(0);
         } else {
             String prefixedName = prefixByNamespace.get(node.namespace()) + ':' + node.name();
-            writer.print('<' + prefixedName);
+            builder.append('<');
+            builder.append(prefixedName);
             for (Attribute attr : node.attributes()) {
-                writer.print(" " + attr.name() + "=\"" + attr.value() + "\"");
+            	builder.append(" ");
+            	builder.append(attr.name());
+            	builder.append("=\"");
+            	builder.append(attr.value());
+            	builder.append("\"");
             }
             if (indent == 0) { // schema node
                 for (Entry<String, String> entry : prefixByNamespace.entrySet()) {
-                    writer.print(" xmlns");
-                    writer.print(entry.getValue().isEmpty() ? "" : ':' + entry.getValue());
-                    writer.print("=\"" + entry.getKey() + "\"");
+                	builder.append(" xmlns");
+                	if (!entry.getValue().isEmpty()) {
+                		builder.append(':');
+                		builder.append(entry.getValue());
+                	}
+                	builder.append("=\"");
+            		builder.append(entry.getKey());
+                	builder.append("\"");
                 }
             }
             Object value = node.value();
             Node[] children = node.children();
             if (children.length == 0 && value != null && !value.toString().isEmpty()) {
-                writer.println(">" + node.value() + "</" + prefixedName + '>');
+            	builder.append('>');
+            	builder.append(node.value());
+            	builder.append("</");
+            	builder.append(prefixedName);
+            	builder.append('>');
+            	lines.add(builder.toString());
+            	builder.setLength(0);
             } else {
                 if (children.length > 0) {
-                    writer.println('>');
+                	builder.append('>');
+                	lines.add(builder.toString());
+                	builder.setLength(0);
                     int childIndent = indent + 2;
                     if (value != null && !value.toString().isEmpty()) {
-                        indent(writer, childIndent);
-                        writer.println(value.toString());
+                        indent(builder, childIndent);
+                        builder.append(value.toString());
+                    	lines.add(builder.toString());
+                    	builder.setLength(0);
                     }
                     for (Node child : children) {
-                        save(child, writer, childIndent, prefixByNamespace);
+                        toTargetData(child, lines, builder, childIndent, prefixByNamespace);
                     }
-                    indent(writer, indent);
-                    writer.println("</" + prefixedName + '>');
+                    indent(builder, indent);
+                	builder.append("</");
+                	builder.append(prefixedName);
+                	builder.append('>');
+                	lines.add(builder.toString());
+                	builder.setLength(0);
                 } else {
-                    writer.println("/>");
+                    builder.append("/>");
+                	lines.add(builder.toString());
+                	builder.setLength(0);
                 }
             }
         }
     }
 
-    protected class XmlSaxHandler extends DefaultHandler2 {
+    /**
+	 * {@inheritDoc}
+	 *
+     * @param data
+     * 		The file path of the target as a {@link String}
+	 * @see org.jboss.chrysalix.DataFormatHandler#toTargetNode(java.lang.Object, org.jboss.chrysalix.Node)
+	 */
+	@Override
+	public Node toTargetNode(Object data,
+							 Node parent) throws Exception {
+        // Create file node, using its path as a namespace
+        File file = new File(data.toString());
+        Node node = parent.addChild(file.getParentFile().getAbsolutePath(), file.getName(), null);
+        if (file.exists()) {
+            // Create file node's contents
+            try (InputStream stream = new FileInputStream(file)) {
+                parse(node, stream);
+            }
+        }
+        return node;
+	}
 
+	/**
+	 * The DefaultHandler2 used to convert
+	 */
+	protected class SaxHandler extends DefaultHandler2 {
+
+    	/**
+    	 * The current node being populated
+    	 */
         protected Node node;
 
-        protected XmlSaxHandler(Node fileNode) {
-            node = fileNode;
+        /**
+         * Populates the supplied documentNode
+         *
+         * @param documentNode
+         * 		The node representing the XML document
+         */
+        protected SaxHandler(Node documentNode) {
+            node = documentNode;
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
+         */
         @Override
         public void characters(char[] chrs,
                                int start,
@@ -151,6 +265,13 @@ public class XmlHandler implements DataFormatHandler {
             node.setValue(val);
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * Adds comments as child nodes to the current {@link #node}.
+         *
+         * @see org.xml.sax.ext.DefaultHandler2#comment(char[], int, int)
+         */
         @Override
         public void comment(char[] chrs,
                             int start,
@@ -158,6 +279,13 @@ public class XmlHandler implements DataFormatHandler {
             node.addChild(null, COMMENT, "string").setValue(String.valueOf(chrs, start, length));
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * Replaces the current {@link #node} with its parent.
+         *
+         * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+         */
         @Override
         public void endElement(String uri,
                                String localName,
@@ -165,7 +293,12 @@ public class XmlHandler implements DataFormatHandler {
             node = node.parent();
         }
 
-        @SuppressWarnings("unused")
+        /**
+         * {@inheritDoc}
+         *
+         * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+         */
+        @SuppressWarnings("unused") // For SAXException that might be thrown by subclasses
         @Override
         public void startElement(String uri,
                                  String localName,
@@ -183,6 +316,11 @@ public class XmlHandler implements DataFormatHandler {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * @see org.xml.sax.helpers.DefaultHandler#startPrefixMapping(java.lang.String, java.lang.String)
+         */
         @Override
         public void startPrefixMapping(String prefix,
                                        String uri) {

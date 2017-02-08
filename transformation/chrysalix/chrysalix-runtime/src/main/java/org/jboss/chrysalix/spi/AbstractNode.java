@@ -38,7 +38,7 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     protected int index;
     protected Set<Attribute> attributes = new LinkedHashSet<>();
     protected List<Node> children = new ArrayList<>();
-    protected boolean list;
+    protected boolean isList;
 
     protected AbstractNode(Node parent,
                            String namespace,
@@ -57,7 +57,7 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     public Attribute addAttribute(String qualifiedName,
                                   String type) {
         int ndx = qualifiedName.lastIndexOf(':');
-        String ns = ndx < 0 ? "" : qualifiedName.substring(0, ndx);
+        String ns = ndx < 0 ? "" : removeBraces(qualifiedName.substring(0, ndx));
         return addAttribute(ns, qualifiedName.substring(ndx + 1), type);
     }
 
@@ -65,7 +65,10 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     public Attribute addAttribute(String namespace,
                                   String name,
                                   String type) {
-        Attribute attribute = new AttributeImpl(this, namespace, name, type);
+    	if (namespace == null) {
+    		namespace = "";
+    	}
+        Attribute attribute = new AttributeImpl(this, removeBraces(namespace), name, type);
         attributes.add(attribute);
         return attribute;
     }
@@ -74,22 +77,25 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     public Node addChild(String qualifiedName,
                          String type) {
         int ndx = qualifiedName.lastIndexOf(':');
-        String ns = ndx < 0 ? "" : qualifiedName.substring(0, ndx);
+        String ns = ndx < 0 ? "" : removeBraces(qualifiedName.substring(0, ndx));
         return addChild(ns, qualifiedName.substring(ndx + 1), type);
     }
 
     @Override
     public Attribute attribute(String qualifiedName) {
         int ndx = qualifiedName.lastIndexOf(':');
-        String ns = ndx < 0 ? "" : qualifiedName.substring(0, ndx);
+        String ns = ndx < 0 ? "" : removeBraces(qualifiedName.substring(0, ndx));
         return attribute(ns, qualifiedName.substring(ndx + 1));
     }
 
     @Override
     public Attribute attribute(String namespace,
                                String name) {
+    	if (namespace == null) {
+    		namespace = "";
+    	}
         for (Attribute attr : attributes) {
-            if (attr.name().equals(name) && attr.namespace().equals(namespace)) return attr;
+            if (attr.name().equals(name) && attr.namespace().equals(removeBraces(namespace))) return attr;
         }
         return null;
     }
@@ -102,13 +108,16 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     @Override
     public Node child(String qualifiedName) {
         int ndx = qualifiedName.lastIndexOf(':');
-        String ns = ndx < 0 ? "" : qualifiedName.substring(0, ndx);
+        String ns = ndx < 0 ? "" : removeBraces(qualifiedName.substring(0, ndx));
         return child(ns, qualifiedName.substring(ndx + 1));
     }
 
     @Override
     public Node child(String namespace,
                       String name) {
+    	if (namespace == null) {
+    		namespace = "";
+    	}
         int indexNdx = name.indexOf('[');
         int index;
         if (indexNdx < 0) index = 0;
@@ -118,7 +127,7 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
         }
         int ndx = 0;
         for (Node child : children()) {
-            if (child.name().equals(name) && child.namespace().equals(namespace)) {
+            if (child.name().equals(name) && child.namespace().equals(removeBraces(namespace))) {
                 if (ndx == index) return child;
                 ndx++;
             }
@@ -132,8 +141,8 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     }
 
     @Override
-    public boolean list() {
-        return list;
+    public boolean isList() {
+        return isList;
     }
 
     @Override
@@ -147,9 +156,16 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
     	return attributes.remove(attribute(namespace, name));
     }
 
+    private String removeBraces(String namespace) {
+        if (namespace.startsWith("{")) { // Remove braces
+        	return namespace.substring(1, namespace.length() - 1);
+        }
+        return namespace;
+    }
+
     @Override
-    public void setList(boolean list) {
-        this.list = list;
+    public void setList(boolean isList) {
+        this.isList = isList;
     }
 
     @Override
@@ -158,8 +174,8 @@ public abstract class AbstractNode extends AbstractEntity implements Node {
         builder.append(super.toString());
         builder.append(", index=");
         builder.append(index);
-        builder.append(", list=");
-        builder.append(list);
+        builder.append(", isList=");
+        builder.append(isList);
         builder.append(", attributes=[");
         int noNamesLength = builder.length();
         for (Attribute attr : attributes()) {
