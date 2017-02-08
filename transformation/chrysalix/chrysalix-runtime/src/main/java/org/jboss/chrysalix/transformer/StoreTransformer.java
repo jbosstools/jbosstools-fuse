@@ -21,24 +21,29 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.chrysalix.spi;
+package org.jboss.chrysalix.transformer;
 
 import java.util.Map;
+import org.jboss.chrysalix.spi.AbstractTransformer;
 
-public interface Transformer {
+public class StoreTransformer extends AbstractTransformer {
 
-    public static final String DATA = "data";
-    public static final String SOURCE_FILE_NODE = "sourceFileNode";
-    public static final String TARGET_FILE_NODE = "targetFileNode";
-    public static final String SOURCE = "source";
-    public static final String TARGET_ENTITY = "target";
+    public StoreTransformer() {}
 
-    public static String removeQuotes(String text) {
-        return text.startsWith("\"") || text.startsWith("\"") ? text.substring(1, text.length() - 1) : text;
+    @Override
+    public void transform(Map<String, Object> context,
+                          String[] arguments) {
+        // TODO support other values besides just value
+        int ndx = 0;
+        String var = arguments[ndx++];
+        if ("in".equals(var)) var = arguments[ndx++];
+        if ("variable".equals(var)) var = arguments[ndx++];
+        if (!var.startsWith("$")) {
+            var = '$' + var;
+        }
+        if (!var.endsWith("$")) {
+            var = var + '$';
+        }
+        context.put(var, context.get(DATA));
     }
-
-    void transform(Map<String, Object> context,
-                   String[] arguments) throws Exception;
-
-    void transformAfterBlock(Map<String, Object> context) throws Exception;
 }

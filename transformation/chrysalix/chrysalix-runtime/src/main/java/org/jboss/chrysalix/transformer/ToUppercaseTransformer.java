@@ -21,29 +21,19 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.chrysalix.internal.transformer;
+package org.jboss.chrysalix.transformer;
 
 import java.util.Map;
 import org.jboss.chrysalix.spi.AbstractTransformer;
 
-public class StoreTransformer extends AbstractTransformer {
-
-    public StoreTransformer() {}
+public class ToUppercaseTransformer extends AbstractTransformer {
 
     @Override
     public void transform(Map<String, Object> context,
                           String[] arguments) {
-        // TODO support other values besides just value
-        int ndx = 0;
-        String var = arguments[ndx++];
-        if ("in".equals(var)) var = arguments[ndx++];
-        if ("variable".equals(var)) var = arguments[ndx++];
-        if (!var.startsWith("$")) {
-            var = '$' + var;
+        Object data = context.get(DATA);
+        if (data != null) {
+            context.put(DATA, data.toString().toUpperCase());
         }
-        if (!var.endsWith("$")) {
-            var = var + '$';
-        }
-        context.put(var, context.get(DATA));
     }
 }

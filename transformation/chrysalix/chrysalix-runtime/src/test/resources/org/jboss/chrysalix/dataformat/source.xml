@@ -1,12 +1,6 @@
-<?xml  
-    version="1.0" 
-    encoding="UTF-8"?>
-  <!-- comment1 -->
-<ns1:elem11
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:ns1="http://ns1.com" 
-    xmlns:ns2="http://ns2.com" 
-    xmlns:ns3="http://ns3.com">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- comment1 -->
+<ns1:elem11 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://ns1.com" xmlns:ns2="http://ns2.com" xmlns:ns3="http://ns3.com">
   <!-- comment2 -->
   <ns2:elem21>
     <ns3:elem31>Some Text 31</ns3:elem31>

@@ -23,44 +23,70 @@
  */
 package org.jboss.chrysalix.dataformat;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
-import org.jboss.chrysalix.Engine;
 import org.jboss.chrysalix.InMemoryRepository;
 import org.jboss.chrysalix.Node;
-import org.jboss.chrysalix.Repository;
-import org.jboss.chrysalix.dataformat.XmlHandler;
 import org.junit.Test;
 
 public class XmlHandlerTest {
 
-    private static final String RESOURCES_FOLDER = "src/test/resources/" + XmlHandlerTest.class.getPackage().getName().replace('.', '/') + '/';
-    private static final String SOURCE_XML = RESOURCES_FOLDER + "source.xml";
-    private static final String TARGET_XML = RESOURCES_FOLDER + "target.xml";
-    private static final String EXPECTED_XML = RESOURCES_FOLDER + "expectedTarget.xml";
-    private static final String MAPPINGS = RESOURCES_FOLDER + "mappings.txt";
+    private static final String RESOURCES_FOLDER = "src/test/resources/" + XmlHandlerTest.class.getPackage().getName().replace('.', '/');
+    private static final String SOURCE = "source.xml";
+    private static final String TARGET = "target.xml";
+    private static final String SOURCE_PATH = RESOURCES_FOLDER + '/' + SOURCE;
+    private static final String TARGET_PATH = RESOURCES_FOLDER + '/' + TARGET;
 
     @Test
-    public void mapXml() throws Exception {
-        Engine engine = new Engine(RESOURCES_FOLDER);
-        XmlHandler handler = new XmlHandler();
-        Repository repository = new InMemoryRepository();
-        Node sourceFileNode = engine.toNode(SOURCE_XML, handler, repository);
-        Node targetFileNode = engine.toNode(TARGET_XML, handler, repository);
-        engine.map(sourceFileNode, targetFileNode, MAPPINGS);
-        engine.toFile(targetFileNode, handler);
-        List<String> targetLines = Files.readAllLines(new File(TARGET_XML).toPath());
-        List<String> expectedLines = Files.readAllLines(new File(EXPECTED_XML).toPath());
-        assertThat("Lines", targetLines.size(), is(expectedLines.size()));
+    public void toSourceNode() throws Exception {
+    	XmlHandler handler = new XmlHandler();
+    	Node root = new InMemoryRepository().newRootNode("root");
+    	handler.toSourceNode(SOURCE_PATH, root);
+    	assertThat(root.children().length, is(1));
+    	Node source = root.children()[0];
+    	assertThat(source, notNullValue());
+    	assertThat(source.name(), is("source.xml"));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void toSourceNodeWhenFileNotExists() throws Exception {
+    	XmlHandler handler = new XmlHandler();
+    	handler.toSourceNode(TARGET_PATH, new InMemoryRepository().newRootNode("root"));
+    }
+
+    @Test
+    public void toTargetData() throws Exception {
+    	XmlHandler handler = new XmlHandler();
+    	Node root = new InMemoryRepository().newRootNode("root");
+    	handler.toSourceNode(SOURCE_PATH, root);
+    	assertThat(root.children().length, is(1));
+    	Node source = root.children()[0];
+    	Object data = handler.toTargetData(source);
+    	assertThat(data, notNullValue());
+    	assertThat(data.getClass().isArray(), is(true));
+        assertThat(data.getClass().getComponentType(), equalTo(String.class));
+		String[] lines = (String[])data;
+        List<String> expectedLines = Files.readAllLines(new File(SOURCE_PATH).toPath());
+        assertThat(lines.length, is(expectedLines.size()));
         int line = 1;
-        for (Iterator<String> targetIter = targetLines.iterator(), expectedIter = expectedLines.iterator(); targetIter.hasNext();) {
-            String targetLine = targetIter.next();
+        for (Iterator<String> expectedIter = expectedLines.iterator(); expectedIter.hasNext();) {
+            String targetLine = lines[line - 1];
             String expectedLine = expectedIter.next();
             assertThat("Line " + line++, targetLine, is(expectedLine));
         }
+    }
+
+    @Test
+    public void toTargetNode() throws Exception {
+    	XmlHandler handler = new XmlHandler();
+    	Node source = handler.toTargetNode(TARGET_PATH, new InMemoryRepository().newRootNode("root"));
+    	assertThat(source, notNullValue());
+    	assertThat(source.name(), is("target.xml"));
     }
 }

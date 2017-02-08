@@ -6,7 +6,7 @@ map from /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem3
   store in variable temp
   append $temp$
 }
-map /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem35[1] to /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem35
+map /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem35[1]/@attr to /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem35/@attr
 map "econstant" to /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:constant
 map "aconstant" /{http://ns1.com}:elem11/{http://ns2.com}:elem21/@constant
 map /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem35 to /{http://ns1.com}:elem11/{http://ns2.com}:elem21/{http://ns3.com}:elem32 {

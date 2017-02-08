@@ -40,51 +40,12 @@ public class XsdHandlerTest {
     private static final String IPO_NS = "http://www.example.com/IPO";
     private static final String REPORT_NS = "http://www.example.com/Report";
 
-    private void debug(Node node) {
-    	debug(node, 0);
-    }
-
-    private void debug(Node node,
-                       int level) {
-		println(level, node.qualifiedName() + ": " + node.type() + ", index=" + node.index() + ", list=" + node.list());
-		Attribute[] attrs = node.attributes();
-		if (attrs.length > 0) {
-			println(level, "attributes:");
-			level++;
-			for (Attribute attr : node.attributes()) {
-				println(level, "@" + attr.qualifiedName() + " " + attr.type());
-			}
-			level--;
-		}
-		Node[] children = node.children();
-		if (children.length > 0) {
-			println(level, "children:");
-			level++;
-			for (Node child : children) {
-				debug(child, level);
-			}
-		}
-    }
-
-    private void indent(int level) {
-    	for (int ndx = level; --ndx >= 0;) {
-			System.out.print("  ");
-    	}
-    }
-
-    private void println(int level,
-                         String text) {
-    	indent(level);
-		System.out.println(text);
-    }
-
     @Test
-    public void loadXsdModel() throws Exception {
-        Engine engine = new Engine(RESOURCES_FOLDER);
+    public void toSourceNode() throws Exception {
+        Engine engine = new Engine();
         XsdHandler handler = new XsdHandler();
         Repository repository = new InMemoryRepository();
-        Node sourceFileNode = engine.toNode(SOURCE_XSD, handler, repository);
-        debug(sourceFileNode);
+        Node sourceFileNode = engine.toSourceNode(SOURCE_XSD, handler, repository);
         assertThat(sourceFileNode.children().length, is(3));
         assertThat(sourceFileNode.child(REPORT_NS, "purchaseReport"), notNullValue());
         assertThat(sourceFileNode.child(IPO_NS, "comment"), notNullValue());
@@ -96,7 +57,7 @@ public class XsdHandlerTest {
         assertThat(orderDate, notNullValue());
         Node shipTo = purchaseOrder.child(IPO_NS, "shipTo");
         assertThat(shipTo, notNullValue());
-        assertThat(shipTo.list(), is(false));
+        assertThat(shipTo.isList(), is(false));
         Node name = shipTo.child(IPO_NS, "name");
         assertThat(name, notNullValue());
         assertThat(name.type(), is("string"));
@@ -104,9 +65,9 @@ public class XsdHandlerTest {
         assertThat(purchaseOrder.child(IPO_NS, "comment"), notNullValue());
         Node items = purchaseOrder.child(IPO_NS, "items");
         assertThat(items, notNullValue());
-        assertThat(items.list(), is(false));
+        assertThat(items.isList(), is(false));
         Node item = items.child(IPO_NS, "item");
         assertThat(item, notNullValue());
-        assertThat(item.list(), is(true));
+        assertThat(item.isList(), is(true));
     }
 }

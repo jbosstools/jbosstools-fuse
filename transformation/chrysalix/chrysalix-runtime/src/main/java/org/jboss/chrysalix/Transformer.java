@@ -21,19 +21,24 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.chrysalix.internal.transformer;
+package org.jboss.chrysalix;
 
 import java.util.Map;
-import org.jboss.chrysalix.spi.AbstractTransformer;
 
-public class ToUppercaseTransformer extends AbstractTransformer {
+public interface Transformer {
 
-    @Override
-    public void transform(Map<String, Object> context,
-                          String[] arguments) {
-        Object data = context.get(DATA);
-        if (data != null) {
-            context.put(DATA, data.toString().toUpperCase());
-        }
+    String DATA = "data";
+    String SOURCE_FILE_NODE = "sourceFileNode";
+    String TARGET_FILE_NODE = "targetFileNode";
+    String SOURCE = "source";
+    String TARGET_ENTITY = "target";
+
+    static String removeQuotes(String text) {
+        return text.startsWith("\"") || text.startsWith("\"") ? text.substring(1, text.length() - 1) : text;
     }
+
+    void transform(Map<String, Object> context,
+                   String[] arguments) throws Exception;
+
+    void transformAfterBlock(Map<String, Object> context) throws Exception;
 }

@@ -23,9 +23,9 @@
  */
 package org.jboss.chrysalix.internal;
 
+import org.jboss.chrysalix.Entity;
 import org.jboss.chrysalix.Node;
 import org.jboss.chrysalix.common.Arg;
-import org.jboss.chrysalix.spi.Entity;
 
 public abstract class AbstractEntity implements Entity {
 
@@ -122,7 +122,7 @@ public abstract class AbstractEntity implements Entity {
         builder.append(", value=");
         builder.append(value);
         builder.append(", parent=");
-        builder.append(parent.path());
+        builder.append(parent == null ? null : parent.path());
         return builder.toString();
     }
 

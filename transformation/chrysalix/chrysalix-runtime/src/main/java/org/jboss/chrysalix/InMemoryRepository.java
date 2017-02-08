@@ -25,17 +25,42 @@ package org.jboss.chrysalix;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jboss.chrysalix.common.Arg;
 import org.jboss.chrysalix.spi.AbstractNode;
 
+/**
+ * An in-memory repository.
+ */
 public class InMemoryRepository implements Repository {
 
     private List<Node> rootNodes = new ArrayList<>();
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.chrysalix.Repository#newRootNode(java.lang.String)
+     */
     @Override
     public Node newRootNode(String name) {
         Node rootNode = new RepositoryNode(null, name);
         rootNodes.add(rootNode);
         return rootNode;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.chrysalix.Repository#rootNode(java.lang.String)
+     */
+    @Override
+    public Node rootNode(String qualifiedName) {
+    	Arg.notNull(qualifiedName, "qualifiedName");
+    	for (Node node : rootNodes) {
+    		if (node.qualifiedName().equals(qualifiedName)) {
+    			return node;
+    		}
+    	}
+    	return null;
     }
 
     private class RepositoryNode extends AbstractNode {
@@ -56,9 +81,14 @@ public class InMemoryRepository implements Repository {
         public Node addChild(String namespace,
                              String name,
                              String type) {
+        	if (namespace == null) {
+        		namespace = "";
+        	}
             int ndx = 0;
             for (Node child : children) {
-                if (child.name().equals(name) && child.namespace().equals(namespace)) ndx++;
+                if (child.name().equals(name) && child.namespace().equals(namespace)) {
+                	ndx++;
+                }
             }
             RepositoryNode child = new RepositoryNode(this, namespace, name, type);
             child.index = ndx;
@@ -76,7 +106,9 @@ public class InMemoryRepository implements Repository {
             RepositoryNode parent = (RepositoryNode)this.parent;
             parent.children.remove(this);
             for (Node child : parent.children) {
-                if (child.index() > index) ((RepositoryNode)child).index--;
+                if (child.index() > index) {
+                	((RepositoryNode)child).index--;
+                }
             }
         }
     }

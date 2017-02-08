@@ -24,6 +24,7 @@
 package org.jboss.chrysalix.spi;
 
 import java.util.Map;
+import org.jboss.chrysalix.Transformer;
 
 
 public abstract class AbstractTransformer implements Transformer {

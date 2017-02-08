@@ -25,12 +25,10 @@ package org.jboss.chrysalix.designer.dataformat;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import javax.xml.parsers.ParserConfigurationException;
 import org.jboss.chrysalix.Attribute;
 import org.jboss.chrysalix.Node;
 import org.jboss.chrysalix.common.I18n;
@@ -51,15 +49,39 @@ public class XsdHandler extends XmlHandler {
     String elementPath = "";
 
     @Override
-    public void load(Node fileNode) throws Exception {
-        this.fileNode = fileNode;
-        super.load(fileNode);
+    protected SaxHandler newSaxHandler(Node fileNode) {
+        return new XsdSaxHandler(fileNode);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.chrysalix.dataformat.XmlHandler#parse(org.jboss.chrysalix.Node, java.io.InputStream)
+     */
+    @Override
+    protected void parse(Node documentNode,
+    					 InputStream stream) throws Exception {
+    	fileNode = documentNode;
+    	super.parse(documentNode, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.chrysalix.dataformat.XmlHandler#toSourceNode(java.lang.Object, org.jboss.chrysalix.Node)
+     */
+    @Override
+    public Node toSourceNode(Object data,
+    						 Node parent) throws Exception {
+        super.toSourceNode(data, parent);
         // Parse again until all deferred references have been resolved
         resolving = true;
         while (!deferredReferences.isEmpty()) {
             elementId = 0;
             int size = deferredReferences.size();
-            super.load(fileNode);
+            try (InputStream stream = new FileInputStream(data.toString())) {
+                parse(fileNode, stream);
+            }
             if (deferredReferences.size() == size) {
             	throw new Exception(I18n.localize(getClass(), "One ore more deferred references are never resolvable: %s", deferredReferences));
             }
@@ -71,17 +93,13 @@ public class XsdHandler extends XmlHandler {
         		node.remove();
         	}
         }
-    }
-
-    @Override
-    protected XmlSaxHandler newSaxHandler(Node fileNode) {
-        return new XsdSaxHandler(fileNode);
+        return fileNode;
     }
 
     // TODO elem w/maxOccurs=0 or attr w/use="prohibited"
     // TODO model and attr groups
     // TODO handle chameleons
-    class XsdSaxHandler extends XmlSaxHandler {
+    class XsdSaxHandler extends SaxHandler {
 
         private String xsdPrefix;
         private String targetNs;
@@ -107,7 +125,7 @@ public class XsdHandler extends XmlHandler {
 
         private void copy(Node from,
                           Node to) {
-            to.setList(from.list());
+            to.setList(from.isList());
             to.setValue(from.value());
             for (Attribute attr : from.attributes()) {
             	if (GLOBAL_NON_ELEMENT.equals(attr.qualifiedName())) {
@@ -300,10 +318,12 @@ public class XsdHandler extends XmlHandler {
 
         private boolean startIncludeImport(Attributes attributes) throws SAXException {
             File file = new File(attributes.getValue("schemaLocation"));
-            if (!file.exists()) file = new File(fileNode.parent().path(), file.getPath());
+            if (!file.exists()) file = new File(fileNode.namespace(), file.getPath());
             try (InputStream stream = new FileInputStream(file.getAbsolutePath())) {
                 parse(fileNode, stream);
-            } catch (IOException | ParserConfigurationException e) {
+            } catch (SAXException e) {
+            	throw e;
+            } catch (Exception e) {
                 throw new SAXException(e);
             }
         	return false;

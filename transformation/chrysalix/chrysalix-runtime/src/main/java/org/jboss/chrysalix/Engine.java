@@ -31,22 +31,88 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jboss.chrysalix.common.Arg;
-import org.jboss.chrysalix.internal.transformer.AppendTransformer;
-import org.jboss.chrysalix.internal.transformer.MapTransformer;
-import org.jboss.chrysalix.internal.transformer.StoreTransformer;
-import org.jboss.chrysalix.internal.transformer.ToUppercaseTransformer;
-import org.jboss.chrysalix.spi.Transformer;
+import org.jboss.chrysalix.common.I18n;
+import org.jboss.chrysalix.transformer.AppendTransformer;
+import org.jboss.chrysalix.transformer.MapTransformer;
+import org.jboss.chrysalix.transformer.StoreTransformer;
+import org.jboss.chrysalix.transformer.ToUppercaseTransformer;
 
 // TODO API for individual mappings, including blocks
 // TODO mult. sources/targets
 // TODO twitter to salesforce, soap to rest
-// TODO recursive elements
 // TODO relative paths
 // TODO if/loop
-// TODO JSON/Java
+// TODO JSON/CSV/HL7/EDI/binary
 // TODO fill lists
 // TODO file repository
+// ==== vs. Dozer
+// chained transformations
+// could run in parallel
+// can update existing target
+// extensible transformations and data formats
+// lists
+// same-named nodes
+// namespaces
+// data preview
+// debugging
+// if/loop
+// no 3rd-party libraries necessary for different data formats
+// mappings based on relative paths
+/**
+ * The Chrysalix runtime engine provides the means to map data from any source to any target.
+ * Source data must first be interpreted by a supplied {@link DataFormatHandler Data format handler} and
+ * {@link #toSourceNode(Object, DataFormatHandler, Repository) converted} into a generic {@link Node nodes} stored in a supplied
+ * {@link Repository repository}.
+ * A target node must then be {@link #toTargetNode(Object, DataFormatHandler, Repository) created} using an independent handler and
+ * repository, optionally containing its own data (as determined by the handler).
+ * The data in the source nodes can then be {@link #map(Node, Node, String) mapped} to the target node using a supplied mappings
+ * file.
+ * Finally, the target node can be {@link #toTargetData(Node, DataFormatHandler) converted} to a data format using another
+ * independent handler.
+ * Note, the same or different handlers and/or repositories may be used in any part of this process.
+ */
 public class Engine {
+
+	private static final String SOURCE = "<source>";
+    private static final String TARGET = "<target>";
+
+    public static void debug(Node node) {
+    	debug(node, 0);
+    }
+
+    private static void debug(Node node,
+                              int level) {
+		println(level, node.qualifiedName() + ": type=" + node.type() + ", index=" + node.index() + ", list=" + node.isList() + ", value=" + node.value());
+		Attribute[] attrs = node.attributes();
+		if (attrs.length > 0) {
+			println(++level, "attributes:");
+			level++;
+			for (Attribute attr : node.attributes()) {
+				println(level, "@" + attr.qualifiedName() + ": type=" + attr.type() + ", value=" + attr.value());
+			}
+			level -= 2;
+		}
+		Node[] children = node.children();
+		if (children.length > 0) {
+			println(++level, "children:");
+			level++;
+			for (Node child : children) {
+				debug(child, level);
+			}
+		}
+    }
+
+    private static void indent(int level) {
+    	for (int ndx = level; --ndx >= 0;) {
+			System.out.print("  ");
+    	}
+    }
+
+    private static void println(int level,
+                                String text) {
+    	indent(level);
+		System.out.println(text);
+    }
 
 	private static String[] splitLine(String line,
                                       String transformerName,
@@ -106,68 +172,104 @@ public class Engine {
         return args.toArray(new String[args.size()]);
     }
 
+	/**
+	 * Splits a slash-delimited (/) path reference into a list of each node/attribute reference within it.
+	 * <p>
+	 * Node references must be in the form:
+	 * </p><p>
+	 * <code>{&lt;<b>namespace</b>>}:&lt;<b>name</b>>[<b>[</b>&lt;<b>index</b>><b>]</b>]</code>
+	 * </p><p>
+	 * Attribute references must be in the form:
+	 * </p><p>
+	 * <code>&lt;<b>node reference as above</b>><b>/@</b>&lt;<b>name</b>></code>
+	 * </p>
+	 *
+	 * @param path
+	 * 		A path to a node or attribute in a repository.
+	 * @return a list of each node reference within the supplied path.
+	 */
     public static String[] splitPath(String path) {
+    	Arg.notNull(path, "path");
         List<String> names = new ArrayList<>();
         String[] rawNames = path.split("/");
         StringBuilder builder = new StringBuilder();
         for (String name : rawNames) {
-            if (name.startsWith("{")) {
-                if (name.endsWith("}")) {
-                    builder.append(name.substring(1, name.length() - 1));
-                } else {
-                    builder.append(name.substring(1));
-                }
-            } else {
-                int ndx = name.indexOf('}');
+        	if (builder.length() == 0) {
+                int ndx = name.indexOf('{');
                 if (ndx >= 0) {
-                    builder.append('/');
-                    builder.append(name.substring(0, ndx));
-                    builder.append(name.substring(ndx + 1));
-                    names.add(builder.toString());
-                    builder.setLength(0);
-                } else if (builder.length() > 0) {
-                    builder.append('/');
-                    builder.append(name);
-                } else {
+                	if (name.indexOf('}') > 0) { // name w/ ns w/o slashes
+                		names.add(name);
+                	} else if (builder.length() == 0) { // beginning of ns w/ slash(es)
+                        builder.append(name);
+                	}
+                } else { // name w/o ns
                     names.add(name);
                 }
-            }
+        	} else {
+        		builder.append('/');
+        		builder.append(name);
+            	if (name.indexOf('}') > 0) { // end of ns plus name
+            		names.add(builder.toString());
+            		builder.setLength(0);
+            	}
+        	}
         }
         return names.toArray(new String[names.size()]);
     }
 
-    private String registryFolder;
-
     private Map<String, Class<? extends Transformer>> transformerByName = new HashMap<>();
 
-    public Engine(String registryFolder) {
-        Arg.notEmpty(registryFolder, "registryFolder");
-        this.registryFolder = registryFolder;
-        this.registryFolder.toString();
+    /**
+     * Creates the engine and registers all built-in {@link Transformer transformers}
+     */
+    public Engine() {
         registerTransformer(MapTransformer.class);
         registerTransformer(StoreTransformer.class);
         registerTransformer(AppendTransformer.class);
         registerTransformer(ToUppercaseTransformer.class);
     }
 
-    public void map(Node sourceFileNode,
-                    Node targetFileNode,
-                    String mappingsFileName) throws Exception {
-        Arg.notNull(sourceFileNode, "sourceFileNode");
-        Arg.notNull(targetFileNode, "targetFileNode");
-        Arg.notEmpty(mappingsFileName, "mappingsFileName");
+    /**
+     * Maps the supplied source Node to the supplied target Node using the supplied mappings file.
+     *
+     * @param sourceNode
+     * 		The node representing the root of the source data used in the mappings.
+     * @param targetNode
+     * 		The node representing the root of the target data created or updated by the mappings.
+     * @param mappingsFilePath
+     * 		The path to the mappings file used to perform the mappings.
+     * @throws Exception if any error occurs.
+     */
+    public void map(Node sourceNode,
+                    Node targetNode,
+                    String mappingsFilePath) throws Exception {
+        Arg.notNull(sourceNode, "sourceNode");
+        Arg.notNull(targetNode, "targetNode");
+        Arg.notEmpty(mappingsFilePath, "mappingsFilePath");
+        File file = new File(mappingsFilePath);
+        if (!file.exists()) {
+        	throw new IllegalArgumentException(I18n.localize(getClass(), "Mappings file does not exist: %s", file));
+        }
         Map<String, Object> context = new HashMap<>();
         context.put(Transformer.DATA, null);
-        context.put(Transformer.SOURCE_FILE_NODE, sourceFileNode);
-        context.put(Transformer.TARGET_FILE_NODE, targetFileNode);
-        try (BufferedReader reader = new BufferedReader(new FileReader(mappingsFileName))) {
+        context.put(Transformer.SOURCE_FILE_NODE, sourceNode);
+        context.put(Transformer.TARGET_FILE_NODE, targetNode);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             int lineNumber = 1;
             for (String line = reader.readLine(); line != null; line = reader.readLine(), lineNumber++) {
-                lineNumber = transform(lineNumber, line, mappingsFileName, context, reader);
+                lineNumber = transform(lineNumber, line, mappingsFilePath, context, reader);
             }
         }
     }
 
+    /**
+     * Registers the supplied Transformer class as available for use in {@link #map(Node, Node, String) mappings}.
+     *
+     * @param transformerClass
+     * 		A class that transforms data in some way.
+     * @return <code>true</code> if the supplied transformerClass was successfully registered; <code>false</code> if it was
+     * 		previously registered.
+     */
     public boolean registerTransformer(Class<? extends Transformer> transformerClass) {
         Arg.notNull(transformerClass, "transformerClass");
         // TODO figure out how jar is passed to camel dozer from transformation.core
@@ -180,34 +282,67 @@ public class Engine {
         return transformerByName.putIfAbsent(name, transformerClass) == null;
     }
 
-    public void toFile(Node fileNode,
-                       DataFormatHandler handler) throws Exception {
-        Arg.notNull(fileNode, "fileNode");
-        Arg.notNull(handler, "handler");
-        handler.save(fileNode);
-    }
-
-    public Node toNode(String filePath,
-                       DataFormatHandler handler,
-                       Repository repository) throws Exception {
-        Arg.notEmpty(filePath, "filePath");
+    private Node rootNode(String name,
+                          DataFormatHandler handler,
+                          Repository repository) {
         Arg.notNull(handler, "handler");
         Arg.notNull(repository, "repository");
-        // Create node, including ancestors, for file path
-        File file = new File(filePath);
-        filePath = file.getAbsolutePath();
-        Node node = null;
-        for (String name : splitPath(filePath)) {
-            if (name.isEmpty()) {
-            	continue;
-            }
-            node = node == null ? repository.newRootNode(name) : node.addChild(null, name, null);
+        String handlerName = handler.getClass().getSimpleName();
+        Node rootNode = repository.rootNode(handlerName);
+        if (rootNode == null) {
+        	rootNode = repository.newRootNode(handlerName);
         }
-        // Create file node's contents using applicable handler
-        if (file.exists()) {
-        	handler.load(node);
-        }
-        return node;
+        Node node = rootNode.child(TARGET);
+        return node == null ? rootNode.addChild(TARGET, null): node;
+    }
+
+    /**
+     * @param data
+     * 		The source data to be converted to nodes. The data's type is dependent upon the supplied handler.
+     * @param handler
+     * 		The data format handler used to interpret and convert the supplied data to nodes.
+     * @param repository
+     * 		The repository containing the nodes that represent the data.
+     * @return the node within the supplied repository representing the root of the supplied data.
+     * @throws Exception if any error occurs.
+     */
+    public Node toSourceNode(Object data,
+                             DataFormatHandler handler,
+                             Repository repository) throws Exception {
+        Arg.notNull(data, "data");
+        return handler.toSourceNode(data, rootNode(SOURCE, handler, repository));
+    }
+
+    /**
+     * @param targetNode
+     * 		The target node to be converted to data in the format determined by the supplied handler.
+     * @param handler
+     * 		The data format handler used to convert the supplied node to data in a handler-determined format.
+     * @return the node within the supplied repository representing the root of the target data.
+     * @throws Exception if any error occurs.
+     */
+    public Object toTargetData(Node targetNode,
+                               DataFormatHandler handler) throws Exception {
+        Arg.notNull(targetNode, "targetNode");
+        Arg.notNull(handler, "handler");
+        return handler.toTargetData(targetNode);
+    }
+
+    /**
+     * @param data The data used to create a new, empty target node or to convert existing data into a target node. The data's type
+     * 		is dependent upon the supplied handler.
+     * @param handler
+     * 		The data format handler used to interpret and convert the supplied data to nodes.
+     * @param repository
+     * 		The repository containing the nodes that represent the data.
+     * @return the node within the supplied repository representing the root of the supplied data.
+     * @throws Exception if any error occurs.
+     */
+    public Node toTargetNode(Object data,
+                             DataFormatHandler handler,
+                             Repository repository) throws Exception {
+        Arg.notNull(data, "data");
+        return handler.toTargetNode(data, rootNode(TARGET, handler, repository));
     }
 
     private int transform(int lineNumber,
@@ -242,8 +377,8 @@ public class Engine {
                     lineNumber = transform(lineNumber, line, mappingsFileName, context, reader);
                 }
                 lineNumber++;
-                transformer.transformAfterBlock(context);
             }
+            transformer.transformAfterBlock(context);
         } catch (Exception e) {
             throw new MappingException(e, "Exception in mappings file \"%s\" at line %d: %s", mappingsFileName, lineNumber, line);
         }
