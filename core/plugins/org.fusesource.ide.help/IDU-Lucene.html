@@ -1,18 +1,18 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Log.html" title="Log"><link rel="next" href="IDU-Mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Lucene"></a>Lucene</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
+   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Log.html" title="Log"><link rel="next" href="IDU-Lumberjack.html" title="Lumberjack"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Lucene"></a>Lucene</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
     </p><p>The <span class="bold"><strong>lucene</strong></span> component is based on the Apache Lucene
       project. Apache Lucene is a powerful high-performance, full-featured text search engine
       library written entirely in Java. For more details about Lucene, please see the following
       links:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://lucene.apache.org/java/docs/" target="_top">http://lucene.apache.org/java/docs/</a></p></li><li class="listitem"><p><a class="link" href="http://lucene.apache.org/java/docs/features.html" target="_top">http://lucene.apache.org/java/docs/features.html</a></p></li></ul></div><p>The lucene component in camel facilitates integration and utilization of Lucene endpoints
       in enterprise integration patterns and scenarios. The lucene component does the
       following</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>builds a searchable index of documents when payloads are sent to the Lucene
-          Endpoint</p></li><li class="listitem"><p>facilitates performing of indexed searches in Apache Camel</p></li></ul></div><p>This component only supports producer endpoints. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e121149"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+          Endpoint</p></li><li class="listitem"><p>facilitates performing of indexed searches in Apache Camel</p></li></ul></div><p>This component only supports producer endpoints. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e123884"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">lucene:searcherName:insert[?options]
 lucene:searcherName:query[?options]</pre><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e121169"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e123904"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -39,7 +39,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         </td>
         <td> An optional directory containing files to be used to be analyzed and added to the index
           at producer startup. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e121230"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e123965"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -65,7 +65,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         <td><code class="literal">10</code>
         </td>
         <td> An integer value that limits the result set of the search operation </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e121291"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e124026"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

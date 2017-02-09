@@ -14,7 +14,7 @@
         <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p><p>This component will by default load the iBatis SqlMapConfig file from the root of the classpath and expected named as <code class="literal">SqlMapConfig.xml</code>.
 It uses Spring resource loading so you can define it using <code class="literal">classpath</code>, <code class="literal">file</code> or <code class="literal">http</code> as prefix to load resources with those schemes.
-In Camel 2.2 you can configure this on the iBatisComponent with the <code class="literal">setSqlMapConfig(String)</code> method.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-iBATIS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e102374"><tr>
+In Camel 2.2 you can configure this on the iBatisComponent with the <code class="literal">setSqlMapConfig(String)</code> method.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-iBATIS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e104904"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Default </th>
@@ -78,7 +78,7 @@ In Camel 2.2 you can configure this on the iBatisComponent with the <code class=
         <td><code class="literal">TRANSACTION_REPEATABLE_READ</code>
         </td>
         <td> *Camel 2.9:* A String the defines the transaction isolation level of the will be used. Allowed values are TRANSACTION_NONE, TRANSACTION_READ_UNCOMMITTED, TRANSACTION_READ_COMMITTED, TRANSACTION_REPEATABLE_READ, TRANSACTION_SERIALIZABLE </td>
-      </tr></table><table id="d0e102542"><tr>
+      </tr></table><table id="d0e105072"><tr>
         <td><code class="literal">isolation</code>
         </td>
         <td><code class="literal">String</code>
@@ -87,7 +87,7 @@ In Camel 2.2 you can configure this on the iBatisComponent with the <code class=
         </td>
         <td> *Camel 2.9:* A String the defines the transaction isolation level of the will be used. Allowed values are TRANSACTION_NONE, TRANSACTION_READ_UNCOMMITTED, TRANSACTION_READ_COMMITTED, TRANSACTION_REPEATABLE_READ, TRANSACTION_SERIALIZABLE </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-iBATIS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel will populate the result message, either IN or OUT with a header with the
-      operationName used:</p><table id="d0e102569"><tr>
+      operationName used:</p><table id="d0e105099"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

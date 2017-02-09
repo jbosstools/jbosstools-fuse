@@ -3,9 +3,8 @@
    <title>Netty4</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Netty.html" title="Netty"><link rel="next" href="IDU-NettyHTTP.html" title="Netty HTTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty4"></a>Netty4</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty4_HSH_Netty4Component"></a>Netty4 Component</h2></div></div></div><p>The <span class="strong"><strong>Netty4</strong></span> component in Camel is a socket
             communication component, based on the <a class="link" href="http://netty.io/" target="_top">Netty</a>
             project version 4. Netty is a NIO client server framework which enables quick and easy
-            development of  <code class="code">netwServerInitializerFactoryork</code> applications such as
-            protocol servers and clients. Netty4 greatly simplifies and streamlines network
-            programming such as TCP and UDP socket server.</p><p>This camel component supports both producer and consumer endpoints.</p><p>The Netty component has several options and allows fine-grained control of a number of
+            development of network applications such as protocol servers and clients. Netty4 greatly
+            simplifies and streamlines network programming such as TCP and UDP socket server.</p><p>This camel component supports both producer and consumer endpoints.</p><p>The Netty component has several options and allows fine-grained control of a number of
             TCP/UDP communication parameters (buffer sizes, keepAlives, tcpNoDelay etc) and
             facilitates both In-Only and In-Out communication on a Camel route.</p><p>Maven users will need to add the following dependency to their <code class="code">pom.xml</code>
             for this component:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
@@ -13,11 +12,11 @@
     &lt;artifactId&gt;camel-netty4&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e131418"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e134386"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-341"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><div class="informalexample"><pre class="programlisting">netty4:tcp://localhost:99999[?options]
 netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports producer and consumer endpoints for both TCP and UDP.</p><p>You can append query options to the URI in the following format,
-                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e131440"><tbody><tr>
+                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e134408"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -62,9 +61,8 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">synchronous</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
-                    <td class="confluenceTd"><p>Whether <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is not in use.
-                                <code class="code">false</code> then the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is used, <code class="code">true</code> to
-                            force processing synchronous.</p></td>
+                    <td class="confluenceTd"><p>By default the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is used. Set to
+                                <code class="code">true</code> to force processing synchronously.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">ssl</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
@@ -130,6 +128,19 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                             fault headers, exchange properties, exchange exception. This requires
                             that the objects are serializable. Camel will exclude any
                             non-serializable objects and log it at WARN level.</p></td>
+                </tr><tr>
+                    <td class="confluenceTd">
+                        <p><code class="code">allowSerializedHeaders</code></p>
+                    </td>
+                    <td class="confluenceTd">
+                        <p><code class="code">false</code></p>
+                    </td>
+                    <td class="confluenceTd">
+                        <p><span class="bold"><strong>Camel 2.18:</strong></span> Only used for TCP when
+                                <code class="code">transferExchange</code> is <code class="code">true</code>. Serializable
+                            objects in In/Out headers and exchange properties are
+                            transferred.</p>
+                    </td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">disconnectOnNoReply</code></p></td>
                     <td class="confluenceTd"><p><code class="code">true</code></p></td>
@@ -285,9 +296,8 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">workerGroup</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
-                    <td class="confluenceTd"><p>To use a explicit
-                                <code class="code">io.netty.channel.EventLoopGroup</code> as the worker thread
-                            pool. For example to share a thread pool with multiple consumers. By
+                    <td class="confluenceTd"><p>To use a explicit <code class="code">io.netty.channel.EventLoopGroup</code> as the worker thread pool. For
+                            example to share a thread pool with multiple consumers or producers. By
                             default each consumer has their own worker pool with 2 x cpu count core
                             threads.</p></td>
                 </tr><tr>
@@ -372,7 +382,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                         the key <code class="code">NettyConstants#NETTY_CHANNEL</code> which allows you to obtain
                         the channel during routing and use it as well.</td>
                 </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-343"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://localhost:8090/display/CAMEL/Registry" target="_top">Registry</a>, such as in
-            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e132473"><col width="203pt"><col width="648pt"><tbody><tr>
+            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e135465"><col width="203pt"><col width="648pt"><tbody><tr>
                     <th class="confluenceTh">
                         <p>Name</p>
                     </th>
@@ -676,7 +686,7 @@ registry.bind("decoders", decoders);
                     insert custom handler(s), encoder(s) and decoder(s). Not overriding the
                         <code class="code">initChannel()</code> method creates a pipeline with no handlers,
                     encoders or decoders wired to the pipeline.</p></li></ul></div><p>The example below shows how <code class="code">ServerInitializerFactory</code> factory may be
-            created</p><div class="example"><a name="d0e132941"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
+            created</p><div class="example"><a name="d0e135933"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
     private int maxLineSize = 1024;
  
      protected void initChannel(Channel ch) throws Exception {

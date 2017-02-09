@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>AWS-DDB</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-CW.html" title="AWS-CW"><link rel="next" href="IDU-AWS-DDBSTREAM.html" title="AWS-DDBSTREAM"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-DDB"></a>AWS-DDB</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_DDBComponent"></a>DDB Component</h3></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.10</strong></span>
-    </p><p>The DynamoDB component supports storing and retrieving data from/to <a class="link" href="http://aws.amazon.com/dynamodb" target="_top">Amazon's DynamoDB</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon DynamoDB. More information are available at <a class="link" href="http://aws.amazon.com/dynamodb" target="_top">Amazon DynamoDB</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_URIFormat"></a>URI Format</h3></div></div></div><p></p><pre class="programlisting">aws-ddb://domainName[?options]</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e47857"><tr>
+    </p><p>The DynamoDB component supports storing and retrieving data from/to <a class="link" href="http://aws.amazon.com/dynamodb" target="_top">Amazon's DynamoDB</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon DynamoDB. More information are available at <a class="link" href="http://aws.amazon.com/dynamodb" target="_top">Amazon DynamoDB</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_URIFormat"></a>URI Format</h3></div></div></div><p></p><pre class="programlisting">aws-ddb://domainName[?options]</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e49027"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -84,7 +84,7 @@
                 <td>Specify a proxy port to be used inside the client definition.</td>
             </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Required DDB component options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Required DDB component options</th></tr><tr><td align="left" valign="top"><p>You have to provide the amazonDDBClient in the Registry or your accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/dynamodb" target="_top">Amazon's DynamoDB</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_Usage"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheadersevaluatedbytheDDBproducer"></a>Message headers evaluated by the DDB producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48094"><tr>
+    </p><table id="d0e49264"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -174,7 +174,7 @@
         <td> Map of attribute name to the new value and action for the update. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringBatchGetItemsoperation"></a>Message headers set during BatchGetItems operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48328"><tr>
+    </p><table id="d0e49498"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -192,7 +192,7 @@
         <td> Contains a map of tables and their respective keys that were not processed with the current response. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringDeleteItemoperation"></a>Message headers set during DeleteItem operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48379"><tr>
+    </p><table id="d0e49549"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -204,7 +204,7 @@
         <td> The list of attributes returned by the operation. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringDeleteTableoperation"></a>Message headers set during DeleteTable operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48415"><tr>
+    </p><table id="d0e49585"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -252,7 +252,7 @@
         <td> The status of the table: CREATING, UPDATING, DELETING, ACTIVE </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringDescribeTableoperation"></a>Message headers set during DescribeTable operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48541"><tr>
+    </p><table id="d0e49711"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -312,7 +312,7 @@
         <td> WriteCapacityUnits property of this table. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringGetItemoperation"></a>Message headers set during GetItem operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48698"><tr>
+    </p><table id="d0e49868"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -324,7 +324,7 @@
         <td> The list of attributes returned by the operation. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringPutItemoperation"></a>Message headers set during PutItem operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48734"><tr>
+    </p><table id="d0e49904"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -336,7 +336,7 @@
         <td> The list of attributes returned by the operation. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringQueryoperation"></a>Message headers set during Query operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48770"><tr>
+    </p><table id="d0e49940"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -366,7 +366,7 @@
         <td> Number of items in the response. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringScanoperation"></a>Message headers set during Scan operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48851"><tr>
+    </p><table id="d0e50021"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -402,7 +402,7 @@
         <td> Number of items in the complete scan before any filters are applied. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-DDB_HSH_MessageheaderssetduringUpdateItemoperation"></a>Message headers set during UpdateItem operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e48947"><tr>
+    </p><table id="d0e50117"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
