@@ -1,0 +1,69 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Ehcache based aggregation repository example:</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="Ehcache-EhcacheComponent.html" title="Ehcache Component"><link rel="prev" href="Ehcache-Ehcachebasedidempotentrepositoryexample.html" title="Ehcache based idempotent repository example:"><link rel="next" href="IDU-EJB.html" title="EJB"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="Ehcache-Ehcachebasedaggregationrepositoryexample"></a>Ehcache based aggregation repository example:</h3></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> EhcacheAggregationRepositoryRoutesTest <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> CamelTestSupport {
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String ENDPOINT_MOCK = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:result"</em></strong>;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String ENDPOINT_DIRECT = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:one"</em></strong>;
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong>[] VALUES = generateRandomArrayOfInt(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">10</span>, <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>, <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">30</span>);
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">int</strong> SUM = IntStream.of(VALUES).reduce(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>, (a, b) -&gt; a + b);
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">static</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String CORRELATOR = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"CORRELATOR"</em></strong>;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = ENDPOINT_MOCK)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> MockEndpoint mock;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Produce(uri = ENDPOINT_DIRECT)</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> ProducerTemplate producer;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Test</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> checkAggregationFromOneRoute() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        mock.expectedMessageCount(VALUES.length);
+        mock.expectedBodiesReceived(SUM);
+
+        IntStream.of(VALUES).forEach(
+            i -&gt; producer.sendBodyAndHeader(i, CORRELATOR, CORRELATOR)
+        );
+
+        mock.assertIsSatisfied();
+    }
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">if</strong> (oldExchange == null) {
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> newExchange;
+        } <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">else</strong> {
+            Integer n = newExchange.getIn().getBody(Integer.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+            Integer o = oldExchange.getIn().getBody(Integer.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+            Integer v = (o == null ? <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span> : o) + (n == null ? <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span> : n);
+
+            oldExchange.getIn().setBody(v, Integer.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>);
+
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> oldExchange;
+        }
+    }
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> RoutesBuilder createRouteBuilder() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
+            <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+                from(ENDPOINT_DIRECT)
+                    .routeId(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"AggregatingRouteOne"</em></strong>)
+                    .aggregate(header(CORRELATOR))
+                    .aggregationRepository(createAggregateRepository())
+                    .aggregationStrategy(EhcacheAggregationRepositoryRoutesTest.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">this</strong>::aggregate)
+                    .completionSize(VALUES.length)
+                        .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:org.apache.camel.component.ehcache.processor.aggregate.level=INFO&amp;showAll=true&amp;mulltiline=true"</em></strong>)
+                        .to(ENDPOINT_MOCK);
+            }
+        };
+    }
+
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> EhcacheAggregationRepository createAggregateRepository() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        CacheManager cacheManager = CacheManagerBuilder.newCacheManager(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> XmlConfiguration(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ehcache.xml"</em></strong>));
+        cacheManager.init();
+
+        EhcacheAggregationRepository repository = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> EhcacheAggregationRepository();
+        repository.setCacheManager(cacheManager);
+        repository.setCacheName(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"aggregate"</em></strong>);
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> repository;
+    }
+}</pre></div></body></html>

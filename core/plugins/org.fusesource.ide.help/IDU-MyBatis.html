@@ -4,11 +4,11 @@
     </p><p>The <span class="bold"><strong>mybatis:</strong></span> component allows you to query, poll, insert, update and delete data in a relational database using <a class="link" href="http://mybatis.org/" target="_top">MyBatis</a>.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-mybatis&lt;/artifactId&gt;
-    &lt;version&gt;2.17.0.redhat-630187&lt;/version&gt;
+    &lt;version&gt;2.18.1.redhat-000005&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">mybatis:statementName[?options]</pre><p>Where <span class="bold"><strong>statementName</strong></span> is the statement name in the MyBatis XML mapping file which maps to the query, insert, update or delete operation you wish to evaluate.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p><p>This component will by default load the MyBatis SqlMapConfig file from the root of the classpath with the expected name of <code class="literal">SqlMapConfig.xml</code>.
-If the file is located in another location, you will need to configure the <code class="literal">configurationUri</code> option on the <code class="literal">MyBatisComponent</code> component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e128801"><tr>
+If the file is located in another location, you will need to configure the <code class="literal">configurationUri</code> option on the <code class="literal">MyBatisComponent</code> component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e131772"><tr>
                 <th> Option </th>
                 <th> Type </th>
                 <th> Default </th>
@@ -107,7 +107,7 @@ If the file is located in another location, you will need to configure the <code
                     disables transaction. If enabled and processing an exchange failed, the consumer
                     breaks out of processing any further exchanges, causing an eager rollback.</td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel will populate the result message, either IN or OUT with a header with the statement used:
-    </p><table id="d0e129064"><tr>
+    </p><table id="d0e132035"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

@@ -25,11 +25,11 @@
         <topic href="convertBody.html" label="Convert Body To"/>
     </context>
     <context id="delayEIP">
-        <description>Delay Patterns</description>
+        <description>Delay Pattern</description>
         <topic href="delay.html" label="Delay"/>
     </context>
     <context id="dynamicEIP">
-        <description>Dynamic Routing Patterns</description>
+        <description>Dynamic Routing Pattern</description>
         <topic href="dynamicRouter.html" label="Dynamic Router"/>
     </context>
     <context id="enrichEIP">
@@ -356,6 +356,13 @@
         <description>Cache Component Options</description>
         <topic href="IDU-Cache.html" label="Cache"/>
     </context>
+    
+    <!--> Not yet approved by PM for FIS release    
+    <context id="chronicle-engine">
+        <description>Chroincle-Engine Component</description>
+        <topic href="IDU-Chronicle-Engine.html" label="Chronicle-Engine"/>
+    </context> -->
+    
     <context id="chunk">
         <description>Chunk Component Options</description>
         <topic href="IDU-Chunk.html" label="Chunk"/>
@@ -368,9 +375,17 @@
         <description>CMIS Component Options</description>
         <topic href="IDU-CMIS.html" label="CMIS"/>
     </context>
+    <context id="cm-sms">
+        <description>CM-SMS Component Options</description>
+        <topic href="IDU-CM-SMS.html" label="CM-SMS"/>
+    </context>
     <context id="cometd">
         <description>Cometd Component Options</description>
         <topic href="IDU-Cometd.html" label="Cometd"/>
+    </context>
+    <context id="consul">
+        <description>Consul Component Options</description>
+        <topic href="IDU-Consul.html" label="Consul"/>
     </context>
     <context id="context">
         <description>Context Component Options</description>
@@ -449,6 +464,10 @@
         <description>Dropbox Component Options</description>
         <topic href="IDU-Dropbox.html" label="Dropbox"/>
     </context>
+    <context id="ehcache">
+        <description>Ehcache Component Options</description>
+        <topic href="IDU-Ehcache.html" label="Ehcache"/>
+    </context>
     <context id="ejb">
         <description>Enterprise Java Bean</description>
         <topic href="IDU-EJB.html" label="EJB"/>
@@ -501,6 +520,10 @@
     <context id="flatpack">
         <description>Flatpack Component Options</description>
         <topic href="IDU-Flatpack.html" label="Flatpack"/>
+    </context>
+    <context id="flink">
+        <description>Flink Component Options</description>
+        <topic href="IDU-Flink.html" label="Flink"/>
     </context>
     <context id="fop">
         <description>FOP Component Options</description>
@@ -756,6 +779,10 @@
         <description>Lucene Component Options</description>
         <topic href="IDU-Lucene.html" label="Lucene"/>
     </context>
+    <context id="lumberjack">
+        <description>Lumberjack Component Options</description>
+        <topic href="IDU-Lumberjack.html" label="Lumberjack"/>
+    </context>
     <context id="master">
         <description>Master Component Options</description>
         <topic href="Master.html" label="Master"/>
@@ -980,6 +1007,10 @@
         <description>SEDA Component Options</description>
         <topic href="IDU-SEDA.html" label="SEDA"/>
     </context>
+    <context id="servicenow">
+        <description>ServiceNow Component Options</description>
+        <topic href="IDU-ServiceNow.html" label="ServiceNow"/>
+    </context>
     <context id="servlet">
         <description>Servlet Component Options</description>
         <topic href="IDU-SERVLET.html" label="SERVLET"/>
@@ -1122,6 +1153,10 @@
         <description>Swagger Java Component Options</description>
         <topic href="IDU-SwaggerJava.html" label="Swagger Java"/>
     </context>
+    <context id="telegram">
+        <description>Telegram Component Options</description>
+        <topic href="IDU-Telegram.html" label="Telegram"/>
+    </context>
     <context id="test">
         <description>Test Component Options</description>
         <topic href="IDU-Test.html" label="Test"/>
@@ -1190,6 +1225,10 @@
     <context id="yammer">
         <description>Yammer Component Options</description>
         <topic href="IDU-Yammer.html" label="Yammer"/>
+    </context>
+    <context id="zipkin">
+        <description>Zookeeper Component Options</description>
+        <topic href="IDU-Zipkin.html" label="Zipkin"/>
     </context>
     <context id="zookeeper">
         <description>Zookeeper Component Options</description>

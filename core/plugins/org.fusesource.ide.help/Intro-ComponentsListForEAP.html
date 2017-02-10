@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>List of Camel Components for JBoss EAP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="CompRefIntro.html" title="Components Overview"><link rel="prev" href="Intro-ComponentsList.html" title="List of Camel Components for Apache Karaf"><link rel="next" href="CompRefIntro-CustomEAP.html" title="Deploying Custom Camel Components on JBoss EAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Intro-ComponentsListForEAP"></a>List of Camel Components for JBoss EAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e43144"></a>Table of components</h3></div></div></div><p>The following Camel components are supported on the Red Hat JBoss Enterprise Application Platform (Java EE)
-                container:</p><div class="table"><a name="d0e43149"></a><p class="title"><b>Table&nbsp;2.&nbsp;Apache Camel Components</b></p><div class="table-contents"><table summary="Apache Camel Components" width="100%" border="1"><colgroup><col class="c1" width="25%"><col class="newCol2" width="25%"><col class="c2" width="25%"><col class="c3" width="25%"></colgroup><thead><tr><th>Component</th><th>Endpoint URI</th><th>Artifact ID</th><th>Description</th></tr></thead><tbody><tr><td>
+   <title>List of Camel Components for JBoss EAP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="CompRefIntro.html" title="Components Overview"><link rel="prev" href="Intro-ComponentsList.html" title="List of Camel Components for Apache Karaf"><link rel="next" href="CompRefIntro-CustomEAP.html" title="Deploying Custom Camel Components on JBoss EAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Intro-ComponentsListForEAP"></a>List of Camel Components for JBoss EAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e44241"></a>Table of components</h3></div></div></div><p>The following Camel components are supported on the Red Hat JBoss Enterprise Application Platform (Java EE)
+                container:</p><div class="table"><a name="d0e44246"></a><p class="title"><b>Table&nbsp;2.&nbsp;Apache Camel Components</b></p><div class="table-contents"><table summary="Apache Camel Components" width="100%" border="1"><colgroup><col class="c1" width="25%"><col class="newCol2" width="25%"><col class="c2" width="25%"><col class="c3" width="25%"></colgroup><thead><tr><th>Component</th><th>Endpoint URI</th><th>Artifact ID</th><th>Description</th></tr></thead><tbody><tr><td>
                                 <a href="IDU-ActiveMQ.html" class="olink">ActiveMQ</a>
                             </td><td>
                                 <code class="code">activemq:[queue:|topic:]<em class="replaceable"><code>DestinationName</code></em></code>
@@ -29,9 +29,11 @@
                             </td><td>
                                 <code class="code">camel-core</code></td><td>Provdes a simple <code class="code">BrowsableEndpoint</code> which can be
                                 useful for testing, visualisation tools or debugging. The exchanges
-                                sent to the endpoint are all available to be browsed. </td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-castor</code></td><td>A data format that uses the Castor XML library to unmarshal an
+                                sent to the endpoint are all available to be browsed. </td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-castor</code></td><td>The <code class="code">camel-castor</code> component provides support for
+                                using a data format that uses the Castor XML library to unmarshal an
                                 XML payload into Java objects or to marshal Java objects into an XML
-                                payload.</td></tr><tr><td><a href="IDU-CDI.html" class="olink">CDI</a></td><td>N/A</td><td><code class="code">camel-cdi</code></td><td>Provides CDI integration.</td></tr><tr><td>
+                                payload. This component is not an endpoint factory. See the <a class="link" href="http://camel.apache.org/castor.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td><a href="IDU-CDI.html" class="olink">CDI</a></td><td>N/A</td><td><code class="code">camel-cdi</code></td><td>Provides CDI integration.</td></tr><tr><td>
                                 <a href="IDU-Class.html" class="olink">Class</a>
                             </td><td>
                                 <code class="code">class:<em class="replaceable"><code>ClassName</code></em>[?method=<em class="replaceable"><code>MethodName</code></em>]</code>
@@ -54,7 +56,10 @@
                                         crypto:verify:<em class="replaceable"><code>Name</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
                             </td><td>
                                 <code class="code">camel-crypto</code></td><td>Sign and verify exchanges using the Signature Service of the Java
-                                Cryptographic Extension.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-csv</code></td><td>&nbsp;</td></tr><tr><td>
+                                Cryptographic Extension.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-csv</code></td><td>The <code class="code">camel-csv</code> component provides support for using
+                                comma separated values (CSV) in message data. This component is not
+                                an endpoint factory. See the <a class="link" href="http://camel.apache.org/csv.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td>
                                 <a href="IDU-CXF.html" class="olink">CXF</a>
                             </td><td>
                                 <code class="code">cxf://<em class="replaceable"><code>Address</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
@@ -131,7 +136,8 @@
                             </td><td>
                                 <code class="code">ftp://[<em class="replaceable"><code>Username</code></em>@]<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Directoryname</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
                             </td><td>
-                                <code class="code">camel-ftp</code></td><td>Sending and receiving files over FTP.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-groovy</code></td><td>&nbsp;</td></tr><tr><td>
+                                <code class="code">camel-ftp</code></td><td>Sending and receiving files over FTP.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-groovy</code></td><td>The <code class="code">camel-groovy</code> component provides support for
+                                using the Groovy language. It is not an endpoint factory.</td></tr><tr><td>
                                 <a href="IDU-HL7.html" class="olink">HL7</a>
                             </td><td> </td><td>
                                 <code class="code">camel-hl7</code>
@@ -148,7 +154,9 @@
                                 <a href="IDU-Mail.html" class="olink">IMap</a></td><td>
                                 <code class="code">imap://[<em class="replaceable"><code>UserName</code></em>@]<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
                             </td><td>
-                                <code class="code">camel-mail</code></td><td>Receiving email using IMap.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-jackson</code></td><td>&nbsp;</td></tr><tr><td><a href="IDU-Jasypt.html" class="olink">Jasypt</a></td><td>&nbsp;</td><td><code class="code">camel-jasypt</code></td><td>Integrates with Jasypt to allow sensitive information in <a href="IDU-Properties.html" class="olink">Properties</a> files to be
+                                <code class="code">camel-mail</code></td><td>Receiving email using IMap.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-jackson</code></td><td>The <code class="code">camel-jackson</code> component provides support for
+                                integrating Jackson as a type converter in the Camel registry. This
+                                component is not an endpoint factory. </td></tr><tr><td><a href="IDU-Jasypt.html" class="olink">Jasypt</a></td><td>&nbsp;</td><td><code class="code">camel-jasypt</code></td><td>Integrates with Jasypt to allow sensitive information in <a href="IDU-Properties.html" class="olink">Properties</a> files to be
                                 encrypted.</td></tr><tr><td><a href="IDU-JAXB.html" class="olink">JAXB</a></td><td>&nbsp;</td><td><code class="code">camel-jaxb</code></td><td>A data format which uses the JAXB2 XML marshalling standard to
                                 unmarshal an XML payload into a Java object or to marshal a Java
                                 object into an XML payload.</td></tr><tr><td><a href="IDU-JGroups.html" class="olink">JGroups</a></td><td><code class="code">jgroups:<em class="replaceable"><code>ClusterName</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td><code class="code">camel-jgroups</code></td><td>Exchanges messages with <a class="link" href="http://jgroups.org/" target="_top">JGroups</a> clusters.</td></tr><tr><td>
@@ -234,7 +242,11 @@
                                 <code class="code">properties://<em class="replaceable"><code>Key</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td>
                                 <code class="code">camel-properties</code>
                             </td><td>Facilitates using property placeholders directly in endpoint URI
-                                definitions. </td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-protobuf</code></td><td>&nbsp;</td></tr><tr><td><a href="IDU-Quartz2.html" class="olink">Quartz2</a></td><td>
+                                definitions. </td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-protobuf</code></td><td>This component provides support for serializing between Java and
+                                the Protocol Buffer protocol. Protocol Buffer is language-neutral
+                                and platform-neutral, so messages produced by your Camel routes may
+                                be consumed by other language implementations. See the <a class="link" href="http://camel.apache.org/protobuf.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td><a href="IDU-Quartz2.html" class="olink">Quartz2</a></td><td>
                                 <code class="code">quartz2://[<em class="replaceable"><code>GroupName</code></em>/]<em class="replaceable"><code>TimerName</code></em>[?<em class="replaceable"><code>Options</code></em>]
                                         quartz2://<em class="replaceable"><code>GroupName</code></em>/<em class="replaceable"><code>TimerName</code></em>/<em class="replaceable"><code>CronExpression</code></em></code>
                             </td><td>
@@ -293,7 +305,14 @@
                             </td><td>
                                 <code class="code">camel-smpp</code></td><td>To send and receive SMS using Short Messaging Service Center
                                 using the <a class="link" href="http://code.google.com/p/jsmpp/" target="_top">JSMPP
-                                    library</a>.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-soap</code></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-spring</code></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-spring-security</code></td><td>&nbsp;</td></tr><tr><td>
+                                    library</a>.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-soap</code></td><td>The <code class="code">camel-soap</code> component provides support for using
+                                the SOAP data format. It is not an endpoint factory. See the <a class="link" href="http://camel.apache.org/soap.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-spring</code></td><td>The <code class="code">camel-spring</code> component provides support for
+                                using the Spring Expression Language (SpEL). It is not an endpoint
+                                factory.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-spring-security</code></td><td>The <code class="code">camel-spring-security</code> component provides
+                                role-based authorization for Camel routes. It is not an endpoint
+                                factory. See the <a class="link" href="http://camel.apache.org/spring-security.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td>
                                 <a href="IDU-SQLComponent.html" class="olink">SQL</a>
                             </td><td>
                                 <code class="code">sql:<em class="replaceable"><code>SqlQueryString</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
@@ -306,7 +325,10 @@
                                 <code class="code">camel-stream</code>
                             </td><td>Read or write to an input/output/error/file stream rather like
                                 Unix pipes.</td></tr><tr><td><a href="IDU-Swagger.html" class="olink">Swagger</a></td><td>N/A</td><td><code class="code">camel-swagger</code></td><td>Enables users to create API docs for any REST-defined routes and
-                                endpoints in a CamelContext file.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-tagsoup</code></td><td>&nbsp;</td></tr><tr><td>
+                                endpoints in a CamelContext file.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-tagsoup</code></td><td>This component provides support for parsing ugly HTML and
+                                returning it as pretty wellformed HTML. This component is not an
+                                endpoint factory. See the <a class="link" href="http://camel.apache.org/tidymarkup.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td>
                                 <a href="IDU-Timer.html" class="olink">Timer</a>
                             </td><td>
                                 <code class="code">timer:<em class="replaceable"><code>EndpointID</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
@@ -328,7 +350,10 @@
                                 <code class="code">weather://<em class="replaceable"><code>DummyName</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td>
                                 <code class="code">camel-weather</code></td><td>Polls weather information from <a class="link" href="http://openweathermap.org" target="_top">Open Weather Map</a>: a
                                 site that provides free global weather and forecast
-                                information.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-xmlbeans</code></td><td>&nbsp;</td></tr><tr><td><a href="IDU-XMLSecuritycomponent.html" class="olink">XML
+                                information.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-xmlbeans</code></td><td>This component provides support for unmarshalling an XML payload
+                                into Java objects and for marshalling Java objects into an XML
+                                payload. This component is not a factory endpoint. See the <a class="link" href="http://camel.apache.org/xmlbeans.html" target="_top">Apache
+                                    documentation</a> for details. </td></tr><tr><td><a href="IDU-XMLSecuritycomponent.html" class="olink">XML
                                 Security</a></td><td>N/A</td><td><code class="code">camel-xmlsecurity</code></td><td>Generate and validate XML signatures as described in the W3C
                                 standard <a class="link" href="http://www.w3.org/TR/xmldsig-core/" target="_top">XML
                                     Signature Syntax and Processing</a>.</td></tr><tr><td>
@@ -340,7 +365,14 @@
                             </td><td><code class="code">camel-spring</code>
                             </td><td>Enables you to process a message using an <a class="link" href="http://www.w3.org/TR/xslt" target="_top">XSLT</a>
                                 template.</td></tr><tr><td><a href="IDU-XStream.html" class="olink">XStream</a></td><td>&nbsp;</td><td><code class="code">camel-xstream</code></td><td>Provides the XStream data format, which uses the XStream library
-                                to marshal and unmarshal Java objects to and from XML.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-zipfile</code></td><td>&nbsp;</td></tr><tr><td>
+                                to marshal and unmarshal Java objects to and from XML.</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td><code class="code">camel-zipfile</code></td><td>This component provides support for compressing messages to zip
+                                files and for decompressing zip files to original messages. This
+                                component is not an endpoint factory. See the <a class="link" href="http://camel.apache.org/zip-file-dataformat.html" target="_top">Apache documentation</a> for details. </td></tr><tr><td>
+                                <a href="IDU-Zipkin.html" class="olink">Zipkin</a>
+                            </td><td> </td><td>
+                                <code class="code">camel-zipkin</code>
+                            </td><td>Used for tracing and timing incoming and outgoing Camel messages
+                                using <a class="link" href="http://zipkin.io/" target="_top">zipkin</a>.</td></tr><tr><td>
                                 <a href="IDU-Zookeeper.html" class="olink">Zookeeper</a>
                             </td><td>
                                 <code class="code">zookeeper://<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Path</code></em>

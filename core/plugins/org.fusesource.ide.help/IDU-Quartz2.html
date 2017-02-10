@@ -11,7 +11,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><p><span class="bold"><strong>NOTE:</strong></span> Quartz 2.x API is not compatible with Quartz
-            1.x. If you need to remain on old Quartz 1.x, please use the old <a href="IDU-Quartz.html" class="olink">Quartz</a> component instead.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e138785"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+            1.x. If you need to remain on old Quartz 1.x, please use the old <a href="IDU-Quartz.html" class="olink">Quartz</a> component instead.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e141777"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz2_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">quartz2://timerName?options
 quartz2://groupName/timerName?options
@@ -23,7 +23,7 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz2_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
             
-        </p><table id="d0e138824"><tr>
+        </p><table id="d0e141816"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -154,7 +154,7 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
             deployments this means just drop the quartz.properties in
                 <code class="literal">WEB-INF/classes/org/quartz</code>.</p><p>However the Camel <a href="IDU-Quartz2.html" class="olink">Quartz2</a> component also allows
             you to configure properties: 
-        </p><table id="d0e139174"><tr>
+        </p><table id="d0e142166"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -177,13 +177,13 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
                 <td> File name of the properties to load from the classpath </td>
             </tr></table><p>To do this you can configure this in Spring XML as follows</p><pre class="programlisting">&lt;bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent"&gt;
     &lt;property name="propertiesFile" value="com/mycompany/myquartz.properties"/&gt;
-&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e139236"></a>Enabling Quartz scheduler in JMX</h2></div></div></div><p>You need to configure the quartz scheduler properties to enable JMX. That is typically
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e142228"></a>Enabling Quartz scheduler in JMX</h2></div></div></div><p>You need to configure the quartz scheduler properties to enable JMX. That is typically
             setting the option <code class="code">org.quartz.scheduler.jmx.export</code> to a <code class="code">true</code>
             value in the configuration file.</p><p>From Camel 2.13 onwards Camel will automatic set this option to <code class="code">true</code>,
             unless explicit disabled.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz2_HSH_StartingtheQuartzscheduler"></a>Starting the Quartz scheduler</h2></div></div></div><p>The <a href="IDU-Quartz2.html" class="olink">Quartz2</a> component offers an option to let
             the Quartz scheduler be started delayed, or not auto started at all.
             
-        </p><table id="d0e139263"><tr>
+        </p><table id="d0e142255"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -225,7 +225,7 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
             URI encoding we allow + to be used instead of spaces.</p><p>For example, the following will fire a message every five minutes starting at 12pm
             (noon) to 6pm on weekdays:</p><pre class="programlisting">from("quartz2://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI").to("activemq:Totally.Rocks");</pre><p>which is equivalent to using the cron expression</p><pre class="programlisting">0 0/5 12-18 ? * MON-FRI</pre><p>The following table shows the URI character encodings we use to preserve valid URI
             syntax: 
-        </p><table id="d0e139424"><tr>
+        </p><table id="d0e142416"><tr>
                 <th>URI Character</th>
                 <th>Cron character</th>
             </tr><tr>
@@ -244,7 +244,7 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
                 <code class="literal">scheduler.xxx</code> options to configure the scheduler. The <a href="IDU-Quartz2.html" class="olink">Quartz2</a> scheduler requires the cron option to be
             set. </p><p>The following options is supported:</p><p>
             
-        </p><table id="d0e139500"><tr>
+        </p><table id="d0e142492"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -274,7 +274,7 @@ quartz2://timerName?cron=expression</pre><p>The component uses either a <code cl
                 </td>
                 <td><code class="literal">String</code>
                 </td>
-                <td> To specify the trigger id. If none provided then an UUID is generated and used.
+                <td> To specify the trigger id. If none provided then an UUID is generated and used. In a clustered environment triggerId should not be provided and each node in the cluster must have a unique instanceId.
                 </td>
             </tr><tr>
                 <td><code class="literal">triggerGroup</code>

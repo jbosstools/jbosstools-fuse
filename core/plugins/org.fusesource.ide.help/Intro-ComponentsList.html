@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>List of Camel Components for Apache Karaf</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="CompRefIntro.html" title="Components Overview"><link rel="prev" href="CompRefIntro.html" title="Components Overview"><link rel="next" href="Intro-ComponentsListForEAP.html" title="List of Camel Components for JBoss EAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Intro-ComponentsList"></a>List of Camel Components for Apache Karaf</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-38088"></a>Table of components</h3></div></div></div><p>The following Camel components are supported on the Apache Karaf (OSGi)
-                container:</p><div class="table"><a name="d0e38467"></a><p class="title"><b>Table&nbsp;1.&nbsp;Apache Camel Components</b></p><div class="table-contents"><table summary="Apache Camel Components" width="100%" border="1"><colgroup><col class="c1" width="25%"><col class="newCol2" width="25%"><col class="c2" width="25%"><col class="c3" width="25%"></colgroup><thead><tr><th>Component</th><th>Endpoint URI</th><th>Artifact ID</th><th>Description</th></tr></thead><tbody><tr><td>
+                container:</p><div class="table"><a name="d0e39415"></a><p class="title"><b>Table&nbsp;1.&nbsp;Apache Camel Components</b></p><div class="table-contents"><table summary="Apache Camel Components" width="100%" border="1"><colgroup><col class="c1" width="25%"><col class="newCol2" width="25%"><col class="c2" width="25%"><col class="c3" width="25%"></colgroup><thead><tr><th>Component</th><th>Endpoint URI</th><th>Artifact ID</th><th>Description</th></tr></thead><tbody><tr><td>
                                 <a href="IDU-ActiveMQ.html" class="olink">ActiveMQ</a>
                             </td><td>
                                 <code class="code">activemq:[queue:|topic:]<em class="replaceable"><code>DestinationName</code></em></code>
@@ -142,6 +142,12 @@
                             </td><td>Uses the <a class="link" href="http://chemistry.apache.org/java/opencmis.html" target="_top">Apache
                                     Chemistry</a> client API to interface with CMIS supporting
                                 CMS.</td></tr><tr><td>
+                                <a href="IDU-CM-SMS.html" class="olink">CM-SMS</a>
+                            </td><td>
+                                <code class="code">cm-sms://sgw01.cm.nl/gateway.ashx[?<em class="replaceable"><code>Options</code></em>]</code></td><td>
+                                <code class="code">camel-cm-sms</code>
+                            </td><td>Enables you to integrate <a class="link" href="https://dashboard.onlinesmsgateway.com/docs" target="_top">CM SMS API</a> in
+                                an application as a Camel component.</td></tr><tr><td>
                                 <a href="IDU-Cometd.html" class="olink">Cometd</a>
                             </td><td>
                                 <code class="code">cometd://<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>ChannelName</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
@@ -149,6 +155,12 @@
                                 <code class="code">camel-cometd</code>
                             </td><td>A transport for working with the jetty implementation of the
                                 cometd/bayeux protocol.</td></tr><tr><td>
+                                <a href="IDU-Consul.html" class="olink">Consul</a>
+                            </td><td>
+                                <code class="code">consul://<em class="replaceable"><code>Domain</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
+                            </td><td>
+                                <code class="code">camel-consul</code>
+                            </td><td>A component for integrating your application with Consul.</td></tr><tr><td>
                                 <a href="IDU-Context.html" class="olink">Context</a>
                             </td><td>
                                 <code class="code">context:<em class="replaceable"><code>CamelContextId</code></em>:<em class="replaceable"><code>LocalEndpointName</code></em></code>
@@ -233,7 +245,8 @@
                                 <code class="code">camel-dns</code>
                             </td><td>Look up domain information and run DNS queries using
                                 DNSJava</td></tr><tr><td><a href="IDU-Docker.html" class="olink">Docker</a></td><td><code class="code">docker:<em class="replaceable"><code>Operation</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td><code class="code">camel-docker</code></td><td>Leverages <a class="link" href="https://github.com/docker-java/docker-java" target="_top">docker-java</a> via the <a class="link" href="https://docs.docker.com/reference/api/docker_remote_api" target="_top">Docker Remote API</a>.</td></tr><tr><td><a href="IDU-Dozer.html" class="olink">Dozer</a></td><td><code class="code">dozer:<em class="replaceable"><code>EndpointID</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td><code class="code">camel-dozer</code></td><td>Provides the ability to map between Java beans using the <a class="link" href="http://camel.apache.org/dozer-type-conversion.html" target="_top">Dozer</a> mapping framework.</td></tr><tr><td><a href="IDU-Dropbox.html" class="olink">Dropbox</a></td><td><code class="code">dropbox://[<em class="replaceable"><code>Operation</code></em>][?<em class="replaceable"><code>Options</code></em>]</code></td><td><code class="code">camel-dropbox</code></td><td>Sends or receives messages from <a class="link" href="https://www.dropbox.com/" target="_top">Dropbox</a> remote
-                                folders.</td></tr><tr><td>
+                                folders.</td></tr><tr><td><a href="IDU-Ehcache.html" class="olink">Ehcache</a></td><td><code class="code">ehcache://<em class="replaceable"><code>CacheName</code></em>[?<em class="replaceable"><code>Options</code></em>]</code></td><td><code class="code">camel-ehcache</code></td><td>Enables you to perform caching operations using Ehcache 3 as the
+                                Cache Implementation.</td></tr><tr><td>
                                 <a href="IDU-ElasticSearch.html" class="olink">ElasticSearch</a>
                             </td><td>
                                 <code class="code">elasticsearch:<em class="replaceable"><code>ClusterName</code></em></code></td><td>
@@ -276,6 +289,14 @@
                             </td><td>Processing fixed width or delimited files or messages using the
                                     <a class="link" href="http://flatpack.sourceforge.net/" target="_top">FlatPack</a>
                                 library</td></tr><tr><td>
+                                <a href="IDU-Flink.html" class="olink">Flink</a>
+                            </td><td>
+                                <pre class="programlisting">flink:dataset[?<em class="replaceable"><code>Options</code></em>]
+flink:datastream[?<em class="replaceable"><code>Options</code></em>]</pre>
+                            </td><td>
+                                <code class="code">camel-flink</code>
+                            </td><td>Provides a bridge between Camel connectors and <a class="link" href="https://flink.apache.org" target="_top">Apache Flink</a>
+                                tasks.</td></tr><tr><td>
                                 <a href="IDU-FOP.html" class="olink">FOP</a>
                             </td><td>
                                 <code class="code">fop:<em class="replaceable"><code>OutputFormat</code></em></code>
@@ -555,6 +576,12 @@ jing:<em class="replaceable"><code>LocalOrRemoteResource</code></em>?compactSynt
                             </td><td>Uses Apache Lucene to perform Java-based indexing and full text
                                 based searches using advanced analysis/tokenization
                                 capabilities.</td></tr><tr><td>
+                                <a href="IDU-Lumberjack.html" class="olink">Lumberjack</a></td><td>
+                                <code class="code">lumberjack:<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
+                            </td><td>
+                                <code class="code">camel-lumberjack</code>
+                            </td><td>Retrieves logs sent over the network using the Lumberjack
+                                protocol.</td></tr><tr><td>
                                 <a href="Master.html" class="olink">Master</a>
                             </td><td>
                                 <code class="code">REVISIT</code>
@@ -906,6 +933,13 @@ slack:@<em class="replaceable"><code>Username</code></em>[?<em class="replaceabl
                             </td><td>Integrates with the REST DSL to expose REST services and their
                                 APIs using Swagger. This component can be used as a servlet or
                                 directly from the REST components without a servlet.</td></tr><tr><td>
+                                <a href="IDU-Telegram.html" class="olink">Telegram</a>
+                            </td><td>
+                                <code class="code">telegram:<em class="replaceable"><code>Type</code></em>/<em class="replaceable"><code>AuthorizationToken</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
+                            </td><td>
+                                <code class="code">camel-telegram</code>
+                            </td><td>Provides access to the <a class="link" href="https://core.telegram.org/bots/api" target="_top">Telegram Bot
+                                    API</a>.</td></tr><tr><td>
                                 <a href="IDU-Test.html" class="olink">Test</a>
                             </td><td>
                                 <code class="code">test:<em class="replaceable"><code>RouterEndpointUri</code></em></code>

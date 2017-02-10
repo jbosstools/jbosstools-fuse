@@ -10,21 +10,21 @@
             don't offer ACID-like transactional behaviour nor relational data. Instead, they are
             designed around the concept of flexible data structures and schemas (meaning that the
             traditional concept of a database table with a fixed schema is dropped), extreme
-            scalability on commodity hardware and blazing-fast processing.</p><p>MongoDB is a very popular NoSQL solution and the camel-mongodb component integrates
-            Camel with MongoDB allowing you to interact with MongoDB collections both as a producer
-            (performing operations on the collection) and as a consumer (consuming documents from a
-            MongoDB collection).</p><p>MongoDB revolves around the concepts of documents (not as is office documents, but
+            scalability on commodity hardware and blazing-fast processing.</p><p>MongoDB is a very popular NoSQL solution and the <code class="code">camel-mongodb</code> component
+            integrates Camel with MongoDB allowing you to interact with MongoDB collections both as
+            a producer (performing operations on the collection) and as a consumer (consuming
+            documents from a MongoDB collection).</p><p>MongoDB revolves around the concepts of documents (not as is office documents, but
             rather hierarchical data defined in JSON/BSON) and collections. This component page will
             assume you are familiar with them. Otherwise, visit <a class="link" href="http://www.mongodb.org/" target="_top">http://www.mongodb.org/</a>.</p><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-mongodb&lt;/artifactId&gt;
-    &lt;version&gt;2.17.0.redhat-630187&lt;/version&gt;
+    &lt;version&gt;2.18.1.redhat-000005&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">mongodb:connectionBean?database=databaseName&amp;collection=collectionName&amp;operation=operationName[&amp;moreOptions...]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_Endpointoptions"></a>Endpoint options</h2></div></div></div><p>MongoDB endpoints support the following options, depending on whether they are acting
             like a Producer or as a Consumer (options vary based on the consumer type too).</p><p>
             
-        </p><table id="d0e126105"><tr>
+        </p><table id="d0e129070"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -225,7 +225,7 @@
                 <td> Field in which the persistent tail tracker will store the last tracked value. </td>
                 <td></td>
                 <td> (/) </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e126621"></a>Configuration of database in Spring XML</h2></div></div></div><p>The following Spring XML creates a bean defining the connection to a MongoDB
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e129586"></a>Configuration of database in Spring XML</h2></div></div></div><p>The following Spring XML creates a bean defining the connection to a MongoDB
             instance.</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -234,7 +234,16 @@
         &lt;constructor-arg name="host" value="${mongodb.host}" /&gt;
         &lt;constructor-arg name="port" value="${mongodb.port}" /&gt;
     &lt;/bean&gt;
-&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e126628"></a>Sample route</h2></div></div></div><p>The following route defined in Spring XML executes the operation dbStats on a
+&lt;/beans&gt;</pre><p>In case you are using a 3.x MongoDB instance you have to use the following
+            bean:</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+    &lt;bean id="mongoBean" class="com.mongodb.MongoClient"&gt;
+        &lt;constructor-arg name="host" value="${mongodb.host}" /&gt;
+        &lt;constructor-arg name="port" value="${mongodb.port}" /&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e129597"></a>Sample route</h2></div></div></div><p>The following route defined in Spring XML executes the operation dbStats on a
             collection.</p><pre class="programlisting">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;!-- using bean 'mongoBean' defined above --&gt;
@@ -254,18 +263,16 @@
     .to("mock:resultFindOneByQuery");</pre><p>Example with a query (returns one matching result):</p><pre class="programlisting">from("direct:findOneByQuery")
     .setBody().constant("{ \"name\": \"Raul Kripalani\" }")
     .to("mongodb:myDb?database=flights&amp;collection=tickets&amp;operation=findOneByQuery")
-    .to("mock:resultFindOneByQuery");</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Supports fields filter"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Supports fields filter</th></tr><tr><td align="left" valign="top"><p>This operation supports specifying a fields filter. See <a class="xref" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Specifyingafieldsfilter" title="Specifying a fields filter">Specifying a fields filter</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_findAll"></a>findAll</h2></div></div></div><p>The <code class="literal">findAll</code> operation returns all documents matching a query, or
-            none at all, in which case all documents contained in the collection are returned.
-                <span class="bold"><strong>The query object is extracted from the IN message
-                body</strong></span>, i.e. it should be of type <code class="literal">DBObject</code> or
-            convertible to <code class="literal">DBObject</code>. It can be a JSON String or a Hashmap. See
-                <a class="link" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Typeconversions" title="Type conversions">Type conversions</a> for more
-            info.</p><p>Example with no query (returns all object in the collection):</p><pre class="programlisting">from("direct:findAll")
+    .to("mock:resultFindOneByQuery");</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Supports fields filter"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Supports fields filter</th></tr><tr><td align="left" valign="top"><p>This operation supports specifying a fields filter. See <a class="xref" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Specifyingafieldsfilter" title="Specifying a fields filter">Specifying a fields filter</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_findAll"></a>findAll</h2></div></div></div><p>The <code class="literal">findAll</code> operation returns all documents matching a query. If
+            your query is empty, all of the documents stored will match and be returned. <span class="bold"><strong>The query object is extracted from the IN message body</strong></span>, i.e.
+            it should be of type <code class="literal">DBObject</code> or convertible to
+                <code class="literal">DBObject</code>. It can be a JSON String or a Hashmap. See <a class="link" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Typeconversions" title="Type conversions">Type conversions</a> for more
+            info.</p><p>Example with no query (returns all documents in the collection):</p><pre class="programlisting">from("direct:findAll")
     .to("mongodb:myDb?database=flights&amp;collection=tickets&amp;operation=findAll")
-    .to("mock:resultFindAll");</pre><p>Example with a query (returns all matching results):</p><pre class="programlisting">from("direct:findAll")
+    .to("mock:resultFindAll");</pre><p>Example with a query (returns all matching documents):</p><pre class="programlisting">from("direct:findAll")
     .setBody().constant("{ \"name\": \"Raul Kripalani\" }")
     .to("mongodb:myDb?database=flights&amp;collection=tickets&amp;operation=findAll")
-    .to("mock:resultFindAll");</pre><p>Paging and efficient retrieval is supported via the following headers:</p><table id="d0e126732"><tr>
+    .to("mock:resultFindAll");</pre><p>Paging and efficient retrieval is supported via the following headers:</p><table id="d0e129701"><tr>
                 <th> Header key </th>
                 <th> Quick constant </th>
                 <th> Description (extracted from MongoDB API doc) </th>
@@ -302,11 +309,19 @@
                     after a cursor is iterated, in which case the setting will apply on the next
                     batch retrieval.</td>
                 <td> int/Integer </td>
-            </tr></table><p>Additionally, you can set a sortBy criteria by putting the relevant
+            </tr></table><p>You can also "stream" the documents returned from the server into your route by
+            including outputType=DBCursor (Camel 2.16+) as an endpoint option which may prove
+            simpler than setting the above headers. This hands your Exchange the DBCursor from the
+            Mongo driver, just as if you were executing the findAll() within the Mongo shell,
+            allowing your route to iterate over the results. By default and without this option,
+            this component will load the documents from the driver's cursor into a List and return
+            this to your route - which may result in a large number of in-memory objects. Remember,
+            with a DBCursor do not ask for the number of documents matched - see the MongoDB
+            documentation site for details.</p><p>Additionally, you can set a sortBy criteria by putting the relevant
                 <code class="literal">DBObject</code> describing your sorting in the
                 <code class="literal">CamelMongoDbSortBy</code> header, quick constant:
                 <code class="literal">MongoDbConstants.SORT_BY</code>.</p><p>The <code class="literal">findAll</code> operation will also return the following OUT headers to
-            enable you to iterate through result pages if you are using paging:</p><table id="d0e126817"><tr>
+            enable you to iterate through result pages if you are using paging:</p><table id="d0e129788"><tr>
                 <th> Header key </th>
                 <th> Quick constant </th>
                 <th> Description (extracted from MongoDB API doc) </th>
@@ -327,7 +342,7 @@
                 <td> Number of objects matching the query. This does not take limit/skip into
                     consideration. </td>
                 <td> int/Integer </td>
-            </tr></table><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Supports fields filter"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Supports fields filter</th></tr><tr><td align="left" valign="top"><p>This operation supports specifying a fields filter. See <a class="xref" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Specifyingafieldsfilter" title="Specifying a fields filter">Specifying a fields filter</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e126875"></a>count</h2></div></div></div><p>Returns the total number of objects in a collection, returning a <code class="code">Long</code> as
+            </tr></table><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Supports fields filter"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Supports fields filter</th></tr><tr><td align="left" valign="top"><p>This operation supports specifying a fields filter. See <a class="xref" href="IDU-MongoDB.html#IDU-MongoDB_HSH_Specifyingafieldsfilter" title="Specifying a fields filter">Specifying a fields filter</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e129846"></a>count</h2></div></div></div><p>Returns the total number of objects in a collection, returning a <code class="code">Long</code> as
             the <span class="emphasis"><em>Out</em></span> message body. The following example will count the number
             of records in the <code class="code">dynamicCollectionName</code> collection. Notice how dynamicity
             is enabled, and as a result, the operation will not run against the
@@ -395,7 +410,7 @@ from("direct:insert")
                 matching records, set the <code class="literal">CamelMongoDbMultiUpdate</code> IN message
                 header to <code class="literal">true</code>.</p></td></tr></table></div><p>A header with key <code class="literal">CamelMongoDbRecordsAffected</code> will be returned
                 (<code class="literal">MongoDbConstants.RECORDS_AFFECTED</code> constant) with the number of
-            records updated (copied from <code class="literal">WriteResult.getN()</code>).</p><p>Supports the following IN message headers:</p><table id="d0e127083"><tr>
+            records updated (copied from <code class="literal">WriteResult.getN()</code>).</p><p>Supports the following IN message headers:</p><table id="d0e130054"><tr>
                 <th> Header key </th>
                 <th> Quick constant </th>
                 <th> Description (extracted from MongoDB API doc) </th>
@@ -433,7 +448,7 @@ Object result = template.requestBody("direct:remove", conditionField);
 </pre><p>A header with key <code class="literal">CamelMongoDbRecordsAffected</code> is returned
                 (<code class="literal">MongoDbConstants.RECORDS_AFFECTED</code> constant) with type
                 <code class="literal">int</code>, containing the number of records deleted (copied from
-                <code class="literal">WriteResult.getN()</code>).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_Otheroperations"></a>Other operations</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e127179"></a>aggregate</h2></div></div></div><p><span class="bold"><strong>Camel 2.14:</strong></span> Perform a aggregation with the given
+                <code class="literal">WriteResult.getN()</code>).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_Otheroperations"></a>Other operations</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e130150"></a>aggregate</h2></div></div></div><p><span class="bold"><strong>Camel 2.14:</strong></span> Perform a aggregation with the given
             pipeline contained in the body. Aggregations could be long and heavy operations. Use
             with care.</p><pre class="programlisting">// route: from("direct:aggregate").to("mongodb:myDb?database=science&amp;collection=notableScientists&amp;operation=aggregate");
 from("direct:aggregate")
@@ -483,7 +498,7 @@ assertTrue("Result is not of type DBObject", result instanceof DBObject);</pre><
 Object result = template.requestBody("direct:getColStats", "irrelevantBody");
 assertTrue("Result is not of type DBObject", result instanceof DBObject);
 </pre><p>The operation will return a data structure similar to the one displayed in the shell,
-            in the form of a <code class="literal">DBObject</code> in the OUT message body. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e127228"></a>command</h2></div></div></div><p><span class="bold"><strong>Camel 2.15:</strong></span> Run the body as a command on database.
+            in the form of a <code class="literal">DBObject</code> in the OUT message body. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e130199"></a>command</h2></div></div></div><p><span class="bold"><strong>Camel 2.15:</strong></span> Run the body as a command on database.
             Useful for admin operation as getting host informations, replication or sharding status.
             Collection parameter is not use for this operation.</p><pre class="programlisting">// route: from("command").to("mongodb:myDb?database=science&amp;operation=command");
 DBObject commandBody = new BasicDBObject("hostInfo", "1");
@@ -566,7 +581,7 @@ assertTrue("Result is not of type Long", result instanceof Long);</pre></div><di
 	.id("tailableCursorConsumer3")
 	.autoStartup(false)
 	.to("mock:test");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MongoDB_HSH_Typeconversions"></a>Type conversions</h2></div></div></div><p>The <code class="literal">MongoDbBasicConverters</code> type converter included with the
-            camel-mongodb component provides the following conversions:</p><table id="d0e127375"><tr>
+            camel-mongodb component provides the following conversions:</p><table id="d0e130346"><tr>
                 <th> Name </th>
                 <th> From type </th>
                 <th> To type </th>
