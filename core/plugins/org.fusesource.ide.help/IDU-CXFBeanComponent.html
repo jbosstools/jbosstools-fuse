@@ -4,7 +4,7 @@
             send exchange and invoke Web service bean objects. <span class="bold"><strong>Currently, it
                 only supports JAXRS and JAXWS (new to Camel 2.1) annotated service
             beans.</strong></span></p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p><code class="literal">CxfBeanEndpoint</code> is a <code class="literal">ProcessorEndpoint</code> so it has
-        no consumers. It works similarly to a Bean component.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">cxfbean:serviceBeanRef</pre><p>Where <span class="bold"><strong>serviceBeanRef</strong></span> is a registry key to look up the service bean object. If <code class="literal">serviceBeanRef</code> references a <code class="literal">List</code> object, elements of the <code class="literal">List</code> are the service bean objects accepted by the endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e68022"><tr>
+        no consumers. It works similarly to a Bean component.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">cxfbean:serviceBeanRef</pre><p>Where <span class="bold"><strong>serviceBeanRef</strong></span> is a registry key to look up the service bean object. If <code class="literal">serviceBeanRef</code> references a <code class="literal">List</code> object, elements of the <code class="literal">List</code> are the service bean objects accepted by the endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e68026"><tr>
         <th> Name </th>
         <th> Description </th>
         <th> Example </th>
@@ -70,7 +70,7 @@
         </td>
       </tr></table><p>
 
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_Headers"></a>Headers</h2></div></div></div><table id="d0e68211"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXFBeanComponent_HSH_Headers"></a>Headers</h2></div></div></div><table id="d0e68215"><tr>
         <th> Name </th>
         <th> Description </th>
         <th> Type </th>

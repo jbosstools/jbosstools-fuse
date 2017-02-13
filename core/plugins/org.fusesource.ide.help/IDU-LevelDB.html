@@ -10,7 +10,7 @@
             various Camel features, such as <span class="phrase">Aggregator</span>. </p><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p></p><p>LevelDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_UsingLevelDBAggregationRepository"></a>Using LevelDBAggregationRepository</h2></div></div></div><p><code class="literal">LevelDBAggregationRepository</code> is an
                 <code class="literal">AggregationRepository</code> which on the fly persists the aggregated
             messages. This ensures that you will not loose messages, as the default aggregator will
-            use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e119627"><tr>
+            use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e119631"><tr>
                 <th> Option </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -95,7 +95,7 @@
             The recovery works as transactional which ensures that Camel will try to recover and
             redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored
             from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-            recovered/redelivered:</p><table id="d0e119849"><tr>
+            recovered/redelivered:</p><table id="d0e119853"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>

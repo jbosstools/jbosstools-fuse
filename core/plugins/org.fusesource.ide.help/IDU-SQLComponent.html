@@ -5,7 +5,7 @@
       it uses message payload as parameters passed to the query.</p><p>This component uses <code class="literal">spring-jdbc</code> behind the scenes for the actual SQL
     handling.</p><p>The SQL component also supports:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>a JDBC based repository for the <span class="phrase">Idempotent Consumer</span> EIP pattern. See further
           below.</p></li><li class="listitem"><p>a JDBC based repository for the 
-              <span class="phrase">Aggregator</span> EIP pattern. See further below.</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>This component can be used as a <a class="link" href="http://camel.apache.org/transactional-client.html" target="_top">Transactional Client</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167276"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+              <span class="phrase">Aggregator</span> EIP pattern. See further below.</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>This component can be used as a <a class="link" href="http://camel.apache.org/transactional-client.html" target="_top">Transactional Client</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e167280"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p><p>When used in conjunction with the <code class="varname">camel-cdi</code> component, Java EE
             annotations make a datasource available to Camel. The following example uses the
@@ -48,7 +48,7 @@ order by
   name</pre><p>In the file you can use multiple lines and format the SQL as you wish. And also use
             comments such as the <code class="code">&#8211;</code> dash line.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e167379"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e167383"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Default </th>
@@ -365,7 +365,7 @@ order by
             .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:row"</em></strong>)
             .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:result"</em></strong>)
         .end();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Headervalues"></a>Header values</h2></div></div></div><p>When performing <code class="literal">update</code> operations, the SQL Component stores the update
-      count in the following message headers:</p><table id="d0e168312"><tr>
+      count in the following message headers:</p><table id="d0e168316"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -390,7 +390,7 @@ order by
       </tr></table><p>When performing <code class="code">insert</code> operations, the SQL Component stores the rows
           with the generated keys and number of these rown in the following message headers
           (<span class="strong"><strong>Available as of Camel 2.12.4,
-              2.13.1</strong></span>):</p><table id="d0e168388"><colgroup> </colgroup><thead><tr>
+              2.13.1</strong></span>):</p><table id="d0e168392"><colgroup> </colgroup><thead><tr>
                   <td>
                       <p>Header</p>
                   </td>
@@ -468,7 +468,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             property as the second parameter.</p><div class="informalexample"><pre class="programlisting">from("direct:projects")
   .setBody(constant("ASF"))
   .setProperty("min", constant(123))
-  .to("sql:select * from projects where license = :#${body} and id &gt; :#${property.min} order by id")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168561"></a>Using IN queries with dynamic values</h2></div></div></div><p>From <span class="bold"><strong>Camel 2.17</strong></span> onwards the SQL producer allows to
+  .to("sql:select * from projects where license = :#${body} and id &gt; :#${property.min} order by id")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e168565"></a>Using IN queries with dynamic values</h2></div></div></div><p>From <span class="bold"><strong>Camel 2.17</strong></span> onwards the SQL producer allows to
             use SQL queries with IN statements, where the IN values are dynamically computed. For
             example, from the message body or header, and so on.</p><p>To use IN, you need to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Prefix the parameter name with <code class="code">in:</code> and</p></li><li class="listitem"><p>Add <code class="code">( )</code> around the parameter</p></li></ul></div><p>For example, assume the following query is used:</p><pre class="programlisting">-- this is a comment
 select *
@@ -523,7 +523,7 @@ template.requestBodyAndHeader("direct:query", "Hi there!", "names", "Camel,AMQ")
 &lt;/camel:camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_CustomizetheJdbcMessageIdRepository"></a>Customize the JdbcMessageIdRepository</h2></div></div></div><p>Starting with <span class="bold"><strong>Camel 2.9.1</strong></span> you have a few options to
             tune the
                 <code class="literal">org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository</code>
-            for your needs:</p><table id="d0e168665"><tr>
+            for your needs:</p><table id="d0e168669"><tr>
                 <th> Parameter </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -597,7 +597,7 @@ template.requestBodyAndHeader("direct:query", "Hi there!", "names", "Camel,AMQ")
       only <code class="literal">AggregationRepository</code>. The
         <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide
         persistent support for the 
-        <span class="phrase">Aggregator</span>.</p><p>It has the following options:</p><table id="d0e168832"><tr>
+        <span class="phrase">Aggregator</span>.</p><p>It has the following options:</p><table id="d0e168836"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Description </th>
@@ -677,7 +677,7 @@ template.requestBodyAndHeader("direct:query", "Hi there!", "names", "Camel,AMQ")
         </td>
         <td></td>
         <td><span class="bold"><strong>Camel 2.12:</strong></span> Allows to plugin a custom <code class="literal">org.apache.camel.processor.aggregate.jdbc.JdbcOptimisticLockingExceptionMapper</code> to map vendor specific error codes to an optimistick locking error, for Camel to perform a retry. This requires <code class="literal">optimisticLocking</code> to be enabled. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p><p>From Camel 2.11 onwards you can store the message body and select(ed) headers as String in separate columns.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Recovery"></a>Recovery</h2></div></div></div><p>The <code class="literal">JdbcAggregationRepository</code> will by default recover any failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. Any <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e169131"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p><p>From Camel 2.11 onwards you can store the message body and select(ed) headers as String in separate columns.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Recovery"></a>Recovery</h2></div></div></div><p>The <code class="literal">JdbcAggregationRepository</code> will by default recover any failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. Any <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e169135"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
