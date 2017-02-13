@@ -171,7 +171,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.v2_18_1_redhat_000010"
+         id="org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012"
          download-size="0"
          install-size="0"
          version="0.0.0"

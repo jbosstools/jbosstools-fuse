@@ -22,6 +22,6 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187;bundle-version="9.1.0",
  org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224;bundle-version="9.1.0",
  org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="9.1.0",
- org.fusesource.ide.camel.model.service.v2_18_1_redhat_000010;bundle-version="9.1.0",
+ org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012;bundle-version="9.1.0",
  org.fusesource.ide.camel.editor;bundle-version="9.1.0"
 Export-Package: org.fusesource.ide.camel.model.service.core.tests.integration.core.io
