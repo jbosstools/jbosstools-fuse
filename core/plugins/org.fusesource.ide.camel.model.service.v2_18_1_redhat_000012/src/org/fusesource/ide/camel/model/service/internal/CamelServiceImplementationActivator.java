@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
  * @author rstryker
  */
 public class CamelServiceImplementationActivator extends BaseUIPlugin {
-	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.v2_18_1_redhat_000007";
+	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012";
 
 	private static CamelServiceImplementationActivator instance;
 	private static BundleContext myContext;
