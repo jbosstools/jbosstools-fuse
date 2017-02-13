@@ -314,7 +314,7 @@
       	
       	<project-facet-version
             facet="jst.camel"
-            version="2.18.1.redhat-000010">
+            version="2.18.1.redhat-000012">
        	
         	<constraint>
             	<and>
