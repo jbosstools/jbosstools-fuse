@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.diagram.view.tests
-Bundle-Version: 9.1.0.qualifier
+Bundle-Version: 9.2.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
-Fragment-Host: org.fusesource.ide.jmx.diagram.view;bundle-version="9.1.0"
+Fragment-Host: org.fusesource.ide.jmx.diagram.view;bundle-version="9.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.assertj.core;bundle-version="2.1.0",
  org.junit;bundle-version="4.12.0",
