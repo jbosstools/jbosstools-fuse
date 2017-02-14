@@ -9,7 +9,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">atom://atomUri[?options]</pre><p>Where <span class="bold"><strong>atomUri</strong></span> is the URI to the Atom feed to poll.
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Options"></a>Options</h2></div></div></div><table id="d0e47696"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Options"></a>Options</h2></div></div></div><table id="d0e47700"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -94,11 +94,11 @@
                 <td> For basic authentication when polling from a HTTP feed. </td>
             </tr></table><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47918"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47922"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p>Apache Camel will set the In body on the returned <code class="literal">Exchange</code> with the
       entries. Depending on the <code class="literal">splitEntries</code> flag Apache Camel will either return one
-        <code class="literal">Entry</code> or a <code class="literal">List&lt;Entry&gt;</code>.</p><table id="d0e47941"><tr>
+        <code class="literal">Entry</code> or a <code class="literal">List&lt;Entry&gt;</code>.</p><table id="d0e47945"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -119,7 +119,7 @@
             <code class="literal">exchange.in.body(List&lt;Entry&gt;)</code>
         </td>
       </tr></table><p>Apache Camel can set the <code class="literal">Feed</code> object on the in header (see
-        <code class="literal">feedHeader</code> option to disable this):</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel atom uses these headers.</p><table id="d0e48003"><tr>
+        <code class="literal">feedHeader</code> option to disable this):</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel atom uses these headers.</p><table id="d0e48007"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
