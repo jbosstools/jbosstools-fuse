@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.branding;singleton:=true
-Bundle-Version: 9.1.0.qualifier
+Bundle-Version: 9.2.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Activator: org.fusesource.ide.branding.Activator
@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.eclipse.ltk.core.refactoring;bundle-version="3.6.100",
  org.eclipse.m2e.maven.runtime,
  org.jboss.tools.foundation.core;bundle-version="1.2.0",
- org.fusesource.ide.maven;bundle-version="9.1.0",
- org.fusesource.ide.foundation.core;bundle-version="9.1.0",
- org.fusesource.ide.foundation.ui;bundle-version="9.1.0",
- org.fusesource.ide.camel.model.service.core;bundle-version="9.1.0"
+ org.fusesource.ide.maven;bundle-version="9.2.0",
+ org.fusesource.ide.foundation.core;bundle-version="9.2.0",
+ org.fusesource.ide.foundation.ui;bundle-version="9.2.0",
+ org.fusesource.ide.camel.model.service.core;bundle-version="9.2.0"
