@@ -282,7 +282,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	private void addDescriptionAsTooltip(Parameter parameter, Label label) {
 		String description = parameter.getDescription();
 		if (description != null) {
-			label.setToolTipText(description);
+			label.setToolTipText(description.replaceAll("&", "&&"));
 		}
 	}
 
