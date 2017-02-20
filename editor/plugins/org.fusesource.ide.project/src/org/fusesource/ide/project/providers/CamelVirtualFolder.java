@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.project.providers;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,6 +95,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	class DeltaPrinter implements IResourceDeltaVisitor {
 
 		private IProject _project;
+		private CamelFilesFinder camelFilesFinder= new CamelFilesFinder();
 
 		public DeltaPrinter(IProject project) {
 			this._project = project;
@@ -113,11 +113,8 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 
 			switch (delta.getKind()) {
 			case IResourceDelta.ADDED:
-				if (resource
-						.getFullPath().toOSString().contains(
-								File.separator + "target" + File.separator
-										+ "classes" + File.separator)) {
-					// skip target folder
+				if (camelFilesFinder.isWorkProjectFolder(_project, getAncestorDirectChildOfProject(_project, resource))) {
+					// skip work folder (target and bin)
 					break;
 				}
 				// a resource was added, check if we need to add it the the
@@ -137,6 +134,15 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 				break;
 			}
 			return true; // visit the children
+		}
+	}
+	
+	private IResource getAncestorDirectChildOfProject(IProject project, IResource resource){
+		IResource parent = resource.getParent();
+		if(project.equals(parent)){
+			return resource;
+		} else {
+			return getAncestorDirectChildOfProject(project, parent);
 		}
 	}
 

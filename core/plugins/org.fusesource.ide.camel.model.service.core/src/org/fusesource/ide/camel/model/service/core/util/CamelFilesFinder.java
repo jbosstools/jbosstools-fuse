@@ -71,7 +71,7 @@ public class CamelFilesFinder {
 		return res;
 	}
 
-	private boolean isWorkProjectFolder(IProject project, IResource f) {
+	public boolean isWorkProjectFolder(IProject project, IResource f) {
 		String resourceName = f.getName();
 		return ("target".equalsIgnoreCase(resourceName) || "bin".equalsIgnoreCase(resourceName))
 				&& f.getParent().getName().equalsIgnoreCase(project.getName());
