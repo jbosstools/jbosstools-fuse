@@ -12,10 +12,8 @@
 package org.fusesource.ide.jmx.karaf.navigator.osgi;
 
 
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IActionBars;
 import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableSheetPage;
-import org.fusesource.ide.foundation.ui.views.IViewPage;
 
 
 public class ServicesTableSheetPage extends PropertySourceTableSheetPage {
@@ -31,23 +29,10 @@ public class ServicesTableSheetPage extends PropertySourceTableSheetPage {
 		return osgiNode;
 	}
 
-
-
-	@Override
-	public void setView(IViewPage view) {
-		super.setView(view);
-
-		/*
-		Action setVersionAction = new ActionSupport("Set Version") {};
-
-		getTableView().addLocalMenuActions(setVersionAction);
-		 */
-	}
-
 	@Override
 	public void setActionBars(IActionBars actionBars) {
 		super.setActionBars(actionBars);
-		IMenuManager menu = actionBars.getMenuManager();
+		actionBars.getMenuManager();
 
 		/** TODO add start/stop stuff */
 

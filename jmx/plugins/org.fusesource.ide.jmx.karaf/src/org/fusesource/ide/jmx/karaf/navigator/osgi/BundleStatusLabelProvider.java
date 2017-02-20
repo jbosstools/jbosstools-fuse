@@ -32,7 +32,6 @@ public class BundleStatusLabelProvider extends StyledCellLabelProvider {
 			}
 			String image = null;
 			if (status != null) {
-				image = "yellow-dot.png";
 				String lowerStatus = status.toLowerCase();
 				if (lowerStatus.startsWith("a")) {
 					image = "green-dot.png";
