@@ -313,7 +313,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 					CamelThread t = (CamelThread)firstElement;
 					try {
 						CamelStackFrame stackFrame = (CamelStackFrame)t.getTopStackFrame();
-						if (stackFrame != null) {
+						if (stackFrame != null && stackFrame.isSuspended()) {
 							highlightBreakpointNodeWithID(stackFrame.getEndpointId());	
 						}
 					} catch (DebugException e) {
