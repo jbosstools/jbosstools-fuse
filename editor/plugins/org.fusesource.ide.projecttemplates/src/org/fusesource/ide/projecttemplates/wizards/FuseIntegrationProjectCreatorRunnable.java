@@ -30,14 +30,9 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.content.IContentDescription;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -314,7 +309,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (project != null) {
 			final IFile[] holder = new IFile[1];
 			searchCamelContextXMLFile(project, holder);
-			ProjectTemplatesActivator.pluginLog().logWarning("xml file found? " + holder[0]); //$NON-NLS-1$
 			try {
 				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
 					searchCamelContextJavaFile(project, monitor, holder);
