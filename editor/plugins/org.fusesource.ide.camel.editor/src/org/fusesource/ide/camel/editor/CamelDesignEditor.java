@@ -609,18 +609,24 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (DebugEvent ev : events) {
-			if (ev.getSource() instanceof CamelThread == false && ev.getSource() instanceof CamelStackFrame == false) continue;
-			if (ev.getSource() instanceof CamelThread && (ev.getKind() == DebugEvent.TERMINATE || ev.getKind() == DebugEvent.RESUME)) {
+			Object source = ev.getSource();
+			if (!(source instanceof CamelThread) && !(source instanceof CamelStackFrame)){
+				continue;
+			}
+			int kind = ev.getKind();
+			if (source instanceof CamelThread && (kind == DebugEvent.TERMINATE || kind == DebugEvent.RESUME)) {
 				// we are only interested in hit camel breakpoints
 				resetHighlightBreakpointNode();
 			} else {
-				if (ev.getSource() instanceof CamelThread) {
-					CamelThread thread = (CamelThread)ev.getSource();
-					if (ev.getKind() == DebugEvent.SUSPEND && ev.getDetail() == DebugEvent.BREAKPOINT) {
+				if (source instanceof CamelThread) {
+					CamelThread thread = (CamelThread)source;
+					if (kind == DebugEvent.SUSPEND && ev.getDetail() == DebugEvent.BREAKPOINT) {
 						// a breakpoint was hit and thread is on suspend -> stack should be selected in tree now
 						try {
 							CamelStackFrame stackFrame = (CamelStackFrame)thread.getTopStackFrame();
-							if (stackFrame != null) highlightBreakpointNodeWithID(stackFrame.getEndpointId());
+							if (stackFrame != null){
+								highlightBreakpointNodeWithID(stackFrame.getEndpointId());
+							}
 						} catch (DebugException ex) {
 							CamelEditorUIActivator.pluginLog().logError(ex);
 						}

@@ -98,7 +98,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	private String suspendedNodeId;
 	
 	// threads
-	private HashMap<String, CamelThread> threads = new HashMap<String, CamelThread>(); 
+	private HashMap<String, CamelThread> threads = new HashMap<>(); 
 	
 	// event dispatcher
 	private EventDispatchJob dispatcher;
@@ -179,10 +179,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @return	a unique key or null if msg was null
 	 */
 	public String generateKey(BacklogTracerEventMessage msg) {
-		if (msg == null) return null;
+		if (msg == null) {
+			return null;
+		}
 		final List<Header> headers = msg.getMessage().getHeaders();
 		for (IBacklogTracerHeader h : headers) {
-			if (h.getKey().equalsIgnoreCase("breadcrumbid")) {
+			if ("breadcrumbid".equalsIgnoreCase(h.getKey())) {
 				// there is a breadcrumbId - use that as key
 				return h.getValue();
 			}
@@ -238,10 +240,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	private boolean connectToVM() {
 		try {
-			if (this.url == null) this.url = new JMXServiceURL(this.jmxUri); 
+			if (this.url == null) {
+				this.url = new JMXServiceURL(this.jmxUri);
+			} 
 			if (!Strings.isBlank(this.jmxUser)) {
 				// credentials defined - so use them
-				Map<String, Object> envMap = new HashMap<String, Object>();
+				Map<String, Object> envMap = new HashMap<>();
 				envMap.put("jmx.remote.credentials", new String[] { this.jmxUser, this.jmxPass });
 				this.jmxc = JMXConnectorFactory.connect(this.url, envMap); 
 			} else {
@@ -375,7 +379,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @see org.eclipse.debug.core.model.ISuspendResume#isSuspended()
 	 */
 	public boolean isSuspended() {
-		return this.fProcessingActive == false;
+		return !fProcessingActive;
 	}
 	
 	/* (non-Javadoc)
@@ -401,9 +405,10 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		if (supportsBreakpoint(breakpoint)) {
 			try {
 				if (breakpoint.isEnabled() && this.debugger != null) {
-					if (breakpoint.getMarker().getType().equals(ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE)) {
+					String markerType = breakpoint.getMarker().getType();
+					if (ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE.equals(markerType)) {
 						this.debugger.addConditionalBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint), CamelDebugUtils.getLanguage(breakpoint), CamelDebugUtils.getCondition(breakpoint));
-					} else if (breakpoint.getMarker().getType().equals(ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE)) {
+					} else if (ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE.equals(markerType)) {
 						this.debugger.addBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));						
 					}
 				}
@@ -444,7 +449,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	protected boolean isBreakpointManagerEnabled() {
 		IBreakpointManager bpManager = DebugPlugin.getDefault().getBreakpointManager();
-		return bpManager != null & bpManager.isEnabled();
+		return bpManager != null && bpManager.isEnabled();
 	}
 	
 	/* (non-Javadoc)
@@ -801,15 +806,13 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 					// check all threads
 					for (CamelThread t : threads.values()) {
 						// we clean all threads not suspended in the last x seconds and state running
-						if (t.isSuspended() == false && (System.currentTimeMillis() - t.getLastSuspended()) > THREAD_LIFE_DURATION) {
+						if (!t.isSuspended() && (System.currentTimeMillis() - t.getLastSuspended()) > THREAD_LIFE_DURATION) {
 							t.terminate();
 						}
 					}
 					Thread.sleep(60000); // run every 60 secs
-				} catch (InterruptedException ex) {
+				} catch (InterruptedException | DebugException ex) {
 					Activator.getLogger().error(ex);
-				} catch (DebugException de) {
-					Activator.getLogger().error(de);
 				}
 			}
 			return Status.OK_STATUS;
