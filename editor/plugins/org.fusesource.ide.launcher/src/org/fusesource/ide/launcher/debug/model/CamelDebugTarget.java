@@ -464,8 +464,8 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	public void disconnect() throws DebugException {
 		if (this.debugger != null) {
-			this.debugger.disableDebugger();
 			this.debugger.resumeAll();
+			this.debugger.disableDebugger();
 			for (CamelThread t : threads.values()){
 				t.terminate();
 			}
