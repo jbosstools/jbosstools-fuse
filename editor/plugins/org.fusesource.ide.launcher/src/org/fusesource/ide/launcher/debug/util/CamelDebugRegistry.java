@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.ui.IEditorInput;
@@ -21,7 +22,7 @@ import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
  */
 public final class CamelDebugRegistry {
 	
-	private static HashMap<ILaunchConfiguration, CamelDebugRegistryEntry> entries = new HashMap<ILaunchConfiguration, CamelDebugRegistryEntry>();
+	private static Map<ILaunchConfiguration, CamelDebugRegistryEntry> entries = new HashMap<>();
 	
 	private static CamelDebugRegistry instance;
 	
@@ -52,8 +53,8 @@ public final class CamelDebugRegistry {
 	/**
 	 * @return the entries
 	 */
-	public HashMap<ILaunchConfiguration, CamelDebugRegistryEntry> getEntries() {
-		HashMap<ILaunchConfiguration, CamelDebugRegistryEntry> copy = new HashMap<ILaunchConfiguration, CamelDebugRegistryEntry>();
+	public Map<ILaunchConfiguration, CamelDebugRegistryEntry> getEntries() {
+		Map<ILaunchConfiguration, CamelDebugRegistryEntry> copy = new HashMap<>();
 		copy.putAll(entries);
 		return copy;
 	}

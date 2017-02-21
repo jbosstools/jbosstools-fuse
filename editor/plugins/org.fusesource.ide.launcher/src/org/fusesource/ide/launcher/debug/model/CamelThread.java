@@ -12,6 +12,7 @@ package org.fusesource.ide.launcher.debug.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -38,7 +39,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	/**
 	 * holds all stackframes
 	 */
-	private ArrayList<CamelStackFrame> stackFrames = new ArrayList<CamelStackFrame>();
+	private List<CamelStackFrame> stackFrames = new ArrayList<>();
 	
 	/**
 	 * Whether this thread is stepping
@@ -119,7 +120,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	 * @see org.eclipse.debug.core.model.IThread#hasStackFrames()
 	 */
 	public boolean hasStackFrames() throws DebugException {
-		return isSuspended() && this.stackFrames.size()>0;
+		return isSuspended() && !stackFrames.isEmpty();
 	}
 	
 	/* (non-Javadoc)
@@ -133,7 +134,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	 * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
 	 */
 	public IStackFrame getTopStackFrame() throws DebugException {
-		if (this.stackFrames.size() > 0) {
+		if (!stackFrames.isEmpty()) {
 			return stackFrames.get(0);
 		}
 		return null;
@@ -204,7 +205,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	 * @see org.eclipse.debug.core.model.ISuspendResume#resume()
 	 */
 	public void resume() throws DebugException {
-		if (this.fStepping == false) {
+		if (!fStepping) {
 			// normal resume without stepping
 			((CamelDebugTarget)getDebugTarget()).getDebugger().resumeBreakpoint(((CamelStackFrame)getTopStackFrame()).getEndpointId());	
 			fireResumeEvent(DebugEvent.CLIENT_REQUEST);
