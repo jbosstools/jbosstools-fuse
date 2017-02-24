@@ -133,7 +133,7 @@ public class DetailsSection extends FusePropertySection {
 				new DescriptionParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             } else if (CamelComponentUtils.isBooleanProperty(prop)) {
 				new BooleanParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            } else if (CamelComponentUtils.isTextProperty(prop)) {
+            } else if (CamelComponentUtils.isTextProperty(prop) || CamelComponentUtils.isCharProperty(prop)) {
 				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
 				new NumberParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();

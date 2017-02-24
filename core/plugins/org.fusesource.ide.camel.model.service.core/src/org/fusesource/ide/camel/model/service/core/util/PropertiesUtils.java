@@ -429,6 +429,10 @@ public class PropertiesUtils {
 		if (CamelComponentUtils.isNumberProperty(p)) {
 			return val;
 		}
+		
+		if (CamelComponentUtils.isCharProperty(p)){
+			return val;
+		}
 
 		return null;
 	}

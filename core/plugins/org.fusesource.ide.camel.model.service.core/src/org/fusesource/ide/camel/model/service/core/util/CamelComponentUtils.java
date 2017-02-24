@@ -122,6 +122,10 @@ public final class CamelComponentUtils {
 						|| p.getJavaType().equalsIgnoreCase("java.net.URI")
 						|| p.getJavaType().equalsIgnoreCase("Text"));
 	}
+	
+	public static boolean isCharProperty(Parameter p) {
+		return "char".equalsIgnoreCase(p.getJavaType());
+	}
 
 	public static boolean isNumberProperty(Parameter p) {
 		final String javaType = p.getJavaType();
@@ -137,21 +141,21 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isFileProperty(Parameter p) {
-		return p.getJavaType().equalsIgnoreCase("file") || p.getJavaType().equalsIgnoreCase("java.io.file");
+		return "file".equalsIgnoreCase(p.getJavaType()) || "java.io.file".equalsIgnoreCase(p.getJavaType());
 	}
 	
 	public static boolean isClassProperty(Parameter p) {
-		return p.getType().equalsIgnoreCase("object");
+		return "object".equalsIgnoreCase(p.getType());
 	}
 
 	public static boolean isExpressionProperty(Parameter p) {
-		return p.getKind().equalsIgnoreCase("expression")
-				|| p.getJavaType().equalsIgnoreCase("org.apache.camel.model.language.ExpressionDefinition");
+		return "expression".equalsIgnoreCase(p.getKind())
+				|| "org.apache.camel.model.language.ExpressionDefinition".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isDataFormatProperty(Parameter p) {
-		return p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT)
-				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition");
+		return AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
+				&& "org.apache.camel.model.DataFormatDefinition".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isListProperty(Parameter p) {
@@ -532,4 +536,6 @@ public final class CamelComponentUtils {
 
 		return resModel;
 	}
+
+
 }
