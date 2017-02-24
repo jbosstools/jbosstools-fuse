@@ -17,16 +17,16 @@
           uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.17.3-blueprint.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring/cxf"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.17.3-spring.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.18.1-spring.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-2.17.3.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-2.18.1.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring-integration"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-integration-2.17.2.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-integration-2.18.1.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring-security"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-security-2.17.3.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-security-2.18.1.xsd" />
        <uri
           name="http://www.osgi.org/xmlns/blueprint/v1.0.0"
           uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/osgi-blueprint-1.0.0.xsd" />
