@@ -97,23 +97,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected Component component; // used for connectors
 	protected Eip eip; // used for eips
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#dispose()
-	 */
 	@Override
 	public void dispose() {
 		if (this.form != null)
 			this.form.dispose();
-		if (this.tabs.isEmpty() == false) {
-			for (CTabItem tab : this.tabs) {
-				if (!tab.isDisposed())
-					tab.dispose();
-			}
-			tabs.clear();
-		}
+		disposeTabs();
 		if (this.tabFolder != null)
 			this.tabFolder.dispose();
 		if (toolkit != null) {
@@ -126,13 +114,6 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		super.dispose();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#setInput
-	 * (org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-	 */
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		super.setInput(part, selection);
@@ -164,7 +145,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		
 		int idx = Math.max(tabFolder.getSelectionIndex(), 0);
 
-		if (this.tabs.isEmpty() == false) {
+		if (!tabs.isEmpty()) {
 			for (CTabItem tab : this.tabs) {
 				if (!tab.isDisposed())
 					tab.dispose();
@@ -183,13 +164,16 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		form.update();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#
-	 * createControls (org.eclipse.swt.widgets.Composite,
-	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
-	 */
+	private void disposeTabs() {
+		if (!tabs.isEmpty()) {
+			for (CTabItem tab : this.tabs) {
+				if (!tab.isDisposed())
+					tab.dispose();
+			}
+			tabs.clear();
+		}
+	}
+	
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
@@ -244,7 +228,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected abstract void createContentTabs(CTabFolder tabFolder);
 
 	/**
-	 * /!\ public fo rtest purpose only
+	 * /!\ public for test purpose only
 	 * 
 	 * @param toolkit
 	 * @param page
@@ -637,11 +621,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 */
 	protected Control getControlForParameter(final Parameter p, Composite parent,
 			final AbstractCamelModelElement camelModelElement, IParameterContainer parameterContainer) {
-		Control c = null;
+		Control c;
 
 		// CHOICE
 		if (CamelComponentUtils.isChoiceProperty(p)) {
-			String initialTextValue = null;
+			String initialTextValue;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				initialTextValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
@@ -675,7 +659,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		// BOOLEAN PROPERTIES
 		} else if (CamelComponentUtils.isBooleanProperty(p)) {
 			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
-			Boolean b = false;
+			Boolean b;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				Object paramValue = camelModelElement.getParameter(p.getName());
 				if (paramValue instanceof String) {
@@ -707,7 +691,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 			// TEXT PROPERTIES
 		} else if (CamelComponentUtils.isTextProperty(p)) {
-			String initialTextValue = null;
+			String initialTextValue;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				initialTextValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
@@ -728,7 +712,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 			// NUMBER PROPERTIES
 		} else if (CamelComponentUtils.isNumberProperty(p)) {
-			String initialValue = null;
+			String initialValue;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				initialValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
@@ -775,7 +759,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			
 			// OTHER
 		} else {
-			String initialValue = null;
+			String initialValue;
 			if (camelModelElement != null && camelModelElement.getParameter(p.getName()) != null) {
 				initialValue = (String) camelModelElement.getParameter(p.getName());
 			} else if (parameterContainer != null) {
