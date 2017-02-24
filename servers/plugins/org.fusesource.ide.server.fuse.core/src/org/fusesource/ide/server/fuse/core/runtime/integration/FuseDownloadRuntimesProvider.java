@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.server.fuse.core.runtime.integration;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,13 +24,6 @@ import org.jboss.tools.stacks.core.model.StacksManager;
  */
 public class FuseDownloadRuntimesProvider extends AbstractStacksDownloadRuntimesProvider {
 	
-	private class CustomStacksManager extends StacksManager {
-		@Override
-		public Stacks getStacksFromFile(File f) throws IOException {
-			return super.getStacksFromFile(f);
-		}
-	}
-
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		return new StacksManager().getStacks("Loading Downloadable Runtimes", monitor, StacksManager.StacksType.PRESTACKS_TYPE, StacksManager.StacksType.STACKS_TYPE);
