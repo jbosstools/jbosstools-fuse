@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -91,7 +90,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected AbstractCamelModelElement selectedEP;
 	protected AbstractCamelModelElement lastSelectedEP;
 	protected DataBindingContext dbc;
-	protected IObservableMap modelMap = new WritableMap();
+	protected IObservableMap modelMap = new WritableMap<>();
 	protected Composite parent;
 	protected TabbedPropertySheetPage aTabbedPropertySheetPage;
 
@@ -136,51 +135,52 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 */
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
-
 		super.setInput(part, selection);
 		
 		AbstractCamelModelElement n = NodeUtils.getSelectedNode(selection);
-
-		if (!Objects.equals(lastSelectedEP, n)) {
-			
-			this.dbc = new DataBindingContext();
-	
-			createTabFolder();
-	
-			if (n.getUnderlyingMetaModelObject() != null) {
-				this.selectedEP = n;
-				this.eip = PropertiesUtils.getEipFor(selectedEP);
-				String headerText = selectedEP.getDisplayText();
-				form.setText(headerText);
-				if (selectedEP.isEndpointElement()) {
-					this.component = PropertiesUtils.getComponentFor(selectedEP);
-				}
-			} else {
-				this.selectedEP = null;
-				form.setText("");
+		
+		if (n.getUnderlyingMetaModelObject() != null) {
+			selectedEP = n;
+			eip = PropertiesUtils.getEipFor(selectedEP);
+			if (selectedEP.isEndpointElement()) {
+				component = PropertiesUtils.getComponentFor(selectedEP);
 			}
-			this.lastSelectedEP = n;
-			
-			int idx = Math.max(tabFolder.getSelectionIndex(), 0);
-	
-			if (this.tabs.isEmpty() == false) {
-				for (CTabItem tab : this.tabs) {
-					if (!tab.isDisposed())
-						tab.dispose();
-				}
-				tabs.clear();
-			}
-	
-			// now generate the tab contents
-			createContentTabs(tabFolder);
-	
-			tabFolder.setSingle(tabFolder.getItemCount() == 1);
-			tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
-	
-			form.redraw();
-			form.layout();
-			form.update();
+		} else {
+			selectedEP = null;
 		}
+	}
+
+	private void initSectionFor(AbstractCamelModelElement n) {
+		dbc = new DataBindingContext();
+		createTabFolder();
+
+		if (n.getUnderlyingMetaModelObject() != null) {
+			String headerText = selectedEP.getDisplayText();
+			form.setText(headerText);
+		} else {
+			form.setText("");
+		}
+		lastSelectedEP = n;
+		
+		int idx = Math.max(tabFolder.getSelectionIndex(), 0);
+
+		if (this.tabs.isEmpty() == false) {
+			for (CTabItem tab : this.tabs) {
+				if (!tab.isDisposed())
+					tab.dispose();
+			}
+			tabs.clear();
+		}
+
+		// now generate the tab contents
+		createContentTabs(tabFolder);
+
+		tabFolder.setSingle(tabFolder.getItemCount() == 1);
+		tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
+
+		form.redraw();
+		form.layout();
+		form.update();
 	}
 
 	/*
@@ -814,5 +814,10 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected GridData createPropertyFieldLayoutData() {
 		return GridDataFactory.fillDefaults().indent(5, 0).span(3, 1).grab(true, false).create();
 	}
-
+	
+	@Override
+	public void aboutToBeShown() {
+		super.aboutToBeShown();
+		initSectionFor(selectedEP);
+	}
 }
