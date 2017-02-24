@@ -67,19 +67,24 @@ public class DetailsSection extends FusePropertySection {
     protected void createContentTabs(CTabFolder folder) {
         List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP);
 
-        if (props.isEmpty()) return;
+        if (props.isEmpty()) {
+        	return;
+        }
        
         boolean createGeneralTab = false;
-        List<String> tabsToCreate = new ArrayList<String>();
+        List<String> tabsToCreate = new ArrayList<>();
         for (Parameter p : props) {
-        	if (p.getGroup() != null && p.getGroup().trim().length() > 0 && tabsToCreate.contains(p.getGroup()) == false) {
-        		tabsToCreate.add(p.getGroup());
-        	} else if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
+        	String parameterGroup = p.getGroup();
+			if (parameterGroup != null && parameterGroup.trim().length() > 0 && !tabsToCreate.contains(parameterGroup)) {
+        		tabsToCreate.add(parameterGroup);
+        	} else if (parameterGroup == null || parameterGroup.trim().length() < 1) {
         		createGeneralTab = true;
         	}
         }
         // groups were introduced in Camel 2.16.x -> earlier versions might not have it
-        if (tabsToCreate.isEmpty() || createGeneralTab) tabsToCreate.add(DEFAULT_GROUP);
+        if (tabsToCreate.isEmpty() || createGeneralTab){
+        	tabsToCreate.add(DEFAULT_GROUP);
+        }
         
         for (String group : tabsToCreate) {
         	CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
@@ -108,15 +113,10 @@ public class DetailsSection extends FusePropertySection {
         for (Parameter p : props) {
         	final Parameter prop = p;
 
-        	// we don't display items which don't fit the group
-        	if (group.equals(DEFAULT_GROUP) == false && group.equals(prop.getGroup()) == false) continue;
-        	if (group.equals(DEFAULT_GROUP) && prop.getGroup() != null && prop.getGroup().trim().length()>0) continue;
-        	
-        	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if ((AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind()) && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || "org.apache.camel.model.OtherwiseDefinition".equals(p.getJavaType())) continue;
-
-        	// we currently don't want to display class params of type element
-        	if (CamelComponentUtils.isClassProperty(p) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())) continue;
+        	String currentPropertyGroup = prop.getGroup();
+			if (shouldHidePropertyFromGroup(group, p, currentPropertyGroup)){
+        		continue;
+        	}
         	
             ISWTObservableValue uiObservable = null;
             IObservableList uiListObservable = null;
@@ -238,7 +238,7 @@ public class DetailsSection extends FusePropertySection {
 						} else {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
 								if (selectedEP.getRouteContainer().findNode((String)value) == null &&
-									selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value) == false) {
+									!selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value)) {
 									// no ref found - could be something the server provides
 									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");
 								}
@@ -266,13 +266,9 @@ public class DetailsSection extends FusePropertySection {
                 uiListObservable = WidgetProperties.items().observe(list);                
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
 						@Override
 						public IStatus validate(Object value) {
-							if (value != null && value instanceof List && ((List)value).isEmpty() == false) {
+							if (value != null && value instanceof List && !((List<?>)value).isEmpty()) {
 								return ValidationStatus.ok();
 							}
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
@@ -308,8 +304,9 @@ public class DetailsSection extends FusePropertySection {
                 
 				if (expressionElement != null) {
 					String value = expressionElement.getNodeTypeId();
-					if (expressionElement.getParameter("expression") != null && expressionElement.getParameter("expression") instanceof AbstractCamelModelElement ) {
-						AbstractCamelModelElement ex = (AbstractCamelModelElement)expressionElement.getParameter("expression");
+					Object expressionParameterValue = expressionElement.getParameter("expression");
+					if (expressionParameterValue != null && expressionParameterValue instanceof AbstractCamelModelElement ) {
+						AbstractCamelModelElement ex = (AbstractCamelModelElement)expressionParameterValue;
 	                    value = ex.getTranslatedNodeName();
 					}
                     choiceCombo.deselectAll();
@@ -446,26 +443,18 @@ public class DetailsSection extends FusePropertySection {
 					@Override
 					protected IStatus doAdd(IObservableList observableList, Object element, int index) {
 						super.doAdd(observableList, element, index);
-						if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true")) {
-							if (observableList.size() < 1)
-								return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
-						}
-						return ValidationStatus.ok();
+						return validateMandatoryBehavior(prop, observableList);
 					}
 
-					/*
-					 * (non-Javadoc)
-					 * 
-					 * @see org.eclipse.core.databinding.UpdateListStrategy#
-					 * doRemove(org.eclipse.core.databinding.observable.list
-					 * .IObservableList, int)
-					 */
 					@Override
 					protected IStatus doRemove(IObservableList observableList, int index) {
 						super.doRemove(observableList, index);
-						if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true")) {
-							if (observableList.size() < 1)
-								return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						return validateMandatoryBehavior(prop, observableList);
+					}
+					
+					private IStatus validateMandatoryBehavior(final Parameter prop, IObservableList observableList) {
+						if (prop.getRequired() != null && "true".equalsIgnoreCase(prop.getRequired()) && observableList.isEmpty()) {
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
 						return ValidationStatus.ok();
 					}
@@ -482,6 +471,29 @@ public class DetailsSection extends FusePropertySection {
         }
         page.layout();
     }
+
+	private boolean shouldHidePropertyFromGroup(final String group, Parameter p, String currentPropertyGroup) {
+		return isNotMatchingGroup(group, currentPropertyGroup)
+				|| isInternalElementToHide(p)
+				|| isClassParamToHide(p);
+	}
+
+	private boolean isNotMatchingGroup(final String group, String currentPropertyGroup) {
+		if(DEFAULT_GROUP.equals(group)){
+			return currentPropertyGroup != null && currentPropertyGroup.trim().length()>0;
+		} else {
+			return !group.equals(currentPropertyGroup);
+		}
+	}
+
+	private boolean isClassParamToHide(Parameter p) {
+		return CamelComponentUtils.isClassProperty(p) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind());
+	}
+
+	private boolean isInternalElementToHide(Parameter p) {
+		return (AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind()) && "array".equalsIgnoreCase(p.getType()) && !"exception".equalsIgnoreCase(p.getName()))
+				|| "org.apache.camel.model.OtherwiseDefinition".equals(p.getJavaType());
+	}
     
 
 }
