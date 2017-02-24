@@ -46,5 +46,29 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		assertThat(modelMap.get("testParameterName")).isEqualTo("newValue");
 		assertThat(camelModelElement.getParameter("testParameterName")).isEqualTo("newValue");
 	}
+	
+	@Test
+	public void testUIDisplayedForChar() throws Exception {
+		Parameter parameter = new Parameter();
+		parameter.setName("testParameterName");
+		parameter.setKind("parameter");
+		parameter.setDefaultValue("<");
+		parameter.setJavaType("char");
+		Eip eip = new Eip();
+		final ArrayList<Parameter> parameters = new ArrayList<>();
+		parameters.add(parameter);
+		eip.setParameters(parameters);
+
+		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
+		textParameterPropertyUICreator.create();
+
+		final Text control = textParameterPropertyUICreator.getControl();
+		assertThat(control.getText()).isEqualTo("<");
+		
+		control.setText(">");
+
+		assertThat(modelMap.get("testParameterName")).isEqualTo(">");
+		assertThat(camelModelElement.getParameter("testParameterName")).isEqualTo(">");
+	}
 
 }

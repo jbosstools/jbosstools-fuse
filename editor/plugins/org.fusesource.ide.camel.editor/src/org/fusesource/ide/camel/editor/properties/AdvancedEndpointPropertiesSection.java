@@ -155,7 +155,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
             if (CamelComponentUtils.isBooleanProperty(prop)) {
 				new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             // TEXT PROPERTIES
-            } else if (CamelComponentUtils.isTextProperty(prop)) {
+            } else if (CamelComponentUtils.isTextProperty(prop) || CamelComponentUtils.isCharProperty(prop)) {
             	new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             // NUMBER PROPERTIES
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
