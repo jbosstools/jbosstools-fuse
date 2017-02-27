@@ -42,6 +42,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.fusesource.ide.camel.validation.ValidationFactory;
+import org.fusesource.ide.camel.validation.ValidationResult;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -77,9 +78,10 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		Map<String, ArrayList<Object>> model = camelEditor.getGlobalConfigEditor().getModel();
 		List<Object> elements = model.get(CamelGlobalConfigEditor.FUSE_CAT_ID);
 		assertTrue(elements != null && elements.size() > 0);
-
+		
 		for (int i = 0; i < elements.size(); i++) {
-			ValidationFactory.getInstance().validate((AbstractCamelModelElement) elements.get(i));
+			ValidationResult validationResult = ValidationFactory.getInstance().validate((AbstractCamelModelElement) elements.get(i));
+			System.out.println("Validation result for "+ elements.get(i) + " :\n"+ validationResult.toString());
 		}
 		
 		waitProblemViewJob();
