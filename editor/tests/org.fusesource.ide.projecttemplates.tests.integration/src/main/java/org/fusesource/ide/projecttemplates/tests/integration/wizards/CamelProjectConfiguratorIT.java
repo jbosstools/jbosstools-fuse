@@ -44,7 +44,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.project.RiderProjectNature;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 import org.junit.After;
 import org.junit.Before;
@@ -73,7 +73,7 @@ public class CamelProjectConfiguratorIT {
 	@After
 	public void tearDown() throws CoreException, OperationCanceledException, InterruptedException {
 		if (project != null) {
-			new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
+			new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 			project.delete(true, new NullProgressMonitor());
 		}
 	}
@@ -88,7 +88,7 @@ public class CamelProjectConfiguratorIT {
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		testFacetsAndNatures();
 	}
 	
@@ -113,7 +113,7 @@ public class CamelProjectConfiguratorIT {
 		checkCamelFacetAndNatureNotAdded();
 
 		modifyPOM(pom.getLocation().toFile());
-		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 
 		checkCamelFacetAndNatureNotAdded();
 	}

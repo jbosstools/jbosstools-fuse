@@ -30,14 +30,9 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.content.IContentDescription;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -68,7 +63,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -330,7 +325,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 					public void run() {
 						try {
 							if (!holder[0].exists()) {
-								new JobWaiterUtil().waitBuildAndRefreshJob(monitor);
+								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
 							}
 							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 							if(isJavaEditorToOpen){

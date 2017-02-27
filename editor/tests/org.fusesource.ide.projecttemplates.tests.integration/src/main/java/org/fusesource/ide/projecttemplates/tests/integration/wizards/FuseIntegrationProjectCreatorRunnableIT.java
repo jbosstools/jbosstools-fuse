@@ -69,6 +69,7 @@ import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -219,9 +220,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	}
 
 	protected void waitJob() {
-		JobWaiterUtil jobWaiterUtil = new JobWaiterUtil();
+		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
 		jobWaiterUtil.setEndless(true);
-		jobWaiterUtil.waitBuildAndRefreshJob(new NullProgressMonitor());
+		jobWaiterUtil.waitJob(new NullProgressMonitor());
 	}
 
 	private void checkNoValidationError() throws CoreException {
