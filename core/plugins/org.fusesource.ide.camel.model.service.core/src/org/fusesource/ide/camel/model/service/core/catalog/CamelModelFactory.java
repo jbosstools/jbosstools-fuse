@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.model.service.core.catalog;
 
 import java.io.File;
@@ -39,7 +38,6 @@ import org.osgi.framework.Version;
 
 /**
  * @author lhein
- *
  */
 public class CamelModelFactory {
 	

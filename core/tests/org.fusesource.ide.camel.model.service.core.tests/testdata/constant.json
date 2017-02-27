@@ -1,0 +1,21 @@
+{
+ "language": {
+    "name": "constant",
+    "kind": "language",
+    "modelName": "constant",
+    "title": "Constant",
+    "description": "For expressions and predicates using a constant",
+    "label": "language,core",
+    "javaType": "org.apache.camel.language.constant.ConstantLanguage",
+    "modelJavaType": "org.apache.camel.model.language.ConstantExpression",
+    "groupId": "org.apache.camel",
+    "artifactId": "camel-core",
+    "version": "2.18.0"
+  },
+  "properties": {
+    "expression": { "kind": "value", "required": "true", "type": "string", "javaType": "java.lang.String", "deprecated": "false", "secret": "false", "description": "The expression value in your chosen language syntax" },
+    "trim": { "kind": "attribute", "required": "false", "type": "boolean", "javaType": "java.lang.Boolean", "deprecated": "false", "secret": "false", "defaultValue": "true", "description": "Whether to trim the value to remove leading and trailing whitespaces and line breaks" },
+    "id": { "kind": "attribute", "required": "false", "type": "string", "javaType": "java.lang.String", "deprecated": "false", "secret": "false", "description": "Sets the id of this node" }
+  }
+}
+
