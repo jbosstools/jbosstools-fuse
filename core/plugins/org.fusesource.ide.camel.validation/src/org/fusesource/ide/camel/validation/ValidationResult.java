@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.validation;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author lhein
@@ -26,9 +27,9 @@ public class ValidationResult {
 	 * constructor
 	 */
 	public ValidationResult() {
-		this.infos = new LinkedList<String>();
-		this.warnings = new LinkedList<String>();
-		this.errors = new LinkedList<String>();
+		this.infos = new LinkedList<>();
+		this.warnings = new LinkedList<>();
+		this.errors = new LinkedList<>();
 	}
 	
 	public List<String> getInformations() {
@@ -71,5 +72,16 @@ public class ValidationResult {
 	
 	public int getErrorCount() {
 		return this.errors.size();
+	}
+	
+	@Override
+	public String toString() {
+		return asString("Errors: ", errors)+
+				asString("Warnings: ", warnings)+
+				asString("Infos: ", infos);
+	}
+
+	private String asString(String type, List<String> list) {
+		return type+ list.stream().collect(Collectors.joining(",")) +"\n";
 	}
 }
