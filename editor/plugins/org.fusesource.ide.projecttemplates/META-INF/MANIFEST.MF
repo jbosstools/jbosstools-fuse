@@ -54,13 +54,12 @@ Export-Package: org.fusesource.ide.projecttemplates.adopters,
  org.fusesource.ide.projecttemplates.adopters.util,
  org.fusesource.ide.projecttemplates.impl.medium,
  org.fusesource.ide.projecttemplates.impl.simple,
+ org.fusesource.ide.projecttemplates.internal;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.maven,
  org.fusesource.ide.projecttemplates.preferences,
  org.fusesource.ide.projecttemplates.preferences.initializer,
- org.fusesource.ide.projecttemplates.util;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.util;x-friends:="org.fusesource.ide.projecttemplates.tests.integration,org.fusesource.ide.camel.validation.tests.integration",
  org.fusesource.ide.projecttemplates.util.camel;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.wizards;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
  org.fusesource.ide.projecttemplates.wizards.pages;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
- org.fusesource.ide.projecttemplates.wizards.pages.model;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
- org.fusesource.ide.projecttemplates.internal;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"
- 
+ org.fusesource.ide.projecttemplates.wizards.pages.model;x-friends:="org.fusesource.ide.projecttemplates.tests.integration"

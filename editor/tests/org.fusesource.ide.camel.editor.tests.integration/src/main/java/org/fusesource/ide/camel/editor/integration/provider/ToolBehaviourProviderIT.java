@@ -40,6 +40,7 @@ import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
@@ -99,7 +100,7 @@ public class ToolBehaviourProviderIT {
 		ResolverConfiguration configuration = new ResolverConfiguration();
 		configuration.setResolveWorkspaceProjects(true);
 		configuration.setSelectedProfiles(""); //$NON-NLS-1$
-		new JobWaiterUtil().waitBuildAndRefreshJob(new NullProgressMonitor());
+		new BuildAndRefreshJobWaiterUtil().waitJob(new NullProgressMonitor());
 		IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 		configurationManager.enableMavenNature(fuseProject.getProject(), configuration, new NullProgressMonitor());
 		configurationManager.updateProjectConfiguration(fuseProject.getProject(), new NullProgressMonitor());

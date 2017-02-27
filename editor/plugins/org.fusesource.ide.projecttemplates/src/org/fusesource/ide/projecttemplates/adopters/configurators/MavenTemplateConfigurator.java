@@ -29,6 +29,7 @@ import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
@@ -71,7 +72,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
-			new JobWaiterUtil().waitBuildAndRefreshJob(subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
 			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));

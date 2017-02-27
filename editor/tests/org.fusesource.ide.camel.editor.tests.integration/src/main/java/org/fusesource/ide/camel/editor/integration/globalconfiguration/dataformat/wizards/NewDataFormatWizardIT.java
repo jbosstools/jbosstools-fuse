@@ -43,6 +43,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Before;
 import org.junit.Rule;
@@ -186,9 +187,9 @@ public class NewDataFormatWizardIT {
 	}
 
 	protected void waitJob() {
-		JobWaiterUtil jobWaiterUtil = new JobWaiterUtil();
+		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
 		jobWaiterUtil.setEndless(true);
-		jobWaiterUtil.waitBuildAndRefreshJob(new NullProgressMonitor());
+		jobWaiterUtil.waitJob(new NullProgressMonitor());
 	}
 
 }

@@ -63,7 +63,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
+import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -324,7 +324,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 					public void run() {
 						try {
 							if (!holder[0].exists()) {
-								new JobWaiterUtil().waitBuildAndRefreshJob(monitor);
+								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
 							}
 							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 							if(isJavaEditorToOpen){

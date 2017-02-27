@@ -10,7 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.util;
 
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
@@ -19,14 +20,18 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 public class JobWaiterUtil {
 	
 	boolean isEndless = false;
-	
 	private Throwable exception = null;
+	private List<Object> jobFamilies;
+	
+	public JobWaiterUtil(List<Object> jobFamilies) {
+		this.jobFamilies = jobFamilies;
+	}
 
-	public void waitBuildAndRefreshJob(IProgressMonitor monitor) {
-		waitBuildAndRefreshJob(20, monitor);
+	public void waitJob(IProgressMonitor monitor) {
+		waitJob(20, monitor);
 	}
 	
-	private void waitBuildAndRefreshJob(int decreasingCounter, IProgressMonitor monitor) {
+	private void waitJob(int decreasingCounter, IProgressMonitor monitor) {
 		int currentCounter;
 		if(isEndless){
 			currentCounter = decreasingCounter;
@@ -36,7 +41,7 @@ public class JobWaiterUtil {
 				if(exception != null){
 					ProjectTemplatesActivator.pluginLog().logError(exception);
 				} else {
-					ProjectTemplatesActivator.pluginLog().logWarning("Waiting for build to finish unsuccessfully.");
+					ProjectTemplatesActivator.pluginLog().logWarning("Waiting for job to finish unsuccessfully.");
 				}
 				return;
 			}
@@ -47,15 +52,14 @@ public class JobWaiterUtil {
 
 	private void joinJobs(IProgressMonitor monitor, int currentCounter) {
 		try {
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, monitor);
-			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, monitor);
+			for (Object jobFamily : jobFamilies) {
+				Job.getJobManager().join(jobFamily, monitor);
+			}
 		} catch (InterruptedException | OperationCanceledException e) {
 			// Workaround to bug
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
 			exception = e;
-			waitBuildAndRefreshJob(currentCounter, monitor);
+			waitJob(currentCounter, monitor);
 		}
 	}
 

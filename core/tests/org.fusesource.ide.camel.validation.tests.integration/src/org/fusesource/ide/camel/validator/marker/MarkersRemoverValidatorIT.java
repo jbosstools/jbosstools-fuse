@@ -17,14 +17,13 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -43,6 +42,7 @@ import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.Fus
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -114,12 +114,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 	}
 
 	private void waitProblemViewJob() {
-		try {
-			Job.getJobManager().join(problemsView.MARKERSVIEW_UPDATE_JOB_FAMILY, new NullProgressMonitor());
-		} catch (OperationCanceledException | InterruptedException e) {
-			waitProblemViewJob();
-			System.out.println("issue while waiting for MarkersView jobs");
-		}
+		new JobWaiterUtil(Arrays.asList(problemsView.MARKERSVIEW_UPDATE_JOB_FAMILY)).waitJob(new NullProgressMonitor());
 	}
 
 	private IEditorPart openFileInEditorWithProblemsViewOpened(String filePath) throws Exception {
