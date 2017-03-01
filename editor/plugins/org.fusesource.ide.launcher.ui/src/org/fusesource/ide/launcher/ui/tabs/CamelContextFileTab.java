@@ -11,19 +11,14 @@
 
 package org.fusesource.ide.launcher.ui.tabs;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
@@ -41,6 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.ui.Activator;
@@ -71,10 +67,6 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 		Group group = SWTFactory.createGroup(c, "Select Camel Context file...", 2, 1, GridData.FILL_HORIZONTAL);
 		this.camelContextFileText = SWTFactory.createSingleText(group, 1);
 		this.camelContextFileText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
 			@Override
 			public void modifyText(ModifyEvent e) {
 				setDirty(true);
@@ -84,56 +76,30 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 		
 		Button selectFileButton = SWTFactory.createPushButton(group, "Browse...", null);
 		selectFileButton.addSelectionListener(new SelectionListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IContainer container = ResourcesPlugin.getWorkspace().getRoot();
 				browseDialog = new FilteredResourcesSelectionDialog(e.display.getActiveShell(), false, container, IResource.FILE) {
 					
-					/*
-					 * (non-Javadoc)
-					 * @see org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog#fillContentProvider(org.eclipse.ui.dialogs.FilteredItemsSelectionDialog.AbstractContentProvider, org.eclipse.ui.dialogs.FilteredItemsSelectionDialog.ItemsFilter, org.eclipse.core.runtime.IProgressMonitor)
-					 */
 					@Override
-					protected void fillContentProvider(final AbstractContentProvider contentProvider, ItemsFilter itemsFilter, org.eclipse.core.runtime.IProgressMonitor progressMonitor) throws CoreException {
+					protected void fillContentProvider(final AbstractContentProvider contentProvider, ItemsFilter itemsFilter, IProgressMonitor progressMonitor) throws CoreException {
 						AbstractContentProvider filteringContentProvider = new AbstractContentProvider() {
-							/*
-							 * (non-Javadoc)
-							 * @see org.eclipse.ui.dialogs.FilteredItemsSelectionDialog.AbstractContentProvider#add(java.lang.Object, org.eclipse.ui.dialogs.FilteredItemsSelectionDialog.ItemsFilter)
-							 */
 							@Override
 							public synchronized void add(Object item, ItemsFilter filter) {
-								if (filter.matchItem(item)) {
-									if (item instanceof IFile) {
-										IFile ifile = (IFile) item;
-										IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
-										InputStream stream = null;
-										try {
-											stream = ifile.getContents(true);
-											IContentType t = contentTypeManager.findContentTypeFor(stream, ifile.getName());
-											if (t.getId().equals("org.fusesource.ide.camel.editor.camelContentType")) {
-												contentProvider.add(item, filter);
-											}
-										} catch (Exception ex) {
-											Activator.getLogger().error(ex);
-										} finally {
-											if (stream != null) {
-												try {
-													stream.close();
-												} catch (IOException ex) {
-													Activator.getLogger().error(ex);
-												}
-											}
-										}										
+								try {
+									if (filter.matchItem(item)
+											&& item instanceof IFile
+											&& ((IFile)item).exists()
+											&& new CamelFilesFinder().isFuseCamelContentType((IFile)item)) {
+										contentProvider.add(item, filter);
 									}
+								} catch (CoreException e) {
+									Activator.getLogger().error(e);
 								}
 							}
 						};
 						super.fillContentProvider(filteringContentProvider, itemsFilter, progressMonitor);
-					};
+					}
 				};
 				browseDialog.setInitialPattern("*.xml", FilteredResourcesSelectionDialog.FULL_SELECTION);
 				browseDialog.setBlockOnOpen(true);
@@ -147,10 +113,6 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 				updateLaunchConfigurationDialog();
 			}
 			
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);				
@@ -174,7 +136,9 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		String fileName = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
-		if (fileName == null) fileName = CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME;
+		if (fileName == null){
+			fileName = CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME;
+		}
 		camelContextFileText.setText(fileName);
 		updateLaunchConfigurationDialog();
 	}
