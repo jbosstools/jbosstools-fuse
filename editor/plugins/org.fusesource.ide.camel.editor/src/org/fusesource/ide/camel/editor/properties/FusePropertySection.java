@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -120,14 +121,18 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		
 		AbstractCamelModelElement n = NodeUtils.getSelectedNode(selection);
 		
-		if (n.getUnderlyingMetaModelObject() != null) {
-			selectedEP = n;
-			eip = PropertiesUtils.getEipFor(selectedEP);
-			if (selectedEP.isEndpointElement()) {
-				component = PropertiesUtils.getComponentFor(selectedEP);
+		if (!Objects.equals(lastSelectedEP, n)) {
+			if (n.getUnderlyingMetaModelObject() != null) {
+				selectedEP = n;
+				eip = PropertiesUtils.getEipFor(selectedEP);
+				if (selectedEP.isEndpointElement()) {
+					component = PropertiesUtils.getComponentFor(selectedEP);
+				}
+			} else {
+				selectedEP = null;
 			}
-		} else {
-			selectedEP = null;
+
+			initSectionFor(selectedEP);
 		}
 	}
 
