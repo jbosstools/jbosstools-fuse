@@ -30,19 +30,17 @@ import org.fusesource.ide.project.providers.CamelVirtualFolder;
 public class CamelNatureTester extends PropertyTester {
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args,
-			Object expectedValue) {
-
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof IProject) {
 			IProject project = (IProject) receiver;
 			boolean enabled = isCamelNatureDefined(project);
-			if (property.equals("camelNatureEnabled")) {
-				return enabled == true;
-			} else if (property.equals("camelNatureDisabled")) {
-				return enabled == false;
-			} else if (property.equals("projectOpen")) {
-				return project.isOpen() == true;
-			} else if (property.equals("hasChildren")) {
+			if ("camelNatureEnabled".equals(property)) {
+				return enabled;
+			} else if ("camelNatureDisabled".equals(property)) {
+				return !enabled;
+			} else if ("projectOpen".equals(property)) {
+				return project.isOpen();
+			} else if ("hasChildren".equals(property)) {
 				return hasChildren(project);
 			}
 		}
@@ -53,13 +51,13 @@ public class CamelNatureTester extends PropertyTester {
 		if (project.isOpen()) {
 			CamelVirtualFolder cvf = new CamelVirtualFolder(project);
 			cvf.populateChildren();
-			return cvf.getCamelFiles().isEmpty() == false;
+			return !cvf.getCamelFiles().isEmpty();
 		}
 		return false;
 	}
 	
 	private boolean isCamelNatureDefined(IProject project) {
-		if (project.isOpen()) {
+		if (project.isAccessible()) {
 			try {
 				IProjectDescription description = project.getDescription();
 				String[] natures = description.getNatureIds();
@@ -73,14 +71,14 @@ public class CamelNatureTester extends PropertyTester {
 				// no camel nature found - check for facet
 				if(FacetedProjectFramework.isFacetedProject(project)) {
 					IFacetedProject fp = ProjectFacetsManager.create(project);
-	                Set<IProjectFacetVersion> enabled = fp.getProjectFacets();
-	                Iterator<IProjectFacetVersion> it = enabled.iterator();
-	                while(it.hasNext()) {
-	                        IProjectFacetVersion i = it.next();
-	                        if( i.getProjectFacet().getId().equals("jst.camel")) {
-	                                return true;
-	                        }
-	                }	
+					Set<IProjectFacetVersion> enabled = fp.getProjectFacets();
+					Iterator<IProjectFacetVersion> it = enabled.iterator();
+					while(it.hasNext()) {
+						IProjectFacetVersion i = it.next();
+						if("jst.camel".equals(i.getProjectFacet().getId())) {
+							return true;
+						}
+					}	
 				}
 			} catch (CoreException e) {
 				RiderLogFacade.getLog(Activator.getDefault().getLog()).error(e);
