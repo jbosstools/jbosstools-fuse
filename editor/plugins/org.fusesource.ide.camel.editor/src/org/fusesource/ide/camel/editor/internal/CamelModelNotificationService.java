@@ -12,6 +12,7 @@
 package org.fusesource.ide.camel.editor.internal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
@@ -28,25 +29,18 @@ public class CamelModelNotificationService extends DefaultNotificationService {
 		super(diagramTypeProvider);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.internal.DefaultNotificationService#updatePictogramElements(org.eclipse.graphiti.mm.pictograms.PictogramElement[])
-	 */
 	@Override
 	public void updatePictogramElements(PictogramElement[] dirtyPes) {
 		for (PictogramElement pe : dirtyPes) {
-			Object bo = getDiagramTypeProvider().getFeatureProvider().getBusinessObjectForPictogramElement(pe);
 			UpdateContext uc = new UpdateContext(pe);
 			getDiagramTypeProvider().getFeatureProvider().updateIfPossible(uc);
 		}
 		super.updatePictogramElements(dirtyPes);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.internal.DefaultNotificationService#calculateRelatedPictogramElements(java.lang.Object[])
-	 */
 	@Override
 	public PictogramElement[] calculateRelatedPictogramElements(Object[] changedBOs) {
-		ArrayList<PictogramElement> relatedBOs = new ArrayList<PictogramElement>();
+		List<PictogramElement> relatedBOs = new ArrayList<>();
 		for (Object bo : changedBOs) {
 			PictogramElement picElem = (PictogramElement)bo;
 			if (picElem != null) {
@@ -54,9 +48,9 @@ public class CamelModelNotificationService extends DefaultNotificationService {
 				if (obo != null) {
 					AbstractCamelModelElement bo1 = (AbstractCamelModelElement)obo;
 					CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-					if (editor.getModel() != null) {
+					if (editor != null && editor.getModel() != null) {
 						AbstractCamelModelElement bo2 = editor.getModel().findNode(bo1.getId());
-						if (bo2 != null && bo2.getXmlNode().isEqualNode(bo1.getXmlNode()) == false) {
+						if (bo2 != null && !bo2.getXmlNode().isEqualNode(bo1.getXmlNode())) {
 							relatedBOs.add(picElem);
 						}
 					}
