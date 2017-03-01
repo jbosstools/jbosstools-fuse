@@ -28,7 +28,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.Activator;
@@ -39,79 +38,44 @@ import org.fusesource.ide.launcher.util.SecureStorageUtil;
  */
 public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 	
-	private Label jmxUriLabel;
-	private Label jmxUserLabel;
-	private Label jmxPasswdLabel;
-	
+	private final class JMXFieldsModifyListener implements ModifyListener {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			setDirty(true);
+			updateLaunchConfigurationDialog();
+		}
+	}
+
 	private Text jmxUriText;
 	private Text jmxUserText;
 	private Text jmxPasswdText;
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getImage()
-	 */
 	@Override
 	public Image getImage() {
 		return Activator.getDefault().getImage("camel.png");
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite c = SWTFactory.createComposite(parent, 1, 1, GridData.FILL_BOTH);
 		setControl(c);
 		Group group = SWTFactory.createGroup(c, "Specify the JMX connection details...", 2, 1, GridData.FILL_HORIZONTAL);
 		
-		this.jmxUriLabel = SWTFactory.createLabel(group, "JMX Uri:", 1);
+		SWTFactory.createLabel(group, "JMX Uri:", 1);
 		this.jmxUriText = SWTFactory.createSingleText(group, 1);
-		this.jmxUriText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		});
+		this.jmxUriText.addModifyListener(new JMXFieldsModifyListener());
 
-		this.jmxUserLabel = SWTFactory.createLabel(group, "JMX User:", 1);
+		SWTFactory.createLabel(group, "JMX User:", 1);
 		this.jmxUserText = SWTFactory.createSingleText(group, 1);
-		this.jmxUserText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		});
+		this.jmxUserText.addModifyListener(new JMXFieldsModifyListener());
 
-		this.jmxPasswdLabel = SWTFactory.createLabel(group, "JMX Password:", 1);
-		this.jmxPasswdText = SWTFactory.createText(group, SWT.PASSWORD , 1);
-		this.jmxPasswdText.addModifyListener(new ModifyListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
-			 */
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		});
+		SWTFactory.createLabel(group, "JMX Password:", 1);
+		this.jmxPasswdText = SWTFactory.createText(group, SWT.PASSWORD | SWT.BORDER, 1);
+		this.jmxPasswdText.addModifyListener(new JMXFieldsModifyListener());
 
 		Dialog.applyDialogFont(parent);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
-	 */
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
@@ -119,9 +83,6 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 		setPassword(configuration, "");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
@@ -141,26 +102,21 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private String getPassword(ILaunchConfiguration configuration) {
-		String s = SecureStorageUtil.getFromSecureStorage(org.fusesource.ide.launcher.Activator.getBundleID(), 
-				configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID);
-		if( s == null )	return "";
+		String s = SecureStorageUtil.getFromSecureStorage(org.fusesource.ide.launcher.Activator.getBundleID(), configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID);
+		if( s == null )	{
+			return "";
+		}
 		return s;
 	}
 	
 	private void setPassword(ILaunchConfiguration configuration, String pass) {
 		try {
-			SecureStorageUtil.storeInSecureStorage(org.fusesource.ide.launcher.Activator.getBundleID(), 
-					configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, pass);
-        } catch (StorageException e) {
+			SecureStorageUtil.storeInSecureStorage(org.fusesource.ide.launcher.Activator.getBundleID(), configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, pass);
+        } catch (StorageException | UnsupportedEncodingException e) {
         	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, org.fusesource.ide.launcher.Activator.getBundleID(), "Could not save password for JMX in secure storage.", e)); //$NON-NLS-1$
-        } catch (UnsupportedEncodingException e) {
-        	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, org.fusesource.ide.launcher.Activator.getBundleID(), "Could not save password for JMX in secure storage.", e)); //$NON-NLS-1$	
         }
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
-	 */
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, jmxUriText.getText().trim());
@@ -169,25 +125,16 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 		setDirty(false);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
-	 */
 	@Override
 	public String getName() {
 		return "JMX";
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		return jmxUriText.getText().trim().length()>0;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#canSave()
-	 */
 	@Override
 	public boolean canSave() {
 		return isValid(null);
