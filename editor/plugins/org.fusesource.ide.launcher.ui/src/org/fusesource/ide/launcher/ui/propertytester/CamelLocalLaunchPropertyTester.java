@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.fusesource.ide.launcher.ui.Activator;
 
 public class CamelLocalLaunchPropertyTester extends PropertyTester {
@@ -56,13 +57,25 @@ public class CamelLocalLaunchPropertyTester extends PropertyTester {
 
 	Model retrieveMavenModel(IResource receiver) {
 		IProject project = receiver.getProject();
-		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().getProject(project);
-		try {
-			return facade.getMavenProject(new NullProgressMonitor()).getModel();
-		} catch (CoreException e) {
-			Activator.getLogger().error(e);
+		IMavenProjectFacade facade = retrieveMavenProjectFacade(project);
+		if(facade != null){
+			try {
+				return facade.getMavenProject(new NullProgressMonitor()).getModel();
+			} catch (CoreException e) {
+				Activator.getLogger().error(e);
+			}
 		}
 		return null;
+	}
+
+	private IMavenProjectFacade retrieveMavenProjectFacade(IProject project) {
+		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
+		IMavenProjectFacade facade = mavenProjectRegistry.getProject(project);
+		if(facade == null){
+			//if not available in Maven cache, try to create the Maven project facade
+			facade = mavenProjectRegistry.create(project, new NullProgressMonitor());
+		}
+		return facade;
 	}
 
 	private List<Plugin> retrievePlugins(Model mavenModel) {
