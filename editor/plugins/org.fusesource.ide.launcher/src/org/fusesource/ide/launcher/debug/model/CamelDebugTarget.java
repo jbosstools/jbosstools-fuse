@@ -404,7 +404,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	public void breakpointAdded(IBreakpoint breakpoint) {
 		if (supportsBreakpoint(breakpoint)) {
 			try {
-				if (breakpoint.isEnabled() && this.debugger != null) {
+				if (breakpoint.isEnabled() && !isDisconnected()) {
 					String markerType = breakpoint.getMarker().getType();
 					if (ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE.equals(markerType)) {
 						this.debugger.addConditionalBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint), CamelDebugUtils.getLanguage(breakpoint), CamelDebugUtils.getCondition(breakpoint));
@@ -421,7 +421,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @see org.eclipse.debug.core.IBreakpointListener#breakpointRemoved(org.eclipse.debug.core.model.IBreakpoint, org.eclipse.core.resources.IMarkerDelta)
 	 */
 	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
-		if (supportsBreakpoint(breakpoint)) {
+		if (supportsBreakpoint(breakpoint) && !isDisconnected()) {
 			this.debugger.removeBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));
 		}
 	}
