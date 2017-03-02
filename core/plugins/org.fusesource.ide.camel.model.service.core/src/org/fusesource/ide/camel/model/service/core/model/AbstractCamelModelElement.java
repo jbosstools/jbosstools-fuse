@@ -790,7 +790,7 @@ public abstract class AbstractCamelModelElement {
 			kind=NODE_KIND_ATTRIBUTE;
 		}
 
-		if (value == null || value.toString().length() < 1) {
+		if (value == null || value.toString().length() < 1 && kind != null) {
 			// seems the attribute has been deleted?
 			if (kind.equalsIgnoreCase(NODE_KIND_ATTRIBUTE) && e.hasAttribute(name)) {
 				e.removeAttribute(name);

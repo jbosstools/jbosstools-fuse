@@ -50,6 +50,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	public static final int XML_INDENT_VALUE = 3;
 	protected static final String CAMEL_CONTEXT = "camelContext";
 	protected static final String CAMEL_ROUTES = "routes";
+	protected static final String CAMEL_BEAN = "bean";
 	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value
@@ -93,49 +94,56 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		getGlobalDefinitions().clear();
 		getChildElements().clear();
 	}
-	
+
 	@Override
 	public void initialize() {
 		super.initialize();
 		NodeList childNodes = document.getDocumentElement().getChildNodes();
-        if (CAMEL_ROUTES.equals(CamelUtils.getTranslatedNodeName(document.getDocumentElement()))) {
-        	// found a routes element
-    		CamelRoutesElement cre = new CamelRoutesElement(this, document.getDocumentElement());
-    		Node namedItem = document.getDocumentElement().getAttributes().getNamedItem("id");
+		if (CAMEL_ROUTES.equals(CamelUtils.getTranslatedNodeName(document.getDocumentElement()))) {
+			// found a routes element
+			CamelRoutesElement cre = new CamelRoutesElement(this, document.getDocumentElement());
+			Node namedItem = document.getDocumentElement().getAttributes().getNamedItem("id");
 			String containerId = namedItem != null ? namedItem.getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
-    		int startIdx 	= resource.getFullPath().toOSString().indexOf("--");
-    		int endIdx 		= resource.getFullPath().toOSString().indexOf("--", startIdx+1);
-    		if (startIdx != endIdx && startIdx != -1) {
-    			containerId = resource.getFullPath().toOSString().substring(startIdx+2, endIdx);
-    		}
-    		cre.setId(containerId);
-    		cre.initialize();
-    		// then add the routes to the file
-    		addChildElement(cre);
-        } else {
-            for (int i = 0; i<childNodes.getLength(); i++) {
-            	Node child = childNodes.item(i);
+			int startIdx 	= resource.getFullPath().toOSString().indexOf("--");
+			int endIdx 		= resource.getFullPath().toOSString().indexOf("--", startIdx+1);
+			if (startIdx != endIdx && startIdx != -1) {
+				containerId = resource.getFullPath().toOSString().substring(startIdx+2, endIdx);
+			}
+			cre.setId(containerId);
+			cre.initialize();
+			// then add the routes to the file
+			addChildElement(cre);
+		} else {
+			for (int i = 0; i<childNodes.getLength(); i++) {
+				Node child = childNodes.item(i);
 				if (child.getNodeType() != Node.ELEMENT_NODE) {
 					continue;
 				}
-            	String name = CamelUtils.getTranslatedNodeName(child);
+				String name = CamelUtils.getTranslatedNodeName(child);
 				String id = computeId(child);
-            	if (name.equals(CAMEL_CONTEXT)) {
-            		// found a camel context
-            		CamelContextElement cce = new CamelContextElement(this, child);
-            		cce.setId(id);
-            		cce.initialize();
-            		// then add the context to the file
-            		addChildElement(cce);
-            	} else if (name.equals(CAMEL_ROUTES)) {
-            		// found a camel context
-            		CamelRoutesElement cre = new CamelRoutesElement(this, child);
-            		cre.setId(id);
-            		cre.initialize();
-            		// then add the context to the file
-            		addChildElement(cre);
-            	} else {
-            		// found a global configuration element
+				if (name.equals(CAMEL_CONTEXT)) {
+					// found a camel context
+					CamelContextElement cce = new CamelContextElement(this, child);
+					cce.setId(id);
+					cce.initialize();
+					// then add the context to the file
+					addChildElement(cce);
+				} else if (name.equals(CAMEL_ROUTES)) {
+					// found a camel context
+					CamelRoutesElement cre = new CamelRoutesElement(this, child);
+					cre.setId(id);
+					cre.initialize();
+					// then add the context to the file
+					addChildElement(cre);
+				} else if (name.equals(CAMEL_BEAN)) {
+					// found a camel bean
+					CamelBean cb = new CamelBean(this, child);
+					cb.setId(id);
+					cb.initialize();
+					// then add the context to the file
+					addGlobalDefinition(id, cb);
+				} else {
+					// found a global configuration element
 					GlobalDefinitionCamelModelElement cme = new GlobalDefinitionCamelModelElement(this, child);
 					cme.setId(id);
 					cme.initialize();
@@ -233,7 +241,10 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		final Node parentNode = cme.getXmlNode().getParentNode();
 		final Element documentElement = getDocument().getDocumentElement();
 		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
-			documentElement.replaceChild(cme.getXmlNode(), oldDef);
+			// to avoid the occasional org.w3c.dom.DOMException: WRONG_DOCUMENT_ERR: 
+			// A node is used in a different document than the one that created it.
+			Node imported = getDocument().importNode(cme.getXmlNode(), true);
+			documentElement.replaceChild(imported, oldDef);
 			fireModelChanged();
 		}
 		return usedId;
@@ -366,39 +377,39 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 * @return	the dom model as string or null on error
 	 */
 	public String getDocumentAsXML() {
-    	try {
-    		// taking line width and indentation size from xml / editor preferences of eclipse -> we always use spaces for indentation...
-    		int lineWidth = Integer.parseInt(XMLCorePlugin.getDefault().getPluginPreferences().getString("lineWidth"));
-    		int indentValue = XMLCorePlugin.getDefault().getPluginPreferences().getInt("indentationSize");
-    		String indentChar = XMLCorePlugin.getDefault().getPluginPreferences().getString("indentationChar");
-    		if (indentChar.equalsIgnoreCase("tab")) {
-    			// calculate tabWidth * indent
-    			int tabWidth = org.eclipse.ui.internal.editors.text.EditorsPlugin.getDefault().getPreferenceStore().getInt("tabWidth");
-    			indentValue = indentValue * tabWidth;
-    		}
-    		    		
-    		final Document document = getDocument();
-            OutputFormat format = new OutputFormat(document);
-            format.setIndenting(true);
-            format.setIndent(indentValue);
-            format.setEncoding("UTF-8");
-            format.setPreserveEmptyAttributes(false);
-            format.setMethod("xml");
-            format.setPreserveSpace(false);
-            format.setOmitComments(false);
-            format.setOmitDocumentType(false);
-            format.setOmitXMLDeclaration(false);
-            format.setLineWidth(lineWidth);
-            
-            Writer out = new StringWriter();
-            XMLSerializer serializer = new XMLSerializer(out, format);
-            serializer.serialize(document);
+		try {
+			// taking line width and indentation size from xml / editor preferences of eclipse -> we always use spaces for indentation...
+			int lineWidth = Integer.parseInt(XMLCorePlugin.getDefault().getPluginPreferences().getString("lineWidth"));
+			int indentValue = XMLCorePlugin.getDefault().getPluginPreferences().getInt("indentationSize");
+			String indentChar = XMLCorePlugin.getDefault().getPluginPreferences().getString("indentationChar");
+			if (indentChar.equalsIgnoreCase("tab")) {
+				// calculate tabWidth * indent
+				int tabWidth = org.eclipse.ui.internal.editors.text.EditorsPlugin.getDefault().getPreferenceStore().getInt("tabWidth");
+				indentValue = indentValue * tabWidth;
+			}
 
-            return out.toString();
-    	} catch (Exception ex) {
-    		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + getResource().getFullPath().toOSString(), ex);
-    	}
-    	return null;
+			final Document document = getDocument();
+			OutputFormat format = new OutputFormat(document);
+			format.setIndenting(true);
+			format.setIndent(indentValue);
+			format.setEncoding("UTF-8");
+			format.setPreserveEmptyAttributes(false);
+			format.setMethod("xml");
+			format.setPreserveSpace(false);
+			format.setOmitComments(false);
+			format.setOmitDocumentType(false);
+			format.setOmitXMLDeclaration(false);
+			format.setLineWidth(lineWidth);
+
+			Writer out = new StringWriter();
+			XMLSerializer serializer = new XMLSerializer(out, format);
+			serializer.serialize(document);
+
+			return out.toString();
+		} catch (Exception ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + getResource().getFullPath().toOSString(), ex);
+		}
+		return null;
 	}
 	
 	/**
@@ -465,6 +476,25 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	
 	public CamelModel getCamelModel(){
 		return CamelModelFactory.getModelForProject(resource != null ? resource.getProject() : null);
+	}
+
+	@Override
+	public List<AbstractCamelModelElement> findAllNodesWithId(String nodeId) {
+		List<AbstractCamelModelElement> result = new ArrayList<>();
+
+		if (getGlobalDefinitions() != null && !getGlobalDefinitions().isEmpty()) {
+			for (AbstractCamelModelElement e : getGlobalDefinitions().values()) {
+				if (e.getId() != null && e.getId().equals(nodeId)) {
+					result.add(e);
+				}
+			}
+		}
+		List<AbstractCamelModelElement> superResult = super.findAllNodesWithId(nodeId);
+		if (superResult != null && !superResult.isEmpty()) {
+			result.addAll(superResult);
+		}
+
+		return result;
 	}
 
 }

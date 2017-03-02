@@ -73,7 +73,7 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if (element instanceof GlobalDefinitionCamelModelElement) {
-			return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
+			return CamelEditorUIActivator.getDefault().getImage("bean16.png");
 		} else if (element instanceof AbstractCamelModelElement) {
 			return getImageForCamelModelElement((AbstractCamelModelElement) element);
 		} else if (element instanceof String) {
@@ -96,7 +96,7 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 			} else if (xmlNode != null) {
 				final Node parentNode = xmlNode.getParentNode();
 				if ("dataFormats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(parentNode))) {
-					res = CamelEditorUIActivator.getDefault().getImage("dataformat.gif");
+					res = CamelEditorUIActivator.getDefault().getImage("dataformat.png");
 				}
 			}
 		}

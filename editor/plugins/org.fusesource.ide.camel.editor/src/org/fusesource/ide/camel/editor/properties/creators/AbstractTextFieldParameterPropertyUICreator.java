@@ -32,9 +32,9 @@ import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
  */
 public abstract class AbstractTextFieldParameterPropertyUICreator extends AbstractParameterPropertyUICreator {
 
-	private ModifyListener modifyListener;
+	protected ModifyListener modifyListener;
 
-	public AbstractTextFieldParameterPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public AbstractTextFieldParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<?, ?> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ModifyListener modifyListener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 		this.modifyListener = modifyListener;

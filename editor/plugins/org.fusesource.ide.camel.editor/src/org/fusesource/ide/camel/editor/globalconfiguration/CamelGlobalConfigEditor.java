@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -625,18 +624,32 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param newXMLNode
 	 */
 	private void createNewGlobalElement(CamelFile cf, Node newXMLNode) {
-		String id = ((Element) newXMLNode).getAttribute("id");
-		GlobalDefinitionCamelModelElement newGlobalDef = new GlobalDefinitionCamelModelElement(cf, newXMLNode);
-		final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
-		newGlobalDef.setId(settedId);
-		newGlobalDef.initialize();
-		if (cf.getGlobalDefinitions().containsKey(id)) {
-			cf.updateGlobalDefinition(settedId, newGlobalDef);
-		} else {
-			cf.addGlobalDefinition(settedId, newGlobalDef);
-		}
+		addNewGlobalElement(cf, newXMLNode);
 		reload();
 		treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
+	}
+	
+	/**
+	 * /!\ Public for test purpose
+	 *
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	public GlobalDefinitionCamelModelElement addNewGlobalElement(CamelFile cf, Node newXMLNode) {
+		if (newXMLNode != null) {
+			String id = ((Element) newXMLNode).getAttribute("id");
+			GlobalDefinitionCamelModelElement newGlobalDef = new GlobalDefinitionCamelModelElement(cf, newXMLNode);
+			final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
+			newGlobalDef.setId(settedId);
+			newGlobalDef.initialize();
+			if (cf.getGlobalDefinitions().containsKey(id)) {
+				cf.updateGlobalDefinition(settedId, newGlobalDef);
+			} else {
+				cf.addGlobalDefinition(settedId, newGlobalDef);
+			}
+			return newGlobalDef;
+		}
+		return null;
 	}
 
 	/**
