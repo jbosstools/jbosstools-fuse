@@ -16,7 +16,6 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
-import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -39,94 +38,74 @@ public class EditConditionalBreakpoint extends SetConditionalBreakpointFeature {
 	public EditConditionalBreakpoint(IFeatureProvider fp) {
 		super(fp);
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
+
 	@Override
 	public void execute(ICustomContext context) {
-		PictogramElement _pe = context.getPictogramElements()[0] instanceof Connection ? ((Connection) context.getPictogramElements()[0])
-                .getStart().getParent() : context.getPictogramElements()[0];
-        final Object bo = getBusinessObjectForPictogramElement(_pe);
-       
-        if (bo instanceof AbstractCamelModelElement) {
-        	AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
-        	IFile contextFile = getContextFile();
-        	String fileName = contextFile.getName();
-        	String projectName = contextFile.getProject().getName();
-            
-        	// now ask the user to define a condition using a language
-        	IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName);
-        	if (bp != null && bp instanceof CamelConditionalBreakpoint) {
-        		CamelConditionalBreakpoint ccb = (CamelConditionalBreakpoint)bp;
-        		// TODO: open a dialog for the user to select language and enter the condition - maybe provide a helper for predefined variables
-        		ConditionalBreakpointEditorDialog dlg = new ConditionalBreakpointEditorDialog(Display.getDefault().getActiveShell(), _ep);
-        		dlg.setLanguage(ccb.getLanguage());
-        		dlg.setCondition(ccb.getConditionPredicate());
-        		dlg.setBlockOnOpen(true);
-        		if (Window.OK == dlg.open()) {
-        			String language = dlg.getLanguage();
-        			String condition = dlg.getCondition();
-        			ccb.setConditionPredicate(condition);
-        			ccb.setLanguage(language);
-        			// notify debug framework that this breakpoint has changed
-        			DebugPlugin.getDefault().getBreakpointManager().fireBreakpointChanged(ccb);
-        		}
-        	}
-        }
-        getDiagramBehavior().refreshRenderingDecorators(_pe);
+		PictogramElement _pe = getPEFromContext(context);
+		final Object bo = getBusinessObjectForPictogramElement(_pe);
+
+		if (bo instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
+			IFile contextFile = getContextFile();
+			String fileName = contextFile.getName();
+			String projectName = contextFile.getProject().getName();
+
+			// now ask the user to define a condition using a language
+			IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName);
+			if (bp != null && bp instanceof CamelConditionalBreakpoint) {
+				CamelConditionalBreakpoint ccb = (CamelConditionalBreakpoint)bp;
+				// TODO: open a dialog for the user to select language and enter the condition - maybe provide a helper for predefined variables
+				ConditionalBreakpointEditorDialog dlg = new ConditionalBreakpointEditorDialog(Display.getDefault().getActiveShell(), _ep);
+				dlg.setLanguage(ccb.getLanguage());
+				dlg.setCondition(ccb.getConditionPredicate());
+				dlg.setBlockOnOpen(true);
+				if (Window.OK == dlg.open()) {
+					String language = dlg.getLanguage();
+					String condition = dlg.getCondition();
+					ccb.setConditionPredicate(condition);
+					ccb.setLanguage(language);
+					// notify debug framework that this breakpoint has changed
+					DebugPlugin.getDefault().getBreakpointManager().fireBreakpointChanged(ccb);
+				}
+			}
+		}
+		getDiagramBehavior().refreshRenderingDecorators(_pe);
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#getName()
-	 */
+
 	@Override
 	public String getName() {
 		return "Edit Conditional Breakpoint";
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getDescription()
-	 */
+
 	@Override
 	public String getDescription() {
 		return "Modifies a conditional breakpoint on the selected endpoint node";
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getImageId()
-	 */
+
 	@Override
 	public String getImageId() {
 		return ImageProvider.IMG_PROPERTIES_BP;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
-	 */
+
 	@Override
 	public boolean isAvailable(IContext context) {
 		ICustomContext cc = (ICustomContext) context;
-		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? ((Connection) cc.getPictogramElements()[0])
-                .getStart().getParent() : cc.getPictogramElements()[0];
-        final Object bo = getBusinessObjectForPictogramElement(_pe);
-       
-        if (bo instanceof AbstractCamelModelElement) {
-        	AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
-        	IFile contextFile = getContextFile();
-        	String fileName = contextFile.getName();
-        	String projectName = contextFile.getProject().getName();
-            
-        	// now ask the user to define a condition using a language
-        	IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName);
-        	return bp != null && bp instanceof CamelConditionalBreakpoint;
-        }
-        return false;
+		PictogramElement _pe = getPEFromContext(cc);
+		final Object bo = getBusinessObjectForPictogramElement(_pe);
+
+		if (bo instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
+			IFile contextFile = getContextFile();
+			String fileName = contextFile.getName();
+			String projectName = contextFile.getProject().getName();
+
+			// now ask the user to define a condition using a language
+			IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName);
+			return bp != null && bp instanceof CamelConditionalBreakpoint;
+		}
+		return false;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#canExecute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
+
 	@Override
 	public boolean canExecute(ICustomContext context) {
 		return isAvailable(context);
