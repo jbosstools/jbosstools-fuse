@@ -17,7 +17,6 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.foundation.ui.util.Selections;
-import org.fusesource.ide.project.Activator;
 
 /**
  * @author lhein
@@ -31,8 +30,6 @@ public class VirtualCamelNodesActionProvider extends CommonActionProvider {
 	public void init(ICommonActionExtensionSite site) {
 		super.init(site);
 		this.site = site;
-		String viewId = site.getViewSite().getId();
-		Activator.getLogger().debug("============================= View ID: " + viewId);
 	}
 
 	public StructuredViewer getStructuredViewer() {

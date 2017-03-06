@@ -28,8 +28,6 @@ public class CamelNodesActionProvider extends CommonActionProvider {
 	public void init(ICommonActionExtensionSite site) {
 		super.init(site);
 		this.site = site;
-		String viewId = site.getViewSite().getId();
-		CamelJMXPlugin.getLogger().debug("============================= View ID: " + viewId);
 	}
 
 	public StructuredViewer getStructuredViewer() {
