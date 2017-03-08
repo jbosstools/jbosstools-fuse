@@ -28,7 +28,7 @@ public class FuseESBRuntimeFragment extends KarafRuntimeFragment {
 	 */
 	@Override
 	protected void updateWizardHandle(Composite parent) {
-		// make modifications to parent
+		// make modifications to parentComposite
 		IRuntime r = getRuntimeFromTaskModel();
 		handle.setTitle(Messages.FuseESBRuntimeComposite_wizard_tite);
 		String descript = r.getRuntimeType().getDescription();

@@ -364,20 +364,17 @@ public class JCo3Archive extends SAPArchive {
 
 	public void buildJCoPlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
-		JarOutputStream target = null;
 		byte[] buf = new byte[32 * 1024];
-		try {
 
-			// Create Jar output stream using manifest file
-			String bundleFilename = settings.getBundleFilename();
-			target = new JarOutputStream(new FileOutputStream(bundleFilename));
-
+		// Create Jar output stream using manifest file
+		String bundleFilename = settings.getBundleFilename();
+		try (JarOutputStream target = new JarOutputStream(new FileOutputStream(bundleFilename))) {
 			// Create and populate manifest file.
-			byte[] manifest = createBundleManifestFile(settings);
+			byte[] bManifest = createBundleManifestFile(settings);
 			JarEntry manifestEntry = new JarEntry(JarFile.MANIFEST_NAME);
 			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
-			is = new ByteArrayInputStream(manifest);
+			is = new ByteArrayInputStream(bManifest);
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -407,33 +404,22 @@ public class JCo3Archive extends SAPArchive {
 			target.closeEntry();
 		} catch (Exception e) {
 			throw new IOException(Messages.JCo3Archive_FailedToBuildJCo3Plugin, e);
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-			if (target != null) {
-				target.close();
-			}
 		}
 
 	}
 
 	public void buildJCoNativePlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
-		JarOutputStream target = null;
 		byte[] buf = new byte[32 * 1024];
-
-		try {
-			// Create Jar output stream using manifest file
-			String bundleFilename = settings.getFragmentFilename();
-			target = new JarOutputStream(new FileOutputStream(bundleFilename));
-
+		// Create Jar output stream using manifest file
+		String bundleFilename = settings.getFragmentFilename();
+		try (JarOutputStream target = new JarOutputStream(new FileOutputStream(bundleFilename))) {
 			// Create and populate manifest file.
-			byte[] manifest = createFragmentManifestFile(settings);
+			byte[] bManifest = createFragmentManifestFile(settings);
 			JarEntry manifestEntry = new JarEntry(JarFile.MANIFEST_NAME);
 			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
-			is = new ByteArrayInputStream(manifest);
+			is = new ByteArrayInputStream(bManifest);
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -463,15 +449,7 @@ public class JCo3Archive extends SAPArchive {
 			target.closeEntry();
 		} catch (Exception e) {
 			throw new IOException(Messages.JCo3Archive_FailedToBuildJCo3PluginFragment, e);
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-			if (target != null) {
-				target.close();
-			}
 		}
-
 	}
 
 	private void readArchiveType() throws IOException {

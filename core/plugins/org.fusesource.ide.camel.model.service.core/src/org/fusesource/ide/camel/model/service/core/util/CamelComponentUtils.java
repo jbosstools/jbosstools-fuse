@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -50,6 +52,10 @@ public final class CamelComponentUtils {
 
 	private static Map<CamelModel, Map<String, Component>> knownComponentsForCamelModel = new WeakHashMap<>();
 
+	private CamelComponentUtils() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * returns the properties model for a given protocol
 	 *
@@ -100,27 +106,27 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isRefProperty(Parameter p) {
-		return p.getName().equalsIgnoreCase("ref") && p.getType().equalsIgnoreCase("string")
-				&& p.getJavaType().equalsIgnoreCase("java.lang.String") && p.getKind().equalsIgnoreCase("attribute");
+		return "ref".equalsIgnoreCase(p.getName()) && "string".equalsIgnoreCase(p.getType())
+				&& "java.lang.String".equalsIgnoreCase(p.getJavaType()) && "attribute".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isBooleanProperty(Parameter p) {
-		return p.getJavaType().equalsIgnoreCase("boolean") || p.getJavaType().equalsIgnoreCase("java.lang.Boolean");
+		return "boolean".equalsIgnoreCase(p.getJavaType()) || "java.lang.Boolean".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isDescriptionProperty(Parameter p) {
-		return p.getKind().equals(AbstractCamelModelElement.NODE_KIND_ELEMENT)
-				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition")
-				&& p.getName().equals("description");
+		return AbstractCamelModelElement.NODE_KIND_ELEMENT.equals(p.getKind())
+				&& "org.apache.camel.model.DescriptionDefinition".equalsIgnoreCase(p.getJavaType())
+				&& "description".equals(p.getName());
 	}
 
 	public static boolean isTextProperty(Parameter p) {
-		return p.getChoice() == null && p.getName().equalsIgnoreCase("ref") == false
-				&& p.getKind().equals("expression") == false
-				&& (p.getJavaType().equalsIgnoreCase("String") || p.getJavaType().equalsIgnoreCase("java.lang.String")
-						|| p.getJavaType().equalsIgnoreCase("java.net.URL")
-						|| p.getJavaType().equalsIgnoreCase("java.net.URI")
-						|| p.getJavaType().equalsIgnoreCase("Text"));
+		return p.getChoice() == null && !"ref".equalsIgnoreCase(p.getName())
+				&& !"expression".equals(p.getKind())
+				&& ("String".equalsIgnoreCase(p.getJavaType()) || "java.lang.String".equalsIgnoreCase(p.getJavaType())
+						|| "java.net.URL".equalsIgnoreCase(p.getJavaType())
+						|| "java.net.URI".equalsIgnoreCase(p.getJavaType())
+						|| "Text".equalsIgnoreCase(p.getJavaType()));
 	}
 	
 	public static boolean isCharProperty(Parameter p) {
@@ -129,11 +135,11 @@ public final class CamelComponentUtils {
 
 	public static boolean isNumberProperty(Parameter p) {
 		final String javaType = p.getJavaType();
-		return p.getChoice() == null && (javaType.equalsIgnoreCase("int") || javaType.equalsIgnoreCase("Integer")
-				|| javaType.equalsIgnoreCase("java.lang.Integer") || javaType.equalsIgnoreCase("long")
-				|| javaType.equalsIgnoreCase("java.lang.Long") || javaType.equalsIgnoreCase("double")
-				|| javaType.equalsIgnoreCase("java.lang.Double") || javaType.equalsIgnoreCase("float")
-				|| javaType.equalsIgnoreCase("java.lang.Float") || javaType.equalsIgnoreCase("Number"));
+		return p.getChoice() == null && ("int".equalsIgnoreCase(javaType) || "Integer".equalsIgnoreCase(javaType)
+				|| "java.lang.Integer".equalsIgnoreCase(javaType) || "long".equalsIgnoreCase(javaType)
+				|| "java.lang.Long".equalsIgnoreCase(javaType) || "double".equalsIgnoreCase(javaType)
+				|| "java.lang.Double".equalsIgnoreCase(javaType) || "float".equalsIgnoreCase(javaType)
+				|| "java.lang.Float".equalsIgnoreCase(javaType) || "Number".equalsIgnoreCase(javaType));
 	}
 
 	public static boolean isChoiceProperty(Parameter p) {
@@ -168,11 +174,11 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isUriPathParameter(Parameter p) {
-		return p.getKind() != null && p.getKind().equalsIgnoreCase("path");
+		return p.getKind() != null && "path".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isUriOptionParameter(Parameter p) {
-		return p.getKind() != null && p.getKind().equalsIgnoreCase("parameter");
+		return p.getKind() != null && "parameter".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isUnsupportedProperty(Parameter p) {
@@ -199,15 +205,8 @@ public final class CamelComponentUtils {
 		return res.toArray(new String[res.size()]);
 	}
 
-	/**
-	 * returns the component class for the given scheme
-	 *
-	 * @param scheme
-	 * @return the class or null if not found
-	 */
-	protected static String getComponentClass(String scheme, CamelFile camelFile) {
+	public static String getComponentClassForScheme(String scheme, CamelFile camelFile) {
 		String compClass = null;
-		IProject project = camelFile.getResource().getProject();
 		List<Component> components = camelFile.getCamelModel().getComponentModel().getSupportedComponents();
 		for (Component c : components) {
 			if (c.supportsScheme(scheme)) {
@@ -215,41 +214,80 @@ public final class CamelComponentUtils {
 				break;
 			}
 		}
+		return compClass;
+	}
 
-		if (compClass == null) {
-			// seems this scheme has no model entry -> check dependency
-			try {
-				ZipFile zf = null;
-				ZipEntry ze = null;
-				IJavaProject jpr = JavaCore.create(project);
-				for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
-					File cpEntryFile = e.getPath().toFile();
-					if (isJarFile(cpEntryFile)) {
-						zf = new ZipFile(cpEntryFile);
-						ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
-						if (ze != null) {
-							break;
-						}
-						ze = null;
-						zf = null;
-					}
-				}
-
+	private static String getClassFromZipEntry(String scheme, File cpEntryFile) {
+		if (isJarFile(cpEntryFile)) {
+			try (ZipFile zf = new ZipFile(cpEntryFile)) {
+				ZipEntry ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
 				if (ze != null) {
 					// try to generate a model entry for the component class
 					Properties p = new Properties();
 					p.load(zf.getInputStream(ze));
-					compClass = p.getProperty("class");
-				}
-			} catch (Exception ex) {
+					return p.getProperty("class");
+				} 
+			} catch (IOException ex) {
 				CamelModelServiceCoreActivator.pluginLog().logError(ex);
-				compClass = null;
 			}
+		}
+		return null;
+	}
+	
+	private static String getComponentClassFromJar(IJavaProject jpr, String scheme){
+		try {
+			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
+				File cpEntryFile = e.getPath().toFile();
+				String compClass = getClassFromZipEntry(scheme, cpEntryFile);
+				if (!Strings.isBlank(compClass)) {
+					return compClass;
+				}
+			}
+		} catch (JavaModelException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
+	
+	/**
+	 * returns the component class for the given scheme
+	 *
+	 * @param scheme
+	 * @return the class or null if not found
+	 */
+	protected static String getComponentClass(String scheme, CamelFile camelFile) {
+		String compClass = getComponentClassForScheme(scheme, camelFile);
+		if (compClass == null) {
+			// seems this scheme has no model entry -> check dependency
+			IProject project = camelFile.getResource().getProject();
+			IJavaProject jpr = JavaCore.create(project);
+			compClass = getComponentClassFromJar(jpr, scheme);
 		}
 
 		return compClass;
 	}
 
+	private static String getComponentJsonFromJar(File cpEntryFile, String scheme) {
+		try (ZipFile zf = new ZipFile(cpEntryFile)) {
+			ZipEntry ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
+			if (ze != null) {
+				// try to generate a model entry for the component class
+				Properties p = new Properties();
+				p.load(zf.getInputStream(ze));
+				String compClass = p.getProperty("class");
+				String packageName = compClass.substring(0, compClass.lastIndexOf('.'));
+				String folder = packageName.replaceAll("\\.", "/");
+				ze = zf.getEntry(String.format("%s/%s.json", folder, scheme));
+				if (ze != null) {
+					return IOUtils.loadText(zf.getInputStream(ze), null);
+				}
+			}
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
+	
 	/**
 	 * returns the component class for the given scheme
 	 *
@@ -258,43 +296,20 @@ public final class CamelComponentUtils {
 	 * @return the class or null if not found
 	 */
 	protected static String getComponentJSon(String scheme, IProject project) {
-		String json = null;
-
+		IJavaProject jpr = JavaCore.create(project);
+		
 		try {
-			ZipFile zf = null;
-			ZipEntry ze = null;
-			IJavaProject jpr = JavaCore.create(project);
 			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
 				File cpEntryFile = e.getPath().toFile();
-				if (isJarFile(cpEntryFile)) {
-					zf = new ZipFile(cpEntryFile);
-					ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
-					if (ze != null) {
-						break;
-					}
-					ze = null;
-					zf = null;
+				if (!isJarFile(cpEntryFile)) {
+					continue;
 				}
+				return getComponentJsonFromJar(cpEntryFile, scheme);
 			}
-
-			if (ze != null) {
-				// try to generate a model entry for the component class
-				Properties p = new Properties();
-				p.load(zf.getInputStream(ze));
-				String compClass = p.getProperty("class");
-				String packageName = compClass.substring(0, compClass.lastIndexOf("."));
-				String folder = packageName.replaceAll("\\.", "/");
-				ze = zf.getEntry(String.format("%s/%s.json", folder, scheme));
-				if (ze != null) {
-					json = IOUtils.loadText(zf.getInputStream(ze), null);
-				}
-			}
-		} catch (Exception ex) {
+		} catch (JavaModelException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-			json = null;
 		}
-
-		return json;
+		return null;
 	}
 
 	private static boolean isJarFile(File f) {
@@ -406,31 +421,31 @@ public final class CamelComponentUtils {
 				String propName = it.next();
 				ModelNode valueNode = componentNode.get(propName);
 
-				if (propName.equals("kind")) {
+				if ("kind".equals(propName)) {
 					resModel.setKind(valueNode.asString());
-				} else if (propName.equals("scheme")) {
+				} else if ("scheme".equals(propName)) {
 					resModel.setScheme(valueNode.asString());
-				} else if (propName.equals("syntax")) {
+				} else if ("syntax".equals(propName)) {
 					resModel.setSyntax(valueNode.asString());
-				} else if (propName.equals("title")) {
+				} else if ("title".equals(propName)) {
 					resModel.setTitle(valueNode.asString());
-				} else if (propName.equals("description")) {
+				} else if ("description".equals(propName)) {
 					resModel.setDescription(valueNode.asString());
-				} else if (propName.equals("label")) {
+				} else if ("label".equals(propName)) {
 					ArrayList<String> al = new ArrayList<String>();
 					al.addAll(Arrays.asList(valueNode.asString().split(",")));
 					resModel.setTags(al);
-				} else if (propName.equals("consumerOnly")) {
+				} else if ("consumerOnly".equals(propName)) {
 					resModel.setConsumerOnly(valueNode.asString());
-				} else if (propName.equals("producerOnly")) {
+				} else if ("producerOnly".equals(propName)) {
 					resModel.setProducerOnly(valueNode.asString());
-				} else if (propName.equals("javaType")) {
+				} else if ("javaType".equals(propName)) {
 					resModel.setClazz(valueNode.asString());
-				} else if (propName.equals("groupId")) {
+				} else if ("groupId".equals(propName)) {
 					grpId = valueNode.asString();
-				} else if (propName.equals("artifactId")) {
+				} else if ("artifactId".equals(propName)) {
 					artId = valueNode.asString();
-				} else if (propName.equals("version")) {
+				} else if ("version".equals(propName)) {
 					ver = valueNode.asString();
 				} else {
 					// unknown property
@@ -458,19 +473,19 @@ public final class CamelComponentUtils {
 				String propName = it.next();
 				ModelNode valueNode = componentNode.get(propName);
 
-				if (propName.equals("defaultValue")) {
+				if ("defaultValue".equals(propName)) {
 					cp.setDefaultValue(valueNode.asString());
-				} else if (propName.equals("deprecated")) {
+				} else if ("deprecated".equals(propName)) {
 					cp.setDeprecated(valueNode.asString());
-				} else if (propName.equals("description")) {
+				} else if ("description".equals(propName)) {
 					cp.setDescription(valueNode.asString());
-				} else if (propName.equals("javaType")) {
+				} else if ("javaType".equals(propName)) {
 					cp.setJavaType(valueNode.asString());
-				} else if (propName.equals("kind")) {
+				} else if ("kind".equals(propName)) {
 					cp.setKind(valueNode.asString());
-				} else if (propName.equals("name")) {
+				} else if ("name".equals(propName)) {
 					cp.setName(valueNode.asString());
-				} else if (propName.equals("type")) {
+				} else if ("type".equals(propName)) {
 					cp.setType(valueNode.asString());
 				} else {
 					// unknown property

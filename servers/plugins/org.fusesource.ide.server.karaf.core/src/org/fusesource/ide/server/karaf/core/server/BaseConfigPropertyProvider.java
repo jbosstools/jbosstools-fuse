@@ -68,20 +68,10 @@ public class BaseConfigPropertyProvider implements
 	 */
 	private void loadPropertiesFromFile() {
 		this.configProps.clear();
-		BufferedInputStream bis = null;
-		try {
-			bis = new BufferedInputStream(new FileInputStream(this.propertyFile));
+		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(this.propertyFile))) {
 			this.configProps.load(bis);	
 		} catch (IOException ex) {
 			Activator.getLogger().error(ex);
-		} finally {
-			if (bis != null) {
-				try {
-					bis.close();
-				} catch (IOException ex) {
-					// unable to close the stream
-				}
-			}
 		}
 	}
 	

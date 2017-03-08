@@ -159,28 +159,19 @@ public class IDoc3Archive extends SAPArchive {
 	
 
 	public void buildIDoc3Plugin(IDoc3ImportSettings settings) throws IOException {
-		JarOutputStream target = null;
-
-		try {
+		String bundleFilename = settings.getBundleFilename();
+		try (JarOutputStream target = new JarOutputStream(new FileOutputStream(bundleFilename))) {
 			// Create Jar output stream using manifest file
-			String bundleFilename = settings.getBundleFilename();
-			target = new JarOutputStream(new FileOutputStream(bundleFilename));
-			
 			// Create and populate manifest file.
-			byte[] manifest = createBundleManifestFile(settings);
-			addJarEntry(target, JarFile.MANIFEST_NAME, manifest, lastModified);
+			byte[] bManifest = createBundleManifestFile(settings);
+			addJarEntry(target, JarFile.MANIFEST_NAME, bManifest, lastModified);
 			
 			// Populate IDoc3 jar into root of jar
 			addJarEntry(target, settings.getBundleIDoc3JarEntry(), sapidoc3jar, lastModified);
 
 		} catch (Exception e) {
 			throw new IOException(Messages.IDoc3Archive_FailedToBuildIDoc3Plugin, e);
-		} finally {
-			if (target != null) {
-				target.close();
-			}
 		}
-		
 	}
 
 	private void readIDoc3JarFile() throws IOException {

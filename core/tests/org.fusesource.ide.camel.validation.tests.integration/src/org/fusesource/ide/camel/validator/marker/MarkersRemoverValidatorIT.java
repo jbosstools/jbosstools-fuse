@@ -24,7 +24,6 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.util.StatusHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IEditorPart;
@@ -34,16 +33,13 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.views.markers.ExtendedMarkersView;
 import org.eclipse.ui.internal.views.markers.ProblemsView;
 import org.fusesource.ide.branding.perspective.FusePerspective;
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -53,21 +49,13 @@ import org.junit.Test;
  */
 public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 
-	@Rule
-	public FuseProject fuseProject = new FuseProject(MarkersRemoverValidatorIT.class.getName());
-
-	private boolean safeRunnableIgnoreErrorStateBeforeTests;
-	private boolean statusHandlerCalled = false;
 	private ProblemsView problemsView = null;
-	private StatusHandler statusHandlerBeforetest;
-	private IEditorPart openEditorOnFileStore;
 
 	@Test
 	public void checkMarkers() throws Exception {
-		openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("routeWithValidationErrorOnGlobalElements.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditorWithProblemsViewOpened("routeWithValidationErrorOnGlobalElements.xml");
 		readAndDispatch(20);
 		CamelEditor camelEditor = (CamelEditor) openEditorOnFileStore;
-		CamelDesignEditor camelDesignEditor = camelEditor.getDesignEditor();
 		CamelGlobalConfigEditor globalEditor = camelEditor.getGlobalConfigEditor();
 		camelEditor.setActiveEditor(globalEditor);
 		globalEditor.setFocus();
@@ -77,7 +65,7 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 
 		Map<String, ArrayList<Object>> model = camelEditor.getGlobalConfigEditor().getModel();
 		List<Object> elements = model.get(CamelGlobalConfigEditor.FUSE_CAT_ID);
-		assertTrue(elements != null && elements.size() > 0);
+		assertTrue(elements != null && !elements.isEmpty());
 		
 		for (int i = 0; i < elements.size(); i++) {
 			ValidationResult validationResult = ValidationFactory.getInstance().validate((AbstractCamelModelElement) elements.get(i));

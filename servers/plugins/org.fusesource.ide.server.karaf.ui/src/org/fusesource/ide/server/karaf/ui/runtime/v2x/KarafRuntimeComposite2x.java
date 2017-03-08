@@ -37,7 +37,7 @@ public class KarafRuntimeComposite2x extends AbstractKarafRuntimeComposite {
 	/**
 	 * constructor 
 	 * 
-	 * @param parent
+	 * @param parentComposite
 	 * @param wizardHandle
 	 * @param model
 	 */

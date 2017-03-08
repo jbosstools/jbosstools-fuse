@@ -54,6 +54,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	private boolean isConnected;
 	private boolean isLoading;
 	
+	private JMXConnector jmxc;
 	private MBeanServerConnection activeConnection;
 	private KarafActiveJvm customJvm;
 	
@@ -174,13 +175,19 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		envMap.put("jmx.remote.credentials", new String[] { user, pass });
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
 		JMXServiceURL url = new JMXServiceURL(conUrl); 
-		JMXConnector jmxc = JMXConnectorFactory.connect(url, envMap); 
-		MBeanServerConnection mbsc = jmxc.getMBeanServerConnection(); 	
+		jmxc = JMXConnectorFactory.connect(url, envMap); 
+		MBeanServerConnection mbsc = jmxc.getMBeanServerConnection(); 
 		return mbsc; 
 	}
 	
 	protected void cleanupConnection(IServer server, MBeanServerConnection connection) {
-		// Do nothing, provide subclasses ability 
+		try {
+			if (jmxc != null) {
+				jmxc.close();
+			}
+		} catch (Exception ex) {
+			KarafJMXPlugin.getLogger().error(ex);
+		}
 	}
 	
 	public String getName() {

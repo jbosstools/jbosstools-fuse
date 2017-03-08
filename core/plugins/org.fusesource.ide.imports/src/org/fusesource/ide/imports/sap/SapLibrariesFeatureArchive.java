@@ -13,6 +13,9 @@ import java.util.jar.JarOutputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 public class SapLibrariesFeatureArchive extends SAPArchive {
 
 	private static final String FEATURE_LICENSE = "Red Hat, Inc. licenses these features and plugins to you under\n" +
@@ -106,15 +109,11 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 	}
 
 	public void buildSAPLibrariesFeature()  throws IOException {
-
-		JarOutputStream target = null;
 		long lastModified = new Date().getTime();
-
-		try {
-			// Create Jar output stream.
-			String bundleFilename = ImportUtils.getFeatureBundleFilename();
-			target = new JarOutputStream(new FileOutputStream(bundleFilename));
-
+		
+		// Create Jar output stream.
+		String bundleFilename = ImportUtils.getFeatureBundleFilename();
+		try (JarOutputStream target = new JarOutputStream(new FileOutputStream(bundleFilename))) {
 			// Create and populate manifest file.
 			byte[] manifest = createBundleManifestFile();
 			addJarEntry(target, JarFile.MANIFEST_NAME, manifest, lastModified);
@@ -128,14 +127,9 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			
 			// Create and populate license.html.
 			addJarEntry(target, LICENSE_FILE_NAME, LICENSE_FILE.getBytes(MANIFEST_ENCODING), lastModified);
-				
 		} catch (Exception e) {
-			
-		} finally {
-			if (target != null) {
-				target.close();
-			}
-		}
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
+		} 
 	}
 	
 	private byte[] createFeatureXmlFile() throws Exception {
