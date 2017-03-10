@@ -41,7 +41,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 	// a dummy string to represent that we did not look up the password
 	// in secure storage yet.  This is done to avoid secure storage 
 	// popping up as soon as a user opens eclipse.
-	private static String PASSWORD_NOT_LOADED = "***fuseide****"; //$NON-NLS-1$
+	private static final String PASSWORD_NOT_LOADED = "***fuseide****"; //$NON-NLS-1$
 	private String passwordString = PASSWORD_NOT_LOADED;
 	private boolean passwordChanged = false;
 	private Text sshPasswordText;

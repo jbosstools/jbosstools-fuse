@@ -27,7 +27,6 @@ import org.fusesource.ide.server.karaf.ui.Messages;
 public class KarafServerPorpertiesComposite extends Composite implements
 		Listener {
 
-	private final Composite parent;
 	private final IWizardHandle wizardHandle;
 	private final KarafWizardDataModel model;
 	private Text txtUserName;
@@ -38,7 +37,6 @@ public class KarafServerPorpertiesComposite extends Composite implements
 	public KarafServerPorpertiesComposite(Composite parent,
 			IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, SWT.NONE);
-		this.parent = parent;
 		this.wizardHandle = wizardHandle;
 		this.model = model;
 		wizardHandle.setTitle(Messages.KarafServerPorpertiesComposite_wizard_title);

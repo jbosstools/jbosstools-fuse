@@ -14,7 +14,6 @@ package org.fusesource.ide.branding.wizards;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -505,9 +504,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 					}
 					
 					if (changes) {
-						OutputStream os = null;
-						try {
-							os = new BufferedOutputStream(new FileOutputStream(pomFile));
+						try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 							MavenPlugin.getMaven().writeModel(model, os);
 							IFile pomIFile = project.getProject().getFile("pom.xml");
 							if (pomIFile != null){
@@ -516,14 +513,6 @@ public class NewCamelTestWizard extends JUnitWizard {
 							runnable.run(new SubProgressMonitor(monitor, 2));
 						} catch (Exception ex) {
 							Activator.getLogger().error(ex);
-						} finally {
-							try {
-								if (os != null) {
-									os.close();
-								}
-							} catch (IOException e) {
-								Activator.getLogger().error(e);
-							}
 						}
 					}
 				} catch (Exception ex) {

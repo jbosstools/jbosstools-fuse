@@ -168,21 +168,11 @@ public class Karaf2xPortController extends AbstractSubsystemController
 
 	private String readKarafShutdownPortFromFile(String portFile) {
 		// no port defined, so look it up from the ports file
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(new File(portFile)));
+		try (BufferedReader br = new BufferedReader(new FileReader(new File(portFile)))) {
 			return br.readLine();
 		} catch (IOException ex) {
 			Activator.getLogger().error(ex);
-			return null;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					// ignore
-				}
-			}
 		}
+		return null;
 	}
 }

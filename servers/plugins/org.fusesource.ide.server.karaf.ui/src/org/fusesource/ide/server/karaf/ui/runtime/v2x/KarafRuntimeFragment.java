@@ -73,7 +73,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 	 */
 	@Override
 	protected void updateWizardHandle(Composite parent) {
-		// make modifications to parent
+		// make modifications to parentComposite
 		IRuntime r = getRuntimeFromTaskModel();
 		handle.setTitle(Messages.AbstractKarafRuntimeComposite_wizard_tite);
 		String descript = r.getRuntimeType().getDescription();

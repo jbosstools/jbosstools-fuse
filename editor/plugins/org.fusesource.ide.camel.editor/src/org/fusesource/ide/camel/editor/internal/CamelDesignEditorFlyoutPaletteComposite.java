@@ -126,19 +126,6 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	private static final Dimension ARROW_SIZE = new Dimension(6, 11);
 	private static final int SASH_BUTTON_WIDTH = 11;
 
-	/**
-	 * One of the two possible initial states of the flyout palette. This is the
-	 * default one. When in this state, only the flyout palette's sash is
-	 * visible.
-	 */
-	public static final int STATE_COLLAPSED = 2;
-	/**
-	 * One of the two possible initial states of the flyout palette. When in
-	 * this state, the flyout palette is completely visible and pinned open so
-	 * that it doesn't disappear when the user wanders away from the flyout.
-	 */
-	public static final int STATE_PINNED_OPEN = 4;
-
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private PaletteComposite paletteContainer;
 	private PaletteViewer pViewer, externalViewer;
@@ -1076,7 +1063,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	}
 
 	private static class TitleLabel extends Label {
-		protected static final Border BORDER = new MarginBorder(4, 3, 4, 3);
+		protected static final Border TITLE_LABEL_BORDER = new MarginBorder(4, 3, 4, 3);
 		protected static final Border TOOL_TIP_BORDER = new MarginBorder(0, 2,
 				0, 2);
 
@@ -1084,7 +1071,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			super(GEFMessages.Palette_Label, InternalImages
 					.get(InternalImages.IMG_PALETTE));
 			setLabelAlignment(PositionConstants.LEFT);
-			setBorder(BORDER);
+			setBorder(TITLE_LABEL_BORDER);
 			Label tooltip = new Label(getText());
 			tooltip.setBorder(TOOL_TIP_BORDER);
 			setToolTip(tooltip);

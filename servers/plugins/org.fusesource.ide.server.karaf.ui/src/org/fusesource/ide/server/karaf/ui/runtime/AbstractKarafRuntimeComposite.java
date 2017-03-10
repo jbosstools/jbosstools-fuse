@@ -59,7 +59,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 
 	public static final String SEPARATOR = File.separator;
 
-	protected final Composite parent;
+	protected final Composite parentComposite;
 	protected final IWizardHandle wizardHandle;
 	protected Text txtKarafDir;
 	protected final KarafWizardDataModel model;
@@ -75,7 +75,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 	public AbstractKarafRuntimeComposite(Composite parent,
 			IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, SWT.NONE);
-		this.parent = parent;
+		this.parentComposite = parent;
 		this.wizardHandle = wizardHandle;
 		this.model = model;
 		wizardHandle
@@ -272,7 +272,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 										btnDownloadAndInstallButton
 												.setEnabled(false);
 										txtKarafDir.setEnabled(false);
-										parent.update();
+										parentComposite.update();
 									}
 								});
 								ir.install(installPath, monitor);
@@ -296,7 +296,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 												.setEnabled(true);
 										txtKarafDir.setEnabled(true);
 										txtKarafDir.setText(selectedDirectory);
-										parent.update();
+										parentComposite.update();
 									}
 								}
 							});

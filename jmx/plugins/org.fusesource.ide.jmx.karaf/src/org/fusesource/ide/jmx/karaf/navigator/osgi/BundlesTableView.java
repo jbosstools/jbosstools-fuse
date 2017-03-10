@@ -38,7 +38,7 @@ public class BundlesTableView extends PropertySourceTableView {
 		super.setFilterText(text);
 		if (bundlesNode == null)
 			bundlesNode = ((BundlesTabSection)this).getCurrent();
-		bundlesNode.setBundlefilterText(text);
+		bundlesNode.setBundleFilterText(text);
 	}
 
 	@Override

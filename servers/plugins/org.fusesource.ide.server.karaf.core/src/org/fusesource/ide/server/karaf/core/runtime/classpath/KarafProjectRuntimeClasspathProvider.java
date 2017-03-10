@@ -28,44 +28,39 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jst.server.core.RuntimeClasspathProviderDelegate;
 import org.eclipse.wst.server.core.IRuntime;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.CustomRuntimeClasspathModel;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.IRuntimePathProvider;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.cache.internal.RuntimeClasspathCache;
 import org.jboss.ide.eclipse.as.classpath.core.runtime.internal.PathProviderResolutionUtil;
 
 /**
- * This class is in use for all server types, because legacy projects
- * may have this classpath container ID still enabled. It cannot be changed. 
+ * This class is in use for all server types, because legacy projects may have
+ * this classpath container ID still enabled. It cannot be changed.
  * 
  * This class delegates to the "throw everything you can find" utility class,
- * for as6 and below. For as7/wf, it will read both from the 
- * client-all cache, as well as read the project's manifest.mf file
- * for jboss-modules style dependencies that can or should be added. 
+ * for as6 and below. For as7/wf, it will read both from the client-all cache,
+ * as well as read the project's manifest.mf file for jboss-modules style
+ * dependencies that can or should be added.
  * 
- * This class expects the container path to have 1 
- * additional argument:  the name of the runtime,
- * though that is resolved by the superclass into an
- * actual IRuntime.
+ * This class expects the container path to have 1 additional argument: the name
+ * of the runtime, though that is resolved by the superclass into an actual
+ * IRuntime.
  * 
- * This class does not receive any information on facets
- * or facet versions enabled on the project. It is most often
- * used to acquire a classpath for projects that are 
- * NOT facet-based, typically POJP. 
+ * This class does not receive any information on facets or facet versions
+ * enabled on the project. It is most often used to acquire a classpath for
+ * projects that are NOT facet-based, typically POJP.
  * 
- * The delegate utility handles caching and manipulating
- * the list of jars into a proper returnable set. The 
- * logic in *discovering* the set of jars is found in 
+ * The delegate utility handles caching and manipulating the list of jars into a
+ * proper returnable set. The logic in *discovering* the set of jars is found in
  * RuntimeJarUtility.
  */
-public class KarafProjectRuntimeClasspathProvider 
-		extends RuntimeClasspathProviderDelegate {
-	
+public class KarafProjectRuntimeClasspathProvider extends RuntimeClasspathProviderDelegate {
+
 	// The path this container can be found under
-	static final IPath CONTAINER_PATH = 
-			new Path("org.eclipse.jst.server.core.container") //$NON-NLS-1$
+	static final IPath CONTAINER_PATH = new Path("org.eclipse.jst.server.core.container") //$NON-NLS-1$
 			.append("org.fusesource.ide.server.karaf.core.runtime.classpath.runtimeTarget"); //$NON-NLS-1$
-	
-	
+
 	public KarafProjectRuntimeClasspathProvider() {
 		// Do Nothing
 	}
@@ -73,14 +68,14 @@ public class KarafProjectRuntimeClasspathProvider
 	@Override
 	public IClasspathEntry[] resolveClasspathContainer(IProject project, IRuntime runtime) {
 		IPath installPath = runtime.getLocation();
-		
-		if (installPath == null) return new IClasspathEntry[0];
-		
+
+		if (installPath == null)
+			return new IClasspathEntry[0];
+
 		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
-		
+
 		String runtimeId = runtime.getRuntimeType().getId();
-		if (runtimeId.indexOf(".fuseesb.runtime.") != -1 || 
-			runtimeId.indexOf(".karaf.runtime.") != -1) {
+		if (runtimeId.indexOf(".fuseesb.runtime.") != -1 || runtimeId.indexOf(".karaf.runtime.") != -1) {
 			IPath libFolder = installPath.append("lib");
 			addLibraryEntries(list, libFolder.toFile(), true);
 			IPath dataFolder = installPath.append("data").append("cache");
@@ -88,7 +83,7 @@ public class KarafProjectRuntimeClasspathProvider
 		}
 		return list.toArray(new IClasspathEntry[list.size()]);
 	}
-	
+
 	private void collectDeployedBundles(List<IClasspathEntry> list, IPath folder) {
 		// loop all subfolders
 		// parse bundle.info to obtain name and version
@@ -102,65 +97,58 @@ public class KarafProjectRuntimeClasspathProvider
 					public boolean accept(File dir, String name) {
 						return name.toLowerCase().trim().equals("bundle.info");
 					}
-				}).length==1;
+				}).length == 1;
 			}
 		})) {
 			// now we have all folders containing a bundle.info file
 			// parse bundle manifest.mf inside the next subfolders jar
+			File f = getJarFromFolder(subFolder);
+			if (f == null) {
+				continue;
+			}
 			IClasspathEntry cpe = null;
-			JarFile jf = null;
-			try {
-				File f = getJarFromFolder(subFolder);
-				if (f == null) continue;
-				jf = new JarFile(f);
-
+			try (JarFile jf = new JarFile(f)) {
 				Manifest mf = jf.getManifest();
 				String version = mf.getMainAttributes().getValue("Bundle-Version");
 				String symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
-				
+
 				if (!Strings.isBlank(symbolicName) && !Strings.isBlank(version)) {
-					IPath bundleFolder = folder.append(subFolder.getName()).append(f.getParentFile().getName()).append(f.getName());
+					IPath bundleFolder = folder.append(subFolder.getName()).append(f.getParentFile().getName())
+							.append(f.getName());
 					cpe = JavaCore.newLibraryEntry(bundleFolder, null, null);
 				}
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				Activator.getLogger().error(ex);
 				continue;
-			} finally {
-				try {
-					if (jf != null) jf.close();
-				} catch (IOException ex) {
-					// ignore
-				}
 			}
-						
-			if (cpe != null) list.add(cpe);
+
+			if (cpe != null)
+				list.add(cpe);
 		}
 	}
-	
-	private File getJarFromFolder(File folder) throws IOException {
-		File jf = null;
-		
+
+	private File getJarFromFolder(File folder) {
 		for (File sf : folder.listFiles()) {
 			if (sf.isDirectory() && sf.list(new FilenameFilter() {
 				@Override
 				public boolean accept(File dir, String name) {
 					return name.trim().equalsIgnoreCase("bundle.jar");
 				}
-			}).length==1) {
+			}).length == 1) {
 				// found bundle.jar
-				jf = new File(sf, "bundle.jar");
+				return new File(sf, "bundle.jar");
 			}
 		}
-		
-		return jf;
+		return null;
 	}
-	
+
 	/*
 	 * For as6 and below, pull from the runtime-type model, which is cached once
-	 * per runtime-type and is only recached if the list of default path providers is changed. 
+	 * per runtime-type and is only recached if the list of default path
+	 * providers is changed.
 	 */
 	public IClasspathEntry[] resolveClasspathContainerFromRuntime(IRuntime runtime) {
-		if( runtime == null ) 
+		if (runtime == null)
 			return new IClasspathEntry[0];
 
 		// if cache is available, use cache
@@ -168,12 +156,12 @@ public class KarafProjectRuntimeClasspathProvider
 		if (runtimeClasspath != null) {
 			return runtimeClasspath;
 		}
-		
+
 		// resolve
 		IRuntimePathProvider[] sets = CustomRuntimeClasspathModel.getInstance().getEntries(runtime.getRuntimeType());
 		IPath[] allPaths = PathProviderResolutionUtil.getAllPaths(runtime, sets);
 		runtimeClasspath = PathProviderResolutionUtil.getClasspathEntriesForResolvedPaths(allPaths);
-	
+
 		RuntimeClasspathCache.getInstance().cacheEntries(runtime, runtimeClasspath);
 		return runtimeClasspath;
 	}

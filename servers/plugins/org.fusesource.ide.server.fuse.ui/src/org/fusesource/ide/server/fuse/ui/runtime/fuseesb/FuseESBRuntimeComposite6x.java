@@ -33,7 +33,7 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 	/**
 	 * constructor 
 	 * 
-	 * @param parent
+	 * @param parentComposite
 	 * @param wizardHandle
 	 * @param model
 	 */

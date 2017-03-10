@@ -117,10 +117,6 @@ public class BundlesNode extends RefreshableCollectionNode implements ImageProvi
 		return bundlefilterText;
 	}
 
-	public void setBundlefilterText(String bundlefilterText) {
-		this.bundlefilterText = bundlefilterText;
-	}
-
 	public void setBundleFilterText(String bundlefilterText) {
 		this.bundlefilterText = bundlefilterText;
 	}
