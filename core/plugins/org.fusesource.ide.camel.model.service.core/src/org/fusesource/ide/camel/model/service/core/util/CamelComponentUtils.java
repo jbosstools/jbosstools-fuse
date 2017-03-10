@@ -226,7 +226,7 @@ public final class CamelComponentUtils {
 					Properties p = new Properties();
 					p.load(zf.getInputStream(ze));
 					return p.getProperty("class");
-				} 
+				}
 			} catch (IOException ex) {
 				CamelModelServiceCoreActivator.pluginLog().logError(ex);
 			}
@@ -304,7 +304,10 @@ public final class CamelComponentUtils {
 				if (!isJarFile(cpEntryFile)) {
 					continue;
 				}
-				return getComponentJsonFromJar(cpEntryFile, scheme);
+				String compJSON = getComponentJsonFromJar(cpEntryFile, scheme);
+				if (!Strings.isBlank(compJSON)) {
+					return compJSON;
+				}
 			}
 		} catch (JavaModelException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
