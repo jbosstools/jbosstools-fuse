@@ -47,9 +47,9 @@ public interface ICamelDebugConstants {
 	public static final String DEBUG_VIEW_ID		= "org.eclipse.debug.ui.DebugView";
 
 	// prefixes for auto generated ID fields
-	public static final String PREFIX_GENERAL		= ""; // "debugger_";
-	public static final String PREFIX_CONTEXT_ID	= PREFIX_GENERAL + "context-";
-	public static final String PREFIX_NODE_ID		= PREFIX_GENERAL + "_"; //"breakpoint_";
+	public static final String PREFIX_CONTEXT_ID	= "context-";
+	public static final String PREFIX_NODE_ID		= "_";
 	
-	public static final String DEFAULT_JMX_URI 		= "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel";
+	public static final String DEFAULT_JMX_URI 				= "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel";
+	public static final String DEFAULT_REMOTE_JMX_URI 		= "service:jmx:rmi:///jndi/rmi://localhost:9011/jmxrmi";
 }

@@ -8,6 +8,16 @@
             icon="icons/run_camel_context.png"
             id="org.fusesource.ide.launcher.ui.launchConfigurationTypeImage.camelContext">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.launcher.camelcontext.remote"
+            icon="icons/run_camel_context.png"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTypeImage.camelContext.remote">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.launcher.camelandjavacontext.remote"
+            icon="icons/run_camel_context.png"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTypeImage.camelAndJavaContext.remote">
+      </launchConfigurationTypeImage>
    </extension>
    
    <extension
@@ -17,6 +27,18 @@
             description="%tabgroup.camelContext.description"
             id="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContext"
             type="org.fusesource.ide.launcher.camelContext">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.launcher.ui.remote.tabs.RemoteCamelContextAndJavaLaunchConfigurationTabGroup"
+            description="%tabgroup.remote.camelandjava.description"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContextAndJava.remote"
+            type="org.fusesource.ide.launcher.camelandjavacontext.remote">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.launcher.ui.remote.tabs.RemoteCamelContextLaunchConfigurationTabGroup"
+            description="%tabgroup.remote.camel.description"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContext.remote"
+            type="org.fusesource.ide.launcher.camelcontext.remote">
       </launchConfigurationTabGroup>
    </extension>
    

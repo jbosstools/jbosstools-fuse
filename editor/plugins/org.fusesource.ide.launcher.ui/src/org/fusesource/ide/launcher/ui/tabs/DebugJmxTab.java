@@ -78,7 +78,7 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
+		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, getDefaultJMXUri());
 		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, (String)null);
 		setPassword(configuration, "");
 	}
@@ -86,7 +86,7 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			String jmxUri = configuration.getAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
+			String jmxUri = configuration.getAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, getDefaultJMXUri());
 			String jmxUser = configuration.getAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, "");
 			String jmxPasswd = getPassword(configuration);
 			
@@ -94,11 +94,15 @@ public class DebugJmxTab extends AbstractLaunchConfigurationTab {
 			jmxUserText.setText(jmxUser);
 			jmxPasswdText.setText(jmxPasswd);			
 		} catch (CoreException ce) {
-			jmxUriText.setText(ICamelDebugConstants.DEFAULT_JMX_URI);
+			jmxUriText.setText(getDefaultJMXUri());
 			jmxUserText.setText("");
 			jmxPasswdText.setText("");			
 		}
 		updateLaunchConfigurationDialog();
+	}
+
+	protected String getDefaultJMXUri() {
+		return ICamelDebugConstants.DEFAULT_JMX_URI;
 	}
 
 	private String getPassword(ILaunchConfiguration configuration) {
