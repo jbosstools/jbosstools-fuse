@@ -26,15 +26,10 @@ import org.eclipse.m2e.ui.internal.launch.MavenLaunchMainTab;
 public class CamelContextLaunchConfigurationTabGroup extends
 		AbstractLaunchConfigurationTabGroup {
 
-	/**
-	 * constructor
-	 */
 	public CamelContextLaunchConfigurationTabGroup() {
+		/* Left empty for reflection */
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTabGroup#createTabs(org.eclipse.debug.ui.ILaunchConfigurationDialog, java.lang.String)
-	 */
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
