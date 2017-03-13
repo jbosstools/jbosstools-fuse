@@ -256,34 +256,27 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			return true;
 		} catch (IOException ex) {
 			//ignore
+			System.out.println(ex);
 		}
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugTarget#getProcess()
-	 */
+	@Override
 	public IProcess getProcess() {
 		return fProcess;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugTarget#getThreads()
-	 */
+	@Override
 	public IThread[] getThreads() throws DebugException {
 		return threads.values().toArray(new IThread[threads.size()]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugTarget#hasThreads()
-	 */
+	@Override
 	public boolean hasThreads() throws DebugException {
 		return true; // WTB Changed per bug #138600
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugTarget#getName()
-	 */
+	@Override
 	public String getName() throws DebugException {
 		if (fName == null) {
 			fName = String.format("Camel Context at %s", jmxUri);
@@ -291,9 +284,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		return fName;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugTarget#supportsBreakpoint(org.eclipse.debug.core.model.IBreakpoint)
-	 */
+	@Override
 	public boolean supportsBreakpoint(IBreakpoint breakpoint) {
 		if (breakpoint.getModelIdentifier().equals(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL)) {
 			String file = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
@@ -308,37 +299,27 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugElement#getDebugTarget()
-	 */
+	@Override
 	public IDebugTarget getDebugTarget() {
 		return this;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDebugElement#getLaunch()
-	 */
+	@Override
 	public ILaunch getLaunch() {
 		return fLaunch;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#canTerminate()
-	 */
+	@Override
 	public boolean canTerminate() {
 		return getProcess() != null && getProcess().canTerminate();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#isTerminated()
-	 */
+	@Override
 	public boolean isTerminated() {
 		return fTerminated || (getProcess() != null && getProcess().isTerminated());
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ITerminate#terminate()
-	 */
+	@Override
 	public void terminate() throws DebugException {
 		fTerminated = true;
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
@@ -361,46 +342,34 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		this.garbageCollector.cancel();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#canResume()
-	 */
+	@Override
 	public boolean canResume() {
 		return !isTerminated() && isSuspended();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#canSuspend()
-	 */
+	@Override
 	public boolean canSuspend() {
 		return !isTerminated() && !isSuspended();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#isSuspended()
-	 */
+	@Override
 	public boolean isSuspended() {
 		return !fProcessingActive;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#resume()
-	 */
+	@Override
 	public void resume() throws DebugException {
 		this.fProcessingActive = true;
 		fireResumeEvent(DebugEvent.CLIENT_REQUEST);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.ISuspendResume#suspend()
-	 */
+	@Override
 	public void suspend() throws DebugException {
 		this.fProcessingActive = false;
 		fireSuspendEvent(DebugEvent.CLIENT_REQUEST);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointListener#breakpointAdded(org.eclipse.debug.core.model.IBreakpoint)
-	 */
+	@Override
 	public void breakpointAdded(IBreakpoint breakpoint) {
 		if (supportsBreakpoint(breakpoint)) {
 			try {
@@ -417,18 +386,14 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointListener#breakpointRemoved(org.eclipse.debug.core.model.IBreakpoint, org.eclipse.core.resources.IMarkerDelta)
-	 */
+	@Override
 	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
 		if (supportsBreakpoint(breakpoint) && !isDisconnected()) {
 			this.debugger.removeBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointListener#breakpointChanged(org.eclipse.debug.core.model.IBreakpoint, org.eclipse.core.resources.IMarkerDelta)
-	 */
+	@Override
 	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
 		if (supportsBreakpoint(breakpoint)) {
 			try {
@@ -452,16 +417,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		return bpManager != null && bpManager.isEnabled();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDisconnect#canDisconnect()
-	 */
+	@Override
 	public boolean canDisconnect() {
-		return true;
+		return fProcess == null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDisconnect#disconnect()
-	 */
+	@Override
 	public void disconnect() throws DebugException {
 		if (this.debugger != null) {
 			this.debugger.resumeAll();
@@ -473,23 +434,17 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IDisconnect#isDisconnected()
-	 */
+	@Override
 	public boolean isDisconnected() {
 		return this.debugger == null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IMemoryBlockRetrieval#supportsStorageRetrieval()
-	 */
+	@Override
 	public boolean supportsStorageRetrieval() {
 		return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IMemoryBlockRetrieval#getMemoryBlock(long, long)
-	 */
+	@Override
 	public IMemoryBlock getMemoryBlock(long startAddress, long length) throws DebugException {
 		return null;
 	}
@@ -584,16 +539,14 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
 		for (int i = 0; i < breakpoints.length; i++) {
 			IBreakpoint breakpoint = breakpoints[i];
-			if (supportsBreakpoint(breakpoint)) {
-				if (breakpoint instanceof CamelEndpointBreakpoint) {
-					CamelEndpointBreakpoint bp = (CamelEndpointBreakpoint)breakpoint;
-					if (bp.getEndpointNodeId().equals(nodeId)) {
-						t.setBreakpoints(new IBreakpoint[]{breakpoint});
-						t.breakpointHit(nodeId, msg);
-						this.suspendedNodeId = nodeId;
-						bpFound = true;
-						break;
-					}
+			if (supportsBreakpoint(breakpoint) && breakpoint instanceof CamelEndpointBreakpoint) {
+				CamelEndpointBreakpoint bp = (CamelEndpointBreakpoint)breakpoint;
+				if (bp.getEndpointNodeId().equals(nodeId)) {
+					t.setBreakpoints(new IBreakpoint[]{breakpoint});
+					t.breakpointHit(nodeId, msg);
+					this.suspendedNodeId = nodeId;
+					bpFound = true;
+					break;
 				}
 			}
 		}
@@ -702,7 +655,9 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 						CamelDebugTarget.this.debugger = new CamelDebugFacade(CamelDebugTarget.this, mbsc, camelContextId, contentType);
 						connected = true;
 						started(true);
-						if (CamelDebugTarget.this.debugger.isEnabled() == false) CamelDebugTarget.this.debugger.enableDebugger();
+						if (!CamelDebugTarget.this.debugger.isEnabled()){
+							CamelDebugTarget.this.debugger.enableDebugger();
+						}
 					}
 				} catch (Exception ex) {
 					Activator.getLogger().error(ex);
@@ -725,7 +680,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			
 			monitor.done();
 			
-			return connected == true ? Status.OK_STATUS : Status.CANCEL_STATUS;
+			return connected ? Status.OK_STATUS : Status.CANCEL_STATUS;
 		}
 	}
 	
@@ -740,9 +695,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			setSystem(true);
 		}
 
-		/* (non-Javadoc)
-		 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-		 */
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			while (!isTerminated() && !monitor.isCanceled()) {
@@ -796,9 +748,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			setSystem(true);
 		}
 		
-		/* (non-Javadoc)
-		 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-		 */
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			while (!isTerminated() && !monitor.isCanceled()) {
@@ -818,4 +767,5 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			return Status.OK_STATUS;
 		}
 	}
+	
 }
