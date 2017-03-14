@@ -326,7 +326,7 @@
 					<includes>
 						<include>**/*IT.class</include>
 					</includes>
-					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false</argLine> 
+					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false</argLine>
 					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
 				</configuration>
 			</plugin>
@@ -356,7 +356,7 @@
 				<systemProperties combine.children="append"> -Dosgi.arch=x86 -XstartOnFirstThread </systemProperties>
 			</properties>
 		</profile>
-		
+
 		<profile>
 			<id>sign</id>
 			<!-- To sign plug-ins and features, run: mvn -Psign -Dkeystore=<path> 
@@ -384,7 +384,7 @@
 				</pluginManagement>
 			</build>
 		</profile>
-		
+
 		<profile>
 			<id>default-tools.jar</id>
 			<activation>
@@ -404,7 +404,7 @@
 				</dependency>
 			</dependencies>
 		</profile>
-		
+
 		<profile>
 			<id>hudson</id>
 			<activation>
@@ -437,7 +437,9 @@
 				<sonar.code.codeCoveragePlugin>jacoco</sonar.code.codeCoveragePlugin>
 				<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 				<!-- points to the target folder of the global parent project -->
-				<sonar.jacoco.reportPath>../../target/jacoco.exec</sonar.jacoco.reportPath>
+				<sonar.jacoco.reportPath>../../../target/jacoco.exec</sonar.jacoco.reportPath>
+				<sonar.jacoco.itReportPath>../../../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+				<sonar.jacoco.reportPaths>${sonar.jacoco.reportPath},${sonar.jacoco.itReportPath}</sonar.jacoco.reportPaths>
 			</properties>
 			<build>
 				<plugins>
@@ -445,19 +447,38 @@
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
 						<version>0.7.9</version>
+						<configuration>
+							<append>true</append>
+							<includes>
+								<include>org.fusesource.ide.*</include>
+								<include>org.jboss.tools.fuse.*</include>
+							</includes>
+						</configuration>
 						<executions>
 							<execution>
+								<id>agent-for-ut</id>
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
 								<configuration>
-									<append>true</append>
 									<destFile>${sonar.jacoco.reportPath}</destFile>
-									<includes>
-										<include>org.fusesource.ide.*</include>
-										<include>org.jboss.tools.fuse.*</include>
-									</includes>
 								</configuration>
+							</execution>
+							<execution>
+								<id>agent-for-it</id>
+								<goals>
+									<goal>prepare-agent-integration</goal>
+								</goals>
+								<configuration>
+									<destFile>${sonar.jacoco.itReportPath}</destFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>jacoco-site</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
