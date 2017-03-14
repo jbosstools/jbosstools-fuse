@@ -62,8 +62,9 @@ public class DetailsSection extends FusePropertySection {
 
     /**
      * 
-     * @param folder
+     * @param folder the CTabFolder in which content will be created
      */
+	@Override
     protected void createContentTabs(CTabFolder folder) {
         List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP);
 
@@ -119,9 +120,9 @@ public class DetailsSection extends FusePropertySection {
         	}
         	
             ISWTObservableValue uiObservable = null;
-            IObservableList uiListObservable = null;
-            IObservableValue modelObservable = null;
-            IObservableList modelListObservable = null;
+            IObservableList<Object> uiListObservable = null;
+            IObservableValue<Object> modelObservable;
+            IObservableList<Object> modelListObservable;
             IValidator validator = null;
             
 			createPropertyLabel(toolkit, page, p);
@@ -224,27 +225,26 @@ public class DetailsSection extends FusePropertySection {
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
 				validator = new IValidator() {
-					/*
-					 * (non-Javadoc)
-					 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-					 */
 					@Override
 					public IStatus validate(Object value) {
 						// check if value has content
 						if (PropertiesUtils.isRequired(prop)) {
-							if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+							if (value == null || !(value instanceof String) || value.toString().trim().length()<1) {
 								return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");	
 							}	
 						} else {
-							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								if (selectedEP.getRouteContainer().findNode((String)value) == null &&
+							if (isNotEmptyString(value)
+									&& selectedEP.getRouteContainer().findNode((String)value) == null &&
 									!selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value)) {
-									// no ref found - could be something the server provides
-									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");
-								}
+								// no ref found - could be something the server provides
+								return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");
 							}
 						}
 						return new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop).validate(value);
+					}
+
+					private boolean isNotEmptyString(Object value) {
+						return value != null && value instanceof String && value.toString().trim().length()>0;
 					}
 				};
                 
@@ -291,9 +291,6 @@ public class DetailsSection extends FusePropertySection {
                 eform.setLayout(new GridLayout(1, true));
 
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
-                	/* (non-Javadoc)
-                     * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-                     */
                     @Override
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
@@ -326,10 +323,6 @@ public class DetailsSection extends FusePropertySection {
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
 						@Override
 						public IStatus validate(Object value) {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
@@ -386,10 +379,6 @@ public class DetailsSection extends FusePropertySection {
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
                 if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
 						@Override
 						public IStatus validate(Object value) {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
@@ -472,7 +461,7 @@ public class DetailsSection extends FusePropertySection {
         page.layout();
     }
 
-	private boolean shouldHidePropertyFromGroup(final String group, Parameter p, String currentPropertyGroup) {
+	boolean shouldHidePropertyFromGroup(final String group, Parameter p, String currentPropertyGroup) {
 		return isNotMatchingGroup(group, currentPropertyGroup)
 				|| isInternalElementToHide(p)
 				|| isClassParamToHide(p);
@@ -480,14 +469,17 @@ public class DetailsSection extends FusePropertySection {
 
 	private boolean isNotMatchingGroup(final String group, String currentPropertyGroup) {
 		if(DEFAULT_GROUP.equals(group)){
-			return currentPropertyGroup != null && currentPropertyGroup.trim().length()>0;
+			return currentPropertyGroup != null && !currentPropertyGroup.trim().isEmpty();
 		} else {
 			return !group.equals(currentPropertyGroup);
 		}
 	}
 
 	private boolean isClassParamToHide(Parameter p) {
-		return CamelComponentUtils.isClassProperty(p) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind());
+		return CamelComponentUtils.isClassProperty(p)
+				&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
+				&& !CamelComponentUtils.isDataFormatProperty(p)
+				&& !CamelComponentUtils.isDescriptionProperty(p);
 	}
 
 	private boolean isInternalElementToHide(Parameter p) {

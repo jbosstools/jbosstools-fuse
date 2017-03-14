@@ -140,7 +140,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		dbc = new DataBindingContext();
 		createTabFolder();
 
-		if (n.getUnderlyingMetaModelObject() != null) {
+		if (n != null && n.getUnderlyingMetaModelObject() != null) {
 			String headerText = selectedEP.getDisplayText();
 			form.setText(headerText);
 		} else {

@@ -121,7 +121,7 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP, UriParameterKind kind) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),

@@ -24,21 +24,15 @@ import org.fusesource.ide.camel.validation.l10n.Messages;
  */
 public class RequiredPropertyValidator implements IValidator {
 
-
 	private Parameter parameter;
 	public RequiredPropertyValidator(Parameter parameter) {
 		this.parameter = parameter;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-	 */
 	@Override
 	public IStatus validate(Object value) {
-		if (PropertiesUtils.isRequired(parameter)) {
-			if ((value == null || value.toString().trim().isEmpty()) && parameter.getDefaultValue() == null) {
-				return ValidationStatus.error(NLS.bind(Messages.RequiredPropertyValidator_messageMissingParameter, parameter.getName()));
-			}
+		if (PropertiesUtils.isRequired(parameter) && ((value == null || value.toString().trim().isEmpty()) && parameter.getDefaultValue() == null)) {
+			return ValidationStatus.error(NLS.bind(Messages.RequiredPropertyValidator_messageMissingParameter, parameter.getName()));
 		}
 		return ValidationStatus.ok();
 	}
