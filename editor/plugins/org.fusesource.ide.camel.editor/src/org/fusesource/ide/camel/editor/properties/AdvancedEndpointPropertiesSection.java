@@ -58,141 +58,138 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 
-	
-    /**
-     * 
-     * @param folder
-     */
-    protected void createContentTabs(CTabFolder folder) {
-        List<Parameter> props = PropertiesUtils.getComponentPropertiesFor(selectedEP);
+	/**
+	 * 
+	 * @param folder
+	 */
+	@Override
+	protected void createContentTabs(CTabFolder folder) {
+		List<Parameter> props = PropertiesUtils.getComponentPropertiesFor(selectedEP);
 
-        if (props.isEmpty()) return;
-       
-        boolean createCommonsTab = false;
-        List<Parameter> commonProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
-        for (Parameter p : commonProps) {
-        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
-        		createCommonsTab = true;
-        		break;
-        	}
-        }
-        
-        boolean createConsumerTab = false;
-        List<Parameter> consumerProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
-        for (Parameter p : consumerProps) {
-        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
-        		createConsumerTab = true;
-        		break;
-        	}
-        }
-        
-        boolean createProducerTab = false;
-        List<Parameter> producerProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
-        for (Parameter p : producerProps) {
-        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
-        		createProducerTab = true;
-        		break;
-        	}
-        }        
-        
-        List<String> tabsToCreate = new ArrayList<>();
-        // path tab is always there
-        tabsToCreate.add(GROUP_PATH);
-        if (createCommonsTab) tabsToCreate.add(GROUP_COMMON);
-        if (createConsumerTab) tabsToCreate.add(GROUP_CONSUMER);
-        if (createProducerTab) tabsToCreate.add(GROUP_PRODUCER);
-        
-        for (Parameter p : props) {
-        	if (p.getGroup() != null && p.getGroup().trim().length() > 0 && tabsToCreate.contains(p.getGroup()) == false) {
-        		tabsToCreate.add(p.getGroup());
-        	}
-        }
-        
-        props.sort(new ParameterPriorityComparator());
-        
-        for (String group : tabsToCreate) {
-        	CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
-            contentTab.setText(Strings.humanize(group));
+		if (props.isEmpty()){
+			return;
+		}
 
-            Composite page = this.toolkit.createComposite(folder);
-            page.setLayout(new GridLayout(4, false));
+		List<String> tabsToCreate = computeTabsToCreate(props);
 
-            if (group.equalsIgnoreCase(GROUP_PATH)) {
-            	generateTabContents(PropertiesUtils.getPathProperties(selectedEP), page, false, group);
-            } else {
-                generateTabContents(props, page, true, group);            	
-            }	
+		props.sort(new ParameterPriorityComparator());
 
-            contentTab.setControl(page);        	
-            
-            this.tabs.add(contentTab);
-        }
-    }
-    
-    /**
-     * 
-     * @param props
-     * @param page
-     * @param ignorePathProperties
-     * @param group
-     */
-    protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties, String group) {
-    	props.sort(new ParameterPriorityComparator());
-        for (Parameter p : props) {
-        	final Parameter prop = p;
-        	
-        	if (!shouldBeDisplayed(prop, group, ignorePathProperties)) continue;
-            
-            ISWTObservableValue uiObservable = null;
-            IObservableValue modelObservable = null;
-            IValidator validator = null;
-            
-            createPropertyLabel(toolkit, page, p);
-            
-            Control c = null;
-            
-            // BOOLEAN PROPERTIES
-            if (CamelComponentUtils.isBooleanProperty(prop)) {
+		for (String group : tabsToCreate) {
+			CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
+			contentTab.setText(Strings.humanize(group));
+
+			Composite page = this.toolkit.createComposite(folder);
+			page.setLayout(new GridLayout(4, false));
+
+			if (GROUP_PATH.equalsIgnoreCase(group)) {
+				generateTabContents(PropertiesUtils.getPathProperties(selectedEP), page, false, group);
+			} else {
+				generateTabContents(props, page, true, group);            	
+			}	
+
+			contentTab.setControl(page);        	
+
+			this.tabs.add(contentTab);
+		}
+	}
+
+	List<String> computeTabsToCreate(List<Parameter> props) {
+		List<String> tabsToCreate = new ArrayList<>();
+		// path tab is always there
+		tabsToCreate.add(GROUP_PATH);
+		if (shouldCreateTabsForKind(UriParameterKind.BOTH)) {
+			tabsToCreate.add(GROUP_COMMON);
+		}
+		if (shouldCreateTabsForKind(UriParameterKind.CONSUMER)) {
+			tabsToCreate.add(GROUP_CONSUMER);
+		}
+		if (shouldCreateTabsForKind(UriParameterKind.PRODUCER)) {
+			tabsToCreate.add(GROUP_PRODUCER);
+		}
+
+		for (Parameter p : props) {
+			String parameterGroup = p.getGroup();
+			if (parameterGroup != null && parameterGroup.trim().length() > 0 && !tabsToCreate.contains(parameterGroup)) {
+				tabsToCreate.add(parameterGroup);
+			}
+		}
+		return tabsToCreate;
+	}
+
+	private boolean shouldCreateTabsForKind(UriParameterKind parameterKind) {
+		List<Parameter> commonProps = PropertiesUtils.getPropertiesFor(selectedEP, parameterKind);
+		return commonProps.parallelStream()
+				.filter(p -> p.getGroup() == null || p.getGroup().trim().length() < 1)
+				.findFirst()
+				.isPresent();
+	}
+
+	/**
+	 * 
+	 * @param props
+	 * @param page
+	 * @param ignorePathProperties
+	 * @param group
+	 */
+	protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties, String group) {
+		props.sort(new ParameterPriorityComparator());
+		for (Parameter p : props) {
+			final Parameter prop = p;
+
+			if (!shouldBeDisplayed(prop, group, ignorePathProperties)){
+				continue;
+			}
+
+			ISWTObservableValue uiObservable = null;
+			IObservableValue<Object> modelObservable;
+			IValidator validator = null;
+
+			createPropertyLabel(toolkit, page, p);
+
+			Control c = null;
+
+			// BOOLEAN PROPERTIES
+			if (CamelComponentUtils.isBooleanProperty(prop)) {
 				new BooleanParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            // TEXT PROPERTIES
-            } else if (CamelComponentUtils.isTextProperty(prop) || CamelComponentUtils.isCharProperty(prop)) {
-            	new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            // NUMBER PROPERTIES
-            } else if (CamelComponentUtils.isNumberProperty(prop)) {
+				// TEXT PROPERTIES
+			} else if (CamelComponentUtils.isTextProperty(prop) || CamelComponentUtils.isCharProperty(prop)) {
+				new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
+				// NUMBER PROPERTIES
+			} else if (CamelComponentUtils.isNumberProperty(prop)) {
 				new NumberParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, prop, page, getWidgetFactory()).create();
-			// CHOICE PROPERTIES
-            } else if (CamelComponentUtils.isChoiceProperty(prop)) {
-                CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
-                toolkit.adapt(choiceCombo, true, true);
-                choiceCombo.setEditable(false);
-                choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
-                String selectedValue = PropertiesUtils.getPropertyFromUri(selectedEP, prop, component);
-                for (int i=0; i < choiceCombo.getItems().length; i++) {
-                    if (selectedValue != null && choiceCombo.getItem(i).equalsIgnoreCase(selectedValue)) {
-                        choiceCombo.select(i);
-                        break;
-                    } else if (selectedValue == null && p.getDefaultValue() != null && choiceCombo.getItem(i).equalsIgnoreCase(p.getDefaultValue())) {
-                    	choiceCombo.select(i);
-                        break;
-                    }
-                }
-                choiceCombo.addSelectionListener(new SelectionAdapter() {
-                    @Override
-                    public void widgetSelected(SelectionEvent e) {
-                        CCombo choice = (CCombo)e.getSource();
-                        String newValue = choice.getText();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
-                        if (AbstractCamelModelElement.PARAMETER_LANGUAGENAME.equalsIgnoreCase(p.getName())) {
-                        	updateDependenciesForLanguage(selectedEP, newValue);
-                        }
-                    }
-                });
-                choiceCombo.setLayoutData(createPropertyFieldLayoutData());
-                c = choiceCombo;
-                //initialize the map entry
-                modelMap.put(p.getName(), choiceCombo.getText());
-                // create observables for the control
-                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+				// CHOICE PROPERTIES
+			} else if (CamelComponentUtils.isChoiceProperty(prop)) {
+				CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+				toolkit.adapt(choiceCombo, true, true);
+				choiceCombo.setEditable(false);
+				choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
+				String selectedValue = PropertiesUtils.getPropertyFromUri(selectedEP, prop, component);
+				for (int i=0; i < choiceCombo.getItems().length; i++) {
+					if (selectedValue != null && choiceCombo.getItem(i).equalsIgnoreCase(selectedValue)) {
+						choiceCombo.select(i);
+						break;
+					} else if (selectedValue == null && p.getDefaultValue() != null && choiceCombo.getItem(i).equalsIgnoreCase(p.getDefaultValue())) {
+						choiceCombo.select(i);
+						break;
+					}
+				}
+				choiceCombo.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						CCombo choice = (CCombo)e.getSource();
+						String newValue = choice.getText();
+						PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
+						if (AbstractCamelModelElement.PARAMETER_LANGUAGENAME.equalsIgnoreCase(p.getName())) {
+							updateDependenciesForLanguage(selectedEP, newValue);
+						}
+					}
+				});
+				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
+				c = choiceCombo;
+				//initialize the map entry
+				modelMap.put(p.getName(), choiceCombo.getText());
+				// create observables for the control
+				uiObservable = WidgetProperties.selection().observe(choiceCombo);                
 				if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						@Override
@@ -203,22 +200,22 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
 					};
-                }
-            // FILE PROPERTIES
-            } else if (CamelComponentUtils.isFileProperty(prop)) {
+				}
+				// FILE PROPERTIES
+			} else if (CamelComponentUtils.isFileProperty(prop)) {
 				new FileParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            // EXPRESSION PROPERTIES
-            } else if (CamelComponentUtils.isExpressionProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-                txtField.addModifyListener(new ModifyListener() {
-                    @Override
-                    public void modifyText(ModifyEvent e) {
-                        Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
-                    }
-                });
-                txtField.setLayoutData(createPropertyFieldLayoutData());
-                c = txtField;
+				// EXPRESSION PROPERTIES
+			} else if (CamelComponentUtils.isExpressionProperty(prop)) {
+				Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+				txtField.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Text txt = (Text)e.getSource();
+						PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+					}
+				});
+				txtField.setLayoutData(createPropertyFieldLayoutData());
+				c = txtField;
 				if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						/*
@@ -233,26 +230,26 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
 					};
-                }
-                //initialize the map entry
-                modelMap.put(p.getName(), txtField.getText());
-                // create observables for the control
-                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                
-            // DATAFORMAT PROPERTIES
-            } else if (CamelComponentUtils.isDataFormatProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-                txtField.addModifyListener(new ModifyListener() {
-                    @Override
-                    public void modifyText(ModifyEvent e) {
-                        Text txt = (Text)e.getSource();
-                        String newValue = txt.getText();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
-                        updateDependenciesForDataFormat(selectedEP, newValue);
-                    }
-                });
-                txtField.setLayoutData(createPropertyFieldLayoutData());
-                c = txtField;
+				}
+				//initialize the map entry
+				modelMap.put(p.getName(), txtField.getText());
+				// create observables for the control
+				uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
+
+				// DATAFORMAT PROPERTIES
+			} else if (CamelComponentUtils.isDataFormatProperty(prop)) {
+				Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+				txtField.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent e) {
+						Text txt = (Text)e.getSource();
+						String newValue = txt.getText();
+						PropertiesUtils.updateURIParams(selectedEP, prop, newValue, component, modelMap);
+						updateDependenciesForDataFormat(selectedEP, newValue);
+					}
+				});
+				txtField.setLayoutData(createPropertyFieldLayoutData());
+				c = txtField;
 				if (PropertiesUtils.isRequired(p)) {
 					validator = new IValidator() {
 						/*
@@ -267,23 +264,23 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
 					};
-                }
-                //initialize the map entry
-                modelMap.put(p.getName(), txtField.getText());
-                // create observables for the control
-                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                
-            // UNSUPPORTED PROPERTIES / REFS
-            } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
+				}
+				//initialize the map entry
+				modelMap.put(p.getName(), txtField.getText());
+				// create observables for the control
+				uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
+
+				// UNSUPPORTED PROPERTIES / REFS
+			} else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
 				// TODO: check how to handle lists and maps - for now we treat
 				// them as string field only --> in DetailsSection seems that
 				// there is something to handle that
 				new UnsupportedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            // CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
-            } else {
-            	new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
-            }
-            
+				// CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
+			} else {
+				new TextParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
+			}
+
 			if (uiObservable != null) {
 				// create UpdateValueStrategy and assign to the binding
 				UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -298,74 +295,68 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 				if (p.getDescription() != null)
 					c.setToolTipText(p.getDescription());
 			}
-        }
-    }
+		}
+	}
 
-	/*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#createControls
-     * (org.eclipse.swt.widgets.Composite,
-     * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
-     */
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        this.toolkit = new FormToolkit(parent.getDisplay());
-        super.createControls(parent, aTabbedPropertySheetPage);
+	@Override
+	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		this.toolkit = new FormToolkit(parent.getDisplay());
+		super.createControls(parent, aTabbedPropertySheetPage);
 
-        // now setup the file binding properties page
-        parent.setLayout(new GridLayout());
-        parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		// now setup the file binding properties page
+		parent.setLayout(new GridLayout());
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        form = toolkit.createForm(parent);
-        form.setLayoutData(new GridData(GridData.FILL_BOTH));
-        form.getBody().setLayout(new GridLayout(1, false));
+		form = toolkit.createForm(parent);
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.getBody().setLayout(new GridLayout(1, false));
 
-        Composite sbody = form.getBody();
+		Composite sbody = form.getBody();
 
-        tabFolder = new CTabFolder(sbody, SWT.TOP | SWT.FLAT);
-        toolkit.adapt(tabFolder, true, true);
-        tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabFolder = new CTabFolder(sbody, SWT.TOP | SWT.FLAT);
+		toolkit.adapt(tabFolder, true, true);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        Color selectedColor = toolkit.getColors().getColor(IFormColors.SEPARATOR);
-        tabFolder.setSelectionBackground(new Color[] { selectedColor, toolkit.getColors().getBackground() }, new int[] { 20 }, true);
-        tabFolder.setCursor(FormsResources.getHandCursor());
-        toolkit.paintBordersFor(tabFolder);
+		Color selectedColor = toolkit.getColors().getColor(IFormColors.SEPARATOR);
+		tabFolder.setSelectionBackground(new Color[] { selectedColor, toolkit.getColors().getBackground() }, new int[] { 20 }, true);
+		tabFolder.setCursor(FormsResources.getHandCursor());
+		toolkit.paintBordersFor(tabFolder);
 
-        form.setText("Advanced Properties");
-        toolkit.decorateFormHeading(form);
-        
-        form.layout();
-        tabFolder.setSelection(0);
-    }
-    
-    private boolean shouldBeDisplayed(Parameter prop, String group, boolean ignorePathProperties) {
-    	// atm we don't want to care about path parameters if thats not the path tab
-    	if (ignorePathProperties && "path".equalsIgnoreCase(prop.getKind())){
-    		return false;
-    	}
+		form.setText("Advanced Properties");
+		toolkit.decorateFormHeading(form);
 
-    	// we currently don't want to display class params of type element
-    	if (CamelComponentUtils.isClassProperty(prop) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(prop.getKind())) return false;
-    	
-    	// we don't display items which don't fit the group
-    	if (prop.getGroup() != null && prop.getGroup().trim().length()>0) {
-    		// a group has been explicitely defined, so use it
-    		if (group.equalsIgnoreCase(prop.getGroup()) == false && prop.getKind().equalsIgnoreCase(GROUP_PATH) == false) {
-    			return false;
-    		}
-    	} else if (prop.getKind().equalsIgnoreCase(GROUP_PATH) && group.equalsIgnoreCase(GROUP_PATH)) {
-    		// special handling for path properties - otherwise the else would kick all props of type path
-    	} else {
-    		// no group defined, fall back to use label
-    		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false){
-    			return false;
-    		}
-    		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false){
-    			return false;
-    		}
-    	}
-    	return true;
-    }
+		form.layout();
+		tabFolder.setSelection(0);
+	}
+
+	private boolean shouldBeDisplayed(Parameter prop, String group, boolean ignorePathProperties) {
+		// atm we don't want to care about path parameters if thats not the path tab
+		if (ignorePathProperties && "path".equalsIgnoreCase(prop.getKind())){
+			return false;
+		}
+
+		// we currently don't want to display class parameters of type element
+		if (CamelComponentUtils.isClassProperty(prop) && AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(prop.getKind())){
+			return false;
+		}
+
+		// we don't display items which don't fit the group
+		if (prop.getGroup() != null && prop.getGroup().trim().length()>0) {
+			// a group has been explicitly defined, so use it
+			if (!group.equalsIgnoreCase(prop.getGroup()) && !GROUP_PATH.equalsIgnoreCase(prop.getKind())) {
+				return false;
+			}
+		} else if (GROUP_PATH.equalsIgnoreCase(prop.getKind()) && GROUP_PATH.equalsIgnoreCase(group)) {
+			// special handling for path properties - otherwise the else would kick all props of type path
+		} else {
+			// no group defined, fall back to use label
+			if (prop.getLabel() != null && !PropertiesUtils.containsLabel(group, prop)){
+				return false;
+			}
+			if (prop.getLabel() == null && !GROUP_COMMON.equalsIgnoreCase(group)){
+				return false;
+			}
+		}
+		return true;
+	}
 }
