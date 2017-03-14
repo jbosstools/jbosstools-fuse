@@ -21,6 +21,7 @@ import org.eclipse.m2e.internal.launch.MavenLaunchDelegate;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.launcher.util.CamelJMXLaunchConfiguration;
 import org.fusesource.ide.launcher.util.SecureStorageUtil;
 
 public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
@@ -36,38 +37,27 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		this.goals = goals;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.m2e.internal.launch.MavenLaunchDelegate#getGoals(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
 	@Override
 	protected String getGoals(ILaunchConfiguration configuration)
 			throws CoreException {
 		return goals;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.m2e.internal.launch.MavenLaunchDelegate#launch(org.eclipse.debug.core.ILaunchConfiguration, java.lang.String, org.eclipse.debug.core.ILaunch, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		super.launch(configuration, mode, launch, monitor);
 		
-		if (mode.equals(ILaunchManager.DEBUG_MODE) && launch.getProcesses() != null && launch.getProcesses().length>0) {
-			// grab the JMX information
-			String jmxUrl = configuration.getAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, ICamelDebugConstants.DEFAULT_JMX_URI);
-			String jmxUser = configuration.getAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, "");
-			String jmxPass = getPassword(configuration);
-					
+		if (ILaunchManager.DEBUG_MODE.equals(mode) && hasProcess(launch)) {
+			CamelJMXLaunchConfiguration conf = new CamelJMXLaunchConfiguration(configuration, ICamelDebugConstants.DEFAULT_JMX_URI);
 			IProcess p = launch.getProcesses()[0];
-			IDebugTarget target = new CamelDebugTarget(launch, p, jmxUrl, jmxUser, jmxPass);
+			IDebugTarget target = new CamelDebugTarget(launch, p, conf.getJMXUrl(), conf.getJMXUser(), conf.getJMXPassword());
 			launch.addDebugTarget(target);
 		}
 	}
-	
-	private String getPassword(ILaunchConfiguration configuration) {
-		String s = SecureStorageUtil.getFromSecureStorage(Activator.getBundleID(), configuration, ICamelDebugConstants.ATTR_JMX_PASSWORD_ID);
-		return s != null ? s : "";
+
+	private boolean hasProcess(ILaunch launch) {
+		return launch.getProcesses() != null && launch.getProcesses().length > 0;
 	}
 	
 	/**

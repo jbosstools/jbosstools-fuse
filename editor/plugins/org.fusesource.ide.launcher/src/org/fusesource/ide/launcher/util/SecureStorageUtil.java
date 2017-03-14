@@ -13,6 +13,7 @@ package org.fusesource.ide.launcher.util;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -26,6 +27,10 @@ import org.fusesource.ide.launcher.Activator;
  * @author lhein
  */
 public class SecureStorageUtil {
+	
+	private SecureStorageUtil(){
+		/*Hide constructor*/
+	}
     
     public static String getFromSecureStorage(String baseKey, ILaunchConfiguration launch, String key) {
         try {
@@ -35,21 +40,19 @@ public class SecureStorageUtil {
             	return null;
             }
             return new String(EncodingUtils.decodeBase64(val));
-        } catch(IOException e) {
+        } catch(IOException | StorageException e) {
         	Activator.getLogger().error(e);
         	return null;
-        } catch (StorageException e) {
-        	Activator.getLogger().error(e);
-        	return null;
-		}
+        }
     }
 
     public static void storeInSecureStorage(String baseKey, ILaunchConfiguration launch, String key, String val ) throws StorageException, UnsupportedEncodingException {
         ISecurePreferences node = getNode(baseKey, launch);
-        if( val == null )
+        if( val == null ) {
         	node.put(key, val, true);
-        else
-        	node.put(key, EncodingUtils.encodeBase64(val.getBytes()), true /* encrypt */); 
+        } else {
+        	node.put(key, EncodingUtils.encodeBase64(val.getBytes()), true /* encrypt */);
+        }
     }
 
     private static ISecurePreferences getNode(String baseKey, ILaunchConfiguration launch) 
@@ -59,7 +62,7 @@ public class SecureStorageUtil {
 			.append(Path.SEPARATOR).toString();
 
 		ISecurePreferences root = SecurePreferencesFactory.getDefault();
-		String encoded = URLEncoder.encode(secureKey, "UTF-8"); //$NON-NLS-1$
+		String encoded = URLEncoder.encode(secureKey, StandardCharsets.UTF_8.name());
 		return root.node(encoded);
     }
 }

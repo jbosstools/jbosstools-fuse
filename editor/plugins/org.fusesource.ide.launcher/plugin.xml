@@ -13,6 +13,21 @@
             sourceLocatorId="org.fusesource.ide.launcher.debug.sourceLookupDirector.camel"
             sourcePathComputerId="org.fusesource.ide.launcher.debug.sourcePathComputer.camel">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.fusesource.ide.launcher.remote.debug.RemoteCamelAndJavaLaunchConfigurationDelegate"
+            id="org.fusesource.ide.launcher.camelandjavacontext.remote"
+            modes="debug"
+            name="Remote Camel and Java Context"
+            sourceLocatorId="org.fusesource.ide.launcher.debug.sourceLookupDirector.camel"
+            sourcePathComputerId="org.fusesource.ide.launcher.debug.sourcePathComputer.camel">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.fusesource.ide.launcher.remote.debug.RemoteCamelLaunchConfigurationDelegate"
+            id="org.fusesource.ide.launcher.camelcontext.remote"
+            modes="debug"
+            name="Remote Camel Context"
+            sourcePathComputerId="org.fusesource.ide.launcher.debug.sourcePathComputer.camel">
+      </launchConfigurationType>
    </extension>
 
    <extension
