@@ -46,6 +46,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 				.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 	}
 
+	@Override
 	public void handleEvent(Event event) {
 		boolean val = false;
 		if (event.type == SWT.FocusIn) {

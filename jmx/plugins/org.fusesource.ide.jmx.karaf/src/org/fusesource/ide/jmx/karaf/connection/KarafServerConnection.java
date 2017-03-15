@@ -67,11 +67,13 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		server.addServerListener(this);
 	}
 	
+	@Override
 	public void connect() throws IOException {
 		// re-connect
 		connectToStartedServer();
 	}
 
+	@Override
 	public void disconnect() throws IOException {
 		// close
 		if( activeConnection != null ) {
@@ -87,14 +89,17 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		((AbstractKarafJMXConnectionProvider)getProvider()).fireChanged(KarafServerConnection.this);
 	}
 
+	@Override
 	public IConnectionProvider getProvider() {
 		return ExtensionManager.getProvider(KarafConnectionProvider.ID);
 	}
 	
+	@Override
 	public Root getRoot() {
 		return root;
 	}
 	
+	@Override
 	public void loadRoot(IProgressMonitor monitor) {
 		if( isConnected() && !isLoading) {
 			isLoading = true;
@@ -112,6 +117,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		}
 	}
 
+	@Override
 	public boolean isConnected() {
 		return isConnected;
 	}
@@ -131,11 +137,13 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		return true;
 	}
 	
+	@Override
 	public void run(IJMXRunnable runnable) throws JMXException {
 		run(runnable, new HashMap<String, String>());
 	}
 	
 	// Potential api upstream in jmx ?
+	@Override
 	public void run(IJMXRunnable runnable, HashMap<String, String> prefs) throws JMXException {
 		run(runnable, prefs, false);
 	}
@@ -200,6 +208,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	 *  state properly.   If there's been a change then fire to the listeners
 	 */
 
+	@Override
 	public void serverChanged(ServerEvent event) {
 		int eventKind = event.getKind();
 		if ((eventKind & ServerEvent.SERVER_CHANGE) != 0) {
@@ -253,6 +262,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	protected void connectToStartedServer() {
 		try {
 			IJMXRunnable run = new IJMXRunnable() {
+				@Override
 				public void run(MBeanServerConnection connection)
 						throws Exception {
 					// Do nothing, just see if the connection worked
@@ -285,19 +295,23 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	 * is removed as a listener to the server if it is removed
 	 */
 	
+	@Override
 	public void connectionAdded(IConnectionWrapper connection) {
 		// ignore
 	}
 
+	@Override
 	public void connectionChanged(IConnectionWrapper connection) {
 		// ignore
 	}
 
+	@Override
 	public void connectionRemoved(IConnectionWrapper connection) {
 		if( connection == this )
 			server.removeServerListener(this);
 	}
 
+	@Override
 	public boolean canControl() {
 		return server.getServerState() == IServer.STATE_STARTED && server.getRuntime() != null;
 	}
@@ -319,8 +333,10 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	}
 	
 
+	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		ITabbedPropertySheetPageContributor contributor = new ITabbedPropertySheetPageContributor() {
+			@Override
 			public String getContributorId() {
 				return "org.jboss.tools.jmx.jvmmonitor.ui.JvmExplorer";
 			}

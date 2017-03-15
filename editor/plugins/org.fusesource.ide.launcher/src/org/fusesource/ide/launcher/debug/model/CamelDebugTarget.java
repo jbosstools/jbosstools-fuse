@@ -684,5 +684,5 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	public ThreadGarbageCollector getGarbageCollector() {
 		return garbageCollector;
-	}
+}
 }

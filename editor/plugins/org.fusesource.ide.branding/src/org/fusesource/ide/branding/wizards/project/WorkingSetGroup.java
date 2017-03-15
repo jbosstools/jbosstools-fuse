@@ -125,6 +125,7 @@ public class WorkingSetGroup {
       private ResourceManager images = new LocalResourceManager(JFaceResources.getResources());
 
       @Override
+	@SuppressWarnings("deprecation")
       public Image getImage(Object element) {
         if(element instanceof IWorkingSet) {
           ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImageDescriptor();

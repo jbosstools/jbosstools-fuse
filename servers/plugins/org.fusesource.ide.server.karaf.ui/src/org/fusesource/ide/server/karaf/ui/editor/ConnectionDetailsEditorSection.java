@@ -89,6 +89,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		final Text portNumberText = toolkit.createText(composite, Integer.toString(configuration.getPortNumber()),SWT.BORDER);
 		portNumberText.setLayoutData(filldata);
 		portNumberText.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				try {
 				int parseInt = Integer.parseInt(portNumberText.getText().trim());
@@ -104,6 +105,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		final Text sshUserNameText = toolkit.createText(composite, ""+configuration.getUserName(),SWT.BORDER);
 		sshUserNameText.setLayoutData(filldata);
 		sshUserNameText.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				execute(new UserNameChangeOperation(configuration,sshUserNameText.getText(),Messages.ConnectionDetailsEditorSection_user_name_op));
 			}
@@ -114,6 +116,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		sshPasswordText = toolkit.createText(composite, PASSWORD_NOT_LOADED,SWT.BORDER|SWT.PASSWORD); //$NON-NLS-1$
 		sshPasswordText.setLayoutData(filldata);
 		sshPasswordListener = new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				execute(new SetPassCommand(server));
 			}
@@ -135,11 +138,13 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 			oldVal = passwordString;
 		}
 		
+		@Override
 		public void execute() {
 			passwordString = newVal;
 			passwordChanged = !PASSWORD_NOT_LOADED.equals(passwordString);
 		}
 		
+		@Override
 		public void undo() {
 			passwordString = oldVal;
 			text.removeModifyListener(listener);
@@ -147,6 +152,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 			text.addModifyListener(listener);
 			passwordChanged = !PASSWORD_NOT_LOADED.equals(passwordString);
 		}
+		@Override
 		public IStatus redo(IProgressMonitor monitor, IAdaptable adapt) {
 			execute();
 			return Status.OK_STATUS;
@@ -157,6 +163,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 	 * Allow a section an opportunity to respond to a doSave request on the editor.
 	 * @param monitor the progress monitor for the save operation.
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		if( passwordChanged ) {
 			configuration.setPassword(passwordString);
