@@ -66,51 +66,31 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		super(fp);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getDescription()
-	 */
 	@Override
 	public String getDescription() {
 		return "Layout diagram with GEF Layouter"; //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#getName()
-	 */
 	@Override
 	public String getName() {
 		return "&Layout Diagram"; //$NON-NLS-1$
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#canExecute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
 	@Override
 	public boolean canExecute(ICustomContext context) {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
-	 */
 	@Override
 	public boolean isAvailable(IContext context) {
 		ICustomContext cc = (ICustomContext)context;
-		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? 
+		PictogramElement pe = cc.getPictogramElements()[0] instanceof Connection ? 
 				((Connection) cc.getPictogramElements()[0]).getStart().getParent() : 
 				cc.getPictogramElements()[0];
-        final Object bo = getBusinessObjectForPictogramElement(_pe);
+        final Object bo = getBusinessObjectForPictogramElement(pe);
         return bo != null && bo instanceof AbstractCamelModelElement && ((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
 	@Override
 	public void execute(ICustomContext context) {
 		doLayout(context.getPictogramElements()[0]);
@@ -149,7 +129,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 			return dg;
 		}
 		
-		if (!CollapseFeature.isCollapsed(container)) {
+		if (!CollapseFeature.isCollapsed(container) && container instanceof ContainerShape) {
 			EList<Shape> children = ((ContainerShape)container).getChildren();
 			for (Shape shape : children) {
 				Node node = new Node();
@@ -198,7 +178,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 												 containerPE.getGraphicsAlgorithm().getHeight());
 	
 		EList<Shape> children = ((ContainerShape)containerPE).getChildren();		
-		if (!CollapseFeature.isCollapsed(containerPE) && children.size()>0) {
+		if (!CollapseFeature.isCollapsed(containerPE) && !children.isEmpty()) {
 			int newWidth = 0;
 			int newHeight = 0;
 			for (Shape shape : children) {
