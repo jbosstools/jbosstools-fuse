@@ -50,6 +50,7 @@ public class RTIComposite extends Composite implements Listener {
 		createControl();
 	}
 
+	@Override
 	public void handleEvent(Event event) {
 		boolean valid = false;
 
@@ -115,9 +116,11 @@ public class RTIComposite extends Composite implements Listener {
 				.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
 		browseButton.addSelectionListener(new SelectionListener() {
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dlg = new DirectoryDialog(browseButton
 						.getShell(), SWT.OPEN);

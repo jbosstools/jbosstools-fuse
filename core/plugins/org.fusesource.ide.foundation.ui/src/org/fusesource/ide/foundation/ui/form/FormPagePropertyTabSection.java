@@ -38,7 +38,8 @@ public abstract class FormPagePropertyTabSection extends AbstractPropertySection
         parentPage = atabbedPropertySheetPage;
         container = getWidgetFactory().createFlatFormComposite(parent);
         controlListener = new ControlAdapter() {
-            public void controlResized(ControlEvent e) {
+            @Override
+			public void controlResized(ControlEvent e) {
                 atabbedPropertySheetPage.resizeScrolledComposite();
             }
         };

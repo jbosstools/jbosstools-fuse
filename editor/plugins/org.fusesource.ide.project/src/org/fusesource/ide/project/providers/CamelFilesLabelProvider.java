@@ -44,6 +44,7 @@ public class CamelFilesLabelProvider extends LabelProvider {
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 	 */
+	@Override
 	public String getText(Object element) {
 		if( element instanceof CamelVirtualFolder ) {
 			CamelVirtualFolder vFolder = (CamelVirtualFolder)element;

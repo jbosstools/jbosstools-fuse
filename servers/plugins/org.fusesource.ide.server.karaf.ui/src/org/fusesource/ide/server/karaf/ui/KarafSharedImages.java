@@ -86,6 +86,7 @@ public class KarafSharedImages {
 		instance = null;
 	}
 	
+	@Override
 	protected void finalize() throws Throwable {
 		cleanup();
 		super.finalize();

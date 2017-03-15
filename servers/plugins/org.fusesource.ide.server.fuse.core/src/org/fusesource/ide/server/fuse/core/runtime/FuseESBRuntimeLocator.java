@@ -46,6 +46,7 @@ public class FuseESBRuntimeLocator extends KarafRuntimeLocator {
 	 * @param monitor	the monitor
 	 * @return			the runtime working copy or null if invalid
 	 */
+	@Override
 	public IRuntimeWorkingCopy getRuntimeFromDir(File dir, IProgressMonitor monitor) {
 		String absolutePath = dir.getAbsolutePath();
 		ServerBeanLoader l = new ServerBeanLoader(dir);

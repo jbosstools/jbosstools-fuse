@@ -73,12 +73,14 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 		return answer;
 	}
 	
+	@Override
 	public List<Node> getChildrenGraph() {
 		List<Node> answer = getConsumerChildren();
 		answer.addAll(Arrays.asList(producersNode.getChildren()));
 		return answer;
 	}
 	
+	@Override
 	public List<?> getConnectedTo() {
 		return getConsumerChildren();
 	}
@@ -92,6 +94,7 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		Action deleteTopicAction = new Action(Messages.DeleteTopicAction, SWT.CHECK) {
+			@Override
 			public void run() {
 				showDeleteTopicDialog();
 			}

@@ -101,7 +101,8 @@ public class WorkingSetGroup {
 
     workingsetComboViewer = new ComboViewer(workingsetCombo);
     workingsetComboViewer.setContentProvider(new IStructuredContentProvider() {
-      public Object[] getElements(Object input) {
+      @Override
+	public Object[] getElements(Object input) {
         if(input instanceof IWorkingSet[]) {
           return (IWorkingSet[]) input;
         } else if(input instanceof List<?>) {
@@ -112,16 +113,19 @@ public class WorkingSetGroup {
         return new IWorkingSet[0];
       }
 
-      public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+      @Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
       }
 
-      public void dispose() {
+      @Override
+	public void dispose() {
       }
     });
     workingsetComboViewer.setLabelProvider(new LabelProvider() {
       private ResourceManager images = new LocalResourceManager(JFaceResources.getResources());
 
-      @SuppressWarnings("deprecation")
+      @Override
+	@SuppressWarnings("deprecation")
       public Image getImage(Object element) {
         if(element instanceof IWorkingSet) {
           ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImage();
@@ -136,7 +140,8 @@ public class WorkingSetGroup {
         return super.getImage(element);
       }
 
-      public String getText(Object element) {
+      @Override
+	public String getText(Object element) {
         if(element instanceof IWorkingSet) {
           return ((IWorkingSet) element).getLabel();
         } else if(element instanceof List<?>) {
@@ -154,7 +159,8 @@ public class WorkingSetGroup {
         return super.getText(element);
       }
 
-      public void dispose() {
+      @Override
+	public void dispose() {
         images.dispose();
         super.dispose();
       }
@@ -168,7 +174,8 @@ public class WorkingSetGroup {
     newWorkingSetButton.setText(WizardMessages.WorkingSetGroup_btnMore);
     newWorkingSetButton.setEnabled(false);
     newWorkingSetButton.addSelectionListener(new SelectionAdapter() {
-      public void widgetSelected(final SelectionEvent e) {
+      @Override
+	public void widgetSelected(final SelectionEvent e) {
         IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
         IWorkingSetSelectionDialog dialog = workingSetManager.createWorkingSetSelectionDialog(shell, true,
             WORKING_SET_IDS.toArray(new String[0]));
@@ -187,7 +194,8 @@ public class WorkingSetGroup {
     }
 
     addToWorkingSetButton.addSelectionListener(new SelectionAdapter() {
-      public void widgetSelected(SelectionEvent e) {
+      @Override
+	public void widgetSelected(SelectionEvent e) {
         boolean addToWorkingingSet = addToWorkingSetButton.getSelection();
         workingsetLabel.setEnabled(addToWorkingingSet);
         workingsetComboViewer.getCombo().setEnabled(addToWorkingingSet);
@@ -201,7 +209,8 @@ public class WorkingSetGroup {
     });
 
     workingsetComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-      public void selectionChanged(SelectionChangedEvent event) {
+      @Override
+	public void selectionChanged(SelectionChangedEvent event) {
         updateConfiguration();
       }
     });

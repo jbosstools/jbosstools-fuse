@@ -118,6 +118,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 			 * (non-Javadoc)
 			 * @see java.io.FileFilter#accept(java.io.File)
 			 */
+			@Override
 			public boolean accept(File pathname) {
 				return pathname.isDirectory() || (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar"));
 			}

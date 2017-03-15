@@ -28,6 +28,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		super(fp);
 	}
 	
+	@Override
 	public int getEditingType() {
 		// there are several possible editor-types supported:
 		// text-field, checkbox, color-chooser, combobox, ...
@@ -51,6 +52,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		return false;
 	}
 
+	@Override
 	public String getInitialValue(IDirectEditingContext context) {
 		// return the current name of the EClass
 		PictogramElement pe = context.getPictogramElement();
@@ -73,6 +75,7 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		return null;
 	}
 
+	@Override
 	public void setValue(String value, IDirectEditingContext context) {
 		// set the new name for the EClass
 		PictogramElement pe = context.getPictogramElement();

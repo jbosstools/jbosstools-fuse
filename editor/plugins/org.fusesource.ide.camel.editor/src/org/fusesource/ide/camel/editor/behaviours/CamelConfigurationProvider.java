@@ -35,6 +35,7 @@ final class CamelConfigurationProvider extends ConfigurationProvider {
 					/**
 					 * Bad Graphiti naming, the "delete" is handling all operations.
 					 * */
+					@Override
 					public EditPolicy createConnectionDeleteEditPolicy(IConfigurationProvider configurationProvider) {
 						return new CamelDefaultConnectionEditPolicy(configurationProvider);
 					}

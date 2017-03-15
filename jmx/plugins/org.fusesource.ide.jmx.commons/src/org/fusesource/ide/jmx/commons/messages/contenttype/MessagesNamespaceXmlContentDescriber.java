@@ -14,6 +14,7 @@ public final class MessagesNamespaceXmlContentDescriber extends NamespaceXmlCont
 	
 	public static final String ID = "org.fusesource.ide.commmons.messagesContentType";
 	
+	@Override
 	protected FindNamespaceHandlerSupport createNamespaceFinder() {
 		return new FindMessagesNamespaceHandler();
 	}

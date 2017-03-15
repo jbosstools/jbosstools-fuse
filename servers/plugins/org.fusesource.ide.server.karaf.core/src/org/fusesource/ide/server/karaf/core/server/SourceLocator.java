@@ -16,6 +16,7 @@ import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupPartici
 
 public class SourceLocator extends AbstractSourceLookupDirector {
 
+	@Override
 	public void initializeParticipants() {
 		ISourceLookupParticipant participant = new JavaSourceLookupParticipant();
 		addParticipants(new ISourceLookupParticipant[] { participant } );

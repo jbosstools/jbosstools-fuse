@@ -81,6 +81,7 @@ public class PollThread extends Thread {
 			return (getServer().getStopTimeout() - 2) * 1000;
 	}
 
+	@Override
 	public void run() {
 		// Poller not found. Abort
 		if (poller == null) {

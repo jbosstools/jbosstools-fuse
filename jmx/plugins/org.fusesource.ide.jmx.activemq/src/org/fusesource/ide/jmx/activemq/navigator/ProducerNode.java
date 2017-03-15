@@ -49,6 +49,7 @@ public class ProducerNode extends NodeSupport implements ConnectedNode {
 		}
 	}
 	
+	@Override
 	public RefreshableUI getRefreshableUI() {
 		if (this instanceof RefreshableUI) {
 			return (RefreshableUI) this;

@@ -117,6 +117,7 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 
 	protected abstract void loadChildren();
 	
+	@Override
 	public RefreshableUI getRefreshableUI() {
 		if (this instanceof RefreshableUI) {
 			return (RefreshableUI) this;

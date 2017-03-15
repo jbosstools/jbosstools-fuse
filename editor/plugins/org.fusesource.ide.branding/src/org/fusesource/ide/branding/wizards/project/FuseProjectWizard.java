@@ -114,6 +114,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		setNeedsProgressMonitor(true);
 	}
 
+	@Override
 	public void addPages() {
 		locationPage = new FuseProjectWizardLocationPage(
 				WizardMessages.wizardProjectPageProjectTitle,
@@ -142,6 +143,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 			 * Skips the archetype selection page if the user chooses a simple
 			 * project.
 			 */
+			@Override
 			public IWizardPage getNextPage() {
 				return getPage("MavenProjectWizardArchetypePage"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
@@ -166,6 +168,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	}
 
 	/** Adds the listeners after the page controls are created. */
+	@Override
 	public void createPageControls(Composite pageContainer) {
 		super.createPageControls(pageContainer);
 
@@ -196,6 +199,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	 * using this wizard as execution context. That way, messages about the
 	 * progress of the project creation are displayed inside the wizard.
 	 */
+	@Override
 	public boolean performFinish() {
 		// First of all, we extract all the information from the wizard pages.
 		// Note that this should not be done inside the operation we will run
@@ -299,10 +303,12 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
 
 		job.addJobChangeListener(new JobChangeAdapter() {
+			@Override
 			public void done(IJobChangeEvent event) {
 				final IStatus result = event.getResult();
 				if (!result.isOK()) {
 					Display.getDefault().asyncExec(new Runnable() {
+						@Override
 						public void run() {
 							MessageDialog.openError(
 									getShell(), //
@@ -488,6 +494,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 			}
 			if(holder[0]!=null){
 				Display.getDefault().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),

@@ -40,6 +40,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 	@Mock
 	private IRuntime runtime;
 	
+	@Override
 	@Before
 	public void setup() throws Exception {
 		camelVersion = "2.17.0.redhat-630187";

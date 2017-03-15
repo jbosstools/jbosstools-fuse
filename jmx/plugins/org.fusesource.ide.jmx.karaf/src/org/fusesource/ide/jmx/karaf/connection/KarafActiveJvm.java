@@ -110,7 +110,8 @@ public class KarafActiveJvm extends AbstractJvm implements IActiveJvm {
                 new JvmModelEvent(State.JvmConnected, this));
 	}
     
-    public void attach() throws JvmCoreException {
+    @Override
+	public void attach() throws JvmCoreException {
     	attach(true);
     }
     
@@ -227,7 +228,8 @@ public class KarafActiveJvm extends AbstractJvm implements IActiveJvm {
     /**
      * Saves the JVM properties.
      */
-    public void saveJvmProperties() {
+    @Override
+	public void saveJvmProperties() {
         IFileStore fileStore;
         try {
             fileStore = Util.getFileStore(IJvm.PROPERTIES_FILE,
@@ -313,10 +315,12 @@ public class KarafActiveJvm extends AbstractJvm implements IActiveJvm {
 				throws JvmCoreException {
 			return getConnection();
 		}
-	    public void connect(int updatePeriod) throws JvmCoreException {
+	    @Override
+		public void connect(int updatePeriod) throws JvmCoreException {
 	    	super.connect(updatePeriod);
 	    }		
-	    public void dispose() {
+	    @Override
+		public void dispose() {
 	    	super.dispose();
 	    }
     }

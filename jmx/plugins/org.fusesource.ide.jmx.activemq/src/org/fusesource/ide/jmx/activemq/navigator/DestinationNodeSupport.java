@@ -56,10 +56,12 @@ public abstract class DestinationNodeSupport extends NodeSupport implements Mess
 		return destination.getName();
 	}
 
+	@Override
 	public DropHandler createDropHandler(DropTargetEvent event) {
 		return new MessageDropHandler(this);
 	}
 
+	@Override
 	public void dropMessage(IMessage message) {
 		Map<String, Object> headers = message.getHeaders();
 		Map<String, String> cleanHeaders = new HashMap<String, String>();

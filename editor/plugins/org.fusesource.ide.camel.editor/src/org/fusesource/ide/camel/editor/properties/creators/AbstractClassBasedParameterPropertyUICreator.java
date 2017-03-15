@@ -65,6 +65,7 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, modifyListener);
 	}
 
+	@Override
 	protected void init(Composite parent) {
 		super.init(parent);
 		final IProject project = camelModelElement.getCamelFile().getResource().getProject();

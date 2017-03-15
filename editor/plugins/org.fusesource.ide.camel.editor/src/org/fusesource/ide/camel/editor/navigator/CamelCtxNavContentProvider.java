@@ -119,6 +119,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 			@Override
 			public void done(IJobChangeEvent event) {
 	        	Display.getDefault().asyncExec(new Runnable() {
+					@Override
 					public void run() {
 						if (!Widgets.isDisposed(mViewer)) {
 							mViewer.remove(camelFile, new Object[] { placeHolder});

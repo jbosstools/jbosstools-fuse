@@ -37,6 +37,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	public KarafRuntimeDelegate() {
 	}
 	
+	@Override
 	public void setDefaults(IProgressMonitor monitor) {
 		getRuntimeWorkingCopy().setName(getNextRuntimeName());
 		setVM(null);
@@ -101,6 +102,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	private static String PROPERTY_VM_TYPE_ID = "PROPERTY_VM_TYPE_ID"; //$NON-NLS-1$
 	private static String PROPERTY_EXECUTION_ENVIRONMENT = "PROPERTY_EXEC_ENVIRONMENT"; //$NON-NLS-1$
 
+	@Override
 	public IExecutionEnvironment getExecutionEnvironment() {
 		String id = getAttribute(PROPERTY_EXECUTION_ENVIRONMENT, (String)null);
 		return id == null ? getMinimumExecutionEnvironment() : EnvironmentsManager.getDefault().getEnvironment(id);
@@ -112,6 +114,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	}
 	
 
+	@Override
 	public void setExecutionEnvironment(IExecutionEnvironment environment) {
 		setAttribute(PROPERTY_EXECUTION_ENVIRONMENT, environment == null ? null : environment.getId());
 	}
@@ -126,6 +129,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 		return null;
 	}
 	
+	@Override
 	public IVMInstall getVM() {
 		IVMInstall hard = getHardVM();
 		if( hard == null )
@@ -133,6 +137,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 		return hard;
 	}
 	
+	@Override
 	public void setVM(IVMInstall selectedVM) {
 		if (selectedVM == null) {
 			setAttribute(PROPERTY_VM_ID, (String) null);
@@ -144,10 +149,12 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 		}
 	}
 
+	@Override
 	public boolean isUsingDefaultJRE() {
 		return getAttribute(PROPERTY_VM_TYPE_ID, (String)null) == null;
 	}
 	
+	@Override
 	public IVMInstall[] getValidJREs() {
 		return getExecutionEnvironment() == null ? new IVMInstall[0] 
 				: getExecutionEnvironment().getCompatibleVMs();

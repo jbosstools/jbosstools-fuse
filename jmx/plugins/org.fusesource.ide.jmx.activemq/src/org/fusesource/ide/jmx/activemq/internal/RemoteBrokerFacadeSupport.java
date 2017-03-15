@@ -40,7 +40,8 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         this.brokerName = brokerName;
     }
 
-    public String getBrokerName() throws Exception,
+    @Override
+	public String getBrokerName() throws Exception,
             MalformedObjectNameException {
         return getBrokerAdmin().getBrokerName();
     }
@@ -59,7 +60,8 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         return name;
     }
 
-    public BrokerViewFacade getBrokerAdmin() throws Exception {
+    @Override
+	public BrokerViewFacade getBrokerAdmin() throws Exception {
         MBeanServerConnection connection = getMBeanServerConnection();
 
         Set brokers = findBrokers(connection);
@@ -121,12 +123,14 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         return brokers;
     }
 
-    public void purgeQueue(ActiveMQDestination destination) throws Exception {
+    @Override
+	public void purgeQueue(ActiveMQDestination destination) throws Exception {
         QueueViewMBean queue = getQueue(destination.getPhysicalName());
         queue.purge();
     }
 
-    public ManagementContext getManagementContext() {
+    @Override
+	public ManagementContext getManagementContext() {
         throw new IllegalStateException("not supported");
     }
 

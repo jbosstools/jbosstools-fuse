@@ -48,7 +48,8 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	    return myContext;
 	}
 
-    public void start(BundleContext context) throws Exception {
+    @Override
+	public void start(BundleContext context) throws Exception {
         super.start(context);
         myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);

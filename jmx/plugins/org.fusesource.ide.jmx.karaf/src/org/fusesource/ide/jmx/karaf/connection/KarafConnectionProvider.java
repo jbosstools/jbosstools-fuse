@@ -33,6 +33,7 @@ public class KarafConnectionProvider extends AbstractKarafJMXConnectionProvider 
 		return ID;
 	}
 	
+	@Override
 	public String getName(IConnectionWrapper wrapper) {
 		if( wrapper instanceof KarafServerConnection) {
 			return ((KarafServerConnection)wrapper).getName();
@@ -40,6 +41,7 @@ public class KarafConnectionProvider extends AbstractKarafJMXConnectionProvider 
 		return null;
 	}
 	
+	@Override
 	protected IConnectionWrapper createConnection(IServer server) {
 		return new KarafServerConnection(server);
 	}

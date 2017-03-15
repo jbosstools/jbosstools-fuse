@@ -34,6 +34,7 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	/**
 	 * @return the icon
 	 */
+	@Override
 	public Image getIcon() {
 		return this.icon;
 	}
@@ -41,6 +42,7 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	/**
 	 * @return the id
 	 */
+	@Override
 	public String getId() {
 		return this.id;
 	}
@@ -48,6 +50,7 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	/**
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -69,6 +72,7 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	/**
 	 * @param icon the icon to set
 	 */
+	@Override
 	public void setIcon(Image icon) {
 		this.icon = icon;
 	}

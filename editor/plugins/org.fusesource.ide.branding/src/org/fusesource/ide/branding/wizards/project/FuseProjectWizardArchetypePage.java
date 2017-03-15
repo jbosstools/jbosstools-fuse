@@ -474,7 +474,8 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 		expandableProperties.setToolTipText(WizardMessages.FuseProjectWizardArchetypePage_dgPropertyMessage);
 		expandableProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 		expandableProperties.addExpansionListener(new ExpansionAdapter() {
-	        public void expansionStateChanged(ExpansionEvent e) {
+	        @Override
+			public void expansionStateChanged(ExpansionEvent e) {
 	          Shell wizardWindow = parent.getShell();
 	          wizardWindow.setMinimumSize(wizardWindow.getSize().x, wizardWindow.getMinimumSize().y);
 	          wizardWindow.pack();

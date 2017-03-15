@@ -41,6 +41,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @return the parameters
 	 */
+	@Override
 	@XmlElementWrapper(name = "parameters")
 	@XmlElement(name = "parameter")
 	public ArrayList<Parameter> getParameters() {
@@ -60,6 +61,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 * @param name
 	 * @return the parameter or null if not found
 	 */
+	@Override
 	public Parameter getParameter(String name) {
 		for (Parameter p : getParameters()) {
 			if (p.getName().equals(name)) {
@@ -102,6 +104,7 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @return the name
 	 */
+	@Override
 	@XmlElement(name = "name")
 	public String getName() {
 		return this.name;

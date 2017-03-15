@@ -45,6 +45,7 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#isServerRoot(java.io.File)
 		 */
+		@Override
 		public boolean isServerRoot(File location) {
 			return checkKarafVersion(location, KARAF2x_RELEASE_VERSION, V2_x)
 					&& !isIntegratedKaraf(location);
@@ -87,6 +88,7 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#getServerTypeId(java.lang.String)
 		 */
+		@Override
 		public String getServerTypeId(String version) {
 			if( version.equals(V2_2)) return SERVER_KARAF_22;
 			if( version.equals(V2_3)) return SERVER_KARAF_23;

@@ -171,6 +171,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 
 	protected IModulePathFilterProvider getModulePathFilterProvider() {
 		return new IModulePathFilterProvider() {
+			@Override
 			public IModulePathFilter getFilter(IServer server, IModule[] module) {
 				return ComponentModuleInclusionFilterUtility.findDefaultModuleFilter(module[module.length-1]);
 			}

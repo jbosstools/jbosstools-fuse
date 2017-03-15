@@ -51,9 +51,11 @@ public class MessageDragListener implements DragSourceListener {
 		viewer.addDragSupport(operations, transferTypes, this);
 	}
 
+	@Override
 	public void dragFinished(DragSourceEvent event) {
 	}
 
+	@Override
 	public void dragSetData(DragSourceEvent event) {
 		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 		if(selection != null){
@@ -92,6 +94,7 @@ public class MessageDragListener implements DragSourceListener {
 		}
 	}
 
+	@Override
 	public void dragStart(DragSourceEvent event) {
 	}
 

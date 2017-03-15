@@ -41,6 +41,7 @@ public class MessageDropHandler extends DropHandlerSupport {
 		this.target = target;
 	}
 
+	@Override
 	public void dropIFile(IFile resource) {
 		try {
 			IMessage message = fileToMessage(resource);

@@ -123,6 +123,7 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 		return composite == null || composite.isDisposed() ? false : composite.isValid();
 	}
 
+	@Override
 	public void enter() {
 		if (composite != null && composite.isDisposed() == false) {
 			IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel()

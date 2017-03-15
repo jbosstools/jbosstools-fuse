@@ -44,12 +44,14 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 	
 	private UnitedServerListener createUnitedListener() {
 		UnitedServerListener listener = new UnitedServerListener() {
+			@Override
 			public boolean canHandleServer(IServer server) {
 				if (server.loadAdapter(KarafServerDelegate.class, new NullProgressMonitor()) != null)
 					return true;
 				return false;
 			}
 
+			@Override
 			public void serverChanged(ServerEvent event) {
 				IConnectionWrapper con = idToConnection.get(event.getServer().getId());
 				if( con != null ) {
@@ -61,6 +63,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				}
 			}
 
+			@Override
 			public void serverAdded(IServer server) {
 				if( belongsHere(server)) {
 					getConnections();
@@ -73,6 +76,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				}
 			}
 
+			@Override
 			public void serverChanged(IServer server) {
 				if( belongsHere(server)) {
 					getConnections();
@@ -86,6 +90,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				}
 			}
 
+			@Override
 			public void serverRemoved(IServer server) {
 				if( belongsHere(server)) {
 					IConnectionWrapper connection;
@@ -113,16 +118,20 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 	}
 	
 	protected abstract boolean belongsHere(IServer server);
+	@Override
 	public abstract String getId();
 	protected abstract IConnectionWrapper createConnection(IServer server);
+	@Override
 	public abstract String getName(IConnectionWrapper wrapper);
 
 
+	@Override
 	public IConnectionWrapper findConnection(IServer s) {
 		getConnections();
 		return idToConnection.get(s.getId());
 	}
 	
+	@Override
 	public IConnectionWrapper[] getConnections() {
 		// do it all on demand right now
 		if( idToConnection == null ) {
@@ -158,23 +167,29 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 		return false;
 	}
 	
+	@Override
 	public boolean canCreate() {
 		return false;
 	}
 
+	@Override
 	public IConnectionWrapper createConnection(Map map) throws CoreException {
 		throw new CoreException(new Status(IStatus.ERROR, KarafJMXPlugin.PLUGIN_ID, "", null));
 	}
 
+	@Override
 	public void addConnection(IConnectionWrapper connection) {
 		// Not Supported
 	}
+	@Override
 	public void removeConnection(IConnectionWrapper connection) {
 		// Not Supported
 	}
+	@Override
 	public boolean canDelete(IConnectionWrapper wrapper) {
 		return false;
 	}
+	@Override
 	public void connectionChanged(IConnectionWrapper connection) {
 		// do nothing
 	}

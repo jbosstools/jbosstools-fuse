@@ -127,6 +127,7 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 		return Objects.equal("Started", state);
 	}
 
+	@Override
 	public String getNodeId() {
 		if(route != null){
 			return route.getId();

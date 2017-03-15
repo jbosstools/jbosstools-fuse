@@ -92,6 +92,7 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 
 	protected void addCreateEndpointAction(IMenuManager menu, final String defaultEndpointName) {
 		Action createEndpointAction = new Action(Messages.CreateEndpointAction, SWT.CHECK) {
+			@Override
 			public void run() {
 				showCreateEndpointDialog(defaultEndpointName);
 			}
@@ -120,6 +121,7 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 				mbean.createEndpoint(uri);
 				
 				Display.getDefault().syncExec(new Runnable() {
+					@Override
 					public void run() {
 						refresh();
 					}

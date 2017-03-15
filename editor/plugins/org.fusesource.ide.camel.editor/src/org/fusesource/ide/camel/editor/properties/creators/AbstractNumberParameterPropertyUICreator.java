@@ -50,6 +50,7 @@ public abstract class AbstractNumberParameterPropertyUICreator extends AbstractT
 		};
 	}
 
+	@Override
 	protected int createTextStyle() {
 		return SWT.SINGLE | SWT.BORDER | SWT.RIGHT;
 	}

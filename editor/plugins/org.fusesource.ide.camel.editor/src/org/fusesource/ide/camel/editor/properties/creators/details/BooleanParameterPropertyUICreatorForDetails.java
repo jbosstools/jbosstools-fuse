@@ -33,6 +33,7 @@ public class BooleanParameterPropertyUICreatorForDetails extends AbstractBoolean
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 	}
 
+	@Override
 	protected SelectionAdapter createSelectionListener() {
 		return new SelectionAdapter() {
 			@Override
