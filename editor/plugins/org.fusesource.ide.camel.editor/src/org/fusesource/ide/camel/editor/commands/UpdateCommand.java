@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.commands;
 
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
@@ -45,17 +46,20 @@ public class UpdateCommand extends RecordingCommand {
 	}
 	
 	private void updateFigure(AbstractCamelModelElement node) {
-		if (node == null) return;
+		if (node == null){
+			return;
+		}
 
-		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
+		IFeatureProvider featureProvider = designEditor.getFeatureProvider();
+		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : featureProvider.getPictogramElementForBusinessObject(node);
 		if (pe == null) {
 			return;
 		}
 		
 		// do check if underlying xml node changed / document changed
 		AbstractCamelModelElement bo2 = designEditor.getModel().findNode(node.getId());
-		if (pe != null && bo2 != null && bo2.getXmlNode().isEqualNode(node.getXmlNode()) == false) {
-			designEditor.getFeatureProvider().link(pe, bo2);
+		if (bo2 != null && !bo2.getXmlNode().isEqualNode(node.getXmlNode())) {
+			featureProvider.link(pe, bo2);
 		}
 		
 		if (CollapseFeature.isCollapsed(pe)) {
@@ -63,8 +67,10 @@ public class UpdateCommand extends RecordingCommand {
 			return;
 		}
 		UpdateContext ctx = new UpdateContext(pe);
-		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);
-		updateFeature.update(ctx);
+		IUpdateFeature updateFeature = featureProvider.getUpdateFeature(ctx);
+		if(updateFeature != null){
+			updateFeature.update(ctx);
+		}
 		for (AbstractCamelModelElement elem : node.getChildElements()) {
 			updateFigure(elem);
 		}
