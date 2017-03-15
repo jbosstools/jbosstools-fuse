@@ -34,6 +34,7 @@ public class BooleanParameterPropertyUICreatorForAdvanced extends AbstractBoolea
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 	}
 
+	@Override
 	protected SelectionAdapter createSelectionListener() {
 		return new SelectionAdapter() {
 			@Override

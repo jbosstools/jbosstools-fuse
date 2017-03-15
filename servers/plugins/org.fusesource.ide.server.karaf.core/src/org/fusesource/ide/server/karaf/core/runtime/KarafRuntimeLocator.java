@@ -93,6 +93,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 			files = File.listRoots();
 		} else {
 			files = folder.listFiles(new FileFilter() {
+				@Override
 				public boolean accept(File pathname) {
 					return pathname.isDirectory();
 				}

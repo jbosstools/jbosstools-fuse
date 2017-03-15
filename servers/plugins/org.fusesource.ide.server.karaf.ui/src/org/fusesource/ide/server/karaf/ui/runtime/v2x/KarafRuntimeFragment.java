@@ -182,6 +182,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 			return jbsrt.isUsingDefaultJRE() ? null : jbsrt.getVM();
 		}
 
+		@Override
 		public List<IVMInstall> getValidJREs() {
 			IRuntime r = getRuntimeFromTaskModel();
 			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
@@ -197,6 +198,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 			return jbsrt.isUsingDefaultJRE();
 		}
 		
+		@Override
 		protected IVMInstall getStoredJRE() {
 			IRuntime r = getRuntimeFromTaskModel();
 			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);

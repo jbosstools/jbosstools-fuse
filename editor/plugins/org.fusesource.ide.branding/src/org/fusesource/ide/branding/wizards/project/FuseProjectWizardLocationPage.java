@@ -77,6 +77,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 	 * whether the project should be created in the workspace or at some given
 	 * external location.
 	 */
+	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
@@ -103,6 +104,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 				.setText(WizardMessages.MavenProjectWizardLocationPage_btnUserDefault);
 		useDefaultWorkspaceLocationButton
 				.addSelectionListener(new SelectionAdapter() {
+					@Override
 					public void widgetSelected(SelectionEvent e) {
 						boolean inWorkspace = isInWorkspace();
 						locationLabel.setEnabled(!inWorkspace);
@@ -124,6 +126,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 				false);
 		locationCombo.setLayoutData(locationComboData);
 		locationCombo.addModifyListener(new ModifyListener() {
+			@Override
 			public void modifyText(ModifyEvent e) {
 				validate();
 			}
@@ -138,6 +141,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 		locationBrowseButton
 				.setText(WizardMessages.MavenProjectWizardLocationPage_btnLocation);
 		locationBrowseButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dialog = new DirectoryDialog(getShell());
 				dialog.setText(WizardMessages.MavenProjectWizardLocationPage_dialog_location);
@@ -178,6 +182,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 		setControl(container);
 	}
 
+	@Override
 	public void dispose() {
 		super.dispose();
 		workingSetGroup.dispose();
@@ -215,6 +220,7 @@ public class FuseProjectWizardLocationPage extends AbstractFuseWizardPage {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 

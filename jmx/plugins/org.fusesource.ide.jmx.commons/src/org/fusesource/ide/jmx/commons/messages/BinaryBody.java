@@ -31,6 +31,7 @@ public class BinaryBody implements BodyType {
 		this.value = value;
 	}
 
+	@Override
 	public byte[] getValue() {
 		return value;
 	}

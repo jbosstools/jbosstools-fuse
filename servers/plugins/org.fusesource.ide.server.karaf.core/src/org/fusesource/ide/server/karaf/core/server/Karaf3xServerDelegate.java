@@ -26,6 +26,7 @@ public class Karaf3xServerDelegate extends KarafServerDelegate implements
 	 * @return	the launch configurator
 	 * @throws CoreException
 	 */
+	@Override
 	public ILaunchConfigConfigurator getLaunchConfigurator() throws CoreException {
 		return new Karaf3xStartupLaunchConfigurator(getServer());
 	}

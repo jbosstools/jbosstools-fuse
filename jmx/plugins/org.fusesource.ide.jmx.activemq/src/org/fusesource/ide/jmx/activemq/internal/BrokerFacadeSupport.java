@@ -61,7 +61,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         }));
     }
 
-    public Collection<QueueViewFacade> getQueues() throws Exception {
+    @Override
+	public Collection<QueueViewFacade> getQueues() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
             return Collections.EMPTY_LIST;
@@ -70,7 +71,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queues, QueueViewMBean.class, QueueViewFacade.class);
     }
 
-    public Collection<TopicViewFacade> getTopics() throws Exception {
+    @Override
+	public Collection<TopicViewFacade> getTopics() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
             return Collections.EMPTY_LIST;
@@ -79,7 +81,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queues, TopicViewMBean.class, TopicViewFacade.class);
     }
 
-    public Collection<DurableSubscriptionViewFacade> getDurableTopicSubscribers() throws Exception {
+    @Override
+	public Collection<DurableSubscriptionViewFacade> getDurableTopicSubscribers() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
             return Collections.EMPTY_LIST;
@@ -88,7 +91,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queues, DurableSubscriptionViewMBean.class, DurableSubscriptionViewFacade.class);
     }
 
-    public Collection<DurableSubscriptionViewFacade> getInactiveDurableTopicSubscribers() throws Exception {
+    @Override
+	public Collection<DurableSubscriptionViewFacade> getInactiveDurableTopicSubscribers() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
             return Collections.EMPTY_LIST;
@@ -97,11 +101,13 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queues, DurableSubscriptionViewMBean.class, DurableSubscriptionViewFacade.class);
     }
 
-    public QueueViewFacade getQueue(String name) throws Exception {
+    @Override
+	public QueueViewFacade getQueue(String name) throws Exception {
         return (QueueViewFacade) getDestinationByName(getQueues(), name);
     }
 
-    public TopicViewFacade getTopic(String name) throws Exception {
+    @Override
+	public TopicViewFacade getTopic(String name) throws Exception {
         return (TopicViewFacade) getDestinationByName(getTopics(), name);
     }
 
@@ -129,7 +135,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return answer;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<ConnectionViewFacade> getConnections() throws Exception {
         String brokerName = getBrokerName();
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName + ",connector=clientConnectors,connectorName=*,connectionViewType=clientId,connectionName=*");
@@ -138,7 +145,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queryResult.toArray(new ObjectName[queryResult.size()]), ConnectionViewMBean.class, ConnectionViewFacade.class);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<String> getConnections(String connectorName) throws Exception {
         String brokerName = getBrokerName();
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName
@@ -152,7 +160,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public ConnectionViewFacade getConnection(String connectionName) throws Exception {
         connectionName = connectionName.replace(':', '_');
         String brokerName = getBrokerName();
@@ -166,7 +175,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return proxy(ConnectionViewFacade.class, rc, objectName.getCanonicalName());
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<String> getConnectors() throws Exception {
         String brokerName = getBrokerName();
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName + ",connector=clientConnectors,connectorName=*");
@@ -177,7 +187,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return result;
     }
 
-    public ConnectorViewFacade getConnector(String name) throws Exception {
+    @Override
+	public ConnectorViewFacade getConnector(String name) throws Exception {
         String brokerName = getBrokerName();
         ObjectName objectName = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName
                 + ",connector=clientConnectors,connectorName=" + name);
@@ -185,7 +196,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return proxy(ConnectorViewFacade.class, rc, objectName.getCanonicalName());
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<NetworkConnectorViewFacade> getNetworkConnectors() throws Exception {
         String brokerName = getBrokerName();
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName + ",connector=networkConnectors,networkConnectorName=*");
@@ -194,7 +206,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
                 NetworkConnectorViewFacade.class);
     }
 
-    public Collection<NetworkBridgeViewFacade> getNetworkBridges() throws Exception {
+    @Override
+	public Collection<NetworkBridgeViewFacade> getNetworkBridges() throws Exception {
         String brokerName = getBrokerName();
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName + ",connector=networkConnectors,networkConnectorName=*,networkBridge=*");
         Set<ObjectName> queryResult = queryNames(query, null);
@@ -202,7 +215,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
                 NetworkBridgeViewMBean.class, NetworkBridgeViewFacade.class);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<SubscriptionViewFacade> getQueueConsumers(String queueName) throws Exception {
         String brokerName = getBrokerName();
         queueName = queueName.replace("\"", "_");
@@ -277,7 +291,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return producers;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public Collection<SubscriptionViewFacade> getConsumersOnConnection(String connectionName) throws Exception {
         connectionName = connectionName.replace(':', '_');
         String brokerName = getBrokerName();
@@ -287,13 +302,15 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         return getManagedObjects(queryResult.toArray(new ObjectName[queryResult.size()]), SubscriptionViewMBean.class,  SubscriptionViewFacade.class);
     }
 
-    public JobSchedulerViewFacade getJobScheduler() throws Exception {
+    @Override
+	public JobSchedulerViewFacade getJobScheduler() throws Exception {
         ObjectName name = getBrokerAdmin().getJMSJobScheduler();
         Object rc = newProxyInstance(name, JobSchedulerViewMBean.class, true);
         return proxy(JobSchedulerViewFacade.class, rc, name.getCanonicalName());
     }
 
-    public Collection<JobFacade> getScheduledJobs() throws Exception {
+    @Override
+	public Collection<JobFacade> getScheduledJobs() throws Exception {
         JobSchedulerViewFacade jobScheduler = getJobScheduler();
         List<JobFacade> result = new ArrayList<JobFacade>();
         TabularData table = jobScheduler.getAllJobs();
@@ -306,7 +323,8 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
     }
 
 
-    public boolean isJobSchedulerStarted() {
+    @Override
+	public boolean isJobSchedulerStarted() {
         try {
             JobSchedulerViewFacade jobScheduler = getJobScheduler();
             return true;

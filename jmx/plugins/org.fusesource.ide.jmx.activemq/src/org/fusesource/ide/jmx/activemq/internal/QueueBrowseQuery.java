@@ -76,7 +76,8 @@ public class QueueBrowseQuery extends DestinationFacade {
         return session;
     }
 
-    public boolean isQueue() {
+    @Override
+	public boolean isQueue() {
         return true;
     }
 

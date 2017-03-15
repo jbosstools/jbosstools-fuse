@@ -45,19 +45,23 @@ public class LocalBrokerFacade extends BrokerFacadeSupport {
         return brokerService.getBrokerName();
     }
 
-    public BrokerFacade[] getBrokers() throws Exception {
+    @Override
+	public BrokerFacade[] getBrokers() throws Exception {
         return new BrokerFacade[]{this};
     }
 
+	@Override
 	public String getBrokerName() throws Exception {
 		return brokerService.getBrokerName();
 	}
 	public Broker getBroker() throws Exception {
 		return brokerService.getBroker();
 	}
+	@Override
 	public ManagementContext getManagementContext() {
 		return brokerService.getManagementContext();
 	}
+	@Override
 	public BrokerViewFacade getBrokerAdmin() throws Exception {
 		return proxy(BrokerViewFacade.class, brokerService.getAdminView(), brokerService.getBrokerName());
 	}
@@ -69,7 +73,8 @@ public class LocalBrokerFacade extends BrokerFacadeSupport {
 		return adminView.getBroker();
 	}
 
-    public void purgeQueue(ActiveMQDestination destination) throws Exception {
+    @Override
+	public void purgeQueue(ActiveMQDestination destination) throws Exception {
         Set destinations = getManagedBroker().getQueueRegion().getDestinations(destination);
         for (Iterator i = destinations.iterator(); i.hasNext();) {
             Destination dest = (Destination) i.next();

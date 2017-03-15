@@ -29,48 +29,56 @@ public class TypeConverters {
 	static {
 		stringToTypeFunctions.put("java.lang.Boolean",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Boolean.parseBoolean(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Byte",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Byte.parseByte(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Short",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Short.parseShort(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Integer",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Integer.parseInt(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Long",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Long.parseLong(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Float",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Float.parseFloat(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.lang.Double",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						return Double.parseDouble(argument);
 					}
 				});
 		stringToTypeFunctions.put("java.util.Date",
 				new Function1<String, Object>() {
+					@Override
 					public Object apply(String argument) {
 						try {
 							return dateFormat.parse(argument);

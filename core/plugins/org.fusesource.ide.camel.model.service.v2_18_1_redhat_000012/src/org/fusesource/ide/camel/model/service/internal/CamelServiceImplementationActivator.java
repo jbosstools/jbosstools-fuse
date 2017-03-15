@@ -45,6 +45,7 @@ public class CamelServiceImplementationActivator extends BaseUIPlugin {
 		return myContext;
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		myContext = context;

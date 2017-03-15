@@ -23,6 +23,7 @@ public class CopyNodeFeature extends AbstractCopyFeature {
 		super(fp);
 	}
 
+	@Override
 	public boolean canCopy(ICopyContext context) {
 		final PictogramElement[] pes = context.getPictogramElements();
 		if (pes == null || pes.length == 0) { // nothing selected
@@ -39,6 +40,7 @@ public class CopyNodeFeature extends AbstractCopyFeature {
 		return true;
 	}
 
+	@Override
 	public void copy(ICopyContext context) {
 		// get the business-objects for all pictogram-elements
 		// we already verified, that all business-objets are EClasses

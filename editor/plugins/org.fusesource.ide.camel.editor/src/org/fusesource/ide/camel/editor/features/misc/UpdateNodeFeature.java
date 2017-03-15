@@ -35,12 +35,14 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		super(fp);
 	}
 
+	@Override
 	public boolean canUpdate(IUpdateContext context) {
 		// return true, if linked business object is an EClass
 		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
 		return bo instanceof AbstractCamelModelElement;
 	}
 
+	@Override
 	public IReason updateNeeded(IUpdateContext context) {
 		// retrieve name from pictogram model
 		String pictogramName = null;
@@ -86,6 +88,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.func.IUpdate#update(org.eclipse.graphiti.features.context.IUpdateContext)
 	 */
+	@Override
 	public boolean update(IUpdateContext context) {
 		this.changed = false;
 		

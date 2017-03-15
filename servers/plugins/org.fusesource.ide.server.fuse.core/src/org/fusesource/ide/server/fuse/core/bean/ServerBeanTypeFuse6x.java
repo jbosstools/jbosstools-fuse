@@ -46,6 +46,7 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#isServerRoot(java.io.File)
 		 */
+		@Override
 		public boolean isServerRoot(File location) {
 			return checkFuseVersion(location, FUSE6x_RELEASE_VERSION, V6_x);
 		}
@@ -67,6 +68,7 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#getServerTypeId(java.lang.String)
 		 */
+		@Override
 		public String getServerTypeId(String version) {
 			if( version.equals(V6_0)) return SERVER_FUSE_60;
 			if( version.equals(V6_1)) return SERVER_FUSE_61;

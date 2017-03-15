@@ -7,6 +7,7 @@ import org.fusesource.ide.foundation.core.contenttype.*;
  */
 public class MessagesXmlMatchingStrategy extends XmlMatchingStrategySupport  {
 
+	@Override
 	protected FindMessagesNamespaceHandler createNamespaceFinder() {
 		return new FindMessagesNamespaceHandler();
 	}

@@ -40,6 +40,7 @@ public class ServerBeanTypeKaraf3x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#isServerRoot(java.io.File)
 		 */
+		@Override
 		public boolean isServerRoot(File location) {
 			return checkKarafVersion(location, KARAF3x_RELEASE_VERSION, V3_x)
 					&& !isIntegratedKaraf(location);
@@ -82,6 +83,7 @@ public class ServerBeanTypeKaraf3x extends ServerBeanType {
 		 * (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#getServerTypeId(java.lang.String)
 		 */
+		@Override
 		public String getServerTypeId(String version) {
 			if( version.equals(V3_0)) return SERVER_KARAF_30;
 			// In case a 3.1 comes out, it should work on 3.0 until fixed

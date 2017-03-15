@@ -73,6 +73,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getPortNumber()
 	 */
+	@Override
 	public int getPortNumber() {
 		return getAttribute(IKarafServerDelegate.PORT_NUMBER, DEFAULT_SSH_PORT);
 	}
@@ -80,6 +81,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getUserName()
 	 */
+	@Override
 	public String getUserName() {
 		return getAttribute(IKarafServerDelegate.USER_ID, getDefaultUsername());
 	}
@@ -100,6 +102,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 		return s;
 	}
 	
+	@Override
 	public void setPassword(String pass) {
 		try {
 			ServerSecureStorageUtil.storeInSecureStorage(Activator.PLUGIN_ID, 
@@ -115,6 +118,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setPortNumber(int)
 	 */
+	@Override
 	public void setPortNumber(int portNo) {
 		setAttribute(IKarafServerDelegate.PORT_NUMBER, portNo);
 	}
@@ -122,6 +126,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setUserName(java.lang.String)
 	 */
+	@Override
 	public void setUserName(String userName) {
 		setAttribute(IKarafServerDelegate.USER_ID, userName);
 	}

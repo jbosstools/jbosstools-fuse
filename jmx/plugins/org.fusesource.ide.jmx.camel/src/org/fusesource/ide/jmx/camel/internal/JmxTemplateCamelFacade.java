@@ -44,7 +44,8 @@ public class JmxTemplateCamelFacade implements CamelJMXFacade {
      */
     public <T> T execute(final CamelFacadeCallback<T> callback) {
         return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
-            public T doWithJmxConnector(JMXConnector connector) throws Exception {
+            @Override
+			public T doWithJmxConnector(JMXConnector connector) throws Exception {
                 MBeanServerConnection connection = connector.getMBeanServerConnection();
                 CamelJMXFacade camelFacade = new RemoteJMXCamelFacade(connection);
                 return callback.doWithCamelFacade(camelFacade);
@@ -52,89 +53,111 @@ public class JmxTemplateCamelFacade implements CamelJMXFacade {
         });
     }
 
-    public List<CamelContextMBean> getCamelContexts() throws Exception {
+    @Override
+	public List<CamelContextMBean> getCamelContexts() throws Exception {
         return execute(new CamelFacadeCallback<List<CamelContextMBean>>() {
-           public List<CamelContextMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelContextMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getCamelContexts();
             }
         });
     }
 
-    public CamelContextMBean getCamelContext(final String managementName) {
+    @Override
+	public CamelContextMBean getCamelContext(final String managementName) {
         return execute(new CamelFacadeCallback<CamelContextMBean>() {
-           public CamelContextMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public CamelContextMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getCamelContext(managementName);
             }
         });
     }
 
-    public CamelFabricTracerMBean getFabricTracer(final String managementName) throws Exception {
+    @Override
+	public CamelFabricTracerMBean getFabricTracer(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<CamelFabricTracerMBean>() {
-           public CamelFabricTracerMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public CamelFabricTracerMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getFabricTracer(managementName);
             }
         });
     }
 
+	@Override
 	public CamelBacklogTracerMBean getCamelTracer(final String managementName) throws Exception {
 		return execute(new CamelFacadeCallback<CamelBacklogTracerMBean>() {
+			@Override
 			public CamelBacklogTracerMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
 				return camel.getCamelTracer(managementName);
 			}
 		});
 	}
 
-    public List<CamelComponentMBean> getComponents(final String managementName) throws Exception {
+    @Override
+	public List<CamelComponentMBean> getComponents(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelComponentMBean>>() {
-           public List<CamelComponentMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelComponentMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getComponents(managementName);
             }
         });
     }
 
-    public List<CamelRouteMBean> getRoutes(final String managementName) throws Exception {
+    @Override
+	public List<CamelRouteMBean> getRoutes(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelRouteMBean>>() {
-           public List<CamelRouteMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelRouteMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getRoutes(managementName);
             }
         });
     }
 
-    public List<CamelEndpointMBean> getEndpoints(final String managementName) throws Exception {
+    @Override
+	public List<CamelEndpointMBean> getEndpoints(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelEndpointMBean>>() {
-           public List<CamelEndpointMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelEndpointMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getEndpoints(managementName);
             }
         });
     }
 
-    public List<CamelConsumerMBean> getConsumers(final String managementName) throws Exception {
+    @Override
+	public List<CamelConsumerMBean> getConsumers(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelConsumerMBean>>() {
-           public List<CamelConsumerMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelConsumerMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getConsumers(managementName);
             }
         });
     }
 
-    public List<CamelProcessorMBean> getProcessors(final String managementName) throws Exception {
+    @Override
+	public List<CamelProcessorMBean> getProcessors(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelProcessorMBean>>() {
-           public List<CamelProcessorMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelProcessorMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getProcessors(managementName);
             }
         });
     }
 
-    public List<CamelThreadPoolMBean> getThreadPools(final String managementName) throws Exception {
+    @Override
+	public List<CamelThreadPoolMBean> getThreadPools(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelThreadPoolMBean>>() {
-           public List<CamelThreadPoolMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+           @Override
+		public List<CamelThreadPoolMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getThreadPools(managementName);
             }
         });
     }
 
-    public String dumpRoutesStatsAsXml(final String managementName) throws Exception {
+    @Override
+	public String dumpRoutesStatsAsXml(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<String>() {
-            public String doWithCamelFacade(CamelJMXFacade camel) throws Exception {
+            @Override
+			public String doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.dumpRoutesStatsAsXml(managementName);
             }
         });

@@ -29,7 +29,8 @@ public class DestinationFacade {
         this.brokerFacade = brokerFacade;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString() + "[destination:" + jmsDestination + "; type=" + jmsDestinationType + "]";
     }
 

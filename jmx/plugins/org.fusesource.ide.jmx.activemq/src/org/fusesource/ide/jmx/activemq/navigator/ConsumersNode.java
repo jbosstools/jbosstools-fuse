@@ -77,6 +77,7 @@ public class ConsumersNode extends RefreshableCollectionNode implements ImagePro
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		Action createQueueAction = new Action(Messages.CreateQueueAction, SWT.CHECK) {
+			@Override
 			public void run() {
 				showCreateQueueDialog();
 			}

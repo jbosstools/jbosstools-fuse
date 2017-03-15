@@ -51,6 +51,7 @@ public class Body implements BodyType {
 		this.type = type;
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}

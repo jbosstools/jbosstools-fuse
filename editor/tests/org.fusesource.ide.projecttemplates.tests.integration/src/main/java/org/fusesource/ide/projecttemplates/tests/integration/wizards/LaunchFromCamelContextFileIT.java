@@ -29,6 +29,7 @@ import org.junit.Test;
 
 public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorRunnableIT{
 	
+	@Override
 	@Before
 	public void setup() throws Exception{
 		camelVersion = "2.17.0.redhat-630187";
@@ -60,6 +61,7 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 		launch = null;
 	}
 	
+	@Override
 	protected StructuredSelection getSelectionForLaunch(IProject project) {
 		return new StructuredSelection(project.getFile("src/main/resources/META-INF/spring/camel-context.xml"));
 	}

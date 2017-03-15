@@ -24,12 +24,14 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 public class FuseRuntimeDetector extends KarafRuntimeDetector {
 	
 
+	@Override
 	protected ServerBeanType[] getServerBeanTypes() {
 		return new ServerBeanType[]{
 				FuseBeanProvider.FUSE_6x
 		};
 	}
 
+	@Override
 	protected boolean isValidServerType(String type) {
 		return Arrays.asList(IFuseToolingConstants.ALL_FUSE_SERVER_TYPES).contains(type);
 	}

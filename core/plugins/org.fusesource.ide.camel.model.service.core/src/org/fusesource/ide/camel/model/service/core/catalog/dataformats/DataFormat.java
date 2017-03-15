@@ -42,6 +42,7 @@ public class DataFormat implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @return the parameters
 	 */
+	@Override
 	@XmlElementWrapper(name = "parameters")
 	@XmlElement(name = "parameter")
 	public ArrayList<Parameter> getParameters() {
@@ -88,6 +89,7 @@ public class DataFormat implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @return the name
 	 */
+	@Override
 	@XmlElement(name = "name")
 	public String getName() {
 		return this.name;
@@ -198,6 +200,7 @@ public class DataFormat implements ICamelCatalogElement, IParameterContainer {
 	 * @param name
 	 * @return
 	 */
+	@Override
 	public Parameter getParameter(String name) {
 		for (Parameter p : getParameters()) {
 			if (p.getName().equals(name)) return p;

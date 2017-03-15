@@ -66,6 +66,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -81,10 +82,12 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 
 	private UnitedServerListener getServerListener() {
 		return new UnitedServerListener(){
+			@Override
 			public boolean canHandleServer(IServer server) {
 				return isKarafServer(server);
 			}
 			
+			@Override
 			public void serverChanged(ServerEvent event) {
 				if( serverSwitchesToState(event, IServer.STATE_STARTED)) {
 					// We already know it's a karaf server from canHandleServer(IServer)
@@ -95,6 +98,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 			
 			private void fireConnectorJob(final IServer server) {
 				new Job("Connecting to " + server.getName()) {
+					@Override
 					protected IStatus run(IProgressMonitor arg0) {
 						if( server.getServerState() == IServer.STATE_STARTED) {
 							SshConnector c = new SshConnector(server);
@@ -112,6 +116,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -127,6 +132,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		final IViewPart[] ret = new IViewPart[1];
 		ret[0] = null;
 		Display.getDefault().syncExec(new Runnable() {
+			@Override
 			public void run() {
 				IWorkbench wb = PlatformUI.getWorkbench();
 				if (wb != null) {

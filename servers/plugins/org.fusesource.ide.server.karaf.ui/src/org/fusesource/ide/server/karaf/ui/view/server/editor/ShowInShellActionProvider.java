@@ -31,6 +31,7 @@ public class ShowInShellActionProvider extends CommonActionProvider {
 		super();
 	}
 
+	@Override
 	public void init(ICommonActionExtensionSite aSite) {
 		super.init(aSite);
 		this.actionSite = aSite;
@@ -45,6 +46,7 @@ public class ShowInShellActionProvider extends CommonActionProvider {
 		}
 	}
 
+	@Override
 	public void fillContextMenu(IMenuManager menu) {
 		CommonActionProviderUtils.addToShowInQuickSubMenu(showInShellAction, menu, actionSite);
 	}
@@ -70,6 +72,7 @@ public class ShowInShellActionProvider extends CommonActionProvider {
 		 * (non-Javadoc)
 		 * @see org.eclipse.wst.server.ui.internal.view.servers.AbstractServerAction#accept(org.eclipse.wst.server.core.IServer)
 		 */
+		@Override
 		public boolean accept(IServer server) {
 			return 	server != null && 
 					server.getServerState() == IServer.STATE_STARTED && 
@@ -80,6 +83,7 @@ public class ShowInShellActionProvider extends CommonActionProvider {
 		 * (non-Javadoc)
 		 * @see org.eclipse.wst.server.ui.internal.view.servers.AbstractServerAction#perform(org.eclipse.wst.server.core.IServer)
 		 */
+		@Override
 		public void perform(IServer server) {
 			SshConnector c = SshConnector.getConnectorForServer(server);
 			if (c == null) {

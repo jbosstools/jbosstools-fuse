@@ -43,6 +43,7 @@ public abstract class DropHandlerSupport implements DropHandler {
 		return null;
 	}
 
+	@Override
 	public void drop(DropTargetEvent event) {
 		Object data = event.data;
 		if (isSupported(FileTransfer.getInstance(), event.dataTypes)) {

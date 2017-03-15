@@ -99,6 +99,7 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 		return headers;
 	}
 
+	@Override
 	public String getId() {
 		if (id == null) {
 			id = Strings.getOrElse(getHeaders().get("JMSMessageId"), null);
@@ -110,10 +111,12 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 		this.id = id;
 	}
 
+	@Override
 	public Long getUuid() {
 		return uuid;
 	}
 
+	@Override
 	public void setUuid(Long uuid) {
 		this.uuid = uuid;
 	}
@@ -205,10 +208,12 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 	/**
 	 * Returns the relative time from the first exchange at which this trace message occurred
 	 */
+	@Override
 	public Long getRelativeTime() {
 		return relativeTime;
 	}
 
+	@Override
 	public void setRelativeTime(Long elapsedTime) {
 		this.relativeTime = elapsedTime;
 	}
@@ -223,27 +228,33 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 		this.elapsedTime = elapsedTime;
 	}
 
+	@Override
 	public Integer getExchangeIndex() {
 		return exchangeIndex;
 	}
 
+	@Override
 	public void setExchangeIndex(Integer exchangeIndex) {
 		this.exchangeIndex = exchangeIndex;
 	}
 
+	@Override
 	public String getEndpointUri() {
 		return endpointUri;
 	}
 
+	@Override
 	public void setEndpointUri(String endpointUri) {
 		this.endpointUri = endpointUri;
 	}
 
+	@Override
 	public boolean matches(String searchText) {
 		return TextFilters.matches(searchText, getBody()) || TextFilters.matches(searchText, getToNode())
 				|| TextFilters.matches(searchText, getHeaders());
 	}
 
+	@Override
 	public void preMarshal() {
 		if (headers != null) {
 			headerList = null;

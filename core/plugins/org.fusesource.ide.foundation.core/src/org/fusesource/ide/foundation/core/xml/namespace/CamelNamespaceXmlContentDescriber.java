@@ -16,6 +16,7 @@ package org.fusesource.ide.foundation.core.xml.namespace;
  */
 public final class CamelNamespaceXmlContentDescriber extends NamespaceXmlContentDescriberSupport {
 	
+	@Override
 	protected FindNamespaceHandlerSupport createNamespaceFinder() {
 		return new FindCamelNamespaceHandler();
 	}

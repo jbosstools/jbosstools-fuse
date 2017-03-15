@@ -41,6 +41,7 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 	 * Determine whether a runtime exists on the file-system level
 	 * at the given root path. 
 	 */
+	@Override
 	public RuntimeDefinition getRuntimeDefinition(File root,
 			IProgressMonitor monitor) {
 		if (monitor.isCanceled() || root == null) {

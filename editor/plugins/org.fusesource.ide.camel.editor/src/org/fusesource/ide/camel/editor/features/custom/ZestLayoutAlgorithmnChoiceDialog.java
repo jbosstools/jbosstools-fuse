@@ -7,7 +7,8 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 public class ZestLayoutAlgorithmnChoiceDialog extends ElementListSelectionDialog {
     public ZestLayoutAlgorithmnChoiceDialog(Shell parent) {
         super(parent, new LabelProvider() {
-            public String getText(Object element) {
+            @Override
+			public String getText(Object element) {
                 Integer idx = (Integer) element;
                 return ZestLayoutDiagramFeature.layouts.get(idx - 1);
             }

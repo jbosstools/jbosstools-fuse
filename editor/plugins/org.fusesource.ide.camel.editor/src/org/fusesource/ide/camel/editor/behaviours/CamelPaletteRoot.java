@@ -251,10 +251,12 @@ public class CamelPaletteRoot extends PaletteRoot {
 			this.objType = objType;
 		}
 
+		@Override
 		public Object getNewObject() {
 			return obj;
 		}
 
+		@Override
 		public Object getObjectType() {
 			return objType;
 		}

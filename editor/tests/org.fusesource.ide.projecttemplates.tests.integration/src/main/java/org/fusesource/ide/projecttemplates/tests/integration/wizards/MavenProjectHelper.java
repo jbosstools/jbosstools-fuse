@@ -69,6 +69,7 @@ public class MavenProjectHelper {
 		final List<IMavenProjectImportResult> importResults = new ArrayList<>();
 
 		workspace.run(new IWorkspaceRunnable() {
+			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
 				importResults.addAll(MavenPlugin.getProjectConfigurationManager().importProjects(projectInfos,
 						importConfiguration, monitor));
@@ -129,6 +130,7 @@ public class MavenProjectHelper {
 	private static List<IMarker> findMarkers(IProject project, int targetSeverity)
 			throws CoreException {
 		SortedMap<IMarker, IMarker> errors = new TreeMap<>(new Comparator<IMarker>() {
+			@Override
 			public int compare(IMarker o1, IMarker o2) {
 				int lineNumber1 = o1.getAttribute(IMarker.LINE_NUMBER, -1);
 				int lineNumber2 = o2.getAttribute(IMarker.LINE_NUMBER, -1);

@@ -25,6 +25,7 @@ public class PasteNodeFeature extends AbstractPasteFeature {
 		super(fp);
 	}
 
+	@Override
 	public boolean canPaste(IPasteContext context) {
 		// only support pasting directly in the diagram (nothing else selected)
 		PictogramElement[] pes = context.getPictogramElements();
@@ -46,6 +47,7 @@ public class PasteNodeFeature extends AbstractPasteFeature {
 		return true;
 	}
 
+	@Override
 	public void paste(IPasteContext context) {
 		// we already verified, that we paste directly in the diagram
 		PictogramElement[] pes = context.getPictogramElements();

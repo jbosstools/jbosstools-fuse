@@ -61,6 +61,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 		return VALID;
 	}
 
+	@Override
 	public int describe(InputStream contents, IContentDescription description) throws IOException {
 		return describe(contents, description, new HashMap());
 	}
@@ -78,6 +79,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 		return checkCriteria(new InputSource(contents), properties);
 	}
 
+	@Override
 	public int describe(Reader contents, IContentDescription description) throws IOException {
 		return describe(contents, description, new HashMap());
 	}

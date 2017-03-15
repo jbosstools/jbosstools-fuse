@@ -41,9 +41,11 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 		karafSubTypeMap.put("mq-version.jar", KARAF_TYPE_AMQ);
 	}
 	
+	@Override
 	public boolean accepts(IActiveJvm jvm) {
 		return isKaraf(jvm);
 	}
+	@Override
 	public Image getImage(IActiveJvm jvm) {
 		String karafHomeFolder = getKarafHomeFolder(jvm);
 		String karafSubType = getKarafSubtype(karafHomeFolder);
@@ -64,6 +66,7 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 		return i;
 	}
 	
+	@Override
 	public String getDisplayString(IActiveJvm jvm) {
 		String karafHomeFolder = getKarafHomeFolder(jvm);
 		String karafSubType = getKarafSubtype(karafHomeFolder);
@@ -114,6 +117,7 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 			File libFolder = new File(String.format("%s%slib%s", karafHomeFolder, File.separator, File.separator));
 			if (libFolder.exists() && libFolder.isDirectory()) {
 				File[] jars = libFolder.listFiles(new FileFilter() {
+					@Override
 					public boolean accept(File f) {
 						return f.isFile() && (f.getName().toLowerCase().endsWith("-version.jar"));
 					}

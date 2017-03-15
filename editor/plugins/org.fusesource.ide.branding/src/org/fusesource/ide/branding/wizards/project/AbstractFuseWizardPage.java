@@ -77,7 +77,8 @@ public abstract class AbstractFuseWizardPage extends WizardPage {
   }
 */
   /** Loads the advanced settings data when the page is displayed. */
-  public void setVisible(boolean visible) {
+  @Override
+public void setVisible(boolean visible) {
     if(visible) {
       if(!isHistoryLoaded) {
         // load data before history kicks in
@@ -97,7 +98,8 @@ public abstract class AbstractFuseWizardPage extends WizardPage {
   }
 
   /** Saves the history when the page is disposed. */
-  public void dispose() {
+  @Override
+public void dispose() {
     saveInputHistory();
     super.dispose();
   }

@@ -50,6 +50,7 @@ public class ActiveMQNodeProvider implements NodeProvider {
 		
 	}
 
+	@Override
 	public void provideRootNodes(List<org.jboss.tools.jmx.core.tree.NodeProvider> list) {
 	}	
 }

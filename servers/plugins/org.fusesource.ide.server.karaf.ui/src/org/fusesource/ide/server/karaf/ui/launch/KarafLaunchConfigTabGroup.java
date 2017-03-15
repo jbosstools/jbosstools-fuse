@@ -29,6 +29,7 @@ public class KarafLaunchConfigTabGroup extends
 	public KarafLaunchConfigTabGroup() {
 	}
 
+	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		List<ILaunchConfigurationTab> tabs = new ArrayList<ILaunchConfigurationTab>(5);
 		

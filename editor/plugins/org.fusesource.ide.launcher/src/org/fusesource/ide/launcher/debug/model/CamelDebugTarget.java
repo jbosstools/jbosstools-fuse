@@ -640,6 +640,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		/* (non-Javadoc)
 		 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
 		 */
+		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.beginTask("Connect to Camel VM...", 1);
 			

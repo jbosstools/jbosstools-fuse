@@ -19,6 +19,7 @@ import org.fusesource.ide.foundation.core.xml.namespace.FindCamelNamespaceHandle
  */
 public class CamelXmlMatchingStrategy extends XmlMatchingStrategySupport  {
 
+	@Override
 	protected FindCamelNamespaceHandler createNamespaceFinder() {
 		return new FindCamelNamespaceHandler();
 	}
