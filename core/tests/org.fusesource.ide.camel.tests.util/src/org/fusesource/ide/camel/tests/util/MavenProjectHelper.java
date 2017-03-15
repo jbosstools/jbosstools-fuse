@@ -156,8 +156,25 @@ public class MavenProjectHelper {
 		}
 	}
 
-	private static List<IMarker> findMarkers(IProject project, int targetSeverity) throws CoreException {
-		SortedMap<IMarker, IMarker> errors = new TreeMap<>(new MarkerComparatorByLine());
+	private static List<IMarker> findMarkers(IProject project, int targetSeverity)
+			throws CoreException {
+		SortedMap<IMarker, IMarker> errors = new TreeMap<>(new Comparator<IMarker>() {
+			@Override
+			public int compare(IMarker o1, IMarker o2) {
+				int lineNumber1 = o1.getAttribute(IMarker.LINE_NUMBER, -1);
+				int lineNumber2 = o2.getAttribute(IMarker.LINE_NUMBER, -1);
+				if(lineNumber1 < lineNumber2) {
+					return -1;
+				}
+				if(lineNumber1 > lineNumber2) {
+					return 1;
+				}
+				// Markers on the same line
+				String message1 = o1.getAttribute(IMarker.MESSAGE, "");
+				String message2 = o2.getAttribute(IMarker.MESSAGE, "");
+				return message1.compareTo(message2);
+			}
+		});
 		for(IMarker marker : project.findMarkers(null /* all markers */, true /* subtypes */, IResource.DEPTH_INFINITE)) {
 			int severity = marker.getAttribute(IMarker.SEVERITY, 0);
 			if(severity != targetSeverity) {

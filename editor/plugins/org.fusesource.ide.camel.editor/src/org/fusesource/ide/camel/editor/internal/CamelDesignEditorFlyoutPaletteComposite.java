@@ -153,11 +153,13 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	private int cachedSearchHeight = 24;
 
 	private IPerspectiveListener perspectiveListener = new IPerspectiveListener() {
+		@Override
 		public void perspectiveActivated(IWorkbenchPage page,
 				IPerspectiveDescriptor perspective) {
 			handlePerspectiveActivated(page, perspective);
 		}
 
+		@Override
 		public void perspectiveChanged(IWorkbenchPage page,
 				IPerspectiveDescriptor perspective, String changeId) {
 			handlePerspectiveChanged(page, perspective, changeId);
@@ -198,6 +200,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		updateState(page);
 
 		addListener(SWT.Resize, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				Rectangle area = getClientArea();
 				/*
@@ -211,6 +214,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		});
 
 		listeners.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				String property = evt.getPropertyName();
 				if (property.equals(PROPERTY_PALETTE_WIDTH))
@@ -346,6 +350,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	/**
 	 * @see Composite#layout(boolean)
 	 */
+	@Override
 	public void layout(boolean changed) {
 		if (graphicalControl == null || graphicalControl.isDisposed())
 			return;
@@ -455,6 +460,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	private void hookIntoWorkbench(final IWorkbenchWindow window) {
 		window.addPerspectiveListener(perspectiveListener);
 		addDisposeListener(new DisposeListener() {
+			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				window.removePerspectiveListener(perspectiveListener);
 				perspectiveListener = null;
@@ -485,6 +491,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	 * @param viewer
 	 *            The palette viewer used in the PaletteView
 	 */
+	@Override
 	public void setExternalViewer(PaletteViewer viewer) {
 		if (viewer == null && externalViewer != null)
 			capturedPaletteState = capturePaletteState(externalViewer);
@@ -527,6 +534,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	 *            the control of the graphical viewer; cannot be
 	 *            <code>null</code>
 	 */
+	@Override
 	public void setGraphicalControl(Control graphicalViewer) {
 		Assert.isTrue(graphicalViewer != null);
 		Assert.isTrue(graphicalViewer.getParent() == this);
@@ -534,10 +542,12 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		graphicalControl = graphicalViewer;
 		addListenerToCtrlHierarchy(graphicalControl, SWT.MouseEnter,
 				new Listener() {
+					@Override
 					public void handleEvent(Event event) {
 						if (!isInState(STATE_EXPANDED))
 							return;
 						Display.getCurrent().timerExec(250, new Runnable() {
+							@Override
 							public void run() {
 								if (isDescendantOf(graphicalControl, Display
 										.getCurrent().getCursorControl())
@@ -563,30 +573,39 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 	 * @param viewer
 	 *            the primary viewer
 	 */
+	@Override
 	public void hookDropTargetListener(GraphicalViewer viewer) {
 		viewer.addDropTargetListener(new TransferDropTargetListener() {
+			@Override
 			public void dragEnter(DropTargetEvent event) {
 			}
 
+			@Override
 			public void dragLeave(DropTargetEvent event) {
 			}
 
+			@Override
 			public void dragOperationChanged(DropTargetEvent event) {
 			}
 
+			@Override
 			public void dragOver(DropTargetEvent event) {
 			}
 
+			@Override
 			public void drop(DropTargetEvent event) {
 			}
 
+			@Override
 			public void dropAccept(DropTargetEvent event) {
 			}
 
+			@Override
 			public Transfer getTransfer() {
 				return TemplateTransfer.getInstance();
 			}
 
+			@Override
 			public boolean isEnabled(DropTargetEvent event) {
 				if (isInState(STATE_EXPANDED))
 					setState(STATE_COLLAPSED);
@@ -678,6 +697,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			new SashDragManager();
 
 			addMouseTrackListener(new MouseTrackAdapter() {
+				@Override
 				public void mouseHover(MouseEvent e) {
 					if (isInState(STATE_COLLAPSED))
 						setState(STATE_EXPANDED);
@@ -685,18 +705,21 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			});
 
 			addListener(SWT.Paint, new Listener() {
+				@Override
 				public void handleEvent(Event event) {
 					paintSash(event.gc);
 				}
 			});
 
 			addListener(SWT.Resize, new Listener() {
+				@Override
 				public void handleEvent(Event event) {
 					layout(true);
 				}
 			});
 
 			listeners.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(PROPERTY_STATE))
 						updateState();
@@ -704,6 +727,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			});
 		}
 
+		@Override
 		public Point computeSize(int wHint, int hHint, boolean changed) {
 			if (isInState(STATE_PINNED_OPEN))
 				return new Point(3, 3);
@@ -719,6 +743,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			setPaletteWidth(newSize);
 		}
 
+		@Override
 		public void layout(boolean changed) {
 			if (button == null)
 				return;
@@ -781,6 +806,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			protected boolean mouseDown = false;
 			protected int origX;
 			protected Listener keyListener = new Listener() {
+				@Override
 				public void handleEvent(Event event) {
 					if (event.keyCode == SWT.ALT || event.keyCode == SWT.ESC) {
 						dragging = false;
@@ -796,6 +822,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				Sash.this.addMouseListener(this);
 			}
 
+			@Override
 			public void mouseDown(MouseEvent me) {
 				if (me.button != 1)
 					return;
@@ -805,6 +832,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				Display.getCurrent().addFilter(SWT.KeyDown, keyListener);
 			}
 
+			@Override
 			public void mouseMove(MouseEvent me) {
 				if (mouseDown)
 					dragging = true;
@@ -812,6 +840,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 					handleSashDragged(me.x - origX);
 			}
 
+			@Override
 			public void mouseUp(MouseEvent me) {
 				Display.getCurrent().removeFilter(SWT.KeyDown, keyListener);
 				if (!dragging && me.button == 1) {
@@ -832,10 +861,12 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			super(PaletteMessages.RESIZE_LABEL);
 		}
 
+		@Override
 		public boolean isEnabled() {
 			return !isInState(STATE_COLLAPSED);
 		}
 
+		@Override
 		public void run() {
 			final Tracker tracker = new Tracker(CamelDesignEditorFlyoutPaletteComposite.this,
 					SWT.RIGHT | SWT.LEFT);
@@ -865,6 +896,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			ctrl.addMouseTrackListener(this);
 		}
 
+		@Override
 		public void handleEvent(Event event) {
 			dragging = true;
 			switchDock = false;
@@ -883,8 +915,10 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			tracker.setRectangles(new Rectangle[] { origBounds });
 			tracker.setStippled(true);
 			tracker.addListener(SWT.Move, new Listener() {
+				@Override
 				public void handleEvent(final Event evt) {
 					Display.getCurrent().syncExec(new Runnable() {
+						@Override
 						public void run() {
 							Control ctrl = Display.getCurrent()
 									.getCursorControl();
@@ -953,12 +987,15 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			tracker.dispose();
 		}
 
+		@Override
 		public void mouseEnter(MouseEvent e) {
 		}
 
+		@Override
 		public void mouseExit(MouseEvent e) {
 		}
 
+		@Override
 		public void mouseHover(MouseEvent e) {
 			/*
 			 * @TODO:Pratik Mouse hover events are received if the hover occurs
@@ -969,6 +1006,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				setState(STATE_EXPANDED);
 		}
 
+		@Override
 		public void mouseUp(MouseEvent me) {
 			if (me.button != 1)
 				return;
@@ -988,6 +1026,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			createComponents();
 
 			listeners.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(PROPERTY_STATE))
 						updateState();
@@ -999,6 +1038,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			});
 
 			addListener(SWT.Resize, new Listener() {
+				@Override
 				public void handleEvent(Event event) {
 					layout(true);
 				}
@@ -1017,6 +1057,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			button = createFlyoutControlButton(this);
 		}
 
+		@Override
 		public void layout(boolean changed) {
 			Control pCtrl = getPaletteViewerControl();
 			if (pCtrl == null || pCtrl.isDisposed())
@@ -1078,12 +1119,14 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			setForegroundColor(ColorConstants.listForeground);
 		}
 
+		@Override
 		public IFigure getToolTip() {
 			if (isTextTruncated())
 				return super.getToolTip();
 			return null;
 		}
 
+		@Override
 		protected void paintFigure(Graphics graphics) {
 
 			// paint the gradient
@@ -1125,6 +1168,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			provideAccSupport();
 		}
 
+		@Override
 		public Point computeSize(int wHint, int hHint, boolean changed) {
 			Dimension size = lws.getRootFigure().getPreferredSize(wHint, hHint);
 			size.union(new Dimension(wHint, hHint));
@@ -1162,6 +1206,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			b.setRolloverEnabled(true);
 			b.setBorder(new ButtonBorder(ButtonBorder.SCHEMES.TOOLBAR));
 			b.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent event) {
 					transferFocus = true;
 					if (isInState(STATE_COLLAPSED))
@@ -1171,6 +1216,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				}
 			});
 			listeners.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(PROPERTY_STATE)) {
 						b.setDirection(getArrowDirection());
@@ -1185,20 +1231,24 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 
 		private void provideAccSupport() {
 			getAccessible().addAccessibleListener(new AccessibleAdapter() {
+				@Override
 				public void getDescription(AccessibleEvent e) {
 					e.result = PaletteMessages.ACC_DESC_PALETTE_BUTTON;
 				}
 
+				@Override
 				public void getHelp(AccessibleEvent e) {
 					getDescription(e);
 				}
 
+				@Override
 				public void getName(AccessibleEvent e) {
 					e.result = getToolTipText();
 				}
 			});
 			getAccessible().addAccessibleControlListener(
 					new AccessibleControlAdapter() {
+						@Override
 						public void getRole(AccessibleControlEvent e) {
 							e.detail = ACC.ROLE_PUSHBUTTON;
 						}
@@ -1233,6 +1283,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				}
 			}
 
+			@Override
 			protected void layout() {
 				org.eclipse.draw2d.geometry.Rectangle clientArea = getBounds();
 
@@ -1242,6 +1293,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 						ARROW_SIZE));
 			}
 
+			@Override
 			protected void paintFigure(Graphics graphics) {
 				super.paintFigure(graphics);
 
@@ -1274,6 +1326,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		/**
 		 * @see org.eclipse.swt.widgets.Control#computeSize(int, int, boolean)
 		 */
+		@Override
 		public Point computeSize(int wHint, int hHint, boolean changed) {
 			Dimension size = lws.getRootFigure().getPreferredSize(wHint, hHint);
 			size.union(new Dimension(wHint, hHint));
@@ -1285,10 +1338,12 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			contents.setRequestFocusEnabled(true);
 			contents.setFocusTraversable(true);
 			contents.addFocusListener(new FocusListener() {
+				@Override
 				public void focusGained(FocusEvent fe) {
 					fe.gainer.repaint();
 				}
 
+				@Override
 				public void focusLost(FocusEvent fe) {
 					fe.loser.repaint();
 				}
@@ -1310,6 +1365,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			manager.add(mgr);
 			setMenu(manager.createContextMenu(this));
 			mgr.addMenuListener(new IMenuListener() {
+				@Override
 				public void menuAboutToShow(IMenuManager menuMgr) {
 					IContributionItem[] items = menuMgr.getItems();
 					for (int i = 0; i < items.length; i++) {
@@ -1319,6 +1375,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			});
 
 			addDisposeListener(new DisposeListener() {
+				@Override
 				public void widgetDisposed(DisposeEvent e) {
 					FONT_MGR.unregister(TitleCanvas.this);
 					manager.dispose();
@@ -1328,26 +1385,31 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 
 		private void provideAccSupport() {
 			getAccessible().addAccessibleListener(new AccessibleAdapter() {
+				@Override
 				public void getDescription(AccessibleEvent e) {
 					e.result = PaletteMessages.ACC_DESC_PALETTE_TITLE;
 				}
 
+				@Override
 				public void getHelp(AccessibleEvent e) {
 					getDescription(e);
 				}
 
+				@Override
 				public void getName(AccessibleEvent e) {
 					e.result = GEFMessages.Palette_Label;
 				}
 			});
 			getAccessible().addAccessibleControlListener(
 					new AccessibleControlAdapter() {
+						@Override
 						public void getRole(AccessibleControlEvent e) {
 							e.detail = ACC.ROLE_LABEL;
 						}
 					});
 		}
 
+		@Override
 		public void setFont(Font font) {
 			((IFigure) lws.getRootFigure().getChildren().get(0)).setFont(font);
 			if (isVisible()) {
@@ -1388,6 +1450,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		 * 
 		 * @see org.eclipse.jface.action.IAction#isChecked()
 		 */
+		@Override
 		public boolean isChecked() {
 			return dock == position;
 		}
@@ -1398,6 +1461,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		 * 
 		 * @see org.eclipse.jface.action.IAction#run()
 		 */
+		@Override
 		public void run() {
 			setDockLocation(position);
 		}
@@ -1408,6 +1472,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		private List registrants = new ArrayList();
 		private Font titleFont;
 		private final IPropertyChangeListener fontListener = new IPropertyChangeListener() {
+			@Override
 			public void propertyChange(
 					org.eclipse.jface.util.PropertyChangeEvent event) {
 				if (fontName.equals(event.getProperty()))
@@ -1482,26 +1547,32 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 			prefs = preferences;
 		}
 
+		@Override
 		public int getDockLocation() {
 			return prefs.getInt(PALETTE_DOCK_LOCATION);
 		}
 
+		@Override
 		public int getPaletteState() {
 			return prefs.getInt(PALETTE_STATE);
 		}
 
+		@Override
 		public int getPaletteWidth() {
 			return prefs.getInt(PALETTE_SIZE);
 		}
 
+		@Override
 		public void setDockLocation(int location) {
 			prefs.setValue(PALETTE_DOCK_LOCATION, location);
 		}
 
+		@Override
 		public void setPaletteState(int state) {
 			prefs.setValue(PALETTE_STATE, state);
 		}
 
+		@Override
 		public void setPaletteWidth(int width) {
 			prefs.setValue(PALETTE_SIZE, width);
 		}
