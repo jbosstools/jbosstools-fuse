@@ -11,7 +11,6 @@
 package org.fusesource.ide.camel.editor;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -203,7 +202,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 								IEditorInput editorInput = editor.getEditorInput();
 								if (editorInput instanceof CamelXMLEditorInput && !((CamelXMLEditorInput) editorInput).getCamelContextFile().exists()) {
 									page.closeEditor(er.getEditor(false), false);
-									if (er != null && er.getEditor(false) != null) {
+									if (er.getEditor(false) != null) {
 										er.getEditor(false).dispose();
 									}
 								}
@@ -271,7 +270,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param dirtyFlag the dirtyFlag to set
 	 */
 	public void setDirtyFlag(boolean dirtyFlag) {
-		if (disableDirtyFlag == false) {
+		if (!disableDirtyFlag) {
 			this.dirtyFlag = dirtyFlag;
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
@@ -500,51 +499,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 	
-	/**
-	 * checks if there are unconnected figures and shows a warning in that case.
-	 * if users ignore the warning the unconnected endpoints are lost
-	 *  
-	 * @return	true if user wants to preserve unconnected figures, otherwise (or if no unconnected figures) returns false
-	 */
-	private boolean continueWithUnconnectedFigures() {
-		// search for figures which have no connections - those would be lost when
-		// saving or switching the tabs
-		boolean unconnectedNodeFound = false;
-
-		unconnectedNodeFound = findUnconnectedNode(designEditor.getModel().getChildElements());
-		
-		if (!unconnectedNodeFound) return true;
-		
-		return MessageDialog.openQuestion(Display.getDefault().getActiveShell(), UIMessages.unconnectedNodeFoundTitle, UIMessages.unconnectedNodeFoundText);
-	}
-	
-	/**
-	 * searches for unconnected nodes
-	 * 
-	 * @param nodes
-	 * @return
-	 */
-	private boolean findUnconnectedNode(List<AbstractCamelModelElement> nodes) {
-		boolean unconnected = false;
-		int nodesWithoutInput = 0;
-		int nodesWithoutOutput = 0;
-		for (AbstractCamelModelElement node : nodes) {
-			if (!node.getChildElements().isEmpty()) {
-				unconnected = findUnconnectedNode(node.getChildElements());
-				if (unconnected) return true;
-			}
-			if (node.getInputElement() == null) nodesWithoutInput++;
-			if (node.getOutputElement() == null) nodesWithoutOutput++;
-		}
-		if (nodesWithoutInput > 1 || nodesWithoutOutput > 1) return true;
-		
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
-	 */
 	@Override
 	public String getContributorId() {
 		return getSite().getId();

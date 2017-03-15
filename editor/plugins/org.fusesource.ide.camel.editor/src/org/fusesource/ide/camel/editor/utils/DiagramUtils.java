@@ -38,6 +38,10 @@ public class DiagramUtils {
 	private static int TEXT_MAX_LENGTH = 20;
 	private static String TEXT_FILL_CHARS = "...";
 	
+	private DiagramUtils(){
+		/* Can be accessed statically only */
+	}
+	
 	/**
 	 * retrieves the anchor for a given pictogram element
 	 * 
@@ -48,9 +52,8 @@ public class DiagramUtils {
 		if (element instanceof AnchorContainer) {
 			AnchorContainer container = (AnchorContainer) element;
 			EList<Anchor> anchors = container.getAnchors();
-			if (anchors != null && anchors.size() > 0) {
-				Anchor answer = anchors.get(0);
-				return answer;
+			if (anchors != null && !anchors.isEmpty()) {
+				return anchors.get(0);
 			}
 		}
 		return null;
@@ -65,7 +68,7 @@ public class DiagramUtils {
 			if (graphicalViewer != null
 					&& graphicalViewer.getEditPartRegistry() != null) {
 				ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) graphicalViewer.getEditPartRegistry().get(LayerManager.ID);
-				IFigure gridFigure = ((LayerManager) rootEditPart).getLayer(LayerConstants.GRID_LAYER);
+				IFigure gridFigure = rootEditPart.getLayer(LayerConstants.GRID_LAYER);
 				gridFigure.setVisible(visible);
 				editor.getDiagramBehavior().refreshContent();
 			}

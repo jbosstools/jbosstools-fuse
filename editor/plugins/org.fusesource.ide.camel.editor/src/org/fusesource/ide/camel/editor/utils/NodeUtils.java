@@ -33,6 +33,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.HasOwner;
 
@@ -40,6 +41,10 @@ import org.fusesource.ide.foundation.ui.tree.HasOwner;
  * @author lhein
  */
 public class NodeUtils {
+	
+	private NodeUtils(){
+		/*Can be accessed only statically*/
+	}
 
 	public static String getPropertyName(final Object id) {
 		String propertyName = id.toString();
@@ -59,7 +64,7 @@ public class NodeUtils {
 			Eip eip = node.getUnderlyingMetaModelObject();
 			Parameter p = eip.getParameter(propertyName);
 			if (p != null) {
-				return p.getRequired().equals("true");
+				return "true".equals(p.getRequired());
 			}
 		}
 		return false;
@@ -74,29 +79,34 @@ public class NodeUtils {
 	 */
 	public static boolean isValidChild(AbstractCamelModelElement parent, AbstractCamelModelElement child) {
 		if (parent != null && child != null) {
-			IProject project;
-			if (parent.getCamelFile() != null && parent.getCamelFile().getResource() != null) {
-				project = parent.getCamelFile().getResource().getProject();
-			} else {
-				project = null;
-			}
-			CamelModel metaModel = CamelModelFactory.getModelForProject(project);
+			CamelModel metaModel = getCamelModel(parent);
 			
-			if (AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(parent.getNodeTypeId())) {
+			String parentNodeType = parent.getNodeTypeId();
+			String childNodeType = child.getNodeTypeId();
+			if (AbstractCamelModelElement.CHOICE_NODE_NAME.equalsIgnoreCase(parentNodeType)) {
 				// special case for choice
-				return 	 AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(child.getNodeTypeId()) || 
-						(AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(child.getNodeTypeId()) && (parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == null || parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == child));
-			} else if (AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(parent.getNodeTypeId())) {
-				return !AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(child.getNodeTypeId());
+				return AbstractCamelModelElement.WHEN_NODE_NAME.equalsIgnoreCase(childNodeType) || 
+						(AbstractCamelModelElement.OTHERWISE_NODE_NAME.equalsIgnoreCase(childNodeType) && (parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == null || parent.getParameter(AbstractCamelModelElement.OTHERWISE_NODE_NAME) == child));
+			} else if (AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(parentNodeType)) {
+				return !AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(childNodeType);
 			} else {
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
 				if (containerEip == null) {
-					containerEip = metaModel.getEipModel().getEIPByName(parent.getNodeTypeId());
+					containerEip = metaModel.getEipModel().getEIPByName(parentNodeType);
 				}
-				return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(child.getNodeTypeId());
+				return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(childNodeType);
 			}
 		}
 		return false;
+	}
+
+	private static CamelModel getCamelModel(AbstractCamelModelElement parent) {
+		CamelFile camelFile = parent.getCamelFile();
+		IProject project = null;
+		if (camelFile != null && camelFile.getResource() != null) {
+			project = camelFile.getResource().getProject();
+		}
+		return CamelModelFactory.getModelForProject(project);
 	}
 	
 	/**
@@ -127,7 +137,7 @@ public class NodeUtils {
 			if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().canHaveChildren()) {
 				pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(cme));
 			}
-			if (cme.getChildElements().size() > 0) {
+			if (!cme.getChildElements().isEmpty()) {
 				getAllContainers(fp, cme, pes);
 			}
 		}
@@ -213,10 +223,14 @@ public class NodeUtils {
 	 */
 	public static void deleteBOFromModel(IFeatureProvider fp, AbstractCamelModelElement nodeToRemove) {
 		// we can't remove null objects or the root of the routes
-		if (nodeToRemove == null || nodeToRemove instanceof CamelContextElement) return;
+		if (nodeToRemove == null || nodeToRemove instanceof CamelContextElement){
+			return;
+		}
 
 		// remove from parent
-		if (nodeToRemove.getParent() != null) nodeToRemove.getParent().removeChildElement(nodeToRemove);
+		if (nodeToRemove.getParent() != null){
+			nodeToRemove.getParent().removeChildElement(nodeToRemove);
+		}
 		 
 		// lets remove all connections
 		if (nodeToRemove.getInputElement() != null && nodeToRemove.getOutputElement() != null) {
