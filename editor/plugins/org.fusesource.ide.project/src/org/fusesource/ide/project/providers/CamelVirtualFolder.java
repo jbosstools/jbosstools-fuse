@@ -74,17 +74,17 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 
 	class CamelVirtualFolderListener implements IResourceChangeListener {
 
-		private IProject _project;
+		private IProject project;
 
 		public CamelVirtualFolderListener(IProject project) {
-			this._project = project;
+			this.project = project;
 		}
 
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
 			if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
 				try {
-					event.getDelta().accept(new DeltaPrinter(_project));
+					event.getDelta().accept(new DeltaPrinter(project));
 				} catch (CoreException ex) {
 					Activator.getLogger().error(ex);
 				}
@@ -94,11 +94,11 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	
 	class DeltaPrinter implements IResourceDeltaVisitor {
 
-		private IProject _project;
+		private IProject project;
 		private CamelFilesFinder camelFilesFinder= new CamelFilesFinder();
 
 		public DeltaPrinter(IProject project) {
-			this._project = project;
+			this.project = project;
 		}
 
 		@Override
@@ -106,17 +106,24 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			IResource resource = delta.getResource();
 
 			if (resource.getProject() != null
-					&& !resource.getProject().equals(_project)) {
+					&& !resource.getProject().equals(project)) {
 				// we are not interested in changes of other projects
 				return true;
 			}
 
-			switch (delta.getKind()) {
-			case IResourceDelta.ADDED:
-				if (camelFilesFinder.isWorkProjectFolder(_project, getAncestorDirectChildOfProject(_project, resource))) {
-					// skip work folder (target and bin)
-					break;
-				}
+			int deltaKind = delta.getKind();
+			if(deltaKind == IResourceDelta.ADDED) {
+				visitAddedFile(resource);
+			} else if(deltaKind == IResourceDelta.REMOVED) {
+				// a resource has been removed, check if we need to remove
+				// it from the virtual camel folder
+				camelFiles.remove(resource);
+			}
+			return true; // visit the children
+		}
+
+		private void visitAddedFile(IResource resource) {
+			if (!camelFilesFinder.isWorkProjectFolder(project, getAncestorDirectChildOfProject(project, resource))) {
 				// a resource was added, check if we need to add it the the
 				// camel virtual folder too
 				try {
@@ -126,20 +133,13 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 				} catch (CoreException ex) {
 					// ignore file
 				}
-				break;
-			case IResourceDelta.REMOVED:
-				// a resource has been removed, check if we need to remove
-				// it from the virtual camel folder
-				camelFiles.remove(resource);
-				break;
 			}
-			return true; // visit the children
 		}
 	}
 	
 	private IResource getAncestorDirectChildOfProject(IProject project, IResource resource){
 		IResource parent = resource.getParent();
-		if(project.equals(parent)){
+		if(project.equals(parent) || parent == null){
 			return resource;
 		} else {
 			return getAncestorDirectChildOfProject(project, parent);
@@ -189,7 +189,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 							   
 							   // if there are already other camel context files we use the path the first best is stored under,
 							   // otherwise we use the project main folder
-							   IStructuredSelection sel = null;
+							   IStructuredSelection sel;
 							   if (!getCamelFiles().isEmpty()) {
 								   sel = new StructuredSelection(getCamelFiles().iterator().next().getParent());
 							   } else {

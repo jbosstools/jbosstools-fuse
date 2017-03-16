@@ -15,14 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class CamelVirtualFolderIT {
 
 	@Rule
 	public FuseProject fuseProject = new FuseProject(CamelVirtualFolderIT.class.getName());
+	
+	@Rule
+	public TemporaryFolder tmp = new TemporaryFolder();
 	
 	@Test
 	public void testCamelVirtualFolderFindCamelFile() throws Exception {
@@ -31,6 +36,17 @@ public class CamelVirtualFolderIT {
 		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder();
 		
 		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(1);
+	}
+	
+	@Test
+	public void testCamelVirtualFolderDetectRemovedCamelFile() throws Exception {
+		CamelFile camelFile = fuseProject.createEmptyCamelFile();
+		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder();
+		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(1);
+		
+		camelFile.getResource().delete(true, new NullProgressMonitor());
+		
+		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(0);
 	}
 	
 	@Test

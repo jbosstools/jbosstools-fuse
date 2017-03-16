@@ -106,9 +106,9 @@ public class FuseProject extends ExternalResource {
 	}
 
 	public CamelFile createEmptyCamelFile(IFile file) throws CoreException, IOException {
-		InputStream source = FuseProject.class.getResourceAsStream("/empty-CamelFile.xml");
-		file.create(source, true, new NullProgressMonitor());
-		source.close();
+		try(InputStream source = FuseProject.class.getResourceAsStream("/empty-CamelFile.xml")){
+			file.create(source, true, new NullProgressMonitor());
+		}
 		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 
