@@ -243,7 +243,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		fireChangeEvent(DebugEvent.CONTENT);
 
 		// 2 possible reasons for suspend - a) step over ended or b) breakpoint hit
-		if (this.fStepping == true) {
+		if (fStepping) {
 			// suspended because step over is finished
 			fireSuspendEvent(DebugEvent.STEP_END);
 			fStepping = false;

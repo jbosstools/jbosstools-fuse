@@ -44,6 +44,9 @@ public class Messages extends NLS {
 	public static String pomDirectoryEmpty;
 	public static String pomDirectoryDoesntExist;
 	public static String xmlSelectionDialogOnRunAndDebugTitle;
+	public static String disconnected;
+	public static String suspended;
+	public static String terminated;
 	
 	static {
         // initialize resource bundle

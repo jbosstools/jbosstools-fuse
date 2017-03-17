@@ -101,14 +101,14 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	private HashMap<String, CamelThread> threads = new HashMap<>(); 
 	
 	// event dispatcher
-	private EventDispatchJob dispatcher;
-	private ThreadGarbageCollector garbageCollector;
+	EventDispatchJob dispatcher;
+	ThreadGarbageCollector garbageCollector;
 	private JMXConnectJob conJob;
 
 	/**
 	 * the debugger facade
 	 */
-	private ICamelDebuggerMBeanFacade debugger;
+	ICamelDebuggerMBeanFacade debugger;
 	
 	/**
 	 * Constructs a new debug target in the given launch for the 
@@ -134,16 +134,34 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		initCamelContextId();
 		
 		// start connector job
-		conJob = new JMXConnectJob();
-		conJob.schedule();
+		scheduleJobs();
 		
-		this.dispatcher = new EventDispatchJob();
-		this.dispatcher.schedule();
-		
+		registerAsBreakpointListener();
+	}
+
+	void registerAsBreakpointListener() {
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+	}
+
+	void scheduleJobs() {
+		scheduleJMXConnectJob();
+		scheduleEventDispatcherJob();
+		scheduleGarbageCollectorJob();
+	}
+
+	private void scheduleGarbageCollectorJob() {
 		this.garbageCollector = new ThreadGarbageCollector();
 		this.garbageCollector.schedule();
-		
-		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+	}
+
+	private void scheduleEventDispatcherJob() {
+		this.dispatcher = new EventDispatchJob();
+		this.dispatcher.schedule();
+	}
+
+	private void scheduleJMXConnectJob() {
+		conJob = new JMXConnectJob();
+		conJob.schedule();
 	}
 	
 	/**
@@ -276,7 +294,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	}
 	
 	@Override
-	public String getName() throws DebugException {
+	public String getName() {
 		if (fName == null) {
 			fName = String.format("Camel Context at %s", jmxUri);
 		}
@@ -310,7 +328,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	@Override
 	public boolean canTerminate() {
-		return getProcess() != null && getProcess().canTerminate();
+		return getProcess() != null && !isTerminated();
 	}
 	
 	@Override
@@ -321,24 +339,29 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	@Override
 	public void terminate() throws DebugException {
 		fTerminated = true;
-		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
+		unregisterBreakpointListener();
 		try {
 			// abort a possible stuck connect
 			if (conJob != null) {
 				conJob.cancel();
 			}
-			if (fProcess != null && !fProcess.isTerminated()) {
+			if(!isDisconnected()){
 				disconnect();
+			}
+			if (fProcess != null && !fProcess.isTerminated()) {
 				fProcess.terminate();
 			}
-		} catch (DebugException ex) {
-//			Activator.getLogger().error(ex);
+		} finally {
+			closeRemoteContextEditor();
+			fireTerminateEvent();
+			// clean up the jobs
+			dispatcher.cancel();
+			garbageCollector.cancel();
 		}
-		closeRemoteContextEditor();
-		fireTerminateEvent();
-		// clean up the jobs
-		this.dispatcher.cancel();
-		this.garbageCollector.cancel();
+	}
+
+	void unregisterBreakpointListener() {
+		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
 	}
 	
 	@Override
@@ -418,24 +441,25 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	@Override
 	public boolean canDisconnect() {
-		return fProcess == null;
+		return fProcess == null && !isDisconnected();
 	}
 	
 	@Override
 	public void disconnect() throws DebugException {
-		if (this.debugger != null) {
-			this.debugger.resumeAll();
-			this.debugger.disableDebugger();
+		if (debugger != null) {
+			debugger.resumeAll();
+			debugger.disableDebugger();
 			for (CamelThread t : threads.values()){
 				t.terminate();
 			}
-			this.debugger = null;
+			debugger = null;
 		}
+		fireTerminateEvent();
 	}
 	
 	@Override
 	public boolean isDisconnected() {
-		return this.debugger == null;
+		return debugger == null;
 	}
 	
 	@Override
