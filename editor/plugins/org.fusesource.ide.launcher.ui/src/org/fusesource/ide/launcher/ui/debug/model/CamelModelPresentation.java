@@ -32,6 +32,7 @@ import org.fusesource.ide.launcher.debug.model.variables.CamelMessageVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelProcessorVariable;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.Activator;
+import org.fusesource.ide.launcher.ui.Messages;
 
 /**
  * Renders camel debug elements
@@ -40,89 +41,111 @@ import org.fusesource.ide.launcher.ui.Activator;
  */
 public class CamelModelPresentation extends LabelProvider implements IDebugModelPresentation {
 	
-	private static final String IMG_CAMEL_DEBUG_TARGET         				= "camel.png";
-	private static final String IMG_CAMEL_THREAD_RUN   						= "run_camel_context.png";
-	private static final String IMG_CAMEL_THREAD_PAUSE 						= "pause_camel_context.png";
-	private static final String IMG_CAMEL_STACK_FRAME  		 				= "endpoint_node.png";
-	private static final String IMG_CAMEL_DEBUGGER	   						= "camel.png";
-	private static final String IMG_CAMEL_EXCHANGE     						= "message.png";
-	private static final String IMG_CAMEL_MESSAGE	   						= "message.png";
-	private static final String IMG_CAMEL_VARIABLE 	   						= "variable.png";
-	private static final String IMG_CAMEL_PROCESSOR  		 				= "endpoint_node.png";
-	private static final String IMG_CAMEL_BREAKPOINT_ENABLED				= "red-dot.png";
-	private static final String IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED	= "yellow-dot.png";
-	private static final String IMG_CAMEL_BREAKPOINT_DISABLED				= "gray-dot.png";
+	private static final String IMG_CAMEL_DEBUG_TARGET                      = "camel.png";
+	private static final String IMG_CAMEL_DISCONNECTED                      = "camel_disabled.png";
+	private static final String IMG_CAMEL_THREAD_RUN                        = "run_camel_context.png";
+	private static final String IMG_CAMEL_THREAD_PAUSE                      = "pause_camel_context.png";
+	private static final String IMG_CAMEL_STACK_FRAME                       = "endpoint_node.png";
+	private static final String IMG_CAMEL_DEBUGGER                          = "camel.png";
+	private static final String IMG_CAMEL_EXCHANGE                          = "message.png";
+	private static final String IMG_CAMEL_MESSAGE                           = "message.png";
+	private static final String IMG_CAMEL_VARIABLE                          = "variable.png";
+	private static final String IMG_CAMEL_PROCESSOR                         = "endpoint_node.png";
+	private static final String IMG_CAMEL_BREAKPOINT_ENABLED                = "red-dot.png";
+	private static final String IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED    = "yellow-dot.png";
+	private static final String IMG_CAMEL_BREAKPOINT_DISABLED               = "gray-dot.png";
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.IDebugModelPresentation#setAttribute(java.lang.String, java.lang.Object)
-	 */
 	@Override
 	public void setAttribute(String attribute, Object value) {
+		/* No specific display configuration*/
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-	 */
 	@Override
 	public Image getImage(Object element) {
+		Activator plugin = Activator.getDefault();
 		if (element instanceof CamelDebugTarget) {
-			return Activator.getDefault().getImage(IMG_CAMEL_DEBUG_TARGET);			
+			return getImage(element, plugin);
 		} else if (element instanceof CamelThread) {
-			CamelThread t = (CamelThread)element;
-			if (t.isSuspended()) {
-				return Activator.getDefault().getImage(IMG_CAMEL_THREAD_PAUSE);
-			} else {
-				return Activator.getDefault().getImage(IMG_CAMEL_THREAD_RUN);				
-			}
+			return getImage((CamelThread) element, plugin);
 		} else if (element instanceof CamelStackFrame) {
-			return Activator.getDefault().getImage(IMG_CAMEL_STACK_FRAME);
+			return plugin.getImage(IMG_CAMEL_STACK_FRAME);
 		} else if (element instanceof CamelEndpointBreakpoint) {
-			CamelEndpointBreakpoint bp = (CamelEndpointBreakpoint)element;
-			try {
-				if (bp.isEnabled() && element instanceof CamelConditionalBreakpoint) {
-					return Activator.getDefault().getImage(IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED);
-				} else if (bp.isEnabled() && element instanceof CamelEndpointBreakpoint) {
-					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_ENABLED);
-				} else {
-					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_DISABLED);
-				}
-			} catch (CoreException ex) {
-				Activator.getLogger().error(ex);
-			}
+			getImage((CamelEndpointBreakpoint) element, plugin);
 		} else if (element instanceof CamelDebuggerVariable) {
-			return Activator.getDefault().getImage(IMG_CAMEL_DEBUGGER);
+			return plugin.getImage(IMG_CAMEL_DEBUGGER);
 		} else if (element instanceof CamelExchangeVariable) {
-			return Activator.getDefault().getImage(IMG_CAMEL_EXCHANGE);
+			return plugin.getImage(IMG_CAMEL_EXCHANGE);
 		} else if (element instanceof CamelMessageVariable) {
-			return Activator.getDefault().getImage(IMG_CAMEL_MESSAGE);
+			return plugin.getImage(IMG_CAMEL_MESSAGE);
 		} else if (element instanceof CamelProcessorVariable) {
-			return Activator.getDefault().getImage(IMG_CAMEL_PROCESSOR);
+			return plugin.getImage(IMG_CAMEL_PROCESSOR);
 		} else if (element instanceof BaseCamelVariable) {
-			return Activator.getDefault().getImage(IMG_CAMEL_VARIABLE);
+			return plugin.getImage(IMG_CAMEL_VARIABLE);
 		} 
 		
 		return null;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-	 */
-	@Override
-	public String getText(Object element) {
-		// responsible for the text in the breakpoints view
-		if (element instanceof CamelEndpointBreakpoint) {
-			return element.toString();
+
+	private Image getImage(Object camelDebugTarget, Activator plugin) {
+		if(((CamelDebugTarget) camelDebugTarget).isDisconnected()){
+			return plugin.getImage(IMG_CAMEL_DISCONNECTED);
+		} else if(((CamelDebugTarget) camelDebugTarget).isSuspended()){
+			return plugin.getImage(IMG_CAMEL_THREAD_PAUSE);
+		} else {
+			return plugin.getImage(IMG_CAMEL_DEBUG_TARGET);		
+		}
+	}
+
+	private Image getImage(CamelThread camelThread, Activator plugin) {
+		if (camelThread.isSuspended()) {
+			return plugin.getImage(IMG_CAMEL_THREAD_PAUSE);
+		} else if (camelThread.isTerminated()) {
+			return plugin.getImage(IMG_CAMEL_DISCONNECTED);
+		} else {
+			return plugin.getImage(IMG_CAMEL_THREAD_RUN);				
+		}
+	}
+
+	private Image getImage(CamelEndpointBreakpoint breakpoint, Activator plugin) {
+		try {
+			if (breakpoint.isEnabled()) {
+				if(breakpoint instanceof CamelConditionalBreakpoint){
+					return plugin.getImage(IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED);
+				} else {
+					return plugin.getImage(IMG_CAMEL_BREAKPOINT_ENABLED);
+				}
+			} else {
+				return plugin.getImage(IMG_CAMEL_BREAKPOINT_DISABLED);
+			}
+		} catch (CoreException ex) {
+			Activator.getLogger().error(ex);
 		}
 		return null;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.IDebugModelPresentation#computeDetail(org.eclipse.debug.core.model.IValue, org.eclipse.debug.ui.IValueDetailListener)
-	 */
+	@Override
+	public String getText(Object element) {
+		if (element instanceof CamelEndpointBreakpoint) {
+			return element.toString();
+		} else if (element instanceof CamelDebugTarget) {
+			return getText((CamelDebugTarget) element);
+		}
+		return null;
+	}
+
+	private String getText(CamelDebugTarget camelDebugTarget) {
+		String name = camelDebugTarget.getName();
+		if(camelDebugTarget.isDisconnected()) {
+			return Messages.disconnected+name;
+		} else if(camelDebugTarget.isSuspended()){
+			return Messages.suspended+name;
+		} else if(camelDebugTarget.isTerminated()){
+			return Messages.terminated+name;
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public void computeDetail(IValue value, IValueDetailListener listener) {
 		String detail = "";
@@ -134,10 +157,6 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 		listener.detailComputed(value, detail);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ISourcePresentation#getEditorInput(java.lang.Object)
-	 */
 	@Override
 	public IEditorInput getEditorInput(Object element) {
 		if (element instanceof IFile) {
@@ -149,10 +168,6 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 		return null;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ISourcePresentation#getEditorId(org.eclipse.ui.IEditorInput, java.lang.Object)
-	 */
 	@Override
 	public String getEditorId(IEditorInput input, Object element) {
 		if (element instanceof IFile || element instanceof CamelEndpointBreakpoint) {
