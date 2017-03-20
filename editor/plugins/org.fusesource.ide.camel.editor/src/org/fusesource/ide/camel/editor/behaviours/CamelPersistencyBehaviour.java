@@ -91,10 +91,7 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 		IFileEditorInput fileEditorInput = editor.asFileEditorInput(input);
 		if (fileEditorInput != null) {
 			IFile camelContextFile = fileEditorInput.getFile();
-			if (camelContextFile.getFullPath().toOSString().indexOf(".FuseRemoteCamelContextData") == -1) {
-				// don't set a project for temporary remote context files
-				editor.setWorkspaceProject(camelContextFile.getProject());
-			}
+			editor.setWorkspaceProject(camelContextFile.getProject());
 			
 			// load the model
 			try {
