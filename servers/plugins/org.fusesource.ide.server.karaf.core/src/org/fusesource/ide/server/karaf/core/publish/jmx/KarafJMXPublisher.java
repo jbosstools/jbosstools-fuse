@@ -42,7 +42,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	// each of those behaviours handle the deployment of modules via a specific mbean
 	private static final ArrayList<IJMXPublishBehaviour> KNOWN_JMX_BEHAVIOURS;
 	static {
-		KNOWN_JMX_BEHAVIOURS = new ArrayList<IJMXPublishBehaviour>();
+		KNOWN_JMX_BEHAVIOURS = new ArrayList<>();
 		KNOWN_JMX_BEHAVIOURS.add(new KarafBundleMBeanPublishBehaviour());
 		KNOWN_JMX_BEHAVIOURS.add(new KarafBundlesMBeanPublishBehaviour());
 		KNOWN_JMX_BEHAVIOURS.add(new OSGIMBeanPublishBehaviour());
@@ -64,25 +64,29 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		this.server = server;
 		
 		KarafServerDelegate del = (KarafServerDelegate)server.loadAdapter(KarafServerDelegate.class, new NullProgressMonitor());
-		Map<String, Object> envMap = new HashMap<String, Object>();
+		Map<String, Object> envMap = new HashMap<>();
 		envMap.put("jmx.remote.credentials", new String[] { del.getUserName(), del.getPassword() });
 		try {
 			String conUrl = KarafUtils.getJMXConnectionURL(server);
-			this.url = new JMXServiceURL(conUrl); 
-			this.jmxc = JMXConnectorFactory.connect(this.url, envMap); 
-			this.mbsc = this.jmxc.getMBeanServerConnection(); 	
-			
-			for (IJMXPublishBehaviour pb : KNOWN_JMX_BEHAVIOURS) {
-				if (pb.canHandle(mbsc)) {
-					this.jmxPublisher = pb;
-					break;
-				}
-			}
-			return this.jmxPublisher != null;
+			url = new JMXServiceURL(conUrl); 
+			jmxc = JMXConnectorFactory.connect(url, envMap); 
+			mbsc = jmxc.getMBeanServerConnection(); 	
+			jmxPublisher = findCompatiblePublisher(mbsc);
+			return jmxPublisher != null;
 		} catch (IOException ex) {
 			Activator.getLogger().error(ex);
 		}
 		return false;
+	}
+
+	private IJMXPublishBehaviour findCompatiblePublisher(MBeanServerConnection mbsc) {
+		for (IJMXPublishBehaviour pb : KNOWN_JMX_BEHAVIOURS) {
+			if (pb.canHandle(mbsc)) {
+				return pb;
+			}
+		}
+		Activator.getLogger().error("No compatible JMX publisher has been found. Please check that your server has started and is accessible by JMX."); //$NON-NLS-0
+		return null;
 	}
 
 	/**
@@ -107,13 +111,10 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour#publish(org.eclipse.wst.server.core.IServer, org.eclipse.wst.server.core.IModule)
-	 */
 	@Override
 	public int publish(IServer server, IModule[] module, String symbolicName, String version, IPath file) {
 		// TODO: for now we do the connect each time...very inefficient...try to cache it
-		if (this.jmxc == null) connect(server);
+		ensureActiveConnection(server);
 
 		try {
 			// first check if there is a bundle installed with that name already
@@ -138,12 +139,19 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		return IServer.STATE_UNKNOWN;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour#uninstall(org.eclipse.wst.server.core.IServer, org.eclipse.wst.server.core.IModule)
-	 */
+	private void ensureActiveConnection(IServer server) {
+		if (!isInActiveState()){
+			connect(server);
+		}
+	}
+
+	private boolean isInActiveState() {
+		return jmxc != null && jmxPublisher != null && mbsc != null;
+	}
+
 	@Override
 	public boolean uninstall(IServer server, IModule[] module, String symbolicName, String version) {
-		if (this.jmxc == null) connect(server);
+		ensureActiveConnection(server);
 		boolean unpublished = false;
 		try {
 			// insert a project refresh here
