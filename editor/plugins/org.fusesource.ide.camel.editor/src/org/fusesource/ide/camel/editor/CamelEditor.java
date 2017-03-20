@@ -176,7 +176,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		// this will assure the diagram is alway layed out correctly which
 		// wasn't always the case (for instance when adding a new data 
 		// transformation endpoint which opened another editor underneath
-		if (designEditor != null && designEditor.getModel() != null) DiagramOperations.layoutDiagram(designEditor);
+		if (designEditor != null && designEditor.getModel() != null){
+			DiagramOperations.layoutDiagram(designEditor);
+		}
 	}
 	
 	/**
@@ -255,7 +257,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		if (getActivePage() == SOURCE_PAGE_INDEX) 	setDirtyFlag(true);
+		if (getActivePage() == SOURCE_PAGE_INDEX){
+			setDirtyFlag(true);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -455,8 +459,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == SOURCE_PAGE_INDEX) {
-			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-			if (rollBackActive == false) {
+			if (sourceEditor == null){
+				sourceEditor = new StructuredTextEditor();
+			}
+			if (!rollBackActive) {
 				updateSourceFromModel();
 			} else {
 				rollBackActive = false;
@@ -479,8 +485,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					} else {
 						updateModelFromSource();
 						lastError = "";
-						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
-						if (newPageIndex == DESIGN_PAGE_INDEX) {
+						if (newPageIndex == GLOBAL_CONF_INDEX){
+							globalConfigEditor.reload();
+						} else if (newPageIndex == DESIGN_PAGE_INDEX) {
 							designEditor.switchContainer(); // needed to fix sync issue between props view and selected context element
 							designEditor.refreshOutlineView();
 						}
@@ -685,8 +692,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		Object element = sourceEditor.getEditorInput();
 		IDocumentProvider documentProvider = sourceEditor.getDocumentProvider();
 		if (documentProvider != null) {
-			IDocument document = documentProvider.getDocument(element);
-			return document;
+			return documentProvider.getDocument(element);
 		}
 		return null;
 	}
@@ -742,7 +748,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
-		if (input instanceof CamelXMLEditorInput && input.equals(this.editorInput) == false) this.editorInput = (CamelXMLEditorInput)input;
+		if (input instanceof CamelXMLEditorInput && !input.equals(this.editorInput)){
+			this.editorInput = (CamelXMLEditorInput)input;
+		}
 		setPartName(input.getName());
 	}
 	
@@ -751,21 +759,22 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getProperty().equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
+		String eventProperty = event.getProperty();
+		if (eventProperty.equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
 			// user switched the displaytext logic flag - refresh diagram and outline
 			designEditor.update();
-		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
+		} else if (eventProperty.equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
 			// user switched direction of diagram layout - relayout the diagram
 			designEditor.autoLayoutRoute();
-		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_VISIBILITY)) {
+		} else if (eventProperty.equals(PreferencesConstants.EDITOR_GRID_VISIBILITY)) {
 			// user switched grid visibility
 			DiagramUtils.setGridVisible((Boolean)event.getNewValue(), designEditor);
-		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_TEXT_COLOR) ||
-				   event.getProperty().equals(PreferencesConstants.EDITOR_CONNECTION_COLOR) ||
-				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_BG_COLOR) ||
-				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_FG_COLOR)) {
+		} else if (eventProperty.equals(PreferencesConstants.EDITOR_TEXT_COLOR) ||
+				   eventProperty.equals(PreferencesConstants.EDITOR_CONNECTION_COLOR) ||
+				   eventProperty.equals(PreferencesConstants.EDITOR_FIGURE_BG_COLOR) ||
+				   eventProperty.equals(PreferencesConstants.EDITOR_FIGURE_FG_COLOR)) {
 			designEditor.getDiagramBehavior().refresh();
-		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
+		} else if (eventProperty.equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 			designEditor.setupGridVisibilityAsync();
 		} 	
 	}

@@ -294,16 +294,14 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				/** this handles selections in the outline view -> selects the node in diagram **/
 				if (firstElement instanceof AbstractCamelModelElement) {
 					AbstractCamelModelElement node = (AbstractCamelModelElement)firstElement;
-					if (node != null) {
-						if (node instanceof CamelContextElement == false) setSelectedNode(node);
+					if (!(node instanceof CamelContextElement)){
+						setSelectedNode(node);
 					}
 				
 				/** this handles selections in the diagram -> selects node in outline view **/
 				} else if (firstElement instanceof ContainerShapeEditPart) {
 					AbstractCamelModelElement node = NodeUtils.toCamelElement(firstElement);
-					if (node != null) {
-						this.outlinePage.setOutlineSelection(node);
-					}
+					this.outlinePage.setOutlineSelection(node);
 					
 				/** this highlights endpoints currently hitting a breakpoint **/
 				} else if (firstElement instanceof CamelStackFrame) {
@@ -407,15 +405,16 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		    if (uri.isPlatformResource()) {
 		        return new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
 		    } else {
-		    	FileEditorInput ei = new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(uri.toFileString())));
-		    	return ei;
+		    	return new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(uri.toFileString())));
 		    }
 		}
 		return null;
 	}
 
 	public IFeatureProvider getFeatureProvider() {
-		if (getDiagramTypeProvider() != null) return getDiagramTypeProvider().getFeatureProvider();
+		if (getDiagramTypeProvider() != null) {
+			return getDiagramTypeProvider().getFeatureProvider();
+		}
 		return null;
 	}
 	
@@ -541,7 +540,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void modelChanged() {
 		// we only update if the correct editor tab is selected
 		parent.setDirtyFlag(true);
-		if (getParent().getActivePage() != CamelEditor.DESIGN_PAGE_INDEX) return;
+		if (getParent().getActivePage() != CamelEditor.DESIGN_PAGE_INDEX){
+			return;
+		}
 		Display.getDefault().syncExec(new Runnable() {
 			/*
 			 * (non-Javadoc)
@@ -562,50 +563,25 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		});
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsAdded(org.eclipse.debug.core.model.IBreakpoint[])
-	 */
 	@Override
 	public void breakpointsAdded(IBreakpoint[] breakpoints) {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				refreshDiagramContents(null);				
-			}
-		});
+		asyncRefresh();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsChanged(org.eclipse.debug.core.model.IBreakpoint[], org.eclipse.core.resources.IMarkerDelta[])
-	 */
 	@Override
-	public void breakpointsChanged(IBreakpoint[] breakpoints,
-			IMarkerDelta[] deltas) {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				refreshDiagramContents(null);				
-			}
-		});
+	public void breakpointsChanged(IBreakpoint[] breakpoints, IMarkerDelta[] deltas) {
+		asyncRefresh();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsRemoved(org.eclipse.debug.core.model.IBreakpoint[], org.eclipse.core.resources.IMarkerDelta[])
-	 */
 	@Override
-	public void breakpointsRemoved(IBreakpoint[] breakpoints,
-			IMarkerDelta[] deltas) {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				refreshDiagramContents(null);				
-			}
-		});
+	public void breakpointsRemoved(IBreakpoint[] breakpoints, IMarkerDelta[] deltas) {
+		asyncRefresh();
+	}
+	
+	private void asyncRefresh() {
+		Display.getDefault().asyncExec(() -> refreshDiagramContents(null));
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.IDebugEventSetListener#handleDebugEvents(org.eclipse.debug.core.DebugEvent[])
-	 */
 	@Override
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (DebugEvent ev : events) {
@@ -652,8 +628,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		// get the correct node for the id
 		final AbstractCamelModelElement node = getModel().findNode(endpointNodeId);
 		
-		if (node == null) return;
-		if (this.highlightedNodeInDebugger != null && node.getId() != null && node.getId().equals(highlightedNodeInDebugger.getId())) return;
+		if (node == null || (this.highlightedNodeInDebugger != null && node.getId() != null && node.getId().equals(highlightedNodeInDebugger.getId()))) {
+			return;
+		}
 
 		// reset old highlight
 		resetHighlightBreakpointNode();
@@ -680,10 +657,10 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @param highlight		the highlight status
 	 */
 	private synchronized void setDebugHighLight(AbstractCamelModelElement bo, boolean highlight) {
-		if (bo == null) return;
-		
-		// delegate to an operation command for async transacted diagram update
-		DiagramOperations.highlightNode(this, bo, highlight);
+		if (bo != null){
+			// delegate to an operation command for async transacted diagram update
+			DiagramOperations.highlightNode(this, bo, highlight);
+		}
 	}
 
 	protected RootEditPart getRootEditPart() {
@@ -744,16 +721,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * layouts the camel diagram elements
 	 */
 	public void autoLayoutRoute() {
-		Display.getCurrent().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				DiagramOperations.layoutDiagram(CamelDesignEditor.this);	
-			}
-		});		
+		Display.getCurrent().asyncExec(() -> DiagramOperations.layoutDiagram(CamelDesignEditor.this));		
 	}
 
 	/**
@@ -763,12 +731,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		// this can't be invoked async as its causing dirty editor all the time then
 		DiagramOperations.updateGridColor(CamelDesignEditor.this);
 				
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-			    setupGridVisibility();
-	        }
-	    });
+		Display.getDefault().asyncExec(this::setupGridVisibility);
 	}
 	
 	/**

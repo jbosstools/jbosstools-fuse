@@ -21,6 +21,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 public final class ImageUtils {
 	
 	private ImageUtils() {
+		/* provide static utilities only */
 	}
 	
 	/**
@@ -31,12 +32,11 @@ public final class ImageUtils {
 	 * @return	the dimension or 0x0 on errors
 	 */
 	public static Dimension getImageSize(String imageId) {
-		Dimension dim;
 		Image img = CamelEditorUIActivator.getDefault().getImage(imageId);
-		if (img != null) 
-			dim = new Dimension(img); 
-		else 
-			dim = new Dimension(0, 0);
-		return dim;
+		if (img != null) {
+			return new Dimension(img); 
+		} else {
+			return new Dimension(0, 0);
+		}
 	}
 }
