@@ -234,17 +234,26 @@ public final class CamelComponentUtils {
 		return null;
 	}
 	
-	private static String getComponentClassFromJar(IJavaProject jpr, String scheme){
-		try {
-			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
-				File cpEntryFile = e.getPath().toFile();
-				String compClass = getClassFromZipEntry(scheme, cpEntryFile);
-				if (!Strings.isBlank(compClass)) {
-					return compClass;
-				}
+	private static String getComponentClassFromJar(IProject project, String scheme){
+		IJavaProject jpr = JavaCore.create(project);
+		if(jpr.exists()){
+			try {
+				IClasspathEntry[] resolvedClasspath = jpr.getResolvedClasspath(true);
+				return getComponentClassFromClasspath(scheme, resolvedClasspath);
+			} catch (JavaModelException ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
 			}
-		} catch (JavaModelException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
+
+	private static String getComponentClassFromClasspath(String scheme, IClasspathEntry[] resolvedClasspath) {
+		for (IClasspathEntry e : resolvedClasspath) {
+			File cpEntryFile = e.getPath().toFile();
+			String compClass = getClassFromZipEntry(scheme, cpEntryFile);
+			if (!Strings.isBlank(compClass)) {
+				return compClass;
+			}
 		}
 		return null;
 	}
@@ -260,8 +269,8 @@ public final class CamelComponentUtils {
 		if (compClass == null) {
 			// seems this scheme has no model entry -> check dependency
 			IProject project = camelFile.getResource().getProject();
-			IJavaProject jpr = JavaCore.create(project);
-			compClass = getComponentClassFromJar(jpr, scheme);
+			
+			compClass = getComponentClassFromJar(project, scheme);
 		}
 
 		return compClass;
@@ -297,20 +306,26 @@ public final class CamelComponentUtils {
 	 */
 	protected static String getComponentJSon(String scheme, IProject project) {
 		IJavaProject jpr = JavaCore.create(project);
-		
-		try {
-			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
-				File cpEntryFile = e.getPath().toFile();
-				if (!isJarFile(cpEntryFile)) {
-					continue;
-				}
+		if(jpr.exists()){
+			try {
+				IClasspathEntry[] resolvedClasspath = jpr.getResolvedClasspath(true);
+				return getComponentJSONFromClasspath(scheme, resolvedClasspath);
+			} catch (JavaModelException ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			}
+		}
+		return null;
+	}
+
+	private static String getComponentJSONFromClasspath(String scheme, IClasspathEntry[] resolvedClasspath) {
+		for (IClasspathEntry e : resolvedClasspath) {
+			File cpEntryFile = e.getPath().toFile();
+			if (isJarFile(cpEntryFile)) {
 				String compJSON = getComponentJsonFromJar(cpEntryFile, scheme);
 				if (!Strings.isBlank(compJSON)) {
 					return compJSON;
 				}
 			}
-		} catch (JavaModelException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
 	}
