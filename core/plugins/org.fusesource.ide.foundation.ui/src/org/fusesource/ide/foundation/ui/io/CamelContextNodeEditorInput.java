@@ -89,4 +89,5 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 	private boolean isCamelContextNode(Node contextNode) {
 		return "org.fusesource.ide.jmx.camel.navigator.CamelContextNode".equals(contextNode.getClass().getName());
 	}
+	
 }

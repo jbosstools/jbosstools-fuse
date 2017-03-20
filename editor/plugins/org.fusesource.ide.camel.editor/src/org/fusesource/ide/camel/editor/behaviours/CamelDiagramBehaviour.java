@@ -33,7 +33,6 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	private CamelUpdateBehaviour camelUpdateBehaviour;
 	private CamelPaletteBehaviour camelPaletteBehaviour;
 	private CamelPersistencyBehaviour camelPersistencyBehaviour;
-	private CamelModelChangeListener camelModelListener;
 	private CamelDesignEditor camelDesignEditor;
 	
 	public CamelDiagramBehaviour(IDiagramContainerUI diagramContainer) {
@@ -79,16 +78,8 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	public TransactionalEditingDomain getEditingDomain() {
-		return (this.camelUpdateBehaviour != null ? this.camelUpdateBehaviour.getEditingDomain() : null);
+		return this.camelUpdateBehaviour != null ? this.camelUpdateBehaviour.getEditingDomain() : null;
 	}	
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#getConfigurationProvider()
-	 */
-	@Override
-	public IConfigurationProvider getConfigurationProvider() {
-		return super.getConfigurationProvider();
-	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#createContextMenuProvider()
@@ -104,7 +95,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	@Override
 	protected void registerBusinessObjectsListener() {
 //		super.registerBusinessObjectsListener();
-		this.camelModelListener = new CamelModelChangeListener(this.camelDesignEditor);
+		CamelModelChangeListener camelModelListener = new CamelModelChangeListener(this.camelDesignEditor);
 		
 		TransactionalEditingDomain eDomain = getEditingDomain();
 		eDomain.addResourceSetListener(camelModelListener);

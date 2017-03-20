@@ -250,6 +250,10 @@ public class CamelContextNode 	extends NodeSupport
 				} catch (PartInitException e) {
 					CamelJMXPlugin.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
 				}
+				
+				//RemoteCamel
+				
+				
 			} else {
 				CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
 			}
@@ -578,5 +582,5 @@ public class CamelContextNode 	extends NodeSupport
 		}
 		return super.hashCode();
 	}
-
+	
 }

@@ -412,8 +412,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public boolean isSingleStepMode() {
 		log("isSingleStepMode()");
 		try {
-			boolean b = (boolean) mbsc.invoke(this.objectNameDebugger, "isSingleStepMode", new Object[] { } , new String[] { }); 
-			return b;
+			return (boolean) mbsc.invoke(this.objectNameDebugger, "isSingleStepMode", new Object[] { } , new String[] { });
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -444,7 +443,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
-		return new HashSet<String>();
+		return new HashSet<>();
 	}
 
 	/* (non-Javadoc)
@@ -489,8 +488,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public int getBodyMaxChars() {
 		log("getBodyMaxChars()");
 		try {
-			int i = (int) mbsc.invoke(this.objectNameDebugger, "getBodyMaxChars", new Object[] { } , new String[] { }); 
-			return i;
+			return (int) mbsc.invoke(this.objectNameDebugger, "getBodyMaxChars", new Object[] { } , new String[] { });
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -517,8 +515,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public boolean isBodyIncludeStreams() {
 		log("isBodyIncludeStreams()");
 		try {
-			boolean b = (boolean) mbsc.invoke(this.objectNameDebugger, "isBodyIncludeStreams", new Object[] { } , new String[] { }); 
-			return b;
+			return (boolean) mbsc.invoke(this.objectNameDebugger, "isBodyIncludeStreams", new Object[] { } , new String[] { });
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -545,8 +542,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public boolean isBodyIncludeFiles() {
 		log("isBodyIncludeFiles()");
 		try {
-			boolean b = (boolean) mbsc.invoke(this.objectNameDebugger, "isBodyIncludeFiles", new Object[] { } , new String[] { }); 
-			return b;
+			return (boolean) mbsc.invoke(this.objectNameDebugger, "isBodyIncludeFiles", new Object[] { } , new String[] { });
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -589,8 +585,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public long getDebugCounter() {
 		log("getDebugCounter()");
 		try {
-			long l = (long) mbsc.invoke(this.objectNameDebugger, "getDebugCounter", new Object[] { } , new String[] { }); 
-			return l;
+			return (long) mbsc.invoke(this.objectNameDebugger, "getDebugCounter", new Object[] { } , new String[] { });
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -627,8 +622,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 		}
 		try {
 			String xmlDump = (String) mbsc.invoke(this.objectNameContext, "dumpRoutesAsXml", new Object[] { } , new String[] { });
-			String contextDump = xmlDump.replaceFirst("<routes ", "<routes id=\"" + contextId + "\" ");
-			return contextDump;
+			return xmlDump.replaceFirst("<routes ", "<routes id=\"" + contextId + "\" ");
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}		
@@ -641,10 +635,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public String getRouteId(String processorId) {
 		log("getRouteId(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (String) mbsc.getAttribute(objName, "RouteId");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (String) mbsc.getAttribute(objName, "RouteId");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -657,10 +652,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public String getCamelId(String processorId) {
 		log("getCamelId(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (String) mbsc.getAttribute(objName, "CamelId");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (String) mbsc.getAttribute(objName, "CamelId");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -673,10 +669,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getCompletedExchanges(String processorId) {
 		log("getCompletedExchanges(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "ExchangesCompleted");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "ExchangesCompleted");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -689,10 +686,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getFailedExchanges(String processorId) {
 		log("getFailedExchanges(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "ExchangesFailed");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "ExchangesFailed");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -705,10 +703,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getTotalExchanges(String processorId) {
 		log("getTotalExchanges(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "ExchangesTotal");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "ExchangesTotal");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -721,10 +720,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getRedeliveries(String processorId) {
 		log("getRedeliveries(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "Redeliveries");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "Redeliveries");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -737,10 +737,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getExternalRedeliveries(String processorId) {
 		log("getExternalRedeliveries(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "ExternalRedeliveries");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "ExternalRedeliveries");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -753,10 +754,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getHandledFailures(String processorId) {
 		log("getHandledFailures(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "FailuresHandled");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "FailuresHandled");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -769,10 +771,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getLastProcessingTime(String processorId) {
 		log("getLastProcessingTime(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "LastProcessingTime");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "LastProcessingTime");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -785,10 +788,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getMinProcessingTime(String processorId) {
 		log("getMinProcessingTime(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "MinProcessingTime");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "MinProcessingTime");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -801,10 +805,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getMaxProcessingTime(String processorId) {
 		log("getMaxProcessingTime(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "MaxProcessingTime");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "MaxProcessingTime");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -817,10 +822,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getAverageProcessingTime(String processorId) {
 		log("getAverageProcessingTime(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "MeanProcessingTime");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "MeanProcessingTime");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -833,10 +839,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public long getTotalProcessingTime(String processorId) {
 		log("getTotalProcessingTime(" + processorId + ")");
-		ObjectName objName = null;
 		try {
-			objName = initializeProcessorMBean(processorId);
-			if (objName != null) return (long) mbsc.getAttribute(objName, "TotalProcessingTime");
+			ObjectName objName = initializeProcessorMBean(processorId);
+			if (objName != null){
+				return (long) mbsc.getAttribute(objName, "TotalProcessingTime");
+			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -844,6 +851,8 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	}
 	
 	private static void log(String logString) {
-		if (DEVELOPER_MODE) System.err.println(logString);
+		if (DEVELOPER_MODE){
+			System.err.println(logString);
+		}
 	}
 }
