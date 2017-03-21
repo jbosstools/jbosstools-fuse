@@ -148,7 +148,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		run(runnable, prefs, false);
 	}
 	
-	public void run(IJMXRunnable runnable, HashMap<String, String> prefs, boolean saveActiveConnection) throws JMXException {
+	public void run(IJMXRunnable runnable, Map<String, String> prefs, boolean saveActiveConnection) throws JMXException {
 		if (getServer().getAdapter(IKarafServerDelegate.class) != null) {
 			IKarafServerDelegate kserver = (IKarafServerDelegate) getServer().getAdapter(IKarafServerDelegate.class);
 			String user = kserver.getUserName();
@@ -178,8 +178,8 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		}
 	}
 
-	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws Exception {
-		Map<String, Object> envMap = new HashMap<String, Object>();
+	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws IOException {
+		Map<String, Object> envMap = new HashMap<>();
 		envMap.put("jmx.remote.credentials", new String[] { user, pass });
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
 		JMXServiceURL url = new JMXServiceURL(conUrl); 
@@ -207,7 +207,6 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	 *  If there's a change in the server state, then set my connection
 	 *  state properly.   If there's been a change then fire to the listeners
 	 */
-
 	@Override
 	public void serverChanged(ServerEvent event) {
 		int eventKind = event.getKind();
