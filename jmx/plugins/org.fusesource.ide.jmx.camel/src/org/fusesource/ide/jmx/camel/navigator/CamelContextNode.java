@@ -183,7 +183,9 @@ public class CamelContextNode 	extends NodeSupport
 
 	public boolean isTracing() {
 		Object tracer = getTracer();
-		if (tracer == null) return false;
+		if (tracer == null){
+			return false;
+		}
 		
 		if (tracer instanceof CamelBacklogTracerMBean) {
 			return ((CamelBacklogTracerMBean)tracer).isEnabled();

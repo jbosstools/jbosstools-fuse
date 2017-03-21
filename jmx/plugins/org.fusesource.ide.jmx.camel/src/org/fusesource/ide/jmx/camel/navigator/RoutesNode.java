@@ -43,7 +43,6 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class RoutesNode extends RefreshableCollectionNode implements ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {
 	private final CamelContextNode camelContextNode;
-	private CamelRouteContainerElement camelContext;
 
 	public RoutesNode(CamelContextNode camelContextNode) {
 		super(camelContextNode);
@@ -80,7 +79,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 	@Override
 	protected void loadChildren() {
 		Map<String, RouteNode> routeMap = new HashMap<>();
-		camelContext = getCamelContextNode().getRouteContainer();
+		CamelRouteContainerElement camelContext = getCamelContextNode().getRouteContainer();
 		if (camelContext != null) {
 			List<AbstractCamelModelElement> children = camelContext.getChildElements();
 			for (AbstractCamelModelElement node : children) {
