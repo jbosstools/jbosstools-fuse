@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MBeanServerInvocationHandler;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import javax.management.QueryExp;
@@ -31,23 +32,24 @@ import javax.management.QueryExp;
  */
 public abstract class CamelFacadeSupport implements CamelJMXFacade {
     
-    protected String camelContextManagementName;
+    private static final String ORG_APACHE_CAMEL_CONTEXT = "org.apache.camel:context=";
+	protected String camelContextManagementName;
     protected final MBeanServerConnection mBeanServer;
 
-    protected CamelFacadeSupport(String camelContextManagementName, MBeanServerConnection mBeanServer) throws Exception {
+    protected CamelFacadeSupport(String camelContextManagementName, MBeanServerConnection mBeanServer) {
         this.mBeanServer = mBeanServer;
         this.camelContextManagementName = camelContextManagementName;
     }
 
-    protected MBeanServerConnection getMBeanServerConnection() throws Exception {
+    protected MBeanServerConnection getMBeanServerConnection() {
         return mBeanServer;
     }
 
-    protected Set<ObjectInstance> queryNames(ObjectName name, QueryExp query) throws Exception {
+    protected Set<ObjectInstance> queryNames(ObjectName name, QueryExp query) throws IOException {
         return getMBeanServerConnection().queryMBeans(name, query);
     }
 
-    static public <T> T addGetId(Class<T> ic, final Object target, final String id) throws Exception {
+    public static <T> T addGetId(Class<T> ic, final Object target, final String id) {
         return ic.cast(Proxy.newProxyInstance(ic.getClassLoader(), new Class[]{ic}, new InvocationHandler() {
             @Override
             public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
@@ -59,9 +61,9 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         }));
     }
 
-	protected Object newProxyInstance(ObjectName objectName, Class<?> interfaceClass, boolean notificationBroadcaster) throws Exception {
-        Object jmx_proxy = MBeanServerInvocationHandler.newProxyInstance(getMBeanServerConnection(), objectName, interfaceClass, notificationBroadcaster);
-        return addGetId(interfaceClass, jmx_proxy, objectName.getCanonicalName());
+	protected Object newProxyInstance(ObjectName objectName, Class<?> interfaceClass, boolean notificationBroadcaster) {
+        Object jmxProxy = MBeanServerInvocationHandler.newProxyInstance(getMBeanServerConnection(), objectName, interfaceClass, notificationBroadcaster);
+        return addGetId(interfaceClass, jmxProxy, objectName.getCanonicalName());
     }
 
     /**
@@ -71,18 +73,19 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
      * @param connection not <code>null</code>
      * @param managementName to find a specific context by its management name
      * @return Set with ObjectName-elements
+     * @throws MalformedObjectNameException 
+     * @throws IOException 
      */
-    protected Set<ObjectName> findCamelContexts(MBeanServerConnection connection, String managementName) throws Exception {
+    protected Set<ObjectName> findCamelContexts(MBeanServerConnection connection, String managementName) throws MalformedObjectNameException, IOException {
         String id = managementName != null ? managementName : camelContextManagementName;
 
         ObjectName name;
         if (id != null) {
-            name = new ObjectName("org.apache.camel:context=" + managementName + ",type=context,*");
+            name = new ObjectName(ORG_APACHE_CAMEL_CONTEXT + managementName + ",type=context,*");
         } else {
-            name = new ObjectName("org.apache.camel:context=*,type=context,*");
+            name = new ObjectName(ORG_APACHE_CAMEL_CONTEXT+"*,type=context,*");
         }
-        Set<ObjectName> camels = connection.queryNames(name, null);
-        return camels;
+        return connection.queryNames(name, null);
     }
 
     // CamelFacade
@@ -119,11 +122,11 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public CamelFabricTracerMBean getFabricTracer(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=fabric,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=fabric,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
         for (ObjectInstance on : names) {
-            if (on.getClassName().equals("org.apache.camel.fabric.FabricTracer")) {
+            if ("org.apache.camel.fabric.FabricTracer".equals(on.getClassName())) {
                 return (CamelFabricTracerMBean) newProxyInstance(on.getObjectName(), CamelFabricTracerMBean.class, true);
             }
         }
@@ -136,11 +139,11 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
 	public CamelBacklogTracerMBean getCamelTracer(String managementName) throws Exception {
 		String id = managementName != null ? managementName : camelContextManagementName;
 
-		ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=tracer,*");
+		ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=tracer,*");
 
 		Set<ObjectInstance> names = queryNames(query, null);
 		for (ObjectInstance on : names) {
-			if (on.getClassName().equals("org.apache.camel.management.mbean.ManagedBacklogTracer")) {
+			if ("org.apache.camel.management.mbean.ManagedBacklogTracer".equals(on.getClassName())) {
 				return (CamelBacklogTracerMBean) newProxyInstance(on.getObjectName(), CamelBacklogTracerMBean.class, true);
 			}
 		}
@@ -153,10 +156,10 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelComponentMBean> getComponents(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=components,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=components,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelComponentMBean> answer = new ArrayList<CamelComponentMBean>();
+        List<CamelComponentMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelComponentMBean component = (CamelComponentMBean) newProxyInstance(on.getObjectName(), CamelComponentMBean.class, true);
             answer.add(component);
@@ -168,10 +171,10 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelRouteMBean> getRoutes(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=routes,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=routes,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelRouteMBean> answer = new ArrayList<CamelRouteMBean>();
+        List<CamelRouteMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelRouteMBean route;
             if ("org.apache.camel.management.mbean.ManagedSuspendableRoute".equals(on.getClassName())) {
@@ -188,17 +191,15 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelEndpointMBean> getEndpoints(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=endpoints,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=endpoints,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelEndpointMBean> answer = new ArrayList<CamelEndpointMBean>();
+        List<CamelEndpointMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelEndpointMBean endpoint;
-            if ("org.apache.camel.management.mbean.ManagedBrowsableEndpoint".equals(on.getClassName()) || 
-            	"org.apache.camel.component.seda.SedaEndpoint".equals(on.getClassName())) {
-                endpoint = (CamelEndpointMBean) newProxyInstance(on.getObjectName(), CamelBrowsableEndpointMBean.class, true);
-            } else if (on.getClassName().startsWith("org.apache.camel.component.jms")) {
-                // special for JMS endpoints as they are browsable as well
+            if ("org.apache.camel.management.mbean.ManagedBrowsableEndpoint".equals(on.getClassName())
+            		|| "org.apache.camel.component.seda.SedaEndpoint".equals(on.getClassName())
+            		|| on.getClassName().startsWith("org.apache.camel.component.jms")) {
                 endpoint = (CamelEndpointMBean) newProxyInstance(on.getObjectName(), CamelBrowsableEndpointMBean.class, true);
             } else {
                 endpoint = (CamelEndpointMBean) newProxyInstance(on.getObjectName(), CamelEndpointMBean.class, true);
@@ -212,10 +213,10 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelConsumerMBean> getConsumers(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=consumers,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=consumers,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelConsumerMBean> answer = new ArrayList<CamelConsumerMBean>();
+        List<CamelConsumerMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelConsumerMBean consumer;
             if ("org.apache.camel.management.mbean.ManagedScheduledPollConsumer".equals(on.getClassName())) {
@@ -232,10 +233,10 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelProcessorMBean> getProcessors(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=processors,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=processors,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelProcessorMBean> answer = new ArrayList<CamelProcessorMBean>();
+        List<CamelProcessorMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelProcessorMBean processor;
             if ("org.apache.camel.management.mbean.ManagedSendProcessor".equals(on.getClassName())) {
@@ -256,10 +257,10 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
     public List<CamelThreadPoolMBean> getThreadPools(String managementName) throws Exception {
         String id = managementName != null ? managementName : camelContextManagementName;
 
-        ObjectName query = ObjectName.getInstance("org.apache.camel:context=" + id + ",type=threadpools,*");
+        ObjectName query = ObjectName.getInstance(ORG_APACHE_CAMEL_CONTEXT + id + ",type=threadpools,*");
 
         Set<ObjectInstance> names = queryNames(query, null);
-        List<CamelThreadPoolMBean> answer = new ArrayList<CamelThreadPoolMBean>();
+        List<CamelThreadPoolMBean> answer = new ArrayList<>();
         for (ObjectInstance on : names) {
             CamelThreadPoolMBean pool = (CamelThreadPoolMBean) newProxyInstance(on.getObjectName(), CamelThreadPoolMBean.class, true);
             answer.add(pool);
