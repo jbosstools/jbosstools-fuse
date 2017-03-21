@@ -148,7 +148,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		run(runnable, prefs, false);
 	}
 	
-	public void run(IJMXRunnable runnable, HashMap<String, String> prefs, boolean saveActiveConnection) throws JMXException {
+	public void run(IJMXRunnable runnable, Map<String, String> prefs, boolean saveActiveConnection) throws JMXException {
 		if (getServer().getAdapter(IKarafServerDelegate.class) != null) {
 			IKarafServerDelegate kserver = (IKarafServerDelegate) getServer().getAdapter(IKarafServerDelegate.class);
 			String user = kserver.getUserName();
@@ -178,7 +178,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		}
 	}
 
-	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws Exception {
+	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws IOException {
 		Map<String, Object> envMap = new HashMap<>();
 		envMap.put("jmx.remote.credentials", new String[] { user, pass });
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
