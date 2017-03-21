@@ -67,6 +67,7 @@
 		<!-- other versions -->
 		<jackson.version>2.5.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
+		<sonar.test.inclusions>**/*Test.*,**/test/**/*,**/*IT.*</sonar.test.inclusions>
 	</properties>
 
 	<modules>
