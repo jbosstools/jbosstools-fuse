@@ -325,7 +325,9 @@ public class MappingDetailViewer extends MappingViewer {
 
     private void createTargetPane(Composite parent) {
         Composite pane;
-        if (mapping.getTarget() == null) pane = createContainerPane(parent, false, manager.rootTargetModel(), null, -1);
+        if (mapping.getTarget() == null) {
+        	pane = createContainerPane(parent, false, manager.rootTargetModel(), null, -1);
+        }
         else {
             List<Integer> indexes = Util.targetUpdateIndexes(mapping);
             pane = createContainerPane(parent, false, ((Model)mapping.getTarget()).getParent(), indexes, indexes.size() - 1);
@@ -350,21 +352,19 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        if (mapping != null && mapping.getTarget() != null) {
-            if (Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), false)) {
-                propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetDateFormat, new MenuItemHandler() {
+        if (mapping.getTarget() != null && Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), false)) {
+        	propPane.addMenuItem(Messages.MappingDetailViewer_menuItemSetDateFormat, new MenuItemHandler() {
 
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            // open dialog to select date format
-                            setDateFormat(false);
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-            }
+        		@Override
+        		public void widgetSelected(final SelectionEvent event) {
+        			try {
+        				// open dialog to select date format
+        				setDateFormat(false);
+        			} catch (final Exception e) {
+        				Activator.error(e);
+        			}
+        		}
+        	});
         }
     }
 

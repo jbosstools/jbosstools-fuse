@@ -151,14 +151,11 @@ public class PollThread extends Thread {
 	}
 
 	private void handlePollerHasAnswer() {
-		boolean finalAlert = true;
 		try {
 			boolean currentState = poller.getState();
 			poller.cleanup();
 			alertListener(currentState);
-			if (finalAlert) {
-				alertEventLog(currentState);
-			}
+			alertEventLog(currentState);
 		} catch (PollingException pe) {
 			// Poller's answer was exception:  abort and put the message in event log
 			poller.cancel(IServerStatePoller.CANCEL);

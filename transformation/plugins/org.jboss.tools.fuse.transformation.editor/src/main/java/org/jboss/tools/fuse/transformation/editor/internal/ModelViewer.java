@@ -127,8 +127,9 @@ public class ModelViewer extends Composite {
         filterTypesButton.setToolTipText(Messages.ModelViewer_Tooltip_ShowTypes);
 
         final ToolItem filterMappedPropertiesButton;
-        if (preferenceId == null) filterMappedPropertiesButton = null;
-        else {
+        if (preferenceId == null) {
+        	filterMappedPropertiesButton = null;
+        } else {
             filterMappedPropertiesButton = new ToolItem(toolBar, SWT.CHECK);
             filterMappedPropertiesButton.setImage(Images.HIDE_MAPPED);
             filterMappedPropertiesButton.setToolTipText(Messages.ModelViewer_Tooltip_HideMappedproperties);
@@ -265,17 +266,19 @@ public class ModelViewer extends Composite {
                 public void widgetSelected(final SelectionEvent event) {
                     hideMappedProperties = filterMappedPropertiesButton.getSelection();
                     filterMappedPropertiesButton.setToolTipText((hideMappedProperties ? Messages.ModelViewer_ShowTooltip : Messages.ModelViewer_HideTooltip) + Messages.ModelViewer_mappedproperties);
-                    if (hideMappedProperties) prevSelectedModel = (Model)treeViewer.getStructuredSelection().getFirstElement();
+                    if (hideMappedProperties) {
+                    	prevSelectedModel = (Model)treeViewer.getStructuredSelection().getFirstElement();
+                    }
                     treeViewer.refresh();
-                    if (!hideMappedProperties && prevSelectedModel != null) select(prevSelectedModel);
+                    if (!hideMappedProperties && prevSelectedModel != null) {
+                    	select(prevSelectedModel);
+                    }
                     if (preferenceId != null)
                         prefs.setValue(PREFERENCE_PREFIX + preferenceId + HIDE_MAPPED_PROPERTIES_PREFERENCE, hideMappedProperties);
                 }
             });
-            if (preferenceId != null) {
-                hideMappedProperties = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + HIDE_MAPPED_PROPERTIES_PREFERENCE);
-                filterMappedPropertiesButton.setSelection(hideMappedProperties);
-            }
+            hideMappedProperties = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + HIDE_MAPPED_PROPERTIES_PREFERENCE);
+            filterMappedPropertiesButton.setSelection(hideMappedProperties);
         }
         searchLabel.addMouseListener(new MouseAdapter() {
 

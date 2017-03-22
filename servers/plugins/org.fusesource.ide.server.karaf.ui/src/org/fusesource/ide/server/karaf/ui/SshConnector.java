@@ -72,7 +72,9 @@ public class SshConnector  {
 	
 
 	public void extractData(Map<String, Object> data) {
-		if (data == null) return;
+		if (data == null) {
+			return;
+		}
 
     	// set the terminal connector id for ssh
     	data.put(ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID, "org.eclipse.tm.terminal.connector.ssh.SshConnector"); //$NON-NLS-1$
@@ -96,13 +98,11 @@ public class SshConnector  {
 			return;
 		}
 		
-		Map<String, Object> properties = new HashMap<String, Object>();
+		Map<String, Object> properties = new HashMap<>();
 		extractData(properties);
-		if (properties != null) {
-			properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID, "org.eclipse.tm.terminal.connector.ssh.launcher.ssh");
-			SshLauncherDelegate delegate = new SshLauncherDelegate();
-			delegate.execute(properties, null);
-		}
+		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID, "org.eclipse.tm.terminal.connector.ssh.launcher.ssh");
+		SshLauncherDelegate delegate = new SshLauncherDelegate();
+		delegate.execute(properties, null);
 	}
 
 	public void onConnect() {

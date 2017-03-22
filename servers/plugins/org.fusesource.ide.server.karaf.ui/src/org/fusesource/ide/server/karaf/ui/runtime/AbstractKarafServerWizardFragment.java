@@ -90,17 +90,15 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 				model.setUserName(karafServerWorkingCopy.getUserName());
 				model.setPassword(karafServerWorkingCopy.getPassword());
 			}
-			boolean readFromConfFile = false;
 			IRuntime runtime = getRuntimeWorkingCopy();
 			if (runtime != null){
 				IKarafRuntime karafRuntime = (IKarafRuntime)runtime.loadAdapter(IKarafRuntime.class, null);
-				if (karafRuntime != null ) {
-					if("".equals(model.getKarafInstallDir()) || model.getKarafInstallDir() == null){
-						model.setKarafInstallDir(karafRuntime.getLocation().toOSString());
-					}
+				if (karafRuntime != null
+						&& ("".equals(model.getKarafInstallDir()) || model.getKarafInstallDir() == null)) {
+					model.setKarafInstallDir(karafRuntime.getLocation().toOSString());
 				}
 			}
-			if (!readFromConfFile && karafServerWorkingCopy != null) {
+			if ( karafServerWorkingCopy != null) {
 				model.setPortNumber(karafServerWorkingCopy.getPortNumber());
 			}
 		}

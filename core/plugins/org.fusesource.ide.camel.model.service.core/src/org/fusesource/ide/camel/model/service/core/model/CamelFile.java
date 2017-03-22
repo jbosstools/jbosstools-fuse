@@ -214,7 +214,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 			return id;
 		}
 		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
-		if (usedId != null && globalDefinitions.containsKey(usedId) || id == null && globalDefinitions.containsValue(cme)) {
+		if (globalDefinitions.containsKey(usedId) || id == null && globalDefinitions.containsValue(cme)) {
 			return null;
 		}
 		globalDefinitions.put(usedId, cme);

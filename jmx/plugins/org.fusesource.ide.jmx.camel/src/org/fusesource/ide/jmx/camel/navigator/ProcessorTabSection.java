@@ -11,7 +11,6 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.camel.navigator;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -39,8 +38,7 @@ public class ProcessorTabSection extends PropertySourceTableView {
             setConfiguration(null);
         }
         current = processor;
-		List<IPropertySource> propertySources = processor == null ? Collections.emptyList() : processor
-                .getAllProcessorsPropertySourceList();
+		List<IPropertySource> propertySources = processor.getAllProcessorsPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);
         recreateColumns();

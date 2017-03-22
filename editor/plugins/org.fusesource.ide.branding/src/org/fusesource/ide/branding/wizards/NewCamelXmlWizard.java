@@ -225,11 +225,6 @@ public class NewCamelXmlWizard extends Wizard implements INewWizard {
 		}
 		builder.append(">\n");
 		builder.append("    <route>\n");
-		boolean includeSampleRoute = false;
-		if (includeSampleRoute) {
-			builder.append("      <from uri=\"seda:start\"/>\n");
-			builder.append("      <to uri=\"seda:finish\"/>\n");
-		}
 		builder.append("    </route>\n");
 		builder.append("  </");
 		builder.append(camelContext);

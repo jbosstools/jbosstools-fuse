@@ -194,7 +194,7 @@ public class BasicNodeValidator implements ValidationSupport {
 					return false;
 				}
 			}
-			if (noDoubledIDs && !Strings.isBlank(node.getId())) {
+			if (!Strings.isBlank(node.getId())) {
 				if (processedNodeIDs.contains(node.getId()) && node.equals(nodeUnderValidation)) {
 					return false;
 				} else {
@@ -299,10 +299,8 @@ public class BasicNodeValidator implements ValidationSupport {
 	}
 
 	public List<Integer> findLineNumbers(String word, String text) {
-		List<Integer> results = new ArrayList<Integer>();
-		LineNumberReader rdr;
-		rdr = new LineNumberReader(new StringReader(text));
-		try {
+		List<Integer> results = new ArrayList<>();
+		try(LineNumberReader rdr = new LineNumberReader(new StringReader(text))) {
 			String line;
 			while ((line = rdr.readLine()) != null) {
 				if (line.indexOf(word) >= 0) {
@@ -311,12 +309,6 @@ public class BasicNodeValidator implements ValidationSupport {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				rdr.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return results;
 	}
