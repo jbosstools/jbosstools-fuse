@@ -12,14 +12,11 @@ package org.fusesource.ide.camel.editor.provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
@@ -50,6 +47,7 @@ public class ProviderHelper {
 		categoryMap.put("doFinally",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("enrich", CATEGORY_TRANSFORMATION);
 		categoryMap.put("filter", CATEGORY_ROUTING);
+		categoryMap.put("hystrix", CATEGORY_ROUTING);
 		categoryMap.put("idempotentConsumer", CATEGORY_ROUTING);
 		categoryMap.put("inOnly", CATEGORY_TRANSFORMATION);
 		categoryMap.put("inOut", CATEGORY_TRANSFORMATION);
@@ -63,6 +61,7 @@ public class ProviderHelper {
 		categoryMap.put("multicast", CATEGORY_ROUTING);
 		categoryMap.put("onCompletion",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("onException",CATEGORY_CONTROL_FLOW);
+		categoryMap.put("onFallback",CATEGORY_CONTROL_FLOW);
 		categoryMap.put("otherwise", CATEGORY_ROUTING);
 		categoryMap.put("pipeline", CATEGORY_ROUTING);
 		categoryMap.put("policy", CATEGORY_MISC);
@@ -119,20 +118,11 @@ public class ProviderHelper {
      * @return an array of create features for the palette
      */
     public static ICreateFeature[] getCreateFeatures(IFeatureProvider fp) {
-    	ArrayList<ICreateFeature> ret = new ArrayList<>();
     	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
     	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
-    	Iterator<Eip> it = list.iterator();
-    	while(it.hasNext()) {
-    		Eip next = it.next();
-    		try {
-    			ICreateFeature f = new CreateFigureFeature(fp, convertCamelCase(next.getName()), next.getDescription(), next);
-    			ret.add(f);
-    		} catch(Exception e) {
-    			CamelEditorUIActivator.pluginLog().logError(e);
-    		}
-    	}    	
-    	return ret.toArray(new ICreateFeature[ret.size()]);
+    	return list.stream()
+    		.map(eip -> new CreateFigureFeature(fp, convertCamelCase(eip.getName()), eip.getDescription(), eip))
+    		.toArray(ICreateFeature[]::new);
     }
 
     /**
@@ -142,11 +132,7 @@ public class ProviderHelper {
      */
     public static void addFigureIcons(ImageProvider imageProvider) {
     	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
-    	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
-    	Iterator<Eip> it = list.iterator();
-    	while(it.hasNext()) {
-            imageProvider.addIconsForEIP(it.next());
-    	}
+    	model.getEipModel().getSupportedEIPs().forEach(imageProvider::addIconsForEIP);
     }
 
     /**
