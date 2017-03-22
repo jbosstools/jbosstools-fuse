@@ -26,13 +26,6 @@ public class KarafJMXPlugin extends ImagesActivatorSupport {
 
 	private KarafJMXSharedImages sharedImages;
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -40,10 +33,6 @@ public class KarafJMXPlugin extends ImagesActivatorSupport {
 		new KarafPreferenceInitializer().initializeDefaultPreferences();
 	}	
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -59,10 +48,8 @@ public class KarafJMXPlugin extends ImagesActivatorSupport {
 	}
 	
 	public KarafJMXSharedImages getSharedImages() {
-		if( sharedImages == null ) {
-			if( getBundle() != null ) {
-				sharedImages = new KarafJMXSharedImages(getBundle());
-			}
+		if( sharedImages == null && getBundle() != null ) {
+			sharedImages = new KarafJMXSharedImages(getBundle());
 		}
 		return sharedImages;
 	}

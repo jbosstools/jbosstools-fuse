@@ -36,8 +36,6 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
-	private static BundleContext context;
-	
 	/**
 	 * Returns the shared instance
 	 *
@@ -48,11 +46,11 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static BundleContext getContext() {
-		return context;
+		return plugin.getBundle().getBundleContext();
 	}
 	
 	public static IProvisioningAgent getProvisioningAgent() {
-		return (IProvisioningAgent) getService(context, IProvisioningAgent.SERVICE_NAME);
+		return (IProvisioningAgent) getService(getContext(), IProvisioningAgent.SERVICE_NAME);
 	}
 
 	public static Object getService(BundleContext context, String name) {
@@ -80,7 +78,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		Activator.context = context;
 	}
 
 	/*

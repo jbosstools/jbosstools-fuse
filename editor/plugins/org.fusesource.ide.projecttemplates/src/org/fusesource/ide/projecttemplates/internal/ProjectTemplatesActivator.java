@@ -30,7 +30,6 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 	public static final String IMAGE_FUSE_ICON = "icons/fuse_icon_16c.png";
 	
 	private static ProjectTemplatesActivator instance;
-	private static BundleContext myContext;
 
 	/**
 	 * default constructor
@@ -49,7 +48,7 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 	}
 	
 	public static BundleContext getBundleContext() {
-	    return myContext;
+		return instance.getBundle().getBundleContext();
 	}
 
 	/*
@@ -59,23 +58,9 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 	@Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
-        myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 	}
     
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    	myContext = null;
-    	super.stop(context);
-    }
-
-    /* (non-Javadoc)
-     * @see org.jboss.tools.foundation.ui.plugin.BaseUIPlugin#createSharedImages()
-     */
     @Override
     protected BaseUISharedImages createSharedImages() {
     	return new ProjectTemplatesSharedImages(getBundle());

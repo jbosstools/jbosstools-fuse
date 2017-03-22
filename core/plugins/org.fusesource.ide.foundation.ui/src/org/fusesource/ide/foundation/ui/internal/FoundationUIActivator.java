@@ -25,9 +25,11 @@ import org.osgi.framework.BundleContext;
  */
 public class FoundationUIActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.foundation.ui";
+	public static final String IMAGE_CAMEL_ICON = "icons/camel.png";
+	public static final String IMAGE_PROPS_ICON = "icons/prop_ps.gif";
+	public static final String IMAGE_CHART_ICON = "icons/chart.gif";
 
 	private static FoundationUIActivator instance;
-	private static BundleContext myContext;
 
 	/**
 	 * default constructor
@@ -35,8 +37,6 @@ public class FoundationUIActivator extends BaseUIPlugin {
 	public FoundationUIActivator() {
 		instance = this;
 	}
-
-	
 	
 	/**
 	 * returns the instance
@@ -48,25 +48,15 @@ public class FoundationUIActivator extends BaseUIPlugin {
 	}
 	
 	public static BundleContext getBundleContext() {
-	    return myContext;
+	    return instance.getBundle().getBundleContext();
 	}
 
     @Override
 	public void start(BundleContext context) throws Exception {
         super.start(context);
-        myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 	}
-    
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    	myContext = null;
-    	super.stop(context);
-    }
 
-    /* (non-Javadoc)
-     * @see org.jboss.tools.foundation.ui.plugin.BaseUIPlugin#createSharedImages()
-     */
     @Override
     protected BaseUISharedImages createSharedImages() {
     	return new FoundationUISharedImages(getBundle());
@@ -100,10 +90,6 @@ public class FoundationUIActivator extends BaseUIPlugin {
 	public static StatusFactory statusFactory() {
 		return getDefault().statusFactoryInternal();
 	}
-	
-	public static final String IMAGE_CAMEL_ICON = "icons/camel.png";
-	public static final String IMAGE_PROPS_ICON = "icons/prop_ps.gif";
-	public static final String IMAGE_CHART_ICON = "icons/chart.gif";
 		
 	private static class FoundationUISharedImages extends BaseUISharedImages {
 		public FoundationUISharedImages(Bundle pluginBundle) {

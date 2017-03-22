@@ -23,7 +23,6 @@ public class CamelServiceImplementationActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012";
 
 	private static CamelServiceImplementationActivator instance;
-	private static BundleContext myContext;
 
 	/**
 	 * default constructor
@@ -42,20 +41,13 @@ public class CamelServiceImplementationActivator extends BaseUIPlugin {
 	}
 
 	public static BundleContext getBundleContext() {
-		return myContext;
+		return instance.getBundle().getBundleContext();
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		myContext = context;
 		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		myContext = null;
-		super.stop(context);
 	}
 
 	/**
