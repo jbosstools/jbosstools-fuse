@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.apache.activemq.broker.jmx.ProducerViewMBean;
 import org.fusesource.ide.foundation.ui.tree.ConnectedNode;
-import org.fusesource.ide.foundation.ui.tree.HasRefreshableUI;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.foundation.ui.tree.RefreshableUI;
 import org.jboss.tools.jmx.core.tree.Node;
@@ -51,12 +50,7 @@ public class ProducerNode extends NodeSupport implements ConnectedNode {
 	
 	@Override
 	public RefreshableUI getRefreshableUI() {
-		if (this instanceof RefreshableUI) {
-			return (RefreshableUI) this;
-		} else if (parent != null && parent instanceof HasRefreshableUI) {
-			return ((HasRefreshableUI)parent).getRefreshableUI();
-		}
-		return null;
+		return this;
 	}
 	
 	@Override

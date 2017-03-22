@@ -119,11 +119,6 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 	
 	@Override
 	public RefreshableUI getRefreshableUI() {
-		if (this instanceof RefreshableUI) {
-			return (RefreshableUI) this;
-		} else if (parent != null && parent instanceof HasRefreshableUI) {
-			return ((HasRefreshableUI)parent).getRefreshableUI();
-		}
-		return null;
+		return this;
 	}
 }

@@ -18,11 +18,8 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
 import org.fusesource.ide.foundation.ui.util.Selections;
 
 public abstract class FormPagePropertyTabSection extends AbstractPropertySection {
@@ -64,13 +61,7 @@ public abstract class FormPagePropertyTabSection extends AbstractPropertySection
         }
         page = createPage(first);
         if (page != null) {
-            if (page instanceof IPageBookViewPage) {
-                try {
-                    ((IPageBookViewPage) page).init(parentPage.getSite());
-                } catch (PartInitException e) {
-                	FoundationUIActivator.pluginLog().logStatus(e.getStatus());
-                }
-            }
+        	page.init(parentPage.getSite());
             page.createControl(container);
             FormData data = new FormData();
             data.left = new FormAttachment(0, 0);

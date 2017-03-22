@@ -49,9 +49,10 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	 */
 	@Override
 	public Object getAdapter(Class adapter) {
-		if (adapter == IPropertySheetPage.class) return new TabbedPropertySheetPage(this);
-		if (this instanceof NodeSupport) return Platform.getAdapterManager().getAdapter(this, adapter);
-		return null;
+		if (adapter == IPropertySheetPage.class) {
+			return new TabbedPropertySheetPage(this);
+		}
+		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 	
 	@Override
