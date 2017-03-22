@@ -13,7 +13,6 @@ package org.fusesource.ide.jmx.camel;
 
 import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.fusesource.ide.foundation.ui.util.ImagesActivatorSupport;
-import org.fusesource.ide.jmx.camel.navigator.CamelNodeProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelPreferenceInitializer;
 import org.osgi.framework.BundleContext;
 
@@ -26,32 +25,15 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 
 	public static final String PLUGIN_ID = "org.fusesource.ide.jmx.camel";
 	private static CamelJMXPlugin plugin;
-	private static CamelNodeProvider nodeProvider;
 	private static CamelJMXSharedImages sharedImages;
 	
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 		new CamelPreferenceInitializer().initializeDefaultPreferences();
-		nodeProvider = new CamelNodeProvider();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -73,11 +55,9 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 		showUserError(PLUGIN_ID, getLogger(), title, message, e);
 	}
 	
-	public CamelJMXSharedImages getSharedImages() {
-		if( sharedImages == null ) {
-			if( getBundle() != null ) {
-				sharedImages = new CamelJMXSharedImages(getBundle());
-			}
+	public static synchronized CamelJMXSharedImages getSharedImages() {
+		if( sharedImages == null && plugin.getBundle() != null ) {
+			sharedImages = new CamelJMXSharedImages(plugin.getBundle());
 		}
 		return sharedImages;
 	}

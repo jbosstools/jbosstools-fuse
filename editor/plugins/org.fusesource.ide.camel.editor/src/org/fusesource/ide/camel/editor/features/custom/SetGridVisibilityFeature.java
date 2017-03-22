@@ -29,18 +29,16 @@ public class SetGridVisibilityFeature extends AbstractCustomFeature {
 		super(fp);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
 	@Override
 	public void execute(ICustomContext context) {
-		gridVisible = !gridVisible;
+		updateGridVisible(!gridVisible);
 		DiagramUtils.setGridVisible(gridVisible, null);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#getName()
-	 */
+	private static synchronized void updateGridVisible(boolean newValue) {
+		gridVisible = newValue;
+	}
+
 	@Override
 	public String getName() {
 		if (gridVisible) {
@@ -50,9 +48,6 @@ public class SetGridVisibilityFeature extends AbstractCustomFeature {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getDescription()
-	 */
 	@Override
 	public String getDescription() {
 		if (gridVisible) {
@@ -62,9 +57,6 @@ public class SetGridVisibilityFeature extends AbstractCustomFeature {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#canExecute(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
 	@Override
 	public boolean canExecute(ICustomContext context) {
 		return true;

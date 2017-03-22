@@ -26,7 +26,6 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.core";
 
 	private static CamelModelServiceCoreActivator instance;
-	private static BundleContext myContext;
 
 	/**
 	 * default constructor
@@ -45,23 +44,15 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	}
 	
 	public static BundleContext getBundleContext() {
-	    return myContext;
+	    return instance.getBundle().getBundleContext();
 	}
 
     @Override
 	public void start(BundleContext context) throws Exception {
         super.start(context);
-        myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
         CamelModelFactory.initializeModels();
 	}
-    
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    	myContext = null;
-    	super.stop(context);
-    }
-
 	
 	/**
 	 * Gets message from plugin.properties

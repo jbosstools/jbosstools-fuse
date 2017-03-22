@@ -84,11 +84,6 @@ public class SAPToolSuiteImportWizard extends Wizard implements IImportWizard {
 		addPage(downloadPage);
 		addPage(archivesSelectionPage);
 	}
-
-	@Override
-	public boolean canFinish() {
-		return super.canFinish();
-	}
 	
 	@Override
 	public boolean performFinish() {

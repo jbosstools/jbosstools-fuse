@@ -25,7 +25,6 @@ public class FoundationCoreActivator extends BaseCorePlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.foundation.core";
 
 	private static FoundationCoreActivator instance;
-	private static BundleContext myContext;
 
 	/**
 	 * default constructor
@@ -44,22 +43,14 @@ public class FoundationCoreActivator extends BaseCorePlugin {
 	}
 	
 	public static BundleContext getBundleContext() {
-	    return myContext;
+	    return instance.getBundle().getBundleContext();
 	}
 
     @Override
 	public void start(BundleContext context) throws Exception {
         super.start(context);
-        myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 	}
-    
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    	myContext = null;
-    	super.stop(context);
-    }
-
 	
 	/**
 	 * Gets message from plugin.properties

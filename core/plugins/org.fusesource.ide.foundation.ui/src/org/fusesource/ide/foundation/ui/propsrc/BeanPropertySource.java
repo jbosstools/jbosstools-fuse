@@ -62,8 +62,9 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 			for (String k : keysToBeCollected) {
 				cachedValues.remove(k);
 			}	
-			lastGCRun = System.currentTimeMillis();
+			updateLastGCRunTime();
 		}
+
 	}
 	
 	private final Object bean;
@@ -136,6 +137,10 @@ public class BeanPropertySource implements IPropertySource2, HasOwner {
 
 	public void cleanCache() {
 		cachedValues.clear();
+		updateLastGCRunTime();
+	}
+	
+	private static synchronized void updateLastGCRunTime() {
 		lastGCRun = System.currentTimeMillis();
 	}
 
