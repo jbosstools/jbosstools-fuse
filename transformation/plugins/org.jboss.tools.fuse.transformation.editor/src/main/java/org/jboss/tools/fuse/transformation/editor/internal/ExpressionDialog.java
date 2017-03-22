@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -43,7 +42,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.core.Expression;
@@ -83,10 +81,10 @@ public class ExpressionDialog extends BaseDialog {
                                                         .getLanguageModel()
                                                         .getSupportedLanguages()) {
             final String name = language.getName();
-            if (!name.equals("bean") && !name.equals("file") && !name.equals("sql") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                && !name.equals("xtokenize") && !name.equals("tokenize") //$NON-NLS-1$ //$NON-NLS-2$
-                && !name.equals("spel")) { //$NON-NLS-1$
-                if (languageName != null && name.equals(languageName)) {
+            if (!"bean".equals(name) && !"file".equals(name) && !"sql".equals(name) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                && !"xtokenize".equals(name) && !"tokenize".equals(name) //$NON-NLS-1$ //$NON-NLS-2$
+                && !"spel".equals(name)) { //$NON-NLS-1$
+                if (languageName != null && languageName.equals(name)) {
                     this.language = language;
                 }
                 languages.add(language);
@@ -177,7 +175,7 @@ public class ExpressionDialog extends BaseDialog {
             }
         });
 
-        WritableList sourceList = new WritableList();
+        WritableList<String> sourceList = new WritableList<>();
         sourceList.add("classpath"); //$NON-NLS-1$
         sourceList.add("file"); //$NON-NLS-1$
         sourceList.add("http"); //$NON-NLS-1$
@@ -194,9 +192,9 @@ public class ExpressionDialog extends BaseDialog {
                         (IStructuredSelection)scriptTypeComboViewer.getSelection();
                 String value = (String) selection.getFirstElement();
                 String path = null;
-                if (value.equalsIgnoreCase("classpath")) { //$NON-NLS-1$
+                if ("classpath".equalsIgnoreCase(value)) { //$NON-NLS-1$
                     path = selectResourceFromWorkspace(browseBtn.getShell(), ""); //$NON-NLS-1$
-                } else if (value.equalsIgnoreCase("file")) { //$NON-NLS-1$
+                } else if ("file".equalsIgnoreCase(value)) { //$NON-NLS-1$
                     FileDialog dialog = new FileDialog(browseBtn.getShell());
                     dialog.setText(Messages.ExpressionDialog_fileDialogTitleSelectScriptFile);
                     String[] filterExt = { "*.*" }; //$NON-NLS-1$
@@ -237,7 +235,7 @@ public class ExpressionDialog extends BaseDialog {
                 scriptOption.setEnabled(true);
                 expressionText.setFocus();
                 validate();
-                if (scriptOption.getSelection() == false && valueOption.getSelection() == false) {
+                if (!scriptOption.getSelection() && !valueOption.getSelection()) {
                     valueOption.setSelection(true);
                     valueOption.notifyListeners(SWT.Selection, null);
                 }
@@ -278,13 +276,15 @@ public class ExpressionDialog extends BaseDialog {
             valueOption.setEnabled(true);
             scriptOption.setSelection(false);
             scriptOption.setEnabled(true);
-            if (part0.contentEquals("resource")) { //$NON-NLS-1$
+            if ("resource".equals(part0)) { //$NON-NLS-1$
                 valueOption.setSelection(false);
                 scriptOption.setSelection(true);
                 String part1 = getParameterPart(expression, 1);
                 scriptTypeComboViewer.setSelection(new StructuredSelection(part1));
                 String part2 = getParameterPart(expression, 2);
-                pathText.setText(part2.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
+                if (part2 != null) {
+                	pathText.setText(part2.replace("\\${", "${")); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
         }
     }
@@ -360,8 +360,7 @@ public class ExpressionDialog extends BaseDialog {
             final IStructuredSelection selection =
                     (IStructuredSelection)scriptTypeComboViewer.getSelection();
             String value = (String) selection.getFirstElement();
-            browseBtn.setEnabled(value != null
-                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file")) //$NON-NLS-1$ //$NON-NLS-2$
+            browseBtn.setEnabled(("classpath".equalsIgnoreCase(value) || "file".equalsIgnoreCase(value)) //$NON-NLS-1$ //$NON-NLS-2$
                     && scriptOption.getSelection());
         }
     }
@@ -387,7 +386,7 @@ public class ExpressionDialog extends BaseDialog {
         if (project != null) {
             javaProject = JavaCore.create(project);
         }
-        ClasspathResourceSelectionDialog dialog = null;
+        ClasspathResourceSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
