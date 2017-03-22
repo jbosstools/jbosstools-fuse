@@ -160,7 +160,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                     } catch (Exception e) {
                         Activator.error(e);
                     }
-                    if (_builder == null || _builder != null && _builder.getTransformEndpointIds().isEmpty()) {
+                    if (_builder == null || _builder.getTransformEndpointIds().isEmpty()) {
                         transformationIDViewer.getCombo().removeAll();
                         transformationIDViewer.getCombo().setToolTipText(Messages.TransformTestWizardPage_tooltipNoTransformationEndpointsAvailable);
                         _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID,

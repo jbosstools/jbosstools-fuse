@@ -15,15 +15,12 @@ package org.fusesource.ide.foundation.ui.views;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPage;
-import org.eclipse.ui.part.Page;
-import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -49,7 +46,7 @@ public class DynamicPropertySheetTracker {
 		Object first = Selections.getFirstSelection(selection);
 		if (first instanceof IAdaptable) {
 			IAdaptable adaptable = (IAdaptable) first;
-			answer = (IPropertySheetPage) adaptable.getAdapter(IPropertySheetPage.class);
+			answer = adaptable.getAdapter(IPropertySheetPage.class);
 		}
 		if (answer == null) {
 			answer = new PropertySheetPage();
@@ -91,15 +88,6 @@ public class DynamicPropertySheetTracker {
 			if (selectionPage instanceof TabFolderSupport2) {
 				TabFolderSupport2 tfs = (TabFolderSupport2) selectionPage;
 				tfs.init(propertySheet);
-			} else {
-				boolean initSelectionPage = false;
-				if (selectionPage instanceof Page) {
-					Page p = (Page) selectionPage;
-					if (initSelectionPage) {
-						IViewSite viewSite = propertySheet.getViewSite();
-						p.init(new PageSite(viewSite));
-					}
-				}
 			}
 			if (selection != null) {
 				selectionPage.selectionChanged(part, selection);

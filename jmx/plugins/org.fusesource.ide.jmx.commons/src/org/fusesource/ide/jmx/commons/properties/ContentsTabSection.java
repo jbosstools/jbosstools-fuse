@@ -11,7 +11,6 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.commons.properties;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -40,7 +39,7 @@ public class ContentsTabSection extends PropertySourceTableView {
             setConfiguration(null);
         }
         current = node;
-		List<IPropertySource> propertySources = node == null ? Collections.emptyList() : node.getPropertySourceList();
+		List<IPropertySource> propertySources = node.getPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);
         recreateColumns();

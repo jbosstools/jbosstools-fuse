@@ -39,8 +39,8 @@ public class ScreenshotUtil {
 	        imgLoader.data = new ImageData[] { image.getImageData() };
 	        imgLoader.save(path, imageType);
         } finally {
-        	if (gc != null) gc.dispose();
-        	if (image != null) image.dispose();
+        	gc.dispose();
+        	image.dispose();
         }
 	}
 }

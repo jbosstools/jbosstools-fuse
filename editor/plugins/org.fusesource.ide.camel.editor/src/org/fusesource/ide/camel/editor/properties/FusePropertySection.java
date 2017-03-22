@@ -522,9 +522,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				}
 			}
 			if (dataformat.trim().length() > 0) {
-				Node expNode = selectedEP.createElement(dataformat,
-						selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix()
-								: null);
+				Node expNode = selectedEP.createElement(dataformat, selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 				dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 				selectedEP.setParameter(prop.getName(), dataFormatElement);
 				selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
@@ -537,8 +535,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			}
 		} else if (dataFormatElement == null && dataformat.trim().length() > 0) {
 			// no expression set, but now we set one
-			Node expNode = selectedEP.createElement(dataformat,
-					selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
+			Node expNode = selectedEP.createElement(dataformat, selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 			dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 			selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 			this.selectedEP.setParameter(prop.getName(), dataFormatElement);

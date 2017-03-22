@@ -120,12 +120,7 @@ public class StyleUtil {
 
 		// this is a child style of the e-class-style
 		Style parentStyle = getStyleForEClass(diagram);
-		Style style = null;
-		if (parentStyle == null) {
-			style = gaService.createStyle(diagram, styleId);
-		} else {
-			style = findStyle(parentStyle, styleId);
-		}
+		Style style = findStyle(parentStyle, styleId); 
 
 		if (style == null) { // style not found - create new style
 			style = gaService.createStyle(getStyleForEClass(diagram), styleId);
