@@ -39,7 +39,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -195,7 +194,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 
         // Bind source file path widget to UI model
         IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_javaClassText);
-        IObservableValue modelValue = null;
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -207,8 +206,8 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             @Override
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
-                String pathEmptyError = null;
-                String unableToFindError = null;
+                String pathEmptyError;
+                String unableToFindError;
                 if (isSourcePage()) {
                     pathEmptyError = Messages.JavaPage_pathEmptyError_source;
                     unableToFindError = Messages.JavaPage_unableToFindError_source;
@@ -310,12 +309,11 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 	 * @return the scope of resources to be searched
 	 */
 	private IJavaSearchScope computeSearchScope(IProject project) {
-		IJavaSearchScope searchScope = null;
+		IJavaSearchScope searchScope;
         if (project == null) {
 			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-            IStructuredSelection selectionToPass = StructuredSelection.EMPTY;
             if (selection instanceof IStructuredSelection) {
-                selectionToPass = (IStructuredSelection) selection;
+            	IStructuredSelection selectionToPass = (IStructuredSelection) selection;
                 if (selectionToPass.getFirstElement() instanceof IFile) {
                     project = ((IFile) selectionToPass.getFirstElement()).getProject();
                 }

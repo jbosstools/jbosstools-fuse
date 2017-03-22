@@ -132,7 +132,7 @@ public class CommonTestUtils {
 			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)
 			swtException.printStackTrace();
 			if(currentNumberOfTry < 100){
-				readAndDispatch(currentNumberOfTry ++);
+				readAndDispatch(currentNumberOfTry + 1);
 			} else {
 				System.out.println("Tried 100 times to wait for UI... Continue and see what happens.");
 			}

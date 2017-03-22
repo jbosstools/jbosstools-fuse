@@ -1176,7 +1176,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		}
 
 		private int getArrowDirection() {
-			int direction = PositionConstants.EAST;
+			int direction;
 			if (isInState(STATE_EXPANDED | STATE_PINNED_OPEN))
 				direction = dock == PositionConstants.WEST ? PositionConstants.WEST
 						: PositionConstants.EAST;
@@ -1601,8 +1601,8 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		public static Cursor getCursor(int code) {
 			Display display = Display.getCurrent();
 			if (cursors[code] == null) {
-				ImageDescriptor source = null;
-				ImageDescriptor mask = null;
+				ImageDescriptor source;
+				ImageDescriptor mask;
 				switch (code) {
 				case LEFT:
 					source = PlatformUI

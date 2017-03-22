@@ -31,7 +31,6 @@ import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 import org.jboss.tools.foundation.core.internal.Trace;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
@@ -121,9 +120,8 @@ public abstract class BundleUtils {
 	
 	public static <T> Collection<ServiceReference<T>> findServiceReferences(BundleContext context, Class<T> c) throws InvalidSyntaxException {
 		String filter = MessageFormat.format("(&(objectClass={0}))", c.getCanonicalName());
-		Filter f = context.createFilter(filter);
-		Collection<ServiceReference<T>> refs = context.getServiceReferences(c, filter);
-		return refs;
+		context.createFilter(filter);
+		return context.getServiceReferences(c, filter);
 	}
 	
 	public static Properties getProperties(ServiceReference<?> ref) {
@@ -135,7 +133,7 @@ public abstract class BundleUtils {
 		return properties;
 	}
 	public static Map<String,Object> getPropertiesMap(ServiceReference<?> ref) {
-		Map<String,Object> properties = new HashMap<String,Object>();
+		Map<String,Object> properties = new HashMap<>();
 		String[] keys = ref.getPropertyKeys();
 		for (String key : keys) {
 			properties.put(key, ref.getProperty(key));

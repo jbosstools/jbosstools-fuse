@@ -331,7 +331,6 @@ public class ArchivesSelectionPage extends WizardPage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        dialog = null;
         return null;
 	}
 

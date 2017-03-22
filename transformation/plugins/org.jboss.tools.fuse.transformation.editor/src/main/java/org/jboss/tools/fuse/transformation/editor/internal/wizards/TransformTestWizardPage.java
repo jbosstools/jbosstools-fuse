@@ -268,7 +268,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             } catch (final InterruptedException ignored) {
             }
 
-            IPath srcPath = null;
+            IPath srcPath;
             if (getPackageFragmentRoot() != null) {
                 srcPath = getPackageFragmentRoot().getPath().makeAbsolute();
                 srcPath = srcPath.removeFirstSegments(1);

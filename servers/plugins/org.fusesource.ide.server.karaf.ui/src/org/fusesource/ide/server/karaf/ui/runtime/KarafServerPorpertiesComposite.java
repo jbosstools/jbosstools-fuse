@@ -48,16 +48,13 @@ public class KarafServerPorpertiesComposite extends Composite implements
 
 	@Override
 	public void handleEvent(Event event) {
-		boolean val = false;
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
 			if (event.widget == txtPortNumber) {
-				val = validate();
-				if (val) {
+				if (validate()) {
 					try {
-						model.setPortNumber(Integer.parseInt(txtPortNumber
-								.getText()));
+						model.setPortNumber(Integer.parseInt(txtPortNumber.getText()));
 					} catch (NumberFormatException ne) {
 						// shdn't happen
 					}

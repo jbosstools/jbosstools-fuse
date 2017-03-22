@@ -19,7 +19,7 @@ public class ServerNamingUtil {
 
 	public static String getDefaultServerName(IServer server, IRuntime rt) {
 		String runtimeName = rt.getName();
-		String base = null;
+		String base;
 		if( runtimeName == null || runtimeName.trim().isEmpty()) //$NON-NLS-1$
 			base = server.getServerType().getName();
 		else 
@@ -28,7 +28,9 @@ public class ServerNamingUtil {
 	}
 	
 	public static String getDefaultServerName( String base) {
-		if( findServer(base) == null ) return base;
+		if( findServer(base) == null ) {
+			return base;
+		}
 		int i = 1;
 		while( findServer(
 				NLS.bind("{0} ({1})", base, i)) != null ) //$NON-NLS-1$

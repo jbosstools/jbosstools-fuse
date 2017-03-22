@@ -103,9 +103,8 @@ public class Fuse6xStartupLaunchConfigurator extends
 		String endorsedDirs = System.getProperty("java.endorsed.dirs");
 		String extDirs = System.getProperty("java.ext.dirs");
 		
-		IKarafRuntime runtime = null;
 		if (server.getRuntime() != null) {
-			runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+			IKarafRuntime runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
 			File vmLoc = runtime.getVM().getInstallLocation();
 			
 //			JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${KARAF_HOME}/lib/endorsed"

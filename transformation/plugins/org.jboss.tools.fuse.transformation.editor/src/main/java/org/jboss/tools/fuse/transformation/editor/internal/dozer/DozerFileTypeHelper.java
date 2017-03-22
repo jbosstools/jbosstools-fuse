@@ -39,7 +39,7 @@ public final class DozerFileTypeHelper {
         boolean matches = false;
 
         if (filePath != null && filePath.trim().length() > 0) {
-            String rawPath = null;
+            String rawPath;
             if (filePath.startsWith("file:")) { //$NON-NLS-1$
                 rawPath = filePath.substring(5);
             } else {

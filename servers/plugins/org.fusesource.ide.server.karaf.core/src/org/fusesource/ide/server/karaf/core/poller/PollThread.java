@@ -190,7 +190,7 @@ public class PollThread extends Thread {
 	
 	private void handleUncertainTermination() {
 		int state = server.getServerState();
-		boolean success = false;
+		boolean success;
 		if (expectedState == IServerStatePoller.SERVER_UP)
 			success = state == IServer.STATE_STARTED;
 		else

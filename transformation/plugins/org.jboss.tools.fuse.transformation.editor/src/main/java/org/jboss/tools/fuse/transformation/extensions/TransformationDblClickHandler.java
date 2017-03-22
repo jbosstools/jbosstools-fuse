@@ -73,7 +73,6 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 	 * @return	the parameter value or null
 	 */
 	private String getEndpointParameter(String uri, String key) {
-		String value = null;
 		StringBuilder uriStr = new StringBuilder(uri);
 		if (uriStr.indexOf(key + "=") == -1) { //$NON-NLS-1$
 			return null;
@@ -81,11 +80,10 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
 		int startIdx = uriStr.indexOf(key);
 		int endIdx = uriStr.indexOf("&", startIdx); //$NON-NLS-1$
 		if (endIdx == -1) {
-			value = uriStr.substring(startIdx + (key + '=').length());
+			return uriStr.substring(startIdx + (key + '=').length());
 		} else {
-			value = uriStr.substring(startIdx + (key + '=').length(), endIdx);
+			return uriStr.substring(startIdx + (key + '=').length(), endIdx);
 		}
-		return value;
 	}
 
 	/*

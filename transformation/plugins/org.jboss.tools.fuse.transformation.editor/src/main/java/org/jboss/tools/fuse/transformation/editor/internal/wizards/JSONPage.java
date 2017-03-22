@@ -88,7 +88,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
         // Bind source file path widget to UI model
         final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_jsonFileText);
-        IObservableValue modelValue = null;
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -449,7 +449,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 javaProject = JavaCore.create(CamelUtils.project());
             }
         }
-        ClasspathResourceSelectionDialog dialog = null;
+        ClasspathResourceSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
@@ -501,8 +501,8 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         @Override
         public IStatus validate(final Object value) {
             final String path = value == null ? null : value.toString().trim();
-            String pathEmptyError = null;
-            String unableToFindError = null;
+            String pathEmptyError;
+            String unableToFindError;
             if (isSourcePage()) {
                 pathEmptyError = Messages.JSONPage_errorMessageEmptySourceFilePath;
                 unableToFindError = Messages.JSONPage_errorMessageInvalidSourcePath;
@@ -532,7 +532,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         @Override
         public IStatus validate(final Object value) {
             final String path = value == null ? null : value.toString().trim();
-            String fileEmptyError = null;
+            String fileEmptyError;
             if (isSourcePage()) {
                 fileEmptyError = Messages.JSONPage_errorMessageSourceFileEmpty;
             } else {

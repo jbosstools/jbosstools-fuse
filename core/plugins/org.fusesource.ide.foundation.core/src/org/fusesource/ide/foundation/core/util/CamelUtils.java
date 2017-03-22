@@ -88,7 +88,7 @@ public class CamelUtils {
 	private static boolean matchesNamespace(String filePath, FindNamespaceHandlerSupport support) {
 		boolean matches = false;
 		if (filePath != null && filePath.trim().length()>0) {
-			String rawPath = null;
+			String rawPath;
 			if (filePath.startsWith("file:")) {
 				rawPath = filePath.substring("file:".length());
 			} else {

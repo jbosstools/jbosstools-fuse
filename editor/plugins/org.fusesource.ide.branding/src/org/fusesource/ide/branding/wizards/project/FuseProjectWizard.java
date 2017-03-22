@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -46,7 +45,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.osgi.util.NLS;
@@ -240,21 +238,20 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 
 		final ArchetypeDetails archetype = archetypePage.getArchetype();
 		if(archetype.getRequiredProperties()!=null){
-			List<String> invalidValues = new ArrayList<String>();
+			List<String> invalidValues = new ArrayList<>();
 			for(Map.Entry<String, String> paramEntry:archetype.getRequiredProperties().entrySet()){
 				if(paramEntry.getValue()==null||paramEntry.getValue().trim().length()==0){
 					invalidValues.add(paramEntry.getKey());
 				}
 			}
-			if(invalidValues.size()>0){
+			if(!invalidValues.isEmpty()){
 				MessageDialog.openError(getShell(),WizardMessages.FuseProjectWizardArchetypePage_missingPropTitle,
 						NLS.bind(WizardMessages.FuseProjectWizardArchetypePage_missingProp, invalidValues.toString()));
 				return false;
 			}
 		}
 		final String javaPackage = archetypePage.getJavaPackage();
-		@SuppressWarnings("unused")
-		final Properties properties = archetypePage.getProperties();
+		archetypePage.getProperties();
 
 		Activator.getLogger().debug(
 				"About to create project: " + projectName + " from archetype: "
@@ -377,8 +374,6 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 			project.setDescription(projectDescription, monitor);
 			
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-		    @SuppressWarnings("unused")
-			IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 			MavenUpdateRequest request = new MavenUpdateRequest(false, true);
 			request.addPomFile(project.getFile("pom.xml"));
 			configurationManager.updateProjectConfiguration(request, monitor);

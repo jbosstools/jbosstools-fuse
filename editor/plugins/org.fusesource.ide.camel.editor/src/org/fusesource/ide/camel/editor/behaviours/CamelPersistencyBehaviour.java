@@ -88,11 +88,9 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 	 * Creates the diagram from the current model
 	 */
 	public boolean loadModel(IEditorInput input) {
-		IFile camelContextFile = null;
-		
 		IFileEditorInput fileEditorInput = editor.asFileEditorInput(input);
 		if (fileEditorInput != null) {
-			camelContextFile = fileEditorInput.getFile();
+			IFile camelContextFile = fileEditorInput.getFile();
 			if (camelContextFile.getFullPath().toOSString().indexOf(".FuseRemoteCamelContextData") == -1) {
 				// don't set a project for temporary remote context files
 				editor.setWorkspaceProject(camelContextFile.getProject());

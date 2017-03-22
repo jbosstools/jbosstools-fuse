@@ -88,16 +88,12 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 
 	@Override
 	public void handleEvent(Event event) {
-		boolean valid = false;
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
-			if (event.widget == txtKarafDir) {
-				valid = validate();
-				if (valid) {
-					String installDir = txtKarafDir.getText();
-					model.setKarafInstallDir(installDir);
-				}
+			if (event.widget == txtKarafDir && validate()) {
+				String installDir = txtKarafDir.getText();
+				model.setKarafInstallDir(installDir);
 			}
 		}
 

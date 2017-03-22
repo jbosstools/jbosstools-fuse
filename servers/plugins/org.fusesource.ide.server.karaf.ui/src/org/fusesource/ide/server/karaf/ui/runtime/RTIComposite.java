@@ -52,13 +52,8 @@ public class RTIComposite extends Composite implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		boolean valid = false;
-
-		if (event.widget == fuseRTLoc) {
-			valid = validate();
-			if (valid)
-				taskModel.putObject(RTITargetFolderWizardFragment.FUSE_RT_LOC,
-						fuseRTLoc.getText());
+		if (event.widget == fuseRTLoc && validate()) {
+			taskModel.putObject(RTITargetFolderWizardFragment.FUSE_RT_LOC, fuseRTLoc.getText());
 		}
 	}
 

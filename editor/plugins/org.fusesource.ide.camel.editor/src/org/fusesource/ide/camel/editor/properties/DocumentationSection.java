@@ -120,7 +120,6 @@ public class DocumentationSection extends NodeSectionSupport {
 				contextName = "org.fusesource.ide.camel.editor.endpoint";
 			} else {
 				contextName = "org.fusesource.ide.camel.editor.allEIPs";
-				context = HelpSystem.getContext("");
 			}
 			context = HelpSystem.getContext(contextName);
 

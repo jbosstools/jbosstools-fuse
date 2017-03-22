@@ -45,15 +45,13 @@ import org.osgi.service.prefs.Preferences;
 public abstract class TabFolderSupport extends ViewPart implements IViewPage {
 
 	private static final String TAB_SELECTION_INDEX = "tabSelectionIndex";
-	private Composite parent;
 	private CTabFolder tabFolder;
 	private IPageSite pageSite;
 	/*
 	private Action refreshAction;
 	private Action doubleClickAction;
 	 */
-	private Menu menu;
-	private List<IPage> pages = new ArrayList<IPage>();
+	private List<IPage> pages = new ArrayList<>();
 
 	public TabFolderSupport() {
 		super();
@@ -74,8 +72,6 @@ public abstract class TabFolderSupport extends ViewPart implements IViewPage {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		this.parent = parent;
-
 		parent.setLayout(new FillLayout());
 
 		tabFolder = new CTabFolder(parent, SWT.BORDER);
@@ -177,7 +173,7 @@ public abstract class TabFolderSupport extends ViewPart implements IViewPage {
 				TabFolderSupport.this.fillContextMenu(manager);
 			}
 		});
-		menu = menuMgr.createContextMenu(tabFolder);
+		Menu menu = menuMgr.createContextMenu(tabFolder);
 		tabFolder.setMenu(menu);
 
 		/*
@@ -209,7 +205,7 @@ public abstract class TabFolderSupport extends ViewPart implements IViewPage {
 
 	}
 	protected void contributeToActionBars() {
-		IActionBars bars = null;
+		IActionBars bars;
 		if (getViewSite() != null) {
 			bars = getViewSite().getActionBars();
 		} else if (pageSite != null) {

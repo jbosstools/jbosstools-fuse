@@ -397,7 +397,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 		} catch(InterruptedException ie){
 			//try to wait a second time
 			//ugly workaround to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
-			waitJavaBuild(decreasingCounter--, ie, monitor);
+			waitJavaBuild(decreasingCounter - 1, ie, monitor);
 		}
 	}
 

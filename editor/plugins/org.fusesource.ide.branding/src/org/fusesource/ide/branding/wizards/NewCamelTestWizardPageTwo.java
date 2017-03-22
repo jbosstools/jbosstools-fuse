@@ -107,7 +107,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		@Override
 		public void updateLabel(ViewerLabel label, TreePath elementPath) {
 			Object last = elementPath.getLastSegment();
-			String text = null;
+			String text;
 			if (last instanceof TreeNode) {
 				TreeNode node = (TreeNode) last;
 				text = node.getValue().toString();
@@ -278,13 +278,11 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 				checkedEndpointCount++;
 			}
 		}
-		String label = ""; //$NON-NLS-1$
+		String label; //$NON-NLS-1$
 		if (checkedEndpointCount == 1) {
-			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_one, new Integer(
-					checkedEndpointCount));
+			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_one, Integer.valueOf(checkedEndpointCount));
 		} else {
-			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_many,
-					new Integer(checkedEndpointCount));
+			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_many, Integer.valueOf(checkedEndpointCount));
 		}
 		fSelectedEndpointsLabel.setText(label);
 	}

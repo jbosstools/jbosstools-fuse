@@ -214,7 +214,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 	@Override
 	public int transferBuiltModule(IModule[] module, IPath srcFile, IProgressMonitor monitor) throws CoreException {
 		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, srcFile);
-		int status = IServer.PUBLISH_FULL;
+		int status;
 		if( bd != null ) {
 			status = getPublisher(module).publish(getServer(), module, bd.getSymbolicName(), bd.getVersion(), srcFile);
 			((Server)getServer()).setModuleState(module, status);

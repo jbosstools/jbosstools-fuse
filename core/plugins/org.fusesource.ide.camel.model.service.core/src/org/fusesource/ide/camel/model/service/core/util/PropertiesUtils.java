@@ -446,7 +446,7 @@ public class PropertiesUtils {
 	public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap<?,?> modelMap) {
 		if ("path".equalsIgnoreCase(p.getKind())) {
 			// simply rebuild the uri
-			String newUri = "";
+			String newUri;
 
 			// first build the path part
 			newUri = updatePathParams(selectedEP, c, c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
@@ -485,7 +485,7 @@ public class PropertiesUtils {
 			if (val != null && idx != -1) {
 				// special replace logic needed as special expression chars can
 				// break the replacement
-				String newUri = "";
+				String newUri;
 				boolean firstParam = idx == -1 || uri.charAt(idx - 1) == '?';
 				if (valueDeleted) {
 					newUri = uri.substring(0, firstParam ? idx : idx - 1);

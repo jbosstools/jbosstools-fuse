@@ -38,7 +38,7 @@ public abstract class XformWizardPage extends WizardPage {
     final ObservablesManager observablesManager = new ObservablesManager();
     final Model model;
 
-    protected int decoratorPosition = SWT.TOP; // SWT.TOP | SWT.LEFT;
+    protected int decoratorPosition = SWT.TOP;
 
     protected XformWizardPage(String pageName, final Model model) {
         super(pageName);
@@ -138,9 +138,8 @@ public abstract class XformWizardPage extends WizardPage {
         // page too
         NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
         StartPage startPage = (StartPage) wizard.getStartingPage();
-        XformWizardPage pageToRefresh = null;
         if (startPage != null && startPage.getSourcePage() != null && startPage.getSourcePage().equals(this)) {
-            pageToRefresh = (XformWizardPage) startPage.getTargetPage();
+        	XformWizardPage pageToRefresh = (XformWizardPage) startPage.getTargetPage();
             pageToRefresh.pingBinding();
         }
     }

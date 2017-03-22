@@ -289,7 +289,7 @@ public class KarafUtils {
 	}
 
 	public static String getBundleSymbolicName(IModule module) throws CoreException {
-		String symbolicName = null;
+		String symbolicName;
 		
 		if (module == null || module.getProject() == null)
 			return "";
@@ -340,7 +340,7 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getBundleVersionFromManifest(File manifest) {
-		String version = null;
+		String version;
 		
 		if (manifest.exists()) {
 			try {
@@ -454,7 +454,7 @@ public class KarafUtils {
 		if (module == null)
 			return "";
 		
-		String version = null;
+		String version;
 		String packaging = getPackaging(module);
 		
 		File manifest = findManifest(module);
@@ -491,9 +491,11 @@ public class KarafUtils {
 		BaseConfigPropertyProvider sysProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("system.properties").toFile());
 		
 		String url = manProv.getConfigurationProperty("serviceUrl");
-		if (url == null) return null;
+		if (url == null) {
+			return null;
+		}
 		url = url.trim();
-		int pos = -1;
+		int pos;
 		while ((pos = url.indexOf("${")) != -1) {
 			retVal += url.substring(0, pos);
 			String placeHolder = url.substring(url.indexOf("${")+2, url.indexOf("}")).trim();

@@ -27,9 +27,7 @@ public class MandatoryComboValidator extends MandatoryValidator {
 	@Override
 	protected boolean isValid(Object value) {
 		int idx = combo.getSelectionIndex();
-		boolean valid = super.isValid(value);
 		return idx >= 0;
 	}
-
 
 }

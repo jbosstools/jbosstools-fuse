@@ -33,9 +33,9 @@ public class ActiveMQConverter {
 			"BooleanProperties", "ByteProperties", "ShortProperties",
 			"IntProperties", "LongProperties", "FloatProperties",
 			"DoubleProperties", "StringProperties"));
-	private Set<String> bodyKeys = new HashSet<String>(Arrays.asList("Text",
+	private Set<String> bodyKeys = new HashSet<>(Arrays.asList("Text",
 			"Object", "Bytes", "Map"));
-	private Set<String> ignoredKeys = new HashSet<String>(Arrays.asList("PropertiesText"));
+	private Set<String> ignoredKeys = new HashSet<>(Arrays.asList("PropertiesText"));
 
 	public IExchange toExchange(Object object) {
 		if (object instanceof CompositeData) {
@@ -69,7 +69,6 @@ public class ActiveMQConverter {
 				headers.put(key, value);
 			}
 		}
-		Set<Entry<String, Object>> entrySet = headers.entrySet();
 		return new Exchange(message);
 	}
 
@@ -85,27 +84,17 @@ public class ActiveMQConverter {
 	}
 
 	private Map<String, Object> toMap(TabularData td) {
-		HashMap<String, Object> answer = new HashMap<String, Object>();
+		HashMap<String, Object> answer = new HashMap<>();
 		Collection<?> rows = td.values();
 		for (Object row : rows) {
 			if (row instanceof CompositeData) {
 				CompositeData cd = (CompositeData) row;
 				// lets assume its just a key & value
-				if (true) {
-					Object key = cd.get("key");
-					if (key != null) {
-						Object value = cd.get("value");
-						//ActiveMQJMXPlugin.getLogger().debug("Got key " + key + " value " + value);
-						answer.put(key.toString(), value);
-					}
-				} else {
-					Set<?> keys = cd.getCompositeType().keySet();
-					for (Object key : keys) {
-						String keyText = key.toString();
-						Object value = cd.get(keyText);
-						//ActiveMQJMXPlugin.getLogger().debug("Got key " + key + " value " + value);
-						answer.put(keyText, value);
-					}
+				Object key = cd.get("key");
+				if (key != null) {
+					Object value = cd.get("value");
+					//ActiveMQJMXPlugin.getLogger().debug("Got key " + key + " value " + value);
+					answer.put(key.toString(), value);
 				}
 			}
 		}

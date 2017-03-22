@@ -158,7 +158,7 @@ public class CamelModelFactory {
 	 * @return
 	 */
 	static String getCompatibleCamelVersion(String requestedCamelVersion, List<String> supportedVersions, String latestCamelVersion) {
-		String alternative = null;
+		String alternative;
 		String lastFound = null;
 		String smallestVersion = null;
 		Version reqVersion = new Version(requestedCamelVersion);

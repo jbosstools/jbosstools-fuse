@@ -31,7 +31,7 @@ public final class ImageUtils {
 	 * @return	the dimension or 0x0 on errors
 	 */
 	public static Dimension getImageSize(String imageId) {
-		Dimension dim = null;
+		Dimension dim;
 		Image img = CamelEditorUIActivator.getDefault().getImage(imageId);
 		if (img != null) 
 			dim = new Dimension(img); 
