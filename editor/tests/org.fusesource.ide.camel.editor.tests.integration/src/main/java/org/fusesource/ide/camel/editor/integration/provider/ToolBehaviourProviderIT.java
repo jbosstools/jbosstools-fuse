@@ -15,13 +15,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -39,9 +45,11 @@ import org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.p
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -92,7 +100,7 @@ public class ToolBehaviourProviderIT {
 			+ "  </build>\n"
 			+ "</project>";
 	
-	private void initProject() throws PartInitException, CoreException, IOException {
+	private void initProject() throws CoreException, IOException {
 		CamelEditor camelEditor = (CamelEditor)IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) fuseProject.createEmptyCamelFile().getResource());
 		CamelDesignEditor camelDesignEditor = camelEditor.getDesignEditor();
 		toolbehaviourprovider = (ToolBehaviourProvider)camelDesignEditor.getDiagramTypeProvider().getCurrentToolBehaviorProvider();
@@ -111,7 +119,7 @@ public class ToolBehaviourProviderIT {
 	}
 	
 	@Test
-	public void testPaletteEntriesfromExtensionPointsContainsAMQForKaraf() throws PartInitException, CoreException, IOException{
+	public void testPaletteEntriesfromExtensionPointsContainsAMQForKaraf() throws CoreException, IOException{
 		initProject();
 		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL, ActiveMQPaletteEntry.CAMEL_JMS);
 	}
@@ -129,7 +137,7 @@ public class ToolBehaviourProviderIT {
 	}
 	
 	@Test
-	public void testPaletteEntriesfromExtensionPointsValidityForKaraf() throws PartInitException, CoreException, IOException{
+	public void testPaletteEntriesfromExtensionPointsValidityForKaraf() throws CoreException, IOException{
 		initProject();
 		List<IToolEntry> aggregatedToolEntries = toolbehaviourprovider.getAggregatedToolEntries();
 		ensureCorrectNumberOfTool(aggregatedToolEntries, CustomPaletteEntry1.INTEGRATION_TEST_KARAF_ONLY, 1);
@@ -153,13 +161,46 @@ public class ToolBehaviourProviderIT {
 		
 		testAMQPalette(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER, ActiveMQPaletteEntry.CAMEL_JMS_STARTER);
 	}
+	
+	@Test
+	public void testAllRoutingEIPWhichCanBePartOfRouteFlowAreAvailable() throws Exception {
+		initProject();
+    	CamelModel model = CamelModelFactory.getModelForProject(fuseProject.getProject());
+    	ArrayList<Eip> eips = model.getEipModel().getSupportedEIPs();
+    	
+    	IPaletteCompartmentEntry[] palette = toolbehaviourprovider.getPalette();
+    	Set<String> missingEips = new HashSet<>();
+    	for(Eip eip : eips){
+    		if(isEIPWantedInPalette(eip)){
+    			List<IToolEntry> correspondingToolEntry = 
+    					Stream.of(palette)
+    					.map(IPaletteCompartmentEntry::getToolEntries)
+    					.flatMap(List::stream)
+    					.filter(toolEntry -> toolEntry instanceof ObjectCreationToolEntry)
+    					.filter(toolEntry  -> eip.getTitle().equals(toolEntry.getLabel()))
+    					.collect(Collectors.toList());
+    			if(correspondingToolEntry.isEmpty()){
+    				missingEips.add(eip.getTitle());
+    			}
+    		}
+    	}
+    	
+    	assertThat(missingEips).isEmpty();
+    	
+	}
+
+	private boolean isEIPWantedInPalette(Eip eip) {
+		return eip.getTags().contains("eip")
+				&& ("true".equals(eip.getInput()) || "true".equals(eip.getOutput()))
+				&& !Arrays.asList("Script","To D", "Service Call", "To", "Dynamic Router").contains(eip.getTitle());
+	}
 
 	@SuppressWarnings("deprecation")
 	private void testAMQPalette(String expectedFirstDependency, String expectedSecondDependency) {
 		List<IToolEntry> aggregatedToolEntries = toolbehaviourprovider.getAggregatedToolEntries();
 		List<IToolEntry> activeMQs = aggregatedToolEntries.stream()
 				.filter(toolEntry -> toolEntry instanceof ObjectCreationToolEntry)
-				.filter(toolEntry  -> ActiveMQPaletteEntry.ACTIVE_MQ.equals((((ObjectCreationToolEntry)toolEntry).getLabel())))
+				.filter(toolEntry  -> ActiveMQPaletteEntry.ACTIVE_MQ.equals(toolEntry.getLabel()))
 				.collect(Collectors.toList());
 		assertThat(activeMQs).hasSize(1);
 		CreateEndpointFigureFeature createFeature = (CreateEndpointFigureFeature)((ObjectCreationToolEntry)activeMQs.get(0)).getCreateFeature();
