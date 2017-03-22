@@ -87,7 +87,7 @@ public class MessageDropHandler extends DropHandlerSupport {
 	}
 
 	public static void setMessageBody(Message m, File file, boolean binary) {
-		Object body = null;
+		Object body;
 		if (binary) {
 			// TODO XML encode???
 			body = IOUtils.loadBinaryFile(file);

@@ -86,7 +86,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
 
         // Bind source file path widget to UI model
         final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(hl7FileText);
-        IObservableValue modelValue = null;
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -445,7 +445,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         if (getModel() != null && CamelUtils.project() != null) {
             javaProject = JavaCore.create(CamelUtils.project());
         }
-        ClasspathResourceSelectionDialog dialog = null;
+        ClasspathResourceSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
@@ -497,8 +497,8 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         @Override
         public IStatus validate(final Object value) {
             final String path = value == null ? null : value.toString().trim();
-            String pathEmptyError = null;
-            String unableToFindError = null;
+            String pathEmptyError;
+            String unableToFindError;
             if (isSourcePage()) {
                 pathEmptyError = "A source file path must be supplied for the transformation."; //$NON-NLS-1$
                 unableToFindError = "Unable to find a source file with the supplied path"; //$NON-NLS-1$
@@ -528,7 +528,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
         @Override
         public IStatus validate(final Object value) {
             final String path = value == null ? null : value.toString().trim();
-            String fileEmptyError = null;
+            String fileEmptyError;
             if (isSourcePage()) {
                 fileEmptyError = "Source file selected is empty."; //$NON-NLS-1$
             } else {

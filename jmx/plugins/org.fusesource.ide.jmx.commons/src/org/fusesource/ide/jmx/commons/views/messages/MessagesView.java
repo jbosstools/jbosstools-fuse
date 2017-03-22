@@ -173,7 +173,7 @@ public class MessagesView extends TableViewSupport {
 	@Override
 	protected void createColumns() {
 		int bounds = 100;
-		int column = 0;
+		int columnIndex = 0;
 		clearColumns();
 
 		if (browser instanceof ITraceExchangeBrowser) {
@@ -187,7 +187,7 @@ public class MessagesView extends TableViewSupport {
 					return null;
 				}
 			};
-			column = addColumnFunction(bounds, column, function, "Trace ID");
+			columnIndex = addColumnFunction(bounds, columnIndex, function, "Trace ID");
 		}
 
 		// TODO add exchange / message ID??
@@ -202,7 +202,7 @@ public class MessagesView extends TableViewSupport {
 					return null;
 				}
 			};
-			column = addColumnFunction(bounds, column, function, "Exchange ID");
+			columnIndex = addColumnFunction(bounds, columnIndex, function, "Exchange ID");
 		}
 		if (showBody) {
 			final Function1<Object, Object> function = new Function1<Object, Object>() {
@@ -219,7 +219,7 @@ public class MessagesView extends TableViewSupport {
 					return null;
 				}
 			};
-			column = addColumnFunction(bounds, column, function, "Message Body");
+			columnIndex = addColumnFunction(bounds, columnIndex, function, "Message Body");
 		}
 
 		SortedSet<String> headers = new TreeSet<>();
@@ -243,7 +243,7 @@ public class MessagesView extends TableViewSupport {
 					return null;
 				}
 			};
-			column = addColumnFunction(bounds, column, function, header);
+			columnIndex = addColumnFunction(bounds, columnIndex, function, header);
 		}
 		if (browser instanceof ITraceExchangeBrowser) {
 			if (showToNode) {
@@ -257,7 +257,7 @@ public class MessagesView extends TableViewSupport {
 						return null;
 					}
 				};
-				column = addColumnFunction(bounds, column, function, "Trace Node Id");
+				columnIndex = addColumnFunction(bounds, columnIndex, function, "Trace Node Id");
 			}
 			if (showTimestamp) {
 				final Function1<Object, Object> function = new Function1<Object, Object>() {
@@ -270,7 +270,7 @@ public class MessagesView extends TableViewSupport {
 						return null;
 					}
 				};
-				column = addColumnFunction(bounds, column, function, "Trace Timestamp");
+				columnIndex = addColumnFunction(bounds, columnIndex, function, "Trace Timestamp");
 			}
 			if (showRelativeTime) {
 				final Function1<Object, Long> function = new FunctionLong<Object>() {
@@ -283,7 +283,7 @@ public class MessagesView extends TableViewSupport {
 						return null;
 					}
 				};
-				column = addColumnFunction(bounds, column, function, "Relative Time (ms)");
+				columnIndex = addColumnFunction(bounds, columnIndex, function, "Relative Time (ms)");
 			}
 			if (showElapsedTime) {
 				final Function1<Object, Long> function = new FunctionLong<Object>() {
@@ -296,7 +296,7 @@ public class MessagesView extends TableViewSupport {
 						return null;
 					}
 				};
-				column = addColumnFunction(bounds, column, function, "Elapsed Time (ms)");
+				addColumnFunction(bounds, columnIndex, function, "Elapsed Time (ms)");
 			}
 		}
 	}

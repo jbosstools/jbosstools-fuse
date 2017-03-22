@@ -163,7 +163,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	
 	protected void run(IServer s, IJMXRunnable r, String user, String pass, boolean saveActiveConnection) throws JMXException {
 		try {
-			MBeanServerConnection c = null;
+			MBeanServerConnection c;
 			if( activeConnection == null ) {
 				c = createConnection(s, user, pass);
 				if( saveActiveConnection ) {
@@ -179,13 +179,12 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	}
 
 	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws Exception {
-		Map<String, Object> envMap = new HashMap<String, Object>();
+		Map<String, Object> envMap = new HashMap<>();
 		envMap.put("jmx.remote.credentials", new String[] { user, pass });
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
 		JMXServiceURL url = new JMXServiceURL(conUrl); 
 		jmxc = JMXConnectorFactory.connect(url, envMap); 
-		MBeanServerConnection mbsc = jmxc.getMBeanServerConnection(); 
-		return mbsc; 
+		return jmxc.getMBeanServerConnection(); 
 	}
 	
 	protected void cleanupConnection(IServer server, MBeanServerConnection connection) {

@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.core.Expression;
@@ -387,7 +386,7 @@ public class ExpressionDialog extends BaseDialog {
         if (project != null) {
             javaProject = JavaCore.create(project);
         }
-        ClasspathResourceSelectionDialog dialog = null;
+        ClasspathResourceSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {

@@ -12,10 +12,7 @@
 package org.fusesource.ide.foundation.ui.chart;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -44,12 +41,6 @@ import org.fusesource.ide.foundation.ui.views.ColumnViewSupport;
 public class TableChartDialog extends ViewSettingsDialog {
 
 	CheckboxTableViewer columnsViewer;
-
-	/** The select-all button. */
-	private Button selectAllButton;
-
-	/** The deselect-all button. */
-	private Button deselectAllButton;
 
 	private final ColumnViewSupport tableView;
 
@@ -167,7 +158,7 @@ public class TableChartDialog extends ViewSettingsDialog {
 		layout.marginWidth = 0;
 		composite.setLayout(layout);
 
-		selectAllButton = new Button(composite, SWT.PUSH);
+		Button selectAllButton = new Button(composite, SWT.PUSH);
 		selectAllButton.setText(Messages.selectAllLabel);
 		setButtonLayoutData(selectAllButton);
 		selectAllButton.addSelectionListener(new SelectionAdapter() {
@@ -177,7 +168,7 @@ public class TableChartDialog extends ViewSettingsDialog {
 			}
 		});
 
-		deselectAllButton = new Button(composite, SWT.PUSH);
+		Button deselectAllButton = new Button(composite, SWT.PUSH);
 		deselectAllButton.setText(Messages.deselectAllLabel);
 		setButtonLayoutData(deselectAllButton);
 		deselectAllButton.addSelectionListener(new SelectionAdapter() {
@@ -195,7 +186,7 @@ public class TableChartDialog extends ViewSettingsDialog {
 	private void loadPreference() {
 		List<TableChartColumnInfo> columnList = tableView.getChartOptions().getNumericColumns();
 
-		List<TableChartColumnInfo> checkedList = new ArrayList<TableChartColumnInfo>(columnList.size());
+		List<TableChartColumnInfo> checkedList = new ArrayList<>(columnList.size());
 		for (TableChartColumnInfo column : columnList) {
 			/*
 			if (column.isVisible()) {
@@ -211,8 +202,6 @@ public class TableChartDialog extends ViewSettingsDialog {
 	 * Stores the current preference.
 	 */
 	private void storePreference() {
-		Set<Object> checkedColumns = new HashSet<Object>(Arrays.asList(columnsViewer.getCheckedElements()));
-
 		// TODO....
 	}
 

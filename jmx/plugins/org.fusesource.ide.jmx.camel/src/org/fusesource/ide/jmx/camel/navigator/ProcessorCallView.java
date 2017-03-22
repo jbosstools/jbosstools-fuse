@@ -52,7 +52,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 	@Override
 	protected void createColumns() {
 		int bounds = 100;
-		int column = 0;
+		int columnIndex = 0;
 		clearColumns();
 
 		Function1<?,?> function = new Function1Adapter<Object,String>(String.class) {
@@ -65,7 +65,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 				return null;
 			}
 		};
-		column = addColumnFunction(bounds, column, function, "ID");
+		columnIndex = addColumnFunction(bounds, columnIndex, function, "ID");
 
 		function = new FunctionLong<Object>() {
 			@Override
@@ -77,7 +77,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 				return null;
 			}
 		};
-		column = addColumnFunction(bounds, column, function, "Total Time (ms)");
+		columnIndex = addColumnFunction(bounds, columnIndex, function, "Total Time (ms)");
 
 		function = new FunctionLong<Object>() {
 			@Override
@@ -89,7 +89,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 				return null;
 			}
 		};
-		column = addColumnFunction(bounds, column, function, "Self Time (ms)");
+		columnIndex = addColumnFunction(bounds, columnIndex, function, "Self Time (ms)");
 
 		function = new FunctionLong<Object>() {
 			@Override
@@ -101,8 +101,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 				return null;
 			}
 		};
-		column = addColumnFunction(bounds, column, function, "Count");
-
+		addColumnFunction(bounds, columnIndex, function, "Count");
 	}
 
 

@@ -20,7 +20,6 @@ import org.eclipse.jface.action.Separator;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.handler.AutoLayoutAction;
 import org.fusesource.ide.camel.editor.utils.INodeViewer;
-import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -70,13 +69,6 @@ public class CamelEditorContextMenuProvider extends ContextMenuProvider {
 	 */
 	@Override
 	public void buildContextMenu(IMenuManager menu) {
-		// add the delete route if a route is selected
-		AbstractCamelModelElement node = nodeViewer.getSelectedNode();
-		if (node == null) {
-			// lets choose the root container
-			node = editor.getModel().getRouteContainer();
-		}
-
 		// add a separator
 		menu.add(new Separator());
 

@@ -326,7 +326,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
     @Override
 	public boolean isJobSchedulerStarted() {
         try {
-            JobSchedulerViewFacade jobScheduler = getJobScheduler();
+            getJobScheduler();
             return true;
         } catch (Exception e) {
             return false;

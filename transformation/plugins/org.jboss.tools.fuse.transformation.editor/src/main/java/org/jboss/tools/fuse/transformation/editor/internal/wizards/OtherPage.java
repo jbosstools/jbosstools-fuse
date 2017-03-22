@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -44,7 +45,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -188,14 +188,14 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
              }
         });
 
-        label = createLabel(_page, Messages.OtherPage_labelDataFormatID, Messages.OtherPage_tooltipDataFormatID);
+        createLabel(_page, Messages.OtherPage_labelDataFormatID, Messages.OtherPage_tooltipDataFormatID);
 
         _dataFormatIdCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
         _dataFormatIdCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _dataFormatIdCombo.getCombo().setToolTipText(label.getToolTipText());
         _dataFormatIdCombo.setContentProvider(new ObservableListContentProvider());
 
-        label = createLabel(_page, "", ""); // spacer //$NON-NLS-1$ //$NON-NLS-2$
+        createLabel(_page, "", ""); // spacer //$NON-NLS-1$ //$NON-NLS-2$
         _dfErrorLabel = createLabel(_page, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
         _dfErrorLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
@@ -217,7 +217,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
 
         // Bind source file path widget to UI model
         IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_javaClassText);
-        IObservableValue modelValue = null;
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -229,8 +229,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             @Override
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
-                String pathEmptyError = null;
-                String unableToFindError = null;
+                String pathEmptyError;
+                String unableToFindError;
                 if (isSourcePage()) {
                     pathEmptyError = Messages.OtherPage_errorMessagePathEmptySource;
                     unableToFindError = Messages.OtherPage_errorMessageNotFoundSource;
@@ -371,9 +371,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (project == null) {
             ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
                     .getSelection();
-            IStructuredSelection selectionToPass = StructuredSelection.EMPTY;
             if (selection instanceof IStructuredSelection) {
-                selectionToPass = (IStructuredSelection) selection;
+            	IStructuredSelection selectionToPass = (IStructuredSelection) selection;
                 if (selectionToPass.getFirstElement() instanceof IFile) {
                     project = ((IFile) selectionToPass.getFirstElement()).getProject();
                 }

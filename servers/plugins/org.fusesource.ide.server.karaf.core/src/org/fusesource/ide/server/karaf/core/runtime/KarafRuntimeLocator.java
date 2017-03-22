@@ -88,7 +88,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		}
 		
 		// Get list of folders to check
-		File[] files = null;
+		File[] files;
 		if (folder == null) {
 			files = File.listRoots();
 		} else {

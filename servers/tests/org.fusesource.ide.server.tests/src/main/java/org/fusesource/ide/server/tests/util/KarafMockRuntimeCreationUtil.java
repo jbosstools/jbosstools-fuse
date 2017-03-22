@@ -126,7 +126,7 @@ public final class KarafMockRuntimeCreationUtil {
 		// just to be sure its there...
 		libFolder.toFile().mkdirs();
 		// now copy the jar file in
-		String fileName = null;
+		String fileName;
 		if (runtimeId.endsWith(".22")) {
 			fileName = "karaf_2.2.jar";
 		} else if (runtimeId.endsWith(".23")) {

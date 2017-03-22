@@ -652,11 +652,10 @@ public class MappingDetailViewer extends MappingViewer {
                                               String value) {
         if (Util.valid(value, argAnnotation, type)) {
             transformationArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value); //$NON-NLS-1$
-            mapping =
-                manager.setTransformation(mapping,
-                                          mapping.getTransformationClass(),
-                                          mapping.getTransformationName(),
-                                          transformationArguments);
+            manager.setTransformation(mapping,
+            		mapping.getTransformationClass(),
+            		mapping.getTransformationName(),
+            		transformationArguments);
             try {
                 manager.save();
             } catch (Exception e) {

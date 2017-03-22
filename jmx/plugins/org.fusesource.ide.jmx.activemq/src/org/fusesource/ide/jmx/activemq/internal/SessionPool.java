@@ -69,7 +69,7 @@ public class SessionPool {
     }
 
     public Session borrowSession() throws JMSException {
-        Session answer = null;
+        Session answer;
         synchronized (sessions) {
             if (sessions.isEmpty()) {
                 answer = createSession();

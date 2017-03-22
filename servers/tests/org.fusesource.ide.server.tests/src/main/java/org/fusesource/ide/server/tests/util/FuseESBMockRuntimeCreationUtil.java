@@ -90,7 +90,7 @@ public final class FuseESBMockRuntimeCreationUtil {
 		// just to be sure its there...
 		libFolder.toFile().mkdirs();
 		// now copy the jar file in
-		String fileName = null;
+		String fileName;
 		if (runtimeId.endsWith(".60")) {
 			fileName = "fuse_6.0.jar";
 		} else if (runtimeId.endsWith(".61")) {

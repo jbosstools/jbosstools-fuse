@@ -216,13 +216,12 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 
 	protected void saveEditor() throws CoreException {
 		final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
-		CamelDesignEditor editor = null;
 		if (container instanceof CamelDesignEditor) {
-			editor = (CamelDesignEditor) container;
+			CamelDesignEditor editor = (CamelDesignEditor) container;
+			editor.getParent().doSave(new NullProgressMonitor());
 		} else {
 			throw new CoreException(new Status(IStatus.ERROR, CamelEditorUIActivator.PLUGIN_ID, "Can't find the editor to set the breakpoint!"));
 		}
-		editor.getParent().doSave(new NullProgressMonitor());
 	}
 
 }

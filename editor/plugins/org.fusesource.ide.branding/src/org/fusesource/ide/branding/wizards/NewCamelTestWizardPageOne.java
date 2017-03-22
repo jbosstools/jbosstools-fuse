@@ -102,33 +102,33 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 
 	private static final String BUILD_PATH_PAGE_ID = "org.eclipse.jdt.ui.propertyPages.BuildPathsPropertyPage"; //$NON-NLS-1$
 
-	public final static String PAGE_NAME = "NewCamelTestWizardPage"; //$NON-NLS-1$
+	public static final String PAGE_NAME = "NewCamelTestWizardPage"; //$NON-NLS-1$
 
 	/** Field ID of the class under test field. */
-	public final static String CLASS_UNDER_TEST = PAGE_NAME + ".classundertest"; //$NON-NLS-1$
+	public static final  String CLASS_UNDER_TEST = PAGE_NAME + ".classundertest"; //$NON-NLS-1$
 	private static final String COMPLIANCE_PAGE_ID = "org.eclipse.jdt.ui.propertyPages.CompliancePreferencePage"; //$NON-NLS-1$
 
-	private final static int IDX_SETUP_CLASS = 0;
-	private final static int IDX_TEARDOWN_CLASS = 1;
-	private final static int IDX_SETUP = 2;
-	private final static int IDX_TEARDOWN = 3;
-	private final static int IDX_CONSTRUCTOR = 4;
+	private static final int IDX_SETUP_CLASS = 0;
+	private static final int IDX_TEARDOWN_CLASS = 1;
+	private static final int IDX_SETUP = 2;
+	private static final int IDX_TEARDOWN = 3;
+	private static final int IDX_CONSTRUCTOR = 4;
 
 	/**
 	 * Field ID of the Junit4 toggle
 	 * 
 	 * @since 3.2
 	 */
-	public final static String JUNIT4TOGGLE = PAGE_NAME + ".junit4toggle"; //$NON-NLS-1$
+	public static final String JUNIT4TOGGLE = PAGE_NAME + ".junit4toggle"; //$NON-NLS-1$
 
 	private static final String KEY_NO_LINK = "PropertyAndPreferencePage.nolink"; //$NON-NLS-1$
-	private final static String PREFIX = "test"; //$NON-NLS-1$
+	private static final String PREFIX = "test"; //$NON-NLS-1$
 
-	private final static String STORE_CONSTRUCTOR = PAGE_NAME + ".USE_CONSTRUCTOR"; //$NON-NLS-1$
-	private final static String STORE_SETUP = PAGE_NAME + ".USE_SETUP"; //$NON-NLS-1$
-	private final static String STORE_SETUP_CLASS = PAGE_NAME + ".USE_SETUPCLASS"; //$NON-NLS-1$
-	private final static String STORE_TEARDOWN = PAGE_NAME + ".USE_TEARDOWN"; //$NON-NLS-1$
-	private final static String STORE_TEARDOWN_CLASS = PAGE_NAME + ".USE_TEARDOWNCLASS"; //$NON-NLS-1$
+	private static final String STORE_CONSTRUCTOR = PAGE_NAME + ".USE_CONSTRUCTOR"; //$NON-NLS-1$
+	private static final String STORE_SETUP = PAGE_NAME + ".USE_SETUP"; //$NON-NLS-1$
+	private static final String STORE_SETUP_CLASS = PAGE_NAME + ".USE_SETUPCLASS"; //$NON-NLS-1$
+	private static final String STORE_TEARDOWN = PAGE_NAME + ".USE_TEARDOWN"; //$NON-NLS-1$
+	private static final String STORE_TEARDOWN_CLASS = PAGE_NAME + ".USE_TEARDOWNCLASS"; //$NON-NLS-1$
 
 	private XmlMatchingStrategySupport camelXmlMatcher = new CamelXmlMatchingStrategy();
 
@@ -401,8 +401,8 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 	}
 
 	private void createConstructor(IType type, ImportsManager imports) throws CoreException {
-		ITypeHierarchy typeHierarchy = null;
-		IType[] superTypes = null;
+		ITypeHierarchy typeHierarchy;
+		IType[] superTypes;
 		String content;
 		IMethod methodTemplate = null;
 		if (type.exists()) {
@@ -562,7 +562,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 
 	private void createSetupStubs(IType type, String methodName, boolean isStatic, String annotationType,
 			ImportsManager imports) throws CoreException {
-		String content = null;
+		String content;
 		IMethod methodTemplate = findInHierarchy(type, methodName);
 		String annotation = null;
 		if (isJUnit4()) {
@@ -819,11 +819,9 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 	}
 
 	private IMethod findInHierarchy(IType type, String methodName) throws JavaModelException {
-		ITypeHierarchy typeHierarchy = null;
-		IType[] superTypes = null;
 		if (type.exists()) {
-			typeHierarchy = type.newSupertypeHierarchy(null);
-			superTypes = typeHierarchy.getAllSuperclasses(type);
+			ITypeHierarchy typeHierarchy = type.newSupertypeHierarchy(null);
+			IType[] superTypes = typeHierarchy.getAllSuperclasses(type);
 			for (IType superType : superTypes) {
 				if (superType.exists()) {
 					IMethod testMethod = superType.getMethod(methodName, new String[] {});
@@ -1008,9 +1006,8 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 			if (pack != null) {
 				setPackageFragment(pack, true);
 			} else {
-				File f = null;
 				File testFolderFile = project.getProject().getParent().getRawLocation().append(getPackageFragmentRoot().getPath().makeRelative()).toFile();
-				f = getBasePackage(testFolderFile);
+				File f = getBasePackage(testFolderFile);
 				if (f != null && testRoot != null) {
 					IPath p = new Path(f.getPath());
 					p = p.makeRelativeTo(project.getProject().getParent().getRawLocation().append(getPackageFragmentRoot().getPath().makeRelative()));
@@ -1059,7 +1056,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 	}
 
 	private File getBasePackage(File f) {
-		File ret = null;
+		File ret;
 		File[] folders = f.listFiles(folderFilter);
 		if (folders != null && folders.length == 1) {
 			ret = getBasePackage(folders[0]);

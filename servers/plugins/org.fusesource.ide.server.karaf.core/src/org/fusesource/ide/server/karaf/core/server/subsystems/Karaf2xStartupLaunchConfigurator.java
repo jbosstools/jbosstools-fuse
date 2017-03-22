@@ -57,11 +57,9 @@ public class Karaf2xStartupLaunchConfigurator extends
 		
 		if (runtime != null) {
 			String karafInstallDir = runtime.getLocation().toOSString();
-			String mainProgram = null;
-			String vmArguments = null;
 			
-			vmArguments = getVMArguments(karafInstallDir);
-			mainProgram = getMainProgram();
+			String vmArguments = getVMArguments(karafInstallDir);
+			String mainProgram = getMainProgram();
 			
 			// For java tabs
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, karafInstallDir);
@@ -152,9 +150,8 @@ public class Karaf2xStartupLaunchConfigurator extends
 		String endorsedDirs = System.getProperty("java.endorsed.dirs");
 		String extDirs = System.getProperty("java.ext.dirs");
 		
-		IKarafRuntime runtime = null;
 		if (server.getRuntime() != null) {
-			runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+			IKarafRuntime runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
 			File vmLoc = runtime.getVM().getInstallLocation();
 			
 //			JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${KARAF_HOME}/lib/endorsed"

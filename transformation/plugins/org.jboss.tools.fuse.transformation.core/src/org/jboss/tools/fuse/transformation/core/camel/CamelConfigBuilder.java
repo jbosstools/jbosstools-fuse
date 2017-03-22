@@ -11,7 +11,6 @@
 package org.jboss.tools.fuse.transformation.core.camel;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -78,26 +77,18 @@ public class CamelConfigBuilder {
 	 */
 	public AbstractCamelModelElement createDataFormat(TransformType type, String className, MarshalType marshalType)
 			throws Exception {
-
-		AbstractCamelModelElement dataFormat = null;
-
 		switch (type) {
 		case JSON:
-			dataFormat = MarshalType.UNMARSHALLER.equals(marshalType) ? createJsonDataFormat(className)
+			return MarshalType.UNMARSHALLER.equals(marshalType) ? createJsonDataFormat(className)
 					: createJsonDataFormat(null);
-			break;
 		case XML:
-			dataFormat = createJaxbDataFormat(getPackage(className));
-			break;
+			return createJaxbDataFormat(getPackage(className));
 		case OTHER:
 		case JAVA:
-			dataFormat = null;
-			break;
+			return null;
 		default:
 			throw new Exception("Unsupported data format type: " + type); //$NON-NLS-1$
 		}
-
-		return dataFormat;
 	}
 
 	/**

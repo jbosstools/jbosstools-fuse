@@ -487,7 +487,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                     JCodeModel model,
                                     boolean isSource,
                                     IProgressMonitor monitor) throws Exception {
-        String elementName = null;
+        String elementName;
         if (isSource) {
             elementName = uiModel.getSourceClassName();
         } else {

@@ -329,9 +329,11 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 javaProject = JavaCore.create(CamelUtils.project());
             }
         }
-        ClasspathResourceSelectionDialog dialog = null;
+        ClasspathResourceSelectionDialog dialog;
         HashSet<String> extensions = new HashSet<>();
-        if (!"xsd".equals(extension)) extensions.add("xml"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (!"xsd".equals(extension)) {
+        	extensions.add("xml"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
         extensions.add("xsd"); //$NON-NLS-1$
         extensions.add("wsdl"); //$NON-NLS-1$
         if (javaProject == null) {
@@ -359,7 +361,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
 
         // Bind source file path widget to UI model
         IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_xmlFileText);
-        IObservableValue modelValue = null;
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -371,9 +373,9 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             @Override
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
-                String pathEmptyError = null;
-                String unableToFindError = null;
-                String unableToParseXMLError = null;
+                String pathEmptyError;
+                String unableToFindError;
+                String unableToParseXMLError;
                 if (isSourcePage()) {
                     pathEmptyError = Messages.XMLPage_errorMessageEmptySourcepath;
                     unableToFindError = Messages.XMLPage_errorMessageUnableToFindSourceFile;
@@ -509,7 +511,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent());
 
         IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
-        IObservableValue comboModelValue = null;
+        IObservableValue comboModelValue;
         if (isSourcePage()) {
             comboModelValue = BeanProperties.value(Model.class, "sourceClassName").observe(model); //$NON-NLS-1$
         } else {

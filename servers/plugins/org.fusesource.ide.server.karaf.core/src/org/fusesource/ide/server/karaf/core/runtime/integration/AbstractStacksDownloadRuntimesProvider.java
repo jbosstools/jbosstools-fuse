@@ -50,12 +50,12 @@ public abstract class AbstractStacksDownloadRuntimesProvider implements IDownloa
 			ArrayList<DownloadRuntime> tmp = loadDownloadableRuntimes(monitor);
 			if( monitor.isCanceled()) {
 				// Return the incomplete list, but do not cache it
-				return (DownloadRuntime[]) tmp.toArray(new DownloadRuntime[tmp.size()]);
+				return tmp.toArray(new DownloadRuntime[tmp.size()]);
 			}
 			// Cache this, as its assumed to be complete
 			downloads = tmp;
 		}
-		return (DownloadRuntime[]) downloads.toArray(new DownloadRuntime[downloads.size()]);
+		return downloads.toArray(new DownloadRuntime[downloads.size()]);
 	}
 	
 	/*
@@ -81,7 +81,7 @@ public abstract class AbstractStacksDownloadRuntimesProvider implements IDownloa
 	protected void traverseStacks(Stacks stacks, ArrayList<DownloadRuntime> list, String category, IProgressMonitor monitor) {
 		List<org.jboss.jdf.stacks.model.Runtime> runtimes = stacks.getAvailableRuntimes();
 		Iterator<org.jboss.jdf.stacks.model.Runtime> i = runtimes.iterator();
-		org.jboss.jdf.stacks.model.Runtime workingRT = null;
+		org.jboss.jdf.stacks.model.Runtime workingRT;
 		monitor.beginTask(Messages.CreateDownloadRuntimes, runtimes.size() * 100);
 		while(i.hasNext()) {
 			workingRT = i.next();

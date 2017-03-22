@@ -44,7 +44,7 @@ public class TestGenerator {
             String fileName,
             boolean isSpring) throws Exception {
 
-        String template = null;
+        String template;
         if (isSpring) {
             template = readTemplate(SPRING_TEST_TEMPLATE)
                     .replaceAll(ENDPOINT_KEY, transformId)

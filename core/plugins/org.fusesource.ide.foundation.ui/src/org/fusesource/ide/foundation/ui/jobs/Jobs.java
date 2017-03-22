@@ -60,7 +60,7 @@ public class Jobs {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					T answer = task.call();
+					task.call();
 					return Status.OK_STATUS;
 				} catch (Throwable e) {
 					return new Status(Status.ERROR, FoundationUIActivator.PLUGIN_ID, "Failed to " + message, e);
