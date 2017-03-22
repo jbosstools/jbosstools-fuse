@@ -64,7 +64,6 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -126,28 +125,16 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		PreferenceManager.getInstance().getUnderlyingStorage().addPropertyChangeListener(this);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
-	 */
 	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
 		switch (event.getType()) {
 		case IResourceChangeEvent.POST_CHANGE:
-			// file has been deleted...
-			closeEditorsWithoutValidInput();
-			break;
 		case IResourceChangeEvent.PRE_DELETE:
-			// close the editor if opened
+			// file has been deleted...
 			closeEditorsWithoutValidInput();
 			break;
 		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
-				/*
-				 * (non-Javadoc)
-				 * 
-				 * @see java.lang.Runnable#run()
-				 */
 				@Override
 				public void run() {
 					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
@@ -342,10 +329,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
-	 */
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
@@ -376,9 +359,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
-	 */
 	@Override
 	public void doSaveAs() {
 		try {
@@ -404,9 +384,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.WorkbenchPart#getTitle()
-	 */
 	@Override
 	public String getTitle() {
 		return this.editorInput != null ? this.editorInput.getName() : "";
@@ -450,6 +427,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		PreferenceManager.getInstance().getUnderlyingStorage().removePropertyChangeListener(this);
 		super.dispose();
+		editorInput.dispose();
 	}
 
 	/*
@@ -709,8 +687,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		} else if (input instanceof DiagramEditorInput) {
 			IFile f = (IFile)((DiagramEditorInput)input).getAdapter(IFile.class);
 			this.editorInput = new CamelXMLEditorInput(f, null);
-		} else if (input instanceof CamelContextNodeEditorInput) {
-			this.editorInput = (CamelContextNodeEditorInput)input;
 		} else if (input instanceof CamelXMLEditorInput) {
 			this.editorInput = (CamelXMLEditorInput)input;
 		} else {
@@ -825,5 +801,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public void updateSelectedContainer(String containerId) {
 		this.editorInput.setSelectedContainerId(containerId);
+	}
+
+	public void updatePartName() {
+		setPartName(getTitle());
 	}
 }

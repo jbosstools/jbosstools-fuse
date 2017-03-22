@@ -24,10 +24,6 @@ import org.jboss.tools.jmx.core.tree.Root;
 public class CamelNodeContentProvider implements ITreeContentProvider {
 
 	@Override
-	public void dispose() {
-	}
-
-	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
 
@@ -61,8 +57,7 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 		if( element instanceof Node ) {
-			Node[] children = ((Node)element).getChildren();
-			return children != null && children.length > 0;
+			return !((Node)element).getChildrenList().isEmpty();
 		}
 		return false;
 	}
