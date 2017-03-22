@@ -277,10 +277,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         return paletteComposite;
     }
     
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// If not the active editor, ignore selection changed.
@@ -293,10 +289,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				
 				/** this handles selections in the outline view -> selects the node in diagram **/
 				if (firstElement instanceof AbstractCamelModelElement) {
-					AbstractCamelModelElement node = (AbstractCamelModelElement)firstElement;
-					if (!(node instanceof CamelContextElement)){
-						setSelectedNode(node);
-					}
+					handleCamelModelElementSelection((AbstractCamelModelElement)firstElement);
 				
 				/** this handles selections in the diagram -> selects node in outline view **/
 				} else if (firstElement instanceof ContainerShapeEditPart) {
@@ -308,17 +301,26 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 					CamelStackFrame stackFrame = (CamelStackFrame)firstElement;
 					highlightBreakpointNodeWithID(stackFrame.getEndpointId());
 				} else if (firstElement instanceof CamelThread) {
-					CamelThread t = (CamelThread)firstElement;
-					try {
-						CamelStackFrame stackFrame = (CamelStackFrame)t.getTopStackFrame();
-						if (stackFrame != null && stackFrame.isSuspended()) {
-							highlightBreakpointNodeWithID(stackFrame.getEndpointId());	
-						}
-					} catch (DebugException e) {
-						CamelEditorUIActivator.pluginLog().logError(e);
-					}
+					handleCamelThreadSelection((CamelThread)firstElement);
 				}
 			}
+		}
+	}
+
+	private void handleCamelModelElementSelection(AbstractCamelModelElement node) {
+		if (!(node instanceof CamelContextElement)){
+			setSelectedNode(node);
+		}
+	}
+
+	private void handleCamelThreadSelection(CamelThread t) {
+		try {
+			CamelStackFrame stackFrame = (CamelStackFrame)t.getTopStackFrame();
+			if (stackFrame != null && stackFrame.isSuspended()) {
+				highlightBreakpointNodeWithID(stackFrame.getEndpointId());	
+			}
+		} catch (DebugException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
 		}
 	}
 	
@@ -544,19 +546,13 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			return;
 		}
 		Display.getDefault().syncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
 			@Override
 			public void run() {
 				DiagramOperations.updateSelectedNode(CamelDesignEditor.this);
 				getDiagramTypeProvider().getDiagramBehavior().refresh();
 				if (selectedEditPart != null) {
 					selectedEditPart.refresh();
-				} else if (lastSelectedEditPart == null) {
-
-				} else {
+				} else if (lastSelectedEditPart != null) {
 					lastSelectedEditPart.refresh();
 				}
 			}

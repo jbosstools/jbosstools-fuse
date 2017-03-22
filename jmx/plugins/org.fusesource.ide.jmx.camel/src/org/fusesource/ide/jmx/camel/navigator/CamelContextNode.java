@@ -25,7 +25,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -33,8 +41,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelBacklogTracerMBean;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
@@ -46,7 +57,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElem
 import org.fusesource.ide.foundation.core.functions.Function1;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Objects;
-import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.foundation.ui.tree.RefreshNodeRunnable;
 import org.fusesource.ide.foundation.ui.tree.Refreshable;
@@ -55,6 +65,7 @@ import org.fusesource.ide.foundation.ui.util.Nodes;
 import org.fusesource.ide.foundation.ui.util.Workbenches;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
+import org.fusesource.ide.jmx.camel.editor.CamelContextNodeEditorInput;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessageParser;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessages;
@@ -63,6 +74,15 @@ import org.fusesource.ide.jmx.commons.messages.IMessage;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeList;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
+import org.fusesource.ide.jmx.karaf.connection.KarafServerConnection;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.launcher.remote.debug.RemoteCamelLaunchConfigurationDelegate;
+import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.core.providers.DefaultConnectionWrapper;
+import org.jboss.tools.jmx.core.providers.MBeanServerConnectionDescriptor;
 import org.jboss.tools.jmx.ui.ImageProvider;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -81,6 +101,10 @@ public class CamelContextNode 	extends NodeSupport
 	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
 	private File tempContextFile = null;
+
+	private ILaunch launch = null;
+
+	private IEditorPart camelEditor;
 	
 	public CamelContextNode(CamelContextsNode camelContextsNode, CamelJMXFacade facade, CamelContextMBean camelContext) {
 		super(camelContextsNode);
@@ -246,19 +270,55 @@ public class CamelContextNode 	extends NodeSupport
 		} else {
 			IFile camelContextFile = createTempContextFile();
 			if (camelContextFile != null) {
-				IEditorInput input = new CamelContextNodeEditorInput(this, camelContextFile);
-				try {
-					page.openEditor(input, CAMEL_EDITOR_ID, true);
-				} catch (PartInitException e) {
-					CamelJMXPlugin.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
-				}
-				
-				//RemoteCamel
-				
-				
+				openEditor(page, camelContextFile);
+				bindRemoteCamelDebug(camelContextFile);
 			} else {
 				CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
 			}
+		}
+	}
+
+	private void bindRemoteCamelDebug(IFile camelContextFile) {
+		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+		ILaunchConfigurationType launchConfigurationType = manager.getLaunchConfigurationType(RemoteCamelLaunchConfigurationDelegate.LAUNCH_CONFIGURATION_TYPE);
+		try {
+			ILaunchConfigurationWorkingCopy configurationWorkingCopy = launchConfigurationType.newInstance(null, "Remote Camel Debug - "+ camelContextFile.getName());
+			if(configureJMXParameter(configurationWorkingCopy)){
+				configurationWorkingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, camelContextFile.getLocation().toOSString());
+
+				ILaunchConfiguration launchConfiguration = configurationWorkingCopy.doSave();
+				launch = launchConfiguration.launch(ILaunchManager.DEBUG_MODE, new NullProgressMonitor());
+			}
+		} catch (CoreException e) {
+			CamelJMXPlugin.getLogger().warning("Cannot bind Camel Remote Debug", e);
+		}
+	}
+
+	private boolean configureJMXParameter(ILaunchConfigurationWorkingCopy configurationWorkingCopy) {
+		IConnectionWrapper connection = getConnection();
+		if(connection instanceof DefaultConnectionWrapper){
+			MBeanServerConnectionDescriptor descriptor = ((DefaultConnectionWrapper) connection).getDescriptor();
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, descriptor.getURL());
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, descriptor.getUserName());
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, descriptor.getPassword());
+			return true;
+		} else if(connection instanceof KarafServerConnection){
+			IServer server = ((KarafServerConnection) connection).getServer();
+			IKarafServerDelegate kserver = (IKarafServerDelegate) server.getAdapter(IKarafServerDelegate.class);
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, KarafUtils.getJMXConnectionURL(server));
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, kserver.getUserName());
+			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, kserver.getPassword());
+			return true;
+		}
+		return false;
+	}
+
+	private void openEditor(IWorkbenchPage page, IFile camelContextFile) {
+		IEditorInput input = new CamelContextNodeEditorInput(this, camelContextFile);
+		try {
+			camelEditor = page.openEditor(input, CAMEL_EDITOR_ID, true);
+		} catch (PartInitException e) {
+			CamelJMXPlugin.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
 		}
 	}
 
@@ -566,23 +626,30 @@ public class CamelContextNode 	extends NodeSupport
 		return new ProcessorBeanView(this, routeId, nodeId);
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof CamelContextNode && obj.hashCode() == hashCode();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		if(isConnectionAvailable()) {
 			return ("CamelContextNode-" + camelContextsNode.toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
 		}
 		return super.hashCode();
+	}
+
+	public void dispose() {
+		if(launch != null){
+			try {
+				launch.terminate();
+			} catch (DebugException e) {
+				CamelJMXPlugin.getLogger().warning("Camel Debug launch cannot be terminated although corresponding JMX connection has been stopped.", e);
+			}
+		}
+		if(camelEditor instanceof CamelEditor){
+			((CamelEditor) camelEditor).updatePartName();
+		}
 	}
 	
 }

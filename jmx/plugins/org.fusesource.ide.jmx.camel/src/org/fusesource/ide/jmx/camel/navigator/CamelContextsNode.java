@@ -23,6 +23,7 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class CamelContextsNode extends RefreshableCollectionNode implements ImageProvider {
+	
 	private final CamelJMXFacade facade;
 
 	public CamelContextsNode(Node parent, CamelJMXFacade facade) {
@@ -54,26 +55,16 @@ public class CamelContextsNode extends RefreshableCollectionNode implements Imag
 		}
 	}
 
-	public void addChildren(CamelJMXFacade facade) throws Exception {
-	}
-
-
 	@Override
 	public Image getImage() {
 		return CamelJMXPlugin.getDefault().getImage("camel.png");
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof CamelContextsNode && obj.hashCode() == hashCode();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		if(isConnectionAvailable()) {
@@ -81,4 +72,5 @@ public class CamelContextsNode extends RefreshableCollectionNode implements Imag
 		}
 		return super.hashCode();
 	}
+
 }
