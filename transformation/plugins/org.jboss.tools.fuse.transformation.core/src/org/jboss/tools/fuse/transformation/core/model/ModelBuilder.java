@@ -121,10 +121,10 @@ public class ModelBuilder {
     private static boolean parseChildren(Class<?> fieldClass) {
         boolean excluded = 
             fieldClass.isPrimitive()
-            || fieldClass.getName().equals(String.class.getName())
+            || String.class.getName().equals(fieldClass.getName())
             || fieldClass.getName().startsWith("java.") //$NON-NLS-1$
             || Number.class.isAssignableFrom(fieldClass)
-            || (fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum());
+            || fieldClass.isEnum();
         
         return !excluded;
     }
