@@ -80,6 +80,7 @@ import org.fusesource.ide.launcher.remote.debug.RemoteCamelLaunchConfigurationDe
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
+import org.jboss.tools.jmx.core.IConnectionProvider;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 import org.jboss.tools.jmx.core.providers.DefaultConnectionWrapper;
 import org.jboss.tools.jmx.core.providers.MBeanServerConnectionDescriptor;
@@ -283,34 +284,22 @@ public class CamelContextNode 	extends NodeSupport
 		ILaunchConfigurationType launchConfigurationType = manager.getLaunchConfigurationType(RemoteCamelLaunchConfigurationDelegate.LAUNCH_CONFIGURATION_TYPE);
 		try {
 			ILaunchConfigurationWorkingCopy configurationWorkingCopy = launchConfigurationType.newInstance(null, "Remote Camel Debug - "+ camelContextFile.getName());
-			if(configureJMXParameter(configurationWorkingCopy)){
-				configurationWorkingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, camelContextFile.getLocation().toOSString());
-
-				ILaunchConfiguration launchConfiguration = configurationWorkingCopy.doSave();
-				launch = launchConfiguration.launch(ILaunchManager.DEBUG_MODE, new NullProgressMonitor());
-			}
+			configureJMXParameter(configurationWorkingCopy);
+			configurationWorkingCopy.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, camelContextFile.getLocation().toOSString());
+			ILaunchConfiguration launchConfiguration = configurationWorkingCopy.doSave();
+			launch = launchConfiguration.launch(ILaunchManager.DEBUG_MODE, new NullProgressMonitor());
 		} catch (CoreException e) {
 			CamelJMXPlugin.getLogger().warning("Cannot bind Camel Remote Debug", e);
 		}
 	}
 
-	private boolean configureJMXParameter(ILaunchConfigurationWorkingCopy configurationWorkingCopy) {
+	private void configureJMXParameter(ILaunchConfigurationWorkingCopy configurationWorkingCopy) {
 		IConnectionWrapper connection = getConnection();
-		if(connection instanceof DefaultConnectionWrapper){
-			MBeanServerConnectionDescriptor descriptor = ((DefaultConnectionWrapper) connection).getDescriptor();
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, descriptor.getURL());
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, descriptor.getUserName());
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, descriptor.getPassword());
-			return true;
-		} else if(connection instanceof KarafServerConnection){
-			IServer server = ((KarafServerConnection) connection).getServer();
-			IKarafServerDelegate kserver = (IKarafServerDelegate) server.getAdapter(IKarafServerDelegate.class);
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, KarafUtils.getJMXConnectionURL(server));
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_USER_ID, kserver.getUserName());
-			configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_PASSWORD_ID, kserver.getPassword());
-			return true;
-		}
-		return false;
+		IConnectionProvider provider = connection.getProvider();
+		String providerId = provider.getId();
+		String connectionName = provider.getName(connection);
+		configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_CONNECTION_WRAPPER_PROVIDER_ID, providerId);
+		configurationWorkingCopy.setAttribute(ICamelDebugConstants.ATTR_JMX_CONNECTION_WRAPPER_CONNECTION_NAME , connectionName);
 	}
 
 	private void openEditor(IWorkbenchPage page, IFile camelContextFile) {

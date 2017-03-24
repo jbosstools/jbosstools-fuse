@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget.EventDispatchJob;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget.ThreadGarbageCollector;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -109,11 +107,11 @@ public class CamelDebugTargetTest {
 	private void createDebugTarget(IProcess process) throws CoreException {
 		camelDebugTarget = new CamelDebugTarget(launch, process, "", "", ""){
 			@Override
-			void scheduleJobs() {
+			void scheduleJobs(String jmxUser, String jmxPass) {
 				/* as this method is called in constructor but don't want to test this part, I just override it to fake initialization */
-				debugger = CamelDebugTargetTest.this.debugger;
-				garbageCollector = CamelDebugTargetTest.this.garbageCollector;
-				dispatcher = CamelDebugTargetTest.this.dispatcher;
+				this.debugger = CamelDebugTargetTest.this.debugger;
+				this.garbageCollector = CamelDebugTargetTest.this.garbageCollector;
+				this.dispatcher = CamelDebugTargetTest.this.dispatcher;
 			}
 			
 			@Override

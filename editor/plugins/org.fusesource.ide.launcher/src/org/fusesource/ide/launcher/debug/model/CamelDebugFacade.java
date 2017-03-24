@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.model;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.management.MBeanServerConnection;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
@@ -34,14 +36,13 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	private static final String CAMEL_CONTEXT_MBEAN = "org.apache.camel:type=context,name=\"%s\",*";
 	
 	
-	private static final long TIMEOUT_MBEAN_REGISTRATION = 30 * 1000; // 30 secs
+	private static final long TIMEOUT_MBEAN_REGISTRATION = 30 * 1000L; // 30 secs
 	
 	private ObjectName objectNameDebugger = null;
 	private ObjectName objectNameContext = null;
 	
 	private CamelDebugTarget debugTarget;
 	private String contextId;
-	private String contentType;
 	
 	/**
 	 * our jmx connection
@@ -55,13 +56,14 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	 * @param mbsc
 	 * @param contextId
 	 * @param contextType
+	 * @throws IOException 
+	 * @throws MalformedObjectNameException 
 	 * @throws Exception
 	 */
-	public CamelDebugFacade(CamelDebugTarget debugTarget, MBeanServerConnection mbsc, String contextId, String contextType) throws Exception {
+	public CamelDebugFacade(CamelDebugTarget debugTarget, MBeanServerConnection mbsc, String contextId) throws MalformedObjectNameException, IOException {
 		this.mbsc = mbsc;
 		this.debugTarget = debugTarget;
 		this.contextId = contextId;
-		this.contentType = contextType;
 		long startTime = System.currentTimeMillis();
 		while (this.objectNameDebugger == null && System.currentTimeMillis() - startTime <= TIMEOUT_MBEAN_REGISTRATION) {
 			try {
@@ -75,10 +77,12 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	
 	/**
 	 * initialize the mbean
+	 * @throws IOException 
+	 * @throws MalformedObjectNameException 
 	 * 
 	 * @throws Exception
 	 */
-	private void initializeDebuggerMBean() throws Exception {
+	private void initializeDebuggerMBean() throws MalformedObjectNameException, IOException {
 		Set<ObjectInstance> mbeans = mbsc.queryMBeans(new ObjectName(CAMEL_DEBUGGER_MBEAN_DEFAULT), null);
     	if (mbeans.size() == 1) {
 	    	// remember the mbean
@@ -95,7 +99,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	 * 
 	 * @throws Exception
 	 */
-	private void initializeContextMBean() throws Exception {
+	private void initializeContextMBean() throws MalformedObjectNameException, IOException {
     	Set<ObjectInstance> mbeans = mbsc.queryMBeans(new ObjectName(String.format(CAMEL_CONTEXT_MBEAN, this.contextId)), null);
     	if (mbeans.size() == 1) {
 	    	// remember the mbean
@@ -112,7 +116,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	 * 
 	 * @throws Exception
 	 */
-	private ObjectName initializeProcessorMBean(String processorId) throws Exception {
+	private ObjectName initializeProcessorMBean(String processorId) throws MalformedObjectNameException, IOException {
     	Set<ObjectInstance> mbeans = mbsc.queryMBeans(new ObjectName(String.format(CAMEL_PROCESSOR_MBEAN, processorId)), null);
     	if (mbeans.size() == 1) {
 	    	// remember the mbean
@@ -125,18 +129,11 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
     	return null;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.ICamelDebuggerMBeanFacade#getContextId()
-	 */
 	@Override
 	public String getContextId() {
 		return this.contextId;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.launcher.debug.model.ICamelDebuggerMBeanFacade#updateContext(java.lang.String)
-	 */
 	@Override
 	public void updateContext(String xmlDump) {
 		log("updateContext(" + xmlDump + ")");
