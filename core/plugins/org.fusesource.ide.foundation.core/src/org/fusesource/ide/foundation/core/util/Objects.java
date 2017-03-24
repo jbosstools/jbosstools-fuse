@@ -100,7 +100,11 @@ public class Objects {
 		StringBuilder buffer = new StringBuilder(prefix);
 		boolean first = true;
 		for (Object object : values) {
-			if (first) first = false; else buffer.append(separator);
+			if (first) {
+				first = false;
+			} else {
+				buffer.append(separator);
+			}
 			buffer.append(object);
 		}
 		buffer.append(postfix);
@@ -111,8 +115,12 @@ public class Objects {
 		StringBuilder buffer = new StringBuilder(prefix);
 		boolean first = true;
 		for (long object : values) {
-			if (first) first = false; else buffer.append(separator);
-			buffer.append("" + object);
+			if (first) {
+				first = false;
+			} else {
+				buffer.append(separator);
+			}
+			buffer.append(Long.toString(object));
 		}
 		buffer.append(postfix);
 		return buffer.toString();
@@ -122,7 +130,11 @@ public class Objects {
 		StringBuilder buffer = new StringBuilder(prefix);
 		boolean first = true;
 		for (Object object : values) {
-			if (first) first = false; else buffer.append(separator);
+			if (first) {
+				first = false;
+			} else {
+				buffer.append(separator);
+			}
 			buffer.append(object);
 		}
 		buffer.append(postfix);

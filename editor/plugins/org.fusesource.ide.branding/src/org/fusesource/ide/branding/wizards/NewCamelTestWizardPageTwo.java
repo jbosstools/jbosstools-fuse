@@ -293,8 +293,8 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	 */
 	public EndpointMaps getCheckedEndpointMaps() {
 		List<EndpointTreeNode> endpoints = getCheckedEndpoints();
-		Map<String, String> inputEndpoints = new LinkedHashMap<String, String>();
-		Map<String, String> outputEndpoints = new LinkedHashMap<String, String>();
+		Map<String, String> inputEndpoints = new LinkedHashMap<>();
+		Map<String, String> outputEndpoints = new LinkedHashMap<>();
 
 		int inputCounter = 0;
 		int outputCounter = 0;
@@ -306,14 +306,14 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 				key = "input";
 				if (!URIs.isTimerEndpointURI(value)) {
 					if (inputCounter++ > 0) {
-						key += inputCounter;
+						key += Integer.toString(inputCounter);
 					}
 					inputEndpoints.put(key, value);
 				}
 			} else {
 				key = "output";
 				if (outputCounter++ > 0) {
-					key += outputCounter;
+					key += Integer.toString(outputCounter);
 				}
 				outputEndpoints.put(key, value);
 			}
@@ -325,7 +325,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	 * Returns all checked endpoints in the tree
 	 */
 	public List<EndpointTreeNode> getCheckedEndpoints() {
-		List<EndpointTreeNode> list = new ArrayList<EndpointTreeNode>();
+		List<EndpointTreeNode> list = new ArrayList<>();
 		if (fCheckedObjects != null) {
 			for (Object object : fCheckedObjects) {
 				if (object instanceof EndpointTreeNode) {

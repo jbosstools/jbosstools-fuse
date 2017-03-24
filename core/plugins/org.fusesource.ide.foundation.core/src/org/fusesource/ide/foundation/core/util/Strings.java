@@ -138,13 +138,13 @@ public class Strings {
 	            if (!lastCharUpperCase || result.endsWith(" ID")) {
 	                result += " ";
 	            }
-	            result += c;
+	            result += Character.toString(c);
 	            lastCharUpperCase = true;
 	        } else {
 	            if (i==0) {
-	                result += Character.toUpperCase(c);
+	                result += Character.toString(Character.toUpperCase(c));
 	            } else {
-	                result += cleanValue.charAt(i);
+	                result += Character.toString(cleanValue.charAt(i));
 	            }
 	            lastCharUpperCase = false;
 	        }
