@@ -501,10 +501,10 @@ public class PropertiesUtils {
 				String newUri = uri;
 				if (!valueDeleted) {
 					if (uri.indexOf('?') == -1) {
-						newUri += '?';
+						newUri += "?";
 					}
 					if (uri.indexOf('=') != -1) {
-						newUri += '&';
+						newUri += "&";
 					}
 					newUri += String.format("%s=%s", p.getName(), value.toString());
 				}

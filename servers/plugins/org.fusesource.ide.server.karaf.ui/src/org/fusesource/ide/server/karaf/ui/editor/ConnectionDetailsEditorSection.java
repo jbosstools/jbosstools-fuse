@@ -86,7 +86,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		
 		Label portNumber = toolkit.createLabel(composite, Messages.ConnectionDetailsEditorSection_port_num_label);
 		portNumber.setLayoutData(leftData);
-		final Text portNumberText = toolkit.createText(composite, ""+configuration.getPortNumber(),SWT.BORDER);
+		final Text portNumberText = toolkit.createText(composite, Integer.toString(configuration.getPortNumber()),SWT.BORDER);
 		portNumberText.setLayoutData(filldata);
 		portNumberText.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {

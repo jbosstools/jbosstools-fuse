@@ -259,8 +259,8 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 				} 
 			};
 			
-			HashMap<String, String> map = new HashMap<String,String>();
-			map.put("force", new Boolean(true).toString());
+			HashMap<String, String> map = new HashMap<>();
+			map.put("force", Boolean.toString(true));
 			run(run, map, true); // save this nw connection as the active one
 
 			
