@@ -95,7 +95,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 		Label lblPortNumber = new Label(this, SWT.NONE);
 		lblPortNumber.setText(Messages.KarafServerPorpertiesComposite_port_number_label);
 		txtPortNumber = new Text(this, SWT.BORDER);
-		txtPortNumber.setText("" + model.getPortNumber());
+		txtPortNumber.setText(Integer.toString(model.getPortNumber()));
 		txtPortNumber.setLayoutData(gd);
 		txtPortNumber.setTextLimit(5);
 		txtPortNumber.addListener(SWT.Modify, this);
