@@ -282,7 +282,7 @@ public class StartPage extends XformWizardPage {
 
             @Override
             public IStatus validate(final Object value) {
-                getModel().setSourceFilePath(new String());
+                getModel().setSourceFilePath("");
                 ((NewTransformationWizard) getWizard()).resetSourceAndTargetPages();
                 if (StartPage.this.getSourcePage() != null) {
                     ((XformWizardPage) StartPage.this.getSourcePage()).clearControls();
@@ -326,7 +326,7 @@ public class StartPage extends XformWizardPage {
 
             @Override
             public IStatus validate(final Object value) {
-                getModel().setTargetFilePath(new String());
+                getModel().setTargetFilePath("");
                 ((NewTransformationWizard) getWizard()).resetSourceAndTargetPages();
                 if (StartPage.this.getTargetPage() != null) {
                     ((XformWizardPage) StartPage.this.getTargetPage()).clearControls();
