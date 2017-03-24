@@ -133,11 +133,8 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		return Thread.NORM_PRIORITY;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
-	 */
 	@Override
-	public IStackFrame getTopStackFrame() throws DebugException {
+	public CamelStackFrame getTopStackFrame() throws DebugException {
 		if (!stackFrames.isEmpty()) {
 			return stackFrames.get(0);
 		}

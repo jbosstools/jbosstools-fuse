@@ -27,10 +27,12 @@ public interface ICamelDebugConstants {
 	public static final String ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE = "org.fusesource.ide.launcher.debug.camel.conditionalbreakpoint.marker";
 
 	// launch config attribute id's for the JMX information
-	public static final String ATTR_JMX_URI_ID 		= "org.fusesource.ide.launcher.debug.jmx.uri";
-	public static final String ATTR_JMX_USER_ID 	= "org.fusesource.ide.launcher.debug.jmx.user";
-	public static final String ATTR_JMX_PASSWORD_ID = "org.fusesource.ide.launcher.debug.jmx.passwd";
-	public static final String ATTR_REMOTE_CONTEXT  = "org.fusesource.ide.launcher.debug.remote.context";	
+	public static final String ATTR_JMX_URI_ID                         = "org.fusesource.ide.launcher.debug.jmx.uri";
+	public static final String ATTR_JMX_USER_ID                        = "org.fusesource.ide.launcher.debug.jmx.user";
+	public static final String ATTR_JMX_PASSWORD_ID                    = "org.fusesource.ide.launcher.debug.jmx.passwd";
+	public static final String ATTR_REMOTE_CONTEXT                     = "org.fusesource.ide.launcher.debug.remote.context";
+	public static final String ATTR_JMX_CONNECTION_WRAPPER_PROVIDER_ID = "org.fusesource.ide.launcher.debug.wrapper.provider.id";
+	public static final String ATTR_JMX_CONNECTION_WRAPPER_CONNECTION_NAME  = "org.fusesource.ide.launcher.debug.wrapper.connection.name";
 	
 	// marker attributes
 	public static final String MARKER_ATTRIBUTE_FILENAME  		= "org.fusesource.ide.launcher.debug.marker.filename";
@@ -52,4 +54,5 @@ public interface ICamelDebugConstants {
 	
 	public static final String DEFAULT_JMX_URI 				= "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel";
 	public static final String DEFAULT_REMOTE_JMX_URI 		= "service:jmx:rmi:///jndi/rmi://localhost:9011/jmxrmi";
+
 }

@@ -16,6 +16,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.fusesource.ide.jmx.commons.Activator;
+
 /**
  * @author Aurelien Pupier
  *
@@ -50,7 +52,7 @@ public class BacklogTracerEventMessageParser {
 			Unmarshaller um = context.createUnmarshaller();
 			return um.unmarshal(new StringReader(xmlDump));
 		} catch (JAXBException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return null;
 	}

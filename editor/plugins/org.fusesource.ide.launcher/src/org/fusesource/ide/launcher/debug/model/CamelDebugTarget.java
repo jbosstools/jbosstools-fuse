@@ -11,16 +11,8 @@
 package org.fusesource.ide.launcher.debug.model;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.management.MBeanServerConnection;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -28,12 +20,8 @@ import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -43,21 +31,19 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.debug.core.model.IThread;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.IBacklogTracerHeader;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessage;
-import org.fusesource.ide.jmx.commons.backlogtracermessage.BacklogTracerEventMessageParser;
 import org.fusesource.ide.jmx.commons.backlogtracermessage.Header;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
 
 /**
  * Camel Debug Target
@@ -66,8 +52,6 @@ import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
  */
 public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget {
 	
-	public static final Object JMX_CONNECT_JOB_FAMILY = new Object();
-
 	// associated system process (VM)
 	private IProcess fProcess;
 	
@@ -76,12 +60,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	// JMX connection info
 	private String jmxUri;
-	private String jmxUser;
-	private String jmxPass;
-	
-	private JMXServiceURL url;
-	private JMXConnector jmxc;
-	private MBeanServerConnection mbsc;
 	
 	// terminated state
 	private boolean fTerminated = false;
@@ -94,7 +72,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	// camel context
 	private String camelContextId;
-	private String contentType;
 	
 	// the currently suspended node's id
 	private String suspendedNodeId;
@@ -105,12 +82,14 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	// event dispatcher
 	EventDispatchJob dispatcher;
 	ThreadGarbageCollector garbageCollector;
-	private JMXConnectJob conJob;
+	private JMXCamelConnectJob conJob;
 
 	/**
 	 * the debugger facade
 	 */
 	ICamelDebuggerMBeanFacade debugger;
+
+	private IConnectionWrapper jmxConnectionWrapper;
 	
 	/**
 	 * Constructs a new debug target in the given launch for the 
@@ -129,8 +108,22 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		this.fTarget = this;
 		this.fProcess = process;
 		this.jmxUri = jmxUri;
-		this.jmxUser = jmxUser;
-		this.jmxPass = jmxPass;
+		
+		// retrieve the context id
+		initCamelContextId();
+		
+		// start connector job
+		scheduleJobs(jmxUser, jmxPass);
+		
+		registerAsBreakpointListener();
+	}
+	
+	public CamelDebugTarget(ILaunch launch, IProcess process, IConnectionWrapper jmxConnectionWrapper) throws CoreException {
+		super(null);
+		this.fLaunch = launch;
+		this.fTarget = this;
+		this.fProcess = process;
+		this.jmxConnectionWrapper = jmxConnectionWrapper;
 		
 		// retrieve the context id
 		initCamelContextId();
@@ -141,28 +134,39 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		registerAsBreakpointListener();
 	}
 
-	void registerAsBreakpointListener() {
-		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
-	}
-
-	void scheduleJobs() {
+	private void scheduleJobs() {
 		scheduleJMXConnectJob();
 		scheduleEventDispatcherJob();
 		scheduleGarbageCollectorJob();
 	}
 
+	void registerAsBreakpointListener() {
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
+	}
+
+	void scheduleJobs(String jmxUser, String jmxPass) {
+		scheduleJMXConnectJob(jmxUser, jmxPass);
+		scheduleEventDispatcherJob();
+		scheduleGarbageCollectorJob();
+	}
+
 	private void scheduleGarbageCollectorJob() {
-		this.garbageCollector = new ThreadGarbageCollector();
-		this.garbageCollector.schedule();
+		garbageCollector = new ThreadGarbageCollector(this);
+		garbageCollector.schedule();
 	}
 
 	private void scheduleEventDispatcherJob() {
-		this.dispatcher = new EventDispatchJob();
-		this.dispatcher.schedule();
+		dispatcher = new EventDispatchJob(this);
+		dispatcher.schedule();
 	}
 
 	private void scheduleJMXConnectJob() {
-		conJob = new JMXConnectJob();
+		conJob = new JMXCamelConnectJob(this);
+		conJob.schedule();
+	}
+	
+	private void scheduleJMXConnectJob(String jmxUser, String jmxPass) {
+		conJob = new JMXCamelConnectJob(this, jmxUser, jmxPass);
 		conJob.schedule();
 	}
 	
@@ -189,7 +193,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @return
 	 */
 	public String getSuspendedNodeId() {
-		return this.suspendedNodeId;
+		return suspendedNodeId;
 	}
 	
 	/**
@@ -227,11 +231,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 				if (cf != null) {
 					this.camelContextId = cf.getRouteContainer().getId();
 				}
-				if (CamelUtils.isBlueprintFile(filePath)) {
-					this.contentType = ICamelDebugConstants.CAMEL_CONTEXT_CONTENT_TYPE_BLUEPRINT;
-				} else if (CamelUtils.isSpringFile(filePath)) {
-					this.contentType = ICamelDebugConstants.CAMEL_CONTEXT_CONTENT_TYPE_SPRING;
-				} 
 			}
 		}
 	}
@@ -252,33 +251,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		}
 		return null;
 	}
-	
-	/**
-	 * establish JMX connection to process
-	 * 
-	 * @return
-	 */
-	private boolean connectToVM() {
-		try {
-			if (this.url == null) {
-				this.url = new JMXServiceURL(this.jmxUri);
-			} 
-			if (!Strings.isBlank(this.jmxUser)) {
-				// credentials defined - so use them
-				Map<String, Object> envMap = new HashMap<>();
-				envMap.put("jmx.remote.credentials", new String[] { this.jmxUser, this.jmxPass });
-				this.jmxc = JMXConnectorFactory.connect(this.url, envMap); 
-			} else {
-				// no need for using credentials if no user is defined
-				this.jmxc = JMXConnectorFactory.connect(this.url); 
-			}
-			this.mbsc = this.jmxc.getMBeanServerConnection(); 	
-			return true;
-		} catch (IOException ex) {
-			//ignore
-		}
-		return false;
-	}
+
 	
 	@Override
 	public IProcess getProcess() {
@@ -286,8 +259,8 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	}
 	
 	@Override
-	public IThread[] getThreads() throws DebugException {
-		return threads.values().toArray(new IThread[threads.size()]);
+	public CamelThread[] getThreads() throws DebugException {
+		return threads.values().toArray(new CamelThread[threads.size()]);
 	}
 	
 	@Override
@@ -298,9 +271,17 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	@Override
 	public String getName() {
 		if (fName == null) {
-			fName = String.format("Camel Context at %s", jmxUri);
+			fName = String.format("Camel Context at %s", getJMXDisplayName());
 		}
 		return fName;
+	}
+
+	private String getJMXDisplayName() {
+		if(jmxConnectionWrapper != null){
+			return jmxConnectionWrapper.getProvider().getName(jmxConnectionWrapper);
+		} else {
+			return jmxUri;
+		}
 	}
 	
 	@Override
@@ -395,18 +376,17 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	@Override
 	public void breakpointAdded(IBreakpoint breakpoint) {
-		if (supportsBreakpoint(breakpoint)) {
-			try {
-				if (breakpoint.isEnabled() && !isDisconnected()) {
-					String markerType = breakpoint.getMarker().getType();
-					if (ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE.equals(markerType)) {
-						this.debugger.addConditionalBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint), CamelDebugUtils.getLanguage(breakpoint), CamelDebugUtils.getCondition(breakpoint));
-					} else if (ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE.equals(markerType)) {
-						this.debugger.addBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));						
-					}
+		try {
+			if (supportsBreakpoint(breakpoint) && breakpoint.isEnabled() && !isDisconnected()) {
+				String markerType = breakpoint.getMarker().getType();
+				if (ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE.equals(markerType)) {
+					debugger.addConditionalBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint), CamelDebugUtils.getLanguage(breakpoint), CamelDebugUtils.getCondition(breakpoint));
+				} else if (ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE.equals(markerType)) {
+					debugger.addBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));						
 				}
-			} catch (CoreException e) {
 			}
+		} catch (CoreException e) {
+			Activator.getLogger().error("Failed to add breakpoint.", e);
 		}
 	}
 	
@@ -427,7 +407,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 					breakpointRemoved(breakpoint, null);
 				}
 			} catch (CoreException e) {
-				Activator.getLogger().error(e);
+				Activator.getLogger().error("Failed to change breakpoint state.", e);
 			}
 		}
 	}
@@ -515,17 +495,21 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		if (isBreakpointManagerEnabled()) {
 			IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
 			for (IBreakpoint bp : breakpoints) {
-				if (bp instanceof CamelEndpointBreakpoint) {
-					CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint) bp;
-					// first get the file path from the launch config
-					String fileUnderDebug = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
-					// then get the project for the file
-					IProject p = CamelDebugUtils.getProjectForFilePath(fileUnderDebug);
-					// only add breakpoints for if project matches
-					if (p.getName().equals(ceb.getProjectName())) {
-						breakpointAdded(bp);
-					}
-				}
+				installDeferredBreakpoint(bp);
+			}
+		}
+	}
+
+	private void installDeferredBreakpoint(IBreakpoint breakpoint) {
+		if (breakpoint instanceof CamelEndpointBreakpoint) {
+			CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint) breakpoint;
+			// first get the file path from the launch config
+			String fileUnderDebug = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
+			// then get the project for the file
+			IProject p = CamelDebugUtils.getProjectForFilePath(fileUnderDebug);
+			// only add breakpoints for if project matches
+			if (p.getName().equals(ceb.getProjectName())) {
+				breakpointAdded(breakpoint);
 			}
 		}
 	}
@@ -536,7 +520,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @return
 	 */
 	public ICamelDebuggerMBeanFacade getDebugger() {
-		return this.debugger;
+		return debugger;
 	}
 	
 	/**
@@ -546,7 +530,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * @return
 	 */
 	public String getMessagesForNode(String endpointNodeId) {
-		return this.debugger.dumpTracedMessagesAsXml(endpointNodeId);
+		return debugger.dumpTracedMessagesAsXml(endpointNodeId);
 	}
 	
 	/**
@@ -555,7 +539,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 * 
 	 * @param nodeid the id of the node
 	 */
-	private void breakpointHit(String nodeId, BacklogTracerEventMessage msg) {
+	void breakpointHit(String nodeId, BacklogTracerEventMessage msg) {
 		boolean bpFound = false;
 		String id = generateKey(msg);
 		CamelThread t = getThreadForId(id);
@@ -649,155 +633,21 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		
 //		closeRemoteContextEditor();
 	}
-	
-	/**
-	 * Listens to events from the CAMEL VM and fires corresponding 
-	 * debug events.
-	 */
-	class JMXConnectJob extends Job {
 		
-		private static final long CONNECTION_TIMEOUT_IN_MILLIS = 1000 * 60 * 5; // 5 minutes timeout
-		
-		public JMXConnectJob() {
-			super("Connect to Camel Debugger...");
-			setSystem(false);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-		 */
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			monitor.beginTask("Connect to Camel VM...", 1);
-			
-			final long startTime = System.currentTimeMillis();
-			boolean connected = false;
-			
-			// run until connected or timed out
-			while (!connected && System.currentTimeMillis()-startTime <= CONNECTION_TIMEOUT_IN_MILLIS && !monitor.isCanceled()) {
-				try {
-					if (connectToVM()) {
-						// connected to the camel vm
-						CamelDebugTarget.this.debugger = new CamelDebugFacade(CamelDebugTarget.this, mbsc, camelContextId, contentType);
-						connected = true;
-						started(true);
-						if (!CamelDebugTarget.this.debugger.isEnabled()){
-							CamelDebugTarget.this.debugger.enableDebugger();
-						}
-					}
-				} catch (Exception ex) {
-					Activator.getLogger().error(ex);
-					// runtime not yet up...wait a bit and retry
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						monitor.setCanceled(true);
-					}
-				}
-			}
-			
-			if (!connected) {
-				try {
-					abort("Unable to connect to Camel VM", new Exception("Unable to connect to Camel Debugger"));
-				} catch (DebugException ex) {
-					Activator.getLogger().error(ex);
-				}
-			}
-			
-			monitor.done();
-			
-			return connected ? Status.OK_STATUS : Status.CANCEL_STATUS;
-		}
-		
-		@Override
-		public boolean belongsTo(Object family) {
-			return JMX_CONNECT_JOB_FAMILY.equals(family) || super.belongsTo(family);
-		}
-		
+	public void setDebugger(ICamelDebuggerMBeanFacade camelDebugFacade) {
+		this.debugger = camelDebugFacade;
 	}
-	
-	/**
-	 * Listens to events from the CAMEL VM and fires corresponding 
-	 * debug events.
-	 */
-	class EventDispatchJob extends Job {
-		
-		public EventDispatchJob() {
-			super("Camel Debug Event Dispatch");
-			setSystem(true);
-		}
 
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			while (!isTerminated() && !monitor.isCanceled()) {
-				// check for suspended breakpoints
-				if (CamelDebugTarget.this.debugger != null && !isSuspended()) {
-					try {
-						Set<String> suspendedBreakpoints = CamelDebugTarget.this.debugger.getSuspendedBreakpointNodeIds();
-						if (suspendedBreakpoints != null && !suspendedBreakpoints.isEmpty()) {
-							// we need to suspend the debug target
-							suspend();
-							
-							for (String nodeId : suspendedBreakpoints) {
-								BacklogTracerEventMessage evMsg = new BacklogTracerEventMessageParser().getBacklogTracerEventMessage(getMessagesForNode(nodeId));
-								String id = generateKey(evMsg);
-								CamelThread t = getThreadForId(id);
-									
-								// now we can access the stack frames
-								String endpointId = t.getTopStackFrame() != null ? ((CamelStackFrame)t.getTopStackFrame()).getEndpointId() : null;
-								if (nodeId.equals(endpointId)) {
-									// its the same breakpoint we already hit for that exchange - ignore it
-									continue;
-								}
-								
-								if (!t.isSuspended()) {
-									// process the breakpoint
-									breakpointHit(nodeId, evMsg);
-									
-									// now resume
-									resume();
-								}
-							}
-						}
-						// wait a bit to keep jmx traffic lower - if we are too fast sometimes a breakpoint is
-						// hit but no message dump is available yet -> bad coding on camel side?
-						Thread.sleep(2000);
-					} catch (Exception ex) {
-						Activator.getLogger().error(ex);
-					}
-				}
-			}
-			return Status.OK_STATUS;
-		}
+	public String getCamelContextId() {
+		return camelContextId;
 	}
-	
-	public class ThreadGarbageCollector extends Job {
-		
-		public static final long THREAD_LIFE_DURATION = 5*60*1000; // 5 minutes
-		
-		public ThreadGarbageCollector() {
-			super("Thread CleanUp Service");
-			setSystem(true);
-		}
-		
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			while (!isTerminated() && !monitor.isCanceled()) {
-				try {
-					// check all threads
-					for (CamelThread t : threads.values()) {
-						// we clean all threads not suspended in the last x seconds and state running
-						if (!t.isSuspended() && (System.currentTimeMillis() - t.getLastSuspended()) > THREAD_LIFE_DURATION) {
-							t.terminate();
-						}
-					}
-					Thread.sleep(60000); // run every 60 secs
-				} catch (InterruptedException | DebugException ex) {
-					Activator.getLogger().error(ex);
-				}
-			}
-			return Status.OK_STATUS;
-		}
+
+	public IConnectionWrapper getJmxConnectionWrapper() {
+		return jmxConnectionWrapper;
+	}
+
+	public String getJmxUri() {
+		return jmxUri;
 	}
 	
 }

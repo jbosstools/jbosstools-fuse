@@ -62,6 +62,7 @@ import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
+import org.fusesource.ide.launcher.debug.model.ThreadGarbageCollector;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
@@ -398,7 +399,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		});
 		executePomAction.launch(getSelectionForLaunch(project), ILaunchManager.DEBUG_MODE);
 		int currentAwaitedTime = 0;
-		while (currentAwaitedTime < CamelDebugTarget.ThreadGarbageCollector.THREAD_LIFE_DURATION && !deploymentFinished) {
+		while (currentAwaitedTime < ThreadGarbageCollector.THREAD_LIFE_DURATION && !deploymentFinished) {
 			readAndDispatch(0);
 			JMXConnector jmxc = null;
 			try{
