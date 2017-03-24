@@ -63,7 +63,7 @@ public class PropertiesUtils {
 
 	public static Component getComponentFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
 				return CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -166,7 +166,7 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getComponentPropertiesFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -193,7 +193,7 @@ public class PropertiesUtils {
 			return false;
 
 		String pLabelString = p.getLabel();
-		if (pLabelString.indexOf(",") != -1) {
+		if (pLabelString.indexOf(',') != -1) {
 			String[] labels = pLabelString.split(",");
 			for (String lab : labels) {
 				if (lab.trim().equalsIgnoreCase(label))
@@ -495,7 +495,7 @@ public class PropertiesUtils {
 				if (newUri.indexOf("?&") != -1)
 					newUri = newUri.replace("?&", "?");
 				if (newUri.endsWith("?"))
-					newUri = newUri.substring(0, newUri.indexOf("?"));
+					newUri = newUri.substring(0, newUri.indexOf('?'));
 				selectedEP.setParameter("uri", newUri);
 			} else {
 				String newUri = uri;
