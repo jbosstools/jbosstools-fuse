@@ -793,7 +793,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 	}
 
 	public static String getDefaultJavaPackage(String groupId, String artifactId) {
-		StringBuffer sb = new StringBuffer(groupId);
+		StringBuilder sb = new StringBuilder(groupId);
 
 		if (sb.length() > 0 && artifactId.length() > 0) {
 			sb.append('.');
@@ -806,7 +806,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 		}
 
 		boolean isFirst = true;
-		StringBuffer pkg = new StringBuffer();
+		StringBuilder pkg = new StringBuilder();
 		for (int i = 0; i < sb.length(); i++) {
 			char c = sb.charAt(i);
 			if (c == '-') {

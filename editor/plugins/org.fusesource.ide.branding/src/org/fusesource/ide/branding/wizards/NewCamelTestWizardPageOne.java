@@ -225,10 +225,10 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 				+ endpointMaps.getInputEndpointVariableName(key) + ";", null, false, null);
 	}
 
-	private void appendTestMethodBody(StringBuffer buffer, ICompilationUnit compilationUnit, EndpointMaps endpointMaps)
+	private void appendTestMethodBody(StringBuilder buffer, ICompilationUnit compilationUnit, EndpointMaps endpointMaps)
 			throws CoreException {
 		endpointMaps.getInputEndpoints();
-		Map<String, String> outputEndpoints = new HashMap<String, String>(endpointMaps.getOutputEndpoints());
+		Map<String, String> outputEndpoints = new HashMap<>(endpointMaps.getOutputEndpoints());
 		// lets remove all output endpoints which are already mocks as we can assert directly on those
 		Iterator<Entry<String, String>> iter = outputEndpoints.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -429,7 +429,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 					null, imports);
 		} else {
 			final String delimiter = getLineDelimiter();
-			StringBuffer buffer = new StringBuffer(32);
+			StringBuilder buffer = new StringBuilder(32);
 			buffer.append("public "); //$NON-NLS-1$
 			buffer.append(getTypeName());
 			buffer.append('(');
@@ -579,7 +579,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 					annotation, imports);
 		} else {
 			final String delimiter = getLineDelimiter();
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			if (settings.createComments) {
 				String[] excSignature = { Signature.createTypeSignature("java.lang.Exception", true) }; //$NON-NLS-1$
 				String comment = CodeGeneration.getMethodComment(type.getCompilationUnit(), type.getElementName(),
@@ -700,23 +700,23 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		String testName = PREFIX + "CamelRoute";
 		String delimiter = getLineDelimiter();
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		if (isJUnit4()) {
-			buffer.append('@').append(imports.addImport(JUnitCorePlugin.JUNIT4_ANNOTATION_NAME)).append(delimiter);
+			builder.append('@').append(imports.addImport(JUnitCorePlugin.JUNIT4_ANNOTATION_NAME)).append(delimiter);
 		}
 
-		buffer.append("public ");//$NON-NLS-1$
+		builder.append("public ");//$NON-NLS-1$
 		if (fPage2.getCreateFinalMethodStubsButtonSelection()) {
-			buffer.append("final "); //$NON-NLS-1$
+			builder.append("final "); //$NON-NLS-1$
 		}
-		buffer.append("void ");//$NON-NLS-1$
-		buffer.append(testName);
-		buffer.append("() throws Exception");//$NON-NLS-1$
+		builder.append("void ");//$NON-NLS-1$
+		builder.append(testName);
+		builder.append("() throws Exception");//$NON-NLS-1$
 
 		EndpointMaps endpointMaps = fPage2.getCheckedEndpointMaps();
 
-		appendTestMethodBody(buffer, type.getCompilationUnit(), endpointMaps);
-		type.createMethod(buffer.toString(), null, false, null);
+		appendTestMethodBody(builder, type.getCompilationUnit(), endpointMaps);
+		type.createMethod(builder.toString(), null, false, null);
 
 		// now lets create the test fields
 

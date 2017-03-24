@@ -47,7 +47,7 @@ public abstract class JmxTemplateSupport {
         if ((args.length % 2) != 0) {
              Activator.getLogger().warning(String.format("Not all values were defined for arguments %s", Arrays.toString(args)));
         }
-        Hashtable<String, String> table = new Hashtable<String, String>();
+        Hashtable<String, String> table = new Hashtable<>();
         for (int i = 0; i < args.length; i += 2) {
             table.put(args[i], args[i + 1]);
         }

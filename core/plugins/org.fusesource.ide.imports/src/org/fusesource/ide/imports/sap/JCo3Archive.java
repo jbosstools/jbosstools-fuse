@@ -262,7 +262,7 @@ public class JCo3Archive extends SAPArchive {
 
 	protected String name;
 	protected JCoArchiveType type;
-	protected Map<String, String> manifest = new HashMap<String, String>();
+	protected Map<String, String> manifest = new HashMap<>();
 	protected long lastModified;
 
 	private String version;
@@ -329,15 +329,15 @@ public class JCo3Archive extends SAPArchive {
 
 	public String getVersion() {
 		if (version == null) {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder builder = new StringBuilder();
 
 			String sapjcoRelease = manifest.get(SAPJCO_RELEASE).trim();
 			String sapjcoPatchLevel = manifest.get(SAPJCO_PATCH_LEVEL).trim();
 			if (sapjcoRelease != null && sapjcoRelease.length() > 0) {
-				buf.append(sapjcoRelease);
-				buf.append(SAPJCO_RELEASE_DELIMITER); //$NON-NLS-1$
-				buf.append(sapjcoPatchLevel);
-				version = buf.toString();
+				builder.append(sapjcoRelease);
+				builder.append(SAPJCO_RELEASE_DELIMITER); //$NON-NLS-1$
+				builder.append(sapjcoPatchLevel);
+				version = builder.toString();
 			}
 		}
 		return version;

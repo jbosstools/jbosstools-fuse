@@ -128,7 +128,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         IFile xmlFile = CamelUtils.project().getFile(tempPath);
         if (xmlFile != null && xmlFile.exists()) {
             try (InputStream istream = xmlFile.getContents()) {
-                StringBuffer buffer = new StringBuffer();
+            	StringBuilder buffer = new StringBuilder();
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
                     String inputLine;
                     while ((inputLine = in.readLine()) != null) {

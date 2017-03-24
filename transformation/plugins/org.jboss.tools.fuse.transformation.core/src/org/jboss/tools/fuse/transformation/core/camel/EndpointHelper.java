@@ -33,7 +33,7 @@ public final class EndpointHelper {
             String unmarshallerId,
             String marshallerId) {
 
-        StringBuffer uriBuf = new StringBuffer(DOZER_SCHEME + ":" + transformId + "?"); //$NON-NLS-1$ //$NON-NLS-2$
+    	StringBuilder uriBuf = new StringBuilder(DOZER_SCHEME + ":" + transformId + "?"); //$NON-NLS-1$ //$NON-NLS-2$
         uriBuf.append(SOURCE_MODEL + "=" + sourceClass); //$NON-NLS-1$
         uriBuf.append("&" + TARGET_MODEL + "=" + targetClass); //$NON-NLS-1$ //$NON-NLS-2$
         if (marshallerId != null) {

@@ -125,10 +125,9 @@ public class WorkingSetGroup {
       private ResourceManager images = new LocalResourceManager(JFaceResources.getResources());
 
       @Override
-	@SuppressWarnings("deprecation")
       public Image getImage(Object element) {
         if(element instanceof IWorkingSet) {
-          ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImage();
+          ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImageDescriptor();
           if(imageDescriptor != null) {
             try {
               return (Image) images.create(imageDescriptor);
@@ -145,7 +144,7 @@ public class WorkingSetGroup {
         if(element instanceof IWorkingSet) {
           return ((IWorkingSet) element).getLabel();
         } else if(element instanceof List<?>) {
-          StringBuffer sb = new StringBuffer();
+        	StringBuilder sb = new StringBuilder();
           for(Object o : (List<?>) element) {
             if(o instanceof IWorkingSet) {
               if(sb.length() > 0) {
@@ -234,13 +233,13 @@ public class WorkingSetGroup {
   }
 
   Set<IWorkingSet> getWorkingSets() {
-    Set<IWorkingSet> workingSets = new HashSet<IWorkingSet>();
+    Set<IWorkingSet> workingSets = new HashSet<>();
 
     IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
     for(IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
       if(!workingSet.isEmpty()) {
         IAdaptable[] elements = workingSet.getElements();
-        IResource resource = (IResource) elements[0].getAdapter(IResource.class);
+        IResource resource = elements[0].getAdapter(IResource.class);
         if(resource != null) {
           workingSets.add(workingSet);
         }
@@ -262,7 +261,7 @@ public class WorkingSetGroup {
     Set<IWorkingSet> defaultSets = getWorkingSets();
     workingsetComboViewer.setInput(defaultSets);
 
-    if(workingSets != null && workingSets.size() > 0) {
+    if(workingSets != null && !workingSets.isEmpty()) {
       if(workingSets.size() == 1) {
         IWorkingSet workingSet = workingSets.get(0);
         if(defaultSets.contains(workingSet)) {
