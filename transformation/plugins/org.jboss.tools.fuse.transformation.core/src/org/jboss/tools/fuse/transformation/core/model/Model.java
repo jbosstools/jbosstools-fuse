@@ -24,7 +24,7 @@ public class Model {
     private String name;
     private String type;
     private Model parent;
-    private HashMap<String, Model> children = new HashMap<String, Model>();
+    private HashMap<String, Model> children = new HashMap<>();
     private boolean isCollection;
 
     public Model(String name, String type) {
@@ -49,10 +49,10 @@ public class Model {
         Model model = null;
         if (nodeName.contains(".")) { //$NON-NLS-1$
             if (hasChildren()) {
-                int idx = nodeName.indexOf("."); //$NON-NLS-1$
-                String parent = nodeName.substring(0, idx);
+                int idx = nodeName.indexOf('.'); //$NON-NLS-1$
+                String parentNodeName = nodeName.substring(0, idx);
                 String child = nodeName.substring(idx + 1, nodeName.length());
-                Model parentModel = children.get(parent);
+                Model parentModel = children.get(parentNodeName);
                 if (parentModel != null) {
                     model = parentModel.get(child);
                 }
@@ -89,11 +89,11 @@ public class Model {
     }
 
     public List<Model> getChildren() {
-        return new ArrayList<Model>(children.values());
+        return new ArrayList<>(children.values());
     }
 
     public List<String> listFields() {
-        List<String> fields = new LinkedList<String>();
+        List<String> fields = new LinkedList<>();
         return listFields(fields, this.children.values(), ""); //$NON-NLS-1$
     }
 
@@ -148,7 +148,7 @@ public class Model {
     }
 
     private String format(Model node, int depth) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             sb.append("  "); //$NON-NLS-1$
         }

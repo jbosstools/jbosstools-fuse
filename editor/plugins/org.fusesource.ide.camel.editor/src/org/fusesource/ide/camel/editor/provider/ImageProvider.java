@@ -14,6 +14,8 @@ package org.fusesource.ide.camel.editor.provider;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
@@ -29,6 +31,8 @@ import org.osgi.framework.Bundle;
  * @author lhein
  */
 public class ImageProvider extends AbstractImageProvider {
+
+	private static final String PATTERN_FOR_IMAGE_NAME = "%s%s%s";
 
 	private static final String ROOT_FOLDER_FOR_IMG = "icons/"; //$NON-NLS-1$
 
@@ -57,7 +61,7 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	public static final String IMG_OUTLINE_THUMBNAIL = PREFIX + "outline.thumbnail"; //$NON-NLS-1$
 
-	private static ArrayList<String> externalImages = new ArrayList<String>();
+	private static List<String> externalImages = new ArrayList<>();
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.platform.AbstractImageProvider#addAvailableImages()
@@ -116,27 +120,28 @@ public class ImageProvider extends AbstractImageProvider {
         IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(ToolBehaviourProvider.PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
         for (IConfigurationElement e : extensions) {
             Bundle b = getBundleById(e.getContributor().getName());
-        	if (b == null) return; // seems there is a problem with the osgi framework
+        	if (b == null) {
+        		return; // seems there is a problem with the osgi framework
+        	}
         	String entryId = e.getAttribute(ToolBehaviourProvider.EXT_ID_ATTR);
             String paletteIconPath = e.getAttribute(ToolBehaviourProvider.PALETTE_ICON_ATTR);
             String diagramImagePath = e.getAttribute(ToolBehaviourProvider.DIAGRAM_IMAGE_ATTR);
             if (paletteIconPath != null && paletteIconPath.trim().length()>0) {
-            	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_SMALL);
-            	URL imgUrl = b.getEntry(paletteIconPath);
-            	String fileExt = imgUrl.getFile().substring(imgUrl.getFile().lastIndexOf("."));
-            	addImageFilePath(key, imgUrl.toString());
-            	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
-            	externalImages.add(entryId+fileExt);
+            	cacheImage(b, entryId, paletteIconPath, POSTFIX_SMALL);
             }
             if (diagramImagePath != null && diagramImagePath.trim().length()>0) {
-            	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_LARGE);
-            	URL imgUrl = b.getEntry(diagramImagePath);
-            	String fileExt = imgUrl.getFile().substring(imgUrl.getFile().lastIndexOf("."));
-            	addImageFilePath(key, imgUrl.toString());
-            	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
-            	externalImages.add(entryId+fileExt);
+            	cacheImage(b, entryId, diagramImagePath, POSTFIX_LARGE);
             }
         }
+	}
+
+	private void cacheImage(Bundle b, String entryId, String iconPath, String postfix) {
+		String key = String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, entryId, postfix);
+		URL imgUrl = b.getEntry(iconPath);
+		String fileExt = imgUrl.getFile().substring(imgUrl.getFile().lastIndexOf('.'));
+		addImageFilePath(key, imgUrl.toString());
+		CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, iconPath));
+		externalImages.add(entryId+fileExt);
 	}
 	
 	/**
@@ -147,7 +152,9 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	private Bundle getBundleById(String id) {
 		for (Bundle b : CamelEditorUIActivator.getDefault().getBundle().getBundleContext().getBundles()) {
-			if (b.getSymbolicName().equals(id)) return b;
+			if (b.getSymbolicName().equals(id)) {
+				return b;
+			}
 		}
 		return null;
 	}
@@ -161,7 +168,9 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	private ImageDescriptor getExternalImage(Bundle bundle, String iconPath) {
 		URL url = bundle.getResource(iconPath);
-		if (url != null) return ImageDescriptor.createFromURL(url);
+		if (url != null) {
+			return ImageDescriptor.createFromURL(url);
+		}
 		return null;
 	}
 	
@@ -170,10 +179,14 @@ public class ImageProvider extends AbstractImageProvider {
 	 * @param icon
 	 */
 	private void addIconCustomImage(String iconPath) {
-		if (iconPath == null || iconPath.endsWith("/")) return;
-		String iconName = iconPath.substring(iconPath.lastIndexOf("/")+1, iconPath.lastIndexOf("."));
-		if (iconName.endsWith("16")) iconName = iconName.substring(0, iconName.lastIndexOf("16"));
-		String key = String.format("%s%s%s", PREFIX, iconName, iconPath.toLowerCase().endsWith("16.png") ? POSTFIX_SMALL : POSTFIX_LARGE);
+		if (iconPath == null || iconPath.endsWith("/")){
+			return;
+		}
+		String iconName = iconPath.substring(iconPath.lastIndexOf('/')+1, iconPath.lastIndexOf('.'));
+		if (iconName.endsWith("16")) {
+			iconName = iconName.substring(0, iconName.lastIndexOf("16"));
+		}
+		String key = String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, iconPath.toLowerCase().endsWith("16.png") ? POSTFIX_SMALL : POSTFIX_LARGE);
 		addImage(key, iconPath);
 		addToImageRegistry(key, iconPath);
 	}
@@ -190,10 +203,10 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 
 	protected void addIconsForIconName(String iconName, String fileNameSmall, String fileNameLarge) {
-		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), fileNameSmall);
-		addImage(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
-		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL), fileNameSmall); //$NON-NLS-1$
-		addToImageRegistry(String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
+		addImage(String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, POSTFIX_SMALL), fileNameSmall);
+		addImage(String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
+		addToImageRegistry(String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, POSTFIX_SMALL), fileNameSmall); //$NON-NLS-1$
+		addToImageRegistry(String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, POSTFIX_LARGE), fileNameLarge); //$NON-NLS-1$
 	}
 
 	/**
@@ -238,14 +251,16 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	private static String getKeyForIcon(boolean isEndpoint, String iconName, final String iconNamePattern, final String postfix) {
 		if (isImageAvailable(String.format(iconNamePattern, iconName))) {
-			return String.format("%s%s%s", PREFIX, iconName, postfix);
+			return String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, iconName, postfix);
 		} else {
-			return String.format("%s%s%s", PREFIX, isEndpoint ? "endpoint" : "generic", postfix);
+			return String.format(PATTERN_FOR_IMAGE_NAME, PREFIX, isEndpoint ? "endpoint" : "generic", postfix);
 		}
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
-		if (externalImages.contains(iconName)) return true;
+		if (externalImages.contains(iconName)) {
+			return true;
+		}
 		return CamelEditorUIActivator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }
