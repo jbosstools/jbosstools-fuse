@@ -82,14 +82,15 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 	 */
 	private Class<?> computeClassToLoad(URLClassLoader child) {
 		Class<?> classToLoad;
+		String javaType = parameter.getJavaType();
 		try {
-			if (parameter.getJavaType().indexOf("<") != -1) {
-				classToLoad = child.loadClass(parameter.getJavaType().substring(0, parameter.getJavaType().indexOf("<")));
+			if (javaType.indexOf('<') != -1) {
+				classToLoad = child.loadClass(javaType.substring(0, javaType.indexOf('<')));
 			} else {
-				classToLoad = child.loadClass(parameter.getJavaType());
+				classToLoad = child.loadClass(javaType);
 			}
 		} catch (ClassNotFoundException ex) {
-			CamelEditorUIActivator.pluginLog().logWarning("Cannot find class " + parameter.getJavaType() + " on classpath.", ex);
+			CamelEditorUIActivator.pluginLog().logWarning("Cannot find class " + javaType + " on classpath.", ex);
 			classToLoad = null;
 		}
 		return classToLoad;

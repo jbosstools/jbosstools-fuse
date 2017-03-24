@@ -120,12 +120,14 @@ public class CamelUtils {
 	}
 
 	public static String getTranslatedNodeName(Node node) {
-		if (node == null || node.getNodeName() == null) return null;
+		if (node == null || node.getNodeName() == null) {
+			return null;
+		}
 		String prefix = node.getPrefix();
 		String nodeName = node.getNodeName();
 		String resVal = nodeName;
-		if ((prefix != null && prefix.trim().length()>0) || nodeName.indexOf(":") != -1) {
-			resVal = nodeName.substring(nodeName.indexOf(":")+1);
+		if ((prefix != null && prefix.trim().length()>0) || nodeName.indexOf(':') != -1) {
+			resVal = nodeName.substring(nodeName.indexOf(':')+1);
 		}
 		return resVal;
 	}

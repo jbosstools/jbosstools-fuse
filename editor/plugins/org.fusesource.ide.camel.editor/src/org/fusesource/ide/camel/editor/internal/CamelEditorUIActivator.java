@@ -92,7 +92,7 @@ public class CamelEditorUIActivator extends BaseUIPlugin {
 			if (!file.startsWith(prefix)) {
 				CamelEditorUIActivator.pluginLog().logWarning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
 			}
-			fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+			fileName = fileName.substring(fileName.lastIndexOf('/')+1);
 			registerImage(reg, fileName, file);
 		}
 	}

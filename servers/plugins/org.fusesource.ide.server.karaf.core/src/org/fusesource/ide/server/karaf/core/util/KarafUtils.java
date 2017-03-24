@@ -47,6 +47,7 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
  */
 public class KarafUtils {
 	
+	private static final String BUNDLE_VERSION_STRING = "Bundle-Version=";
 	/**
 	 * A constant representing that no publish is required. 
 	 * This constant is different from the wtp constants in that
@@ -415,8 +416,8 @@ public class KarafUtils {
 	public static String getBundleVersionFromURI(String uri, String packaging) {
 		String version = null;
 		
-		if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
-			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+		if (uri != null && uri.indexOf(BUNDLE_VERSION_STRING) != -1) {
+			version = uri.substring(uri.indexOf(BUNDLE_VERSION_STRING) + BUNDLE_VERSION_STRING.length());
 		} else if (uri != null && uri.endsWith(KarafUtils.getFileExtensionForPackaging(packaging))) {
 			String s = uri.substring(uri.lastIndexOf(File.separatorChar)+1);
 			String pack = KarafUtils.getFileExtensionForPackaging(packaging);
@@ -438,7 +439,9 @@ public class KarafUtils {
 				version = c + version;
 			}
 			// finally replace a possible - with a . to be OSGi compliant
-			if (version.indexOf("-") != -1) version = version.replaceAll("-", ".");
+			if (version.indexOf('-') != -1) {
+				version = version.replaceAll("-", ".");
+			}
 		}
 		
 		return version;
@@ -486,7 +489,7 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getJMXConnectionURL(IServer server) {
-		String retVal = "";
+		StringBuilder retVal = new StringBuilder();
 		BaseConfigPropertyProvider manProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("org.apache.karaf.management.cfg").toFile());
 		BaseConfigPropertyProvider sysProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("system.properties").toFile());
 		
@@ -497,8 +500,8 @@ public class KarafUtils {
 		url = url.trim();
 		int pos;
 		while ((pos = url.indexOf("${")) != -1) {
-			retVal += url.substring(0, pos);
-			String placeHolder = url.substring(url.indexOf("${")+2, url.indexOf("}")).trim();
+			retVal.append(url.substring(0, pos));
+			String placeHolder = url.substring(url.indexOf("${")+2, url.indexOf('}')).trim();
 			String replacement = manProv.getConfigurationProperty(placeHolder);
 			if (replacement == null) {
 				replacement = sysProv.getConfigurationProperty(placeHolder);
@@ -506,10 +509,10 @@ public class KarafUtils {
 			if (replacement == null) {
 				return null;
 			} else {
-				retVal += replacement.trim();
+				retVal.append(replacement.trim());
 				url = url.substring(pos + placeHolder.length() + 3);
 			}
 		}
-		return retVal;
+		return retVal.toString();
 	}
 }
