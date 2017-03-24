@@ -321,7 +321,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 IPackageFragment pkg = root.createPackageFragment(packageName,
                         false, null);
 
-                StringBuffer clsContent = new StringBuffer();
+                StringBuilder clsContent = new StringBuilder();
 
                 String filePath = getCamelFilePath();
                 IResource res = project.getProject().findMember(filePath);

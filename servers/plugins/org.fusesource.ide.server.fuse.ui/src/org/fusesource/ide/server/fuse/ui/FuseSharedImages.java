@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.server.fuse.ui;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -27,12 +28,12 @@ public class FuseSharedImages {
 
 	private static FuseSharedImages instance;
 	
-	private Hashtable<String, Object> images, descriptors;
+	private Map<String, Object> images, descriptors;
 	
 	private FuseSharedImages () {
 		instance = this;
-		images = new Hashtable<String, Object>();
-		descriptors = new Hashtable<String, Object>();
+		images = new HashMap<>();
+		descriptors = new HashMap<>();
 		
 		if( FuseESBUIPlugin.getDefault() == null || FuseESBUIPlugin.getDefault().getBundle() == null ) 
 			return;

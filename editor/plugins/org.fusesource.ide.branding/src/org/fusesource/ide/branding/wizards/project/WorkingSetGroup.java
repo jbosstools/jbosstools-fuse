@@ -125,10 +125,9 @@ public class WorkingSetGroup {
       private ResourceManager images = new LocalResourceManager(JFaceResources.getResources());
 
       @Override
-	@SuppressWarnings("deprecation")
       public Image getImage(Object element) {
         if(element instanceof IWorkingSet) {
-          ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImage();
+          ImageDescriptor imageDescriptor = ((IWorkingSet) element).getImageDescriptor();
           if(imageDescriptor != null) {
             try {
               return (Image) images.create(imageDescriptor);
@@ -145,7 +144,7 @@ public class WorkingSetGroup {
         if(element instanceof IWorkingSet) {
           return ((IWorkingSet) element).getLabel();
         } else if(element instanceof List<?>) {
-          StringBuffer sb = new StringBuffer();
+        	StringBuilder sb = new StringBuilder();
           for(Object o : (List<?>) element) {
             if(o instanceof IWorkingSet) {
               if(sb.length() > 0) {

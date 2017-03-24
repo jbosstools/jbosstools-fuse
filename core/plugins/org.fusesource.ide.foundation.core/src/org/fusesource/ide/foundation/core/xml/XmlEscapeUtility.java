@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class XmlEscapeUtility {
 
-    protected static Map<Character, String> encodingMap = new HashMap<Character, String>();
+    protected static Map<Character, String> encodingMap = new HashMap<>();
 
     static {
         encodingMap.put('"', "&quot;");
@@ -62,7 +62,7 @@ public class XmlEscapeUtility {
 //        }
 
     public static String escape(String text) {
-        StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         for (char c : text.toCharArray()) {
             escape(c, sb);
         }
@@ -78,9 +78,9 @@ public class XmlEscapeUtility {
         return answer;
     }
 
-    private static StringBuffer escape(char c, StringBuffer buffer) {
+    private static StringBuilder escape(char c, StringBuilder builder) {
         String encoded = encodingMap.get(c);
-        return buffer.append(encoded == null ? Character.toString(c) : encoded);
+        return builder.append(encoded == null ? Character.toString(c) : encoded);
     }
 
 }

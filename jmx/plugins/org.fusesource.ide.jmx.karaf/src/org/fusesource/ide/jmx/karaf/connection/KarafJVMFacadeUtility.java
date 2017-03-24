@@ -46,7 +46,7 @@ public class KarafJVMFacadeUtility {
 			}
 		}
 		
-		StringBuffer target2 = new StringBuffer();
+		StringBuilder target2 = new StringBuilder();
 		if( main != null ) {
 			target2.append(main);
 			target2.append(" ");
