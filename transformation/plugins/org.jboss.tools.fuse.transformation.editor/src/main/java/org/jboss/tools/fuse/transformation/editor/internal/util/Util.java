@@ -196,7 +196,7 @@ public class Util {
             }
             if (element instanceof JsonObject) {
                 JsonObject jObj = (JsonObject) element;
-                if (jObj.entrySet().size() < 1) {
+                if (jObj.entrySet().isEmpty()) {
                     return false;
                 }
             }

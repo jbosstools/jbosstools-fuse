@@ -50,7 +50,7 @@ public class TableConfiguration implements IFlushable {
 	protected static final String COLUMN_NAME_SEPARATOR = ",";
 	protected static final String COLUMN_ORDER = "columnOrder";
 	private AtomicInteger moveEventCounter = new AtomicInteger();
-	private static Map<String,TableConfiguration> defaultCache = new HashMap<String,TableConfiguration>();
+	private static Map<String,TableConfiguration> defaultCache = new HashMap<>();
 	private List<ColumnConfiguration> columnConfigurations;
 	private Map<String,ColumnConfiguration> columnMap;
 	private final Preferences node;
@@ -182,7 +182,7 @@ public class TableConfiguration implements IFlushable {
 	}
 
 	public boolean hasColumns() {
-		return getColumnConfigurations().size() > 0;
+		return !getColumnConfigurations().isEmpty();
 	}
 
 

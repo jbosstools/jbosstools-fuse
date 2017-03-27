@@ -72,7 +72,7 @@ public class CamelModelOutlineContentProvider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 		if (element instanceof AbstractCamelModelElement) {
 			AbstractCamelModelElement e = (AbstractCamelModelElement)element;
-			return e.getChildElements().size()>0;
+			return !e.getChildElements().isEmpty();
 		}
 		return false;
 	}

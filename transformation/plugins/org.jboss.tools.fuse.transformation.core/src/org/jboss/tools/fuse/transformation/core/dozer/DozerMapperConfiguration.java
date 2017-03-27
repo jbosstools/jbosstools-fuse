@@ -256,7 +256,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     @Override
     public List<MappingOperation<?, ?>> getMappings() {
-        LinkedList<MappingOperation<?, ?>> mappings = new LinkedList<MappingOperation<?, ?>>();
+        LinkedList<MappingOperation<?, ?>> mappings = new LinkedList<>();
         for (Mapping mapping : mapConfig.getMapping()) {
             String targetType = mapping.getClassB().getContent();
 
@@ -292,7 +292,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     @Override
     public List<MappingOperation<?, ?>> getMappingsForSource(Model source) {
-        List<MappingOperation<?, ?>> sourceMappings = new LinkedList<MappingOperation<?, ?>>();
+        List<MappingOperation<?, ?>> sourceMappings = new LinkedList<>();
         for (MappingOperation<?, ?> op : getMappings()) {
             if (op.getSource().equals(source)) {
                 sourceMappings.add(op);
@@ -303,7 +303,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     @Override
     public List<MappingOperation<?, ?>> getMappingsForTarget(Model target) {
-        List<MappingOperation<?, ?>> targetMappings = new LinkedList<MappingOperation<?, ?>>();
+        List<MappingOperation<?, ?>> targetMappings = new LinkedList<>();
         for (MappingOperation<?, ?> op : getMappings()) {
             if (op.getTarget().equals(target)) {
                 targetMappings.add(op);
@@ -340,13 +340,15 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     private Model getParentCollection(Model model) {
-        if (model.getParent() == null) return null;
+        if (model.getParent() == null) {
+        	return null;
+        }
         return model.getParent().isCollection() ? model.getParent() : getParentCollection(model.getParent());
     }
 
     Mapping getRootMapping() {
         Mapping root = null;
-        if (mapConfig.getMapping().size() > 0) {
+        if (!mapConfig.getMapping().isEmpty()) {
             root = mapConfig.getMapping().get(0);
         }
         return root;

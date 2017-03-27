@@ -441,13 +441,13 @@ public class ModelViewer extends Composite {
         private Image getImage(final Object element) {
             final Model model = (Model)element;
             if (manager != null) {
-                if (model.getChildren() != null && model.getChildren().size() > 0)
+                if (model.getChildren() != null && !model.getChildren().isEmpty())
                     return manager.mapped(model) ? Images.MAPPED_NODE : Images.NODE;
                 return manager.mapped(model) ? Images.MAPPED_PROPERTY : Images.PROPERTY;
             }
             // if we are hosting the viewer on a wizard page, we don't have the manager
             // so just default to parent (node) or node (property) in the tree
-            if (model.getChildren() != null && model.getChildren().size() > 0)
+            if (model.getChildren() != null && !model.getChildren().isEmpty())
                 return Images.NODE;
             return Images.PROPERTY;
         }
@@ -462,8 +462,10 @@ public class ModelViewer extends Composite {
             boolean list = type.startsWith("["); //$NON-NLS-1$
             if (list) {
                 text.append("[", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
-                if (showTypes) text.append(type.substring(1, type.length() - 1),
-                                           eligible ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
+                if (showTypes) {
+                	text.append(type.substring(1, type.length() - 1), eligible ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
+                }
+                                           
                 else text.append(" "); //$NON-NLS-1$
                 text.append("]", StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
             } else if (showTypes) {

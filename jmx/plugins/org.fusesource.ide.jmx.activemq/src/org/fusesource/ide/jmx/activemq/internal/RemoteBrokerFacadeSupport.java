@@ -53,11 +53,10 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
     private ObjectName getBrokerObjectName(MBeanServerConnection connection)
             throws IOException, MalformedObjectNameException {
         Set<ObjectName> brokers = findBrokers(connection);
-        if (brokers.size() == 0) {
+        if (brokers.isEmpty()) {
             throw new IOException("No broker could be found in the JMX.");
         }
-        ObjectName name = brokers.iterator().next();
-        return name;
+        return brokers.iterator().next();
     }
 
     @Override
@@ -65,28 +64,28 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         MBeanServerConnection connection = getMBeanServerConnection();
 
         Set brokers = findBrokers(connection);
-        if (brokers.size() == 0) {
+        if (brokers.isEmpty()) {
             throw new IOException("No broker could be found in the JMX.");
         }
         ObjectName name = (ObjectName) brokers.iterator().next();
-        BrokerViewMBean mbean = (BrokerViewMBean) MBeanServerInvocationHandler.newProxyInstance(connection, name, BrokerViewMBean.class, true);
+        BrokerViewMBean mbean = MBeanServerInvocationHandler.newProxyInstance(connection, name, BrokerViewMBean.class, true);
         return proxy(BrokerViewFacade.class, mbean, name.getCanonicalName());
     }
 
     @Override
     public String getId() throws Exception {
-        Set brokers = findBrokers(getMBeanServerConnection());
-        if (brokers.size() == 0) {
+        Set<ObjectName> brokers = findBrokers(getMBeanServerConnection());
+        if (brokers.isEmpty()) {
             throw new IOException("No broker could be found in the JMX.");
         }
-        ObjectName name = (ObjectName) brokers.iterator().next();
+        ObjectName name = brokers.iterator().next();
         return name.getCanonicalName();
     }
 
     public String[] getBrokerNames() throws Exception {
         MBeanServerConnection connection = getMBeanServerConnection();
         ObjectName names = new ObjectName("org.apache.activemq:type=Broker,brokerName=*");
-        Set<String> rc = new HashSet<String>();
+        Set<String> rc = new HashSet<>();
         Set<ObjectName> objectNames = connection.queryNames(names, null);
         for(ObjectName name: objectNames) {
             String bn = name.getKeyProperty("brokerName");
@@ -143,11 +142,11 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
             throw new RuntimeException(e);
         }
 
-        List<T> answer = new ArrayList<T>();
+        List<T> answer = new ArrayList<>();
         if (connection != null) {
             for (int i = 0; i < names.length; i++) {
                 ObjectName name = names[i];
-                T value = (T) MBeanServerInvocationHandler.newProxyInstance(
+                T value = MBeanServerInvocationHandler.newProxyInstance(
                         connection, name, type, true);
                 if (value != null) {
                     answer.add(value);
@@ -158,7 +157,7 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
     }
 
     @Override
-    public Set queryNames(ObjectName name, QueryExp query) throws Exception {
+    public Set<ObjectName> queryNames(ObjectName name, QueryExp query) throws Exception {
         return getMBeanServerConnection().queryNames(name, query);
     }
 

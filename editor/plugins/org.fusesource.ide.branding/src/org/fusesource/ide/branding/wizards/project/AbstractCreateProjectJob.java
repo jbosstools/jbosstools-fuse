@@ -48,7 +48,7 @@ public abstract class AbstractCreateProjectJob extends WorkspaceJob {
 
   // PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets(project, new IWorkingSet[] {workingSet});
   public static void addToWorkingSets(IProject project, List<IWorkingSet> workingSets) {
-    if(workingSets != null && workingSets.size() > 0) {
+    if(workingSets != null && !workingSets.isEmpty()) {
       // IAdaptable[] elements = workingSet.adaptElements(new IAdaptable[] {project});
       // if(elements.length == 1) {
       for(IWorkingSet workingSet : workingSets) {

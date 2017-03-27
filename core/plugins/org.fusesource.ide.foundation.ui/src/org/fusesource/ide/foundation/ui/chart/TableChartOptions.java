@@ -18,7 +18,7 @@ import java.util.List;
  * The options from the table which can be used to show a chart.
  */
 public class TableChartOptions {
-	private List<TableChartColumnInfo> numericColumns = new ArrayList<TableChartColumnInfo>();
+	private List<TableChartColumnInfo> numericColumns = new ArrayList<>();
 
 	public void addNumericColumn(TableChartColumnInfo labelProvider) {
 		numericColumns.add(labelProvider);
@@ -30,6 +30,6 @@ public class TableChartOptions {
 	}
 
 	public boolean isValid() {
-		return numericColumns.size() > 0;
+		return !numericColumns.isEmpty();
 	}
 }
