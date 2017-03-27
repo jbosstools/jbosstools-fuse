@@ -106,14 +106,13 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         MBeanServerConnection connection = getMBeanServerConnection();
 
 		Set<ObjectName> contexts = findCamelContexts(connection, managementName);
-        if (contexts.size() == 0) {
+        if (contexts.isEmpty()) {
             throw new IOException("No CamelContext could be found in the JMX.");
         }
 
         // we just take the first CamelContext as it matches the context id
 		ObjectName name = contexts.iterator().next();
-        CamelContextMBean mbean = (CamelContextMBean) newProxyInstance(name, CamelContextMBean.class, true);
-        return mbean;
+        return (CamelContextMBean) newProxyInstance(name, CamelContextMBean.class, true);
     }
 
     @Override

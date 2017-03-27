@@ -38,11 +38,11 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class CollapseFeature extends AbstractCustomFeature {
 
-	public static String PROP_COLLAPSED_STATE 	= "isCollapsed";
-	public static String PROP_EXPANDED_WIDTH  	= "expandedWidth";
-	public static String PROP_EXPANDED_HEIGHT 	= "expandedHeight";
-	public static String PROP_COLLAPSED_WIDTH 	= "collapsedWidth";
-	public static String PROP_COLLAPSED_HEIGHT 	= "collapsedHeight";
+	public static final String PROP_COLLAPSED_STATE 	= "isCollapsed";
+	public static final String PROP_EXPANDED_WIDTH  	= "expandedWidth";
+	public static final String PROP_EXPANDED_HEIGHT 	= "expandedHeight";
+	public static final String PROP_COLLAPSED_WIDTH 	= "collapsedWidth";
+	public static final String PROP_COLLAPSED_HEIGHT 	= "collapsedHeight";
 	
 	private PictogramElement lastPE;
 		
@@ -65,7 +65,7 @@ public class CollapseFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 			// Add more of the objects that collapse here
 			if (bo instanceof AbstractCamelModelElement) {
-				return ((AbstractCamelModelElement)bo).getChildElements().size() > 0;
+				return !((AbstractCamelModelElement)bo).getChildElements().isEmpty();
 			}
 		}
 		return ret;

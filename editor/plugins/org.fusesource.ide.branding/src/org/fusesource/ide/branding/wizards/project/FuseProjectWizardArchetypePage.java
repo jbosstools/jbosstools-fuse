@@ -738,7 +738,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 		 * WizardMessages.wizardProjectPageMaven2ValidatorRequiredArchetype; }
 		 */
 
-		if (requiredProperties != null && requiredProperties.size() > 0) {
+		if (requiredProperties != null && !requiredProperties.isEmpty()) {
 			Properties properties = getProperties();
 			for (String key : requiredProperties) {
 				String value = properties.getProperty(key);

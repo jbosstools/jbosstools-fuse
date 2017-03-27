@@ -168,7 +168,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
         ObjectName query = new ObjectName("org.apache.activemq:type=Broker,brokerName=" + brokerName
                 + ",connector=clientConnectors,*,connectionName=" + connectionName);
         Set<ObjectName> queryResult = queryNames(query, null);
-        if (queryResult.size() == 0)
+        if (queryResult.isEmpty())
             return null;
         ObjectName objectName = queryResult.iterator().next();
         Object rc = newProxyInstance(objectName, ConnectionViewMBean.class, true);

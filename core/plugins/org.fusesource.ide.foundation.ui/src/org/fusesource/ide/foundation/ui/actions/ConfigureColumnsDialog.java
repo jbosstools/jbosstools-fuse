@@ -309,7 +309,7 @@ public class ConfigureColumnsDialog extends ViewSettingsDialog {
 	 *            The items to move up
 	 */
 	void moveUp(List<ColumnConfiguration> items) {
-		if (items.size() > 0 && !items.get(0).equals(getColumns().get(0))) {
+		if (!items.isEmpty() && !items.get(0).equals(getColumns().get(0))) {
 			for (ColumnConfiguration item : items) {
 				moveUp(item);
 			}
@@ -318,7 +318,7 @@ public class ConfigureColumnsDialog extends ViewSettingsDialog {
 
 	protected void moveTop(List<ColumnConfiguration> selectedList) {
 		// use reverse order to preserve selection order
-		List<ColumnConfiguration> reverseOrder = new ArrayList<ColumnConfiguration>(selectedList);
+		List<ColumnConfiguration> reverseOrder = new ArrayList<>(selectedList);
 		Collections.reverse(reverseOrder);
 		for (ColumnConfiguration config : reverseOrder) {
 			moveTop(config);
@@ -332,7 +332,7 @@ public class ConfigureColumnsDialog extends ViewSettingsDialog {
 	}
 
 	private void moveTop(ColumnConfiguration item) {
-		List<ColumnConfiguration> newColumns = new ArrayList<ColumnConfiguration>();
+		List<ColumnConfiguration> newColumns = new ArrayList<>();
 		newColumns.add(item);
 		for (ColumnConfiguration column : getColumns()) {
 			if (!column.equals(item)) {
@@ -343,7 +343,7 @@ public class ConfigureColumnsDialog extends ViewSettingsDialog {
 	}
 
 	private void moveBottom(ColumnConfiguration item) {
-		List<ColumnConfiguration> newColumns = new ArrayList<ColumnConfiguration>();
+		List<ColumnConfiguration> newColumns = new ArrayList<>();
 		for (ColumnConfiguration column : getColumns()) {
 			if (!column.equals(item)) {
 				newColumns.add(column);
@@ -360,7 +360,7 @@ public class ConfigureColumnsDialog extends ViewSettingsDialog {
 	 *            The items to move down
 	 */
 	void moveDown(List<ColumnConfiguration> items) {
-		if (items.size() > 0
+		if (!items.isEmpty()
 				&& !items.get(items.size() - 1).equals(
 						getColumns().get(getColumns().size() - 1))) {
 			for (int i = items.size() - 1; i >= 0; i--) {
