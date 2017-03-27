@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -73,7 +72,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
-
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -85,6 +83,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
     public static final String CAMEL_CONFIG_PATH = MavenUtils.RESOURCES_PATH + "META-INF/spring/camel-context.xml"; //$NON-NLS-1$
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory"; //$NON-NLS-1$
+    private static final String CAMEL_GROUP_ID = "org.apache.camel"; //$NON-NLS-1$
 
     private Model uiModel = new Model();
     private AbstractCamelModelElement sourceFormat;
@@ -113,12 +112,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         endpoints.put(endpoint.getId(), endpoint);
     }
 
-    private void addCamelDozerDependency() {
-        Dependency dep = createDependency("org.apache.camel", "camel-dozer", CamelUtils.getCurrentProjectCamelVersion()); //$NON-NLS-1$ //$NON-NLS-2$
+    private void addCamelDozerDependency(IProject project) {
+        Dependency dep = createDependency(CAMEL_GROUP_ID, "camel-dozer", CamelUtils.getCurrentProjectCamelVersion()); //$NON-NLS-1$
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
-            new MavenUtils().updateMavenDependencies(deps);
+            new MavenUtils().updateMavenDependencies(deps, project);
         } catch (CoreException e) {
             Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
         }
@@ -138,9 +137,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         if (dataFormat != null && dataFormat.getNodeTypeId() != null) {
             if (dataFormat.getNodeTypeId().startsWith("json")) { //$NON-NLS-1$
-                dep = createDependency("org.apache.camel", "camel-jackson", camelVersion); //$NON-NLS-1$ //$NON-NLS-2$
-            } else if (dataFormat.getNodeTypeId().equalsIgnoreCase("jaxb")) { //$NON-NLS-1$
-                dep = createDependency("org.apache.camel", "camel-jaxb", camelVersion); //$NON-NLS-1$ //$NON-NLS-2$
+                dep = createDependency(CAMEL_GROUP_ID, "camel-jackson", camelVersion); //$NON-NLS-1$
+            } else if ("jaxb".equalsIgnoreCase(dataFormat.getNodeTypeId())) { //$NON-NLS-1$
+                dep = createDependency(CAMEL_GROUP_ID, "camel-jaxb", camelVersion); //$NON-NLS-1$
             }
             if (dep != null) {
                 List<Dependency> deps = new ArrayList<>();
@@ -277,7 +276,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                 targetClassName, sourceFormat, targetFormat);
 
                         // make sure we add our maven dependencies where needed
-                        addCamelDozerDependency();
+                        addCamelDozerDependency(project);
                         new ImportExportPackageUpdater(project, sourceClassName, targetClassName).updatePackageImports(monitor);
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
@@ -293,7 +292,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         // now update the camel config if we didn't already
                     	if (camelModel.getRouteContainer() instanceof CamelContextElement) {
 	                        CamelContextElement camelContext = (CamelContextElement)camelModel.getRouteContainer();
-	
+
 	                        // Wizard completed successfully; create the necessary
 	                        // config
 	                        addCamelContextEndpoint(camelContext, endpoint);
@@ -487,7 +486,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                     JCodeModel model,
                                     boolean isSource,
                                     IProgressMonitor monitor) throws Exception {
-        String elementName = null;
+        String elementName;
         if (isSource) {
             elementName = uiModel.getSourceClassName();
         } else {
