@@ -32,7 +32,9 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -149,6 +151,7 @@ public class MavenProjectHelper {
 		try {
 			return "Type=" + marker.getType() + ":Message=" + marker.getAttribute(IMarker.MESSAGE) + ":LineNumber=" + marker.getAttribute(IMarker.LINE_NUMBER);
 		} catch (CoreException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, e.getMessage(), e));
 			return "Error computing string reprsentation of "+ marker.toString() + " "+ e.getMessage();
 		}
 	}

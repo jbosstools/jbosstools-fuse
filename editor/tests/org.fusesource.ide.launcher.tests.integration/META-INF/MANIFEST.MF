@@ -19,3 +19,5 @@ Require-Bundle: org.junit,
  org.fusesource.ide.camel.model.service.core.tests.integration;bundle-version="9.2.0",
  org.fusesource.ide.camel.tests.util;bundle-version="9.2.0"
 Bundle-Vendor: %Bundle-Vendor
+Export-Package: org.fusesource.ide.launcher.tests.integration.remote.debug
+Bundle-Activator: org.fusesource.ide.launcher.tests.integration.Activator

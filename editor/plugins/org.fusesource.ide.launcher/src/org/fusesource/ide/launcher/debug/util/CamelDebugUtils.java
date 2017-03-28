@@ -193,7 +193,7 @@ public class CamelDebugUtils {
 	 * @return		the project or null if not able to determine a project
 	 */
 	public static IProject getProjectForFilePath(String filePath) {
-		if (Strings.isBlank(filePath)){
+		if (Strings.isBlank(filePath)) {
 			return null;
 		}
 		String checkPath = filePath;
@@ -214,7 +214,7 @@ public class CamelDebugUtils {
 		if (launchConfig != null) {
 			try {
 				String fileUnderDebug = launchConfig.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String)null);
-				if (fileUnderDebug.startsWith("file:")){
+				if (fileUnderDebug.startsWith("file:")) {
 					fileUnderDebug = fileUnderDebug.substring("file:".length());
 				}
 				fileUnderDebug = URLDecoder.decode(fileUnderDebug, StandardCharsets.UTF_8.name());

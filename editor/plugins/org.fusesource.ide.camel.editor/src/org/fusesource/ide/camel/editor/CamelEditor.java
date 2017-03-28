@@ -244,7 +244,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		if (getActivePage() == SOURCE_PAGE_INDEX){
+		if (getActivePage() == SOURCE_PAGE_INDEX) {
 			setDirtyFlag(true);
 		}
 	}
@@ -437,7 +437,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == SOURCE_PAGE_INDEX) {
-			if (sourceEditor == null){
+			if (sourceEditor == null) {
 				sourceEditor = new StructuredTextEditor();
 			}
 			if (!rollBackActive) {
@@ -447,7 +447,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 			this.lastActivePageIdx = newPageIndex;
 			super.pageChange(newPageIndex);
-		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
+		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX) {
 			if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
 				IDocument document = getDocument();
 				if (document != null) {
@@ -463,7 +463,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					} else {
 						updateModelFromSource();
 						lastError = "";
-						if (newPageIndex == GLOBAL_CONF_INDEX){
+						if (newPageIndex == GLOBAL_CONF_INDEX) {
 							globalConfigEditor.reload();
 						} else if (newPageIndex == DESIGN_PAGE_INDEX) {
 							designEditor.switchContainer(); // needed to fix sync issue between props view and selected context element
@@ -724,7 +724,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
-		if (input instanceof CamelXMLEditorInput && !input.equals(this.editorInput)){
+		if (input instanceof CamelXMLEditorInput && !input.equals(this.editorInput)) {
 			this.editorInput = (CamelXMLEditorInput)input;
 		}
 		setPartName(input.getName());

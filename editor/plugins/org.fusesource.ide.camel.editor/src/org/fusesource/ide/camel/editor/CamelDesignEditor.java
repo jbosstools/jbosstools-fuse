@@ -542,7 +542,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void modelChanged() {
 		// we only update if the correct editor tab is selected
 		parent.setDirtyFlag(true);
-		if (getParent().getActivePage() != CamelEditor.DESIGN_PAGE_INDEX){
+		if (getParent().getActivePage() != CamelEditor.DESIGN_PAGE_INDEX) {
 			return;
 		}
 		Display.getDefault().syncExec(new Runnable() {
