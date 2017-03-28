@@ -34,7 +34,7 @@ import org.jboss.tools.jmx.core.JMXException;
 /**
  * Connect to Camel Debugger via JMX
  */
-class JMXCamelConnectJob extends Job {
+public class JMXCamelConnectJob extends Job {
 	
 	private static final int TIME_WAIT_BETWEEN_RETRY = 500;
 	public static final Object JMX_CONNECT_JOB_FAMILY = new Object();

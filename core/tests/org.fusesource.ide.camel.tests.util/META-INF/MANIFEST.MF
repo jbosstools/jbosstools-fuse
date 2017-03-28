@@ -31,3 +31,5 @@ Require-Bundle: org.fusesource.ide.branding,
 Export-Package: org.fusesource.ide.camel.test.util.editor,
  org.fusesource.ide.camel.tests.util
 Bundle-Vendor: %Bundle-Vendor
+Bundle-Activator: org.fusesource.ide.camel.tests.util.Activator
+Bundle-ActivationPolicy: lazy

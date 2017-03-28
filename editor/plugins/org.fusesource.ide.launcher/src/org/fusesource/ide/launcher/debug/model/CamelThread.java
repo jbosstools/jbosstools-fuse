@@ -214,7 +214,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	public void resume() throws DebugException {
 		if (!fStepping) {
 			// normal resume without stepping
-			((CamelDebugTarget)getDebugTarget()).getDebugger().resumeBreakpoint(((CamelStackFrame)getTopStackFrame()).getEndpointId());	
+			((CamelDebugTarget)getDebugTarget()).getDebugger().resumeBreakpoint(getTopStackFrame().getEndpointId());
 			fireResumeEvent(DebugEvent.CLIENT_REQUEST);
 		} else {
 			// step over resume
@@ -283,11 +283,9 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		return fStepping;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepInto()
-	 */
 	@Override
 	public void stepInto() throws DebugException {
+		/* Step into is not implemented*/
 	}
 	
 	/* (non-Javadoc)
@@ -296,7 +294,7 @@ public class CamelThread extends CamelDebugElement implements IThread {
 	@Override
 	public void stepOver() throws DebugException {
 		ICamelDebuggerMBeanFacade debugger = ((CamelDebugTarget)getDebugTarget()).getDebugger();
-		String endpointId = ((CamelStackFrame)getTopStackFrame()).getEndpointId();
+		String endpointId = getTopStackFrame().getEndpointId();
 		try {
 			// mark this thread as in stepping mode
 			this.fStepping = true;
@@ -314,11 +312,9 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepReturn()
-	 */
 	@Override
 	public void stepReturn() throws DebugException {
+		/* Step into and return is not implemented*/
 	}
 	
 	/* (non-Javadoc)

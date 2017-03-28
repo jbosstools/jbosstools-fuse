@@ -63,8 +63,6 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 			} catch (IOException | CoreException ex) {
 				CamelJMXPlugin.getLogger().error("Error saving changes to remote camel context " + this.contextId, ex);
 			}
-		} else {
-			
 		}
 	}
 	
