@@ -162,12 +162,11 @@ public class StyleUtil {
 	}
 
 	public static IColorConstant getColorConstant(String rgb) {
-		IColorConstant cc = null;
 		String[] parts = rgb.split(",");
 		if (parts.length != 3) {
 			return null;
 		}
-		String hex = "";
+		StringBuilder hex = new StringBuilder();
 		for (String part : parts) {
 			String h;
 			if (Character.isDigit(part.charAt(0))) {
@@ -178,12 +177,10 @@ public class StyleUtil {
 				h = part;
 			}
 			if (h.length()<2) {
-				hex+="0";
+				hex.append("0");
 			}
-			hex+=h;
+			hex.append(h);
 		}
-		cc = new ColorConstant(hex);
-
-		return cc;
+		return new ColorConstant(hex.toString());
 	}
 }

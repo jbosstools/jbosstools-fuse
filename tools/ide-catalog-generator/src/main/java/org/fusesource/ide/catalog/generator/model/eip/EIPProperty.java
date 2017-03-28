@@ -196,23 +196,31 @@ public class EIPProperty {
 	}
 	
 	public String getChoiceString() {
-		if (this.choice == null || this.choice.length<1) return null;
-		String retVal = "";
-		for (String c : this.choice) {
-			if (retVal.length()>0) retVal += ","; 
-			retVal += c;
+		if (this.choice == null || this.choice.length<1) {
+			return null;
 		}
-		return retVal;
+		StringBuilder retVal = new StringBuilder();
+		for (String c : this.choice) {
+			if (retVal.length()>0) {
+				retVal.append(","); 
+			}
+			retVal.append(c);
+		}
+		return retVal.toString();
 	}
 	
 	public String getOneOfString() {
-		if (this.oneOf == null || this.oneOf.length<1) return null;
-		String retVal = "";
-		for (String c : this.oneOf) {
-			if (retVal.length()>0) retVal += ","; 
-			retVal += c;
+		if (this.oneOf == null || this.oneOf.length<1) {
+			return null;
 		}
-		return retVal;
+		StringBuilder retVal = new StringBuilder();
+		for (String c : this.oneOf) {
+			if (retVal.length()>0) {
+				retVal.append(","); 
+			}
+			retVal.append(c);
+		}
+		return retVal.toString();
 	}
 	
 	/**
