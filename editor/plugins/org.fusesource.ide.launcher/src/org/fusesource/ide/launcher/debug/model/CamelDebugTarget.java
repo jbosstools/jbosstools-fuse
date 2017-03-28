@@ -65,6 +65,8 @@ import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
  * @author lhein
  */
 public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget {
+	
+	public static final Object JMX_CONNECT_JOB_FAMILY = new Object();
 
 	// associated system process (VM)
 	private IProcess fProcess;
@@ -366,12 +368,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	
 	@Override
 	public boolean canResume() {
-		return !isTerminated() && isSuspended();
+		return !isTerminated() && isSuspended() && !isDisconnected();
 	}
 	
 	@Override
 	public boolean canSuspend() {
-		return !isTerminated() && !isSuspended();
+		return !isTerminated() && !isSuspended() && !isDisconnected();
 	}
 	
 	@Override
@@ -706,6 +708,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			
 			return connected ? Status.OK_STATUS : Status.CANCEL_STATUS;
 		}
+		
+		@Override
+		public boolean belongsTo(Object family) {
+			return JMX_CONNECT_JOB_FAMILY.equals(family) || super.belongsTo(family);
+		}
+		
 	}
 	
 	/**

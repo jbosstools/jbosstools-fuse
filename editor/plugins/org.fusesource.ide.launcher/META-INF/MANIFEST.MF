@@ -30,6 +30,7 @@ Export-Package: org.fusesource.ide.launcher,
  org.fusesource.ide.launcher.debug.model.values,
  org.fusesource.ide.launcher.debug.model.variables,
  org.fusesource.ide.launcher.debug.util,
+ org.fusesource.ide.launcher.remote.debug,
  org.fusesource.ide.launcher.run.util,
  org.fusesource.ide.launcher.util
 Import-Package: org.eclipse.jdt.ui

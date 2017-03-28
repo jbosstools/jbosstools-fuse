@@ -28,19 +28,14 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
  */
 public class CamelFacetInstallationDelegate implements IDelegate {
 	
-	private IDataModel model;
-	private NewProjectMetaData metadata;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.wst.common.project.facet.core.IDelegate#execute(org.eclipse.core.resources.IProject, org.eclipse.wst.common.project.facet.core.IProjectFacetVersion, java.lang.Object, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv,
 			Object config, IProgressMonitor monitor) throws CoreException {
-		model = (IDataModel) config;
-		if (!model.isPropertySet(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA)) return;
-		metadata = (NewProjectMetaData)model.getProperty(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA);
+		IDataModel model = (IDataModel) config;
+		if (!model.isPropertySet(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA)) {
+			return;
+		}
+		NewProjectMetaData metadata = (NewProjectMetaData)model.getProperty(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA);
 		
 		// store the camel version as project property
 		project.setPersistentProperty(ICamelFacetDataModelProperties.QNAME_CAMEL_VERSION, metadata.getCamelVersion());
