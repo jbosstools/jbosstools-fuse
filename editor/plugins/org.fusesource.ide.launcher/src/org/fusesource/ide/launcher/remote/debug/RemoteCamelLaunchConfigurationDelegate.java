@@ -21,6 +21,8 @@ import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.util.CamelJMXLaunchConfiguration;
 
 public class RemoteCamelLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
+	
+	public static final String LAUNCH_CONFIGURATION_TYPE = "org.fusesource.ide.launcher.camelcontext.remote";
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
