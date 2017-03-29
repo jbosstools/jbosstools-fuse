@@ -445,8 +445,8 @@
 				<sonar.code.codeCoveragePlugin>jacoco</sonar.code.codeCoveragePlugin>
 				<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 				<!-- points to the target folder of the global parent project -->
-				<sonar.jacoco.reportPath>../../../target/jacoco.exec</sonar.jacoco.reportPath>
-				<sonar.jacoco.itReportPath>../../../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+				<sonar.jacoco.reportPath>../../target/jacoco.exec</sonar.jacoco.reportPath>
+				<sonar.jacoco.itReportPath>../../target/jacoco-it.exec</sonar.jacoco.itReportPath>
 				<sonar.jacoco.reportPaths>${sonar.jacoco.reportPath},${sonar.jacoco.itReportPath}</sonar.jacoco.reportPaths>
 			</properties>
 			<build>
