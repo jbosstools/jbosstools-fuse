@@ -97,6 +97,7 @@ public class Messages extends NLS {
 	public static String ExpressionDialog_title;
 	public static String ExpressionDialog_titleResourceSelection;
 	public static String ExpressionDialog_ValueButton;
+	public static String ImportExportPackageUpdater_UnresolvedCamelCoreVersion;
 	public static String MappingDetailViewer_labelVariable;
 	public static String MappingDetailViewer_menuItemAddTransformation;
 	public static String MappingDetailViewer_menuItemEditTransformation;
