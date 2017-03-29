@@ -20,8 +20,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -40,12 +38,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -121,7 +115,6 @@ public class CamelProjectConfiguratorIT {
 	private void checkCamelFacetAndNatureNotAdded() throws CoreException {
 		// test modification of the pom.xml is not resulting in project
 		// getting a fuse project (facet and nature)
-		assertThat(isCamelFacetEnabled(project)).isFalse();
 		assertThat(isCamelNatureEnabled(project)).isFalse();
 	}
 	
@@ -147,21 +140,6 @@ public class CamelProjectConfiguratorIT {
 		    }
 			project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 		}
-	}
-
-	private boolean isCamelFacetEnabled(IProject project) throws CoreException {
-		IFacetedProject fproj = ProjectFacetsManager.create(project);
-		if (fproj != null) {
-			Set<IProjectFacetVersion> facets = fproj.getProjectFacets();
-			Iterator<IProjectFacetVersion> itFacet = facets.iterator();
-			while (itFacet.hasNext()) {
-				IProjectFacetVersion f = itFacet.next();
-				if (ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET.equals(f.getProjectFacet().getId())) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	private boolean isCamelNatureEnabled(IProject project) throws CoreException {

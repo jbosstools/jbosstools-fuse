@@ -11,30 +11,27 @@
 package org.fusesource.ide.camel.model.service.core.catalog;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.resolution.VersionRangeRequest;
+import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
-import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
-import org.osgi.framework.Version;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein
@@ -42,172 +39,14 @@ import org.osgi.framework.Version;
 public class CamelModelFactory {
 	
 	private static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
-
-	private static final Map<String, String> camelVersionToFuseBOMMapping;
-	static {
-		camelVersionToFuseBOMMapping = new HashMap<>();
-		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
-		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
-		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
-		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", "6.3.0.redhat-224");
-		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-224");
-	}
+	private static final String CAMEL_WILDFLY_CDI = "camel-cdi";
+	private static final String CAMEL_WILDFLY_SPRING = "camel-core";
 	
-	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000012").collect(Collectors.toSet());
-	
-	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-224";
-	
-	private static HashMap<String, Map<String, CamelModel>> supportedCamelModels;
+	public static final String DEFAULT_CAMEL_VERSION = "2.18.1.redhat-000012";
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
-	
-	/**
-	 * initializes all available models for the connectors group of the camel editor palette
-	 */
-	public static void initializeModels() {
-		supportedCamelModels = new HashMap<>();
-		
-		String[] versions = CamelServiceManagerUtil.getAvailableVersions();
-		for (String version : versions) {
-			supportedCamelModels.put(version, null); // we initialize on access
-		}
-	}
-	
-	/**
-	 * /!\ Used for Unit testing only
-	 * 
-	 * @param mockedSupportedCamelModels
-	 */
-	@Deprecated
-	public static void initializeModels(HashMap<String, Map<String, CamelModel>> mockedSupportedCamelModels) {
-		supportedCamelModels = mockedSupportedCamelModels;
-	}
-
-	/**
-	 * returns the list of supported camel versions
-	 * 
-	 * @return
-	 */
-	public static List<String> getSupportedCamelVersions() {
-		if (supportedCamelModels == null || supportedCamelModels.isEmpty()) {
-			initializeModels();
-		}
-		return Arrays.asList(supportedCamelModels.keySet().toArray(new String[supportedCamelModels.size()]));
-	}
-	
-	/**
-	 * returns the model for a given camel version or null if not supported
-	 * 
-	 * @param camelVersion
-	 * @return
-	 * @deprecated please use getModelForVersion(String camelVersion, String runtimeProvider) in future!
-	 */
-	@Deprecated
-	public static CamelModel getModelForVersion(String camelVersion) {
-		return getModelForVersion(camelVersion, RUNTIME_PROVIDER_KARAF);
-	}
-	
-	/**
-	 * returns the model for a given camel version or null if not supported
-	 * 
-	 * @param camelVersion
-	 * @param runtimeProvider
-	 * @return
-	 */
-	public static CamelModel getModelForVersion(String camelVersion, String runtimeProvider) {
-		Map<String, CamelModel> modelMap = supportedCamelModels.get(camelVersion);
-		CamelModel cm = null;
-		if (modelMap != null) {
-			cm = modelMap.get(runtimeProvider);
-		} else {
-			modelMap = new HashMap<>();
-		}
-		
-		if (!supportedCamelModels.containsKey(camelVersion)) {
-			// seems user wants a version we don't have - look for compatible
-			// alternative supported version of camel
-			String alternateVersion = getCompatibleCamelVersion(camelVersion);
-			CamelModelServiceCoreActivator.pluginLog().logWarning("Selected Camel version " + camelVersion + " is not directly supported. Using alternative version: " + alternateVersion);
-			cm = supportedCamelModels.get(alternateVersion).get(runtimeProvider);
-		}
-		
-		if (cm == null) {
-			// not initialized yet
-			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(camelVersion);
-			if (svc != null) {
-				cm = svc.getCamelModel(runtimeProvider);
-				cm.setCamelVersion(camelVersion);
-				cm.setRuntimeProvider(runtimeProvider);
-				modelMap.put(runtimeProvider, cm);
-				supportedCamelModels.put(camelVersion, modelMap);
-			}
-		}
-		
-		return cm;
-	}
-	
-	/**
-	 * returns an alternative for the requested camel version
-	 * 
-	 * @param requestedCamelVersion
-	 * @param supportedVersions
-	 * @param latestCamelVersion
-	 * @return
-	 */
-	static String getCompatibleCamelVersion(String requestedCamelVersion, List<String> supportedVersions, String latestCamelVersion) {
-		String alternative = null;
-		String lastFound = null;
-		String smallestVersion = null;
-		Version reqVersion = new Version(requestedCamelVersion);
-		for (String supV : supportedVersions) {
-			Version testVersion = new Version(supV);
-			if (testVersion.compareTo(reqVersion) == 0) {
-				// in case we support the requested version directly we
-				// should use it
-				return supV;
-			}
-			if (testVersion.compareTo(reqVersion) < 0) {
-				if (lastFound == null) {
-					lastFound = supV;
-				} else {
-					Version lastCompatible = new Version(lastFound);
-					if (testVersion.compareTo(lastCompatible)>0) {
-						lastFound = supV;
-					}
-				}
-			} else {
-				// this case is determining the smallest available camel version
-				if (smallestVersion == null) {
-					smallestVersion = supV;
-				} else {
-					Version smallest = new Version(smallestVersion);
-					if (testVersion.compareTo(smallest)<0) {
-						smallestVersion = supV;
-					}
-				}
-			}
-		}
-		alternative = lastFound;
-		
-		// in case the requested version is earlier than all we have available
-		// then we simply return our earliest available version
-		if (lastFound == null) {
-			alternative = smallestVersion;
-		}
-		
-		return alternative != null ? alternative : latestCamelVersion;
-	}
-	
-	/**
-	 * retrieves a compatible version of camel which is shipped with the tools
-	 * 
-	 * @param requestedCamelVersion
-	 * @return
-	 */
-	public static String getCompatibleCamelVersion(String requestedCamelVersion) {
-		return getCompatibleCamelVersion(requestedCamelVersion, getSupportedCamelVersions(), getLatestCamelVersion());
-	}
+	public static final String RUNTIME_PROVIDER_WILDFLY = "wildfly";
 	
 	/**
 	 * returns the latest and greatest supported Camel version we have a catalog 
@@ -217,31 +56,33 @@ public class CamelModelFactory {
 	 * @return
 	 */
 	public static String getLatestCamelVersion() {
-		String latest = null;
-		for (String v : supportedCamelModels.keySet()) {
-			if (latest == null || v.compareTo(latest)>0) {
-				latest = v;
-			}
-		}
-		if (latest != null){
-			return latest;
-		}
-		
-		return supportedCamelModels.keySet().iterator().next();
+		RepositorySystem system = CamelMavenUtils.newRepositorySystem();
+        RepositorySystemSession session = CamelMavenUtils.newRepositorySystemSession( system );
+        Artifact artifact = new DefaultArtifact( "org.apache.camel:camel-core:[2,)" );
+        VersionRangeRequest rangeRequest = new VersionRangeRequest();
+        rangeRequest.setArtifact( artifact );
+        rangeRequest.setRepositories( CamelMavenUtils.newRepositories( system, session ) );
+        try {
+	        VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
+	        org.eclipse.aether.version.Version newestVersion = rangeResult.getHighestVersion();
+			if (!Strings.isBlank(newestVersion.toString())) {
+				return newestVersion.toString();
+			}		
+        } catch (Exception ex) {
+        	CamelModelServiceCoreActivator.pluginLog().logError(ex);
+        }
+		return DEFAULT_CAMEL_VERSION;
 	}
 	
 	/**
 	 * TODO   This method should be used as much as possible to make sure
 	 * the editor is pulling the proper model for the given project. 
 	 * 
-	 * 
 	 * @return
 	 */
 	public static String getCamelVersion(IProject p) {
-		// TODO stubbed out for now. We should check the facets if possible and fallback to the version used in the pom.xml
 		String version = getCamelVersionFromMaven(p);
-		if (version != null && 
-			CamelModelFactory.getSupportedCamelVersions().contains(version)) {
+		if (version != null) {
 			return version;
 		}
 		return getLatestCamelVersion();
@@ -261,27 +102,20 @@ public class CamelModelFactory {
         if (pomFile.exists() == false || pomFile.isDirectory()) return null;
         try {
         	final Model model = MavenPlugin.getMaven().readModel(pomFile);
-
         	// get camel-core or another camel dep
 	        List<Dependency> deps = new CamelMavenUtils().getDependencies(project, model);
 	        for (Dependency pomDep : deps) {
 	            if (pomDep.getGroupId().equalsIgnoreCase("org.apache.camel") &&
 	                pomDep.getArtifactId().startsWith("camel-")) {
-	                return pomDep.getVersion();
+	                if (!Strings.isBlank(pomDep.getVersion())) {
+	                	return pomDep.getVersion();
+	                }
 	            }
 	        }
         } catch (Exception ex) {
         	CamelModelServiceCoreActivator.pluginLog().logError("Unable to load camel version from " + pomPath, ex);
         }
         return null;
-	}
-
-	public static String getFuseVersionForCamelVersion(String camelVersion) {
-		String bomVersion = camelVersionToFuseBOMMapping.get(camelVersion);
-		if (bomVersion == null) {
-			bomVersion = LATEST_BOM_VERSION;
-		}
-		return bomVersion;
 	}
 
 	public static String getRuntimeprovider(IProject camelProject, IProgressMonitor monitor) {
@@ -294,6 +128,8 @@ public class CamelModelFactory {
 						List<Dependency> dependencies = mavenProject.getDependencies();
 						if(hasSpringBootDependency(dependencies)){
 							return RUNTIME_PROVIDER_SPRINGBOOT;
+						} else if (hasWildflyDependency(dependencies)) {
+							return RUNTIME_PROVIDER_WILDFLY;
 						} else {
 							return RUNTIME_PROVIDER_KARAF;
 						}
@@ -313,13 +149,11 @@ public class CamelModelFactory {
 					.findFirst().isPresent();
 	}
 	
-	public static CamelModel getModelForProject(IProject project){
-		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(CamelModelFactory.getCamelVersion(project));
-		String runtimeProvider = CamelModelFactory.getRuntimeprovider(project, new NullProgressMonitor());
-		return CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider);
-	}
-
-	public static boolean isPureFISVersion(String camelVersion) {
-		return pureFisVersions.contains(camelVersion);
+	// TODO: put in the correct maven coords for a wildfly swarm project
+	public static boolean hasWildflyDependency(List<Dependency> dependencies){
+		return dependencies != null
+				&& dependencies.stream()
+					.filter(dependency -> CAMEL_WILDFLY_CDI.equals(dependency.getArtifactId()))
+					.findFirst().isPresent();
 	}
 }

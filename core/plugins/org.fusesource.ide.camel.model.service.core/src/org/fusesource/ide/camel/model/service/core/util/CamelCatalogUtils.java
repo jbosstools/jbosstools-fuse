@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.util;
 import java.util.ArrayList;
 
 import org.fusesource.ide.camel.model.service.core.catalog_json.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog_json.cache.CamelCatalogCoordinates;
 
 /**
  * collection of camel catalog related util methods
@@ -59,5 +60,17 @@ public class CamelCatalogUtils {
 			dependencies.add(dep);
 		}
 		return dependencies;
+	}
+	
+	/**
+	 * returns the catalog coordinates for the given maven coords
+	 * 
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 * @return
+	 */
+	public static CamelCatalogCoordinates getCatalogCoordinatesFor(String groupId, String artifactId, String version) {
+		return new CamelCatalogCoordinates(groupId, artifactId, version);
 	}
 }

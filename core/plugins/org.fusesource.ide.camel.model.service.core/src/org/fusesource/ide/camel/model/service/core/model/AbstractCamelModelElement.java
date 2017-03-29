@@ -26,6 +26,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog_json.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -1413,7 +1414,7 @@ public abstract class AbstractCamelModelElement {
 		} else {
 			project = null;
 		}
-		CamelModel model = CamelModelFactory.getModelForProject(project);
+		CamelModel model = CamelCatalogCacheManager.getInstance().getModelForProject(project);
 		// then we get the eip meta model
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// special case for context wide endpoint definitions

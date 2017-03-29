@@ -11,8 +11,6 @@
 package org.fusesource.ide.projecttemplates.maven;
 
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
@@ -35,7 +33,6 @@ import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -47,9 +44,6 @@ import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
-import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
-import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
@@ -58,7 +52,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
 	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
 	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
-	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
 	public static IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
 	public static IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2"); //$NON-NLS-1$
 	public static IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
@@ -97,10 +90,8 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
 		if (checkCamelContextsExist(request.getProject(), monitor)) {
-			if (!isCamelFacetEnabled(request)) {
-				// if we have a camel context but no facade set we do set it
-				configureFacet(request.getMavenProject(), request.getProject(), monitor);
-			}
+			// if we have a camel context but no facade set we do set it
+			configureFacet(request.getMavenProject(), request.getProject(), monitor);
 			if (!isCamelNatureEnabled(request.getProject())) {
 				// enable the camel nature
 				configureNature(request.getProject(), request.getMavenProject(), monitor);
@@ -174,22 +165,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 
-	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
-		IProject project = request.getProject();
-		IFacetedProject fproj = ProjectFacetsManager.create(project);
-		if (fproj != null) {
-			Set<IProjectFacetVersion> facets = fproj.getProjectFacets();
-			Iterator<IProjectFacetVersion> itFacet = facets.iterator();
-			while (itFacet.hasNext()) {
-				IProjectFacetVersion f = itFacet.next();
-				if (ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET.equals(f.getProjectFacet().getId())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	private boolean isCamelNatureEnabled(IProject project) throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
@@ -250,10 +225,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
 				}
 			}
-			installCamelFacet(fproj, fpwc, camelVersion, monitor);
 			fpwc.commitChanges(monitor);
 			configureNature(project, mavenProject, monitor);
-			updateMavenProject(project);
+// TODO: check why this causes an infinite loop
+//			updateMavenProject(project);
 		}
 	}
 
@@ -289,36 +264,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
         	}
         }
         return CamelModelFactory.getLatestCamelVersion();		
-	}
-
-	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
-			IProgressMonitor monitor) throws CoreException {
-		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
-		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
-		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
-		if (camelFacetVersion == null) {
-			camelFacetVersion = getCamelFacetVersion(CamelModelFactory.getCamelVersion(fproj.getProject()));
-		}
-		installFacet(fproj, fpwc, camelFacet,
-				camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
-		if (camelFacetVersion == null) {
-			// we need to switch dependency versions
-			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
-			del.execute(fproj.getProject(), camelFacet.getLatestVersion(), config, monitor);
-		}
-	}
-
-	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
-		try {
-			IProjectFacetVersion facetVersion = camelFacet
-					.getVersion(CamelModelFactory.getCompatibleCamelVersion(camelVersionString));
-			if (facetVersion != null) {
-				return facetVersion;
-			}
-		} catch (IllegalArgumentException iae) {
-			return camelFacet.getLatestVersion();
-		}
-		return camelFacet.getLatestVersion();
 	}
 
 	/**

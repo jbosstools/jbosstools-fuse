@@ -34,10 +34,7 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 	
 	@Override
 	public Object getDefaultProperty(String propertyName) {
-		if (propertyName.equals(FACET_ID)) {
-			return ICamelFacetDataModelProperties.CAMEL_PROJECT_FACET;
-		}
-		else if(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER.equals(propertyName)){
+		if(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER.equals(propertyName)){
 			return ICamelFacetDataModelProperties.DEFAULT_CAMEL_CONFIG_RESOURCE_FOLDER;
 		} else if( ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE.equals(propertyName)) {
 			return false;

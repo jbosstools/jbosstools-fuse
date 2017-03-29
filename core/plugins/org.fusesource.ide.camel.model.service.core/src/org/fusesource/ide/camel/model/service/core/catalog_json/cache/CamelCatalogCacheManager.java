@@ -37,14 +37,24 @@ public class CamelCatalogCacheManager {
 	}
 	
 	/**
+	 * checks whether there is a cached catalog for the given coordinates
+	 * 
+	 * @param coordinates
+	 * @return
+	 */
+	public boolean hasCachedCatalog(CamelCatalogCoordinates coordinates) {
+		return CACHE.containsKey(coordinates);
+	}
+	
+	/**
 	 * returns the cached catalog for the given coordinates or a new catalog cache if not existing
 	 * 
 	 * @param coordinates	the coordinates
 	 * @return	the cached catalog or an empty one if not yet in cache
 	 */
-	public CamelCatalogCache getCachedCatalog(CamelCatalogCoordinates coordinates) {
+	public synchronized CamelCatalogCache getCachedCatalog(CamelCatalogCoordinates coordinates) {
 		if (!CACHE.containsKey(coordinates)) {
-			CACHE.put(coordinates, new CamelCatalogCache());
+			initializeCatalog(coordinates);
 		}
 		return CACHE.get(coordinates);
 	}
@@ -56,5 +66,20 @@ public class CamelCatalogCacheManager {
 	 */
 	public void clearCachedCatalog(CamelCatalogCoordinates coordinates) {
 		CACHE.remove(coordinates);
+	}
+	
+	/**
+	 * initializes the catalog for the given coords
+	 * 
+	 * @param coordinates
+	 */
+	protected void initializeCatalog(CamelCatalogCoordinates coordinates) {
+		CamelCatalogCache catalog = new CamelCatalogCache();
+		
+		// load the catalog maven dep into classpath
+		
+		// use catalog java api to build the catalog cache
+				
+		CACHE.put(coordinates, catalog);		
 	}
 }

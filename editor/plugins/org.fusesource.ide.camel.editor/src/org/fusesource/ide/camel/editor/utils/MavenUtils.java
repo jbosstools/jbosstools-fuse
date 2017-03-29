@@ -122,10 +122,10 @@ public class MavenUtils {
 	 */
 	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
 		final File pomFile = getPomFile(project);
-
 		final Model model = readMavenModel(pomFile);
 		List<Dependency> deps = camelMavenUtils.getDependencies(project, model);
-
+		if (model == null || deps == null) return;
+		
 		// then check if component dependency is already a dep
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
 		String scope = null;
