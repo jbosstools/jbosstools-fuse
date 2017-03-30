@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
-
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -51,24 +50,24 @@ import org.osgi.framework.Version;
 
 /**
  * This class is responsible to configure the project to import the Expression Language package if needed.
- * 
+ *
  */
 public class ImportExportPackageUpdater {
 
-	private static final String DEFAULT_PACKAGE_EXPORT = ".";
-	private static final String COM_SUN_EL_VERSION = "com.sun.el;version=";
-	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0";
-	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
-	private static final String CAMEL_CORE = "camel-core";
-	private static final String ORG_APACHE_FELIX = "org.apache.felix";
-	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
-	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0";
-	
+	private static final String DEFAULT_PACKAGE_EXPORT = "."; //$NON-NLS-1$
+	private static final String COM_SUN_EL_VERSION = "com.sun.el;version="; //$NON-NLS-1$
+	private static final String LIMIT_CAMEL_VERSION_FROM_WHICH_NEED_TO_ADD_IMPORT_PACKAGE = "2.17.0"; //$NON-NLS-1$
+	private static final String ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
+	private static final String CAMEL_CORE = "camel-core"; //$NON-NLS-1$
+	private static final String ORG_APACHE_FELIX = "org.apache.felix"; //$NON-NLS-1$
+	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin"; //$NON-NLS-1$
+	private static final String MAVEN_BUNDLE_PLUGIN_VERSION = "3.2.0"; //$NON-NLS-1$
+
 	private IProject project;
 	private String sourceClassName;
 	private String targetClassName;
-	
-	
+
+
 	public ImportExportPackageUpdater(IProject project, String sourceClassName, String targetClassName) {
 		this.project = project;
 		this.sourceClassName= sourceClassName;
@@ -138,7 +137,7 @@ public class ImportExportPackageUpdater {
 	private boolean isPackageInsideSource(String packageName) {
 		IJavaProject jProject = JavaCore.create(project);
 		try{
-			IJavaElement findElement = jProject.findElement(Path.fromPortableString(packageName.replaceAll("\\.", "/")));
+			IJavaElement findElement = jProject.findElement(Path.fromPortableString(packageName.replaceAll("\\.", "/"))); //$NON-NLS-1$ //$NON-NLS-2$
 			if(findElement instanceof IPackageFragment){
 				return IPackageFragmentRoot.K_SOURCE == ((IPackageFragment) findElement).getKind();
 			}
@@ -164,17 +163,16 @@ public class ImportExportPackageUpdater {
 	private String getPackage(String fullyQualifiedClassName) {
 		if(fullyQualifiedClassName.contains(DEFAULT_PACKAGE_EXPORT)){
 			return fullyQualifiedClassName.substring(0, fullyQualifiedClassName.lastIndexOf('.'));
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	private void updateImportExportPackageForGeneratedManifest(IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
-			if (!shouldAddImportExportPackage(pomModel)){ //$NON-NLS-1$
-				return; 
+			if (!shouldAddImportExportPackage(pomModel)){
+				return;
 			}
 			managePlugins(pomModel);
 
@@ -189,7 +187,7 @@ public class ImportExportPackageUpdater {
 	}
 
 	boolean shouldAddImportExportPackage(Model pomModel) {
-		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63(pomModel);
+		return !"war".equals(pomModel.getPackaging()) && isCamelDependencyHigherThan63(pomModel); //$NON-NLS-1$
 	}
 
 	private boolean isCamelDependencyHigherThan63(Model pomModel) {
@@ -201,18 +199,16 @@ public class ImportExportPackageUpdater {
 				return true;
 			}
 			String pluginVersion = plugin.getVersion();
-			if(pluginVersion.startsWith("${") && pluginVersion.endsWith("}") && pomModel.getProperties() != null){
+			if(pluginVersion.startsWith("${") && pluginVersion.endsWith("}") && pomModel.getProperties() != null) { //$NON-NLS-1$ //$NON-NLS-2$
 				String camelCoreVersionFromProperty = pomModel.getProperties().getProperty(pluginVersion.substring(2, pluginVersion.length() -1));
 				if(camelCoreVersionFromProperty ==  null){
 					return true;
-				} else {
-					return isVersionHigherThanLimitForImportPackage(camelCoreVersionFromProperty);
 				}
-			} else {
-				return isVersionHigherThanLimitForImportPackage(pluginVersion);
+				return isVersionHigherThanLimitForImportPackage(camelCoreVersionFromProperty);
 			}
+			return isVersionHigherThanLimitForImportPackage(pluginVersion);
 		} catch(IllegalArgumentException e){
-			Activator.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, "The version of camel-core has not been resolved correctly.", e));
+			Activator.log(new Status(IStatus.INFO, Activator.PLUGIN_ID, Messages.ImportExportPackageUpdater_UnresolvedCamelCoreVersion, e));
 			return true;
 		}
 	}
@@ -227,9 +223,9 @@ public class ImportExportPackageUpdater {
 		Plugin plugin = pluginsByName.get(ORG_APACHE_FELIX+":"+MAVEN_BUNDLE_PLUGIN); //$NON-NLS-1$
 		if (plugin == null) {
 			plugin = new Plugin();
-			plugin.setGroupId(ORG_APACHE_FELIX); //$NON-NLS-1$
-			plugin.setArtifactId(MAVEN_BUNDLE_PLUGIN); //$NON-NLS-1$
-			plugin.setVersion(MAVEN_BUNDLE_PLUGIN_VERSION); //$NON-NLS-1$
+			plugin.setGroupId(ORG_APACHE_FELIX);
+			plugin.setArtifactId(MAVEN_BUNDLE_PLUGIN);
+			plugin.setVersion(MAVEN_BUNDLE_PLUGIN_VERSION);
 			plugin.setExtensions(true);
 			build.addPlugin(plugin);
 		}
@@ -260,14 +256,13 @@ public class ImportExportPackageUpdater {
 		manageExportPkg(instructions);
 	}
 
-	private void manageExportPkg(Xpp3Dom instructions) throws XmlPullParserException, IOException {
+	private void manageExportPkg(Xpp3Dom instructions) {
 		Xpp3Dom exporttPkg = instructions.getChild("Export-Package"); //$NON-NLS-1$
 		if (exporttPkg == null) {
 			//By default, all packages are exported
 			return;
-		} else {
-			manageExportPkgs(exporttPkg);
 		}
+		manageExportPkgs(exporttPkg);
 	}
 
 	private void manageExportPkgs(Xpp3Dom exportPkg) {
@@ -290,7 +285,7 @@ public class ImportExportPackageUpdater {
 
 	private void manageImportPkgs(Xpp3Dom importPkg) {
 		String importPkgs = importPkg.getValue().trim();
-		if (!importPkgs.contains(COM_SUN_EL_VERSION)) { //$NON-NLS-1$
+		if (!importPkgs.contains(COM_SUN_EL_VERSION)) {
 			importPkgs = addELPackage(importPkgs);
 			importPkg.setValue(importPkgs);
 		}
@@ -298,7 +293,7 @@ public class ImportExportPackageUpdater {
 
 	private String addELPackage(String importPkgs) {
 		if(importPkgs == null){
-			importPkgs = "";
+			importPkgs = ""; //$NON-NLS-1$
 		}
 		if (!importPkgs.isEmpty()){
 			importPkgs += ",\n "; //$NON-NLS-1$
@@ -310,7 +305,7 @@ public class ImportExportPackageUpdater {
 		}
 		return importPkgs;
 	}
-	
+
 
 	private String addPackage(String initialPackageList, String packageToAdd) {
 		if(initialPackageList == null){
@@ -319,12 +314,10 @@ public class ImportExportPackageUpdater {
 		if(!Arrays.asList(initialPackageList.split(",")).contains(packageToAdd)){ //$NON-NLS-1$
 			if(initialPackageList.isEmpty()){
 				return packageToAdd;
-			} else {
-				return initialPackageList + ",\n " + packageToAdd; //$NON-NLS-1$
 			}
-		} else {
-			return initialPackageList;
+			return initialPackageList + ",\n " + packageToAdd; //$NON-NLS-1$
 		}
+		return initialPackageList;
 	}
 
 }
