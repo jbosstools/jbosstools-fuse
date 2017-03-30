@@ -93,38 +93,33 @@ public abstract class XformWizardPage extends WizardPage {
     }
 
     public IWizardPage getSourcePage() {
-        if (model.getSourceTypeStr() != null && !model.getSourceTypeStr().trim().isEmpty()) {
-            if (model.getSourceTypeStr().equalsIgnoreCase("java")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+    	String sourceType = model.getSourceTypeStr();
+        if (sourceType != null && !sourceType.trim().isEmpty()) {
+            NewTransformationWizard wizard = (NewTransformationWizard)getWizard();
+            if ("java".equalsIgnoreCase(sourceType)) { //$NON-NLS-1$
                 return wizard.javaSourcePage();
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("xml")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("xml".equalsIgnoreCase(sourceType)) { //$NON-NLS-1$
                 return wizard.xmlSourcePage();
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("json")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("json".equalsIgnoreCase(sourceType)) { //$NON-NLS-1$
                 return wizard.jsonSourcePage();
-            } else if (model.getSourceTypeStr().equalsIgnoreCase("other")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("other".equalsIgnoreCase(sourceType)) { //$NON-NLS-1$
                 return wizard.otherSourcePage();
             }
-
         }
         return null;
     }
 
     public IWizardPage getTargetPage() {
-        if (model.getTargetTypeStr() != null && !model.getTargetTypeStr().trim().isEmpty()) {
-            if (model.getTargetTypeStr().equalsIgnoreCase("java")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+    	String targetType = model.getTargetTypeStr();
+        if (targetType != null && !targetType.trim().isEmpty()) {
+            NewTransformationWizard wizard = (NewTransformationWizard)getWizard();
+            if ("java".equalsIgnoreCase(targetType)) { //$NON-NLS-1$
                 return wizard.javaTargetPage();
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("xml")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("xml".equalsIgnoreCase(targetType)) { //$NON-NLS-1$
                 return wizard.xmlTargetPage();
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("json")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("json".equalsIgnoreCase(targetType)) { //$NON-NLS-1$
                 return wizard.jsonTargetPage();
-            } else if (model.getTargetTypeStr().equalsIgnoreCase("other")) { //$NON-NLS-1$
-                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+            } else if ("other".equalsIgnoreCase(targetType)) { //$NON-NLS-1$
                 return wizard.otherTargetPage();
             }
         }
@@ -167,7 +162,7 @@ public abstract class XformWizardPage extends WizardPage {
     protected void listenForValidationChanges() {
         if (context != null) {
             // get the validation status provides
-            IObservableList bindings = context.getValidationStatusProviders();
+            IObservableList<?> bindings = context.getValidationStatusProviders();
 
             IChangeListener listener = new ValidationChangedListener();
             // register the listener to all bindings
