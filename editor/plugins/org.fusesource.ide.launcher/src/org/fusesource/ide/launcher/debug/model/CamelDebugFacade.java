@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.model;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -436,7 +437,8 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public Set<String> getBreakpoints() {
 		log("getBreakpoints()");
 		try {
-			return (HashSet<String>) mbsc.invoke(this.objectNameDebugger, "getBreakpoints", new Object[] { } , new String[] { }); 
+			Collection<String> breakpoints = (Collection<String>) mbsc.invoke(this.objectNameDebugger, "getBreakpoints", new Object[] { } , new String[] { });
+			return new HashSet<>(breakpoints); 
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -449,7 +451,8 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	@Override
 	public Set<String> getSuspendedBreakpointNodeIds() throws Exception {
 		log("getSuspendedBreakpointsNodeIds()");
-		return (HashSet<String>) mbsc.invoke(this.objectNameDebugger, "getSuspendedBreakpointNodeIds", new Object[] { } , new String[] { }); 
+		Collection<String> suspendedBreakpointNodeIds = (Collection<String>) mbsc.invoke(this.objectNameDebugger, "getSuspendedBreakpointNodeIds", new Object[] { } , new String[] { });
+		return new HashSet<>(suspendedBreakpointNodeIds); 
 	}
 
 	/* (non-Javadoc)

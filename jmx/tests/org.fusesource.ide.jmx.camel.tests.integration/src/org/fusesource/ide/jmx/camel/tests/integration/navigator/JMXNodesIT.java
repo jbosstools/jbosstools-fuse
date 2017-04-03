@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.assertj.core.api.Assertions;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
@@ -52,7 +51,7 @@ public class JMXNodesIT {
 	
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper();
+		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper(JMXNodesIT.class.getSimpleName());
 		projectWithDebugAvailableDeployedHelper.start();
 	}
 	
