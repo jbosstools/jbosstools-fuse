@@ -73,8 +73,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     private ComboViewer transformationIDViewer;
     private Text _camelFilePathText;
 
-    private IProject _project;
-    private IJavaProject _javaProject;
+    private IProject project;
+    private IJavaProject javaProject;
     private IFile _camelConfigFile;
     private CamelConfigBuilder _builder = null;
     private String _transformID = null;
@@ -118,31 +118,31 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 _builder = null;
-                final IResource res = Util.selectCamelResourceFromWorkspace(getShell(), _project);
+                final IResource res = Util.selectCamelResourceFromWorkspace(getShell(), project);
                 if (res != null) {
                     String path = ""; //$NON-NLS-1$
                     try {
                         IPath respath = JavaUtil.getJavaPathForResource(res);
-                        if (_project == null) {
-                            _project = res.getProject();
-                            _javaProject = JavaCore.create(_project);
+                        if (project == null) {
+                            project = res.getProject();
+                            javaProject = JavaCore.create(project);
                         }
-                        if (_javaProject != null) {
-                            IFolder srcFolder = _javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
-                            IPackageFragmentRoot root = _javaProject.getPackageFragmentRoot(srcFolder);
+                        if (javaProject != null) {
+                            IFolder srcFolder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
+                            IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
                             initContainerPage(root);
                         }
-                        IFile camelConfigFile = (IFile) _project.findMember(respath);
+                        IFile camelConfigFile = (IFile) project.findMember(respath);
                         if (camelConfigFile == null) {
                             IPath newrespath = new Path("src/main/resources/").append(respath); //$NON-NLS-1$
-                            camelConfigFile = (IFile) _project.findMember(newrespath);
+                            camelConfigFile = (IFile) project.findMember(newrespath);
                         }
                         if (camelConfigFile != null) {
                             path = respath.makeRelative().toString();
                             _camelFilePath = camelConfigFile.getProjectRelativePath().toPortableString();
                             File file = new File(camelConfigFile.getLocationURI());
                             boolean isValid = CamelFileTypeHelper
-                                    .isSupportedCamelFile(_project, _camelFilePath);
+                                    .isSupportedCamelFile(project, _camelFilePath);
                             if (isValid) {
                                 _builder = new CamelConfigBuilder(file);
                                 _camelFileSelectedStatus = Status.OK_STATUS;
@@ -245,23 +245,24 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     }
 
     private ICompilationUnit createJavaClass(String packageName,
-            String className, IJavaProject project) {
+                                             String className) {
         try {
             boolean isSpring = CamelFileTypeHelper
-                    .isSpringFile(project.getProject(), _camelFilePath);
+                    .isSpringFile(project, _camelFilePath);
             boolean isBlueprint = CamelFileTypeHelper
-                    .isBlueprintFile(project.getProject(),_camelFilePath);
+                    .isBlueprintFile(project,_camelFilePath);
 
             if (!isSpring && !isBlueprint) {
                 // obviously we're not dealing with a camel file here
                 return null;
             }
 
-            if (isBlueprint) updateMavenDependencies(getRequiredBlueprintTestDependencies(project.getProject()));
-            else updateMavenDependencies(getRequiredSpringTestDependencies(project.getProject()));
+            List<Dependency> dependencies = isBlueprint ? getRequiredBlueprintTestDependencies(project)
+            											: getRequiredSpringTestDependencies(project);
+            new MavenUtils().updateMavenDependencies(dependencies, project);
 
             // refresh the project in case we added dependencies
-            project.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+            project.refreshLocal(IProject.DEPTH_INFINITE, null);
             // Ensure build of Java classes has completed
             try {
                 Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
@@ -272,9 +273,9 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             if (getPackageFragmentRoot() != null) {
                 srcPath = getPackageFragmentRoot().getPath().makeAbsolute();
                 srcPath = srcPath.removeFirstSegments(1);
-                IFolder folder = _javaProject.getProject().getFolder(srcPath);
-                if (!JavaUtil.findFolderOnProjectClasspath(_javaProject, folder)) {
-                    JavaUtil.addFolderToProjectClasspath(_javaProject, folder);
+                IFolder folder = javaProject.getProject().getFolder(srcPath);
+                if (!JavaUtil.findFolderOnProjectClasspath(javaProject, folder)) {
+                    JavaUtil.addFolderToProjectClasspath(javaProject, folder);
                 }
                 if (!folder.exists()) {
                     try {
@@ -285,9 +286,9 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 }
 
             } else {
-                IFolder folder = _javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
+                IFolder folder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
                 if (!folder.exists()) {
-                    IFolder srcFolder = _javaProject.getProject().getFolder("src"); //$NON-NLS-1$
+                    IFolder srcFolder = javaProject.getProject().getFolder("src"); //$NON-NLS-1$
                     if (!srcFolder.exists()) {
                         srcFolder.create(true,  true,  null);
                     }
@@ -300,20 +301,20 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                         javaFolder.create(true,  true,  null);
                     }
                 }
-                if (!JavaUtil.findFolderOnProjectClasspath(_javaProject, folder)) {
-                    JavaUtil.addFolderToProjectClasspath(_javaProject, folder);
+                if (!JavaUtil.findFolderOnProjectClasspath(javaProject, folder)) {
+                    JavaUtil.addFolderToProjectClasspath(javaProject, folder);
                 }
                 srcPath = folder.getProjectRelativePath();
             }
 
-            IFolder srcFolder = project.getProject().getFolder(srcPath);
+            IFolder srcFolder = project.getFolder(srcPath);
             if (srcFolder == null || !srcFolder.exists()) {
-                srcPath = project.getPath().append(
-                        srcPath.makeRelativeTo(project.getProject()
+                srcPath = javaProject.getPath().append(
+                        srcPath.makeRelativeTo(project
                                 .getLocation()));
-                srcFolder = project.getProject().getFolder(srcPath);
+                srcFolder = project.getFolder(srcPath);
             }
-            IPackageFragmentRoot root = project.getPackageFragmentRoot(srcFolder);
+            IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
             if (packageName == null) {
                 packageName = ""; //$NON-NLS-1$
             }
@@ -324,7 +325,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 StringBuilder clsContent = new StringBuilder();
 
                 String filePath = getCamelFilePath();
-                IResource res = project.getProject().findMember(filePath);
+                IResource res = project.findMember(filePath);
                 IPath respath = JavaUtil.getJavaPathForResource(res);
                 filePath = respath.makeRelative().toString();
 
@@ -349,20 +350,9 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         return null;
     }
 
-    /**
-     * Checks if we need to add a maven dependency for the chosen component and inserts it into the pom.xml if needed.
-     *
-     * @param compDeps
-     * @throws CoreException
-     */
-    public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
-    	new MavenUtils().updateMavenDependencies(compDeps);
-    }
-
     @Override
     public void createType(IProgressMonitor monitor) {
-        ICompilationUnit createdClass =
-                createJavaClass(getPackageText(), getTypeName(), _javaProject);
+        ICompilationUnit createdClass = createJavaClass(getPackageText(), getTypeName());
         if (createdClass != null) {
             _generatedClassResource = createdClass.getResource();
         }
@@ -425,20 +415,20 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     }
 
     public IProject getProject() {
-        return _project;
+        return project;
     }
 
     public void setProject(IProject project) {
-        this._project = project;
+        this.project = project;
     }
 
     @Override
     public IJavaProject getJavaProject() {
-        return _javaProject;
+        return javaProject;
     }
 
     public void setJavaProject(IJavaProject javaProject) {
-        this._javaProject = javaProject;
+        this.javaProject = javaProject;
     }
 
     public IFile getDozerConfigFile() {
@@ -484,12 +474,13 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             }
         }
 
-        if (fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null
-                || fPackageStatus.getMessage().trim().isEmpty())) {
-            // override this particular case, since the default package is ok, though not great
-            fPackageStatus = new StatusInfo(NONE, null);
-        } else if (fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null
-                && fPackageStatus.getMessage().contains("default package is discouraged")) { //$NON-NLS-1$
+        boolean defaultPkg = fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null
+            				 || fPackageStatus.getMessage().trim().isEmpty());
+        if (!defaultPkg) {
+        	defaultPkg = fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null
+                		 && fPackageStatus.getMessage().contains("default package is discouraged"); //$NON-NLS-1$
+        }
+        if (defaultPkg) {
             // override this particular case, since the default package is ok, though not great
             fPackageStatus = new StatusInfo(NONE, null);
         }
