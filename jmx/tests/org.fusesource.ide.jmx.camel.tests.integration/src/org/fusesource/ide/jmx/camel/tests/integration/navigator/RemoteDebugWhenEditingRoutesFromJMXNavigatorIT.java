@@ -46,7 +46,7 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	
 	@Before
 	public void setup() throws Exception {
-		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper();
+		projectWithDebugAvailableDeployedHelper = new ProjectWithDebugAvailableDeployedHelper(RemoteDebugWhenEditingRoutesFromJMXNavigatorIT.class.getSimpleName());
 		projectWithDebugAvailableDeployedHelper.start();
 	}
 	

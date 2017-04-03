@@ -13,8 +13,6 @@ package org.fusesource.ide.launcher.ui.tests.integration.tabs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -22,7 +20,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationPresentationManager;
 import org.eclipse.debug.internal.ui.launchConfigurations.LaunchConfigurationTabGroupWrapper;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
-import org.eclipse.equinox.internal.security.storage.friends.IStorageConstants;
+import org.fusesource.ide.camel.tests.util.MasterPasswordDisabler;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.junit.After;
 import org.junit.Before;
@@ -30,24 +28,17 @@ import org.junit.Test;
 
 public abstract class AbstractLaunchConfigurationTabGroupIT {
 	
-	private String initialValue;
+	private MasterPasswordDisabler masterPasswordDisabler;
 	
 	@Before
 	public void setup(){
-		//it avoids to have Master Security Password popup
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode("org.eclipse.equinox.security");
-		initialValue = node.get(IStorageConstants.DISABLED_PROVIDERS_KEY, "");
-		node.put(IStorageConstants.DISABLED_PROVIDERS_KEY, "org.eclipse.equinox.security.ui.defaultpasswordprovider");
+		masterPasswordDisabler = new MasterPasswordDisabler();
+		masterPasswordDisabler.setup();
 	}
 	
 	@After
 	public void tearDown(){
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode("org.eclipse.equinox.security");
-		if(initialValue.isEmpty()){
-			node.remove(IStorageConstants.DISABLED_PROVIDERS_KEY);
-		} else {
-			node.put(IStorageConstants.DISABLED_PROVIDERS_KEY, initialValue);
-		}
+		masterPasswordDisabler.tearDown();
 	}
 
 	@Test
