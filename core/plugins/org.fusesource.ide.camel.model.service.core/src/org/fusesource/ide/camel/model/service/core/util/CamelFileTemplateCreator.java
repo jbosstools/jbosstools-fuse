@@ -99,7 +99,7 @@ public class CamelFileTemplateCreator {
 	 * @return
 	 */
 	String getSpringStubText() {
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<beans xmlns=\"http://www.springframework.org/schema/beans\"\n");
 		sb.append("       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd\">\n");
@@ -115,7 +115,7 @@ public class CamelFileTemplateCreator {
 	 * @return
 	 */
 	String getBlueprintStubText() {
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n");
 		sb.append("		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
@@ -137,7 +137,7 @@ public class CamelFileTemplateCreator {
 	 * @return
 	 */
 	String getRoutesStubText() {
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<routes xmlns=\"http://camel.apache.org/schema/spring\">\n");
 		sb.append("</routes>\n");

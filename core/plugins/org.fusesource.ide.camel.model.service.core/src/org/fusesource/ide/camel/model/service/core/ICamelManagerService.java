@@ -13,20 +13,19 @@ package org.fusesource.ide.camel.model.service.core;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 
 public interface ICamelManagerService {
 
 	public static final String CAMEL_VERSION_PROPERTY = "camel.version"; //$NON-NLS-1$
 
 	/**
-	 * creates and returns the camel model for a specific version
+	 * creates and returns the camel model for a specific version and karaf runtime 
 	 * 
-	 * @return	the camel model
-	 * @deprecated Please use getCamelModel(String runtimeProvider) in future!
+	 * @param camelVersion the camel version to load
+	 * @return	the camel model using karaf runtime provider
 	 */
-	@Deprecated	
-	CamelModel getCamelModel();
+	CamelModel getCamelModel(String camelVersion);
 	
 	/**
 	 * creates and returns the camel model for a specific version and runtime
@@ -34,7 +33,7 @@ public interface ICamelManagerService {
 	 * @param runtimeProvider	the name of the runtime provider
 	 * @return	the camel model
 	 */
-	CamelModel getCamelModel(String runtimeProvider);
+	CamelModel getCamelModel(String camelVersion, String runtimeProvider);
 	
 	/**
 	 * returns the schema provider 

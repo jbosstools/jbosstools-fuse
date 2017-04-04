@@ -10,8 +10,11 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.properties.creators;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractFileParameterPropertyUICreator;
@@ -22,8 +25,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -41,9 +42,9 @@ public class FileParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		parameter.setJavaType(File.class.getName());
 		parameter.setKind("parameter");
 		eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 	}
 
 	@Test

@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.LanguageUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -534,17 +533,14 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 			return false;
 		}
 		
-		String cv = CamelModelFactory.getCamelVersion(node.getCamelFile().getResource().getProject());
-		if (cv != null) {
-			// not initialized yet
-			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(cv);
-			if (svc != null) {
-				String ex = svc.testExpression(combo_language.getText().trim(), text_condition.getText());
-				if (ex != null && !ex.contains("No language could be found for:")) {
-					setErrorMessage("Condition Error: " + ex);
-					if (getButton(OK) != null) getButton(OK).setEnabled(false);
-					return false;
-				}
+		// not initialized yet
+		ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(CamelServiceManagerUtil.DEFAULT_SERVICE);
+		if (svc != null) {
+			String ex = svc.testExpression(combo_language.getText().trim(), text_condition.getText());
+			if (ex != null && !ex.contains("No language could be found for:")) {
+				setErrorMessage("Condition Error: " + ex);
+				if (getButton(OK) != null) getButton(OK).setEnabled(false);
+				return false;
 			}
 		}
 

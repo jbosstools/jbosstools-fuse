@@ -24,7 +24,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IRuntime;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Before;
@@ -91,7 +91,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 	private void checkBomVersion() throws CoreException {
 		IMavenProjectFacade mavenProjectFacade = MavenPlugin.getMavenProjectRegistry().getProject(project);
 		MavenProject mavenProject = mavenProjectFacade.getMavenProject(new NullProgressMonitor());
-		assertThat(mavenProject.getProperties().getProperty("jboss.fuse.bom.version")).isEqualTo(CamelModelFactory.getFuseVersionForCamelVersion(camelVersion));
+		assertThat(mavenProject.getProperties().getProperty("jboss.fuse.bom.version")).isEqualTo(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 		
 	}
 
@@ -99,5 +99,4 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
 		// not the purpose of this test
 	}
-	
 }

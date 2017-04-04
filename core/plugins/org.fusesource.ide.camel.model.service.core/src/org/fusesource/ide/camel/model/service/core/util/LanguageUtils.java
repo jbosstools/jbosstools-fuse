@@ -11,9 +11,9 @@
 
 package org.fusesource.ide.camel.model.service.core.util;
 
-import java.util.List;
+import java.util.Collection;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
@@ -29,7 +29,7 @@ public class LanguageUtils {
 	 * @return
 	 */
 	public static String[] languageArray(CamelFile camelFile) {
-		List<Language> languages = camelFile.getCamelModel().getLanguageModel().getSupportedLanguages();
+		Collection<Language> languages = camelFile.getCamelModel().getLanguages();
 		return languages.stream().map(Language::getName).toArray(String[]::new);
 	}
 
@@ -39,7 +39,7 @@ public class LanguageUtils {
 	 * @return the name and languages array available with the latest version of Camel embedded.
 	 */
 	public static String[][] nameAndLanguageArray() {
-		List<Language> languages = CamelModelFactory.getModelForProject(null).getLanguageModel().getSupportedLanguages();
+		Collection<Language> languages = CamelCatalogCacheManager.getInstance().getDefaultCamelCatalog().getLanguages();
 		return languages.stream()
 				.map(lang -> new String[] { lang.getTitle(), lang.getName() })
 				.toArray(String[][]::new);

@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,14 +36,15 @@ import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEdit
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Before;
@@ -79,12 +81,12 @@ public class NewDataFormatWizardIT {
 	
 	@Parameters(name = "{0} - {1}")
 	public static Collection<Object[]> data() {
-		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
+		List<String> supportedCamelVersions = Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
 		Assertions.assertThat(supportedCamelVersions).hasSize(CURRENTLY_SHIPPED_MODEL_BUNDLES);
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
-			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
-			List<DataFormat> supportedDataFormats = camelModel.getDataformatModel().getSupportedDataFormats();
+			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+			Collection<DataFormat> supportedDataFormats = camelModel.getDataFormats();
 			Stream<Object[]> stream = supportedDataFormats.stream().map(dataFormat -> new Object[] { camelVersion, dataFormat.getName(), dataFormat });
 			res.addAll(stream.collect(Collectors.toCollection(HashSet::new)));
 		}
@@ -101,9 +103,9 @@ public class NewDataFormatWizardIT {
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
 		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + project.getName());
 
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
 
-		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel.getDataformatModel());
+		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel);
 		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id);
 		new CamelGlobalConfigEditor(null).addDataFormat(camelFile, dataFormatNode);
 		

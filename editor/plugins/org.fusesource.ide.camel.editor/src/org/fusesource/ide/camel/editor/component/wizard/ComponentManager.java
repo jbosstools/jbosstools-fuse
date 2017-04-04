@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 
 /**
  * @author Aurelien Pupier
@@ -28,18 +28,18 @@ public class ComponentManager {
 
 	private Map<String, Set<Component>> tagMap = new HashMap<>();
 	private Set<Component> noTagComponents = new HashSet<>();
-	private ComponentModel componentModel;
+	private CamelModel model;
 
-	public ComponentManager(ComponentModel componentModel) {
-		this.componentModel = componentModel;
-		initTagMap(componentModel);
+	public ComponentManager(CamelModel model) {
+		this.model = model;
+		initTagMap(model);
 	}
 
 	/**
-	 * @param componentModel
+	 * @param model
 	 */
-	private void initTagMap(ComponentModel componentModel) {
-		for (Component component : componentModel.getSupportedComponents()) {
+	private void initTagMap(CamelModel model) {
+		for (Component component : model.getComponents()) {
 			final List<String> componentTags = component.getTags();
 			if (componentTags == null || componentTags.isEmpty()) {
 				noTagComponents.add(component);
@@ -72,7 +72,7 @@ public class ComponentManager {
 	}
 
 	public Set<Component> getAllComponents() {
-		return new HashSet<>(componentModel.getSupportedComponents());
+		return new HashSet<>(model.getComponents());
 	}
 
 }

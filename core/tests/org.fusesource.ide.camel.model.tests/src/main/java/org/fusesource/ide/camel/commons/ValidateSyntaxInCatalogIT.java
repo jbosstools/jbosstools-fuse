@@ -17,12 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Test;
 
@@ -63,17 +64,11 @@ public class ValidateSyntaxInCatalogIT {
 	@Test
 	public void checkComponentSyntaxAreValid() throws Exception {
 		StringBuilder sb = new StringBuilder();
-		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
+		List<String> supportedCamelVersions = Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
 		// TODO: update when a new version is added
-		assertThat(supportedCamelVersions).contains("2.15.1.redhat-621084", 
-													"2.15.1.redhat-621117",
-													"2.17.0.redhat-630187",
-													"2.17.3",
-													"2.18.1.redhat-000012",
-													"2.18.1.redhat-000015");
-		
-		checkForRuntimeProvider(sb, supportedCamelVersions, CamelModelFactory.RUNTIME_PROVIDER_KARAF);
-		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000015"), CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT);
+		assertThat(supportedCamelVersions).contains(CamelCatalogUtils.getLatestCamelVersion());
+		checkForRuntimeProvider(sb, supportedCamelVersions, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000012"), CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		if (sb.length() != 0) {
 			fail(sb.toString());
 		}
@@ -82,9 +77,9 @@ public class ValidateSyntaxInCatalogIT {
 
 	private void checkForRuntimeProvider(StringBuilder sb, List<String> supportedCamelVersions, String runtimeProvider) {
 		for (String camelVersion : supportedCamelVersions) {
-			CamelModel camelModel = CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider);
-			for (Component component : camelModel.getComponentModel().getSupportedComponents()) {
-				for (Parameter param : new ArrayList<>(component.getUriParameters())) {
+			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, runtimeProvider);
+			for (Component component : camelModel.getComponents()) {
+				for (Parameter param : new ArrayList<>(component.getParameters())) {
 					AbstractCamelModelElement selectedEP = new CamelEndpoint(component.getSyntax());
 					// doReturn(camelFile).when(selectedEP).getCamelFile();
 					// when(camelFile.getResource().getProject()).thenReturn(project);

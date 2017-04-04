@@ -19,8 +19,8 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -256,12 +256,12 @@ public class CamelConfigBuilder {
 	public Eip getEipByName(String name) {
 		IResource resource = getModel().getResource();
 		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForProject(resource != null ? resource.getProject() : null);
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource != null ? resource.getProject() : null);
 		if (model == null) {
 			return null;
 		}
 		// then we get the eip meta model
-		Eip eip = model.getEipModel().getEIPByName(name);
+		Eip eip = model.getEip(name);
 		// and return it
 		return eip;
 	}

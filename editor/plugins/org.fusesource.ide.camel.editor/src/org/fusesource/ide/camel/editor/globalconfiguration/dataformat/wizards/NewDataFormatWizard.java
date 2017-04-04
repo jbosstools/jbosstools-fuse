@@ -23,8 +23,8 @@ import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizar
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
-import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Element;
 
@@ -33,15 +33,15 @@ import org.w3c.dom.Element;
  */
 public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTypeWizard {
 
-    private DataFormatModel dfModel;
+    private CamelModel model;
 	private Element dataformatNode;
 
 	private DataFormatSelectionPage dataFormatSelectionPage;
 	private DataFormat dataformatSelected;
 	private CamelFile camelFile;
 
-	public NewDataFormatWizard(CamelFile camelFile, DataFormatModel dfModel) {
-		this.dfModel = dfModel;
+	public NewDataFormatWizard(CamelFile camelFile, CamelModel model) {
+		this.model = model;
 		this.camelFile = camelFile;
 	}
 
@@ -60,7 +60,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	@Override
 	public void addPages() {
 		super.addPages();
-		this.dataFormatSelectionPage = new DataFormatSelectionPage(dfModel);
+		this.dataFormatSelectionPage = new DataFormatSelectionPage(model);
 		addPage(dataFormatSelectionPage);
 	}
 

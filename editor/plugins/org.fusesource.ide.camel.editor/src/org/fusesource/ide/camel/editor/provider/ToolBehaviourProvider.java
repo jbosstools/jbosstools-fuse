@@ -73,12 +73,13 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.validation.ValidationFactory;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -703,9 +704,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	private String determineRuntimeProvider() {
 		CamelDesignEditor editor = CamelUtils.getDiagramEditor(getDiagramTypeProvider());
 		if(editor != null){
-			return CamelModelFactory.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor());
+			return CamelCatalogUtils.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor());
 		}
-		return CamelModelFactory.RUNTIME_PROVIDER_KARAF;
+		return CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
 	}
 
 	/**
@@ -720,10 +721,10 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		// inject palette entries generated out of the component model file
 		CamelDesignEditor editor = CamelUtils.getDiagramEditor(getDiagramTypeProvider());
 		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
-		String runtimeprovider = editor != null ? CamelModelFactory.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor()) : CamelModelFactory.RUNTIME_PROVIDER_KARAF;
+		String runtimeprovider = editor != null ? CamelCatalogUtils.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor()) : CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
 
-		ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion, runtimeprovider).getComponentModel();
-		for (Component component : componentModel.getSupportedComponents()) {
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, runtimeprovider);
+		for (Component component : model.getComponents()) {
 			if (shouldBeIgnored(component.getSchemeTitle()))
 				continue;
 			ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);

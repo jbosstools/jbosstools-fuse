@@ -17,8 +17,8 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
@@ -58,7 +58,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 	}
 
 	private String computeArtifactId(String runtimeProvider) {
-		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+		if(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
 			return CAMEL_DOZER_STARTER;
 		} else {
 			return CAMEL_DOZER;

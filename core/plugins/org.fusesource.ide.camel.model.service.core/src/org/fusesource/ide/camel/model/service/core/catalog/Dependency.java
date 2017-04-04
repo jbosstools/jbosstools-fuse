@@ -10,14 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.catalog;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * @author lhein
  */
-@XmlRootElement(name = "dependency")
 public class Dependency {
+
 	private String groupId;
 	private String artifactId;
 	private String version;
@@ -25,7 +22,6 @@ public class Dependency {
 	/**
 	 * @return the groupId
 	 */
-	@XmlElement(name = "groupId")
 	public String getGroupId() {
 		return this.groupId;
 	}
@@ -40,7 +36,6 @@ public class Dependency {
 	/**
 	 * @return the artifactId
 	 */
-	@XmlElement(name = "artifactId")
 	public String getArtifactId() {
 		return this.artifactId;
 	}
@@ -55,7 +50,6 @@ public class Dependency {
 	/**
 	 * @return the version
 	 */
-	@XmlElement(name = "version")
 	public String getVersion() {
 		return this.version;
 	}

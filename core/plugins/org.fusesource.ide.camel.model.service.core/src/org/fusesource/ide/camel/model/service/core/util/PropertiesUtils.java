@@ -31,9 +31,6 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
-import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
-import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -50,7 +47,7 @@ public class PropertiesUtils {
 	public static final Pattern PATH_DELIMETER = Pattern.compile(":|/");
 
 	public static Parameter getUriParam(String name, Component c) {
-		return getUriParam(name, c.getUriParameters());
+		return getUriParam(name, c.getParameters());
 	}
 
 	public static Parameter getUriParam(String name, List<Parameter> uriParams) {
@@ -64,7 +61,7 @@ public class PropertiesUtils {
 
 	public static Component getComponentFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
 			if (protocolSeparatorIdx != -1) {
 				return CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -103,7 +100,7 @@ public class PropertiesUtils {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null && componentModel != null) {
 			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
-				for (Parameter p : componentModel.getUriParameters()) {
+				for (Parameter p : componentModel.getParameters()) {
 					if ("path".equalsIgnoreCase(p.getKind())) {
 						result.add(p);
 					}
@@ -121,7 +118,7 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP, UriParameterKind kind) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -142,7 +139,7 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getPropertiesFor(UriParameterKind kind, Component componentModel) {
 		List<Parameter> result = new ArrayList<>();
-		for (Parameter p : componentModel.getUriParameters()) {
+		for (Parameter p : componentModel.getParameters()) {
 			if (kind == UriParameterKind.CONSUMER) {
 				if (p.getLabel() != null && containsLabel("consumer", p)) {
 					result.add(p);
@@ -167,13 +164,13 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getComponentPropertiesFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
 						selectedEP.getCamelFile());
 				if (componentModel != null) {
-					return componentModel.getUriParameters();
+					return componentModel.getParameters();
 				}
 			}
 		}
@@ -194,7 +191,7 @@ public class PropertiesUtils {
 			return false;
 
 		String pLabelString = p.getLabel();
-		if (pLabelString.indexOf(',') != -1) {
+		if (pLabelString.indexOf(",") != -1) {
 			String[] labels = pLabelString.split(",");
 			for (String lab : labels) {
 				if (lab.trim().equalsIgnoreCase(label))
@@ -214,7 +211,7 @@ public class PropertiesUtils {
 	 * @return
 	 */
 	public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP) {
-		ArrayList<Parameter> result = new ArrayList<>();
+		List<Parameter> result = new ArrayList<>();
 
 		if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
 			Eip eip = selectedEP.getUnderlyingMetaModelObject();
@@ -249,7 +246,7 @@ public class PropertiesUtils {
 			// ? char
 		} else if ("path".equalsIgnoreCase(kind)) {
 			// first get the delimiters
-			String delimiters = getDelimitersAsString(c.getSyntax(), c.getUriParameters());
+			String delimiters = getDelimitersAsString(c.getSyntax(), c.getParameters());
 			
 			// now get the uri without scheme and options
 			String uri = uriParameterValue.substring(uriParameterValue.indexOf(':') + 1,
@@ -276,17 +273,20 @@ public class PropertiesUtils {
 		String pathParameters = null;
 		if(uriParameterValue.lastIndexOf('?') != -1){
 			String parameters = uriParameterValue.substring(uriParameterValue.lastIndexOf('?') +1, uriParameterValue.length());
-			ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(CamelModelFactory.getCamelVersion(selectedEP.getCamelFile().getResource().getProject()));
 			try {
-				Map<String, Object> parseQuery = svc.parseQuery(parameters);
-				for (Parameter componentParameter : c.getUriParameters()) {
+				Map<String, Object> parseQuery = URISupport.parseQuery(parameters);
+				for (Parameter componentParameter : c.getParameters()) {
 					String componentParameterName = componentParameter.getName();
 					if(parseQuery.containsKey(componentParameterName)){
 						parseQuery.remove(componentParameterName);
 					}
 				}
-				if(!parseQuery.isEmpty()){
-					pathParameters = svc.createQuery(parseQuery);
+				Map<String,String> parseQueryStrings = new HashMap<>();				
+				for (String key : parseQuery.keySet()) {
+					parseQueryStrings.put(key, parseQuery.get(key).toString());
+				}
+				if(!parseQuery.isEmpty() && !parseQueryStrings.isEmpty()) {
+					pathParameters = URISupport.createQueryString(parseQueryStrings, "&amp;", true);
 				}
 			} catch (URISyntaxException e) {
 				CamelModelServiceCoreActivator.pluginLog().logError(e);
@@ -429,10 +429,6 @@ public class PropertiesUtils {
 		if (CamelComponentUtils.isNumberProperty(p)) {
 			return val;
 		}
-		
-		if (CamelComponentUtils.isCharProperty(p)){
-			return val;
-		}
 
 		return null;
 	}
@@ -446,13 +442,13 @@ public class PropertiesUtils {
 	public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap<?,?> modelMap) {
 		if ("path".equalsIgnoreCase(p.getKind())) {
 			// simply rebuild the uri
-			String newUri;
+			String newUri = "";
 
 			// first build the path part
 			newUri = updatePathParams(selectedEP, c, c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
 
 			// now build the options
-			for (Parameter uriParam : c.getUriParameters()) {
+			for (Parameter uriParam : c.getParameters()) {
 				if ("path".equalsIgnoreCase(uriParam.getKind()))
 					continue;
 				String pName = uriParam.getName();
@@ -485,7 +481,7 @@ public class PropertiesUtils {
 			if (val != null && idx != -1) {
 				// special replace logic needed as special expression chars can
 				// break the replacement
-				String newUri;
+				String newUri = "";
 				boolean firstParam = idx == -1 || uri.charAt(idx - 1) == '?';
 				if (valueDeleted) {
 					newUri = uri.substring(0, firstParam ? idx : idx - 1);
@@ -497,16 +493,16 @@ public class PropertiesUtils {
 				if (newUri.indexOf("?&") != -1)
 					newUri = newUri.replace("?&", "?");
 				if (newUri.endsWith("?"))
-					newUri = newUri.substring(0, newUri.indexOf('?'));
+					newUri = newUri.substring(0, newUri.indexOf("?"));
 				selectedEP.setParameter("uri", newUri);
 			} else {
 				String newUri = uri;
 				if (!valueDeleted) {
 					if (uri.indexOf('?') == -1) {
-						newUri += "?";
+						newUri += '?';
 					}
 					if (uri.indexOf('=') != -1) {
-						newUri += "&";
+						newUri += '&';
 					}
 					newUri += String.format("%s=%s", p.getName(), value.toString());
 				}
@@ -705,11 +701,8 @@ public class PropertiesUtils {
 	 * @return
 	 */
 	public static boolean validateDuration(String value) throws IllegalArgumentException {
-		ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(getCurrentProjectCamelVersion());
-		if (svc == null)
-			return false;
 		// try to convert to millis which will throw exception on error
-		svc.durationToMillis(value);
+		TimePatternConverter.toMilliSeconds(value);
 		return true;
 	}
 
@@ -721,10 +714,10 @@ public class PropertiesUtils {
 	 * @return
 	 */
 	public static String getCurrentProjectCamelVersion() {
-		String camelVersion = CamelModelFactory.getLatestCamelVersion();
+		String camelVersion = CamelCatalogUtils.DEFAULT_CAMEL_VERSION;
 		IProject wsProject = CamelUtils.getCurrentProject();
 		if (wsProject != null) {
-			camelVersion = CamelModelFactory.getCamelVersion(wsProject);
+			camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(wsProject);
 		}
 		return camelVersion;
 	}

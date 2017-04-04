@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
@@ -92,7 +92,7 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && !CamelModelFactory.isPureFISVersion(camelVersion)){
+					if(isMavenPropertyFuseBomVersionSet(properties) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
 						dep.setVersion(null);
 					} else if(isMavenPropertyCamelVersionSet(properties)){
 						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
@@ -171,12 +171,12 @@ public class MavenUtils {
 	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion) {
 		Properties properties = mavenModel.getProperties();
 		if(isMavenPropertyFuseBomVersionSet(properties)){
-			properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelModelFactory.getFuseVersionForCamelVersion(camelVersion));
+			properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 		} else {
 			if(mavenModel.getDependencyManagement() != null){
 				for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
 					if(ORG_JBOSS_FUSE_BOM.equals(dependency.getGroupId()) && JBOSS_FUSE_PARENT.equals(dependency.getArtifactId())){
-						dependency.setVersion(CamelModelFactory.getFuseVersionForCamelVersion(camelVersion));
+						dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 						return;
 					}
 				}

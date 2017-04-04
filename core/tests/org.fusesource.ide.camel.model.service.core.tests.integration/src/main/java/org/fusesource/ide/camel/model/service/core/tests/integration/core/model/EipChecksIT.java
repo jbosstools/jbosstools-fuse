@@ -13,15 +13,16 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.model
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -44,11 +45,11 @@ public class EipChecksIT {
 	@Parameters(name = "{0} {1}")
 	public static Collection<String[]> params() {
 		Collection<String[]> params = new HashSet<>();
-		List<String> supportedCamelVersions = CamelModelFactory.getSupportedCamelVersions();
+		List<String> supportedCamelVersions = Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
 		for (String supportedCamelVersion : supportedCamelVersions) {
-			params.add(new String[]{supportedCamelVersion, CamelModelFactory.RUNTIME_PROVIDER_KARAF});
+			params.add(new String[]{supportedCamelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF});
 			if (supportedCamelVersion.compareTo("2.18") > 1) {
-				params.add(new String[]{supportedCamelVersion, CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT});
+				params.add(new String[]{supportedCamelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT});
 			}
 		}
 		return params;
@@ -71,7 +72,7 @@ public class EipChecksIT {
 	
 	@Test
 	public void testWireTapCanBeChildOfAllContainers() throws IOException, CoreException {
-		ArrayList<Eip> eips = CamelModelFactory.getModelForVersion(versionToTest, runtimeProvider).getEipModel().getSupportedEIPs();
+		Collection<Eip> eips = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(versionToTest, runtimeProvider).getEips();
 		for (Eip eip : eips) {
 			if (eip.canHaveChildren() == false || eip.getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) continue;
 			assertThisEIPCanContainThat(versionToTest, eip.getName(), AbstractCamelModelElement.WIRETAP_NODE_NAME);
@@ -79,7 +80,7 @@ public class EipChecksIT {
 	}
 
 	private void assertThisEIPCanContainThat(String camelVersion, String eipContainer, String eipChild){
-		Eip container = CamelModelFactory.getModelForVersion(camelVersion, runtimeProvider).getEipModel().getEIPByName(eipContainer);
+		Eip container = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, runtimeProvider).getEip(eipContainer);
 		assertThat(container.canHaveChildren()).isTrue();
 		assertThat(container.getAllowedChildrenNodeTypes()).describedAs("Container " + eipContainer + " is not defined to allow child of type " + eipChild).contains(eipChild);
 	}

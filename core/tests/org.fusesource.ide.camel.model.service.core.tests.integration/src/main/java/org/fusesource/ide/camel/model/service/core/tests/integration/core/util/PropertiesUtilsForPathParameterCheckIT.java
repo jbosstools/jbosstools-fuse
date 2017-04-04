@@ -23,14 +23,15 @@ import org.eclipse.core.databinding.observable.map.ObservableMap;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -50,9 +51,9 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	public void testWithQuestionMark() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withQuestionMark.xml");
 		
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		final Component rssComponent = camelModel.getComponentModel().getComponentForScheme("rss");
-		Parameter feedUriParameter = rssComponent.getUriParameters().stream().filter(p -> "feedUri".equals(p.getName())).findFirst().get();
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		final Component rssComponent = camelModel.getComponentForScheme("rss");
+		Parameter feedUriParameter = rssComponent.getParameters().stream().filter(p -> "feedUri".equals(p.getName())).findFirst().get();
 		
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, feedUriParameter, rssComponent)).isEqualTo("http://my.url?with=some&param=eter");
 	}
@@ -71,10 +72,10 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testSeveralURiPaths() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameter.xml");
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		final Component linkedinComponent = camelModel.getComponentModel().getComponentForScheme("linkedin");
-		Parameter apiNamePathParameter = linkedinComponent.getUriParameters().stream().filter(p -> "apiName".equals(p.getName())).findFirst().get();
-		Parameter methodNamePathParameter = linkedinComponent.getUriParameters().stream().filter(p -> "methodName".equals(p.getName())).findFirst().get();
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		final Component linkedinComponent = camelModel.getComponentForScheme("linkedin");
+		Parameter apiNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "apiName".equals(p.getName())).findFirst().get();
+		Parameter methodNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "methodName".equals(p.getName())).findFirst().get();
 		
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, apiNamePathParameter, linkedinComponent)).isEqualTo("companies");
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, methodNamePathParameter, linkedinComponent)).isEqualTo("addComment");
@@ -83,15 +84,15 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testStartingWithSlash() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameterStartingWithSlash.xml");
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		final Component ftpsComponent = camelModel.getComponentModel().getComponentForScheme("ftps");
-		Parameter hostPathParameter = ftpsComponent.getUriParameters().stream().filter(p -> "host".equals(p.getName())).findFirst().get();
-		Parameter portPathParameter = ftpsComponent.getUriParameters().stream().filter(p -> "port".equals(p.getName())).findFirst().get();
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		final Component ftpsComponent = camelModel.getComponentForScheme("ftps");
+		Parameter hostPathParameter = ftpsComponent.getParameters().stream().filter(p -> "host".equals(p.getName())).findFirst().get();
+		Parameter portPathParameter = ftpsComponent.getParameters().stream().filter(p -> "port".equals(p.getName())).findFirst().get();
 		
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, hostPathParameter, ftpsComponent)).isEqualTo("//localhost");
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, portPathParameter, ftpsComponent)).isEqualTo("32");
 		
-		PropertiesUtils.updateURIParams(selectedEP, hostPathParameter, "//newlocalhost", ftpsComponent, modelMap(ftpsComponent.getUriParameters()));
+		PropertiesUtils.updateURIParams(selectedEP, hostPathParameter, "//newlocalhost", ftpsComponent, modelMap(ftpsComponent.getParameters()));
 	
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, hostPathParameter, ftpsComponent)).isEqualTo("//newlocalhost");
 	}
@@ -99,9 +100,9 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testWithNotFullyInitializedModelMap() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameterStartingWithSlash.xml");
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		final Component ftpsComponent = camelModel.getComponentModel().getComponentForScheme("ftps");
-		List<Parameter> uriParameters = ftpsComponent.getUriParameters();
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		final Component ftpsComponent = camelModel.getComponentForScheme("ftps");
+		List<Parameter> uriParameters = ftpsComponent.getParameters();
 		Parameter hostPathParameter = uriParameters.stream().filter(p -> "host".equals(p.getName())).findFirst().get();
 		Parameter portPathParameter = uriParameters.stream().filter(p -> "port".equals(p.getName())).findFirst().get();
 		
