@@ -47,8 +47,8 @@ import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -88,14 +88,14 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement logEP = model.findNode("log1");
 		PictogramElement logPE = fp.getPictogramElementForBusinessObject(logEP);
 		
 		// first we try to append a file endpoint to a log endpoint by droping
 		// it on the log endpoint instead of the diagram
-		createConnector(fp, (ContainerShape)logPE, null, metaModel.getComponentModel().getComponentForScheme("file"));
+		createConnector(fp, (ContainerShape)logPE, null, metaModel.getComponentForScheme("file"));
 		AbstractCamelModelElement fileEP = model.findNode("_to1");
 		assertThat(fileEP).isNotNull();
 		assertThat(fileEP.isToEndpoint()).isTrue();
@@ -105,7 +105,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		// then we try to prepend a file endpoint to a log endpoint by droping
 		// it on the log endpoint instead of the diagram (as the output is already
 		// occupied by the earlier file endpoint we now prepend it as input)
-		createConnector(fp, (ContainerShape)logPE, null, metaModel.getComponentModel().getComponentForScheme("file"));
+		createConnector(fp, (ContainerShape)logPE, null, metaModel.getComponentForScheme("file"));
 		AbstractCamelModelElement fromFileEP = model.findNode("_to2");
 		assertThat(fromFileEP).isNotNull();
 		assertThat(fromFileEP.isFromEndpoint()).isTrue();
@@ -124,7 +124,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement inbox = model.findNode("inbox");
 		AbstractCamelModelElement outbox = model.findNode("outbox");
@@ -138,7 +138,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createConnector(fp, 
 						(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
 						con,
-						metaModel.getComponentModel().getComponentForScheme("file"));
+						metaModel.getComponentForScheme("file"));
 		
 		readAndDispatch(20);
 		
@@ -204,12 +204,12 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		assertThat(connections.size()).isEqualTo(1);
 
 		Connection con = connections.get(0);
-		CamelModel metaModel = CamelModelFactory.getModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
 		// now drop another file endpoint onto the connection
 		createConnector(fp, 
 						(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
 						con,
-						metaModel.getComponentModel().getComponentForScheme("file"));
+						metaModel.getComponentForScheme("file"));
 		
 		readAndDispatch(20);
 		
@@ -224,7 +224,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createConnector(fp, 
 				(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
 				connections.get(1),
-				metaModel.getComponentModel().getComponentForScheme("file"));
+				metaModel.getComponentForScheme("file"));
 
 		readAndDispatch(20);
 
@@ -273,7 +273,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer(fp.getDiagramTypeProvider().getDiagram());
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
 		executeCommandInTransactionDomain(createCtx, createRouteFigureFeature);
 		
 		AbstractCamelModelElement createdRoute = model.findNode("_route1");
@@ -295,7 +295,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
@@ -315,7 +315,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("when"));
+		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("when"));
 		assertThat(createWhenFigureFeature.canExecute(createCtx)).isTrue();
 		executeCommandInTransactionDomain(createCtx, createWhenFigureFeature);
 		AbstractCamelModelElement when = model.findNode("_when1");
@@ -339,7 +339,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngLoggraphic.getX());
 		createCtx.setY(exisitngLoggraphic.getY() + exisitngLoggraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(log));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
@@ -357,7 +357,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(1);
 		createCtx.setY(1);
 		createCtx.setTargetContainer(dia);
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isTrue();
 	}
 	
@@ -379,7 +379,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "",  CamelModelFactory.getModelForProject(ed.getWorkspaceProject()).getEipModel().getEIPByName("bean"));
+		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "",  CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("bean"));
 		executeCommandInTransactionDomain(createCtx, createFigureFeature);
 		
 		AbstractCamelModelElement createdBean = model.findNode("_bean1");

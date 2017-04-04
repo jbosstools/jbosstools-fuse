@@ -44,7 +44,7 @@ public class CamelFilesFinder {
 	 */
 	public Set<IFile> findFiles(IResource resource) {
 		Set<IFile> res = new HashSet<>();
-		if (resource instanceof IContainer && resource.exists()) {
+		if (resource instanceof IContainer) {
 			try {
 				IResource[] children = ((IContainer)resource).members();
 				for (IResource f : children) {

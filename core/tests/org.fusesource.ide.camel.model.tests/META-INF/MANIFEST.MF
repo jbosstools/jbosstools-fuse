@@ -10,14 +10,5 @@ Require-Bundle: org.junit,
  org.fusesource.ide.foundation.core;bundle-version="10.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.assertj.core;bundle-version="2.1.0",
- org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012;bundle-version="10.0.0",
- org.fusesource.ide.camel.model.service.v2_18_1_redhat_000015;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.impl;bundle-version="10.0.0",
  org.jboss.tools.locus.mockito;bundle-version="1.9.5"
-
-

@@ -18,8 +18,8 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 
 /**
  * @author lhein
@@ -64,7 +64,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
 	}
 
 	private String computeJMSArtifactId(String runtimeProvider) {
-		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+		if(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
 			return CAMEL_JMS_STARTER;
 		} else {
 			return CAMEL_JMS;

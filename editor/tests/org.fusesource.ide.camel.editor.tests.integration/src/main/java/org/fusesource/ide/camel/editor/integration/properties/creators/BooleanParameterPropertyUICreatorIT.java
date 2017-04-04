@@ -10,7 +10,10 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.properties.creators;
 
-import java.util.ArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -22,8 +25,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -41,10 +42,9 @@ public class BooleanParameterPropertyUICreatorIT extends AbstractParameterProper
 		parameter.setKind("parameter");
 		parameter.setJavaType(Boolean.class.getName());
 		eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
-
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 	}
 
 	@Test

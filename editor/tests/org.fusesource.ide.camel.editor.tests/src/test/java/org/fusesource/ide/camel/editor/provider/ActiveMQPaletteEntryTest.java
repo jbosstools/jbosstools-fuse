@@ -15,8 +15,8 @@ import static org.mockito.Mockito.doReturn;
 
 import java.util.List;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class ActiveMQPaletteEntryTest {
 
 	@Test
 	public void testGetRequiredDependenciesForKarafProvider() throws Exception {
-		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelModelFactory.RUNTIME_PROVIDER_KARAF);
+		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
 		Dependency amqDep = requiredDependencies.get(0);
 		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL);
 		
@@ -46,7 +46,7 @@ public class ActiveMQPaletteEntryTest {
 	
 	@Test
 	public void testGetRequiredDependenciesForSpringBootProvider() throws Exception {
-		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT);
+		List<Dependency> requiredDependencies = activeMQPaletteEntry.getRequiredDependencies(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		
 		Dependency amqDep = requiredDependencies.get(0);
 		assertThat(amqDep.getArtifactId()).isEqualTo(ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER);

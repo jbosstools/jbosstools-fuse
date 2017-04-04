@@ -16,7 +16,6 @@ package org.fusesource.ide.camel.model.service.core.jmx.camel;
  */
 public interface IBacklogTracerHeader {
 
-	@Override
 	String toString();
 
 	void setValue(String value);

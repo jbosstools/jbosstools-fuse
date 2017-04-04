@@ -14,14 +14,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.foundation.core</module>
 		<module>org.fusesource.ide.foundation.ui</module>
 		<module>org.fusesource.ide.camel.model.service.core</module>
-		<module>org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084</module>
-		<module>org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117</module>
-		<module>org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187</module>
-		<module>org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224</module>
-		<module>org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254</module>
-		<module>org.fusesource.ide.camel.model.service.v2_17_3</module>
-		<module>org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012</module>
-		<module>org.fusesource.ide.camel.model.service.v2_18_1_redhat_000015</module>
+		<module>org.fusesource.ide.camel.model.service.impl</module>
 		<module>org.fusesource.ide.camel.validation</module>
 		<module>org.fusesource.ide.cheatsheets</module>
 		<module>org.fusesource.ide.graph</module>

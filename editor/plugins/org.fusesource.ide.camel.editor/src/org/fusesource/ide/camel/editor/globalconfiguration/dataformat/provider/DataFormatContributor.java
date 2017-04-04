@@ -18,9 +18,9 @@ import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.Ne
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
-import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
@@ -37,8 +37,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	@Override
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
 		IProject project = camelFile.getResource().getProject();
-		final DataFormatModel dataformatModel = CamelModelFactory.getModelForProject(project).getDataformatModel();
-		return new NewDataFormatWizard(camelFile, dataformatModel);
+		final CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		return new NewDataFormatWizard(camelFile, model);
 	}
 
 	/* (non-Javadoc)
@@ -67,9 +67,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 		if ("dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode()))) {
 			String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
 			IProject project = camelModelElementToHandle.getCamelFile().getResource().getProject();
-			DataFormatModel dfModel = CamelModelFactory.getModelForProject(project).getDataformatModel();
-
-			return !dfModel.getDataFormatsByModelName(nodeName).isEmpty();
+			CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+			return !model.getDataFormatsByModelName(nodeName).isEmpty();
 		}
 		return false;
 	}

@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,7 +43,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.core.Expression;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
@@ -77,9 +78,7 @@ public class ExpressionDialog extends BaseDialog {
             this.expression = expressionInstance.getExpression();
             languageName = expressionInstance.getLanguage();
         }
-        for (final Language language : CamelModelFactory.getModelForProject(project)
-                                                        .getLanguageModel()
-                                                        .getSupportedLanguages()) {
+        for (final Language language : CamelCatalogCacheManager.getInstance().getCamelModelForProject(project).getLanguages()) {
             final String name = language.getName();
             if (!"bean".equals(name) && !"file".equals(name) && !"sql".equals(name) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 && !"xtokenize".equals(name) && !"tokenize".equals(name) //$NON-NLS-1$ //$NON-NLS-2$

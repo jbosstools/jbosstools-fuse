@@ -14,8 +14,8 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
@@ -49,22 +49,22 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
 	}
 
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel()
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String, java.lang.String)
      */
     @Override
-    public CamelModel getCamelModel() {
-    	return getCamelModel(CamelModelFactory.RUNTIME_PROVIDER_KARAF);
+    public CamelModel getCamelModel(String camelVersion, String runtimeProvider) {
+    	CamelModel cm = checkedGetService().getCamelModel(camelVersion, runtimeProvider);
+//    	cm.setCamelVersion(this.serviceVersion);
+//    	cm.setRuntimeProvider(runtimeProvider);
+    	return cm;
     }
-    
+
     /* (non-Javadoc)
      * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String)
      */
     @Override
-    public CamelModel getCamelModel(String runtimeProvider) {
-    	CamelModel cm = checkedGetService().getCamelModel(runtimeProvider);
-    	cm.setCamelVersion(this.serviceVersion);
-    	cm.setRuntimeProvider(runtimeProvider);
-    	return cm;
+    public CamelModel getCamelModel(String camelVersion) {
+    	return getCamelModel(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
     }
     
     /* (non-Javadoc)

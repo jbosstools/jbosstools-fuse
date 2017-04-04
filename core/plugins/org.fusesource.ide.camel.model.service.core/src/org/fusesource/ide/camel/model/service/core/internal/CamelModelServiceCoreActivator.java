@@ -11,8 +11,11 @@
 
 package org.fusesource.ide.camel.model.service.core.internal;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.eclipse.jdt.core.JavaCore;
+import org.fusesource.ide.camel.model.service.core.util.ProjectClasspathChangedListener;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
@@ -26,6 +29,8 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.camel.model.service.core";
 
 	private static CamelModelServiceCoreActivator instance;
+	private static BundleContext myContext;
+	private static ProjectClasspathChangedListener listener;
 
 	/**
 	 * default constructor
@@ -44,15 +49,32 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	}
 	
 	public static BundleContext getBundleContext() {
-	    return instance.getBundle().getBundleContext();
+	    return myContext;
 	}
 
-    @Override
-	public void start(BundleContext context) throws Exception {
+    public void start(BundleContext context) throws Exception {
         super.start(context);
+        myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
-        CamelModelFactory.initializeModels();
+        registerWorkspaceProjectListener();
+        JavaCore.addElementChangedListener(listener);
 	}
+    
+    @Override
+    public void stop(BundleContext context) throws Exception {
+    	myContext = null;
+    	JavaCore.removeElementChangedListener(listener);
+    	IWorkspace wsp = ResourcesPlugin.getWorkspace();
+    	wsp.removeResourceChangeListener(listener);
+    	listener = null;
+    	super.stop(context);
+    }
+
+    private void registerWorkspaceProjectListener() {
+    	IWorkspace wsp = ResourcesPlugin.getWorkspace();
+    	listener = new ProjectClasspathChangedListener();
+    	wsp.addResourceChangeListener(listener);
+    }
 	
 	/**
 	 * Gets message from plugin.properties

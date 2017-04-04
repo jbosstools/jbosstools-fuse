@@ -87,28 +87,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_17_3"
+         id="org.fusesource.ide.camel.model.service.impl"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -165,34 +144,6 @@
 
    <plugin
          id="org.fusesource.ide.camel.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-         
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_18_1_redhat_000015"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-         
-   <plugin
-         id="org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254"
          download-size="0"
          install-size="0"
          version="0.0.0"

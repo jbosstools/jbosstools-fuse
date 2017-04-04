@@ -10,15 +10,16 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.properties.creators;
 
-import java.util.ArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Aurelien Pupier
@@ -32,9 +33,9 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		parameter.setName("testParameterName");
 		parameter.setKind("parameter");
 		Eip eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 
 		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent,
 				widgetFactory);
@@ -55,9 +56,9 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		parameter.setDefaultValue("<");
 		parameter.setJavaType("char");
 		Eip eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 
 		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 		textParameterPropertyUICreator.create();
