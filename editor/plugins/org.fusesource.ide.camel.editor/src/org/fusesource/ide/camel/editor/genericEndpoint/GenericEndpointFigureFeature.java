@@ -16,9 +16,8 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.features.create.ext.AbstractComponentBasedCreateFigurefeature;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
@@ -35,9 +34,8 @@ public class GenericEndpointFigureFeature extends AbstractComponentBasedCreateFi
 	@Override
 	protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
 		CamelFile camelFile = parent.getCamelFile();
-		final CamelModel camelModel = CamelModelFactory.getModelForProject(camelFile.getResource().getProject());
-		final ComponentModel componentModel = camelModel.getComponentModel();
-		SelectEndpointWizard wizard = new SelectEndpointWizard(parent, componentModel);
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(camelFile.getResource().getProject());
+		SelectEndpointWizard wizard = new SelectEndpointWizard(parent, camelModel);
 		WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 		if (dialog.open() == IStatus.OK) {
 			setComponent(wizard.getComponent());

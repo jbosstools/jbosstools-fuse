@@ -19,11 +19,10 @@ import org.fusesource.ide.camel.editor.globalconfiguration.endpoint.wizards.AddG
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
@@ -42,9 +41,8 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 	@Override
 	public GlobalConfigurationTypeWizard createGlobalElement(CamelFile camelFile) {
 		IProject project = camelFile.getResource().getProject();
-		final CamelModel camelModel = CamelModelFactory.getModelForProject(project);
-		final ComponentModel componentModel = camelModel.getComponentModel();
-		wizard = new AddGlobalEndpointWizard(camelFile, componentModel);
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		wizard = new AddGlobalEndpointWizard(camelFile, camelModel);
 		return wizard;
 	}
 

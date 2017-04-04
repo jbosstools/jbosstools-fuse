@@ -22,11 +22,12 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.ui.PlatformUI;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -1271,7 +1272,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	private void parseDataFormatElementAttribute(Parameter param) {
 		NodeList childNodes = getXmlNode().getChildNodes();
-		String[] dfs = param.getOneOf().split(",");
+		String[] dfs = param.getOneOf();
 		List<String> dfList = new ArrayList<>(Arrays.asList(dfs));
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node subNode = childNodes.item(i);
@@ -1305,7 +1306,7 @@ public abstract class AbstractCamelModelElement {
 	private void parseExpressionKindAttribute(Parameter param) {
 		NodeList childNodes = getXmlNode().getChildNodes();
 		AbstractCamelModelElement expNode;
-		String[] langs = param.getOneOf().split(",");
+		String[] langs = param.getOneOf();
 		List<String> langList = new ArrayList<>(Arrays.asList(langs));
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node subNode = childNodes.item(i);
@@ -1413,12 +1414,12 @@ public abstract class AbstractCamelModelElement {
 		} else {
 			project = null;
 		}
-		CamelModel model = CamelModelFactory.getModelForProject(project);
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCachedCatalog(CamelCatalogUtils.getCatalogCoordinatesForProject(project));
 		// then we get the eip meta model
-		Eip eip = model.getEipModel().getEIPByName(name);
+		Eip eip = model.getEip(name);
 		// special case for context wide endpoint definitions
 		if (eip == null && name.equals(ENDPOINT_NODE_NAME)) {
-			eip = model.getEipModel().getEIPByName(ENDPOINT_TYPE_TO);
+			eip = model.getEip(ENDPOINT_TYPE_TO);
 		}
 		// and return it
 		return eip;
@@ -1522,7 +1523,7 @@ public abstract class AbstractCamelModelElement {
 
 				// check if node name equals the language of an expression
 				if (NODE_KIND_EXPRESSION.equals(p.getKind())) {
-					List<String> langs = Arrays.asList(p.getOneOf().split(","));
+					List<String> langs = Arrays.asList(p.getOneOf());
 					if (langs.contains(nodeName)) {
 						return true;
 					}

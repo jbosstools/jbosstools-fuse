@@ -14,8 +14,8 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.ide.camel.editor.component.wizard.SelectComponentWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -24,7 +24,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class SelectEndpointWizard extends Wizard {
 
-	private ComponentModel componentModel;
+	private CamelModel model;
 	private SelectComponentWizardPage page;
 	private AbstractCamelModelElement parent;
 
@@ -32,8 +32,8 @@ public class SelectEndpointWizard extends Wizard {
 	 * @param camelFile
 	 * @param componentModel
 	 */
-	public SelectEndpointWizard(AbstractCamelModelElement parent, ComponentModel componentModel) {
-		this.componentModel = componentModel;
+	public SelectEndpointWizard(AbstractCamelModelElement parent, CamelModel model) {
+		this.model = model;
 		this.parent = parent;
 		setWindowTitle(UIMessages.SelectEndpointWizard_windowTitle);
 	}
@@ -41,7 +41,7 @@ public class SelectEndpointWizard extends Wizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		page = new SelectComponentWizardPage(new DataBindingContext(), componentModel, UIMessages.SelectEndpointWizard_pageSelectionComponentTitle,
+		page = new SelectComponentWizardPage(new DataBindingContext(), model, UIMessages.SelectEndpointWizard_pageSelectionComponentTitle,
 				UIMessages.SelectEndpointWizard_pageSelectionComponentDescription, parent);
 		addPage(page);
 	}

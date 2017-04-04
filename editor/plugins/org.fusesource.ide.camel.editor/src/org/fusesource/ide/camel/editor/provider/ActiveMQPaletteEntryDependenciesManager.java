@@ -17,7 +17,7 @@ import java.util.Map;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesManager {
@@ -102,7 +102,7 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 	}
 
 	public String getArtifactId(String runtimeProvider) {
-		if(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
+		if(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
 			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL_STARTER;
 		} else {
 			return ActiveMQPaletteEntryDependenciesManager.ACTIVEMQ_CAMEL;

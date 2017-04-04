@@ -17,7 +17,8 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.ui.IEditorPart;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 
 /**
  * @author lhein
@@ -49,8 +50,8 @@ public class CamelUtils {
 		if (editor == null) {
 			editor = getDiagramEditor();
 		}
-		return editor == null ? CamelModelFactory.getLatestCamelVersion()
-		                      : CamelModelFactory.getCamelVersion(editor.getWorkspaceProject());
+		return editor == null ? CamelCatalogUtils.getLatestCamelVersion()
+		                      : new CamelMavenUtils().getCamelVersionFromMaven(editor.getWorkspaceProject());
 	}
 	
 	/**
@@ -72,7 +73,7 @@ public class CamelUtils {
 	
 	public static String getRuntimeProvider(IFeatureProvider fp) {
 		CamelDesignEditor diagramEditor = CamelUtils.getDiagramEditor(fp.getDiagramTypeProvider());
-		return CamelModelFactory.getRuntimeprovider(diagramEditor != null ? diagramEditor.getWorkspaceProject() : project(), new NullProgressMonitor());
+		return CamelCatalogUtils.getRuntimeprovider(diagramEditor != null ? diagramEditor.getWorkspaceProject() : project(), new NullProgressMonitor());
 	}
 	
 	public static IProject project() {

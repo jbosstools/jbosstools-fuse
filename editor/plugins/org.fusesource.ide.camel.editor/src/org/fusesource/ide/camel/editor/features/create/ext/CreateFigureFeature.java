@@ -46,9 +46,9 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Node;
 
@@ -585,8 +586,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		IFacetedProject fproj = ProjectFacetsManager.create(editor.getWorkspaceProject());
 		IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
 		if (fproj != null && fproj.hasProjectFacet(camelFacet)) {
-			String facetVersion = fproj.getInstalledVersion(camelFacet).getVersionString();
-			final String m2CamelVersion = CamelModelFactory.getCompatibleCamelVersion(facetVersion);
+			final String m2CamelVersion = new CamelMavenUtils().getCamelVersionFromMaven(CamelUtils.project());
 			if (m2CamelVersion != null) {
 				updateDepsVersion(compDeps, m2CamelVersion);
 				new MavenUtils().updateMavenDependencies(compDeps);
@@ -613,12 +613,12 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public Eip getEipByName(String name) {
 		// TODO: project camel version vs latest camel version
 		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
 		if (model == null) {
 			return null;
 		}
 		// then we get the eip meta model
-		return model.getEipModel().getEIPByName(name);
+		return model.getEip(name);
 	}
 
 	protected Eip determineEIP(AbstractCamelModelElement parent) {

@@ -55,17 +55,15 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
-import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
-import org.fusesource.ide.camel.model.service.core.catalog.languages.LanguageModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -320,8 +318,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
 		AbstractCamelModelElement uiExpressionElement = null;
 
-		LanguageModel model = getCamelModel(expressionElement).getLanguageModel();
-		Language lang = model.getLanguageByName(language);
+		Language lang = getCamelModel(expressionElement).getLanguage(language);
 
 		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName())) {
 			// normal expression subnode - no cascading -> when.<expression>
@@ -453,7 +450,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			Composite parent) {
 		CamelModel model = getCamelModel(expressionElement);
 		// now create the new fields
-		Language lang = model.getLanguageModel().getLanguageByName(language);
+		Language lang = model.getLanguage(language);
 		if (lang != null) {
 			List<Parameter> props = lang.getParameters();
 			props.sort(new ParameterPriorityComparator());
@@ -467,7 +464,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			}
 		} else {
 			// seems to be not in language catalog - use eip catalog
-			Eip eip = model.getEipModel().getEIPByName(language);
+			Eip eip = model.getEip(language);
 			if (eip != null) {
 				List<Parameter> props = eip.getParameters();
 				props.sort(new ParameterPriorityComparator());
@@ -509,8 +506,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		client.setLayoutData(new GridData(GridData.FILL_BOTH));
 		client.setLayout(new GridLayout(4, false));
 
-		DataFormatModel model = getCamelModel(dataFormatElement).getDataformatModel();
-		DataFormat df = model.getDataFormatByName(dataformat);
+		DataFormat df = getCamelModel(dataFormatElement).getDataFormat(dataformat);
 		if (dataFormatElement != null && df != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
 			Node oldExpNode = null;
 			for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
@@ -562,9 +558,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected void updateDependenciesForDataFormat(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
 			IProject project = selectedEP.getCamelFile().getResource().getProject();
-			CamelModel m = CamelModelFactory.getModelForProject(project);
+			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 			if (m != null) {
-				DataFormat df = m.getDataformatModel().getDataFormatByName(newValue);
+				DataFormat df = m.getDataFormat(newValue);
 				if (df != null) {
 					updateDependencies(df.getDependencies(), project);
 				}
@@ -575,9 +571,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected void updateDependenciesForLanguage(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
 			IProject project = selectedEP.getCamelFile().getResource().getProject();
-			CamelModel m = CamelModelFactory.getModelForProject(project);
+			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 			if (m != null) {
-				Language l = m.getLanguageModel().getLanguageByName(newValue);
+				Language l = m.getLanguage(newValue);
 				if (l != null) {
 					updateDependencies(l.getDependencies(), project);
 				}
@@ -597,7 +593,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		CamelModel model = getCamelModel(dataFormatElement);
 
 		// now create the new fields
-		Eip df = model.getEipModel().getEIPByName(dataformat);
+		Eip df = model.getEip(dataformat);
 		if (df != null) {
 			List<Parameter> props = df.getParameters();
 			props.sort(new ParameterPriorityComparator());

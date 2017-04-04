@@ -10,25 +10,23 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.component.wizard;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+
 import java.util.ArrayList;
 
-import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentManagerTest {
 	@Mock
-	private ComponentModel componentModel;
+	private CamelModel camelModel;
 	private ComponentManager componentManager;
 	private Component componentWithoutTag;
 	private Component componentWithTag1;
@@ -44,8 +42,8 @@ public class ComponentManagerTest {
 		setupComponentsWithSharedTags(supportedComponents);
 		setupComponentWithSeveralTags(supportedComponents);
 
-		doReturn(supportedComponents).when(componentModel).getSupportedComponents();
-		componentManager = new ComponentManager(componentModel);
+		doReturn(supportedComponents).when(camelModel).getComponents();
+		componentManager = new ComponentManager(camelModel);
 	}
 
 	/**

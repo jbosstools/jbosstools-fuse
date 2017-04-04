@@ -57,7 +57,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -256,7 +256,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 						//TODO: managed other dependencies than camel
 						&& !message.startsWith("Duplicating managed version")
 						//TODO: manage community version and pure fis version
-						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelModelFactory.isPureFISVersion(camelVersion)));
+						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelCatalogUtils.isPureFISVersion(camelVersion)));
 			} catch (CoreException e1) {
 				return true;
 			}

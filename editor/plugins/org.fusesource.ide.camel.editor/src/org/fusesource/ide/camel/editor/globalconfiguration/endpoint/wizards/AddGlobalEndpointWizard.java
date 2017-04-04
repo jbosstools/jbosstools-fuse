@@ -15,8 +15,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.ide.camel.editor.component.wizard.SelectComponentWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Element;
 
@@ -26,17 +26,17 @@ import org.w3c.dom.Element;
  */
 public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurationTypeWizard {
 
-	private ComponentModel componentModel;
+	private CamelModel model;
 	private DataBindingContext dbc;
 	private Element globalConfigurationNode;
 	private SelectComponentWizardPage globalEndpointPage;
 	private CamelFile camelFile;
 	private Component component;
 
-	public AddGlobalEndpointWizard(CamelFile camelFile, ComponentModel componentModel) {
+	public AddGlobalEndpointWizard(CamelFile camelFile, CamelModel model) {
 		super();
 		this.camelFile = camelFile;
-		this.componentModel = componentModel;
+		this.model = model;
 		this.dbc = new DataBindingContext();
 		setWindowTitle(UIMessages.AddGlobalEndpointWizard_windowTitle);
 		setNeedsProgressMonitor(true);
@@ -50,7 +50,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	@Override
 	public void addPages() {
 		super.addPages();
-		globalEndpointPage = new SelectComponentWizardPage(dbc, componentModel, UIMessages.SelectComponentWizardPage_pageName,
+		globalEndpointPage = new SelectComponentWizardPage(dbc, model, UIMessages.SelectComponentWizardPage_pageName,
 				UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription, camelFile);
 		addPage(globalEndpointPage);
 

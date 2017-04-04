@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,189 +10,277 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.catalog.eips;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author lhein
  */
-@XmlRootElement(name = "eip")
 public class Eip implements ICamelCatalogElement, IParameterContainer {
-	
-	private String name;
+
+	public static final String PROPERTY_NAME = "name";
+	public static final String PROPERTY_KIND = "kind";
+	public static final String PROPERTY_JAVA_TYPE = "javaType";
+	public static final String PROPERTY_DESCRIPTION = "description";
+	public static final String PROPERTY_TITLE = "title";
+	public static final String PROPERTY_LABEL = "label";
+	public static final String PROPERTY_INPUT = "input";
+	public static final String PROPERTY_OUTPUT = "output";
+
+	@JsonProperty("model")
+	private Map<String, String> model;
+	@JsonProperty("properties")
+	private Map<String, Parameter> properties;
+
 	private ArrayList<String> tags;
-	private String title;
-	private String description;
-	private String clazz;
-	private String kind;
-	private String input;
-	private String output;
-	private ArrayList<Parameter> parameters;
-	
-	/**
-	 * @return the parameters
-	 */
-	@Override
-	@XmlElementWrapper(name = "parameters")
-	@XmlElement(name = "parameter")
-	public ArrayList<Parameter> getParameters() {
-		return this.parameters;
+	private Map<String, Object> otherProperties = new HashMap<>();
+
+	@JsonAnyGetter
+	public Map<String, Object> any() {
+		return otherProperties;
 	}
-	
-	/**
-	 * @param parameters the parameters to set
-	 */
-	public void setParameters(ArrayList<Parameter> parameters) {
-		this.parameters = parameters;
+
+	@JsonAnySetter
+	public void set(String name, Object value) {
+		otherProperties.put(name, value);
 	}
-	
-	/**
-	 * returns the parameter with the given name
+
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param name
-	 * @return the parameter or null if not found
+	 * @see
+	 * org.jboss.fuse.model.IParameterContainer#getParameter(java.lang.String)
 	 */
 	@Override
 	public Parameter getParameter(String name) {
-		for (Parameter p : getParameters()) {
-			if (p.getName().equals(name)) {
-				return p;
-			}
-		}
-		return null;
+		return properties.get(name);
 	}
-	
-	/**
-	 * @return the input
-	 */
-	@XmlElement(name="input")
-	public String getInput() {
-		return this.input;
-	}
-	
-	/**
-	 * @param input the input to set
-	 */
-	public void setInput(String input) {
-		this.input = input;
-	}
-	
-	/**
-	 * @return the output
-	 */
-	@XmlElement(name="output")
-	public String getOutput() {
-		return this.output;
-	}
-	
-	/**
-	 * @param output the output to set
-	 */
-	public void setOutput(String output) {
-		this.output = output;
-	}
-	
-	/**
-	 * @return the name
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jboss.fuse.model.IParameterContainer#getParameters()
 	 */
 	@Override
-	@XmlElement(name = "name")
-	public String getName() {
-		return this.name;
+	public List<Parameter> getParameters() {
+		return new ArrayList<>(properties.values());
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jboss.fuse.model.ICamelCatalogElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return this.model.get(PROPERTY_NAME);
+	}
+
 	/**
-	 * @param name the name to set
+	 * 
+	 * @param name
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.model.put(PROPERTY_NAME, name);
 	}
-	
+
 	/**
 	 * @return the kind
 	 */
-	@XmlElement(name = "kind")
 	public String getKind() {
-		return this.kind;
+		return this.model.get(PROPERTY_KIND);
 	}
-	
+
 	/**
-	 * @param kind the kind to set
+	 * @param kind
 	 */
 	public void setKind(String kind) {
-		this.kind = kind;
+		this.model.put(PROPERTY_KIND, kind);
 	}
-	
+
+	/**
+	 * @return the input
+	 */
+	public String getInput() {
+		String input = this.model.get(PROPERTY_INPUT);
+		if (input != null && input.trim().length() > 0) {
+			return input;
+		}
+		return Boolean.FALSE.toString();
+	}
+
+	/**
+	 * @param input
+	 */
+	public void setInput(String input) {
+		this.model.put(PROPERTY_INPUT, input);
+	}
+
+	/**
+	 * @return the output
+	 */
+	public String getOutput() {
+		String output = this.model.get(PROPERTY_OUTPUT);
+		if (output != null && output.trim().length() > 0) {
+			return output;
+		}
+		return Boolean.FALSE.toString();
+	}
+
+	/**
+	 * @param output
+	 */
+	public void setOutput(String output) {
+		this.model.put(PROPERTY_OUTPUT, output);
+	}
+
 	/**
 	 * @return the clazz
 	 */
-	@XmlElement(name = "class")
 	public String getClazz() {
-		return this.clazz;
+		return this.model.get(PROPERTY_JAVA_TYPE);
 	}
-	
+
 	/**
-	 * @param clazz the clazz to set
+	 * @param clazz
 	 */
 	public void setClazz(String clazz) {
-		this.clazz = clazz;
+		this.model.put(PROPERTY_JAVA_TYPE, clazz);
 	}
-	
+
 	/**
 	 * @return the description
 	 */
-	@XmlElement(name = "description")
 	public String getDescription() {
-		return this.description;
+		return this.model.get(PROPERTY_DESCRIPTION);
+	}
+
+	/**
+	 * @param description
+	 */
+	public void setDescription(String description) {
+		this.model.put(PROPERTY_DESCRIPTION, description);
 	}
 
 	/**
 	 * @return the title
 	 */
-	@XmlElement(name="title")
 	public String getTitle() {
-		return this.title;
+		return this.model.get(PROPERTY_TITLE);
 	}
-	
+
 	/**
-	 * @param title the title to set
+	 * @param title
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.model.put(PROPERTY_TITLE, title);
 	}
-	
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
+
 	/**
 	 * @return the tags
 	 */
-	@XmlElementWrapper(name = "tags")
-	@XmlElement(name = "tag")
 	public ArrayList<String> getTags() {
+		if (this.tags == null || this.tags.isEmpty()) {
+			this.tags = CamelCatalogUtils.initializeTags(this.model.get(PROPERTY_LABEL));
+		}
 		return this.tags;
 	}
-	
+
 	/**
-	 * @param tags the tags to set
+	 * @param tags
 	 */
 	public void setTags(ArrayList<String> tags) {
+		String label = "";
+		for (String tag : tags) {
+			if (label.length() > 0) {
+				label += ',';
+			}
+			label += tag;
+		}
+		this.model.put(PROPERTY_LABEL, label);
 		this.tags = tags;
 	}
-	
+
+	/**
+	 * @return the model
+	 */
+	public Map<String, String> getModel() {
+		return this.model;
+	}
+
+	/**
+	 * @param model
+	 *            the model to set
+	 */
+	public void setModel(Map<String, String> model) {
+		this.model = model;
+	}
+
+	/**
+	 * @return the properties
+	 */
+	public Map<String, Parameter> getProperties() {
+		return this.properties;
+	}
+
+	/**
+	 * @param properties
+	 *            the properties to set
+	 */
+	public void setProperties(Map<String, Parameter> properties) {
+		this.properties = properties;
+	}
+
+	/**
+	 * checks whether there is a component data with the given key
+	 * 
+	 * @param key
+	 *            the key to lookup
+	 * @return true if existing, otherwise false
+	 */
+	public boolean containsCustomValueForKey(String key) {
+		return this.model.containsKey(key);
+	}
+
+	/**
+	 * returns the value for a custom key
+	 * 
+	 * @param key
+	 *            the key of the value to lookup
+	 * @return the value or null if not existing
+	 */
+	public String getCustomComponentModelValue(String key) {
+		return this.model.get(key);
+	}
+
+	/**
+	 * sets the component value for the given key
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 */
+	public void setCustomComponentModelValue(String key, String value) {
+		this.model.put(key, value);
+	}
+
 	/**
 	 * returns true if this element can have child elements
 	 * 
@@ -200,23 +288,28 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public boolean canHaveChildren() {
 		for (Parameter p : getParameters()) {
-			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && getInput().equalsIgnoreCase("true")) return true;
+			if ("array".equalsIgnoreCase(p.getType())
+					&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
+					&& "true".equalsIgnoreCase(getInput()))
+				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * returns the list of allowed node type id values for child elements
 	 * 
-	 * @return	a list of allowed node type ids or an empty list if not a container
+	 * @return a list of allowed node type ids or an empty list if not a
+	 *         container
 	 */
 	public List<String> getAllowedChildrenNodeTypes() {
 		ArrayList<String> allowedNodeTypes = new ArrayList<String>();
 		if (canHaveChildren()) {
 			for (Parameter p : getParameters()) {
-				if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && p.getOneOf() != null) {
-					String oneOfList = p.getOneOf();
-					String[] types = oneOfList.split(",");
+				if ("array".equalsIgnoreCase(p.getType())
+						&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
+						&& p.getOneOf() != null) {
+					String[] types = p.getOneOf();
 					for (String type : types) {
 						allowedNodeTypes.add(type.trim());
 					}
@@ -225,15 +318,32 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 		}
 		return allowedNodeTypes;
 	}
-	
+
 	/**
-     * returns true if the EIP is allowed to be created on the Camel Context
-     * 
-     * @return
-     */
-    public boolean canBeAddedToCamelContextDirectly() {
-    	return 	getName().equalsIgnoreCase(AbstractCamelModelElement.ROUTE_NODE_NAME) || 
-				getName().equalsIgnoreCase("rest") || 
-				getName().equalsIgnoreCase("restConfiguration"); 
-    }
+	 * returns true if the EIP is allowed to be created on the Camel Context
+	 * 
+	 * @return
+	 */
+	public boolean canBeAddedToCamelContextDirectly() {
+		return AbstractCamelModelElement.ROUTE_NODE_NAME.equalsIgnoreCase(getName())
+				|| "rest".equalsIgnoreCase(getName()) || "restConfiguration".equalsIgnoreCase(getName());
+	}
+
+	/**
+	 * creates the model from the given input stream
+	 * 
+	 * @param stream
+	 *            the stream to parse
+	 * @return the created model instance of null on errors
+	 */
+	public static Eip getJSONFactoryInstance(InputStream stream) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Eip model = mapper.readValue(stream, Eip.class);
+			return model;
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
 }

@@ -10,24 +10,23 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.pages;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+
 import org.eclipse.jface.viewers.Viewer;
 import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.editor.component.wizard.WhiteListComponentFilter;
 import org.fusesource.ide.camel.editor.provider.DiagramTypeProvider;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
 
 /**
  * @author Aurelien Pupier
@@ -39,15 +38,13 @@ public class WhiteListComponentFilterIT {
 	@Mock
 	private Viewer viewer;
 
-	private ComponentModel componentModel;
-
+	private CamelModel camelModel;
+	
 	@Before
 	public void setup() {
 		new ToolBehaviourProvider(new DiagramTypeProvider()).getPalette();
-		CamelModelFactory.initializeModels();
-		final CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		componentModel = camelModel.getComponentModel();
-		doReturn(new ComponentManager(componentModel)).when(viewer).getInput();
+		camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		doReturn(new ComponentManager(camelModel)).when(viewer).getInput();
 	}
 
 	@Test

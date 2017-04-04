@@ -30,7 +30,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
@@ -45,13 +46,9 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	}
 	
 	private String getCamelVersionForFacetVersion(IProjectFacetVersion fv, IProject project) {
-		String facetVersion = fv.getVersionString();
-		String camelVersion = CamelModelFactory.getCompatibleCamelVersion(facetVersion);
+		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(project);
 		if (camelVersion == null) {
-			camelVersion = CamelModelFactory.getCamelVersion(project);
-		}
-		if (camelVersion == null) {
-			camelVersion = CamelModelFactory.getLatestCamelVersion();
+			camelVersion = CamelCatalogUtils.getLatestCamelVersion();
 		}
 		return camelVersion;
 	}

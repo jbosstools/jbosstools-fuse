@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.provider;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,8 +18,8 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 
 /**
@@ -118,8 +118,8 @@ public class ProviderHelper {
      * @return an array of create features for the palette
      */
     public static ICreateFeature[] getCreateFeatures(IFeatureProvider fp) {
-    	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
-    	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
+    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
+    	Collection<Eip> list = model.getEips();
     	return list.stream()
     		.map(eip -> new CreateFigureFeature(fp, convertCamelCase(eip.getName()), eip.getDescription(), eip))
     		.toArray(ICreateFeature[]::new);
@@ -131,8 +131,8 @@ public class ProviderHelper {
      * @param imageProvider the image provider to use
      */
     public static void addFigureIcons(ImageProvider imageProvider) {
-    	CamelModel model = CamelModelFactory.getModelForProject(CamelUtils.project());
-    	model.getEipModel().getSupportedEIPs().forEach(imageProvider::addIconsForEIP);
+    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
+    	model.getEips().forEach(imageProvider::addIconsForEIP);
     }
 
     /**

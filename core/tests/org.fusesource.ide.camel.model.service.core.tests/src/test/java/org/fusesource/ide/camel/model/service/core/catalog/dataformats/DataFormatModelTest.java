@@ -11,53 +11,55 @@
 package org.fusesource.ide.camel.model.service.core.catalog.dataformats;
 
 
-import java.util.ArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class DataFormatModelTest {
 
-	private DataFormatModel dataFormatModel;
+	private CamelModel model;
 	private DataFormat dataFormat;
 
 	@Before
 	public void setup() {
-		dataFormatModel = new DataFormatModel();
-		ArrayList<DataFormat> supportedDataFormats = new ArrayList<>();
+		model = new CamelModel();
+		Map<String, DataFormat> supportedDataFormats = new HashMap<>();
 		dataFormat = new DataFormat();
 		final String sameModelName = "model-name";
 		dataFormat.setModelName(sameModelName);
 		dataFormat.setName("name1");
-		supportedDataFormats.add(dataFormat);
+		supportedDataFormats.put(dataFormat.getName(), dataFormat);
 
 		DataFormat dataFormat2 = new DataFormat();
 		dataFormat2.setModelName(sameModelName);
 		dataFormat2.setName("name2");
-		supportedDataFormats.add(dataFormat2);
-		dataFormatModel.setSupportedDataFormats(supportedDataFormats);
+		supportedDataFormats.put(dataFormat2.getName(), dataFormat2);
+		model.setDataFormats(supportedDataFormats);
 	}
 
 	@Test
 	public void testGetDataFormatByName() throws Exception {
-		assertThat(dataFormatModel.getDataFormatByName(dataFormat.getName())).isEqualTo(dataFormat);
+		assertThat(model.getDataFormat(dataFormat.getName())).isEqualTo(dataFormat);
 	}
 
 	@Test
 	public void testGetDataFormatByName_returnNullIfNotExists() throws Exception {
-		assertThat(dataFormatModel.getDataFormatByName("dumbName")).isNull();
+		assertThat(model.getDataFormat("dumbName")).isNull();
 	}
 
 	@Test
 	public void testGetDataFormatByModelName() throws Exception {
-		assertThat(dataFormatModel.getDataFormatsByModelName(dataFormat.getModelName())).hasSize(2);
+		assertThat(model.getDataFormatsByModelName(dataFormat.getModelName())).hasSize(2);
 	}
 
 	@Test
 	public void testGetDataFormatByModelName_returnsEmptyIfNotExists() throws Exception {
-		assertThat(dataFormatModel.getDataFormatsByModelName("dumbModelName")).isEmpty();
+		assertThat(model.getDataFormatsByModelName("dumbModelName")).isEmpty();
 	}
 
 }

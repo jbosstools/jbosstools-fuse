@@ -34,7 +34,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
@@ -49,7 +49,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelModelFactory.getSupportedCamelVersions();
+		return Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForEAPSpringIT(String version) {

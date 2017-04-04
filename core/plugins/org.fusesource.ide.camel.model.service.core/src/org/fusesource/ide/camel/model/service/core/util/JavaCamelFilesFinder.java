@@ -58,6 +58,7 @@ public class JavaCamelFilesFinder {
 		}
 		IJavaProject javaProject = JavaCore.create(project);
 		try {
+			CamelModelServiceCoreActivator.pluginLog().logWarning("Start search of Camel Java Route in project "+project.getName());
 			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder"); //$NON-NLS-1$
 			if (routeBuilderType != null) {
 				Display.getDefault().syncExec(new Runnable() {

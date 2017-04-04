@@ -116,7 +116,7 @@ public class FusePropertySectionIT {
 		parameter.setName("expression");
 		parameter.setRequired("true");
 		parameter.setDeprecated("false");
-		parameter.setOneOf("simple,header,constant");
+		parameter.setOneOf(new String[] { "simple", "header", "constant" });
 		parameter.setKind("expression");
 		parameter.setJavaType("org.apache.camel.model.language.ExpressionDefinition");
 		

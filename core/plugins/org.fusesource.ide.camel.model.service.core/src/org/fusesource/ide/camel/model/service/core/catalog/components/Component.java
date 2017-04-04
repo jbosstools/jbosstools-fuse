@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,245 +10,269 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.catalog.components;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
+import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author lhein
  */
-@XmlRootElement(name = "component")
-public class Component implements ICamelCatalogElement {
-	
-	private String id;
-	private String clazz;
-	private String title;
-	private String description;
-	private String syntax;
-	private String kind;
-	private String consumerOnly;
-	private String producerOnly;
-	private String scheme;
+public class Component implements ICamelCatalogElement, IParameterContainer {
+
+	public static final String PROPERTY_CONSUMER_ONLY = "consumerOnly";
+	public static final String PROPERTY_PRODUCER_ONLY = "producerOnly";
+	public static final String PROPERTY_SCHEME = "scheme";
+	public static final String PROPERTY_KIND = "kind";
+	public static final String PROPERTY_JAVA_TYPE = "javaType";
+	public static final String PROPERTY_SYNTAX = "syntax";
+	public static final String PROPERTY_DESCRIPTION = "description";
+	public static final String PROPERTY_TITLE = "title";
+	public static final String PROPERTY_LABEL = "label";
+	public static final String PROPERTY_GROUPID = "groupId";
+	public static final String PROPERTY_ARTIFACTID = "artifactId";
+	public static final String PROPERTY_VERSION = "version";
+
+	@JsonProperty("component")
+	private Map<String, String> model;
+	@JsonProperty("componentProperties")
+	private Map<String, ComponentProperty> componentProperties;
+	@JsonProperty("properties")
+	private Map<String, Parameter> properties;
+
 	private ArrayList<Dependency> dependencies;
 	private ArrayList<String> tags;
-	private ArrayList<ComponentProperty> componentProperties;
-	private ArrayList<Parameter> uriParameters;
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement#getName()
+	private Map<String, Object> otherProperties = new HashMap<>();
+
+	@JsonAnyGetter
+	public Map<String, Object> any() {
+		return otherProperties;
+	}
+
+	@JsonAnySetter
+	public void set(String name, Object value) {
+		otherProperties.put(name, value);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.jboss.fuse.model.IParameterContainer#getParameter(java.lang.String)
+	 */
+	@Override
+	public Parameter getParameter(String name) {
+		return properties.get(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jboss.fuse.model.IParameterContainer#getParameters()
+	 */
+	@Override
+	public List<Parameter> getParameters() {
+		return new ArrayList<>(properties.values());
+	}
+
+	/**
+	 * returns the id of the connector
+	 * 
+	 * @return
+	 */
+	public String getId() {
+		return getScheme();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jboss.fuse.model.ICamelCatalogElement#getName()
 	 */
 	@Override
 	public String getName() {
 		return getId();
 	}
-	
-	/**
-	 * @return the componentProperties
-	 */
-	@XmlElementWrapper(name = "componentProperties")
-	@XmlElement(name = "componentProperty")
-	public ArrayList<ComponentProperty> getComponentProperties() {
-		return this.componentProperties;
-	}
-	
-	/**
-	 * @param componentProperties the componentProperties to set
-	 */
-	public void setComponentProperties(
-			ArrayList<ComponentProperty> componentProperties) {
-		this.componentProperties = componentProperties;
-	}
-	
-	/**
-	 * @return the uriParameters
-	 */
-	@XmlElementWrapper(name = "uriParameters")
-	@XmlElement(name = "uriParameter")
-	public ArrayList<Parameter> getUriParameters() {
-		return this.uriParameters;
-	}
-	
-	/**
-	 * @param uriParameters the uriParameters to set
-	 */
-	public void setUriParameters(ArrayList<Parameter> uriParameters) {
-		this.uriParameters = uriParameters;
-	}
-	
+
 	/**
 	 * @return the consumerOnly
 	 */
-	@XmlElement(name = "consumerOnly")
 	public String getConsumerOnly() {
-		return this.consumerOnly;
+		String consumerOnly = this.model.get(PROPERTY_CONSUMER_ONLY);
+		if (consumerOnly != null && consumerOnly.trim().length() > 0) {
+			return consumerOnly;
+		}
+		return Boolean.FALSE.toString();
 	}
-	
+
 	/**
-	 * @param consumerOnly the consumerOnly to set
+	 * @param consumerOnly
 	 */
 	public void setConsumerOnly(String consumerOnly) {
-		this.consumerOnly = consumerOnly;
+		this.model.put(PROPERTY_CONSUMER_ONLY, consumerOnly);
 	}
-	
+
 	/**
 	 * @return the producerOnly
 	 */
-	@XmlElement(name = "producerOnly")
 	public String getProducerOnly() {
-		return this.producerOnly;
+		String producerOnly = this.model.get(PROPERTY_PRODUCER_ONLY);
+		if (producerOnly != null && producerOnly.trim().length() > 0) {
+			return producerOnly;
+		}
+		return Boolean.FALSE.toString();
 	}
-	
+
 	/**
-	 * @param producerOnly the producerOnly to set
+	 * @param producerOnly
 	 */
 	public void setProducerOnly(String producerOnly) {
-		this.producerOnly = producerOnly;
+		this.model.put(PROPERTY_PRODUCER_ONLY, producerOnly);
 	}
-	
+
 	/**
-	 * @return the id
+	 * @return the kind
 	 */
-	@XmlElement(name="id")
-	public String getId() {
-		return this.id;
+	public String getKind() {
+		return this.model.get(PROPERTY_KIND);
 	}
-	
+
 	/**
-	 * @param id the id to set
+	 * @param kind
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setKind(String kind) {
+		this.model.put(PROPERTY_KIND, kind);
 	}
 
 	/**
 	 * @return the scheme
 	 */
-	@XmlElement(name="scheme")
 	public String getScheme() {
-		return this.scheme;
+		return this.model.get(PROPERTY_SCHEME);
 	}
-	
+
 	/**
-	 * @param scheme the scheme to set
+	 * @param scheme
 	 */
 	public void setScheme(String scheme) {
-		this.scheme = scheme;
+		this.model.put(PROPERTY_SCHEME, scheme);
 	}
-	
-	/**
-	 * @return the kind
-	 */
-	@XmlElement(name = "kind")
-	public String getKind() {
-		return this.kind;
-	}
-	
-	/**
-	 * @param kind the kind to set
-	 */
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-	
+
 	/**
 	 * @return the clazz
 	 */
-	@XmlElement(name = "class")
 	public String getClazz() {
-		return this.clazz;
+		return this.model.get(PROPERTY_JAVA_TYPE);
 	}
-	
+
 	/**
-	 * @param clazz the clazz to set
+	 * @param clazz
 	 */
 	public void setClazz(String clazz) {
-		this.clazz = clazz;
+		this.model.put(PROPERTY_JAVA_TYPE, clazz);
 	}
-	
+
 	/**
 	 * @return the syntax
 	 */
-	@XmlElement(name = "syntax")
 	public String getSyntax() {
-		return this.syntax;
+		return this.model.get(PROPERTY_SYNTAX);
 	}
-	
+
 	/**
-	 * @param syntax the syntax to set
+	 * @param syntax
 	 */
 	public void setSyntax(String syntax) {
-		this.syntax = syntax;
+		this.model.put(PROPERTY_SYNTAX, syntax);
 	}
-	
+
 	/**
 	 * @return the description
 	 */
-	@XmlElement(name = "description")
 	public String getDescription() {
-		return this.description;
+		return this.model.get(PROPERTY_DESCRIPTION);
+	}
+
+	/**
+	 * @param description
+	 */
+	public void setDescription(String description) {
+		this.model.put(PROPERTY_DESCRIPTION, description);
 	}
 
 	/**
 	 * @return the title
 	 */
-	@XmlElement(name="title")
 	public String getTitle() {
-		return this.title;
+		return this.model.get(PROPERTY_TITLE);
 	}
-	
+
 	/**
-	 * @param title the title to set
+	 * @param title
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.model.put(PROPERTY_TITLE, title);
 	}
-	
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
+
 	/**
 	 * @return the tags
 	 */
-	@XmlElementWrapper(name = "tags")
-	@XmlElement(name = "tag")
 	public ArrayList<String> getTags() {
+		if (this.tags == null || this.tags.isEmpty()) {
+			this.tags = CamelCatalogUtils.initializeTags(this.model.get(PROPERTY_LABEL));
+		}
 		return this.tags;
 	}
-	
+
 	/**
-	 * @param tags the tags to set
+	 * @param tags
 	 */
 	public void setTags(ArrayList<String> tags) {
+		String label = "";
+		for (String tag : tags) {
+			if (label.length() > 0) {
+				label += ',';
+			}
+			label += tag;
+		}
+		this.model.put(PROPERTY_LABEL, label);
 		this.tags = tags;
 	}
-	
+
 	/**
 	 * @return the dependency
 	 */
-	@XmlElementWrapper(name = "dependencies")
-	@XmlElement(name = "dependency")
-	public ArrayList<Dependency> getDependencies() {
+	public List<Dependency> getDependencies() {
+		if (this.dependencies == null || this.dependencies.isEmpty()) {
+			this.dependencies = CamelCatalogUtils.initializeDependency(getCustomComponentModelValue(PROPERTY_GROUPID),
+					getCustomComponentModelValue(PROPERTY_ARTIFACTID), getCustomComponentModelValue(PROPERTY_VERSION));
+		}
 		return this.dependencies;
 	}
-	
+
 	/**
-	 * @param dependency the dependency to set
+	 * @param dependency
+	 *            the dependency to set
 	 */
-	public void setDependencies(ArrayList<Dependency> dependencies) {
-		this.dependencies = dependencies;
+	public void setDependencies(List<Dependency> dependencies) {
+		this.dependencies = new ArrayList<>(dependencies);
 	}
-	
+
 	/**
 	 * checks if the component can handle the given scheme
 	 * 
@@ -256,37 +280,126 @@ public class Component implements ICamelCatalogElement {
 	 * @return
 	 */
 	public boolean supportsScheme(String scheme) {
-	    return getScheme().equals(scheme);
+		return getScheme().equals(scheme);
 	}
-	
+
 	/**
-	 * returns the label of the component if component itself doesn't provide
-	 * a title
+	 * returns the label of the component if component itself doesn't provide a
+	 * title
 	 * 
 	 * @return
 	 */
 	public String getSchemeTitle() {
 		return getScheme();
 	}
-	
+
+	/**
+	 * @return the display title
+	 */
+	public String getDisplayTitle() {
+		return Strings.isBlank(getTitle()) ? Strings.humanize(getSchemeTitle()) : getTitle();
+	}
+
+	/**
+	 * @return the model
+	 */
+	public Map<String, String> getModel() {
+		return this.model;
+	}
+
+	/**
+	 * @param model
+	 *            the model to set
+	 */
+	public void setModel(Map<String, String> model) {
+		this.model = model;
+	}
+
+	/**
+	 * @return the componentProperties
+	 */
+	public Map<String, ComponentProperty> getComponentProperties() {
+		return this.componentProperties;
+	}
+
+	/**
+	 * @param componentProperties
+	 *            the componentProperties to set
+	 */
+	public void setComponentProperties(Map<String, ComponentProperty> componentProperties) {
+		this.componentProperties = componentProperties;
+	}
+
+	/**
+	 * @return the properties
+	 */
+	public Map<String, Parameter> getProperties() {
+		return this.properties;
+	}
+
+	/**
+	 * @param properties
+	 *            the properties to set
+	 */
+	public void setProperties(Map<String, Parameter> properties) {
+		this.properties = properties;
+	}
+
+	/**
+	 * checks whether there is a component data with the given key
+	 * 
+	 * @param key
+	 *            the key to lookup
+	 * @return true if existing, otherwise false
+	 */
+	public boolean containsCustomValueForKey(String key) {
+		return this.model.containsKey(key);
+	}
+
+	/**
+	 * returns the value for a custom key
+	 * 
+	 * @param key
+	 *            the key of the value to lookup
+	 * @return the value or null if not existing
+	 */
+	public String getCustomComponentModelValue(String key) {
+		return this.model.get(key);
+	}
+
+	/**
+	 * sets the component value for the given key
+	 * 
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 */
+	public void setCustomComponentModelValue(String key, String value) {
+		this.model.put(key, value);
+	}
+
 	/**
 	 * duplicates the component
 	 * 
-	 * @return	a copy of the original component
+	 * @return a copy of the original component
 	 */
 	public Component duplicateFor(final String scheme, final String clazz) {
 		Component dup = new Component() {
-			/* (non-Javadoc)
-			 * @see org.fusesource.ide.camel.model.service.core.catalog.components.Component#supportsScheme(java.lang.String)
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.fusesource.ide.camel.model.service.core.catalog.components.
+			 * Component#supportsScheme(java.lang.String)
 			 */
 			@Override
 			public boolean supportsScheme(String testScheme) {
 				return scheme.equals(testScheme);
 			}
 		};
-		
+
 		dup.setScheme(scheme);
-		dup.setId(scheme);
 		dup.setClazz(clazz);
 		dup.setComponentProperties(getComponentProperties());
 		dup.setConsumerOnly(getConsumerOnly());
@@ -296,12 +409,26 @@ public class Component implements ICamelCatalogElement {
 		dup.setSyntax(getSyntax().replaceFirst(String.format("%s:", getScheme()), String.format("%s:", scheme)));
 		dup.setTags(getTags());
 		dup.setTitle(getTitle());
-		dup.setUriParameters(getUriParameters());
-		
+		dup.setProperties(getProperties());
+
 		return dup;
 	}
 
-	public String getDisplayTitle() {
-		return Strings.isBlank(getTitle()) ? Strings.humanize(getSchemeTitle()) : getTitle();
+	/**
+	 * creates the model from the given input stream
+	 * 
+	 * @param stream
+	 *            the stream to parse
+	 * @return the created model instance of null on errors
+	 */
+	public static Component getJSONFactoryInstance(InputStream stream) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			Component model = mapper.readValue(stream, Component.class);
+			return model;
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
 	}
 }

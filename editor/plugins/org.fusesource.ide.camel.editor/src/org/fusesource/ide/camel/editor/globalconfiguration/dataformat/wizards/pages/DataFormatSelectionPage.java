@@ -35,8 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
-import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormatModel;
 
 /**
  * @author lhein
@@ -44,7 +44,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataForma
  */
 public class DataFormatSelectionPage extends WizardPage {
 
-	private DataFormatModel dfModel;
+	private CamelModel model;
 	private DataFormat dataFormatSelected;
 	private String id;
 	private DataBindingContext dbc;
@@ -52,11 +52,11 @@ public class DataFormatSelectionPage extends WizardPage {
 	/**
 	 * @param pageName
 	 */
-	public DataFormatSelectionPage(DataFormatModel dfModel) {
+	public DataFormatSelectionPage(CamelModel model) {
 		super("Dataformat selection page"); //$NON-NLS-1$
 		setTitle(UIMessages.DataFormatSelectionPage_dataFormatSelectionPageTitle);
 		setDescription(UIMessages.DataFormatSelectionPage_DataFormatSelectionPageDescription);
-		this.dfModel = dfModel;
+		this.model = model;
 		this.dbc = new DataBindingContext();
 	}
 
@@ -90,7 +90,7 @@ public class DataFormatSelectionPage extends WizardPage {
 		dataformatComboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		dataformatComboViewer.setLabelProvider(new DataFormatLabelProvider());
 		dataformatComboViewer.setComparator(new ViewerComparator());
-		dataformatComboViewer.setInput(dfModel.getSupportedDataFormats().toArray());
+		dataformatComboViewer.setInput(model.getDataFormats().toArray());
 
 		dbc.bindValue(ViewerProperties.singleSelection().observe(dataformatComboViewer),
 				PojoProperties.value(DataFormatSelectionPage.class, "dataFormatSelected", DataFormat.class).observe(this)); //$NON-NLS-1$
