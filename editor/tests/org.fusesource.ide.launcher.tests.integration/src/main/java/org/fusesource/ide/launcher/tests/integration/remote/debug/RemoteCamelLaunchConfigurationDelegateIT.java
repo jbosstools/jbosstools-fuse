@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -44,7 +43,7 @@ public class RemoteCamelLaunchConfigurationDelegateIT {
 	}
 	
 	@After
-	public void tearDown() throws DebugException {
+	public void tearDown() throws CoreException {
 		projectWithDebugAvailableDeployedHelper.clean();
 	}
 
