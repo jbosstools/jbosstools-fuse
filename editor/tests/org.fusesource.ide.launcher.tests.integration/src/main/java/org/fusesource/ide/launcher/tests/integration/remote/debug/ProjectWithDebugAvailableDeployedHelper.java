@@ -28,7 +28,9 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -69,13 +71,14 @@ public class ProjectWithDebugAvailableDeployedHelper {
 		launchCamelRoute(project);
 	}
 
-	public void clean() throws DebugException {
+	public void clean() throws CoreException {
 		if(launchUsedToInitialize != null && !launchUsedToInitialize.isTerminated()){
 			launchUsedToInitialize.terminate();
 			for(IProcess process : launchUsedToInitialize.getProcesses()){
 				process.terminate();
 			}
 		}
+		project.delete(true, new NullProgressMonitor());
 	}
 	
 	private void launchCamelRoute(IProject project) throws MalformedObjectNameException, InterruptedException, DebugException {
