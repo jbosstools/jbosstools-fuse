@@ -83,6 +83,7 @@ import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
+import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
 import org.fusesource.ide.launcher.debug.model.CamelThread;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
@@ -209,12 +210,18 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		        		String endpointId = null;
 		        		
 		        		// first highlight the suspended node
-		        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null && entry.getDebugTarget().getDebugger().isEnabled()) {
-			        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
-			        		if (ids != null && !ids.isEmpty()) {
-			        			endpointId = ids.iterator().next();
-			        		}
-			        		highlightBreakpointNodeWithID(endpointId);
+		        		if (entry != null) {
+		        			CamelDebugTarget debugTarget = entry.getDebugTarget();
+							if(debugTarget != null
+		        					&& !debugTarget.isDisconnected()
+		        					&& !debugTarget.isTerminated()
+		        					&& debugTarget.getDebugger().isEnabled()) {
+		        				Set<String> ids = debugTarget.getDebugger().getSuspendedBreakpointNodeIds();
+		        				if (ids != null && !ids.isEmpty()) {
+		        					endpointId = ids.iterator().next();
+		        				}
+		        				highlightBreakpointNodeWithID(endpointId);
+		        			}
 		        		}
 		        	}
 		        }
