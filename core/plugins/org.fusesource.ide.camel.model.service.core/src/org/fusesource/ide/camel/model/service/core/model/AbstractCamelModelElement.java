@@ -1414,7 +1414,7 @@ public abstract class AbstractCamelModelElement {
 		} else {
 			project = null;
 		}
-		CamelModel model = CamelCatalogCacheManager.getInstance().getCachedCatalog(CamelCatalogUtils.getCatalogCoordinatesForProject(project));
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 		// then we get the eip meta model
 		Eip eip = model.getEip(name);
 		// special case for context wide endpoint definitions

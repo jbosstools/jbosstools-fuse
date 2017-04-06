@@ -27,7 +27,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCac
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -465,6 +464,6 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	}
 	
 	public CamelModel getCamelModel(){
-		return CamelCatalogCacheManager.getInstance().getCachedCatalog(CamelCatalogUtils.getCatalogCoordinatesForProject(resource != null ? resource.getProject() : null));
+		return CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 	}
 }

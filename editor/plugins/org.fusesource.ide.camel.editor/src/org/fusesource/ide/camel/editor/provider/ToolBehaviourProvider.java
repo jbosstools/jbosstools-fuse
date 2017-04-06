@@ -720,10 +720,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 
 		// inject palette entries generated out of the component model file
 		CamelDesignEditor editor = CamelUtils.getDiagramEditor(getDiagramTypeProvider());
-		String camelVersion = CamelUtils.getCurrentProjectCamelVersion(editor);
-		String runtimeprovider = editor != null ? CamelCatalogUtils.getRuntimeprovider(editor.getWorkspaceProject(), new NullProgressMonitor()) : CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
-
-		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, runtimeprovider);
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(editor.getModel().getResource().getProject());
 		for (Component component : model.getComponents()) {
 			if (shouldBeIgnored(component.getSchemeTitle()))
 				continue;

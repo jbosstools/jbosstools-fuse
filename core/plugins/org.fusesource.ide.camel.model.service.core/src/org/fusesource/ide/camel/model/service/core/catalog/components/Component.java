@@ -23,6 +23,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -328,6 +329,7 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public void setComponentProperties(Map<String, ComponentProperty> componentProperties) {
 		this.componentProperties = componentProperties;
+		PropertiesUtils.initializeComponentPropertyNames(this.componentProperties);
 	}
 
 	/**
@@ -343,6 +345,7 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public void setProperties(Map<String, Parameter> properties) {
 		this.properties = properties;
+		PropertiesUtils.initializePropertyNames(this.properties);
 	}
 
 	/**

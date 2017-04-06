@@ -85,7 +85,7 @@ public class NewDataFormatWizardIT {
 		Assertions.assertThat(supportedCamelVersions).hasSize(CURRENTLY_SHIPPED_MODEL_BUNDLES);
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
-			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(camelVersion);
 			Collection<DataFormat> supportedDataFormats = camelModel.getDataFormats();
 			Stream<Object[]> stream = supportedDataFormats.stream().map(dataFormat -> new Object[] { camelVersion, dataFormat.getName(), dataFormat });
 			res.addAll(stream.collect(Collectors.toCollection(HashSet::new)));
@@ -103,7 +103,7 @@ public class NewDataFormatWizardIT {
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
 		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + project.getName());
 
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 
 		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel);
 		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id);

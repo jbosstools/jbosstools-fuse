@@ -586,7 +586,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		IFacetedProject fproj = ProjectFacetsManager.create(editor.getWorkspaceProject());
 		IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
 		if (fproj != null && fproj.hasProjectFacet(camelFacet)) {
-			final String m2CamelVersion = new CamelMavenUtils().getCamelVersionFromMaven(CamelUtils.project());
+			final String m2CamelVersion = CamelMavenUtils.getCamelVersionFromMaven(CamelUtils.project());
 			if (m2CamelVersion != null) {
 				updateDepsVersion(compDeps, m2CamelVersion);
 				new MavenUtils().updateMavenDependencies(compDeps);

@@ -53,7 +53,7 @@ public class MavenUtils {
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		} else {
 			for (Plugin p : plugins) {
-				if (ORG_APACHE_CAMEL.equalsIgnoreCase(p.getGroupId()) && p.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_PREFIX)) {
+				if (isCamelDependency(p)) {
 					p.setVersion(camelVersion);
 				}
 			}
@@ -92,7 +92,7 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
+					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
 						dep.setVersion(null);
 					} else if(isMavenPropertyCamelVersionSet(properties)){
 						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
@@ -103,16 +103,35 @@ public class MavenUtils {
 			}
 		} else {
 			for (Dependency dep : dependencies) {
-				if (isCamelDependency(dep)
-						&& !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(dep.getVersion())){
+				if (isCamelDependency(dep) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(dep.getVersion())){
 					dep.setVersion(camelVersion);
 				}
 			}
 		}
 	}
+	
+	private static boolean isFuseBomImported(List<Dependency> dependencies) {
+		for (Dependency dep : dependencies) {
+			if (isFuseBomImportDependency(dep)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
+	private static boolean isFuseBomImportDependency(Dependency dep) {
+		return 	ORG_JBOSS_FUSE_BOM.equals(dep.getGroupId()) &&
+				JBOSS_FUSE_PARENT.equals(dep.getArtifactId()) &&
+				"pom".equals(dep.getType()) &&
+				"import".equals(dep.getScope());
+	}
+	
 	private static boolean isCamelDependency(Dependency dep) {
 		return ORG_APACHE_CAMEL.equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_PREFIX);
+	}
+	
+	private static boolean isCamelDependency(Plugin plugin) {
+		return ORG_APACHE_CAMEL.equalsIgnoreCase(plugin.getGroupId()) && plugin.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_PREFIX);
 	}
 
 	private static boolean isMavenPropertyFuseBomVersionSet(Properties properties) {
@@ -170,12 +189,12 @@ public class MavenUtils {
 	 */
 	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion) {
 		Properties properties = mavenModel.getProperties();
-		if(isMavenPropertyFuseBomVersionSet(properties)){
+		if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
 			properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 		} else {
 			if(mavenModel.getDependencyManagement() != null){
 				for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
-					if(ORG_JBOSS_FUSE_BOM.equals(dependency.getGroupId()) && JBOSS_FUSE_PARENT.equals(dependency.getArtifactId())){
+					if(isFuseBomImportDependency(dependency)){
 						dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 						return;
 					}

@@ -12,8 +12,10 @@ package org.fusesource.ide.camel.model.service.core;
 
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Repository;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.osgi.framework.BundleContext;
@@ -65,6 +67,14 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
     @Override
     public CamelModel getCamelModel(String camelVersion) {
     	return getCamelModel(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#updateMavenRepositoryLookup(java.util.List)
+     */
+    @Override
+    public void updateMavenRepositoryLookup(List<Repository> repositories) {
+    	checkedGetService().updateMavenRepositoryLookup(repositories);
     }
     
     /* (non-Javadoc)

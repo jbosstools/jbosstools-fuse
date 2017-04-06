@@ -51,7 +51,7 @@ public class CamelUtils {
 			editor = getDiagramEditor();
 		}
 		return editor == null ? CamelCatalogUtils.getLatestCamelVersion()
-		                      : new CamelMavenUtils().getCamelVersionFromMaven(editor.getWorkspaceProject());
+		                      : CamelMavenUtils.getCamelVersionFromMaven(editor.getWorkspaceProject());
 	}
 	
 	/**

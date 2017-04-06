@@ -57,9 +57,9 @@ public class CamelCatalogCoordinates {
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof CamelCatalogCoordinates) {
 			CamelCatalogCoordinates other = (CamelCatalogCoordinates)arg0;
-			return  getGroupId().equals(other.getGroupId()) &&
-					getArtifactId().equals(other.getArtifactId()) &&
-					getVersion().equals(other.getVersion());
+			return  getGroupId().equalsIgnoreCase(other.getGroupId()) &&
+					getArtifactId().equalsIgnoreCase(other.getArtifactId()) &&
+					getVersion().equalsIgnoreCase(other.getVersion());
 		}
 		return false; 
 	}
@@ -112,5 +112,13 @@ public class CamelCatalogCoordinates {
 	 */
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("%s:%s:%s", getGroupId(), getArtifactId(), getVersion());
 	}
 }

@@ -34,6 +34,7 @@ import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -717,8 +718,32 @@ public class PropertiesUtils {
 		String camelVersion = CamelCatalogUtils.DEFAULT_CAMEL_VERSION;
 		IProject wsProject = CamelUtils.getCurrentProject();
 		if (wsProject != null) {
-			camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(wsProject);
+			camelVersion = CamelMavenUtils.getCamelVersionFromMaven(wsProject);
 		}
 		return camelVersion;
+	}
+	
+	/**
+	 * method used to initialize the name field of each parameter as the name itself is only stored in the map as key
+	 * 
+	 * @param props
+	 */
+	public static void initializePropertyNames(Map<String, Parameter> props) {
+		for (String name : props.keySet()) {
+			Parameter p = props.get(name);
+			p.setName(name);
+		}
+	}
+	
+	/**
+	 * method used to initialize the name field of each parameter as the name itself is only stored in the map as key
+	 * 
+	 * @param props
+	 */
+	public static void initializeComponentPropertyNames(Map<String, ComponentProperty> props) {
+		for (String name : props.keySet()) {
+			ComponentProperty p = props.get(name);
+			p.setName(name);
+		}
 	}
 }
