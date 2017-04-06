@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.model.Repository;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.osgi.framework.BundleContext;
@@ -55,10 +56,7 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
      */
     @Override
     public CamelModel getCamelModel(String camelVersion, String runtimeProvider) {
-    	CamelModel cm = checkedGetService().getCamelModel(camelVersion, runtimeProvider);
-//    	cm.setCamelVersion(this.serviceVersion);
-//    	cm.setRuntimeProvider(runtimeProvider);
-    	return cm;
+    	return checkedGetService().getCamelModel(camelVersion, runtimeProvider);
     }
 
     /* (non-Javadoc)
@@ -70,51 +68,54 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
     }
     
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#updateMavenRepositoryLookup(java.util.List)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#updateMavenRepositoryLookup(java.util.List, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
      */
     @Override
-    public void updateMavenRepositoryLookup(List<Repository> repositories) {
-    	checkedGetService().updateMavenRepositoryLookup(repositories);
+    public void updateMavenRepositoryLookup(List<Repository> repositories, CamelCatalogCoordinates coords) {
+    	checkedGetService().updateMavenRepositoryLookup(repositories, coords);
     }
     
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelSchemaProvider()
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelSchemaProvider(org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
      */
     @Override
-    public CamelSchemaProvider getCamelSchemaProvider() {
-    	return checkedGetService().getCamelSchemaProvider();
+    public CamelSchemaProvider getCamelSchemaProvider(CamelCatalogCoordinates coords) {
+    	return checkedGetService().getCamelSchemaProvider(coords);
     }
 
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
      */
     @Override
-    public String createEndpointUri(String scheme, Map<String, String> properties) throws URISyntaxException {
-    	return checkedGetService().createEndpointUri(scheme, properties);
+    public String createEndpointUri(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords)
+    		throws URISyntaxException {
+    	return checkedGetService().createEndpointUri(scheme, properties, coords);
+    }
+
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
+     */
+    @Override
+    public String createEndpointXml(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords)
+    		throws URISyntaxException {
+    	return checkedGetService().createEndpointXml(scheme, properties, coords);
     }
     
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointProperties(java.lang.String, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
      */
     @Override
-    public String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException {
-    	return checkedGetService().createEndpointXml(scheme, properties);
+    public Map<String, String> getEndpointProperties(String uri, CamelCatalogCoordinates coords)
+    		throws URISyntaxException {
+    	return checkedGetService().getEndpointProperties(uri, coords);
     }
     
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointProperties(java.lang.String)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointScheme(java.lang.String, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
      */
     @Override
-    public Map<String, String> getEndpointProperties(String uri) throws URISyntaxException {
-    	return checkedGetService().getEndpointProperties(uri);
-    }
-    
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointScheme(java.lang.String)
-     */
-    @Override
-    public String getEndpointScheme(String uri) {
-    	return checkedGetService().getEndpointScheme(uri);
+    public String getEndpointScheme(String uri, CamelCatalogCoordinates coords) {
+    	return checkedGetService().getEndpointScheme(uri, coords);
     }
     
     /*
@@ -126,22 +127,22 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
     	return checkedGetService().testExpression(language, expression);
     }
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, boolean)
-	 */
-	@Override
-	public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode)
-			throws URISyntaxException {
-		return checkedGetService().createEndpointUri(scheme, properties, encode);
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, boolean, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
+     */
+    @Override
+    public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode,
+    		CamelCatalogCoordinates coords) throws URISyntaxException {
+		return checkedGetService().createEndpointUri(scheme, properties, encode, coords);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean)
-	 */
-	@Override
-	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode)
-			throws URISyntaxException {
-		return checkedGetService().createEndpointXml(scheme, properties, encode);
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
+     */
+    @Override
+    public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode,
+    		CamelCatalogCoordinates coords) throws URISyntaxException {
+		return checkedGetService().createEndpointXml(scheme, properties, encode, coords);
 	}
 	
 	/* (non-Javadoc)
