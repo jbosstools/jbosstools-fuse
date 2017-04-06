@@ -11,8 +11,10 @@
 package org.fusesource.ide.camel.model.service.core;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Repository;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 
 public interface ICamelManagerService {
@@ -34,6 +36,13 @@ public interface ICamelManagerService {
 	 * @return	the camel model
 	 */
 	CamelModel getCamelModel(String camelVersion, String runtimeProvider);
+	
+	/**
+	 * use this method to add additional repositories to use for dependency lookups
+	 * 
+	 * @param repositories
+	 */
+	void updateMavenRepositoryLookup(List<Repository> repositories);
 	
 	/**
 	 * returns the schema provider 

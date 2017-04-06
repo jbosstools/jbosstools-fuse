@@ -39,7 +39,7 @@ public class LanguageUtils {
 	 * @return the name and languages array available with the latest version of Camel embedded.
 	 */
 	public static String[][] nameAndLanguageArray() {
-		Collection<Language> languages = CamelCatalogCacheManager.getInstance().getDefaultCamelCatalog().getLanguages();
+		Collection<Language> languages = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(CamelCatalogUtils.DEFAULT_CAMEL_VERSION).getLanguages();
 		return languages.stream()
 				.map(lang -> new String[] { lang.getTitle(), lang.getName() })
 				.toArray(String[][]::new);

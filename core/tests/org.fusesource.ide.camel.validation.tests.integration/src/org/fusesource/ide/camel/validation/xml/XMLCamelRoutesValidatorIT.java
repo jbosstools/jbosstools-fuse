@@ -33,7 +33,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
@@ -140,7 +139,7 @@ public class XMLCamelRoutesValidatorIT {
 		CamelBasicModelElement unmarshall = new CamelBasicModelElement(route, null);
 		doReturn("unmarshal").when(unmarshalNode).getNodeName();
 		unmarshall.setXmlNode(unmarshalNode);
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
 		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);
@@ -176,7 +175,7 @@ public class XMLCamelRoutesValidatorIT {
 		CamelBasicModelElement jaxBElement = new CamelBasicModelElement(unmarshall, jaxbXmlNode);
 		jaxBElement.setXmlNode(jaxbXmlNode);
 		unmarshall.setParameter("dataFormatType", jaxBElement);
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
 		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);
@@ -213,7 +212,7 @@ public class XMLCamelRoutesValidatorIT {
 		jaxBElement.setXmlNode(jaxbXmlNode);
 		unmarshall.setParameter("dataFormatType", jaxBElement);
 		unmarshall.setParameter("ref", "aRefValue");
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
 		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);

@@ -31,7 +31,6 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,7 +50,7 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	public void testWithQuestionMark() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withQuestionMark.xml");
 		
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 		final Component rssComponent = camelModel.getComponentForScheme("rss");
 		Parameter feedUriParameter = rssComponent.getParameters().stream().filter(p -> "feedUri".equals(p.getName())).findFirst().get();
 		
@@ -72,7 +71,7 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testSeveralURiPaths() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameter.xml");
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 		final Component linkedinComponent = camelModel.getComponentForScheme("linkedin");
 		Parameter apiNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "apiName".equals(p.getName())).findFirst().get();
 		Parameter methodNamePathParameter = linkedinComponent.getParameters().stream().filter(p -> "methodName".equals(p.getName())).findFirst().get();
@@ -84,7 +83,7 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testStartingWithSlash() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameterStartingWithSlash.xml");
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 		final Component ftpsComponent = camelModel.getComponentForScheme("ftps");
 		Parameter hostPathParameter = ftpsComponent.getParameters().stream().filter(p -> "host".equals(p.getName())).findFirst().get();
 		Parameter portPathParameter = ftpsComponent.getParameters().stream().filter(p -> "port".equals(p.getName())).findFirst().get();
@@ -100,7 +99,7 @@ public class PropertiesUtilsForPathParameterCheckIT {
 	@Test
 	public void testWithNotFullyInitializedModelMap() throws Exception {
 		AbstractCamelModelElement selectedEP = importModel("withPathParameterStartingWithSlash.xml");
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 		final Component ftpsComponent = camelModel.getComponentForScheme("ftps");
 		List<Parameter> uriParameters = ftpsComponent.getParameters();
 		Parameter hostPathParameter = uriParameters.stream().filter(p -> "host".equals(p.getName())).findFirst().get();

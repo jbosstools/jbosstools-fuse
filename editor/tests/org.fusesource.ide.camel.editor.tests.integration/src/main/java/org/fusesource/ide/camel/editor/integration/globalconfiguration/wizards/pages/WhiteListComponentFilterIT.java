@@ -43,7 +43,7 @@ public class WhiteListComponentFilterIT {
 	@Before
 	public void setup() {
 		new ToolBehaviourProvider(new DiagramTypeProvider()).getPalette();
-		camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion());
+		camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(CamelCatalogUtils.getLatestCamelVersion());
 		doReturn(new ComponentManager(camelModel)).when(viewer).getInput();
 	}
 

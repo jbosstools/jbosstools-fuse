@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Repository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -44,7 +45,11 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 
 public class CamelMavenUtils {
 
-	public List<Dependency> getDependencies(MavenProject project, final Model model) {
+	private CamelMavenUtils() {
+		// hide constructor
+	}
+	
+	public static List<Dependency> getDependencies(MavenProject project, final Model model) {
 		List<Dependency> deps = new ArrayList<>();
 		deps.addAll(project.getDependencies());
 		if (project.getDependencyManagement() != null) {
@@ -57,6 +62,41 @@ public class CamelMavenUtils {
 		return deps;
 	}
 	
+	public static List<Repository> getRepositories(IProject project) {
+		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
+		List<Repository> reps = new ArrayList<>();
+		if (projectFacade != null) {
+			try {
+				MavenProject mavenProject = projectFacade.getMavenProject(new NullProgressMonitor());
+				reps.addAll(getRepositories(mavenProject));
+			} catch (CoreException e) {
+				CamelModelServiceCoreActivator.pluginLog().logError(
+						"Maven project has not been found (not imported?). Repositories won't be resolved.", e);
+			}
+		}
+		return reps;
+	}
+	
+	public static List<Repository> getRepositories(MavenProject project) {
+		if (project == null) return null;
+		String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
+		final File pomFile = new File(pomPath);
+		if (!pomFile.exists() || !pomFile.isFile()) {
+			return null;
+		}
+		try {
+			final Model model = MavenPlugin.getMaven().readModel(pomFile);
+			List<Repository> repos = new ArrayList<>();
+			if (model.getRepositories() != null) repos.addAll(model.getRepositories());
+			if (model.getPluginRepositories() != null) repos.addAll(model.getPluginRepositories());
+			return repos;
+		} catch (Exception ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
 	/**
 	 * returns the dependencies for the supplied Maven model in the supplied project
 	 * 
@@ -64,7 +104,7 @@ public class CamelMavenUtils {
 	 * @param model
 	 * @return
 	 */
-	public List<Dependency> getDependencies(IProject project, final Model model) {
+	public static List<Dependency> getDependencies(IProject project, final Model model) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
 		List<Dependency> deps = new ArrayList<>();
 		if (projectFacade != null) {
@@ -89,7 +129,7 @@ public class CamelMavenUtils {
 	 * @param project
 	 * @return the Maven project facade corresponding to the supplied project
 	 */
-	public IMavenProjectFacade getMavenProjectFacade(IProject project) {
+	public static IMavenProjectFacade getMavenProjectFacade(IProject project) {
 		final IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
 		return projectRegistry.create(pomIFile, false, new NullProgressMonitor());
@@ -103,7 +143,7 @@ public class CamelMavenUtils {
 	 * @param version
 	 * @return	the artifact or null if not resolvable 
 	 */
-	public Artifact resolveArtifact(String groupId, String artifactId, String version) {
+	public static Artifact resolveArtifact(String groupId, String artifactId, String version) {
 		try {
 			return MavenPlugin.getMaven().resolve(groupId, artifactId, version, "jar", //$NON-NLS-1$
 					null, null, new NullProgressMonitor());
@@ -113,7 +153,7 @@ public class CamelMavenUtils {
 		return null;
 	}
 
-	public List<Dependency> getDependencyList(IProject project) {
+	public static List<Dependency> getDependencyList(IProject project) {
 		if (project == null) return null;
 		IPath pomPathValue = project.getProject().getRawLocation() != null
 				? project.getProject().getRawLocation().append("pom.xml")
@@ -131,7 +171,7 @@ public class CamelMavenUtils {
 		return Collections.EMPTY_LIST;
 	}
 	
-	public List<Dependency> getDependencyList(MavenProject project) {
+	public static List<Dependency> getDependencyList(MavenProject project) {
 		if (project == null) return null;
 		String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
 		final File pomFile = new File(pomPath);
@@ -153,7 +193,7 @@ public class CamelMavenUtils {
 	 * @param project
 	 * @return
 	 */
-	public String getCamelVersionFromMaven(IProject project) {
+	public static String getCamelVersionFromMaven(IProject project) {
 		// get camel-core or another camel dep
 		List<Dependency> deps = getDependencyList(project);
 		if (deps != null) {
@@ -167,7 +207,7 @@ public class CamelMavenUtils {
 		return null;
 	}
 	
-	public String getCamelVersionFromMaven(MavenProject project) {
+	public static String getCamelVersionFromMaven(MavenProject project) {
 		List<Dependency> deps = getDependencyList(project);
 		if (deps != null) {
 			for (Dependency pomDep : deps) {
@@ -186,7 +226,7 @@ public class CamelMavenUtils {
 	 * @param project
 	 * @return
 	 */
-	public String getWildFlyCamelVersionFromMaven(IProject project) {
+	public static String getWildFlyCamelVersionFromMaven(IProject project) {
 		// get any wildfly camel dep
 		List<Dependency> deps = getDependencyList(project);
 		for (Dependency pomDep : deps) {
