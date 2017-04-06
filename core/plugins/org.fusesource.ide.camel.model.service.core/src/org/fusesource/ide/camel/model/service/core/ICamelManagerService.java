@@ -19,9 +19,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoo
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 
 public interface ICamelManagerService {
-
-	public static final String CAMEL_VERSION_PROPERTY = "camel.version"; //$NON-NLS-1$
-
 	/**
 	 * creates and returns the camel model for a specific version and karaf runtime 
 	 * 
@@ -133,10 +130,9 @@ public interface ICamelManagerService {
 	 * tests a duration string and returns the amount of millis
 	 *  
 	 * @param duration	the duration string like 10h(ours)5m(inutes)30s(econds)
-	 * @return	the value in milliseconds
-	 * @throws IllegalArgumentException	if the string is invalid
+	 * @return	the value in milliseconds or -1 on failure
 	 */
-	long durationToMillis(String duration) throws IllegalArgumentException;
+	long durationToMillis(String duration);
 	
 	/**
 	 * parses a uri query

@@ -149,7 +149,7 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#durationToMillis(java.lang.String)
 	 */
 	@Override
-	public long durationToMillis(String duration) throws IllegalArgumentException {
+	public long durationToMillis(String duration) {
 		return checkedGetService().durationToMillis(duration);
 	}
 

@@ -47,7 +47,7 @@ public class CamelCatalogCoordinates {
 		dep.setGroupId(groupId);
 		dep.setArtifactId(artifactId);
 		dep.setVersion(version);
-		CamelCatalogUtils.getRuntimeProvider(dep);
+		CamelCatalogUtils.getRuntimeProviderFromDependency(dep);
 	}
 	
 	/* (non-Javadoc)
