@@ -46,26 +46,28 @@ public class CamelService implements ICamelManagerService {
 	
 	private static final boolean ENCODE_DEFAULT = false;
 
-	private MavenVersionManager versionManager;
-	private CamelCatalog catalog;
+	private Map<CamelCatalogCoordinates, CamelCatalog> cachedCatalogs = new HashMap<>();
 
-	/**
-	 * initializing
-	 */
-	public CamelService() {
-		createCatalog();
-	}
-	
-	private void createCatalog() {
-		catalog = new DefaultCamelCatalog(true);
-		versionManager = new MavenVersionManager();
-		List<List<String>> additionalM2Repos = getAdditionalRepos();
-		for (List<String> repo : additionalM2Repos) {
-			String repoName = repo.get(0);
-			String repoUri = repo.get(1);
-			versionManager.addMavenRepository(repoName, repoUri);
+	private CamelCatalog getCatalog(CamelCatalogCoordinates coords) {
+		if (!cachedCatalogs.containsKey(coords) ) {
+			CamelCatalog catalog = new DefaultCamelCatalog(true);
+			MavenVersionManager versionManager = new MavenVersionManager();
+			List<List<String>> additionalM2Repos = getAdditionalRepos();
+			for (List<String> repo : additionalM2Repos) {
+				String repoName = repo.get(0);
+				String repoUri = repo.get(1);
+				versionManager.addMavenRepository(repoName, repoUri);
+			}
+			catalog.setVersionManager(versionManager);
+			if (!catalog.loadVersion(coords.getVersion())) {
+				CamelServiceImplementationActivator.pluginLog().logError("Unable to load Camel Catalog for version " + coords.getVersion());
+			}
+			if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
+				CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+			}
+			cachedCatalogs.put(coords, catalog);
 		}
-		catalog.setVersionManager(versionManager);
+		return cachedCatalogs.get(coords);
 	}
 	
 	/* (non-Javadoc)
@@ -81,76 +83,75 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public CamelModel getCamelModel(String camelVersion, String runtimeProvider) {
-		createCatalog();
-		if (!catalog.loadVersion(camelVersion)) {
-			CamelServiceImplementationActivator.pluginLog().logError("Unable to load Camel Catalog for version " + camelVersion);
-		}
-		loadRuntimeProvider(runtimeProvider, camelVersion);
+		CamelCatalogCoordinates coords = CamelCatalogUtils.getCatalogCoordinatesFor(runtimeProvider, camelVersion);
+		CamelCatalog catalog = getCatalog(coords);
 		return loadCamelModelFromCatalog(catalog);
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelSchemaProvider()
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelSchemaProvider(org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public CamelSchemaProvider getCamelSchemaProvider() {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public CamelSchemaProvider getCamelSchemaProvider(CamelCatalogCoordinates coords) {
+		CamelCatalog catalog = getCatalog(coords);
 		return new CamelSchemaProvider(catalog.blueprintSchemaAsXml(), catalog.springSchemaAsXml());
 	}	
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public String createEndpointUri(String scheme, Map<String, String> properties) throws URISyntaxException {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public String createEndpointUri(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords) throws URISyntaxException {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.asEndpointUri(scheme, properties, ENCODE_DEFAULT);
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, boolean)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, boolean, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode)
-			throws URISyntaxException {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode,
+			CamelCatalogCoordinates coords) throws URISyntaxException {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.asEndpointUri(scheme, properties, encode);
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointProperties(java.lang.String)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointProperties(java.lang.String, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public Map<String, String> getEndpointProperties(String uri) throws URISyntaxException {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public Map<String, String> getEndpointProperties(String uri, CamelCatalogCoordinates coords)
+			throws URISyntaxException {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.endpointProperties(uri);
 	}
-	
+
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public String createEndpointXml(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords)
+			throws URISyntaxException {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.asEndpointUriXml(scheme, properties, ENCODE_DEFAULT);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode)
-			throws URISyntaxException {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode,
+			CamelCatalogCoordinates coords) throws URISyntaxException {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.asEndpointUriXml(scheme, properties, encode);
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointScheme(java.lang.String)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointScheme(java.lang.String, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public String getEndpointScheme(String uri) {
-		if (catalog == null) catalog = new DefaultCamelCatalog();
+	public String getEndpointScheme(String uri, CamelCatalogCoordinates coords) {
+		CamelCatalog catalog = getCatalog(coords);
 		return catalog.endpointComponentName(uri);
 	}
 	
@@ -185,11 +186,19 @@ public class CamelService implements ICamelManagerService {
 		return TimePatternConverter.toMilliSeconds(duration);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#parseQuery(java.lang.String)
+	 */
 	@Override
 	public Map<String, Object> parseQuery(String uri) throws URISyntaxException {
 		return URISupport.parseQuery(uri);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createQuery(java.util.Map)
+	 */
 	@Override
 	public String createQuery(Map<String, Object> parameters) throws URISyntaxException {
 		Map<String, String> params = new HashMap<>();
@@ -200,19 +209,12 @@ public class CamelService implements ICamelManagerService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#updateMavenRepositoryLookup(java.util.List)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#updateMavenRepositoryLookup(java.util.List, org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates)
 	 */
 	@Override
-	public void updateMavenRepositoryLookup(List<Repository> repositories) {
+	public void updateMavenRepositoryLookup(List<Repository> repositories, CamelCatalogCoordinates coords) {
 		for (Repository repo : repositories) {
-			versionManager.addMavenRepository(repo.getId(), repo.getUrl());
-		}
-	}
-	
-	private void loadRuntimeProvider(String runtimeProvider, String version) {
-		CamelCatalogCoordinates coords = CamelCatalogUtils.getCatalogCoordinatesFor(runtimeProvider, version);
-		if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), version)) {
-			CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+			((MavenVersionManager)getCatalog(coords).getVersionManager()).addMavenRepository(repo.getId(), repo.getUrl());
 		}
 	}
 	
@@ -220,6 +222,8 @@ public class CamelService implements ICamelManagerService {
 		List<List<String>> repoList = new ArrayList<>();
 		// add the ASF snapshot repo for cutting edge camel version access
 		repoList.add(Arrays.asList("asf-snapshots", "https://repository.apache.org/content/groups/snapshots"));
+		// public asf repo
+		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
 		// add the JBoss Products GA repo
 		repoList.add(Arrays.asList("jboss-products-ga", "https://repository.jboss.org/nexus/content/groups/product-ga/"));
 		IPreferenceStore s = new ScopedPreferenceStore(new InstanceScope(), "org.fusesource.ide.projecttemplates");

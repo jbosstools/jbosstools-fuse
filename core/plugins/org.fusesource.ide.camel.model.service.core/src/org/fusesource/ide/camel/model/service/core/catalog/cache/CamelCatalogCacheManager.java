@@ -99,15 +99,15 @@ public class CamelCatalogCacheManager {
 	 * @return	the model or NULL
 	 */
 	public CamelModel getCamelModelForProject(IProject project) {
-		// initialize repos for the dep lookup
-		if (project != null) {
-			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(CamelMavenUtils.getRepositories(project));
-		}
 		CamelCatalogCoordinates coords = null;
 		if (project == null) {
 			coords = CamelCatalogUtils.getDefaultCatalogCoordinates();
 		} else {
 			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project);
+		}
+		// initialize repos for the dep lookup
+		if (project != null) {
+			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(CamelMavenUtils.getRepositories(project), coords);
 		}
 		if (coords != null) {
 			return getCachedCatalog(coords);
