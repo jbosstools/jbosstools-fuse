@@ -72,7 +72,6 @@
 
 	<modules>
 		<module>build-config</module>
-		<module>tools</module>
 		<module>core</module>
 		<module>editor</module>
 		<module>transformation</module>
