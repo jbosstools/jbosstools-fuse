@@ -42,6 +42,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.tests.util.Activator;
 import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -53,7 +54,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 
 public class ProjectWithDebugAvailableDeployedHelper {
 	
-	private static final String POM_XML = "pom.xml";
+	private static final String POM_XML = IMavenConstants.POM_FILE_NAME;
 	
 	private boolean deploymentFinished;
 	private boolean isDeploymentOk;

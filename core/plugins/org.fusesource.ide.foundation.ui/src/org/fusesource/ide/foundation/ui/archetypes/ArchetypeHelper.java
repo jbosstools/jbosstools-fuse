@@ -40,6 +40,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -207,7 +208,7 @@ public class ArchetypeHelper {
 
         // now lets replace all the properties in the pom.xml
         if (!replaceProperties.isEmpty()) {
-            File pom = new File(outputDir, "pom.xml");
+            File pom = new File(outputDir, IMavenConstants.POM_FILE_NAME);
             FileReader reader = new FileReader(pom);
             String text = IOUtils.toString(reader);
             IOUtils.closeQuietly(reader);

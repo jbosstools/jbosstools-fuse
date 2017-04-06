@@ -45,6 +45,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.osgi.util.NLS;
@@ -221,7 +222,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final IPath location = locationPage.isInWorkspace() ? null : locationPage.getLocationPath();
 		final IWorkspaceRoot root = workspace.getRoot();
 		final IPath rootPath = locationPage.isInWorkspace() ? root.getLocation().append(projectName) : location;
-		final File pomFile = rootPath.append("pom.xml").toFile();
+		final File pomFile = rootPath.append(IMavenConstants.POM_FILE_NAME).toFile();
 		boolean pomExists = pomFile.exists();
 		final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
@@ -375,7 +376,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 			
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			MavenUpdateRequest request = new MavenUpdateRequest(false, true);
-			request.addPomFile(project.getFile("pom.xml"));
+			request.addPomFile(project.getFile(IMavenConstants.POM_FILE_NAME));
 			configurationManager.updateProjectConfiguration(request, monitor);
 		} catch (CoreException ex) {
 			Activator.getLogger().error(ex);
