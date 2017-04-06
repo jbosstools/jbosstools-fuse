@@ -50,14 +50,14 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	public static final String PROPERTY_VERSION = "version";
 
 	@JsonProperty("component")
-	private Map<String, String> model;
+	private Map<String, String> model = new HashMap<>();
 	@JsonProperty("componentProperties")
-	private Map<String, ComponentProperty> componentProperties;
+	private Map<String, ComponentProperty> componentProperties = new HashMap<>();
 	@JsonProperty("properties")
-	private Map<String, Parameter> properties;
+	private Map<String, Parameter> properties = new HashMap<>();
 
-	private ArrayList<Dependency> dependencies;
-	private ArrayList<String> tags;
+	private List<Dependency> dependencies = new ArrayList<>();
+	private List<String> tags = new ArrayList<>();
 	private Map<String, Object> otherProperties = new HashMap<>();
 
 	@JsonAnyGetter
@@ -233,7 +233,7 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @return the tags
 	 */
-	public ArrayList<String> getTags() {
+	public List<String> getTags() {
 		if (this.tags == null || this.tags.isEmpty()) {
 			this.tags = CamelCatalogUtils.initializeTags(this.model.get(PROPERTY_LABEL));
 		}
@@ -243,15 +243,18 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	/**
 	 * @param tags
 	 */
-	public void setTags(ArrayList<String> tags) {
-		String label = "";
-		for (String tag : tags) {
-			if (label.length() > 0) {
-				label += ',';
+	public void setTags(List<String> tags) {
+		this.tags.clear();
+		StringBuilder label = new StringBuilder();
+		if (tags != null) {
+			for (String tag : tags) {
+				if (label.length() > 0) {
+					label.append(Character.toString(','));
+				}
+				label.append(tag);
 			}
-			label += tag;
 		}
-		this.model.put(PROPERTY_LABEL, label);
+		this.model.put(PROPERTY_LABEL, label.toString());
 		this.tags = tags;
 	}
 
@@ -427,8 +430,7 @@ public class Component implements ICamelCatalogElement, IParameterContainer {
 	public static Component getJSONFactoryInstance(InputStream stream) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			Component model = mapper.readValue(stream, Component.class);
-			return model;
+			return mapper.readValue(stream, Component.class);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}

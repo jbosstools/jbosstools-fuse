@@ -171,7 +171,7 @@ public class CamelService implements ICamelManagerService {
 			try {
 				ctx.shutdown();
 			} catch (Exception ex) {
-				// ignore
+				CamelServiceImplementationActivator.pluginLog().logError(ex);
 			}
 			ctx = null;
 		}
@@ -182,8 +182,12 @@ public class CamelService implements ICamelManagerService {
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#durationToMillis(java.lang.String)
 	 */
 	@Override
-	public long durationToMillis(String duration) throws IllegalArgumentException {
-		return TimePatternConverter.toMilliSeconds(duration);
+	public long durationToMillis(String duration) {
+		try {
+			return TimePatternConverter.toMilliSeconds(duration);
+		} catch (IllegalArgumentException ex) {
+			return -1;
+		}
 	}
 	
 	/*
@@ -226,16 +230,14 @@ public class CamelService implements ICamelManagerService {
 		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
 		// add the JBoss Products GA repo
 		repoList.add(Arrays.asList("jboss-products-ga", "https://repository.jboss.org/nexus/content/groups/product-ga/"));
-		IPreferenceStore s = new ScopedPreferenceStore(new InstanceScope(), "org.fusesource.ide.projecttemplates");
-		if (s != null) {
-			boolean enabled = s.getBoolean("enableStagingRepositories");
-			if (enabled) {
-				String repos = s.getString("stagingRepositories");
-				repoList.addAll(Arrays.asList(repos.split(";"))
-						.stream()
-						.map(repoName -> Arrays.asList(repoName.split(",")))
-						.collect(Collectors.toList()));
-			}
+		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
+		boolean enabled = s.getBoolean("enableStagingRepositories");
+		if (enabled) {
+			String repos = s.getString("stagingRepositories");
+			repoList.addAll(Arrays.asList(repos.split(";"))
+					.stream()
+					.map(repoName -> Arrays.asList(repoName.split(",")))
+					.collect(Collectors.toList()));
 		}
 		return repoList;
 	}
