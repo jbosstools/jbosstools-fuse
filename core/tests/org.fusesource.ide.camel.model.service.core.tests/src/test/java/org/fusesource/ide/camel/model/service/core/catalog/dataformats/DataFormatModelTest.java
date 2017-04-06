@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.junit.Before;
 import org.junit.Test;
 
