@@ -10,19 +10,19 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -31,27 +31,28 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.eclipse.jdt.core.JavaModelException;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
-import org.fusesource.ide.foundation.core.util.JsonHelper;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.jboss.dmr.ModelNode;
 
 /**
  * @author lhein
  */
 public final class CamelComponentUtils {
 
-	private static Map<CamelModel, Map<String, Component>> knownComponentsForCamelModel = new WeakHashMap<>();
+	private static Map<CamelModel, Map<String, Component>> knownComponentsForCamelModel = new HashMap<>();
 
+	private CamelComponentUtils() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * returns the properties model for a given protocol
 	 *
@@ -66,7 +67,7 @@ public final class CamelComponentUtils {
 		if (knownComponentsForCamelModel.containsKey(camelModel)) {
 			knownComponents = knownComponentsForCamelModel.get(camelModel);
 		} else {
-			knownComponents = new WeakHashMap<>();
+			knownComponents = new HashMap<>();
 			knownComponentsForCamelModel.put(camelModel, knownComponents);
 		}
 		String componentClass = getComponentClass(protocol, camelFile);
@@ -102,40 +103,40 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isRefProperty(Parameter p) {
-		return p.getName().equalsIgnoreCase("ref") && p.getType().equalsIgnoreCase("string")
-				&& p.getJavaType().equalsIgnoreCase("java.lang.String") && p.getKind().equalsIgnoreCase("attribute");
+		return "ref".equalsIgnoreCase(p.getName()) && "string".equalsIgnoreCase(p.getType())
+				&& "java.lang.String".equalsIgnoreCase(p.getJavaType()) && "attribute".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isBooleanProperty(Parameter p) {
-		return p.getJavaType().equalsIgnoreCase("boolean") || p.getJavaType().equalsIgnoreCase("java.lang.Boolean");
+		return "boolean".equalsIgnoreCase(p.getJavaType()) || "java.lang.Boolean".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isDescriptionProperty(Parameter p) {
-		return p.getKind().equals(AbstractCamelModelElement.NODE_KIND_ELEMENT)
-				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition")
-				&& p.getName().equals("description");
+		return AbstractCamelModelElement.NODE_KIND_ELEMENT.equals(p.getKind())
+				&& "org.apache.camel.model.DescriptionDefinition".equalsIgnoreCase(p.getJavaType())
+				&& "description".equals(p.getName());
+	}
+
+	public static boolean isTextProperty(Parameter p) {
+		return p.getChoice() == null && !"ref".equalsIgnoreCase(p.getName())
+				&& !"expression".equals(p.getKind())
+				&& ("String".equalsIgnoreCase(p.getJavaType()) || "java.lang.String".equalsIgnoreCase(p.getJavaType())
+						|| "java.net.URL".equalsIgnoreCase(p.getJavaType())
+						|| "java.net.URI".equalsIgnoreCase(p.getJavaType())
+						|| "Text".equalsIgnoreCase(p.getJavaType()));
 	}
 	
 	public static boolean isCharProperty(Parameter p) {
 		return "char".equalsIgnoreCase(p.getJavaType());
 	}
 
-	public static boolean isTextProperty(Parameter p) {
-		return p.getChoice() == null && p.getName().equalsIgnoreCase("ref") == false
-				&& p.getKind().equals("expression") == false
-				&& (p.getJavaType().equalsIgnoreCase("String") || p.getJavaType().equalsIgnoreCase("java.lang.String")
-						|| p.getJavaType().equalsIgnoreCase("java.net.URL")
-						|| p.getJavaType().equalsIgnoreCase("java.net.URI")
-						|| p.getJavaType().equalsIgnoreCase("Text"));
-	}
-
 	public static boolean isNumberProperty(Parameter p) {
 		final String javaType = p.getJavaType();
-		return p.getChoice() == null && (javaType.equalsIgnoreCase("int") || javaType.equalsIgnoreCase("Integer")
-				|| javaType.equalsIgnoreCase("java.lang.Integer") || javaType.equalsIgnoreCase("long")
-				|| javaType.equalsIgnoreCase("java.lang.Long") || javaType.equalsIgnoreCase("double")
-				|| javaType.equalsIgnoreCase("java.lang.Double") || javaType.equalsIgnoreCase("float")
-				|| javaType.equalsIgnoreCase("java.lang.Float") || javaType.equalsIgnoreCase("Number"));
+		return p.getChoice() == null && ("int".equalsIgnoreCase(javaType) || "Integer".equalsIgnoreCase(javaType)
+				|| "java.lang.Integer".equalsIgnoreCase(javaType) || "long".equalsIgnoreCase(javaType)
+				|| "java.lang.Long".equalsIgnoreCase(javaType) || "double".equalsIgnoreCase(javaType)
+				|| "java.lang.Double".equalsIgnoreCase(javaType) || "float".equalsIgnoreCase(javaType)
+				|| "java.lang.Float".equalsIgnoreCase(javaType) || "Number".equalsIgnoreCase(javaType));
 	}
 
 	public static boolean isChoiceProperty(Parameter p) {
@@ -143,21 +144,21 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isFileProperty(Parameter p) {
-		return p.getJavaType().equalsIgnoreCase("file") || p.getJavaType().equalsIgnoreCase("java.io.file");
+		return "file".equalsIgnoreCase(p.getJavaType()) || "java.io.file".equalsIgnoreCase(p.getJavaType());
 	}
 	
 	public static boolean isClassProperty(Parameter p) {
-		return p.getType().equalsIgnoreCase("object");
+		return "object".equalsIgnoreCase(p.getType());
 	}
 
 	public static boolean isExpressionProperty(Parameter p) {
-		return p.getKind().equalsIgnoreCase("expression")
-				|| p.getJavaType().equalsIgnoreCase("org.apache.camel.model.language.ExpressionDefinition");
+		return "expression".equalsIgnoreCase(p.getKind())
+				|| "org.apache.camel.model.language.ExpressionDefinition".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isDataFormatProperty(Parameter p) {
-		return p.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT)
-				&& p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition");
+		return AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())
+				&& "org.apache.camel.model.DataFormatDefinition".equalsIgnoreCase(p.getJavaType());
 	}
 
 	public static boolean isListProperty(Parameter p) {
@@ -170,11 +171,11 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isUriPathParameter(Parameter p) {
-		return p.getKind() != null && p.getKind().equalsIgnoreCase("path");
+		return p.getKind() != null && "path".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isUriOptionParameter(Parameter p) {
-		return p.getKind() != null && p.getKind().equalsIgnoreCase("parameter");
+		return p.getKind() != null && "parameter".equalsIgnoreCase(p.getKind());
 	}
 
 	public static boolean isUnsupportedProperty(Parameter p) {
@@ -192,23 +193,11 @@ public final class CamelComponentUtils {
 	}
 
 	public static String[] getOneOfList(Parameter p) {
-		List<String> res = new ArrayList<>();
-		res.add(" "); // empty entry
-		for (String choice : p.getOneOf()) {
-			res.add(choice);
-		}
-		return res.toArray(new String[res.size()]);
+		return p.getOneOf();
 	}
 
-	/**
-	 * returns the component class for the given scheme
-	 *
-	 * @param scheme
-	 * @return the class or null if not found
-	 */
-	protected static String getComponentClass(String scheme, CamelFile camelFile) {
+	public static String getComponentClassForScheme(String scheme, CamelFile camelFile) {
 		String compClass = null;
-		IProject project = camelFile.getResource().getProject();
 		Collection<Component> components = camelFile.getCamelModel().getComponents();
 		for (Component c : components) {
 			if (c.supportsScheme(scheme)) {
@@ -216,41 +205,80 @@ public final class CamelComponentUtils {
 				break;
 			}
 		}
+		return compClass;
+	}
 
-		if (compClass == null) {
-			// seems this scheme has no model entry -> check dependency
-			try {
-				ZipFile zf = null;
-				ZipEntry ze = null;
-				IJavaProject jpr = JavaCore.create(project);
-				for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
-					File cpEntryFile = e.getPath().toFile();
-					if (isJarFile(cpEntryFile)) {
-						zf = new ZipFile(cpEntryFile);
-						ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
-						if (ze != null) {
-							break;
-						}
-						ze = null;
-						zf = null;
-					}
-				}
-
+	private static String getClassFromZipEntry(String scheme, File cpEntryFile) {
+		if (isJarFile(cpEntryFile)) {
+			try (ZipFile zf = new ZipFile(cpEntryFile)) {
+				ZipEntry ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
 				if (ze != null) {
 					// try to generate a model entry for the component class
 					Properties p = new Properties();
 					p.load(zf.getInputStream(ze));
-					compClass = p.getProperty("class");
+					return p.getProperty("class");
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				CamelModelServiceCoreActivator.pluginLog().logError(ex);
-				compClass = null;
 			}
+		}
+		return null;
+	}
+	
+	private static String getComponentClassFromJar(IJavaProject jpr, String scheme){
+		try {
+			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
+				File cpEntryFile = e.getPath().toFile();
+				String compClass = getClassFromZipEntry(scheme, cpEntryFile);
+				if (!Strings.isBlank(compClass)) {
+					return compClass;
+				}
+			}
+		} catch (JavaModelException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
+	
+	/**
+	 * returns the component class for the given scheme
+	 *
+	 * @param scheme
+	 * @return the class or null if not found
+	 */
+	protected static String getComponentClass(String scheme, CamelFile camelFile) {
+		String compClass = getComponentClassForScheme(scheme, camelFile);
+		if (compClass == null) {
+			// seems this scheme has no model entry -> check dependency
+			IProject project = camelFile.getResource().getProject();
+			IJavaProject jpr = JavaCore.create(project);
+			compClass = getComponentClassFromJar(jpr, scheme);
 		}
 
 		return compClass;
 	}
 
+	private static String getComponentJsonFromJar(File cpEntryFile, String scheme) {
+		try (ZipFile zf = new ZipFile(cpEntryFile)) {
+			ZipEntry ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
+			if (ze != null) {
+				// try to generate a model entry for the component class
+				Properties p = new Properties();
+				p.load(zf.getInputStream(ze));
+				String compClass = p.getProperty("class");
+				String packageName = compClass.substring(0, compClass.lastIndexOf('.'));
+				String folder = packageName.replaceAll("\\.", "/");
+				ze = zf.getEntry(String.format("%s/%s.json", folder, scheme));
+				if (ze != null) {
+					return IOUtils.loadText(zf.getInputStream(ze), null);
+				}
+			}
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		}
+		return null;
+	}
+	
 	/**
 	 * returns the component class for the given scheme
 	 *
@@ -259,43 +287,23 @@ public final class CamelComponentUtils {
 	 * @return the class or null if not found
 	 */
 	protected static String getComponentJSon(String scheme, IProject project) {
-		String json = null;
-
+		IJavaProject jpr = JavaCore.create(project);
+		
 		try {
-			ZipFile zf = null;
-			ZipEntry ze = null;
-			IJavaProject jpr = JavaCore.create(project);
 			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
 				File cpEntryFile = e.getPath().toFile();
-				if (isJarFile(cpEntryFile)) {
-					zf = new ZipFile(cpEntryFile);
-					ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
-					if (ze != null) {
-						break;
-					}
-					ze = null;
-					zf = null;
+				if (!isJarFile(cpEntryFile)) {
+					continue;
+				}
+				String compJSON = getComponentJsonFromJar(cpEntryFile, scheme);
+				if (!Strings.isBlank(compJSON)) {
+					return compJSON;
 				}
 			}
-
-			if (ze != null) {
-				// try to generate a model entry for the component class
-				Properties p = new Properties();
-				p.load(zf.getInputStream(ze));
-				String compClass = p.getProperty("class");
-				String packageName = compClass.substring(0, compClass.lastIndexOf("."));
-				String folder = packageName.replaceAll("\\.", "/");
-				ze = zf.getEntry(String.format("%s/%s.json", folder, scheme));
-				if (ze != null) {
-					json = IOUtils.loadText(zf.getInputStream(ze), null);
-				}
-			}
-		} catch (Exception ex) {
+		} catch (JavaModelException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-			json = null;
 		}
-
-		return json;
+		return null;
 	}
 
 	private static boolean isJarFile(File f) {
@@ -309,7 +317,7 @@ public final class CamelComponentUtils {
 
 		// 2. try to generate the model from json blob
 		if (resModel == null) {
-			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, camelFile.getResource().getProject()), clazz, camelModel);
+			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, camelFile.getResource().getProject()), camelModel);
 		}
 
 		// 3. handling special cases
@@ -333,12 +341,12 @@ public final class CamelComponentUtils {
 	 * @param camelModel 
 	 * @return
 	 */
-	protected static Component buildModelFromJSON(String scheme, String oJSONBlob, String clazz, CamelModel camelModel) {
+	protected static Component buildModelFromJSON(String scheme, String oJSONBlob, CamelModel camelModel) {
 		Component resModel = null;
 
 		try {
 			if (oJSONBlob != null) {
-				resModel = buildModelFromJSonBlob(oJSONBlob, clazz);
+				resModel = buildModelFromJSonBlob(oJSONBlob);
 				resModel.setScheme(scheme);
 				saveModel(camelModel, resModel);
 			}
@@ -351,20 +359,9 @@ public final class CamelComponentUtils {
 
 	private static void saveModel(CamelModel camelModel, Component component) {
 		if(!knownComponentsForCamelModel.containsKey(camelModel)){
-			knownComponentsForCamelModel.put(camelModel, new WeakHashMap<>());
+			knownComponentsForCamelModel.put(camelModel, new HashMap<>());
 		}
 		knownComponentsForCamelModel.get(camelModel).put(component.getClazz(), component);
-		
-		try {
-			// create JAXB context and instantiate marshaller
-			// JAXBContext context =
-			// JAXBContext.newInstance(ComponentModel.class, Component.class,
-			// Dependency.class, ComponentProperty.class, Parameter.class);
-			// Marshaller m = context.createMarshaller();
-			// m.marshal(component, new File("/var/tmp/model.xml"));
-		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-		}
 	}
 
 	public static URLClassLoader getProjectClassLoader(IProject project) {
@@ -389,158 +386,7 @@ public final class CamelComponentUtils {
 	 * @param json
 	 * @return
 	 */
-	protected static Component buildModelFromJSonBlob(String json, String clazz) {
-		Component resModel = new Component();
-		resModel.setClazz(clazz);
-
-		try {
-			ModelNode model = JsonHelper.getModelNode(json);
-
-			ModelNode componentNode = model.get("component");
-			Map<String, Object> props = JsonHelper.getAsMap(componentNode);
-			Iterator<String> it = props.keySet().iterator();
-
-			String grpId = null, artId = null, ver = null;
-
-			while (it.hasNext()) {
-				String propName = it.next();
-				ModelNode valueNode = componentNode.get(propName);
-
-				if ("kind".equals(propName)) {
-					resModel.setKind(valueNode.asString());
-				} else if ("scheme".equals(propName)) {
-					resModel.setScheme(valueNode.asString());
-				} else if ("syntax".equals(propName)) {
-					resModel.setSyntax(valueNode.asString());
-				} else if ("title".equals(propName)) {
-					resModel.setTitle(valueNode.asString());
-				} else if ("description".equals(propName)) {
-					resModel.setDescription(valueNode.asString());
-				} else if ("label".equals(propName)) {
-					ArrayList<String> al = new ArrayList<String>();
-					al.addAll(Arrays.asList(valueNode.asString().split(",")));
-					resModel.setTags(al);
-				} else if ("consumerOnly".equals(propName)) {
-					resModel.setConsumerOnly(valueNode.asString());
-				} else if ("producerOnly".equals(propName)) {
-					resModel.setProducerOnly(valueNode.asString());
-				} else if ("javaType".equals(propName)) {
-					resModel.setClazz(valueNode.asString());
-				} else if ("groupId".equals(propName)) {
-					grpId = valueNode.asString();
-				} else if ("artifactId".equals(propName)) {
-					artId = valueNode.asString();
-				} else if ("version".equals(propName)) {
-					ver = valueNode.asString();
-				} else {
-					// unknown property
-				}
-			}
-
-			if (!Strings.isBlank(grpId) && !Strings.isBlank(artId) && !Strings.isBlank(ver)) {
-				ArrayList<Dependency> depList = new ArrayList<Dependency>();
-				Dependency dep = new Dependency();
-				dep.setGroupId(grpId);
-				dep.setArtifactId(artId);
-				dep.setVersion(ver);
-				depList.add(dep);
-				resModel.setDependencies(depList);
-			}
-
-			ArrayList<ComponentProperty> cProps = new ArrayList<>();
-
-			ModelNode componentPropertiesNode = model.get("componentProperties");
-			Map<String, Object> cprops = JsonHelper.getAsMap(componentPropertiesNode);
-			it = cprops.keySet().iterator();
-
-			while (it.hasNext()) {
-				ComponentProperty cp = new ComponentProperty();
-				String propName = it.next();
-				ModelNode valueNode = componentNode.get(propName);
-
-				if ("defaultValue".equals(propName)) {
-					cp.setDefaultValue(valueNode.asString());
-				} else if ("deprecated".equals(propName)) {
-					cp.setDeprecated(valueNode.asString());
-				} else if ("description".equals(propName)) {
-					cp.setDescription(valueNode.asString());
-				} else if ("javaType".equals(propName)) {
-					cp.setJavaType(valueNode.asString());
-				} else if ("kind".equals(propName)) {
-					cp.setKind(valueNode.asString());
-				} else if ("name".equals(propName)) {
-					cp.setName(valueNode.asString());
-				} else if ("type".equals(propName)) {
-					cp.setType(valueNode.asString());
-				} else {
-					// unknown property
-				}
-				cProps.add(cp);
-			}
-			Map<String, ComponentProperty> cpropsMap = new HashMap<>();
-			for (ComponentProperty cp : cProps) {
-				cpropsMap.put(cp.getName(), cp);
-			}
-			resModel.setComponentProperties(cpropsMap);
-
-			ModelNode propsNode = model.get("properties");
-			props = JsonHelper.getAsMap(propsNode);
-			it = props.keySet().iterator();
-
-			ArrayList<Parameter> uriParams = new ArrayList<>();
-
-			while (it.hasNext()) {
-				String propName = it.next();
-				ModelNode valueNode = propsNode.get(propName);
-				Parameter param = new Parameter();
-
-				param.setName(propName);
-
-				if (valueNode.hasDefined("choice")) {
-					param.setChoice(valueNode.get("choice").asString());
-				}
-				// if (valueNode.hasDefined("oneOf")) {
-				// param.setOneOf(valueNode.get("oneOf").asString());
-				// }
-				if (valueNode.hasDefined("defaultValue")) {
-					param.setDefaultValue(valueNode.get("defaultValue").asString());
-				}
-				if (valueNode.hasDefined("deprecated")) {
-					param.setDeprecated(valueNode.get("deprecated").asString());
-				}
-				if (valueNode.hasDefined("description")) {
-					param.setDescription(valueNode.get("description").asString());
-				}
-				if (valueNode.hasDefined("javaType")) {
-					param.setJavaType(valueNode.get("javaType").asString());
-				}
-				if (valueNode.hasDefined("kind")) {
-					param.setKind(valueNode.get("kind").asString());
-				}
-				if (valueNode.hasDefined("label")) {
-					param.setLabel(valueNode.get("label").asString());
-				}
-				if (valueNode.hasDefined("name")) {
-					param.setName(valueNode.get("name").asString());
-				}
-				if (valueNode.hasDefined("required")) {
-					param.setRequired(valueNode.get("required").asString());
-				}
-				if (valueNode.hasDefined("type")) {
-					param.setType(valueNode.get("type").asString());
-				}
-				uriParams.add(param);
-			}
-			Map<String, Parameter> uriParamsMap = new HashMap<>();
-			for (Parameter p : uriParams) {
-				uriParamsMap.put(p.getName(), p);
-			}
-			resModel.setProperties(uriParamsMap);
-		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-			resModel = null;
-		}
-
-		return resModel;
+	protected static Component buildModelFromJSonBlob(String json) {
+		return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
 	}
 }

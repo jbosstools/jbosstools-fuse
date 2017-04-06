@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
@@ -59,7 +60,7 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	 * @param model
 	 */
 	private void updateCamelVersion(IProject project, String camelVersion) throws CoreException {
-		File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString());
+		File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString());
 		Model m2m = MavenPlugin.getMaven().readModel(pomFile);
 
 		if (m2m.getDependencyManagement() != null) {
@@ -91,7 +92,7 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		} finally {
-			IFile pomIFile2 = project.getProject().getFile("pom.xml");
+			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
 				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		    }

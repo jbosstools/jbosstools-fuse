@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jst.common.project.facet.WtpUtils;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -127,7 +128,7 @@ class EmptyProjectCreatorRunnable implements IRunnableWithProgress {
 	}
 
 	private void createPom(IProject project) {
-		File pomFile = new File(project.getLocation().toOSString(), "pom.xml");
+		File pomFile = new File(project.getLocation().toOSString(), IMavenConstants.POM_FILE_NAME);
 		try {
 			pomFile.createNewFile();
 			Files.write(pomFile.toPath(), DUMMY_POM_CONTENT.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);

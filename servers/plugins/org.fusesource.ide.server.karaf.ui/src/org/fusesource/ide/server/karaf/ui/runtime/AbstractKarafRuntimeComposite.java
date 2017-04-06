@@ -86,14 +86,15 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 	}
 
-	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
-			if (event.widget == txtKarafDir && validate()) {
-				String installDir = txtKarafDir.getText();
-				model.setKarafInstallDir(installDir);
+			if (event.widget == txtKarafDir) {
+				if (validate()) {
+					String installDir = txtKarafDir.getText();
+					model.setKarafInstallDir(installDir);
+				}
 			}
 		}
 
@@ -175,16 +176,13 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
 		btnBrowseButton.addMouseListener(new MouseListener() {
 
-			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 
-			@Override
 			public void mouseDown(MouseEvent e) {
 
 			}
 
-			@Override
 			public void mouseUp(MouseEvent e) {
 				DirectoryDialog dd = new DirectoryDialog(Display.getDefault()
 						.getActiveShell(), SWT.OPEN);
@@ -213,16 +211,13 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				.setToolTipText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_description);
 		btnDownloadAndInstallButton.addMouseListener(new MouseListener() {
 
-			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 
-			@Override
 			public void mouseDown(MouseEvent e) {
 
 			}
 
-			@Override
 			public void mouseUp(MouseEvent e) {
 				ir = ServerPlugin.findInstallableRuntime(runtimeWC
 						.getRuntimeType().getId());
@@ -242,7 +237,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				TaskWizard wizard2 = new TaskWizard(
 						Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label,
 						new WizardFragment() {
-							@Override
 							protected void createChildFragments(
 									List<WizardFragment> list) {
 								list.add(new LicenseWizardFragment());
@@ -263,16 +257,13 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 					installRuntimeJob = new Job("Installing server runtime "
 							+ ir.getName() + "...") {
 
-						@Override
 						public boolean belongsTo(Object family) {
 							return ServerPlugin.PLUGIN_ID.equals(family);
 						}
 
-						@Override
 						protected IStatus run(IProgressMonitor monitor) {
 							try {
 								Display.getDefault().asyncExec(new Runnable() {
-									@Override
 									public void run() {
 										installLabel.setText(getName());
 										btnBrowseButton.setEnabled(false);
@@ -291,10 +282,8 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 						}
 					};
 					jobListener = new JobChangeAdapter() {
-						@Override
 						public void done(IJobChangeEvent event) {
 							Display.getDefault().asyncExec(new Runnable() {
-								@Override
 								public void run() {
 									if (!AbstractKarafRuntimeComposite.this
 											.isDisposed()) {
@@ -312,7 +301,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 							installRuntimeJob.removeJobChangeListener(this);
 							installRuntimeJob = null;
 							Display.getDefault().asyncExec(new Runnable() {
-								@Override
 								public void run() {
 									if (!isDisposed()) {
 										validate();

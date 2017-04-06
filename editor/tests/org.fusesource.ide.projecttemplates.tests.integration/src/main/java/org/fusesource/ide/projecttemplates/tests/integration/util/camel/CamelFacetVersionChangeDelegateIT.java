@@ -22,6 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -36,7 +37,7 @@ import org.junit.Test;
 public class CamelFacetVersionChangeDelegateIT {
 	
 	private static final IProjectFacet PROJECT_FACET = ProjectFacetsManager.getProjectFacet("jst.camel");
-	private static final String POM_XML = "pom.xml";
+	private static final String POM_XML = IMavenConstants.POM_FILE_NAME;
 	private IProject project;
 	
 	@After

@@ -161,9 +161,9 @@ public class CamelMavenUtils {
 	public static List<Dependency> getDependencyList(IProject project) {
 		if (project != null) {
 			IPath pomPathValue = project.getProject().getRawLocation() != null
-					? project.getProject().getRawLocation().append("pom.xml")
+					? project.getProject().getRawLocation().append(IMavenConstants.POM_FILE_NAME)
 					: ResourcesPlugin.getWorkspace().getRoot().getLocation()
-							.append(project.getFullPath().append("pom.xml"));
+							.append(project.getFullPath().append(IMavenConstants.POM_FILE_NAME));
 			String pomPath = pomPathValue.toOSString();
 			final File pomFile = new File(pomPath);
 			if (!pomFile.exists() || pomFile.isDirectory()) {

@@ -180,7 +180,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 
 		boolean isWARPackaging = false;
 		try {
-			isWARPackaging = MavenLaunchUtils.isPackagingTypeWAR(basedir.getFile(Path.fromOSString("pom.xml"))); //$NON-NLS-1$
+			isWARPackaging = MavenLaunchUtils.isPackagingTypeWAR(basedir.getFile(Path.fromOSString(IMavenConstants.POM_FILE_NAME))); //$NON-NLS-1$
 		} catch (CoreException ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -557,7 +557,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 */
 	protected IFile getPomFile(IContainer basedir) {
-		return basedir.getFile(Path.fromOSString("pom.xml"));		 //$NON-NLS-1$
+		return basedir.getFile(Path.fromOSString(IMavenConstants.POM_FILE_NAME));		 //$NON-NLS-1$
 	}
 	
 	private ILaunch launchCamelContextOnProject(IProject project, String mode) {
