@@ -207,7 +207,6 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 * @param tags
 	 */
 	public void setTags(List<String> tags) {
-		this.tags.clear();
 		StringBuilder label = new StringBuilder();
 		if (tags != null) {
 			for (String tag : tags) {
