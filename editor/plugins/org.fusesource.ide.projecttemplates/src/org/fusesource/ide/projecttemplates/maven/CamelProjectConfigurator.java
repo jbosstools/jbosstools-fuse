@@ -270,17 +270,17 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
-		return new CamelMavenUtils().getCamelVersionFromMaven(mavenProject);
+		return CamelMavenUtils.getCamelVersionFromMaven(mavenProject);
 	}
 
 	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
 			IProgressMonitor monitor) throws CoreException {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
-		installFacet(fproj, fpwc, camelFacet, camelFacet.getVersion(DEFAULT_CAMEL_FACET_VERSION));
+		installFacet(fproj, fpwc, camelFacet, getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION));
 		// we need to switch dependency versions
 		CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
-		del.execute(fproj.getProject(), camelFacet.getLatestVersion(), config, monitor);
+		del.execute(fproj.getProject(), getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION), config, monitor);
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {

@@ -34,33 +34,6 @@ import org.junit.Test;
 // @RunWith(MockitoJUnitRunner.class)
 public class ValidateSyntaxInCatalogIT {
 
-	// @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-	// CamelFile camelFile;
-	// private IProject project;
-	// private IFile pom;
-
-	// @Before
-	// public void setup() throws CoreException {
-	// IWorkspace ws = ResourcesPlugin.getWorkspace();
-	// project = ws.getRoot().getProject("External Files");
-	// if (!project.exists()) {
-	// project.create(null);
-	// }
-	// if (!project.isOpen()) {
-	// project.open(null);
-	// }
-	// // Create a fake pom.xml
-	// pom = project.getFile("pom.xml");
-	//
-	// }
-	//
-	// @After
-	// public void tearDown() throws CoreException {
-	// if (project.exists()) {
-	// project.delete(true, new NullProgressMonitor());
-	// }
-	// }
-
 	@Test
 	public void checkComponentSyntaxAreValid() throws Exception {
 		StringBuilder sb = new StringBuilder();
@@ -77,12 +50,10 @@ public class ValidateSyntaxInCatalogIT {
 
 	private void checkForRuntimeProvider(StringBuilder sb, List<String> supportedCamelVersions, String runtimeProvider) {
 		for (String camelVersion : supportedCamelVersions) {
-			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(camelVersion, runtimeProvider);
+			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(camelVersion);
 			for (Component component : camelModel.getComponents()) {
 				for (Parameter param : new ArrayList<>(component.getParameters())) {
 					AbstractCamelModelElement selectedEP = new CamelEndpoint(component.getSyntax());
-					// doReturn(camelFile).when(selectedEP).getCamelFile();
-					// when(camelFile.getResource().getProject()).thenReturn(project);
 					try {
 						PropertiesUtils.getPropertyFromUri(selectedEP, param, component);
 					} catch (Exception e) {

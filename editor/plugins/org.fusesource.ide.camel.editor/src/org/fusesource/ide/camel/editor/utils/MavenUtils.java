@@ -53,8 +53,6 @@ public class MavenUtils {
 
 	private static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
 	
-	private CamelMavenUtils camelMavenUtils = new CamelMavenUtils();
-	
 	/**
 	 * @return the Java source folder for the project containing the Camel file
 	 *         currently being edited
@@ -124,7 +122,7 @@ public class MavenUtils {
 		final File pomFile = getPomFile(project);
 
 		final Model model = readMavenModel(pomFile);
-		List<Dependency> deps = camelMavenUtils.getDependencies(project, model);
+		List<Dependency> deps = CamelMavenUtils.getDependencies(project, model);
 
 		// then check if component dependency is already a dep
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
@@ -258,9 +256,5 @@ public class MavenUtils {
 				CamelEditorUIActivator.pluginLog().logError(ex);
 			}
 		}
-	}
-
-	void setCamelMavenUtils(CamelMavenUtils camelMavenUtils) {
-		this.camelMavenUtils = camelMavenUtils;
 	}
 }

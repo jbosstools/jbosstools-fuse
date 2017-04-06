@@ -23,6 +23,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -263,6 +264,7 @@ public class Language implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public void setProperties(Map<String, Parameter> properties) {
 		this.properties = properties;
+		PropertiesUtils.initializePropertyNames(properties);
 	}
 
 	/**

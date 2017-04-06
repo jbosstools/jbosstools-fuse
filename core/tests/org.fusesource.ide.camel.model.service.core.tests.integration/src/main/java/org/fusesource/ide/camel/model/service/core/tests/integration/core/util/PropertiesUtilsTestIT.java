@@ -17,12 +17,8 @@ import static org.mockito.Mockito.spy;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.ObservableMap;
@@ -55,28 +51,13 @@ public class PropertiesUtilsTestIT {
 	@Mock
 	private IResource resource;
 
-	@Parameterized.Parameter
-	public String componentName;
-
-	@Parameterized.Parameter(value = 1)
+	@Parameterized.Parameter(value = 0)
 	public Component component;
 	
-	@Parameterized.Parameter(value = 2)
-	public String runtimeProvider;
-
-	@Parameters(name = "{0} {2}")
-	public static Collection<Object[]> components() {
-		Set<Object[]> res = new HashSet<>();
-		res.addAll(retrieveComponents(CamelCatalogUtils.RUNTIME_PROVIDER_KARAF));
-		res.addAll(retrieveComponents(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT));
-		return res;
-	}
-
-	private static HashSet<Object[]> retrieveComponents(String runtimeProvider) {
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion(), runtimeProvider);
-		final Collection<Component> supportedComponents = camelModel.getComponents();
-		Stream<Object[]> stream = supportedComponents.stream().map(component -> new Object[] { component.getName(), component, runtimeProvider });
-		return stream.collect(Collectors.toCollection(HashSet::new));
+	@Parameters()
+	public static Collection<Component> components() {
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(CamelCatalogUtils.DEFAULT_CAMEL_VERSION);
+		return camelModel.getComponents();
 	}
 
 	@Before
@@ -97,7 +78,7 @@ public class PropertiesUtilsTestIT {
 	
 	private CamelEndpoint createCamelEndpoint(String uri) {
 		CamelFile camelFile = spy(new CamelFile(resource));
-		doReturn(CamelCatalogCacheManager.getInstance().getCamelModelForVersion(CamelCatalogUtils.getLatestCamelVersion(), runtimeProvider)).when(camelFile).getCamelModel();
+		doReturn(CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject())).when(camelFile).getCamelModel();
 		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
 		camelFile.addChildElement(route);
 		CamelEndpoint endpoint = new CamelEndpoint(uri);

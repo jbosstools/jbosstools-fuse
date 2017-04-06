@@ -16,12 +16,13 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 
 /**
  * @author lhein
  */
 public class Parameter {
-	@JsonProperty
+	@JsonTypeId
 	private String name;
 	@JsonProperty
 	private String type;
@@ -60,6 +61,14 @@ public class Parameter {
 		otherProperties.put(name, value);
 	}
 
+	public String getOtherParameterValue(String paramName) {
+		return otherProperties.get(paramName).toString();
+	}
+	
+	public void setOtherParameterValue(String name, String value) {
+		otherProperties.put(name, value);
+	}
+	
 	/**
 	 * @return the group
 	 */

@@ -29,7 +29,6 @@ import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
-import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 
 /**
@@ -132,7 +131,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	private void notifyClasspathChanged(IJavaProject project) {
     	// refresh catalog if needed
 		IProject prj = project.getProject();
-		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj);
+		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(prj);
 		boolean camelVersionChanged = true;
 		String oldCamelVersion = knownProjects.get(prj);
 		if (!knownProjects.containsKey(prj)) {
@@ -142,10 +141,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 		}
 		if (camelVersionChanged) {
 			knownProjects.put(prj, camelVersion);
-			CamelCatalogCoordinates coords = CamelCatalogUtils.getCatalogCoordinatesForProject(prj);
-			if (!CamelCatalogCacheManager.getInstance().hasCachedCatalog(coords)) {
-				CamelCatalogCacheManager.getInstance().getCachedCatalog(coords);
-			}
+			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj);
 		}
     }
 }

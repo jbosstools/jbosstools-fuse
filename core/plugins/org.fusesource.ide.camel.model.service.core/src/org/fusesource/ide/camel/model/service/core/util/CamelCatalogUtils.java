@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -45,6 +46,8 @@ public class CamelCatalogUtils {
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
 	public static final String RUNTIME_PROVIDER_WILDFLY = "wildfly";
+
+	public static final String CATALOG_CAMEL_ARTIFACTID = "camel-catalog";
 	
 	public static final String CATALOG_KARAF_GROUPID = "org.apache.camel";
 	public static final String CATALOG_KARAF_ARTIFACTID = "camel-catalog-provider-karaf";
@@ -153,6 +156,12 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static CamelCatalogCoordinates getCatalogCoordinatesFor(String groupId, String artifactId, String version) {
+		if (!CATALOG_CAMEL_ARTIFACTID.equals(artifactId) && isCamelVersionWithoutProviderSupport(version)) {
+			CamelCatalogCoordinates coord = getDefaultCatalogCoordinates();
+			coord.setArtifactId(CATALOG_CAMEL_ARTIFACTID);
+			coord.setVersion(version);
+			return coord;
+		}
 		return new CamelCatalogCoordinates(groupId, artifactId, version);
 	}
 	
@@ -165,13 +174,25 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static CamelCatalogCoordinates getCatalogCoordinatesFor(String runtimeProvider, String version) {
+		if (isCamelVersionWithoutProviderSupport(version)) {
+			CamelCatalogCoordinates coord = getDefaultCatalogCoordinates();
+			coord.setArtifactId(CATALOG_CAMEL_ARTIFACTID);
+			coord.setVersion(version);
+			return coord;
+		}
 		if (RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
 			return new CamelCatalogCoordinates(CATALOG_SPRINGBOOT_GROUPID, CATALOG_SPRINGBOOT_ARTIFACTID, version);
-		} else if (RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
-			return new CamelCatalogCoordinates(CATALOG_WILDFLY_GROUPID, CATALOG_WILDFLY_ARTIFACTID, version);
+//		} else if (RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
+//			return new CamelCatalogCoordinates(CATALOG_WILDFLY_GROUPID, CATALOG_WILDFLY_ARTIFACTID, version);
 		} else {
 			return new CamelCatalogCoordinates(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, version);
 		}
+	}
+	
+	public static boolean isCamelVersionWithoutProviderSupport(String version) {
+		ComparableVersion v1 = new ComparableVersion(version);
+		ComparableVersion v2 = new ComparableVersion("2.18.1");
+		return v1.compareTo(v2) < 0;
 	}
 	
 	public static CamelCatalogCoordinates getDefaultCatalogCoordinates() {
@@ -179,16 +200,15 @@ public class CamelCatalogUtils {
 	}
 	
 	public static CamelCatalogCoordinates getCatalogCoordinatesForProject(IProject project) {
-		CamelMavenUtils cmu = new CamelMavenUtils();
-		String camelVersion = cmu.getCamelVersionFromMaven(project);
-		String wildFlyCamelVersion = cmu.getWildFlyCamelVersionFromMaven(project);
+		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project);
+//		String wildFlyCamelVersion = CamelMavenUtils.getWildFlyCamelVersionFromMaven(project);
 		String runtimeProvider = CamelCatalogUtils.getRuntimeprovider(project, new NullProgressMonitor());
 		if (CamelCatalogUtils.RUNTIME_PROVIDER_KARAF.equalsIgnoreCase(runtimeProvider)) {
 			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, camelVersion);
 		} else if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
 			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_SPRINGBOOT_GROUPID, CATALOG_SPRINGBOOT_ARTIFACTID, camelVersion);
-		} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
-			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_WILDFLY_GROUPID, CATALOG_WILDFLY_ARTIFACTID, wildFlyCamelVersion);
+//		} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
+//			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_WILDFLY_GROUPID, CATALOG_WILDFLY_ARTIFACTID, wildFlyCamelVersion);
 		} else {
 			// unsupported - fall back to Karaf
 			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, camelVersion);
@@ -221,8 +241,8 @@ public class CamelCatalogUtils {
 	public static String getRuntimeProvider(List<org.apache.maven.model.Dependency> dependencies) {
 		if(hasSpringBootDependency(dependencies)){
 			return RUNTIME_PROVIDER_SPRINGBOOT;
-		} else if (hasWildflyDependency(dependencies)) {
-			return RUNTIME_PROVIDER_WILDFLY;
+//		} else if (hasWildflyDependency(dependencies)) {
+//			return RUNTIME_PROVIDER_WILDFLY;
 		} else {
 			return RUNTIME_PROVIDER_KARAF;
 		}
