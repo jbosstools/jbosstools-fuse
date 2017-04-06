@@ -67,13 +67,11 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		server.addServerListener(this);
 	}
 	
-	@Override
 	public void connect() throws IOException {
 		// re-connect
 		connectToStartedServer();
 	}
 
-	@Override
 	public void disconnect() throws IOException {
 		// close
 		if( activeConnection != null ) {
@@ -89,17 +87,14 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		((AbstractKarafJMXConnectionProvider)getProvider()).fireChanged(KarafServerConnection.this);
 	}
 
-	@Override
 	public IConnectionProvider getProvider() {
 		return ExtensionManager.getProvider(KarafConnectionProvider.ID);
 	}
 	
-	@Override
 	public Root getRoot() {
 		return root;
 	}
 	
-	@Override
 	public void loadRoot(IProgressMonitor monitor) {
 		if( isConnected() && !isLoading) {
 			isLoading = true;
@@ -117,7 +112,6 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		}
 	}
 
-	@Override
 	public boolean isConnected() {
 		return isConnected;
 	}
@@ -137,18 +131,16 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		return true;
 	}
 	
-	@Override
 	public void run(IJMXRunnable runnable) throws JMXException {
 		run(runnable, new HashMap<String, String>());
 	}
 	
 	// Potential api upstream in jmx ?
-	@Override
 	public void run(IJMXRunnable runnable, HashMap<String, String> prefs) throws JMXException {
 		run(runnable, prefs, false);
 	}
 	
-	public void run(IJMXRunnable runnable, Map<String, String> prefs, boolean saveActiveConnection) throws JMXException {
+	public void run(IJMXRunnable runnable, HashMap<String, String> prefs, boolean saveActiveConnection) throws JMXException {
 		if (getServer().getAdapter(IKarafServerDelegate.class) != null) {
 			IKarafServerDelegate kserver = (IKarafServerDelegate) getServer().getAdapter(IKarafServerDelegate.class);
 			String user = kserver.getUserName();
@@ -163,7 +155,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	
 	protected void run(IServer s, IJMXRunnable r, String user, String pass, boolean saveActiveConnection) throws JMXException {
 		try {
-			MBeanServerConnection c;
+			MBeanServerConnection c = null;
 			if( activeConnection == null ) {
 				c = createConnection(s, user, pass);
 				if( saveActiveConnection ) {
@@ -178,13 +170,14 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		}
 	}
 
-	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws IOException {
-		Map<String, Object> envMap = new HashMap<>();
+	protected MBeanServerConnection createConnection(IServer s, String user, String pass) throws Exception {
+		Map<String, Object> envMap = new HashMap<String, Object>();
 		envMap.put("jmx.remote.credentials", new String[] { user, pass });
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
 		JMXServiceURL url = new JMXServiceURL(conUrl); 
 		jmxc = JMXConnectorFactory.connect(url, envMap); 
-		return jmxc.getMBeanServerConnection(); 
+		MBeanServerConnection mbsc = jmxc.getMBeanServerConnection(); 
+		return mbsc; 
 	}
 	
 	protected void cleanupConnection(IServer server, MBeanServerConnection connection) {
@@ -207,7 +200,6 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	 *  state properly.   If there's been a change then fire to the listeners
 	 */
 
-	@Override
 	public void serverChanged(ServerEvent event) {
 		int eventKind = event.getKind();
 		if ((eventKind & ServerEvent.SERVER_CHANGE) != 0) {
@@ -261,15 +253,14 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	protected void connectToStartedServer() {
 		try {
 			IJMXRunnable run = new IJMXRunnable() {
-				@Override
 				public void run(MBeanServerConnection connection)
 						throws Exception {
 					// Do nothing, just see if the connection worked
 				} 
 			};
 			
-			HashMap<String, String> map = new HashMap<>();
-			map.put("force", Boolean.toString(true));
+			HashMap<String, String> map = new HashMap<String,String>();
+			map.put("force", new Boolean(true).toString());
 			run(run, map, true); // save this nw connection as the active one
 
 			
@@ -294,23 +285,19 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	 * is removed as a listener to the server if it is removed
 	 */
 	
-	@Override
 	public void connectionAdded(IConnectionWrapper connection) {
 		// ignore
 	}
 
-	@Override
 	public void connectionChanged(IConnectionWrapper connection) {
 		// ignore
 	}
 
-	@Override
 	public void connectionRemoved(IConnectionWrapper connection) {
 		if( connection == this )
 			server.removeServerListener(this);
 	}
 
-	@Override
 	public boolean canControl() {
 		return server.getServerState() == IServer.STATE_STARTED && server.getRuntime() != null;
 	}
@@ -332,10 +319,8 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 	}
 	
 
-	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		ITabbedPropertySheetPageContributor contributor = new ITabbedPropertySheetPageContributor() {
-			@Override
 			public String getContributorId() {
 				return "org.jboss.tools.jmx.jvmmonitor.ui.JvmExplorer";
 			}

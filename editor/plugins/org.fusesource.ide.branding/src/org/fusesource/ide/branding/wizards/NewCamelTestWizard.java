@@ -56,6 +56,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -426,7 +427,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 		boolean isBlueprint = false;
 		
 		if (filePath != null && filePath.trim().length()>0) {
-			String rawPath = null;
+			String rawPath;
 			if (filePath.startsWith("file:")) {
 				rawPath = filePath.substring(5);
 			} else {
@@ -454,7 +455,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 				monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
 
 				// first load the pom file into some model
-				IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append("pom.xml"));
+				IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append(IMavenConstants.POM_FILE_NAME) : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append(IMavenConstants.POM_FILE_NAME));
 				String pomPath = pomPathValue.toOSString();
 				final File pomFile = new File(pomPath);
 				try {
@@ -506,7 +507,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 					if (changes) {
 						try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 							MavenPlugin.getMaven().writeModel(model, os);
-							IFile pomIFile = project.getProject().getFile("pom.xml");
+							IFile pomIFile = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 							if (pomIFile != null){
 								pomIFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 							}

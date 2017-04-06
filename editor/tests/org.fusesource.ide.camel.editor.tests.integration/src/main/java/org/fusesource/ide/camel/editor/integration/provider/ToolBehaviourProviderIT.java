@@ -31,6 +31,7 @@ import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
@@ -113,7 +114,7 @@ public class ToolBehaviourProviderIT {
 		configurationManager.updateProjectConfiguration(fuseProject.getProject(), new NullProgressMonitor());
 		
 		
-		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().create(fuseProject.getProject().getFile("pom.xml"), true, new NullProgressMonitor());
+		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().create(fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME), true, new NullProgressMonitor());
 		assertThat(projectFacade.getMavenProject(new NullProgressMonitor())).isNotNull();
 	}
 	
@@ -125,7 +126,7 @@ public class ToolBehaviourProviderIT {
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsContainsAMQForSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile("pom.xml");
+		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();
@@ -153,7 +154,7 @@ public class ToolBehaviourProviderIT {
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsValidityFoSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile("pom.xml");
+		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();

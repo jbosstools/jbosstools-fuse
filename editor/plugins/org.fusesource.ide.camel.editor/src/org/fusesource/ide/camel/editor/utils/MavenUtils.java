@@ -248,7 +248,7 @@ public class MavenUtils {
 
 			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(model, os);
-				IFile pomIFile = project.getFile("pom.xml");
+				IFile pomIFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 				if (pomIFile != null) {
 					pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 				}

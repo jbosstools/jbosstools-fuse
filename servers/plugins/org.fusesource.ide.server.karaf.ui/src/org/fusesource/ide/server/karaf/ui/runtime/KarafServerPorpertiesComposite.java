@@ -46,15 +46,17 @@ public class KarafServerPorpertiesComposite extends Composite implements
 				.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 	}
 
-	@Override
 	public void handleEvent(Event event) {
+		boolean val = false;
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
 			if (event.widget == txtPortNumber) {
-				if (validate()) {
+				val = validate();
+				if (val) {
 					try {
-						model.setPortNumber(Integer.parseInt(txtPortNumber.getText()));
+						model.setPortNumber(Integer.parseInt(txtPortNumber
+								.getText()));
 					} catch (NumberFormatException ne) {
 						// shdn't happen
 					}
@@ -93,7 +95,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 		Label lblPortNumber = new Label(this, SWT.NONE);
 		lblPortNumber.setText(Messages.KarafServerPorpertiesComposite_port_number_label);
 		txtPortNumber = new Text(this, SWT.BORDER);
-		txtPortNumber.setText(Integer.toString(model.getPortNumber()));
+		txtPortNumber.setText("" + model.getPortNumber());
 		txtPortNumber.setLayoutData(gd);
 		txtPortNumber.setTextLimit(5);
 		txtPortNumber.addListener(SWT.Modify, this);

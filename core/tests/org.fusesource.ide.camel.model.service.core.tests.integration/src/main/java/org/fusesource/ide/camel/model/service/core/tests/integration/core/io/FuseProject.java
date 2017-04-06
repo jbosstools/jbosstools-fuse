@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.junit.rules.ExternalResource;
@@ -80,7 +81,7 @@ public class FuseProject extends ExternalResource {
 			project.open(null);
 		}
 		// Create a fake pom.xml
-		IFile pom = project.getFile("pom.xml");
+		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
 		pom.create(new ByteArrayInputStream(DUMMY_POM_CONTENT.getBytes()), true, new NullProgressMonitor());
 	}
 
