@@ -30,6 +30,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * collection of camel catalog related util methods
@@ -42,6 +43,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
 	public static final String DEFAULT_CAMEL_VERSION = "2.18.1.redhat-000012";
+	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";	
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -64,14 +66,18 @@ public class CamelCatalogUtils {
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
-		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", "6.3.0.redhat-224");
-		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-224");
+		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", FUSE_63_R1_BOM_VERSION);
+		camelVersionToFuseBOMMapping.put("2.17.3",               FUSE_63_R1_BOM_VERSION);
 	}
 	
 	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000012").collect(Collectors.toSet());
 	
-	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-224";
+	private static final String LATEST_BOM_VERSION = FUSE_63_R1_BOM_VERSION;
 
+	private CamelCatalogUtils() {
+		// utility class
+	}
+	
 	/**
 	 * returns the latest and greatest supported Camel version we have a catalog 
 	 * for. If there are 2 catalogs with the same version (for instance 2.15.1 and 
@@ -114,11 +120,11 @@ public class CamelCatalogUtils {
 	 * @param label
 	 * @return
 	 */
-	public static ArrayList<String> initializeTags(String label) {
-		ArrayList<String> tags = new ArrayList<>();
+	public static List<String> initializeTags(String label) {
+		List<String> tags = new ArrayList<>();
 		if (label != null && label.trim().length()>0) {
-			String[] s_tags = label.split(",");
-			for (String s_tag : s_tags) {
+			String[] tagArray = label.split(",");
+			for (String s_tag : tagArray) {
 				tags.add(s_tag);
 			}
 		}
@@ -133,11 +139,9 @@ public class CamelCatalogUtils {
 	 * @param version
 	 * @return
 	 */
-	public static ArrayList<Dependency> initializeDependency(String groupId, String artifactId, String version) {
-		ArrayList<Dependency> dependencies = new ArrayList<>();
-		if (groupId != null && groupId.trim().length()>0 &&
-			artifactId != null && artifactId.trim().length()>0 && 
-			version != null && version.trim().length()>0) {
+	public static List<Dependency> initializeDependency(String groupId, String artifactId, String version) {
+		List<Dependency> dependencies = new ArrayList<>();
+		if (isValidGAV(groupId, artifactId, version)) {
 			Dependency dep = new Dependency();
 			dep.setGroupId(groupId);
 			dep.setArtifactId(artifactId);
@@ -145,6 +149,12 @@ public class CamelCatalogUtils {
 			dependencies.add(dep);
 		}
 		return dependencies;
+	}
+	
+	private static boolean isValidGAV(String groupId, String artifactId, String version) {
+		return 	!Strings.isBlank(groupId) &&
+				!Strings.isBlank(artifactId) && 
+				!Strings.isBlank(version);
 	}
 	
 	/**
@@ -203,9 +213,7 @@ public class CamelCatalogUtils {
 		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project);
 //		String wildFlyCamelVersion = CamelMavenUtils.getWildFlyCamelVersionFromMaven(project);
 		String runtimeProvider = CamelCatalogUtils.getRuntimeprovider(project, new NullProgressMonitor());
-		if (CamelCatalogUtils.RUNTIME_PROVIDER_KARAF.equalsIgnoreCase(runtimeProvider)) {
-			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, camelVersion);
-		} else if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
+		if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
 			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_SPRINGBOOT_GROUPID, CATALOG_SPRINGBOOT_ARTIFACTID, camelVersion);
 //		} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
 //			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_WILDFLY_GROUPID, CATALOG_WILDFLY_ARTIFACTID, wildFlyCamelVersion);
@@ -223,7 +231,7 @@ public class CamelCatalogUtils {
 					MavenProject mavenProject = m2prj.getMavenProject(monitor);
 					if(mavenProject != null){
 						List<org.apache.maven.model.Dependency> dependencies = mavenProject.getDependencies();
-						return getRuntimeProvider(dependencies);
+						return getRuntimeProviderFromDependencyList(dependencies);
 					}
 				}
 			} catch (CoreException e) {
@@ -233,12 +241,12 @@ public class CamelCatalogUtils {
 		return RUNTIME_PROVIDER_KARAF;
 	}
 	
-	public static String getRuntimeProvider(org.apache.maven.model.Dependency dependency) {
+	public static String getRuntimeProviderFromDependency(org.apache.maven.model.Dependency dependency) {
 		List<org.apache.maven.model.Dependency> deps = Arrays.asList(dependency);
-		return getRuntimeProvider(deps);
+		return getRuntimeProviderFromDependencyList(deps);
 	}
 	
-	public static String getRuntimeProvider(List<org.apache.maven.model.Dependency> dependencies) {
+	public static String getRuntimeProviderFromDependencyList(List<org.apache.maven.model.Dependency> dependencies) {
 		if(hasSpringBootDependency(dependencies)){
 			return RUNTIME_PROVIDER_SPRINGBOOT;
 //		} else if (hasWildflyDependency(dependencies)) {
@@ -255,7 +263,6 @@ public class CamelCatalogUtils {
 					.findFirst().isPresent();
 	}
 	
-	// TODO: put in the correct maven coords for a wildfly swarm project
 	public static boolean hasWildflyDependency(List<org.apache.maven.model.Dependency> dependencies){
 		return dependencies != null
 				&& dependencies.stream()

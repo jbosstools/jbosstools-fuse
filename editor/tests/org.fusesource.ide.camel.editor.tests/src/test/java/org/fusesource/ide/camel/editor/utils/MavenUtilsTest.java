@@ -63,6 +63,8 @@ public class MavenUtilsTest {
 		doReturn(pomFile).when(mavenUtils).getPomFile(project);
 		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class));
 		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
+		// TODO: repair this broken test
+		// mavenUtils.setCamelMavenUtils(camelMavenUtils);
 	}
 
 	@Test

@@ -33,6 +33,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
@@ -132,10 +134,9 @@ public class MavenUtils {
 			for (Dependency pomDep : deps) {
 				if (scope == null &&
 						CAMEL_GROUP_ID.equalsIgnoreCase(pomDep.getGroupId()) &&
-						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId())) {
-					if (SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
-						scope = pomDep.getScope();
-					}
+						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId()) &&
+						SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
+					scope = pomDep.getScope();
 				}
 				if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId())
 						&& pomDep.getArtifactId().equalsIgnoreCase(conDep.getArtifactId())) {
@@ -175,9 +176,9 @@ public class MavenUtils {
 	 */
 	File getPomFile(IProject project) {
 		IPath pomPathValue = project.getProject().getRawLocation() != null
-				? project.getProject().getRawLocation().append("pom.xml")
+				? project.getProject().getRawLocation().append(IMavenConstants.POM_FILE_NAME)
 				: ResourcesPlugin.getWorkspace().getRoot().getLocation()
-						.append(project.getFullPath().append("pom.xml"));
+						.append(project.getFullPath().append(IMavenConstants.POM_FILE_NAME));
 		String pomPath = pomPathValue.toOSString();
 		return new File(pomPath);
 	}
@@ -190,7 +191,7 @@ public class MavenUtils {
 	public void writeNewPomFile(IProject project, final File pomFile, final Model model) {
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 			MavenPlugin.getMaven().writeModel(model, os);
-			IFile pomIFile2 = project.getProject().getFile("pom.xml");
+			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
 				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}

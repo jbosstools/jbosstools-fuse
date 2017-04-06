@@ -46,7 +46,7 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 public class CamelMavenUtils {
 
 	private CamelMavenUtils() {
-		// hide constructor
+		// util class
 	}
 	
 	public static List<Dependency> getDependencies(MavenProject project, final Model model) {
@@ -78,22 +78,27 @@ public class CamelMavenUtils {
 	}
 	
 	public static List<Repository> getRepositories(MavenProject project) {
-		if (project == null) return null;
-		String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
-		final File pomFile = new File(pomPath);
-		if (!pomFile.exists() || !pomFile.isFile()) {
-			return null;
+		if (project != null) {
+			String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
+			final File pomFile = new File(pomPath);
+			if (!pomFile.exists() || !pomFile.isFile()) {
+				return Collections.emptyList();
+			}
+			try {
+				final Model model = MavenPlugin.getMaven().readModel(pomFile);
+				List<Repository> repos = new ArrayList<>();
+				if (model.getRepositories() != null) {
+					repos.addAll(model.getRepositories());
+				}
+				if (model.getPluginRepositories() != null) {
+					repos.addAll(model.getPluginRepositories());
+				}
+				return repos;
+			} catch (Exception ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			}
 		}
-		try {
-			final Model model = MavenPlugin.getMaven().readModel(pomFile);
-			List<Repository> repos = new ArrayList<>();
-			if (model.getRepositories() != null) repos.addAll(model.getRepositories());
-			if (model.getPluginRepositories() != null) repos.addAll(model.getPluginRepositories());
-			return repos;
-		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	
@@ -154,37 +159,41 @@ public class CamelMavenUtils {
 	}
 
 	public static List<Dependency> getDependencyList(IProject project) {
-		if (project == null) return null;
-		IPath pomPathValue = project.getProject().getRawLocation() != null
-				? project.getProject().getRawLocation().append("pom.xml")
-				: ResourcesPlugin.getWorkspace().getRoot().getLocation()
-						.append(project.getFullPath().append("pom.xml"));
-		String pomPath = pomPathValue.toOSString();
-		final File pomFile = new File(pomPath);
-		if (pomFile.exists() == false || pomFile.isDirectory()) return null;
-		try {
-			final Model model = MavenPlugin.getMaven().readModel(pomFile);
-			return getDependencies(project, model);
-		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+		if (project != null) {
+			IPath pomPathValue = project.getProject().getRawLocation() != null
+					? project.getProject().getRawLocation().append("pom.xml")
+					: ResourcesPlugin.getWorkspace().getRoot().getLocation()
+							.append(project.getFullPath().append("pom.xml"));
+			String pomPath = pomPathValue.toOSString();
+			final File pomFile = new File(pomPath);
+			if (!pomFile.exists() || pomFile.isDirectory()) {
+				return Collections.emptyList();
+			}
+			try {
+				final Model model = MavenPlugin.getMaven().readModel(pomFile);
+				return getDependencies(project, model);
+			} catch (Exception ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			}
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	public static List<Dependency> getDependencyList(MavenProject project) {
-		if (project == null) return null;
-		String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
-		final File pomFile = new File(pomPath);
-		if (!pomFile.exists() || !pomFile.isFile()) {
-			return null;
+		if (project != null) {
+			String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
+			final File pomFile = new File(pomPath);
+			if (!pomFile.exists() || !pomFile.isFile()) {
+				return Collections.emptyList();
+			}
+			try {
+				final Model model = MavenPlugin.getMaven().readModel(pomFile);
+				return getDependencies(project, model);
+			} catch (Exception ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			}
 		}
-		try {
-			final Model model = MavenPlugin.getMaven().readModel(pomFile);
-			return getDependencies(project, model);
-		} catch (Exception ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -209,12 +218,10 @@ public class CamelMavenUtils {
 	
 	public static String getCamelVersionFromMaven(MavenProject project) {
 		List<Dependency> deps = getDependencyList(project);
-		if (deps != null) {
-			for (Dependency pomDep : deps) {
-				if (pomDep.getGroupId().equalsIgnoreCase(CamelCatalogUtils.CATALOG_KARAF_GROUPID)
-						&& pomDep.getArtifactId().startsWith("camel-")) {
-					return pomDep.getVersion();
-				}
+		for (Dependency pomDep : deps) {
+			if (pomDep.getGroupId().equalsIgnoreCase(CamelCatalogUtils.CATALOG_KARAF_GROUPID)
+					&& pomDep.getArtifactId().startsWith("camel-")) {
+				return pomDep.getVersion();
 			}
 		}
 		return null;
@@ -254,7 +261,7 @@ public class CamelMavenUtils {
 	}
 
 	public static List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
-		return new ArrayList<RemoteRepository>(Arrays.asList(newCentralRepository()));
+		return new ArrayList<>(Arrays.asList(newCentralRepository()));
 	}
 
 	private static RemoteRepository newCentralRepository() {
