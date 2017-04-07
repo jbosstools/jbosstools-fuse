@@ -98,7 +98,8 @@ public class CamelFilesFinder {
 	 */
 	public boolean isFuseCamelContentType(IFile ifile) throws CoreException {
 		if( ifile != null
-				&& ifile.isSynchronized(IResource.DEPTH_ZERO)){
+				&& ifile.isSynchronized(IResource.DEPTH_ZERO)
+				&& ifile.isLocal(IResource.DEPTH_ZERO)){
 			IContentDescription contentDescription = ifile.getContentDescription();
 			if(contentDescription != null){
 				String contentTypeId = contentDescription.getContentType().getId();
