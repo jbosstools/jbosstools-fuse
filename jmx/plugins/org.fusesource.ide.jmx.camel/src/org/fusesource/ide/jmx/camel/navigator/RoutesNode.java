@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
@@ -181,9 +182,6 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()&& getConnection().isConnected()) {
-			return ("CamelRoutesNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), camelContextNode);
 	}
 }

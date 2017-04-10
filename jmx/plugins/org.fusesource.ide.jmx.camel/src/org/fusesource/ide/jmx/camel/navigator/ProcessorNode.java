@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
@@ -100,9 +101,6 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()&& getConnection().isConnected()) {
-			return ("CamelProcessorNode-" + routeNode.getNodeId() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), routeNode, node.getId());
 	}
 }

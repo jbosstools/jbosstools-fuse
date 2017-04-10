@@ -64,7 +64,7 @@ public abstract class DestinationNodeSupport extends NodeSupport implements Mess
 	@Override
 	public void dropMessage(IMessage message) {
 		Map<String, Object> headers = message.getHeaders();
-		Map<String, String> cleanHeaders = new HashMap<String, String>();
+		Map<String, String> cleanHeaders = new HashMap<>();
 		Set<Entry<String, Object>> entrySet = headers.entrySet();
 		for (Entry<String, Object> entry : entrySet) {
 			String key = entry.getKey();

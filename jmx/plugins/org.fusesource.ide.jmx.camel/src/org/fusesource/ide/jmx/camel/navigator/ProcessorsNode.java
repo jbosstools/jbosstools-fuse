@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
+import java.util.Objects;
+
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 
 public class ProcessorsNode extends RefreshableCollectionNode {
@@ -45,9 +47,6 @@ public class ProcessorsNode extends RefreshableCollectionNode {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelProcessorsNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), camelContextNode, "CamelProcessorsNode");
 	}
 }

@@ -19,6 +19,8 @@ import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
+import com.google.common.base.Objects;
+
 
 public class BrokerNode extends NodeSupport implements ImageProvider, Refreshable {
 
@@ -109,14 +111,8 @@ public class BrokerNode extends NodeSupport implements ImageProvider, Refreshabl
 		return obj instanceof BrokerNode && obj.hashCode() == hashCode();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQBrokerNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hashCode(getConnection(), brokerName, userName, password);
 	}
 }

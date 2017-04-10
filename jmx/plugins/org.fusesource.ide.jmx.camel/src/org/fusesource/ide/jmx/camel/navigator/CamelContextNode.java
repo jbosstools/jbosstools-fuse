@@ -13,7 +13,6 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import java.io.File;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -503,12 +502,8 @@ public class CamelContextNode 	extends NodeSupport
 			// TODO lets find all the messages and filter them...
 			return getTraceExchangeList(null);
 		}
-		TraceExchangeList traceList = null;
-		String key = id;
-		if (key == null) {
-			key = getContextId();
-		}
-		traceList = traceMessageMap.get(key);
+		String key = getContextId();
+		TraceExchangeList traceList = traceMessageMap.get(key);
 		if (traceList == null) {
 			traceList = new TraceExchangeList();
 			traceMessageMap.put(key, traceList);
@@ -519,28 +514,14 @@ public class CamelContextNode 	extends NodeSupport
 			Object tracer = getTracer();
 			if (tracer instanceof CamelBacklogTracerMBean) {
 				CamelBacklogTracerMBean camelTracer = (CamelBacklogTracerMBean)tracer;
-				if (camelTracer != null) {
-					String traceXml = camelTracer.dumpAllTracedMessagesAsXml();
-					List<BacklogTracerEventMessage> traceMessages = null;
-					if (id == null) {
-						traceMessages = getTraceMessagesFromXml(traceXml);
-					} else {
-						traceMessages = getTraceMessagesFromXml(traceXml, id);
-					}
-					traceList.addBackLogTraceMessages(traceMessages);
-				}
+				String traceXml = camelTracer.dumpAllTracedMessagesAsXml();
+				List<BacklogTracerEventMessage> traceMessages = getTraceMessagesFromXml(traceXml);
+				traceList.addBackLogTraceMessages(traceMessages);
 			} else if (tracer instanceof CamelFabricTracerMBean) {
 				CamelFabricTracerMBean fabricTracer = (CamelFabricTracerMBean)tracer;
-				if (fabricTracer != null) {
-					String traceXml = fabricTracer.dumpAllTracedMessagesAsXml();
-					List<BacklogTracerEventMessage> traceMessages;
-					if (id == null) {
-						traceMessages = getTraceMessagesFromXml(traceXml);
-					} else {
-						traceMessages = getTraceMessagesFromXml(traceXml, id);
-					}
-					traceList.addFabricTraceMessages(traceMessages);
-				}
+				String traceXml = fabricTracer.dumpAllTracedMessagesAsXml();
+				List<BacklogTracerEventMessage> traceMessages = getTraceMessagesFromXml(traceXml);
+				traceList.addFabricTraceMessages(traceMessages);
 			} else {
 				// TODO should we highlight in the UI that there's no tracer
 				// enabled?
@@ -564,17 +545,6 @@ public class CamelContextNode 	extends NodeSupport
 		return builder.parse(is);
 	}
 
-	private List<BacklogTracerEventMessage> getTraceMessagesFromXml(String xmlDump, String id) {
-		List<BacklogTracerEventMessage> events = new ArrayList<BacklogTracerEventMessage>();
-		
-		// TODO: unmarshal events from the xml and put to the list of messages
-		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
-		
-		System.out.println(id + ": >>> \n" + xmlDump);
-		
-		return events;
-	}
-	
 	@Override
 	public Image getImage() {
 		if (isTracing()) {
@@ -619,10 +589,7 @@ public class CamelContextNode 	extends NodeSupport
 	
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelContextNode-" + camelContextsNode.toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return java.util.Objects.hash(getConnection(), camelContextMBean);
 	}
 
 	public void dispose() {

@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
@@ -89,9 +90,6 @@ public class ConnectionsNode extends RefreshableCollectionNode implements ImageP
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQConnectionsNode" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), "AMQConnectionsNode");
 	}
 }

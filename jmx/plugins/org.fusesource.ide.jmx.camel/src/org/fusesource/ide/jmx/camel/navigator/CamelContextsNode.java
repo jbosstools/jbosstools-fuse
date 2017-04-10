@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
@@ -67,10 +68,7 @@ public class CamelContextsNode extends RefreshableCollectionNode implements Imag
 	
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelContextsNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), "CamelContextsNode");
 	}
 
 }

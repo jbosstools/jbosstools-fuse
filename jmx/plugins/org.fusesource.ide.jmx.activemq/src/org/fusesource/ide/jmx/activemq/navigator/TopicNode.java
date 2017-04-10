@@ -14,6 +14,7 @@ package org.fusesource.ide.jmx.activemq.navigator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.activemq.broker.jmx.TopicViewMBean;
 import org.eclipse.jface.action.Action;
@@ -67,7 +68,7 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 	}
 
 	public List<Node> getConsumerChildren() {
-		List<Node> answer = new ArrayList<Node>();
+		List<Node> answer = new ArrayList<>();
 		answer.addAll(Arrays.asList(consumersNode.getChildren()));
 		answer.addAll(Arrays.asList(durableConsumersNode.getChildren()));
 		return answer;
@@ -142,9 +143,6 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQTopicNode-" + topicsNode.toString() + "-" + consumersNode.toString() + "-" + producersNode.toString() +  "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), topic);
 	}
 }

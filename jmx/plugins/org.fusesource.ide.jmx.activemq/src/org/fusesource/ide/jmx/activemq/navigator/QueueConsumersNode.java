@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
@@ -85,9 +86,6 @@ public class QueueConsumersNode extends RefreshableCollectionNode implements Ima
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQQueueConsumersNode-" + brokerNode.getBrokerName() + "-" + queueNode.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), brokerNode, queueNode, "Consumer");
 	}
 }

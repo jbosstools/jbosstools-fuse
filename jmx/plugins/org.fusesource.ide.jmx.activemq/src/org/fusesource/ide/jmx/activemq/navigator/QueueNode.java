@@ -14,6 +14,7 @@ package org.fusesource.ide.jmx.activemq.navigator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.management.openmbean.CompositeData;
 
@@ -67,7 +68,7 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 
 	@Override
 	public List<Node> getChildrenGraph() {
-		List<Node> answer = new ArrayList<Node>();
+		List<Node> answer = new ArrayList<>();
 		answer.addAll(Arrays.asList(consumersNode.getChildren()));
 		answer.addAll(Arrays.asList(producersNode.getChildren()));
 		return answer;
@@ -88,7 +89,7 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 
 	@Override
 	public List<IExchange> browseExchanges() {
-		List<IExchange> answer = new ArrayList<IExchange>();
+		List<IExchange> answer = new ArrayList<>();
 		try {
 			CompositeData[] cds = queue.browse();
 			if (cds != null) {
@@ -161,9 +162,6 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQQueueNode-" + queuesNode.getBrokerNode().getBrokerName() + "-" + queuesNode.toString() + "-" + queue.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), queue);
 	}
 }
