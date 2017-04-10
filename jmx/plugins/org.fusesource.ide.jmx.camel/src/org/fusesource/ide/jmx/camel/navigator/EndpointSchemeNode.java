@@ -105,9 +105,6 @@ public class EndpointSchemeNode extends RefreshableCollectionNode implements Ima
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelEndpointSchemeNode-" + endpointsNode.getCamelContextNode().getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return java.util.Objects.hash(getConnection(), scheme);
 	}
 }

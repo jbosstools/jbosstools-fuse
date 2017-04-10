@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -39,7 +40,7 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class EndpointsNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {
 	private final CamelContextNode camelContextNode;
-	private Map<String,EndpointSchemeNode> schemeNodes = new HashMap<String, EndpointSchemeNode>();
+	private Map<String,EndpointSchemeNode> schemeNodes = new HashMap<>();
 
 	public EndpointsNode(CamelContextNode camelContextNode) {
 		super(camelContextNode);
@@ -177,9 +178,6 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelEndpointsNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), schemeNodes);
 	}
 }

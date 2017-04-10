@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
+import java.util.Objects;
+
 import org.apache.activemq.broker.jmx.ConnectionViewMBean;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
@@ -58,9 +60,6 @@ public class ConnectionNode extends NodeSupport implements ImageProvider {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQConnectionNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), mbean);
 	}
 }

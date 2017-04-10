@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -122,9 +123,6 @@ public class TopicsNode extends RefreshableCollectionNode implements ImageProvid
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQTopicsNode" + brokerNode.toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), brokerNode, "Topics");
 	}
 }

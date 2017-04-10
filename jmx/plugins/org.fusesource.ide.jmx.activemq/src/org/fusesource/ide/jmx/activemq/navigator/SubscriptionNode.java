@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
+import java.util.Objects;
+
 import org.apache.activemq.broker.jmx.SubscriptionViewMBean;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.jboss.tools.jmx.core.tree.Node;
@@ -45,9 +47,6 @@ public class SubscriptionNode extends NodeSupport {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQSubscriptionNode-" + getParent().toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), mbean, "Subscription");
 	}
 }

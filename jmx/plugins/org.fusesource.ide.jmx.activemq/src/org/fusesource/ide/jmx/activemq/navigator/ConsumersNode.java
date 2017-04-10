@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
+import java.util.Objects;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -30,12 +32,10 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 public class ConsumersNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {
 
 	private final BrokerNode brokerNode;
-	private final BrokerFacade facade;
 
 	public ConsumersNode(BrokerNode brokerNode) {
 		super(brokerNode);
 		this.brokerNode = brokerNode;
-		this.facade = brokerNode.getFacade();
 	}
 
 	@Override
@@ -126,9 +126,6 @@ public class ConsumersNode extends RefreshableCollectionNode implements ImagePro
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQConsumersNode-" + toString() + "-" + brokerNode.toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), brokerNode);
 	}
 }

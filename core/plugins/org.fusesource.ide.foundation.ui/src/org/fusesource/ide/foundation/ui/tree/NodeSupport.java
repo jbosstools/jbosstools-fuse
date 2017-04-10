@@ -161,7 +161,8 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	}
 	
 	public boolean isConnectionAvailable() {
-		return getConnection() != null && getConnection().getProvider() != null && getConnection().isConnected();
+		return getRoot().isConnected();
 	}
+	
 }
 

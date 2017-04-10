@@ -12,6 +12,7 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
@@ -24,14 +25,12 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 public class TopicProducersNode extends RefreshableCollectionNode implements ImageProvider {
 
 	private final BrokerNode brokerNode;
-	private final BrokerFacade facade;
 	private final TopicNode topicNode;
 
 	public TopicProducersNode(TopicNode topicNode) {
 		super(topicNode);
 		this.topicNode = topicNode;
 		this.brokerNode = topicNode.getBrokerNode();
-		this.facade = topicNode.getFacade();
 	}
 
 	@Override
@@ -85,9 +84,6 @@ public class TopicProducersNode extends RefreshableCollectionNode implements Ima
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQTopicProducersNode-" + brokerNode.toString() + "-" + topicNode.getName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), brokerNode, topicNode, "TopicProducer");
 	}
 }

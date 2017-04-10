@@ -13,6 +13,7 @@ package org.fusesource.ide.jmx.karaf.navigator.osgi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.management.openmbean.TabularData;
 
@@ -134,9 +135,6 @@ public class BundlesNode extends RefreshableCollectionNode implements ImageProvi
 	 */
 	@Override
 	public int hashCode() {
-		if( getConnection() != null && getConnection().getProvider() != null ) {
-			return ("OSGiBundlesNode" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), "OSGiBundlesNode");
 	}
 }

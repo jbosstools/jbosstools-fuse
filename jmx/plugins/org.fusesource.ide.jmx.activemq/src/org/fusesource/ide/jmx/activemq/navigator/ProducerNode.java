@@ -13,6 +13,7 @@ package org.fusesource.ide.jmx.activemq.navigator;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.activemq.broker.jmx.ProducerViewMBean;
 import org.fusesource.ide.foundation.ui.tree.ConnectedNode;
@@ -71,9 +72,6 @@ public class ProducerNode extends NodeSupport implements ConnectedNode {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("AMQProducerNode-" + getParent().toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return Objects.hash(getConnection(), mbean, destinationNode);
 	}
 }

@@ -148,9 +148,6 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 	 */
 	@Override
 	public int hashCode() {
-		if(isConnectionAvailable()) {
-			return ("CamelRouteNode-" + routesNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
-		}
-		return super.hashCode();
+		return java.util.Objects.hash(getConnection(), routeMBean, route.getId());
 	}
 }

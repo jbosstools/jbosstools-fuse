@@ -126,6 +126,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 			currentAwaitedTime += 500;
 		}
 		assertThat(isDeploymentOk).isTrue();
+		launchUsedToInitialize = executePomAction.getLaunch();
 		//disconnect the debug target used with Local debug
 		for(IDebugTarget debugTarget : executePomAction.getLaunch().getDebugTargets()){
 			if(debugTarget instanceof CamelDebugTarget){
