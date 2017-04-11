@@ -21,19 +21,21 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("No longer valid as we only have a single 1.0 facet for camel projects")
 public class CamelFacetVersionChangeDelegateIT {
 	
 	private static final IProjectFacet PROJECT_FACET = ProjectFacetsManager.getProjectFacet("jst.camel");
@@ -70,7 +72,7 @@ public class CamelFacetVersionChangeDelegateIT {
 
 	private void testUpdate(final IProjectFacetVersion facetVersion, final String expectedDependencyVersion) throws CoreException {
 		new CamelFacetVersionChangeDelegate().execute(project, facetVersion, null, new NullProgressMonitor());
-		Model m2m = MavenPlugin.getMaven().readModel(project.getFile(POM_XML).getLocation().toFile());
+		Model m2m = CamelMavenUtils.getMavenModel(project);
 		assertThat(m2m.getDependencies().get(0).getVersion()).isEqualTo(expectedDependencyVersion );
 	}
 	

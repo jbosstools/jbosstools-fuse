@@ -92,13 +92,14 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
-						dep.setVersion(null);
-					} else if(isMavenPropertyCamelVersionSet(properties)){
-						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
-					} else {
+// FOR NOW WE JUST SET THAT CAMEL VERSION AS REQUESTED BY USER					
+//					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
+//						dep.setVersion(null);
+//					} else if(isMavenPropertyCamelVersionSet(properties)){
+//						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
+//					} else {
 						dep.setVersion(camelVersion);
-					}
+//					}
 				}
 			}
 		} else {

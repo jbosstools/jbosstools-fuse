@@ -77,7 +77,7 @@ public class MavenUtilsTest {
 		mavenDependency.setArtifactId("test-artifactID");
 		mavenDependency.setGroupId("test-groupID");
 		mavenModel.addDependency(mavenDependency);
-		doReturn(mavenModel).when(mavenUtils).readMavenModel(pomFile);
+		doReturn(mavenModel).when(camelMavenUtils).getMavenModel(project);
 
 		List<Dependency> compDeps = new ArrayList<>();
 		final Dependency dep = new Dependency();
@@ -105,7 +105,7 @@ public class MavenUtilsTest {
 		mavenDependency.setArtifactId("test-artifactID");
 		mavenDependency.setGroupId("test-groupID");
 		mavenModel.addDependency(mavenDependency);
-		doReturn(mavenModel).when(mavenUtils).readMavenModel(pomFile);
+		doReturn(mavenModel).when(camelMavenUtils).getMavenModel(project);
 
 		List<Dependency> compDeps = new ArrayList<>();
 		final Dependency dep = new Dependency();
@@ -128,7 +128,7 @@ public class MavenUtilsTest {
 		mavenDependency.setArtifactId("test-artifactID");
 		mavenDependency.setGroupId("test-groupID");
 		mavenModel.addDependency(mavenDependency);
-		doReturn(mavenModel).when(mavenUtils).readMavenModel(pomFile);
+		doReturn(mavenModel).when(camelMavenUtils).getMavenModel(project);
 
 		List<Dependency> compDeps = new ArrayList<>();
 		final Dependency dep = new Dependency();

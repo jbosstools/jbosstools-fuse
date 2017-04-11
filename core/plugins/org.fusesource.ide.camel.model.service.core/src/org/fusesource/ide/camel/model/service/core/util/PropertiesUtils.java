@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
+import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -275,19 +276,15 @@ public class PropertiesUtils {
 		if(uriParameterValue.lastIndexOf('?') != -1){
 			String parameters = uriParameterValue.substring(uriParameterValue.lastIndexOf('?') +1, uriParameterValue.length());
 			try {
-				Map<String, Object> parseQuery = URISupport.parseQuery(parameters);
+				Map<String, Object> parseQuery = CamelServiceManagerUtil.getManagerService().parseQuery(parameters);
 				for (Parameter componentParameter : c.getParameters()) {
 					String componentParameterName = componentParameter.getName();
 					if(parseQuery.containsKey(componentParameterName)){
 						parseQuery.remove(componentParameterName);
 					}
 				}
-				Map<String,String> parseQueryStrings = new HashMap<>();				
-				for (String key : parseQuery.keySet()) {
-					parseQueryStrings.put(key, parseQuery.get(key).toString());
-				}
-				if(!parseQuery.isEmpty() && !parseQueryStrings.isEmpty()) {
-					pathParameters = URISupport.createQueryString(parseQueryStrings, "&amp;", true);
+				if(!parseQuery.isEmpty()) {
+					pathParameters = CamelServiceManagerUtil.getManagerService().createQuery(parseQuery);
 				}
 			} catch (URISyntaxException e) {
 				CamelModelServiceCoreActivator.pluginLog().logError(e);
@@ -428,6 +425,10 @@ public class PropertiesUtils {
 		}
 
 		if (CamelComponentUtils.isNumberProperty(p)) {
+			return val;
+		}
+
+		if (CamelComponentUtils.isCharProperty(p)){
 			return val;
 		}
 

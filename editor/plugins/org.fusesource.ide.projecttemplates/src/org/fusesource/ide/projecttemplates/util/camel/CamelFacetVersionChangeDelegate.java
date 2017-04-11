@@ -61,7 +61,7 @@ public class CamelFacetVersionChangeDelegate implements IDelegate {
 	 */
 	private void updateCamelVersion(IProject project, String camelVersion) throws CoreException {
 		File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString());
-		Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+		Model m2m = CamelMavenUtils.getMavenModel(project);
 
 		if (m2m.getDependencyManagement() != null) {
 			final List<Dependency> dependencies = m2m.getDependencyManagement().getDependencies();

@@ -68,11 +68,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
-	 * mavenProjectChanged(org.eclipse.m2e.core.project.
-	 * MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void mavenProjectChanged(MavenProjectChangedEvent event, IProgressMonitor monitor) throws CoreException {
@@ -90,11 +86,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
-	 * configure(org.eclipse.m2e.core.project.configurator.
-	 * ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#configure(org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
@@ -237,7 +229,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
-		String camelVersion = getCamelVersion(mavenProject);
+		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
@@ -267,10 +259,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			Job updateJob = new UpdateMavenProjectJob(new IProject[] { project });
 			updateJob.schedule();
 		}
-	}
-
-	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
-		return CamelMavenUtils.getCamelVersionFromMaven(mavenProject);
 	}
 
 	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,

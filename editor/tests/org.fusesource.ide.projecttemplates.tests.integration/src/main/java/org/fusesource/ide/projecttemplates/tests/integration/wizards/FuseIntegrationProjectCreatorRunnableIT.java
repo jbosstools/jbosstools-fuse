@@ -68,6 +68,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
@@ -348,7 +349,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(mavenFacetFound).isTrue();
 		assertThat(utilityFacetFound).isTrue();
 		
-		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(camelVersion).as("The Camel Facet version is not the right one.");
+		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(CamelProjectConfigurator.DEFAULT_CAMEL_FACET_VERSION).as("The Camel Facet version is not the right one.");
 		
         checkNoConflictingFacets(fproj);
 	}
