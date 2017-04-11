@@ -133,6 +133,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 				debugTarget.disconnect();
 			}
 		}
+		launchUsedToInitialize = executePomAction.getLaunch();
 	}
 	
 	public IProject getProject() {

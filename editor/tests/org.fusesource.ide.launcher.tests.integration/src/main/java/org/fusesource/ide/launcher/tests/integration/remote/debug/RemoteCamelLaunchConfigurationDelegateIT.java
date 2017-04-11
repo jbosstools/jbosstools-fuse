@@ -44,6 +44,10 @@ public class RemoteCamelLaunchConfigurationDelegateIT {
 	
 	@After
 	public void tearDown() throws CoreException {
+		if(remoteDebuglaunch.canTerminate()){
+			remoteDebuglaunch.terminate();
+		}
+		remoteDebuglaunch.getLaunchConfiguration().delete();
 		projectWithDebugAvailableDeployedHelper.clean();
 	}
 
