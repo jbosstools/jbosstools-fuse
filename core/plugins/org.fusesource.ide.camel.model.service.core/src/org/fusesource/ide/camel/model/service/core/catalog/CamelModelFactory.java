@@ -52,12 +52,13 @@ public class CamelModelFactory {
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", "6.3.0.redhat-224");
-		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-224");
+		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630254", "6.3.0.redhat-254");
+		camelVersionToFuseBOMMapping.put("2.17.3",               "6.3.0.redhat-254");
 	}
 	
 	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000012").collect(Collectors.toSet());
 	
-	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-224";
+	private static final String LATEST_BOM_VERSION = "6.3.0.redhat-254";
 	
 	private static HashMap<String, Map<String, CamelModel>> supportedCamelModels;
 	

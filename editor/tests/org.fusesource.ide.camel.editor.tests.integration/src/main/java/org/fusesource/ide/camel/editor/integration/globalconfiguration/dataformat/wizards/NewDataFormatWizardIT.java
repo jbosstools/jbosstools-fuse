@@ -61,7 +61,7 @@ import org.w3c.dom.Element;
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
 
-	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 6;
+	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 7;
 	
 	@Parameter
 	public String camelVersion;
