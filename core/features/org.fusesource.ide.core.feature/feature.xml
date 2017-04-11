@@ -183,5 +183,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+         
+   <plugin
+         id="org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
