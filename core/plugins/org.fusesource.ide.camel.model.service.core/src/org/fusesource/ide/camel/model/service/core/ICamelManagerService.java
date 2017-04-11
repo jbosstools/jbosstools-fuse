@@ -151,5 +151,13 @@ public interface ICamelManagerService {
 	 * @throws URISyntaxException
 	 */
 	String createQuery(Map<String, Object> parameters) throws URISyntaxException;
+	
+	/**
+	 * checks wether the camel version is available from the m2 repos
+	 * 
+	 * @param camelVersion	the version to check for 
+	 * @return	true if available
+	 */
+	boolean isCamelVersionExisting(String camelVersion);
 		
 }

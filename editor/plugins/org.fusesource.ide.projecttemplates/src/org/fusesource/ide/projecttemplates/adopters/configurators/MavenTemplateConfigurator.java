@@ -11,16 +11,10 @@
 
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 
 import org.apache.maven.model.Model;
-import org.apache.maven.project.MavenProject;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -28,10 +22,10 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
@@ -97,7 +91,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
-			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+			Model m2m = CamelMavenUtils.getMavenModel(project);
 			subMonitor.worked(1);
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {
@@ -112,13 +106,13 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), camelVersion);
 			subMonitor.worked(1);
 			
-			if(projectMetaData.getTargetRuntime() == null){
-				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
-			} else {
-				// we suppose that only one version of Fuse Runtime is possible for a Camel Version
-				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
-				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
-			}
+//			if(projectMetaData.getTargetRuntime() == null){
+//				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+//			} else {
+//				// we suppose that only one version of Fuse Runtime is possible for a Camel Version
+//				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
+//				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+//			}
 			subMonitor.worked(1);
 			
 			MavenUtils.manageStagingRepositories(m2m);

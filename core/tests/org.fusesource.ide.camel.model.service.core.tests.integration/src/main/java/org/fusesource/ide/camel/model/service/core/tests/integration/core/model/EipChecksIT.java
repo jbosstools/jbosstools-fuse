@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.model
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.CoreException;
@@ -40,7 +39,7 @@ public class EipChecksIT {
 
 	@Parameters(name = "{0}")
 	public static Collection<String> params() {
-		return Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
 	}
 
 	@Test

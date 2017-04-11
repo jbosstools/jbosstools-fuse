@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.rules.ExternalResource;
 
 /**
@@ -60,6 +61,13 @@ public class FuseProject extends ExternalResource {
 			+ "      </plugin>\n"
 			+ "    </plugins>\n"
 			+ "  </build>\n"
+			+ "  <dependencies>\n"
+			+ "    <dependency>\n"
+			+ "      <groupId>org.apache.camel</groupId>\n"
+			+ "      <artifactId>camel-core</artifactId>\n"
+			+ "      <version>" + CamelCatalogUtils.getLatestCamelVersion() + "</version>\n"
+			+ "    </dependency>\n"
+			+ "  </dependencies>\n"
 			+ "</project>";
 
 	private IProject project = null;

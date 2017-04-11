@@ -162,4 +162,12 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
 	public String createQuery(Map<String, Object> parameters) throws URISyntaxException {
 		return checkedGetService().createQuery(parameters);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#isCamelVersionExisting(java.lang.String)
+	 */
+	@Override
+	public boolean isCamelVersionExisting(String camelVersion) {
+		return checkedGetService().isCamelVersionExisting(camelVersion);
+	}
 }

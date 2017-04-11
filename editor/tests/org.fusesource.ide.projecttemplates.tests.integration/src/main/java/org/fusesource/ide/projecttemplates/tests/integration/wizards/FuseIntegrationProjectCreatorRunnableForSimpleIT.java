@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -37,7 +36,7 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return Arrays.asList(CamelCatalogUtils.getLatestCamelVersion()); 
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForSimpleIT(String version) {

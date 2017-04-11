@@ -60,6 +60,11 @@ public class CamelCatalogUtils {
 	public static final String CATALOG_WILDFLY_GROUPID = CAMEL_WILDFLY;
 	public static final String CATALOG_WILDFLY_ARTIFACTID = "wildfly-camel-catalog";
 	
+	public static final String GAV_KEY_GROUPID = "groupId";
+	public static final String GAV_KEY_ARTIFACTID = "artifactId";
+	public static final String GAV_KEY_VERSION = "version";
+	
+	private static final List<String> OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final Map<String, String> camelVersionToFuseBOMMapping;
 	static {
 		camelVersionToFuseBOMMapping = new HashMap<>();
@@ -67,7 +72,11 @@ public class CamelCatalogUtils {
 		camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
 		camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", FUSE_63_R1_BOM_VERSION);
-		camelVersionToFuseBOMMapping.put("2.17.3",               FUSE_63_R1_BOM_VERSION);
+		
+		OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
+		OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630187");
+		OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630224");
+		OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000012");
 	}
 	
 	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000012").collect(Collectors.toSet());
@@ -76,6 +85,10 @@ public class CamelCatalogUtils {
 
 	private CamelCatalogUtils() {
 		// utility class
+	}
+	
+	public static List<String> getOfficialSupportedCamelCatalogVersions() {
+		return OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	}
 	
 	/**
@@ -131,26 +144,6 @@ public class CamelCatalogUtils {
 		return tags;
 	}
 	
-	/**
-	 * takes maven coordinates and creates a dependency from it storing it in the array list
-	 * 
-	 * @param groupId
-	 * @param artifactId
-	 * @param version
-	 * @return
-	 */
-	public static List<Dependency> initializeDependency(String groupId, String artifactId, String version) {
-		List<Dependency> dependencies = new ArrayList<>();
-		if (isValidGAV(groupId, artifactId, version)) {
-			Dependency dep = new Dependency();
-			dep.setGroupId(groupId);
-			dep.setArtifactId(artifactId);
-			dep.setVersion(version);
-			dependencies.add(dep);
-		}
-		return dependencies;
-	}
-	
 	private static boolean isValidGAV(String groupId, String artifactId, String version) {
 		return 	!Strings.isBlank(groupId) &&
 				!Strings.isBlank(artifactId) && 
@@ -200,6 +193,7 @@ public class CamelCatalogUtils {
 	}
 	
 	public static boolean isCamelVersionWithoutProviderSupport(String version) {
+		if (version == null) return true; // happens if no camel dep is defined in the pom.xml
 		ComparableVersion v1 = new ComparableVersion(version);
 		ComparableVersion v2 = new ComparableVersion("2.18.1");
 		return v1.compareTo(v2) < 0;
@@ -268,5 +262,22 @@ public class CamelCatalogUtils {
 				&& dependencies.stream()
 					.filter(dependency -> CAMEL_WILDFLY.equals(dependency.getGroupId()))
 					.findFirst().isPresent();
+	}
+	
+	public static void parseDependencies(List<Dependency> dependencies, Map<String, String> properties) {
+		String grpId = properties.get(GAV_KEY_GROUPID);
+		String artId = properties.get(GAV_KEY_ARTIFACTID);
+		String version = properties.get(GAV_KEY_VERSION);
+		
+		if (isValidGAV(grpId, artId, version)) {
+			// we process only fully specified dependencies
+			Dependency dep = new Dependency();
+			
+			dep.setGroupId(grpId);
+			dep.setArtifactId(artId);
+			dep.setVersion(version);
+			
+			dependencies.add(dep);
+		}
 	}
 }

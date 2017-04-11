@@ -44,6 +44,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
@@ -123,7 +124,7 @@ public class CamelProjectConfiguratorIT {
 	}
 	
 	private void modifyPOM(File pomFile) throws CoreException {
-		Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+		Model m2m = CamelMavenUtils.getMavenModel(project);
 
 		// some tiny change (including a dependency!)
 		m2m.setDescription("New Description");

@@ -589,7 +589,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			final String m2CamelVersion = CamelMavenUtils.getCamelVersionFromMaven(CamelUtils.project());
 			if (m2CamelVersion != null) {
 				updateDepsVersion(compDeps, m2CamelVersion);
-				new MavenUtils().updateMavenDependencies(compDeps);
+				new MavenUtils().updateMavenDependencies(compDeps, fproj.getProject());
 			}
 		}
 	}

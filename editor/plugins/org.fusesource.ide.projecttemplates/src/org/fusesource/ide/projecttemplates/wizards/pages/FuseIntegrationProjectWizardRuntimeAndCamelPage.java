@@ -19,11 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -32,7 +30,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -46,12 +43,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
@@ -75,7 +72,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private ComboViewer runtimeComboViewer;
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
-	private Text camelVersionText;
+	private Combo camelVersionCombo;
 	private StyledText camelInfoText;
 	private Label warningIconLabel;
 	
@@ -169,12 +166,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionLabel.setLayoutData(camelLabelData);
 		camelVersionLabel.setText(Messages.newProjectWizardRuntimePageCamelLabel);
 
-		camelVersionText = new Text(camelGrp, SWT.RIGHT);
+		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT | SWT.DROP_DOWN);
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
-		camelVersionText.setLayoutData(camelComboData);
-		camelVersionText.setText(CamelCatalogUtils.getLatestCamelVersion());
-		camelVersionText.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
-		camelVersionText.addSelectionListener(new SelectionAdapter() {
+		camelVersionCombo.setLayoutData(camelComboData);
+		camelVersionCombo.setItems(CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions().toArray(new String[CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions().size()]));
+		camelVersionCombo.setText(CamelCatalogUtils.getLatestCamelVersion());
+		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
+		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
@@ -183,7 +181,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				validate();
 			}
 		});
-		camelVersionText.addFocusListener(new FocusAdapter() {
+		camelVersionCombo.addFocusListener(new FocusAdapter() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.FocusAdapter#focusLost(org.eclipse.swt.events.FocusEvent)
 			 */
@@ -333,8 +331,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			String runtimeCamelVersion = determineRuntimeCamelVersion(getSelectedRuntime());
 
 			if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
-				if (!Widgets.isDisposed(camelVersionText)){
-					camelVersionText.setEnabled(true);
+				if (!Widgets.isDisposed(camelVersionCombo)){
+					camelVersionCombo.setEnabled(true);
 				}
 				camelInfoText.setText(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
 			} else {
@@ -345,13 +343,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				} else {
 					camelInfoText.setText(""); //$NON-NLS-1$
 				}
-				if (!Widgets.isDisposed(camelVersionText)){
-					camelVersionText.setEnabled(false);
+				if (!Widgets.isDisposed(camelVersionCombo)){
+					camelVersionCombo.setEnabled(false);
 				}
 			}
 		} else {
-			if (!Widgets.isDisposed(camelVersionText)){
-				camelVersionText.setEnabled(true);
+			if (!Widgets.isDisposed(camelVersionCombo)){
+				camelVersionCombo.setEnabled(true);
 			}
 
 			if (!Widgets.isDisposed(camelInfoText)) {
@@ -375,9 +373,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			warningIconLabel.setVisible(!camelInfoText.getText().isEmpty());
 		}
 		
-		if (!Widgets.isDisposed(runtimeComboViewer) && !Widgets.isDisposed(camelVersionText)) {
+		if (!Widgets.isDisposed(runtimeComboViewer) && !Widgets.isDisposed(camelVersionCombo)) {
 			setPageComplete(!Strings.isBlank(getSelectedRuntimeAsString()) && 
-							!Strings.isBlank(camelVersionText.getText()) &&
+							!Strings.isBlank(camelVersionCombo.getText()) &&
 							!warningIconLabel.isVisible());
 		}
 	}
@@ -399,29 +397,19 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	private boolean isCamelVersionValid(String camelVersion) {
-		boolean camelVersionAvailable = false;
-		try {
-			Artifact camelCore = MavenPlugin.getMaven().resolve("org.apache.camel",  //$NON-NLS-1$
-																"camel-core",  //$NON-NLS-1$
-																camelVersion, 
-																"jar",  //$NON-NLS-1$
-																null, 
-																null, 
-																new NullProgressMonitor());
-			camelVersionAvailable = camelCore != null;
-		} catch (CoreException ex) {
-			camelVersionAvailable = false;
-		}	
-		return camelVersionAvailable;
+		return true; // we assume for now that the user knows what he is doing
+		// disabled...we need to put that into some visible progress bar with info that we are currently doing
+		// so the user doesn't feel like the UI got frozen for unknown reasons
+		//return CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
 	}
 	
 	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
-		if (Widgets.isDisposed(camelVersionText)){
+		if (Widgets.isDisposed(camelVersionCombo)){
 			return;
 		}
 		
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
-			camelVersionText.setEnabled(true);
+			camelVersionCombo.setEnabled(true);
 		}		
 	}
 	
@@ -480,8 +468,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 * @return
 	 */
 	public String getSelectedCamelVersion() {
-		if (!Widgets.isDisposed(camelVersionText)) {
-			return camelVersionText.getText();
+		if (!Widgets.isDisposed(camelVersionCombo)) {
+			return camelVersionCombo.getText();
 		}
 		return null;
 	}

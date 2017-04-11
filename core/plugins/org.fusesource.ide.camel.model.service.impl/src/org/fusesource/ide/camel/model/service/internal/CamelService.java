@@ -12,21 +12,18 @@ package org.fusesource.ide.camel.model.service.internal;
 
 import java.io.ByteArrayInputStream;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
+import org.apache.camel.catalog.URISupport;
+import org.apache.camel.catalog.karaf.KarafRuntimeProvider;
 import org.apache.camel.catalog.maven.MavenVersionManager;
+import org.apache.camel.catalog.springboot.SpringBootRuntimeProvider;
 import org.apache.maven.model.Repository;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.fusesource.ide.camel.model.service.core.CamelSchemaProvider;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
@@ -36,8 +33,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataForma
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.TimePatternConverter;
-import org.fusesource.ide.camel.model.service.core.util.URISupport;
 
 /**
  * @author lhein
@@ -47,12 +44,21 @@ public class CamelService implements ICamelManagerService {
 	private static final boolean ENCODE_DEFAULT = false;
 
 	private Map<CamelCatalogCoordinates, CamelCatalog> cachedCatalogs = new HashMap<>();
+	
+	private MavenVersionManager tmpMan;
 
+	public CamelService() {
+		tmpMan = new MavenVersionManager();
+		for (List<String> rep : CamelMavenUtils.getAdditionalRepos()) {
+			tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+		}
+	}
+	
 	private CamelCatalog getCatalog(CamelCatalogCoordinates coords) {
 		if (!cachedCatalogs.containsKey(coords) ) {
 			CamelCatalog catalog = new DefaultCamelCatalog(true);
 			MavenVersionManager versionManager = new MavenVersionManager();
-			List<List<String>> additionalM2Repos = getAdditionalRepos();
+			List<List<String>> additionalM2Repos = CamelMavenUtils.getAdditionalRepos();
 			for (List<String> repo : additionalM2Repos) {
 				String repoName = repo.get(0);
 				String repoUri = repo.get(1);
@@ -62,8 +68,18 @@ public class CamelService implements ICamelManagerService {
 			if (!catalog.loadVersion(coords.getVersion())) {
 				CamelServiceImplementationActivator.pluginLog().logError("Unable to load Camel Catalog for version " + coords.getVersion());
 			}
-			if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
-				CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+			if (!CamelCatalogUtils.isCamelVersionWithoutProviderSupport(coords.getVersion())) {
+				String runtimeProvider = CamelCatalogUtils.getRuntimeProviderFromDependency(coords.asMavenDependency());
+				if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
+					catalog.setRuntimeProvider(new SpringBootRuntimeProvider());
+	//			} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
+	//				catalog.setRuntimeProvider(new WildFlyRuntimeProvider());
+				} else {
+					catalog.setRuntimeProvider(new KarafRuntimeProvider());
+				}
+				if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
+					CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+				}
 			}
 			cachedCatalogs.put(coords, catalog);
 		}
@@ -183,11 +199,7 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public long durationToMillis(String duration) {
-		try {
-			return TimePatternConverter.toMilliSeconds(duration);
-		} catch (IllegalArgumentException ex) {
-			return -1;
-		}
+		return TimePatternConverter.toMilliSeconds(duration);
 	}
 	
 	/*
@@ -209,7 +221,7 @@ public class CamelService implements ICamelManagerService {
 		for (Entry<String, Object> e : parameters.entrySet()) {
 			params.put(e.getKey(), (String)e.getValue());
 		}
-		return URISupport.createQueryString(params, "&amp;", true);
+		return URISupport.createQueryString(params, Character.toString('&'), ENCODE_DEFAULT);
 	}
 	
 	/* (non-Javadoc)
@@ -222,24 +234,12 @@ public class CamelService implements ICamelManagerService {
 		}
 	}
 	
-	private List<List<String>> getAdditionalRepos() {
-		List<List<String>> repoList = new ArrayList<>();
-		// add the ASF snapshot repo for cutting edge camel version access
-		repoList.add(Arrays.asList("asf-snapshots", "https://repository.apache.org/content/groups/snapshots"));
-		// public asf repo
-		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
-		// add the JBoss Products GA repo
-		repoList.add(Arrays.asList("jboss-products-ga", "https://repository.jboss.org/nexus/content/groups/product-ga/"));
-		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
-		boolean enabled = s.getBoolean("enableStagingRepositories");
-		if (enabled) {
-			String repos = s.getString("stagingRepositories");
-			repoList.addAll(Arrays.asList(repos.split(";"))
-					.stream()
-					.map(repoName -> Arrays.asList(repoName.split(",")))
-					.collect(Collectors.toList()));
-		}
-		return repoList;
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#isCamelVersionExisting(java.lang.String)
+	 */
+	@Override
+	public boolean isCamelVersionExisting(String camelVersion) {
+		return tmpMan.loadVersion(camelVersion);
 	}
 	
 	private CamelModel loadCamelModelFromCatalog(CamelCatalog catalog) {

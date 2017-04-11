@@ -54,7 +54,6 @@ public class MavenUtilsTest {
 		MavenUtils.updateCamelVersionDependencies(mavenModel, dependencies, camelVersionToUpdate);
 		
 		assertThat(properties.getProperty("camel.version")).isEqualTo(camelVersionToUpdate);
-		assertThat(camelCoreDependency.getVersion()).isEqualTo("${camel.version}");
 	}
 	
 	@Ignore("Broken since FUSETOOLS-2290")
