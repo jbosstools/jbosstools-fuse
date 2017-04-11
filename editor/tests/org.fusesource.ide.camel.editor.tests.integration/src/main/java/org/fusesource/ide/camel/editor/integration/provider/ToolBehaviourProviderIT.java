@@ -49,6 +49,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCac
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,6 +77,7 @@ public class ToolBehaviourProviderIT {
 		    + "    <dependency>\n"
 		    + "      <groupId>org.apache.camel</groupId>\n"
 		    + "      <artifactId>camel-spring-boot-starter</artifactId>\n"
+		    + "      <version>" + CamelCatalogUtils.getLatestCamelVersion() + "</version>\n"
 		    + "    </dependency>\n"
 		    + "  </dependencies>\n"
 			+ "  <build>\n"

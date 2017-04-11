@@ -224,8 +224,8 @@ public class DataFormat implements ICamelCatalogElement, IParameterContainer {
 	 */
 	public List<Dependency> getDependencies() {
 		if (this.dependencies == null || this.dependencies.isEmpty()) {
-			this.dependencies = CamelCatalogUtils.initializeDependency(getCustomComponentModelValue(PROPERTY_GROUPID),
-					getCustomComponentModelValue(PROPERTY_ARTIFACTID), getCustomComponentModelValue(PROPERTY_VERSION));
+			this.dependencies = new ArrayList<>();
+			CamelCatalogUtils.parseDependencies(dependencies, getModel());
 		}
 		return this.dependencies;
 	}

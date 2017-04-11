@@ -12,7 +12,6 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.junit.Assume.assumeFalse;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
@@ -29,7 +28,7 @@ public class FuseIntegrationProjectCreatorRunnableForAMQIT extends FuseIntegrati
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return Arrays.asList(CamelCatalogUtils.getLatestCamelVersion()); 
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForAMQIT(String version) {

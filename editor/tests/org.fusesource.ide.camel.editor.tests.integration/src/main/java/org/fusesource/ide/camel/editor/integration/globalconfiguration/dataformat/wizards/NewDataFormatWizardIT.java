@@ -14,24 +14,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
 import org.assertj.core.api.Assertions;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
@@ -45,6 +38,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Before;
@@ -63,8 +57,6 @@ import org.w3c.dom.Element;
 @RunWith(Parameterized.class)
 public class NewDataFormatWizardIT {
 
-	private static final int CURRENTLY_SHIPPED_MODEL_BUNDLES = 8;
-	
 	@Parameter
 	public String camelVersion;
 
@@ -81,8 +73,7 @@ public class NewDataFormatWizardIT {
 	
 	@Parameters(name = "{0} - {1}")
 	public static Collection<Object[]> data() {
-		List<String> supportedCamelVersions = Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
-		Assertions.assertThat(supportedCamelVersions).hasSize(CURRENTLY_SHIPPED_MODEL_BUNDLES);
+		List<String> supportedCamelVersions = CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(camelVersion);
@@ -119,7 +110,7 @@ public class NewDataFormatWizardIT {
 		check(id, reloadedCamelFile);
 		
 		// check that dependencies were added
-		List<Dependency> mavenProjectDependencies = getMavenProjectDependencies(project);
+		List<Dependency> mavenProjectDependencies = CamelMavenUtils.getDependencyList(project);
 		for(org.fusesource.ide.camel.model.service.core.catalog.Dependency dataFormatDependency : dataFormat.getDependencies()){
 			Stream<Dependency> filter = mavenProjectDependencies.stream()
 			.filter(dep -> dep.getGroupId().equals(dataFormatDependency.getGroupId()))
@@ -130,19 +121,6 @@ public class NewDataFormatWizardIT {
 		}
 	}
 	
-	/**
-	 * @param project
-	 * @return the Maven pom dependencies corresponding to the supplied project
-	 */
-	private List<Dependency> getMavenProjectDependencies(IProject project) throws CoreException {
-		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
-		if (pomIFile.exists()) {
-			final Model m2m = MavenPlugin.getMaven().readModel(pomIFile.getLocation().toFile());
-			return m2m.getDependencies();
-		}
-		return Collections.emptyList();
-	}
-
 	/**
 	 * @param id
 	 * @param camelFile

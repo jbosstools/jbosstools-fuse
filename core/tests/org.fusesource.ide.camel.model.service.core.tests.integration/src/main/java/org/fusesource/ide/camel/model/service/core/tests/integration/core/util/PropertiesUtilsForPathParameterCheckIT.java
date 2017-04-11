@@ -53,7 +53,6 @@ public class PropertiesUtilsForPathParameterCheckIT {
 		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 		final Component rssComponent = camelModel.getComponentForScheme("rss");
 		Parameter feedUriParameter = rssComponent.getParameters().stream().filter(p -> "feedUri".equals(p.getName())).findFirst().get();
-		
 		assertThat(PropertiesUtils.getPropertyFromUri(selectedEP, feedUriParameter, rssComponent)).isEqualTo("http://my.url?with=some&param=eter");
 	}
 

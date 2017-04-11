@@ -73,6 +73,21 @@ public class CamelCatalogCoordinates {
 	}
 	
 	/**
+	 * returns the coords as dependency
+	 * 
+	 * @return
+	 */
+	public org.apache.maven.model.Dependency asMavenDependency() {
+		org.apache.maven.model.Dependency dep = new org.apache.maven.model.Dependency();
+		
+		dep.setGroupId(getGroupId());
+		dep.setArtifactId(getArtifactId());
+		dep.setVersion(getVersion());
+		
+		return dep;
+	}
+	
+	/**
 	 * @return the groupId
 	 */
 	public String getGroupId() {
@@ -104,7 +119,7 @@ public class CamelCatalogCoordinates {
 	 * @return the version
 	 */
 	public String getVersion() {
-		return this.version;
+		return this.version != null ? this.version : CamelCatalogUtils.DEFAULT_CAMEL_VERSION;
 	}
 	
 	/**

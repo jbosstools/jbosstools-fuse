@@ -19,12 +19,14 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author lhein
  *
  */
+@Ignore("This test no longer applies as user can select whatever version they want as long as it exists in a public repo defined. Maybe add a test if the check for availability works!")
 public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 	
 	private WizardDialog dlg;

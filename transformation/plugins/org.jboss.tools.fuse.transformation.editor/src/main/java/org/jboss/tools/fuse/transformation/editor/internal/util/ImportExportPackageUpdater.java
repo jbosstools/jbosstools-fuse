@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
+
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -42,6 +43,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.osgi.framework.Constants;
@@ -85,7 +87,7 @@ public class ImportExportPackageUpdater {
 
 	private void updateImportExportPackageForExistingManifest(IFile manifestFile, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UpdatingMANIFESTMF, 3);
-		Model pomModel = retrievePomModel(project);
+		Model pomModel = CamelMavenUtils.getMavenModel(project);
 		subMonitor.worked(1);
 		if(pomModel == null || shouldAddImportExportPackage(pomModel)){
 			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
@@ -94,17 +96,6 @@ public class ImportExportPackageUpdater {
 			updateExportPackage(bundleModel);
 		}
 		subMonitor.done();
-	}
-
-	private Model retrievePomModel(IProject project) {
-		File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-		Model pomModel = null;
-		try {
-			pomModel = MavenPlugin.getMaven().readModel(pomFile);
-		} catch (CoreException e) {
-			Activator.error(e);
-		}
-		return pomModel;
 	}
 
 	private void updateExportPackage(WorkspaceBundleModel bundleModel) {
@@ -170,7 +161,7 @@ public class ImportExportPackageUpdater {
 	private void updateImportExportPackageForGeneratedManifest(IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
+			Model pomModel = CamelMavenUtils.getMavenModel(project);
 			if (!shouldAddImportExportPackage(pomModel)){
 				return;
 			}

@@ -68,6 +68,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.contenttype.BlueprintXmlMatchingStrategy;
 import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
 
@@ -459,7 +460,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 				String pomPath = pomPathValue.toOSString();
 				final File pomFile = new File(pomPath);
 				try {
-					final Model model = MavenPlugin.getMaven().readModel(pomFile);
+					final Model model = CamelMavenUtils.getMavenModel(project.getProject());
 	
 					// then check if camel-test is already a dep
 					boolean isBlueprint = isBlueprintFile(fPage1.getXmlFileUnderTest().getLocationURI().toString());

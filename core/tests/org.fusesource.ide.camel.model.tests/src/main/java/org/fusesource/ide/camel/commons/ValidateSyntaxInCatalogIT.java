@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.commons;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -37,9 +36,7 @@ public class ValidateSyntaxInCatalogIT {
 	@Test
 	public void checkComponentSyntaxAreValid() throws Exception {
 		StringBuilder sb = new StringBuilder();
-		List<String> supportedCamelVersions = Arrays.asList(CamelCatalogUtils.getLatestCamelVersion());
-		// TODO: update when a new version is added
-		assertThat(supportedCamelVersions).contains(CamelCatalogUtils.getLatestCamelVersion());
+		List<String> supportedCamelVersions = CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
 		checkForRuntimeProvider(sb, supportedCamelVersions, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
 		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000012"), CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		if (sb.length() != 0) {
