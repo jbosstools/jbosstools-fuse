@@ -27,12 +27,12 @@ import org.jboss.tools.fuse.transformation.core.Expression;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.Variable;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
-import org.jboss.tools.fuse.transformation.core.model.Model;
 
 abstract class MappingViewer {
 
@@ -149,22 +149,40 @@ abstract class MappingViewer {
         setTarget((Model)Util.draggedObject());
     }
 
-    boolean equals(MappingOperation<?, ?> mapping,
-                   Object object) {
-        if (mapping == object) return true;
-        if (mapping == null || object == null) return false;
-        if (!(object instanceof MappingOperation<?, ?>)) return false;
+    boolean mappingsEqual(MappingOperation<?, ?> mapping,
+                          Object object) {
+        if (mapping == object) {
+        	return true;
+        }
+        if (mapping == null || object == null) {
+        	return false;
+        }
+        if (!(object instanceof MappingOperation<?, ?>)) {
+        	return false;
+        }
         MappingOperation<?, ?> mapping2 = (MappingOperation<?, ?>)object;
-        if (mapping.getSource() == mapping2.getSource() && mapping.getTarget() == mapping2.getTarget()) return true;
-        if (mapping.getSource() != null && !mapping.getSource().equals(mapping2.getSource())) return false;
-        if (mapping.getTarget() != null && !mapping.getTarget().equals(mapping2.getTarget())) return false;
+        if (mapping.getSource() == mapping2.getSource() && mapping.getTarget() == mapping2.getTarget()) {
+        	return true;
+        }
+        if (mapping.getSource() != null && !mapping.getSource().equals(mapping2.getSource())) {
+        	return false;
+        }
+        if (mapping.getTarget() != null && !mapping.getTarget().equals(mapping2.getTarget())) {
+        	return false;
+        }
         return true;
     }
 
     String name(Object object) {
-        if (object instanceof Model) return ((Model)object).getName();
-        if (object instanceof Variable) return ((Variable)object).getName();
-        if (object instanceof Expression) return ((Expression)object).getLanguage();
+        if (object instanceof Model) {
+        	return ((Model)object).getName();
+        }
+        if (object instanceof Variable) {
+        	return ((Variable)object).getName();
+        }
+        if (object instanceof Expression) {
+        	return ((Expression)object).getLanguage();
+        }
         return ""; //$NON-NLS-1$
     }
 
@@ -218,7 +236,9 @@ abstract class MappingViewer {
     }
 
     void variableValueUpdated(Variable variable) {
-        if (mapping != null && variable.equals(mapping.getSource())) sourcePropPane.setToolTipText(variableToolTip(variable));
+        if (mapping != null && variable.equals(mapping.getSource())) {
+        	sourcePropPane.setToolTipText(variableToolTip(variable));
+        }
     }
 
     private abstract class DropListener extends DropTargetAdapter {
@@ -256,7 +276,9 @@ abstract class MappingViewer {
         @Override
         public final void drop(final DropTargetEvent event) {
             try {
-                if (draggingFromValidObject()) drop();
+                if (draggingFromValidObject()) {
+                	drop();
+                }
             } catch (final Exception e) {
                 Activator.error(e);
             }
