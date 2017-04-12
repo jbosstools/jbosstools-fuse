@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
@@ -94,6 +95,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			if (!isCamelFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
+			}
+			if (isInvalidCamelFacetVersion(request)) {
+				repairCamelFacet(request);
 			}
 			if (!isCamelNatureEnabled(request.getProject())) {
 				// enable the camel nature
@@ -168,6 +172,28 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 
+	private boolean isInvalidCamelFacetVersion(ProjectConfigurationRequest request) throws CoreException {
+		IProject project = request.getProject();
+		IFacetedProject fproj = ProjectFacetsManager.create(project);
+		if (fproj != null) {
+			return !fproj.getInstalledVersion(camelFacet).getVersionString().equalsIgnoreCase(DEFAULT_CAMEL_FACET_VERSION);
+		}
+		return true;
+	}
+	
+	private void repairCamelFacet(ProjectConfigurationRequest request) throws CoreException {
+		IProject project = request.getProject();
+		IFacetedProject fproj = ProjectFacetsManager.create(project);
+		NullProgressMonitor mon = new NullProgressMonitor();
+		if (fproj != null) {
+			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
+			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
+			fproj.uninstallProjectFacet(oldfv, null, mon);
+			installCamelFacet(fproj, fpwc, DEFAULT_CAMEL_FACET_VERSION, mon);
+			fpwc.commitChanges(mon);
+		}
+	}
+	
 	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
