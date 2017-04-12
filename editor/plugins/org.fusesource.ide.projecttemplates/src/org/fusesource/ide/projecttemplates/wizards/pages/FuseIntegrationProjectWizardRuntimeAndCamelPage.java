@@ -55,6 +55,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
+import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
@@ -73,6 +74,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
 	private Combo camelVersionCombo;
+	private Button camelVersionValidationBtn;
 	private StyledText camelInfoText;
 	private Label warningIconLabel;
 	
@@ -200,7 +202,33 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				setPageComplete(false);
 			}
 		});
-
+		
+		camelVersionValidationBtn = new Button(camelGrp, SWT.PUSH);
+		GridData camelButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		camelVersionValidationBtn.setLayoutData(camelButtonData);
+		camelVersionValidationBtn.setText(Messages.newProjectWizardRuntimePageCamelVersionValidationLabel);
+		camelVersionValidationBtn.setToolTipText(Messages.newProjectWizardRuntimePageCamelVersionValidationDescription);
+		camelVersionValidationBtn.addSelectionListener(new SelectionAdapter() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					getWizard().getContainer().run(false, false, new IRunnableWithProgress() {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+							monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
+							validateCamelVersion();
+							monitor.done();
+						}
+					});
+				} catch (Exception ex) {
+					ProjectTemplatesActivator.pluginLog().logError(ex);
+				}
+			}
+		});
+				
 		new Label(camelGrp, SWT.None);
 	
 		warningIconLabel = new Label(camelGrp, SWT.None);
@@ -356,18 +384,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				camelInfoText.setText(""); //$NON-NLS-1$
 			}			
 		}
-		try {
-			getWizard().getContainer().run(false, false, new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
-					validateCamelVersion();
-					monitor.done();
-				}
-			});
-		} catch (Exception ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
-		}
 		
 		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
 			warningIconLabel.setVisible(!camelInfoText.getText().isEmpty());
@@ -397,10 +413,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	private boolean isCamelVersionValid(String camelVersion) {
-		return true; // we assume for now that the user knows what he is doing
-		// disabled...we need to put that into some visible progress bar with info that we are currently doing
-		// so the user doesn't feel like the UI got frozen for unknown reasons
-		//return CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
+		return CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
 	}
 	
 	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
