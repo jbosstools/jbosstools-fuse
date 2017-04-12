@@ -63,7 +63,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ImportExportPackageUpdater;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
-import org.jboss.tools.fuse.transformation.editor.internal.wizards.JSONPage;
+import org.jboss.tools.fuse.transformation.editor.internal.wizards.JsonPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JavaPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.ModelType;
@@ -98,8 +98,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private JavaPage javaTarget;
     private XMLPage xmlSource;
     private XMLPage xmlTarget;
-    private JSONPage jsonSource;
-    private JSONPage jsonTarget;
+    private JsonPage jsonSource;
+    private JsonPage jsonTarget;
     private OtherPage otherSource;
     private OtherPage otherTarget;
 
@@ -181,11 +181,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         addPage(xmlTarget);
         if (jsonSource == null) {
-            jsonSource = new JSONPage("Sourcejson", uiModel, true); //$NON-NLS-1$
+            jsonSource = new JsonPage("Sourcejson", uiModel, true); //$NON-NLS-1$
         }
         addPage(jsonSource);
         if (jsonTarget == null) {
-            jsonTarget = new JSONPage("Targetjson", uiModel, false); //$NON-NLS-1$
+            jsonTarget = new JsonPage("Targetjson", uiModel, false); //$NON-NLS-1$
         }
         addPage(jsonTarget);
         if (otherSource == null) {
@@ -206,11 +206,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return javaTarget;
     }
 
-    public JSONPage jsonSourcePage() {
+    public JsonPage jsonSourcePage() {
         return jsonSource;
     }
 
-    public JSONPage jsonTargetPage() {
+    public JsonPage jsonTargetPage() {
         return jsonTarget;
     }
 
