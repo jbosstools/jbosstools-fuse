@@ -76,7 +76,7 @@ public class ControllableKarafServerBehavior extends ControllableServerBehavior 
 					((Server)server).setModuleState(temp, state);
 				}
 				return Status.OK_STATUS;
-			};
+			}
 		};
 		moduleStateJob.schedule();	
 	}
