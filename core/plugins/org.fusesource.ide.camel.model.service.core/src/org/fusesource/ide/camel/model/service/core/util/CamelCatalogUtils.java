@@ -15,12 +15,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.project.MavenProject;
@@ -44,12 +43,12 @@ public class CamelCatalogUtils {
 	
 	// TODO change the URL once we merged it into master...all versions should point to the file on master
 	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2290-ALTERNATIVE/configuration/camel2bom.properties";
+	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2290-ALTERNATIVE/configuration/fismarker.properties";
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
 	public static final String DEFAULT_CAMEL_VERSION = "2.18.1.redhat-000012";
-	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";	
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -70,11 +69,16 @@ public class CamelCatalogUtils {
 	public static final String GAV_KEY_ARTIFACTID = "artifactId";
 	public static final String GAV_KEY_VERSION = "version";
 	
+	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
+	private static final String LATEST_BOM_VERSION = FUSE_63_R1_BOM_VERSION;
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
-	private static final Map<String, String> camelVersionToFuseBOMMapping;
+	private static final Map<String, String> CAMEL_VERSION_2_FUSE_BOM_MAPPING;
+	private static final Set<String> PURE_FIS_CAMEL_VERSIONS;
+	
 	static {
-		camelVersionToFuseBOMMapping = new HashMap<>();
+		CAMEL_VERSION_2_FUSE_BOM_MAPPING = new HashMap<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
+		PURE_FIS_CAMEL_VERSIONS = new HashSet<>();
 		
 		try {
 			Properties vMapping = new Properties();
@@ -83,7 +87,7 @@ public class CamelCatalogUtils {
 			
 			for(String camelVersion : vMapping.stringPropertyNames()) {
 				String bomVersion = vMapping.getProperty(camelVersion);
-				camelVersionToFuseBOMMapping.put(camelVersion, bomVersion);
+				CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(camelVersion, bomVersion);
 				
 				// we only add camel versions later than 2.18.0 to the supported versions map (prior versions had
 				// too many errors in the catalog or not catalog at all) 
@@ -95,20 +99,34 @@ public class CamelCatalogUtils {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			camelVersionToFuseBOMMapping.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
-			camelVersionToFuseBOMMapping.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
-			camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
-			camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", FUSE_63_R1_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.17.0.redhat-630224", FUSE_63_R1_BOM_VERSION);
 			
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630187");
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630224");
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000012");	
 		}
+		
+		try {
+			Properties fisMapping = new Properties();
+			URL url = new URL(FIS_MAPPING_URL);
+			fisMapping.load(url.openStream());
+			
+			for(String camelVersion : fisMapping.stringPropertyNames()) {
+				PURE_FIS_CAMEL_VERSIONS.add(camelVersion);
+			}
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
+
+			// DEFAULTS
+			PURE_FIS_CAMEL_VERSIONS.add("2.18.1.redhat-000012");			
+		}
+		
 	}
 	
-	private static final Set<String> pureFisVersions = Stream.of("2.18.1.redhat-000012").collect(Collectors.toSet());
-	
-	private static final String LATEST_BOM_VERSION = FUSE_63_R1_BOM_VERSION;
+
 
 	private CamelCatalogUtils() {
 		// utility class
@@ -136,10 +154,12 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static String getFuseVersionForCamelVersion(String camelVersion) {
-		String bomVersion = camelVersionToFuseBOMMapping.get(camelVersion);
-		if (bomVersion == null) {
-			bomVersion = LATEST_BOM_VERSION;
-		}
+		String bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
+		// TODO: revisit once https://issues.apache.org/jira/browse/CAMEL-8502 got solved
+//		if (bomVersion == null) {
+			// seems its not a Fuse Camel version so we currently don't support it
+//			bomVersion = LATEST_BOM_VERSION;
+//		}
 		return bomVersion;
 	}
 	
@@ -150,7 +170,7 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static boolean isPureFISVersion(String camelVersion) {
-		return pureFisVersions.contains(camelVersion);
+		return PURE_FIS_CAMEL_VERSIONS.contains(camelVersion);
 	}
 	
 	/**
