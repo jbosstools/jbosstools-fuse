@@ -91,7 +91,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	public void widgetSelected(SelectionEvent event) {
 	    		setTemplatesActive(false);
 	    		validate();
-	    	};
+	    	}
 	    });
 	    
 	    btn_templateProject = new Button(grp_emptyVsTemplate, SWT.RADIO);
@@ -145,7 +145,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
-	    	};
+	    	}
 	    });
 	    
 	    btn_springDSL = new Button(grp_dslSelection, SWT.RADIO);
@@ -159,7 +159,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
-	    	};
+	    	}
 	    });
 	    
 	    btn_javaDSL = new Button(grp_dslSelection, SWT.RADIO);
@@ -173,7 +173,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
-	    	};
+	    	}
 	    });
 
 	    btn_emptyProject.setSelection(true);

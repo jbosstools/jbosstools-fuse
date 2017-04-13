@@ -15,7 +15,7 @@ package org.fusesource.ide.camel.editor.provider.ext;
  * @author lhein
  */
 public interface PaletteCategoryItemProvider {
-	static enum CATEGORY_TYPE {
+	enum CATEGORY_TYPE {
 		COMPONENTS, ENDPOINTS, ROUTING, CONTROL_FLOW, TRANSFORMATION, MISCELLANEOUS, NONE, USER_DEFINED;
 
 		public static CATEGORY_TYPE getCategoryType(String name) {
@@ -30,7 +30,7 @@ public interface PaletteCategoryItemProvider {
 			}
 			return CATEGORY_TYPE.NONE;
 		}
-	};
+	}
 
 	/**
 	 * returns the category type

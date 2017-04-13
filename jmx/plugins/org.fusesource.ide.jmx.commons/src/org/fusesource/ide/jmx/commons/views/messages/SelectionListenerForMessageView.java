@@ -54,7 +54,6 @@ final class SelectionListenerForMessageView implements ISelectionListener {
 				"org.fusesource.ide.jmx.commons.views.diagram.DiagramView",
 				"org.eclipse.wst.server.ui.internal.view.servers.ServersView",
 				"org.eclipse.wst.server.ui.internal.cnf.ServersView2"});
-		;
 		//@formatter:on
 		return relevantPartClassNames.contains(partClassName);
 	}
