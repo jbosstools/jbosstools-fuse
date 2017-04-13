@@ -107,13 +107,13 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), camelVersion);
 			subMonitor.worked(1);
 			
-//			if(projectMetaData.getTargetRuntime() == null){
-//				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
-//			} else {
-//				// we suppose that only one version of Fuse Runtime is possible for a Camel Version
-//				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
-//				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
-//			}
+			if(projectMetaData.getTargetRuntime() == null){
+				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+			} else {
+				// we suppose that only one version of Fuse Runtime is possible for a Camel Version
+				//TODO: find a way to retrieve the Fuse Runtime BOM version from the Target Runtime
+				MavenUtils.alignFuseRuntimeVersion(m2m, camelVersion);
+			}
 			subMonitor.worked(1);
 			
 			MavenUtils.manageStagingRepositories(m2m);
