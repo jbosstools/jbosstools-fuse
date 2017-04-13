@@ -43,23 +43,6 @@ public class MavenUtils {
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION = "camel.version";
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE = "${"+MAVEN_PROPERTY_CAMEL_VERSION+"}";
 	
-	/**
-	 * @param plugins
-	 * @param camelVersion
-	 */
-	public static void updateCamelVersionPlugins(Model mavenModel, List<Plugin> plugins, String camelVersion) {
-		Properties properties = mavenModel.getProperties();
-		if(isMavenPropertyCamelVersionSet(properties)){
-			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
-		} else {
-			for (Plugin p : plugins) {
-				if (isCamelDependency(p)) {
-					p.setVersion(camelVersion);
-				}
-			}
-		}
-	}
-	
 	public static void updateContributedPlugins(List<Plugin> plugins, String camelVersion) {
 		for (IConfigurationElement e : getExtensionPoints()) {
 			try {
@@ -81,6 +64,36 @@ public class MavenUtils {
 	}
 
 	/**
+	 * @param plugins
+	 * @param camelVersion
+	 */
+	public static void updateCamelVersionPlugins(Model mavenModel, List<Plugin> plugins, String camelVersion) {
+		Properties properties = mavenModel.getProperties();
+		if(isMavenPropertyCamelVersionSet(properties)){
+			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
+		}
+		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)) { 
+			for (Plugin p : plugins) {
+				if (isCamelPlugin(p)) {
+					if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
+						p.setVersion(null);
+					} else if(isMavenPropertyCamelVersionSet(properties)){
+						p.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
+					} else {
+						p.setVersion(camelVersion);
+					}					
+				}
+			}
+		} else {
+			for (Plugin p : plugins) {
+				if (isCamelPlugin(p) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(p.getVersion())) {
+					p.setVersion(camelVersion);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * @param dependencies
 	 * @param camelVersion
 	 */
@@ -92,7 +105,7 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
+					if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
 						dep.setVersion(null);
 					} else if(isMavenPropertyCamelVersionSet(properties)){
 						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
@@ -130,7 +143,7 @@ public class MavenUtils {
 		return ORG_APACHE_CAMEL.equalsIgnoreCase(dep.getGroupId()) && dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_PREFIX);
 	}
 	
-	private static boolean isCamelDependency(Plugin plugin) {
+	private static boolean isCamelPlugin(Plugin plugin) {
 		return ORG_APACHE_CAMEL.equalsIgnoreCase(plugin.getGroupId()) && plugin.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_PREFIX);
 	}
 
