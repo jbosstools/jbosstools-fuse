@@ -55,10 +55,7 @@ public final class CamelFileTypeHelper {
     public static boolean isSupportedCamelFile(IProject project, String filePath) {
         boolean isSpring = isSpringFile(project, filePath);
         boolean isBlueprint = isBlueprintFile(project, filePath);
-        if (isSpring || isBlueprint) {
-            return true;
-        }
-        return false;
+        return isSpring || isBlueprint;
     }
 
     private static boolean fileMatches(IProject project, String filePath, XmlMatchingStrategySupport matcher) {
@@ -86,4 +83,6 @@ public final class CamelFileTypeHelper {
         return matches;
     }
 
+    private CamelFileTypeHelper() {
+    }
 }
