@@ -180,6 +180,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				super.widgetSelected(e);
 				validate();
 			}
 		});

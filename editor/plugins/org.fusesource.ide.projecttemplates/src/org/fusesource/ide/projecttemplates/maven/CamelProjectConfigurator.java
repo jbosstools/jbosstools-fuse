@@ -96,6 +96,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
 			}
+			// handling for projects migrated from tooling version 9.x and earlier with deprecated fact version usage 
 			if (isInvalidCamelFacetVersion(request)) {
 				repairCamelFacet(request);
 			}
@@ -255,7 +256,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
-		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project);
+		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project, false);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 

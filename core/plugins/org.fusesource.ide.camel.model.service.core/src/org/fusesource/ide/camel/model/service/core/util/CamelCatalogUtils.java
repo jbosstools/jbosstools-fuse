@@ -89,9 +89,9 @@ public class CamelCatalogUtils {
 				String bomVersion = vMapping.getProperty(camelVersion);
 				CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(camelVersion, bomVersion);
 				
-				// we only add camel versions later than 2.18.0 to the supported versions map (prior versions had
+				// we only add camel versions later than 2.17.0 to the supported versions map (prior versions had
 				// too many errors in the catalog or not catalog at all) 
-				if (!isCamelVersionWithoutProviderSupport(camelVersion)) {
+				if (!isCamelVersionWithoutCatalogSupport(camelVersion)) {
 					OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(camelVersion);
 				}
 			}
@@ -243,6 +243,13 @@ public class CamelCatalogUtils {
 		if (version == null) return true; // happens if no camel dep is defined in the pom.xml
 		ComparableVersion v1 = new ComparableVersion(version);
 		ComparableVersion v2 = new ComparableVersion("2.18.1");
+		return v1.compareTo(v2) < 0;
+	}
+	
+	public static boolean isCamelVersionWithoutCatalogSupport(String version) {
+		if (version == null) return true; // happens if no camel dep is defined in the pom.xml
+		ComparableVersion v1 = new ComparableVersion(version);
+		ComparableVersion v2 = new ComparableVersion("2.17.0");
 		return v1.compareTo(v2) < 0;
 	}
 	

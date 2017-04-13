@@ -92,14 +92,13 @@ public class MavenUtils {
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
 			for (Dependency dep : dependencies) {
 				if (isCamelDependency(dep)) {
-// FOR NOW WE JUST SET THAT CAMEL VERSION AS REQUESTED BY USER					
-//					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
-//						dep.setVersion(null);
-//					} else if(isMavenPropertyCamelVersionSet(properties)){
-//						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
-//					} else {
+					if(isMavenPropertyFuseBomVersionSet(properties) && isFuseBomImported(dependencies) && !CamelCatalogUtils.isPureFISVersion(camelVersion)){
+						dep.setVersion(null);
+					} else if(isMavenPropertyCamelVersionSet(properties)){
+						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
+					} else {
 						dep.setVersion(camelVersion);
-//					}
+					}
 				}
 			}
 		} else {
@@ -189,15 +188,17 @@ public class MavenUtils {
 	 * @param camelVersion
 	 */
 	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion) {
-		Properties properties = mavenModel.getProperties();
-		if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
-			properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
-		} else {
-			if(mavenModel.getDependencyManagement() != null){
-				for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
-					if(isFuseBomImportDependency(dependency)){
-						dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
-						return;
+		if (CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion) != null) {
+			Properties properties = mavenModel.getProperties();
+			if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
+				properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
+			} else {
+				if(mavenModel.getDependencyManagement() != null){
+					for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
+						if(isFuseBomImportDependency(dependency)){
+							dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
+							return;
+						}
 					}
 				}
 			}
