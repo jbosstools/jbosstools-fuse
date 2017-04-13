@@ -70,11 +70,11 @@ public class CamelCatalogUtils {
 	public static final String GAV_KEY_ARTIFACTID = "artifactId";
 	public static final String GAV_KEY_VERSION = "version";
 	
-	private static final List<String> OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
+	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final Map<String, String> camelVersionToFuseBOMMapping;
 	static {
 		camelVersionToFuseBOMMapping = new HashMap<>();
-		OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		
 		try {
 			Properties vMapping = new Properties();
@@ -88,7 +88,7 @@ public class CamelCatalogUtils {
 				// we only add camel versions later than 2.18.0 to the supported versions map (prior versions had
 				// too many errors in the catalog or not catalog at all) 
 				if (!isCamelVersionWithoutProviderSupport(camelVersion)) {
-					OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(camelVersion);
+					OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(camelVersion);
 				}
 			}
 		} catch (IOException ex) {
@@ -100,9 +100,9 @@ public class CamelCatalogUtils {
 			camelVersionToFuseBOMMapping.put("2.17.0.redhat-630187", "6.3.0.redhat-187");
 			camelVersionToFuseBOMMapping.put("2.17.0.redhat-630224", FUSE_63_R1_BOM_VERSION);
 			
-			OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630187");
-			OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630224");
-			OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000012");	
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630187");
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630224");
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000012");	
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class CamelCatalogUtils {
 	}
 	
 	public static List<String> getOfficialSupportedCamelCatalogVersions() {
-		return OFFICAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
+		return OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	}
 	
 	/**
