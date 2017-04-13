@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -37,6 +38,8 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 
 public class CamelMavenUtils {
 
+	private static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
+	
 	private CamelMavenUtils() {
 		// util class
 	}
@@ -104,15 +107,38 @@ public class CamelMavenUtils {
 		return projectRegistry.create(pomIFile, true, new NullProgressMonitor());
 	}
 
+	public static String getCamelVersionFromMaven(IProject project) {
+		return getCamelVersionFromMaven(project, true);
+	}
+	
 	/**
 	 * checks for the camel version in the dependencies of the pom.xml
 	 * 
 	 * @param project
+	 * @param useCachedCamelVersionInfo	true if you want to use the cached camel version for that project, otherwise false
 	 * @return
 	 */
-	public static String getCamelVersionFromMaven(IProject project) {
-		List<Dependency> deps = getDependencyList(project);
-		return getCamelVersionFromDependencies(deps);
+	public static String getCamelVersionFromMaven(IProject project, boolean useCachedCamelVersionInfo) {
+		String camelVersion;
+		try {
+			// lets cache the camel version used in a project
+			if (!useCachedCamelVersionInfo || project.getSessionProperty(CAMEL_VERSION_QNAME) == null) {
+				List<Dependency> deps = getDependencyList(project);
+				if (deps.isEmpty()) {
+					// probably a remote edit route -> load latest default version
+					camelVersion = CamelCatalogUtils.getLatestCamelVersion();
+				} else {
+					camelVersion = getCamelVersionFromDependencies(deps);
+				}				
+				project.setSessionProperty(CAMEL_VERSION_QNAME, camelVersion);
+			} else {
+				camelVersion = (String)project.getSessionProperty(CAMEL_VERSION_QNAME);
+			}
+		} catch (CoreException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			camelVersion = CamelCatalogUtils.getLatestCamelVersion();
+		}
+		return camelVersion;
 	}
 
 	public static Model getMavenModel(IProject project) {
@@ -144,35 +170,34 @@ public class CamelMavenUtils {
 	
 	public static List<Dependency> getDependencyList(IProject project, boolean includeManagedDependencies) {
 		IMavenProjectFacade m2facade = getMavenProjectFacade(project);
-		
 		List<Dependency> deps = new ArrayList<>();
-		try {
-			MavenProject m2Project = m2facade.getMavenProject(new NullProgressMonitor());
-			deps.addAll(m2Project.getCompileDependencies());
-			deps.addAll(m2Project.getDependencies());
-			deps.addAll(m2Project.getRuntimeDependencies());
-			deps.addAll(m2Project.getSystemDependencies());
-			deps.addAll(m2Project.getTestDependencies());
-			if (m2Project.getDependencyManagement() != null && includeManagedDependencies) {
-				deps.addAll(m2Project.getDependencyManagement().getDependencies());
+		if (m2facade != null) {
+			try {
+				MavenProject m2Project = m2facade.getMavenProject(new NullProgressMonitor());
+				deps.addAll(m2Project.getCompileDependencies());
+				deps.addAll(m2Project.getDependencies());
+				deps.addAll(m2Project.getRuntimeDependencies());
+				deps.addAll(m2Project.getSystemDependencies());
+				deps.addAll(m2Project.getTestDependencies());
+				if (m2Project.getDependencyManagement() != null && includeManagedDependencies) {
+					deps.addAll(m2Project.getDependencyManagement().getDependencies());
+				}
+				translateVariables(deps, m2Project.getModel());
+			} catch (CoreException ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
 			}
-			translateVariables(deps, m2Project.getModel());
-		} catch (CoreException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
-		
 		return deps;
 	}
 	
 	private static String getCamelVersionFromDependencies(List<Dependency> deps) {
 		for (Dependency pomDep : deps) {
-			System.err.println(String.format("%s:%s:%s", pomDep.getGroupId(), pomDep.getArtifactId(), pomDep.getVersion()));
 			if (pomDep.getGroupId().equalsIgnoreCase(CamelCatalogUtils.CATALOG_KARAF_GROUPID) && 
 				pomDep.getArtifactId().startsWith("camel-")) {
 				return pomDep.getVersion();
 			}
 		}
-		return null;//CamelCatalogUtils.DEFAULT_CAMEL_VERSION;
+		return null;
 	}
 
 	/**
@@ -198,8 +223,7 @@ public class CamelMavenUtils {
 		repoList.add(Arrays.asList("asf-snapshots", "https://repository.apache.org/content/groups/snapshots"));
 		// public asf repo
 		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
-		// add the JBoss Products GA repo
-		repoList.add(Arrays.asList("jboss-products-ga", "https://repository.jboss.org/nexus/content/groups/product-ga/"));
+		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
 		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
 		boolean enabled = s.getBoolean("enableStagingRepositories");
