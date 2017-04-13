@@ -26,7 +26,7 @@ import org.junit.Test;
 public class CamelCatalogUtilsTest {
 
 	@Test
-	public void testRemoteVersionMappingAvailability() {
+	public void testRemoteCamel2BOMVersionMappingAvailability() {
 		try {
 			Properties vMapping = new Properties();
 			URL url = new URL(CamelCatalogUtils.CAMEL_TO_BOM_MAPPING_URL);
@@ -36,4 +36,17 @@ public class CamelCatalogUtilsTest {
 			fail("Unable to load the Camel2BOM mapping file from remote repo.");
 		}
 	}
+	
+	@Test
+	public void testRemoteFISVersionMappingAvailability() {
+		try {
+			Properties fisMapping = new Properties();
+			URL url = new URL(CamelCatalogUtils.FIS_MAPPING_URL);
+			fisMapping.load(url.openStream());
+			assertTrue("Seems there is no data available in the online mapping file for FIS ONLY versions.", fisMapping.size() > 0);
+		} catch (IOException ex) {
+			fail("Unable to load the FIS-ONLY mapping file from remote repo.");
+		}
+	}
+	
 }
