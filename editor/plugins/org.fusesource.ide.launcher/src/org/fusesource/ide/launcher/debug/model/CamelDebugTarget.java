@@ -337,12 +337,24 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		} finally {
 			closeRemoteContextEditor();
 			fireTerminateEvent();
-			// clean up the jobs
-			dispatcher.cancel();
-			garbageCollector.cancel();
+			cleanJobs();
 		}
 	}
 
+	private void cleanJobs() {
+		if (conJob != null) {
+			conJob.cancel();
+		}
+		if (dispatcher != null) {
+			dispatcher.cancel();
+			dispatcher = null;
+		}
+		if (garbageCollector != null) {
+			garbageCollector.cancel();
+			garbageCollector = null;			
+		}
+	}
+	
 	void unregisterBreakpointListener() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
 	}
@@ -365,6 +377,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	@Override
 	public void resume() throws DebugException {
 		this.fProcessingActive = true;
+		if(dispatcher == null){
+			scheduleEventDispatcherJob();
+		}
+		if(garbageCollector == null){
+			scheduleGarbageCollectorJob();
+		}
 		fireResumeEvent(DebugEvent.CLIENT_REQUEST);
 	}
 	
@@ -437,6 +455,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			debugger = null;
 		}
 		fireTerminateEvent();
+		cleanJobs();
 	}
 	
 	@Override
@@ -650,4 +669,19 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		return jmxUri;
 	}
 	
+	/** 
+	 * Used for test purpose
+	 * @return
+	 */
+	public EventDispatchJob getDispatcher() {
+		return dispatcher;
+	}
+	
+	/** 
+	 * Used for test purpose
+	 * @return
+	 */
+	public ThreadGarbageCollector getGarbageCollector() {
+		return garbageCollector;
+	}
 }
