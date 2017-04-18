@@ -1,5 +1,5 @@
 # Contribution Guide
-Please make sure you read and understand this document before starting development on Fuse Tooling as it helps us to merge your pull requests faster and keeps the commit history clean.
+Please make sure you read and understand this document before starting development on JBoss Camel Developer Tools as it helps us to merge your pull requests faster and keeps the commit history clean.
 
 ## Git configuration
 
@@ -13,9 +13,9 @@ To configure Eclipse workspace preferences:
 ## Get the code
 The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
 
-	$ git clone git@github.com:<you>/fuseide.git
-	$ cd fuseide
-	$ git remote add upstream https://github.com/fusesource/fuseide.git
+	$ git clone git@github.com:<you>/fusetools.git
+	$ cd fusetools
+	$ git remote add upstream https://github.com/jbosstools/fusetools.git
 
 At any time, you can pull changes from the upstream and merge them onto your master:
 
@@ -25,8 +25,8 @@ At any time, you can pull changes from the upstream and merge them onto your mas
 
 The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
 
-## Building JBoss Fuse Tooling
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+). See this [link](https://github.com/fusesource/fuseide/blob/master/Build.md) for more information on how to setup, run and configure build.
+## Building JBoss Camel Developer Tools
+To build _JBoss Camel Developer Tools_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](https://github.com/jbosstools/fusetools/blob/master/Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
@@ -34,14 +34,14 @@ This command will run the build:
 
 If you just want to check if things compiles/builds you can run:
 
-    $ mvn clean package -Dmaven.test.skip=true
+    $ mvn clean verify -DskipTests
 
-But *do not* push changes without having the new and existing unit tests pass!
+But *do not* push changes without having the new and existing unit and integration tests pass!
 
 ## Contribute fixes and features
-_JBoss Fuse Tooling_ is open source, and we welcome anybody who wants to participate and contribute!
+_JBoss Camel Developer Tools_ is open source, and we welcome anyone willing to participate and contribute!
 
-If you want to fix a bug or make any changes, please log an issue in the [JBoss Fuse Tooling JIRA](https://issues.jboss.org/browse/FUSETOOLS) describing the bug or new feature and give it a fitting component type. Then we highly recommend making the changes on a topic branch named with the JIRA issue number. For example, this command creates a branch for the _FUSETOOLS-1234_ issue:
+If you want to fix a bug or make any changes, please log an issue in the [JBoss Camel Developer Tools JIRA](https://issues.jboss.org/browse/FUSETOOLS) describing the bug or new feature and give it a fitting component type. Then we highly recommend making the changes on a topic branch named with the JIRA issue number. For example, this command creates a branch for the _FUSETOOLS-1234_ issue:
 
 	$ git checkout -b fusetools-1234
 
@@ -57,7 +57,7 @@ If the pull grabbed a lot of changes, you should rerun your build with tests ena
 
 You can then push your topic branch and its changes into your public fork repository:
 
-	$ git push origin fusetools-1234         # pushes your topic branch into your public fork of JBoss Fuse Tooling
+	$ git push origin fusetools-1234         # pushes your topic branch into your public fork of JBoss Camel Developer Tools
 
 And then [generate a pull-request](http://help.github.com/pull-requests/) where we can review the proposed changes, comment on them, discuss them with you, and if everything is good merge the changes right into the official repository.
 
@@ -67,46 +67,14 @@ If you introduced new dependencies or changed versions it is always a good idea 
 - download and install a plain vanilla Eclipse Kepler, Luna or whatever version used currently  
 - run this vanilla Eclipse
 - in Eclipse choose _Install new software_, then _Add_ to add a new update site
-- choose _Local_ in the following dialog and set the location to file://<your path to fuseide>/site/target/repository
+- choose _Local_ in the following dialog and set the location to file://<your path to fusetools>/site/target/repository
 - close the dialog with _OK_ and then select the new added update site from the drop down box
-- then in the tree below check all the _JBoss Fuse Tooling_ entries
+- then in the tree below check all the _JBoss Camel Developer Tools_ entries
 - hit _Next_ to install the software
 - if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 
-## Code generation
-__IMPORTANT:__
-
-_This step is only required if the Apache Camel model, the documentation or used archetypes and xml catalogs changed! 
-Usually thats the case if the underlying Apache Camel version changed._
-
-### How to generate	model classes
-From the _fuseide_ directory type:
-
-    cd tools/ide-codegen
-    mvn compile exec:java
-
-The generator then runs and updates the sources. Don't forget to commit and push the regenerated source files.
-
-### How to generate archetypes and latest XSDs
-From the _fuseide_ directory type:
-
-    cd tools/ide-buildtools
-    mvn compile exec:java
-
-Be sure to have the file 
-
-    <userhome>/.repo.fusesource.com.properties
-
-which should contain the credentials for the FuseSource Nexus EA repository like
-
-    username=<your login>
-    password=<your password>
-
-Without this file the build will not work!
-
-
 ## Changing versions before / after a release
-There is a bash script called [_changeVersion.sh_](https://github.com/fusesource/fuseide/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
+There is a bash script called [_changeVersion.sh_](https://github.com/jbosstools/fusetools/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
 
 *Invocation:*
 
