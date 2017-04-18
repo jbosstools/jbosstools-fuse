@@ -1,4 +1,4 @@
-# JBoss Fuse Tooling for Eclipse
+# JBoss Camel Developer Tools
 Please visit our [project site](http://tools.jboss.org/features/apachecamel.html) to learn more about _JBoss Fuse Tooling_.
 
 ## Summary
