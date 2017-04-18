@@ -4,9 +4,9 @@ This document describes how to get and build the sources. It also covers how to 
 ## Get the code
 The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
 
-	$ git clone git@github.com:<you>/fusetools.git
-	$ cd fusetools
-	$ git remote add upstream https://github.com/jbosstools/fusetools.git
+	$ git clone git@github.com:<you>/jbosstools-fuse.git
+	$ cd jbosstools-fuse
+	$ git remote add upstream https://github.com/jbosstools/jbosstools-fuse.git
 
 At any time, you can pull changes from the upstream and merge them onto your master:
 
@@ -32,7 +32,7 @@ If you want to do development in Eclipse for JBoss Camel Developer Tools you nee
 
 Here's how to retrieve the target files describing the Target Platform...
 
-    $ cd fusetools/targetplatform
+    $ cd jbosstools-fuse/targetplatform
     $ mvn generate-sources
 
 Once the build is done you end up with a file aggregate-\*.target inside the *target/tp* subfolder. Now open this file with Target File editor from Eclipse IDE and click "Set as target Platform" at the top right. Be patient... and it will be ready.
@@ -45,7 +45,7 @@ Now its time to open your Eclipse if you haven't done so.
 Here's how to setup Eclipse...
 
 - create a new workspace for working on _JBoss Camel Developer Tools_
-- import the project into Eclipse from directory "fusetools" (_Import... -> General -> Existing Project_)
+- import the project into Eclipse from directory "jbosstools-fuse" (_Import... -> General -> Existing Project_)
 
 Now your Eclipse has set the target platform you need for running _JBoss Camel Developer Tools_. A rebuild of all imported projects is done directly after setting the target platform. Make sure there are no more errors displayed in any of the projects.
 
