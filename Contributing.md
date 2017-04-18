@@ -13,9 +13,9 @@ To configure Eclipse workspace preferences:
 ## Get the code
 The easiest way to get started with the code is to [create your own fork](http://help.github.com/forking/) at github, and then clone your fork:
 
-	$ git clone git@github.com:<you>/fusetools.git
-	$ cd fusetools
-	$ git remote add upstream https://github.com/jbosstools/fusetools.git
+	$ git clone git@github.com:<you>/jbosstools-fuse.git
+	$ cd jbosstools-fuse
+	$ git remote add upstream https://github.com/jbosstools/jbosstools-fuse.git
 
 At any time, you can pull changes from the upstream and merge them onto your master:
 
@@ -74,7 +74,7 @@ If you introduced new dependencies or changed versions it is always a good idea 
 - if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 
 ## Changing versions before / after a release
-There is a bash script called [_changeVersion.sh_](https://github.com/jbosstools/fusetools/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
+There is a bash script called [_changeVersion.sh_](https://github.com/jbosstools/jbosstools-fuse/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
 
 *Invocation:*
 
