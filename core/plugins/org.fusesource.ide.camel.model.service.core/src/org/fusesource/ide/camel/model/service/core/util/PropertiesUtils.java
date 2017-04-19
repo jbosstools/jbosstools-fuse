@@ -704,7 +704,7 @@ public class PropertiesUtils {
 	 */
 	public static boolean validateDuration(String value) throws IllegalArgumentException {
 		// try to convert to millis which will throw exception on error
-		TimePatternConverter.toMilliSeconds(value);
+		CamelServiceManagerUtil.getManagerService().durationToMillis(value);
 		return true;
 	}
 

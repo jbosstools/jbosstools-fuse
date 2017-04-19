@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
+import org.apache.camel.catalog.TimePatternConverter;
 import org.apache.camel.catalog.URISupport;
 import org.apache.camel.catalog.karaf.KarafRuntimeProvider;
 import org.apache.camel.catalog.maven.MavenVersionManager;
@@ -34,7 +35,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
-import org.fusesource.ide.camel.model.service.core.util.TimePatternConverter;
 
 /**
  * @author lhein
