@@ -92,7 +92,7 @@ public class CamelFacetVersionChangeDelegateIT {
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		IProjectFacetVersion camelProjectFacetVersion = fproj.getProjectFacetVersion(PROJECT_FACET);
 		
-		assertThat(camelProjectFacetVersion.getVersionString()).isEqualTo("2.17.0.redhat-630254");
+		assertThat(camelProjectFacetVersion.getVersionString()).isEqualTo("1.0");
 	}
 
 }
