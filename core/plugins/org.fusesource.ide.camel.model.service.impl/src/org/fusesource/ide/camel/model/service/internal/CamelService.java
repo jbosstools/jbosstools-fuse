@@ -11,6 +11,8 @@
 package org.fusesource.ide.camel.model.service.internal;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -46,18 +48,33 @@ public class CamelService implements ICamelManagerService {
 	private Map<CamelCatalogCoordinates, CamelCatalog> cachedCatalogs = new HashMap<>();
 	
 	private MavenVersionManager tmpMan;
+	private File tempFolder;
 
 	public CamelService() {
 		tmpMan = new MavenVersionManager();
-		for (List<String> rep : CamelMavenUtils.getAdditionalRepos()) {
-			tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+		try {
+			tempFolder = File.createTempFile("grape","m2repo");
+			tempFolder.delete();
+			tempFolder.mkdirs();
+			tmpMan.setCacheDirectory(tempFolder.getPath());
+		} catch (IOException ex) {
+			CamelServiceImplementationActivator.pluginLog().logError(ex);
+			tempFolder = null;
+		} finally {
+			for (List<String> rep : CamelMavenUtils.getAdditionalRepos()) {
+				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+			}
 		}
+		
 	}
 	
 	private CamelCatalog getCatalog(CamelCatalogCoordinates coords) {
 		if (!cachedCatalogs.containsKey(coords) ) {
 			CamelCatalog catalog = new DefaultCamelCatalog(true);
 			MavenVersionManager versionManager = new MavenVersionManager();
+			if (tempFolder != null) {
+				versionManager.setCacheDirectory(tempFolder.getPath());
+			}
 			List<List<String>> additionalM2Repos = CamelMavenUtils.getAdditionalRepos();
 			for (List<String> repo : additionalM2Repos) {
 				String repoName = repo.get(0);
