@@ -91,9 +91,9 @@ public class CamelCatalogUtils {
 				
 				// we only add camel versions later than 2.17.0 to the supported versions map (prior versions had
 				// too many errors in the catalog or not catalog at all) 
-				if (!isCamelVersionWithoutCatalogSupport(camelVersion)) {
+				//if (!isCamelVersionWithoutCatalogSupport(camelVersion)) {
 					OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(camelVersion);
-				}
+				//}
 			}
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings from online repo. Falling back to defaults.", ex);
