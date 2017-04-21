@@ -34,7 +34,12 @@ public class CamelModelPatcher {
 	}
 
 	public static void applyVersionSpecificCatalogFixes(CamelCatalog catalog, CamelModel loadedModel) {
-		ComparableVersion loadedVersion = new ComparableVersion(catalog.getLoadedVersion());
+		String camelVersion = catalog.getLoadedVersion();
+		if (camelVersion == null) {
+			// can't work with a null value here - thats usually caused by a non existing catalog
+			return;
+		}
+		ComparableVersion loadedVersion = new ComparableVersion(camelVersion);
 		if (loadedVersion.compareTo(v217Ref) < 0) {
 			// we've got a pre-2.17 version with a whacky catalog here - apply
 			// some fixes
