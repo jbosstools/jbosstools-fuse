@@ -223,6 +223,8 @@ public class CamelMavenUtils {
 		repoList.add(Arrays.asList("asf-snapshots", "https://repository.apache.org/content/groups/snapshots"));
 		// public asf repo
 		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
+		// old fuse repo
+		repoList.add(Arrays.asList("old-fuse", "https://repository.jboss.org/nexus/content/repositories/fs-releases"));
 		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
 		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
