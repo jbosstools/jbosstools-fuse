@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -24,9 +25,13 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,14 +39,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Aurelien Pupier
  *
  */
+@RunWith(Parameterized.class)
 public class DataFormatsInCamelModelElementIT {
 
 	@Rule
 	public TemporaryFolder testFolder = new TemporaryFolder();
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(DataFormatsInCamelModelElementIT.class.getSimpleName());
+	public FuseProject fuseProject;
 
+	public DataFormatsInCamelModelElementIT(String camelVersion) {
+		this.fuseProject = new FuseProject(DataFormatsInCamelModelElementIT.class.getSimpleName(), camelVersion);
+	}
+	
+	@Parameters(name = "{0}")
+	public static Collection<String> params() {
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
+	}
+	
 	@Test
 	public void testDataFormatsInUnmarshal_notRemovedWhenUpdatingRefParameter() throws IOException, CoreException {
 		String name = "unmarshalSample.xml";
