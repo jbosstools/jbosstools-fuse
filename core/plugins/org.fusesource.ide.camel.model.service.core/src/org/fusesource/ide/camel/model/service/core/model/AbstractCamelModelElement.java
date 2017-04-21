@@ -27,7 +27,6 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCac
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -1306,13 +1305,19 @@ public abstract class AbstractCamelModelElement {
 	private void parseExpressionKindAttribute(Parameter param) {
 		NodeList childNodes = getXmlNode().getChildNodes();
 		AbstractCamelModelElement expNode;
-		String[] langs = param.getOneOf();
-		List<String> langList = new ArrayList<>(Arrays.asList(langs));
+		List<String> langList = Arrays.asList(param.getOneOf());
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node subNode = childNodes.item(i);
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
+			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			System.err.println("Parameter " + param.getName() + " of EIP " + getName() + ": ");
+			System.err.println("Looking for Language: " + CamelUtils.getTranslatedNodeName(subNode));
+			for (String lang : langList) {
+				System.err.println("Available Language: " + lang);
+			}
+			System.err.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 			if (subNode != null && isAnExpressionGuessedByName(param)
 					&& langList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
 				// this case is for expressions which are directly
