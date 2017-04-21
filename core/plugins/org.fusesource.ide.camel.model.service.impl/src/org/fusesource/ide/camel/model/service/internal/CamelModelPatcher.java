@@ -17,6 +17,7 @@ import org.apache.camel.catalog.CamelCatalog;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
@@ -45,6 +46,7 @@ public class CamelModelPatcher {
 			// some fixes
 			applyMissingOneOfValuesForExpressionsPatch(loadedModel);
 			applyMissingWhenChildDefinitionForChoice(loadedModel);
+			applyFixesToComponentsSyntax(loadedModel);
 		}
 	}
 
@@ -91,6 +93,14 @@ public class CamelModelPatcher {
 					}
 				}
 			}
+		}
+	}
+	
+	private static void applyFixesToComponentsSyntax(CamelModel loadedModel) {
+		// google-drive has a wrong syntax
+		Component c = loadedModel.getComponent("google-drive");
+		if (c != null && c.getSyntax().equalsIgnoreCase("google-drive:drive:apiName/methodName")) {
+			c.setSyntax("google-drive:apiName/methodName");
 		}
 	}
 }
