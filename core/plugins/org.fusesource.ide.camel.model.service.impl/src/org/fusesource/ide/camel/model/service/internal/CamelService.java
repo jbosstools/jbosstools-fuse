@@ -118,7 +118,9 @@ public class CamelService implements ICamelManagerService {
 	public CamelModel getCamelModel(String camelVersion, String runtimeProvider) {
 		CamelCatalogCoordinates coords = CamelCatalogUtils.getCatalogCoordinatesFor(runtimeProvider, camelVersion);
 		CamelCatalog catalog = getCatalog(coords);
-		return loadCamelModelFromCatalog(catalog);
+		CamelModel loadedModel = loadCamelModelFromCatalog(catalog);
+		CamelModelPatcher.applyVersionSpecificCatalogFixes(catalog, loadedModel);
+		return loadedModel;
 	}
 	
 	/* (non-Javadoc)

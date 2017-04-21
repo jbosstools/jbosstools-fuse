@@ -1311,13 +1311,6 @@ public abstract class AbstractCamelModelElement {
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
-			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			System.err.println("Parameter " + param.getName() + " of EIP " + getName() + ": ");
-			System.err.println("Looking for Language: " + CamelUtils.getTranslatedNodeName(subNode));
-			for (String lang : langList) {
-				System.err.println("Available Language: " + lang);
-			}
-			System.err.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 			if (subNode != null && isAnExpressionGuessedByName(param)
 					&& langList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
 				// this case is for expressions which are directly

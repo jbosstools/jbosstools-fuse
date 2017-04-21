@@ -65,16 +65,22 @@ public class FuseProject extends ExternalResource {
 			+ "    <dependency>\n"
 			+ "      <groupId>org.apache.camel</groupId>\n"
 			+ "      <artifactId>camel-core</artifactId>\n"
-			+ "      <version>" + CamelCatalogUtils.getLatestCamelVersion() + "</version>\n"
+			+ "      <version>%s</version>\n"
 			+ "    </dependency>\n"
 			+ "  </dependencies>\n"
 			+ "</project>";
 
 	private IProject project = null;
 	private String projectName;
+	private String camelVersion;
 
 	public FuseProject(String projectName) {
+		this(projectName, CamelCatalogUtils.getLatestCamelVersion());
+	}
+	
+	public FuseProject(String projectName, String camelVersion) {
 		this.projectName = projectName;
+		this.camelVersion = camelVersion;
 	}
 
 	@Override
@@ -90,7 +96,7 @@ public class FuseProject extends ExternalResource {
 		}
 		// Create a fake pom.xml
 		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
-		pom.create(new ByteArrayInputStream(DUMMY_POM_CONTENT.getBytes()), true, new NullProgressMonitor());
+		pom.create(new ByteArrayInputStream(String.format(DUMMY_POM_CONTENT, this.camelVersion).getBytes()), true, new NullProgressMonitor());
 	}
 
 	@Override
