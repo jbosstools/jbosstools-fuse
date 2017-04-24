@@ -142,13 +142,7 @@ public abstract class XformWizardPage extends WizardPage {
     public boolean isSourceOrTargetPage() {
         NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
         StartPage startPage = (StartPage) wizard.getStartingPage();
-        if (startPage.getSourcePage().equals(this)) {
-            return true;
-        }
-        if (startPage.getTargetPage().equals(this)) {
-            return true;
-        }
-        return false;
+        return startPage.getSourcePage().equals(this) || startPage.getTargetPage().equals(this);
     }
 
     protected Model getModel() {

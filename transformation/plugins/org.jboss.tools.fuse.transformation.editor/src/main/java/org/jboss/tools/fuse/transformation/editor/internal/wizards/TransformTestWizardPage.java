@@ -69,20 +69,21 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 
     protected static final String CAMEL_FILE_PATH = "TransformTestWizardPage.CamelFilePath"; //$NON-NLS-1$
     protected static final String ENDPOINT = "TransformTestWizardPage.Endpoint"; //$NON-NLS-1$
+    private static final String TEST_SOURCE_FOLDER = "src/test/java"; //$NON-NLS-1$
 
     private ComboViewer transformationIDViewer;
-    private Text _camelFilePathText;
+    private Text camelFilePathText;
 
     private IProject project;
     private IJavaProject javaProject;
-    private IFile _camelConfigFile;
-    private CamelConfigBuilder _builder = null;
-    private String _transformID = null;
-    private String _camelFilePath = null;
-    private IResource _generatedClassResource;
+    private IFile camelConfigFile;
+    private CamelConfigBuilder builder = null;
+    private String transformID = null;
+    private String camelFilePath = null;
+    private IResource generatedClassResource;
 
-    private IStatus _camelFileSelectedStatus = Status.OK_STATUS;
-    private IStatus _camelEndpointSelectedStatus = Status.OK_STATUS;
+    private IStatus camelFileSelectedStatus = Status.OK_STATUS;
+    private IStatus camelEndpointSelectedStatus = Status.OK_STATUS;
 
     public TransformTestWizardPage() {
         super(true, TransformTestWizardPage.class.getSimpleName());
@@ -91,16 +92,16 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 		setDescription(Messages.TransformTestWizardPage_description);
     }
 
-    private void createCamelSpecificControls(Composite composite, int nColumns) {
+    private void createCamelSpecificControls(Composite composite) {
         // Create camel file path widgets
         Label label = new Label(composite, SWT.NONE);
         label.setText(Messages.TransformTestWizardPage_labelCamelFilePath);
         label.setToolTipText(Messages.TransformTestWizardPage_tootlipCamelFilePath);
 
-        _camelFilePathText = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-        _camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-        _camelFilePathText.setToolTipText(label.getToolTipText());
-        _camelFilePathText.addModifyListener(new ModifyListener() {
+        camelFilePathText = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+        camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        camelFilePathText.setToolTipText(label.getToolTipText());
+        camelFilePathText.addModifyListener(new ModifyListener() {
 
             @Override
             public void modifyText(ModifyEvent arg0) {
@@ -117,7 +118,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                _builder = null;
+                builder = null;
                 final IResource res = Util.selectCamelResourceFromWorkspace(getShell(), project);
                 if (res != null) {
                     String path = ""; //$NON-NLS-1$
@@ -128,7 +129,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                             javaProject = JavaCore.create(project);
                         }
                         if (javaProject != null) {
-                            IFolder srcFolder = javaProject.getProject().getFolder("src/test/java"); //$NON-NLS-1$
+                            IFolder srcFolder = javaProject.getProject().getFolder(TEST_SOURCE_FOLDER);
                             IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
                             initContainerPage(root);
                         }
@@ -139,39 +140,39 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                         }
                         if (camelConfigFile != null) {
                             path = respath.makeRelative().toString();
-                            _camelFilePath = camelConfigFile.getProjectRelativePath().toPortableString();
+                            camelFilePath = camelConfigFile.getProjectRelativePath().toPortableString();
                             File file = new File(camelConfigFile.getLocationURI());
                             boolean isValid = CamelFileTypeHelper
-                                    .isSupportedCamelFile(project, _camelFilePath);
+                                    .isSupportedCamelFile(project, camelFilePath);
                             if (isValid) {
-                                _builder = new CamelConfigBuilder(file);
-                                _camelFileSelectedStatus = Status.OK_STATUS;
+                                builder = new CamelConfigBuilder(file);
+                                camelFileSelectedStatus = Status.OK_STATUS;
                             } else {
-                                _builder = null;
-                                _camelFileSelectedStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
+                                builder = null;
+                                camelFileSelectedStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID,
                                         Messages.TransformTestWizardPage_errorWrongFileSelected
                                         + Messages.TransformTestWizardPage_errorMessagePleaseSelectAntherFile);
                             }
-                            if (_builder != null) {
+                            if (builder != null) {
                                 transformationIDViewer.getCombo().removeAll();
-                                transformationIDViewer.add(_builder.getTransformEndpointIds().toArray());
+                                transformationIDViewer.add(builder.getTransformEndpointIds().toArray());
                             }
                         }
                     } catch (Exception e) {
                         Activator.error(e);
                     }
-                    if (_builder == null || _builder.getTransformEndpointIds().isEmpty()) {
+                    if (builder == null || builder.getTransformEndpointIds().isEmpty()) {
                         transformationIDViewer.getCombo().removeAll();
                         transformationIDViewer.getCombo().setToolTipText(Messages.TransformTestWizardPage_tooltipNoTransformationEndpointsAvailable);
-                        _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+                        camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID,
                                 Messages.TransformTestWizardPage_errorMessageNoTransformationEndpointsAvailable);
                     } else {
-                        _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID,
+                        camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID,
                                 Messages.TransformTestWizardPage_selectFormTheListOFAvailableEndpoints);
                         transformationIDViewer.getCombo().setToolTipText(
                                 Messages.TransformTestWizardPage_selectFormTheListOFAvailableEndpoints);
                     }
-                    _camelFilePathText.setText(path);
+                    camelFilePathText.setText(path);
                     handleFieldChanged(CAMEL_FILE_PATH);
                 }
             }
@@ -187,26 +188,26 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         transformationIDViewer.setLabelProvider(new LabelProvider() {
             @Override
             public String getText(final Object element) {
-                return ((String) element);
+                return (String)element;
             }
         });
-        if (_camelFilePath != null) {
-            _camelFilePathText.setText(_camelFilePath);
+        if (camelFilePath != null) {
+            camelFilePathText.setText(camelFilePath);
         }
         boolean noEndpoints = true;
         transformationIDViewer.getCombo().removeAll();
-        if (_builder != null) {
-            transformationIDViewer.add(_builder.getTransformEndpointIds().toArray());
-            noEndpoints = _builder.getTransformEndpointIds().isEmpty();
+        if (builder != null) {
+            transformationIDViewer.add(builder.getTransformEndpointIds().toArray());
+            noEndpoints = builder.getTransformEndpointIds().isEmpty();
         }
         if (!noEndpoints) {
             transformationIDViewer.getCombo().setToolTipText(
                 Messages.TransformTestWizardPage_selectFormTheListOFAvailableEndpoints);
-            _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID,
+            camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID,
                     Messages.TransformTestWizardPage_selectFormTheListOFAvailableEndpoints);
         } else {
             transformationIDViewer.getCombo().setToolTipText(Messages.TransformTestWizardPage_tooltipNoTransformationEndpointsAvailable);
-            _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID,
+            camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID,
                     Messages.TransformTestWizardPage_errorMessageNoTransformationEndpointsAvailable);
         }
 
@@ -214,9 +215,9 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                _transformID = (String) ((IStructuredSelection) transformationIDViewer.getSelection())
+                transformID = (String) ((IStructuredSelection) transformationIDViewer.getSelection())
                         .getFirstElement();
-                _camelEndpointSelectedStatus = Status.OK_STATUS;
+                camelEndpointSelectedStatus = Status.OK_STATUS;
                 handleFieldChanged(ENDPOINT);
             }
         });
@@ -224,7 +225,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         setErrorMessage(null);
     }
 
-    private List<Dependency> getRequiredBlueprintTestDependencies(IProject project) {
+    private List<Dependency> getRequiredBlueprintTestDependencies() {
         List<Dependency> deps = new ArrayList<>();
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
@@ -234,7 +235,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         return deps;
     }
 
-    private List<Dependency> getRequiredSpringTestDependencies(IProject project) {
+    private List<Dependency> getRequiredSpringTestDependencies() {
         List<Dependency> deps = new ArrayList<>();
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel"); //$NON-NLS-1$
@@ -248,17 +249,17 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                                              String className) {
         try {
             boolean isSpring = CamelFileTypeHelper
-                    .isSpringFile(project, _camelFilePath);
+                    .isSpringFile(project, camelFilePath);
             boolean isBlueprint = CamelFileTypeHelper
-                    .isBlueprintFile(project,_camelFilePath);
+                    .isBlueprintFile(project,camelFilePath);
 
             if (!isSpring && !isBlueprint) {
                 // obviously we're not dealing with a camel file here
                 return null;
             }
 
-            List<Dependency> dependencies = isBlueprint ? getRequiredBlueprintTestDependencies(project)
-            											: getRequiredSpringTestDependencies(project);
+            List<Dependency> dependencies = isBlueprint ? getRequiredBlueprintTestDependencies()
+            											: getRequiredSpringTestDependencies();
             new MavenUtils().updateMavenDependencies(dependencies, project);
 
             // refresh the project in case we added dependencies
@@ -332,7 +333,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 if (isSpring || isBlueprint) {
                     String codeTemplate =
                         TestGenerator.createTransformTestText(
-                                _transformID, packageName, className, filePath, isSpring);
+                                transformID, packageName, className, filePath, isSpring);
 
                     if (codeTemplate != null) {
                         clsContent.append(codeTemplate);
@@ -354,12 +355,12 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     public void createType(IProgressMonitor monitor) {
         ICompilationUnit createdClass = createJavaClass(getPackageText(), getTypeName());
         if (createdClass != null) {
-            _generatedClassResource = createdClass.getResource();
+            generatedClassResource = createdClass.getResource();
         }
     }
 
     public IResource getGeneratedResource() {
-        return this._generatedClassResource;
+        return this.generatedClassResource;
     }
 
     @Override
@@ -386,7 +387,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 
         createSeparator(composite, nColumns);
 
-        createCamelSpecificControls(composite, nColumns);
+        createCamelSpecificControls(composite);
 
         setControl(composite);
 
@@ -402,16 +403,11 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     @Override
     public boolean isPageComplete() {
         // having an endpoint selected implies that we also have a camel file selected
-        boolean endpointSelected = (getTransformID() != null && !getTransformID().trim().isEmpty());
+        boolean endpointSelected = getTransformID() != null && !getTransformID().trim().isEmpty();
         boolean sourceFolderSpecified = (getPackageFragmentRoot() != null)
                 || (getPackageFragmentRootText() != null
                 && getPackageFragmentRootText().endsWith("src/test/java")); //$NON-NLS-1$
-        boolean classNameSpecified = (getTypeName() != null);
-        boolean superComplete = super.isPageComplete();
-        if (superComplete && endpointSelected && sourceFolderSpecified && classNameSpecified) {
-            return true;
-        }
-        return false;
+        return super.isPageComplete() && endpointSelected && sourceFolderSpecified && getTypeName() != null;
     }
 
     public IProject getProject() {
@@ -432,46 +428,45 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     }
 
     public IFile getDozerConfigFile() {
-        return _camelConfigFile;
+        return camelConfigFile;
     }
 
     public void setCamelConfigFile(IFile dozerConfigFile) {
-        this._camelConfigFile = dozerConfigFile;
+        this.camelConfigFile = dozerConfigFile;
         if (dozerConfigFile != null) {
-            this._camelFilePath = this._camelConfigFile.getProjectRelativePath().toPortableString();
+            this.camelFilePath = this.camelConfigFile.getProjectRelativePath().toPortableString();
         }
     }
 
     public CamelConfigBuilder getBuilder() {
-        return _builder;
+        return builder;
     }
 
     public void setBuilder(CamelConfigBuilder builder) {
-        this._builder = builder;
+        this.builder = builder;
     }
 
     public String getTransformID() {
-        return _transformID;
+        return transformID;
     }
 
     public void setTransformID(String transformID) {
-        this._transformID = transformID;
+        this.transformID = transformID;
     }
 
     public String getCamelFilePath() {
-        return _camelFilePath;
+        return camelFilePath;
     }
 
     public void setCamelFilePath(String path) {
-        this._camelFilePath = path;
+        this.camelFilePath = path;
     }
 
     private void doStatusUpdate() {
-        if (fContainerStatus.getMessage() != null && fContainerStatus.getMessage().endsWith("does not exist.")) { //$NON-NLS-1$
-            if (getPackageFragmentRootText().endsWith("src/test/java")) { //$NON-NLS-1$
-                // override this particular case, since we'll create it
-                fContainerStatus = new StatusInfo(NONE, null);
-            }
+        if (fContainerStatus.getMessage() != null && fContainerStatus.getMessage().endsWith("does not exist.") //$NON-NLS-1$
+            && getPackageFragmentRootText().endsWith(TEST_SOURCE_FOLDER)) {
+            // override this particular case, since we'll create it
+            fContainerStatus = new StatusInfo(NONE, null);
         }
 
         boolean defaultPkg = fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null
@@ -490,8 +485,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             fContainerStatus,
             fPackageStatus,
             fTypeNameStatus,
-            _camelFileSelectedStatus,
-            _camelEndpointSelectedStatus
+            camelFileSelectedStatus,
+            camelEndpointSelectedStatus
         };
 
         // the mode severe status will be displayed and the OK button enabled/disabled.

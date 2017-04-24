@@ -177,6 +177,11 @@ public class JMXCamelConnectJob extends Job {
 	
 	@Override
 	protected void canceling() {
+		clean();
+		super.canceling();
+	}
+
+	private void clean() {
 		try {
 			if(jmxc != null) {
 				jmxc.close();
@@ -184,8 +189,13 @@ public class JMXCamelConnectJob extends Job {
 		} catch (IOException e) {
 			Activator.getLogger().error(e);
 		}
-		
-		super.canceling();
+		if(camelDebugTarget != null){
+			try {
+				camelDebugTarget.terminate();
+			} catch (DebugException e) {
+				Activator.getLogger().error(e);
+			}
+		}
 	}
 	
 	@Override

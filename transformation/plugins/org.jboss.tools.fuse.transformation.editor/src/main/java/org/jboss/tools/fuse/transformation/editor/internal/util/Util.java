@@ -71,8 +71,12 @@ public class Util {
 
     public static String displayName(Class<?> type) {
         String name = type.getName();
-        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) return "String"; //$NON-NLS-1$ //$NON-NLS-2$
-        if (type == Date.class) return "Date"; //$NON-NLS-1$
+        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) { //$NON-NLS-1$
+        	return "String"; //$NON-NLS-1$
+        }
+        if (type == Date.class) {
+        	return "Date"; //$NON-NLS-1$
+        }
         return type.getName().replace('.', '/');
     }
 
@@ -88,11 +92,17 @@ public class Util {
      * @return <code>true</code> if the object being dragged is a valid source object
      */
     public static boolean draggingFromValidSource(TransformationManager manager) {
-        final Object object = draggedObject();
-        if (object instanceof Variable) return true;
-        if (!(object instanceof Model)) return false;
+        Object object = draggedObject();
+        if (object instanceof Variable) {
+        	return true;
+        }
+        if (!(object instanceof Model)) {
+        	return false;
+        }
         final Model model = (Model)object;
-        if (type(model)) return false;
+        if (type(model)) {
+        	return false;
+        }
         return root(model).equals(manager.rootSourceModel());
     }
 
@@ -101,10 +111,14 @@ public class Util {
      * @return <code>true</code> if the object being dragged is a valid target object
      */
     public static boolean draggingFromValidTarget(TransformationManager manager) {
-        final Object object = draggedObject();
-        if (!(object instanceof Model)) return false;
+        Object object = draggedObject();
+        if (!(object instanceof Model)) {
+        	return false;
+        }
         final Model model = (Model)object;
-        if (type(model)) return false;
+        if (type(model)) {
+        	return false;
+        }
         return root(model).equals(manager.rootTargetModel());
     }
 
@@ -119,7 +133,9 @@ public class Util {
                 exists = true;
                 File folder = javaProject.getResource().getLocation().append(folderName).toFile();
                 if (!folder.exists()) {
-                    if (!folder.mkdirs()) throw new Exception(Messages.bind(Messages.Util_UnableToCreateSourceFolder, folder));
+                    if (!folder.mkdirs()) {
+                    	throw new Exception(Messages.bind(Messages.Util_UnableToCreateSourceFolder, folder));
+                    }
                     javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
                 }
                 break;
@@ -181,10 +197,7 @@ public class Util {
     }
 
     private static boolean isValidNonNullType(Model model) {
-        if (model != null && model.getType() != null) {
-            return true;
-        }
-        return false;
+        return model != null && model.getType() != null;
     }
 
     public static boolean jsonValid(String incomingJSON) {
@@ -215,11 +228,12 @@ public class Util {
         Model srcModel = (Model)source;
         Model tgtModel = (Model)target;
         if (isValidNonNullType(srcModel) && isValidNonNullType(tgtModel)) {
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
-                tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) { //$NON-NLS-1$
+            if (String.class.getName().equalsIgnoreCase(srcModel.getType())
+            	&& Date.class.getName().equalsIgnoreCase(tgtModel.getType()) && isSource) {
                 return true;
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
-                       srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) { //$NON-NLS-1$
+            }
+            if (String.class.getName().equalsIgnoreCase(tgtModel.getType())
+            	&& Date.class.getName().equalsIgnoreCase(srcModel.getType()) && !isSource) {
                 return true;
             }
         }
@@ -245,8 +259,9 @@ public class Util {
                 return Character.class.getName();
             case "byte": //$NON-NLS-1$
                 return Byte.class.getName();
+            default:
+            	return type;
         }
-        return type;
     }
 
     /**
@@ -467,7 +482,9 @@ public class Util {
     }
 
     public static List<Integer> sourceUpdateIndexes(MappingOperation<?, ?> mapping) {
-        if (mapping == null) return Collections.emptyList();
+        if (mapping == null) {
+        	return Collections.emptyList();
+        }
         return updateIndexes(mapping, mapping.getSource(), mapping.getSourceIndex());
     }
 
@@ -505,8 +522,12 @@ public class Util {
                 event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
                 final Rectangle bounds = ((Control)event.widget).getBounds();
                 event.gc.drawLine(0, bounds.height - 1, bounds.width, bounds.height - 1); // Bottom border
-                if (leftBorder) event.gc.drawLine(0, 0, 0, bounds.height - 1); // Left border
-                if (rightBorder) event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
+                if (leftBorder) {
+                	event.gc.drawLine(0, 0, 0, bounds.height - 1); // Left border
+                }
+                if (rightBorder) {
+                	event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
+                }
             }
         };
     }
@@ -529,26 +550,30 @@ public class Util {
     }
 
     public static List<Integer> targetUpdateIndexes(MappingOperation<?, ?> mapping) {
-        if (mapping == null) return Collections.emptyList();
+        if (mapping == null) {
+        	return Collections.emptyList();
+        }
         return updateIndexes(mapping, mapping.getTarget(), mapping.getTargetIndex());
     }
 
     public static boolean type(final Model model) {
-        return (!model.isCollection() && !model.getChildren().isEmpty());
+        return !model.isCollection() && !model.getChildren().isEmpty();
     }
 
     public static void updateDateFormat(Shell shell,
                                         MappingOperation<?, ?> mapping) {
         // if both sides of the equation are Models, we're good to check this out
-        if (mapping.getType() != MappingType.FIELD) return;
+        if (mapping.getType() != MappingType.FIELD) {
+        	return;
+        }
         Model srcModel = (Model)mapping.getSource();
         Model tgtModel = (Model)mapping.getTarget();
-        if (srcModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
-            tgtModel.getType().equalsIgnoreCase("java.util.Date")) { //$NON-NLS-1$
+        if (String.class.getName().equalsIgnoreCase(srcModel.getType())
+        	&& Date.class.getName().equalsIgnoreCase(tgtModel.getType())) {
             String dateFormatStr = Util.getDateFormat(shell, mapping, true);
             mapping.setSourceDateFormat(dateFormatStr);
-        } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") && //$NON-NLS-1$
-                   srcModel.getType().equalsIgnoreCase("java.util.Date")) { //$NON-NLS-1$
+        } else if (String.class.getName().equalsIgnoreCase(tgtModel.getType())
+        	&& Date.class.getName().equalsIgnoreCase(srcModel.getType())) {
             String dateFormatStr = Util.getDateFormat(shell, mapping, false);
             mapping.setTargetDateFormat(dateFormatStr);
         }
@@ -557,7 +582,9 @@ public class Util {
     private static List<Integer> updateIndexes(MappingOperation<?, ?> mapping,
                                                Object object,
                                                List<Integer> indexes) {
-        if (!(object instanceof Model)) return null;
+        if (!(object instanceof Model)) {
+        	return null;
+        }
         List<Integer> updateIndexes = new ArrayList<>();
         updateIndexes(((Model)object).getParent(),
                       indexes,
@@ -572,7 +599,9 @@ public class Util {
                                       int indexesIndex,
                                       List<Integer> updateIndexes,
                                       boolean indexed) {
-        if (model == null) return;
+        if (model == null) {
+        	return;
+        }
         updateIndexes(model.getParent(), indexes, indexesIndex - 1, updateIndexes, indexed);
         if (model.isCollection() && indexed) {
             Integer index = indexesIndex < 0 ? null : indexes.get(indexesIndex);
@@ -593,7 +622,9 @@ public class Util {
                                 Arg annotation,
                                 Class<?> type) {
         if (value == null || value.isEmpty()) {
-            if (type == Boolean.class) return true;
+            if (type == Boolean.class) {
+            	return true;
+            }
             return annotation == null ? false : !annotation.defaultValue().isEmpty();
         }
         try {
@@ -609,11 +640,19 @@ public class Util {
                                                TransformationManager manager) {
         Model sourceModel = source instanceof Model ? (Model)source : null;
         Model targetModel = target instanceof Model ? (Model)target : null;
-        if (sourceModel != null && Util.type(sourceModel)) return false;
-        if (targetModel != null && Util.type(targetModel)) return false;
+        if (sourceModel != null && Util.type(sourceModel)) {
+        	return false;
+        }
+        if (targetModel != null && Util.type(targetModel)) {
+        	return false;
+        }
         if (sourceModel != null && targetModel != null) {
-            if (manager.mapped(sourceModel, targetModel)) return false;
-            if (sourceModel.isCollection() || targetModel.isCollection()) return false;
+            if (manager.mapped(sourceModel, targetModel)) {
+            	return false;
+            }
+            if (sourceModel.isCollection() || targetModel.isCollection()) {
+            	return false;
+            }
         }
         return true;
     }

@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -78,10 +79,32 @@ public class RemoteCamelDebugTester {
 	}
 
 	private void checkDisconnect(CamelDebugTarget debugTarget) throws DebugException {
+		Job registeredDispatcher = debugTarget.getDispatcher();
+		checkJobRunning(registeredDispatcher);
+		Job garbageCollector = debugTarget.getGarbageCollector();
+		checkJobRunning(garbageCollector);
+		
 		debugTarget.disconnect();
+		
 		assertThat(debugTarget.canSuspend()).isFalse();
 		assertThat(debugTarget.canResume()).isFalse();
+		assertThat(debugTarget.getDispatcher()).isNull();
 		assertThat(debugTarget.isDisconnected()).isTrue();
+		checkJobCanceled(registeredDispatcher);
+		checkJobCanceled(garbageCollector);
+	}
+
+	private void checkJobCanceled(Job job) {
+		int time = 0;
+		while(time < 5000 || job.getState() != Job.NONE) {
+			time += 100;
+		}
+		assertThat(job.getState()).isEqualTo(Job.NONE);
+	}
+
+	private void checkJobRunning(Job job) {
+		assertThat(job.getState()).isEqualTo(Job.RUNNING);
+		assertThat(job.getResult()).isNull();
 	}
 
 	private void checkResume(CamelDebugTarget debugTarget) throws DebugException {

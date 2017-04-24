@@ -130,7 +130,7 @@ final class MappingSummary extends MappingViewer {
             variableValueUpdated((Variable)newValue);
             return;
         }
-        if (!equals(mapping, oldValue)) return;
+        if (!mappingsEqual(mapping, oldValue)) return;
         if (eventType.equals(Event.MAPPING.name())) {
             dispose((MappingOperation<?, ?>)oldValue);
         } else if (eventType.equals(Event.MAPPING_SOURCE.name())) {

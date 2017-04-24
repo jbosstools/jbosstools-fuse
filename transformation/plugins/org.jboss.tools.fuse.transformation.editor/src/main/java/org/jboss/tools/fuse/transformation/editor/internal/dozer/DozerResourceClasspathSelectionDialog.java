@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.dozer;
 import java.io.File;
 import java.util.Collections;
 import java.util.Set;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -25,7 +24,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 /*
- * Allows user to select a Dozer resource on the project's classpath. 
+ * Allows user to select a Dozer resource on the project's classpath.
  */
 public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSelectionDialog {
 
@@ -34,7 +33,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
 
     /**
      * Create a new ClasspathResourceSelectionDialog.
-     * 
+     *
      * @param parentShell the parent shell
      * @param container the root container
      * @param fileExtensions the types of files to display; may be null
@@ -52,7 +51,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
 
     /**
      * Create a new ClasspathResourceSelectionDialog.
-     * 
+     *
      * @param parentShell the parent shell
      * @param container the root container
      * @param title
@@ -65,7 +64,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
 
     /**
      * Create a new ClasspathResourceSelectionDialog.
-     * 
+     *
      * @param parentShell the parent shell
      * @param container the root container
      * @param fileExtension the type of files to display; may be null
@@ -93,7 +92,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog.
          * ResourceFilter
          * #equalsFilter(org.eclipse.ui.dialogs.FilteredItemsSelectionDialog
@@ -109,13 +108,8 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
                 final IResource resource = (IResource) item;
                 final File testFile = new File(resource.getLocationURI());
                 if (testFile.exists()) {
-                    boolean isValidDozer = DozerFileTypeHelper
-                            .isDozerFile(resource.getProject(), 
-                                    resource.getProjectRelativePath().toPortableString());
-                    if (isValidDozer) {
-                        return true;
-                    }
-                    return false;
+                    return DozerFileTypeHelper.isDozerFile(resource.getProject(),
+                                                           resource.getProjectRelativePath().toPortableString());
                 }
             } catch (final Exception e) {
                 // ignore
@@ -139,7 +133,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog.
          * ResourceFilter#matchItem(java.lang.Object)
          */
@@ -158,7 +152,7 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
          * <code>FilteredResourcesSelectionDialog</code> result of this method
          * must be combined with the <code>matchItem</code> method from super
          * class (<code>ResourceFilter</code>).
-         * 
+         *
          * @param resource A resource
          * @return <code>true</code> if item matches against given conditions
          *         <code>false</code> otherwise

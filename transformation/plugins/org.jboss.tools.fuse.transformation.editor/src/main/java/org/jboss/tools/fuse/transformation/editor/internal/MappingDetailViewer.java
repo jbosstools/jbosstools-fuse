@@ -526,10 +526,10 @@ public class MappingDetailViewer extends MappingViewer {
                               Object oldValue,
                               Object newValue) {
         if (eventType.equals(Event.MAPPING.name())) {
-            if (equals(mapping, oldValue)) scroller.setContent(null);
+            if (mappingsEqual(mapping, oldValue)) scroller.setContent(null);
             else if (newValue != null) update((MappingOperation<?, ?>)newValue);
         } else if (eventType.equals(Event.MAPPING_TRANSFORMATION.name())) {
-            if (equals(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
+            if (mappingsEqual(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
             if (oldValue instanceof TransformationMapping && newValue instanceof TransformationMapping) {
                 // Argument updated
                 Text text = textById.get(focusedTextId);
@@ -539,7 +539,7 @@ public class MappingDetailViewer extends MappingViewer {
                 }
             }
         } else if (eventType.equals(Event.MAPPING_SOURCE.name()) || eventType.equals(Event.MAPPING_TARGET.name())) {
-            if (equals(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
+            if (mappingsEqual(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
         } else if (eventType.equals(Event.VARIABLE_VALUE.name())) variableValueUpdated((Variable)newValue);
     }
 
