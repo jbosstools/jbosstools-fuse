@@ -107,7 +107,10 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	public void setup() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
-
+		
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
+		
 		//No staging repository currently
 //		if("2.18.1.redhat-000012".equals(camelVersion) || "2.17.0.redhat-630224".equals(camelVersion)){
 //			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
@@ -117,9 +120,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 
 	@After
 	public void tearDown() throws CoreException, InterruptedException, IOException {
-		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
-		
 		if(launch != null) {
 			if (launch.canTerminate()) {
 				launch.terminate();
@@ -160,6 +160,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		
 		CommonTestUtils.closeAllEditors();
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
+		
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_AFTER.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
