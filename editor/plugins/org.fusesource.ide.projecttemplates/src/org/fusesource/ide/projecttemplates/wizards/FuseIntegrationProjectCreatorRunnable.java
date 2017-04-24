@@ -65,6 +65,7 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -141,6 +142,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 		// finally open the camel context file
 		openCamelContextFile(prj, subMonitor.newChild(1));
+		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
 		subMonitor.done();
 	}
 
