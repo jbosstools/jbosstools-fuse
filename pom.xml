@@ -89,7 +89,6 @@
 	</modules>
 
 	<repositories>
-
 		<repository>
 			<id>fusesource.ea.repo</id>
 			<name>JBoss Fuse Early Access Repository</name>
