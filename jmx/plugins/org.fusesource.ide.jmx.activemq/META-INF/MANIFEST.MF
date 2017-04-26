@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.activemq;singleton:=true
-Bundle-Version: 9.2.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
@@ -12,11 +12,11 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.eclipse.osgi;bundle-version="3.10.0",
  org.eclipse.core.runtime;bundle-version="3.10.0",
  org.eclipse.ui.workbench;bundle-version="3.106.0",
- org.fusesource.ide.graph;bundle-version="9.2.0",
- org.fusesource.ide.jmx.commons;bundle-version="9.2.0",
- org.fusesource.ide.preferences;bundle-version="9.2.0",
- org.fusesource.ide.foundation.core;bundle-version="9.2.0",
- org.fusesource.ide.foundation.ui;bundle-version="9.2.0"
+ org.fusesource.ide.graph;bundle-version="10.0.0",
+ org.fusesource.ide.jmx.commons;bundle-version="10.0.0",
+ org.fusesource.ide.preferences;bundle-version="10.0.0",
+ org.fusesource.ide.foundation.core;bundle-version="10.0.0",
+ org.fusesource.ide.foundation.ui;bundle-version="10.0.0"
 Bundle-Activator: org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin
 Bundle-ClassPath: .,
  libs/activemq-osgi-5.11.0.redhat-630187.jar,
