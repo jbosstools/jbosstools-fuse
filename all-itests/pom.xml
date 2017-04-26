@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.fusesource.ide</groupId>
+		<artifactId>project</artifactId>
+		<version>10.0.0-SNAPSHOT</version>
+	</parent>
+	<groupId>org.fusesource.ide</groupId>
+	<artifactId>all-itests</artifactId>
+	<packaging>pom</packaging>
+
+	<!-- this module is a convenience pom to just run all the integration tests. see ../all-tests/pom.xml for unit tests -->
+	<modules>
+		<!-- <module>../all-tests</module> -->
+		<module>../transformation/tests/org.jboss.tools.fuse.transformation.core.tests.integration</module>
+		<module>../transformation/tests/org.jboss.tools.fuse.transformation.editor.tests.integration</module>
+		<module>../jmx/tests/org.fusesource.ide.jmx.camel.tests.integration</module>
+		<module>../core/tests/org.fusesource.ide.camel.validation.tests.integration</module>
+		<module>../core/tests/org.fusesource.ide.camel.model.service.core.tests.integration</module>
+		<module>../editor/tests/org.fusesource.ide.launcher.tests.integration</module>
+		<module>../editor/tests/org.fusesource.ide.project.tests.integration</module>
+		<module>../editor/tests/org.fusesource.ide.camel.editor.tests.integration</module>
+		<module>../editor/tests/org.fusesource.ide.projecttemplates.tests.integration</module>
+		<module>../editor/tests/org.fusesource.ide.launcher.ui.tests.integration</module>
+	</modules>
+</project>
