@@ -11,22 +11,21 @@
 package org.fusesource.ide.camel.model.service.core;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.apache.maven.model.Repository;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 
 public interface ICamelManagerService {
-
-	public static final String CAMEL_VERSION_PROPERTY = "camel.version"; //$NON-NLS-1$
-
 	/**
-	 * creates and returns the camel model for a specific version
+	 * creates and returns the camel model for a specific version and karaf runtime 
 	 * 
-	 * @return	the camel model
-	 * @deprecated Please use getCamelModel(String runtimeProvider) in future!
+	 * @param camelVersion the camel version to load
+	 * @return	the camel model using karaf runtime provider
 	 */
-	@Deprecated	
-	CamelModel getCamelModel();
+	CamelModel getCamelModel(String camelVersion);
 	
 	/**
 	 * creates and returns the camel model for a specific version and runtime
@@ -34,41 +33,54 @@ public interface ICamelManagerService {
 	 * @param runtimeProvider	the name of the runtime provider
 	 * @return	the camel model
 	 */
-	CamelModel getCamelModel(String runtimeProvider);
+	CamelModel getCamelModel(String camelVersion, String runtimeProvider);
+	
+	/**
+	 * use this method to add additional repositories to use for dependency lookups
+	 * 
+	 * @param repositories
+	 * @param coords
+	 */
+	void updateMavenRepositoryLookup(List<Repository> repositories, CamelCatalogCoordinates coords);
 	
 	/**
 	 * returns the schema provider 
 	 * 
+	 * @param coords
 	 * @return
 	 */
-	CamelSchemaProvider getCamelSchemaProvider();
+	CamelSchemaProvider getCamelSchemaProvider(CamelCatalogCoordinates coords);
 
 	/**
 	 * returns a map of properties for a given URI of a camel endpoint
 	 * 
 	 * @param uri
+	 * @param coords
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	Map<String, String> getEndpointProperties(String uri) throws URISyntaxException;
+	Map<String, String> getEndpointProperties(String uri, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
 	 * returns the scheme used in the endpoint uri
 	 * 
 	 * @param uri
+	 * @param coords
 	 * @return
 	 */
-	String getEndpointScheme(String uri);
+	String getEndpointScheme(String uri, CamelCatalogCoordinates coords);
 	
 	/**
 	 * creates an endpoint uri from the given scheme and properties
 	 * 
 	 * @param scheme
 	 * @param properties
+	 * @param coords
+	 * @pa
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	String createEndpointUri(String scheme, Map<String, String> properties) throws URISyntaxException;
+	String createEndpointUri(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
 	 * creates an endpoint uri from the given scheme and properties
@@ -76,20 +88,22 @@ public interface ICamelManagerService {
 	 * @param scheme
 	 * @param properties
 	 * @param encode
+	 * @param coords
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	String createEndpointUri(String scheme, Map<String, String> properties, boolean encode) throws URISyntaxException;
+	String createEndpointUri(String scheme, Map<String, String> properties, boolean encode, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
 	 * creates the endpoint xml representation for the given scheme and properties
 	 * 
 	 * @param scheme
 	 * @param properties
+	 * @param coords
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException;
+	String createEndpointXml(String scheme, Map<String, String> properties, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
 	 * creates the endpoint xml representation for the given scheme and properties
@@ -97,10 +111,11 @@ public interface ICamelManagerService {
 	 * @param scheme
 	 * @param properties
 	 * @param encode
+	 * @param coords
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	String createEndpointXml(String scheme, Map<String, String> properties, boolean encode) throws URISyntaxException;
+	String createEndpointXml(String scheme, Map<String, String> properties, boolean encode, CamelCatalogCoordinates coords) throws URISyntaxException;
 	
 	/**
 	 * tests an expression in a default camel context ran locally
@@ -115,13 +130,34 @@ public interface ICamelManagerService {
 	 * tests a duration string and returns the amount of millis
 	 *  
 	 * @param duration	the duration string like 10h(ours)5m(inutes)30s(econds)
-	 * @return	the value in milliseconds
-	 * @throws IllegalArgumentException	if the string is invalid
+	 * @return	the value in milliseconds or -1 on failure
 	 */
-	long durationToMillis(String duration) throws IllegalArgumentException;
+	long durationToMillis(String duration);
 	
+	/**
+	 * parses a uri query
+	 * 
+	 * @param uri
+	 * @return
+	 * @throws URISyntaxException
+	 */
 	Map<String, Object> parseQuery(String uri) throws URISyntaxException;
 
+	/**
+	 * creates a uri query
+	 * 
+	 * @param parameters
+	 * @return
+	 * @throws URISyntaxException
+	 */
 	String createQuery(Map<String, Object> parameters) throws URISyntaxException;
+	
+	/**
+	 * checks wether the camel version is available from the m2 repos
+	 * 
+	 * @param camelVersion	the version to check for 
+	 * @return	true if available
+	 */
+	boolean isCamelVersionExisting(String camelVersion);
 		
 }

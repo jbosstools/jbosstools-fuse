@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
@@ -43,6 +44,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
@@ -92,18 +94,18 @@ public class CamelProjectConfiguratorIT {
 	public void testMavenNotFacetedProjectUpdate() throws Exception {
 		File projectFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), "simple-maven-project");
 		projectFolder.mkdirs();
-		final File file = new File(projectFolder, "pom.xml");
-		Files.copy(CamelProjectConfiguratorIT.class.getResourceAsStream("pom.xml"), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		final File file = new File(projectFolder, IMavenConstants.POM_FILE_NAME);
+		Files.copy(CamelProjectConfiguratorIT.class.getResourceAsStream(IMavenConstants.POM_FILE_NAME), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		
 		
-		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{"pom.xml"})[0];
+		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{IMavenConstants.POM_FILE_NAME})[0];
 		
 		testFacetsAndNatures();
 	}
 
 	private void testFacetsAndNatures() throws Exception {
 		assertThat(project.exists()).isTrue();
-		final IFile pom = project.getFile("pom.xml");
+		final IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
 		assertThat(pom.getLocation().toFile().exists()).isTrue();
 		
 		checkCamelFacetAndNatureNotAdded();
@@ -137,7 +139,7 @@ public class CamelProjectConfiguratorIT {
 		} catch (Exception ex) {
 			System.out.println(ex);
 		} finally {
-			IFile pomIFile2 = project.getProject().getFile("pom.xml");
+			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
 				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		    }

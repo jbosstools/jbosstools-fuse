@@ -57,6 +57,7 @@ import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
@@ -64,6 +65,7 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -140,6 +142,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		}
 		// finally open the camel context file
 		openCamelContextFile(prj, subMonitor.newChild(1));
+		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
 		subMonitor.done();
 	}
 
@@ -153,7 +156,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	protected void updateBundlePluginConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-			Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
+			Model pomModel = CamelMavenUtils.getMavenModel(project);
 
 			customizeBundlePlugin(pomModel, project);
 

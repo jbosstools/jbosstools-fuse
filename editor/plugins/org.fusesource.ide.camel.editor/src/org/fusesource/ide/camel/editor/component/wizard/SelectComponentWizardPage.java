@@ -38,8 +38,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -48,7 +48,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class SelectComponentWizardPage extends WizardPage {
 
-	private ComponentModel componentModel;
+	private CamelModel model;
 	private DataBindingContext dbc;
 
 	private Component componentSelected;
@@ -58,12 +58,12 @@ public class SelectComponentWizardPage extends WizardPage {
 	/**
 	 * @param pageName
 	 */
-	public SelectComponentWizardPage(DataBindingContext dbc, ComponentModel componentModel, String title, String description, AbstractCamelModelElement parent) {
+	public SelectComponentWizardPage(DataBindingContext dbc, CamelModel model, String title, String description, AbstractCamelModelElement parent) {
 		super(UIMessages.SelectComponentWizardPage_pageName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
-		this.componentModel = componentModel;
+		this.model = model;
 		this.parent = parent;
 	}
 
@@ -124,7 +124,7 @@ public class SelectComponentWizardPage extends WizardPage {
 		treeViewer.setContentProvider(new ComponentListTreeContentProvider());
 		treeViewer.setComparator(new ViewerComparator());
 		treeViewer.setLabelProvider(new ComponentLabelProvider());
-		treeViewer.setInput(new ComponentManager(componentModel));
+		treeViewer.setInput(new ComponentManager(model));
 		UpdateValueStrategy strategy = new UpdateValueStrategy() ;
 		strategy.setBeforeSetValidator(new IValidator() {
 			

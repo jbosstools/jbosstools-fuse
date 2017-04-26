@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -53,8 +54,6 @@ public class MavenUtils {
 
 	private static final String JAVA_PATH = MAIN_PATH + "java/"; //$NON-NLS-1$
 	
-	private CamelMavenUtils camelMavenUtils = new CamelMavenUtils();
-	
 	/**
 	 * @return the Java source folder for the project containing the Camel file
 	 *         currently being edited
@@ -62,7 +61,7 @@ public class MavenUtils {
 	 *             if the project's POM file could not be read
 	 */
 	public String javaSourceFolder() throws CoreException {
-		String name = readMavenModel(getPomFile(CamelUtils.project())).getBuild().getSourceDirectory();
+		String name = CamelMavenUtils.getMavenModel(CamelUtils.project()).getBuild().getSourceDirectory();
 		if (name == null)
 			return JAVA_PATH;
 		return name.endsWith("/") ? name : name + "/";
@@ -122,9 +121,8 @@ public class MavenUtils {
 	 */
 	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
 		final File pomFile = getPomFile(project);
-
-		final Model model = readMavenModel(pomFile);
-		List<Dependency> deps = camelMavenUtils.getDependencies(project, model);
+		final Model model = CamelMavenUtils.getMavenModel(project);
+		List<Dependency> deps = CamelMavenUtils.getDependencyList(project);
 
 		// then check if component dependency is already a dep
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
@@ -134,10 +132,9 @@ public class MavenUtils {
 			for (Dependency pomDep : deps) {
 				if (scope == null &&
 						CAMEL_GROUP_ID.equalsIgnoreCase(pomDep.getGroupId()) &&
-						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId())) {
-					if (SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
-						scope = pomDep.getScope();
-					}
+						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId()) &&
+						SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
+					scope = pomDep.getScope();
 				}
 				if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId())
 						&& pomDep.getArtifactId().equalsIgnoreCase(conDep.getArtifactId())) {
@@ -163,23 +160,14 @@ public class MavenUtils {
 	}
 
 	/**
-	 * @param pomFile
-	 * @return the Maven model for the supplied POM file
-	 * @throws CoreException
-	 */
-	Model readMavenModel(final File pomFile) throws CoreException {
-		return MavenPlugin.getMaven().readModel(pomFile);
-	}
-
-	/**
 	 * @param project
 	 * @return the POM file for the supplied project
 	 */
 	File getPomFile(IProject project) {
 		IPath pomPathValue = project.getProject().getRawLocation() != null
-				? project.getProject().getRawLocation().append("pom.xml")
+				? project.getProject().getRawLocation().append(IMavenConstants.POM_FILE_NAME)
 				: ResourcesPlugin.getWorkspace().getRoot().getLocation()
-						.append(project.getFullPath().append("pom.xml"));
+						.append(project.getFullPath().append(IMavenConstants.POM_FILE_NAME));
 		String pomPath = pomPathValue.toOSString();
 		return new File(pomPath);
 	}
@@ -192,7 +180,7 @@ public class MavenUtils {
 	public void writeNewPomFile(IProject project, final File pomFile, final Model model) {
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 			MavenPlugin.getMaven().writeModel(model, os);
-			IFile pomIFile2 = project.getProject().getFile("pom.xml");
+			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
 				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			}
@@ -233,7 +221,7 @@ public class MavenUtils {
 	 *             on any errors
 	 */
 	public void addResourceFolder(IProject project, File pomFile, String resourceFolderName) throws CoreException {
-		final Model model = readMavenModel(pomFile);
+		final Model model = CamelMavenUtils.getMavenModel(project);
 		List<Resource> resources = model.getBuild().getResources();
 
 		boolean exists = false;
@@ -250,7 +238,7 @@ public class MavenUtils {
 
 			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(model, os);
-				IFile pomIFile = project.getFile("pom.xml");
+				IFile pomIFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 				if (pomIFile != null) {
 					pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 				}
@@ -258,9 +246,5 @@ public class MavenUtils {
 				CamelEditorUIActivator.pluginLog().logError(ex);
 			}
 		}
-	}
-
-	void setCamelMavenUtils(CamelMavenUtils camelMavenUtils) {
-		this.camelMavenUtils = camelMavenUtils;
 	}
 }

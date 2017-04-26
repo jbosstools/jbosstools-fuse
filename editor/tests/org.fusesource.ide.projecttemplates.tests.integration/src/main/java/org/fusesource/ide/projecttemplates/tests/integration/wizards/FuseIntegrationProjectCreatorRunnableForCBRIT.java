@@ -14,7 +14,7 @@ import static org.junit.Assume.assumeFalse;
 
 import java.util.List;
 
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
@@ -28,7 +28,7 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelModelFactory.getSupportedCamelVersions(); 
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForCBRIT(String version) {

@@ -63,7 +63,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
@@ -350,7 +349,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         try {
             loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject, getClass().getClassLoader());
             manager = new TransformationManager(configFile, loader);
-            CamelModelFactory.initializeModels();
             // Add contributed transformations if missing or a different version
             String version = Activator.plugin().getBundle().getVersion().toString();
             IPreferenceStore prefs = Activator.plugin().getPreferenceStore();

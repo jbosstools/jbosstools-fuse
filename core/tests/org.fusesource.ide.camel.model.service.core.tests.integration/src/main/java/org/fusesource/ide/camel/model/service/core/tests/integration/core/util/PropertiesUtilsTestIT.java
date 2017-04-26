@@ -17,24 +17,21 @@ import static org.mockito.Mockito.spy;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.ObservableMap;
 import org.eclipse.core.resources.IResource;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,28 +51,13 @@ public class PropertiesUtilsTestIT {
 	@Mock
 	private IResource resource;
 
-	@Parameterized.Parameter
-	public String componentName;
-
-	@Parameterized.Parameter(value = 1)
+	@Parameterized.Parameter(value = 0)
 	public Component component;
 	
-	@Parameterized.Parameter(value = 2)
-	public String runtimeProvider;
-
-	@Parameters(name = "{0} {2}")
-	public static Collection<Object[]> components() {
-		Set<Object[]> res = new HashSet<>();
-		res.addAll(retrieveComponents(CamelModelFactory.RUNTIME_PROVIDER_KARAF));
-		res.addAll(retrieveComponents(CamelModelFactory.RUNTIME_PROVIDER_SPRINGBOOT));
-		return res;
-	}
-
-	private static HashSet<Object[]> retrieveComponents(String runtimeProvider) {
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion(), runtimeProvider);
-		final List<Component> supportedComponents = camelModel.getComponentModel().getSupportedComponents();
-		Stream<Object[]> stream = supportedComponents.stream().map(component -> new Object[] { component.getName(), component, runtimeProvider });
-		return stream.collect(Collectors.toCollection(HashSet::new));
+	@Parameters()
+	public static Collection<Component> components() {
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(CamelCatalogUtils.DEFAULT_CAMEL_VERSION);
+		return camelModel.getComponents();
 	}
 
 	@Before
@@ -85,10 +67,10 @@ public class PropertiesUtilsTestIT {
 
 	@Test
 	public void testUpdateURIParamsWithPathParams() throws Exception {
-		for (Parameter p : component.getUriParameters()) {
+		for (Parameter p : component.getParameters()) {
 			if ("path".equalsIgnoreCase(p.getKind())) {
 				CamelEndpoint endpoint = createCamelEndpoint(component.getSyntax());
-				updateURIParams(endpoint, p, "abc", component, modelMap(component.getUriParameters()));
+				updateURIParams(endpoint, p, "abc", component, modelMap(component.getParameters()));
 				assertUri(endpoint.getUri(), component, p, "abc");
 			}
 		}
@@ -96,7 +78,7 @@ public class PropertiesUtilsTestIT {
 	
 	private CamelEndpoint createCamelEndpoint(String uri) {
 		CamelFile camelFile = spy(new CamelFile(resource));
-		doReturn(CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion(), runtimeProvider)).when(camelFile).getCamelModel();
+		doReturn(CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject())).when(camelFile).getCamelModel();
 		CamelRouteElement route = new CamelRouteElement(new CamelContextElement(camelFile, null), null);
 		camelFile.addChildElement(route);
 		CamelEndpoint endpoint = new CamelEndpoint(uri);

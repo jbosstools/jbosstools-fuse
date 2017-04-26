@@ -11,26 +11,21 @@
 
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 
 import org.apache.maven.model.Model;
-import org.apache.maven.project.MavenProject;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
@@ -76,6 +71,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
 			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
         } catch(CoreException ex) {
         	ProjectTemplatesActivator.pluginLog().logError(ex.getMessage(), ex);
         	return false;
@@ -95,8 +91,8 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	protected boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
-			File pomFile = new File(project.getFile("pom.xml").getLocation().toOSString()); //$NON-NLS-1$
-			Model m2m = MavenPlugin.getMaven().readModel(pomFile);
+			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
+			Model m2m = CamelMavenUtils.getMavenModel(project);
 			subMonitor.worked(1);
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {

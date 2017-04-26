@@ -26,9 +26,9 @@ import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
@@ -92,7 +92,7 @@ public class NodeUtils {
 			} else {
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
 				if (containerEip == null) {
-					containerEip = metaModel.getEipModel().getEIPByName(parentNodeType);
+					containerEip = metaModel.getEip(parentNodeType);
 				}
 				return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(childNodeType);
 			}
@@ -106,7 +106,7 @@ public class NodeUtils {
 		if (camelFile != null && camelFile.getResource() != null) {
 			project = camelFile.getResource().getProject();
 		}
-		return CamelModelFactory.getModelForProject(project);
+		return CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 	}
 	
 	/**

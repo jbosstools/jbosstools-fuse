@@ -17,6 +17,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
@@ -55,7 +56,7 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 			IFile f = getFileInWorkspace(filePath);
 			if (f != null) {
 				IProject p = f.getProject();
-				pomFile = p.getFile("pom.xml");
+				pomFile = p.getFile(IMavenConstants.POM_FILE_NAME);
 			}
 		}
 		

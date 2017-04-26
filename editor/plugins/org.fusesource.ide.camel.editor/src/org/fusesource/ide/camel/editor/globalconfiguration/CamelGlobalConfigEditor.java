@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -67,9 +66,9 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
@@ -680,8 +679,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
 		cme.setXmlNode(newXMLNode);
 		IProject project = cf.getResource().getProject();
-		final CamelModel camelModel = CamelModelFactory.getModelForProject(project);
-		cme.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName(eipName));
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		cme.setUnderlyingMetaModelObject(camelModel.getEip(eipName));
 		cme.setId(newXMLNode.getAttribute("id"));
 		cme.initialize();
 	}

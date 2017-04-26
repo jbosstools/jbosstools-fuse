@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
@@ -42,8 +43,8 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -64,13 +65,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
 	public static IProjectFacet webFacet = WebFacetUtils.WEB_FACET;
 
+	public static final String DEFAULT_CAMEL_FACET_VERSION = "1.0";
+	
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
-	 * mavenProjectChanged(org.eclipse.m2e.core.project.
-	 * MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void mavenProjectChanged(MavenProjectChangedEvent event, IProgressMonitor monitor) throws CoreException {
@@ -88,11 +87,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#
-	 * configure(org.eclipse.m2e.core.project.configurator.
-	 * ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#configure(org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
@@ -100,6 +95,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			if (!isCamelFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
+			}
+			// handling for projects migrated from tooling version 9.x and earlier with deprecated fact version usage 
+			if (isInvalidCamelFacetVersion(request)) {
+				repairCamelFacet(request);
 			}
 			if (!isCamelNatureEnabled(request.getProject())) {
 				// enable the camel nature
@@ -174,6 +173,28 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 
+	private boolean isInvalidCamelFacetVersion(ProjectConfigurationRequest request) throws CoreException {
+		IProject project = request.getProject();
+		IFacetedProject fproj = ProjectFacetsManager.create(project);
+		if (fproj != null) {
+			return !fproj.getInstalledVersion(camelFacet).getVersionString().equalsIgnoreCase(DEFAULT_CAMEL_FACET_VERSION);
+		}
+		return true;
+	}
+	
+	private void repairCamelFacet(ProjectConfigurationRequest request) throws CoreException {
+		IProject project = request.getProject();
+		IFacetedProject fproj = ProjectFacetsManager.create(project);
+		NullProgressMonitor mon = new NullProgressMonitor();
+		if (fproj != null) {
+			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
+			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
+			fproj.uninstallProjectFacet(oldfv, null, mon);
+			installCamelFacet(fproj, fpwc, DEFAULT_CAMEL_FACET_VERSION, mon);
+			fpwc.commitChanges(mon);
+		}
+	}
+	
 	private boolean isCamelFacetEnabled(ProjectConfigurationRequest request) throws CoreException {
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -235,7 +256,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
-		String camelVersion = getCamelVersion(mavenProject);
+		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(project, false);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
@@ -267,51 +288,19 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 	}
 
-	private String getCamelVersion(MavenProject mavenProject) throws CoreException {
-		for (Dependency dep : mavenProject.getDependencies()) {
-            if (isCamelDependency(dep)) {
-                return dep.getVersion();
-            }
-        }
-        if (mavenProject.getDependencyManagement() != null) {
-            for (Dependency dep : mavenProject.getDependencyManagement().getDependencies()) {
-                if (isCamelDependency(dep)) {
-                    return dep.getVersion();
-                }
-            }
-        }
-        // use deprecated dependency method as a last resort 
-        if (mavenProject.getCompileDependencies() != null) {
-        	for (Dependency dep : mavenProject.getCompileDependencies()) {
-        		if (isCamelDependency(dep)) {
-        			return dep.getVersion();
-        		}
-        	}
-        }
-        return CamelModelFactory.getLatestCamelVersion();		
-	}
-
 	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
 			IProgressMonitor monitor) throws CoreException {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
-		IProjectFacetVersion camelFacetVersion = getCamelFacetVersion(camelVersionString);
-		if (camelFacetVersion == null) {
-			camelFacetVersion = getCamelFacetVersion(CamelModelFactory.getCamelVersion(fproj.getProject()));
-		}
-		installFacet(fproj, fpwc, camelFacet,
-				camelFacetVersion == null ? camelFacet.getLatestVersion() : camelFacetVersion);
-		if (camelFacetVersion == null) {
-			// we need to switch dependency versions
-			CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
-			del.execute(fproj.getProject(), camelFacet.getLatestVersion(), config, monitor);
-		}
+		installFacet(fproj, fpwc, camelFacet, getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION));
+		// we need to switch dependency versions
+		CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
+		del.execute(fproj.getProject(), getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION), config, monitor);
 	}
 
 	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
 		try {
-			IProjectFacetVersion facetVersion = camelFacet
-					.getVersion(CamelModelFactory.getCompatibleCamelVersion(camelVersionString));
+			IProjectFacetVersion facetVersion = camelFacet.getVersion(DEFAULT_CAMEL_FACET_VERSION);
 			if (facetVersion != null) {
 				return facetVersion;
 			}

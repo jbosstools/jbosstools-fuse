@@ -57,7 +57,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -68,6 +68,7 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
@@ -106,7 +107,10 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 	public void setup() throws Exception {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
-
+		
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
+		
 		//No staging repository currently
 //		if("2.18.1.redhat-000012".equals(camelVersion) || "2.17.0.redhat-630224".equals(camelVersion)){
 //			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
@@ -116,9 +120,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 
 	@After
 	public void tearDown() throws CoreException, InterruptedException, IOException {
-		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
-		
 		if(launch != null) {
 			if (launch.canTerminate()) {
 				launch.terminate();
@@ -159,6 +160,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		
 		CommonTestUtils.closeAllEditors();
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
+		
+		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
+		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_AFTER.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
@@ -256,7 +260,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 						//TODO: managed other dependencies than camel
 						&& !message.startsWith("Duplicating managed version")
 						//TODO: manage community version and pure fis version
-						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelModelFactory.isPureFISVersion(camelVersion)));
+						&& (!message.startsWith("Overriding managed version") || (camelVersion.contains("redhat") && !CamelCatalogUtils.isPureFISVersion(camelVersion)));
 			} catch (CoreException e1) {
 				return true;
 			}
@@ -349,7 +353,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		assertThat(mavenFacetFound).isTrue();
 		assertThat(utilityFacetFound).isTrue();
 		
-		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(camelVersion).as("The Camel Facet version is not the right one.");
+		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(CamelProjectConfigurator.DEFAULT_CAMEL_FACET_VERSION).as("The Camel Facet version is not the right one.");
 		
         checkNoConflictingFacets(fproj);
 	}

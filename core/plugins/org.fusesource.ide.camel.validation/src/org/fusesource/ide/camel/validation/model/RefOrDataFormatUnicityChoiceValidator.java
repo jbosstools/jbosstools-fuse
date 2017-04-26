@@ -34,7 +34,7 @@ public class RefOrDataFormatUnicityChoiceValidator implements IValidator {
 	@Override
 	public IStatus validate(Object value) {
 		final String parameterName = parameter.getName();
-		if (parameterName.equalsIgnoreCase("ref")) {
+		if ("ref".equalsIgnoreCase(parameterName)) {
 			if (isRefEmpty(value)) {
 				for (Parameter otherParameter : PropertiesUtils.getPropertiesFor(cme)) {
 					if (isDataFormatToCheck(otherParameter)) {

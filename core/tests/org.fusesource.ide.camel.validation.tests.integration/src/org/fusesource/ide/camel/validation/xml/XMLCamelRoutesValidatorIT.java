@@ -10,6 +10,13 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.validation.xml;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.assertj.core.api.Assertions;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -18,8 +25,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.validation.ValidationEvent;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
@@ -35,14 +42,6 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class XMLCamelRoutesValidatorIT {
@@ -140,9 +139,9 @@ public class XMLCamelRoutesValidatorIT {
 		CamelBasicModelElement unmarshall = new CamelBasicModelElement(route, null);
 		doReturn("unmarshal").when(unmarshalNode).getNodeName();
 		unmarshall.setXmlNode(unmarshalNode);
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
-		unmarshall.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("unmarshal"));
+		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);
 
 		route.addChildElement(unmarshall);
@@ -176,9 +175,9 @@ public class XMLCamelRoutesValidatorIT {
 		CamelBasicModelElement jaxBElement = new CamelBasicModelElement(unmarshall, jaxbXmlNode);
 		jaxBElement.setXmlNode(jaxbXmlNode);
 		unmarshall.setParameter("dataFormatType", jaxBElement);
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
-		unmarshall.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("unmarshal"));
+		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);
 
 		route.addChildElement(unmarshall);
@@ -213,9 +212,9 @@ public class XMLCamelRoutesValidatorIT {
 		jaxBElement.setXmlNode(jaxbXmlNode);
 		unmarshall.setParameter("dataFormatType", jaxBElement);
 		unmarshall.setParameter("ref", "aRefValue");
-		CamelModel camelModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 
-		unmarshall.setUnderlyingMetaModelObject(camelModel.getEipModel().getEIPByName("unmarshal"));
+		unmarshall.setUnderlyingMetaModelObject(camelModel.getEip("unmarshal"));
 		unmarshall.setParent(route);
 
 		route.addChildElement(unmarshall);

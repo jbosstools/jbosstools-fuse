@@ -10,13 +10,15 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Rule;
@@ -26,8 +28,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(Parameterized.class)
 public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegrationProjectCreatorRunnableIT{
 	
@@ -36,7 +36,7 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelModelFactory.getSupportedCamelVersions(); 
+		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForSimpleIT(String version) {

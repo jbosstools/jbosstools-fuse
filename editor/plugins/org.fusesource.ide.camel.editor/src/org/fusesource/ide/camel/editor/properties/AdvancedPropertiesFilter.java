@@ -35,7 +35,7 @@ public class AdvancedPropertiesFilter implements IFilter {
 			int protocolSeparatorIdx = uri.indexOf(':');
             if (protocolSeparatorIdx != -1) {
 				Component comp = CamelComponentUtils.getComponentModel(uri.substring(0, protocolSeparatorIdx), ep.getCamelFile());
-				return comp != null && !comp.getUriParameters().isEmpty();
+				return comp != null && !comp.getParameters().isEmpty();
             }            
         }
         return false;

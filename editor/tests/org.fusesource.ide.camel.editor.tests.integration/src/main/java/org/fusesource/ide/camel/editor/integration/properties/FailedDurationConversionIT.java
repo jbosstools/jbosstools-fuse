@@ -18,7 +18,6 @@ import java.util.Collection;
 
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +49,7 @@ public class FailedDurationConversionIT {
 	
 	@Before
 	public void setup() {
-		this.svc = CamelServiceManagerUtil.getManagerService(CamelModelFactory.getLatestCamelVersion());
+		this.svc = CamelServiceManagerUtil.getManagerService();
 		assertNotNull("Camel Catalog Service was null!", this.svc);
 	}
 	

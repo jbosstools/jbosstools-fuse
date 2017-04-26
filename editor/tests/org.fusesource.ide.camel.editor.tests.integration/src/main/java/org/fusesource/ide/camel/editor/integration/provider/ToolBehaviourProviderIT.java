@@ -15,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,10 +31,10 @@ import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
@@ -45,10 +45,11 @@ import org.fusesource.ide.camel.editor.integration.globalconfiguration.wizards.p
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntryDependenciesManager;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,6 +77,7 @@ public class ToolBehaviourProviderIT {
 		    + "    <dependency>\n"
 		    + "      <groupId>org.apache.camel</groupId>\n"
 		    + "      <artifactId>camel-spring-boot-starter</artifactId>\n"
+		    + "      <version>" + CamelCatalogUtils.getLatestCamelVersion() + "</version>\n"
 		    + "    </dependency>\n"
 		    + "  </dependencies>\n"
 			+ "  <build>\n"
@@ -114,7 +116,7 @@ public class ToolBehaviourProviderIT {
 		configurationManager.updateProjectConfiguration(fuseProject.getProject(), new NullProgressMonitor());
 		
 		
-		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().create(fuseProject.getProject().getFile("pom.xml"), true, new NullProgressMonitor());
+		IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().create(fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME), true, new NullProgressMonitor());
 		assertThat(projectFacade.getMavenProject(new NullProgressMonitor())).isNotNull();
 	}
 	
@@ -126,7 +128,7 @@ public class ToolBehaviourProviderIT {
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsContainsAMQForSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile("pom.xml");
+		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();
@@ -154,7 +156,7 @@ public class ToolBehaviourProviderIT {
 	
 	@Test
 	public void testPaletteEntriesfromExtensionPointsValidityFoSpringBoot() throws CoreException, IOException{
-		IFile pom = fuseProject.getProject().getFile("pom.xml");
+		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();
@@ -165,8 +167,8 @@ public class ToolBehaviourProviderIT {
 	@Test
 	public void testAllRoutingEIPWhichCanBePartOfRouteFlowAreAvailable() throws Exception {
 		initProject();
-    	CamelModel model = CamelModelFactory.getModelForProject(fuseProject.getProject());
-    	ArrayList<Eip> eips = model.getEipModel().getSupportedEIPs();
+    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
+    	Collection<Eip> eips = model.getEips();
     	
     	IPaletteCompartmentEntry[] palette = toolbehaviourprovider.getPalette();
     	Set<String> missingEips = new HashSet<>();

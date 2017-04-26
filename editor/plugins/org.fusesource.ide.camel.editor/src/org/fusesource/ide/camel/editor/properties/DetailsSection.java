@@ -46,8 +46,8 @@ import org.fusesource.ide.camel.editor.properties.creators.details.DescriptionPa
 import org.fusesource.ide.camel.editor.properties.creators.details.FileParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.editor.properties.creators.details.NumberParameterPropertyUICreatorForDetails;
 import org.fusesource.ide.camel.editor.properties.creators.details.UnsupportedParameterPropertyUICreatorForDetails;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -400,7 +400,7 @@ public class DetailsSection extends FusePropertySection {
 					objectGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).create());
 					objectGroup.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
 					CamelModel camelModel = getCamelModel((AbstractCamelModelElement) valueToDisplay);
-					final Eip eip = camelModel.getEipModel().getEIPByName(prop.getName());
+					final Eip eip = camelModel.getEip(prop.getName());
 					for (Parameter childParameter : eip.getParameters()) {
 						createPropertyLabel(toolkit, objectGroup, childParameter);
 

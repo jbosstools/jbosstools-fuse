@@ -20,8 +20,10 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.rules.ExternalResource;
 
 /**
@@ -59,13 +61,26 @@ public class FuseProject extends ExternalResource {
 			+ "      </plugin>\n"
 			+ "    </plugins>\n"
 			+ "  </build>\n"
+			+ "  <dependencies>\n"
+			+ "    <dependency>\n"
+			+ "      <groupId>org.apache.camel</groupId>\n"
+			+ "      <artifactId>camel-core</artifactId>\n"
+			+ "      <version>%s</version>\n"
+			+ "    </dependency>\n"
+			+ "  </dependencies>\n"
 			+ "</project>";
 
 	private IProject project = null;
 	private String projectName;
+	private String camelVersion;
 
 	public FuseProject(String projectName) {
+		this(projectName, CamelCatalogUtils.getLatestCamelVersion());
+	}
+	
+	public FuseProject(String projectName, String camelVersion) {
 		this.projectName = projectName;
+		this.camelVersion = camelVersion;
 	}
 
 	@Override
@@ -80,8 +95,8 @@ public class FuseProject extends ExternalResource {
 			project.open(null);
 		}
 		// Create a fake pom.xml
-		IFile pom = project.getFile("pom.xml");
-		pom.create(new ByteArrayInputStream(DUMMY_POM_CONTENT.getBytes()), true, new NullProgressMonitor());
+		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
+		pom.create(new ByteArrayInputStream(String.format(DUMMY_POM_CONTENT, this.camelVersion).getBytes()), true, new NullProgressMonitor());
 	}
 
 	@Override

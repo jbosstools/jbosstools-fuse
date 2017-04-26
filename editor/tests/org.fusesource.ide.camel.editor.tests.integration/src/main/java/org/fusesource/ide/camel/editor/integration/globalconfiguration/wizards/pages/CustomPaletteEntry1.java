@@ -19,8 +19,8 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureF
 import org.fusesource.ide.camel.editor.provider.CamelFeatureProvider;
 import org.fusesource.ide.camel.editor.provider.DiagramTypeProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 
 public class CustomPaletteEntry1 implements ICustomPaletteEntry {
 
@@ -53,7 +53,7 @@ public class CustomPaletteEntry1 implements ICustomPaletteEntry {
 
 	@Override
 	public boolean isValid(String runtimeProvider) {
-		return CamelModelFactory.RUNTIME_PROVIDER_KARAF.equals(runtimeProvider);
+		return CamelCatalogUtils.RUNTIME_PROVIDER_KARAF.equals(runtimeProvider);
 	}
 
 }

@@ -48,6 +48,10 @@ public class JCo3Archive extends SAPArchive {
 
 	private static final String MANIFEST_LINE_DELIMITER = ":"; //$NON-NLS-1$
 
+	public static final String NATIVE_ARCHIVE_NAME_WIN = "sapjco3.dll";
+	public static final String NATIVE_ARCHIVE_NAME_LINUX = "libsapjco3.so";
+	public static final String NATIVE_ARCHIVE_NAME_MACOS = "libsapjco3.jnilib";
+	
 	/**
 	 * The plug-in name for platform-independent parts of the SAP Java
 	 * Connector.
@@ -97,14 +101,14 @@ public class JCo3Archive extends SAPArchive {
 
 	public enum JCoArchiveType {
 		JCO_INVALID_ARCHIVE("Invalid JCo 3 Archive", "", "", "", "", "", "", ""),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-		JCO_WIN32_X86_ARCHIVE("Microsoft Windows (x86 32 bit)", "NTintel", "sapjco3.dll", FRAGMENT_WINDOWS_32, "(& (osgi.os=win32) (osgi.arch=x86))", Platform.OS_WIN32, Platform.ARCH_X86, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_WIN32_IA64_ARCHIVE("Microsoft Windows (Itanium 64 bit)", "NTia64", "sapjco3.dll", FRAGMENT_WINDOWS_64IA, "(& (osgi.os=win32) (osgi.arch=ia64n))", Platform.OS_WIN32, Platform.ARCH_IA64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_WIN32_X86_64_ARCHIVE("Microsoft Windows (x86 64 bit)", "NTAMD64", "sapjco3.dll", FRAGMENT_WINDOWS_64X86, "(& (osgi.os=win32) (osgi.arch=x86_64))", Platform.OS_WIN32, Platform.ARCH_X86_64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_X86_ARCHIVE("Linux (x86 32 bit)", "linuxintel", "libsapjco3.so", FRAGMENT_LINUX_32, "(& (osgi.os=linux) (osgi.arch=x86))", Platform.OS_LINUX, Platform.ARCH_X86, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_IA64_ARCHIVE("Linux (Itanium 64 bit)", "linuxia64", "libsapjco3.so", FRAGMENT_LINUX_64IA, "(& (osgi.os=linux) (osgi.arch=ia64n))", Platform.OS_LINUX, Platform.ARCH_IA64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_X86_64_ARCHIVE("Linux (x86 64 bit)", "linuxx86_64", "libsapjco3.so", FRAGMENT_LINUX_64X86, "(& (osgi.os=linux) (osgi.arch=x86_64))", Platform.OS_LINUX, Platform.ARCH_X86_64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_OSX_X86_ARCHIVE("Apple MacOS X (x86 32 bit)", "darwinintel", "libsapjco3.jnilib", FRAGMENT_DARWIN_32, "(& (osgi.os=macosx) (osgi.arch=x86))", Platform.OS_MACOSX, Platform.ARCH_X86, Platform.WS_COCOA),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_OSX_X86_64_ARCHIVE("Apple MacOS X (x86 64 bit)", "darwinintel64", "libsapjco3.jnilib", FRAGMENT_DARWIN_64, "(& (osgi.os=macosx) (osgi.arch=x86_64))", Platform.OS_MACOSX, Platform.ARCH_X86_64, Platform.WS_COCOA); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_WIN32_X86_ARCHIVE("Microsoft Windows (x86 32 bit)", "NTintel", NATIVE_ARCHIVE_NAME_WIN, FRAGMENT_WINDOWS_32, "(& (osgi.os=win32) (osgi.arch=x86))", Platform.OS_WIN32, Platform.ARCH_X86, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_WIN32_IA64_ARCHIVE("Microsoft Windows (Itanium 64 bit)", "NTia64", NATIVE_ARCHIVE_NAME_WIN, FRAGMENT_WINDOWS_64IA, "(& (osgi.os=win32) (osgi.arch=ia64n))", Platform.OS_WIN32, Platform.ARCH_IA64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_WIN32_X86_64_ARCHIVE("Microsoft Windows (x86 64 bit)", "NTAMD64", NATIVE_ARCHIVE_NAME_WIN, FRAGMENT_WINDOWS_64X86, "(& (osgi.os=win32) (osgi.arch=x86_64))", Platform.OS_WIN32, Platform.ARCH_X86_64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_X86_ARCHIVE("Linux (x86 32 bit)", "linuxintel", NATIVE_ARCHIVE_NAME_LINUX, FRAGMENT_LINUX_32, "(& (osgi.os=linux) (osgi.arch=x86))", Platform.OS_LINUX, Platform.ARCH_X86, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_IA64_ARCHIVE("Linux (Itanium 64 bit)", "linuxia64", NATIVE_ARCHIVE_NAME_LINUX, FRAGMENT_LINUX_64IA, "(& (osgi.os=linux) (osgi.arch=ia64n))", Platform.OS_LINUX, Platform.ARCH_IA64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_X86_64_ARCHIVE("Linux (x86 64 bit)", "linuxx86_64", NATIVE_ARCHIVE_NAME_LINUX, FRAGMENT_LINUX_64X86, "(& (osgi.os=linux) (osgi.arch=x86_64))", Platform.OS_LINUX, Platform.ARCH_X86_64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_OSX_X86_ARCHIVE("Apple MacOS X (x86 32 bit)", "darwinintel", NATIVE_ARCHIVE_NAME_MACOS, FRAGMENT_DARWIN_32, "(& (osgi.os=macosx) (osgi.arch=x86))", Platform.OS_MACOSX, Platform.ARCH_X86, Platform.WS_COCOA),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_OSX_X86_64_ARCHIVE("Apple MacOS X (x86 64 bit)", "darwinintel64", NATIVE_ARCHIVE_NAME_MACOS, FRAGMENT_DARWIN_64, "(& (osgi.os=macosx) (osgi.arch=x86_64))", Platform.OS_MACOSX, Platform.ARCH_X86_64, Platform.WS_COCOA); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	
 		private String description;
 		private String sapjcoOs;
@@ -262,7 +266,7 @@ public class JCo3Archive extends SAPArchive {
 
 	protected String name;
 	protected JCoArchiveType type;
-	protected Map<String, String> manifest = new HashMap<>();
+	protected Map<String, String> manifest = new HashMap<String, String>();
 	protected long lastModified;
 
 	private String version;
@@ -329,15 +333,15 @@ public class JCo3Archive extends SAPArchive {
 
 	public String getVersion() {
 		if (version == null) {
-			StringBuilder builder = new StringBuilder();
+			StringBuilder sbBuf = new StringBuilder();
 
 			String sapjcoRelease = manifest.get(SAPJCO_RELEASE).trim();
 			String sapjcoPatchLevel = manifest.get(SAPJCO_PATCH_LEVEL).trim();
 			if (sapjcoRelease != null && sapjcoRelease.length() > 0) {
-				builder.append(sapjcoRelease);
-				builder.append(SAPJCO_RELEASE_DELIMITER); //$NON-NLS-1$
-				builder.append(sapjcoPatchLevel);
-				version = builder.toString();
+				sbBuf.append(sapjcoRelease);
+				sbBuf.append(SAPJCO_RELEASE_DELIMITER); //$NON-NLS-1$
+				sbBuf.append(sapjcoPatchLevel);
+				version = sbBuf.toString();
 			}
 		}
 		return version;
@@ -364,7 +368,7 @@ public class JCo3Archive extends SAPArchive {
 
 	public void buildJCoPlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
-		byte[] buf = new byte[32 * 1024];
+		byte[] bBuf = new byte[32 * 1024];
 
 		// Create Jar output stream using manifest file
 		String bundleFilename = settings.getBundleFilename();
@@ -376,11 +380,11 @@ public class JCo3Archive extends SAPArchive {
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(bManifest);
 			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
+				int numRead = is.read(bBuf, 0, bBuf.length);
 				if (numRead == -1) {
 					break;
 				}
-				target.write(buf, 0, numRead);
+				target.write(bBuf, 0, numRead);
 			}
 			target.closeEntry();
 
@@ -395,11 +399,11 @@ public class JCo3Archive extends SAPArchive {
 			target.putNextEntry(jco3JarEntry);
 			is = new ByteArrayInputStream(sapjco3jar);
 			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
+				int numRead = is.read(bBuf, 0, bBuf.length);
 				if (numRead == -1) {
 					break;
 				}
-				target.write(buf, 0, numRead);
+				target.write(bBuf, 0, numRead);
 			}
 			target.closeEntry();
 		} catch (Exception e) {
@@ -410,7 +414,7 @@ public class JCo3Archive extends SAPArchive {
 
 	public void buildJCoNativePlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
-		byte[] buf = new byte[32 * 1024];
+		byte[] sbBuf = new byte[32 * 1024];
 		// Create Jar output stream using manifest file
 		String bundleFilename = settings.getFragmentFilename();
 		try (JarOutputStream target = new JarOutputStream(new FileOutputStream(bundleFilename))) {
@@ -421,11 +425,11 @@ public class JCo3Archive extends SAPArchive {
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(bManifest);
 			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
+				int numRead = is.read(sbBuf, 0, sbBuf.length);
 				if (numRead == -1) {
 					break;
 				}
-				target.write(buf, 0, numRead);
+				target.write(sbBuf, 0, numRead);
 			}
 			target.closeEntry();
 
@@ -440,11 +444,11 @@ public class JCo3Archive extends SAPArchive {
 			target.putNextEntry(jco3NativeLibEntry);
 			is = new ByteArrayInputStream(nativelib);
 			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
+				int numRead = is.read(sbBuf, 0, sbBuf.length);
 				if (numRead == -1) {
 					break;
 				}
-				target.write(buf, 0, numRead);
+				target.write(sbBuf, 0, numRead);
 			}
 			target.closeEntry();
 		} catch (Exception e) {
@@ -477,19 +481,19 @@ public class JCo3Archive extends SAPArchive {
 	}
 
 	private void readJCo3JarFile() throws IOException {
-		byte[] sapjco3jar = contents.get(SAPJCO3_JAR);
-		if (sapjco3jar == null) {
+		byte[] bsapjco3jar = contents.get(SAPJCO3_JAR);
+		if (bsapjco3jar == null) {
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_FileMissingFromArchive, SAPJCO3_JAR)); //$NON-NLS-1$
 		}
-		this.sapjco3jar = sapjco3jar;
+		this.sapjco3jar = bsapjco3jar;
 	}
 
 	private void readNativeLibraryFile() throws IOException {
-		byte[] nativelib = contents.get(type.getNativeArchiveName());
-		if (nativelib == null) {
+		byte[] bNativelib = contents.get(type.getNativeArchiveName());
+		if (bNativelib == null) {
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_FileMissingFromArchive, type.getNativeArchiveName()));
 		}
-		this.nativelib = nativelib;
+		this.nativelib = bNativelib;
 	}
 
 	private Map<String, String> parseManifest(byte[] file) throws IOException {
@@ -507,35 +511,35 @@ public class JCo3Archive extends SAPArchive {
 
 	@SuppressWarnings("deprecation")
 	private byte[] createBundleManifestFile(JCo3ImportSettings settings) throws IOException {
-		StringBuilder manifest = new StringBuilder();
-		writeAttribute(manifest, Attributes.Name.MANIFEST_VERSION.toString(), MANIFEST_VERSION_VALUE);
-		writeAttribute(manifest, BUNDLE_MANIFESTVERSION, BUNDLE_MANIFEST_VERSION_VALUE);
-		writeAttribute(manifest, BUNDLE_NAME, settings.getBundleName());
-		writeAttribute(manifest, BUNDLE_SYMBOLICNAME, settings.getBundleSymbolicName());
-		writeAttribute(manifest, BUNDLE_VERSION, settings.getBundleVersion());
-		writeAttribute(manifest, BUNDLE_CLASSPATH, BUNDLE_CLASS_PATH_VALUE);
-		writeAttribute(manifest, BUNDLE_VENDOR, settings.getBundleVendor());
-		writeAttribute(manifest, BUNDLE_REQUIREDEXECUTIONENVIRONMENT,
+		StringBuilder sbManifest = new StringBuilder();
+		writeAttribute(sbManifest, Attributes.Name.MANIFEST_VERSION.toString(), MANIFEST_VERSION_VALUE);
+		writeAttribute(sbManifest, BUNDLE_MANIFESTVERSION, BUNDLE_MANIFEST_VERSION_VALUE);
+		writeAttribute(sbManifest, BUNDLE_NAME, settings.getBundleName());
+		writeAttribute(sbManifest, BUNDLE_SYMBOLICNAME, settings.getBundleSymbolicName());
+		writeAttribute(sbManifest, BUNDLE_VERSION, settings.getBundleVersion());
+		writeAttribute(sbManifest, BUNDLE_CLASSPATH, BUNDLE_CLASS_PATH_VALUE);
+		writeAttribute(sbManifest, BUNDLE_VENDOR, settings.getBundleVendor());
+		writeAttribute(sbManifest, BUNDLE_REQUIREDEXECUTIONENVIRONMENT,
 				ImportUtils.getExecutionEnvironment(settings.getRequiredExecutionEnvironmentIndex()));
-		writeAttribute(manifest, EXPORT_PACKAGE, EXPORT_PACKAGE_VALUE);
-		writeAttribute(manifest, BUNDLE_ACTIVATIONPOLICY, BUNDLE_ACTIVATION_POLICY_VALUE);
-		return manifest.toString().getBytes(MANIFEST_ENCODING);
+		writeAttribute(sbManifest, EXPORT_PACKAGE, EXPORT_PACKAGE_VALUE);
+		writeAttribute(sbManifest, BUNDLE_ACTIVATIONPOLICY, BUNDLE_ACTIVATION_POLICY_VALUE);
+		return sbManifest.toString().getBytes(MANIFEST_ENCODING);
 	}
 
 	@SuppressWarnings("deprecation")
 	private byte[] createFragmentManifestFile(JCo3ImportSettings settings) throws IOException {
-		StringBuilder manifest = new StringBuilder();
-		writeAttribute(manifest, Attributes.Name.MANIFEST_VERSION.toString(), MANIFEST_VERSION_VALUE);
-		writeAttribute(manifest, BUNDLE_MANIFESTVERSION, BUNDLE_MANIFEST_VERSION_VALUE);
-		writeAttribute(manifest, BUNDLE_NAME, settings.getFragmentBundleName());
-		writeAttribute(manifest, BUNDLE_SYMBOLICNAME, settings.getFragmentSymbolicName());
-		writeAttribute(manifest, BUNDLE_VERSION, settings.getBundleVersion());
-		writeAttribute(manifest, BUNDLE_VENDOR, settings.getBundleVendor());
-		writeAttribute(manifest, FRAGMENT_HOST, settings.getFragmentHost());
-		writeAttribute(manifest, BUNDLE_REQUIREDEXECUTIONENVIRONMENT,
+		StringBuilder sbManifest = new StringBuilder();
+		writeAttribute(sbManifest, Attributes.Name.MANIFEST_VERSION.toString(), MANIFEST_VERSION_VALUE);
+		writeAttribute(sbManifest, BUNDLE_MANIFESTVERSION, BUNDLE_MANIFEST_VERSION_VALUE);
+		writeAttribute(sbManifest, BUNDLE_NAME, settings.getFragmentBundleName());
+		writeAttribute(sbManifest, BUNDLE_SYMBOLICNAME, settings.getFragmentSymbolicName());
+		writeAttribute(sbManifest, BUNDLE_VERSION, settings.getBundleVersion());
+		writeAttribute(sbManifest, BUNDLE_VENDOR, settings.getBundleVendor());
+		writeAttribute(sbManifest, FRAGMENT_HOST, settings.getFragmentHost());
+		writeAttribute(sbManifest, BUNDLE_REQUIREDEXECUTIONENVIRONMENT,
 				ImportUtils.getExecutionEnvironment(settings.getRequiredExecutionEnvironmentIndex()));
-		writeAttribute(manifest, BUNDLE_NATIVECODE, settings.getBundleNativeLibraryEntry());
-		writeAttribute(manifest, ECLIPSE_PLATFORM_FILTER, settings.getPlatformFilter());
-		return manifest.toString().getBytes(MANIFEST_ENCODING);
+		writeAttribute(sbManifest, BUNDLE_NATIVECODE, settings.getBundleNativeLibraryEntry());
+		writeAttribute(sbManifest, ECLIPSE_PLATFORM_FILTER, settings.getPlatformFilter());
+		return sbManifest.toString().getBytes(MANIFEST_ENCODING);
 	}
 }

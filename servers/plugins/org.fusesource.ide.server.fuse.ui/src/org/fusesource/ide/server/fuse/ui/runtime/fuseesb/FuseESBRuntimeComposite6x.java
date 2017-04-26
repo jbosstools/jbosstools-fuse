@@ -81,7 +81,6 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 		return valid;
 	}
 	
-	@Override
 	public void handleEvent(Event event) {
 		boolean valid = false;
 		if (event.type == SWT.FocusIn){

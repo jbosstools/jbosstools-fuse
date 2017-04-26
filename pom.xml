@@ -23,13 +23,13 @@
 		<name>Red Hat</name>
 		<url>http://www.redhat.com</url>
 	</organization>
-  <issueManagement>
-    <system>jira</system>
-    <url>https://issues.jboss.org/browse/FUSETOOLS</url>
-  </issueManagement>
-  <scm>
-    <url>https://github.com/fusesource/fuseide</url>
-  </scm>
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.jboss.org/browse/FUSETOOLS</url>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/fusesource/fuseide</url>
+	</scm>
 
 	<prerequisites>
 		<maven>3.0.2</maven>
@@ -40,6 +40,9 @@
 		<!-- compiler settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<!-- disable enforcer rules -->
+		<BUILD_ALIAS>AM1</BUILD_ALIAS>		
 
 		<!-- JBoss Tools Integration Stack version -->
 		<jbtis.version>4.4.3.CR1-SNAPSHOT</jbtis.version>
@@ -79,7 +82,6 @@
 
 	<modules>
 		<module>build-config</module>
-		<module>tools</module>
 		<module>core</module>
 		<module>editor</module>
 		<module>transformation</module>
@@ -89,6 +91,18 @@
 	</modules>
 
 	<repositories>
+		<repository>
+			<id>asf.snapshot.repo</id>
+			<name>ASF SNAPSHOT Repository</name>
+			<url>https://repository.apache.org/content/groups/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+
 		<repository>
 			<id>fusesource.ea.repo</id>
 			<name>JBoss Fuse Early Access Repository</name>

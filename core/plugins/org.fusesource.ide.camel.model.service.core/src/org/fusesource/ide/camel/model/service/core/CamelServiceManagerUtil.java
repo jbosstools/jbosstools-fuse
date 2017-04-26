@@ -26,6 +26,11 @@ import org.osgi.framework.ServiceReference;
  */
 public class CamelServiceManagerUtil {
 
+	public static final String DEFAULT_SERVICE = "dynamic";	
+	
+	public static ICamelManagerService getManagerService() throws CamelManagerException {
+		return getManagerService(DEFAULT_SERVICE);
+	}
 	
 	/**
 	 * Retrieve the ICamelManagerService with the given service id. 
