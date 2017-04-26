@@ -52,6 +52,7 @@ public class BeanConfigUtil {
 		OpenNewClassWizardAction action = new OpenNewClassWizardAction();
 		action.setShell(shell);
         action.setSelection(new StructuredSelection(project));
+        action.setOpenEditorOnFinish(false);
 		action.run();
         IType type = (IType)action.getCreatedElement();
         if (type != null) {
