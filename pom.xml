@@ -9,13 +9,13 @@
 	<parent>
 		<groupId>org.jboss.tools</groupId>
 		<artifactId>parent</artifactId>
-		<version>4.4.4.AM1-SNAPSHOT</version>
+		<version>4.5.0.AM1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.fusesource.ide</groupId>
 	<artifactId>project</artifactId>
-	<packaging>pom</packaging>
 	<version>9.2.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>JBoss Fuse Tooling</name>
 	<url>http://tools.jboss.org/features/apachecamel.html</url>
 
@@ -23,39 +23,30 @@
 		<name>Red Hat</name>
 		<url>http://www.redhat.com</url>
 	</organization>
-  <issueManagement>
-    <system>jira</system>
-    <url>https://issues.jboss.org/browse/FUSETOOLS</url>
-  </issueManagement>
-  <scm>
-    <url>https://github.com/fusesource/fuseide</url>
-  </scm>
+
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.jboss.org/browse/FUSETOOLS</url>
+	</issueManagement>
+  
+	<scm>
+		<connection>scm:git:git://git@github.com:fusesource/fuseide.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:fusesource/fuseide.git</developerConnection>
+		<url>git://github.com/fusesource/fuseide.git</url>
+	</scm>	
 
 	<prerequisites>
 		<maven>3.0.2</maven>
 	</prerequisites>
 
 	<properties>
+		<!-- fuse tooling related -->
+		<tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<!-- compiler settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-
-		<!-- JBoss Tools Integration Stack version -->
-		<jbtis.version>4.4.3.Final-SNAPSHOT</jbtis.version>
-		<jbtis.classifier>base</jbtis.classifier> <!-- base-ea -->
-
-		<!-- Tycho versions -->
-		<jboss-tycho-version>0.26.0</jboss-tycho-version>
-		<tychoVersion>0.26.0</tychoVersion>
-		<tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
-
-		<!-- increase the timeout for tests as they might need longer for downloads -->
-		<surefire.timeout>5400</surefire.timeout>
-
-		<!-- fuse tooling related -->
-		<tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
-		<forge-project-id>ide</forge-project-id>
 
 		<!-- camel version -->
 		<camel.version>2.17.0.redhat-630187</camel.version>
@@ -63,9 +54,6 @@
 		<!-- AMQ JMX plugin -->
 		<activemq.version>5.11.0.redhat-630187</activemq.version>
 		<geronimo.jms.version>1.1.1</geronimo.jms.version>
-
-		<!-- codegen/buildtools fabric8 versions (only build time deps) -->
-		<fabric.version>1.2.0.redhat-133</fabric.version>
 
 		<!-- wildfly archetypes version -->
 		<wildfly.version>2.3.0.redhat-630187</wildfly.version>
@@ -92,6 +80,24 @@
 	</modules>
 
 	<repositories>
+		<repository>
+			<id>jbosstools-base</id>
+			<layout>p2</layout>
+			<url>${jbosstools-base-site}</url>
+		</repository>
+
+		<repository>
+			<id>jbosstools-server</id>
+			<layout>p2</layout>
+			<url>${jbosstools-server-site}</url>
+		</repository>
+
+		<repository>
+			<id>jbosstools-central</id>
+			<layout>p2</layout>
+			<url>${jbosstools-central-site}</url>
+		</repository>
+
 		<repository>
 			<id>fusesource.ea.repo</id>
 			<name>JBoss Fuse Early Access Repository</name>
@@ -139,6 +145,7 @@
 			<name>Fuse Early Access - staging</name>
 			<url>https://origin-repository.jboss.org/nexus/content/</url>
 		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
@@ -181,7 +188,6 @@
 	</pluginRepositories>
 
 	<build>
-		<defaultGoal>install</defaultGoal>
 		<plugins>
 
 			<plugin>
@@ -212,45 +218,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.0.0</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>
-					<configLocation>checkstyle/checkstyle.xml</configLocation>
-					<suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
-					<failOnError>true</failOnError>
-					<useFile />
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.fusesource.ide</groupId>
-						<artifactId>build-config</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.puppycrawl.tools</groupId>
-						<artifactId>checkstyle</artifactId>
-						<version>6.17</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>check-style</id>
-						<phase>site</phase>
-						<goals>
-							<goal>checkstyle</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- needed for building the source features -->
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
@@ -261,51 +228,6 @@
 				<artifactId>tycho-p2-plugin</artifactId>
 			</plugin>
 
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tychoVersion}</version>
-				<configuration>
-					<resolver>p2</resolver>
-					<pomDependencies>consider</pomDependencies>
-					<target>
-						<artifact>
-							<groupId>org.jboss.tools.integration-stack</groupId>
-							<artifactId>target-platform</artifactId>
-							<version>${jbtis.version}</version>
-							<classifier>${jbtis.classifier}</classifier>
-						</artifact>
-					</target>
-					<ignoreTychoRepositories>false</ignoreTychoRepositories>
-					<environments>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -353,90 +275,6 @@
 	</dependencies>
 
 	<profiles>
-		<profile>
-			<id>osx</id>
-			<activation>
-				<property>
-					<name>java.vendor.url</name>
-					<value>http://www.apple.com/</value>
-				</property>
-			</activation>
-			<properties>
-				<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
-				<systemProperties combine.children="append"> -Dosgi.arch=x86 -XstartOnFirstThread </systemProperties>
-			</properties>
-		</profile>
-
-		<profile>
-			<id>sign</id>
-			<!-- To sign plug-ins and features, run: mvn -Psign -Dkeystore=<path> 
-				-Dstorepass=*** -Dalias=<keyalias> clean install -->
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-jar-plugin</artifactId>
-							<version>2.3.1</version>
-							<executions>
-								<execution>
-									<goals>
-										<goal>sign</goal>
-									</goals>
-								</execution>
-							</executions>
-							<configuration>
-								<verify>true</verify>
-								<jarPath>${project.build.directory}/${project.build.finalName}.jar</jarPath>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-
-		<profile>
-			<id>default-tools.jar</id>
-			<activation>
-				<property>
-					<name>java.vendor</name>
-					<value>Sun Microsystems Inc.</value>
-				</property>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>com.sun</groupId>
-					<artifactId>tools</artifactId>
-					<version>1.7</version>
-					<scope>system</scope>
-					<!-- assumes JAVA_HOME is set to the JDK dir? -->
-					<systemPath>${java.home}/../lib/tools.jar</systemPath>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<profile>
-			<id>hudson</id>
-			<activation>
-				<property>
-					<name>BUILD_NUMBER</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.tycho</groupId>
-						<artifactId>tycho-packaging-plugin</artifactId>
-						<version>${tychoVersion}</version>
-						<configuration>
-							<format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm'-B${BUILD_NUMBER}'</format>
-							<archiveSite>true</archiveSite>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 		<profile>
 			<id>quality</id>
 			<activation>
