@@ -50,6 +50,9 @@
 		<tychoVersion>0.26.0</tychoVersion>
 		<tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
 
+		<!-- increase the timeout for tests as they might need longer for downloads -->
+		<surefire.timeout>5400</surefire.timeout>
+
 		<!-- fuse tooling related -->
 		<tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
 		<forge-project-id>ide</forge-project-id>
