@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
@@ -59,6 +60,47 @@ public class GlobalDefinitionsIT {
 
 		GlobalDefinitionCamelModelElement globalDefinition = model1.getGlobalDefinitions().values().iterator().next();
 		assertThat(globalDefinition.getId()).isEqualTo("sap-configuration");
+	}
 
+	@Test
+	public void testCamelBeanProperties() throws IOException, CoreException {
+		String name = "withGlobalDefinitionSample.xml";
+
+		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
+
+		File baseFile = File.createTempFile("beanFile" + name, "xml");
+		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+		inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
+		IFile fileInProject = fuseProject.getProject().getFile(name);
+		fileInProject.create(inputStream, true, new NullProgressMonitor());
+
+		CamelFile model1 = new CamelIOHandler().loadCamelModel(fileInProject, new NullProgressMonitor());
+
+		GlobalDefinitionCamelModelElement globalDefinition = model1.getGlobalDefinitions().values().iterator().next();
+
+		// now make sure that it was parsed correctly into a bean
+		assertThat(globalDefinition).isInstanceOf(CamelBean.class);
+		
+		CamelBean bean = (CamelBean) globalDefinition;
+		assertThat(bean.getAttributeValue(CamelBean.PROP_CLASS)).isEqualTo("org.fusesource.camel.component.sap.SapConnectionConfiguration");
+		assertThat(bean.getClassName()).isEqualTo("org.fusesource.camel.component.sap.SapConnectionConfiguration");
+
+		assertThat(bean.getDependsOn()).isNull();
+		bean.setDependsOn("Something Awesome");
+		assertThat(bean.getDependsOn()).isEqualTo("Something Awesome");
+
+		// Check that Model is valid after reloading from the filesystem
+		CamelIOHandler camelIOHandler = new CamelIOHandler();
+		camelIOHandler.setDocument(model1.getDocument());
+		camelIOHandler.saveCamelModel(model1, model1.getResource().getLocation().toFile(), new NullProgressMonitor());
+		CamelFile reloadedCamelFile = camelIOHandler.loadCamelModel(model1.getResource(), new NullProgressMonitor());
+
+		GlobalDefinitionCamelModelElement newGlobalDefinition = reloadedCamelFile.getGlobalDefinitions().values().iterator().next();
+
+		// now make sure that it was parsed correctly into a bean
+		assertThat(newGlobalDefinition).isInstanceOf(CamelBean.class);
+		CamelBean newbean = (CamelBean) newGlobalDefinition;
+		assertThat(newbean.getDependsOn()).isEqualTo("Something Awesome");
 	}
 }
