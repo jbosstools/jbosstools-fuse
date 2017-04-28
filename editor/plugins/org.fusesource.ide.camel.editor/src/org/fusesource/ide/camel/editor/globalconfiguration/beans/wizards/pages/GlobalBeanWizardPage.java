@@ -36,7 +36,6 @@ import org.fusesource.ide.camel.editor.globalconfiguration.beans.ArgumentStyleCh
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.PropertyStyleChildTableControl;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -54,6 +53,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	private ArgumentStyleChildTableControl beanArgsTable;
 	private PropertyStyleChildTableControl beanPropsTable;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private IProject project = null;
 
 	/**
 	 * @param pageName
@@ -64,6 +64,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		setDescription(description);
 		this.dbc = dbc;
 		this.parent = parent;
+		this.project = parent.getCamelFile().getResource().getProject();
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +81,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		createClassNewButton(composite);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
-		argsPropsGroup.setText("Constructor arguments");
+		argsPropsGroup.setText("Constructor Arguments");
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -126,7 +127,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		Text classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new BeanClassExistsValidator());
+		strategy.setBeforeSetValidator(new BeanClassExistsValidator(project));
 
 		classObservable = PojoProperties.value(GlobalBeanWizardPage.class, "classname", String.class).observe(this); //$NON-NLS-1$
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classObservable, strategy, null);
@@ -139,7 +140,6 @@ public class GlobalBeanWizardPage extends WizardPage {
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
 				String value = beanConfigUtil.handleClassBrowse(project, getShell());
 				if (value != null) {
 					classObservable.setValue(value);
@@ -154,7 +154,6 @@ public class GlobalBeanWizardPage extends WizardPage {
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
 				String value = beanConfigUtil.handleNewClassWizard(project, getShell());
 				if (value != null) {
 					classObservable.setValue(value);

@@ -68,8 +68,9 @@ public class AttributeTextFieldPropertyUICreator extends AbstractTextFieldParame
 	}
 
 	protected Object getAttributeValue(String attrName) {
-		if (camelModelElement.getXmlNode() != null && camelModelElement.getXmlNode().hasAttributes()) {
-			Node attrNode = camelModelElement.getXmlNode().getAttributes().getNamedItem(attrName);
+		Node camelNode = camelModelElement.getXmlNode();
+		if (camelNode != null && camelNode.hasAttributes()) {
+			Node attrNode = camelNode.getAttributes().getNamedItem(attrName);
 			if (attrNode != null) {
 				return attrNode.getNodeValue();
 			}

@@ -18,7 +18,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 
 /**
  * @author brianf
@@ -26,9 +25,10 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
  */
 public class BeanClassExistsValidator implements IValidator {
 	
+	private IProject project;
 
-	public BeanClassExistsValidator() {
-		// empty
+	public BeanClassExistsValidator(IProject project) {
+		this.project = project;
 	}
 
 	@Override
@@ -37,8 +37,7 @@ public class BeanClassExistsValidator implements IValidator {
 		if (className == null || className.isEmpty()) {
 			return ValidationStatus.error("Bean class name is mandatory.");
 		}
-		IProject project = CamelUtils.project();
-		IJavaProject javaProject = JavaCore.create(project);
+		IJavaProject javaProject = JavaCore.create(this.project);
         IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);

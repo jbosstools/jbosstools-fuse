@@ -15,11 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.AddGlobalBeanWizard;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.EditGlobalBeanWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
@@ -97,12 +92,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		CamelModel camelModel = CamelModelFactory.getModelForProject(project);
 		ComponentModel componentModel = camelModel.getComponentModel();
 		EditGlobalBeanWizard editWizard = new EditGlobalBeanWizard(camelFile, componentModel);
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getSelectionService().getSelection();
-		if (!(selection instanceof IStructuredSelection)) {
-			selection = StructuredSelection.EMPTY;
-		}
-		editWizard.init(PlatformUI.getWorkbench(), (IStructuredSelection) selection);
+		editWizard.init();
 		return editWizard;
 	}
 
@@ -116,12 +106,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		CamelModel camelModel = CamelModelFactory.getModelForProject(project);
 		ComponentModel componentModel = camelModel.getComponentModel();
 		AddGlobalBeanWizard addWizard = new AddGlobalBeanWizard(camelFile, componentModel);
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		ISelection selection = window.getSelectionService().getSelection();
-		if (!(selection instanceof IStructuredSelection)) {
-			selection = StructuredSelection.EMPTY;
-		}
-		addWizard.init(PlatformUI.getWorkbench(), (IStructuredSelection) selection);
+		addWizard.init();
 		return addWizard;
 	}
 }

@@ -45,7 +45,6 @@ import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -153,19 +152,20 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	private void createPropertyFieldEditor(final Composite page, Parameter p) {
 		IValidator validator = null;
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = null;
+		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		String propName = p.getName();
 		
 		if (propName.equals(CamelBean.PROP_CLASS)) {
 			txtFieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
-			validator = new BeanClassExistsValidator();
+			validator = new BeanClassExistsValidator(project);
 		} else if (propName.equals(CamelBean.PROP_INIT_METHOD)
 				|| propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
 			txtFieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
-			validator = new PropertyMethodValidator(modelMap);
+			validator = new PropertyMethodValidator(modelMap, project);
 		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD)
 				|| propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
 			txtFieldCreator = createTextFieldWithMethodBrowse(p, page);
-			validator = new PropertyMethodValidator(modelMap);
+			validator = new PropertyMethodValidator(modelMap, project);
 		} else if (propName.equals(CamelBean.PROP_ID)) {
 			txtFieldCreator = createTextField(p, page);
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
@@ -252,7 +252,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
+				final IProject project = selectedEP.getCamelFile().getResource().getProject();
 				String className = beanConfigUtil.handleClassBrowse(project, getDisplay().getActiveShell());
 				if (className != null) {
 					field.setText(className);
@@ -268,7 +268,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
+				final IProject project = selectedEP.getCamelFile().getResource().getProject();
 				String value = beanConfigUtil.handleNewClassWizard(project, getDisplay().getActiveShell());
 				if (value != null) {
 					field.setText(value);
@@ -286,7 +286,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			public void widgetSelected(SelectionEvent event) {
 				Object control = modelMap.get(CamelBean.PROP_CLASS);
 				if (control != null) {
-					final IProject project = CamelUtils.project();
+					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;
 					String methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
 							getDisplay().getActiveShell());
@@ -307,7 +307,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			public void widgetSelected(SelectionEvent event) {
 				Object control = modelMap.get(CamelBean.PROP_CLASS);
 				if (control != null) {
-					final IProject project = CamelUtils.project();
+					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;
 					String methodName = beanConfigUtil.handleMethodBrowse(project, className,
 							getDisplay().getActiveShell());

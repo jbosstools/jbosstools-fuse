@@ -29,9 +29,8 @@ public class BeanPropertiesFilter implements IFilter {
 	}
 
 	protected AbstractCamelModelElement getSelectedObject(Object toTest) {
-		Object bo = toTest;
-		if (bo instanceof CamelBean) {
-			return (CamelBean)bo;
+		if (toTest instanceof CamelBean) {
+			return (CamelBean)toTest;
 		}
 		return null;
 	}

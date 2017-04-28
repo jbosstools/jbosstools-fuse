@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.AbstractTextParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,6 +37,11 @@ public class AttributeTextParameterPropertyModifyListenerForAdvanced extends Abs
 	}
 	
 	private void setAttributeValue(String attrName, String attrValue) {
+		camelModelElement.setParameter(attrName, attrValue);
+		if (camelModelElement instanceof CamelBean) {
+			CamelBean bean = (CamelBean) camelModelElement;
+			bean.setParameter(attrName, attrValue);
+		}
 		if (camelModelElement.getXmlNode() != null) {
 			Element e = (Element) camelModelElement.getXmlNode();
 			Object oldValue = getAttributeValue(attrName);
@@ -62,8 +68,9 @@ public class AttributeTextParameterPropertyModifyListenerForAdvanced extends Abs
 	}
 	
 	private Object getAttributeValue(String attrName) {
-		if (camelModelElement.getXmlNode() != null && camelModelElement.getXmlNode().hasAttributes()) {
-			Node attrNode = camelModelElement.getXmlNode().getAttributes().getNamedItem(attrName);
+		Node camelNode = camelModelElement.getXmlNode();
+		if (camelNode != null && camelNode.hasAttributes()) {
+			Node attrNode = camelNode.getAttributes().getNamedItem(attrName);
 			if (attrNode != null) {
 				return attrNode.getNodeValue();
 			}

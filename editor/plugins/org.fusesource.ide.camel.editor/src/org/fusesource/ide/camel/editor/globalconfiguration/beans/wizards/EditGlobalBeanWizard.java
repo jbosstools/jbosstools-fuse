@@ -11,9 +11,7 @@
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IWorkbench;
 import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.GlobalBeanEditWizardPage;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
@@ -31,8 +29,8 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 
 	private DataBindingContext dbc;
 	private Element inputNode;
-	private CamelFile camelFile;
 	private ComponentManager componentManager;
+	private CamelFile camelFile;
 
 	public EditGlobalBeanWizard(CamelFile camelFile, ComponentModel componentModel) {
 		super();
@@ -103,14 +101,15 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 		return true;
 	}
 
-	/*
-	 * Though this seems nonsensical at this point, it somehow resets the wizard to the point
-	 * where the updated XML element is updated correctly in the model. 
-	 */
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	@Override
+	public boolean performCancel() {
+		setGlobalConfigurationElementNode(null);
+		return true;
+	}
+
+	public void init() {
 		setWindowTitle("Edit Bean");
 		setNeedsProgressMonitor(true);
 		dbc = new DataBindingContext();
 	}
-
 }

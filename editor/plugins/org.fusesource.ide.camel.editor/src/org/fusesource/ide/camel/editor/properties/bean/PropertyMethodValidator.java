@@ -13,13 +13,13 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -31,9 +31,11 @@ public class PropertyMethodValidator implements IValidator {
 	
 	private IObservableMap<?, ?> modelMap;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private IProject project;
 	
-	public PropertyMethodValidator(IObservableMap<?, ?> modelMap) {
+	public PropertyMethodValidator(IObservableMap<?, ?> modelMap, IProject project) {
 		this.modelMap = modelMap;
+		this.project = project;
 	}
 	
 	@Override
@@ -42,7 +44,7 @@ public class PropertyMethodValidator implements IValidator {
 		if (control != null) {
 			String className = (String) control;
 			String methodName = (String) value;
-			IJavaProject jproject = beanConfigUtil.getJavaProject(CamelUtils.project());
+			IJavaProject jproject = beanConfigUtil.getJavaProject(this.project);
 			if (!Strings.isEmpty(methodName) && jproject != null) {
 				try {
 					return validateMethod(jproject, className, methodName);

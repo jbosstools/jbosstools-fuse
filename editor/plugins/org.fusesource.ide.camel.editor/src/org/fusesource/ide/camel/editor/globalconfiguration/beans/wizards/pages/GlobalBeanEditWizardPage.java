@@ -33,8 +33,6 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.ArgumentXMLStyleChildTableControl;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.PropertyXMLStyleChildTableControl;
-import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.w3c.dom.Element;
@@ -49,10 +47,10 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 
 	private String id;
 	private String classname;
-	private AbstractCamelModelElement parent;
 	private IObservableValue<String> classObservable;
 	private Element selectedElement;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private IProject project = null;
 
 	/**
 	 * @param pageName
@@ -62,7 +60,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
-		this.parent = parent;
+		this.project = parent.getCamelFile().getResource().getProject();
 	}
 
 	/* (non-Javadoc)
@@ -73,13 +71,12 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		composite.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
-		createIdLine(composite);
 		createClassLine(composite);
 		createBrowseButton(composite);
 		createClassNewButton(composite);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
-		argsPropsGroup.setText("Constructor arguments");
+		argsPropsGroup.setText("Constructor Arguments");
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -103,46 +100,13 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 	/**
 	 * @param composite
 	 */
-	private void createIdLine(Composite composite) {
-		Label idLabel = new Label(composite, SWT.NONE);
-		idLabel.setText(UIMessages.GlobalEndpointWizardPage_idFieldLabel);
-		Text idText = new Text(composite, SWT.BORDER);
-		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
-
-		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new NewBeanIdPropertyValidator(CamelBean.PROP_ID, parent));
-
-		ComputedValue<?> idValue = new ComputedValue<Object>() {
-
-			@Override
-			protected Object calculate() {
-				return beanConfigUtil.getAttributeValue(selectedElement, CamelBean.PROP_ID);
-			}
-
-			@Override
-			protected void doSetValue(Object value) {
-				final String strValue = (String) value;
-				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, CamelBean.PROP_ID);
-				if (!oldValue.contentEquals(strValue)) {
-					beanConfigUtil.setAttributeValue(selectedElement, CamelBean.PROP_ID, strValue);
-				}
-				getValue();
-			}
-		};
-		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), idValue, strategy, null);
-		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
-	}
-
-	/**
-	 * @param composite
-	 */
 	private void createClassLine(Composite composite) {
 		Label classLabel = new Label(composite, SWT.NONE);
 		classLabel.setText("Class");
 		Text classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new BeanClassExistsValidator());
+		strategy.setBeforeSetValidator(new BeanClassExistsValidator(project));
 
 		ComputedValue<?> classValue = new ComputedValue<Object>() {
 
@@ -171,7 +135,6 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
 				String value = beanConfigUtil.handleClassBrowse(project, getShell());
 				if (value != null) {
 					classObservable.setValue(value);
@@ -186,7 +149,6 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				final IProject project = CamelUtils.project();
 				String value = beanConfigUtil.handleNewClassWizard(project, getShell());
 				if (value != null) {
 					classObservable.setValue(value);

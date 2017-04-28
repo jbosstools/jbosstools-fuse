@@ -12,6 +12,10 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaElement;
@@ -39,6 +43,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -186,7 +191,7 @@ public class BeanConfigUtil {
 					matchCounter, 
 					null);
 		} catch (CoreException ce) {
-			CamelEditorUIActivator.pluginLog().logError("Couldn't find type: " + ce.getMessage());
+			CamelEditorUIActivator.pluginLog().logError("Couldn't find type: " + ce.getMessage(), ce);
 		} 
 
 		return matchCounter.getNumMatch() > 0;
@@ -373,6 +378,21 @@ public class BeanConfigUtil {
 		return newBeanNode;
 	}
 	
+	public Element createBeanProperty(String name, String value) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			Document doc = builder.newDocument();
+			Element propertyNode = doc.createElement(CamelBean.TAG_PROPERTY);
+			propertyNode.setAttribute(CamelBean.PROP_NAME, name);
+			propertyNode.setAttribute(CamelBean.PROP_VALUE, value);
+			return propertyNode;
+		} catch (ParserConfigurationException pse) {
+			CamelEditorUIActivator.pluginLog().logError("Had issue creating simple XML property", pse);
+			return null;
+		}
+	}
+
 	public Element createBeanProperty(final CamelFile camelFile, String name, String value) {
 		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		AbstractCamelModelElement newRoot = camelFile.getChildElements().get(0);
