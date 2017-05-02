@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.model;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author bfitzpat
@@ -34,6 +35,7 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	public static final String TAG_PROPERTY = "property"; //$NON-NLS-1$
 	public static final String TAG_ARGUMENT = "argument"; //$NON-NLS-1$
 	public static final String TAG_CONSTRUCTOR_ARG = "constructor-arg"; //$NON-NLS-1$
+	private static final Object[] NO_CHILDREN = {};
 	
 	/**
 	 * @param parent
@@ -160,4 +162,69 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 		return null;
 	}
 	
+
+	public Object[] getBeanProperties() {
+		return getXMLChildrenByTag(TAG_PROPERTY);
+	}
+	
+	public Object[] getBeanArguments() {
+		String tagName = getArgumentTag(this.getXmlNode());
+		return getXMLChildrenByTag(tagName);
+	}
+
+	protected Object[] getXMLChildrenByTag(String tag) {
+		Node camelNode = this.getXmlNode();
+		if (camelNode instanceof Element) {
+			Element parent = (Element) camelNode;
+			return convertToArray(parent.getElementsByTagName(tag));
+		}
+		return NO_CHILDREN;
+	}
+
+	private Object[] convertToArray(NodeList list)
+	{
+		int length = list.getLength();
+		Node[] copy = new Node[length];
+		for (int n = 0; n < length; ++n) {
+			copy[n] = list.item(n);
+		}
+		return copy;
+	}
+
+	protected boolean isBlueprintConfig(Node node) {
+		if (node != null) {
+			String nsURI = getNamespace(node);
+			if(!Strings.isEmpty(nsURI) && nsURI != null) {
+				return nsURI.contains("blueprint"); //$NON-NLS-1$
+			}
+		}
+		return false;
+	}
+
+	protected String getNamespace(Node node) {
+		if (node != null) {
+			String nsURI = node.getNamespaceURI();
+			if (nsURI == null && node.getParentNode() != null) {
+				return getNamespace(node.getParentNode());
+			}
+			if (nsURI != null) {
+				return nsURI;
+			}
+		}
+		return null;
+	}
+
+	protected String getArgumentTag(Node node) {
+		if (node != null) {
+			boolean isBlueprint = isBlueprintConfig(node);
+			String tagName;
+			if (isBlueprint) {
+				tagName = TAG_ARGUMENT;
+			} else {
+				tagName = TAG_CONSTRUCTOR_ARG;
+			}
+			return tagName;
+		}
+		return null;
+	}
 }
