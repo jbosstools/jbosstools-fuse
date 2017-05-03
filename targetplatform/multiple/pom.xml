@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.fusesource.ide</groupId>
+		<artifactId>project</artifactId>
+		<version>9.2.0-SNAPSHOT</version>
+		<relativePath>../..</relativePath>
+
+	</parent>
+
+	<groupId>org.jboss.tools.targetplatforms</groupId>
+	<artifactId>fuse-multiple</artifactId>
+	<version>10.0.0-SNAPSHOT</version>
+
+	<name>JBoss Tools Fuse Multiple (Composite) Target Platform</name>
+	<packaging>pom</packaging>
+	<properties>
+		<!-- set this to false to allow validation to proceed but NOT fail the build -->
+		<validate-target-platform.failOnError>true</validate-target-platform.failOnError>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jboss.tools.tycho-plugins</groupId>
+				<artifactId>target-platform-utils</artifactId>
+				<version>${jbossTychoPluginsVersion}</version>
+				<executions>
+					<!-- Merge:
+							 1. jbosstools-multiple.target (JBoss Tools TP)
+							 2. fuse-jbosstools.target (JBoss Tools features)
+							 =	fuse-multiple.target
+					-->
+					<execution>
+						<id>merge-fuse</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>merge-targets</goal>
+						</goals>
+						<configuration>
+							<sourceTargetArtifacts>
+								<item>
+									<groupId>org.jboss.tools.targetplatforms</groupId>
+									<artifactId>jbosstools-multiple</artifactId>
+									<version>${TARGET_PLATFORM_VERSION_MAX}</version>
+									<classifier>jbosstools-multiple</classifier>
+								</item>
+							</sourceTargetArtifacts>
+							<sourceTargetFiles>
+								<item>${basedir}/fuse-jbosstools.target</item>
+							</sourceTargetFiles>
+							<outputFile>${project.build.directory}/${project.artifactId}.target</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>target-platform-validation-plugin</artifactId>
+				<version>${tychoExtrasVersion}</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							 <goal>validate-target-platform</goal>
+						</goals>
+						<configuration>
+							<targetFiles>
+								<param>${project.build.directory}/${project.artifactId}.target</param>
+							</targetFiles>
+							<failOnError>${validate-target-platform.failOnError}</failOnError>
+							<checkProvisioning>true</checkProvisioning>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<!-- add more artifacts if want more target platforms -->
+								<artifact>
+									<file>${project.basedir}/fuse-jbosstools.target</file>
+									<type>target</type>
+									<classifier>fuse-jbosstools</classifier>
+								</artifact>
+								<artifact>
+									<file>${project.build.directory}/${project.artifactId}.target</file>
+									<type>target</type>
+									<classifier>${project.artifactId}</classifier>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>${basedir}/publish-assembly.xml</descriptor>
+					</descriptors>
+					<!-- want TP zip called fuse-multiple-target-VERSION.zip -->
+					<finalName>${project.artifactId}-target-${project.version}</finalName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>net.ju-n.maven.plugins</groupId>
+				<artifactId>checksum-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>multiple2repo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=389052	-->
+						<groupId>org.jboss.tools.tycho-plugins</groupId>
+						<artifactId>target-platform-utils</artifactId>
+						<version>${jbossTychoPluginsVersion}</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>mirror-target-to-repo</goal>
+								</goals>
+								<configuration>
+									<sourceTargetFile>${project.build.directory}/${project.artifactId}.target</sourceTargetFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>jbosstools-oxygen-staging</id>
+			<url>http://download.jboss.org/jbosstools/oxygen/staging/updates/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+</project>
