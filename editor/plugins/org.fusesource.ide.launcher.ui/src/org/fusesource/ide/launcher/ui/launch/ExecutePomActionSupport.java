@@ -14,6 +14,7 @@ package org.fusesource.ide.launcher.ui.launch;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,7 +79,7 @@ import org.fusesource.ide.launcher.ui.Messages;
 
 public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExtension {
 
-	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "USE_CUSTOM_LOCAL_MAVEN_REPO";
+	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "FUSE_TOOLING_USE_CUSTOM_LOCAL_MAVEN_REPO";
 	
 	private final String launchConfigurationId;
 	private final String launchConfigTypeId;
@@ -345,7 +346,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			String customRepoPath = getCustomRepositoryPath();
 			if (!Strings.isBlank(customRepoPath)) {
 				List<String> props = workingCopy.getAttribute(MavenLaunchConstants.ATTR_PROPERTIES, new ArrayList<String>());
-				props.add("-Dmaven.repo.local" + customRepoPath);
+				addOrUpdateLocalCustomRepo(props, customRepoPath);
 				workingCopy.setAttribute(MavenLaunchConstants.ATTR_PROPERTIES, props);
 			}
 			
@@ -373,6 +374,18 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			Activator.getLogger().error("Unable to create launch configuration", ex); //$NON-NLS-1$
 		}
 		return null;
+	}
+	
+	protected void addOrUpdateLocalCustomRepo(List<String> props, String customRepoPath) {
+		Iterator<String> it = props.iterator();
+		while (it.hasNext()) {
+			String prop = it.next();
+			if (prop.toLowerCase().trim().startsWith("-Dmaven.repo.local")) {
+				it.remove();
+				break;
+			}
+		}
+		props.add("-Dmaven.repo.local=" + customRepoPath);		
 	}
 	
 	protected String getCustomRepositoryPath() {
