@@ -18,15 +18,18 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.m2e.internal.launch.MavenLaunchDelegate;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.util.CamelJMXLaunchConfiguration;
 
 public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 
+	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "USE_CUSTOM_LOCAL_MAVEN_REPO";
+	
 	protected String goals = "";
 	protected boolean skipTests = false;
-	
+		
 	/**
 	 * 
 	 * @param goals
@@ -88,8 +91,17 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 		sb.append(" -Dmaven.test.skip=" + this.skipTests);
 		// enable jmx
 		sb.append(" -Dorg.apache.camel.jmx.createRmiConnector=True");
+		// enable custom m2repo if required
+		String customRepoPath = getCustomRepositoryPath();
+		if (!Strings.isBlank(customRepoPath)) {
+			sb.append(" -Dmaven.repo.local=" + customRepoPath);
+		}
 		
 		return sb.toString();
+	}
+		
+	protected String getCustomRepositoryPath() {
+		return System.getenv(CUSTOM_LOCAL_MAVEN_REPO_PATH);
 	}
 
 	/**
