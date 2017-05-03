@@ -13,6 +13,7 @@ package org.fusesource.ide.launcher.ui.launch;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -77,6 +78,8 @@ import org.fusesource.ide.launcher.ui.Messages;
 
 public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExtension {
 
+	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "USE_CUSTOM_LOCAL_MAVEN_REPO";
+	
 	private final String launchConfigurationId;
 	private final String launchConfigTypeId;
 
@@ -338,6 +341,14 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, launchConfigName);
 			workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedir.getLocation().toOSString());
 			workingCopy.setAttribute(MavenLaunchConstants.ATTR_GOALS, goal);
+			
+			String customRepoPath = getCustomRepositoryPath();
+			if (!Strings.isBlank(customRepoPath)) {
+				List<String> props = workingCopy.getAttribute(MavenLaunchConstants.ATTR_PROPERTIES, new ArrayList<String>());
+				props.add("-Dmaven.repo.local" + customRepoPath);
+				workingCopy.setAttribute(MavenLaunchConstants.ATTR_PROPERTIES, props);
+			}
+			
 			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}"); //$NON-NLS-1$
 			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_RECURSIVE, true);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, basedir.getProject().getName());
@@ -362,6 +373,10 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 			Activator.getLogger().error("Unable to create launch configuration", ex); //$NON-NLS-1$
 		}
 		return null;
+	}
+	
+	protected String getCustomRepositoryPath() {
+		return System.getenv(CUSTOM_LOCAL_MAVEN_REPO_PATH);
 	}
 
 	/**
