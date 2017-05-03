@@ -25,7 +25,7 @@ import org.fusesource.ide.launcher.util.CamelJMXLaunchConfiguration;
 
 public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 
-	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "USE_CUSTOM_LOCAL_MAVEN_REPO";
+	public static final String CUSTOM_LOCAL_MAVEN_REPO_PATH = "FUSE_TOOLING_USE_CUSTOM_LOCAL_MAVEN_REPO";
 	
 	protected String goals = "";
 	protected boolean skipTests = false;
