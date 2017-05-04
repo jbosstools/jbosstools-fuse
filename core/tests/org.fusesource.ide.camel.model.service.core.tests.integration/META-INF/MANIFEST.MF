@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.camel.model.service.core.tests.integration
-Bundle-Version: 9.2.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.core.runtime;bundle-version="3.11.1",
@@ -14,16 +14,15 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.assertj.core;bundle-version="2.1.0",
  org.junit;bundle-version="4.12.0",
  org.jboss.tools.locus.mockito;bundle-version="1.9.5",
- org.fusesource.ide.foundation.core;bundle-version="9.2.0",
- org.fusesource.ide.foundation.ui;bundle-version="9.2.0",
+ org.fusesource.ide.foundation.core;bundle-version="10.0.0",
+ org.fusesource.ide.foundation.ui;bundle-version="10.0.0",
  org.fusesource.ide.camel.model.service.core,
- org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012;bundle-version="9.2.0",
- org.fusesource.ide.camel.model.service.v2_18_1_redhat_000015;bundle-version="9.2.0",
- org.fusesource.ide.camel.editor;bundle-version="9.2.0"
+ org.fusesource.ide.camel.model.service.v2_15_1_redhat_621084;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_15_1_redhat_621117;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_0_redhat_630187;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_0_redhat_630224;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_0_redhat_630254;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_17_3;bundle-version="10.0.0",
+ org.fusesource.ide.camel.model.service.v2_18_1_redhat_000012;bundle-version="10.0.0",
+ org.fusesource.ide.camel.editor;bundle-version="10.0.0"
 Export-Package: org.fusesource.ide.camel.model.service.core.tests.integration.core.io
