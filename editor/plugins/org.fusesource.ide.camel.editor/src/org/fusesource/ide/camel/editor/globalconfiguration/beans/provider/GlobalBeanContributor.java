@@ -79,7 +79,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 
 	@Override
 	public GlobalConfigElementType getGlobalConfigElementType() {
-		return GlobalConfigElementType.GLOBAL_ELEMENT;
+		return GlobalConfigElementType.GLOBAL_BEAN;
 	}
 
 	/**

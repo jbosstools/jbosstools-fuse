@@ -71,6 +71,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -572,6 +573,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 							case GLOBAL_ELEMENT:
 								createNewGlobalElement(cf, newXMLNode);
 								break;
+							case GLOBAL_BEAN:
+								createNewGlobalBeanElement(cf, newXMLNode);
+								break;
 							case CONTEXT_DATAFORMAT:
 								createNewDataFormat(cf, newXMLNode);
 								break;
@@ -627,6 +631,17 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		reload();
 		treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
 	}
+
+	/**
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	private void createNewGlobalBeanElement(CamelFile cf, Node newXMLNode) {
+		addNewGlobalBeanElement(cf, newXMLNode);
+		reload();
+		treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
+	}
+
 	
 	/**
 	 * /!\ Public for test purpose
@@ -679,6 +694,29 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			configureCamelModelElement(cf, newXMLNode, elemEP, "to");
 			((CamelContextElement)cf.getRouteContainer()).addEndpointDefinition(elemEP);
 			return elemEP;
+		}
+		return null;
+	}
+
+	/**
+	 * /!\ Public for test purpose
+	 *
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	public CamelBean addNewGlobalBeanElement(CamelFile cf, Node newXMLNode) {
+		if (newXMLNode != null) {
+			String id = ((Element) newXMLNode).getAttribute("id");
+			CamelBean newGlobalBeanDef = new CamelBean(cf, newXMLNode);
+			final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
+			newGlobalBeanDef.setId(settedId);
+			newGlobalBeanDef.initialize();
+			if (cf.getGlobalDefinitions().containsKey(id)) {
+				cf.updateGlobalDefinition(settedId, newGlobalBeanDef);
+			} else {
+				cf.addGlobalDefinition(settedId, newGlobalBeanDef);
+			}
+			return newGlobalBeanDef;
 		}
 		return null;
 	}

@@ -123,7 +123,7 @@ public class BeanEditWizardIT {
 		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanId);
 		
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(camelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -181,7 +181,7 @@ public class BeanEditWizardIT {
 		beanConfigUtil.addBeanArgument(camelFile, beanNode, argType, argValue);
 		logInfo("Bean argument created: " + argType + "/" + argValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(camelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -244,7 +244,7 @@ public class BeanEditWizardIT {
 		beanConfigUtil.addBeanArgument(camelFile, beanNode, factoryArg, factoryArgValue);
 		logInfo("Bean argument created: null type/" + factoryArgValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(camelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -295,7 +295,7 @@ public class BeanEditWizardIT {
 		beanConfigUtil.addBeanProperty(camelFile, beanNode, propName, propValue);
 		logInfo("Bean property created: " + propName + "/" + propValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(camelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -344,7 +344,7 @@ public class BeanEditWizardIT {
 		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanIdWithInitDestroyMethods);
 		
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(camelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized

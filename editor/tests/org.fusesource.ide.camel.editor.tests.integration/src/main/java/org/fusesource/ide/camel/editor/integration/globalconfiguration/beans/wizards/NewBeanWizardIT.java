@@ -103,7 +103,7 @@ public class NewBeanWizardIT {
 		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanId);
 		
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -132,7 +132,7 @@ public class NewBeanWizardIT {
 		beanConfigUtil.addBeanArgument(creationTestsCamelFile, beanNode, argType, argValue);
 		logInfo("Bean argument created: " + argType + "/" + argValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -171,7 +171,7 @@ public class NewBeanWizardIT {
 		beanConfigUtil.addBeanArgument(creationTestsBlueprintCamelFile, beanNode, argType, argValue);
 		logInfo("Bean argument created: " + argType + "/" + argValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsBlueprintCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsBlueprintCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -210,7 +210,7 @@ public class NewBeanWizardIT {
 		beanConfigUtil.addBeanProperty(creationTestsCamelFile, beanNode, propName, propValue);
 		logInfo("Bean property created: " + propName + "/" + propValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -248,7 +248,7 @@ public class NewBeanWizardIT {
 		beanConfigUtil.addBeanProperty(creationTestsCamelFile, beanNode, propName, propValue);
 		logInfo("Bean property created: " + propName + "/" + propValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
@@ -292,7 +292,7 @@ public class NewBeanWizardIT {
 		beanConfigUtil.addBeanProperty(creationTestsBlueprintCamelFile, beanNode, propName, propValue);
 		logInfo("Bean property created: " + propName + "/" + propValue);
 
-		new CamelGlobalConfigEditor(null).addNewGlobalElement(creationTestsBlueprintCamelFile, beanNode);
+		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsBlueprintCamelFile, beanNode);
 		logInfo("Added bean to global configuration model");
 
 		// Check that element just created has been correctly initialized
