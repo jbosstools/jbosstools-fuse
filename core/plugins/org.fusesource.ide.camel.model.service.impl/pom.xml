@@ -16,7 +16,7 @@
   <name>JBoss Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation</name>
   
   <properties>
-  		<bundle.camel.version>2.19.0-SNAPSHOT</bundle.camel.version>
+  		<bundle.camel.version>2.19.0</bundle.camel.version>
   		<bundle.slf4j.version>1.7.21</bundle.slf4j.version>
   		<groovy-version>2.4.10</groovy-version>
   		<ivy-version>2.4.0</ivy-version>
