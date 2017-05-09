@@ -81,6 +81,23 @@
 	</modules>
 
 	<repositories>
+		<repository>
+			<id>jbosstools-base</id>
+			<layout>p2</layout>
+			<url>${jbosstools-base-site}</url>
+		</repository>
+
+		<repository>
+			<id>jbosstools-server</id>
+			<layout>p2</layout>
+			<url>${jbosstools-server-site}</url>
+		</repository>
+
+		<repository>
+			<id>jbosstools-central</id>
+			<layout>p2</layout>
+			<url>${jbosstools-central-site}</url>
+		</repository>
 
 		<repository>
 			<id>jbosstools-base</id>
