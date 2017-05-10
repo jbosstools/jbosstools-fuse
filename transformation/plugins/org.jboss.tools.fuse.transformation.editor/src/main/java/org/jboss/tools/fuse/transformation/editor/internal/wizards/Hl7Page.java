@@ -52,7 +52,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CompoundValidator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -60,35 +59,34 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 /**
  *
  */
-public class JsonPage extends XformWizardPage implements TransformationTypePage {
+public class Hl7Page extends XformWizardPage implements TransformationTypePage {
 
-    private Composite page;
+    private Composite _page;
     private boolean isSource = true;
-    private Text jsonFileText;
-    private Button jsonSchemaOption;
-    private Button jsonInstanceOption;
-    private Text jsonPreviewText;
-    private Binding binding;
+    private Text hl7FileText;
+    private Button hl7SchemaOption;
+    private Button hl7InstanceOption;
+    private Text hl7PreviewText;
+    private Binding _binding;
 
     /**
      * @param pageName
      * @param model
      * @param isSource
      */
-    public JsonPage(final String pageName, final Model model, final boolean isSource) {
+    public Hl7Page(final String pageName, final Model model, final boolean isSource) {
         super(pageName, model);
-        setTitle(Messages.JSONPage_title);
+        setTitle("HL7 Page"); //$NON-NLS-1$
         setImageDescriptor(Activator.imageDescriptor("transform.png")); //$NON-NLS-1$
         this.isSource = isSource;
         observablesManager.addObservablesFromContext(context, true, true);
     }
 
-	@SuppressWarnings("unchecked")
-	private void bindControls() {
+    private void bindControls() {
 
         // Bind source file path widget to UI model
-        final IObservableValue<?> widgetValue = WidgetProperties.text(SWT.Modify).observe(jsonFileText);
-        IObservableValue<?> modelValue;
+        final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(hl7FileText);
+        IObservableValue modelValue;
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model); //$NON-NLS-1$
         } else {
@@ -103,14 +101,14 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                 pathValidator, fileEmptyValidator, jsonValidator);
         strategy.setBeforeSetValidator(compoundJSONTextValidator);
 
-        binding = context.bindValue(widgetValue, modelValue, strategy, null);
-        ControlDecorationSupport.create(binding, decoratorPosition, jsonFileText.getParent());
+        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        ControlDecorationSupport.create(_binding, decoratorPosition, hl7FileText.getParent());
 
-        widgetValue.addValueChangeListener(new IValueChangeListener<Object>() {
+        widgetValue.addValueChangeListener(new IValueChangeListener() {
 
 			@Override
-			public void handleValueChange(ValueChangeEvent<?> event) {
-				if (!JsonPage.this.isCurrentPage()) {
+			public void handleValueChange(ValueChangeEvent event) {
+				if (!Hl7Page.this.isCurrentPage()) {
 					return;
 				}
                 Object value = event.diff.getNewValue();
@@ -140,7 +138,7 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                             model.setTargetFilePath(path);
                         }
                         updatePreview(resource.getProjectRelativePath().toString());
-                        jsonFileText.notifyListeners(SWT.Modify, new Event());
+                        hl7FileText.notifyListeners(SWT.Modify, new Event());
                     } catch (final Exception e) {
                         Activator.error(e);
                     }
@@ -156,16 +154,18 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
         IFile xmlFile = CamelUtils.project().getFile(tempPath);
         if (xmlFile != null && xmlFile.exists()) {
             try (InputStream istream = xmlFile.getContents()) {
-            	StringBuilder buffer = new StringBuilder();
+                StringBuilder buffer = new StringBuilder();
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
                     String inputLine;
                     while ((inputLine = in.readLine()) != null) {
                         buffer.append(inputLine + "\n"); //$NON-NLS-1$
                     }
                 }
-                jsonPreviewText.setText(buffer.toString());
+                hl7PreviewText.setText(buffer.toString());
 
-            } catch (CoreException | IOException e1) {
+            } catch (CoreException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
@@ -178,8 +178,8 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
         	return;
         }
         final boolean schema = jsonSchema(path);
-        jsonInstanceOption.setSelection(!schema);
-        jsonSchemaOption.setSelection(schema);
+        hl7InstanceOption.setSelection(!schema);
+        hl7SchemaOption.setSelection(schema);
         if (isSourcePage()) {
             if (schema) {
                 model.setSourceType(ModelType.JSON_SCHEMA);
@@ -199,13 +199,19 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void createControl(final Composite parent) {
         if (this.isSource) {
-            setTitle(Messages.JSONPage_sourceTypeTitle);
-            setDescription(Messages.JSONPage_sourceTypeDescription);
+            setTitle("Source Type (JSON)"); //$NON-NLS-1$
+            setDescription("Specify details for the source JSON for this transformation."); //$NON-NLS-1$
         } else {
-            setTitle(Messages.JSONPage_targetTypeTitle);
-            setDescription(Messages.JSONPage_targetTypeDescription);
+            setTitle("Target Type (JSON)"); //$NON-NLS-1$
+            setDescription("Specify details for the target JSON for this transformation."); //$NON-NLS-1$
         }
-        observablesManager.runAndCollect(() -> createPage(parent));
+        observablesManager.runAndCollect(new Runnable() {
+
+            @Override
+            public void run() {
+                createPage(parent);
+            }
+        });
 
         WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
@@ -214,29 +220,29 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
     }
 
     private void createPage(final Composite parent) {
-        page = new Composite(parent, SWT.NONE);
-        setControl(page);
+        _page = new Composite(parent, SWT.NONE);
+        setControl(_page);
 
         GridLayout layout = new GridLayout(3, false);
         layout.marginRight = 5;
         layout.horizontalSpacing = 10;
-        page.setLayout(layout);
+        _page.setLayout(layout);
 
-        final Group group = new Group(page, SWT.SHADOW_ETCHED_IN);
-        group.setText(Messages.JSONPage_groupTitleJsonTypeDefinition);
+        final Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
+        group.setText("JSON Type Definition"); //$NON-NLS-1$
         group.setLayout(new GridLayout(1, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
 
-        jsonSchemaOption = new Button(group, SWT.RADIO);
-        jsonSchemaOption.setText(Messages.JSONPage_labelJSONSchema);
-        jsonSchemaOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        jsonSchemaOption.setSelection(true);
+        hl7SchemaOption = new Button(group, SWT.RADIO);
+        hl7SchemaOption.setText("JSON Schema"); //$NON-NLS-1$
+        hl7SchemaOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+        hl7SchemaOption.setSelection(true);
 
-        jsonInstanceOption = new Button(group, SWT.RADIO);
-        jsonInstanceOption.setText(Messages.JSONPage_labelJsonDocument);
-        jsonInstanceOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+        hl7InstanceOption = new Button(group, SWT.RADIO);
+        hl7InstanceOption.setText("JSON Instance Document"); //$NON-NLS-1$
+        hl7InstanceOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
-        jsonSchemaOption.addSelectionListener(new SelectionAdapter() {
+        hl7SchemaOption.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -246,12 +252,12 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                     model.setTargetType(ModelType.JSON_SCHEMA);
                 }
                 model.setTargetFilePath(""); //$NON-NLS-1$
-                jsonPreviewText.setText(""); //$NON-NLS-1$
-                JsonPage.this.resetFinish();
+                hl7PreviewText.setText(""); //$NON-NLS-1$
+                Hl7Page.this.resetFinish();
             }
         });
 
-        jsonInstanceOption.addSelectionListener(new SelectionAdapter() {
+        hl7InstanceOption.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -261,53 +267,53 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                     model.setTargetType(ModelType.JSON);
                 }
                 model.setTargetFilePath(""); //$NON-NLS-1$
-                jsonPreviewText.setText(""); //$NON-NLS-1$
-                JsonPage.this.resetFinish();
+                hl7PreviewText.setText(""); //$NON-NLS-1$
+                Hl7Page.this.resetFinish();
             }
         });
 
         // Create file path widgets
         Label label;
         if (isSourcePage()) {
-            label = createLabel(page, Messages.JSONPage_labelSourceFile, Messages.JSONPage_labelSourceFileTooltip);
+            label = createLabel(_page, "Source File:", "The source JSON file for the transformation."); //$NON-NLS-1$ //$NON-NLS-2$
         } else {
-            label = createLabel(page, Messages.JSONPage_labeltargetFile, Messages.JSONPage_labeltargetFileTooltip);
+            label = createLabel(_page, "Target File:", "The target JSON file for the transformation."); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        jsonFileText = new Text(page, SWT.BORDER);
-        jsonFileText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        jsonFileText.setToolTipText(label.getToolTipText());
+        hl7FileText = new Text(_page, SWT.BORDER);
+        hl7FileText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        hl7FileText.setToolTipText(label.getToolTipText());
 
-        final Button jsonFileBrowseButton = new Button(page, SWT.NONE);
+        final Button jsonFileBrowseButton = new Button(_page, SWT.NONE);
         jsonFileBrowseButton.setLayoutData(new GridData());
         jsonFileBrowseButton.setText("..."); //$NON-NLS-1$
-        jsonFileBrowseButton.setToolTipText(Messages.JSONPage_tooltipButtonBrowse);
+        jsonFileBrowseButton.setToolTipText("Browse to specify the JSON file."); //$NON-NLS-1$
 
         jsonFileBrowseButton.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 final String extension = "json"; //$NON-NLS-1$
-                final String path = selectResourceFromWorkspace(page.getShell(), extension);
+                final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
                     try {
-                        jsonPreviewText.setText(""); //$NON-NLS-1$
+                        hl7PreviewText.setText(""); //$NON-NLS-1$
                         if (fileIsEmpty(path)) {
-                            jsonFileText.setText(path);
-                            notifyControl(jsonFileText, SWT.Modify);
+                            hl7FileText.setText(path);
+                            notifyControl(hl7FileText, SWT.Modify);
                             return;
                         }
                         IPath tempPath = new Path(path);
                         IFile xmlFile = CamelUtils.project().getFile(tempPath);
                         String jsonText = getJsonText(xmlFile);
                         if (!Util.jsonValid(jsonText)) {
-                            jsonFileText.setText(path);
-                            notifyControl(jsonFileText, SWT.Modify);
+                            hl7FileText.setText(path);
+                            notifyControl(hl7FileText, SWT.Modify);
                             return;
                         }
 
                         boolean schema = jsonSchema(path);
-                        jsonInstanceOption.setSelection(!schema);
-                        jsonSchemaOption.setSelection(schema);
+                        hl7InstanceOption.setSelection(!schema);
+                        hl7SchemaOption.setSelection(schema);
                         if (isSourcePage()) {
                             if (schema) {
                                 model.setSourceType(ModelType.JSON_SCHEMA);
@@ -323,9 +329,9 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                             }
                             model.setTargetFilePath(path);
                         }
-                        jsonFileText.setText(path);
-                        jsonPreviewText.setText(jsonText);
-                        notifyControl(jsonFileText, SWT.Modify);
+                        hl7FileText.setText(path);
+                        hl7PreviewText.setText(jsonText);
+                        notifyControl(hl7FileText, SWT.Modify);
                     } catch (final Exception e) {
                         Activator.error(e);
                     }
@@ -333,13 +339,13 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
-        final Group group2 = new Group(page, SWT.SHADOW_ETCHED_IN);
-        group2.setText(Messages.JSONPage_groupTitleStructurePreview);
+        final Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
+        group2.setText("JSON Structure Preview"); //$NON-NLS-1$
         group2.setLayout(new FillLayout());
         group2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        jsonPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY | SWT.H_SCROLL );
-        jsonPreviewText.setBackground(page.getBackground());
+        hl7PreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY | SWT.H_SCROLL );
+        hl7PreviewText.setBackground(_page.getBackground());
 
         bindControls();
         validatePage();
@@ -356,7 +362,9 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
                     }
                 }
                 return buffer.toString();
-            } catch (CoreException | IOException e1) {
+            } catch (final CoreException e1) {
+                e1.printStackTrace();
+            } catch (final IOException e1) {
                 e1.printStackTrace();
             }
         }
@@ -434,10 +442,8 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
 
     private String selectResourceFromWorkspace(final Shell shell, final String extension) {
         IJavaProject javaProject = null;
-        if (getModel() != null) {
-            if (CamelUtils.project() != null) {
-                javaProject = JavaCore.create(CamelUtils.project());
-            }
+        if (getModel() != null && CamelUtils.project() != null) {
+            javaProject = JavaCore.create(CamelUtils.project());
         }
         ClasspathResourceSelectionDialog dialog;
         if (javaProject == null) {
@@ -445,7 +451,7 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
-		dialog.setTitle(Messages.bind(Messages.JSONPage_dialogTitleSelectFormProject, extension.toUpperCase()));
+        dialog.setTitle("Select " + extension.toUpperCase() + " From Project"); //$NON-NLS-1$ //$NON-NLS-2$
         dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
@@ -457,24 +463,24 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
 
     @Override
     public void notifyListeners() {
-        if (jsonFileText != null && !jsonFileText.isDisposed()) {
-            notifyControl(jsonFileText, SWT.Modify);
+        if (hl7FileText != null && !hl7FileText.isDisposed()) {
+            notifyControl(hl7FileText, SWT.Modify);
         }
     }
 
     @Override
     public void clearControls() {
-        if (jsonFileText != null && !jsonFileText.isDisposed()) {
-            jsonFileText.setText(""); //$NON-NLS-1$
-            jsonPreviewText.setText(""); //$NON-NLS-1$
+        if (hl7FileText != null && !hl7FileText.isDisposed()) {
+            hl7FileText.setText(""); //$NON-NLS-1$
+            hl7PreviewText.setText(""); //$NON-NLS-1$
         }
         notifyListeners();
     }
 
     @Override
     public void pingBinding() {
-        if (binding != null) {
-            binding.validateTargetToModel();
+        if (_binding != null) {
+            _binding.validateTargetToModel();
         }
     }
 
@@ -494,23 +500,23 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
             String pathEmptyError;
             String unableToFindError;
             if (isSourcePage()) {
-                pathEmptyError = Messages.JSONPage_errorMessageEmptySourceFilePath;
-                unableToFindError = Messages.JSONPage_errorMessageInvalidSourcePath;
+                pathEmptyError = "A source file path must be supplied for the transformation."; //$NON-NLS-1$
+                unableToFindError = "Unable to find a source file with the supplied path"; //$NON-NLS-1$
             } else {
-                pathEmptyError = Messages.JSONPage_errorMessageEmptyTargetFilepath;
-                unableToFindError = Messages.JSONPage_errorMessageInvalidTargetFilePath;
+                pathEmptyError = "A target file path must be supplied for the transformation."; //$NON-NLS-1$
+                unableToFindError = "Unable to find a target file with the supplied path"; //$NON-NLS-1$
             }
             if (path == null || path.isEmpty()) {
-                jsonPreviewText.setText(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(pathEmptyError);
             }
             if (CamelUtils.project().findMember(path) == null) {
-                jsonPreviewText.setText(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
             }
             IResource resource = CamelUtils.project().findMember(path);
             if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
-                jsonPreviewText.setText(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(unableToFindError);
             }
             return ValidationStatus.ok();
@@ -524,19 +530,19 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
             final String path = value == null ? null : value.toString().trim();
             String fileEmptyError;
             if (isSourcePage()) {
-                fileEmptyError = Messages.JSONPage_errorMessageSourceFileEmpty;
+                fileEmptyError = "Source file selected is empty."; //$NON-NLS-1$
             } else {
-                fileEmptyError = Messages.JSONPage_errorMessageTargetFileEmpty;
+                fileEmptyError = "Target file selected is empty."; //$NON-NLS-1$
             }
             if (fileIsEmpty(path)) {
-                jsonPreviewText.setText(""); //$NON-NLS-1$
+                hl7PreviewText.setText(""); //$NON-NLS-1$
                 return ValidationStatus.error(fileEmptyError);
             }
             IResource resource = CamelUtils.project().findMember(path);
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (jsonText == null || jsonText.trim().isEmpty()) {
-                    jsonPreviewText.setText(""); //$NON-NLS-1$
+                    hl7PreviewText.setText(""); //$NON-NLS-1$
                     return ValidationStatus.error(fileEmptyError);
                 }
             }
@@ -553,8 +559,8 @@ public class JsonPage extends XformWizardPage implements TransformationTypePage 
             if (resource instanceof IFile) {
                 String jsonText = getJsonText((IFile) resource);
                 if (!Util.jsonValid(jsonText)) {
-                    jsonPreviewText.setText(""); //$NON-NLS-1$
-                    return ValidationStatus.error(Messages.JSONPage_errorMessageInvalidJSON);
+                    hl7PreviewText.setText(""); //$NON-NLS-1$
+                    return ValidationStatus.error("Invalid JSON"); //$NON-NLS-1$
                 }
             }
             return ValidationStatus.ok();
