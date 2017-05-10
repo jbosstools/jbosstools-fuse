@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.ui.util.Shells;
 
 /**
  * @author lhein
@@ -96,7 +97,7 @@ public class MavenUtils {
 			return;
 		}
 		// show progress dialog to user to signal ongoing changes to the pom
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Shells.getShell());
 		try {
 			dialog.run(true, true, new IRunnableWithProgress() {
 				@Override
