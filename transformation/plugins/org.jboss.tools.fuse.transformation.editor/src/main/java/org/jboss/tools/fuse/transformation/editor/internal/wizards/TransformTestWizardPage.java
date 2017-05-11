@@ -271,7 +271,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             List<Dependency> dependencies = isBlueprint ? getRequiredBlueprintTestDependencies()
             											: getRequiredSpringTestDependencies();
             
-            Display.getDefault().syncExec( () -> updateProjectDeps(dependencies));
+            Display.getDefault().asyncExec( () -> updateProjectDeps(dependencies));
 
             // refresh the project in case we added dependencies
             project.refreshLocal(IProject.DEPTH_INFINITE, null);
