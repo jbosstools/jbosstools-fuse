@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -48,6 +49,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
@@ -260,7 +262,18 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
 
             List<Dependency> dependencies = isBlueprint ? getRequiredBlueprintTestDependencies()
             											: getRequiredSpringTestDependencies();
-            new MavenUtils().updateMavenDependencies(dependencies, project);
+            
+            Display.getDefault().syncExec( new Runnable() {
+				@Override
+				public void run() {
+					try { 
+		            	new MavenUtils().updateMavenDependencies(dependencies, project);	
+		            } catch (CoreException ex) {
+		            	Activator.log(new Status(ERROR, Activator.PLUGIN_ID, ex.getMessage()));
+		            }					
+				}
+			}); 
+            
 
             // refresh the project in case we added dependencies
             project.refreshLocal(IProject.DEPTH_INFINITE, null);
