@@ -37,6 +37,10 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 			"redhat-ea"+
 			StagingRepositoriesConstants.NAME_URL_SEPARATOR+
 			"https://maven.repository.redhat.com/earlyaccess/all";
+	private static final String ASF_SNAPSHOT_REPO_URI = 
+			"asf-snapshots" +
+			StagingRepositoriesConstants.NAME_URL_SEPARATOR +
+			"https://repository.apache.org/content/groups/snapshots/";
 
 	public StagingRepositoriesPreferenceInitializer() {
 		// Keep for reflection initialization
@@ -49,7 +53,8 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 		preferenceStore.setDefault(StagingRepositoriesConstants.STAGING_REPOSITORIES,
 				PRODUCT_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
 				THIRD_PARTY_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
-				PRODUCT_FIS_STAGING_REPO_URI+ StagingRepositoriesConstants.REPO_SEPARATOR +
+				PRODUCT_FIS_STAGING_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
+				ASF_SNAPSHOT_REPO_URI + StagingRepositoriesConstants.REPO_SEPARATOR +
 				PRODUCT_FUSE_NON_PRODUCTIZED_STAGING_REPO_URI);
 	}
 

@@ -62,7 +62,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success
 	 */
 	protected boolean configureMavenNature(IProject project, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage, 3);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage, 4);
 		try {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
@@ -92,7 +92,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
-			Model m2m = CamelMavenUtils.getMavenModel(project);
+			Model m2m = new CamelMavenUtils().getMavenModel(project);
 			subMonitor.worked(1);
 			final String camelVersion = projectMetaData.getCamelVersion();
 			if (m2m.getDependencyManagement() != null) {

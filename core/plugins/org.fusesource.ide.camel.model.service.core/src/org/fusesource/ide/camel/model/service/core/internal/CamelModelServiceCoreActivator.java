@@ -21,7 +21,6 @@ import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
 import org.osgi.framework.BundleContext;
 
-
 /**
  * @author rstryker
  */
@@ -47,50 +46,52 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	public static CamelModelServiceCoreActivator getDefault() {
 		return instance;
 	}
-	
+
 	public static BundleContext getBundleContext() {
-	    return myContext;
+		return myContext;
 	}
 
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        myContext = context;
-        registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
-        registerWorkspaceProjectListener();
-        JavaCore.addElementChangedListener(listener);
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		myContext = context;
+		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
+		registerWorkspaceProjectListener();
+		JavaCore.addElementChangedListener(listener);
 	}
-    
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    	myContext = null;
-    	JavaCore.removeElementChangedListener(listener);
-    	IWorkspace wsp = ResourcesPlugin.getWorkspace();
-    	wsp.removeResourceChangeListener(listener);
-    	listener = null;
-    	super.stop(context);
-    }
 
-    private void registerWorkspaceProjectListener() {
-    	IWorkspace wsp = ResourcesPlugin.getWorkspace();
-    	listener = new ProjectClasspathChangedListener();
-    	wsp.addResourceChangeListener(listener);
-    }
-	
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		myContext = null;
+		JavaCore.removeElementChangedListener(listener);
+		IWorkspace wsp = ResourcesPlugin.getWorkspace();
+		wsp.removeResourceChangeListener(listener);
+		listener = null;
+		super.stop(context);
+	}
+
+	private void registerWorkspaceProjectListener() {
+		IWorkspace wsp = ResourcesPlugin.getWorkspace();
+		listener = new ProjectClasspathChangedListener();
+		wsp.addResourceChangeListener(listener);
+	}
+
 	/**
 	 * Gets message from plugin.properties
+	 * 
 	 * @param key
 	 * @return
 	 */
-	public static String getMessage(String key)	{
+	public static String getMessage(String key) {
 		return Platform.getResourceString(instance.getBundle(), key);
 	}
 
 	/**
-	 * Get the IPluginLog for this plugin. This method 
-	 * helps to make logging easier, for example:
+	 * Get the IPluginLog for this plugin. This method helps to make logging
+	 * easier, for example:
 	 * 
-	 *     FoundationCorePlugin.pluginLog().logError(etc)
-	 *  
+	 * FoundationCorePlugin.pluginLog().logError(etc)
+	 * 
 	 * @return IPluginLog object
 	 */
 	public static IPluginLog pluginLog() {
@@ -99,10 +100,11 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 
 	/**
 	 * Get a status factory for this plugin
+	 * 
 	 * @return status factory
 	 */
 	public static StatusFactory statusFactory() {
 		return getDefault().statusFactoryInternal();
 	}
-	
+
 }

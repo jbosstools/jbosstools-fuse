@@ -157,7 +157,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT | SWT.DROP_DOWN);
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
-		camelVersionCombo.setItems(CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions().toArray(new String[CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions().size()]));
+		camelVersionCombo.setItems(CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions().stream().toArray(String[]::new));
 		camelVersionCombo.setText(CamelCatalogUtils.getLatestCamelVersion());
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
@@ -377,7 +377,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 	}
 	
-	private void validateCamelVersion() {
+	public void validateCamelVersion() {
 		if (getSelectedCamelVersion() != null && !isCamelVersionValid(getSelectedCamelVersion())) {
 			if (!Widgets.isDisposed(camelInfoText)) {
 				camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidWarning, getSelectedCamelVersion()));
@@ -397,7 +397,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		return CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
 	}
 	
-
+	public boolean isWarningShown() {
+		if (!Widgets.isDisposed(camelInfoText)) return !camelInfoText.getText().trim().isEmpty();
+		return false;
+	}
+	
 	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
 		if (Widgets.isDisposed(camelVersionCombo)){
 			return;
@@ -406,6 +410,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
 		}
+		
+		camelVersionCombo.setText(runtimeCamelVersion);
 	}
 
 	/**

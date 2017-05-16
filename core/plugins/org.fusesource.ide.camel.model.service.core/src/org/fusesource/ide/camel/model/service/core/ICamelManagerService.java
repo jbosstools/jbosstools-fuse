@@ -25,7 +25,7 @@ public interface ICamelManagerService {
 	 * @param camelVersion the camel version to load
 	 * @return	the camel model using karaf runtime provider
 	 */
-	CamelModel getCamelModel(String camelVersion);
+	CamelModel getCamelModelForKarafRuntimeProvider(String camelVersion);
 	
 	/**
 	 * creates and returns the camel model for a specific version and runtime

@@ -63,7 +63,7 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
      * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String)
      */
     @Override
-    public CamelModel getCamelModel(String camelVersion) {
+    public CamelModel getCamelModelForKarafRuntimeProvider(String camelVersion) {
     	return getCamelModel(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
     }
     

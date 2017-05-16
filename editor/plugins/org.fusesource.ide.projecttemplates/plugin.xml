@@ -179,14 +179,11 @@
          	<description>
              	Adds support for Camel to the project.
          	</description>
-          <version-comparator
-                class="org.fusesource.ide.projecttemplates.util.OSGiVersionComparator">
-          </version-comparator>
       	</project-facet>
       
       	<project-facet-version
             facet="jst.camel"
-            version="1.0">
+            version="3.0">
         	
         	<constraint>
             	<and>

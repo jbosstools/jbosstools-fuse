@@ -165,9 +165,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		
 		CommonTestUtils.closeAllEditors();
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
-		
-		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_AFTER.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 	}
 	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {

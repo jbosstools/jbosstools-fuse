@@ -38,7 +38,7 @@ public class CamelCatalogCacheManager {
 	/**
 	 * flushes the cache
 	 */
-	public void flush() {
+	public void clear() {
 		camelModelCache.clear();
 	}
 
@@ -82,7 +82,7 @@ public class CamelCatalogCacheManager {
 		}
 		// initialize repos for the dep lookup
 		if (project != null) {
-			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(CamelMavenUtils.getRepositories(project), coords);
+			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(new CamelMavenUtils().getRepositories(project), coords);
 		}
 		if (coords != null) {
 			return getCachedCatalog(coords);
@@ -110,10 +110,6 @@ public class CamelCatalogCacheManager {
 		dep.setArtifactId(coordinates.getArtifactId());
 		dep.setVersion(coordinates.getVersion());
 		
-		CamelModel catalog = CamelServiceManagerUtil.getManagerService().getCamelModel(coordinates.getVersion(), CamelCatalogUtils.getRuntimeProviderFromDependency(dep));
-
-		System.err.println("Loaded catalog for version: " + coordinates);
-
-		camelModelCache.put(coordinates, catalog);
+		camelModelCache.put(coordinates, CamelServiceManagerUtil.getManagerService().getCamelModel(coordinates.getVersion(), CamelCatalogUtils.getRuntimeProviderFromDependency(dep)));
 	}
 }

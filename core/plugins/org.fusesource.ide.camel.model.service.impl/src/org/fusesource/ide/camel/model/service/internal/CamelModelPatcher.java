@@ -99,7 +99,7 @@ public class CamelModelPatcher {
 	private static void applyFixesToComponentsSyntax(CamelModel loadedModel) {
 		// google-drive has a wrong syntax
 		Component c = loadedModel.getComponent("google-drive");
-		if (c != null && c.getSyntax().equalsIgnoreCase("google-drive:drive:apiName/methodName")) {
+		if (c != null && "google-drive:drive:apiName/methodName".equalsIgnoreCase(c.getSyntax())) {
 			c.setSyntax("google-drive:apiName/methodName");
 		}
 	}

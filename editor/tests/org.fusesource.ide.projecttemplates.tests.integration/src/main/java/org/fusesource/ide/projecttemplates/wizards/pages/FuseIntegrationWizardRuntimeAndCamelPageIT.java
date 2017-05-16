@@ -19,14 +19,12 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectWizard;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author lhein
  *
  */
-@Ignore("This test no longer applies as user can select whatever version they want as long as it exists in a public repo defined. Maybe add a test if the check for availability works!")
 public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 	
 	private WizardDialog dlg;
@@ -48,39 +46,35 @@ public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 	}
 	
 	@Test
-	public void testCompatibleCamelVersionSelectedForUnsupportedBrandedVersion() throws Exception {
-		page.preselectCamelVersionForRuntime("2.17.0.redhat-630175");
+	public void testCamelVersionSelectedForUnsupportedCommunityVersion() throws Exception {
+		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
+		
+		page.preselectCamelVersionForRuntime("2.19.0");
+		page.validateCamelVersion();
 		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.startsWith("2.17.0.redhat-630")).isTrue();
+		assertThat(selectedCamelVersion.startsWith("2.19.0")).isTrue();
+		assertThat(page.isWarningShown()).isFalse();
 	}
 	
 	@Test
-	public void testCompatibleCamelVersionSelectedForUnsupportedCommunityVersion() throws Exception {
+	public void testCamelVersionSelectedForInvalidCommunityVersion() throws Exception {
 		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
 		
-		page.preselectCamelVersionForRuntime("2.17.0");
+		page.preselectCamelVersionForRuntime("2.19.a");
+		page.validateCamelVersion();
 		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.startsWith("2.17.3")).isTrue();
-	}
-
-	@Test
-	public void testExactCamelVersionSelectedForBrandedVersion() throws Exception {
-		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
-		
-		page.preselectCamelVersionForRuntime("2.17.0.redhat-630187");
-		String selectedCamelVersion = page.getSelectedCamelVersion();
-		assertThat(selectedCamelVersion.equalsIgnoreCase("2.17.0.redhat-630187")).isTrue();
+		assertThat(selectedCamelVersion.startsWith("2.19.a")).isTrue();
+		assertThat(page.isWarningShown()).isTrue();
 	}
 	
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage createWizardRuntimePage() {
-		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
-		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
+		wiz = new FuseIntegrationProjectWizard();
+		dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
 		dlg.create();
 		return getWizardRuntimePage(wiz);
 	}
 	
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage getWizardRuntimePage(FuseIntegrationProjectWizard wiz) {
-		FuseIntegrationProjectWizardRuntimeAndCamelPage page = null;
 		for (IWizardPage p : wiz.getPages()) {
 			if (p instanceof FuseIntegrationProjectWizardRuntimeAndCamelPage) {
 				page = (FuseIntegrationProjectWizardRuntimeAndCamelPage)p;

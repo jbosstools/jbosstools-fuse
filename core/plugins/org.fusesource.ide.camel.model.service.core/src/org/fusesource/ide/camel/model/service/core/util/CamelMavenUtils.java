@@ -39,12 +39,8 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 public class CamelMavenUtils {
 
 	private static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
-	
-	private CamelMavenUtils() {
-		// util class
-	}
-	
-	public static List<Repository> getRepositories(IProject project) {
+		
+	public List<Repository> getRepositories(IProject project) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
 		List<Repository> reps = new ArrayList<>();
 		if (projectFacade != null) {
@@ -59,9 +55,9 @@ public class CamelMavenUtils {
 		return reps;
 	}
 	
-	public static List<Repository> getRepositories(MavenProject project) {
+	public List<Repository> getRepositories(MavenProject project) {
 		if (project != null) {
-			String pomPath = project.getFile().getPath(); // TODO: check if we need to append pom.xml
+			String pomPath = project.getFile().getPath();
 			final File pomFile = new File(pomPath);
 			if (!pomFile.exists() || !pomFile.isFile()) {
 				return Collections.emptyList();
@@ -83,7 +79,7 @@ public class CamelMavenUtils {
 		return Collections.emptyList();
 	}
 
-	private static void translateVariables(List<Dependency> deps, Model model) {
+	private void translateVariables(List<Dependency> deps, Model model) {
 		for (Dependency dep : deps) {
 			if (dep.getVersion() != null && dep.getVersion().startsWith("${")) {
 				String propName = dep.getVersion().substring(2, dep.getVersion().length()-1);
@@ -101,13 +97,13 @@ public class CamelMavenUtils {
 	 * @param project
 	 * @return the Maven project facade corresponding to the supplied project
 	 */
-	public static IMavenProjectFacade getMavenProjectFacade(IProject project) {
+	public IMavenProjectFacade getMavenProjectFacade(IProject project) {
 		final IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
 		return projectRegistry.create(pomIFile, true, new NullProgressMonitor());
 	}
 
-	public static String getCamelVersionFromMaven(IProject project) {
+	public String getCamelVersionFromMaven(IProject project) {
 		return getCamelVersionFromMaven(project, true);
 	}
 	
@@ -118,7 +114,7 @@ public class CamelMavenUtils {
 	 * @param useCachedCamelVersionInfo	true if you want to use the cached camel version for that project, otherwise false
 	 * @return
 	 */
-	public static String getCamelVersionFromMaven(IProject project, boolean useCachedCamelVersionInfo) {
+	public String getCamelVersionFromMaven(IProject project, boolean useCachedCamelVersionInfo) {
 		String camelVersion;
 		try {
 			// lets cache the camel version used in a project
@@ -141,11 +137,11 @@ public class CamelMavenUtils {
 		return camelVersion;
 	}
 
-	public static Model getMavenModel(IProject project) {
+	public Model getMavenModel(IProject project) {
 		return getMavenModel(project, false);
 	}
 	
-	public static Model getMavenModel(IProject project, boolean resolveFully) {
+	public Model getMavenModel(IProject project, boolean resolveFully) {
 		if (resolveFully) {
 			IMavenProjectFacade m2facade = getMavenProjectFacade(project);
 			try {
@@ -164,11 +160,11 @@ public class CamelMavenUtils {
 		return null;
 	}
 
-	public static List<Dependency> getDependencyList(IProject project) {
+	public List<Dependency> getDependencyList(IProject project) {
 		return getDependencyList(project, false);
 	}
 	
-	public static List<Dependency> getDependencyList(IProject project, boolean includeManagedDependencies) {
+	public List<Dependency> getDependencyList(IProject project, boolean includeManagedDependencies) {
 		IMavenProjectFacade m2facade = getMavenProjectFacade(project);
 		List<Dependency> deps = new ArrayList<>();
 		if (m2facade != null) {
@@ -190,9 +186,9 @@ public class CamelMavenUtils {
 		return deps;
 	}
 	
-	private static String getCamelVersionFromDependencies(List<Dependency> deps) {
+	private String getCamelVersionFromDependencies(List<Dependency> deps) {
 		for (Dependency pomDep : deps) {
-			if (pomDep.getGroupId().equalsIgnoreCase(CamelCatalogUtils.CATALOG_KARAF_GROUPID) && 
+			if (CamelCatalogUtils.CATALOG_KARAF_GROUPID.equalsIgnoreCase(pomDep.getGroupId()) && 
 				pomDep.getArtifactId().startsWith("camel-")) {
 				return pomDep.getVersion();
 			}
@@ -206,21 +202,19 @@ public class CamelMavenUtils {
 	 * @param project
 	 * @return
 	 */
-	public static String getWildFlyCamelVersionFromMaven(IProject project) {
+	public String getWildFlyCamelVersionFromMaven(IProject project) {
 		// get any wildfly camel dep
 		List<Dependency> deps = getDependencyList(project);
 		for (Dependency pomDep : deps) {
-			if (pomDep.getGroupId().equalsIgnoreCase(CamelCatalogUtils.CATALOG_WILDFLY_GROUPID)) {
+			if (CamelCatalogUtils.CATALOG_WILDFLY_GROUPID.equalsIgnoreCase(pomDep.getGroupId())) {
 				return pomDep.getVersion();
 			}
 		}
 		return null;
 	}
 	
-	public static List<List<String>> getAdditionalRepos() {
+	public List<List<String>> getAdditionalRepos() {
 		List<List<String>> repoList = new ArrayList<>();
-		// add the ASF snapshot repo for cutting edge camel version access
-		repoList.add(Arrays.asList("asf-snapshots", "https://repository.apache.org/content/groups/snapshots"));
 		// public asf repo
 		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
 		// old fuse repo

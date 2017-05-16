@@ -87,7 +87,7 @@ public class ImportExportPackageUpdater {
 
 	private void updateImportExportPackageForExistingManifest(IFile manifestFile, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UpdatingMANIFESTMF, 3);
-		Model pomModel = CamelMavenUtils.getMavenModel(project);
+		Model pomModel = new CamelMavenUtils().getMavenModel(project);
 		subMonitor.worked(1);
 		if(pomModel == null || shouldAddImportExportPackage(pomModel)){
 			WorkspaceBundleModel bundleModel = new WorkspaceBundleModel(manifestFile);
@@ -161,7 +161,7 @@ public class ImportExportPackageUpdater {
 	private void updateImportExportPackageForGeneratedManifest(IProgressMonitor monitor) {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-			Model pomModel = CamelMavenUtils.getMavenModel(project);
+			Model pomModel = new CamelMavenUtils().getMavenModel(project);
 			if (!shouldAddImportExportPackage(pomModel)){
 				return;
 			}

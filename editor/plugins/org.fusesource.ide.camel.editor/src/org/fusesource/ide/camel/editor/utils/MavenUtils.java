@@ -62,7 +62,7 @@ public class MavenUtils {
 	 *             if the project's POM file could not be read
 	 */
 	public String javaSourceFolder() throws CoreException {
-		String name = CamelMavenUtils.getMavenModel(CamelUtils.project()).getBuild().getSourceDirectory();
+		String name = new CamelMavenUtils().getMavenModel(CamelUtils.project()).getBuild().getSourceDirectory();
 		if (name == null)
 			return JAVA_PATH;
 		return name.endsWith("/") ? name : name + "/";
@@ -122,8 +122,9 @@ public class MavenUtils {
 	 */
 	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
 		final File pomFile = getPomFile(project);
-		final Model model = CamelMavenUtils.getMavenModel(project);
-		List<Dependency> deps = CamelMavenUtils.getDependencyList(project);
+		CamelMavenUtils cmu = new CamelMavenUtils();
+		final Model model = cmu.getMavenModel(project);
+		List<Dependency> deps = cmu.getDependencyList(project);
 
 		// then check if component dependency is already a dep
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
@@ -222,7 +223,7 @@ public class MavenUtils {
 	 *             on any errors
 	 */
 	public void addResourceFolder(IProject project, File pomFile, String resourceFolderName) throws CoreException {
-		final Model model = CamelMavenUtils.getMavenModel(project);
+		final Model model = new CamelMavenUtils().getMavenModel(project);
 		List<Resource> resources = model.getBuild().getResources();
 
 		boolean exists = false;
