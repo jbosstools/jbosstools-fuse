@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
@@ -65,9 +66,9 @@ public class CamelModel {
 	 * @return	the component or null if no component supports the scheme
 	 */
 	public Component getComponentForScheme(String scheme) {
-		for (String key : components.keySet()) {
-			if (key.equalsIgnoreCase(scheme)) {
-				return components.get(key);
+		for (Entry<String, Component> e : components.entrySet()) {
+			if (e.getKey().equalsIgnoreCase(scheme)) {
+				return e.getValue();
 			}
 		}
 		return null;

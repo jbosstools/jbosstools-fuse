@@ -110,7 +110,7 @@ public class NewDataFormatWizardIT {
 		check(id, reloadedCamelFile);
 		
 		// check that dependencies were added
-		List<Dependency> mavenProjectDependencies = CamelMavenUtils.getDependencyList(project);
+		List<Dependency> mavenProjectDependencies = new CamelMavenUtils().getDependencyList(project);
 		for(org.fusesource.ide.camel.model.service.core.catalog.Dependency dataFormatDependency : dataFormat.getDependencies()){
 			Stream<Dependency> filter = mavenProjectDependencies.stream()
 			.filter(dep -> dep.getGroupId().equals(dataFormatDependency.getGroupId()))

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.fusesource.ide.camel.model.service.core.catalog.ICamelCatalogElement;
 import org.fusesource.ide.camel.model.service.core.catalog.IParameterContainer;
@@ -207,16 +208,13 @@ public class Eip implements ICamelCatalogElement, IParameterContainer {
 	 * @param tags
 	 */
 	public void setTags(List<String> tags) {
-		StringBuilder label = new StringBuilder();
+		String label;
 		if (tags != null) {
-			for (String tag : tags) {
-				if (label.length() > 0) {
-					label.append(Character.toString(','));
-				}
-				label.append(tag);
-			}
+			label = tags.stream().collect(Collectors.joining(","));
+		} else {
+			label = "";
 		}
-		this.model.put(PROPERTY_LABEL, label.toString());
+		this.model.put(PROPERTY_LABEL, label);
 		this.tags = tags;
 	}
 

@@ -460,7 +460,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 				String pomPath = pomPathValue.toOSString();
 				final File pomFile = new File(pomPath);
 				try {
-					final Model model = CamelMavenUtils.getMavenModel(project.getProject());
+					final Model model = new CamelMavenUtils().getMavenModel(project.getProject());
 	
 					// then check if camel-test is already a dep
 					boolean isBlueprint = isBlueprintFile(fPage1.getXmlFileUnderTest().getLocationURI().toString());

@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.util;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -252,7 +253,9 @@ public final class CamelComponentUtils {
 			// seems this scheme has no model entry -> check dependency
 			IProject project = camelFile.getResource().getProject();
 			IJavaProject jpr = JavaCore.create(project);
-			compClass = getComponentClassFromJar(jpr, scheme);
+			if (jpr.exists() && jpr.isOpen()) {
+				compClass = getComponentClassFromJar(jpr, scheme);
+			}
 		}
 
 		return compClass;
@@ -289,19 +292,21 @@ public final class CamelComponentUtils {
 	protected static String getComponentJSon(String scheme, IProject project) {
 		IJavaProject jpr = JavaCore.create(project);
 		
-		try {
-			for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
-				File cpEntryFile = e.getPath().toFile();
-				if (!isJarFile(cpEntryFile)) {
-					continue;
+		if (jpr.exists() && jpr.isOpen()) {
+			try {
+				for (IClasspathEntry e : jpr.getResolvedClasspath(true)) {
+					File cpEntryFile = e.getPath().toFile();
+					if (!isJarFile(cpEntryFile)) {
+						continue;
+					}
+					String compJSON = getComponentJsonFromJar(cpEntryFile, scheme);
+					if (!Strings.isBlank(compJSON)) {
+						return compJSON;
+					}
 				}
-				String compJSON = getComponentJsonFromJar(cpEntryFile, scheme);
-				if (!Strings.isBlank(compJSON)) {
-					return compJSON;
-				}
+			} catch (JavaModelException ex) {
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
 			}
-		} catch (JavaModelException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
 	}
@@ -387,6 +392,11 @@ public final class CamelComponentUtils {
 	 * @return
 	 */
 	protected static Component buildModelFromJSonBlob(String json) {
-		return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+		try {
+			return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes("UTF-8")));
+		} catch (UnsupportedEncodingException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+		}
 	}
 }

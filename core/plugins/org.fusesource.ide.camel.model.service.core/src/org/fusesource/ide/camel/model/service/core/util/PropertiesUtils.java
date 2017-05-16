@@ -719,7 +719,7 @@ public class PropertiesUtils {
 		String camelVersion = CamelCatalogUtils.DEFAULT_CAMEL_VERSION;
 		IProject wsProject = CamelUtils.getCurrentProject();
 		if (wsProject != null) {
-			camelVersion = CamelMavenUtils.getCamelVersionFromMaven(wsProject);
+			camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(wsProject);
 		}
 		return camelVersion;
 	}

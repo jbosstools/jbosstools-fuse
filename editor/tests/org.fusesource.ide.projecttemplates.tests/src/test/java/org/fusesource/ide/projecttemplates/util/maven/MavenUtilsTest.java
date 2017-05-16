@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -56,19 +57,23 @@ public class MavenUtilsTest {
 		assertThat(properties.getProperty("camel.version")).isEqualTo(camelVersionToUpdate);
 	}
 	
-	@Ignore("Broken since FUSETOOLS-2290")
 	@Test
 	public void testCamelVersionNotTouchedForDependencyWhenUsingBomAndNoVersionSpecified() throws Exception {
 		Model mavenModel = new Model();
 		Properties properties = new Properties();
 		properties.setProperty("jboss.fuse.bom.version", "oldVersion");
 		mavenModel.setProperties(properties);
+		DependencyManagement depMan = new DependencyManagement();
+		Dependency bomDep = createBOMDep("oldVersion");
+		depMan.addDependency(bomDep);
+		mavenModel.setDependencyManagement(depMan);
 		List<Dependency> dependencies = new ArrayList<>();
 		Dependency camelCoreDependency = createCamelCoreDependency();
 		dependencies.add(camelCoreDependency);
 		mavenModel.setDependencies(dependencies);
 		
 		String camelVersionToUpdate = "2.17.0.redhat-187";
+
 		MavenUtils.updateCamelVersionDependencies(mavenModel, dependencies, camelVersionToUpdate);
 		
 		assertThat(camelCoreDependency.getVersion()).isNull();
@@ -92,7 +97,6 @@ public class MavenUtilsTest {
 		assertThat(properties.getProperty("camel.version")).isEqualTo(camelVersionToUpdate);
 	}
 	
-	@Ignore("Broken since FUSETOOLS-2290")
 	@Test
 	public void testCamelVersionTouchedForPropertyOnlyWhenUsingBomButVersionSpecifiedUsingProperty() throws Exception {
 		Model mavenModel = new Model();
@@ -100,6 +104,10 @@ public class MavenUtilsTest {
 		properties.setProperty("jboss.fuse.bom.version", "oldFuseBomVersion");
 		properties.setProperty("camel.version", "oldCamelCoreVersion");
 		mavenModel.setProperties(properties);
+		DependencyManagement depMan = new DependencyManagement();
+		Dependency bomDep = createBOMDep("oldVersion");
+		depMan.addDependency(bomDep);
+		mavenModel.setDependencyManagement(depMan);
 		List<Dependency> dependencies = new ArrayList<>();
 		Dependency camelCoreDependency = createCamelCoreDependency();
 		camelCoreDependency.setVersion("${camel.version}");
@@ -158,5 +166,15 @@ public class MavenUtilsTest {
 		camelCoreDependency.setGroupId("org.apache.camel");
 		camelCoreDependency.setArtifactId("camel-core");
 		return camelCoreDependency;
+	}
+	
+	private Dependency createBOMDep(String version) {
+		Dependency bomDep = new Dependency();
+		bomDep.setGroupId("org.jboss.fuse.bom");
+		bomDep.setArtifactId("jboss-fuse-parent");
+		bomDep.setVersion(version);
+		bomDep.setType("pom");
+		bomDep.setScope("import");
+		return bomDep;
 	}
 }

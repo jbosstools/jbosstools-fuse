@@ -93,7 +93,7 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         MBeanServerConnection connection = getMBeanServerConnection();
         Set<ObjectName> names = findCamelContexts(connection, null);
 
-        List<CamelContextMBean> answer = new ArrayList<CamelContextMBean>();
+        List<CamelContextMBean> answer = new ArrayList<>();
         for (ObjectName on : names) {
             CamelContextMBean context = (CamelContextMBean) newProxyInstance(on, CamelContextMBean.class, true);
             answer.add(context);
@@ -106,14 +106,13 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         MBeanServerConnection connection = getMBeanServerConnection();
 
 		Set<ObjectName> contexts = findCamelContexts(connection, managementName);
-        if (contexts.size() == 0) {
+        if (contexts.isEmpty()) {
             throw new IOException("No CamelContext could be found in the JMX.");
         }
 
         // we just take the first CamelContext as it matches the context id
 		ObjectName name = contexts.iterator().next();
-        CamelContextMBean mbean = (CamelContextMBean) newProxyInstance(name, CamelContextMBean.class, true);
-        return mbean;
+        return (CamelContextMBean) newProxyInstance(name, CamelContextMBean.class, true);
     }
 
     @Override
@@ -125,8 +124,7 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
         Set<ObjectInstance> names = queryNames(query, null);
         for (ObjectInstance on : names) {
             if (on.getClassName().equals("org.apache.camel.fabric.FabricTracer")) {
-                CamelFabricTracerMBean tracer = (CamelFabricTracerMBean) newProxyInstance(on.getObjectName(), CamelFabricTracerMBean.class, true);
-                return tracer;
+                return (CamelFabricTracerMBean) newProxyInstance(on.getObjectName(), CamelFabricTracerMBean.class, true);
             }
         }
 
@@ -143,8 +141,7 @@ public abstract class CamelFacadeSupport implements CamelJMXFacade {
 		Set<ObjectInstance> names = queryNames(query, null);
 		for (ObjectInstance on : names) {
 			if (on.getClassName().equals("org.apache.camel.management.mbean.ManagedBacklogTracer")) {
-				CamelBacklogTracerMBean tracer = (CamelBacklogTracerMBean) newProxyInstance(on.getObjectName(), CamelBacklogTracerMBean.class, true);
-				return tracer;
+				return (CamelBacklogTracerMBean) newProxyInstance(on.getObjectName(), CamelBacklogTracerMBean.class, true);
 			}
 		}
 

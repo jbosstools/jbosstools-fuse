@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.internal;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class CamelService implements ICamelManagerService {
 			CamelServiceImplementationActivator.pluginLog().logError(ex);
 			tempFolder = null;
 		} finally {
-			for (List<String> rep : CamelMavenUtils.getAdditionalRepos()) {
+			for (List<String> rep : new CamelMavenUtils().getAdditionalRepos()) {
 				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
 			}
 		}
@@ -75,7 +76,7 @@ public class CamelService implements ICamelManagerService {
 			if (tempFolder != null) {
 				versionManager.setCacheDirectory(tempFolder.getPath());
 			}
-			List<List<String>> additionalM2Repos = CamelMavenUtils.getAdditionalRepos();
+			List<List<String>> additionalM2Repos = new CamelMavenUtils().getAdditionalRepos();
 			for (List<String> repo : additionalM2Repos) {
 				String repoName = repo.get(0);
 				String repoUri = repo.get(1);
@@ -107,7 +108,7 @@ public class CamelService implements ICamelManagerService {
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getCamelModel(java.lang.String)
 	 */
 	@Override
-	public CamelModel getCamelModel(String camelVersion) {
+	public CamelModel getCamelModelForKarafRuntimeProvider(String camelVersion) {
 		return this.getCamelModel(camelVersion, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
 	}
 	
@@ -264,34 +265,40 @@ public class CamelService implements ICamelManagerService {
 	private CamelModel loadCamelModelFromCatalog(CamelCatalog catalog) {
 		CamelModel model = new CamelModel();
 		
-		System.err.println("Initializing Catalog Model for version " + catalog.getLoadedVersion() + " and runtime provider " + catalog.getRuntimeProvider().getProviderArtifactId());
-		
-		System.err.println("Components to load: " + catalog.findComponentNames().size());
 		for (String name : catalog.findComponentNames()) {
 			String json = catalog.componentJSonSchema(name);
-			Component elem = Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+			Component elem = Component.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
 			model.addComponent(elem);
 		}
-		System.err.println("DataFormats to load: " + catalog.findDataFormatNames().size());
+
 		for (String name : catalog.findDataFormatNames()) {
 			String json = catalog.dataFormatJSonSchema(name);
-			DataFormat elem = DataFormat.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+			DataFormat elem = DataFormat.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
 			model.addDataFormat(elem);
 		}
-		System.err.println("Languages to load: " + catalog.findLanguageNames().size());
+
 		for (String name : catalog.findLanguageNames()) {
 			String json = catalog.languageJSonSchema(name);
-			Language elem = Language.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+			Language elem = Language.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
 			model.addLanguage(elem);
 		}
-		System.err.println("Eips to load: " + catalog.findModelNames().size());
+
 		for (String name : catalog.findModelNames()) {
 			String json = catalog.modelJSonSchema(name);
-			Eip elem = Eip.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
+			Eip elem = Eip.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
 			model.addEip(elem);
 		}
 		
 		return model;
+	}
+	
+	private byte[] getUnicodeEncodedStreamIfPossible(String json) {
+		try {
+			return json.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			CamelServiceImplementationActivator.pluginLog().logError(ex);
+		}
+		return json.getBytes();
 	}
 }
 

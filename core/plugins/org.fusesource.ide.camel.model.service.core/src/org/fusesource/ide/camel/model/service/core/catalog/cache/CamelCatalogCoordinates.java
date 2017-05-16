@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.catalog.cache;
 
+import java.util.Objects;
+
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 
@@ -69,7 +71,7 @@ public class CamelCatalogCoordinates {
 	 */
 	@Override
 	public int hashCode() {
-		return String.format("%s:%s:%s", getGroupId(), getArtifactId(), getVersion()).hashCode();
+		return Objects.hash(getGroupId(), getArtifactId(), getVersion());
 	}
 	
 	/**

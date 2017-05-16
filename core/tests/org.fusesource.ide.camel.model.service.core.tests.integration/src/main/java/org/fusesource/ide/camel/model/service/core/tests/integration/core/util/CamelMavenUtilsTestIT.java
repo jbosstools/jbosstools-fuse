@@ -46,7 +46,7 @@ public class CamelMavenUtilsTestIT {
 
 	@Test
 	public void testUpdatePathParams() {
-		String version = CamelMavenUtils.getCamelVersionFromMaven(fuseProject.getProject());
+		String version = new CamelMavenUtils().getCamelVersionFromMaven(fuseProject.getProject());
 		assertNotNull("The retrieved camel version should not be null.", version);
 		assertNotEquals("The retrieved camel version should not resolve to the variable name.", "${camel.version}", version);
 		assertEquals("The retrieved version doesn't match the defined value in the pom file.", "2.19.0", version);

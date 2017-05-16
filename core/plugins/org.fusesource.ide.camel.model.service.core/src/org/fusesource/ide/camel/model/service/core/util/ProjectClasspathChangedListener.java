@@ -39,7 +39,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	private Map<IProject, String> knownProjects = new HashMap<>();
 	
 	/**
-	 * 
+	 * creates a change listener watching for events in the classpath of the project
 	 */
 	public ProjectClasspathChangedListener() {
 		for (IJavaProject jp : getCamelProjects()) {
@@ -131,7 +131,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	private void notifyClasspathChanged(IJavaProject project) {
     	// refresh catalog if needed
 		IProject prj = project.getProject();
-		String camelVersion = CamelMavenUtils.getCamelVersionFromMaven(prj);
+		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj);
 		boolean camelVersionChanged = true;
 		String oldCamelVersion = knownProjects.get(prj);
 		if (!knownProjects.containsKey(prj)) {

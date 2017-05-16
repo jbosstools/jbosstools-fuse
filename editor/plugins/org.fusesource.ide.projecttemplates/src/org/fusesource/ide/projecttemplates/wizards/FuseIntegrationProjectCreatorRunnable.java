@@ -156,7 +156,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	protected void updateBundlePluginConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-			Model pomModel = CamelMavenUtils.getMavenModel(project);
+			Model pomModel = new CamelMavenUtils().getMavenModel(project);
 
 			customizeBundlePlugin(pomModel, project);
 
