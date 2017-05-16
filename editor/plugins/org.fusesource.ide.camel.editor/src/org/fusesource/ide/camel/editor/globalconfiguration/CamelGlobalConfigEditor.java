@@ -104,7 +104,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	private Composite parent;
 	private TreeViewer treeViewer;
-	private Button btnAdd;
 	private Button btnModify;
 	private Button btnDelete;
 
@@ -248,7 +247,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createAddButton() {
-		btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
+		Button btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
 		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
@@ -261,7 +260,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				createNewEntry();
 			}
 		});
-		btnAdd.setEnabled(getElementContributions().isEmpty() == false);
+		btnAdd.setEnabled(!getElementContributions().isEmpty());
 	}
 
 	@Override
@@ -277,7 +276,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	@Override
 	public void setFocus() {
-		Display.getDefault().asyncExec(() -> reload());
+		Display.getDefault().asyncExec(this::reload);
 		this.treeViewer.getTree().setFocus();
 	}
 
@@ -458,19 +457,19 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param selectedId
 	 */
 	private void restoreSelection(IStructuredSelection selection, String selectedId) {
+		IStructuredSelection restorableSelection = selection;
 		if (selectedId != null) {
 			for (List<Object> models : getModel().values()) {
 				for (Object object : models) {
-					if (object instanceof AbstractCamelModelElement) {
-						if (selectedId.equals(((AbstractCamelModelElement) object).getId())) {
-							selection = new StructuredSelection(object);
-							break;
-						}
+					if (object instanceof AbstractCamelModelElement
+							&& selectedId.equals(((AbstractCamelModelElement) object).getId())) {
+						restorableSelection = new StructuredSelection(object);
+						break;
 					}
 				}
 			}
 		}
-		treeViewer.setSelection(selection);
+		treeViewer.setSelection(restorableSelection);
 	}
 
 	private void buildModel() {
