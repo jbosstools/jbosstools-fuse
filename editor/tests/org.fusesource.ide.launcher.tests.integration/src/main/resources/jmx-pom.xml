@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mycompany</groupId>
-  <artifactId>maven-project-to-test-JMX</artifactId>
+  <artifactId>XXX_PROJECT_NAME_XXX</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>Camel Spring Quickstart</name>

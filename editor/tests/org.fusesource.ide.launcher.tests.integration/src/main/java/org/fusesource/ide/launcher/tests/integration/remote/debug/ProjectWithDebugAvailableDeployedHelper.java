@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -58,17 +61,33 @@ public class ProjectWithDebugAvailableDeployedHelper {
 
 	private IProject project;
 	private IFile camelFile;
+	private String projectNameAfterImport;
+	
+	public ProjectWithDebugAvailableDeployedHelper(String projectNameAfterImport) {
+		this.projectNameAfterImport = projectNameAfterImport;
+	}
 
 	public void start() throws Exception {
-		File projectFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), "maven-project-to-test-JMX");
+		File projectFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), projectNameAfterImport);
 		projectFolder.mkdirs();
-		Files.copy(ProjectWithDebugAvailableDeployedHelper.class.getResourceAsStream("/jmx-pom.xml"), new File(projectFolder, POM_XML).toPath(), StandardCopyOption.REPLACE_EXISTING);
+		File pomFile = new File(projectFolder, POM_XML);
+		Files.copy(ProjectWithDebugAvailableDeployedHelper.class.getResourceAsStream("/jmx-pom.xml"), pomFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		setArtifactIdCorrespondingToProjectName(pomFile);
 		File camelContextFileFolder = new File(projectFolder, "src/main/resources/META-INF/spring");
 		camelContextFileFolder.mkdirs();
-		Files.copy(RemoteCamelLaunchConfigurationDelegateIT.class.getResourceAsStream("/camel-context.xml"), new File(camelContextFileFolder, "camel-context.xml").toPath(), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(RemoteCamelLaunchConfigurationDelegateOverJMXIT.class.getResourceAsStream("/camel-context.xml"), new File(camelContextFileFolder, "camel-context.xml").toPath(), StandardCopyOption.REPLACE_EXISTING);
 		project = new MavenProjectHelper().importProjects(projectFolder, new String[]{POM_XML})[0];
 		camelFile = project.getFile("src/main/resources/META-INF/spring/camel-context.xml");
 		launchCamelRoute(project);
+	}
+
+	private void setArtifactIdCorrespondingToProjectName(File pomFile) throws IOException {
+		try (Stream<String> lines = Files.lines(pomFile.toPath())) {
+			   List<String> replaced = lines
+			       .map(line-> line.replaceAll("XXX_PROJECT_NAME_XXX", projectNameAfterImport))
+			       .collect(Collectors.toList());
+			   Files.write(pomFile.toPath(), replaced);
+			}
 	}
 
 	public void clean() throws CoreException {
@@ -84,7 +103,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 	private void launchCamelRoute(IProject project) throws MalformedObjectNameException, InterruptedException, DebugException {
 		final File parent = new File("target/MavenLaunchOutputs");
 		parent.mkdirs();
-		final String mavenOutputFilePath = new File(parent, "MavenLaunchOutput-"+project.getName()+".txt").getAbsolutePath();
+		final String mavenOutputFilePath = new File(parent, getMavenLaunchOutPutFileName(project)).getAbsolutePath();
 		final ExecutePomAction executePomAction = new ExecutePomAction(){
 			
 			@Override
@@ -92,6 +111,12 @@ public class ProjectWithDebugAvailableDeployedHelper {
 				super.appendAttributes(basedir, workingCopy, goal);
 				Activator.getDefault().getLog().log(new Status(IStatus.INFO, Activator.ID, "Maven output file path: "+mavenOutputFilePath));
 				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+				
+				try {
+					addExtraAttributesToLocalProjectLaunch(workingCopy);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 		};
@@ -135,7 +160,15 @@ public class ProjectWithDebugAvailableDeployedHelper {
 		}
 		launchUsedToInitialize = executePomAction.getLaunch();
 	}
+
+	protected String getMavenLaunchOutPutFileName(IProject project) {
+		return "MavenLaunchOutput-"+project.getName()+".txt";
+	}
 	
+	protected void addExtraAttributesToLocalProjectLaunch(ILaunchConfigurationWorkingCopy configuration) throws Exception {
+		/* Only subclass will provide parameters to configure Jolokia for instance */
+	}
+
 	public IProject getProject() {
 		return project;
 	}

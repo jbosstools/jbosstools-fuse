@@ -81,7 +81,6 @@
 	</modules>
 
 	<repositories>
-
 		<repository>
 			<id>jbosstools-base</id>
 			<layout>p2</layout>
