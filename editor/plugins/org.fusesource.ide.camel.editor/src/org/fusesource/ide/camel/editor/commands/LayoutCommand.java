@@ -21,7 +21,7 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 
@@ -44,7 +44,7 @@ public class LayoutCommand extends RecordingCommand {
 	@Override
 	protected void doExecute() {
 		layout(featureProvider, container);
-		if (container instanceof CamelContextElement) {
+		if (container instanceof CamelRouteContainerElement) {
 			layout(featureProvider, diagram);
 		}
 	}
