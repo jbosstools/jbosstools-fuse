@@ -413,9 +413,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
-		}
-		
-		camelVersionCombo.setText(runtimeCamelVersion);
+		} else {
+			camelVersionCombo.setText(runtimeCamelVersion);
+		}		
 	}
 
 	/**
