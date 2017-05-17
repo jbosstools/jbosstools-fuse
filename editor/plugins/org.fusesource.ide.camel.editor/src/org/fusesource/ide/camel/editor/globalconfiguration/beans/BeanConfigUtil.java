@@ -16,11 +16,17 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -30,11 +36,17 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.internal.ui.viewsupport.JavaUILabelProvider;
+import org.eclipse.jdt.internal.ui.wizards.NewClassCreationWizard;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
+import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
@@ -42,6 +54,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,18 +66,82 @@ import org.w3c.dom.Node;
  */
 public class BeanConfigUtil {
 
+	/*
+	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
+	 */
 	public String handleNewClassWizard(IProject project, Shell shell) {
-		OpenNewClassWizardAction action = new OpenNewClassWizardAction();
-		action.setShell(shell);
-        action.setSelection(new StructuredSelection(project));
-        action.setOpenEditorOnFinish(false);
-		action.run();
-        IType type = (IType)action.getCreatedElement();
-        if (type != null) {
-			return type.getFullyQualifiedName();
+		NewClassCreationWizard wiz = new NewClassCreationWizard();
+		wiz.addPages();
+		wiz.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
+		NewClassWizardPage wp = (NewClassWizardPage) wiz.getStartingPage();
+		WizardDialog wd = new WizardDialog(shell, wiz);
+		wp.setAddComments(true, true);
+		setInitialPackageFrament(project, wp);
+		if (Window.OK == wd.open()) {
+			String value = wp.getCreatedType().getFullyQualifiedName();
+			if (value != null) {
+				return value;
+			}
 		}
-        return null;
+		return null;
 	}	
+	
+	private void setInitialPackageFrament(final IProject project, NewClassWizardPage wp) {
+		try {
+			IJavaProject javaProject = (IJavaProject) project.getNature(JavaCore.NATURE_ID);
+			if(javaProject != null){
+				IPackageFragmentRoot fragroot = findPackageFragmentRoot(project, javaProject);
+				wp.setPackageFragmentRoot(fragroot, true);
+				wp.setPackageFragment(PropertiesUtils.getPackage(javaProject, fragroot), true);
+			}
+		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	private IPackageFragmentRoot findPackageFragmentRootWithFacade(final IProject project, IJavaProject javaProject) throws JavaModelException {
+		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
+		if(facade != null){
+			IPath[] paths = facade.getCompileSourceLocations();
+			if (paths != null && paths.length > 0) {
+				for (IPath p : paths) {
+					if (p == null)
+						continue;
+					IResource res = project.findMember(p);
+					if (res != null) {
+						return javaProject.getPackageFragmentRoot(res);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private IPackageFragmentRoot findPackageFragmentRoot(final IProject project, IJavaProject javaProject) throws CoreException {
+		IPackageFragmentRoot fromFacade = findPackageFragmentRootWithFacade(project, javaProject);
+		if (fromFacade != null) {
+			return fromFacade;
+		} else {
+			IPackageFragmentRoot[] allPackageFragmentRoots = javaProject.getAllPackageFragmentRoots();
+			if(allPackageFragmentRoots.length == 1) {
+				return allPackageFragmentRoots[0];
+			} else {
+				IFolder tstFolder = project.getFolder("src/main/java"); //$NON-NLS-1$
+	            IPackageFragmentRoot tstRoot = javaProject.getPackageFragmentRoot(tstFolder);
+	            if (tstRoot.exists()) {
+	            	return tstRoot;
+	            } else {
+	            	tstFolder.create(false, true, null);
+	            }
+				IClasspathEntry[] entries = javaProject.getRawClasspath();
+				IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
+				System.arraycopy(entries, 0, newEntries, 0, entries.length);
+				newEntries[entries.length] = JavaCore.newSourceEntry(tstRoot.getPath());
+				javaProject.setRawClasspath(newEntries, new NullProgressMonitor());
+				return tstRoot;
+			}
+		}
+	}
 	
 	public String handleClassBrowse(IProject project, Shell shell) {
 		IJavaSearchScope scope = null;
