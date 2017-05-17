@@ -30,7 +30,7 @@ public class AutoLayoutAction extends Action {
 	 */
 	@Override
 	public void run() {
-		IHandlerService handlerService = (IHandlerService)PlatformUI.getWorkbench().getService(IHandlerService.class);
+		IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
 		try {
 			handlerService.executeCommand(AUTO_LAYOUT_COMMAND_ID, null);
 		} catch (Exception ex) {

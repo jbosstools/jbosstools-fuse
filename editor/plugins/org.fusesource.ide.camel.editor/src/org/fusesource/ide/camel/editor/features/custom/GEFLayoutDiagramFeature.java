@@ -86,7 +86,7 @@ public class GEFLayoutDiagramFeature extends AbstractCustomFeature {
 
 	@SuppressWarnings("unchecked")
 	private CompoundDirectedGraph mapDiagramToGraph() {
-		Map<AnchorContainer, Node> shapeToNode = new HashMap<AnchorContainer, Node>();
+		Map<AnchorContainer, Node> shapeToNode = new HashMap<>();
 		Diagram d = getDiagram();
 		CompoundDirectedGraph dg = new CompoundDirectedGraph();
 		EdgeList edgeList = new EdgeList();
@@ -107,7 +107,9 @@ public class GEFLayoutDiagramFeature extends AbstractCustomFeature {
 		for (Connection connection : connections) {
 			AnchorContainer source = connection.getStart().getParent();
 			AnchorContainer target = connection.getEnd().getParent();
-			if (shapeToNode.get(source) == null || shapeToNode.get(target) == null) continue;
+			if (shapeToNode.get(source) == null || shapeToNode.get(target) == null) {
+				continue;
+			}
 			Edge edge = new Edge(shapeToNode.get(source), shapeToNode.get(target));
 			edge.data = connection;
 			edgeList.add(edge);
