@@ -54,25 +54,34 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		myContext = context;
+		setContext(context);
 		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 		registerWorkspaceProjectListener();
 		JavaCore.addElementChangedListener(listener);
 	}
 
+
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		myContext = null;
+		setContext(null);
 		JavaCore.removeElementChangedListener(listener);
 		IWorkspace wsp = ResourcesPlugin.getWorkspace();
 		wsp.removeResourceChangeListener(listener);
-		listener = null;
+		setListener(null);
 		super.stop(context);
 	}
 
+	private static void setListener(ProjectClasspathChangedListener projectListener) {
+		listener = projectListener;
+	}
+
+	private static synchronized void setContext(BundleContext context) {
+		myContext = context;
+	}
+	
 	private void registerWorkspaceProjectListener() {
 		IWorkspace wsp = ResourcesPlugin.getWorkspace();
-		listener = new ProjectClasspathChangedListener();
+		setListener(new ProjectClasspathChangedListener());
 		wsp.addResourceChangeListener(listener);
 	}
 

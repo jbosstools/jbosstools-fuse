@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.model.service.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.maven.artifact.versioning.ComparableVersion;
@@ -53,27 +54,33 @@ public class CamelModelPatcher {
 	private static void applyMissingOneOfValuesForExpressionsPatch(CamelModel loadedModel) {
 		for (Eip eip : loadedModel.getEips()) {
 			if (eip != null) {
-				for (Parameter p : eip.getParameters()) {
-					if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(p.getKind())) {
-						// expression parameter -> check for specific oneOf values
-						ArrayList<String> possibleValues = new ArrayList<>();
-						possibleValues.addAll(Arrays.asList(p.getOneOf()));
-						if (!possibleValues.contains("vtdxml")) {
-							possibleValues.add("vtdxml");
-						}
-						if (!possibleValues.contains("xpath")) {
-							possibleValues.add("xpath");
-						}
-						if (!possibleValues.contains("xquery")) {
-							possibleValues.add("xquery");
-						}
-						if (!possibleValues.contains("xtokenize")) {
-							possibleValues.add("xtokenize");
-						}
-						p.setOneOf(possibleValues.toArray(new String[possibleValues.size()]));
-					}
-				}
+				ensureAllParametersWithOneOfContainsAllPossibleValues(eip);
 			}
+		}
+	}
+
+	private static void ensureAllParametersWithOneOfContainsAllPossibleValues(Eip eip) {
+		for (Parameter p : eip.getParameters()) {
+			if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(p.getKind())) {
+				ensureOneOfContainsAllPossiblevalues(p);
+			}
+		}
+	}
+
+	private static void ensureOneOfContainsAllPossiblevalues(Parameter p) {
+		// expression parameter -> check for specific oneOf values
+		List<String> possibleValues = new ArrayList<>();
+		possibleValues.addAll(Arrays.asList(p.getOneOf()));
+		ensureListContains(possibleValues, "vtdxml");
+		ensureListContains(possibleValues, "xpath");
+		ensureListContains(possibleValues, "xquery");
+		ensureListContains(possibleValues, "xtokenize");
+		p.setOneOf(possibleValues.stream().toArray(String[]::new));
+	}
+
+	private static void ensureListContains(List<String> possibleValues, String possibleExpressionLanguage) {
+		if (!possibleValues.contains(possibleExpressionLanguage)) {
+			possibleValues.add(possibleExpressionLanguage);
 		}
 	}
 
@@ -81,17 +88,22 @@ public class CamelModelPatcher {
 		Eip choiceEip = loadedModel.getEip(AbstractCamelModelElement.CHOICE_NODE_NAME);
 		if (choiceEip != null) {
 			for (Parameter p : choiceEip.getParameters()) {
-				if ("array".equalsIgnoreCase(p.getType())
-						&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())) {
-					if (p.getOneOf() == null)
-						p.setOneOf(new String[0]);
-					ArrayList<String> possibleChildren = new ArrayList<>();
-					possibleChildren.addAll(Arrays.asList(p.getOneOf()));
-					if (!possibleChildren.contains(AbstractCamelModelElement.WHEN_NODE_NAME)) {
-						possibleChildren.add(AbstractCamelModelElement.WHEN_NODE_NAME);
-						p.setOneOf(possibleChildren.toArray(new String[possibleChildren.size()]));
-					}
-				}
+				applyMissingWhenChildDefinitionForChoice(p);
+			}
+		}
+	}
+
+	private static void applyMissingWhenChildDefinitionForChoice(Parameter p) {
+		if ("array".equalsIgnoreCase(p.getType())
+				&& AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(p.getKind())) {
+			if (p.getOneOf() == null) {
+				p.setOneOf(new String[0]);
+			}
+			List<String> possibleChildren = new ArrayList<>();
+			possibleChildren.addAll(Arrays.asList(p.getOneOf()));
+			if (!possibleChildren.contains(AbstractCamelModelElement.WHEN_NODE_NAME)) {
+				possibleChildren.add(AbstractCamelModelElement.WHEN_NODE_NAME);
+				p.setOneOf(possibleChildren.stream().toArray(String[]::new));
 			}
 		}
 	}
