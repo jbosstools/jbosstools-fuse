@@ -72,12 +72,14 @@ public class CamelCatalogUtils {
 	private static final String LATEST_BOM_VERSION = FUSE_63_R2_BOM_VERSION;
 	
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
+	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
 	private static final Map<String, String> CAMEL_VERSION_2_FUSE_BOM_MAPPING;
 	private static final Map<String, String> PURE_FIS_CAMEL_VERSIONS;
 	
 	static {
 		CAMEL_VERSION_2_FUSE_BOM_MAPPING = new HashMap<>();
 		PURE_FIS_CAMEL_VERSIONS = new HashMap<>();
+		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 				
 		try {
@@ -125,9 +127,10 @@ public class CamelCatalogUtils {
 			PURE_FIS_CAMEL_VERSIONS.put("2.18.1.redhat-000012", "2.2.170.redhat-000010");			
 			PURE_FIS_CAMEL_VERSIONS.put("2.18.1.redhat-000015", "2.2.170.redhat-000013");
 		}
+		
+		ALL_CAMEL_CATALOG_VERSIONS.addAll(PURE_FIS_CAMEL_VERSIONS.keySet());
+		ALL_CAMEL_CATALOG_VERSIONS.addAll(OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS);
 	}
-	
-
 
 	private CamelCatalogUtils() {
 		// utility class
@@ -135,6 +138,10 @@ public class CamelCatalogUtils {
 	
 	public static List<String> getOfficialSupportedCamelCatalogVersions() {
 		return OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
+	}
+	
+	public static List<String> getAllCamelCatalogVersions() {
+		return ALL_CAMEL_CATALOG_VERSIONS;
 	}
 	
 	/**
