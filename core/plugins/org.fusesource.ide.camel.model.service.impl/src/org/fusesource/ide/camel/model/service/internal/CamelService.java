@@ -76,32 +76,40 @@ public class CamelService implements ICamelManagerService {
 			if (tempFolder != null) {
 				versionManager.setCacheDirectory(tempFolder.getPath());
 			}
-			List<List<String>> additionalM2Repos = new CamelMavenUtils().getAdditionalRepos();
-			for (List<String> repo : additionalM2Repos) {
-				String repoName = repo.get(0);
-				String repoUri = repo.get(1);
-				versionManager.addMavenRepository(repoName, repoUri);
-			}
+			configureAdditionalRepos(versionManager);
 			catalog.setVersionManager(versionManager);
 			if (!catalog.loadVersion(coords.getVersion())) {
 				CamelServiceImplementationActivator.pluginLog().logError("Unable to load Camel Catalog for version " + coords.getVersion());
 			}
 			if (!CamelCatalogUtils.isCamelVersionWithoutProviderSupport(coords.getVersion())) {
-				String runtimeProvider = CamelCatalogUtils.getRuntimeProviderFromDependency(coords.asMavenDependency());
-				if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
-					catalog.setRuntimeProvider(new SpringBootRuntimeProvider());
-	//			} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
-	//				catalog.setRuntimeProvider(new WildFlyRuntimeProvider());
-				} else {
-					catalog.setRuntimeProvider(new KarafRuntimeProvider());
-				}
-				if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
-					CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
-				}
+				configureRuntimeprovider(coords, catalog);
 			}
 			cachedCatalogs.put(coords, catalog);
 		}
 		return cachedCatalogs.get(coords);
+	}
+
+	private void configureRuntimeprovider(CamelCatalogCoordinates coords, CamelCatalog catalog) {
+		String runtimeProvider = CamelCatalogUtils.getRuntimeProviderFromDependency(coords.asMavenDependency());
+		if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
+			catalog.setRuntimeProvider(new SpringBootRuntimeProvider());
+//			} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
+//				catalog.setRuntimeProvider(new WildFlyRuntimeProvider());
+		} else {
+			catalog.setRuntimeProvider(new KarafRuntimeProvider());
+		}
+		if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
+			CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+		}
+	}
+
+	private void configureAdditionalRepos(MavenVersionManager versionManager) {
+		List<List<String>> additionalM2Repos = new CamelMavenUtils().getAdditionalRepos();
+		for (List<String> repo : additionalM2Repos) {
+			String repoName = repo.get(0);
+			String repoUri = repo.get(1);
+			versionManager.addMavenRepository(repoName, repoUri);
+		}
 	}
 	
 	/* (non-Javadoc)
