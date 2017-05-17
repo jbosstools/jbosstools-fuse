@@ -239,7 +239,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		if (!checkCamelContextsExist(project, monitor)) {
 			return;
 		}
-		IFacetedProject fproj = ProjectFacetsManager.create(project);
+		IFacetedProject fproj = ProjectFacetsManager.create(project, true, monitor);
 
 		if (fproj == null) {
 			// Add the modulecore nature
