@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -39,8 +40,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.branding.Activator;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
 
@@ -235,7 +236,7 @@ public class NewCamelXmlWizard extends Wizard implements INewWizard {
 		} else if (osgi) {
 			builder.append("</blueprint>\n");
 		}
-		return new ByteArrayInputStream(builder.toString().getBytes());
+		return new ByteArrayInputStream(builder.toString().getBytes(StandardCharsets.UTF_8));
 	}
 
 	/*

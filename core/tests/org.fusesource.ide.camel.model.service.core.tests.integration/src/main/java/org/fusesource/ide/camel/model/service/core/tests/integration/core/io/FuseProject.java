@@ -95,7 +95,7 @@ public class FuseProject extends ExternalResource {
 		}
 		// Create a fake pom.xml
 		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
-		pom.create(new ByteArrayInputStream(String.format(DUMMY_POM_CONTENT, this.camelVersion).getBytes()), true, new NullProgressMonitor());
+		pom.create(new ByteArrayInputStream(String.format(DUMMY_POM_CONTENT, this.camelVersion).getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
 	}
 
 	@Override

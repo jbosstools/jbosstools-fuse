@@ -12,6 +12,7 @@ package org.fusesource.ide.server.karaf.core.server.subsystems;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -127,7 +128,7 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 			// we need to obtain the shutdown command
 			String shutdownCommand = ctrl.getShutdownCommand();
             s = new Socket(getServer().getHost(), managementPort);
-            s.getOutputStream().write(shutdownCommand.getBytes());
+            s.getOutputStream().write(shutdownCommand.getBytes(StandardCharsets.UTF_8));
 		} catch (CoreException e) {
 			Activator.getLogger().error(e);
 			return Status.CANCEL_STATUS;

@@ -51,7 +51,7 @@ public class SecureStorageUtil {
         if( val == null ) {
         	node.put(key, val, true);
         } else {
-        	node.put(key, EncodingUtils.encodeBase64(val.getBytes()), true /* encrypt */);
+        	node.put(key, EncodingUtils.encodeBase64(val.getBytes(StandardCharsets.UTF_8)), true /* encrypt */);
         }
     }
 

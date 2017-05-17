@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.endpoint.provider;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -22,10 +25,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Element;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.Mockito.doReturn;
-
 @RunWith(MockitoJUnitRunner.class)
 public class GlobalEndpointContributorTest {
 
@@ -37,7 +36,7 @@ public class GlobalEndpointContributorTest {
 		Element nodeToHandle = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new ByteArrayInputStream(
 						"<endpoint id=\"aaa\" uri=\"dozer:aaa?sourceModel=com.mycompany.camel.spring.sss&amp;targetModel=com.mycompany.camel.spring.sss&amp;mappingFile=transformation.xml\"/>"
-								.getBytes(StandardCharsets.UTF_8.name())))
+								.getBytes(StandardCharsets.UTF_8)))
 				.getDocumentElement();
 		doReturn(nodeToHandle).when(cme).getXmlNode();
 		assertThat(new GlobalEndpointContributor().canHandle(cme)).isTrue();
@@ -48,7 +47,7 @@ public class GlobalEndpointContributorTest {
 		Element nodeToHandle = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new ByteArrayInputStream(
 						"<myPrefix:endpoint id=\"aaa\" uri=\"dozer:aaa?sourceModel=com.mycompany.camel.spring.sss&amp;targetModel=com.mycompany.camel.spring.sss&amp;mappingFile=transformation.xml\"/>"
-								.getBytes(StandardCharsets.UTF_8.name())))
+								.getBytes(StandardCharsets.UTF_8)))
 				.getDocumentElement();
 		doReturn(nodeToHandle).when(cme).getXmlNode();
 		assertThat(new GlobalEndpointContributor().canHandle(cme)).isTrue();
@@ -57,7 +56,7 @@ public class GlobalEndpointContributorTest {
 	@Test
 	public void testCanHandle_ReturnFalseForNodeNotGlobalEndpoint() throws Exception {
 		Element nodeToHandle = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(new ByteArrayInputStream("<bindy type=\"KeyValue\"/>".getBytes(StandardCharsets.UTF_8.name())))
+				.parse(new ByteArrayInputStream("<bindy type=\"KeyValue\"/>".getBytes(StandardCharsets.UTF_8)))
 				.getDocumentElement();
 		doReturn(nodeToHandle).when(cme).getXmlNode();
 		assertThat(new GlobalEndpointContributor().canHandle(cme)).isFalse();

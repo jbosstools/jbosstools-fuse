@@ -13,9 +13,9 @@ package org.fusesource.ide.camel.model.service.core.util;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -392,11 +392,6 @@ public final class CamelComponentUtils {
 	 * @return
 	 */
 	protected static Component buildModelFromJSonBlob(String json) {
-		try {
-			return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes("UTF-8")));
-		} catch (UnsupportedEncodingException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError(ex);
-			return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes()));
-		}
+		return Component.getJSONFactoryInstance(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)));
 	}
 }

@@ -129,7 +129,7 @@ public class ToolBehaviourProviderIT {
 	@Test
 	public void testPaletteEntriesfromExtensionPointsContainsAMQForSpringBoot() throws CoreException, IOException{
 		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
-		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
+		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();
 		
@@ -157,7 +157,7 @@ public class ToolBehaviourProviderIT {
 	@Test
 	public void testPaletteEntriesfromExtensionPointsValidityFoSpringBoot() throws CoreException, IOException{
 		IFile pom = fuseProject.getProject().getFile(IMavenConstants.POM_FILE_NAME);
-		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8.name())), IResource.FORCE, new NullProgressMonitor());
+		pom.setContents(new ByteArrayInputStream(DUMMY_POM_CONTENT_WITH_SPRING_BOOT_DEPENDENCY.getBytes(StandardCharsets.UTF_8)), IResource.FORCE, new NullProgressMonitor());
 		
 		initProject();
 		

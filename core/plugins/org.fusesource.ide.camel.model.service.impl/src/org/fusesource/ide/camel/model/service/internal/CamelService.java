@@ -13,8 +13,8 @@ package org.fusesource.ide.camel.model.service.internal;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -293,12 +293,7 @@ public class CamelService implements ICamelManagerService {
 	}
 	
 	private byte[] getUnicodeEncodedStreamIfPossible(String json) {
-		try {
-			return json.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException ex) {
-			CamelServiceImplementationActivator.pluginLog().logError(ex);
-		}
-		return json.getBytes();
+		return json.getBytes(StandardCharsets.UTF_8);
 	}
 }
 
