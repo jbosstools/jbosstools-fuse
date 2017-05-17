@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -178,8 +179,8 @@ public class ArchetypeHelper {
                                     // text file...
                                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                     copy(zip, bos);
-                                    String text = new String(bos.toByteArray(), "UTF-8");
-                                    out.write(transformContents(text, replaceProperties).getBytes());
+                                    String text = new String(bos.toByteArray(), StandardCharsets.UTF_8);
+                                    out.write(transformContents(text, replaceProperties).getBytes(StandardCharsets.UTF_8));
                                 }
                             } finally {
                                 if (out != null) {

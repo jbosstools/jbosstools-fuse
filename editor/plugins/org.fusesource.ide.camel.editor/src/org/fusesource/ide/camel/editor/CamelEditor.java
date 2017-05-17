@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -601,7 +602,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			factory.setValidating(false);
 			factory.setNamespaceAware(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			builder.parse(new ByteArrayInputStream(text.getBytes()));
+			builder.parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
 		} catch (Exception ex) {
 			lastError = ex.getMessage();				
 			return false;

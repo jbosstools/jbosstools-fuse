@@ -15,6 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -34,7 +36,7 @@ public class SAPArchive {
 	private static final String TGZ_EXTENTION = ".tgz"; //$NON-NLS-1$
 	private static final String ZIP_EXTENTION = ".zip"; //$NON-NLS-1$
 	private static final String END_OF_LINE = "\n"; //$NON-NLS-1$
-	protected static final String MANIFEST_ENCODING = "UTF-8"; //$NON-NLS-1$
+	protected static final Charset MANIFEST_ENCODING = StandardCharsets.UTF_8; //$NON-NLS-1$
 	public static final String MANIFEST_VERSION_VALUE = "1.0"; //$NON-NLS-1$
 	public static final String BUNDLE_MANIFEST_VERSION_VALUE = "2"; //$NON-NLS-1$
 	public static final String BUNDLE_ACTIVATION_POLICY_VALUE = "lazy"; //$NON-NLS-1$
