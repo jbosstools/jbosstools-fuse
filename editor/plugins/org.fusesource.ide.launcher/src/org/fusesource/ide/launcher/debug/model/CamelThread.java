@@ -133,11 +133,8 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		return Thread.NORM_PRIORITY;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
-	 */
 	@Override
-	public IStackFrame getTopStackFrame() throws DebugException {
+	public CamelStackFrame getTopStackFrame() throws DebugException {
 		if (!stackFrames.isEmpty()) {
 			return stackFrames.get(0);
 		}
@@ -286,9 +283,6 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		return fStepping;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepInto()
-	 */
 	@Override
 	public void stepInto() throws DebugException {
 		/* Step into is not implemented*/
@@ -318,9 +312,6 @@ public class CamelThread extends CamelDebugElement implements IThread {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IStep#stepReturn()
-	 */
 	@Override
 	public void stepReturn() throws DebugException {
 		/* Step into and return is not implemented*/
