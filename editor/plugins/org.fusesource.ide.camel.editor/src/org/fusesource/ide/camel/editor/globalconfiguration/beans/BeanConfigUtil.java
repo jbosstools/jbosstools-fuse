@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
-import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -172,40 +172,33 @@ public class BeanConfigUtil {
 	private String openNoArgMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			IMethod[] methods = foundClass.getMethods();
-			ArrayList<IMethod> noParamsList = new ArrayList<>();
-			for (int i = 0; i < methods.length; i++) {
-				IMethod iMethod = methods[i];
-				if (iMethod.getNumberOfParameters() == 0) {
-					noParamsList.add(iMethod);
-				}
-			}
-			methods = new IMethod[noParamsList.size()];
-			methods = noParamsList.toArray(methods);
-			ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new JavaUILabelProvider());
-			dialog.setTitle("Method Selection");
-			dialog.setMessage("Select a no-parameter method:");
-			dialog.setElements(methods);
-			if (dialog.open()  == SelectionDialog.OK) {
-				IMethod result = (IMethod) dialog.getFirstResult();
-				return result.getElementName();
-			}
+			return openMethodDialog(shell, getNoParamMethods(foundClass), "Select a no-parameter method:");
 		}
 		return null;
+	}
+
+	private String openMethodDialog(Shell shell, IMethod[] methods, String dialogMessage) {
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new JavaUILabelProvider());
+		dialog.setTitle("Method Selection");
+		dialog.setMessage(dialogMessage);
+		dialog.setElements(methods);
+		if (dialog.open()  == SelectionDialog.OK) {
+			IMethod result = (IMethod) dialog.getFirstResult();
+			return result.getElementName();
+		}
+		return null;
+	}
+
+	private IMethod[] getNoParamMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> method.getNumberOfParameters() == 0)
+				.toArray(IMethod[]::new);
 	}
 
 	private String openMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			IMethod[] methods = foundClass.getMethods();
-			ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new JavaUILabelProvider());
-			dialog.setTitle("Method Selection");
-			dialog.setMessage("Select a method:");
-			dialog.setElements(methods);
-			if (dialog.open()  == SelectionDialog.OK) {
-				IMethod result = (IMethod) dialog.getFirstResult();
-				return result.getElementName();
-			}
+			return openMethodDialog(shell, foundClass.getMethods(), "Select a method:");
 		}
 		return null;
 	}
