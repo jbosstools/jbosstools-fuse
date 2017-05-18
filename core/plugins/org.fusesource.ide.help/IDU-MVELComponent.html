@@ -9,7 +9,7 @@
     &lt;artifactId&gt;camel-mvel&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e132064"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e131417"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MVELComponent_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">mvel:templateName[?options]</pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the
             template to invoke; or the complete URL of the remote template (eg:
@@ -17,7 +17,7 @@
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MVELComponent_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
             
-        </p><table id="d0e132092"><tr>
+        </p><table id="d0e131445"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -37,7 +37,7 @@
                 <td> Character encoding of the resource content. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MVELComponent_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The mvel component sets a couple headers on the message.
             
-        </p><table id="d0e132144"><tr>
+        </p><table id="d0e131497"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>
@@ -48,7 +48,7 @@
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MVELComponent_HSH_MVELContext"></a>MVEL Context</h2></div></div></div><p>Camel will provide exchange information in the MVEL context (just a
                 <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transfered as:
             
-        </p><table id="d0e132182"><tr>
+        </p><table id="d0e131535"><tr>
                 <th> key </th>
                 <th> value </th>
             </tr><tr>
@@ -94,7 +94,7 @@
             template or the template content itself. If any of these headers is set then Camel uses
             this over the endpoint configured resource. This allows you to provide a dynamic
             template at runtime. 
-        </p><table id="d0e132302"><tr>
+        </p><table id="d0e131655"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>

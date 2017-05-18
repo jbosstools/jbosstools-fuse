@@ -7,7 +7,7 @@
             spring-jdbc. </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>This component can only be used to define producer endpoints, which means that you
         cannot use the JDBC component in a <code class="literal">from()</code> statement.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jdbc:dataSourceName[?options]</pre><p>This component only supports producer endpoints.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_Options"></a>Options</h2></div></div></div><table id="d0e107914"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_Options"></a>Options</h2></div></div></div><table id="d0e107290"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -113,7 +113,7 @@
         Object&gt;&gt;</code>. The <code class="literal">List</code> object contains the list of rows and the
         <code class="literal">Map</code> objects contain each row with the <code class="literal">String</code> key as
       the column name.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This component fetches <code class="literal">ResultSetMetaData</code> to be able to return the
-        column name as the key in the <code class="literal">Map</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e108218"><tr>
+        column name as the key in the <code class="literal">Map</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e107594"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -205,7 +205,7 @@ assertEquals("nsandhu", row.get("NAME"));
   .split(body()).streaming()
   .to("mock:result");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JDBC_HSH_SamplePollingthedatabaseeveryminute"></a>Sample - Polling the database every minute</h2></div></div></div><p>If we want to poll a database using the JDBC component, we need to combine it with a
       polling scheduler such as the <a href="IDU-Timer.html" class="olink">Timer</a> or <a href="IDU-Quartz.html" class="olink">Quartz</a> etc. In the following example, we retrieve data from
-      the database every 60 seconds:</p><pre class="programlisting">from("timer://foo?period=60000").setBody(constant("select * from customer")).to("jdbc:testdb").to("activemq:queue:customers");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e108409"></a>Sample - Move Data Between Data Sources</h2></div></div></div><p>A common use case is to query for data, process it and move it to another data source
+      the database every 60 seconds:</p><pre class="programlisting">from("timer://foo?period=60000").setBody(constant("select * from customer")).to("jdbc:testdb").to("activemq:queue:customers");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e107785"></a>Sample - Move Data Between Data Sources</h2></div></div></div><p>A common use case is to query for data, process it and move it to another data source
             (ETL operations). In the following example, we retrieve new customer records from the
             source table every hour, filter/transform them and move them to a destination
             table:</p><pre class="programlisting">from("timer://MoveNewCustomersEveryHour?period=3600000")
@@ -214,6 +214,6 @@ assertEquals("nsandhu", row.get("NAME"));
     .split(body())
 		.process(new MyCustomerProcessor()) //filter/transform results as needed
         .setBody(simple("insert into processed_customer values('${body[ID]}','${body[NAME]}')"))
-        .to("jdbc:testdb");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e108416"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        .to("jdbc:testdb");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e107792"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
                   <a class="link" href="SQL" target="_top">SQL</a>
               </p></li></ul></div></div></div></body></html>

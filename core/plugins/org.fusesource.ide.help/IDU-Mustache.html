@@ -12,7 +12,7 @@ mustache:templateName[?options]
 </pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the template to invoke; or the complete URL of the remote template (eg: file://folder/myfile.mustache).</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mustache_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e131798"><tr>
+    </p><table id="d0e131151"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -34,7 +34,7 @@ mustache:templateName[?options]
         <td> Characters used to mark template code end. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mustache_HSH_MustacheContext"></a>Mustache Context</h2></div></div></div><p></p><p>Camel will provide exchange information in the Mustache context (just a <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transferred as:
 
-    </p><table id="d0e131866"><tr>
+    </p><table id="d0e131219"><tr>
         <th> key </th>
         <th> value </th>
       </tr><tr>
@@ -67,7 +67,7 @@ mustache:templateName[?options]
         <td> The Out message (only for InOut message exchange pattern). </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mustache_HSH_Dynamictemplates"></a>Dynamic templates</h2></div></div></div><p></p><p>Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
-    </p><table id="d0e131960"><tr>
+    </p><table id="d0e131313"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

@@ -11,7 +11,7 @@
     &lt;artifactId&gt;camel-smpp&lt;/artifactId&gt;
     &lt;version&gt;2.18.1.redhat-000005&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e159386"></a>SMS limitations</h2></div></div></div><p>SMS is neither reliable or secure. Users who require reliable and secure delivery may
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e158739"></a>SMS limitations</h2></div></div></div><p>SMS is neither reliable or secure. Users who require reliable and secure delivery may
             want to consider using the XMPP or SIP components instead, combined with a smartphone
             app supporting the chosen protocol.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>Reliability:</em></span> although the SMPP standard offers a range of
                     feedback mechanisms to indicate errors, non-delivery and confirmation of
@@ -28,7 +28,7 @@
                     even the mobile telephone industry itself has cautioned against the use of SMS
                     in two-factor authentication schemes and other purposes where security is
                     important.</p></li></ul></div><p>While the Camel component makes it as easy as possible to send messages to the SMS
-            network, it can not offer an easy solution to these problems.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e159404"></a>Data coding, alphabet and international character sets</h2></div></div></div><p>Data coding and alphabet can be specified on a per-message basis. Default values can
+            network, it can not offer an easy solution to these problems.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e158757"></a>Data coding, alphabet and international character sets</h2></div></div></div><p>Data coding and alphabet can be specified on a per-message basis. Default values can
             be specified for the endpoint. It is important to understand the relationship between
             these options and the way the component acts when more than one value is set.</p><p>Data coding is an 8 bit field in the SMPP wire format. Alphabet corresponds to bits
             0-3 of the data coding field. For some types of message, where a message class is used
@@ -58,7 +58,7 @@
             but it is not guaranteed. The SMPP gateway Nexmo actually allows the default to be
             mapped to any other character set with a control panel option. It is suggested that
             users check with their SMSC operator to confirm exactly which character set is being
-            used as the default.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e159439"></a>Message splitting and throttling</h2></div></div></div><p>After transforming a message body from a <code class="code">String</code> to a <code class="code">byte</code>
+            used as the default.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e158792"></a>Message splitting and throttling</h2></div></div></div><p>After transforming a message body from a <code class="code">String</code> to a <code class="code">byte</code>
             array, the Camel component is also responsible for splitting the message into parts
             (within the 140 byte SMS size limit) before passing it to JSMPP. This is completed
             automatically.</p><p>If the GSM 3.38 alphabet is used, the component will pack up to 160 characters into
@@ -76,7 +76,7 @@ smpps://[username@]hostname[:port][?options]</pre><p>If no <span class="bold"><s
         <code class="code">smpps</code>, camel-smpp with try to use SSLSocket to init a connection to the
       server.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SMPP_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e159490"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SMPP_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e158843"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -351,7 +351,7 @@ smpps://[username@]hostname[:port][?options]</pre><p>If no <span class="bold"><s
                     proxy server while establishing the connection. </td>
             </tr></table><p>You can have as many of these options as you like.</p><pre class="programlisting">smpp://smppclient@localhost:2775?password=password&amp;enquireLinkTimer=3000&amp;transactionTimer=5000&amp;systemType=consumer</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SMPP_HSH_ProducerMessageHeaders"></a>Producer Message Headers</h2></div></div></div><p>The following message headers can be used to affect the behavior of the SMPP producer
 
-    </p><table id="d0e160499"><tr>
+    </p><table id="d0e159852"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -514,7 +514,7 @@ smpps://[username@]hostname[:port][?options]</pre><p>If no <span class="bold"><s
                 </td>
             </tr></table><p>The following message headers are used by the SMPP producer to set the response from the SMSC in the message header
 
-    </p><table id="d0e161162"><tr>
+    </p><table id="d0e160515"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -556,7 +556,7 @@ smpps://[username@]hostname[:port][?options]</pre><p>If no <span class="bold"><s
         </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SMPP_HSH_ConsumerMessageHeaders"></a>Consumer Message Headers</h2></div></div></div><p>The following message headers are used by the SMPP consumer to set the request data from the SMSC in the message header
 
-    </p><table width="964" id="d0e161319"><col width="294pt"><col width="208pt"><col width="454pt"><tr>
+    </p><table width="964" id="d0e160672"><col width="294pt"><col width="208pt"><col width="454pt"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

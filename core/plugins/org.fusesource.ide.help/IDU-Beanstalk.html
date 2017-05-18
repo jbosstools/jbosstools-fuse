@@ -3,13 +3,13 @@
    <title>Beanstalk</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-BeanValidation.html" title="Bean Validator"><link rel="next" href="IDU-Bindy.html" title="Bindy"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Beanstalk"></a>Beanstalk</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Beanstalk_HSH_BeanstalkComponent"></a>Beanstalk component</h2></div></div></div><p><span class="bold"><strong>Available in Camel
             2.15</strong></span></p><p>camel-beanstalk project provides a Camel component for job retrieval
                 and post-processing of Beanstalk jobs.</p><p>You can find the detailed explanation of Beanstalk job life cycle at <a class="link" href="http://github.com/kr/beanstalkd/blob/v1.3/doc/protocol.txt" target="_top">Beanstalk
-                protocol</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56474"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following
+                protocol</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55896"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following
             dependency to their <code class="code">pom.xml</code></p><pre class="programlisting">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
   &lt;artifactId&gt;camel-beanstalk&lt;/artifactId&gt;
   &lt;version&gt;${camel-version}&lt;/version&gt;
 &lt;/dependency&gt;</pre><p>where <code class="code">${camel-version</code>} must be replaced by the actual version of
-            Camel (2.15.0 or higher).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56488"></a>URI format</h2></div></div></div><pre class="programlisting">beanstalk://[host[:port]][/tube][?options]</pre><p>You may omit either <code class="code">port</code> or both <code class="code">host</code> and
+            Camel (2.15.0 or higher).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55910"></a>URI format</h2></div></div></div><pre class="programlisting">beanstalk://[host[:port]][/tube][?options]</pre><p>You may omit either <code class="code">port</code> or both <code class="code">host</code> and
             <code class="code">port</code>: for the Beanstalk defaults to be used (&#8220;localhost&#8221; and 11300). If
             you omit <code class="code">tube</code>, Beanstalk component will use the tube with name
             &#8220;default&#8221;.</p><p>When listening, you may probably want to watch for jobs from several
@@ -17,7 +17,7 @@
             tube names include special characters like + or ?, you need to URL-encode them
             appropriately, or use the RAW syntax, see <a class="link" href="/confluence/display/CAMEL/How+do+I+configure+endpoints" target="_top">more details
                 here</a>.</p><p>By the way, you cannot specify several tubes when you are
-                    writing jobs into Beanstalk.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56518"></a>Common URI options</h2></div></div></div><table id="d0e56521"><tbody><tr>
+                    writing jobs into Beanstalk.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55940"></a>Common URI options</h2></div></div></div><table id="d0e55943"><tbody><tr>
                                 <th><p>Name</p></th>
                                 <th><p>Default value</p></th>
                                 <th><p>Description</p></th>
@@ -36,8 +36,8 @@
                                 <td>Job time to run in seconds.
                                     (when 0, the beanstalkd daemon raises it to 1
                                         automatically, see <a class="link" href="http://github.com/kr/beanstalkd/blob/v1.3/doc/protocol.txt" target="_top">Beanstalk protocol</a>)</td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56576"></a>Producer UIR options</h2></div></div></div><p>Producer behaviour is affected by the <code class="code">command</code> parameter which tells what to do
-            with the job, it can be</p><table id="d0e56584"><tbody><tr>
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55998"></a>Producer UIR options</h2></div></div></div><p>Producer behaviour is affected by the <code class="code">command</code> parameter which tells what to do
+            with the job, it can be</p><table id="d0e56006"><tbody><tr>
                                 <th><p>Name</p></th>
                                 <th><p>Default value</p></th>
                                 <th><p>Description</p></th>
@@ -55,7 +55,7 @@
                                         the message body and returns the number of jobs actually
                                         kicked out in the message header
                                         <span class="emphasis"><em>beanstalk.result</em></span>.</p></li></ul></div></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56647"></a>Consumer UIR options</h2></div></div></div><p>The consumer may delete the job immediately
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56069"></a>Consumer UIR options</h2></div></div></div><p>The consumer may delete the job immediately
             after reserving it or wait until Camel routes process it. While the first scenario is
             more like a &#8220;message queue&#8221;, the second is similar to &#8220;job queue&#8221;. This behavior is
             controlled by <code class="code">consumer.awaitJob</code> parameter, which equals <code class="code">true</code>
@@ -68,7 +68,7 @@
                     parameter in JavaBeanstalkClient library. By default it is <code class="code">true</code>.</p><p>Be
                         careful when specifying <code class="code">release</code>, as the failed job will immediately become
                         available in the same tube and your consumer will try to acquire it again. You can
-                        <code class="code">release</code> and specify <span class="emphasis"><em>jobDelay</em></span> though.</p><table id="d0e56697"><tbody><tr>
+                        <code class="code">release</code> and specify <span class="emphasis"><em>jobDelay</em></span> though.</p><table id="d0e56119"><tbody><tr>
                                 <th><p>Name</p></th>
                                 <th><p>Default value</p></th>
                                 <th><p>Description</p></th>
@@ -87,9 +87,9 @@
                                 <td>Whether to wait for job to
                                     complete before ack the job from beanstalk</td>
                             </tr></tbody></table><p></p><p>The beanstalk consumer is a Scheduled Polling Consumer which means there is more options you can configure, such as how frequent the consumer should poll. For more details see <a class="link" href="http://camel.apache.org/polling-consumer.html" target="_top">Polling
-                        Consumer</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56752"></a>Consumer
+                        Consumer</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56174"></a>Consumer
             Headers</h2></div></div></div><p>The consumer stores a number of job headers in the Exchange
-                message:</p><table id="d0e56757"><tbody><tr>
+                message:</p><table id="d0e56179"><tbody><tr>
                                         <th><p>Property</p></th>
                                         <th><p>Type</p></th>
                                         <th><p>Description</p></th>
@@ -141,7 +141,7 @@
                                         <td>int</td>
                                         <td>the number of times this job has been
                                             kicked</td>
-                                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56893"></a>Examples</h2></div></div></div><p>This Camel component lets you both request the jobs for
+                                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56315"></a>Examples</h2></div></div></div><p>This Camel component lets you both request the jobs for
             processing and supply them to Beanstalkd daemon. Our simple demo routes may look
             like</p><pre class="programlisting">from("beanstalk:testTube").
    log("Processing job #${property.beanstalk.jobId} with body ${in.body}").

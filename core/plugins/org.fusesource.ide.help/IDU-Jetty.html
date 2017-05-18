@@ -17,7 +17,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jetty:http://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e108477"><tr>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e107853"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -370,14 +370,7 @@
                         defined using the syntax,
                                 <code class="code"><em class="replaceable"><code>from</code></em>-<em class="replaceable"><code>to</code></em></code>.</p>
                 </td>
-            </tr><tr>
-	        <td><code class="literal">connectionClose</code>
-	        </td>
-	        <td><code class="literal">false</code>
-	        </td>
-	        <td><span class="bold"><strong>Camel 2.18:</strong></span> If this option is <span class="bold"><strong>true</strong></span>, the producer will add a <code class="literal">Connection Close</code> header to the HTTP Request.
-	        </td>
-	    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel uses the same message headers as the <a href="IDU-HTTP.html" class="olink">HTTP</a>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel uses the same message headers as the <a href="IDU-HTTP.html" class="olink">HTTP</a>
             component. From Camel 2.2, it also uses (Exchange.HTTP_CHUNKED,CamelHttpChunked) header
             to turn on or turn off the chuched encoding on the camel-jetty consumer.</p><p>Camel also populates <span class="bold"><strong>all</strong></span> request.parameter and
             request.headers. For example, given a client request with the URL, <code class="literal">
@@ -388,7 +381,7 @@
                 Component</a>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">JettyHttpComponent</code> provides the following options:
             
-        </p><table id="d0e109354"><tr>
+        </p><table id="d0e108707"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -808,7 +801,7 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
             &lt;entry key="maxIdleTime" value="300000"/&gt;
         &lt;/map&gt;
     &lt;/property&gt;
-&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e110188"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e109541"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
                 <code class="code">mod_proxy</code>, the original client IP address is in the
                 <code class="code">X-Forwarded-For</code> header and the
                 <code class="code">HttpServletRequest.getRemoteAddr()</code> will return the address of the
