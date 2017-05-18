@@ -73,7 +73,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
 	private Combo camelVersionCombo;
-	private Button camelVersionValidationBtn;
 	private StyledText camelInfoText;
 	private Label warningIconLabel;
 
@@ -174,15 +173,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			}
 		});
 
-		camelVersionCombo.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validate();
-			}
-		});
+		camelVersionCombo.addModifyListener(e -> validate());
 		
-		camelVersionValidationBtn = new Button(camelGrp, SWT.PUSH);
+		Button camelVersionValidationBtn = new Button(camelGrp, SWT.PUSH);
 		GridData camelButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		camelVersionValidationBtn.setLayoutData(camelButtonData);
 		camelVersionValidationBtn.setText(Messages.newProjectWizardRuntimePageCamelVersionValidationLabel);
@@ -328,39 +321,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			// determine the camel version of that runtime
 			String runtimeCamelVersion = determineRuntimeCamelVersion(getSelectedRuntime());
 
-			if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
-				if (!Widgets.isDisposed(camelVersionCombo)){
-					camelVersionCombo.setEnabled(true);
-				}
-				camelInfoText.setText(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
-			} else {
-				// and compare if selected camel version fits that version
-				if (!isCompatible(runtimeCamelVersion, getSelectedCamelVersion())) {
-					// Display warning and suggest the correct version
-					camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionsDontMatchWarning, runtimeCamelVersion));
-				} else {
-					camelInfoText.setText(""); //$NON-NLS-1$
-				}
-				if (!Widgets.isDisposed(camelVersionCombo)){
-					camelVersionCombo.setEnabled(false);
-				}
-			}
+			validateForRuntimeCamelVersion(runtimeCamelVersion);
 		} else {
-			if (!Widgets.isDisposed(camelVersionCombo)){
-				camelVersionCombo.setEnabled(true);
-			}		
-			if (!Widgets.isDisposed(camelVersionCombo)) {
-				String selectedCamelVersion = camelVersionCombo.getText();
-				if (!isValidCamelVersionSyntax(selectedCamelVersion)) {
-					if (!Widgets.isDisposed(camelInfoText)) {
-						camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidSyntaxWarning, selectedCamelVersion)); //$NON-NLS-1$
-					}
-				} else {
-					if (!Widgets.isDisposed(camelInfoText)) {
-						camelInfoText.setText(""); //$NON-NLS-1$
-					}
-				}
-			}
+			validateWithoutRuntimeSelected();
 		}
 		
 		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
@@ -373,6 +336,45 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			setPageComplete(!Strings.isBlank(getSelectedRuntimeAsString()) && 
 							!Strings.isBlank(camelVersionCombo.getText()) &&
 							!warningIconLabel.isVisible());
+		}
+	}
+
+	private void validateWithoutRuntimeSelected() {
+		if (!Widgets.isDisposed(camelVersionCombo)){
+			camelVersionCombo.setEnabled(true);
+		}
+		
+		if (!Widgets.isDisposed(camelVersionCombo)) {
+			String selectedCamelVersion = camelVersionCombo.getText();
+			if (!isValidCamelVersionSyntax(selectedCamelVersion)) {
+				if (!Widgets.isDisposed(camelInfoText)) {
+					camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidSyntaxWarning, selectedCamelVersion)); //$NON-NLS-1$
+				}
+			} else {
+				if (!Widgets.isDisposed(camelInfoText)) {
+					camelInfoText.setText(""); //$NON-NLS-1$
+				}
+			}
+		}
+	}
+
+	private void validateForRuntimeCamelVersion(String runtimeCamelVersion) {
+		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
+			if (!Widgets.isDisposed(camelVersionCombo)){
+				camelVersionCombo.setEnabled(true);
+			}
+			camelInfoText.setText(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
+		} else {
+			// and compare if selected camel version fits that version
+			if (!isCompatible(runtimeCamelVersion, getSelectedCamelVersion())) {
+				// Display warning and suggest the correct version
+				camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionsDontMatchWarning, runtimeCamelVersion));
+			} else {
+				camelInfoText.setText(""); //$NON-NLS-1$
+			}
+			if (!Widgets.isDisposed(camelVersionCombo)){
+				camelVersionCombo.setEnabled(false);
+			}
 		}
 	}
 	
@@ -402,7 +404,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 	
 	public boolean isWarningShown() {
-		if (!Widgets.isDisposed(camelInfoText)) return !camelInfoText.getText().trim().isEmpty();
+		if (!Widgets.isDisposed(camelInfoText)) {
+			return !camelInfoText.getText().trim().isEmpty();
+		}
 		return false;
 	}
 	
@@ -515,5 +519,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 */
 	public void setCamelInfoText(StyledText camelInfoText) {
 		this.camelInfoText = camelInfoText;
+	}
+	
+	/**
+	 * /!\ Public for test purpose 
+	 */
+	public void setCamelVersionCombo(Combo camelVersionCombo) {
+		this.camelVersionCombo = camelVersionCombo;
 	}
 }
