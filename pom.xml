@@ -42,7 +42,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- JBoss Tools Integration Stack version -->
-		<jbtis.version>4.4.3.Final-SNAPSHOT</jbtis.version>
+		<jbtis.version>4.4.3.Final</jbtis.version>
 		<jbtis.classifier>base</jbtis.classifier> <!-- base-ea -->
 
 		<!-- Tycho versions -->
