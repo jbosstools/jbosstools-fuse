@@ -46,7 +46,7 @@ public static class MyConfig extends SingleRouteCamelConfiguration {
                         <code class="code">name.not.used</code>.</p><p>All Metrics specific headers are removed from the message once Metrics
                     endpoint finishes processing of exchange. While processing exchange Metrics
                     endpoint will catch all exceptions and write log entry using level
-                        <code class="code">warn</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-311"></a>Metrics type counter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:counter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-312"></a>Options</h2></div></div></div><table id="d0e126398"><colgroup> </colgroup><thead><tr>
+                        <code class="code">warn</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-311"></a>Metrics type counter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:counter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-312"></a>Options</h2></div></div></div><table id="d0e127045"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -89,7 +89,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:counter:simple.counter?decrement=3")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-313"></a>Headers</h2></div></div></div><p>Message headers can be used to override <code class="code">increment</code> and
-                        <code class="code">decrement</code> values specified in Metrics component URI.</p><table id="d0e126497"><colgroup> </colgroup><thead><tr>
+                        <code class="code">decrement</code> values specified in Metrics component URI.</p><table id="d0e127144"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -127,7 +127,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_COUNTER_INCREMENT, simple("${body.length}"))
     .to("metrics:counter:body.length")
-    .to("mock:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-314"></a>Metric type histogram</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:histogram:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-315"></a>Options</h2></div></div></div><table id="d0e126577"><colgroup> </colgroup><thead><tr>
+    .to("mock:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-314"></a>Metric type histogram</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:histogram:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-315"></a>Options</h2></div></div></div><table id="d0e127224"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -155,7 +155,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:histogram:simple.histogram")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-316"></a>Headers</h2></div></div></div><p>Message header can be used to override value specified in Metrics component
-                    URI.</p><table id="d0e126638"><colgroup> </colgroup><thead><tr>
+                    URI.</p><table id="d0e127285"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -179,7 +179,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_HISTOGRAM_VALUE, constant(992L))
     .to("metric:histogram:simple.histogram?value=700")
-    .to("direct:out")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-317"></a>Metric type meter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:meter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-318"></a>Options</h2></div></div></div><table id="d0e126695"><colgroup> </colgroup><thead><tr>
+    .to("direct:out")</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-317"></a>Metric type meter</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:meter:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-318"></a>Options</h2></div></div></div><table id="d0e127342"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -207,7 +207,7 @@ from("direct:in")
 from("direct:in")
     .to("metric:meter:simple.meter?mark=81")
     .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-319"></a>Headers</h2></div></div></div><p>Message header can be used to override <code class="code">mark</code> value specified in
-                    Metrics component URI.</p><table id="d0e126762"><colgroup> </colgroup><thead><tr>
+                    Metrics component URI.</p><table id="d0e127409"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -231,7 +231,7 @@ from("direct:in")
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_METER_MARK, constant(345L))
     .to("metric:meter:simple.meter?mark=123")
-    .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-320"></a>Metrics type timer</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:timer:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-321"></a>Options</h2></div></div></div><table id="d0e126819"><colgroup> </colgroup><thead><tr>
+    .to("direct:out");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-320"></a>Metrics type timer</h2></div></div></div><div class="informalexample"><pre class="programlisting">metrics:timer:metricname[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-321"></a>Options</h2></div></div></div><table id="d0e127466"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -260,7 +260,7 @@ from("direct:in")
     .to("direct:calculate")
     .to("metrics:timer:simple.timer?action=stop");</pre></div><p><code class="code">TimerContext</code> objects are stored as Exchange properties between
                     different Metrics component calls.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-322"></a>Headers</h2></div></div></div><p>Message header can be used to override action value specified in Metrics
-                    component URI.</p><table id="d0e126887"><colgroup> </colgroup><thead><tr>
+                    component URI.</p><table id="d0e127534"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Name</p>
                             </td>
@@ -291,7 +291,7 @@ from("direct:in")
                     instrument a few selected routes.</p></td></tr></table></div><p>From Java you just add the factory to the <code class="code">CamelContext</code> as shown
                 below:</p><div class="informalexample"><pre class="programlisting">context.addRoutePolicyFactory(new MetricsRoutePolicyFactory());</pre></div><p>And from XML DSL you define a &lt;bean&gt; as follows:</p><div class="informalexample"><pre class="programlisting">&lt;!-- use camel-metrics route policy to gather metrics for all routes --&gt;
 &lt;bean id="metricsRoutePolicyFactory" class="org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory"/&gt;</pre></div><p>The <code class="code">MetricsRoutePolicyFactory</code> and <code class="code">MetricsRoutePolicy</code>
-                supports the following options:</p><table id="d0e126968"><colgroup> </colgroup><thead><tr>
+                supports the following options:</p><table id="d0e127615"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Name</p>
                         </td>
@@ -396,7 +396,7 @@ from("direct:in")
 if (registryService != null) {
   MetricsRegistry registry = registryService.getMetricsRegistry();
   ...
-}</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e127191"></a>MetricsMessageHistoryFactory</h2></div></div></div><p>This factory allows to use metrics to capture Message History performance statistics
+}</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e127838"></a>MetricsMessageHistoryFactory</h2></div></div></div><p>This factory allows to use metrics to capture Message History performance statistics
             while routing messages. It works by using a metrics Timer for each node in all the
             routes. This factory can be used in Java and XML as the examples below demonstrates. </p><p>From Java you just set the factory to the CamelContext as shown below:</p><pre class="programlisting">context.setMessageHistoryFactory(new MetricsMessageHistoryFactory());</pre><p>And from XML DSL you define a &lt;bean&gt; as follows:</p><pre class="programlisting">&lt;!-- use camel-metrics message history to gather metrics for all messages being routed --&gt;
 &lt;bean id="metricsMessageHistoryFactory" class="org.apache.camel.component.metrics.messagehistory.MetricsMessageHistoryFactory"/&gt;</pre><p>The following options are supported on the factory:</p><div class="informaltable"><table border="1"><colgroup><col width="29%" class="c1"><col width="16%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">useJmx</code></td><td><code class="code">false</code></td><td>Whether to report fine-grained statistics to JMX using the

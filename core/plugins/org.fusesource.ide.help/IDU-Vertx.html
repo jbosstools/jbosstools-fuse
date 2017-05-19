@@ -9,7 +9,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>From <span class="bold"><strong>Camel 2.16</strong></span> onwards, uses Vertx 3 which
                 requires Java 8 at run time.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Vertx_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">vertx:channelName[?options]</pre><p>You can append query options to the URI in the following format,
-                <code class="code">?option=value&amp;amp;option=value&amp;amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-1963"></a>Options</h2></div></div></div><table id="d0e175257"><colgroup> </colgroup><thead><tr>
+                <code class="code">?option=value&amp;amp;option=value&amp;amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-1963"></a>Options</h2></div></div></div><table id="d0e175904"><colgroup> </colgroup><thead><tr>
                     <td>
                         <p>Name</p>
                     </td>
@@ -31,7 +31,7 @@
                             publish/subscribe instead of point to point when sending to a vertx
                             endpoint.</p>
                     </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e175306"></a>Connecting to the existing Vert.x instance</h2></div></div></div><p>If you would like to connect to the Vert.x instance already existing in your JVM, you
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e175953"></a>Connecting to the existing Vert.x instance</h2></div></div></div><p>If you would like to connect to the Vert.x instance already existing in your JVM, you
             can set the instance on the component level:</p><pre class="programlisting">Vertx vertx = ...;
 VertxComponent vertxComponent = new VertxComponent();
 vertxComponent.setVertx(vertx);

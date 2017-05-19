@@ -14,7 +14,6 @@
             <topic label="Connecting patterns to make a route" href="RiderPatternConnect.html"/>
             <topic label="Configuring a pattern" href="RiderPatternConfig.html"/>
             <topic label="Removing patterns from a route" href="RiderRemovePattern.html"/>
-            <topic label="Disconnecting two patterns" href="RiderRemoveConnect.html"/>
             <topic label="Deleting a route" href="RiderRemoveRoute.html"/>
             <topic label="Adding beans and configuration" href="RiderAddBeans.html"/>
             <topic label="Adding global endpoints and data formats" href="RiderAddGlobalCnfg.html"/>
@@ -50,7 +49,10 @@
       </topic>
       <topic label="Debugging Routing Contexts" href="RiderCamelDebugger.html">
          <topic label="Setting Breakpoints" href="setBreakpoints.html"/>
-         <topic label="Starting the Camel Debugger" href="startDebugger.html"/>
+         <topic label="Running the Camel Debugger" href="startDebugger.html">
+            <topic label="Debugging a locally running routing context" href="localDebug.html"/>
+            <topic label="Debugging a remotely running routing context" href="remoteDebug.html"/>
+         </topic>
          <topic label="Stopping the Camel Debugger" href="stopDebugger.html"/>
          <topic label="Changing Variable Values" href="editVariables.html"/>
          <topic label="Adding Variables to the Watch List" href="addWatchList.html"/>
@@ -77,7 +79,6 @@
             <topic label="Adding a routing endpoint" href="RiderAddEndpoint.html"/>
             <topic label="Deleting a routing endpoint" href="RiderDeleteEndpoint.html"/>
          </topic>
-         <topic label="Editing running routes" href="RiderEditRunRoute.html"/>
          <topic label="Managing routing contexts" href="RiderManageRouteContexts.html">
             <topic label="Suspending a routing context" href="RiderContextSuspend.html"/>
             <topic label="Resuming a routing context" href="RiderContextResume.html"/>
@@ -170,6 +171,7 @@
          <topic label="Aggregate" href="aggregate.html"/>
          <topic label="Choice" href="choice.html"/>
          <topic label="Filter" href="filter.html"/>
+         <topic label="Hystrix" href="hystrix.html"/>
          <topic label="Idempotent Consumer" href="idempotentConsumer.html"/>
          <topic label="Load Balance" href="loadBalance.html"/>
          <topic label="Multicast" href="multicast.html"/>
