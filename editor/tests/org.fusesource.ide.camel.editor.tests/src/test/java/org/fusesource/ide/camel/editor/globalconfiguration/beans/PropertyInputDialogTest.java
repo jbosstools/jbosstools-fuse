@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.foundation.ui.util.Shells;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
@@ -32,7 +32,7 @@ public class PropertyInputDialogTest {
 
 	@Test
 	public void testValidate() {
-		PropertyInputDialog dialog = new PropertyInputDialog(Display.getDefault().getActiveShell());
+		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
 		Assertions.assertThat(dialog.validate(null, null)).isNotNull();
 		Assertions.assertThat(dialog.validate(TESTNAME, null)).isNotNull();
 		Assertions.assertThat(dialog.validate(null, TESTVALUE)).isNotNull();
@@ -41,7 +41,7 @@ public class PropertyInputDialogTest {
 
 	@Test
 	public void testValidateWithPropertyList() {
-		PropertyInputDialog dialog = new PropertyInputDialog(Display.getDefault().getActiveShell());
+		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
 		List<AbstractCamelModelElement> propertyList = new ArrayList<>();
 		Element propertyNode = beanConfigUtil.createBeanProperty(TESTNAME, TESTVALUE);
 		CamelBasicModelElement newProperty = new CamelBasicModelElement(null, propertyNode);
