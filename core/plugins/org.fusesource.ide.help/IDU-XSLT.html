@@ -7,7 +7,7 @@
             template to invoke; or the complete URL of the remote template. Refer to the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/core/io/DefaultResourceLoader.html" target="_top">Spring Documentation for more detail of the URI syntax</a>
         </p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p><p>Here are some example URIs</p><table id="d0e178694"><tr>
+        </p><p>Here are some example URIs</p><table id="d0e179341"><tr>
                 <th> URI </th>
                 <th> Description </th>
             </tr><tr>
@@ -29,7 +29,7 @@
                 </td>
                 <td> Refers to the remote HTTP resource.</td>
             </tr></table><p>From Camel 2.9 onwards the <a href="IDU-XSLT.html" class="olink">XSLT</a> component is
-            provided directly in the camel-core.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Options"></a>Options</h2></div></div></div><table id="d0e178758"><tr>
+            provided directly in the camel-core.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XSLT_HSH_Options"></a>Options</h2></div></div></div><table id="d0e179405"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -208,7 +208,7 @@
             and then mix and match. And have both file and classpath loading. But that would be
             unusual, as most people either use file or classpath based resources.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
   XSLT can load the resource file from the Registry by using <em class="parameter"><code>ref:</code></em> as prefix.
-  </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e179223"></a>Using Saxon extension functions</h2></div></div></div><p>Since Saxon 9.2, writing extension functions has been supplemented by a new mechanism,
+  </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e179870"></a>Using Saxon extension functions</h2></div></div></div><p>Since Saxon 9.2, writing extension functions has been supplemented by a new mechanism,
             referred to as integrated extension functions you can now easily use camel:</p><p>Java example:</p><pre class="programlisting">SimpleRegistry registry = new SimpleRegistry();
 registry.put("function1", new MyExtensionFunction1());
 registry.put("function2", new MyExtensionFunction2());
