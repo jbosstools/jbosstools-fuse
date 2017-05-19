@@ -13,12 +13,12 @@
     &lt;artifactId&gt;camel-dozer&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72402"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72980"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
- </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72407"></a>URI format</h2></div></div></div><p>The Dozer component only supports producer endpoints.</p><pre class="programlisting">dozer:endpointId[?options]</pre><p>Where <span class="bold"><strong>endpointId</strong></span> is a name used to uniquely identify
+ </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72985"></a>URI format</h2></div></div></div><p>The Dozer component only supports producer endpoints.</p><pre class="programlisting">dozer:endpointId[?options]</pre><p>Where <span class="bold"><strong>endpointId</strong></span> is a name used to uniquely identify
             the Dozer endpoint configuration. </p><p>An example Dozer endpoint URI:</p><pre class="programlisting">from("direct:orderInput").
   to("dozer:transformOrder?mappingFile=orderMapping.xml&amp;targetModel=example.XYZOrder").
-  to("direct:orderOutput");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72423"></a>Options</h2></div></div></div><table id="d0e72426"><tbody><tr>
+  to("direct:orderOutput");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73001"></a>Options</h2></div></div></div><table id="d0e73004"><tbody><tr>
                     <th><p>Name</p></th>
                     <th><p>Default</p></th>
                     <th><p>Description</p></th>
@@ -61,7 +61,7 @@
                             Dozer is configured. Remember to use a "#" prefix in the value
                             to indicate that the bean is in the Camel registry (e.g.
                             "#myDozerConfig").</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72534"></a>Using Data Formats with Dozer</h2></div></div></div><p>Dozer does not support non-Java sources and targets for mappings, so it cannot, for
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73112"></a>Using Data Formats with Dozer</h2></div></div></div><p>Dozer does not support non-Java sources and targets for mappings, so it cannot, for
             example, map an XML document to a Java object on its own. Luckily, Camel has extensive
             support for marshalling between Java and a wide variety of formats using <a class="link" href="http://camel.apache.org/data-format.html" target="_top">data formats</a>. The Dozer
             component takes advantage of this support by allowing you to specify that input and
@@ -74,7 +74,7 @@
   &lt;json library="Jackson" id="myjson"/&gt;
   &lt;jaxb contextPath="org.example" id="myjaxb"/&gt;
 &lt;/dataFormats&gt;</pre><p>You could then configure a Dozer endpoint to unmarshal the input XML using a JAXB data
-            format and marshal the mapping output using Jackson.</p><pre class="programlisting">&lt;endpoint uri="dozer:xml2json?marshalId=myjson&amp;amp;unmarshalId=myjaxb&amp;amp;targetModel=org.example.Order"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72550"></a>Configuring Dozer</h2></div></div></div><p>All Dozer endpoints require a Dozer mapping configuration file which defines mappings
+            format and marshal the mapping output using Jackson.</p><pre class="programlisting">&lt;endpoint uri="dozer:xml2json?marshalId=myjson&amp;amp;unmarshalId=myjaxb&amp;amp;targetModel=org.example.Order"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73128"></a>Configuring Dozer</h2></div></div></div><p>All Dozer endpoints require a Dozer mapping configuration file which defines mappings
             between source and target objects. The component will default to a location of
             META-INF/dozerBeanMapping.xml if the mappingFile or mappingConfiguration options are not
             specified on an endpoint. If you need to supply multiple mapping configuration files for
@@ -87,9 +87,9 @@
       &lt;value&gt;mapping2.xml&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
-&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72560"></a>Mapping Extensions</h2></div></div></div><p>The Dozer component implements a number of extensions to the Dozer mapping framework
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73138"></a>Mapping Extensions</h2></div></div></div><p>The Dozer component implements a number of extensions to the Dozer mapping framework
             as custom converters. These converters implement mapping functions that are not
-            supported directly by Dozer itself.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72565"></a>Variable Mappings</h2></div></div></div><p>Variable mappings allow you to map the value of a variable definition within a Dozer
+            supported directly by Dozer itself.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73143"></a>Variable Mappings</h2></div></div></div><p>Variable mappings allow you to map the value of a variable definition within a Dozer
             configuration into a target field instead of using the value of a source field. This is
             equivalent to constant mapping in other mapping frameworks, where can you assign a
             literal value to a target field. To use a variable mapping, simply define a variable
@@ -110,7 +110,7 @@
       &lt;b&gt;custId&lt;/b&gt;
     &lt;/field&gt;
   &lt;/mapping&gt;
-&lt;/mappings&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72572"></a>Custom Mappings</h2></div></div></div><p>Custom mappings allow you to define your own logic for how a source field is mapped to
+&lt;/mappings&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73150"></a>Custom Mappings</h2></div></div></div><p>Custom mappings allow you to define your own logic for how a source field is mapped to
             a target field. They are similar in function to Dozer customer converters, with two
             notable differences:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>You can have multiple converter methods in a single class with custom
                 mappings.</p></li><li class="listitem"><p>There is no requirement to implement a Dozer-specific interface with
@@ -134,7 +134,7 @@
       &lt;b&gt;custId&lt;/b&gt;
     &lt;/field&gt;
   &lt;/mapping&gt;
-&lt;/mappings&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72595"></a>Expression Mappings</h2></div></div></div><p>Expression mappings allow you to use the powerful <a class="link" href="http://camel.apache.org/languages.html" target="_top">language</a> capabilities of Camel to
+&lt;/mappings&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73173"></a>Expression Mappings</h2></div></div></div><p>Expression mappings allow you to use the powerful <a class="link" href="http://camel.apache.org/languages.html" target="_top">language</a> capabilities of Camel to
             evaluate an expression and assign the result to a target field in a mapping. Any
             language that Camel supports can be used in an expression mapping. Basic examples of
             expressions include the ability to map a Camel message header or exchange property to a
@@ -152,7 +152,7 @@
   &lt;/mapping&gt;
 &lt;/mappings&gt;</pre><p>Note that any properties within your expression must be escaped with "\" to
             prevent an error when Dozer attempts to resolve variable values defined using the
-            EL.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72611"></a>Dozer type conversions</h2></div></div></div><p>The Dozer component provides the ability to map between Java beans, using the Dozer
+            EL.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73189"></a>Dozer type conversions</h2></div></div></div><p>The Dozer component provides the ability to map between Java beans, using the Dozer
             Mapping framework. However, Camel also supports the ability to trigger Dozer mappings as
             a type converter.  </p><pre class="programlisting">CamelContext camelctx = new DefaultCamelContext();
 camelctx.addRoutes(new RouteBuilder() {
