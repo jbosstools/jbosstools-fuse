@@ -13,7 +13,7 @@
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">yammer:[function]?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_YammerComponent"></a>YammerComponent</h2></div></div></div><p>The yammer component can be configured with the Yammer account settings which are
             mandatory to configure before using. You can also configure these options directly in
             the endpoint. 
-        </p><table id="d0e179325"><tr>
+        </p><table id="d0e179972"><tr>
                 <th> Option </th>
                 <th> Description </th>
             </tr><tr>
@@ -31,7 +31,7 @@
                     <code class="code">accessToken</code>
                 </td>
                 <td> The access token </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Consumingmessages"></a>Consuming messages</h2></div></div></div><p>The camel-yammer component provides several endpoints for consuming messages:</p><table id="d0e179372"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Consumingmessages"></a>Consuming messages</h2></div></div></div><p>The camel-yammer component provides several endpoints for consuming messages:</p><table id="d0e180019"><tr>
                 <th> URI </th>
                 <th> Description </th>
             </tr><tr>
@@ -83,7 +83,7 @@
                 </td>
                 <td><span class="bold"><strong>Camel 2.12.1:</strong></span> All messages received by the user
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforconsumingmessages"></a>URI Options for consuming messages</h2></div></div></div><p></p><table id="d0e179492"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforconsumingmessages"></a>URI Options for consuming messages</h2></div></div></div><p></p><table id="d0e180139"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -257,7 +257,7 @@
 Messages messages = exchange.getIn().getBody(Messages.class);
 
 assertEquals(1, messages.getMessages().size());
-assertEquals("Hi from Camel!", messages.getMessages().get(0).getBody().getPlain());        </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Retrievinguserrelationships"></a>Retrieving user relationships</h2></div></div></div><p>The camel-yammer component can retrieve user relationships:</p><pre class="programlisting">yammer:relationships?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforretrievingrelationships"></a>URI Options for retrieving relationships</h2></div></div></div><p></p><table id="d0e179705"><tr>
+assertEquals("Hi from Camel!", messages.getMessages().get(0).getBody().getPlain());        </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Retrievinguserrelationships"></a>Retrieving user relationships</h2></div></div></div><p>The camel-yammer component can retrieve user relationships:</p><pre class="programlisting">yammer:relationships?[options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforretrievingrelationships"></a>URI Options for retrieving relationships</h2></div></div></div><p></p><table id="d0e180352"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -294,7 +294,7 @@ assertEquals("Hi from Camel!", messages.getMessages().get(0).getBody().getPlain(
                 <td><code class="literal">current user</code>
                 </td>
                 <td> To view the relationships for a user other than the current user. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Retrievingusers"></a>Retrieving users</h2></div></div></div><p>The camel-yammer component provides several endpoints for retrieving users:</p><table id="d0e179809"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_Retrievingusers"></a>Retrieving users</h2></div></div></div><p>The camel-yammer component provides several endpoints for retrieving users:</p><table id="d0e180456"><tr>
                 <th> URI </th>
                 <th> Description </th>
             </tr><tr>
@@ -307,7 +307,7 @@ assertEquals("Hi from Camel!", messages.getMessages().get(0).getBody().getPlain(
                     <code class="code">yammer:current?[options]</code>
                 </td>
                 <td> View data about the current user. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforretrievingusers"></a>URI Options for retrieving users</h2></div></div></div><p></p><table id="d0e179844"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Yammer_HSH_URIOptionsforretrievingusers"></a>URI Options for retrieving users</h2></div></div></div><p></p><table id="d0e180491"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>

@@ -44,6 +44,10 @@
         <description>Finally Pattern</description>
         <topic href="finally.html" label="Exception Handling"/>
     </context>
+    <context id="hystrixEIP">
+        <description>Hystrix Pattern</description>
+        <topic href="hystrix.html" label="Hystrix"/>
+    </context>
     <context id="idempotentConsumerEIP">
         <description>Idempotent Consumer</description>
         <topic href="idempotentConsumer.html" label="Idempotent Consumer"/>
