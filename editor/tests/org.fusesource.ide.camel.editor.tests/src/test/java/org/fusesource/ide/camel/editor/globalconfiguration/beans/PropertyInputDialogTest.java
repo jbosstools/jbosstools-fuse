@@ -10,10 +10,11 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.foundation.ui.util.Shells;
@@ -31,12 +32,27 @@ public class PropertyInputDialogTest {
 	private static String TESTVALUE = "testValue"; //$NON-NLS-1$
 
 	@Test
-	public void testValidate() {
+	public void testValidateReturnErrorWhenBothEntryFieldsAreNull() {
 		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
-		Assertions.assertThat(dialog.validate(null, null)).isNotNull();
-		Assertions.assertThat(dialog.validate(TESTNAME, null)).isNotNull();
-		Assertions.assertThat(dialog.validate(null, TESTVALUE)).isNotNull();
-		Assertions.assertThat(dialog.validate(TESTNAME, TESTVALUE)).isNull();
+		assertThat(dialog.validate(null, null)).isNotNull();
+	}
+
+	@Test
+	public void testValidateReturnErrorWhenOnlyNameFieldIsNull() {
+		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
+		assertThat(dialog.validate(TESTNAME, null)).isNotNull();
+	}
+
+	@Test
+	public void testValidateReturnErrorWhenOnlyValueFieldIsNull() {
+		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
+		assertThat(dialog.validate(null, TESTVALUE)).isNotNull();
+	}
+
+	@Test
+	public void testValidateReturnErrorWhenBothEntryFieldsAreNotNull() {
+		PropertyInputDialog dialog = new PropertyInputDialog(Shells.getShell());
+		assertThat(dialog.validate(TESTNAME, TESTVALUE)).isNull();
 	}
 
 	@Test
@@ -47,7 +63,7 @@ public class PropertyInputDialogTest {
 		CamelBasicModelElement newProperty = new CamelBasicModelElement(null, propertyNode);
 		propertyList.add(newProperty);
 		dialog.setPropertyList(propertyList);
-		Assertions.assertThat(dialog.validate(TESTNAME, TESTVALUE)).isNotNull();
+		assertThat(dialog.validate(TESTNAME, TESTVALUE)).isNotNull();
 	}
 
 }
