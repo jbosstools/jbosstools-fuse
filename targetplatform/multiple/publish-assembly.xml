@@ -1,0 +1,24 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>publish</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <!-- to set zip output filename, use <finalName>${project.parent.artifactId}target-${project.version}</finalName> in pom's <configuration> -->
+	<fileSets>
+	  <fileSet>
+			<directory>${project.build.directory}/${project.artifactId}.target.repo</directory>
+			<!-- put files in root of zip with outputDirectory = '' -->
+	    <outputDirectory/>
+	    <includes>
+	      <include>*</include>
+	      <include>web/*</include>
+	      <include>binary/*</include>
+	      <include>plugins/*</include>
+	      <include>features/*</include>
+	    </includes>
+	  </fileSet>
+	</fileSets>
+</assembly>
