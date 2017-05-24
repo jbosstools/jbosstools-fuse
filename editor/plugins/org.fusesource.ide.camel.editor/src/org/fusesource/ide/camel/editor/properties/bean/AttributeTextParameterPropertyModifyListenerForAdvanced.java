@@ -21,20 +21,17 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
  */
 public class AttributeTextParameterPropertyModifyListenerForAdvanced extends AbstractTextParameterPropertyModifyListener {
 
-	private Parameter parameter;
-
 	public AttributeTextParameterPropertyModifyListenerForAdvanced(AbstractCamelModelElement camelModelElement, Parameter parameter) {
 		super(camelModelElement, parameter.getName());
-		this.parameter = parameter;
 	}
 
 	@Override
 	protected void updateModel(String newValue) {
 		if (camelModelElement instanceof CamelBean) {
 			CamelBean bean = (CamelBean) camelModelElement;
-			bean.setParameter(this.parameter.getName(), newValue);
+			bean.setParameter(parameterName, newValue);
 		} else {
-			camelModelElement.setParameter(this.parameter.getName(), newValue);
+			camelModelElement.setParameter(parameterName, newValue);
 		}
 	}
 }

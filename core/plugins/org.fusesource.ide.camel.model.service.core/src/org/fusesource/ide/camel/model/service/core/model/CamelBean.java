@@ -55,7 +55,7 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	
 	public CamelBean(String name) {
 		super(null, null);
-		setParameter(PROP_CLASS, name);
+		setClassName(name);
 	}
 	public String getClassName() {
 		return (String)getParameter(PROP_CLASS);
@@ -90,10 +90,25 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	
 	@Override
 	public void setParameter(String name, Object value) {
+		Object oldValue = getParameter(name);
+		if (oldValue == null && value == null) {
+			return;
+		}
+		if (oldValue == null && value instanceof String && Strings.isBlank((String)value)) {
+			return;
+		}
+		if (oldValue != null && value != null && oldValue.equals(value)) {
+			return;
+		}
+		if (oldValue != null && oldValue.equals(value)) {
+			return;
+		}
+		if (value != null && value.equals(oldValue)) {
+			return;
+		}
 		super.setParameter(name, value);
 		if (value instanceof String) {
-			String newValue = (String) value;
-			setAttributeValue(name, newValue);
+			setAttributeValue(name, (String) value);
 		}
 	}
 	
@@ -101,10 +116,11 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	public Object getParameter(String name) {
 		Object value = super.getParameter(name);
 		if (value != null) {
-			return super.getParameter(name);
+			return value;
 		}
 		return getAttributeValue(name);
 	}
+	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#setParent(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */

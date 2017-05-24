@@ -51,6 +51,8 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 	private Element selectedElement;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	private IProject project = null;
+	private ArgumentXMLStyleChildTableControl beanArgsTable;
+	private PropertyXMLStyleChildTableControl beanPropsTable;
 
 	/**
 	 * @param pageName
@@ -80,7 +82,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
-		final ArgumentXMLStyleChildTableControl beanArgsTable = new ArgumentXMLStyleChildTableControl(argsPropsGroup, SWT.NULL);
+		beanArgsTable = new ArgumentXMLStyleChildTableControl(argsPropsGroup, SWT.NULL);
 		beanArgsTable.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).span(4, 2).create());
 		beanArgsTable.setInput(selectedElement);
 
@@ -89,7 +91,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		beanPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
-		final PropertyXMLStyleChildTableControl beanPropsTable = new PropertyXMLStyleChildTableControl(beanPropsGroup, SWT.NULL);
+		beanPropsTable = new PropertyXMLStyleChildTableControl(beanPropsGroup, SWT.NULL);
 		beanPropsTable.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).span(4, 2).create());
 		beanPropsTable.setInput(selectedElement);
 
@@ -189,5 +191,11 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 
 	public void setElement(Element element) {
 		this.selectedElement = element;
+		if (this.beanPropsTable != null && !this.beanPropsTable.isDisposed()) {
+			this.beanPropsTable.setInput(this.selectedElement);
+		}
+		if (this.beanArgsTable != null && !this.beanArgsTable.isDisposed()) {
+			this.beanArgsTable.setInput(this.selectedElement);
+		}
 	}
 }

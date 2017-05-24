@@ -81,11 +81,11 @@ public class AttributeTextFieldPropertyUICreator extends AbstractTextFieldParame
 	@Override
 	protected void init(Composite parent) {
 		final Text txtField = getWidgetFactory().createText(parent, getInitialValue(), createTextStyle());
-		txtField.addModifyListener(modifyListener);
 		txtField.setLayoutData(createPropertyFieldLayoutData());
 		setControl(txtField);
 
 		setUiObservable(WidgetProperties.text(SWT.Modify).observeDelayed(500, txtField));
 		setValidator(createValidator());
+		txtField.addModifyListener(modifyListener);
 	}
 }
