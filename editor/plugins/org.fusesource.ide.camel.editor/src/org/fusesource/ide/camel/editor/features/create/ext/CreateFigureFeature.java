@@ -362,9 +362,11 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			// simple drop on a container
 			node = createNode(selectedContainerElement, selectedContainerElement != null);
 		}
-		node.initialize();
 
-		if (selectedContainerElement != null) {
+		if (selectedContainerElement != null && node != null) {
+			// initialize the node
+			node.initialize();
+			
 			// add the new node to the parent container
 			selectedContainerElement.addChildElement(node);
 			// and update the parent link
