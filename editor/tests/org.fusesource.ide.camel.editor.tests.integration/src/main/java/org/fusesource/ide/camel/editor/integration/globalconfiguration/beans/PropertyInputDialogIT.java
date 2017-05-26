@@ -8,13 +8,15 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.camel.editor.globalconfiguration.beans;
+package org.fusesource.ide.camel.editor.integration.globalconfiguration.beans;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.PropertyInputDialog;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.foundation.ui.util.Shells;
@@ -25,7 +27,7 @@ import org.w3c.dom.Element;
  * @author brianf
  *
  */
-public class PropertyInputDialogTest {
+public class PropertyInputDialogIT {
 
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	private static String TESTNAME = "testName"; //$NON-NLS-1$

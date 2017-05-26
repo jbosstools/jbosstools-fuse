@@ -97,7 +97,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 	 * @param newPropValue
 	 * @return
 	 */
-	protected String validate(String newPropName, String newPropValue) {
+	public String validate(String newPropName, String newPropValue) {
 		if (Strings.isEmpty(newPropName)) {
 			return "No property name specified. Please specify a property name.";
 		}
