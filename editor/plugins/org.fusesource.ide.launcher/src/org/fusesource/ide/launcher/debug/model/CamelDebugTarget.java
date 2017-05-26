@@ -291,7 +291,8 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			if (file != null) {
 				File f = new File(file);
 				IMarker marker = breakpoint.getMarker();
-				if (marker != null && marker.getResource() != null) {
+				// ensure that the camel file exists - it may not if the project was deleted
+				if (marker != null && marker.getResource() != null && f.exists()) {
 					return f.getPath().equals(marker.getResource().getLocation().toFile().getPath());
 				}
 			}
