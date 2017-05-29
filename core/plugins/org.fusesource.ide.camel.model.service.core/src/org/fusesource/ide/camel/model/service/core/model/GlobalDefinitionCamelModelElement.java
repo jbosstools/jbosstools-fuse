@@ -30,7 +30,10 @@ public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement
 	 */
 	@Override
 	protected void parseNode() {
+		if (getNodeTypeId().equalsIgnoreCase(BEAN_NODE)) {
+			super.parseNode();
+		}
 		// we don't want to parse global config nodes and just reuse the xml node 
-		// directly - see FUSETOOLS-1884
+		// directly - see FUSETOOLS-1884 (except for Beans)
 	}
 }

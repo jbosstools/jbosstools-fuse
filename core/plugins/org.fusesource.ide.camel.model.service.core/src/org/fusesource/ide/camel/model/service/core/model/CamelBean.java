@@ -10,10 +10,13 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
-import org.fusesource.ide.foundation.core.util.Strings;
-import org.w3c.dom.Element;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author bfitzpat
@@ -35,28 +38,22 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	public static final String TAG_PROPERTY = "property"; //$NON-NLS-1$
 	public static final String TAG_ARGUMENT = "argument"; //$NON-NLS-1$
 	public static final String TAG_CONSTRUCTOR_ARG = "constructor-arg"; //$NON-NLS-1$
-	private static final Object[] NO_CHILDREN = {};
-	
+
 	/**
 	 * @param parent
 	 * @param underlyingNode
 	 */
-	public CamelBean() {
-		super(null, null);
-	}
-
-	/**
-	 * @param parent
-	 * @param underlyingXmlNode
-	 */
-	public CamelBean(AbstractCamelModelElement parent, Node underlyingXmlNode) {
-		super(parent, underlyingXmlNode);
+	public CamelBean(AbstractCamelModelElement parent, Node underlyingNode) {
+		super(parent, underlyingNode);
+		setUnderlyingMetaModelObject(new GlobalBeanEIP());
 	}
 	
 	public CamelBean(String name) {
 		super(null, null);
-		setClassName(name);
+		setUnderlyingMetaModelObject(new GlobalBeanEIP());
+		setParameter(PROP_CLASS, name);
 	}
+	
 	public String getClassName() {
 		return (String)getParameter(PROP_CLASS);
 	}
@@ -88,159 +85,123 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 		setParameter(PROP_DESTROY_METHOD, value);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#getKind(java.lang.String)
+	 */
 	@Override
-	public void setParameter(String name, Object value) {
-		Object oldValue = getParameter(name);
-		if (oldValue == null && value == null) {
-			return;
-		}
-		if (oldValue == null && value instanceof String && Strings.isBlank((String)value)) {
-			return;
-		}
-		if (oldValue != null && value != null && oldValue.equals(value)) {
-			return;
-		}
-		if (oldValue != null && oldValue.equals(value)) {
-			return;
-		}
-		if (value != null && value.equals(oldValue)) {
-			return;
-		}
-		super.setParameter(name, value);
-		if (value instanceof String) {
-			setAttributeValue(name, (String) value);
-		}
-	}
-	
-	@Override
-	public Object getParameter(String name) {
-		Object value = super.getParameter(name);
-		if (value != null) {
-			return value;
-		}
-		return getAttributeValue(name);
+	public String getKind(String name) {
+		// due to the missing EIP as underlying meta model we have to tell AbstractCamelModelElement what
+		// kind the attribute is ... so if we got other than ATTRIBUTE please adapt this methods logic!
+		return NODE_KIND_ATTRIBUTE;
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#setParent(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#parseAttributes()
 	 */
 	@Override
-	public void setParent(AbstractCamelModelElement parent) {
-		super.setParent(parent);
-		if (parent != null && parent.getXmlNode() != null && getXmlNode() != null) {
-			boolean alreadyChild = false;
-			for (int i = 0; i < parent.getXmlNode().getChildNodes().getLength(); i++) {
-				if (parent.getXmlNode().getChildNodes().item(i).isEqualNode(getXmlNode())) {
-					alreadyChild = true;
-					break;
-				}
-			}
-			if (!alreadyChild) {				
-				parent.getXmlNode().appendChild(getXmlNode());	
-			}
-		}
+	protected void parseAttributes() {
+		// there is no model info for beans so we need to parse them manually
+		String value = parseAttribute(PROP_ID);
+		if (value != null) setParameter(PROP_ID, value);
+		value = parseAttribute(PROP_CLASS);
+		if (value != null) setParameter(PROP_CLASS, value);
+		value = parseAttribute(PROP_DEPENDS_ON);
+		if (value != null) setParameter(PROP_DEPENDS_ON, value);
+		value = parseAttribute(PROP_DESTROY_METHOD);
+		if (value != null) setParameter(PROP_DESTROY_METHOD, value);
+		value = parseAttribute(PROP_FACTORY_BEAN);
+		if (value != null) setParameter(PROP_FACTORY_BEAN, value);
+		value = parseAttribute(PROP_FACTORY_METHOD);
+		if (value != null) setParameter(PROP_FACTORY_METHOD, value);
+		value = parseAttribute(PROP_INIT_METHOD);
+		if (value != null) setParameter(PROP_INIT_METHOD, value);
+		value = parseAttribute(PROP_SCOPE);
+		if (value != null) setParameter(PROP_SCOPE, value);
 	}
 	
-	public void setAttributeValue(String attrName, String attrValue) {
-		if (this.getXmlNode() != null) {
-			Element e = (Element) this.getXmlNode();
-			Object oldValue = getAttributeValue(attrName);
-			// if values are both null, no change
-			if (oldValue == null && attrValue == null) {
-				// no change
-				return;
-			}
-			// if both values are same string, no change
-			if (oldValue != null && attrValue != null) {
-				String oldValueStr = (String) oldValue;
-				if (oldValueStr.contentEquals(attrValue)) {
-					// no change
-					return;
-				}
-			}
-			// otherwise we have a change, set new value or clear value
-			if (!Strings.isEmpty(attrValue)) {
-				e.setAttribute(attrName, attrValue);
-			} else {
-				e.removeAttribute(attrName);
-			}
-		}
-	}
-	
-	public Object getAttributeValue(String attrName) {
-		Node camelNode = this.getXmlNode();
-		if (camelNode != null && camelNode.hasAttributes()) {
-			Node attrNode = camelNode.getAttributes().getNamedItem(attrName);
-			if (attrNode != null) {
-				return attrNode.getNodeValue();
-			}
+	private String parseAttribute(String name) {
+		Node tmp = getXmlNode().getAttributes().getNamedItem(name);
+		if (tmp != null) {
+			return tmp.getNodeValue();
 		}
 		return null;
 	}
 	
-
-	public Object[] getBeanProperties() {
-		return getXMLChildrenByTag(TAG_PROPERTY);
-	}
-	
-	public Object[] getBeanArguments() {
-		String tagName = getArgumentTag(this.getXmlNode());
-		return getXMLChildrenByTag(tagName);
-	}
-
-	protected Object[] getXMLChildrenByTag(String tag) {
-		Node camelNode = this.getXmlNode();
-		if (camelNode instanceof Element) {
-			Element parent = (Element) camelNode;
-			return convertToArray(parent.getElementsByTagName(tag));
+	class GlobalBeanEIP extends Eip {
+		
+		private ArrayList<Parameter> parameters = new ArrayList<>();
+		
+		/**
+		 * 
+		 */
+		public GlobalBeanEIP() {
+			Parameter idParam = createParameter(PROP_ID, String.class.getName());
+			idParam.setRequired("true");
+			parameters.add(idParam);
+			Parameter classParam = createParameter(PROP_CLASS, String.class.getName());
+			classParam.setRequired("true");
+			parameters.add(classParam);
+			parameters.add(createParameter(PROP_SCOPE, String.class.getName()));
+			parameters.add(createParameter(PROP_DEPENDS_ON, String.class.getName()));
+			parameters.add(createParameter(PROP_INIT_METHOD, String.class.getName()));
+			parameters.add(createParameter(PROP_DESTROY_METHOD, String.class.getName()));
+			parameters.add(createParameter(PROP_FACTORY_METHOD, String.class.getName()));
+			setParameters(parameters);
 		}
-		return NO_CHILDREN;
-	}
-
-	private Object[] convertToArray(NodeList list)
-	{
-		int length = list.getLength();
-		Node[] copy = new Node[length];
-		for (int n = 0; n < length; ++n) {
-			copy[n] = list.item(n);
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#canHaveChildren()
+		 */
+		@Override
+		public boolean canHaveChildren() {
+			return true;
 		}
-		return copy;
-	}
-
-	protected boolean isBlueprintConfig(Node node) {
-		if (node != null) {
-			String nsURI = getNamespace(node);
-			if(!Strings.isEmpty(nsURI) && nsURI != null) {
-				return nsURI.contains("blueprint"); //$NON-NLS-1$
-			}
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#canBeAddedToCamelContextDirectly()
+		 */
+		@Override
+		public boolean canBeAddedToCamelContextDirectly() {
+			return false;
 		}
-		return false;
-	}
-
-	protected String getNamespace(Node node) {
-		if (node != null) {
-			String nsURI = node.getNamespaceURI();
-			if (nsURI == null && node.getParentNode() != null) {
-				return getNamespace(node.getParentNode());
-			}
-			if (nsURI != null) {
-				return nsURI;
-			}
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#getAllowedChildrenNodeTypes()
+		 */
+		@Override
+		public List<String> getAllowedChildrenNodeTypes() {
+			return Arrays.asList(PROP_NAME);
 		}
-		return null;
-	}
-
-	protected String getArgumentTag(Node node) {
-		if (node != null) {
-			boolean isBlueprint = isBlueprintConfig(node);
-			String tagName;
-			if (isBlueprint) {
-				tagName = TAG_ARGUMENT;
-			} else {
-				tagName = TAG_CONSTRUCTOR_ARG;
-			}
-			return tagName;
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#getKind()
+		 */
+		@Override
+		public String getKind() {
+			return "model";
 		}
-		return null;
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#getName()
+		 */
+		@Override
+		public String getName() {
+			return BEAN_NODE;
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.camel.model.service.core.catalog.eips.Eip#getTitle()
+		 */
+		@Override
+		public String getTitle() {
+			return BEAN_NODE;
+		}
+		
+		private Parameter createParameter(String name, String jType) {
+			Parameter outParm = new Parameter();
+			outParm.setName(name);
+			outParm.setJavaType(jType);
+			return outParm;
+		}
 	}
 }

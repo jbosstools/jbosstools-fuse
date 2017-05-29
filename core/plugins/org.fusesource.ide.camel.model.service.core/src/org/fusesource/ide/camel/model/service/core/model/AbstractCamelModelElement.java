@@ -117,7 +117,7 @@ public abstract class AbstractCamelModelElement {
 		this.xmlNode = underlyingNode;
 		this.parent = parent;
 
-		if (underlyingNode != null) {
+		if (underlyingNode != null && parent!= null && parent instanceof CamelFile == false) {
 			setUnderlyingMetaModelObject(getEipByName(CamelUtils.getTranslatedNodeName(underlyingNode)));
 		}
 		if (parent != null && parent.getXmlNode() != null && underlyingNode != null
@@ -1040,7 +1040,7 @@ public abstract class AbstractCamelModelElement {
 	 * @param e
 	 */
 	private void updateAttribute(String name, Object newValue, Object oldValue, Element e) {
-		String defaultValue = this.underlyingMetaModelObject != null
+		String defaultValue = this.underlyingMetaModelObject != null && this.underlyingMetaModelObject.getParameter(name) != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
 		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue)) && useOptimizedXML()) {
 			// default value -> no need to explicitly set it -> delete
