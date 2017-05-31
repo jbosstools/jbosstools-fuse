@@ -1,0 +1,10 @@
+<features>
+  <feature name="starter" version="${project.version}" resolver="(obr)">
+    <feature version="${version.camel}">camel-blueprint</feature>
+    <feature version="${version.camel}">camel-core</feature>
+    <feature version="${version.camel}">camel-dozer</feature>
+    <feature version="${version.camel}">camel-jaxb</feature>
+    <feature version="${version.camel}">camel-jackson</feature>
+    <bundle>mvn:org.jboss.tools.fuse.examples.transformation/starter/${project.version}</bundle>
+  </feature>
+</features>

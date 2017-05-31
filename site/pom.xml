@@ -8,13 +8,52 @@
 		<artifactId>project</artifactId>
 		<version>10.1.0-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<name>JBoss Fuse Tooling :: Update Site</name>
 	<packaging>eclipse-repository</packaging>
 
 	<properties>
 		<skipDeployToJBossOrg>false</skipDeployToJBossOrg>
+		<update.site.name>JBoss Tools Fuse Tooling</update.site.name>
+		<update.site.description>CI Build</update.site.description>
+		<update.site.version>${version}</update.site.version>
+		<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
+		<target.eclipse.version>4.5 (Oxygen)</target.eclipse.version>
 	</properties>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tychoVersion}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<!-- Add support for bundles without any category -->
+			<plugin>
+				<groupId>org.jboss.tools.tycho-plugins</groupId>
+				<artifactId>repository-utils</artifactId>
+				<version>${jbossTychoPluginsVersion}</version>
+				<executions>
+					<execution>
+						<id>generate-facade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>generate-repository-facade</goal>
+						</goals>
+						<configuration>
+							<referenceStrategy>compositeReferences</referenceStrategy>
+							<siteTemplateFolder>${siteTemplateFolder}</siteTemplateFolder>
+							<removeDefaultCategory>true</removeDefaultCategory>
+							<symbols>
+								<update.site.name>${update.site.name}</update.site.name>
+								<update.site.description>${update.site.description}</update.site.description>
+								<update.site.version>${update.site.version}</update.site.version>
+								<target.eclipse.version>${target.eclipse.version}</target.eclipse.version>
+							</symbols>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

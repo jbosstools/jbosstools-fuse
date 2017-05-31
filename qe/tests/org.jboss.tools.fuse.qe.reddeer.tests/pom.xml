@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.fusesource.ide.qe</groupId>
+		<artifactId>tests</artifactId>
+		<version>10.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>org.jboss.tools.fuse.qe.reddeer.tests</artifactId>
+	<name>JBoss Fuse Tooling :: QE :: Tests :: RedDeer Tests</name>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<properties>
+		<surefire.timeout>21600</surefire.timeout>
+		<memoryOptions2>-XX:MaxPermSize=384m</memoryOptions2>
+		<swt.bot.test.record.screencast>false</swt.bot.test.record.screencast>
+		<pauseFailedTest>false</pauseFailedTest>
+		<reddeer.skipUnfixedIssues>false</reddeer.skipUnfixedIssues>
+		<integrationTestsSystemProperties>-Dorg.jboss.tools.central.donotshow=true -Dreddeer.skipUnfixedIssues=${reddeer.skipUnfixedIssues} -Dorg.eclipse.swt.internal.gtk.disablePrinting</integrationTestsSystemProperties>
+		<test.installPath.OSX/>
+		<karaf.version>3.0.3</karaf.version>
+		<rd.config>${project.build.directory}/requirements/karaf-3.0.3.xml</rd.config>
+		<reddeerConfig>-Drd.config=${rd.config}</reddeerConfig>
+		<enable.debug.log>false</enable.debug.log>
+		<systemProperties>${integrationTestsSystemProperties} ${reddeerConfig}</systemProperties>
+		<test.class>AllTests</test.class>
+		<customization.file>resources/settings/plugin_customization.ini</customization.file>
+		<maven.repo>${project.build.directory}/requirements/repository/</maven.repo>
+		<staging.repos>false</staging.repos>
+		<rd.skipUnfixedIssues>true</rd.skipUnfixedIssues>
+		<skipQETests>true</skipQETests>
+		<skipRequirements>true</skipRequirements>
+	</properties>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>${project.build.directory}/requirements</outputDirectory>
+							<resources>
+								<resource>
+									<directory>resources/config</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>maven-download-plugin</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<skip>${skipRequirements}</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>get-karaf</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>http://archive.apache.org/dist/karaf/${karaf.version}/apache-karaf-${karaf.version}.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/requirements</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Fuse Bot Tests -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<appArgLine>-eclipse.password resources/security/password -pluginCustomization ${customization.file} -clean -testpluginname org.jboss.tools.fuse.ui.bot.test</appArgLine>
+					<testSuite>org.jboss.tools.fuse.ui.bot.test</testSuite>
+					<testClass>**/*Test</testClass>
+					<useUIThread>false</useUIThread>
+					<skip>${skipQETests}</skip>
+					<systemProperties>
+						<logDebug>${enable.debug.log}</logDebug>
+						<maven.settings>${project.build.directory}/requirements/emptysettings.xml</maven.settings>
+						<maven.repository>${maven.repo}</maven.repository>
+						<staging.repositories>${staging.repos}</staging.repositories>
+						<rd.skipUnfixedIssues>${rd.skipUnfixedIssues}</rd.skipUnfixedIssues>
+					</systemProperties>
+					<dependencies combine.children="append">
+						<!-- This entry should enable creating of default JDK on Mac -->
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.jdt.feature.group</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>smoke</id>
+			<activation>
+				<property>
+					<name>test</name>
+					<value>SmokeTests</value>
+				</property>
+			</activation>
+			<properties>
+				<reddeerConfig/>
+				<test.class>SmokeTests</test.class>
+				<skipRequirements>true</skipRequirements>
+			</properties>
+		</profile>
+		<profile>
+			<id>mac-installPath</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<test.installPath.OSX>/devstudio.app/</test.installPath.OSX>
+			</properties>
+		</profile>
+		<profile>
+			<id>install-base</id>
+			<activation>
+				<property>
+					<name>test.installBase</name>
+				</property>
+			</activation>
+			<properties>
+				<test.installPath>${test.installBase}${test.installPath.OSX}</test.installPath>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<configuration>
+							<testRuntime>p2Installed</testRuntime>
+							<work>${test.installPath}</work>
+							<profileName>devstudio</profileName>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

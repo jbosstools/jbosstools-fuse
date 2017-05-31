@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ABCOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://java.sun.com">
+    <header>
+        <status>GOLD</status>
+        <customer-num>ACME-123</customer-num>
+        <order-num>ORDER1</order-num>
+    </header>
+    <order-items>
+        <item id="PICKLE">
+            <price>2.25</price>
+            <quantity>1000</quantity>
+        </item>
+        <item id="BANANA">
+            <price>1.25</price>
+            <quantity>400</quantity>
+        </item>
+    </order-items>
+</ABCOrder>

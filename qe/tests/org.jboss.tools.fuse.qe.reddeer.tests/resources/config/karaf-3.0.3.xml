@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun xmlns="http://www.jboss.org/NS/Req" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:server="http://www.jboss.org/NS/SOAReq"
+	xsi:schemaLocation="http://www.jboss.org/NS/Req       http://www.jboss.org/schema/reddeer/RedDeerSchema.xsd
+						http://www.jboss.org/NS/SOAReq    http://www.jboss.org/schema/reddeer/3rdparty/SOARequirements.xsd">
+
+	<requirements>
+		<server:server-requirement name="${karaf.name}">
+			<server:karaf version="3.0">
+				<server:home>${project.build.directory}/requirements/apache-karaf-3.0.3</server:home>
+				<server:host>localhost</server:host>
+				<server:port>8101</server:port>
+				<server:username>karaf</server:username>
+				<server:password>karaf</server:password>
+			</server:karaf>
+		</server:server-requirement>
+	</requirements>
+
+</testrun>
