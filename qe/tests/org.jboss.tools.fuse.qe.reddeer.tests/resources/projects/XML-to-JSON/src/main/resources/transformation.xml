@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <configuration>
+        <wildcard>false</wildcard>
+        <variables>
+            <variable name="ORIGIN">web</variable>
+            <variable name="CODE">OK</variable>
+        </variables>
+    </configuration>
+    <mapping>
+        <class-a>abcorder.ABCOrder</class-a>
+        <class-b>xyzorderschema.XyzOrderSchema</class-b>
+        <field>
+            <a>header.customerNum</a>
+            <b>custId</b>
+        </field>
+        <field custom-converter-id="_customMapping" custom-converter-param="example.MyTransformation,brackets">
+            <a>header.orderNum</a>
+            <b>orderId</b>
+        </field>
+        <field>
+            <a>header.status</a>
+            <b>priority</b>
+        </field>
+        <field>
+            <a>orderItems.item</a>
+            <b>lineItems</b>
+        </field>
+    </mapping>
+    <mapping>
+        <class-a>abcorder.ABCOrder$OrderItems$Item</class-a>
+        <class-b>xyzorderschema.LineItem</class-b>
+        <field>
+            <a>id</a>
+            <b>itemId</b>
+        </field>
+        <field>
+            <a>price</a>
+            <b>cost</b>
+        </field>
+        <field>
+            <a>quantity</a>
+            <b>amount</b>
+        </field>
+    </mapping>
+    <mapping>
+        <class-a>org.apache.camel.component.dozer.VariableMapper</class-a>
+        <class-b>xyzorderschema.XyzOrderSchema</class-b>
+        <field custom-converter-id="_variableMapping" custom-converter-param="${ORIGIN}">
+            <a>literal</a>
+            <b>origin</b>
+        </field>
+    </mapping>
+    <mapping>
+        <class-a>org.apache.camel.component.dozer.ExpressionMapper</class-a>
+        <class-b>xyzorderschema.XyzOrderSchema</class-b>
+        <field custom-converter-id="_expressionMapping" custom-converter-param="header:approvalID">
+            <a>expression</a>
+            <b>approvalCode</b>
+        </field>
+    </mapping>
+</mappings>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+	debug="false">
+
+	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="(%C{1}.java:%L) - %m%n" />		 
+		</layout>
+	</appender>
+
+	<appender name="fileAppender" class="org.apache.log4j.FileAppender">
+		<param name="File" value="target/debug.log" />
+		<param name="Append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{dd MMM yyyy HH:mm:ss.SSS} - %25t - %-5p - %30c{1} - (%C{1}.java:%L) - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="asyncAppender" class="org.apache.log4j.AsyncAppender">
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="fileAppender" />
+	</appender>
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="fileAppender" />
+	</root>
+
+</log4j:configuration>
