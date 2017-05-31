@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <camelContext id="context-06999711-07c6-4c53-b604-a2d99acbcbd0" xmlns="http://camel.apache.org/schema/blueprint">
+        <endpoint id="xml2json" uri="dozer:xml2json?sourceModel=abcorder.ABCOrder&amp;targetModel=xyzorderschema.XyzOrderSchema&amp;marshalId=transform-json&amp;unmarshalId=abcorder&amp;mappingFile=transformation.xml"/>
+        <dataFormats>
+            <jaxb contextPath="abcorder" id="abcorder"/>
+            <json id="transform-json" library="Jackson"/>
+        </dataFormats>
+        <route id="XML-to-JSON">
+            <from id="_from1" uri="file:src/main/resources/data?noop=true"/>
+            <setHeader headerName="approvalID" id="setHeader1">
+                <simple>AUTO_OK</simple>
+            </setHeader>
+            <to id="_to1" ref="xml2json"/>
+            <log id="_log1" message="${body}"/>
+        </route>
+    </camelContext>
+</blueprint>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes id="cbr-example-context" xmlns="http://camel.apache.org/schema/spring">
+    <route customId="true" id="cbr-route">
+        <from customId="true" id="_from1" uri="file:src/main/data?noop=true"/>
+        <log customId="true" id="_log1" message="YYY"/>
+        <choice customId="true" id="_choice1">
+            <when customId="true" id="_when1">
+                <xpath id="_xpath1">/order/customer/country = 'UK'</xpath>
+                <log customId="true" id="_log2" message="Sending order ${file:name} to the UK"/>
+                <to customId="true" id="_to1" uri="file:work/cbr/output/uk"/>
+            </when>
+            <when customId="true" id="_when2">
+                <xpath id="_xpath2">/order/customer/country = 'US'</xpath>
+                <log customId="true" id="_log3" message="Sending order ${file:name} to the US"/>
+                <to customId="true" id="_to2" uri="file:work/cbr/output/us"/>
+            </when>
+        </choice>
+        <log customId="true" id="_log5" message="Done processing ${file:name}"/>
+    </route>
+</routes>

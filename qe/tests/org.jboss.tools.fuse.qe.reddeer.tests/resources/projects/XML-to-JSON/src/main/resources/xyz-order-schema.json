@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "title": "XYZOrder",
+  "properties": {
+    "custId": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "orderId": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "approvalCode": {
+      "type": "string"
+    },
+    "lineItems": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "title": "LineItem",
+            "properties": {
+                "itemId": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "cost": {
+                    "type": "number"
+                }
+            }
+       }
+    }
+  }
+}
