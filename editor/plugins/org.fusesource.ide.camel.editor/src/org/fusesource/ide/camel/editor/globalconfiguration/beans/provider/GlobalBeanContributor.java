@@ -26,6 +26,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 
@@ -74,7 +75,18 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 
 	@Override
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
-		return CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
+		// to avoid clash with SAP extension, needs to NOT handle a bean with the class 
+		// org.fusesource.camel.component.sap.SapConnectionConfiguration
+		boolean isBeanElement = 
+				CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
+		boolean isNotSAPClass = true;
+		if (isBeanElement) {
+			Object classParm = camelModelElementToHandle.getParameter(CamelBean.PROP_CLASS);
+			if (classParm != null && classParm instanceof String) {
+				isNotSAPClass = !((String)classParm).equals("org.fusesource.camel.component.sap.SapConnectionConfiguration"); //$NON-NLS-1$
+			}
+		}
+		return isBeanElement && isNotSAPClass;
 	}
 
 	@Override
