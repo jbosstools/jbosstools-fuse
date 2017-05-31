@@ -35,8 +35,8 @@
       <unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.0.v20170517-1222"/>
       <unit id="org.jboss.tools.maven.feature.feature.group" version="1.8.100.v20170420-1329"/>
       <unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.2.100.v20170526-2039"/>
-      <unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.3.3.v20161213-1258"/>
-      <unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.3.v20161213-1258"/>
+      <unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.0.v20170519-2128"/>
+      <unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.100.v20170505-1845"/>
       <unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.9.0.v20170316-1838"/>
       <unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.9.0.v20170519-2103"/>
 <!-- HERE -->
@@ -47,7 +47,7 @@
       <repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/coretests/4.5.0.AM0a/"/>
       <unit id="org.jboss.tools.as.test.core" version="3.3.0.v20170526-0041"/>
       <unit id="org.jboss.tools.jmx.core.test" version="1.10.0.v20170406-2053"/>
-      <unit id="org.jboss.tools.tests" version="3.7.3.v20170414-0943"/>
+      <unit id="org.jboss.tools.tests" version="3.7.100.v20170529-1436"/>
     </location>
   </locations>
   <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
