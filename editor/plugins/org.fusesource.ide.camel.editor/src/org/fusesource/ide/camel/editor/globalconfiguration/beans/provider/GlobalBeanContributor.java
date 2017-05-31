@@ -83,7 +83,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		if (isBeanElement) {
 			Object classParm = camelModelElementToHandle.getParameter(CamelBean.PROP_CLASS);
 			if (classParm != null && classParm instanceof String) {
-				isNotSAPClass = !((String)classParm).equals("org.fusesource.camel.component.sap.SapConnectionConfiguration"); //$NON-NLS-1$
+				isNotSAPClass = !("org.fusesource.camel.component.sap.SapConnectionConfiguration".equals((String)classParm)); //$NON-NLS-1$
 			}
 		}
 		return isBeanElement && isNotSAPClass;

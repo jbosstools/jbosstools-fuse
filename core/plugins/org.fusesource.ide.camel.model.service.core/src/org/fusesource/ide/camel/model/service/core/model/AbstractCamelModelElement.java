@@ -117,7 +117,7 @@ public abstract class AbstractCamelModelElement {
 		this.xmlNode = underlyingNode;
 		this.parent = parent;
 
-		if (underlyingNode != null && parent!= null && parent instanceof CamelFile == false) {
+		if (underlyingNode != null) {
 			setUnderlyingMetaModelObject(getEipByName(CamelUtils.getTranslatedNodeName(underlyingNode)));
 		}
 		if (parent != null && parent.getXmlNode() != null && underlyingNode != null
@@ -790,7 +790,9 @@ public abstract class AbstractCamelModelElement {
 			kind=NODE_KIND_ATTRIBUTE;
 		}
 
-		if (value == null || value.toString().length() < 1 && kind != null) {
+		
+//		if (value == null || value.toString().length() < 1 && kind != null) {
+		if (value == null || value.toString().length() < 1) {
 			// seems the attribute has been deleted?
 			if (kind.equalsIgnoreCase(NODE_KIND_ATTRIBUTE) && e.hasAttribute(name)) {
 				e.removeAttribute(name);
@@ -1040,7 +1042,8 @@ public abstract class AbstractCamelModelElement {
 	 * @param e
 	 */
 	private void updateAttribute(String name, Object newValue, Object oldValue, Element e) {
-		String defaultValue = this.underlyingMetaModelObject != null && this.underlyingMetaModelObject.getParameter(name) != null
+		String defaultValue = this.underlyingMetaModelObject != null 
+				&& this.underlyingMetaModelObject.getParameter(name) != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
 		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue)) && useOptimizedXML()) {
 			// default value -> no need to explicitly set it -> delete

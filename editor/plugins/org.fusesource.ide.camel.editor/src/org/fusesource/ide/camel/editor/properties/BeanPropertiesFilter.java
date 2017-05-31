@@ -31,7 +31,7 @@ public class BeanPropertiesFilter implements IFilter {
 	protected AbstractCamelModelElement getSelectedObject(Object toTest) {
 		if (toTest instanceof CamelBean) {
 			CamelBean testBean = (CamelBean) toTest;
-			if (!testBean.getClassName().equals("org.fusesource.camel.component.sap.SapConnectionConfiguration")) { //$NON-NLS-1$
+			if (!"org.fusesource.camel.component.sap.SapConnectionConfiguration".equals(testBean.getClassName())) { //$NON-NLS-1$
 				return testBean;
 			}
 		}
