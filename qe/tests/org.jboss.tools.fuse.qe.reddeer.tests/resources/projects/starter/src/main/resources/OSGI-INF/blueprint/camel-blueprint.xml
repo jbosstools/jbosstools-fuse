@@ -1,0 +1,8 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+  <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <route>
+        <from uri="file:/tmp/inbox?fileName=abc-order.xml"/>
+        <to uri="file:/tmp/outbox?fileName=xyz-order.json"/>
+    </route>
+  </camelContext>
+</blueprint>

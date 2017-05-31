@@ -1,0 +1,9 @@
+{"custId":"[ACME-123]",
+ "priority":"GOLD",
+ "orderId":"ORDER1",
+ "origin":"Web",
+ "approvalCode":"AUTO",
+ "lineItems":[
+ 	{"itemId":"PICKLE","amount":1000,"cost":2.25},
+ 	{"itemId":"BANANA","amount":400,"cost":1.25}
+   ]}

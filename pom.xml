@@ -78,6 +78,7 @@
 		<module>transformation</module>
 		<module>jmx</module>
 		<module>servers</module>
+		<module>qe</module>
 		<module>site</module>
 	</modules>
 

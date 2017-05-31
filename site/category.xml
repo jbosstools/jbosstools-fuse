@@ -82,6 +82,10 @@
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration.source"><category name="AllTests"/></bundle>
 
+   <!-- qe tests don't need to be included in any category-->
+   <bundle id="org.jboss.tools.fuse.qe.reddeer" />
+   <bundle id="org.jboss.tools.fuse.qe.reddeer.tests" />
+
    <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site - Features">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.
