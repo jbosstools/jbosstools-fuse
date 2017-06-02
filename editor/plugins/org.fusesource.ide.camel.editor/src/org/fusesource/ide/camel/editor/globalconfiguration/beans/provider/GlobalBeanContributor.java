@@ -20,6 +20,7 @@ import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.EditGlo
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
+import org.fusesource.ide.camel.editor.utils.GlobalConfigUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -36,6 +37,7 @@ import org.fusesource.ide.foundation.core.util.CamelUtils;
 public class GlobalBeanContributor implements ICustomGlobalConfigElementContribution {
 
 	private AddGlobalBeanWizard wizard = null;
+	private GlobalConfigUtils globalConfigUtils = null;
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#createGlobalElement(org.w3c.dom.Document)
@@ -77,16 +79,23 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
 		// to avoid clash with SAP extension, needs to NOT handle a bean with the class 
 		// org.fusesource.camel.component.sap.SapConnectionConfiguration
+		
+		if (globalConfigUtils == null) {
+			globalConfigUtils = new GlobalConfigUtils();
+		}
 		boolean isBeanElement = 
 				CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
-		boolean isNotSAPClass = true;
+		boolean isSAPClass = true;
 		if (isBeanElement) {
 			Object classParm = camelModelElementToHandle.getParameter(CamelBean.PROP_CLASS);
 			if (classParm != null && classParm instanceof String) {
-				isNotSAPClass = !("org.fusesource.camel.component.sap.SapConnectionConfiguration".equals((String)classParm)); //$NON-NLS-1$
+				isSAPClass = "org.fusesource.camel.component.sap.SapConnectionConfiguration".equals((String)classParm); //$NON-NLS-1$
 			}
 		}
-		return isBeanElement && isNotSAPClass;
+		if (!globalConfigUtils.isSAPExtInstalled() || !isSAPClass) {
+			return isBeanElement;
+		}
+		return false;
 	}
 
 	@Override

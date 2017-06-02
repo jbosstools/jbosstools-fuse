@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.properties;
 
 import org.eclipse.jface.viewers.IFilter;
+import org.fusesource.ide.camel.editor.utils.GlobalConfigUtils;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 
@@ -18,6 +19,8 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
  * @author bfitzpat
  */
 public class BeanPropertiesFilter implements IFilter {
+
+	private GlobalConfigUtils globalConfigUtils = null;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IFilter#select(java.lang.Object)
@@ -29,9 +32,13 @@ public class BeanPropertiesFilter implements IFilter {
 	}
 
 	protected AbstractCamelModelElement getSelectedObject(Object toTest) {
+		if (globalConfigUtils == null) {
+			globalConfigUtils = new GlobalConfigUtils();
+		}
 		if (toTest instanceof CamelBean) {
 			CamelBean testBean = (CamelBean) toTest;
-			if (!"org.fusesource.camel.component.sap.SapConnectionConfiguration".equals(testBean.getClassName())) { //$NON-NLS-1$
+			boolean isSAPClass = "org.fusesource.camel.component.sap.SapConnectionConfiguration".equals(testBean.getClassName()); //$NON-NLS-1$
+			if (!globalConfigUtils.isSAPExtInstalled() || !isSAPClass) {
 				return testBean;
 			}
 		}

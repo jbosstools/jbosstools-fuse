@@ -482,16 +482,18 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	public List<AbstractCamelModelElement> findAllNodesWithId(String nodeId) {
 		List<AbstractCamelModelElement> result = new ArrayList<>();
 
-		if (getGlobalDefinitions() != null && !getGlobalDefinitions().isEmpty()) {
-			for (AbstractCamelModelElement e : getGlobalDefinitions().values()) {
-				if (e.getId() != null && e.getId().equals(nodeId)) {
-					result.add(e);
+		if (nodeId != null) { 
+			if (getGlobalDefinitions() != null) {
+				for (AbstractCamelModelElement e : getGlobalDefinitions().values()) {
+					if (nodeId.equals(e.getId())) {
+						result.add(e);
+					}
 				}
 			}
-		}
-		List<AbstractCamelModelElement> superResult = super.findAllNodesWithId(nodeId);
-		if (superResult != null && !superResult.isEmpty()) {
-			result.addAll(superResult);
+			List<AbstractCamelModelElement> superResult = super.findAllNodesWithId(nodeId);
+			if (superResult != null && !superResult.isEmpty()) {
+				result.addAll(superResult);
+			}
 		}
 
 		return result;

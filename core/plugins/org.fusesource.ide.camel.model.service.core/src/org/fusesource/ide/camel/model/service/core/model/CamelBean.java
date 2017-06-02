@@ -101,23 +101,22 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 	@Override
 	protected void parseAttributes() {
 		// there is no model info for beans so we need to parse them manually
-		String value = parseAttribute(PROP_ID);
-		if (value != null) setParameter(PROP_ID, value);
-		value = parseAttribute(PROP_CLASS);
-		if (value != null) setParameter(PROP_CLASS, value);
-		value = parseAttribute(PROP_DEPENDS_ON);
-		if (value != null) setParameter(PROP_DEPENDS_ON, value);
-		value = parseAttribute(PROP_DESTROY_METHOD);
-		if (value != null) setParameter(PROP_DESTROY_METHOD, value);
-		value = parseAttribute(PROP_FACTORY_BEAN);
-		if (value != null) setParameter(PROP_FACTORY_BEAN, value);
-		value = parseAttribute(PROP_FACTORY_METHOD);
-		if (value != null) setParameter(PROP_FACTORY_METHOD, value);
-		value = parseAttribute(PROP_INIT_METHOD);
-		if (value != null) setParameter(PROP_INIT_METHOD, value);
-		value = parseAttribute(PROP_SCOPE);
-		if (value != null) setParameter(PROP_SCOPE, value);
+		initAttribute(PROP_ID);
+		initAttribute(PROP_CLASS);
+		initAttribute(PROP_DEPENDS_ON);
+		initAttribute(PROP_DESTROY_METHOD);
+		initAttribute(PROP_FACTORY_BEAN);
+		initAttribute(PROP_FACTORY_METHOD);
+		initAttribute(PROP_INIT_METHOD);
+		initAttribute(PROP_SCOPE);
 	}
+	
+	private void initAttribute(String paramName) {
+		String value = parseAttribute(paramName);
+		if (value != null) {
+			setParameter(paramName, value);
+		}
+	}	
 	
 	private String parseAttribute(String name) {
 		Node tmp = getXmlNode().getAttributes().getNamedItem(name);
@@ -131,9 +130,6 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 		
 		private ArrayList<Parameter> parameters = new ArrayList<>();
 		
-		/**
-		 * 
-		 */
 		public GlobalBeanEIP() {
 			Parameter idParam = createParameter(PROP_ID, String.class.getName());
 			idParam.setRequired("true");
