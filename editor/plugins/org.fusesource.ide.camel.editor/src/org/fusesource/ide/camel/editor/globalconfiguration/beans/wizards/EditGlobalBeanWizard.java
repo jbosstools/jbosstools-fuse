@@ -14,6 +14,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.GlobalBeanEditWizardPage;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
@@ -37,7 +38,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle("Edit Bean");
+		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -49,8 +50,8 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	@Override
 	public void addPages() {
 		super.addPages();
-		final GlobalBeanEditWizardPage globalBeanPage = new GlobalBeanEditWizardPage(dbc, "Bean Definition",
-				"Edit details for selected bean definition.", camelFile);
+		final GlobalBeanEditWizardPage globalBeanPage = new GlobalBeanEditWizardPage(dbc, UIMessages.EditGlobalBeanWizard_BeanEditPageTitle,
+				UIMessages.EditGlobalBeanWizard_BeanEditPageMessage, camelFile);
 		globalBeanPage.setElement(inputNode);
 		addPage(globalBeanPage);
 
@@ -108,7 +109,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	}
 
 	public void init() {
-		setWindowTitle("Edit Bean");
+		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 		dbc = new DataBindingContext();
 	}

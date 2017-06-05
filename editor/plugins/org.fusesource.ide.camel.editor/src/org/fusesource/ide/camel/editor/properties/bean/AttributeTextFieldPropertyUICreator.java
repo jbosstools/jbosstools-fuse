@@ -48,7 +48,7 @@ public class AttributeTextFieldPropertyUICreator extends AbstractTextFieldParame
 		} else if (defaultValue != null) {
 			return defaultValue;
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	@Override

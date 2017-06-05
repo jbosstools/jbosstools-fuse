@@ -59,7 +59,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public GlobalBeanWizardPage(DataBindingContext dbc, String title, String description, AbstractCamelModelElement parent) {
-		super("Bean Details page");
+		super(UIMessages.GlobalBeanWizardPage_DefaultName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
@@ -81,7 +81,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		createClassNewButton(composite);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
-		argsPropsGroup.setText("Constructor Arguments");
+		argsPropsGroup.setText(UIMessages.GlobalBeanWizardPage_ArgumentsGroupLabel);
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -90,7 +90,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		beanArgsTable.setInput(this.parent);
 
 		Group beanPropsGroup = new Group(composite, SWT.NONE);
-		beanPropsGroup.setText("Bean Properties");
+		beanPropsGroup.setText(UIMessages.GlobalBeanWizardPage_PropertiesGroupLabel);
 		beanPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -123,7 +123,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	 */
 	private void createClassLine(Composite composite) {
 		Label classLabel = new Label(composite, SWT.NONE);
-		classLabel.setText("Class");
+		classLabel.setText(UIMessages.GlobalBeanWizardPage_ClassLabel);
 		Text classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -136,7 +136,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 
 	private void createBrowseButton(Composite composite) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
-		browseBeanButton.setText("...");
+		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -150,7 +150,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 
 	private void createClassNewButton(Composite composite) {
 		Button newBeanButton = new Button(composite, SWT.PUSH);
-		newBeanButton.setText("+");
+		newBeanButton.setText("+"); //$NON-NLS-1$
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {

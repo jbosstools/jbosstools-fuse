@@ -15,6 +15,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.GlobalBeanWizardPage;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
@@ -41,7 +42,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle("Add Bean");
+		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -53,8 +54,8 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	@Override
 	public void addPages() {
 		super.addPages();
-		globalBeanPage = new GlobalBeanWizardPage(dbc, "Bean Definition",
-				"Specify details for the new bean definition.", camelFile);
+		globalBeanPage = new GlobalBeanWizardPage(dbc, UIMessages.AddGlobalBeanWizard_BeanPageTitle,
+				UIMessages.AddGlobalBeanWizard_BeanPageMessage, camelFile);
 		addPage(globalBeanPage);
 
 	}
@@ -118,7 +119,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	}
 
 	public void init() {
-		setWindowTitle("Add Bean");
+		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 		dbc = new DataBindingContext();
 	}

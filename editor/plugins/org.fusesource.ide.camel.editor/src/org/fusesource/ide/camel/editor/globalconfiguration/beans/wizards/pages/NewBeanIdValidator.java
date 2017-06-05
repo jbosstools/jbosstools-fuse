@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -31,10 +32,10 @@ public class NewBeanIdValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String id = (String) value;
 		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error("Bean ID is mandatory.");
+			return ValidationStatus.error(UIMessages.NewBeanIdValidator_ErrorBeanIDMandatory);
 		}
 		if (!parent.findAllNodesWithId(id).isEmpty()){
-			return ValidationStatus.error("Bean ID is used elsewhere in the Camel route. It must be unique.");
+			return ValidationStatus.error(UIMessages.NewBeanIdValidator_ErrorBeanIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();
 	}

@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author bfitzpat
@@ -40,21 +41,21 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("Argument Details");
-		setMessage("Specify type and value details for the new argument.");
-		getShell().setText("Bean Argument");
+		setTitle(UIMessages.ArgumentInputDialog_DialogTitle);
+		setMessage(UIMessages.ArgumentInputDialog_DialogMessage);
+		getShell().setText(UIMessages.ArgumentInputDialog_DialogWindowTitle);
 
 		Composite area = new Composite(parent, SWT.NULL);
 		GridLayout gridLayout = new GridLayout(2, false);
 		area.setLayout(gridLayout);
 		area.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Text argumentTypeText = createLabelAndText(area, "Type");
+		Text argumentTypeText = createLabelAndText(area, UIMessages.ArgumentInputDialog_TypeFieldLabel);
 		if (argumentType != null && !argumentType.trim().isEmpty()) {
 			argumentTypeText.setText(argumentType);
 		}
 		argumentTypeText.addModifyListener( input -> argumentType = argumentTypeText.getText().trim() );
 
-		argumentValueText = createLabelAndText(area, "Value*");
+		argumentValueText = createLabelAndText(area, UIMessages.ArgumentInputDialog_ValueFieldLabel);
 		if (argumentValue != null && !argumentValue.trim().isEmpty()) {
 			argumentValueText.setText(argumentValue);
 		}
@@ -67,7 +68,7 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 	protected boolean validate() {
 		setErrorMessage(null);
 		if (argumentValueText.getText().trim().isEmpty()) {
-			setErrorMessage("No argument value specified. Please specify an argument value.");
+			setErrorMessage(UIMessages.ArgumentInputDialog_ErrorMessage);
 		}
 		return getErrorMessage() == null;
 	}

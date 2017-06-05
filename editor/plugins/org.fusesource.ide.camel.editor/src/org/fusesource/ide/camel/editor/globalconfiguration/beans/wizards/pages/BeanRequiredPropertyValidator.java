@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author brianf
@@ -30,7 +31,7 @@ public class BeanRequiredPropertyValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String id = (String) value;
 		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error(propertyName + " is mandatory.");
+			return ValidationStatus.error(propertyName + UIMessages.BeanRequiredPropertyValidator_ErrorMandatoryProperty);
 		}
 		return ValidationStatus.ok();
 	}

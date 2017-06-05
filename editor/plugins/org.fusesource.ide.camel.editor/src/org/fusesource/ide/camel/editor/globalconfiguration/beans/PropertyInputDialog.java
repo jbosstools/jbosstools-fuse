@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -50,24 +51,24 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("Property Details");
-		getShell().setText("Bean Property");
+		setTitle(UIMessages.PropertyInputDialog_PropertyDialogTitle);
+		getShell().setText(UIMessages.PropertyInputDialog_PropertyDialogWindowTitle);
 		if (isEditDialog()) {
-			setMessage("Edit name and value details for the property.");
+			setMessage(UIMessages.PropertyInputDialog_PropertyDialogEditMessage);
 		} else {
-			setMessage("Specify name and value details for the new property.");
+			setMessage(UIMessages.PropertyInputDialog_PropertyDialogNewPropertyMessage);
 		}
 		Composite area = new Composite(parent, SWT.NULL);
 		GridLayout gridLayout = new GridLayout(2, false);
 		area.setLayout(gridLayout);
 		area.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Text propertyNameText = createLabelAndText(area, "Name*");
+		Text propertyNameText = createLabelAndText(area, UIMessages.PropertyInputDialog_NameFieldLabel);
 		if (propertyName != null && !propertyName.trim().isEmpty()) {
 			propertyNameText.setText(propertyName);
 		}
 		propertyNameText.addModifyListener(input -> propertyName = propertyNameText.getText().trim());
 
-		Text propertyValueText = createLabelAndText(area, "Value*");
+		Text propertyValueText = createLabelAndText(area, UIMessages.PropertyInputDialog_ValueFieldLabel);
 		if (propertyValue != null && !propertyValue.trim().isEmpty()) {
 			propertyValueText.setText(propertyValue);
 		}
@@ -99,7 +100,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 	 */
 	public String validate(String newPropName, String newPropValue) {
 		if (Strings.isEmpty(newPropName)) {
-			return "No property name specified. Please specify a property name.";
+			return UIMessages.PropertyInputDialog_ErrorNoNameSpecified;
 		}
 		if (propertyList != null) {
 			for (AbstractCamelModelElement camelElement : propertyList) {
@@ -107,7 +108,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 				String propName = xmlElement.getAttribute(CamelBean.PROP_NAME);
 				boolean nameIsUnique = nameIsUnique(propName, newPropName);
 				if (!nameIsUnique) {
-					return "Property names must be unique. One already exists with that name.";
+					return UIMessages.PropertyInputDialog_NameNotUnique;
 				}
 			}
 		} else if (inputElement != null) {
@@ -116,12 +117,12 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 				Element arrayElement = (Element) childList.item(i);
 				String propName = arrayElement.getAttribute(CamelBean.PROP_NAME);
 				if (!nameIsUnique(propName, newPropName)) {
-					return "Property names must be unique. One already exists with that name.";
+					return UIMessages.PropertyInputDialog_NameNotUnique;
 				}
 			}
 		}
 		if (Strings.isEmpty(newPropValue)) {
-			return "No property value specified. Please specify a property value.";
+			return UIMessages.PropertyInputDialog_ValueNotSpecified;
 		}
 		return null;
 	}

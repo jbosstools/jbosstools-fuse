@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -49,7 +50,7 @@ public class PropertyMethodValidator implements IValidator {
 				try {
 					return validateMethod(jproject, className, methodName);
 				} catch (JavaModelException e) {
-					CamelEditorUIActivator.pluginLog().logError("Error validating method for class " + className,
+					CamelEditorUIActivator.pluginLog().logError(UIMessages.PropertyMethodValidator_MethodValidationError + className,
 							e);
 				}
 			}
@@ -62,7 +63,7 @@ public class PropertyMethodValidator implements IValidator {
 		boolean foundMethod = beanConfigUtil.hasMethod(methodName, foundClass);
 		if (!foundMethod) {
 			return ValidationStatus
-					.error("Method " + methodName + " must exist in class " + className + ".");
+					.error(UIMessages.PropertyMethodValidator_MethodValidatorErrorPt2 + methodName + UIMessages.PropertyMethodValidator_MethodValidatorErrorPt3 + className + "."); //$NON-NLS-3$
 		}
 		return ValidationStatus.ok();
 	}

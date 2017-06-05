@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
@@ -35,7 +36,7 @@ public class NewBeanIdPropertyValidator extends PropertyRequiredValidator {
 		if (superStatus.equals(Status.OK_STATUS)) {
 			String id = (String) value;
 			if (parent.findAllNodesWithId(id).size() > 1){
-				return ValidationStatus.error("Bean ID is used elsewhere in the Camel route. It must be unique.");
+				return ValidationStatus.error(UIMessages.NewBeanIdPropertyValidator_BeanIDMustBeUnique);
 			}
 			return ValidationStatus.ok();
 		}

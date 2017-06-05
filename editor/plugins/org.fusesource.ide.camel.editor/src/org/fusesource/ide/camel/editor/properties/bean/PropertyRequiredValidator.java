@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -34,7 +35,7 @@ public class PropertyRequiredValidator implements IValidator {
 			return ValidationStatus.ok();
 		}
 		return ValidationStatus
-				.error("Parameter " + parameter.getName() + " is mandatory and cannot be empty.");
+				.error(UIMessages.PropertyRequiredValidator_MandatoryParameterEmptyPt1 + parameter.getName() + UIMessages.PropertyRequiredValidator_MandatoryParameterEmptyPt2);
 	}
 	
 

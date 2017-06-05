@@ -50,6 +50,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
@@ -172,14 +173,14 @@ public class BeanConfigUtil {
 	private String openNoArgMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			return openMethodDialog(shell, getNoParamMethods(foundClass), "Select a no-parameter method:");
+			return openMethodDialog(shell, getNoParamMethods(foundClass), UIMessages.BeanConfigUtil_NoParmMethodSelectionMessage);
 		}
 		return null;
 	}
 
 	private String openMethodDialog(Shell shell, IMethod[] methods, String dialogMessage) {
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new JavaUILabelProvider());
-		dialog.setTitle("Method Selection");
+		dialog.setTitle(UIMessages.BeanConfigUtil_MethodSelectionDialogTitle);
 		dialog.setMessage(dialogMessage);
 		dialog.setElements(methods);
 		if (dialog.open()  == SelectionDialog.OK) {
@@ -198,7 +199,7 @@ public class BeanConfigUtil {
 	private String openMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			return openMethodDialog(shell, foundClass.getMethods(), "Select a method:");
+			return openMethodDialog(shell, foundClass.getMethods(), UIMessages.BeanConfigUtil_MethodSelectionMessage);
 		}
 		return null;
 	}
@@ -261,7 +262,7 @@ public class BeanConfigUtil {
 					matchCounter, 
 					null);
 		} catch (CoreException ce) {
-			CamelEditorUIActivator.pluginLog().logError("Couldn't find type: " + ce.getMessage(), ce);
+			CamelEditorUIActivator.pluginLog().logError(UIMessages.BeanConfigUtil_MethodSelectionErrorNoTypeFound + ce.getMessage(), ce);
 		} 
 
 		return matchCounter.getNumMatch() > 0;
@@ -458,7 +459,7 @@ public class BeanConfigUtil {
 			propertyNode.setAttribute(CamelBean.PROP_VALUE, value);
 			return propertyNode;
 		} catch (ParserConfigurationException pse) {
-			CamelEditorUIActivator.pluginLog().logError("Had issue creating simple XML property", pse);
+			CamelEditorUIActivator.pluginLog().logError(UIMessages.BeanConfigUtil_MethodSelectionErrorCreatingXML, pse);
 			return null;
 		}
 	}

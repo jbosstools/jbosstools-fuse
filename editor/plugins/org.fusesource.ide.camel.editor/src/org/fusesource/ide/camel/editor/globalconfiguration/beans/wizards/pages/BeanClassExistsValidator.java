@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
  * @author brianf
@@ -35,17 +36,17 @@ public class BeanClassExistsValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String className = (String) value;
 		if (className == null || className.isEmpty()) {
-			return ValidationStatus.error("Bean class name is mandatory.");
+			return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMandatory);
 		}
 		IJavaProject javaProject = JavaCore.create(this.project);
         IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
 			if (javaClass == null) {
-				return ValidationStatus.error("Bean class must exist in the Fuse project.");
+				return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMustExist);
 			}
 		} catch (JavaModelException e) {
-			return ValidationStatus.error("Bean class must exist in the Fuse project.", e);
+			return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMustExist, e);
 		}
 		return ValidationStatus.ok();
 	}

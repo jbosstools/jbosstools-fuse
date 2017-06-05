@@ -38,6 +38,7 @@ import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreatorWithBrowse;
 import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
@@ -69,10 +70,10 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		
 		// define the properties we're handling here
 		Parameter idParam = beanConfigUtil.createParameter(CamelBean.PROP_ID, String.class.getName());
-		idParam.setRequired("true");
+		idParam.setRequired("true"); //$NON-NLS-1$
 		props.add(idParam);
 		Parameter classParam = beanConfigUtil.createParameter(CamelBean.PROP_CLASS, String.class.getName());
-		classParam.setRequired("true");
+		classParam.setRequired("true"); //$NON-NLS-1$
 		props.add(classParam);
 		props.add(beanConfigUtil.createParameter(CamelBean.PROP_SCOPE, String.class.getName()));
 		props.add(beanConfigUtil.createParameter(CamelBean.PROP_DEPENDS_ON, String.class.getName()));
@@ -171,7 +172,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
 			txtFieldCreator = createTextField(p, page);
-			if (p.getRequired() != null && "true".contentEquals(p.getRequired())) {
+			if (p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
 				validator = new PropertyRequiredValidator(p);
 			}
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) {
@@ -239,7 +240,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		tabFolder.setCursor(FormsResources.getHandCursor());
 		toolkit.paintBordersFor(tabFolder);
 
-		form.setText("Advanced Properties");
+		form.setText(UIMessages.AdvancedBeanPropertiesSection_Title);
 		toolkit.decorateFormHeading(form);
 
 		form.layout();
@@ -248,7 +249,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	private void createClassBrowseButton(Composite composite, Text field) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
-		browseBeanButton.setText("...");
+		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -264,7 +265,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	private void createClassNewButton(Composite composite, Text field) {
 		Button newBeanButton = new Button(composite, SWT.PUSH);
-		newBeanButton.setText("+");
+		newBeanButton.setText("+"); //$NON-NLS-1$
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -280,7 +281,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	private void createNoArgMethodBrowseButton(Composite composite, Text field) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
-		browseBeanButton.setText("...");
+		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -301,7 +302,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	private void createMethodBrowseButton(Composite composite, Text field) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
-		browseBeanButton.setText("...");
+		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
