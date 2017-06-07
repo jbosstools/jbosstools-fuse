@@ -126,6 +126,15 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#shouldParseNode()
+	 */
+	@Override
+	protected boolean shouldParseNode() {
+		// we do want to parse bean contents
+		return true;
+	}
+
 	class GlobalBeanEIP extends Eip {
 		
 		private ArrayList<Parameter> parameters = new ArrayList<>();

@@ -1115,14 +1115,25 @@ public abstract class AbstractCamelModelElement {
 	 * subnodes
 	 */
 	protected void parseNode() {
-		// first parse direct attributes
-		parseAttributes();
-
-		// now parse child elements
-		parseChildren();
-
-		// link child attributes like expressions to parent parameters
-		linkChildrenToAttributes();
+		if (shouldParseNode()) {
+			// first parse direct attributes
+			parseAttributes();
+	
+			// now parse child elements
+			parseChildren();
+	
+			// link child attributes like expressions to parent parameters
+			linkChildrenToAttributes();
+		}
+	}
+	
+	/**
+	 * For downstream nodes to choose whether to ignore contents or not
+	 * @return true/false (default true)
+	 */
+	protected boolean shouldParseNode() {
+		// default implementation
+		return true;
 	}
 
 	public void ensureUniqueID(AbstractCamelModelElement elem) {

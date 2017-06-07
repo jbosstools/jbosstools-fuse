@@ -24,16 +24,14 @@ public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement
 	public GlobalDefinitionCamelModelElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode);
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#parseNode()
+	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#shouldParseNode()
 	 */
 	@Override
-	protected void parseNode() {
-		if (getNodeTypeId().equalsIgnoreCase(BEAN_NODE)) {
-			super.parseNode();
-		}
+	protected boolean shouldParseNode() {
 		// we don't want to parse global config nodes and just reuse the xml node 
 		// directly - see FUSETOOLS-1884 (except for Beans)
+		return false;
 	}
 }

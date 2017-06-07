@@ -99,7 +99,7 @@ public class BeanConfigUtil {
 		}
 	}
 
-	private IPackageFragmentRoot findPackageFragmentRootWithFacade(final IProject project, IJavaProject javaProject) throws JavaModelException {
+	private IPackageFragmentRoot findPackageFragmentRootWithFacade(final IProject project, IJavaProject javaProject) {
 		IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
 		if(facade != null){
 			IPath[] paths = facade.getCompileSourceLocations();
