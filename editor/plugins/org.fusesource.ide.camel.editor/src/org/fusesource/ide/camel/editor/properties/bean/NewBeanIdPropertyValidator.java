@@ -36,7 +36,7 @@ public class NewBeanIdPropertyValidator extends PropertyRequiredValidator {
 		if (superStatus.equals(Status.OK_STATUS)) {
 			String id = (String) value;
 			if (parent.findAllNodesWithId(id).size() > 1){
-				return ValidationStatus.error(UIMessages.NewBeanIdPropertyValidator_BeanIDMustBeUnique);
+				return ValidationStatus.error(UIMessages.NewBeanIdValidator_ErrorBeanIDAlreadyUsed);
 			}
 			return ValidationStatus.ok();
 		}

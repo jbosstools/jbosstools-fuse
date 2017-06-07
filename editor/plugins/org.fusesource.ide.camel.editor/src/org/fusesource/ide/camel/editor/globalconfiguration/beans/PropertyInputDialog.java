@@ -102,7 +102,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 		if (Strings.isEmpty(newPropName)) {
 			return UIMessages.PropertyInputDialog_ErrorNoNameSpecified;
 		}
-		if (propertyList != null) {
+		if (!propertyList.isEmpty()) {
 			for (AbstractCamelModelElement camelElement : propertyList) {
 				Element xmlElement = (Element) camelElement.getXmlNode();
 				String propName = xmlElement.getAttribute(CamelBean.PROP_NAME);

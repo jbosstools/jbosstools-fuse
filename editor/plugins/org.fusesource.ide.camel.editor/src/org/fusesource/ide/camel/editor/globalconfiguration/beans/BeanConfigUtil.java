@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
@@ -133,12 +132,10 @@ public class BeanConfigUtil {
 	            	return tstRoot;
 	            } else {
 	            	tstFolder.create(false, true, null);
+	            	
+	            	// now refresh the package root to ensure we have the right fragment
+	            	tstRoot = javaProject.getPackageFragmentRoot(tstFolder);
 	            }
-				IClasspathEntry[] entries = javaProject.getRawClasspath();
-				IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
-				System.arraycopy(entries, 0, newEntries, 0, entries.length);
-				newEntries[entries.length] = JavaCore.newSourceEntry(tstRoot.getPath());
-				javaProject.setRawClasspath(newEntries, new NullProgressMonitor());
 				return tstRoot;
 			}
 		}
