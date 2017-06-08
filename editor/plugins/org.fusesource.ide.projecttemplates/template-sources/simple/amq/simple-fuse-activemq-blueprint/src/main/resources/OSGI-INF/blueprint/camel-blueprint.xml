@@ -85,7 +85,7 @@
         <route id="file-to-jms-route">
             <from id="incomingFolder" uri="file:work/in"/>
             <log id="logReceivingOrder" message="Receiving order ${file:name}"/>
-            <to id="sendIncomingOrder" uri="activemq:incomingOrders?username=${broker.userName}&amp;password=${broker.password}"/>
+            <to id="sendIncomingOrder" uri="activemq:incomingOrders"/>
         </route>
         <!--
           This route consumes messages from the JMS queue incomingOrders on the 
@@ -99,7 +99,7 @@
           the <when/> elements will be moved to the work/jms/output/others directory.
         -->
         <route id="jms-cbr-route" streamCache="true">
-            <from id="listenToIncomingOrder" uri="activemq:incomingOrders?username=${broker.userName}&amp;password=${broker.password}"/>
+            <from id="listenToIncomingOrder" uri="activemq:incomingOrders"/>
             <choice id="countrySelection">
                 <when id="UKCustomer">
                     <xpath id="_xpath1">/order:order/order:customer/order:country = 'UK'</xpath>
