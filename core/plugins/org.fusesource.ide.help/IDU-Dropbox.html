@@ -11,7 +11,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-221"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">dropbox://[operation]?[options]</pre></div><p>Where <span class="strong"><strong>operation</strong></span> is the specific action
-                (typically is a CRUD action) to perform on Dropbox remote folder.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-222"></a>Operation</h2></div></div></div><table class="confluenceTable" id="d0e73245"><tbody><tr>
+                (typically is a CRUD action) to perform on Dropbox remote folder.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-222"></a>Operation</h2></div></div></div><table class="confluenceTable" id="d0e71765"><tbody><tr>
                     <th class="confluenceTh"><p> Operation </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
                 </tr><tr>
@@ -31,7 +31,7 @@
                     <td class="confluenceTd"><p> search files on Dropbox based on string queries </p></td>
                 </tr></tbody></table><p><span class="strong"><strong>Operations</strong></span> require additional options to work,
                 some are mandatory for the specific operation.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-223"></a>Options</h2></div></div></div><p>In order to work with Dropbox API you need to obtain an <span class="strong"><strong>accessToken</strong></span> and a <span class="strong"><strong>clientIdentifier.</strong></span> You can refer to the <a class="link" href="https://www.dropbox.com/developers/core/start/java" target="_top">Dropbox
-                    documentation</a> that expalins how to get them. </p><p>Below are listed the mandatory options for all operations:</p><table class="confluenceTable" id="d0e73342"><tbody><tr>
+                    documentation</a> that expalins how to get them. </p><p>Below are listed the mandatory options for all operations:</p><table class="confluenceTable" id="d0e71862"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -43,7 +43,7 @@
                     <td class="confluenceTd"><p> <code class="code">clientIdentifier</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">true</code> </p></td>
                     <td class="confluenceTd"><p> Name of the app registered to make API requests </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-224"></a>Del operation</h2></div></div></div><p>Delete files on Dropbox.</p><p>Works only as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e73407"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-224"></a>Del operation</h2></div></div></div><p>Delete files on Dropbox.</p><p>Works only as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e71927"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -51,19 +51,19 @@
                     <td class="confluenceTd"><p> <code class="code">remotePath</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">true</code> </p></td>
                     <td class="confluenceTd"><p> Folder or file to delete on Dropbox </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-225"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("mock:result");</p><p>from("direct:start").to("dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1/file1.tar.gz").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-226"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e73455"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-225"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("mock:result");</p><p>from("direct:start").to("dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1/file1.tar.gz").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-226"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e71975"><tbody><tr>
                         <th class="confluenceTh"><p> Property </p></th>
                         <th class="confluenceTh"><p> Value </p></th>
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">DELETED_PATH</code> </p></td>
                         <td class="confluenceTd"><p> name of the path deleted on dropbox </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-227"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e73485"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-227"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e72005"><tbody><tr>
                         <th class="confluenceTh"><p> Object type </p></th>
                         <th class="confluenceTh"><p> Description </p></th>
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">String</code> </p></td>
                         <td class="confluenceTd"><p> name of the path deleted on dropbox </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-228"></a>Get (download) operation</h2></div></div></div><p>Download files from Dropbox.</p><p>Works as Camel producer or Camel consumer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e73519"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-228"></a>Get (download) operation</h2></div></div></div><p>Download files from Dropbox.</p><p>Works as Camel producer or Camel consumer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e72039"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -71,7 +71,7 @@
                     <td class="confluenceTd"><p> <code class="code">remotePath</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">true</code> </p></td>
                     <td class="confluenceTd"><p> Folder or file to download from Dropbox </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-229"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1/file1.tar.gz").to("file:///home/kermit/?fileName=file1.tar.gz");</p><p>from("direct:start").to("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("mock:result");</p><p>from("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("file:///home/kermit/");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-230"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e73569"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-229"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1/file1.tar.gz").to("file:///home/kermit/?fileName=file1.tar.gz");</p><p>from("direct:start").to("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("mock:result");</p><p>from("dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1").to("file:///home/kermit/");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-230"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e72089"><tbody><tr>
                         <th class="confluenceTh"><p> Property </p></th>
                         <th class="confluenceTh"><p> Value </p></th>
                     </tr><tr>
@@ -80,7 +80,7 @@
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">DOWNLOADED_FILES</code> </p></td>
                         <td class="confluenceTd"><p> in case of multiple files download, path of the remote files downloaded </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-231"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e73612"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-231"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e72132"><tbody><tr>
                         <th class="confluenceTh"><p> Object type </p></th>
                         <th class="confluenceTh"><p> Description </p></th>
                     </tr><tr>
@@ -89,7 +89,7 @@
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">Map&lt;String, ByteArrayOutputStream&gt;</code> </p></td>
                         <td class="confluenceTd"><p> in case of multiple files download, a map with as key the path of the remote file downloaded and as value the stream representing the file downloaded </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-232"></a>Move operation</h2></div></div></div><p>Move files on Dropbox between one folder to another.</p><p>Works only as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e73659"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-232"></a>Move operation</h2></div></div></div><p>Move files on Dropbox between one folder to another.</p><p>Works only as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e72179"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -101,19 +101,19 @@
                     <td class="confluenceTd"><p> <code class="code">newRemotePath</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">true</code> </p></td>
                     <td class="confluenceTd"><p> Destination file or folder </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-233"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://move?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1&amp;newRemotePath=/root/folder2").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-234"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e73725"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-233"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://move?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/root/folder1&amp;newRemotePath=/root/folder2").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-234"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e72245"><tbody><tr>
                         <th class="confluenceTh"><p> Property </p></th>
                         <th class="confluenceTh"><p> Value </p></th>
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">MOVED_PATH</code> </p></td>
                         <td class="confluenceTd"><p> name of the path moved on dropbox </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-235"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e73755"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-235"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e72275"><tbody><tr>
                         <th class="confluenceTh"><p> Object type </p></th>
                         <th class="confluenceTh"><p> Description </p></th>
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">String</code> </p></td>
                         <td class="confluenceTd"><p> name of the path moved on dropbox </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-236"></a>Put (upload) operation</h2></div></div></div><p>Upload files on Dropbox.</p><p>Works as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e73789"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-236"></a>Put (upload) operation</h2></div></div></div><p>Upload files on Dropbox.</p><p>Works as Camel producer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e72309"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -131,7 +131,7 @@
                     <td class="confluenceTd"><p> <code class="code">remotePath</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">false</code> </p></td>
                     <td class="confluenceTd"><p> Folder destination on Dropbox. If the property is not set, the component will upload the file on a remote path equal to the local path. </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-237"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;uploadMode=add&amp;localPath=/root/folder1").to("mock:result");</p><p>from("direct:start").to("dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;uploadMode=add&amp;localPath=/root/folder1&amp;remotePath=/root/folder2").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-238"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e73877"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-237"></a>Samples</h2></div></div></div><p>from("direct:start").to("dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;uploadMode=add&amp;localPath=/root/folder1").to("mock:result");</p><p>from("direct:start").to("dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;uploadMode=add&amp;localPath=/root/folder1&amp;remotePath=/root/folder2").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-238"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e72397"><tbody><tr>
                         <th class="confluenceTh"><p> Property </p></th>
                         <th class="confluenceTh"><p> Value </p></th>
                     </tr><tr>
@@ -140,7 +140,7 @@
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">UPLOADED_FILES</code> </p></td>
                         <td class="confluenceTd"><p> in case of multiple files upload, string with the remote paths uploaded </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-239"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e73920"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-239"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e72440"><tbody><tr>
                         <th class="confluenceTh"><p> Object type </p></th>
                         <th class="confluenceTh"><p> Description </p></th>
                     </tr><tr>
@@ -149,7 +149,7 @@
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">Map&lt;String, DropboxResultCode&gt;</code> </p></td>
                         <td class="confluenceTd"><p> in case of multiple files upload, a map with as key the path of the remote file uploaded and as value the result of the upload operation, OK or KO </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-240"></a>Search operation</h2></div></div></div><p>Search inside a remote Dropbox folder including its sub directories.</p><p>Works as Camel producer and as Camel consumer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e73967"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-240"></a>Search operation</h2></div></div></div><p>Search inside a remote Dropbox folder including its sub directories.</p><p>Works as Camel producer and as Camel consumer.</p><p>Below are listed the options for this operation:</p><table class="confluenceTable" id="d0e72487"><tbody><tr>
                     <th class="confluenceTh"><p> Property </p></th>
                     <th class="confluenceTh"><p> Mandatory </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -161,13 +161,13 @@
                     <td class="confluenceTd"><p> <code class="code">query</code> </p></td>
                     <td class="confluenceTd"><p> <code class="code">false</code> </p></td>
                     <td class="confluenceTd"><p> A space-separated list of substrings to search for. A file matches only if it contains all the substrings. If this option is not set, all files will be matched. </p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-241"></a>Samples</h2></div></div></div><p>from("dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/XXX&amp;query=XXX").to("mock:result");</p><p>from("direct:start").to("dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/XXX").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-242"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e74035"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-241"></a>Samples</h2></div></div></div><p>from("dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/XXX&amp;query=XXX").to("mock:result");</p><p>from("direct:start").to("dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;remotePath=/XXX").to("mock:result");</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-242"></a>Result Message Headers</h2></div></div></div><p>The following headers are set on message result:</p><table class="confluenceTable" id="d0e72555"><tbody><tr>
                         <th class="confluenceTh"><p> Property </p></th>
                         <th class="confluenceTh"><p> Value </p></th>
                     </tr><tr>
                         <td class="confluenceTd"><p> <code class="code">FOUNDED_FILES</code> </p></td>
                         <td class="confluenceTd"><p> list of file path founded </p></td>
-                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-243"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e74065"><tbody><tr>
+                    </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-243"></a>Result Message Body</h2></div></div></div><p>The following objects are set on message body result:</p><table class="confluenceTable" id="d0e72585"><tbody><tr>
                         <th class="confluenceTh"><p> Object type </p></th>
                         <th class="confluenceTh"><p> Description </p></th>
                     </tr><tr>
