@@ -2,11 +2,11 @@
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>RSS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Routebox.html" title="Routebox"><link rel="next" href="IDU-Salesforce.html" title="Salesforce"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-RSS"></a>RSS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_RSSComponent"></a>RSS Component</h2></div></div></div><p>The <span class="bold"><strong>rss:</strong></span> component is used for polling RSS feeds.
       Apache Camel will default poll the feed every 60th seconds.</p><p><span class="bold"><strong>Note:</strong></span> The component currently only supports polling
-      (consuming) feeds.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Camel-rss internally uses a <a class="link" href="http://svn.apache.org/repos/asf/servicemix/smx4/bundles/trunk/rome-1.0/" target="_top">patched version</a> of <a class="link" href="http://rometools.org/" target="_top">ROME</a> hosted on ServiceMix to solve some OSGi <a class="link" href="https://issues.apache.org/jira/browse/SMX4-510" target="_top">class loading issues</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e147018"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+      (consuming) feeds.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Camel-rss internally uses a <a class="link" href="http://svn.apache.org/repos/asf/servicemix/smx4/bundles/trunk/rome-1.0/" target="_top">patched version</a> of <a class="link" href="http://rometools.org/" target="_top">ROME</a> hosted on ServiceMix to solve some OSGi <a class="link" href="https://issues.apache.org/jira/browse/SMX4-510" target="_top">class loading issues</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e145538"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">rss:rssUri</pre><p>Where <code class="literal">rssUri</code> is the URI to the RSS feed to poll. </p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e147043"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e145563"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -95,7 +95,7 @@
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Exchangedatatypes"></a>Exchange data types</h2></div></div></div><p>Apache Camel initializes the In body on the Exchange with a ROME <code class="literal">SyndFeed</code>.
       Depending on the value of the <code class="literal">splitEntries</code> flag, Apache Camel returns either a
         <code class="literal">SyndFeed</code> with one <code class="literal">SyndEntry</code> or a
-        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e147285"><tr>
+        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e145805"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -111,7 +111,7 @@
         <td><code class="literal">false</code>
         </td>
         <td> The entire list of entries from the current feed is set in the exchange. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e147331"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e145851"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

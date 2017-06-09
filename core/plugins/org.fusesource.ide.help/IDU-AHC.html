@@ -9,7 +9,7 @@ The component uses the <a class="link" href="https://github.com/AsyncHttpClient/
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">ahc:http://hostname[:port][/resourceUri][?options]
 ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use port 80 for HTTP and 443 for HTTPS.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcEndpointOptions"></a>AhcEndpoint Options</h2></div></div></div><table id="d0e46880"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcEndpointOptions"></a>AhcEndpoint Options</h2></div></div></div><table id="d0e45400"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -88,7 +88,7 @@ ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use 
         <td><span class="bold"><strong>Camel 2.10.3:</strong></span> The initial in-memory buffer size used when transferring data between Camel and AHC Client. </td>
       </tr></table><p>
 
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcComponentOptions"></a>AhcComponent Options</h2></div></div></div><table id="d0e47136"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcComponentOptions"></a>AhcComponent Options</h2></div></div></div><table id="d0e45656"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -122,7 +122,7 @@ ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use 
           or component level. </td>
       </tr></table><p>
 
-    </p><p>Notice that setting any of the options on the <code class="literal">AhcComponent</code> will propagate those options to <code class="literal">AhcEndpoint</code>s being created. However the <code class="literal">AhcEndpoint</code> can also configure/override a custom option. Options set on endpoints will always take precedence over options from the <code class="literal">AhcComponent</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e47247"><tr>
+    </p><p>Notice that setting any of the options on the <code class="literal">AhcComponent</code> will propagate those options to <code class="literal">AhcEndpoint</code>s being created. However the <code class="literal">AhcEndpoint</code> can also configure/override a custom option. Options set on endpoints will always take precedence over options from the <code class="literal">AhcComponent</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e45767"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
