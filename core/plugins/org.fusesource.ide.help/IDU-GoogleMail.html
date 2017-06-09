@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>GoogleMail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-GoogleDrive.html" title="GoogleDrive"><link rel="next" href="IDU-GuavaEventBus.html" title="Guava EventBus"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleMail"></a>GoogleMail</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GoogleMail_HSH_GoogleMailComponent"></a>GoogleMail component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94561"></a>Component Description</h2></div></div></div><p>The Google Mail component provides access to <a class="link" href="http://gmail.com/" target="_top">Gmail</a> via the <a class="link" href="https://developers.google.com/gmail/api/v1/reference/" target="_top">Google Mail Web
+   <title>GoogleMail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-GoogleDrive.html" title="GoogleDrive"><link rel="next" href="IDU-GuavaEventBus.html" title="Guava EventBus"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleMail"></a>GoogleMail</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GoogleMail_HSH_GoogleMailComponent"></a>GoogleMail component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93081"></a>Component Description</h2></div></div></div><p>The Google Mail component provides access to <a class="link" href="http://gmail.com/" target="_top">Gmail</a> via the <a class="link" href="https://developers.google.com/gmail/api/v1/reference/" target="_top">Google Mail Web
                 APIs</a>.</p><p>Google Mail uses the <a class="link" href="https://developers.google.com/accounts/docs/OAuth2" target="_top">OAuth 2.0
                 protocol</a> for authenticating a Google account and authorizing access to user
             data. Before you can use this component, you will need to <a class="link" href="https://developers.google.com/gmail/api/auth/web-server" target="_top">create an account
@@ -12,9 +12,9 @@
         &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
         &lt;artifactId&gt;camel-google-mail&lt;/artifactId&gt;
         &lt;version&gt;2.18.1.redhat-000005&lt;/version&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94587"></a>URI Format</h2></div></div></div><p>The GoogleMail Component uses the following URI format:</p><pre class="programlisting">google-mail://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>attachments</p></li><li class="listitem"><p>drafts</p></li><li class="listitem"><p>history</p></li><li class="listitem"><p>labels</p></li><li class="listitem"><p>messages</p></li><li class="listitem"><p>threads</p></li><li class="listitem"><p>users</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94618"></a>GoogleMailComponent</h2></div></div></div><p>The GoogleMail Component can be configured with the options below. These options can
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93107"></a>URI Format</h2></div></div></div><p>The GoogleMail Component uses the following URI format:</p><pre class="programlisting">google-mail://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>attachments</p></li><li class="listitem"><p>drafts</p></li><li class="listitem"><p>history</p></li><li class="listitem"><p>labels</p></li><li class="listitem"><p>messages</p></li><li class="listitem"><p>threads</p></li><li class="listitem"><p>users</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93138"></a>GoogleMailComponent</h2></div></div></div><p>The GoogleMail Component can be configured with the options below. These options can
             be provided using the component's bean property <code class="code">configuration</code> of type
-                <code class="code">org.apache.camel.component.google.mail.GoogleMailConfiguration</code>.</p><table width="862" id="d0e94629"><col width="194pt"><col width="102pt"><col width="558pt"><tbody><tr>
+                <code class="code">org.apache.camel.component.google.mail.GoogleMailConfiguration</code>.</p><table width="862" id="d0e93149"><col width="194pt"><col width="102pt"><col width="558pt"><tbody><tr>
                     <th>Option</th>
                     <th>Type</th>
                     <th> </th>
@@ -66,7 +66,7 @@
                                 <code class="code">.p12</code> file which has the private key to use with the
                             Google Service Account.</p>
                     </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94777"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93297"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
             options described next. A shorthand alias can be used for some endpoints. The endpoint
             URI MUST contain a prefix.</p><p>Endpoint options that are not mandatory are denoted by []. When there are no mandatory
             options for an endpoint, one of the set of [] options MUST be provided. Producer
@@ -75,8 +75,8 @@
             in a message header. The message header name must be of the format
                 <code class="code">CamelGoogleMail.&lt;option&gt;</code>. Note that the <code class="code">inBody</code> option
             overrides message header, i.e. the endpoint option <code class="code">inBody=option</code> would
-            override a <code class="code">CamelGoogleMail.option</code> header.</p><p>For more information on the endpoints and options see API documentation at: <a class="link" href="https://developers.google.com/gmail/api/v1/reference/" target="_top">https://developers.google.com/gmail/api/v1/reference/</a></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94806"></a>1. Endpoint Prefix <span class="emphasis"><em>attachments</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">attachments</code> as
-            follows:</p><pre class="programlisting">google-mail://attachments/endpoint?[options]</pre><table id="d0e94818"><tbody><tr>
+            override a <code class="code">CamelGoogleMail.option</code> header.</p><p>For more information on the endpoints and options see API documentation at: <a class="link" href="https://developers.google.com/gmail/api/v1/reference/" target="_top">https://developers.google.com/gmail/api/v1/reference/</a></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93326"></a>1. Endpoint Prefix <span class="emphasis"><em>attachments</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">attachments</code> as
+            follows:</p><pre class="programlisting">google-mail://attachments/endpoint?[options]</pre><table id="d0e93338"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -86,7 +86,7 @@
                     <td> </td>
                     <td>id, messageId, userId</td>
                     <td>com.google.api.services.gmail.model.MessagePartBody</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94848"></a>URI Options for <span class="emphasis"><em>attachments</em></span></h2></div></div></div><table id="d0e94853"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93368"></a>URI Options for <span class="emphasis"><em>attachments</em></span></h2></div></div></div><table id="d0e93373"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -98,8 +98,8 @@
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94887"></a>2. Endpoint Prefix <span class="emphasis"><em>drafts</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drafts</code> as
-            follows:</p><pre class="programlisting">google-mail://drafts/endpoint?[options]</pre><table id="d0e94899"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93407"></a>2. Endpoint Prefix <span class="emphasis"><em>drafts</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drafts</code> as
+            follows:</p><pre class="programlisting">google-mail://drafts/endpoint?[options]</pre><table id="d0e93419"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -134,7 +134,7 @@
                     <td> </td>
                     <td>[mediaContent], content, id, userId</td>
                     <td><code class="code">com.google.api.services.gmail.model.Draft</code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95004"></a>URI Options for <span class="emphasis"><em>drafts</em></span></h2></div></div></div><table id="d0e95009"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93524"></a>URI Options for <span class="emphasis"><em>drafts</em></span></h2></div></div></div><table id="d0e93529"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -149,8 +149,8 @@
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95051"></a>3. Endpoint Prefix <span class="emphasis"><em>history</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">history</code> as
-            follows:</p><pre class="programlisting">google-mail://history/endpoint?[options]</pre><table id="d0e95063"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93571"></a>3. Endpoint Prefix <span class="emphasis"><em>history</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">history</code> as
+            follows:</p><pre class="programlisting">google-mail://history/endpoint?[options]</pre><table id="d0e93583"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -160,14 +160,14 @@
                     <td> </td>
                     <td>userId</td>
                     <td><code class="code">com.google.api.services.gmail.model.ListHistoryResponse</code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95094"></a>URI Options for <span class="emphasis"><em>history</em></span></h2></div></div></div><table id="d0e95099"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93614"></a>URI Options for <span class="emphasis"><em>history</em></span></h2></div></div></div><table id="d0e93619"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95117"></a>4. Endpoint Prefix <span class="emphasis"><em>labels</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">labels</code> as
-            follows:</p><pre class="programlisting">google-mail://labels/endpoint?[options]</pre><table id="d0e95129"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93637"></a>4. Endpoint Prefix <span class="emphasis"><em>labels</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">labels</code> as
+            follows:</p><pre class="programlisting">google-mail://labels/endpoint?[options]</pre><table id="d0e93649"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -202,7 +202,7 @@
                     <td> </td>
                     <td>content, id, userId</td>
                     <td><code class="code">com.google.api.services.gmail.model.Label</code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95234"></a>URI Options for <span class="emphasis"><em>labels</em></span></h2></div></div></div><table id="d0e95239"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93754"></a>URI Options for <span class="emphasis"><em>labels</em></span></h2></div></div></div><table id="d0e93759"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -214,8 +214,8 @@
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95273"></a>5. Endpoint Prefix <span class="emphasis"><em>messages</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">messages</code> as
-            follows:</p><pre class="programlisting">google-mail://messages/endpoint?[options]</pre><table id="d0e95285"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93793"></a>5. Endpoint Prefix <span class="emphasis"><em>messages</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">messages</code> as
+            follows:</p><pre class="programlisting">google-mail://messages/endpoint?[options]</pre><table id="d0e93805"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -265,7 +265,7 @@
                     <td> </td>
                     <td>id, userId</td>
                     <td><code class="code"> </code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95435"></a>URI Options for <span class="emphasis"><em>messages</em></span></h2></div></div></div><table id="d0e95440"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e93955"></a>URI Options for <span class="emphasis"><em>messages</em></span></h2></div></div></div><table id="d0e93960"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -283,8 +283,8 @@
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95490"></a>6. Endpoint Prefix <span class="emphasis"><em>threads</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">threads</code> as
-            follows:</p><pre class="programlisting">google-mail://threads/endpoint?[options]</pre><table id="d0e95502"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94010"></a>6. Endpoint Prefix <span class="emphasis"><em>threads</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">threads</code> as
+            follows:</p><pre class="programlisting">google-mail://threads/endpoint?[options]</pre><table id="d0e94022"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -319,7 +319,7 @@
                     <td> </td>
                     <td>id, userId</td>
                     <td> </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95605"></a>URI Options for <span class="emphasis"><em>threads</em></span></h2></div></div></div><table id="d0e95610"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94125"></a>URI Options for <span class="emphasis"><em>threads</em></span></h2></div></div></div><table id="d0e94130"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -331,8 +331,8 @@
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95644"></a>7. Endpoint Prefix <span class="emphasis"><em>users</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">users</code> as
-            follows:</p><pre class="programlisting">google-mail://users/endpoint?[options]</pre><table id="d0e95656"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94164"></a>7. Endpoint Prefix <span class="emphasis"><em>users</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">users</code> as
+            follows:</p><pre class="programlisting">google-mail://users/endpoint?[options]</pre><table id="d0e94176"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -342,18 +342,18 @@
                     <td> </td>
                     <td>userId</td>
                     <td>com.google.api.services.gmail.model.Profile</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95686"></a>URI Options for <span class="emphasis"><em>users</em></span></h2></div></div></div><table id="d0e95691"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94206"></a>URI Options for <span class="emphasis"><em>users</em></span></h2></div></div></div><table id="d0e94211"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
                     <td>userId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95709"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94229"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints
             can use <a class="link" href="http://camel.apache.org/polling-consumer.html#PollingConsumer-ScheduledPollConsumerOptions" target="_top">Scheduled Poll Consumer Options</a> with a <code class="code">consumer.</code> prefix to
             schedule endpoint invocation. Consumer endpoints that return an array or collection will
             generate one exchange per element, and their routes will be executed once for each
-            exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95720"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
-                <code class="code">CamelGoogleMail.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e95728"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
+            exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94240"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
+                <code class="code">CamelGoogleMail.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e94248"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
             GoogleMailComponent. Producer endpoints can specify the option name for incoming message
             body in the <code class="code">inBody</code> endpoint URI parameter. For endpoints that return an
             array or collection, a consumer endpoint will map every element to distinct messages.

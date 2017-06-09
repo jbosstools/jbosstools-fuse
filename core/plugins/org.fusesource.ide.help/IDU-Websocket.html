@@ -4,7 +4,7 @@
     </p><p>The <span class="bold"><strong>websocket</strong></span> component provides websocket <span class="phrase">endpoints</span> for communicating with clients using websocket. The component uses Eclipse Jetty Server which implements the <a class="link" href="http://tools.ietf.org/html/rfc6455" target="_top">IETF</a> specification (drafts and RFC 6455). It supports the protocols ws:// and wss://. To use wss:// protocol, the SSLContextParameters must be defined.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">websocket://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">WebsocketComponent</code> can be configured prior to use, to setup host, to act as a websocket server. </p><p>
 
-    </p><table id="d0e176441"><tr>
+    </p><table id="d0e174961"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -90,7 +90,7 @@
                     <span class="bold"><strong>Consumer only</strong></span>: To use a custom thread pool for
                     the server. <code class="code">minThreads</code>/<code class="code">maxThreads</code> or
                         <code class="code">threadPool</code> fields are required due to switch to Jetty 9. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The <code class="literal">WebsocketEndpoint</code> can be configured prior to use</p><table id="d0e176678"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The <code class="literal">WebsocketEndpoint</code> can be configured prior to use</p><table id="d0e175198"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -191,7 +191,7 @@
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The websocket component uses 2 headers to indicate to either send messages back to a single/current client, or to all clients.</p><p>
 
-    </p><table id="d0e176918"><tr>
+    </p><table id="d0e175438"><tr>
         <th> Key</th>
         <th> Description </th>
       </tr><tr>

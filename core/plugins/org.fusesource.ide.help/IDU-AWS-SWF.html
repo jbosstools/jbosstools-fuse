@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>AWS-SWF</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-SQS.html" title="AWS-SQS"><link rel="next" href="IDU-Bean.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-SWF"></a>AWS-SWF</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54927"></a>SWF Component</h3></div></div></div><p>
+   <title>AWS-SWF</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-SQS.html" title="AWS-SQS"><link rel="next" href="IDU-Bean.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-SWF"></a>AWS-SWF</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e53447"></a>SWF Component</h3></div></div></div><p>
             <span class="bold"><strong>Available as of Camel 2.13</strong></span>
         </p><p>The Simple Workflow component supports managing workflows from <a class="link" href="http://aws.amazon.com/swf/" target="_top">Amazon's Simple Workflow</a> service.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services
                         developer account, and be signed up to use Amazon Simple Workflow. More
                         information are available at <a class="link" href="http://aws.amazon.com/swf/" target="_top">Amazon
-                            Simple Workflow</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54946"></a>URI Format</h3></div></div></div><div class="informalexample"><pre class="programlisting">aws-swf://&lt;workflow|activity&gt;[?options]</pre></div><p>You can append query options to the URI in the following format,
-            ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54954"></a>URI Options</h3></div></div></div><table id="d0e54957"><tbody><tr>
+                            Simple Workflow</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e53466"></a>URI Format</h3></div></div></div><div class="informalexample"><pre class="programlisting">aws-swf://&lt;workflow|activity&gt;[?options]</pre></div><p>You can append query options to the URI in the following format,
+            ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e53474"></a>URI Options</h3></div></div></div><table id="d0e53477"><tbody><tr>
                     <th><p>Name</p></th>
                     <th><p>Default Value</p></th>
                     <th><p>Context</p></th>
@@ -143,9 +143,9 @@
                     <td class="confluenceTd">An instance of
                             <code class="code">WorkflowTypeRegistrationOptions</code>.</td>
                 </tr></tbody></table><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You have to provide the amazonSWClient in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a> or your
-                        accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/swf" target="_top">Amazon's Simple Workflow Service</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55411"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55415"></a>Message headers evaluated by the SWF Workflow Producer</h3></div></div></div><p>A workflow producer allows interacting with a workflow. It can start a new workflow
+                        accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/swf" target="_top">Amazon's Simple Workflow Service</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e53931"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e53935"></a>Message headers evaluated by the SWF Workflow Producer</h3></div></div></div><p>A workflow producer allows interacting with a workflow. It can start a new workflow
             execution, query its state, send signals to a running workflow, or terminate and cancel
-            it.</p><table id="d0e55420"><tbody><tr>
+            it.</p><table id="d0e53940"><tbody><tr>
                                 <th><p> Header </p></th>
                                 <th><p> Type </p></th>
                                 <th><p> Description </p></th>
@@ -230,7 +230,7 @@
                                     </p></td>
                                 <td><p> The policy to use on child workflows
                                         when terminating a workflow. </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55616"></a>Message headers set by the SWF Workflow Producer</h3></div></div></div><table id="d0e55619"><tbody><tr>
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54136"></a>Message headers set by the SWF Workflow Producer</h3></div></div></div><table id="d0e54139"><tbody><tr>
                                 <th><p> Header </p></th>
                                 <th><p> Type </p></th>
                                 <th><p> Description </p></th>
@@ -252,12 +252,12 @@
                                     </p></td>
                                 <td><p> The worfklow run ID used or generated.
                                     </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55675"></a>Message headers set by the SWF Workflow Consumer</h3></div></div></div><p>A workflow consumer represents the workflow logic. When it is started, it will start
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54195"></a>Message headers set by the SWF Workflow Consumer</h3></div></div></div><p>A workflow consumer represents the workflow logic. When it is started, it will start
             polling workflow decision tasks and process them. In addition to processing decision
             tasks, a workflow consumer route, will also receive signals (send from a workflow
             producer) or state queries. The primary purpose of a workflow consumer is to schedule
             activity tasks for execution using activity producers. Actually activity tasks can be
-            scheduled only from a thread started by a workflow consumer.</p><table id="d0e55680"><tbody><tr>
+            scheduled only from a thread started by a workflow consumer.</p><table id="d0e54200"><tbody><tr>
                                 <th><p> Header </p></th>
                                 <th><p> Type </p></th>
                                 <th><p> Description </p></th>
@@ -289,9 +289,9 @@
                                     </p></td>
                                 <td><p> The time of the start event for this
                                         decision task. </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55756"></a>Message headers set by the SWF Activity Producer</h3></div></div></div><p>An activity producer allows scheduling activity tasks. An activity producer can be used
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54276"></a>Message headers set by the SWF Activity Producer</h3></div></div></div><p>An activity producer allows scheduling activity tasks. An activity producer can be used
             only from a thread started by a workflow consumer ie, it can process synchronous
-            exchanges started by a workflow consumer.</p><table id="d0e55761"><tbody><tr>
+            exchanges started by a workflow consumer.</p><table id="d0e54281"><tbody><tr>
                                 <th><p> Header </p></th>
                                 <th><p> Type </p></th>
                                 <th><p> Description </p></th>
@@ -312,7 +312,7 @@
                                     </p></td>
                                 <td><p> The activity version to schedule.
                                     </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55816"></a>Message headers set by the SWF Activity Consumer</h3></div></div></div><table id="d0e55819"><tbody><tr>
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54336"></a>Message headers set by the SWF Activity Consumer</h3></div></div></div><table id="d0e54339"><tbody><tr>
                                 <th><p> Header </p></th>
                                 <th><p> Type </p></th>
                                 <th><p> Description </p></th>
@@ -326,7 +326,7 @@
                                 <td><p> The task token that is required to
                                         report task completion for manually completed tasks.
                                     </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55855"></a>Advanced amazonSWClient configuration</h3></div></div></div><p>If you need more control over the AmazonSimpleWorkflowClient instance configuration you
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54375"></a>Advanced amazonSWClient configuration</h3></div></div></div><p>If you need more control over the AmazonSimpleWorkflowClient instance configuration you
             can create your own instance and refer to it from the URI:</p><p>The <code class="code">#client</code> refers to a AmazonSimpleWorkflowClient in the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/Registry.html" target="_top">Registry</a>.</p><p>For example if your Camel Application is running behind a firewall:</p><div class="informalexample"><pre class="programlisting">AWSCredentials awsCredentials = new BasicAWSCredentials("myAccessKey", "mySecretKey");
 ClientConfiguration clientConfiguration = new ClientConfiguration();
 clientConfiguration.setProxyHost("http://myProxyHost");
@@ -334,7 +334,7 @@ clientConfiguration.setProxyPort(8080);
 
 AmazonSimpleWorkflowClient client = new AmazonSimpleWorkflowClient(awsCredentials, clientConfiguration);
 
-registry.bind("client", client);</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e55873"></a>Dependencies</h3></div></div></div><p>Maven users will need to add the following dependency to their pom.xml.</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
+registry.bind("client", client);</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e54393"></a>Dependencies</h3></div></div></div><p>Maven users will need to add the following dependency to their pom.xml.</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-aws&lt;/artifactId&gt;
     &lt;version&gt;${camel-version}&lt;/version&gt;
