@@ -556,13 +556,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				selectedEP.getXmlNode().removeChild(oldExpNode);
 				selectedEP.removeParameter(prop.getName());
 			}
-		} else if (dataFormatElement == null && dataformat.trim().length() > 0) {
+		} else if (dataFormatElement == null && dataformat.trim().length() > 0 && df != null) {
 			// no expression set, but now we set one
 			Node expNode = selectedEP.createElement(dataformat, selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 			dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 			selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 			this.selectedEP.setParameter(prop.getName(), dataFormatElement);
-
 			updateDependencies(df.getDependencies(), project);
 		}
 
