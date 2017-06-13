@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.jboss.tools</groupId>
+		<artifactId>server.all</artifactId>
+		<version>4.5.0-SNAPSHOT</version>
+	</parent>
+	<groupId>org.jboss.tools</groupId>
+	<artifactId>server.all.tests</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>../core/tests</module>
+		<module>../editor/tests</module>
+		<module>../jmx/tests</module>
+		<module>../servers/tests</module>
+		<module>../transformation/tests</module>
+	</modules>
+</project>
