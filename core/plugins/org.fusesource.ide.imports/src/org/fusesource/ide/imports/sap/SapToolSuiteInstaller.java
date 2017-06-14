@@ -59,8 +59,8 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 	private static final String DOT = "."; //$NON-NLS-1$
 	private static final String CONFIGS_ARG = "-configs"; //$NON-NLS-1$
 	private static final String APPEND_FLAG = "-append"; //$NON-NLS-1$
-	private static final String INTEGRATION_STACK_SAP_URL_PROP = "jboss.discovery.site.integration-stack-sap.url"; //$NON-NLS-1$
-	private static final String INTEGRATION_STACK_SAP_FEATURE_PROP = "jboss.discovery.site.integration-stack-sap.feature"; //$NON-NLS-1$
+	private static final String FUSE_EXTRAS_URL_PROP = "jboss.fuse.extras.site.url"; //$NON-NLS-1$
+	private static final String FUSE_EXTRAS_FEATURE_PROP = "jboss.fuse.extras.site.feature"; //$NON-NLS-1$
 	private SapLibrariesFeatureArchive sapLibrariesFeatureArchive;
 	private JCo3ImportSettings jco3ImportSettings;
 	private IDoc3ImportSettings idoc3ImportSettings;
@@ -164,26 +164,26 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 	}
 	
 	public URI getSapToolingUpdateSiteUrl() throws InterruptedException {
-		String sapToolingUpdateSite = System.getProperty(INTEGRATION_STACK_SAP_URL_PROP, null);
+		String sapToolingUpdateSite = System.getProperty(FUSE_EXTRAS_URL_PROP, null);
 		if (sapToolingUpdateSite == null) {
 			IPropertiesProvider propertiesProvider = PropertiesHelper.getPropertiesProvider();
-			sapToolingUpdateSite = propertiesProvider.getValue(INTEGRATION_STACK_SAP_URL_PROP);
+			sapToolingUpdateSite = propertiesProvider.getValue(FUSE_EXTRAS_URL_PROP);
 		}
 		if (sapToolingUpdateSite == null) {
-			throw new InterruptedException(String.format("No URL set for discovery catalog. Property %s is missing!", INTEGRATION_STACK_SAP_URL_PROP)); //$NON-NLS-1$
+			throw new InterruptedException(String.format("No URL set for discovery catalog. Property %s is missing!", FUSE_EXTRAS_URL_PROP)); //$NON-NLS-1$
 		}
 		
 		return URI.create(sapToolingUpdateSite);
 	}
 
 	public String getSapToolingFeature() throws InterruptedException {
-		String sapToolingUpdateSite = System.getProperty(INTEGRATION_STACK_SAP_FEATURE_PROP, null);
+		String sapToolingUpdateSite = System.getProperty(FUSE_EXTRAS_FEATURE_PROP, null);
 		if (sapToolingUpdateSite == null) {
 			IPropertiesProvider propertiesProvider = PropertiesHelper.getPropertiesProvider();
-			sapToolingUpdateSite = propertiesProvider.getValue(INTEGRATION_STACK_SAP_FEATURE_PROP);
+			sapToolingUpdateSite = propertiesProvider.getValue(FUSE_EXTRAS_FEATURE_PROP);
 		}
 		if (sapToolingUpdateSite == null) {
-			throw new InterruptedException(String.format("No feature set for discovery catalog. Property %s is missing!", INTEGRATION_STACK_SAP_FEATURE_PROP)); //$NON-NLS-1$
+			throw new InterruptedException(String.format("No feature set for discovery catalog. Property %s is missing!", FUSE_EXTRAS_FEATURE_PROP)); //$NON-NLS-1$
 		}
 		
 		return sapToolingUpdateSite;
