@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.model.IProcess;
 import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeContentProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
@@ -58,13 +59,17 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		}
 		projectWithDebugAvailableDeployedHelper.clean();
 		if (remoteDebuglaunch != null) {
+			IProcess[] procs = remoteDebuglaunch.getProcesses();
+			for (IProcess p : procs) {
+				p.terminate();
+			}
 			remoteDebuglaunch.terminate();
 		}
 	}
 	
 	@Test
 	public void testRemoteDebugScenario() throws Exception {
-		jmxConnection = initializeConnection();
+		initializeConnection();
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
@@ -76,7 +81,7 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		new RemoteCamelDebugTester(remoteDebuglaunch, contextFile.getProject(), contextFile).test();
 	}
 
-	private DefaultConnectionWrapper initializeConnection() throws MalformedURLException, IOException, CoreException {
+	private void initializeConnection() throws MalformedURLException, IOException, CoreException {
 		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
 		jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
@@ -84,7 +89,5 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		provider.addConnection(jmxConnection);
 		jmxConnection.connect();
 		jmxConnection.loadRoot(new NullProgressMonitor());
-		return jmxConnection;
 	}
-
 }
