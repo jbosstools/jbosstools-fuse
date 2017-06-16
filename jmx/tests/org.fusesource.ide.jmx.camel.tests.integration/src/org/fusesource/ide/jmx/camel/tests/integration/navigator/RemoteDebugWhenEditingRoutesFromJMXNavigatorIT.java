@@ -57,11 +57,14 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 			ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
 		}
 		projectWithDebugAvailableDeployedHelper.clean();
+		if (remoteDebuglaunch != null) {
+			remoteDebuglaunch.terminate();
+		}
 	}
 	
 	@Test
 	public void testRemoteDebugScenario() throws Exception {
-		DefaultConnectionWrapper jmxConnection = initializeConnection();
+		jmxConnection = initializeConnection();
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
