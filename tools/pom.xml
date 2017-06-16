@@ -1,11 +1,9 @@
 <!--
-
     Copyright (C) 2010 FuseSource, Corp. All rights reserved.
     http://fusesource.com
 
     The software in this package is published under the terms of the AGPL license
     a copy of which has been included with this distribution in the license.txt file.
-
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,7 +23,7 @@
   <name>JBoss Fuse Tooling :: Tools</name>
 
   <modules>
-    <module>ide-catalog-generator</module>
+    <module>m2-repo-cleaner</module>
   </modules>
 
 </project>
