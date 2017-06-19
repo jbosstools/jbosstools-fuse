@@ -43,6 +43,21 @@ public class ThreadGarbageCollector extends Job {
 		return Status.OK_STATUS;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.runtime.jobs.Job#canceling()
+	 */
+	@Override
+	protected void canceling() {
+		try {
+			for (CamelThread t : camelDebugTarget.getThreads()) {
+				t.terminate();
+			}
+			cancel();
+		} catch (Exception ex) {
+			Activator.getLogger().error(ex);
+		}
+	}
+	
 	private void checkAllThreads() throws DebugException {
 		for (CamelThread t : camelDebugTarget.getThreads()) {
 			// we clean all threads not suspended in the last x seconds and state running
