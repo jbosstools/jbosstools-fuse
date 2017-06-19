@@ -83,12 +83,11 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	}
 
 	private void initializeConnection() throws MalformedURLException, IOException, CoreException {
-		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
+		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi/camel", null, null);
 		jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
 		provider.addConnection(jmxConnection);
-		LocateRegistry.createRegistry(1099); 
 		jmxConnection.connect();
 		jmxConnection.loadRoot(new NullProgressMonitor());
 	}

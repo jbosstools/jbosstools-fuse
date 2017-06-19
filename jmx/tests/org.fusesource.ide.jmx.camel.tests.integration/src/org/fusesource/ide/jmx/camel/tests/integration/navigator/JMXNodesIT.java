@@ -158,7 +158,7 @@ public class JMXNodesIT {
 	}
 	
 	private DefaultConnectionWrapper initializeConnection(String connectioName) throws MalformedURLException, IOException, CoreException {
-		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor(connectioName, "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
+		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor(connectioName, "service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi/camel", null, null);
 		DefaultConnectionWrapper jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
