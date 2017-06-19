@@ -222,14 +222,15 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 */
 	private void createTabFolder() {
 
-		if (this.form != null)
+		if (this.form != null && !this.form.isDisposed()) {
 			form.dispose();
+		}
 
 		this.form = this.toolkit.createForm(this.parent);
 		this.form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		this.form.getBody().setLayout(new GridLayout(1, false));
 
-		if (tabFolder != null) {
+		if (tabFolder != null && !tabFolder.isDisposed()) {
 			tabFolder.dispose();
 		}
 
