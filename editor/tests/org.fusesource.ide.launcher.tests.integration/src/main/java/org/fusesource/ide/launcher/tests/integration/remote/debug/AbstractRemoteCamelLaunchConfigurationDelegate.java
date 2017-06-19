@@ -19,6 +19,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
 import org.fusesource.ide.camel.tests.util.MasterPasswordDisabler;
@@ -58,6 +59,12 @@ public abstract class AbstractRemoteCamelLaunchConfigurationDelegate {
 	@After
 	public void tearDown() throws CoreException {
 		if(remoteDebuglaunch != null) {
+			for (IDebugTarget t : remoteDebuglaunch.getDebugTargets()) {
+				if (t.getDebugTarget() != null) {
+					t.getDebugTarget().terminate();
+				}
+				t.terminate();
+			}
 			remoteDebuglaunch.terminate();
 			remoteDebuglaunch.getLaunchConfiguration().delete();
 		}
