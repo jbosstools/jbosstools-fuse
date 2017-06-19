@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.rmi.registry.LocateRegistry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -87,6 +88,7 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
 		provider.addConnection(jmxConnection);
+		LocateRegistry.createRegistry(1099); 
 		jmxConnection.connect();
 		jmxConnection.loadRoot(new NullProgressMonitor());
 	}
