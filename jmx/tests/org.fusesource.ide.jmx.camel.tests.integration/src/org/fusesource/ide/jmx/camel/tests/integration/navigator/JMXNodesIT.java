@@ -22,6 +22,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeContentProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
@@ -62,15 +63,25 @@ public class JMXNodesIT {
 	
 	@Before
 	public void setup(){
-		jmxConnections.clear();
+		cleanAllConnections();
 	}
 	
 	@After
 	public void tearDown() throws IOException{
+		cleanAllConnections();
+	}
+	
+	private void cleanAllConnections() {
 		for(IConnectionWrapper jmxConnection : jmxConnections){
-			jmxConnection.disconnect();
-			ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
+			try {
+				jmxConnection.disconnect();
+			} catch (IOException ex) {
+				CamelJMXPlugin.getLogger().error(ex);
+			} finally {
+				ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
+			}
 		}
+		jmxConnections.clear();
 	}
 	
 	@Test

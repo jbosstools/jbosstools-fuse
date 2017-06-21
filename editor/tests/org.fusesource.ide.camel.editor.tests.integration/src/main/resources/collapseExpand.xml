@@ -21,7 +21,7 @@
         elements, it is a good idea to set those for runtime management purposes 
         (logging, JMX MBeans, ...)
     -->
-    <camelContext id="amq-example-context"
+    <camelContext id="amq-example-context-for-collapse-expand-test"
         xmlns="http://camel.apache.org/schema/spring" xmlns:order="http://com.mycompany/examples/order">
         <!-- a route to generate a random order every 5th second -->
         <route id="generate-order">

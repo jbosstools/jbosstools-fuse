@@ -39,9 +39,6 @@ import org.junit.Test;
 public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	
 	private ProjectWithDebugAvailableDeployedHelper projectWithDebugAvailableDeployedHelper;
-
-	private ILaunch remoteDebuglaunch;
-
 	private DefaultConnectionWrapper jmxConnection;
 	
 	@Before
@@ -52,11 +49,17 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	
 	@After
 	public void tearDown() throws Exception {
-		if(jmxConnection != null){
-			jmxConnection.disconnect();
-			ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
+		try {
+			if(jmxConnection != null){
+				try {
+					jmxConnection.disconnect();
+				} finally {
+					ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
+				}
+			}
+		} finally {
+			projectWithDebugAvailableDeployedHelper.clean();
 		}
-		projectWithDebugAvailableDeployedHelper.clean();
 	}
 	
 	@Test
@@ -67,7 +70,7 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
 		assertThat(camelContextNode.toString()).isEqualTo("contextToTestJMX");
 		
-		remoteDebuglaunch = camelContextNode.editRoutes();
+		ILaunch remoteDebuglaunch = camelContextNode.editRoutes();
 		String camelFilePath = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(remoteDebuglaunch.getLaunchConfiguration());
 		IFile contextFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(camelFilePath));
 		new RemoteCamelDebugTester(remoteDebuglaunch, contextFile.getProject(), contextFile).test();
