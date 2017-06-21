@@ -34,7 +34,7 @@
     <camelContext 
         xmlns="http://camel.apache.org/schema/spring"
         xmlns:order="http://com.mycompany/examples/order"
-        id="amq-example-context">
+        id="amq-example-context-amq-spring-template">
 
         <!-- a route to generate a random order every 5th second -->
         <route id="generate-order">
