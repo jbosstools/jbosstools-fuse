@@ -3,49 +3,98 @@
    <description>
       To install these features, point Eclipse at this site.
    </description>
-   <feature id="org.fusesource.ide.core.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <feature id="org.fusesource.ide.core.feature.source">
-      <category name="AllSources"/>
-   </feature>
 
-   <feature id="org.fusesource.ide.camel.editor.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <feature id="org.fusesource.ide.camel.editor.feature.source">
-      <category name="AllSources"/>
-   </feature>
+   <!-- features -->
 
-   <feature id="org.fusesource.ide.jmx.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <feature id="org.fusesource.ide.jmx.feature.source">
-      <category name="AllSources"/>
-   </feature>
+   <feature id="org.fusesource.ide.camel.editor.feature"><category name="AllFeatures"/></feature>
+   <feature id="org.fusesource.ide.core.feature"><category name="AllFeatures"/></feature>
+   <feature id="org.fusesource.ide.jmx.feature"><category name="AllFeatures"/></feature>
+   <feature id="org.fusesource.ide.server.extensions.feature"><category name="AllFeatures"/></feature>
+   <feature id="org.jboss.tools.fuse.transformation.feature"><category name="AllFeatures"/></feature>
 
-   <feature id="org.fusesource.ide.server.extensions.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <feature id="org.fusesource.ide.server.extensions.feature.source">
-      <category name="AllSources"/>
-   </feature>
+   <!-- tests -->
 
-   <feature id="org.jboss.tools.fuse.transformation.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <feature id="org.jboss.tools.fuse.transformation.feature.source">
-      <category name="AllSources"/>
-   </feature>
+   <bundle id="org.fusesource.ide.camel.editor.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.service.core.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.tests.util"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.validation.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.camel.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.commons.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.diagram.view.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.ui.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.projecttemplates.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.server.karaf.core.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.server.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.core.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.editor.tests"><category name="AllTests"/></bundle>
 
-   <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site">
+   <!-- integration tests -->
+
+   <!-- <bundle id="org.fusesource.ide.camel.editor.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.service.core.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.validation.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.camel.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.ui.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.project.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.projecttemplates.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration"><category name="AllTests"/></bundle> -->
+
+   <!-- sources -->
+
+   <feature id="org.fusesource.ide.camel.editor.feature.source"><category name="AllSources"/></feature>
+   <feature id="org.fusesource.ide.core.feature.source"><category name="AllSources"/></feature>
+   <feature id="org.fusesource.ide.jmx.feature.source"><category name="AllSources"/></feature>
+   <feature id="org.fusesource.ide.server.extensions.feature.source"><category name="AllSources"/></feature>
+   <feature id="org.jboss.tools.fuse.transformation.feature.source"><category name="AllSources"/></feature>
+
+   <!-- test sources -->
+
+   <!-- <bundle id="org.fusesource.ide.camel.editor.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.service.core.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.tests.util.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.validation.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.camel.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.commons.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.diagram.view.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.ui.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.projecttemplates.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.server.karaf.core.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.server.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.core.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.editor.tests.source"><category name="AllTests"/></bundle> -->
+
+   <!-- integration test sources -->
+
+   <!-- <bundle id="org.fusesource.ide.camel.editor.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.service.core.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.validation.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.jmx.camel.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.launcher.ui.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.project.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.projecttemplates.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration.source"><category name="AllTests"/></bundle> -->
+
+   <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site - Features">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.
       </description>
    </category-def>
-   <category-def name="AllSources" label="JBoss Fuse Tooling Nightly Build Update Site">
+   <category-def name="AllSources" label="JBoss Fuse Tooling Nightly Build Update Site - Sources">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all source features in this build.
+      </description>
+   </category-def>
+   <category-def name="AllTests" label="JBoss Fuse Tooling Nightly Build Update Site - Tests">
+      <description>
+         JBoss Fuse Tooling Nightly Build Update Site: contains all tests in this build.
       </description>
    </category-def>
 </site>
