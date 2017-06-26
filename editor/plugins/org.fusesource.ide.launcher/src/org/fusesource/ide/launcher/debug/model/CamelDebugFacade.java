@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -34,6 +35,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	
 	private static final String CAMEL_PROCESSOR_MBEAN = "org.apache.camel:type=processors,name=\"%s\",*";
 	public static final String CAMEL_DEBUGGER_MBEAN_DEFAULT = "org.apache.camel:type=tracer,name=BacklogDebugger,*";
+	static final String KEY_PROPERTY_CONTEXT_FOR_DEBUGGER_MBEAN = "context";
 	private static final String CAMEL_CONTEXT_MBEAN = "org.apache.camel:type=context,name=\"%s\",*";
 	
 	
@@ -73,27 +75,46 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 				Activator.getLogger().error(e);
 				Thread.currentThread().interrupt();
 			}
-			initializeDebuggerMBean();
+			initializeDebuggerMBean(contextId);
 		}
 	}
 	
 	/**
 	 * initialize the mbean
+	 * @param contextId 
 	 * @throws IOException 
 	 * @throws MalformedObjectNameException 
 	 * 
 	 * @throws Exception
 	 */
-	private void initializeDebuggerMBean() throws MalformedObjectNameException, IOException {
+	private void initializeDebuggerMBean(String contextId) throws MalformedObjectNameException, IOException {
 		Set<ObjectInstance> mbeans = mbsc.queryMBeans(new ObjectName(CAMEL_DEBUGGER_MBEAN_DEFAULT), null);
+		this.objectNameDebugger = findDebugger(contextId, mbeans);
+	}
+
+	ObjectName findDebugger(String contextId, Set<ObjectInstance> mbeans) {
     	if (mbeans.size() == 1) {
 	    	// remember the mbean
-	    	Object oMbean = mbeans.iterator().next();
-	    	if (oMbean instanceof ObjectInstance) {
-	    		ObjectInstance oi = (ObjectInstance)oMbean;
-	    		this.objectNameDebugger = oi.getObjectName();
-	    	}
+    		ObjectInstance oMbean = mbeans.iterator().next();
+	    	return oMbean.getObjectName();
+	    } else if (mbeans.size() > 1) {
+	    	Set<ObjectName> objectNames = mbeans.stream().map(ObjectInstance::getObjectName).collect(Collectors.toSet());
+	    	
+	    	for (ObjectName objectName : objectNames) {
+	    		String contextValue = objectName.getKeyProperty(KEY_PROPERTY_CONTEXT_FOR_DEBUGGER_MBEAN);
+				if (contextValue != null && contextValue.equals(contextId)) {
+					return objectName;
+				}
+			}
+	    	//On Karaf, the bundle name is used as a prefix but we don't have this bundle name here so try the first best match.
+	    	for (ObjectName objectName : objectNames) {
+	    		String contextValue = objectName.getKeyProperty(KEY_PROPERTY_CONTEXT_FOR_DEBUGGER_MBEAN);
+				if (contextValue != null && contextValue.endsWith(contextId)){
+					return objectName;
+				}
+			}
 	    }
+		return null;
 	}
 	
 	/**
@@ -169,8 +190,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public String getLoggingLevel() {
 		log("getLoggingLevel()");
 		try {
-			String logLevel = (String) mbsc.invoke(this.objectNameDebugger, "getLoggingLevel", new Object[] { } , new String[] { }); 
-			return logLevel;
+			return (String) mbsc.invoke(this.objectNameDebugger, "getLoggingLevel", new Object[] { } , new String[] { }); 
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -197,8 +217,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	public boolean isEnabled() {
 		log("isEnabled()");
 		try {
-			boolean b = (boolean) mbsc.invoke(this.objectNameDebugger, "isEnabled", new Object[] { } , new String[] { }); 
-			return b;
+			return (boolean) mbsc.invoke(this.objectNameDebugger, "isEnabled", new Object[] { } , new String[] { }); 
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}

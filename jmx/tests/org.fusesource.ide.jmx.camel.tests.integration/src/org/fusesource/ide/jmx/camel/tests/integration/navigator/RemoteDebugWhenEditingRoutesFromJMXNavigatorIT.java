@@ -13,7 +13,6 @@ package org.fusesource.ide.jmx.camel.tests.integration.navigator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -41,8 +40,6 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	
 	private ProjectWithDebugAvailableDeployedHelper projectWithDebugAvailableDeployedHelper;
 
-	private ILaunch remoteDebuglaunch;
-
 	private DefaultConnectionWrapper jmxConnection;
 	
 	@Before
@@ -62,19 +59,19 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	
 	@Test
 	public void testRemoteDebugScenario() throws Exception {
-		DefaultConnectionWrapper jmxConnection = initializeConnection();
+		initializeConnection();
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
 		assertThat(camelContextNode.toString()).isEqualTo("contextToTestJMX");
 		
-		remoteDebuglaunch = camelContextNode.editRoutes();
+		ILaunch remoteDebuglaunch = camelContextNode.editRoutes();
 		String camelFilePath = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(remoteDebuglaunch.getLaunchConfiguration());
 		IFile contextFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(camelFilePath));
 		new RemoteCamelDebugTester(remoteDebuglaunch, contextFile.getProject(), contextFile).test();
 	}
 
-	private DefaultConnectionWrapper initializeConnection() throws MalformedURLException, IOException, CoreException {
+	private DefaultConnectionWrapper initializeConnection() throws IOException, CoreException {
 		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote Debug scenario test", ICamelDebugConstants.DEFAULT_JMX_URI, null, null);
 		jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
