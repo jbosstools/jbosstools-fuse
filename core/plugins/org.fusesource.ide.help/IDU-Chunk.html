@@ -10,9 +10,9 @@
 &lt;artifactId&gt;camel-chunk&lt;/artifactId&gt;
 &lt;version&gt;x.x.x&lt;/version&gt; &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63429"></a>URI format</h2></div></div></div><pre class="programlisting">chunk:templateName[?options]</pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the template to
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e61949"></a>URI format</h2></div></div></div><pre class="programlisting">chunk:templateName[?options]</pre><p>Where <span class="bold"><strong>templateName</strong></span> is the classpath-local URI of the template to
             invoke.</p><p>You can append query options to the URI in the following format,
-                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63443"></a>Options</h2></div></div></div><table id="d0e63446"><tbody><tr>
+                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e61963"></a>Options</h2></div></div></div><table id="d0e61966"><tbody><tr>
                                 <th><p>Option</p></th>
                                 <th><p>Default</p></th>
                                 <th><p>Description</p></th>
@@ -44,8 +44,8 @@
                                     set.</p></td>
                             </tr></tbody></table><p>Chunk component will look for a specific template in <span class="emphasis"><em>themes</em></span> folder with
             extensions <span class="emphasis"><em>.chtml</em></span> or <span class="emphasis"><em>.cxml. </em></span>If you need to specify a different folder
-            or extensions, you will need to use the specific options listed above.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63551"></a>Chunk Context</h2></div></div></div><p>Camel will provide exchange information in the Chunk context (just a <code class="code">Map</code>).
-            The <code class="code">Exchange</code> is transferred as:</p><table id="d0e63562"><tbody><tr>
+            or extensions, you will need to use the specific options listed above.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62071"></a>Chunk Context</h2></div></div></div><p>Camel will provide exchange information in the Chunk context (just a <code class="code">Map</code>).
+            The <code class="code">Exchange</code> is transferred as:</p><table id="d0e62082"><tbody><tr>
                                 <th><p>key</p></th>
                                 <th><p>value</p></th>
                             </tr><tr>
@@ -72,10 +72,10 @@
                                 <td><p><code class="code">response</code></p></td>
                                 <td><p>The Out message (only for InOut message
                                         exchange pattern).</p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63657"></a>Dynamic templates</h2></div></div></div><p>Camel provides two headers by which you can define a different resource location for a
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62177"></a>Dynamic templates</h2></div></div></div><p>Camel provides two headers by which you can define a different resource location for a
             template or the template content itself. If any of these headers is set then Camel uses
             this over the endpoint configured resource. This allows you to provide a dynamic
-            template at runtime.</p><table id="d0e63662"><tbody><tr>
+            template at runtime.</p><table id="d0e62182"><tbody><tr>
                                 <th><p>Header</p></th>
                                 <th><p>Type</p></th>
                                 <th><p>Description</p></th>
@@ -92,7 +92,7 @@
                                 <td><p>The template to use instead of the
                                         endpoint configured.</p></td>
                                 <td><p> </p></td>
-                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63718"></a>Samples</h2></div></div></div><p>For example you could use something like:</p><pre class="programlisting">from("activemq:My.Queue").
+                            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62238"></a>Samples</h2></div></div></div><p>For example you could use something like:</p><pre class="programlisting">from("activemq:My.Queue").
 to("chunk:template");</pre><p>To use a Chunk template to formulate a response for a message for InOut message exchanges
             (where there is a <code class="code">JMSReplyTo</code> header).</p><p>If you want to use InOnly and consume the message and send it to another destination you
             could use:</p><pre class="programlisting">from("activemq:My.Queue").
@@ -102,7 +102,7 @@ to("activemq:Another.Queue");</pre><p>It's possible to specify what template the
 setHeader(ChunkConstants.CHUNK_RESOURCE_URI).constant("template").
 to("chunk:dummy");</pre><p>An example of Chunk component options use:</p><pre class="programlisting">from("direct:in").
 to("chunk:file_example?themeFolder=template&amp;themeSubfolder=subfolder&amp;extension=chunk");</pre><p>In this example Chunk component will look for the file <span class="emphasis"><em>file_example.chunk</em></span> in the
-            folder <span class="emphasis"><em>template/subfolder.</em></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63749"></a>The Email Sample</h2></div></div></div><p>In this sample we want to use Chunk templating for an order confirmation email. The email
+            folder <span class="emphasis"><em>template/subfolder.</em></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62269"></a>The Email Sample</h2></div></div></div><p>In this sample we want to use Chunk templating for an order confirmation email. The email
             template is laid out in Chunk as:</p><pre class="programlisting">Dear {$headers.lastName}, {$headers.firstName}
 
 Thanks for the order of {$headers.item}.

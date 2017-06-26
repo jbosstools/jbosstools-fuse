@@ -17,7 +17,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jetty:http://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e108477"><tr>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e106997"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -388,7 +388,7 @@
                 Component</a>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">JettyHttpComponent</code> provides the following options:
             
-        </p><table id="d0e109354"><tr>
+        </p><table id="d0e107874"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -808,7 +808,7 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
             &lt;entry key="maxIdleTime" value="300000"/&gt;
         &lt;/map&gt;
     &lt;/property&gt;
-&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e110188"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e108708"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
                 <code class="code">mod_proxy</code>, the original client IP address is in the
                 <code class="code">X-Forwarded-For</code> header and the
                 <code class="code">HttpServletRequest.getRemoteAddr()</code> will return the address of the
