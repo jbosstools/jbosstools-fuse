@@ -39,7 +39,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.w3c.dom.Element;
 
 /**
- * @author bfitzpat
+ * @author brianf
  *
  */
 public class GlobalBeanEditWizardPage extends WizardPage {

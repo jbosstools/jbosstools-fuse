@@ -25,8 +25,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * @author bfitzpat
- * 
+ * @author brianf
+ *
  */
 public abstract class AbstractBeanInputDialog extends TitleAreaDialog {
 

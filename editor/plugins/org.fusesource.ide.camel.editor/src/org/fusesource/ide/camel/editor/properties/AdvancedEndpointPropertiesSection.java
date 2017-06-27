@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2014-2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -31,15 +31,11 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.BooleanParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.FileParameterPropertyUICreatorForAdvanced;
@@ -303,30 +299,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		// now setup the file binding properties page
-		parent.setLayout(new GridLayout());
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		form = toolkit.createForm(parent);
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		form.getBody().setLayout(new GridLayout(1, false));
-
-		Composite sbody = form.getBody();
-
-		tabFolder = new CTabFolder(sbody, SWT.TOP | SWT.FLAT);
-		toolkit.adapt(tabFolder, true, true);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		Color selectedColor = toolkit.getColors().getColor(IFormColors.SEPARATOR);
-		tabFolder.setSelectionBackground(new Color[] { selectedColor, toolkit.getColors().getBackground() }, new int[] { 20 }, true);
-		tabFolder.setCursor(FormsResources.getHandCursor());
-		toolkit.paintBordersFor(tabFolder);
-
-		form.setText("Advanced Properties");
-		toolkit.decorateFormHeading(form);
-
-		form.layout();
-		tabFolder.setSelection(0);
+		createStandardTabLayout("Advanced Properties");
 	}
 
 	private boolean shouldBeDisplayed(Parameter prop, String group, boolean ignorePathProperties) {

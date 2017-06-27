@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,8 +29,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * @author bfitzpat
- * 
+ * @author brianf
+ *
  */
 public class PropertyInputDialog extends AbstractBeanInputDialog {
 
@@ -66,13 +67,19 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 		if (propertyName != null && !propertyName.trim().isEmpty()) {
 			propertyNameText.setText(propertyName);
 		}
-		propertyNameText.addModifyListener(input -> propertyName = propertyNameText.getText().trim());
+		propertyNameText.addModifyListener(input -> {
+			propertyName = propertyNameText.getText().trim();
+			getButton(IDialogConstants.OK_ID).setEnabled(validate());
+		});
 
 		Text propertyValueText = createLabelAndText(area, UIMessages.PropertyInputDialog_ValueFieldLabel);
 		if (propertyValue != null && !propertyValue.trim().isEmpty()) {
 			propertyValueText.setText(propertyValue);
 		}
-		propertyValueText.addModifyListener(input -> propertyValue = propertyValueText.getText().trim());
+		propertyValueText.addModifyListener(input -> {
+			propertyValue = propertyValueText.getText().trim();
+			getButton(IDialogConstants.OK_ID).setEnabled(validate());
+		});
 
 		return area;
 	}
@@ -136,7 +143,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 		if (msg != null) {
 			setErrorMessage(msg);
 		}
-		return true;
+		return getErrorMessage() == null;
 	}
 
 	/**

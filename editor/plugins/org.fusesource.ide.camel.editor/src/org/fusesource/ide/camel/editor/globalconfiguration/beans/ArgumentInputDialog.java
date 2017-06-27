@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,8 +21,8 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 
 /**
- * @author bfitzpat
- * 
+ * @author brianf
+ *
  */
 public class ArgumentInputDialog extends AbstractBeanInputDialog {
 
@@ -53,13 +54,19 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 		if (argumentType != null && !argumentType.trim().isEmpty()) {
 			argumentTypeText.setText(argumentType);
 		}
-		argumentTypeText.addModifyListener( input -> argumentType = argumentTypeText.getText().trim() );
+		argumentTypeText.addModifyListener( input -> {
+			argumentType = argumentTypeText.getText().trim();
+			getButton(IDialogConstants.OK_ID).setEnabled(validate());
+		});
 
 		argumentValueText = createLabelAndText(area, UIMessages.ArgumentInputDialog_ValueFieldLabel);
 		if (argumentValue != null && !argumentValue.trim().isEmpty()) {
 			argumentValueText.setText(argumentValue);
 		}
-		argumentValueText.addModifyListener(input -> argumentValue = argumentValueText.getText().trim());
+		argumentValueText.addModifyListener(input -> {
+			argumentValue = argumentValueText.getText().trim();
+			getButton(IDialogConstants.OK_ID).setEnabled(validate());
+		});
 
 		return area;
 	}

@@ -32,7 +32,8 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 
 /**
- * @author bfitzpat
+ * @author brianf
+ *
  */
 public class GlobalBeanContributor implements ICustomGlobalConfigElementContribution {
 

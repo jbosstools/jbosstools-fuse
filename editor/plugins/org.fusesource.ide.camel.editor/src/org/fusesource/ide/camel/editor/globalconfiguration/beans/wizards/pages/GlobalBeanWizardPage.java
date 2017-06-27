@@ -39,7 +39,7 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
- * @author bfitzpat
+ * @author brianf
  *
  */
 public class GlobalBeanWizardPage extends WizardPage {

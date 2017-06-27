@@ -241,10 +241,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		final Node parentNode = cme.getXmlNode().getParentNode();
 		final Element documentElement = getDocument().getDocumentElement();
 		if (parentNode == null || !parentNode.isEqualNode(documentElement)) {
-			// to avoid the occasional org.w3c.dom.DOMException: WRONG_DOCUMENT_ERR: 
-			// A node is used in a different document than the one that created it.
-			Node imported = getDocument().importNode(cme.getXmlNode(), true);
-			documentElement.replaceChild(imported, oldDef);
+			documentElement.replaceChild(cme.getXmlNode(), oldDef);
 			fireModelChanged();
 		}
 		return usedId;

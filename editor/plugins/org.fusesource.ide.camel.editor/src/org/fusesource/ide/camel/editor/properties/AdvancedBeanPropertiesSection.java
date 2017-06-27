@@ -26,15 +26,11 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
@@ -52,7 +48,8 @@ import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
- * @author bfitzpat
+ * @author brianf
+ * 
  */
 public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
@@ -220,31 +217,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		// now setup the file binding properties page
-		parent.setLayout(new GridLayout());
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		form = toolkit.createForm(parent);
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		form.getBody().setLayout(new GridLayout(1, false));
-
-		Composite sbody = form.getBody();
-
-		tabFolder = new CTabFolder(sbody, SWT.TOP | SWT.FLAT);
-		toolkit.adapt(tabFolder, true, true);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		Color selectedColor = toolkit.getColors().getColor(IFormColors.SEPARATOR);
-		tabFolder.setSelectionBackground(new Color[] { selectedColor, toolkit.getColors().getBackground() },
-				new int[] { 20 }, true);
-		tabFolder.setCursor(FormsResources.getHandCursor());
-		toolkit.paintBordersFor(tabFolder);
-
-		form.setText(UIMessages.AdvancedBeanPropertiesSection_Title);
-		toolkit.decorateFormHeading(form);
-
-		form.layout();
-		tabFolder.setSelection(0);
+		createStandardTabLayout(UIMessages.AdvancedBeanPropertiesSection_Title);
 	}
 
 	private void createClassBrowseButton(Composite composite, Text field) {

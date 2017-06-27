@@ -53,6 +53,7 @@ import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
@@ -190,6 +191,33 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		// now setup the file binding properties page
 		parent.setLayout(new GridLayout());
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+	
+	protected void createStandardTabLayout(String sectionTitle) {
+		parent.setLayout(new GridLayout());
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		form = toolkit.createForm(parent);
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.getBody().setLayout(new GridLayout(1, false));
+
+		Composite sbody = form.getBody();
+
+		tabFolder = new CTabFolder(sbody, SWT.TOP | SWT.FLAT);
+		toolkit.adapt(tabFolder, true, true);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Color selectedColor = toolkit.getColors().getColor(IFormColors.SEPARATOR);
+		tabFolder.setSelectionBackground(new Color[] { selectedColor, toolkit.getColors().getBackground() },
+				new int[] { 20 }, true);
+		tabFolder.setCursor(FormsResources.getHandCursor());
+		toolkit.paintBordersFor(tabFolder);
+
+		form.setText(sectionTitle);
+		toolkit.decorateFormHeading(form);
+
+		form.layout();
+		tabFolder.setSelection(0);
 	}
 
 	/**
