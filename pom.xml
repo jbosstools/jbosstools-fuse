@@ -67,6 +67,19 @@
 		<jackson.version>2.5.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<sonar.test.inclusions>**/*Test.*,**/test/**/*,**/*IT.*</sonar.test.inclusions>
+
+		<!-- fusesource nexus repos -->
+		<fusesourceNexusCommunity>https://repo.fusesource.com/nexus/content/groups/public</fusesourceNexusCommunity>
+		<!-- could use? <fusesourceNexusCommunity>https://${jbossNexus}/nexus/content/groups/public</fusesourceNexusCommunity> --> 
+		
+		<!-- <fusesourceNexusRelease>https://repo.fusesource.com/nexus/content/repositories/releases</fusesourceNexusRelease> -->
+		<!-- 
+			use this alternate path as computed from 
+			https://repository.jboss.org/nexus/#nexus-search;gav~org.apache.camel~camel-test~2.17.*630187~~ 
+			to resolve
+			https://repository.jboss.org/nexus/service/local/repositories/product-brms-ip-06_03_4-fuse-06_03_00/content/org/apache/camel/camel-test/2.17.0.redhat-630187/
+		-->
+		<fusesourceNexusRelease>https://${jbossNexus}/nexus/service/local/repositories/product-brms-ip-06_03_4-fuse-06_03_00/content/</fusesourceNexusRelease>
 	</properties>
 
 	<modules>
@@ -102,7 +115,7 @@
 		<repository>
 			<id>fusesource.ea.repo</id>
 			<name>JBoss Fuse Early Access Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+			<url>https://${jbossNexus}/nexus/content/groups/ea</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -114,7 +127,7 @@
 		<repository>
 			<id>fusesource.release.repo</id>
 			<name>JBoss Fuse Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
+			<url>${fusesourceNexusRelease}</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -126,7 +139,7 @@
 		<repository>
 			<id>jboss.public.repo</id>
 			<name>JBoss Public Repository</name>
-			<url>http://repository.jboss.org/nexus/content/repositories/public</url>
+			<url>https://${jbossNexus}/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -141,11 +154,13 @@
 			<url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
 		</repository>
 
+		<!-- should this be changed to https://${jbossNexus}/nexus/service/local/staging/deploy/maven2/ for staged deployment, and therefore inherited from JBT parent pom?
 		<repository>
 			<id>fuse-early-access</id>
 			<name>Fuse Early Access - staging</name>
 			<url>https://origin-repository.jboss.org/nexus/content/</url>
 		</repository>
+		-->
 
 	</repositories>
 
@@ -153,7 +168,7 @@
 		<pluginRepository>
 			<id>fusesource.ea.repo</id>
 			<name>JBoss Fuse Early Access Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+			<url>https://${jbossNexus}/nexus/content/groups/ea</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -165,7 +180,7 @@
 		<pluginRepository>
 			<id>fusesource.release.repo</id>
 			<name>JBoss Fuse Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
+			<url>${fusesourceNexusRelease}</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -177,7 +192,7 @@
 		<pluginRepository>
 			<id>jboss.public.repo</id>
 			<name>JBoss Public Repository</name>
-			<url>http://repository.jboss.org/nexus/content/repositories/public</url>
+			<url>https://${jbossNexus}/nexus/content/repositories/public</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
