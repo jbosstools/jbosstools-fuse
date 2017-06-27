@@ -30,9 +30,9 @@
 	</issueManagement>
   
 	<scm>
-		<connection>scm:git:git://git@github.com:fusesource/fuseide.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:fusesource/fuseide.git</developerConnection>
-		<url>git://github.com/fusesource/fuseide.git</url>
+		<connection>scm:git:git://git@github.com:jbosstools/jbosstools-fuse.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:jbosstools/jbosstools-fuse.git</developerConnection>
+		<url>git://github.com/jbosstools/jbosstools-fuse.git</url>
 	</scm>	
 
 	<prerequisites>
@@ -41,7 +41,7 @@
 
 	<properties>
 		<!-- fuse tooling related -->
-		<tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
+		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-fuse.git</tycho.scmUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- compiler settings -->
