@@ -378,6 +378,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				super.appendAttributes(basedir, workingCopy, goal);
 				System.out.println("Maven output file path: "+mavenOutputFilePath);
 				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+				workingCopy.setAttribute("org.eclipse.debug.ui.M2_DEBUG_OUTPUT", true);
 			}
 			
 		};
