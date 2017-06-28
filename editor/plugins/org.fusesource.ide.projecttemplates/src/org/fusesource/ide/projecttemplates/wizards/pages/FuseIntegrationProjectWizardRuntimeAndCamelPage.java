@@ -1,29 +1,24 @@
-/******************************************************************************* 
- * Copyright (c) 2016 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
+/*******************************************************************************
+ * Copyright (c) 2016 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,12 +26,9 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -75,7 +67,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private Combo camelVersionCombo;
 	private StyledText camelInfoText;
 	private Label warningIconLabel;
-	
+
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage() {
 		super(Messages.newProjectWizardRuntimePageName);
 		setTitle(Messages.newProjectWizardRuntimePageTitle);
@@ -83,7 +75,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		setPageComplete(false);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
@@ -97,41 +89,31 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeGrp.setLayout(new GridLayout(3, false));
 		runtimeGrp.setLayoutData(runtimeGrpData);
 		runtimeGrp.setText(Messages.newProjectWizardRuntimePageRuntimeGroupLabel);
-		
+
 		Label runtimeLabel = new Label(runtimeGrp, SWT.NONE);
 		GridData runtimeLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		runtimeLabel.setLayoutData(runtimeLabelData);
 		runtimeLabel.setText(Messages.newProjectWizardRuntimePageRuntimeLabel);
 
 		runtimeComboViewer = new ComboViewer(runtimeGrp, SWT.NONE | SWT.READ_ONLY);
-		runtimeComboViewer.setComparator(new ViewerComparator(new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				if(Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
-					return -1;
-				}
-				return o1.compareTo(o2);
+		runtimeComboViewer.setComparator(new ViewerComparator((o1, o2) -> {
+			if (Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equals(o1)){
+				return -1;
 			}
+			return o1.compareTo(o2);
 		}));
-		
+
 		GridData runtimeComboData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
 		runtimeComboViewer.getCombo().setLayoutData(runtimeComboData);
 		runtimeComboViewer.getCombo().setToolTipText(Messages.newProjectWizardRuntimePageRuntimeDescription);
 		runtimeComboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		runtimeComboViewer.getCombo().addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				lastSelectedRuntime = getSelectedRuntimeAsString();
-				preselectCamelVersionForRuntime(determineRuntimeCamelVersion(getSelectedRuntime()));
-				validate();
-			}
+		runtimeComboViewer.getCombo().addModifyListener(e -> {
+			lastSelectedRuntime = getSelectedRuntimeAsString();
+			preselectCamelVersionForRuntime(determineRuntimeCamelVersion(getSelectedRuntime()));
+			validate();
 		});
 
-		try {
-			configureRuntimeCombo();
-		} catch (CoreException ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
-		}
+		configureRuntimeCombo();
 
 		Button runtimeNewButton = new Button(runtimeGrp, SWT.NONE);
 		GridData runtimeNewButtonData = new GridData(SWT.FILL, SWT.CENTER, false, false);
@@ -152,15 +134,15 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				}
 			}
 		});
-		
+
 		new Label(runtimeGrp, SWT.None);
-		
+
 		Group camelGrp = new Group(container, SWT.NONE);
 		GridData camelGrpData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 20);
 		camelGrp.setLayout(new GridLayout(3, false));
 		camelGrp.setLayoutData(camelGrpData);
 		camelGrp.setText(Messages.newProjectWizardRuntimePageCamelGroupLabel);
-		
+
 		Label camelVersionLabel = new Label(camelGrp, SWT.NONE);
 		GridData camelLabelData = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		camelVersionLabel.setLayoutData(camelLabelData);
@@ -181,36 +163,29 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				validate();
 			}
 		});
-// TODO: leaving that out until we decide to support other camel versions than the ones we ship		
+// TODO: leaving that out until we decide to support other camel versions than the ones we ship
 //		camelVersionCombo.addFocusListener(new FocusAdapter() {
-//			/* (non-Javadoc)
-//			 * @see org.eclipse.swt.events.FocusAdapter#focusLost(org.eclipse.swt.events.FocusEvent)
-//			 */
+//
 //			@Override
 //			public void focusLost(FocusEvent e) {
-//				super.focusLost(e);
 //				validate();
 //			}
-//			
-//			/* (non-Javadoc)
-//			 * @see org.eclipse.swt.events.FocusAdapter#focusGained(org.eclipse.swt.events.FocusEvent)
-//			 */
+//
 //			@Override
 //			public void focusGained(FocusEvent e) {
-//				super.focusGained(e);
 //				setPageComplete(false);
 //			}
 //		});
 
 		new Label(camelGrp, SWT.None);
-	
+
 		warningIconLabel = new Label(camelGrp, SWT.None);
 		GridData camelLblData = new GridData(SWT.FILL, SWT.TOP, false, true, 1, 20);
 		camelLblData.verticalIndent = 20;
 		warningIconLabel.setImage(getSWTImage(SWT.ICON_WARNING));
 		warningIconLabel.setLayoutData(camelLblData);
 		warningIconLabel.setVisible(false);
-		
+
 		camelInfoText = new StyledText(camelGrp, SWT.WRAP | SWT.MULTI);
 		GridData camelInfoData = new GridData(SWT.FILL, SWT.TOP, true, true, 2, 20);
 		camelInfoData.verticalIndent = 0;
@@ -219,60 +194,51 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelInfoText.setEnabled(false);
 		camelInfoText.setEditable(false);
 		camelInfoText.setBackground(container.getBackground());
+		camelInfoText.setVisible(false);
 
 		new Label(camelGrp, SWT.None);
-		
+
 		setControl(container);
-		
+
 		IRuntimeLifecycleListener listener = new IRuntimeLifecycleListener() {
-			
+
 			@Override
 			public void runtimeRemoved(IRuntime runtime) {
 				runInUIThread();
 			}
-			
+
 			@Override
 			public void runtimeChanged(IRuntime runtime) {
 				runInUIThread();
 			}
-			
+
 			@Override
 			public void runtimeAdded(IRuntime runtime) {
 				runInUIThread();
 			}
-			
+
 			private void runInUIThread() {
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					@Override
-					public void run() {
-						try {
-							configureRuntimeCombo();
-						} catch (CoreException ex) {
-							ProjectTemplatesActivator.pluginLog().logError("Unable to handle runtime change event", ex); //$NON-NLS-1$
-						}
-					}
-				});
+				Display.getDefault().asyncExec(FuseIntegrationProjectWizardRuntimeAndCamelPage.this::configureRuntimeCombo);
 			}
-			
+
 		};
 		ServerCore.addRuntimeLifecycleListener(listener);
 		validate();
 	}
-	
+
 	private String[] getSupportedCamelVersions() {
 		return CamelModelFactory.getSupportedCamelVersions().stream().sorted().toArray(String[]::new);
 	}
-	
-	private void configureRuntimeCombo() throws CoreException {
+
+	private void configureRuntimeCombo() {
 		if (Widgets.isDisposed(runtimeComboViewer)) {
 			return;
 		}
-		
+
 		String lastUsedRuntime = lastSelectedRuntime;
 		List<String> runtimesList = new ArrayList<>();
 		String selectedRuntime = null;
-	
+
 		serverRuntimes = getServerRuntimes(null);
 		runtimeComboViewer.setInput(ArrayContentProvider.getInstance());
 		runtimesList.addAll(serverRuntimes.keySet());
@@ -286,12 +252,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				selectedRuntime = lastUsedRuntime;
 			}
 		}
-		
+
 		if (selectedRuntime != null) {
 			runtimeComboViewer.setSelection(new StructuredSelection(selectedRuntime));
 		}
 	}
-	
+
 	private Map<String, IRuntime> getServerRuntimes(IProjectFacetVersion facetVersion) {
 		Set<org.eclipse.wst.common.project.facet.core.runtime.IRuntime> runtimesSet;
 		if (facetVersion == null) {
@@ -299,7 +265,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		} else {
 			runtimesSet = RuntimeManager.getRuntimes(Collections.singleton(facetVersion));
 		}
-		
+
 		Map<String, IRuntime> runtimesMap = new LinkedHashMap<>();
 		for (org.eclipse.wst.common.project.facet.core.runtime.IRuntime r : runtimesSet) {
 			IRuntime serverRuntime = FacetUtil.getRuntime(r);
@@ -309,7 +275,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 		return runtimesMap;
 	}
-	
+
 	private String getNewRuntime(String[] oldRuntimes, String[] newRuntimes) {
 		for (String newRuntime : newRuntimes) {
 			boolean found = false;
@@ -327,7 +293,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	}
 
 	/**
-	 * /!\ Public for test purpose 
+	 * /!\ Public for test purpose
 	 */
 	public void validate() {
 		// if runtime is selected other than NO RUNTIME
@@ -359,7 +325,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 
 			if (!Widgets.isDisposed(camelInfoText)) {
 				camelInfoText.setText(""); //$NON-NLS-1$
-			}			
+			}
 		}
 // TODO: leaving that out until we decide to support other camel versions than the ones we ship
 //		try {
@@ -374,63 +340,25 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 //		} catch (Exception ex) {
 //			ProjectTemplatesActivator.pluginLog().logError(ex);
 //		}
-		
-		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
-			warningIconLabel.setVisible(!camelInfoText.getText().isEmpty());
+
+		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) {
+			boolean visible = !camelInfoText.getText().isEmpty();
+			camelInfoText.setVisible(visible);
+			warningIconLabel.setVisible(visible);
 		}
-		
+
 		if (!Widgets.isDisposed(runtimeComboViewer) && !Widgets.isDisposed(camelVersionCombo)) {
-			setPageComplete(!Strings.isBlank(getSelectedRuntimeAsString()) && 
+			setPageComplete(!Strings.isBlank(getSelectedRuntimeAsString()) &&
 							!Strings.isBlank(camelVersionCombo.getText()) &&
 							!warningIconLabel.isVisible());
 		}
 	}
-	
-	private void validateCamelVersion() {
-		if (getSelectedCamelVersion() != null && !isCamelVersionValid(getSelectedCamelVersion())) {
-			if (!Widgets.isDisposed(camelInfoText)) {
-				camelInfoText.setText(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidWarning, getSelectedCamelVersion()));
-				setPageComplete(false);
-			}
-		} else {
-			if (!Widgets.isDisposed(camelInfoText)) {
-				camelInfoText.setText(""); //$NON-NLS-1$
-			}	
-		}
-		if (!Widgets.isDisposed(warningIconLabel) && !Widgets.isDisposed(camelInfoText)) { 
-			warningIconLabel.setVisible(camelInfoText.getText().length()>0);
-		}
-	}
-	
-	private boolean isCamelVersionValid(String camelVersion) {
-		// return true for supported versions from the combo list
-		for (String supportedVersion : camelVersionCombo.getItems()) {
-			if (supportedVersion.equals(camelVersion)){
-				return true;
-			}
-		}
-		
-		boolean camelVersionAvailable = false;
-		try {
-			Artifact camelCore = MavenPlugin.getMaven().resolve("org.apache.camel",  //$NON-NLS-1$
-																"camel-core",  //$NON-NLS-1$
-																camelVersion, 
-																"jar",  //$NON-NLS-1$
-																null, 
-																null, 
-																new NullProgressMonitor());
-			camelVersionAvailable = camelCore != null;
-		} catch (CoreException ex) {
-			camelVersionAvailable = false;
-		}	
-		return camelVersionAvailable;
-	}
-	
+
 	public void preselectCamelVersionForRuntime(String runtimeCamelVersion) {
 		if (Widgets.isDisposed(camelVersionCombo)){
 			return;
 		}
-		
+
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			camelVersionCombo.setEnabled(true);
 		} else {
@@ -447,19 +375,21 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			} else {
 				camelVersionCombo.select(Math.max(0, camelVersionCombo.getItemCount()-1));
 			}
-		}		
+		}
 	}
-	
+
 	/**
-	 * /!\ Public for test purpose 
+	 * /!\ Public for test purpose
+	 * @param runtime
+	 * @return the runtime camel version applicable to the supplied runtime
 	 */
 	public String determineRuntimeCamelVersion(IRuntime runtime) {
 		return new RuntimeCamelVersionFinder().getVersion(runtime);
 	}
-	
+
 	/**
 	 * checks if the two versions are identical for major and minor version
-	 * 
+	 *
 	 * @param runtimeCamelVersion	the camel version in the runtime
 	 * @param selectedCamelVersion	the camel version selected in the wizard
 	 * @return	true if compatible
@@ -467,30 +397,28 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private boolean isCompatible(String runtimeCamelVersion, String selectedCamelVersion) {
 		String[] runtimeVersionParts = runtimeCamelVersion.split("\\."); //$NON-NLS-1$
 		String[] camelVersionParts = selectedCamelVersion.split("\\."); //$NON-NLS-1$
-		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1 || runtimeCamelVersion.indexOf(".fuse-") != -1;  //$NON-NLS-1$
-		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1 || selectedCamelVersion.indexOf(".fuse-") != -1; //$NON-NLS-1$
-		
+		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1 || runtimeCamelVersion.indexOf(".fuse-") != -1;  //$NON-NLS-1$ //$NON-NLS-2$
+		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1 || selectedCamelVersion.indexOf(".fuse-") != -1; //$NON-NLS-1$ //$NON-NLS-2$
+
 		return runtimeVersionParts.length>1 && camelVersionParts.length>1 &&
 			   runtimeVersionParts[0].equals(camelVersionParts[0]) &&
-			   runtimeVersionParts[1].equals(camelVersionParts[1]) && 
+			   runtimeVersionParts[1].equals(camelVersionParts[1]) &&
 			   rh_branded_rcv == rh_branded_scv;
 	}
-	
+
 	/**
-	 * returns the selected runtime
-	 * 
-	 * @return
+	 * @return the selected runtime
 	 */
 	public IRuntime getSelectedRuntime() {
 		if (!Widgets.isDisposed(runtimeComboViewer)) {
 			String runtimeId = getSelectedRuntimeAsString();
 			if (!Messages.newProjectWizardRuntimePageNoRuntimeSelectedLabel.equalsIgnoreCase(runtimeId)) {
-				return serverRuntimes.get(runtimeId);	
+				return serverRuntimes.get(runtimeId);
 			}
 		}
 		return null;
 	}
-	
+
 	private String getSelectedRuntimeAsString(){
 		IStructuredSelection structuredSelection = runtimeComboViewer.getStructuredSelection();
 		if(!structuredSelection.isEmpty()){
@@ -498,11 +426,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 		return null;
 	}
-	
+
 	/**
-	 * returns the selected camel version
-	 * 
-	 * @return
+	 * @return the selected camel version
 	 */
 	public String getSelectedCamelVersion() {
 		if (!Widgets.isDisposed(camelVersionCombo)) {
@@ -510,7 +436,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get an <code>Image</code> from the provide SWT image constant.
 	 *
@@ -537,18 +463,15 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 
 		final Image[] image = new Image[1];
-		display.syncExec(new Runnable() {
-			@Override
-			public void run() {
-				image[0] = display.getSystemImage(imageID);
-			}
-		});
+		display.syncExec(() -> image[0] = display.getSystemImage(imageID));
 
 		return image[0];
 	}
-	
+
 	/**
-	 * /!\ Public for test purpose 
+	 * /!\ Public for test purpose
+	 *
+	 * @param camelInfoText
 	 */
 	public void setCamelInfoText(StyledText camelInfoText) {
 		this.camelInfoText = camelInfoText;

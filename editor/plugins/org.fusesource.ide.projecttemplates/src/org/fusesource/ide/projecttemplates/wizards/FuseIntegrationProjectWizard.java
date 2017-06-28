@@ -12,7 +12,6 @@
 package org.fusesource.ide.projecttemplates.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -77,10 +76,10 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		try {
 			getContainer().run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
 		} catch (InterruptedException iex) {
-			ProjectTemplatesActivator.pluginLog().logError("User canceled the wizard!", iex);
+			ProjectTemplatesActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
 			return false;
 		} catch (InvocationTargetException ite) {
-			ProjectTemplatesActivator.pluginLog().logError("Error occured executing the wizard!", ite);
+			ProjectTemplatesActivator.pluginLog().logError("Error occured executing the wizard!", ite); //$NON-NLS-1$
 			return false;
 		}
 		return true;
