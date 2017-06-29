@@ -92,10 +92,10 @@ public class PropertyStyleChildTableControl extends Composite {
 		propertyTreeTable.getTree().setHeaderVisible(true);
 		propertyTreeTable.getTree().setLinesVisible(true);
 		TreeColumn nameColumn = new TreeColumn(propertyTreeTable.getTree(), SWT.LEFT);
-		nameColumn.setText(UIMessages.PropertyStyleChildTableControl_NameColumnLabel);
+		nameColumn.setText(UIMessages.propertyStyleChildTableControlNameColumnLabel);
 		nameColumn.setWidth(200);
 		TreeColumn valueColumn = new TreeColumn(propertyTreeTable.getTree(), SWT.LEFT);
-		valueColumn.setText(UIMessages.PropertyStyleChildTableControl_ValueColumnLabel);
+		valueColumn.setText(UIMessages.propertyStyleChildTableControlValueColumnLabel);
 		valueColumn.setWidth(200);
 
 		propertyTreeTable.setColumnProperties(TREE_COLUMNS);
@@ -108,7 +108,7 @@ public class PropertyStyleChildTableControl extends Composite {
 
 		this.addButton = new Button(this, SWT.NONE);
 		this.addButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.addButton.setText(UIMessages.PropertyStyleChildTableControl_AddButtonLabel);
+		this.addButton.setText(UIMessages.propertyStyleChildTableControlAddButtonLabel);
 		this.addButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -124,7 +124,7 @@ public class PropertyStyleChildTableControl extends Composite {
 
 		this.editButton = new Button(this, SWT.NONE);
 		this.editButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.editButton.setText(UIMessages.PropertyStyleChildTableControl_EditButtonLabel);
+		this.editButton.setText(UIMessages.propertyStyleChildTableControlEditButtonLabel);
 		this.editButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -155,7 +155,7 @@ public class PropertyStyleChildTableControl extends Composite {
 
 		this.removeButton = new Button(this, SWT.NONE);
 		this.removeButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.removeButton.setText(UIMessages.PropertyStyleChildTableControl_RemoveButtonLabel);
+		this.removeButton.setText(UIMessages.propertyStyleChildTableControlRemoveButtonLabel);
 		this.removeButton.setEnabled(false);
 		this.removeButton.addSelectionListener(new SelectionAdapter() {
 

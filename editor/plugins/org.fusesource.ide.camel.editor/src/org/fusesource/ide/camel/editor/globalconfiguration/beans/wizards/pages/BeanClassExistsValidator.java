@@ -36,17 +36,17 @@ public class BeanClassExistsValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String className = (String) value;
 		if (className == null || className.isEmpty()) {
-			return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMandatory);
+			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
 		}
 		IJavaProject javaProject = JavaCore.create(this.project);
         IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
 			if (javaClass == null) {
-				return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMustExist);
+				return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMustExist);
 			}
 		} catch (JavaModelException e) {
-			return ValidationStatus.error(UIMessages.BeanClassExistsValidator_ErrorBeanClassMustExist, e);
+			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMustExist, e);
 		}
 		return ValidationStatus.ok();
 	}

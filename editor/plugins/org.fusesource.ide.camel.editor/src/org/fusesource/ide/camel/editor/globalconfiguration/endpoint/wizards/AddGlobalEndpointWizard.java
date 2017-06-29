@@ -38,7 +38,7 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 		this.camelFile = camelFile;
 		this.componentModel = componentModel;
 		this.dbc = new DataBindingContext();
-		setWindowTitle(UIMessages.AddGlobalEndpointWizard_windowTitle);
+		setWindowTitle(UIMessages.addGlobalEndpointWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -50,8 +50,8 @@ public class AddGlobalEndpointWizard extends Wizard implements GlobalConfigurati
 	@Override
 	public void addPages() {
 		super.addPages();
-		globalEndpointPage = new SelectComponentWizardPage(dbc, componentModel, UIMessages.SelectComponentWizardPage_pageName,
-				UIMessages.GlobalEndpointWizardPage_globalEndpointTypeSelectionWizardpageDescription, camelFile);
+		globalEndpointPage = new SelectComponentWizardPage(dbc, componentModel, UIMessages.selectComponentWizardPagePageName,
+				UIMessages.globalEndpointWizardPageGlobalEndpointTypeSelectionWizardpageDescription, camelFile);
 		addPage(globalEndpointPage);
 
 	}

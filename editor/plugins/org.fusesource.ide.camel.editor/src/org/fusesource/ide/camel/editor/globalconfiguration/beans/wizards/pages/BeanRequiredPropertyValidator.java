@@ -31,7 +31,7 @@ public class BeanRequiredPropertyValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String id = (String) value;
 		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error(propertyName + UIMessages.BeanRequiredPropertyValidator_ErrorMandatoryProperty);
+			return ValidationStatus.error(propertyName + UIMessages.beanRequiredPropertyValidatorErrorMandatoryProperty);
 		}
 		return ValidationStatus.ok();
 	}

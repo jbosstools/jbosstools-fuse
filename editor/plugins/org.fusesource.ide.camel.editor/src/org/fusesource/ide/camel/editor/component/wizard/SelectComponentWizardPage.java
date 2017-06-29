@@ -59,7 +59,7 @@ public class SelectComponentWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public SelectComponentWizardPage(DataBindingContext dbc, ComponentModel componentModel, String title, String description, AbstractCamelModelElement parent) {
-		super(UIMessages.SelectComponentWizardPage_pageName);
+		super(UIMessages.selectComponentWizardPagePageName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
@@ -87,7 +87,7 @@ public class SelectComponentWizardPage extends WizardPage {
 	 */
 	private void createIdLine(Composite composite) {
 		Label idLabel = new Label(composite, SWT.NONE);
-		idLabel.setText(UIMessages.GlobalEndpointWizardPage_idFieldLabel);
+		idLabel.setText(UIMessages.globalEndpointWizardPageIdFieldLabel);
 		Text idText = new Text(composite, SWT.BORDER);
 		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -105,7 +105,7 @@ public class SelectComponentWizardPage extends WizardPage {
 		Group componentSelectionGroup = new Group(parent, SWT.NONE);
 		componentSelectionGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
 		componentSelectionGroup.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
-		componentSelectionGroup.setText(UIMessages.GlobalEndpointWizardPage_componentSelectionGroupTitle);
+		componentSelectionGroup.setText(UIMessages.globalEndpointWizardPageComponentSelectionGroupTitle);
 		final FilteredTree filteredTree = createFilteredTree(componentSelectionGroup);
 		createCheckboxFilterComposite(componentSelectionGroup, filteredTree.getViewer());
 	}
@@ -117,7 +117,7 @@ public class SelectComponentWizardPage extends WizardPage {
 	private FilteredTree createFilteredTree(Group componentSelectionGroup) {
 		final int treeStyle = SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER;
 		final FilteredTree filteredTree = new FilteredTree(componentSelectionGroup, treeStyle, new ComponentNameAndTagPatternFilter(), true);
-		filteredTree.getFilterControl().setMessage(UIMessages.GlobalEndpointWizardPage_filterSearchMessage);
+		filteredTree.getFilterControl().setMessage(UIMessages.globalEndpointWizardPageFilterSearchMessage);
 		final int xHint = getShell().getSize().x - 20;
 		filteredTree.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).hint(xHint, 400).create());
 		final TreeViewer treeViewer = filteredTree.getViewer();
@@ -133,7 +133,7 @@ public class SelectComponentWizardPage extends WizardPage {
 				if (value instanceof Component) {
 					return Status.OK_STATUS ;
 				}
-				return ValidationStatus.error(UIMessages.GlobalEndpointWizardPage_componentSelectionMandatoryMessage);
+				return ValidationStatus.error(UIMessages.globalEndpointWizardPageComponentSelectionMandatoryMessage);
 			}
 		}) ;
 		
@@ -156,7 +156,7 @@ public class SelectComponentWizardPage extends WizardPage {
 
 	private Button createCheckboxToShowOnlyPaletteComponents(Composite parent, final TreeViewer treeViewer) {
 		final Button showOnlyPaletteComponents = new Button(parent, SWT.CHECK);
-		showOnlyPaletteComponents.setText(UIMessages.GlobalEndpointWizardPage_showOnlyPaletteComonentsChecboxText);
+		showOnlyPaletteComponents.setText(UIMessages.globalEndpointWizardPageShowOnlyPaletteComonentsChecboxText);
 		final WhiteListComponentFilter whiteListComponentFilter = new WhiteListComponentFilter();
 		treeViewer.addFilter(whiteListComponentFilter);
 		showOnlyPaletteComponents.addSelectionListener(new SelectionAdapter() {
@@ -177,7 +177,7 @@ public class SelectComponentWizardPage extends WizardPage {
 
 	private Button createCheckboxToGroupByCategory(Composite parent, final TreeViewer treeViewer) {
 		final Button groupedByCategories = new Button(parent, SWT.CHECK);
-		groupedByCategories.setText(UIMessages.GlobalEndpointWizardPage_groupByCategories);
+		groupedByCategories.setText(UIMessages.globalEndpointWizardPageGroupByCategories);
 		groupedByCategories.addSelectionListener(new SelectionAdapter() {
 
 			@Override

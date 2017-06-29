@@ -35,14 +35,14 @@ public class SelectEndpointWizard extends Wizard {
 	public SelectEndpointWizard(AbstractCamelModelElement parent, ComponentModel componentModel) {
 		this.componentModel = componentModel;
 		this.parent = parent;
-		setWindowTitle(UIMessages.SelectEndpointWizard_windowTitle);
+		setWindowTitle(UIMessages.selectEndpointWizardWindowTitle);
 	}
 
 	@Override
 	public void addPages() {
 		super.addPages();
-		page = new SelectComponentWizardPage(new DataBindingContext(), componentModel, UIMessages.SelectEndpointWizard_pageSelectionComponentTitle,
-				UIMessages.SelectEndpointWizard_pageSelectionComponentDescription, parent);
+		page = new SelectComponentWizardPage(new DataBindingContext(), componentModel, UIMessages.selectEndpointWizardPageSelectionComponentTitle,
+				UIMessages.selectEndpointWizardPageSelectionComponentDescription, parent);
 		addPage(page);
 	}
 

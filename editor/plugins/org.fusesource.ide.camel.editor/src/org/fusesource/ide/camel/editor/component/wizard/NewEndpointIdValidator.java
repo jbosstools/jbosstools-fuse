@@ -28,10 +28,10 @@ final class NewEndpointIdValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String id = (String) value;
 		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error(UIMessages.GlobalEndpointWizardPage_idMandatoryMessage);
+			return ValidationStatus.error(UIMessages.globalEndpointWizardPageIdMandatoryMessage);
 		}
 		if(!parent.findAllNodesWithId(id).isEmpty()){
-			return ValidationStatus.error(UIMessages.GlobalEndpointWizardPage_idExistingMessage);
+			return ValidationStatus.error(UIMessages.globalEndpointWizardPageIdExistingMessage);
 		}
 		return ValidationStatus.ok();
 	}

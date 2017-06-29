@@ -24,6 +24,7 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
  * @author brianf
  *
  */
+@SuppressWarnings("squid:MaximumInheritanceDepth")
 public class ArgumentInputDialog extends AbstractBeanInputDialog {
 
 	private Text argumentValueText;
@@ -42,15 +43,15 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(UIMessages.ArgumentInputDialog_DialogTitle);
-		setMessage(UIMessages.ArgumentInputDialog_DialogMessage);
-		getShell().setText(UIMessages.ArgumentInputDialog_DialogWindowTitle);
+		setTitle(UIMessages.argumentInputDialogDialogTitle);
+		setMessage(UIMessages.argumentInputDialogDialogMessage);
+		getShell().setText(UIMessages.argumentInputDialogDialogWindowTitle);
 
 		Composite area = new Composite(parent, SWT.NULL);
 		GridLayout gridLayout = new GridLayout(2, false);
 		area.setLayout(gridLayout);
 		area.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Text argumentTypeText = createLabelAndText(area, UIMessages.ArgumentInputDialog_TypeFieldLabel);
+		Text argumentTypeText = createLabelAndText(area, UIMessages.argumentInputDialogTypeFieldLabel);
 		if (argumentType != null && !argumentType.trim().isEmpty()) {
 			argumentTypeText.setText(argumentType);
 		}
@@ -59,7 +60,7 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 			getButton(IDialogConstants.OK_ID).setEnabled(validate());
 		});
 
-		argumentValueText = createLabelAndText(area, UIMessages.ArgumentInputDialog_ValueFieldLabel);
+		argumentValueText = createLabelAndText(area, UIMessages.argumentInputDialogValueFieldLabel);
 		if (argumentValue != null && !argumentValue.trim().isEmpty()) {
 			argumentValueText.setText(argumentValue);
 		}
@@ -75,7 +76,7 @@ public class ArgumentInputDialog extends AbstractBeanInputDialog {
 	protected boolean validate() {
 		setErrorMessage(null);
 		if (argumentValueText.getText().trim().isEmpty()) {
-			setErrorMessage(UIMessages.ArgumentInputDialog_ErrorMessage);
+			setErrorMessage(UIMessages.argumentInputDialogErrorMessage);
 		}
 		return getErrorMessage() == null;
 	}

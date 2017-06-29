@@ -59,7 +59,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public GlobalBeanWizardPage(DataBindingContext dbc, String title, String description, AbstractCamelModelElement parent) {
-		super(UIMessages.GlobalBeanWizardPage_DefaultName);
+		super(UIMessages.globalBeanWizardPageDefaultName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
@@ -81,7 +81,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		createClassNewButton(composite);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
-		argsPropsGroup.setText(UIMessages.GlobalBeanWizardPage_ArgumentsGroupLabel);
+		argsPropsGroup.setText(UIMessages.globalBeanWizardPageArgumentsGroupLabel);
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -90,7 +90,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		beanArgsTable.setInput(this.parent);
 
 		Group beanPropsGroup = new Group(composite, SWT.NONE);
-		beanPropsGroup.setText(UIMessages.GlobalBeanWizardPage_PropertiesGroupLabel);
+		beanPropsGroup.setText(UIMessages.globalBeanWizardPagePropertiesGroupLabel);
 		beanPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -107,7 +107,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	 */
 	private void createIdLine(Composite composite) {
 		Label idLabel = new Label(composite, SWT.NONE);
-		idLabel.setText(UIMessages.GlobalEndpointWizardPage_idFieldLabel);
+		idLabel.setText(UIMessages.globalEndpointWizardPageIdFieldLabel);
 		Text idText = new Text(composite, SWT.BORDER);
 		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
@@ -123,7 +123,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 	 */
 	private void createClassLine(Composite composite) {
 		Label classLabel = new Label(composite, SWT.NONE);
-		classLabel.setText(UIMessages.GlobalBeanWizardPage_ClassLabel);
+		classLabel.setText(UIMessages.globalBeanWizardPageClassLabel);
 		Text classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();

@@ -54,8 +54,8 @@ public class DataFormatSelectionPage extends WizardPage {
 	 */
 	public DataFormatSelectionPage(DataFormatModel dfModel) {
 		super("Dataformat selection page"); //$NON-NLS-1$
-		setTitle(UIMessages.DataFormatSelectionPage_dataFormatSelectionPageTitle);
-		setDescription(UIMessages.DataFormatSelectionPage_DataFormatSelectionPageDescription);
+		setTitle(UIMessages.dataFormatSelectionPageDataFormatSelectionPageTitle);
+		setDescription(UIMessages.dataFormatSelectionPageDataFormatSelectionPageDescription);
 		this.dfModel = dfModel;
 		this.dbc = new DataBindingContext();
 	}
@@ -82,7 +82,7 @@ public class DataFormatSelectionPage extends WizardPage {
 	 */
 	private void createDataFormatSelectionLine(Composite container) {
 		Label l = new Label(container, SWT.NONE);
-		l.setText(UIMessages.dataFormatSelectionPage_dataformatLabel);
+		l.setText(UIMessages.dataFormatSelectionPageDataformatLabel);
 		l.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
 		
 		ComboViewer dataformatComboViewer = new ComboViewer(container, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -99,7 +99,7 @@ public class DataFormatSelectionPage extends WizardPage {
 
 	private void createIdLine(Composite container) {
 		Label l_id = new Label(container, SWT.NONE);
-		l_id.setText(UIMessages.dataFormatSelectionPage_idLabel);
+		l_id.setText(UIMessages.dataFormatSelectionPageIdLabel);
 		l_id.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
 		
 		Text txt_id = new Text(container, SWT.BORDER);
@@ -111,7 +111,7 @@ public class DataFormatSelectionPage extends WizardPage {
 			public IStatus validate(Object value) {
 				String id = (String) value;
 				if (id == null || id.isEmpty()) {
-					return ValidationStatus.error(UIMessages.GlobalEndpointWizardPage_idMandatoryMessage);
+					return ValidationStatus.error(UIMessages.globalEndpointWizardPageIdMandatoryMessage);
 				}
 				// TODO: check unicity of ID
 				return ValidationStatus.ok();

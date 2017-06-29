@@ -32,6 +32,7 @@ import org.w3c.dom.NodeList;
  * @author brianf
  *
  */
+@SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PropertyInputDialog extends AbstractBeanInputDialog {
 
 	private String propertyName = null;
@@ -52,18 +53,18 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(UIMessages.PropertyInputDialog_PropertyDialogTitle);
-		getShell().setText(UIMessages.PropertyInputDialog_PropertyDialogWindowTitle);
+		setTitle(UIMessages.propertyInputDialogPropertyDialogTitle);
+		getShell().setText(UIMessages.propertyInputDialogPropertyDialogWindowTitle);
 		if (isEditDialog()) {
-			setMessage(UIMessages.PropertyInputDialog_PropertyDialogEditMessage);
+			setMessage(UIMessages.propertyInputDialogPropertyDialogEditMessage);
 		} else {
-			setMessage(UIMessages.PropertyInputDialog_PropertyDialogNewPropertyMessage);
+			setMessage(UIMessages.propertyInputDialogPropertyDialogNewPropertyMessage);
 		}
 		Composite area = new Composite(parent, SWT.NULL);
 		GridLayout gridLayout = new GridLayout(2, false);
 		area.setLayout(gridLayout);
 		area.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Text propertyNameText = createLabelAndText(area, UIMessages.PropertyInputDialog_NameFieldLabel);
+		Text propertyNameText = createLabelAndText(area, UIMessages.propertyInputDialogNameFieldLabel);
 		if (propertyName != null && !propertyName.trim().isEmpty()) {
 			propertyNameText.setText(propertyName);
 		}
@@ -72,7 +73,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 			getButton(IDialogConstants.OK_ID).setEnabled(validate());
 		});
 
-		Text propertyValueText = createLabelAndText(area, UIMessages.PropertyInputDialog_ValueFieldLabel);
+		Text propertyValueText = createLabelAndText(area, UIMessages.propertyInputDialogValueFieldLabel);
 		if (propertyValue != null && !propertyValue.trim().isEmpty()) {
 			propertyValueText.setText(propertyValue);
 		}
@@ -107,7 +108,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 	 */
 	public String validate(String newPropName, String newPropValue) {
 		if (Strings.isEmpty(newPropName)) {
-			return UIMessages.PropertyInputDialog_ErrorNoNameSpecified;
+			return UIMessages.propertyInputDialogErrorNoNameSpecified;
 		}
 		if (!propertyList.isEmpty()) {
 			for (AbstractCamelModelElement camelElement : propertyList) {
@@ -115,7 +116,7 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 				String propName = xmlElement.getAttribute(CamelBean.PROP_NAME);
 				boolean nameIsUnique = nameIsUnique(propName, newPropName);
 				if (!nameIsUnique) {
-					return UIMessages.PropertyInputDialog_NameNotUnique;
+					return UIMessages.propertyInputDialogNameNotUnique;
 				}
 			}
 		} else if (inputElement != null) {
@@ -124,12 +125,12 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 				Element arrayElement = (Element) childList.item(i);
 				String propName = arrayElement.getAttribute(CamelBean.PROP_NAME);
 				if (!nameIsUnique(propName, newPropName)) {
-					return UIMessages.PropertyInputDialog_NameNotUnique;
+					return UIMessages.propertyInputDialogNameNotUnique;
 				}
 			}
 		}
 		if (Strings.isEmpty(newPropValue)) {
-			return UIMessages.PropertyInputDialog_ValueNotSpecified;
+			return UIMessages.propertyInputDialogValueNotSpecified;
 		}
 		return null;
 	}

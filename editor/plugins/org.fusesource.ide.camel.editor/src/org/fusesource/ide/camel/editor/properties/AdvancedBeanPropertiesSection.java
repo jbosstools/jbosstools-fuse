@@ -217,7 +217,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
-		createStandardTabLayout(UIMessages.AdvancedBeanPropertiesSection_Title);
+		createStandardTabLayout(UIMessages.advancedBeanPropertiesSectionTitle);
 	}
 
 	private void createClassBrowseButton(Composite composite, Text field) {

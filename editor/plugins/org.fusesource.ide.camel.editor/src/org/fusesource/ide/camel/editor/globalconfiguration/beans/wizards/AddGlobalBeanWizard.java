@@ -42,7 +42,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.addGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -54,8 +54,8 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	@Override
 	public void addPages() {
 		super.addPages();
-		globalBeanPage = new GlobalBeanWizardPage(dbc, UIMessages.AddGlobalBeanWizard_BeanPageTitle,
-				UIMessages.AddGlobalBeanWizard_BeanPageMessage, camelFile);
+		globalBeanPage = new GlobalBeanWizardPage(dbc, UIMessages.addGlobalBeanWizardBeanPageTitle,
+				UIMessages.addGlobalBeanWizardBeanPageMessage, camelFile);
 		addPage(globalBeanPage);
 
 	}
@@ -119,7 +119,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	}
 
 	public void init() {
-		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.addGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 		dbc = new DataBindingContext();
 	}

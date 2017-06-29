@@ -59,7 +59,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public GlobalBeanEditWizardPage(DataBindingContext dbc, String title, String description, AbstractCamelModelElement parent) {
-		super(UIMessages.GlobalBeanEditWizardPage_DefaultName);
+		super(UIMessages.globalBeanEditWizardPageDefaultName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
@@ -79,7 +79,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		createClassNewButton(composite);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
-		argsPropsGroup.setText(UIMessages.GlobalBeanEditWizardPage_ArgumentsGroupLabel);
+		argsPropsGroup.setText(UIMessages.globalBeanEditWizardPageArgumentsGroupLabel);
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -88,7 +88,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 		beanArgsTable.setInput(selectedElement);
 
 		Group beanPropsGroup = new Group(composite, SWT.NONE);
-		beanPropsGroup.setText(UIMessages.GlobalBeanEditWizardPage_PropertiesGroupLabel);
+		beanPropsGroup.setText(UIMessages.globalBeanEditWizardPagePropertiesGroupLabel);
 		beanPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
@@ -105,7 +105,7 @@ public class GlobalBeanEditWizardPage extends WizardPage {
 	 */
 	private void createClassLine(Composite composite) {
 		Label classLabel = new Label(composite, SWT.NONE);
-		classLabel.setText(UIMessages.GlobalBeanEditWizardPage_ClassLabel);
+		classLabel.setText(UIMessages.globalBeanEditWizardPageClassLabel);
 		Text classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();

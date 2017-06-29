@@ -53,7 +53,7 @@ public final class ComponentGroupedByTagsTreeContenProvider implements ITreeCont
 			Set<String> res = new HashSet<>();
 			res.addAll(componentManager.getTags());
 			if (!componentManager.getComponentWithoutTag().isEmpty()) {
-				res.add(UIMessages.ComponentGroupedByTagsTreeContenProvider_Uncategorized);
+				res.add(UIMessages.componentGroupedByTagsTreeContenProviderUncategorized);
 			}
 			return res.toArray();
 		}
@@ -63,7 +63,7 @@ public final class ComponentGroupedByTagsTreeContenProvider implements ITreeCont
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if(parentElement instanceof String){
-			if (UIMessages.ComponentGroupedByTagsTreeContenProvider_Uncategorized.equals(parentElement)) {
+			if (UIMessages.componentGroupedByTagsTreeContenProviderUncategorized.equals(parentElement)) {
 				return componentManager.getComponentWithoutTag().toArray();
 			} else {
 				return componentManager.getComponentForTag((String) parentElement).toArray();
