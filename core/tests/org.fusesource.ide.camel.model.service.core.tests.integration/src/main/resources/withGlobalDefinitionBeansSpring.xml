@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- some beans... -->
+  <bean id="accountOne" class="org.apache.aries.simple.Account"/>
+  <bean id="accountTwo" class="org.apache.aries.simple.Account2">
+      <constructor-arg value="1"/>
+  </bean>
+  <bean id="accountThree" class="org.apache.aries.simple.Account3">
+      <constructor-arg value="1"/>
+      <property name="description" value="#1 account"/>
+  </bean>
+
+  <!--  the route -->
+  <camelContext xmlns="http://camel.apache.org/schema/spring" autoStartup="true" streamCache="false" id="context1">
+    <route/>
+  </camelContext>
+
+</beans>

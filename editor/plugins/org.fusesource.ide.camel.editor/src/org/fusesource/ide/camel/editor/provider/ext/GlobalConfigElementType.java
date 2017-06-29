@@ -16,5 +16,6 @@ package org.fusesource.ide.camel.editor.provider.ext;
 public enum GlobalConfigElementType {
 	CONTEXT_DATAFORMAT,
 	CONTEXT_ENDPOINT,
-	GLOBAL_ELEMENT;
+	GLOBAL_ELEMENT,
+	GLOBAL_BEAN;
 }

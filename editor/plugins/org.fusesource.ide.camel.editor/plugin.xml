@@ -97,6 +97,12 @@
          <propertyTab
                afterTab="DefaultCamelPropertiesTab"
                category="FuseTooling"
+               id="AdvancedBeanPropertiesTab"
+               indented="false"
+               label="Bean"/> 
+         <propertyTab
+               afterTab="DefaultCamelPropertiesTab"
+               category="FuseTooling"
                id="DocumentationTab"
                indented="false"
                label="%integration.properties.tab.documentation.title"/> 
@@ -117,6 +123,13 @@
                filter="org.fusesource.ide.camel.editor.properties.AdvancedPropertiesFilter"
                id="AdvancedEndpointPropertiesSection"
                tab="AdvancedEndpointPropertiesTab">
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.AdvancedBeanPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.properties.BeanPropertiesFilter"
+               id="AdvancedBeanPropertiesSection"
+               tab="AdvancedBeanPropertiesTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.CamelBean"/>
          </propertySection>
          <propertySection
                afterSection="DefaultEndpointPropertiesSection"
@@ -300,6 +313,13 @@
             icon="icons/dataformat.png"
             id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.dataformat"
             name="Data Format">
+      </GlobalConfigElement>
+      <GlobalConfigElement
+            category="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
+            class="org.fusesource.ide.camel.editor.globalconfiguration.beans.provider.GlobalBeanContributor"
+            icon="icons/bean16.png"
+            id="org.fusesource.ide.camel.editor.provider.globalconfigprovider.globalbean"
+            name="Bean">
       </GlobalConfigElement>
    </extension>
    <extension

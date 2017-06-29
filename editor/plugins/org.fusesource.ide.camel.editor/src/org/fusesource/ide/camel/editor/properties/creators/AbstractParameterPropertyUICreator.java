@@ -51,6 +51,7 @@ public abstract class AbstractParameterPropertyUICreator {
 	protected IObservableMap modelMap;
 	protected Component component = null;
 	private Composite parent;
+	private int columnSpan = 3;
 
 	public AbstractParameterPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
@@ -124,7 +125,7 @@ public abstract class AbstractParameterPropertyUICreator {
 	}
 
 	protected GridData createPropertyFieldLayoutData() {
-		return GridDataFactory.fillDefaults().indent(5, 0).span(3, 1).grab(true, false).create();
+		return GridDataFactory.fillDefaults().indent(5, 0).span(getColumnSpan(), 1).grab(true, false).create();
 	}
 
 	protected void createHelpDecoration(Parameter parameter, Control control) {
@@ -139,4 +140,11 @@ public abstract class AbstractParameterPropertyUICreator {
 		}
 	}
 
+	public void setColumnSpan(int count) {
+		this.columnSpan = count;
+	}
+	
+	protected int getColumnSpan() {
+		return this.columnSpan;
+	}
 }

@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -72,6 +71,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -105,7 +105,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	private Composite parent;
 	private TreeViewer treeViewer;
-	private Button btnAdd;
 	private Button btnModify;
 	private Button btnDelete;
 
@@ -249,7 +248,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	}
 
 	private void createAddButton() {
-		btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
+		Button btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
 		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false, false, 1, 1);
@@ -262,7 +261,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				createNewEntry();
 			}
 		});
-		btnAdd.setEnabled(getElementContributions().isEmpty() == false);
+		btnAdd.setEnabled(!getElementContributions().isEmpty());
 	}
 
 	@Override
@@ -278,7 +277,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	@Override
 	public void setFocus() {
-		Display.getDefault().asyncExec(() -> reload());
+		Display.getDefault().asyncExec(this::reload);
 		this.treeViewer.getTree().setFocus();
 	}
 
@@ -459,19 +458,19 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param selectedId
 	 */
 	private void restoreSelection(IStructuredSelection selection, String selectedId) {
+		IStructuredSelection restorableSelection = selection;
 		if (selectedId != null) {
 			for (List<Object> models : getModel().values()) {
 				for (Object object : models) {
-					if (object instanceof AbstractCamelModelElement) {
-						if (selectedId.equals(((AbstractCamelModelElement) object).getId())) {
-							selection = new StructuredSelection(object);
-							break;
-						}
+					if (object instanceof AbstractCamelModelElement
+							&& selectedId.equals(((AbstractCamelModelElement) object).getId())) {
+						restorableSelection = new StructuredSelection(object);
+						break;
 					}
 				}
 			}
 		}
-		treeViewer.setSelection(selection);
+		treeViewer.setSelection(restorableSelection);
 	}
 
 	private void buildModel() {
@@ -574,6 +573,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 							case GLOBAL_ELEMENT:
 								createNewGlobalElement(cf, newXMLNode);
 								break;
+							case GLOBAL_BEAN:
+								createNewGlobalBeanElement(cf, newXMLNode);
+								break;
 							case CONTEXT_DATAFORMAT:
 								createNewDataFormat(cf, newXMLNode);
 								break;
@@ -625,18 +627,43 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * @param newXMLNode
 	 */
 	private void createNewGlobalElement(CamelFile cf, Node newXMLNode) {
-		String id = ((Element) newXMLNode).getAttribute("id");
-		GlobalDefinitionCamelModelElement newGlobalDef = new GlobalDefinitionCamelModelElement(cf, newXMLNode);
-		final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
-		newGlobalDef.setId(settedId);
-		newGlobalDef.initialize();
-		if (cf.getGlobalDefinitions().containsKey(id)) {
-			cf.updateGlobalDefinition(settedId, newGlobalDef);
-		} else {
-			cf.addGlobalDefinition(settedId, newGlobalDef);
-		}
+		addNewGlobalElement(cf, newXMLNode);
 		reload();
 		treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
+	}
+
+	/**
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	private void createNewGlobalBeanElement(CamelFile cf, Node newXMLNode) {
+		addNewGlobalBeanElement(cf, newXMLNode);
+		reload();
+		treeViewer.setSelection(new StructuredSelection(newXMLNode), true);
+	}
+
+	
+	/**
+	 * /!\ Public for test purpose
+	 *
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	public GlobalDefinitionCamelModelElement addNewGlobalElement(CamelFile cf, Node newXMLNode) {
+		if (newXMLNode != null) {
+			String id = ((Element) newXMLNode).getAttribute("id");
+			GlobalDefinitionCamelModelElement newGlobalDef = new GlobalDefinitionCamelModelElement(cf, newXMLNode);
+			final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
+			newGlobalDef.setId(settedId);
+			newGlobalDef.initialize();
+			if (cf.getGlobalDefinitions().containsKey(id)) {
+				cf.updateGlobalDefinition(settedId, newGlobalDef);
+			} else {
+				cf.addGlobalDefinition(settedId, newGlobalDef);
+			}
+			return newGlobalDef;
+		}
+		return null;
 	}
 
 	/**
@@ -667,6 +694,29 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			configureCamelModelElement(cf, newXMLNode, elemEP, "to");
 			((CamelContextElement)cf.getRouteContainer()).addEndpointDefinition(elemEP);
 			return elemEP;
+		}
+		return null;
+	}
+
+	/**
+	 * /!\ Public for test purpose
+	 *
+	 * @param cf
+	 * @param newXMLNode
+	 */
+	public CamelBean addNewGlobalBeanElement(CamelFile cf, Node newXMLNode) {
+		if (newXMLNode != null) {
+			String id = ((Element) newXMLNode).getAttribute("id");
+			CamelBean newGlobalBeanDef = new CamelBean(cf, newXMLNode);
+			final String settedId = Strings.isBlank(id) ? UUID.randomUUID().toString() : id;
+			newGlobalBeanDef.setId(settedId);
+			newGlobalBeanDef.initialize();
+			if (cf.getGlobalDefinitions().containsKey(id)) {
+				cf.updateGlobalDefinition(settedId, newGlobalBeanDef);
+			} else {
+				cf.addGlobalDefinition(settedId, newGlobalBeanDef);
+			}
+			return newGlobalBeanDef;
 		}
 		return null;
 	}

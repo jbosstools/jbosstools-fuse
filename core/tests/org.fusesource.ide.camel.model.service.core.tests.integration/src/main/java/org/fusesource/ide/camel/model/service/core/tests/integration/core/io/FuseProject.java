@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.io;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -112,4 +111,10 @@ public class FuseProject extends ExternalResource {
 		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 
+	public CamelFile createEmptyBlueprintCamelFile(IFile file) throws CoreException, IOException {
+		try(InputStream source = FuseProject.class.getResourceAsStream("/empty-BlueprintCamelFile.xml")){
+			file.create(source, true, new NullProgressMonitor());
+		}
+		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
+	}
 }

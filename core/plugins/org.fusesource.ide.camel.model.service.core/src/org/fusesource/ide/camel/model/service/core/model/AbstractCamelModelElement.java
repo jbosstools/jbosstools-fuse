@@ -790,6 +790,7 @@ public abstract class AbstractCamelModelElement {
 			kind=NODE_KIND_ATTRIBUTE;
 		}
 
+		
 		if (value == null || value.toString().length() < 1) {
 			// seems the attribute has been deleted?
 			if (kind.equalsIgnoreCase(NODE_KIND_ATTRIBUTE) && e.hasAttribute(name)) {
@@ -1040,7 +1041,8 @@ public abstract class AbstractCamelModelElement {
 	 * @param e
 	 */
 	private void updateAttribute(String name, Object newValue, Object oldValue, Element e) {
-		String defaultValue = this.underlyingMetaModelObject != null
+		String defaultValue = this.underlyingMetaModelObject != null 
+				&& this.underlyingMetaModelObject.getParameter(name) != null
 				? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
 		if (defaultValue != null && defaultValue.equals(getMappedValue(newValue)) && useOptimizedXML()) {
 			// default value -> no need to explicitly set it -> delete
@@ -1113,14 +1115,25 @@ public abstract class AbstractCamelModelElement {
 	 * subnodes
 	 */
 	protected void parseNode() {
-		// first parse direct attributes
-		parseAttributes();
-
-		// now parse child elements
-		parseChildren();
-
-		// link child attributes like expressions to parent parameters
-		linkChildrenToAttributes();
+		if (shouldParseNode()) {
+			// first parse direct attributes
+			parseAttributes();
+	
+			// now parse child elements
+			parseChildren();
+	
+			// link child attributes like expressions to parent parameters
+			linkChildrenToAttributes();
+		}
+	}
+	
+	/**
+	 * For downstream nodes to choose whether to ignore contents or not
+	 * @return true/false (default true)
+	 */
+	protected boolean shouldParseNode() {
+		// default implementation
+		return true;
 	}
 
 	public void ensureUniqueID(AbstractCamelModelElement elem) {
