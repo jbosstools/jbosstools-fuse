@@ -69,16 +69,15 @@ public class BeanConfigUtil {
 	/*
 	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
 	 */
-	public String handleNewClassWizard(IProject project, Shell shell) {
-		NewClassCreationWizard wiz = new NewClassCreationWizard();
-		wiz.addPages();
-		wiz.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
-		NewClassWizardPage wp = (NewClassWizardPage) wiz.getStartingPage();
-		WizardDialog wd = new WizardDialog(shell, wiz);
-		wp.setAddComments(true, true);
-		setInitialPackageFrament(project, wp);
+	public String handleNewClassWizard(IProject project, Shell shell) {	
+		NewClassWizardPage ncwp = new NewClassWizardPage();
+		ncwp.setAddComments(true, true);
+		setInitialPackageFrament(project, ncwp);
+		NewClassCreationWizard newClassCreationWizard = new NewClassCreationWizard(ncwp, true);
+		newClassCreationWizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
+		WizardDialog wd = new WizardDialog(shell, newClassCreationWizard);
 		if (Window.OK == wd.open()) {
-			String value = wp.getCreatedType().getFullyQualifiedName();
+			String value = ncwp.getCreatedType().getFullyQualifiedName();
 			if (value != null) {
 				return value;
 			}
