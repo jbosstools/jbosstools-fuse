@@ -63,18 +63,10 @@ public class IOUtils {
 
     public static byte[] loadBinaryFile(File file) {
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        FileInputStream in = null;
-        try {
-        	in = new FileInputStream(file);
+        try (FileInputStream in = new FileInputStream(file)) {
         	copy(in, baos);
         } catch (IOException ex) {
     		FoundationCoreActivator.pluginLog().logError(ex);
-        } finally {
-        	try {
-        		in.close();
-        	} catch (IOException e) {
-        		// ignore
-        	}
         }
         return baos.toByteArray();
     }

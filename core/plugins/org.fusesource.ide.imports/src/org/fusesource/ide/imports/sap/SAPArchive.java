@@ -43,13 +43,12 @@ public class SAPArchive {
 	protected Map<String, byte[]> contents = new HashMap<>();
 
 	protected void readArchiveFile(String filename, byte[] fileBytes) throws IOException {
-		if (filename.toLowerCase().endsWith(ZIP_EXTENTION)) { //$NON-NLS-1$
+		String fileNameLowerCased = filename.toLowerCase();
+		if (fileNameLowerCased.endsWith(ZIP_EXTENTION)) { //$NON-NLS-1$
 			readZIPFile(fileBytes);
-		} else if (filename.toLowerCase().endsWith(TGZ_EXTENTION)) { //$NON-NLS-1$
+		} else if (fileNameLowerCased.endsWith(TGZ_EXTENTION) || fileNameLowerCased.endsWith(TAR_GZ_EXTENTION)) { //$NON-NLS-1$ //$NON-NLS-2$
 			readTGZFile(fileBytes);
-		} else if (filename.toLowerCase().endsWith(TAR_GZ_EXTENTION)) { //$NON-NLS-1$
-			readTGZFile(fileBytes);
-		} else if (filename.toLowerCase().endsWith(TAR_EXTENTION)) { //$NON-NLS-1$
+		} else if (fileNameLowerCased.endsWith(TAR_EXTENTION)) { //$NON-NLS-1$
 			readTarFile(fileBytes);
 		} else {
 			throw new IOException(Messages.SAPArchive_InvalidFile);
@@ -58,8 +57,8 @@ public class SAPArchive {
 		if (contents.size() == 1) {
 			filename = contents.keySet().iterator().next();
 			fileBytes = contents.values().iterator().next();
-			if (filename.toLowerCase().endsWith(ZIP_EXTENTION) || filename.toLowerCase().endsWith(TGZ_EXTENTION)
-					|| filename.toLowerCase().endsWith(TAR_GZ_EXTENTION) || filename.toLowerCase().endsWith(TAR_EXTENTION)) {
+			if (fileNameLowerCased.endsWith(ZIP_EXTENTION) || fileNameLowerCased.endsWith(TGZ_EXTENTION)
+					|| fileNameLowerCased.endsWith(TAR_GZ_EXTENTION) || fileNameLowerCased.endsWith(TAR_EXTENTION)) {
 				readArchiveFile(filename, fileBytes);
 			}
 		}
@@ -70,54 +69,52 @@ public class SAPArchive {
 		contents.clear();
 		byte[] buf = new byte[32 * 1024];
 		InputStream fs = new ByteArrayInputStream(fileBytes);
-		ZipInputStream zis = new ZipInputStream(fs);
-		for (ZipEntry entry = zis.getNextEntry(); entry != null; entry = zis.getNextEntry()) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			while (true) {
-				int numRead = zis.read(buf, 0, buf.length);
-				if (numRead == -1) {
-					break;
-				}
-				os.write(buf, 0, numRead);
-			}
-			os.close();
-			contents.put(entry.getName(), os.toByteArray());
+		try(ZipInputStream zis = new ZipInputStream(fs)) {
+			read(buf, zis);
 		}
-		zis.close();
+	}
+
+	private void read(byte[] buf, ZipInputStream zis) throws IOException {
+		for (ZipEntry entry = zis.getNextEntry(); entry != null; entry = zis.getNextEntry()) {
+			try(ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+				while (true) {
+					int numRead = zis.read(buf, 0, buf.length);
+					if (numRead == -1) {
+						break;
+					}
+					os.write(buf, 0, numRead);
+				}
+				contents.put(entry.getName(), os.toByteArray());
+			}
+		}
 	}
 
 	protected void readTGZFile(byte[] fileBytes) throws IOException {
 		contents.clear();
-		TarInputStream tin = new TarInputStream(new GZIPInputStream(new ByteArrayInputStream(fileBytes)));
-		TarEntry tarEntry = tin.getNextEntry();
-		while (tarEntry != null) {
-			if (!tarEntry.isDirectory()) {
-				// tar.getName()
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				tin.copyEntryContents(os);
-				os.close();
-				contents.put(tarEntry.getName(), os.toByteArray());
-			}
-			tarEntry = tin.getNextEntry();
+		try (TarInputStream tin = new TarInputStream(new GZIPInputStream(new ByteArrayInputStream(fileBytes)))) {
+			read(tin);
 		}
-		tin.close();
 	}
 
 	protected void readTarFile(byte[] fileBytes) throws IOException {
 		contents.clear();
-		TarInputStream tin = new TarInputStream(new ByteArrayInputStream(fileBytes));
+		try (TarInputStream tin = new TarInputStream(new ByteArrayInputStream(fileBytes))) {
+			read(tin);
+		}
+	}
+
+	private void read(TarInputStream tin) throws IOException {
 		TarEntry tarEntry = tin.getNextEntry();
 		while (tarEntry != null) {
 			if (!tarEntry.isDirectory()) {
 				// tar.getName()
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				tin.copyEntryContents(os);
-				os.close();
-				contents.put(tarEntry.getName(), os.toByteArray());
+				try(ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+					tin.copyEntryContents(os);
+					contents.put(tarEntry.getName(), os.toByteArray());
+				}
 			}
 			tarEntry = tin.getNextEntry();
 		}
-		tin.close();
 	}
 
 	protected void writeAttribute(StringBuilder manifest, String attributeName, String attributeValue) throws IOException {
@@ -143,20 +140,20 @@ public class SAPArchive {
 		contents.clear();
 		byte[] buf = new byte[32 * 1024];
 		InputStream fs = new ByteArrayInputStream(fileBytes);
-		JarInputStream jis = new JarInputStream(fs);
-		for (ZipEntry entry = jis.getNextEntry(); entry != null; entry = jis.getNextEntry()) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			while (true) {
-				int numRead = jis.read(buf, 0, buf.length);
-				if (numRead == -1) {
-					break;
+		try(JarInputStream jis = new JarInputStream(fs)) {
+			for (ZipEntry entry = jis.getNextEntry(); entry != null; entry = jis.getNextEntry()) {
+				try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+					while (true) {
+						int numRead = jis.read(buf, 0, buf.length);
+						if (numRead == -1) {
+							break;
+						}
+						os.write(buf, 0, numRead);
+					}
+					contents.put(entry.getName(), os.toByteArray());
 				}
-				os.write(buf, 0, numRead);
 			}
-			os.close();
-			contents.put(entry.getName(), os.toByteArray());
 		}
-		jis.close();
 	}
 
 	protected void addJarEntry(JarOutputStream target, String jarEntryName, byte[] jarEntryContents, long lastModified) throws IOException {

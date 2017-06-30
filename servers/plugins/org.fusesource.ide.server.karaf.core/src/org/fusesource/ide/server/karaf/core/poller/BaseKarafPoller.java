@@ -117,7 +117,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 */
 	@Override
 	public List<String> getRequiredProperties() {
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	/*
@@ -264,24 +264,10 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 * @return	returns true if server is up, otherwise false
 	 */
 	private boolean onePing(String host, int port) {
-		Socket s = null;
-        try {
-            s = new Socket(host, port);
-            if (s.isBound()) {
-                return true;
-            } else {
-                return false;
-            }
+        try (Socket s = new Socket(host, port)){
+            return s.isBound();
         } catch (IOException ex) {
         	// ignore
-        } finally {
-            if (s != null) {
-            	try {
-            		s.close();
-            	} catch (IOException e) {
-            		// ignore
-            	}
-            }
         }
 		return false;
 	}
