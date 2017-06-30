@@ -130,11 +130,9 @@ public class ArchetypeHelper {
             groupId + ", artifactId: " + artifactId + ", version: " + version
             + " in directory: " + outputDir);
 
-        Map<String, String> replaceProperties = new HashMap<String, String>();
+        Map<String, String> replaceProperties = new HashMap<>();
 
-        ZipInputStream zip = null;
-        try {
-            zip = new ZipInputStream(archetypeIn);
+        try (ZipInputStream zip = new ZipInputStream(archetypeIn)) {
             boolean ok = true;
             while (ok) {
                 ZipEntry entry = zip.getNextEntry();
@@ -162,9 +160,7 @@ public class ArchetypeHelper {
                             // lets replace properties...
                             File file = new File(outputDir, dirName);
                             file.getParentFile().mkdirs();
-                            FileOutputStream out = null;
-                            try {
-                                out = new FileOutputStream(file);
+                            try (FileOutputStream out = new FileOutputStream(file)) {
                                 boolean isBinary = false;
                                 for (String suffix : binarySuffixes) {
                                     if (name.endsWith(suffix)) {
@@ -177,14 +173,11 @@ public class ArchetypeHelper {
                                     copy(zip, out);
                                 } else {
                                     // text file...
-                                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                                    copy(zip, bos);
-                                    String text = new String(bos.toByteArray(), StandardCharsets.UTF_8);
-                                    out.write(transformContents(text, replaceProperties).getBytes(StandardCharsets.UTF_8));
-                                }
-                            } finally {
-                                if (out != null) {
-                                    out.close();
+                                	try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                                		copy(zip, bos);
+                                		String text = new String(bos.toByteArray(), StandardCharsets.UTF_8);
+                                		out.write(transformContents(text, replaceProperties).getBytes(StandardCharsets.UTF_8));
+                                	}
                                 }
                             }
                         } else if (fullName != null && fullName.equals("META-INF/maven/archetype-metadata.xml")) {
@@ -199,10 +192,6 @@ public class ArchetypeHelper {
             }
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e);
-        } finally {
-            if (zip != null) {
-                zip.close();
-            }
         }
 
         info("Using replace properties: " + replaceProperties);
@@ -250,10 +239,8 @@ public class ArchetypeHelper {
      * @throws IOException
      */
     public Map<String, String> parseProperties() throws IOException {
-        Map<String, String> replaceProperties = new HashMap<String, String>();
-        ZipInputStream zip = null;
-        try {
-            zip = new ZipInputStream(archetypeIn);
+        Map<String, String> replaceProperties = new HashMap<>();
+        try (ZipInputStream zip = new ZipInputStream(archetypeIn)) {
             boolean ok = true;
             while (ok) {
                 ZipEntry entry = zip.getNextEntry();
@@ -271,10 +258,6 @@ public class ArchetypeHelper {
             }
         } catch (Exception e) {
             throw new IOException(e.getMessage(), e);
-        } finally {
-            if (zip != null) {
-                zip.close();
-            }
         }
         return replaceProperties;
     }
@@ -371,8 +354,7 @@ public class ArchetypeHelper {
     
 	public static Map<String, String> getArchetypeRequiredProperties(URL jarURL)
 			throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
-    	ZipInputStream zis = new ZipInputStream(jarURL.openStream());
-    	try{
+    	try (ZipInputStream zis = new ZipInputStream(jarURL.openStream())) {
         	ZipEntry entry = null;
         	while ((entry=zis.getNextEntry())!=null) {
         		try{
@@ -386,15 +368,13 @@ public class ArchetypeHelper {
                     zis.closeEntry();
         		}
             }
-    	}finally{
-    		zis.close();
     	}
     	return Collections.EMPTY_MAP;
     }
     
 	private static Map<String, String> getArchetypeRequiredProperties(ByteArrayOutputStream copyOfArchetypeJar,
 			boolean excludeDepVersionProperties,boolean defaultAllProperties) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-    	Map<String,String> propertiesMap = new LinkedHashMap<String,String>();
+    	Map<String,String> propertiesMap = new LinkedHashMap<>();
  
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);

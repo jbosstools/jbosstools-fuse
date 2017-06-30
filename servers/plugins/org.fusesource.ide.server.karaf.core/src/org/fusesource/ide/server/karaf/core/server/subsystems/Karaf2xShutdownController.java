@@ -122,35 +122,26 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 	 * @return
 	 */
 	protected IStatus shutdownKarafInstance(int managementPort) {
-		Socket s = null;
 		try {
 			Karaf2xPortController ctrl = (Karaf2xPortController)((ControllableKarafServerBehavior)getControllableBehavior()).getController("port");
 			// we need to obtain the shutdown command
 			String shutdownCommand = ctrl.getShutdownCommand();
-            s = new Socket(getServer().getHost(), managementPort);
-            s.getOutputStream().write(shutdownCommand.getBytes(StandardCharsets.UTF_8));
+            try(Socket s = new Socket(getServer().getHost(), managementPort)){
+            	s.getOutputStream().write(shutdownCommand.getBytes(StandardCharsets.UTF_8));
+            }
 		} catch (CoreException e) {
 			Activator.getLogger().error(e);
 			return Status.CANCEL_STATUS;
         } catch (IOException ex) {
         	Activator.getLogger().error(ex);
             return Status.CANCEL_STATUS;
-        } finally {
-            if (s != null) {
-            	try {
-            		s.close();
-            	} catch (IOException e) {
-            		// can't close the socket
-            	}
-            }
         }
         return Status.OK_STATUS;
 	}
 	
 	protected boolean shouldUseForce() {
 		int state = getServer().getServerState();
-		boolean useForce = !isProcessRunning() || state == IServer.STATE_STOPPED || getRequiresForce(); 
-		return useForce;
+		return !isProcessRunning() || state == IServer.STATE_STOPPED || getRequiresForce(); 
 	}
 	
 	protected void forceStop() {
@@ -172,8 +163,7 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 	
 	
 	protected IProcess getProcess() {
-		IProcess existing = (IProcess)getControllableBehavior().getSharedData(AbstractStartJavaServerLaunchDelegate.PROCESS);
-		return existing;
+		return (IProcess)getControllableBehavior().getSharedData(AbstractStartJavaServerLaunchDelegate.PROCESS);
 	}
 
 	protected boolean getRequiresForce() {
@@ -182,8 +172,7 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 	}
 	
 	protected boolean isProcessRunning() {
-		boolean isProcessRunning = getProcess() != null && !getProcess().isTerminated();
-		return isProcessRunning;
+		return getProcess() != null && !getProcess().isTerminated();
 	}
 	
 	protected void clearProcess() {

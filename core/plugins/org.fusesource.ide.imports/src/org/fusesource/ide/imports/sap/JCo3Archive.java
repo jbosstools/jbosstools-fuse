@@ -277,13 +277,10 @@ public class JCo3Archive extends SAPArchive {
 
 	public JCo3Archive(String filename) throws IOException {
 		name = filename;
-		InputStream is = null;
-		ByteArrayOutputStream os = null;
-		try {
-			File file = new File(filename);
-			lastModified = file.lastModified();
-			is = new FileInputStream(file);
-			os = new ByteArrayOutputStream();
+		File file = new File(filename);
+		lastModified = file.lastModified();
+		try(InputStream is = new FileInputStream(file);
+			ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -298,12 +295,6 @@ public class JCo3Archive extends SAPArchive {
 		} catch (IOException e) {
 			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
 			throw e;
-		} finally {
-			if (is != null)
-				is.close();
-			if (os != null)
-				os.close();
-
 		}
 	}
 
@@ -498,12 +489,13 @@ public class JCo3Archive extends SAPArchive {
 
 	private Map<String, String> parseManifest(byte[] file) throws IOException {
 		manifest.clear();
-		BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(file)));
-		String line;
-		while ((line = br.readLine()) != null) {
-			String[] elements = line.split(MANIFEST_LINE_DELIMITER);
-			if (elements.length >= 2) {
-				manifest.put(elements[0], elements[1]);
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(file)))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] elements = line.split(MANIFEST_LINE_DELIMITER);
+				if (elements.length >= 2) {
+					manifest.put(elements[0], elements[1]);
+				}
 			}
 		}
 		return manifest;

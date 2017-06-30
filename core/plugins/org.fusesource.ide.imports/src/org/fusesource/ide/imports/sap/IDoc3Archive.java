@@ -95,13 +95,10 @@ public class IDoc3Archive extends SAPArchive {
 
 	public IDoc3Archive(String filename) throws IOException {
 		name = filename;
-		InputStream is = null;
-		ByteArrayOutputStream os = null;
-		try {
-			File file = new File(filename);
-			lastModified = file.lastModified();
-			is = new FileInputStream(file);
-			os = new ByteArrayOutputStream();
+		File file = new File(filename);
+		lastModified = file.lastModified();
+		try(InputStream is = new FileInputStream(file);
+			ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -116,12 +113,6 @@ public class IDoc3Archive extends SAPArchive {
 		} catch (IOException e) {
 			isValid = false;
 			throw e;
-		} finally {
-			if (is != null)
-				is.close();
-			if (os != null)
-				os.close();
-
 		}
 	}
 
@@ -183,7 +174,7 @@ public class IDoc3Archive extends SAPArchive {
 	}
 
 	private void readVersion() throws IOException {
-		Map<String, byte[]> idoc3Contents = new HashMap<String, byte[]>();
+		Map<String, byte[]> idoc3Contents = new HashMap<>();
 		readJARFile(sapidoc3jar, idoc3Contents);
 		byte[] jco3IdocContents = idoc3Contents.get(JCOIDOC_CLASSFILE_ENTRY);
 		ByteArrayInputStream bais = new ByteArrayInputStream(jco3IdocContents);
