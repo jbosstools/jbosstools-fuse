@@ -66,7 +66,6 @@ public class CamelService implements ICamelManagerService {
 				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
 			}
 		}
-		
 	}
 	
 	private CamelCatalog getCatalog(CamelCatalogCoordinates coords) {
