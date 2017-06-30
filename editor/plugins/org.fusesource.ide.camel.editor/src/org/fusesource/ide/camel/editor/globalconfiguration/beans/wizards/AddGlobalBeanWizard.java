@@ -17,8 +17,8 @@ import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.GlobalBeanWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -37,12 +37,12 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	private ComponentManager componentManager;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
-	public AddGlobalBeanWizard(CamelFile camelFile, ComponentModel componentModel) {
+	public AddGlobalBeanWizard(CamelFile camelFile, CamelModel camelModel) {
 		super();
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
-		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle(UIMessages.addGlobalBeanWizardWindowTitle);
+		this.componentManager = new ComponentManager(camelModel);
+		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 

@@ -21,11 +21,10 @@ import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
 import org.fusesource.ide.camel.editor.utils.GlobalConfigUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -111,9 +110,8 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	 */
 	private EditGlobalBeanWizard createEditWizard(CamelFile camelFile) {
 		IProject project = camelFile.getResource().getProject();
-		CamelModel camelModel = CamelModelFactory.getModelForProject(project);
-		ComponentModel componentModel = camelModel.getComponentModel();
-		EditGlobalBeanWizard editWizard = new EditGlobalBeanWizard(camelFile, componentModel);
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		EditGlobalBeanWizard editWizard = new EditGlobalBeanWizard(camelFile, camelModel);
 		editWizard.init();
 		return editWizard;
 	}
@@ -125,9 +123,8 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	 */
 	private AddGlobalBeanWizard createAddWizard(CamelFile camelFile) {
 		IProject project = camelFile.getResource().getProject();
-		CamelModel camelModel = CamelModelFactory.getModelForProject(project);
-		ComponentModel componentModel = camelModel.getComponentModel();
-		AddGlobalBeanWizard addWizard = new AddGlobalBeanWizard(camelFile, componentModel);
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		AddGlobalBeanWizard addWizard = new AddGlobalBeanWizard(camelFile, camelModel);
 		addWizard.init();
 		return addWizard;
 	}
