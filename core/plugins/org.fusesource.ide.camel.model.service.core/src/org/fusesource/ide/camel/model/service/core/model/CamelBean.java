@@ -10,9 +10,10 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -137,20 +138,26 @@ public class CamelBean extends GlobalDefinitionCamelModelElement {
 
 	class GlobalBeanEIP extends Eip {
 		
-		private ArrayList<Parameter> parameters = new ArrayList<>();
+		private Map<String, Object> parameters = new HashMap<>();
 		
 		public GlobalBeanEIP() {
-			Parameter idParam = createParameter(PROP_ID, String.class.getName());
-			idParam.setRequired("true");
-			parameters.add(idParam);
-			Parameter classParam = createParameter(PROP_CLASS, String.class.getName());
-			classParam.setRequired("true");
-			parameters.add(classParam);
-			parameters.add(createParameter(PROP_SCOPE, String.class.getName()));
-			parameters.add(createParameter(PROP_DEPENDS_ON, String.class.getName()));
-			parameters.add(createParameter(PROP_INIT_METHOD, String.class.getName()));
-			parameters.add(createParameter(PROP_DESTROY_METHOD, String.class.getName()));
-			parameters.add(createParameter(PROP_FACTORY_METHOD, String.class.getName()));
+			Parameter p = createParameter(PROP_ID, String.class.getName());
+			p.setRequired("true");
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_CLASS, String.class.getName());
+			p.setRequired("true");
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_SCOPE, String.class.getName());
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_DEPENDS_ON, String.class.getName());
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_INIT_METHOD, String.class.getName());
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_DESTROY_METHOD, String.class.getName());
+			parameters.put(p.getName(), p);
+			p = createParameter(PROP_FACTORY_METHOD, String.class.getName());
+			parameters.put(p.getName(), p);
+			
 			setParameters(parameters);
 		}
 		

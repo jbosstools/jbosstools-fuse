@@ -16,8 +16,8 @@ import org.fusesource.ide.camel.editor.component.wizard.ComponentManager;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.GlobalBeanEditWizardPage;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigurationTypeWizard;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.w3c.dom.Element;
@@ -33,12 +33,12 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	private ComponentManager componentManager;
 	private CamelFile camelFile;
 
-	public EditGlobalBeanWizard(CamelFile camelFile, ComponentModel componentModel) {
+	public EditGlobalBeanWizard(CamelFile camelFile, CamelModel camelModel) {
 		super();
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
-		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle(UIMessages.editGlobalBeanWizardWindowTitle);
+		this.componentManager = new ComponentManager(camelModel);
+		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
