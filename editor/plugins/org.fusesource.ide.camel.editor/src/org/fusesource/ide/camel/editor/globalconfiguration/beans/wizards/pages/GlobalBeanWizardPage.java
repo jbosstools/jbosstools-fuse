@@ -86,7 +86,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
 		beanArgsTable = new ArgumentStyleChildTableControl(argsPropsGroup, SWT.NULL);
-		beanArgsTable.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).span(4, 2).create());
+		beanArgsTable.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 2).create());
 		beanArgsTable.setInput(this.parent);
 
 		Group beanPropsGroup = new Group(composite, SWT.NONE);
@@ -95,7 +95,7 @@ public class GlobalBeanWizardPage extends WizardPage {
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
 		beanPropsTable = new PropertyStyleChildTableControl(beanPropsGroup, SWT.NULL);
-		beanPropsTable.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).span(4, 2).create());
+		beanPropsTable.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 2).create());
 		beanPropsTable.setInput(this.parent);
 
 		setControl(composite);
