@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElementIDUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 
 /**
@@ -121,7 +122,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 				designEditor.getModel().registerDOMListener();
 			}
 			if (context != null){
-				context.ensureUniqueID(context);
+				new CamelModelElementIDUtil().ensureUniqueID(context);
 			}
 		}
 	}
