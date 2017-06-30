@@ -55,6 +55,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElementIDUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Node;
@@ -374,7 +375,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 
 			// make sure we have a unique id for the new figure
 			if (Strings.isBlank(node.getId())) {
-				node.ensureUniqueID(node);
+				new CamelModelElementIDUtil().ensureUniqueID(node);
 			}
 
 			// add the node to the diagram

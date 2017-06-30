@@ -32,6 +32,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElementIDUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
@@ -71,11 +72,11 @@ public class GlobalNewIdIT {
 		CamelRouteContainerElement ctx = model.getRouteContainer();
 		CamelRouteElement route1 = createRoute(model, ctx);
 		ctx.addChildElement(route1);
-		route1.ensureUniqueID(route1);
+		new CamelModelElementIDUtil().ensureUniqueID(route1);
 		assertThat(route1.getId()).isNotEmpty();
 		CamelRouteElement route2 = createRoute(model, ctx);
 		ctx.addChildElement(route2);
-		route2.ensureUniqueID(route2);
+		new CamelModelElementIDUtil().ensureUniqueID(route2);
 		assertThat(route2.getId()).isNotEmpty();
 		assertThat(route1.getId()).isNotEqualTo(route2.getId());
 	}

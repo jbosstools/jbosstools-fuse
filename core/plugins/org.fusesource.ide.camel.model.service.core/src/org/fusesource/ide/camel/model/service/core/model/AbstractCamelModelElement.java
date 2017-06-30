@@ -1136,27 +1136,6 @@ public abstract class AbstractCamelModelElement {
 		return true;
 	}
 
-	public void ensureUniqueID(AbstractCamelModelElement elem) {
-		// if this element is also a parent element parameter then we don't
-		// set ID values (example: parent = onException, element: exception)
-		if (elem.getParent().getParameter(elem.getTranslatedNodeName()) != null &&
-			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getTranslatedNodeName()).getKind().equals(NODE_KIND_ELEMENT) &&
-			!elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase(OTHERWISE_NODE_NAME)) {
-			return;
-		}
-
-		if (elem.getUnderlyingMetaModelObject() == null && elem instanceof CamelContextElement == false) {
-			// don't give ID for attributes
-		} else {
-			if (elem.getId() == null || elem.getId().trim().length() < 1) {
-				elem.setId(elem.getNewID());
-			}
-		}
-		for (AbstractCamelModelElement e : elem.getChildElements()) {
-			e.ensureUniqueID(e);
-		}
-	}
-
 	/**
 	 * parses direct attributes of the node
 	 */

@@ -24,6 +24,7 @@ import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsComman
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElementIDUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 
 /**
@@ -63,7 +64,7 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
         
         final CamelRouteContainerElement camelContext = camelFile.getRouteContainer();
 		if (camelContext != null) {
-			camelContext.ensureUniqueID(camelContext);
+			new CamelModelElementIDUtil().ensureUniqueID(camelContext);
         }
         
         return importCommand.getDiagram();
