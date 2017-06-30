@@ -50,10 +50,10 @@ public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
 		
 		page.preselectCamelVersionForRuntime("2.19.0");
-		page.validateCamelVersion();
+		assertThat(page.isValidCamelVersionSyntax(page.getSelectedCamelVersion())).isTrue();
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		assertThat(selectedCamelVersion.startsWith("2.19.0")).isTrue();
-		assertThat(page.isWarningShown()).isFalse();
+		assertThat(page.getErrorMessage()).isNull();
 	}
 	
 	@Test
@@ -61,10 +61,10 @@ public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 		FuseIntegrationProjectWizardRuntimeAndCamelPage page = createWizardRuntimePage();
 		
 		page.preselectCamelVersionForRuntime("2.19.a");
-		page.validateCamelVersion();
+		assertThat(page.isValidCamelVersionSyntax(page.getSelectedCamelVersion())).isFalse();
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		assertThat(selectedCamelVersion.startsWith("2.19.a")).isTrue();
-		assertThat(page.isWarningShown()).isTrue();
+		assertThat(page.isCamelVersionValid(selectedCamelVersion)).isFalse();
 	}
 	
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage createWizardRuntimePage() {

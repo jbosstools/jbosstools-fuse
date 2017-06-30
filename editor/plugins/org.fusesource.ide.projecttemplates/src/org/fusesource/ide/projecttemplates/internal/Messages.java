@@ -61,8 +61,10 @@ public class Messages extends NLS {
 	public static String newProjectWizardRuntimePageCamelVersionValidationLabel;
 	public static String newProjectWizardRuntimePageCamelVersionValidationDescription;
 	public static String newProjectWizardRuntimePageNoRuntimeSelectedLabel;
+	public static String newProjectWizardRuntimePageNoCamelVersionSelectedLabel;
 	public static String newProjectWizardRuntimePageCamelVersionsDontMatchWarning;
 	public static String newProjectWizardRuntimePageCamelVersionInvalidWarning;
+	public static String newProjectWizardRuntimePageCamelVersionValidInfo;
 	public static String newProjectWizardRuntimePageResolveDependencyStatus;
 	public static String newProjectWizardRuntimePageCamelVersionInvalidSyntaxWarning;
 	
