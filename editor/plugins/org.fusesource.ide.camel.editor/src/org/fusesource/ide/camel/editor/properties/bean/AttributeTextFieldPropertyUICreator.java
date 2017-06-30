@@ -31,14 +31,12 @@ import org.w3c.dom.Node;
  */
 public class AttributeTextFieldPropertyUICreator extends AbstractTextFieldParameterPropertyUICreator {
 
-	@SuppressWarnings("squid:S00107")
 	public AttributeTextFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
 				new AttributeTextParameterPropertyModifyListenerForAdvanced(camelModelElement, parameter));
 	}
 
-	@SuppressWarnings("squid:S00107")
 	public AttributeTextFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, AbstractTextParameterPropertyModifyListener listener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
