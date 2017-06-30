@@ -10,10 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 
-import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.validation.BeanValidationUtil;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -33,11 +32,7 @@ public class NewBeanIdPropertyValidator extends BeanRequiredPropertyValidator {
 	public IStatus validate(Object value) {
 		IStatus superStatus = super.validate(value);
 		if (superStatus.equals(Status.OK_STATUS)) {
-			String id = (String) value;
-			if (parent.findAllNodesWithId(id).size() > 1){
-				return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
-			}
-			return ValidationStatus.ok();
+			return BeanValidationUtil.validateIdInParent(parent, value);
 		}
 		return superStatus;
 	}
