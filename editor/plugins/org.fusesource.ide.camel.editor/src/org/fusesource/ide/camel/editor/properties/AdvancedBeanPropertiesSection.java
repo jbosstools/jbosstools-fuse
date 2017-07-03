@@ -40,6 +40,8 @@ import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropert
 import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
+import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
+import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -132,6 +134,13 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		return txtFieldCreator;
 	}
 
+	private ScopeAttributeComboFieldPropertyUICreator createScopeCombo(final Parameter p, final Composite page) {
+		ScopeAttributeComboFieldPropertyUICreator scopeFieldCreator = new ScopeAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
+				getWidgetFactory());
+		scopeFieldCreator.create();
+		return scopeFieldCreator;
+	}
+
 	/**
 	 * 
 	 * @param props
@@ -147,42 +156,48 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		}
 	}
 
-	private void createPropertyFieldEditor(final Composite page, Parameter p) {
+	private IValidator getValidatorForField(Parameter p) {
 		IValidator validator = null;
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = null;
 		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		String propName = p.getName();
-		
 		if (propName.equals(CamelBean.PROP_CLASS)) {
-			txtFieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
 			validator = new BeanClassExistsValidator(project);
-		} else if (propName.equals(CamelBean.PROP_INIT_METHOD)
-				|| propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
-			txtFieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
+		} else if (propName.equals(CamelBean.PROP_INIT_METHOD) || propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
 			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD)
-				|| propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
-			txtFieldCreator = createTextFieldWithMethodBrowse(p, page);
+		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD) || propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
 			validator = new PropertyMethodValidator(modelMap, project);
 		} else if (propName.equals(CamelBean.PROP_ID)) {
-			txtFieldCreator = createTextField(p, page);
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
+		}
+		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
+			validator = new PropertyRequiredValidator(p);
+		}
+		return validator;
+	}
+	
+	private void createPropertyFieldEditor(final Composite page, Parameter p) {
+		IValidator validator = getValidatorForField(p);
+		AbstractParameterPropertyUICreator fieldCreator = null;
+		String propName = p.getName();
+		if (propName.equals(CamelBean.PROP_CLASS)) {
+			fieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
+		} else if (propName.equals(CamelBean.PROP_INIT_METHOD) || propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
+			fieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
+		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD) || propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
+			fieldCreator = createTextFieldWithMethodBrowse(p, page);
+		} else if (propName.equals(CamelBean.PROP_ID)) {
+			fieldCreator = createTextField(p, page);
+		} else if (propName.equals(CamelBean.PROP_SCOPE)) {
+			fieldCreator = createScopeCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
-			txtFieldCreator = createTextField(p, page);
-			if (p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
-				validator = new PropertyRequiredValidator(p);
-			}
-		} else if (CamelComponentUtils.isUnsupportedProperty(p)) {
-			// handle unsupported props
+			fieldCreator = createTextField(p, page);
+		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { // handle unsupported props
 			new UnsupportedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page,
 					getWidgetFactory()).create();
 		}
-
-		if (txtFieldCreator != null) {
-			ISWTObservableValue uiObservable = handleObservable(txtFieldCreator, p);
-			if (uiObservable != null) {
-				bindField(validator, uiObservable, p);
-			}
+		if (fieldCreator != null && fieldCreator instanceof AbstractTextFieldParameterPropertyUICreator) {
+			ISWTObservableValue uiObservable = handleObservable((AbstractTextFieldParameterPropertyUICreator) fieldCreator, p);
+			if (uiObservable != null) bindField(validator, uiObservable, p);
 		}
 	}	
 	

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016-2017 Red Hat, Inc. 
+ * Copyright (c) 2017 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,8 +17,8 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -26,14 +26,15 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 
 /**
- * @author Aurelien Pupier
+ * @author brianf
  *
  */
-public abstract class AbstractTextFieldParameterPropertyUICreator extends AbstractParameterPropertyUICreator {
+public abstract class AbstractComboFieldParameterPropertyUICreator extends AbstractParameterPropertyUICreator {
 
 	protected ModifyListener modifyListener;
+	private String[] values;
 
-	public AbstractTextFieldParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<?, ?> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public AbstractComboFieldParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<?, ?> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ModifyListener modifyListener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 		this.modifyListener = modifyListener;
@@ -41,17 +42,20 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 
 	@Override
 	protected void init(Composite parent) {
-		final Text txtField = getWidgetFactory().createText(parent, getInitialValue(), createTextStyle());
-		txtField.addModifyListener(modifyListener);
-		txtField.setLayoutData(createPropertyFieldLayoutData());
-		setControl(txtField);
+		final Combo comboField = new Combo(parent, createComboStyle());
+		for (int i = 0; i < values.length; i++) {
+			comboField.add(values[i]);
+		}
+		comboField.addModifyListener(modifyListener);
+		comboField.setLayoutData(createPropertyFieldLayoutData());
+		setControl(comboField);
 
-		setUiObservable(WidgetProperties.text(SWT.Modify).observe(txtField));
+		setUiObservable(WidgetProperties.selection().observe(comboField));
 		setValidator(createValidator());
 	}
 
-	protected int createTextStyle() {
-		return SWT.SINGLE | SWT.BORDER | SWT.LEFT;
+	protected int createComboStyle() {
+		return SWT.BORDER | SWT.READ_ONLY;
 	}
 
 	/**
@@ -65,6 +69,10 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 			return ValidationStatus.ok();
 		};
 	}
+	
+	protected void setValues(String[] values) {
+		this.values = values; 
+	}
 
 	@Override
 	public String getInitialValue() {
@@ -75,8 +83,8 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 	}
 
 	@Override
-	public Text getControl() {
-		return (Text) super.getControl();
+	public Combo getControl() {
+		return (Combo) super.getControl();
 	}
 
 }

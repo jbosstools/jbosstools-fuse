@@ -102,8 +102,8 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 	 * @param fClass
 	 */
 	private void createBrowseButton(Composite parent, final IProject project, final Class<?> fClass) {
-		Button btn_browse = getWidgetFactory().createButton(parent, "...", SWT.FLAT | SWT.PUSH);
-		btn_browse.addSelectionListener(new SelectionAdapter() {
+		Button btnBrowse = getWidgetFactory().createButton(parent, "...", SWT.FLAT | SWT.PUSH);
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
@@ -127,8 +127,8 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 				}
 			}
 		});
-		btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		btn_browse.setEnabled(fClass != null);
+		btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnBrowse.setEnabled(fClass != null);
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 	 * @param fClass
 	 */
 	private void createCreateButton(Composite parent, final IProject project, final Class<?> fClass) {
-		Button btn_create = getWidgetFactory().createButton(parent, " + ", SWT.FLAT | SWT.PUSH);
-		btn_create.addSelectionListener(new SelectionAdapter() {
+		Button btnCreate = getWidgetFactory().createButton(parent, " + ", SWT.FLAT | SWT.PUSH);
+		btnCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				NewClassCreationWizard wiz = new NewClassCreationWizard();
@@ -194,8 +194,8 @@ public class AbstractClassBasedParameterPropertyUICreator extends AbstractTextFi
 				return null;
 			}
 		});
-		btn_create.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		btn_create.setEnabled(fClass != null);
+		btnCreate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnCreate.setEnabled(fClass != null);
 	}
 
 	@Override
