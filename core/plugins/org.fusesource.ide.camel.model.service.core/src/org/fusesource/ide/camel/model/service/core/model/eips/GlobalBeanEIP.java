@@ -42,23 +42,13 @@ public class GlobalBeanEIP extends Eip {
 	private Map<String, Parameter> parameters = new HashMap<>();
 	
 	public GlobalBeanEIP() {
-		Parameter p = createParameter(PROP_ID, String.class.getName());
-		p.setRequired("true");
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_CLASS, String.class.getName());
-		p.setRequired("true");
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_SCOPE, String.class.getName());
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_DEPENDS_ON, String.class.getName());
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_INIT_METHOD, String.class.getName());
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_DESTROY_METHOD, String.class.getName());
-		parameters.put(p.getName(), p);
-		p = createParameter(PROP_FACTORY_METHOD, String.class.getName());
-		parameters.put(p.getName(), p);
-		
+		createParameter(PROP_ID, String.class.getName(), true);
+		createParameter(PROP_CLASS, String.class.getName(), true);
+		createParameter(PROP_SCOPE, String.class.getName());
+		createParameter(PROP_DEPENDS_ON, String.class.getName());
+		createParameter(PROP_INIT_METHOD, String.class.getName());
+		createParameter(PROP_DESTROY_METHOD, String.class.getName());
+		createParameter(PROP_FACTORY_METHOD, String.class.getName());
 		setProperties(parameters);
 	}
 	
@@ -110,10 +100,15 @@ public class GlobalBeanEIP extends Eip {
 		return AbstractCamelModelElement.BEAN_NODE;
 	}
 	
-	private Parameter createParameter(String name, String jType) {
+	private void createParameter(String name, String jType) {
+		createParameter(name, jType, false);
+	}
+	
+	private void createParameter(String name, String jType, boolean mandatory) {
 		Parameter outParm = new Parameter();
 		outParm.setName(name);
 		outParm.setJavaType(jType);
-		return outParm;
+		outParm.setRequired(Boolean.toString(mandatory));
+		parameters.put(name, outParm);
 	}
 }
