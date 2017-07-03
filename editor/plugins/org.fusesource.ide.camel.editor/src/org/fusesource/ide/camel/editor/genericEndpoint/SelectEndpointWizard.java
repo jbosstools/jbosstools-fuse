@@ -41,8 +41,8 @@ public class SelectEndpointWizard extends Wizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		page = new SelectComponentWizardPage(new DataBindingContext(), model, UIMessages.SelectEndpointWizard_pageSelectionComponentTitle,
-				UIMessages.SelectEndpointWizard_pageSelectionComponentDescription, parent);
+		page = new SelectComponentWizardPage(new DataBindingContext(), model, UIMessages.selectEndpointWizardPageSelectionComponentTitle,
+				UIMessages.selectEndpointWizardPageSelectionComponentDescription, parent);
 		addPage(page);
 	}
 

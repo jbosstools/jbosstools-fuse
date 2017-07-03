@@ -59,7 +59,7 @@ public class SelectComponentWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public SelectComponentWizardPage(DataBindingContext dbc, CamelModel model, String title, String description, AbstractCamelModelElement parent) {
-		super(UIMessages.SelectComponentWizardPage_pageName);
+		super(UIMessages.selectComponentWizardPagePageName);
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;

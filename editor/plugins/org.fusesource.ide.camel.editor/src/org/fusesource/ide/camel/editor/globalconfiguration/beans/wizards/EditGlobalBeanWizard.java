@@ -38,7 +38,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(camelModel);
-		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.editGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 

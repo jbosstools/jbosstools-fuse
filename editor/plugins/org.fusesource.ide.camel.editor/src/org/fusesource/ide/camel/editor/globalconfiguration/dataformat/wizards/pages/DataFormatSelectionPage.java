@@ -54,8 +54,8 @@ public class DataFormatSelectionPage extends WizardPage {
 	 */
 	public DataFormatSelectionPage(CamelModel model) {
 		super("Dataformat selection page"); //$NON-NLS-1$
-		setTitle(UIMessages.DataFormatSelectionPage_dataFormatSelectionPageTitle);
-		setDescription(UIMessages.DataFormatSelectionPage_DataFormatSelectionPageDescription);
+		setTitle(UIMessages.dataFormatSelectionPageDataFormatSelectionPageTitle);
+		setDescription(UIMessages.dataFormatSelectionPageDataFormatSelectionPageDescription);
 		this.model = model;
 		this.dbc = new DataBindingContext();
 	}

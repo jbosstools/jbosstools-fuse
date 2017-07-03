@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 
 /**
  * @author brianf
@@ -37,7 +37,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
  */
 public abstract class ArgumentStyleBaseTableControl extends Composite {
 
-	protected static final String[] TREE_COLUMNS = new String[] { CamelBean.ARG_TYPE, CamelBean.ARG_VALUE };
+	protected static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.ARG_TYPE, GlobalBeanEIP.ARG_VALUE };
 
 	protected Button addButton;
 	protected Button removeButton;
