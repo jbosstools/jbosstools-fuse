@@ -89,7 +89,7 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 				}
 				getValue();
 			}
-		};		
+		};
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classValue, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 	}
