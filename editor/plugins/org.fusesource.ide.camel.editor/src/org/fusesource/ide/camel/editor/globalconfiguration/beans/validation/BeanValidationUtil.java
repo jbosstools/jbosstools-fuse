@@ -13,7 +13,9 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans.validation;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 
 /**
  * @author brianf
@@ -29,6 +31,14 @@ public class BeanValidationUtil {
 		String id = (String) value;
 		if (parent.findAllNodesWithId(id).size() > 1){
 			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
+		}
+		return ValidationStatus.ok();
+	}
+	
+	public static IStatus validateRequiredParemeter(Parameter parameter, Object value) {
+		if (PropertiesUtils.isRequired(parameter) && (value == null || value.toString().trim().length() < 1)) {
+			return ValidationStatus.error(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt1 
+					+ parameter.getName() + UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt2);
 		}
 		return ValidationStatus.ok();
 	}

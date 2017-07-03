@@ -160,13 +160,13 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		IValidator validator = null;
 		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		String propName = p.getName();
-		if (propName.equals(CamelBean.PROP_CLASS)) {
+		if (CamelBean.PROP_CLASS.equals(propName)) {
 			validator = new BeanClassExistsValidator(project);
-		} else if (propName.equals(CamelBean.PROP_INIT_METHOD) || propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
+		} else if (CamelBean.PROP_INIT_METHOD.equals(propName) || CamelBean.PROP_DESTROY_METHOD.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD) || propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
+		} else if (CamelBean.PROP_FACTORY_METHOD.equals(propName) || CamelBean.PROP_FACTORY_BEAN.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (propName.equals(CamelBean.PROP_ID)) {
+		} else if (CamelBean.PROP_ID.equals(propName)) {
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
 		}
 		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
@@ -179,15 +179,15 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		IValidator validator = getValidatorForField(p);
 		AbstractParameterPropertyUICreator fieldCreator = null;
 		String propName = p.getName();
-		if (propName.equals(CamelBean.PROP_CLASS)) {
+		if (CamelBean.PROP_CLASS.equals(propName)) {
 			fieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
-		} else if (propName.equals(CamelBean.PROP_INIT_METHOD) || propName.equals(CamelBean.PROP_DESTROY_METHOD)) {
+		} else if (CamelBean.PROP_INIT_METHOD.equals(propName) || CamelBean.PROP_DESTROY_METHOD.equals(propName)) {
 			fieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
-		} else if (propName.equals(CamelBean.PROP_FACTORY_METHOD) || propName.equals(CamelBean.PROP_FACTORY_BEAN)) {
+		} else if (CamelBean.PROP_FACTORY_METHOD.equals(propName) || CamelBean.PROP_FACTORY_BEAN.equals(propName)) {
 			fieldCreator = createTextFieldWithMethodBrowse(p, page);
-		} else if (propName.equals(CamelBean.PROP_ID)) {
+		} else if (CamelBean.PROP_ID.equals(propName)) {
 			fieldCreator = createTextField(p, page);
-		} else if (propName.equals(CamelBean.PROP_SCOPE)) {
+		} else if (CamelBean.PROP_SCOPE.equals(propName)) {
 			fieldCreator = createScopeCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
 			fieldCreator = createTextField(p, page);
@@ -197,7 +197,9 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		}
 		if (fieldCreator != null && fieldCreator instanceof AbstractTextFieldParameterPropertyUICreator) {
 			ISWTObservableValue uiObservable = handleObservable((AbstractTextFieldParameterPropertyUICreator) fieldCreator, p);
-			if (uiObservable != null) bindField(validator, uiObservable, p);
+			if (uiObservable != null) { 
+				bindField(validator, uiObservable, p);
+			}
 		}
 	}	
 	

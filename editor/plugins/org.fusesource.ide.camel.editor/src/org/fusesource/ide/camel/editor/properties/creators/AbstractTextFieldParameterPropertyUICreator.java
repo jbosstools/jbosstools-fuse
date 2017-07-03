@@ -13,17 +13,16 @@ package org.fusesource.ide.camel.editor.properties.creators;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.validation.BeanValidationUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 
 /**
  * @author Aurelien Pupier
@@ -58,12 +57,7 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 	 * @return A Validator checking non-emptiness of mandatory field
 	 */
 	protected IValidator createValidator() {
-		return value -> {
-			if (PropertiesUtils.isRequired(parameter) && (value == null || value.toString().trim().length() < 1)) {
-				return ValidationStatus.error("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
-			}
-			return ValidationStatus.ok();
-		};
+		return value -> BeanValidationUtil.validateRequiredParemeter(parameter, value);
 	}
 
 	@Override

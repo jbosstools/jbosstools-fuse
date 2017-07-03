@@ -15,7 +15,7 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
-import org.fusesource.ide.camel.editor.properties.creators.AbstractComboFieldParameterPropertyUICreator;
+import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.AbstractComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -27,7 +27,7 @@ import org.w3c.dom.Node;
  * @author brianf
  *
  */
-public class ScopeAttributeComboFieldPropertyUICreator extends AbstractComboFieldParameterPropertyUICreator {
+public class ScopeAttributeComboFieldPropertyUICreator extends ComboParameterPropertyUICreator {
 	
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	private static String singletonScope = "singleton"; //$NON-NLS-1$
@@ -57,15 +57,6 @@ public class ScopeAttributeComboFieldPropertyUICreator extends AbstractComboFiel
 		}
 	}
 
-	private String findInitialValue(Object value, String defaultValue) {
-		if (value != null && value instanceof String) {
-			return (String) value;
-		} else if (defaultValue != null) {
-			return defaultValue;
-		}
-		return ""; //$NON-NLS-1$
-	}
-	
 	@Override
 	public String getInitialValue() {
 		final String parameterName = parameter.getName();
@@ -82,7 +73,7 @@ public class ScopeAttributeComboFieldPropertyUICreator extends AbstractComboFiel
 		return findInitialValue(parameterValue, defaultValue);
 	}
 
-	protected Object getAttributeValue(String attrName) {
+	private Object getAttributeValue(String attrName) {
 		Node camelNode = camelModelElement.getXmlNode();
 		if (camelNode != null && camelNode.hasAttributes()) {
 			Node attrNode = camelNode.getAttributes().getNamedItem(attrName);
