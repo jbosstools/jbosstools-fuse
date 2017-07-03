@@ -42,7 +42,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(camelModel);
-		setWindowTitle(UIMessages.AddGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.addGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
