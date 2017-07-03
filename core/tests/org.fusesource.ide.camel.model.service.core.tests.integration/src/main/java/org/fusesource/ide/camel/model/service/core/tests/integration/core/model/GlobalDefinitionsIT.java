@@ -25,6 +25,7 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.CamelIOHandlerIT;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -90,7 +91,7 @@ public class GlobalDefinitionsIT {
 		assertThat(globalDefinition).isInstanceOf(CamelBean.class);
 
 		CamelBean bean = (CamelBean) globalDefinition;
-		assertThat(getAttributeValue(CamelBean.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.fusesource.camel.component.sap.SapConnectionConfiguration");
+		assertThat(getAttributeValue(GlobalBeanEIP.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.fusesource.camel.component.sap.SapConnectionConfiguration");
 		assertThat(bean.getClassName()).isEqualTo("org.fusesource.camel.component.sap.SapConnectionConfiguration");
 
 		assertThat(bean.getDependsOn()).isNull();
@@ -131,7 +132,7 @@ public class GlobalDefinitionsIT {
 
 		CamelBean bean = (CamelBean) globalDefinition;
 		assertThat(bean.getId()).isEqualTo("accountOne");
-		assertThat(getAttributeValue(CamelBean.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.apache.aries.simple.Account");
+		assertThat(getAttributeValue(GlobalBeanEIP.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.apache.aries.simple.Account");
 		assertThat(bean.getClassName()).isEqualTo("org.apache.aries.simple.Account");
 		assertThat(getBeanProperties(bean.getXmlNode())).isEmpty();
 		assertThat(getBeanArguments(bean.getXmlNode())).isEmpty();
@@ -146,9 +147,9 @@ public class GlobalDefinitionsIT {
 		Object[] bean2args = getBeanArguments(bean2.getXmlNode());
 		assertThat(bean2args[0]).isInstanceOf(Element.class);
 		Element bean2arg1 = (Element) bean2args[0];
-		assertThat(bean2arg1.getTagName()).isEqualTo(CamelBean.TAG_CONSTRUCTOR_ARG);
-		assertThat(bean2arg1.getAttribute(CamelBean.ARG_VALUE)).isEqualTo("1");
-		assertThat(bean2arg1.getAttribute(CamelBean.ARG_TYPE)).isNullOrEmpty();
+		assertThat(bean2arg1.getTagName()).isEqualTo(GlobalBeanEIP.TAG_CONSTRUCTOR_ARG);
+		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_VALUE)).isEqualTo("1");
+		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_TYPE)).isNullOrEmpty();
 		
 		GlobalDefinitionCamelModelElement globalDefinition3 = model1.getGlobalDefinitions().get("accountThree");
 		CamelBean bean3 = (CamelBean) globalDefinition3;
@@ -159,8 +160,8 @@ public class GlobalDefinitionsIT {
 		Object[] bean3props = getBeanProperties(bean3.getXmlNode());
 		assertThat(bean3props[0]).isInstanceOf(Element.class);
 		Element bean3prop1 = (Element) bean3props[0];
-		assertThat(bean3prop1.getAttribute(CamelBean.PROP_NAME)).isEqualTo("description");
-		assertThat(bean3prop1.getAttribute(CamelBean.PROP_VALUE)).isEqualTo("#1 account");
+		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_NAME)).isEqualTo("description");
+		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_VALUE)).isEqualTo("#1 account");
 		
 	}
 
@@ -184,7 +185,7 @@ public class GlobalDefinitionsIT {
 
 		CamelBean bean = (CamelBean) globalDefinition;
 		assertThat(bean.getId()).isEqualTo("accountOne");
-		assertThat(getAttributeValue(CamelBean.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.apache.aries.simple.Account");
+		assertThat(getAttributeValue(GlobalBeanEIP.PROP_CLASS, bean.getXmlNode())).isEqualTo("org.apache.aries.simple.Account");
 		assertThat(bean.getClassName()).isEqualTo("org.apache.aries.simple.Account");
 		assertThat(getBeanProperties(bean.getXmlNode())).isEmpty();
 		assertThat(getBeanArguments(bean.getXmlNode())).isEmpty();
@@ -199,9 +200,9 @@ public class GlobalDefinitionsIT {
 		Object[] bean2args = getBeanArguments(bean2.getXmlNode());
 		assertThat(bean2args[0]).isInstanceOf(Element.class);
 		Element bean2arg1 = (Element) bean2args[0];
-		assertThat(bean2arg1.getTagName()).isEqualTo(CamelBean.TAG_ARGUMENT);
-		assertThat(bean2arg1.getAttribute(CamelBean.ARG_VALUE)).isEqualTo("1");
-		assertThat(bean2arg1.getAttribute(CamelBean.ARG_TYPE)).isNullOrEmpty();
+		assertThat(bean2arg1.getTagName()).isEqualTo(GlobalBeanEIP.TAG_ARGUMENT);
+		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_VALUE)).isEqualTo("1");
+		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_TYPE)).isNullOrEmpty();
 		
 		GlobalDefinitionCamelModelElement globalDefinition3 = model1.getGlobalDefinitions().get("accountThree");
 		CamelBean bean3 = (CamelBean) globalDefinition3;
@@ -212,8 +213,8 @@ public class GlobalDefinitionsIT {
 		Object[] bean3props = getBeanProperties(bean3.getXmlNode());
 		assertThat(bean3props[0]).isInstanceOf(Element.class);
 		Element bean3prop1 = (Element) bean3props[0];
-		assertThat(bean3prop1.getAttribute(CamelBean.PROP_NAME)).isEqualTo("description");
-		assertThat(bean3prop1.getAttribute(CamelBean.PROP_VALUE)).isEqualTo("#1 account");
+		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_NAME)).isEqualTo("description");
+		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_VALUE)).isEqualTo("#1 account");
 	}
 	
 	private Object getAttributeValue(String attrName, Node camelNode) {
@@ -227,7 +228,7 @@ public class GlobalDefinitionsIT {
 	}
 	
 	private Object[] getBeanProperties(Node node) {
-		return getXMLChildrenByTag(CamelBean.TAG_PROPERTY, node);
+		return getXMLChildrenByTag(GlobalBeanEIP.TAG_PROPERTY, node);
 	}
 	
 	private Object[] getXMLChildrenByTag(String tag, Node camelNode) {
@@ -280,9 +281,9 @@ public class GlobalDefinitionsIT {
 			boolean isBlueprint = isBlueprintConfig(node);
 			String tagName;
 			if (isBlueprint) {
-				tagName = CamelBean.TAG_ARGUMENT;
+				tagName = GlobalBeanEIP.TAG_ARGUMENT;
 			} else {
-				tagName = CamelBean.TAG_CONSTRUCTOR_ARG;
+				tagName = GlobalBeanEIP.TAG_CONSTRUCTOR_ARG;
 			}
 			return tagName;
 		}

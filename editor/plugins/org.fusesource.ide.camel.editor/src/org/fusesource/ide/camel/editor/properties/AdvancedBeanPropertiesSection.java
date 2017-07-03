@@ -45,7 +45,7 @@ import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterProp
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -68,16 +68,16 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		tabsToCreate.add(GROUP_COMMON);
 		
 		// define the properties we're handling here
-		Parameter idParam = beanConfigUtil.createParameter(CamelBean.PROP_ID, String.class.getName());
+		Parameter idParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_ID, String.class.getName());
 		idParam.setRequired("true"); //$NON-NLS-1$
 		props.add(idParam);
-		Parameter classParam = beanConfigUtil.createParameter(CamelBean.PROP_CLASS, String.class.getName());
+		Parameter classParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_CLASS, String.class.getName());
 		classParam.setRequired("true"); //$NON-NLS-1$
 		props.add(classParam);
-		props.add(beanConfigUtil.createParameter(CamelBean.PROP_SCOPE, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(CamelBean.PROP_DEPENDS_ON, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(CamelBean.PROP_INIT_METHOD, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(CamelBean.PROP_DESTROY_METHOD, String.class.getName()));
+		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_SCOPE, String.class.getName()));
+		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DEPENDS_ON, String.class.getName()));
+		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_INIT_METHOD, String.class.getName()));
+		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DESTROY_METHOD, String.class.getName()));
 		
 		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(selectedEP.getXmlNode());
 		props.add(beanConfigUtil.createParameter(factoryAttribute, String.class.getName()));
@@ -160,13 +160,16 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		IValidator validator = null;
 		IProject project = selectedEP.getCamelFile().getResource().getProject();
 		String propName = p.getName();
-		if (CamelBean.PROP_CLASS.equals(propName)) {
+
+		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
 			validator = new BeanClassExistsValidator(project);
-		} else if (CamelBean.PROP_INIT_METHOD.equals(propName) || CamelBean.PROP_DESTROY_METHOD.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (CamelBean.PROP_FACTORY_METHOD.equals(propName) || CamelBean.PROP_FACTORY_BEAN.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (CamelBean.PROP_ID.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
 		}
 		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
@@ -179,15 +182,15 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		IValidator validator = getValidatorForField(p);
 		AbstractParameterPropertyUICreator fieldCreator = null;
 		String propName = p.getName();
-		if (CamelBean.PROP_CLASS.equals(propName)) {
+		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
 			fieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
-		} else if (CamelBean.PROP_INIT_METHOD.equals(propName) || CamelBean.PROP_DESTROY_METHOD.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			fieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
-		} else if (CamelBean.PROP_FACTORY_METHOD.equals(propName) || CamelBean.PROP_FACTORY_BEAN.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName) || GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
 			fieldCreator = createTextFieldWithMethodBrowse(p, page);
-		} else if (CamelBean.PROP_ID.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			fieldCreator = createTextField(p, page);
-		} else if (CamelBean.PROP_SCOPE.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
 			fieldCreator = createScopeCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
 			fieldCreator = createTextField(p, page);
@@ -275,7 +278,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				Object control = modelMap.get(CamelBean.PROP_CLASS);
+				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
 				if (control != null) {
 					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;
@@ -296,7 +299,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				Object control = modelMap.get(CamelBean.PROP_CLASS);
+				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
 				if (control != null) {
 					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;

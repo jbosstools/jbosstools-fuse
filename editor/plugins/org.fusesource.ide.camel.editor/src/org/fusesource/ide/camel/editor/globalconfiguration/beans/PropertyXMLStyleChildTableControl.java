@@ -18,6 +18,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,6 +33,8 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableControl {
+
+	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.PROP_NAME, GlobalBeanEIP.PROP_VALUE };
 
 	private Element inputElement;
 
@@ -76,11 +81,11 @@ public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableCon
 			final PropertyInputDialog dialog = new PropertyInputDialog(Display.getCurrent().getActiveShell());
 			dialog.setIsEditDialog(true);
 			Element xmlElement = selectedProperty;
-			if (xmlElement.getAttribute(CamelBean.PROP_NAME) != null) {
-				dialog.setPropertyName(xmlElement.getAttribute(CamelBean.PROP_NAME));
+			if (xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME) != null) {
+				dialog.setPropertyName(xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME));
 			}
-			if (xmlElement.getAttribute(CamelBean.PROP_VALUE) != null) {
-				dialog.setPropertyValue(xmlElement.getAttribute(CamelBean.PROP_VALUE));
+			if (xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE) != null) {
+				dialog.setPropertyValue(xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE));
 			}
 			dialog.setInput(inputElement);
 			int rtnValue = dialog.open();
@@ -114,7 +119,7 @@ public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableCon
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Element) {
 				Element parent = (Element) inputElement;
-				return convertToArray(parent.getElementsByTagName(CamelBean.TAG_PROPERTY));
+				return convertToArray(parent.getElementsByTagName(GlobalBeanEIP.TAG_PROPERTY));
 			}
 			return new Object[0];
 		}
@@ -165,7 +170,7 @@ public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableCon
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
 			return element instanceof Element
-					&& (property.equalsIgnoreCase(CamelBean.PROP_NAME) || property.equalsIgnoreCase(CamelBean.PROP_VALUE));
+					&& (property.equalsIgnoreCase(GlobalBeanEIP.PROP_NAME) || property.equalsIgnoreCase(GlobalBeanEIP.PROP_VALUE));
 		}
 
 		@Override
@@ -182,10 +187,10 @@ public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableCon
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof Element && columnIndex == 0) {
 				Element xmlElement = (Element) element;
-				return xmlElement.getAttribute(CamelBean.PROP_NAME);
+				return xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME);
 			} else if (element instanceof Element && columnIndex == 1) {
 				Element xmlElement = (Element) element;
-				return xmlElement.getAttribute(CamelBean.PROP_VALUE);
+				return xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE);
 			}
 			return null;
 		}

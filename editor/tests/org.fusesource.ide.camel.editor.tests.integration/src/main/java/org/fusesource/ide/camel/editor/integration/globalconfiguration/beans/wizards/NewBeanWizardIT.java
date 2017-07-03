@@ -30,6 +30,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
@@ -99,8 +100,8 @@ public class NewBeanWizardIT {
 		// simple bean with id & class - same on blueprint and spring
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsCamelFile, basicCreationCaseBeanId, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanId);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanId);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanId);
 		
 		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(creationTestsCamelFile, beanNode);
@@ -125,8 +126,8 @@ public class NewBeanWizardIT {
 		// simple bean plus argument
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsCamelFile, basicCreationCaseBeanIdWithArgument, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgument);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgument);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanIdWithArgument);
 		
 		beanConfigUtil.addBeanArgument(creationTestsCamelFile, beanNode, argType, argValue);
@@ -144,7 +145,7 @@ public class NewBeanWizardIT {
 
 		// check that the tag name matches what we expect it to be
 		assertThat(addedArgument.getTagName()).isEqualTo(beanConfigUtil.getArgumentTag(creationTestsCamelFile));
-		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(CamelBean.TAG_CONSTRUCTOR_ARG);
+		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(GlobalBeanEIP.TAG_CONSTRUCTOR_ARG);
 
 		// Check that Model is valid after reloading from the filesystem
 		CamelIOHandler camelIOHandler = new CamelIOHandler();
@@ -164,8 +165,8 @@ public class NewBeanWizardIT {
 		// simple bean plus argument
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsBlueprintCamelFile, basicCreationCaseBeanIdWithArgument, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgument);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgument);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanIdWithArgument);
 		
 		beanConfigUtil.addBeanArgument(creationTestsBlueprintCamelFile, beanNode, argType, argValue);
@@ -183,7 +184,7 @@ public class NewBeanWizardIT {
 		
 		// check that the tag name matches what we expect it to be
 		assertThat(addedArgument.getTagName()).isEqualTo(beanConfigUtil.getArgumentTag(creationTestsBlueprintCamelFile));
-		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(CamelBean.TAG_ARGUMENT);
+		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(GlobalBeanEIP.TAG_ARGUMENT);
 
 		// Check that Model is valid after reloading from the filesystem
 		CamelIOHandler camelIOHandler = new CamelIOHandler();
@@ -203,8 +204,8 @@ public class NewBeanWizardIT {
 		// simple bean plus property
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsCamelFile, basicCreationCaseBeanIdWithProperty, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithProperty);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithProperty);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanIdWithProperty);
 		
 		beanConfigUtil.addBeanProperty(creationTestsCamelFile, beanNode, propName, propValue);
@@ -238,8 +239,8 @@ public class NewBeanWizardIT {
 		// simple bean plus property and argument
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsCamelFile, basicCreationCaseBeanIdWithArgumentAndProperty, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgumentAndProperty);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgumentAndProperty);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanIdWithArgumentAndProperty);
 		
 		beanConfigUtil.addBeanArgument(creationTestsCamelFile, beanNode, argType, argValue);
@@ -282,8 +283,8 @@ public class NewBeanWizardIT {
 		// simple bean plus argument and a property
 		Element beanNode = beanConfigUtil.createBeanNode(creationTestsBlueprintCamelFile, basicCreationCaseBeanIdWithArgumentAndProperty, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgumentAndProperty);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicCreationCaseBeanIdWithArgumentAndProperty);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicCreationCaseBeanIdWithArgument);
 		
 		beanConfigUtil.addBeanArgument(creationTestsBlueprintCamelFile, beanNode, argType, argValue);
@@ -304,7 +305,7 @@ public class NewBeanWizardIT {
 		
 		// check that the tag name matches what we expect it to be
 		assertThat(addedArgument.getTagName()).isEqualTo(beanConfigUtil.getArgumentTag(creationTestsBlueprintCamelFile));
-		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(CamelBean.TAG_ARGUMENT);
+		assertThat(addedArgument.getTagName()).isEqualToIgnoringCase(GlobalBeanEIP.TAG_ARGUMENT);
 
 		// check that the property exists
 		Node addedProperty = findProperty(beanNode, propName, propValue);
@@ -350,8 +351,8 @@ public class NewBeanWizardIT {
 			Node node = argumentList.item(i);
 			if (node instanceof Element) {
 				Element element = (Element) node;
-				String typeVal = element.getAttribute(CamelBean.ARG_TYPE);
-				String valueVal = element.getAttribute(CamelBean.ARG_VALUE);
+				String typeVal = element.getAttribute(GlobalBeanEIP.ARG_TYPE);
+				String valueVal = element.getAttribute(GlobalBeanEIP.ARG_VALUE);
 				if (typeVal.equals(argType) && valueVal.equals(argValue)) {
 					return element;
 				}
@@ -361,13 +362,13 @@ public class NewBeanWizardIT {
 	}
 
 	private Node findProperty(Element beanElement, String propName, String propValue) {
-		NodeList propertyList = beanElement.getElementsByTagName(CamelBean.TAG_PROPERTY);
+		NodeList propertyList = beanElement.getElementsByTagName(GlobalBeanEIP.TAG_PROPERTY);
 		for (int i = 0; i < propertyList.getLength(); i++) {
 			Node node = propertyList.item(i);
 			if (node instanceof Element) {
 				Element element = (Element) node;
-				String nameVal = element.getAttribute(CamelBean.PROP_NAME);
-				String valueVal = element.getAttribute(CamelBean.PROP_VALUE);
+				String nameVal = element.getAttribute(GlobalBeanEIP.PROP_NAME);
+				String valueVal = element.getAttribute(GlobalBeanEIP.PROP_VALUE);
 				if (nameVal.equals(propName) && valueVal.equals(propValue)) {
 					return element;
 				}
