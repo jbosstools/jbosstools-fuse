@@ -179,20 +179,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					final String camelVersionToValidate = getSelectedCamelVersion();
-					getWizard().getContainer().run(true, true, new IRunnableWithProgress() {
-						@Override
-						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-							try {
-								monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
-								boolean valid = isCamelVersionValid(camelVersionToValidate);
-								Display.getDefault().syncExec(() -> updateCamelValidation(valid, camelVersionToValidate));
-							} finally {
-								monitor.done();
-							}
-						}
-					});
+				CamelVersionChecker versionChecker = new CamelVersionChecker(getSelectedCamelVersion());
+				try {					
+					getWizard().getContainer().run(true, true, versionChecker);
+				} catch (InterruptedException iex) {
+					versionChecker.cancel();
+					Thread.currentThread().interrupt();
 				} catch (Exception ex) {
 					ProjectTemplatesActivator.pluginLog().logError(ex);
 				}
@@ -460,5 +452,45 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		private void runInUIThread() {
 			Display.getDefault().asyncExec(FuseIntegrationProjectWizardRuntimeAndCamelPage.this::configureRuntimeCombo);
 		}
-	};
+	}
+	
+	class CamelVersionChecker implements IRunnableWithProgress {
+		
+		private String camelVersionToValidate;
+		private Thread thread;
+		private IProgressMonitor monitor;
+		
+		public CamelVersionChecker(String camelVersionToValidate) {
+			this.camelVersionToValidate = camelVersionToValidate;
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+		 */
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+			this.monitor = monitor;
+			monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
+			this.thread = createThread();
+			this.thread.start();
+			while (this.thread.isAlive() && !this.thread.isInterrupted() && !monitor.isCanceled()) {
+				// wait
+			}
+		}
+		
+		public void cancel() {
+			this.thread.interrupt();
+			monitor.setCanceled(true);
+		}
+		
+		private Thread createThread() {
+			return new Thread( () -> {
+					boolean valid = isCamelVersionValid(camelVersionToValidate);
+					if (!monitor.isCanceled()) {
+						monitor.done();
+						Display.getDefault().asyncExec(() -> updateCamelValidation(valid, camelVersionToValidate));
+					}
+			});
+		}
+	}
 }
