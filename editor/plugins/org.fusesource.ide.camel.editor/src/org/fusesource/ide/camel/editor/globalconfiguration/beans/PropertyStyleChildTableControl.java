@@ -34,8 +34,6 @@ import org.w3c.dom.Element;
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PropertyStyleChildTableControl extends PropertyStyleBaseTableControl {
 
-	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.PROP_NAME, GlobalBeanEIP.PROP_VALUE };
-
 	private AbstractCamelModelElement inputElement;
 	private List<AbstractCamelModelElement> propertyList = new ArrayList<>();
 

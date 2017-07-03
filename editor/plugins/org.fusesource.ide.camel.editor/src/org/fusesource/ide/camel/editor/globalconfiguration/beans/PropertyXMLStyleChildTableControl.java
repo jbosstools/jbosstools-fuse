@@ -17,9 +17,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
-import org.eclipse.swt.widgets.TreeColumn;
-import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,8 +30,6 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PropertyXMLStyleChildTableControl extends PropertyStyleBaseTableControl {
-
-	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.PROP_NAME, GlobalBeanEIP.PROP_VALUE };
 
 	private Element inputElement;
 

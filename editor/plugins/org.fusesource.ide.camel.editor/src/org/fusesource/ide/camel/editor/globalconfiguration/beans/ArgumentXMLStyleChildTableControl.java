@@ -29,8 +29,6 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class ArgumentXMLStyleChildTableControl extends ArgumentStyleBaseTableControl {
 
-	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.ARG_TYPE, GlobalBeanEIP.ARG_VALUE };
-
 	private Element inputElement;
 
 	public ArgumentXMLStyleChildTableControl(Composite parent, int style) {
