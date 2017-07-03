@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Element;
 
 /**
@@ -33,6 +33,8 @@ import org.w3c.dom.Element;
  */
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class PropertyStyleChildTableControl extends PropertyStyleBaseTableControl {
+
+	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.PROP_NAME, GlobalBeanEIP.PROP_VALUE };
 
 	private AbstractCamelModelElement inputElement;
 	private List<AbstractCamelModelElement> propertyList = new ArrayList<>();
@@ -78,11 +80,11 @@ public class PropertyStyleChildTableControl extends PropertyStyleBaseTableContro
 			final PropertyInputDialog dialog = new PropertyInputDialog(Display.getCurrent().getActiveShell());
 			dialog.setIsEditDialog(true);
 			Element xmlElement = (Element) selectedProperty.getXmlNode();
-			if (xmlElement.getAttribute(CamelBean.PROP_NAME) != null) {
-				dialog.setPropertyName(xmlElement.getAttribute(CamelBean.PROP_NAME));
+			if (xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME) != null) {
+				dialog.setPropertyName(xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME));
 			}
-			if (xmlElement.getAttribute(CamelBean.PROP_VALUE) != null) {
-				dialog.setPropertyValue(xmlElement.getAttribute(CamelBean.PROP_VALUE));
+			if (xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE) != null) {
+				dialog.setPropertyValue(xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE));
 			}
 			dialog.setPropertyList(propertyList);
 			int rtnValue = dialog.open();
@@ -163,7 +165,7 @@ public class PropertyStyleChildTableControl extends PropertyStyleBaseTableContro
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
 			return element instanceof AbstractCamelModelElement
-					&& (property.equalsIgnoreCase(CamelBean.PROP_NAME) || property.equalsIgnoreCase(CamelBean.PROP_VALUE));
+					&& (property.equalsIgnoreCase(GlobalBeanEIP.PROP_NAME) || property.equalsIgnoreCase(GlobalBeanEIP.PROP_VALUE));
 		}
 
 		@Override
@@ -180,10 +182,10 @@ public class PropertyStyleChildTableControl extends PropertyStyleBaseTableContro
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof AbstractCamelModelElement && columnIndex == 0) {
 				Element xmlElement = (Element) ((AbstractCamelModelElement) element).getXmlNode();
-				return xmlElement.getAttribute(CamelBean.PROP_NAME);
+				return xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME);
 			} else if (element instanceof AbstractCamelModelElement && columnIndex == 1) {
 				Element xmlElement = (Element) ((AbstractCamelModelElement) element).getXmlNode();
-				return xmlElement.getAttribute(CamelBean.PROP_VALUE);
+				return xmlElement.getAttribute(GlobalBeanEIP.PROP_VALUE);
 			}
 			return null;
 		}

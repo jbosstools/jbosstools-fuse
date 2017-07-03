@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Element;
 
 /**
@@ -32,6 +32,8 @@ import org.w3c.dom.Element;
  */
 @SuppressWarnings("squid:MaximumInheritanceDepth")
 public class ArgumentStyleChildTableControl extends ArgumentStyleBaseTableControl {
+
+	private static final String[] TREE_COLUMNS = new String[] { GlobalBeanEIP.ARG_TYPE, GlobalBeanEIP.ARG_VALUE };
 
 	private AbstractCamelModelElement inputElement;
 	private List<AbstractCamelModelElement> argumentList = new ArrayList<>();
@@ -72,11 +74,11 @@ public class ArgumentStyleChildTableControl extends ArgumentStyleBaseTableContro
 
 			final ArgumentInputDialog dialog = new ArgumentInputDialog(Display.getCurrent().getActiveShell());
 			final Element xmlElement = (Element) selectedProperty.getXmlNode();
-			if (xmlElement.getAttribute(CamelBean.ARG_TYPE) != null) {
-				dialog.setArgumentType(xmlElement.getAttribute(CamelBean.ARG_TYPE));
+			if (xmlElement.getAttribute(GlobalBeanEIP.ARG_TYPE) != null) {
+				dialog.setArgumentType(xmlElement.getAttribute(GlobalBeanEIP.ARG_TYPE));
 			}
-			if (xmlElement.getAttribute(CamelBean.ARG_VALUE) != null) {
-				dialog.setArgumentValue(xmlElement.getAttribute(CamelBean.ARG_VALUE));
+			if (xmlElement.getAttribute(GlobalBeanEIP.ARG_VALUE) != null) {
+				dialog.setArgumentValue(xmlElement.getAttribute(GlobalBeanEIP.ARG_VALUE));
 			}
 			int rtnValue = dialog.open();
 			if (rtnValue == PropertyInputDialog.OK) {
@@ -130,7 +132,7 @@ public class ArgumentStyleChildTableControl extends ArgumentStyleBaseTableContro
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
 			return element instanceof AbstractCamelModelElement
-					&& (property.equalsIgnoreCase(CamelBean.ARG_TYPE) || property.equalsIgnoreCase(CamelBean.ARG_VALUE));
+					&& (property.equalsIgnoreCase(GlobalBeanEIP.ARG_TYPE) || property.equalsIgnoreCase(GlobalBeanEIP.ARG_VALUE));
 		}
 
 		@Override
@@ -147,10 +149,10 @@ public class ArgumentStyleChildTableControl extends ArgumentStyleBaseTableContro
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof AbstractCamelModelElement && columnIndex == 0) {
 				Element xmlElement = (Element) ((AbstractCamelModelElement) element).getXmlNode();
-				return xmlElement.getAttribute(CamelBean.ARG_TYPE);
+				return xmlElement.getAttribute(GlobalBeanEIP.ARG_TYPE);
 			} else if (element instanceof AbstractCamelModelElement && columnIndex == 1) {
 				Element xmlElement = (Element) ((AbstractCamelModelElement) element).getXmlNode();
-				return xmlElement.getAttribute(CamelBean.ARG_VALUE);
+				return xmlElement.getAttribute(GlobalBeanEIP.ARG_VALUE);
 			}
 			return null;
 		}

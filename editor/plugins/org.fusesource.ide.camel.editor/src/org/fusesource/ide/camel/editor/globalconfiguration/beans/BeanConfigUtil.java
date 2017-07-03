@@ -54,6 +54,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Document;
@@ -351,9 +352,9 @@ public class BeanConfigUtil {
 			boolean isBlueprint = isBlueprintConfig(node);
 			String tagName;
 			if (isBlueprint) {
-				tagName = CamelBean.TAG_ARGUMENT;
+				tagName = GlobalBeanEIP.TAG_ARGUMENT;
 			} else {
-				tagName = CamelBean.TAG_CONSTRUCTOR_ARG;
+				tagName = GlobalBeanEIP.TAG_CONSTRUCTOR_ARG;
 			}
 			return tagName;
 		}
@@ -377,9 +378,9 @@ public class BeanConfigUtil {
 				boolean isBlueprint = nsURI.contains("blueprint"); //$NON-NLS-1$
 				String tagName;
 				if (isBlueprint) {
-					tagName = CamelBean.PROP_FACTORY_METHOD;
+					tagName = GlobalBeanEIP.PROP_FACTORY_METHOD;
 				} else {
-					tagName = CamelBean.PROP_FACTORY_BEAN;
+					tagName = GlobalBeanEIP.PROP_FACTORY_BEAN;
 				}
 				return tagName;
 			}
@@ -402,12 +403,12 @@ public class BeanConfigUtil {
 		String tagName = getArgumentTag(inputElement);
 		Element propertyNode = inputElement.getOwnerDocument().createElementNS(prefixNS, tagName);
 		if (!Strings.isEmpty(type)) {
-			propertyNode.setAttribute(CamelBean.ARG_TYPE, type);
+			propertyNode.setAttribute(GlobalBeanEIP.ARG_TYPE, type);
 		} else {
-			propertyNode.removeAttribute(CamelBean.ARG_TYPE);
+			propertyNode.removeAttribute(GlobalBeanEIP.ARG_TYPE);
 		}
 		if (!Strings.isEmpty(value)) {
-			propertyNode.setAttribute(CamelBean.ARG_VALUE, value);
+			propertyNode.setAttribute(GlobalBeanEIP.ARG_VALUE, value);
 		}
 		return propertyNode;
 	}
@@ -418,29 +419,29 @@ public class BeanConfigUtil {
 		String tagName = getArgumentTag(newRoot);
 		Element propertyNode = newRoot.createElement(tagName, prefixNS);
 		if (!Strings.isEmpty(type)) {
-			propertyNode.setAttribute(CamelBean.ARG_TYPE, type);
+			propertyNode.setAttribute(GlobalBeanEIP.ARG_TYPE, type);
 		} else {
-			propertyNode.removeAttribute(CamelBean.ARG_TYPE);
+			propertyNode.removeAttribute(GlobalBeanEIP.ARG_TYPE);
 		}
 		if (!Strings.isEmpty(value)) {
-			propertyNode.setAttribute(CamelBean.ARG_VALUE, value);
+			propertyNode.setAttribute(GlobalBeanEIP.ARG_VALUE, value);
 		}
 		return propertyNode;
 	}
 
 	public void editBeanArgument(Element xmlElement, String type, String value) {
-		setAttributeValue(xmlElement, CamelBean.ARG_TYPE, type);
+		setAttributeValue(xmlElement, GlobalBeanEIP.ARG_TYPE, type);
 		if (!Strings.isEmpty(value)) {
-			xmlElement.setAttribute(CamelBean.PROP_VALUE, value);
+			xmlElement.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		}
 	}
 	
 	public Element createBeanNode(final CamelFile camelFile, String id, String className) {
 		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
-		newBeanNode.setAttribute(CamelBean.PROP_ID, id);
+		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
 		if (!Strings.isBlank(className)) {
-			newBeanNode.setAttribute(CamelBean.PROP_CLASS, className);
+			newBeanNode.setAttribute(GlobalBeanEIP.PROP_CLASS, className);
 		}
 		return newBeanNode;
 	}
@@ -450,9 +451,9 @@ public class BeanConfigUtil {
 		try {
 			DocumentBuilder builder = dbf.newDocumentBuilder();
 			Document doc = builder.newDocument();
-			Element propertyNode = doc.createElement(CamelBean.TAG_PROPERTY);
-			propertyNode.setAttribute(CamelBean.PROP_NAME, name);
-			propertyNode.setAttribute(CamelBean.PROP_VALUE, value);
+			Element propertyNode = doc.createElement(GlobalBeanEIP.TAG_PROPERTY);
+			propertyNode.setAttribute(GlobalBeanEIP.PROP_NAME, name);
+			propertyNode.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 			return propertyNode;
 		} catch (ParserConfigurationException pse) {
 			CamelEditorUIActivator.pluginLog().logError(UIMessages.beanConfigUtilMethodSelectionErrorCreatingXML, pse);
@@ -463,17 +464,17 @@ public class BeanConfigUtil {
 	public Element createBeanProperty(final CamelFile camelFile, String name, String value) {
 		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		AbstractCamelModelElement newRoot = camelFile.getChildElements().get(0);
-		Element propertyNode = newRoot.createElement(CamelBean.TAG_PROPERTY, prefixNS);
-		propertyNode.setAttribute(CamelBean.PROP_NAME, name);
-		propertyNode.setAttribute(CamelBean.PROP_VALUE, value);
+		Element propertyNode = newRoot.createElement(GlobalBeanEIP.TAG_PROPERTY, prefixNS);
+		propertyNode.setAttribute(GlobalBeanEIP.PROP_NAME, name);
+		propertyNode.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		return propertyNode;
 	}
 
 	public Element createBeanProperty(final Element inputElement, String name, String value) {
 		String prefixNS = inputElement.getPrefix();
-		Element propertyNode = inputElement.getOwnerDocument().createElementNS(prefixNS, CamelBean.TAG_PROPERTY);
-		propertyNode.setAttribute(CamelBean.PROP_NAME, name);
-		propertyNode.setAttribute(CamelBean.PROP_VALUE, value);
+		Element propertyNode = inputElement.getOwnerDocument().createElementNS(prefixNS, GlobalBeanEIP.TAG_PROPERTY);
+		propertyNode.setAttribute(GlobalBeanEIP.PROP_NAME, name);
+		propertyNode.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		return propertyNode;
 	}
 
@@ -507,9 +508,9 @@ public class BeanConfigUtil {
 	}
 	
 	public void editBeanProperty(Element xmlElement, String name, String value) {
-		setAttributeValue(xmlElement, CamelBean.PROP_NAME, name);
+		setAttributeValue(xmlElement, GlobalBeanEIP.PROP_NAME, name);
 		if (!Strings.isEmpty(value)) {
-			xmlElement.setAttribute(CamelBean.PROP_VALUE, value);
+			xmlElement.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		}
 	}
 }

@@ -21,7 +21,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -41,7 +41,7 @@ public class PropertyMethodValidator implements IValidator {
 	
 	@Override
 	public IStatus validate(Object value) {
-		Object control = modelMap.get(CamelBean.PROP_CLASS);
+		Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
 		if (control != null) {
 			String className = (String) control;
 			String methodName = (String) value;

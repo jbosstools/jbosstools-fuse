@@ -23,7 +23,7 @@ import org.fusesource.ide.camel.editor.globalconfiguration.beans.ArgumentXMLStyl
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.PropertyXMLStyleChildTableControl;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.w3c.dom.Element;
 
 /**
@@ -77,15 +77,15 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 
 			@Override
 			protected Object calculate() {
-				return beanConfigUtil.getAttributeValue(selectedElement, CamelBean.PROP_CLASS);
+				return beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS);
 			}
 
 			@Override
 			protected void doSetValue(Object value) {
 				final String strValue = (String) value;
-				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, CamelBean.PROP_ID);
+				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_ID);
 				if (!oldValue.contentEquals(strValue)) {
-					beanConfigUtil.setAttributeValue(selectedElement, CamelBean.PROP_CLASS, strValue);
+					beanConfigUtil.setAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS, strValue);
 				}
 				getValue();
 			}

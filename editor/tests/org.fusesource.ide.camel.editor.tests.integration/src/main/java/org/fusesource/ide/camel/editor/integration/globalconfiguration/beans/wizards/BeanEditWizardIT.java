@@ -30,6 +30,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
@@ -119,8 +120,8 @@ public class BeanEditWizardIT {
 		// simple bean with id & class - same on blueprint and spring
 		Element beanNode = beanConfigUtil.createBeanNode(camelFile, basicEditCaseBeanId, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicEditCaseBeanId);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicEditCaseBeanId);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanId);
 		
 		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
@@ -130,11 +131,11 @@ public class BeanEditWizardIT {
 		check(basicEditCaseBeanId, camelFile);
 		
 		// update id for bean
-		beanConfigUtil.setAttributeValue(beanNode, CamelBean.PROP_ID, editedBasicEditCaseBeanId);
+		beanConfigUtil.setAttributeValue(beanNode, GlobalBeanEIP.PROP_ID, editedBasicEditCaseBeanId);
 		logInfo("Updated bean ID in global configuration model");
 
 		// update class for bean from String to Integer
-		beanConfigUtil.setAttributeValue(beanNode, CamelBean.PROP_CLASS, newClassName);
+		beanConfigUtil.setAttributeValue(beanNode, GlobalBeanEIP.PROP_CLASS, newClassName);
 		logInfo("Updated bean class in global configuration model");
 
 		// Check that Model is valid after reloading from the filesystem
@@ -153,8 +154,8 @@ public class BeanEditWizardIT {
 		
 		Element updatedElement = getBeanElement(editedBasicEditCaseBeanId, reloadedCamelFile);
 		assertThat(updatedElement).isNotNull();
-		assertThat(updatedElement.getAttribute(CamelBean.PROP_ID)).isEqualTo(editedBasicEditCaseBeanId);
-		assertThat(updatedElement.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(newClassName);
+		assertThat(updatedElement.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(editedBasicEditCaseBeanId);
+		assertThat(updatedElement.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(newClassName);
 		logInfo("Bean id and class for (" + basicEditCaseBeanId + ") in reloaded global configuration was updated correctly");
 		
 	}
@@ -174,8 +175,8 @@ public class BeanEditWizardIT {
 		// simple bean plus argument
 		Element beanNode = beanConfigUtil.createBeanNode(camelFile, basicEditCaseBeanIdWithArgument, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithArgument);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithArgument);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanIdWithArgument);
 		
 		beanConfigUtil.addBeanArgument(camelFile, beanNode, argType, argValue);
@@ -229,8 +230,8 @@ public class BeanEditWizardIT {
 		// simple bean plus factory-method plus argument
 		Element beanNode = beanConfigUtil.createBeanNode(camelFile, basicEditCaseBeanIdWithArgumentAndFactoryMethod, STATIC_ACCOUNT_FACTORY);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithArgumentAndFactoryMethod);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(STATIC_ACCOUNT_FACTORY);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithArgumentAndFactoryMethod);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(STATIC_ACCOUNT_FACTORY);
 		logInfo("Bean created: " + basicEditCaseBeanIdWithArgumentAndFactoryMethod);
 		
 		// update factory-method
@@ -288,8 +289,8 @@ public class BeanEditWizardIT {
 		// simple bean plus property
 		Element beanNode = beanConfigUtil.createBeanNode(camelFile, basicEditCaseBeanIdWithProperty, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithProperty);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithProperty);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanIdWithProperty);
 		
 		beanConfigUtil.addBeanProperty(camelFile, beanNode, propName, propValue);
@@ -340,8 +341,8 @@ public class BeanEditWizardIT {
 		// edit bean node like we do in EditGlobalBeanWizard
 		Element beanNode = beanConfigUtil.createBeanNode(camelFile, basicEditCaseBeanIdWithInitDestroyMethods, className);
 		assertThat(beanNode).isNotNull();
-		assertThat(beanNode.getAttribute(CamelBean.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithInitDestroyMethods);
-		assertThat(beanNode.getAttribute(CamelBean.PROP_CLASS)).isEqualTo(className);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_ID)).isEqualTo(basicEditCaseBeanIdWithInitDestroyMethods);
+		assertThat(beanNode.getAttribute(GlobalBeanEIP.PROP_CLASS)).isEqualTo(className);
 		logInfo("Bean created: " + basicEditCaseBeanIdWithInitDestroyMethods);
 		
 		new CamelGlobalConfigEditor(null).addNewGlobalBeanElement(camelFile, beanNode);
@@ -351,9 +352,9 @@ public class BeanEditWizardIT {
 		check(basicEditCaseBeanIdWithInitDestroyMethods, camelFile);
 		
 		// update init-method and destroy-method
-		beanConfigUtil.setAttributeValue(beanNode, CamelBean.PROP_INIT_METHOD, TRIM_METHOD);
+		beanConfigUtil.setAttributeValue(beanNode, GlobalBeanEIP.PROP_INIT_METHOD, TRIM_METHOD);
 		logInfo("Updated init-method in global configuration model");
-		beanConfigUtil.setAttributeValue(beanNode, CamelBean.PROP_DESTROY_METHOD, HASHCODE_METHOD);
+		beanConfigUtil.setAttributeValue(beanNode, GlobalBeanEIP.PROP_DESTROY_METHOD, HASHCODE_METHOD);
 		logInfo("Updated destroy-method in global configuration model");
 
 		// Check that Model is valid after reloading from the filesystem
@@ -366,8 +367,8 @@ public class BeanEditWizardIT {
 
 		Element updatedElement = getBeanElement(basicEditCaseBeanIdWithInitDestroyMethods, reloadedCamelFile);
 		assertThat(updatedElement).isNotNull();
-		assertThat(updatedElement.getAttribute(CamelBean.PROP_INIT_METHOD)).isEqualTo(TRIM_METHOD);
-		assertThat(updatedElement.getAttribute(CamelBean.PROP_DESTROY_METHOD)).isEqualTo(HASHCODE_METHOD);
+		assertThat(updatedElement.getAttribute(GlobalBeanEIP.PROP_INIT_METHOD)).isEqualTo(TRIM_METHOD);
+		assertThat(updatedElement.getAttribute(GlobalBeanEIP.PROP_DESTROY_METHOD)).isEqualTo(HASHCODE_METHOD);
 		logInfo("Init- and Destroy-method found for (" + basicEditCaseBeanIdWithInitDestroyMethods + ") in reloaded global configuration was updated correctly");
 	}
 
@@ -397,8 +398,8 @@ public class BeanEditWizardIT {
 			Node node = argumentList.item(i);
 			if (node instanceof Element) {
 				Element element = (Element) node;
-				String typeVal = element.getAttribute(CamelBean.ARG_TYPE);
-				String valueVal = element.getAttribute(CamelBean.ARG_VALUE);
+				String typeVal = element.getAttribute(GlobalBeanEIP.ARG_TYPE);
+				String valueVal = element.getAttribute(GlobalBeanEIP.ARG_VALUE);
 				// null type is ok
 				if ((typeVal == null || typeVal.trim().isEmpty()) && argType == null && valueVal.equals(argValue)) {
 					return element;
@@ -412,13 +413,13 @@ public class BeanEditWizardIT {
 	}
 
 	private Node findProperty(Element beanElement, String propName, String propValue) {
-		NodeList propertyList = beanElement.getElementsByTagName(CamelBean.TAG_PROPERTY);
+		NodeList propertyList = beanElement.getElementsByTagName(GlobalBeanEIP.TAG_PROPERTY);
 		for (int i = 0; i < propertyList.getLength(); i++) {
 			Node node = propertyList.item(i);
 			if (node instanceof Element) {
 				Element element = (Element) node;
-				String nameVal = element.getAttribute(CamelBean.PROP_NAME);
-				String valueVal = element.getAttribute(CamelBean.PROP_VALUE);
+				String nameVal = element.getAttribute(GlobalBeanEIP.PROP_NAME);
+				String valueVal = element.getAttribute(GlobalBeanEIP.PROP_VALUE);
 				if (nameVal.equals(propName) && valueVal.equals(propValue)) {
 					return element;
 				}

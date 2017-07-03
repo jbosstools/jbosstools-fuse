@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -113,17 +113,17 @@ public class PropertyInputDialog extends AbstractBeanInputDialog {
 		if (!propertyList.isEmpty()) {
 			for (AbstractCamelModelElement camelElement : propertyList) {
 				Element xmlElement = (Element) camelElement.getXmlNode();
-				String propName = xmlElement.getAttribute(CamelBean.PROP_NAME);
+				String propName = xmlElement.getAttribute(GlobalBeanEIP.PROP_NAME);
 				boolean nameIsUnique = nameIsUnique(propName, newPropName);
 				if (!nameIsUnique) {
 					return UIMessages.propertyInputDialogNameNotUnique;
 				}
 			}
 		} else if (inputElement != null) {
-			NodeList childList = inputElement.getElementsByTagName(CamelBean.TAG_PROPERTY);
+			NodeList childList = inputElement.getElementsByTagName(GlobalBeanEIP.TAG_PROPERTY);
 			for (int i = 0; i < childList.getLength(); i++) {
 				Element arrayElement = (Element) childList.item(i);
-				String propName = arrayElement.getAttribute(CamelBean.PROP_NAME);
+				String propName = arrayElement.getAttribute(GlobalBeanEIP.PROP_NAME);
 				if (!nameIsUnique(propName, newPropName)) {
 					return UIMessages.propertyInputDialogNameNotUnique;
 				}

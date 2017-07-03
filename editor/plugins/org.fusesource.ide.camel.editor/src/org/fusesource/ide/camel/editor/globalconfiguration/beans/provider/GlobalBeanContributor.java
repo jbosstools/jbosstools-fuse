@@ -26,8 +26,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCac
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
 
 /**
@@ -87,7 +87,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 				CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
 		boolean isSAPClass = true;
 		if (isBeanElement) {
-			Object classParm = camelModelElementToHandle.getParameter(CamelBean.PROP_CLASS);
+			Object classParm = camelModelElementToHandle.getParameter(GlobalBeanEIP.PROP_CLASS);
 			if (classParm != null && classParm instanceof String) {
 				isSAPClass = "org.fusesource.camel.component.sap.SapConnectionConfiguration".equals((String)classParm); //$NON-NLS-1$
 			}
