@@ -13,29 +13,13 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeColumn;
-import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
@@ -47,20 +31,11 @@ import org.w3c.dom.Element;
  * @author brianf
  *
  */
-public class PropertyStyleChildTableControl extends Composite {
+@SuppressWarnings("squid:MaximumInheritanceDepth")
+public class PropertyStyleChildTableControl extends PropertyStyleBaseTableControl {
 
-	private static final String[] TREE_COLUMNS = new String[] { CamelBean.PROP_NAME, CamelBean.PROP_VALUE };
-
-	private Button addButton;
-	private Button removeButton;
-	private Button editButton;
-	private boolean isReadOnly = false;
-	private String warningMsg = null;
-	private ListenerList<ChangeListener> changeListeners;
-	private TreeViewer propertyTreeTable;
 	private AbstractCamelModelElement inputElement;
 	private List<AbstractCamelModelElement> propertyList = new ArrayList<>();
-	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
 	/**
 	 * @param parent
@@ -71,175 +46,10 @@ public class PropertyStyleChildTableControl extends Composite {
 	}
 
 	public PropertyStyleChildTableControl(Composite parent, int style, boolean isReadOnly) {
-		super(parent, style);
-
-		this.isReadOnly = isReadOnly;
-		this.changeListeners = new ListenerList<>();
-
-		int additionalStyles;
-		if (isReadOnly) {
-			additionalStyles = SWT.READ_ONLY;
-		} else {
-			additionalStyles = SWT.NONE;
-		}
-		setLayout(GridLayoutFactory.fillDefaults().margins(0, 0).numColumns(2).create());
-
-		propertyTreeTable = new TreeViewer(this,
-				SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.FULL_SELECTION | style | additionalStyles);
-		this.propertyTreeTable.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
-		propertyTreeTable.getTree().setLayoutData(
-				GridDataFactory.fillDefaults().span(1, 5).grab(true, true).hint(SWT.DEFAULT, 100).create());
-		propertyTreeTable.getTree().setHeaderVisible(true);
-		propertyTreeTable.getTree().setLinesVisible(true);
-		TreeColumn nameColumn = new TreeColumn(propertyTreeTable.getTree(), SWT.LEFT);
-		nameColumn.setText(UIMessages.PropertyStyleChildTableControl_NameColumnLabel);
-		nameColumn.setWidth(200);
-		TreeColumn valueColumn = new TreeColumn(propertyTreeTable.getTree(), SWT.LEFT);
-		valueColumn.setText(UIMessages.PropertyStyleChildTableControl_ValueColumnLabel);
-		valueColumn.setWidth(200);
-
-		propertyTreeTable.setColumnProperties(TREE_COLUMNS);
-
-		propertyTreeTable.setLabelProvider(new PropertyTypeTreeLabelProvider());
-		propertyTreeTable.setContentProvider(new PropertyTypeTreeContentProvider());
-
-		propertyTreeTable.setCellEditors(new CellEditor[] { new TextCellEditor(propertyTreeTable.getTree()),
-				new TextCellEditor(propertyTreeTable.getTree()), null });
-
-		this.addButton = new Button(this, SWT.NONE);
-		this.addButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.addButton.setText(UIMessages.PropertyStyleChildTableControl_AddButtonLabel);
-		this.addButton.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				addPropertyTypeToList();
-				propertyTreeTable.refresh();
-				updatePropertyTypeButtons();
-				fireChangedEvent(e.getSource());
-			}
-		});
-
-		this.addButton.setEnabled(false);
-
-		this.editButton = new Button(this, SWT.NONE);
-		this.editButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.editButton.setText(UIMessages.PropertyStyleChildTableControl_EditButtonLabel);
-		this.editButton.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				editPropertyType();
-				propertyTreeTable.refresh();
-				updatePropertyTypeButtons();
-				fireChangedEvent(e.getSource());
-			}
-		});
-
-		this.editButton.setEnabled(false);
-
-		propertyTreeTable.addDoubleClickListener(e -> {
-			editPropertyType();
-			propertyTreeTable.refresh();
-			updatePropertyTypeButtons();
-			fireChangedEvent(e.getSource());
-		});
-
-		propertyTreeTable.getTree().addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updatePropertyTypeButtons();
-			}
-		});
-
-		this.removeButton = new Button(this, SWT.NONE);
-		this.removeButton.setLayoutData(GridDataFactory.fillDefaults().create());
-		this.removeButton.setText(UIMessages.PropertyStyleChildTableControl_RemoveButtonLabel);
-		this.removeButton.setEnabled(false);
-		this.removeButton.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				removePropertyFromList();
-				propertyTreeTable.refresh();
-				updatePropertyTypeButtons();
-				fireChangedEvent(e.getSource());
-			}
-		});
+		super(parent, style, isReadOnly);
 
 		propertyTreeTable.setInput(propertyList);
 		updatePropertyTypeButtons();
-	}
-
-	/**
-	 * If we changed, fire a changed event.
-	 * 
-	 * @param source
-	 */
-	protected void fireChangedEvent(Object source) {
-		ChangeEvent e = new ChangeEvent(source);
-		// inform any listeners of the resize event
-		Object[] listeners = this.changeListeners.getListeners();
-		for (int i = 0; i < listeners.length; ++i) {
-			((ChangeListener) listeners[i]).stateChanged(e);
-		}
-	}
-
-	/**
-	 * Add a change listener.
-	 * 
-	 * @param listener
-	 *            new listener
-	 */
-	public void addChangeListener(ChangeListener listener) {
-		this.changeListeners.add(listener);
-	}
-
-	/**
-	 * Remove a change listener.
-	 * 
-	 * @param listener
-	 *            old listener
-	 */
-	public void removeChangeListener(ChangeListener listener) {
-		this.changeListeners.remove(listener);
-	}
-
-	/**
-	 * Update button state based on what's selected.
-	 */
-	public void updatePropertyTypeButtons() {
-		if (isReadOnly) {
-			this.addButton.setEnabled(false);
-			this.editButton.setEnabled(false);
-			this.removeButton.setEnabled(false);
-
-		} else {
-			this.addButton.setEnabled(true);
-
-			// enable if a selection is made
-			boolean enable = getStructuredSelection() != null && !getStructuredSelection().isEmpty();
-			this.editButton.setEnabled(enable);
-			this.removeButton.setEnabled(enable);
-		}
-	}
-
-	/**
-	 * @return the current selection from the table
-	 */
-	public IStructuredSelection getStructuredSelection() {
-		if (propertyTreeTable != null && !propertyTreeTable.getSelection().isEmpty()) {
-			return (IStructuredSelection) propertyTreeTable.getSelection();
-		}
-		return null;
-	}
-
-	/**
-	 * @return warning string
-	 */
-	public String getWarning() {
-		return this.warningMsg;
 	}
 
 	protected void removePropertyFromList() {
@@ -288,7 +98,7 @@ public class PropertyStyleChildTableControl extends Composite {
 		inputElement = input;
 	}
 
-	private void addBeanProperty(String name, String value) {
+	protected void addBeanProperty(String name, String value) {
 		Element propertyNode = beanConfigUtil.createBeanProperty(inputElement.getCamelFile(), name, value);
 		CamelBasicModelElement newProperty = new CamelBasicModelElement(null, propertyNode);
 		propertyList.add(newProperty);
@@ -385,5 +195,15 @@ public class PropertyStyleChildTableControl extends Composite {
 
 	public void setPropertyList(List<AbstractCamelModelElement> list) {
 		this.propertyList = list;
+	}
+
+	@Override
+	protected ITableLabelProvider getTableLabelProvider() {
+		return new PropertyTypeTreeLabelProvider();
+	}
+
+	@Override
+	protected ITreeContentProvider getTableContentProvider() {
+		return new PropertyTypeTreeContentProvider();
 	}
 }

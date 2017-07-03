@@ -38,7 +38,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();
 		this.componentManager = new ComponentManager(componentModel);
-		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.editGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -50,8 +50,8 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	@Override
 	public void addPages() {
 		super.addPages();
-		final GlobalBeanEditWizardPage globalBeanPage = new GlobalBeanEditWizardPage(dbc, UIMessages.EditGlobalBeanWizard_BeanEditPageTitle,
-				UIMessages.EditGlobalBeanWizard_BeanEditPageMessage, camelFile);
+		final GlobalBeanEditWizardPage globalBeanPage = new GlobalBeanEditWizardPage(dbc, UIMessages.editGlobalBeanWizardBeanEditPageTitle,
+				UIMessages.editGlobalBeanWizardBeanEditPageMessage, camelFile);
 		globalBeanPage.setElement(inputNode);
 		addPage(globalBeanPage);
 
@@ -109,7 +109,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	}
 
 	public void init() {
-		setWindowTitle(UIMessages.EditGlobalBeanWizard_WindowTitle);
+		setWindowTitle(UIMessages.editGlobalBeanWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 		dbc = new DataBindingContext();
 	}

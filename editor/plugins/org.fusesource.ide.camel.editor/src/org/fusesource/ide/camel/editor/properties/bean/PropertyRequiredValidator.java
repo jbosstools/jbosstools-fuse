@@ -35,7 +35,7 @@ public class PropertyRequiredValidator implements IValidator {
 			return ValidationStatus.ok();
 		}
 		return ValidationStatus
-				.error(UIMessages.PropertyRequiredValidator_MandatoryParameterEmptyPt1 + parameter.getName() + UIMessages.PropertyRequiredValidator_MandatoryParameterEmptyPt2);
+				.error(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt1 + parameter.getName() + UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt2);
 	}
 	
 

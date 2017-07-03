@@ -50,7 +50,7 @@ public class PropertyMethodValidator implements IValidator {
 				try {
 					return validateMethod(jproject, className, methodName);
 				} catch (JavaModelException e) {
-					CamelEditorUIActivator.pluginLog().logError(UIMessages.PropertyMethodValidator_MethodValidationError + className,
+					CamelEditorUIActivator.pluginLog().logError(UIMessages.propertyMethodValidatorMethodValidationError + className,
 							e);
 				}
 			}
@@ -63,7 +63,7 @@ public class PropertyMethodValidator implements IValidator {
 		boolean foundMethod = beanConfigUtil.hasMethod(methodName, foundClass);
 		if (!foundMethod) {
 			return ValidationStatus
-					.error(UIMessages.PropertyMethodValidator_MethodValidatorErrorPt2 + methodName + UIMessages.PropertyMethodValidator_MethodValidatorErrorPt3 + className + "."); //$NON-NLS-3$
+					.error(UIMessages.propertyMethodValidatorMethodValidatorErrorPt2 + methodName + UIMessages.propertyMethodValidatorMethodValidatorErrorPt3 + className + "."); //$NON-NLS-3$
 		}
 		return ValidationStatus.ok();
 	}

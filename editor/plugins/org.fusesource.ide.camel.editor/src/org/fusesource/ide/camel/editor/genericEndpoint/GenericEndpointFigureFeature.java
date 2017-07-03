@@ -29,7 +29,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 public class GenericEndpointFigureFeature extends AbstractComponentBasedCreateFigurefeature {
 
 	public GenericEndpointFigureFeature(IFeatureProvider fp) {
-		super(fp, UIMessages.GenericEndpointFigureFeature_paletteName, UIMessages.GenericEndpointFigureFeature_paletteDescription);
+		super(fp, UIMessages.genericEndpointFigureFeaturePaletteName, UIMessages.genericEndpointFigureFeaturePaletteDescription);
 	}
 
 	@Override

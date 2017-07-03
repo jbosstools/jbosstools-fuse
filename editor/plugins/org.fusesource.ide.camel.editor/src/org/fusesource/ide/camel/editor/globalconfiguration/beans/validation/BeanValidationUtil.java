@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc. 
+ * Copyright (c) 2017 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -8,30 +8,27 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.component.wizard;
+package org.fusesource.ide.camel.editor.globalconfiguration.beans.validation;
 
-import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
-final class NewEndpointIdValidator implements IValidator {
+/**
+ * @author brianf
+ *
+ */
+public class BeanValidationUtil {
 	
-	private AbstractCamelModelElement parent;
-
-	public NewEndpointIdValidator(AbstractCamelModelElement parent) {
-		this.parent = parent;
+	private BeanValidationUtil() {
+		// empty constructor
 	}
 
-	@Override
-	public IStatus validate(Object value) {
+	public static IStatus validateIdInParent(AbstractCamelModelElement parent, Object value) {
 		String id = (String) value;
-		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error(UIMessages.globalEndpointWizardPageIdMandatoryMessage);
-		}
-		if(!parent.findAllNodesWithId(id).isEmpty()){
-			return ValidationStatus.error(UIMessages.globalEndpointWizardPageIdExistingMessage);
+		if (parent.findAllNodesWithId(id).size() > 1){
+			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();
 	}

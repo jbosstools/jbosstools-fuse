@@ -117,7 +117,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	protected void setEditorInitializationError(String editorInitializationError) {
-		super.setEditorInitializationError(UIMessages.CamelDiagramBehaviour_messageOnErrorEditorInitialization);
+		super.setEditorInitializationError(UIMessages.camelDiagramBehaviourMessageOnErrorEditorInitialization);
 	}
 	
 	//TODO: remove after Graphiti issue fixed https://bugs.eclipse.org/bugs/show_bug.cgi?id=499720

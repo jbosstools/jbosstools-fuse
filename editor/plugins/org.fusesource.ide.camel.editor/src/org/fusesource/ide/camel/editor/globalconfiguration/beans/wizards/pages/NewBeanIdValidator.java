@@ -32,10 +32,10 @@ public class NewBeanIdValidator implements IValidator {
 	public IStatus validate(Object value) {
 		String id = (String) value;
 		if (id == null || id.isEmpty()) {
-			return ValidationStatus.error(UIMessages.NewBeanIdValidator_ErrorBeanIDMandatory);
+			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDMandatory);
 		}
 		if (!parent.findAllNodesWithId(id).isEmpty()){
-			return ValidationStatus.error(UIMessages.NewBeanIdValidator_ErrorBeanIDAlreadyUsed);
+			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();
 	}
