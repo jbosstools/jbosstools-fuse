@@ -44,7 +44,7 @@ public class CamelRunMavenLaunchDelegateTest {
 		doReturn(false).when(camelRunMavenLaunchDelegate).isSpringBoot(Mockito.any(IFile.class));
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
-				.isEqualTo("clean package org.apache.camel:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
+				.isEqualTo("-U clean package org.apache.camel:camel-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class CamelRunMavenLaunchDelegateTest {
 		doReturn(true).when(camelRunMavenLaunchDelegate).isSpringBoot(Mockito.any(IFile.class));
 		
 		assertThat(camelRunMavenLaunchDelegate.getGoals(launchConfig))
-				.isEqualTo("clean package org.springframework.boot:spring-boot-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
+				.isEqualTo("-U clean package org.springframework.boot:spring-boot-maven-plugin:run -Dcamel.fileApplicationContextUri=\"file:C:\\my path with space\"");
 	}
 
 }
