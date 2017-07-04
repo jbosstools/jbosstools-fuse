@@ -64,8 +64,7 @@ public class FuseIntegrationWizardRuntimeAndCamelPageIT {
 		assertThat(page.isValidCamelVersionSyntax(page.getSelectedCamelVersion())).isFalse();
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		assertThat(selectedCamelVersion.startsWith("2.19.a")).isTrue();
-		// TODO: disabled the test due to an issue with Ivy/Camel being stuck on unavailable URLs (see CAMEL-11506)
-		// assertThat(page.isCamelVersionValid(selectedCamelVersion)).isFalse();
+		assertThat(page.isCamelVersionValid(selectedCamelVersion)).isFalse();
 	}
 	
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage createWizardRuntimePage() {
