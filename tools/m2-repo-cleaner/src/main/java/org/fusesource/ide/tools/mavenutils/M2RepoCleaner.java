@@ -66,6 +66,8 @@ public class M2RepoCleaner {
 			String fname = f.getName().toLowerCase();
 			if (f.isFile() && (fname.endsWith(".jar") || fname.endsWith(".zip"))) {
 				checkForCorruption(f);
+			} else if (f.isFile() && fname.endsWith(".lastupdated") && f.exists()) {
+				//handleCorruptedZip(f);
 			}
 		}
 	}
