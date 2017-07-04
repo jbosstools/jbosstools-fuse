@@ -67,7 +67,7 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 		} else {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
 		}
-		return super.getGoals(configuration) + newGoalsAdditionForFile;
+		return "-U " + super.getGoals(configuration) + newGoalsAdditionForFile;
 	}
 
 	/**
