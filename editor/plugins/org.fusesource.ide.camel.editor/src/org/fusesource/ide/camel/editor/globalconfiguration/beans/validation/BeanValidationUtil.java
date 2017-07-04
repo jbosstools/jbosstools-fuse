@@ -36,7 +36,7 @@ public class BeanValidationUtil {
 		return ValidationStatus.ok();
 	}
 	
-	public static IStatus validateRequiredParemeter(Parameter parameter, Object value) {
+	public static IStatus validateRequiredParameter(Parameter parameter, Object value) {
 		if (PropertiesUtils.isRequired(parameter) && (value == null || value.toString().trim().length() < 1)) {
 			return ValidationStatus.error(NLS.bind(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt, parameter.getName()));
 		}

@@ -57,7 +57,7 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 	 * @return A Validator checking non-emptiness of mandatory field
 	 */
 	protected IValidator createValidator() {
-		return value -> BeanValidationUtil.validateRequiredParemeter(parameter, value);
+		return value -> BeanValidationUtil.validateRequiredParameter(parameter, value);
 	}
 
 	@Override

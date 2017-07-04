@@ -61,7 +61,7 @@ public abstract class AbstractComboFieldParameterPropertyUICreator extends Abstr
 	 * @return A Validator checking non-emptiness of mandatory field
 	 */
 	protected IValidator createValidator() {
-		return value -> BeanValidationUtil.validateRequiredParemeter(parameter, value);
+		return value -> BeanValidationUtil.validateRequiredParameter(parameter, value);
 	}
 	
 	protected void setValues(String[] values) {
