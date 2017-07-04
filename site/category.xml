@@ -84,7 +84,9 @@
 
    <!-- qe tests don't need to be included in any category-->
    <bundle id="org.jboss.tools.fuse.qe.reddeer" />
+   <bundle id="org.jboss.tools.fuse.qe.reddeer.source" />
    <bundle id="org.jboss.tools.fuse.qe.reddeer.tests" />
+   <bundle id="org.jboss.tools.fuse.qe.reddeer.tests.source" />
 
    <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site - Features">
       <description>
