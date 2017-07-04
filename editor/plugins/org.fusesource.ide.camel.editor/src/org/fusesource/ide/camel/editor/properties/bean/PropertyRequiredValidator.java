@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -34,8 +35,7 @@ public class PropertyRequiredValidator implements IValidator {
 		if (value != null && value instanceof String && !Strings.isEmpty((String) value)) {
 			return ValidationStatus.ok();
 		}
-		return ValidationStatus
-				.error(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt1 + parameter.getName() + UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt2);
+		return ValidationStatus.error(NLS.bind(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt, parameter.getName()));
 	}
 	
 

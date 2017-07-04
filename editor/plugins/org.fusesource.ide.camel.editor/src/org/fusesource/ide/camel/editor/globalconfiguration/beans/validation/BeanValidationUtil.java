@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.globalconfiguration.beans.validation;
 
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -37,8 +38,7 @@ public class BeanValidationUtil {
 	
 	public static IStatus validateRequiredParemeter(Parameter parameter, Object value) {
 		if (PropertiesUtils.isRequired(parameter) && (value == null || value.toString().trim().length() < 1)) {
-			return ValidationStatus.error(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt1 
-					+ parameter.getName() + UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt2);
+			return ValidationStatus.error(NLS.bind(UIMessages.propertyRequiredValidatorMandatoryParameterEmptyPt, parameter.getName()));
 		}
 		return ValidationStatus.ok();
 	}
