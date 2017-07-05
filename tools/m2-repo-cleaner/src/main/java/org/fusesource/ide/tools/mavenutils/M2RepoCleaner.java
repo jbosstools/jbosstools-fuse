@@ -27,32 +27,47 @@ public class M2RepoCleaner {
 
 	public static final String DEFAULT_REPO_FOLDER = System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository" + File.separator;
 	
+	private static final String ARG_PATHS = "FUSE_REPO_CLEANER_PATHS";
+	private static final String ARG_DELETE_LASTUPDATED = "FUSE_REPO_CLEANER_DELETELASTUPDATED";
+	
 	private static long checkedFiles = 0;
 	private static long checkedFolders = 0;
 	private static List<String> corruptedFiles = new ArrayList<>();
+	
+	private static boolean deleteLastUpdatedFiles = Boolean.parseBoolean(System.getProperty(ARG_DELETE_LASTUPDATED, "false"));
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String repoPath; 
+		String reposPath; 
 		if (args.length>0) {
-			repoPath = args[0];
-		 	System.out.println("Using custom repo folder: " + repoPath);
+			reposPath = args[0];
 		} else {
-		 	repoPath = DEFAULT_REPO_FOLDER;
-			System.out.println("Using default repo folder: " + repoPath);
+		 	reposPath = DEFAULT_REPO_FOLDER;
 		}
 
-		File repoFolder = new File(repoPath);
-		if (!repoFolder.exists() || !repoFolder.isDirectory()) {
-			System.err.println("The given folder does not exist or is not a directory. Also make sure you have the rights to access it.");
-		} else {
-			findCorruptedJarFiles(repoFolder);
-			System.out.println("FINISHED - We checked " + checkedFiles + " files in " + checkedFolders + " folders with " + corruptedFiles.size() + " corrupted files detected!");
-			for (String f : corruptedFiles) {
-				System.err.println(f);
+		String repoPathsVar = System.getProperty(ARG_PATHS, "");
+		if (repoPathsVar.trim().length()>0) {
+			reposPath += ";" + repoPathsVar;
+		}
+
+		System.out.println("Using repo folders: " + reposPath);
+		
+		String[] paths = reposPath.split(";");
+		for (String path : paths) {
+			if (path.trim().isEmpty()) continue;
+			
+			File repoFolder = new File(path);
+			if (!repoFolder.exists() || !repoFolder.isDirectory()) {
+				System.err.println("The given folder " + path + " does not exist or is not a directory. Also make sure you have the rights to access it.");
+			} else {
+				findCorruptedJarFiles(repoFolder);
 			}
+		}
+		System.out.println("FINISHED - We checked " + checkedFiles + " files in " + checkedFolders + " folders with " + corruptedFiles.size() + " corrupted files detected!");
+		for (String f : corruptedFiles) {
+			System.err.println(f);
 		}
 	}
 	
@@ -66,8 +81,8 @@ public class M2RepoCleaner {
 			String fname = f.getName().toLowerCase();
 			if (f.isFile() && (fname.endsWith(".jar") || fname.endsWith(".zip"))) {
 				checkForCorruption(f);
-			} else if (f.isFile() && fname.endsWith(".lastupdated") && f.exists()) {
-				//handleCorruptedZip(f);
+			} else if (f.isFile() && fname.endsWith(".lastupdated") && f.exists() && deleteLastUpdatedFiles) {
+				handleCorruptedZip(f);
 			}
 		}
 	}
