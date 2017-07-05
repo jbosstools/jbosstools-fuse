@@ -82,7 +82,7 @@ public class M2RepoCleaner {
 			if (f.isFile() && (fname.endsWith(".jar") || fname.endsWith(".zip"))) {
 				checkForCorruption(f);
 			} else if (f.isFile() && fname.endsWith(".lastupdated") && f.exists() && deleteLastUpdatedFiles) {
-				handleCorruptedZip(f);
+				handleLastUpdatedFile(f);
 			}
 		}
 	}
@@ -116,6 +116,13 @@ public class M2RepoCleaner {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+		}
+	}
+	
+	private static void handleLastUpdatedFile(File file) {
+		corruptedFiles.add(file.getPath());
+		if (file.isFile() && file.exists()) {
+			file.delete();
 		}
 	}
 }
