@@ -62,6 +62,7 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 	 * Made visible for testing
 	 * @see org.fusesource.ide.camel.editor.properties.creators.AbstractComboFieldParameterPropertyUICreator#setValues(java.lang.String[])
 	 */
+	@Override
 	public void setValues(String[] values) {
 		super.setValues(values); 
 	}
