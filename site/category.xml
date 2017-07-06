@@ -16,7 +16,6 @@
 
    <bundle id="org.fusesource.ide.camel.editor.tests"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.model.service.core.tests"><category name="AllTests"/></bundle>
-   <bundle id="org.fusesource.ide.camel.model.tests"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.tests.util"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.validation.tests"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.jmx.camel.tests"><category name="AllTests"/></bundle>
@@ -34,6 +33,7 @@
 
    <bundle id="org.fusesource.ide.camel.editor.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.model.service.core.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.validation.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.jmx.camel.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.launcher.tests.integration"><category name="AllTests"/></bundle>
@@ -55,7 +55,6 @@
 
    <bundle id="org.fusesource.ide.camel.editor.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.model.service.core.tests.source"><category name="AllTests"/></bundle>
-   <bundle id="org.fusesource.ide.camel.model.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.tests.util.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.validation.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.jmx.camel.tests.source"><category name="AllTests"/></bundle>
@@ -73,6 +72,7 @@
 
    <bundle id="org.fusesource.ide.camel.editor.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.model.service.core.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.camel.model.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.camel.validation.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.jmx.camel.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.launcher.tests.integration.source"><category name="AllTests"/></bundle>
