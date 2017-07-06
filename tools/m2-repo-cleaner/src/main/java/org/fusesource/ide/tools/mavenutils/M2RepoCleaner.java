@@ -120,9 +120,10 @@ public class M2RepoCleaner {
 	}
 	
 	private static void handleLastUpdatedFile(File file) {
-		corruptedFiles.add(file.getPath());
-		if (file.isFile() && file.exists()) {
-			file.delete();
-		}
+		handleCorruptedZip(file);
+//		corruptedFiles.add(file.getPath());
+//		if (file.isFile() && file.exists()) {
+//			file.delete();
+//		}
 	}
 }
