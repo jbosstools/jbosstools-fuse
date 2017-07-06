@@ -43,6 +43,10 @@ public class MavenUtils {
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION = "camel.version";
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE = "${"+MAVEN_PROPERTY_CAMEL_VERSION+"}";
 	
+	private MavenUtils() {
+		// private
+	}
+	
 	public static void updateContributedPlugins(List<Plugin> plugins, String camelVersion) {
 		for (IConfigurationElement e : getExtensionPoints()) {
 			try {
@@ -73,22 +77,30 @@ public class MavenUtils {
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		}
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)) { 
-			for (Plugin p : plugins) {
-				if (isCamelPlugin(p)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
-						p.setVersion(null);
-					} else if(isMavenPropertyCamelVersionSet(properties)){
-						p.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
-					} else {
-						p.setVersion(camelVersion);
-					}					
-				}
-			}
+			updatePluginVersionsForProductizedVersion(mavenModel, plugins, camelVersion, properties);
 		} else {
-			for (Plugin p : plugins) {
-				if (isCamelPlugin(p) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(p.getVersion())) {
+			updatePluginVersionForNonProductizedVersion(plugins, camelVersion);
+		}
+	}
+	
+	private static void updatePluginVersionForNonProductizedVersion(List<Plugin> plugins, String camelVersion) {
+		for (Plugin p : plugins) {
+			if (isCamelPlugin(p) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(p.getVersion())) {
+				p.setVersion(camelVersion);
+			}
+		}
+	}
+	
+	private static void updatePluginVersionsForProductizedVersion(Model mavenModel, List<Plugin> plugins, String camelVersion, Properties properties) {
+		for (Plugin p : plugins) {
+			if (isCamelPlugin(p)) {
+				if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
+					p.setVersion(null);
+				} else if(isMavenPropertyCamelVersionSet(properties)){
+					p.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
+				} else {
 					p.setVersion(camelVersion);
-				}
+				}					
 			}
 		}
 	}
@@ -103,20 +115,28 @@ public class MavenUtils {
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		}
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)){
-			for (Dependency dep : dependencies) {
-				if (isCamelDependency(dep)) {
-					if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) { // TODO: test if isPureFISVersion check is harmful here...
-						dep.setVersion(null);
-					} else if(isMavenPropertyCamelVersionSet(properties)){
-						dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
-					} else {
-						dep.setVersion(camelVersion);
-					}
-				}
-			}
+			updateDependenciesForProductizedVersion(mavenModel, dependencies, camelVersion, properties);
 		} else {
-			for (Dependency dep : dependencies) {
-				if (isCamelDependency(dep) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(dep.getVersion())){
+			updateDependenciesForNonProductizedVersion(dependencies, camelVersion);
+		}
+	}
+	
+	private static void updateDependenciesForNonProductizedVersion(List<Dependency> dependencies, String camelVersion) {
+		for (Dependency dep : dependencies) {
+			if (isCamelDependency(dep) && !MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE.equals(dep.getVersion())){
+				dep.setVersion(camelVersion);
+			}
+		}
+	}
+	
+	private static void updateDependenciesForProductizedVersion(Model mavenModel, List<Dependency> dependencies, String camelVersion, Properties properties) {
+		for (Dependency dep : dependencies) {
+			if (isCamelDependency(dep)) {
+				if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
+					dep.setVersion(null);
+				} else if(isMavenPropertyCamelVersionSet(properties)){
+					dep.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
+				} else {
 					dep.setVersion(camelVersion);
 				}
 			}
@@ -206,18 +226,22 @@ public class MavenUtils {
 			if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
 				properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
 			} else {
-				if(mavenModel.getDependencyManagement() != null){
-					for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
-						if(isFuseBomImportDependency(dependency)){
-							dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
-							return;
-						}
-					}
-				}
+				alignFuseRuntimeVersionForNonBOMUsage(mavenModel, camelVersion);
 			}
 		}
 	}
 
+	private static void alignFuseRuntimeVersionForNonBOMUsage(Model mavenModel, String camelVersion) {
+		if(mavenModel.getDependencyManagement() != null){
+			for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
+				if(isFuseBomImportDependency(dependency)){
+					dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion));
+					return;
+				}
+			}
+		}
+	}
+	
 	/**
 	 * If staging repositories enabled, ensure to have them in the Maven model.
 	 * 

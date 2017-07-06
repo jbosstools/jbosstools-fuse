@@ -69,7 +69,6 @@ public class CamelCatalogUtils {
 	
 	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
 	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
-	private static final String LATEST_BOM_VERSION = FUSE_63_R2_BOM_VERSION;
 	
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
@@ -108,7 +107,7 @@ public class CamelCatalogUtils {
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630187");
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.17.0.redhat-630224");
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000012");	
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add("2.18.1.redhat-000015");
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(DEFAULT_CAMEL_VERSION);
 		}
 		
 		try {
@@ -125,7 +124,7 @@ public class CamelCatalogUtils {
 
 			// DEFAULTS
 			PURE_FIS_CAMEL_VERSIONS.put("2.18.1.redhat-000012", "2.2.170.redhat-000010");			
-			PURE_FIS_CAMEL_VERSIONS.put("2.18.1.redhat-000015", "2.2.170.redhat-000013");
+			PURE_FIS_CAMEL_VERSIONS.put(DEFAULT_CAMEL_VERSION,  "2.2.170.redhat-000013");
 		}
 		
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(PURE_FIS_CAMEL_VERSIONS.keySet());
@@ -162,13 +161,14 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static String getFuseVersionForCamelVersion(String camelVersion) {
-		String bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
+		return CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
+//		String bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
 		// TODO: revisit once https://issues.apache.org/jira/browse/CAMEL-8502 got solved
 //		if (bomVersion == null) {
 			// seems its not a Fuse Camel version so we currently don't support it
 //			bomVersion = LATEST_BOM_VERSION;
 //		}
-		return bomVersion;
+//		return bomVersion;
 	}
 	
 	/**
