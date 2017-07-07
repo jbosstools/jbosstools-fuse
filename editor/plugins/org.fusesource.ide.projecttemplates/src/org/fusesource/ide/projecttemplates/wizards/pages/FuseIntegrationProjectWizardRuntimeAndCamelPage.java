@@ -173,23 +173,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionValidationBtn.setLayoutData(camelButtonData);
 		camelVersionValidationBtn.setText(Messages.newProjectWizardRuntimePageCamelVersionValidationLabel);
 		camelVersionValidationBtn.setToolTipText(Messages.newProjectWizardRuntimePageCamelVersionValidationDescription);
-		camelVersionValidationBtn.addSelectionListener(new SelectionAdapter() {
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				CamelVersionChecker versionChecker = new CamelVersionChecker(getSelectedCamelVersion());
-				try {					
-					getWizard().getContainer().run(true, true, versionChecker);
-				} catch (InterruptedException iex) {
-					versionChecker.cancel();
-					Thread.currentThread().interrupt();
-				} catch (Exception ex) {
-					ProjectTemplatesActivator.pluginLog().logError(ex);
-				}
-			}
-		});
+		camelVersionValidationBtn.addSelectionListener(new VersionValidationHandler());
+				
 		new Label(camelGrp, SWT.None);
 				
 		setControl(container);
@@ -198,17 +183,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		validate();
 	}	
 
-	private void updateCamelValidation(boolean valid, String camelVersionToValidate) {
-		if (!valid) {
-			setMessage(null);
-			setErrorMessage(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidWarning, camelVersionToValidate));
-		} else {
-			setErrorMessage(null);
-			setMessage(Messages.newProjectWizardRuntimePageCamelVersionValidInfo, INFORMATION);
-		}
-		setPageComplete(valid);
-	}
-	
 	private void configureRuntimeCombo() {
 		if (Widgets.isDisposed(runtimeComboViewer)) {
 			return;
@@ -302,13 +276,13 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private boolean isCompatible(String runtimeCamelVersion, String selectedCamelVersion) {
 		String[] runtimeVersionParts = runtimeCamelVersion.split("\\."); //$NON-NLS-1$
 		String[] camelVersionParts = selectedCamelVersion.split("\\."); //$NON-NLS-1$
-		boolean rh_branded_rcv = runtimeCamelVersion.indexOf(".redhat-") != -1 || runtimeCamelVersion.indexOf(".fuse-") != -1;  //$NON-NLS-1$ //$NON-NLS-2$
-		boolean rh_branded_scv = selectedCamelVersion.indexOf(".redhat-") != -1 || selectedCamelVersion.indexOf(".fuse-") != -1; //$NON-NLS-1$ //$NON-NLS-2$
+		boolean productizedRuntimeCamelVersion = runtimeCamelVersion.indexOf(".redhat-") != -1 || runtimeCamelVersion.indexOf(".fuse-") != -1;  //$NON-NLS-1$ //$NON-NLS-2$
+		boolean productizedSelectedCamelVersion = selectedCamelVersion.indexOf(".redhat-") != -1 || selectedCamelVersion.indexOf(".fuse-") != -1; //$NON-NLS-1$ //$NON-NLS-2$
 
 		return runtimeVersionParts.length>1 && camelVersionParts.length>1 &&
 			   runtimeVersionParts[0].equals(camelVersionParts[0]) &&
 			   runtimeVersionParts[1].equals(camelVersionParts[1]) &&
-			   rh_branded_rcv == rh_branded_scv;
+			   productizedRuntimeCamelVersion == productizedSelectedCamelVersion;
 	}
 
 	/**
@@ -459,6 +433,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		private String camelVersionToValidate;
 		private Thread thread;
 		private IProgressMonitor monitor;
+		private boolean valid;
+		private boolean done;
 		
 		public CamelVersionChecker(String camelVersionToValidate) {
 			this.camelVersionToValidate = camelVersionToValidate;
@@ -475,7 +451,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			this.thread.start();
 			while (this.thread.isAlive() && !this.thread.isInterrupted() && !monitor.isCanceled()) {
 				// wait
+				Thread.sleep(100);
 			}
+			done = true;
 		}
 		
 		public void cancel() {
@@ -485,12 +463,58 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		private Thread createThread() {
 			return new Thread( () -> {
-					boolean valid = isCamelVersionValid(camelVersionToValidate);
+					valid = isCamelVersionValid(camelVersionToValidate);
 					if (!monitor.isCanceled()) {
 						monitor.done();
-						Display.getDefault().asyncExec(() -> updateCamelValidation(valid, camelVersionToValidate));
 					}
 			});
+		}
+		
+		public boolean isDone() {
+			return done;
+		}
+		
+		public boolean isValid() {
+			return valid;
+		}
+	}
+	
+	class VersionValidationHandler extends SelectionAdapter {
+		
+		/* (non-Javadoc)
+		 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+		 */
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String camelVersion = getSelectedCamelVersion();
+			CamelVersionChecker versionChecker = new CamelVersionChecker(camelVersion);
+			try {					
+				getWizard().getContainer().run(true, true, versionChecker);
+			} catch (InterruptedException iex) {
+				versionChecker.cancel();
+				Thread.currentThread().interrupt();
+			} catch (Exception ex) {
+				ProjectTemplatesActivator.pluginLog().logError(ex);
+			}
+			while (!versionChecker.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			updateCamelValidation(camelVersion, versionChecker.isValid());
+		}
+		
+		private void updateCamelValidation(String camelVersion, boolean valid) {
+			if (!valid) {
+				setMessage(null);
+				setErrorMessage(NLS.bind(Messages.newProjectWizardRuntimePageCamelVersionInvalidWarning, camelVersion));
+			} else {
+				setErrorMessage(null);
+				setMessage(Messages.newProjectWizardRuntimePageCamelVersionValidInfo, INFORMATION);
+			}
+			setPageComplete(valid);
 		}
 	}
 }
