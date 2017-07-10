@@ -49,7 +49,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
+		return CamelCatalogUtils.getCamelVersionsToTestWith();
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForEAPSpringIT(String version) {

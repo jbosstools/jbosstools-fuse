@@ -73,7 +73,7 @@ public class NewDataFormatWizardIT {
 	
 	@Parameters(name = "{0} - {1}")
 	public static Collection<Object[]> data() {
-		List<String> supportedCamelVersions = CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
+		List<String> supportedCamelVersions = CamelCatalogUtils.getCamelVersionsToTestWith();
 		Collection<Object[]> res = new HashSet<>();
 		for (String camelVersion : supportedCamelVersions) {
 			CamelModel camelModel = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(camelVersion);

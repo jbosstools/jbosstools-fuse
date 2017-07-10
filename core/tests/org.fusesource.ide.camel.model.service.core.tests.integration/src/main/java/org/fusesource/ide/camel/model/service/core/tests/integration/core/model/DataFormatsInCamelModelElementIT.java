@@ -54,7 +54,7 @@ public class DataFormatsInCamelModelElementIT {
 	
 	@Parameters(name = "{0}")
 	public static Collection<String> params() {
-		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
+		return CamelCatalogUtils.getCamelVersionsToTestWith();
 	}
 	
 	@Test
