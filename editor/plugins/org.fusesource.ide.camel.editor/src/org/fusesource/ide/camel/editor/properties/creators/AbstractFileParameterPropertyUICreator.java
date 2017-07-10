@@ -40,8 +40,8 @@ public abstract class AbstractFileParameterPropertyUICreator extends AbstractTex
 	@Override
 	protected void init(Composite parent) {
 		super.init(parent);
-		Button btn_browse = getWidgetFactory().createButton(parent, "...", SWT.PUSH);
-		btn_browse.addSelectionListener(new SelectionAdapter() {
+		Button btnBrowse = getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dd = new DirectoryDialog(parent.getShell());
@@ -51,7 +51,7 @@ public abstract class AbstractFileParameterPropertyUICreator extends AbstractTex
 				}
 			}
 		});
-		btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnBrowse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 	}
 
 	@Override

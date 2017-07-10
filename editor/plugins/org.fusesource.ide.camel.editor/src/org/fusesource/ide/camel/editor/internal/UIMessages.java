@@ -137,8 +137,7 @@ public class UIMessages extends NLS {
 	public static String propertyMethodValidatorMethodValidationError;
 	public static String propertyMethodValidatorMethodValidatorErrorPt2;
 	public static String propertyMethodValidatorMethodValidatorErrorPt3;
-	public static String propertyRequiredValidatorMandatoryParameterEmptyPt1;
-	public static String propertyRequiredValidatorMandatoryParameterEmptyPt2;
+	public static String propertyRequiredValidatorMandatoryParameterEmptyPt;
 	public static String propertyStyleChildTableControlAddButtonLabel;
 	public static String propertyStyleChildTableControlEditButtonLabel;
 	public static String propertyStyleChildTableControlNameColumnLabel;

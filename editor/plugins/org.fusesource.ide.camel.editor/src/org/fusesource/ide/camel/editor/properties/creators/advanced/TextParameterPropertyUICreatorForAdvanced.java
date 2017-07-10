@@ -44,20 +44,16 @@ public class TextParameterPropertyUICreatorForAdvanced extends AbstractTextField
 	@Override
 	protected IValidator createValidator() {
 		final IValidator superValidator = super.createValidator();
-		return new IValidator() {
-
-			@Override
-			public IStatus validate(Object value) {
-				IStatus superValidation = superValidator.validate(value);
-				if (!superValidation.isOK()) {
-					return superValidation;
-				}
-				final IStatus commonValidation = new TextParameterValidator(camelModelElement, parameter).validate(value);
-				if (!commonValidation.isOK()) {
-					return commonValidation;
-				}
-				return new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter).validate(value);
+		return value -> {
+			IStatus superValidation = superValidator.validate(value);
+			if (!superValidation.isOK()) {
+				return superValidation;
 			}
+			final IStatus commonValidation = new TextParameterValidator(camelModelElement, parameter).validate(value);
+			if (!commonValidation.isOK()) {
+				return commonValidation;
+			}
+			return new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter).validate(value);
 		};
 
 	}

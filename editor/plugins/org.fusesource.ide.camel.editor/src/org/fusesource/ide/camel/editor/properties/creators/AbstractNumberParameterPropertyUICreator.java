@@ -37,16 +37,12 @@ public abstract class AbstractNumberParameterPropertyUICreator extends AbstractT
 	@Override
 	protected IValidator createValidator() {
 		final IValidator superValidator = super.createValidator();
-		return new IValidator() {
-
-			@Override
-			public IStatus validate(Object value) {
-				IStatus superValidation = superValidator.validate(value);
-				if (!superValidation.isOK()) {
-					return superValidation;
-				}
-				return new NumberValidator(parameter).validate(value);
+		return value -> {
+			IStatus superValidation = superValidator.validate(value);
+			if (!superValidation.isOK()) {
+				return superValidation;
 			}
+			return new NumberValidator(parameter).validate(value);
 		};
 	}
 
