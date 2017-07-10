@@ -36,7 +36,7 @@ public class ValidateSyntaxInCatalogIT {
 	@Test
 	public void checkComponentSyntaxAreValid() throws Exception {
 		StringBuilder sb = new StringBuilder();
-		List<String> supportedCamelVersions = CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions();
+		List<String> supportedCamelVersions = CamelCatalogUtils.getCamelVersionsToTestWith();
 		checkForRuntimeProvider(sb, supportedCamelVersions, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
 		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000012"), CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		if (sb.length() != 0) {

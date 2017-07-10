@@ -29,7 +29,7 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
+		return CamelCatalogUtils.getCamelVersionsToTestWith(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT(String version) {

@@ -42,6 +42,7 @@ public class CamelCatalogUtils {
 	// TODO change the URL once we merged it into master...all versions should point to the file on master
 	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/camel2bom.properties";
 	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/fismarker.properties";
+	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/testversions.properties";
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
@@ -72,6 +73,7 @@ public class CamelCatalogUtils {
 	
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
+	private static final List<String> TEST_CAMEL_VERSIONS;
 	private static final Map<String, String> CAMEL_VERSION_2_FUSE_BOM_MAPPING;
 	private static final Map<String, String> PURE_FIS_CAMEL_VERSIONS;
 	
@@ -80,6 +82,7 @@ public class CamelCatalogUtils {
 		PURE_FIS_CAMEL_VERSIONS = new HashMap<>();
 		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
+		TEST_CAMEL_VERSIONS = new ArrayList<>();
 				
 		try {
 			Properties vMapping = new Properties();
@@ -126,6 +129,26 @@ public class CamelCatalogUtils {
 			PURE_FIS_CAMEL_VERSIONS.put("2.18.1.redhat-000012", "2.2.170.redhat-000010");			
 			PURE_FIS_CAMEL_VERSIONS.put(DEFAULT_CAMEL_VERSION,  "2.2.170.redhat-000013");
 		}
+
+		try {
+			Properties versionMapping = new Properties();
+			URL url = new URL(TEST_VERSIONS_URL);
+			versionMapping.load(url.openStream());
+		
+			for(String camelVersion : versionMapping.stringPropertyNames()) {
+				TEST_CAMEL_VERSIONS.add(camelVersion);
+			}
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Test Camel Versions list from online repo. Falling back to defaults.", ex);
+
+			TEST_CAMEL_VERSIONS.add("2.17.0.redhat-630187");
+			TEST_CAMEL_VERSIONS.add("2.17.0.redhat-630224");
+			TEST_CAMEL_VERSIONS.add("2.17.7");
+			TEST_CAMEL_VERSIONS.add("2.18.1.redhat-000012");
+			TEST_CAMEL_VERSIONS.add(DEFAULT_CAMEL_VERSION);
+			TEST_CAMEL_VERSIONS.add("2.18.4");
+			TEST_CAMEL_VERSIONS.add("2.19.1");
+		}
 		
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(PURE_FIS_CAMEL_VERSIONS.keySet());
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS);
@@ -141,6 +164,10 @@ public class CamelCatalogUtils {
 	
 	public static List<String> getAllCamelCatalogVersions() {
 		return ALL_CAMEL_CATALOG_VERSIONS;
+	}
+	
+	public static List<String> getCamelVersionsToTestWith() {
+		return TEST_CAMEL_VERSIONS;
 	}
 	
 	/**

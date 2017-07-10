@@ -36,7 +36,7 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 	
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
-		return CamelCatalogUtils.getOfficialSupportedCamelCatalogVersions(); 
+		return CamelCatalogUtils.getCamelVersionsToTestWith(); 
 	}
 	
 	public FuseIntegrationProjectCreatorRunnableForSimpleIT(String version) {
