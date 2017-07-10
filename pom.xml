@@ -259,7 +259,7 @@
 					<includes>
 						<include>**/*IT.class</include>
 					</includes>
-					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false</argLine>
+					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -debug</argLine>
 					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
 				</configuration>
 			</plugin>
