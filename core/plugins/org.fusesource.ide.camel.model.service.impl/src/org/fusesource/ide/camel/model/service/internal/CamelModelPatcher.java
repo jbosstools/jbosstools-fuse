@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.camel.catalog.CamelCatalog;
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
@@ -29,8 +28,6 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class CamelModelPatcher {
 
-	private static final ComparableVersion v217Ref = new ComparableVersion("2.17.0");
-
 	private CamelModelPatcher() {
 		// util class
 	}
@@ -41,14 +38,9 @@ public class CamelModelPatcher {
 			// can't work with a null value here - thats usually caused by a non existing catalog
 			return;
 		}
-		ComparableVersion loadedVersion = new ComparableVersion(camelVersion);
-		if (loadedVersion.compareTo(v217Ref) < 0) {
-			// we've got a pre-2.17 version with a whacky catalog here - apply
-			// some fixes
-			applyMissingOneOfValuesForExpressionsPatch(loadedModel);
-			applyMissingWhenChildDefinitionForChoice(loadedModel);
-			applyFixesToComponentsSyntax(loadedModel);
-		}
+		applyMissingOneOfValuesForExpressionsPatch(loadedModel);
+		applyMissingWhenChildDefinitionForChoice(loadedModel);
+		applyFixesToComponentsSyntax(loadedModel);
 	}
 
 	private static void applyMissingOneOfValuesForExpressionsPatch(CamelModel loadedModel) {
@@ -113,6 +105,42 @@ public class CamelModelPatcher {
 		Component c = loadedModel.getComponent("google-drive");
 		if (c != null && "google-drive:drive:apiName/methodName".equalsIgnoreCase(c.getSyntax())) {
 			c.setSyntax("google-drive:apiName/methodName");
+		}
+		
+		// couchbase has a wrong syntax
+		c = loadedModel.getComponent("couchbase");
+		if (c != null && "couchbase:url".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("couchbase:protocol:hostname");
+		}
+		
+		// ignite-* has a wrong syntax including invalid []
+		c = loadedModel.getComponent("ignite-messaging");
+		if (c != null && "ignite-messaging:[topic]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-messaging:topic");
+		}
+		c = loadedModel.getComponent("ignite-queue");
+		if (c != null && "ignite-queue:[name]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-queue:name");
+		}
+		c = loadedModel.getComponent("ignite-compute");
+		if (c != null && "ignite-compute:[endpointId]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-compute:endpointId");
+		}
+		c = loadedModel.getComponent("ignite-idgen");
+		if (c != null && "ignite-idgen:[name]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-idgen:name");
+		}
+		c = loadedModel.getComponent("ignite-cache");
+		if (c != null && "ignite-cache:[cacheName]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-cache:cacheName");
+		}
+		c = loadedModel.getComponent("ignite-set");
+		if (c != null && "ignite-set:[name]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-set:name");
+		}
+		c = loadedModel.getComponent("ignite-events");
+		if (c != null && "ignite-events:[endpointId]".equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax("ignite-events:endpointId");
 		}
 	}
 }
