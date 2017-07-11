@@ -281,7 +281,9 @@ public class CamelCatalogUtils {
 	}
 	
 	public static boolean isCamelVersionWithoutProviderSupport(String version) {
-		if (version == null) return true; // happens if no camel dep is defined in the pom.xml
+		if (version == null) {
+			return true; // happens if no camel dep is defined in the pom.xml
+		}
 		ComparableVersion v1 = new ComparableVersion(version);
 		ComparableVersion v2 = new ComparableVersion("2.18.1");
 		return v1.compareTo(v2) < 0;
