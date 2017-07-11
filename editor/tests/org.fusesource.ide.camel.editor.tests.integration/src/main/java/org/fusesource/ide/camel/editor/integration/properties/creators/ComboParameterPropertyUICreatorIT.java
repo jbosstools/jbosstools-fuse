@@ -12,7 +12,8 @@ package org.fusesource.ide.camel.editor.integration.properties.creators;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Combo;
 import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;
@@ -32,9 +33,9 @@ public class ComboParameterPropertyUICreatorIT extends AbstractParameterProperty
 		parameter.setName("testParameterName");
 		parameter.setKind("parameter");
 		Eip eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 
 		final ComboParameterPropertyUICreator comboParameterPropertyUICreator = 
 				new ComboParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent,

@@ -12,14 +12,15 @@ package org.fusesource.ide.camel.editor.integration.properties.bean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Combo;
 import org.fusesource.ide.camel.editor.integration.properties.creators.AbstractParameterPropertySectionUICreatorITHelper;
 import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.junit.Test;
 
 /**
@@ -36,12 +37,12 @@ public class ScopeAttributeComboFieldPropertyUICreatorIT extends AbstractParamet
 	public void testUIDisplayed() throws Exception {
 
 		Parameter parameter = new Parameter();
-		parameter.setName(CamelBean.PROP_SCOPE);
+		parameter.setName(GlobalBeanEIP.PROP_SCOPE);
 		parameter.setKind("parameter");
 		Eip eip = new Eip();
-		final ArrayList<Parameter> parameters = new ArrayList<>();
-		parameters.add(parameter);
-		eip.setParameters(parameters);
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
 
 		final ScopeAttributeComboFieldPropertyUICreator scopeParameterPropertyUICreator = 
 				new ScopeAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent,
@@ -52,7 +53,7 @@ public class ScopeAttributeComboFieldPropertyUICreatorIT extends AbstractParamet
 		assertThat(control.getText()).isEqualTo(defaultScope);
 		
 		control.select(1);
-		assertThat(modelMap.get(CamelBean.PROP_SCOPE)).isEqualTo(prototypeScope);
-		assertThat(camelModelElement.getParameter(CamelBean.PROP_SCOPE)).isEqualTo(prototypeScope);
+		assertThat(modelMap.get(GlobalBeanEIP.PROP_SCOPE)).isEqualTo(prototypeScope);
+		assertThat(camelModelElement.getParameter(GlobalBeanEIP.PROP_SCOPE)).isEqualTo(prototypeScope);
 	}
 }
