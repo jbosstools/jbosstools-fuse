@@ -341,16 +341,17 @@ public class CamelCatalogUtils {
 	}
 		
 	public static boolean hasSpringBootDependency(List<org.apache.maven.model.Dependency> dependencies){
-		return dependencies != null
-				&& dependencies.stream()
-					.filter(dependency -> CAMEL_SPRING_BOOT_STARTER.equals(dependency.getArtifactId()))
-					.findFirst().isPresent();
+		return hasDependency(dependencies, CAMEL_SPRING_BOOT_STARTER);
+	}
+
+	public static boolean hasWildflyDependency(List<org.apache.maven.model.Dependency> dependencies){
+		return hasDependency(dependencies, CAMEL_WILDFLY);
 	}
 	
-	public static boolean hasWildflyDependency(List<org.apache.maven.model.Dependency> dependencies){
+	private static boolean hasDependency(List<org.apache.maven.model.Dependency> dependencies, String dependencyToCheck) {
 		return dependencies != null
 				&& dependencies.stream()
-					.filter(dependency -> CAMEL_WILDFLY.equals(dependency.getGroupId()))
+					.filter(dependency -> dependencyToCheck.equals(dependency.getArtifactId()))
 					.findFirst().isPresent();
 	}
 	
