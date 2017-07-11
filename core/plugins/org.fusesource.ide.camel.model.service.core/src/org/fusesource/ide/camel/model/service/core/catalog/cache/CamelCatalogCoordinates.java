@@ -59,11 +59,16 @@ public class CamelCatalogCoordinates {
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof CamelCatalogCoordinates) {
 			CamelCatalogCoordinates other = (CamelCatalogCoordinates)arg0;
-			return  getGroupId().equalsIgnoreCase(other.getGroupId()) &&
-					getArtifactId().equalsIgnoreCase(other.getArtifactId()) &&
-					getVersion().equalsIgnoreCase(other.getVersion());
+			return  isSameCoordinateIgnoringCase(getGroupId(), other.getGroupId()) &&
+					isSameCoordinateIgnoringCase(getArtifactId(), other.getArtifactId()) &&
+					isSameCoordinateIgnoringCase(getVersion(), other.getVersion());
 		}
 		return false; 
+	}
+
+	private boolean isSameCoordinateIgnoringCase(String us, String their) {
+		return us == null && their == null
+				|| us != null && us.equalsIgnoreCase(their);
 	}
 	
 	/* (non-Javadoc)
