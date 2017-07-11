@@ -120,7 +120,7 @@ public class PropertiesUtils {
 	 */
 	public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP, UriParameterKind kind) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
-			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(":");
+			int protocolSeparatorIdx = ((String) selectedEP.getParameter("uri")).indexOf(':');
 			if (protocolSeparatorIdx != -1) {
 				Component componentModel = CamelComponentUtils.getComponentModel(
 						((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
@@ -176,11 +176,11 @@ public class PropertiesUtils {
 				}
 			}
 		}
-		return new ArrayList<Parameter>();
+		return new ArrayList<>();
 	}
 
 	/**
-	 * checks wether the parameter has the given label
+	 * checks whether the parameter has the given label
 	 * 
 	 * @param label
 	 *            the label to check for
@@ -444,10 +444,9 @@ public class PropertiesUtils {
 	public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap<?,?> modelMap) {
 		if ("path".equalsIgnoreCase(p.getKind())) {
 			// simply rebuild the uri
-			String newUri = "";
 
 			// first build the path part
-			newUri = updatePathParams(selectedEP, c, c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
+			String newUri = updatePathParams(selectedEP, c, c.getSyntax(), p, value, getPathProperties(selectedEP), modelMap) + "?";
 
 			// now build the options
 			for (Parameter uriParam : c.getParameters()) {
@@ -463,8 +462,9 @@ public class PropertiesUtils {
 						&& pValue.equals(uriParam.getDefaultValue()))
 					continue;
 
-				if (newUri.endsWith("?") == false)
+				if (!newUri.endsWith("?")) {
 					newUri += "&";
+				}
 				newUri += String.format("%s=%s", pName, pValue);
 			}
 
