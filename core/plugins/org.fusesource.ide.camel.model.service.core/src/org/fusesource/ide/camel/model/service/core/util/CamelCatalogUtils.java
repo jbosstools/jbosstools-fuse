@@ -289,13 +289,6 @@ public class CamelCatalogUtils {
 		return v1.compareTo(v2) < 0;
 	}
 	
-	public static boolean isCamelVersionWithoutCatalogSupport(String version) {
-		if (version == null) return true; // happens if no camel dep is defined in the pom.xml
-		ComparableVersion v1 = new ComparableVersion(version);
-		ComparableVersion v2 = new ComparableVersion("2.17.0");
-		return v1.compareTo(v2) < 0;
-	}
-	
 	public static CamelCatalogCoordinates getDefaultCatalogCoordinates() {
 		return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, DEFAULT_CAMEL_VERSION);
 	}
