@@ -730,9 +730,10 @@ public class PropertiesUtils {
 	 * @param props
 	 */
 	public static void initializePropertyNames(Map<String, Parameter> props) {
-		for (String name : props.keySet()) {
-			Parameter p = props.get(name);
-			p.setName(name);
+		for(Map.Entry<String, Parameter> entry : props.entrySet()){
+			Parameter parameter = entry.getValue();
+			String name = entry.getKey();
+			parameter.setName(name);
 		}
 	}
 	
@@ -742,9 +743,10 @@ public class PropertiesUtils {
 	 * @param props
 	 */
 	public static void initializeComponentPropertyNames(Map<String, ComponentProperty> props) {
-		for (String name : props.keySet()) {
-			ComponentProperty p = props.get(name);
-			p.setName(name);
+		for(Map.Entry<String, ComponentProperty> entry : props.entrySet()){
+			ComponentProperty componentProperty = entry.getValue();
+			String name = entry.getKey();
+			componentProperty.setName(name);
 		}
 	}
 }
