@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,14 +197,13 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static String getFuseVersionForCamelVersion(String camelVersion) {
-		return CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
-//		String bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
+		String bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.get(camelVersion);
 		// TODO: revisit once https://issues.apache.org/jira/browse/CAMEL-8502 got solved
-//		if (bomVersion == null) {
-			// seems its not a Fuse Camel version so we currently don't support it
-//			bomVersion = LATEST_BOM_VERSION;
-//		}
-//		return bomVersion;
+		if (bomVersion == null) {
+			// seems it's not a Fuse Camel version so we currently don't support it, so try to get the latest known BOM version
+			bomVersion = CAMEL_VERSION_2_FUSE_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+		}
+		return bomVersion;
 	}
 	
 	/**
