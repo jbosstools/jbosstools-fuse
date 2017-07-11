@@ -11,6 +11,7 @@
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class FuseIntegrationProjectCreatorRunnableForAMQIT extends FuseIntegrati
 		//TODO: Known limitations see https://issues.jboss.org/browse/FUSETOOLS-1986
 		assumeFalse("Blueprint with 2.15 redhat version is not working, see https://issues.jboss.org/browse/FUSETOOLS-1986", camelVersion.startsWith("2.15"));
 		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
+		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse"));
 		
 		testProjectCreation("-AMQBlueprintProject-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/camel-blueprint.xml", null);
 	}
