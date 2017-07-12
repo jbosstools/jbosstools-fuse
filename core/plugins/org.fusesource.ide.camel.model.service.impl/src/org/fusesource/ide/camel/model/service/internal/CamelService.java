@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
@@ -48,23 +49,16 @@ public class CamelService implements ICamelManagerService {
 
 	private Map<CamelCatalogCoordinates, CamelCatalog> cachedCatalogs = new HashMap<>();
 	
-	private MavenVersionManager tmpMan;
 	private File tempFolder;
 
 	public CamelService() {
-		tmpMan = new MavenVersionManager();
 		try {
 			tempFolder = File.createTempFile("grape","m2repo");
 			tempFolder.delete();
 			tempFolder.mkdirs();
-			tmpMan.setCacheDirectory(tempFolder.getPath());
 		} catch (IOException ex) {
 			CamelServiceImplementationActivator.pluginLog().logError(ex);
 			tempFolder = null;
-		} finally {
-			for (List<String> rep : new CamelMavenUtils().getAdditionalRepos()) {
-				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
-			}
 		}
 	}
 	
@@ -266,6 +260,21 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public boolean isCamelVersionExisting(String camelVersion) {
+		MavenVersionManager tmpMan = new MavenVersionManager();
+		try {
+			File folder = File.createTempFile("grape", UUID.randomUUID().toString());
+			folder.delete();
+			folder.mkdirs();
+			folder.deleteOnExit();
+			tmpMan.setCacheDirectory(folder.getPath());
+			tmpMan.setLog(true);
+		} catch (IOException ex) {
+			CamelServiceImplementationActivator.pluginLog().logError(ex);
+		} finally {
+			for (List<String> rep : new CamelMavenUtils().getAdditionalRepos()) {
+				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
+			}
+		}
 		return tmpMan.loadVersion(camelVersion);
 	}
 	

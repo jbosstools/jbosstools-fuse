@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.commons;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -36,9 +35,8 @@ public class ValidateSyntaxInCatalogIT {
 	@Test
 	public void checkComponentSyntaxAreValid() throws Exception {
 		StringBuilder sb = new StringBuilder();
-		List<String> supportedCamelVersions = CamelCatalogUtils.getCamelVersionsToTestWith();
-		checkForRuntimeProvider(sb, supportedCamelVersions, CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
-		checkForRuntimeProvider(sb, Arrays.asList("2.18.1.redhat-000012"), CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
+		checkForRuntimeProvider(sb, CamelCatalogUtils.getCamelVersionsToTestWith(), CamelCatalogUtils.RUNTIME_PROVIDER_KARAF);
+		checkForRuntimeProvider(sb, CamelCatalogUtils.getPureFISVersions(), CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT);
 		if (sb.length() != 0) {
 			fail(sb.toString());
 		}
