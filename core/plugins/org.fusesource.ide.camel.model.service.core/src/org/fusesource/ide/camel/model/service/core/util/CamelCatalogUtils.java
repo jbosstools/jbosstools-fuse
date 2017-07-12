@@ -40,9 +40,9 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class CamelCatalogUtils {
 	// TODO change the URL once we merged it into master...all versions should point to the file on master
-	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/camel2bom.properties";
-	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/fismarker.properties";
-	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/testversions.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
+	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
+	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/testversions.properties";
 	
 	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
 	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
