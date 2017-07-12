@@ -179,6 +179,10 @@ public class CamelCatalogUtils {
 		return TEST_CAMEL_VERSIONS;
 	}
 	
+	public static List<String> getPureFISVersions() {
+		return Arrays.asList(PURE_FIS_CAMEL_VERSIONS.keySet().toArray(new String[PURE_FIS_CAMEL_VERSIONS.size()]));
+	}
+	
 	/**
 	 * returns the latest and greatest supported Camel version we have a catalog 
 	 * for. If there are 2 catalogs with the same version (for instance 2.15.1 and 
