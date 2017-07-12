@@ -101,46 +101,21 @@ public class CamelModelPatcher {
 	}
 	
 	private static void applyFixesToComponentsSyntax(CamelModel loadedModel) {
-		// google-drive has a wrong syntax
-		Component c = loadedModel.getComponent("google-drive");
-		if (c != null && "google-drive:drive:apiName/methodName".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("google-drive:apiName/methodName");
-		}
-		
-		// couchbase has a wrong syntax
-		c = loadedModel.getComponent("couchbase");
-		if (c != null && "couchbase:url".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("couchbase:protocol:hostname");
-		}
-		
-		// ignite-* has a wrong syntax including invalid []
-		c = loadedModel.getComponent("ignite-messaging");
-		if (c != null && "ignite-messaging:[topic]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-messaging:topic");
-		}
-		c = loadedModel.getComponent("ignite-queue");
-		if (c != null && "ignite-queue:[name]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-queue:name");
-		}
-		c = loadedModel.getComponent("ignite-compute");
-		if (c != null && "ignite-compute:[endpointId]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-compute:endpointId");
-		}
-		c = loadedModel.getComponent("ignite-idgen");
-		if (c != null && "ignite-idgen:[name]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-idgen:name");
-		}
-		c = loadedModel.getComponent("ignite-cache");
-		if (c != null && "ignite-cache:[cacheName]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-cache:cacheName");
-		}
-		c = loadedModel.getComponent("ignite-set");
-		if (c != null && "ignite-set:[name]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-set:name");
-		}
-		c = loadedModel.getComponent("ignite-events");
-		if (c != null && "ignite-events:[endpointId]".equalsIgnoreCase(c.getSyntax())) {
-			c.setSyntax("ignite-events:endpointId");
+		applyFixToComponent(loadedModel, "google-drive", "google-drive:drive:apiName/methodName", "google-drive:apiName/methodName");
+		applyFixToComponent(loadedModel, "couchbase", "couchbase:url", "couchbase:protocol:hostname");
+		applyFixToComponent(loadedModel, "ignite-messaging", "ignite-messaging:[topic]", "ignite-messaging:topic");
+		applyFixToComponent(loadedModel, "ignite-queue", "ignite-queue:[name]", "ignite-queue:name");
+		applyFixToComponent(loadedModel, "ignite-compute", "ignite-compute:[endpointId]", "ignite-compute:endpointId");
+		applyFixToComponent(loadedModel, "ignite-idgen", "ignite-idgen:[name]", "ignite-idgen:name");
+		applyFixToComponent(loadedModel, "ignite-cache", "ignite-cache:[cacheName]", "ignite-cache:[cacheName]");
+		applyFixToComponent(loadedModel, "ignite-set", "ignite-set:[name]", "ignite-set:name");
+		applyFixToComponent(loadedModel, "ignite-events", "ignite-events:[endpointId]", "ignite-events:endpointId");
+	}
+
+	private static void applyFixToComponent(CamelModel loadedModel, String componentScheme, String invalidSyntaxBugFromOlderVersion, String correctSyntax) {
+		Component c = loadedModel.getComponent(componentScheme);
+		if (c != null && invalidSyntaxBugFromOlderVersion.equalsIgnoreCase(c.getSyntax())) {
+			c.setSyntax(correctSyntax);
 		}
 	}
 }
