@@ -39,24 +39,30 @@ import org.fusesource.ide.foundation.core.util.Strings;
  * @author lhein
  */
 public class CamelCatalogUtils {
-	
-	private static final String CAMEL_VERSION_LATEST_2_19_X = "2.19.1";
-	private static final String CAMEL_VERSION_LATEST_2_18_X = "2.18.4";
-	private static final String CAMEL_VERSION_LATEST_2_17_X = "2.17.7";
-	private static final String FUSE_63_CAMEL_VERSION_2170_630_224 = "2.17.0.redhat-630224";
-	private static final String FUSE_63_CAMEL_VERSION_2170_630_254 = "2.17.0.redhat-630254";
-	private static final String FUSE_63_CAMEL_VERSION_2170_630_187 = "2.17.0.redhat-630187";
-	private static final String FIS_20_CAMEL_VERSION_2181_000012 = "2.18.1.redhat-000012";
-	private static final String FIS_20_R1_CAMEL_VERSION_2181_000015 = "2.18.1.redhat-000015";
-	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R1_CAMEL_VERSION_2181_000015;
 	// TODO change the URL once we merged it into master...all versions should point to the file on master
 	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/camel2bom.properties";
 	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/fismarker.properties";
 	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/lhein/fuseide/FUSETOOLS-2263/configuration/testversions.properties";
 	
+	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
+	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
+	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
+
+	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
+	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
+	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
+	
+	private static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
+	private static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
+	
+	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R1_CAMEL_VERSION;
+	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
+	private static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.1";
+	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R2_CAMEL_VERSION;
+	private static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -76,9 +82,6 @@ public class CamelCatalogUtils {
 	public static final String GAV_KEY_GROUPID = "groupId";
 	public static final String GAV_KEY_ARTIFACTID = "artifactId";
 	public static final String GAV_KEY_VERSION = "version";
-	
-	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
-	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
 	
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
@@ -112,13 +115,13 @@ public class CamelCatalogUtils {
 			// DEFAULTS
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_CAMEL_VERSION_2170_630_187, "6.3.0.redhat-187");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_CAMEL_VERSION_2170_630_224, FUSE_63_R1_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_CAMEL_VERSION_2170_630_254, FUSE_63_R2_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R0_CAMEL_VERSION, "6.3.0.redhat-187");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R1_CAMEL_VERSION, FUSE_63_R1_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R2_CAMEL_VERSION, FUSE_63_R2_BOM_VERSION);
 			
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FUSE_63_CAMEL_VERSION_2170_630_187);
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FUSE_63_CAMEL_VERSION_2170_630_224);
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FIS_20_CAMEL_VERSION_2181_000012);	
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FUSE_63_R0_CAMEL_VERSION);
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FUSE_63_R1_CAMEL_VERSION);
+			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(FIS_20_R0_CAMEL_VERSION);	
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(DEFAULT_CAMEL_VERSION);
 		}
 		
@@ -135,8 +138,8 @@ public class CamelCatalogUtils {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_CAMEL_VERSION_2181_000012, "2.2.170.redhat-000010");			
-			PURE_FIS_CAMEL_VERSIONS.put(DEFAULT_CAMEL_VERSION,  "2.2.170.redhat-000013");
+			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R0_CAMEL_VERSION, "2.2.170.redhat-000010");			
+			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000013");
 		}
 
 		try {
@@ -150,13 +153,9 @@ public class CamelCatalogUtils {
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Test Camel Versions list from online repo. Falling back to defaults.", ex);
 
-			TEST_CAMEL_VERSIONS.add(FUSE_63_CAMEL_VERSION_2170_630_187);
-			TEST_CAMEL_VERSIONS.add(FUSE_63_CAMEL_VERSION_2170_630_224);
-			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_2_17_X);
-			TEST_CAMEL_VERSIONS.add(FIS_20_CAMEL_VERSION_2181_000012);
-			TEST_CAMEL_VERSIONS.add(DEFAULT_CAMEL_VERSION);
-			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_2_18_X);
-			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_2_19_X);
+			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_COMMUNITY);
+			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_63);
+			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_FIS_20);
 		}
 		
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(PURE_FIS_CAMEL_VERSIONS.keySet());
