@@ -1176,7 +1176,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 		}
 
 		private int getArrowDirection() {
-			int direction = PositionConstants.EAST;
+			int direction;
 			if (isInState(STATE_EXPANDED | STATE_PINNED_OPEN))
 				direction = dock == PositionConstants.WEST ? PositionConstants.WEST
 						: PositionConstants.EAST;
