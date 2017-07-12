@@ -86,8 +86,6 @@ public class CamelService implements ICamelManagerService {
 		String runtimeProvider = CamelCatalogUtils.getRuntimeProviderFromDependency(coords.asMavenDependency());
 		if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
 			catalog.setRuntimeProvider(new SpringBootRuntimeProvider());
-//			} else if (CamelCatalogUtils.RUNTIME_PROVIDER_WILDFLY.equalsIgnoreCase(runtimeProvider)) {
-//				catalog.setRuntimeProvider(new WildFlyRuntimeProvider());
 		} else {
 			catalog.setRuntimeProvider(new KarafRuntimeProvider());
 		}
