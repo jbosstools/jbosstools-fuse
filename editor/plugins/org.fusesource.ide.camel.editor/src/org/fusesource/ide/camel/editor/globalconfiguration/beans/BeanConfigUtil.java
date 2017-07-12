@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
@@ -34,11 +35,12 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.internal.ui.viewsupport.JavaUILabelProvider;
 import org.eclipse.jdt.internal.ui.wizards.NewClassCreationWizard;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
+import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -167,6 +169,36 @@ public class BeanConfigUtil {
 		return null;
 	}
 
+	private String openStaticPublicMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+		IType foundClass = jproject.findType(className);
+		if (foundClass != null) {
+			return openMethodDialog(shell, getStaticPublicMethods(foundClass), UIMessages.beanConfigUtilSelectStaticPublicMethod);
+		}
+		return null;
+	}
+
+	private IMethod[] getStaticPublicMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> {
+					try {
+						return Flags.isStatic(method.getFlags()) && Flags.isPublic(method.getFlags());
+					} catch (JavaModelException e) {
+						return false;
+					}
+				}).toArray(IMethod[]::new);
+	}
+
+	private IMethod[] getPublicNoArgMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> {
+					try {
+						return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0;
+					} catch (JavaModelException e) {
+						return false;
+					}
+				}).toArray(IMethod[]::new);
+	}
+
 	private String openNoArgMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
@@ -176,15 +208,32 @@ public class BeanConfigUtil {
 	}
 
 	private String openMethodDialog(Shell shell, IMethod[] methods, String dialogMessage) {
-		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new JavaUILabelProvider());
+		MethodSelectionDialog dialog = new MethodSelectionDialog(shell, new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT));
 		dialog.setTitle(UIMessages.beanConfigUtilMethodSelectionDialogTitle);
 		dialog.setMessage(dialogMessage);
+		dialog.setMultipleSelection(false);
+		dialog.setEmptyListMessage(UIMessages.beanConfigUtilNoMethodsAvailable);
 		dialog.setElements(methods);
+		dialog.setHelpAvailable(false);
 		if (dialog.open()  == SelectionDialog.OK) {
 			IMethod result = (IMethod) dialog.getFirstResult();
 			return result.getElementName();
 		}
 		return null;
+	}
+	
+	private class MethodSelectionDialog extends ElementListSelectionDialog {
+
+		public MethodSelectionDialog(Shell parent, ILabelProvider renderer) {
+			super(parent, renderer);
+		}
+		@Override
+	    public void setElements(Object[] elements) {
+	    	super.setElements(elements);
+	    	if (elements == null || elements.length == 0) {
+	    		setMessage(UIMessages.beanConfigUtilNoMethodsAvailable);
+	    	}
+	    }		
 	}
 
 	private IMethod[] getNoParamMethods(IType foundClass) throws JavaModelException {
@@ -196,7 +245,7 @@ public class BeanConfigUtil {
 	private String openMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			return openMethodDialog(shell, foundClass.getMethods(), UIMessages.beanConfigUtilMethodSelectionMessage);
+			return openMethodDialog(shell, getPublicNoArgMethods(foundClass), UIMessages.beanConfigUtilMethodSelectionMessage);
 		}
 		return null;
 	}
@@ -221,6 +270,20 @@ public class BeanConfigUtil {
 			if (jproject.exists()) {
 				try {
 					return openMethodDialog(jproject, className, shell);
+				} catch (JavaModelException e) {
+					CamelEditorUIActivator.pluginLog().logError(e);
+				}
+			}
+		}
+		return null;
+	}
+
+	public String handlePublicStaticMethodBrowse(IProject project, String className, Shell shell) {
+		if (project != null) {
+			IJavaProject jproject = JavaCore.create(project);
+			if (jproject.exists()) {
+				try {
+					return openStaticPublicMethodDialog(jproject, className, shell);
 				} catch (JavaModelException e) {
 					CamelEditorUIActivator.pluginLog().logError(e);
 				}
