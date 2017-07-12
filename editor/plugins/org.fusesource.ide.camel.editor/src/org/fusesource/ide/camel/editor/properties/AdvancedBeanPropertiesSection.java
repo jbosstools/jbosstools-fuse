@@ -118,6 +118,15 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		return txtFieldCreator;
 	}
 
+	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithPublicStaticMethodBrowse(final Parameter p, final Composite page) {
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
+				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+		txtFieldCreator.setColumnSpan(2);
+		txtFieldCreator.create();
+		createPublicStaticMethodBrowseButton(page, txtFieldCreator.getControl());
+		return txtFieldCreator;
+	}
+
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithNoArgMethodBrowse(final Parameter p, final Composite page) {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
 				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
@@ -187,7 +196,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			fieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName) || GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
-			fieldCreator = createTextFieldWithMethodBrowse(p, page);
+			fieldCreator = createTextFieldWithPublicStaticMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			fieldCreator = createTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
@@ -304,6 +313,27 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;
 					String methodName = beanConfigUtil.handleMethodBrowse(project, className,
+							getDisplay().getActiveShell());
+					if (methodName != null) {
+						field.setText(methodName);
+					}
+				}
+			}
+
+		});
+	}
+
+	private void createPublicStaticMethodBrowseButton(Composite composite, Text field) {
+		Button browseMethodButton = new Button(composite, SWT.PUSH);
+		browseMethodButton.setText("..."); //$NON-NLS-1$
+		browseMethodButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+				if (control != null) {
+					final IProject project = selectedEP.getCamelFile().getResource().getProject();
+					String className = (String) control;
+					String methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					if (methodName != null) {
 						field.setText(methodName);

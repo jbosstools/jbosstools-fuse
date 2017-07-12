@@ -75,6 +75,8 @@ public class UIMessages extends NLS {
 	public static String autoLayoutActionTooltip;
 	public static String beanClassExistsValidatorErrorBeanClassMandatory;
 	public static String beanClassExistsValidatorErrorBeanClassMustExist;
+	public static String beanConfigUtilNoMethodsAvailable;
+	public static String beanConfigUtilSelectStaticPublicMethod;
 	public static String beanConfigUtilMethodSelectionDialogTitle;
 	public static String beanConfigUtilMethodSelectionErrorCreatingXML;
 	public static String beanConfigUtilMethodSelectionErrorNoTypeFound;
