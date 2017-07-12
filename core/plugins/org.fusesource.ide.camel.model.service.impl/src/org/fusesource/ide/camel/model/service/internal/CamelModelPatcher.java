@@ -107,7 +107,7 @@ public class CamelModelPatcher {
 		applyFixToComponent(loadedModel, "ignite-queue", "ignite-queue:[name]", "ignite-queue:name");
 		applyFixToComponent(loadedModel, "ignite-compute", "ignite-compute:[endpointId]", "ignite-compute:endpointId");
 		applyFixToComponent(loadedModel, "ignite-idgen", "ignite-idgen:[name]", "ignite-idgen:name");
-		applyFixToComponent(loadedModel, "ignite-cache", "ignite-cache:[cacheName]", "ignite-cache:[cacheName]");
+		applyFixToComponent(loadedModel, "ignite-cache", "ignite-cache:[cacheName]", "ignite-cache:cacheName");
 		applyFixToComponent(loadedModel, "ignite-set", "ignite-set:[name]", "ignite-set:name");
 		applyFixToComponent(loadedModel, "ignite-events", "ignite-events:[endpointId]", "ignite-events:endpointId");
 	}
