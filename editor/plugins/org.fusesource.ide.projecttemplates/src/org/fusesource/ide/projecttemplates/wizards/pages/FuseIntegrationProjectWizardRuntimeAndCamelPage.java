@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +155,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionCombo = new Combo(camelGrp, SWT.RIGHT | SWT.DROP_DOWN);
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
-		camelVersionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream().toArray(String[]::new));
+		camelVersionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream().sorted( (String o1, String o2) -> o2.compareToIgnoreCase(o1)).toArray(String[]::new));
 		camelVersionCombo.setText(CamelCatalogUtils.getLatestCamelVersion());
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
