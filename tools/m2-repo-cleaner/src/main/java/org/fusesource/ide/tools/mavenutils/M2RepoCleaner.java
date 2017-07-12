@@ -33,6 +33,7 @@ public class M2RepoCleaner {
 	private static long checkedFiles = 0;
 	private static long checkedFolders = 0;
 	private static List<String> corruptedFiles = new ArrayList<>();
+	private static List<String> lastUpdatedFileDeleted = new ArrayList<>();
 	
 	private static boolean deleteLastUpdatedFiles = Boolean.parseBoolean(System.getProperty(ARG_DELETE_LASTUPDATED, "false"));
 	
@@ -68,8 +69,15 @@ public class M2RepoCleaner {
 			}
 		}
 		System.out.println("FINISHED - We checked " + checkedFiles + " files in " + checkedFolders + " folders with " + corruptedFiles.size() + " corrupted files detected!");
-		for (String f : corruptedFiles) {
-			System.err.println(f);
+		corruptedFiles.forEach(System.err::println);
+		
+		if (deleteLastUpdatedFiles) {
+			if(lastUpdatedFileDeleted.isEmpty()){
+				System.out.println("No .lastUpdated file found and deleted.");
+			} else {
+				System.out.println("Deleted "+ lastUpdatedFileDeleted.size() + " .lastupdated file.");
+				lastUpdatedFileDeleted.forEach(System.err::println);
+			}
 		}
 	}
 	
@@ -124,10 +132,9 @@ public class M2RepoCleaner {
 	}
 	
 	private static void handleLastUpdatedFile(File file) {
-		handleCorruptedZip(file);
-//		corruptedFiles.add(file.getPath());
-//		if (file.isFile() && file.exists()) {
-//			file.delete();
-//		}
+		lastUpdatedFileDeleted.add(file.getPath());
+		if (file.isFile() && file.exists()) {
+			file.delete();
+		}
 	}
 }
