@@ -56,7 +56,9 @@ public class M2RepoCleaner {
 		
 		String[] paths = reposPath.split(";");
 		for (String path : paths) {
-			if (path.trim().isEmpty()) continue;
+			if (path.trim().isEmpty()) {
+				continue;
+			}
 			
 			File repoFolder = new File(path);
 			if (!repoFolder.exists() || !repoFolder.isDirectory()) {
@@ -94,9 +96,9 @@ public class M2RepoCleaner {
 			while (entries.hasMoreElements()) {
 				ZipEntry ze = entries.nextElement();
 				ze.getName();
-				InputStream inputStream = zf.getInputStream(ze);
-				inputStream.read();
-				inputStream.close();
+				try(InputStream inputStream = zf.getInputStream(ze)){
+					inputStream.read();
+				}
 			}
 		} catch (IOException ex) {
 			handleCorruptedZip(file);
@@ -109,7 +111,9 @@ public class M2RepoCleaner {
 		if (parentFolder != null && parentFolder.exists() && parentFolder.isDirectory()) {
 			try {
 				for (File f : parentFolder.listFiles()) {
-					if ("..".equals(f.getName())) continue;
+					if ("..".equals(f.getName())) {
+						continue;
+					}
 					Files.delete(f.toPath());
 				}
 				Files.delete(parentFolder.toPath());
