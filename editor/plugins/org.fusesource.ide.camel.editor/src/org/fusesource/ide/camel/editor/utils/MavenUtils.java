@@ -34,7 +34,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
@@ -111,6 +110,28 @@ public class MavenUtils {
 				}
 			});
 		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	/**
+	 * Instead of creating a separate progress dialog, use the incoming one.
+	 * Useful for wizards.
+	 * 
+	 * @param compDeps
+	 * @param project
+	 * @param monitor
+	 */
+	public void updateMavenDependenciesWithMonitor(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project, IProgressMonitor monitor) throws CoreException {
+		if (compDeps == null || compDeps.isEmpty()) {
+			CamelEditorUIActivator.pluginLog()
+			.logWarning("Unable to add component dependencies because no dependencies were specified.");
+			return;
+		}
+		monitor.subTask(UIMessages.updatePomDependenciesProgressDialogLabel);
+		try {
+			internalUpdateMavenDependencies(compDeps, project);
+		} catch (CoreException ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);
 		}
 	}
