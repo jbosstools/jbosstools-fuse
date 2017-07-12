@@ -11,6 +11,7 @@
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 	@Test
 	public void testCXFCodeFirstSpringProjectCreation() throws Exception {
 		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
+		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse"));
 		testProjectCreation("-CXFCodeFirstSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
