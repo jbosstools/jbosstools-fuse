@@ -183,6 +183,7 @@ public class BeanConfigUtil {
 					try {
 						return Flags.isStatic(method.getFlags()) && Flags.isPublic(method.getFlags());
 					} catch (JavaModelException e) {
+						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & static flags.", e); //$NON-NLS-1$
 						return false;
 					}
 				}).toArray(IMethod[]::new);
@@ -194,6 +195,7 @@ public class BeanConfigUtil {
 					try {
 						return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0;
 					} catch (JavaModelException e) {
+						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & no arguments.", e); //$NON-NLS-1$
 						return false;
 					}
 				}).toArray(IMethod[]::new);
