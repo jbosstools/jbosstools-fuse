@@ -31,6 +31,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -167,15 +168,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				validate();
 			}
 		});
-		camelVersionCombo.addKeyListener(new KeyListener() {
+		camelVersionCombo.addKeyListener(new KeyAdapter() {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				setMessage(null);
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
 			}
 		});
 
