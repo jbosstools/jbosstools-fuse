@@ -109,15 +109,6 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		return txtFieldCreator;
 	}
 	
-	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithMethodBrowse(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
-				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
-		txtFieldCreator.setColumnSpan(2);
-		txtFieldCreator.create();
-		createMethodBrowseButton(page, txtFieldCreator.getControl());
-		return txtFieldCreator;
-	}
-
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithPublicStaticMethodBrowse(final Parameter p, final Composite page) {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
 				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
@@ -282,27 +273,13 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 
 	private void createNoArgMethodBrowseButton(Composite composite, Text field) {
-		Button browseBeanButton = new Button(composite, SWT.PUSH);
-		browseBeanButton.setText("..."); //$NON-NLS-1$
-		browseBeanButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
-				if (control != null) {
-					final IProject project = selectedEP.getCamelFile().getResource().getProject();
-					String className = (String) control;
-					String methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
-							getDisplay().getActiveShell());
-					if (methodName != null) {
-						field.setText(methodName);
-					}
-				}
-			}
-
-		});
+		createMethodBrowseBtn(composite, field, PUBLIC_NO_ARG_METHOD_BROWSE);
 	}
 
-	private void createMethodBrowseButton(Composite composite, Text field) {
+	private static final int PUBLIC_STATIC_METHOD_BROWSE = 1;
+	private static final int PUBLIC_NO_ARG_METHOD_BROWSE = 2;
+	
+	private void createMethodBrowseBtn(Composite composite, Text field, int methodBrowseType) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
 		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
@@ -312,8 +289,21 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 				if (control != null) {
 					final IProject project = selectedEP.getCamelFile().getResource().getProject();
 					String className = (String) control;
-					String methodName = beanConfigUtil.handleMethodBrowse(project, className,
-							getDisplay().getActiveShell());
+					String methodName = null;
+					switch (methodBrowseType) {
+					case PUBLIC_STATIC_METHOD_BROWSE:
+						methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
+								getDisplay().getActiveShell());
+						break;
+					case PUBLIC_NO_ARG_METHOD_BROWSE:
+						methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
+								getDisplay().getActiveShell());
+						break;
+					default:
+						// default to standard method browse
+						methodName = beanConfigUtil.handleMethodBrowse(project, className,
+								getDisplay().getActiveShell());
+					}
 					if (methodName != null) {
 						field.setText(methodName);
 					}
@@ -324,23 +314,6 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 
 	private void createPublicStaticMethodBrowseButton(Composite composite, Text field) {
-		Button browseMethodButton = new Button(composite, SWT.PUSH);
-		browseMethodButton.setText("..."); //$NON-NLS-1$
-		browseMethodButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
-				if (control != null) {
-					final IProject project = selectedEP.getCamelFile().getResource().getProject();
-					String className = (String) control;
-					String methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
-							getDisplay().getActiveShell());
-					if (methodName != null) {
-						field.setText(methodName);
-					}
-				}
-			}
-
-		});
+		createMethodBrowseBtn(composite, field, PUBLIC_STATIC_METHOD_BROWSE);
 	}
 }
