@@ -91,11 +91,9 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
-			if (event.widget == txtKarafDir) {
-				if (validate()) {
-					String installDir = txtKarafDir.getText();
-					model.setKarafInstallDir(installDir);
-				}
+			if (event.widget == txtKarafDir && validate()) {
+				String installDir = txtKarafDir.getText();
+				model.setKarafInstallDir(installDir);
 			}
 		}
 
