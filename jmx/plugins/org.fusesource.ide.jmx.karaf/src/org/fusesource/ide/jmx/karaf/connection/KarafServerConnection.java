@@ -184,8 +184,7 @@ public class KarafServerConnection implements IConnectionWrapper, IServerListene
 		String conUrl = KarafUtils.getJMXConnectionURL(s);
 		JMXServiceURL url = new JMXServiceURL(conUrl); 
 		jmxc = JMXConnectorFactory.connect(url, envMap); 
-		MBeanServerConnection mbsc = jmxc.getMBeanServerConnection(); 
-		return mbsc; 
+		return jmxc.getMBeanServerConnection(); 
 	}
 	
 	protected void cleanupConnection(IServer server, MBeanServerConnection connection) {
