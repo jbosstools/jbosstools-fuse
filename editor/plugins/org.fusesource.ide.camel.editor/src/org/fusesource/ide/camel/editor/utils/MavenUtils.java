@@ -60,7 +60,7 @@ public class MavenUtils {
 	 * @throws CoreException
 	 *             if the project's POM file could not be read
 	 */
-	public String javaSourceFolder() throws CoreException {
+	public String javaSourceFolder() {
 		String name = new CamelMavenUtils().getMavenModel(CamelUtils.project()).getBuild().getSourceDirectory();
 		if (name == null)
 			return JAVA_PATH;
@@ -101,11 +101,7 @@ public class MavenUtils {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100);
-					try {
-						internalUpdateMavenDependencies(compDeps, project);
-					} catch (CoreException ex) {
-						CamelEditorUIActivator.pluginLog().logError(ex);
-					}
+					internalUpdateMavenDependencies(compDeps, project);
 					monitor.done();
 				}
 			});
@@ -119,7 +115,7 @@ public class MavenUtils {
 	 * @param project
 	 * @throws CoreException
 	 */
-	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
+	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) {
 		final File pomFile = getPomFile(project);
 		CamelMavenUtils cmu = new CamelMavenUtils();
 		final Model model = cmu.getMavenModel(project);
