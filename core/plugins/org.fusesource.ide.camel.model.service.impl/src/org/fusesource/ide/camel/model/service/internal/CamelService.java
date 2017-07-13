@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +56,20 @@ public class CamelService implements ICamelManagerService {
 
 	public CamelService() {
 		try {
-			tempFolder = File.createTempFile("grape","m2repo");
-			tempFolder.delete();
-			tempFolder.mkdirs();
+			Path grapeFolder = getGrapeFolderInsideTempFolder();
+			Files.createTempDirectory(grapeFolder,"m2repo");
 		} catch (IOException ex) {
 			CamelServiceImplementationActivator.pluginLog().logError(ex);
 			tempFolder = null;
 		}
+	}
+
+	private Path getGrapeFolderInsideTempFolder() throws IOException {
+		Path grapeFolder = Paths.get(System.getProperty("java.io.tmpdir"),"grape");
+		if(!grapeFolder.toFile().exists()){
+			Files.createDirectory(grapeFolder);
+		}
+		return grapeFolder;
 	}
 	
 	private CamelCatalog getCatalog(CamelCatalogCoordinates coords) {
@@ -260,11 +270,11 @@ public class CamelService implements ICamelManagerService {
 	public boolean isCamelVersionExisting(String camelVersion) {
 		MavenVersionManager tmpMan = new MavenVersionManager();
 		try {
-			File folder = File.createTempFile("grape", UUID.randomUUID().toString());
-			folder.delete();
-			folder.mkdirs();
-			folder.deleteOnExit();
-			tmpMan.setCacheDirectory(folder.getPath());
+			Path grapeFolder = getGrapeFolderInsideTempFolder();
+			Path tmpFolderPath = Files.createTempDirectory(grapeFolder, UUID.randomUUID().toString());
+			File tmpFolder = tmpFolderPath.toFile();
+			tmpFolder.deleteOnExit();
+			tmpMan.setCacheDirectory(tmpFolder.getPath());
 			tmpMan.setLog(true);
 		} catch (IOException ex) {
 			CamelServiceImplementationActivator.pluginLog().logError(ex);
