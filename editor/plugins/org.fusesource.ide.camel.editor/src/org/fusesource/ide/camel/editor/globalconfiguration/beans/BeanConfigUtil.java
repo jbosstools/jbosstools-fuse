@@ -72,13 +72,24 @@ public class BeanConfigUtil {
 	/*
 	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
 	 */
-	public String handleNewClassWizard(IProject project, Shell shell) {	
-		NewClassWizardPage ncwp = new NewClassWizardPage();
-		ncwp.setAddComments(true, true);
-		setInitialPackageFrament(project, ncwp);
-		NewClassCreationWizard newClassCreationWizard = new NewClassCreationWizard(ncwp, true);
+	public String handleNewClassWizard(IProject project, Shell shell, String initialClassName) {	
+		NewClassCreationWizard newClassCreationWizard = new NewClassCreationWizard();
 		newClassCreationWizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
 		WizardDialog wd = new WizardDialog(shell, newClassCreationWizard);
+		wd.create();
+		NewClassWizardPage ncwp = (NewClassWizardPage) newClassCreationWizard.getPage("NewClassWizardPage"); //$NON-NLS-1$
+		ncwp.setAddComments(true, true);
+		if (!Strings.isEmpty(initialClassName)) {
+			if (initialClassName.indexOf('.') > -1) {
+				String packageName = initialClassName.substring(0, initialClassName.lastIndexOf('.'));
+				String simpleClassName = initialClassName.substring(initialClassName.lastIndexOf('.') + 1);
+				ncwp.setTypeName(simpleClassName, true);
+				setInitialPackageFramentWithName(project, ncwp, packageName);
+			} else {
+				ncwp.setTypeName(initialClassName, true);
+				setInitialPackageFrament(project, ncwp);
+			}
+		}
 		if (Window.OK == wd.open()) {
 			String value = ncwp.getCreatedType().getFullyQualifiedName();
 			if (value != null) {
@@ -95,6 +106,19 @@ public class BeanConfigUtil {
 				IPackageFragmentRoot fragroot = findPackageFragmentRoot(project, javaProject);
 				wp.setPackageFragmentRoot(fragroot, true);
 				wp.setPackageFragment(PropertiesUtils.getPackage(javaProject, fragroot), true);
+			}
+		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+
+	private void setInitialPackageFramentWithName(final IProject project, NewClassWizardPage wp, String packName) {
+		try {
+			IJavaProject javaProject = (IJavaProject) project.getNature(JavaCore.NATURE_ID);
+			if(javaProject != null){
+				IPackageFragmentRoot fragroot = findPackageFragmentRoot(project, javaProject);
+				wp.setPackageFragmentRoot(fragroot, true);
+				wp.setPackageFragment(fragroot.getPackageFragment(packName), true);
 			}
 		} catch (Exception ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);
