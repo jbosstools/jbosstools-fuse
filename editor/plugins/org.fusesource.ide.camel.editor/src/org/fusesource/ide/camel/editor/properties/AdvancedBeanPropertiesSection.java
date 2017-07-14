@@ -263,7 +263,8 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				final IProject project = selectedEP.getCamelFile().getResource().getProject();
-				String value = beanConfigUtil.handleNewClassWizard(project, getDisplay().getActiveShell());
+				String initialClassName = field.getText();
+				String value = beanConfigUtil.handleNewClassWizard(project, getDisplay().getActiveShell(), initialClassName);
 				if (value != null) {
 					field.setText(value);
 				}

@@ -132,7 +132,8 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				String value = beanConfigUtil.handleNewClassWizard(project, getShell());
+				String initialClassName = classText.getText();
+				String value = beanConfigUtil.handleNewClassWizard(project, getShell(), initialClassName);
 				if (value != null) {
 					classObservable.setValue(value);
 				}
