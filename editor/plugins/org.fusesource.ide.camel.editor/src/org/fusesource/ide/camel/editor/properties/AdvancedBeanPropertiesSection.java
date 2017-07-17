@@ -55,6 +55,9 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
+	private static final int PUBLIC_STATIC_METHOD_BROWSE = 1;
+	private static final int PUBLIC_NO_ARG_METHOD_BROWSE = 2;
+	
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
 	/**
@@ -277,41 +280,54 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		createMethodBrowseBtn(composite, field, PUBLIC_NO_ARG_METHOD_BROWSE);
 	}
 
-	private static final int PUBLIC_STATIC_METHOD_BROWSE = 1;
-	private static final int PUBLIC_NO_ARG_METHOD_BROWSE = 2;
-	
 	private void createMethodBrowseBtn(Composite composite, Text field, int methodBrowseType) {
 		Button browseBeanButton = new Button(composite, SWT.PUSH);
 		browseBeanButton.setText("..."); //$NON-NLS-1$
-		browseBeanButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
-				if (control != null) {
-					final IProject project = selectedEP.getCamelFile().getResource().getProject();
-					String className = (String) control;
-					String methodName = null;
-					switch (methodBrowseType) {
-					case PUBLIC_STATIC_METHOD_BROWSE:
-						methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
-								getDisplay().getActiveShell());
-						break;
-					case PUBLIC_NO_ARG_METHOD_BROWSE:
-						methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
-								getDisplay().getActiveShell());
-						break;
-					default:
-						// default to standard method browse
-						methodName = beanConfigUtil.handleMethodBrowse(project, className,
-								getDisplay().getActiveShell());
-					}
-					if (methodName != null) {
-						field.setText(methodName);
-					}
+		browseBeanButton.addSelectionListener(new MethodSelectionListener(methodBrowseType, field));
+	}
+	
+	/*
+	 * Handle which type of method selection should be presented to the user.
+	 * @author brianf
+	 *
+	 */
+	class MethodSelectionListener extends SelectionAdapter {
+		
+		private int methodBrowseType;
+		private Text field;
+		
+		public MethodSelectionListener(int browseType, Text field) {
+			super();
+			this.methodBrowseType = browseType;
+			this.field = field;
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+			if (control != null) {
+				final IProject project = selectedEP.getCamelFile().getResource().getProject();
+				String className = (String) control;
+				String methodName;
+				switch (methodBrowseType) {
+				case PUBLIC_STATIC_METHOD_BROWSE:
+					methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
+							getDisplay().getActiveShell());
+					break;
+				case PUBLIC_NO_ARG_METHOD_BROWSE:
+					methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
+							getDisplay().getActiveShell());
+					break;
+				default:
+					// default to standard method browse
+					methodName = beanConfigUtil.handleMethodBrowse(project, className,
+							getDisplay().getActiveShell());
+				}
+				if (methodName != null) {
+					field.setText(methodName);
 				}
 			}
-
-		});
+		}
 	}
 
 	private void createPublicStaticMethodBrowseButton(Composite composite, Text field) {
