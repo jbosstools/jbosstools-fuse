@@ -84,7 +84,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 			globalConfigUtils = new GlobalConfigUtils();
 		}
 		boolean isBeanElement = 
-				CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
+				CamelUtils.getTagNameWithoutPrefix(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(CamelFile.BEAN_NODE);
 		boolean isSAPClass = true;
 		if (isBeanElement) {
 			Object classParm = camelModelElementToHandle.getParameter(GlobalBeanEIP.PROP_CLASS);

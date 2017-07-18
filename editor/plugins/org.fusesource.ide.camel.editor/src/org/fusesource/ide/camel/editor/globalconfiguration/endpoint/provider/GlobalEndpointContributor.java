@@ -76,7 +76,7 @@ public class GlobalEndpointContributor implements ICustomGlobalConfigElementCont
 
 	@Override
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
-		return CamelUtils.getTranslatedNodeName(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(ENDPOINT);
+		return CamelUtils.getTagNameWithoutPrefix(camelModelElementToHandle.getXmlNode()).equalsIgnoreCase(ENDPOINT);
 	}
 
 	@Override

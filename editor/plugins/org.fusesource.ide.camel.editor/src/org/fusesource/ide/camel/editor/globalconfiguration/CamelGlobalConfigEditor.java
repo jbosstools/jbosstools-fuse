@@ -675,7 +675,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	public CamelBasicModelElement addDataFormat(CamelFile cf, Element newXMLNode) {
 		if (cf.getRouteContainer() instanceof CamelContextElement) {
 			CamelBasicModelElement elemDF = new CamelBasicModelElement(cf.getRouteContainer(), newXMLNode);
-			final String eipName = org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(newXMLNode);
+			final String eipName = org.fusesource.ide.foundation.core.util.CamelUtils.getTagNameWithoutPrefix(newXMLNode);
 			configureCamelModelElement(cf, newXMLNode, elemDF, eipName);
 			((CamelContextElement)cf.getRouteContainer()).addDataFormat(elemDF);
 			return elemDF;

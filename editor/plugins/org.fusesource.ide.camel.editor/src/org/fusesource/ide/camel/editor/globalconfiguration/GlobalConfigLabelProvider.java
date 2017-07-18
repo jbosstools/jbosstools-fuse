@@ -52,7 +52,7 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 				return item.getName();
 			}
 		}
-		return Strings.capitalize(CamelUtils.getTranslatedNodeName(cme.getXmlNode()));
+		return Strings.capitalize(CamelUtils.getTagNameWithoutPrefix(cme.getXmlNode()));
 	}
 
 	private StyledString getStyledTextForCategory(String element) {
@@ -91,11 +91,11 @@ class GlobalConfigLabelProvider implements IStyledLabelProvider {
 		final Node xmlNode = cme.getXmlNode();
 		Image res = getIconFromExtensionPoint(cme);
 		if (res == null) {
-			if ("endpoint".equalsIgnoreCase(cme.getTranslatedNodeName())) {
+			if ("endpoint".equalsIgnoreCase(cme.getTagNameWithoutPrefix())) {
 				res = CamelEditorUIActivator.getDefault().getImage("endpointdef.png");
 			} else if (xmlNode != null) {
 				final Node parentNode = xmlNode.getParentNode();
-				if ("dataFormats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(parentNode))) {
+				if ("dataFormats".equalsIgnoreCase(CamelUtils.getTagNameWithoutPrefix(parentNode))) {
 					res = CamelEditorUIActivator.getDefault().getImage("dataformat.png");
 				}
 			}

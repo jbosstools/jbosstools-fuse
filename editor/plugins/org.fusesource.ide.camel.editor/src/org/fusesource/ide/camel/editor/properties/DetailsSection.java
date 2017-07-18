@@ -304,7 +304,7 @@ public class DetailsSection extends FusePropertySection {
 					Object expressionParameterValue = expressionElement.getParameter("expression");
 					if (expressionParameterValue != null && expressionParameterValue instanceof AbstractCamelModelElement ) {
 						AbstractCamelModelElement ex = (AbstractCamelModelElement)expressionParameterValue;
-	                    value = ex.getTranslatedNodeName();
+	                    value = ex.getTagNameWithoutPrefix();
 					}
                     choiceCombo.deselectAll();
                     for (int i=0; i < choiceCombo.getItems().length; i++) {
