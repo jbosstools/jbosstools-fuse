@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.imports.sap.ImportUtils.UnsupportedVersionException;
 import org.fusesource.ide.imports.sap.JCo3Archive.JCoArchiveType;
+import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 
 public class ArchivesSelectionPage extends WizardPage {
 
@@ -155,11 +156,8 @@ public class ArchivesSelectionPage extends WizardPage {
 	private JCo3ImportSettings jcoImportSettings;
 
 	private Text textSelectJCo3Archive;
-	private Button btnSelectJCo3Archive;
 
-	private Label lblJCo3ArchiveOsPlatform;
 	private Text textJCo3ArchiveOs;
-	private Label lblJCo3ArchiveVersion;
 	private Text textJCo3ArchiveVersion;
 
 	private boolean isJCo3ArchiveValid;
@@ -167,13 +165,10 @@ public class ArchivesSelectionPage extends WizardPage {
 	private IDoc3ImportSettings idoc3ImportSettings;
 
 	private Text textSelectIDoc3Archive;
-	private Button btnSelectIDoc3Archive;
 
-	private Label lblIDoc3ArchiveVersion;
 	private Text textIDoc3ArchiveVersion;
 
 	private boolean isIDoc3ArchiveValid;
-	private Label label;
 
 	protected ArchivesSelectionPage(DataBindingContext context, JCo3ImportSettings jcoImportSettings, IDoc3ImportSettings idocImportSettings) {
 		super(Messages.ArchivesSelectionPage_PageName, Messages.ArchivesSelectionPage_PageName, Activator.getDefault().getImageRegistry().getDescriptor(Activator.SAP_TOOL_SUITE_48_IMAGE));
@@ -212,7 +207,7 @@ public class ArchivesSelectionPage extends WizardPage {
         Binding bindingJCCo3 = context.bindValue(uiObservable, modelObservable, strategy, null);
 		ControlDecorationSupport.create(bindingJCCo3, SWT.TOP | SWT.LEFT);
 
-		btnSelectJCo3Archive = new Button(container, SWT.PUSH);
+		Button btnSelectJCo3Archive = new Button(container, SWT.PUSH);
 		btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -221,7 +216,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		});
 		btnSelectJCo3Archive.setText(Messages.ArchivesSelectionPage_Browse);
 
-		lblJCo3ArchiveVersion = new Label(container, SWT.NONE);
+		Label lblJCo3ArchiveVersion = new Label(container, SWT.NONE);
 		lblJCo3ArchiveVersion.setText(Messages.ArchivesSelectionPage_ArchiveVersion);
 
 		textJCo3ArchiveVersion = new Text(container, SWT.BORDER | SWT.READ_ONLY);
@@ -230,7 +225,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		context.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(300, textJCo3ArchiveVersion),
 				BeanProperties.value(JCo3ImportSettings.ARCHIVE_VERSION).observe(jcoImportSettings), new UpdateValueStrategy(), new UpdateValueStrategy());
 
-		lblJCo3ArchiveOsPlatform = new Label(container, SWT.NONE);
+		Label lblJCo3ArchiveOsPlatform = new Label(container, SWT.NONE);
 		lblJCo3ArchiveOsPlatform.setText(Messages.ArchivesSelectionPage_ArchiveOSPlatform);
 
 		textJCo3ArchiveOs = new Text(container, SWT.BORDER | SWT.READ_ONLY);
@@ -239,7 +234,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		context.bindValue(WidgetProperties.text(SWT.Modify).observe(textJCo3ArchiveOs), BeanProperties.value(JCo3ImportSettings.ARCHIVE_OS).observe(jcoImportSettings),
 				new UpdateValueStrategy(), new UpdateValueStrategy());
 
-		label = new Label(container, SWT.NONE);
+		Label label = new Label(container, SWT.NONE);
 		label.setText("");
 		label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 3));
 
@@ -251,9 +246,9 @@ public class ArchivesSelectionPage extends WizardPage {
 		lblSelectIDoc3Archive.setText(Messages.ArchivesSelectionPage_IDoc3ArchiveFile);
 
 		textSelectIDoc3Archive = new Text(container, SWT.BORDER);
-		GridData gd_textSelectIDoc3Archive = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_textSelectIDoc3Archive.widthHint = 230;
-		textSelectIDoc3Archive.setLayoutData(gd_textSelectIDoc3Archive);
+		GridData gdTextSelectIDoc3Archive = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gdTextSelectIDoc3Archive.widthHint = 230;
+		textSelectIDoc3Archive.setLayoutData(gdTextSelectIDoc3Archive);
 		textSelectIDoc3Archive.setMessage(Messages.ArchivesSelectionPage_IDoc3ArchivePath);
 
 		uiObservable = WidgetProperties.text(SWT.Modify).observe(textSelectIDoc3Archive);
@@ -266,7 +261,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		Binding bindingIDoc3 = context.bindValue(uiObservable, modelObservable, strategy, null);
 		ControlDecorationSupport.create(bindingIDoc3, SWT.TOP | SWT.LEFT);
 
-		btnSelectIDoc3Archive = new Button(container, SWT.NONE);
+		Button btnSelectIDoc3Archive = new Button(container, SWT.NONE);
 		btnSelectIDoc3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -275,7 +270,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		});
 		btnSelectIDoc3Archive.setText(Messages.ArchivesSelectionPage_Browse);
 
-		lblIDoc3ArchiveVersion = new Label(container, SWT.NONE);
+		Label lblIDoc3ArchiveVersion = new Label(container, SWT.NONE);
 		lblIDoc3ArchiveVersion.setText(Messages.ArchivesSelectionPage_ArchiveVersion);
 
 		textIDoc3ArchiveVersion = new Text(container, SWT.BORDER | SWT.READ_ONLY);
@@ -329,7 +324,7 @@ public class ArchivesSelectionPage extends WizardPage {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Activator.getDefault().getLog().log(new StatusFactory(Activator.PLUGIN_ID).errorStatus(e));
 		}
         return null;
 	}

@@ -11,10 +11,12 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.fusesource.ide.imports.sap.JCo3Archive.JCoArchiveType;
 
 public class SapLibrariesFeatureArchive extends SAPArchive {
 
@@ -41,7 +43,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 	private static final String FEATURE_PROPERTIES_FILE_NAME = "feature.properties";
 	private static final String FEATURE_PROPERTIES_FILE = 
 			"###############################################################################\n" +
-			"# Copyright (c) 2010-2015 Red Hat, Inc. and others.\n" +
+			"# Copyright (c) 2010-2017 Red Hat, Inc. and others.\n" +
 			"# All rights reserved. This program and the accompanying materials \n" +
 			"# are made available under the terms of the Eclipse Public License v1.0\n" +
 			"# which accompanies this distribution, and is available at\n" +
@@ -127,12 +129,12 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			
 			// Create and populate license.html.
 			addJarEntry(target, LICENSE_FILE_NAME, LICENSE_FILE.getBytes(MANIFEST_ENCODING), lastModified);
-		} catch (Exception e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
+		} catch (IOException | JAXBException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		} 
 	}
 	
-	private byte[] createFeatureXmlFile() throws Exception {
+	private byte[] createFeatureXmlFile() throws JAXBException {
 
 		// Define Feature
 		Feature feature = new Feature();
@@ -148,7 +150,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		
 		// Add Feature Copyright
 		Feature.Copyright copyright = new Feature.Copyright();
-		copyright.setContent("Copyright 2015 Red Hat, Inc.");
+		copyright.setContent("Copyright 2017 Red Hat, Inc.");
 		feature.setCopyright(copyright);
 		
 		// Add Feature License
@@ -158,7 +160,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		
 		// Add Plug-ins to Feature
 		//
-		List<Feature.Plugin> plugins = new ArrayList<Feature.Plugin>();
+		List<Feature.Plugin> plugins = new ArrayList<>();
 
 		// Add IDoc3 Plug-in to Feature
 		Feature.Plugin plugin = new Feature.Plugin();
@@ -178,9 +180,10 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		plugin = new Feature.Plugin();
 		plugin.setId(jco3ImportSettings.getFragmentSymbolicName());
 		plugin.setVersion(jco3ImportSettings.getArchiveVersion());
-		plugin.setOs(jco3ImportSettings.getJco3Archive().getType().getEclipseOS());
-		plugin.setWs(jco3ImportSettings.getJco3Archive().getType().getEclipseWS());
-		plugin.setArch(jco3ImportSettings.getJco3Archive().getType().getEclipseArch());
+		JCoArchiveType jco3Type = jco3ImportSettings.getJco3Archive().getType();
+		plugin.setOs(jco3Type.getEclipseOS());
+		plugin.setWs(jco3Type.getEclipseWS());
+		plugin.setArch(jco3Type.getEclipseArch());
 		plugin.setFragment(true);
 		plugin.setUnpack(false);
 		plugins.add(plugin);

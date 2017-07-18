@@ -123,7 +123,7 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 			ui.loadArtifactRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
 			IMetadataRepository librariesMetadataRepository = ui.loadMetadataRepository(librariesRepositoryURI, false, monitor);
 			IMetadataRepository sapToolingMetadataRepository = ui.loadMetadataRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
-			final Set<IInstallableUnit> toInstall = new HashSet<IInstallableUnit>();
+			final Set<IInstallableUnit> toInstall = new HashSet<>();
 			toInstall.addAll(librariesMetadataRepository.query(QueryUtil.createIUGroupQuery(), monitor).toUnmodifiableSet());
 			toInstall.addAll(sapToolingMetadataRepository.query(QueryUtil.createIUQuery(sapToolingSuiteFeature), monitor).toUnmodifiableSet());
 			final InstallOperation installOperation = ui.getInstallOperation(toInstall, new URI[] { librariesRepositoryURI, sapToolingSuiteRepositoryURI });

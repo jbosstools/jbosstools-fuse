@@ -79,12 +79,12 @@ public class IDoc3Archive extends SAPArchive {
 	//
 	// /////////////////////////////////
 
-	private static char[] VERSION_NAME = new char[] { 'V', 'E', 'R', 'S', 'I', 'O', 'N' };
+	private static final char[] VERSION_NAME = new char[] { 'V', 'E', 'R', 'S', 'I', 'O', 'N' };
 
 	protected byte[] buf = new byte[32 * 1024];
 
 	protected String name;
-	protected Map<String, String> manifest = new HashMap<String, String>();
+	protected Map<String, String> manifest = new HashMap<>();
 	protected long lastModified;
 
 	private String version = ""; //$NON-NLS-1$
