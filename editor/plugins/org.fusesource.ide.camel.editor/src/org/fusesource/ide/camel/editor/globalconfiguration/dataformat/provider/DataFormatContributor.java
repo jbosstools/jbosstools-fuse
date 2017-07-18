@@ -64,8 +64,8 @@ public class DataFormatContributor implements ICustomGlobalConfigElementContribu
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
 		// we support it if the parent node is dataFormats and the node is one of the supported languages of our model
 		final Node nodeToHandle = camelModelElementToHandle.getXmlNode();
-		if ("dataformats".equalsIgnoreCase(CamelUtils.getTranslatedNodeName(nodeToHandle.getParentNode()))) {
-			String nodeName = CamelUtils.getTranslatedNodeName(nodeToHandle);
+		if ("dataformats".equalsIgnoreCase(CamelUtils.getTagNameWithoutPrefix(nodeToHandle.getParentNode()))) {
+			String nodeName = CamelUtils.getTagNameWithoutPrefix(nodeToHandle);
 			IProject project = camelModelElementToHandle.getCamelFile().getResource().getProject();
 			CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 			return !model.getDataFormatsByModelName(nodeName).isEmpty();

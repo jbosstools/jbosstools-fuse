@@ -37,12 +37,12 @@ public class CamelRoutesElement extends CamelRouteContainerElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (ROUTE_NODE_NAME.equals(CamelUtils.getTranslatedNodeName(tmp))) {
+			if (ROUTE_NODE_NAME.equals(CamelUtils.getTagNameWithoutPrefix(tmp))) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
 			} else {
-				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the routes definition: " + CamelUtils.getTranslatedNodeName(tmp));
+				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the routes definition: " + CamelUtils.getTagNameWithoutPrefix(tmp));
 			}
 		}
 	}

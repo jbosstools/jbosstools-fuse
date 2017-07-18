@@ -118,10 +118,10 @@ public abstract class AbstractCamelModelElement {
 		this.parent = parent;
 
 		if (underlyingNode != null) {
-			setUnderlyingMetaModelObject(getEipByName(CamelUtils.getTranslatedNodeName(underlyingNode)));
+			setUnderlyingMetaModelObject(getEipByName(CamelUtils.getTagNameWithoutPrefix(underlyingNode)));
 		}
 		if (parent != null && parent.getXmlNode() != null && underlyingNode != null
-				&& (getXmlNode().getParentNode() == null || !CamelUtils.getTranslatedNodeName(getXmlNode().getParentNode()).equals(DATA_FORMATS_NODE_NAME))) {
+				&& (getXmlNode().getParentNode() == null || !CamelUtils.getTagNameWithoutPrefix(getXmlNode().getParentNode()).equals(DATA_FORMATS_NODE_NAME))) {
 			boolean alreadyChild = false;
 			final NodeList siblingNodes = parent.getXmlNode().getChildNodes();
 			for (int i = 0; i < siblingNodes.getLength(); i++) {
@@ -135,7 +135,7 @@ public abstract class AbstractCamelModelElement {
 					if (this.getNodeTypeId().equals(WHEN_NODE_NAME)) {
 						Node otherwiseNode = null;
 						for (int i = 0; i < siblingNodes.getLength(); i++) {
-							if (CamelUtils.getTranslatedNodeName(siblingNodes.item(i)).equals(OTHERWISE_NODE_NAME)) {
+							if (CamelUtils.getTagNameWithoutPrefix(siblingNodes.item(i)).equals(OTHERWISE_NODE_NAME)) {
 								otherwiseNode = siblingNodes.item(i);
 								break;
 							}
@@ -786,7 +786,7 @@ public abstract class AbstractCamelModelElement {
 
 		// this is needed for FUSETOOLS-1884, otherwise some global config
 		// elements lose their children and get corrupted
-		if (getEipByName(CamelUtils.getTranslatedNodeName(getXmlNode())) == null && "id".equalsIgnoreCase(name)) {
+		if (getEipByName(CamelUtils.getTagNameWithoutPrefix(getXmlNode())) == null && "id".equalsIgnoreCase(name)) {
 			kind=NODE_KIND_ATTRIBUTE;
 		}
 
@@ -800,7 +800,7 @@ public abstract class AbstractCamelModelElement {
 				// nodes will return empty String as value
 				for (int i = 0; i < e.getChildNodes().getLength(); i++) {
 					Node subElem = e.getChildNodes().item(i);
-					if (subElem.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTranslatedNodeName(subElem).equals(name)) {
+					if (subElem.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTagNameWithoutPrefix(subElem).equals(name)) {
 						// found the sub element -> delete it
 						e.removeChild(subElem);
 						break;
@@ -902,7 +902,7 @@ public abstract class AbstractCamelModelElement {
 			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 				subNode = e.getChildNodes().item(c);
 				if (subNode.getNodeType() == Node.ELEMENT_NODE
-						&& CamelUtils.getTranslatedNodeName(subNode).equals(comparedNodeName)) {
+						&& CamelUtils.getTagNameWithoutPrefix(subNode).equals(comparedNodeName)) {
 					createSubNode = false;
 					break;
 				}
@@ -919,7 +919,7 @@ public abstract class AbstractCamelModelElement {
 
 			for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
 				Node attrNode = ((Element) subNode).getAttributes().item(i);
-				((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
+				((Element) subNode).removeAttribute(CamelUtils.getTagNameWithoutPrefix(attrNode));
 			}
 			Iterator<String> pKeys = exp.getParameters().keySet().iterator();
 			while (pKeys.hasNext()) {
@@ -942,7 +942,7 @@ public abstract class AbstractCamelModelElement {
 			Node oldChild = null;
 			for (int i = 0; i < e.getChildNodes().getLength(); i++) {
 				if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
-						&& CamelUtils.getTranslatedNodeName(e.getChildNodes().item(i)).equals(name)) {
+						&& CamelUtils.getTagNameWithoutPrefix(e.getChildNodes().item(i)).equals(name)) {
 					oldChild = e.getChildNodes().item(i);
 					break;
 				}
@@ -972,7 +972,7 @@ public abstract class AbstractCamelModelElement {
 			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 				subNode = e.getChildNodes().item(c);
 				if (subNode.getNodeType() == Node.ELEMENT_NODE
-						&& CamelUtils.getTranslatedNodeName(subNode).equals(df.getNodeTypeId())) {
+						&& CamelUtils.getTagNameWithoutPrefix(subNode).equals(df.getNodeTypeId())) {
 					createSubNode = false;
 					break;
 				}
@@ -984,7 +984,7 @@ public abstract class AbstractCamelModelElement {
 
 			for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
 				Node attrNode = ((Element) subNode).getAttributes().item(i);
-				((Element) subNode).removeAttribute(CamelUtils.getTranslatedNodeName(attrNode));
+				((Element) subNode).removeAttribute(CamelUtils.getTagNameWithoutPrefix(attrNode));
 			}
 			Iterator<String> pKeys = df.getParameters().keySet().iterator();
 			while (pKeys.hasNext()) {
@@ -1022,7 +1022,7 @@ public abstract class AbstractCamelModelElement {
 			Node subNode = null;
 			for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 				subNode = e.getChildNodes().item(c);
-				if (subNode.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTranslatedNodeName(subNode).equals(name)) {
+				if (subNode.getNodeType() == Node.ELEMENT_NODE && CamelUtils.getTagNameWithoutPrefix(subNode).equals(name)) {
 					createSubNode = false;
 					break;
 				}
@@ -1141,7 +1141,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	protected void parseAttributes() {
 		// first get the element name
-		String nodename = getTranslatedNodeName();
+		String nodename = getTagNameWithoutPrefix();
 		// now try to match with an EIP name
 		Eip eip = getEipByName(nodename);
 		if (eip != null) {
@@ -1192,7 +1192,7 @@ public abstract class AbstractCamelModelElement {
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
-			if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
+			if (CamelUtils.getTagNameWithoutPrefix(subNode).equals(param.getName())) {
 				descNode = subNode;
 				break;
 			}
@@ -1220,7 +1220,7 @@ public abstract class AbstractCamelModelElement {
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
-			if (CamelUtils.getTranslatedNodeName(subNode).equals(param.getName())) {
+			if (CamelUtils.getTagNameWithoutPrefix(subNode).equals(param.getName())) {
 				String val = subNode.getTextContent();
 				if (val != null && !val.trim().isEmpty() && !list.contains(val)) {
 					list.add(val);
@@ -1270,7 +1270,7 @@ public abstract class AbstractCamelModelElement {
 			if (subNode.getNodeType() != Node.ELEMENT_NODE) {
 				continue;
 			}
-			if (dfList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
+			if (dfList.contains(CamelUtils.getTagNameWithoutPrefix(subNode))) {
 				AbstractCamelModelElement dfNode = new CamelBasicModelElement(this, subNode);
 				dfNode.initialize();
 				// expNode.setParent(this);
@@ -1304,7 +1304,7 @@ public abstract class AbstractCamelModelElement {
 				continue;
 			}
 			if (subNode != null && isAnExpressionGuessedByName(param)
-					&& langList.contains(CamelUtils.getTranslatedNodeName(subNode))) {
+					&& langList.contains(CamelUtils.getTagNameWithoutPrefix(subNode))) {
 				// this case is for expressions which are directly
 				// stored under the parent node
 				// for instance when.<expression>
@@ -1313,7 +1313,7 @@ public abstract class AbstractCamelModelElement {
 				// expNode.setParent(this);
 				setParameter(param.getName(), expNode);
 			} else if (subNode != null && !isAnExpressionGuessedByName(param)
-					&& param.getName().equals(CamelUtils.getTranslatedNodeName(subNode))) {
+					&& param.getName().equals(CamelUtils.getTagNameWithoutPrefix(subNode))) {
 				// this case is for expressions which are not
 				// directly
 				// stored under the parent node but under another
@@ -1322,7 +1322,7 @@ public abstract class AbstractCamelModelElement {
 				for (int x = 0; x < subNode.getChildNodes().getLength(); x++) {
 					Node subExpNode = subNode.getChildNodes().item(x);
 					if (subExpNode.getNodeType() == Node.ELEMENT_NODE && subExpNode != null
-							&& langList.contains(CamelUtils.getTranslatedNodeName(subExpNode))) {
+							&& langList.contains(CamelUtils.getTagNameWithoutPrefix(subExpNode))) {
 						// found the sub -> create container element
 						AbstractCamelModelElement expContainer = new CamelBasicModelElement(this, subNode);
 						// expContainer.initialize();
@@ -1457,7 +1457,7 @@ public abstract class AbstractCamelModelElement {
 	 * parses the children of this node
 	 */
 	protected void parseChildren() {
-		String nodeName = getTranslatedNodeName();
+		String nodeName = getTagNameWithoutPrefix();
 		boolean canHaveChildren = hasChildren(nodeName) || hasSpecialHandling(nodeName);
 		if (canHaveChildren) {
 			NodeList children = getXmlNode().getChildNodes();
@@ -1484,7 +1484,7 @@ public abstract class AbstractCamelModelElement {
 	}
 
 	protected boolean isSpecialCase(Node childNode) {
-		return CHOICE_NODE_NAME.equalsIgnoreCase(getTranslatedNodeName()) && OTHERWISE_NODE_NAME.equalsIgnoreCase(CamelUtils.getTranslatedNodeName(childNode));
+		return CHOICE_NODE_NAME.equalsIgnoreCase(getTagNameWithoutPrefix()) && OTHERWISE_NODE_NAME.equalsIgnoreCase(CamelUtils.getTagNameWithoutPrefix(childNode));
 	}
 
 	/**
@@ -1495,7 +1495,7 @@ public abstract class AbstractCamelModelElement {
 	 * @return
 	 */
 	protected boolean isUsedAsAttribute(Node childNode) {
-		String nodeName = CamelUtils.getTranslatedNodeName(childNode);
+		String nodeName = CamelUtils.getTagNameWithoutPrefix(childNode);
 
 		if (isSpecialCase(childNode)) {
 			return false;
@@ -1564,7 +1564,7 @@ public abstract class AbstractCamelModelElement {
 		for (int i = 0; i < attribs.getLength(); i++) {
 			Node attr = attribs.item(i);
 			if (attr != null) {
-				getXmlNode().getAttributes().removeNamedItem(CamelUtils.getTranslatedNodeName(attr));
+				getXmlNode().getAttributes().removeNamedItem(CamelUtils.getTagNameWithoutPrefix(attr));
 			}
 		}
 	}
@@ -1616,7 +1616,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public String getNodeTypeId() {
 		return underlyingMetaModelObject != null ? underlyingMetaModelObject.getName()
-				: xmlNode != null ? CamelUtils.getTranslatedNodeName(xmlNode) : "camelContext";
+				: xmlNode != null ? CamelUtils.getTagNameWithoutPrefix(xmlNode) : "camelContext";
 	}
 
 	/**
@@ -1799,8 +1799,8 @@ public abstract class AbstractCamelModelElement {
 		return getCamelFile().getDocument().createElement(nodeName);
 	}
 
-	public String getTranslatedNodeName() {
-		return CamelUtils.getTranslatedNodeName(getXmlNode());
+	public String getTagNameWithoutPrefix() {
+		return CamelUtils.getTagNameWithoutPrefix(getXmlNode());
 	}
 	
 	/**

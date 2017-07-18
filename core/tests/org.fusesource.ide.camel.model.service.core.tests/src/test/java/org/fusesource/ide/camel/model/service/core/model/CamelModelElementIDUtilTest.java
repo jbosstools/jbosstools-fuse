@@ -67,7 +67,7 @@ public class CamelModelElementIDUtilTest {
 	public void testEnsureUniqueID_setNoIdWhenParentElementParameter() throws Exception {
 		doReturn(eip).when(cme).getUnderlyingMetaModelObject();
 		doReturn(eip).when(parentCme).getUnderlyingMetaModelObject();
-		doReturn(CME_NAME).when(cme).getTranslatedNodeName();
+		doReturn(CME_NAME).when(cme).getTagNameWithoutPrefix();
 		Parameter parameter = new Parameter();
 		parameter.setKind(AbstractCamelModelElement.NODE_KIND_ELEMENT);
 		doReturn(parameter).when(eip).getParameter(CME_NAME);

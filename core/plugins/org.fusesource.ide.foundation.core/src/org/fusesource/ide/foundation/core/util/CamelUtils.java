@@ -119,7 +119,7 @@ public class CamelUtils {
 		return false;
 	}
 
-	public static String getTranslatedNodeName(Node node) {
+	public static String getTagNameWithoutPrefix(Node node) {
 		if (node == null || node.getNodeName() == null) {
 			return null;
 		}

@@ -42,7 +42,7 @@ public class CamelModelElementIDUtil {
 		AbstractCamelModelElement parentElement = elem.getParent();
 		if(parentElement != null){
 			Eip parentUnderlyingMetaModelObject = parentElement.getUnderlyingMetaModelObject();
-			String nodeName = elem.getTranslatedNodeName();
+			String nodeName = elem.getTagNameWithoutPrefix();
 			if (parentElement.getParameter(nodeName) != null && parentUnderlyingMetaModelObject != null) {
 				Parameter parameter = parentUnderlyingMetaModelObject.getParameter(nodeName);
 				if(AbstractCamelModelElement.NODE_KIND_ELEMENT.equals(parameter.getKind()) &&

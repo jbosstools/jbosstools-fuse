@@ -142,7 +142,7 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 			Node n = getXmlNode().getChildNodes().item(i);
 			if (n.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (CamelUtils.getTranslatedNodeName(n).equals(DATA_FORMATS_NODE_NAME)) {
+			if (CamelUtils.getTagNameWithoutPrefix(n).equals(DATA_FORMATS_NODE_NAME)) {
 				dataFormatsNode = n;
 				break;
 			}
@@ -199,7 +199,7 @@ public class CamelContextElement extends CamelRouteContainerElement {
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				Node n = getXmlNode().getChildNodes().item(i);
 				if (n.getNodeType() != Node.ELEMENT_NODE) continue;
-				if (CamelUtils.getTranslatedNodeName(n).equals(DATA_FORMATS_NODE_NAME)) {
+				if (CamelUtils.getTagNameWithoutPrefix(n).equals(DATA_FORMATS_NODE_NAME)) {
 					dataFormatsNode = n;
 					break;
 				}
@@ -252,7 +252,7 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (CamelUtils.getTranslatedNodeName(tmp).equals(DATA_FORMATS_NODE_NAME)) {
+			if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(DATA_FORMATS_NODE_NAME)) {
 				NodeList dfs = tmp.getChildNodes();
 				for (int y=0; y<dfs.getLength(); y++) {
 					Node tmp_df = dfs.item(y);
@@ -261,16 +261,16 @@ public class CamelContextElement extends CamelRouteContainerElement {
 					cme.initialize();
 					this.dataformats.put(cme.getId(), cme);
 				}
-			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ENDPOINT_NODE_NAME)) {
+			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(ENDPOINT_NODE_NAME)) {
 				CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp);
 				cme.initialize();
 				this.endpointDefinitions.put(cme.getId(), cme);
-			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ROUTE_NODE_NAME)) {
+			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(ROUTE_NODE_NAME)) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
 			} else {
-				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + CamelUtils.getTranslatedNodeName(tmp));
+				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + CamelUtils.getTagNameWithoutPrefix(tmp));
 			}
 		}
 	}

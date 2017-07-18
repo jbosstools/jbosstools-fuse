@@ -350,12 +350,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		if (AbstractCamelModelElement.NODE_KIND_EXPRESSION.equalsIgnoreCase(prop.getName())) {
 			// normal expression subnode - no cascading -> when.<expression>
 			// the content of expressionElement is the language node itself
-			if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
+			if (expressionElement != null && expressionElement.getTagNameWithoutPrefix().equals(language) == false) {
 				Node oldExpNode = null;
 				for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
 					if (org.fusesource.ide.foundation.core.util.CamelUtils
-							.getTranslatedNodeName(selectedEP.getXmlNode().getChildNodes().item(i))
-							.equals(expressionElement.getTranslatedNodeName())) {
+							.getTagNameWithoutPrefix(selectedEP.getXmlNode().getChildNodes().item(i))
+							.equals(expressionElement.getTagNameWithoutPrefix())) {
 						oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
 						break;
 					}
@@ -401,14 +401,14 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				List<String> langs = Arrays.asList(CamelComponentUtils.getOneOfList(prop));
 				for (int i = 0; i < expressionElement.getXmlNode().getChildNodes().getLength(); i++) {
 					Node n = expressionElement.getXmlNode().getChildNodes().item(i);
-					if (langs.contains(org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(n))) {
+					if (langs.contains(org.fusesource.ide.foundation.core.util.CamelUtils.getTagNameWithoutPrefix(n))) {
 						oldExpNode = n;
 						break;
 					}
 				}
 				AbstractCamelModelElement expElement = (AbstractCamelModelElement) expressionElement
 						.getParameter(AbstractCamelModelElement.NODE_KIND_EXPRESSION);
-				if (expElement.getTranslatedNodeName().equals(language) == false) {
+				if (expElement.getTagNameWithoutPrefix().equals(language) == false) {
 					if (language.trim().length() > 0) {
 						Node expNode = selectedEP.createElement(language,
 								selectedEP != null && selectedEP.getXmlNode() != null
@@ -534,12 +534,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		client.setLayout(new GridLayout(4, false));
 
 		DataFormat df = getCamelModel(dataFormatElement).getDataFormat(dataformat);
-		if (dataFormatElement != null && df != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
+		if (dataFormatElement != null && df != null && dataFormatElement.getTagNameWithoutPrefix().equals(dataformat) == false) {
 			Node oldExpNode = null;
 			for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
 				final Node childNode = selectedEP.getXmlNode().getChildNodes().item(i);
-				if (org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(childNode)
-						.equalsIgnoreCase(dataFormatElement.getTranslatedNodeName())) {
+				if (org.fusesource.ide.foundation.core.util.CamelUtils.getTagNameWithoutPrefix(childNode)
+						.equalsIgnoreCase(dataFormatElement.getTagNameWithoutPrefix())) {
 					oldExpNode = childNode;
 					break;
 				}
