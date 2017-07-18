@@ -193,7 +193,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		JAXBContext context = JAXBContext.newInstance(Feature.class);
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		m.setProperty(Marshaller.JAXB_ENCODING, MANIFEST_ENCODING);
+		m.setProperty(Marshaller.JAXB_ENCODING, MANIFEST_ENCODING.name());
 		StringWriter stringWriter = new StringWriter();
 		m.marshal(feature, stringWriter);
 		
