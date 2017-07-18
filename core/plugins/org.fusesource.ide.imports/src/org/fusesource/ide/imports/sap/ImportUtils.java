@@ -48,6 +48,8 @@ public class ImportUtils {
 	
 	private static final String FEATURE_BUNDLE_NAME = "com.sap.conn_3.0.0.jar";
 	
+	private static Path temporarySapLibraryUpdateSite = null;
+	
 	/**
 	 * Default Execution Environment assigned to plug-ins.
 	 */
@@ -73,9 +75,13 @@ public class ImportUtils {
 			super(arg0);
 		}
 	}
+	
+	private ImportUtils() {
+		// Contains only static method
+	}
 
 	public static String[] getExecutionEnvironments() {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		IExecutionEnvironmentsManager manager = JavaRuntime.getExecutionEnvironmentsManager();
 		IExecutionEnvironment[] environments = manager.getExecutionEnvironments();
 		for (IExecutionEnvironment environment : environments) {
@@ -105,7 +111,6 @@ public class ImportUtils {
 		return result;
 	}
 	
-	private static Path temporarySapLibraryUpdateSite = null;
 	
 	public static Path getTemporySapLibrariesRepository() {
 

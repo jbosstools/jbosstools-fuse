@@ -167,22 +167,22 @@ public class JCo3Archive extends SAPArchive {
 		}
 
 		public static JCoArchiveType getType(String sapjcoOsCode) {
-			sapjcoOsCode = sapjcoOsCode.trim();
-			if (sapjcoOsCode.equals(JCO_WIN32_X86_ARCHIVE.getSapjcoOs())) {
+			String trimmedSapjcoOsCode = sapjcoOsCode.trim();
+			if (trimmedSapjcoOsCode.equals(JCO_WIN32_X86_ARCHIVE.getSapjcoOs())) {
 				return JCO_WIN32_X86_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_WIN32_IA64_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_WIN32_IA64_ARCHIVE.getSapjcoOs())) {
 				return JCO_WIN32_IA64_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_WIN32_X86_64_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_WIN32_X86_64_ARCHIVE.getSapjcoOs())) {
 				return JCO_WIN32_X86_64_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_LINUX_X86_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_LINUX_X86_ARCHIVE.getSapjcoOs())) {
 				return JCO_LINUX_X86_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_LINUX_IA64_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_LINUX_IA64_ARCHIVE.getSapjcoOs())) {
 				return JCO_LINUX_IA64_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_LINUX_X86_64_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_LINUX_X86_64_ARCHIVE.getSapjcoOs())) {
 				return JCO_LINUX_X86_64_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_OSX_X86_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_OSX_X86_ARCHIVE.getSapjcoOs())) {
 				return JCO_OSX_X86_ARCHIVE;
-			} else if (sapjcoOsCode.equals(JCO_OSX_X86_64_ARCHIVE.getSapjcoOs())) {
+			} else if (trimmedSapjcoOsCode.equals(JCO_OSX_X86_64_ARCHIVE.getSapjcoOs())) {
 				return JCO_OSX_X86_64_ARCHIVE;
 			} else {
 				return JCO_INVALID_ARCHIVE;
@@ -457,7 +457,7 @@ public class JCo3Archive extends SAPArchive {
 			manifest = parseManifest(file);
 		} catch (IOException e) {
 			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
-			throw new IOException(Messages.JCo3Archive_UnableToParseArchiveManifestFile);
+			throw new IOException(Messages.JCo3Archive_UnableToParseArchiveManifestFile, e);
 		}
 		String sapjcoos = manifest.get(SAPJCO_OS);
 		if (sapjcoos == null) {
