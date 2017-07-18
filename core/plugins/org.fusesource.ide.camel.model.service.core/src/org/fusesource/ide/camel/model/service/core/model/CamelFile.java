@@ -47,10 +47,12 @@ import org.w3c.dom.events.EventTarget;
  */
 public class CamelFile extends AbstractCamelModelElement implements EventListener {
 	
+	private static final String SPRING_BEANS_NAMESPACE = "http://www.springframework.org/schema/beans";
+	private static final String OSGI_BLUEPRINT_NAMESPACE = "http://www.osgi.org/xmlns/blueprint/v1.0.0";
 	public static final int XML_INDENT_VALUE = 3;
 	protected static final String CAMEL_CONTEXT = "camelContext";
 	protected static final String CAMEL_ROUTES = "routes";
-	protected static final String CAMEL_BEAN = "bean";
+	protected static final String GLOBAL_BEAN = "bean";
 	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value
@@ -135,7 +137,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 					cre.initialize();
 					// then add the context to the file
 					addChildElement(cre);
-				} else if (CAMEL_BEAN.equals(name)) {
+				} else if (isGlobalBean(child)) {
 					// found a camel bean
 					CamelBean cb = new CamelBean(this, child);
 					cb.setId(id);
@@ -151,6 +153,11 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 				}
             }
 		}
+	}
+
+	private boolean isGlobalBean(Node child) {
+		return GLOBAL_BEAN.equals(CamelUtils.getTagNameWithoutPrefix(child))
+				&& startsWithNamespace(child, OSGI_BLUEPRINT_NAMESPACE) || startsWithNamespace(child, SPRING_BEANS_NAMESPACE);
 	}
 
 	private String computeId(Node child) {
