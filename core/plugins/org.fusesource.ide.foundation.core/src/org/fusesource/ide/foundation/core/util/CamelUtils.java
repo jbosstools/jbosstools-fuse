@@ -56,6 +56,10 @@ public class CamelUtils {
 	private static FindNamespaceHandlerSupport springXmlMatcher = new SpringNamespaceHandler();
 	private static FindNamespaceHandlerSupport camelXmlMatcher = new FindCamelNamespaceHandler();
 	
+	private CamelUtils(){
+		// only static methods available
+	}
+	
 	/**
 	 * checks if the given file is a blueprint file or not
 	 * @param filePath
@@ -140,7 +144,7 @@ public class CamelUtils {
 	 * @throws CoreException
 	 */
 	public static List<IFile> getFilesWithCamelContentType(IProject project) throws CoreException{ 
-		final List<IFile> files = new ArrayList<IFile>();
+		final List<IFile> files = new ArrayList<>();
 		if (project.hasNature(JavaCore.NATURE_ID)) {
 			//limit the search to source folders
 	        IJavaProject javaProject = JavaCore.create(project);
@@ -163,7 +167,7 @@ public class CamelUtils {
 	}
 	
 	private static List<IFile> getFilesWithCamelContentTypeInResource(IResource root) throws CoreException {
-		final List<IFile> files = new ArrayList<IFile>();
+		final List<IFile> files = new ArrayList<>();
 		if (root != null) {
 			root.accept(new IResourceVisitor() {		
 				@Override
