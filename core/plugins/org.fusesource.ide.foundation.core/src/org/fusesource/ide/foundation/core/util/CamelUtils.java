@@ -14,6 +14,8 @@ package org.fusesource.ide.foundation.core.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -51,6 +53,8 @@ public class CamelUtils {
 	
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
+	private static final String SPRING_BEANS_NAMESPACE = "http://www.springframework.org/schema/beans";
+	private static final String GLOBAL_BEAN = "bean";
 	
 	private static FindNamespaceHandlerSupport blueprintXmlMatcher = new BlueprintNamespaceHandler();
 	private static FindNamespaceHandlerSupport springXmlMatcher = new SpringNamespaceHandler();
@@ -134,6 +138,29 @@ public class CamelUtils {
 			resVal = nodeName.substring(nodeName.indexOf(':')+1);
 		}
 		return resVal;
+	}
+	
+	public static boolean startsWithNamespace(Node child, String namespace) {
+		return child != null && child.getNamespaceURI() != null && child.getNamespaceURI().startsWith(namespace);
+	}
+	
+	public static boolean startsWithOneOfNamespace(Node child, Collection<String> namespaces) {
+		return namespaces.stream()
+				.filter(namespace -> CamelUtils.startsWithNamespace(child, namespace))
+				.findAny().isPresent();
+	}
+	
+	public static boolean isCamelNamespaceElement(Node child) {
+		return CamelUtils.startsWithNamespace(child, "http://camel.apache.org/schema/");
+	}
+	
+	public static boolean isGlobalBean(Node child) {
+		return GLOBAL_BEAN.equals(CamelUtils.getTagNameWithoutPrefix(child))
+				&& CamelUtils.startsWithOneOfNamespace(child,
+						Arrays.asList(
+								BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP,
+								BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTPS,
+								SPRING_BEANS_NAMESPACE));
 	}
 	
 	/**

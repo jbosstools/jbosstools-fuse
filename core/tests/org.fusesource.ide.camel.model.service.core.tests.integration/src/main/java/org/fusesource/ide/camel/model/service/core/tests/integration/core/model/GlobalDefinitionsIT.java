@@ -31,7 +31,6 @@ import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.Fus
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,9 +43,6 @@ public class GlobalDefinitionsIT {
 
 	private static final Object[] NO_CHILDREN = {};
 	
-	@Rule
-	public TemporaryFolder testFolder = new TemporaryFolder();
-
 	@Rule
 	public FuseProject fuseProject = new FuseProject(GlobalDefinitionsIT.class.getSimpleName());
 
@@ -215,6 +211,24 @@ public class GlobalDefinitionsIT {
 		Element bean3prop1 = (Element) bean3props[0];
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_NAME)).isEqualTo("description");
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_VALUE)).isEqualTo("#1 account");
+	}
+	
+	@Test
+	public void testNonCamelGlobalElementWithTagNameCollision() throws IOException, CoreException {
+		String name = "externalTagNameCollisionWithCamelTags.xml";
+		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
+		File baseFile = File.createTempFile("externalTagNameCollisionWithCamelTagsFile" + name, "xml");
+		Files.copy(inputStream, baseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+		inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
+		IFile fileInProject = fuseProject.getProject().getFile(name);
+		fileInProject.create(inputStream, true, new NullProgressMonitor());
+
+		CamelFile model1 = new CamelIOHandler().loadCamelModel(fileInProject, new NullProgressMonitor());
+
+		GlobalDefinitionCamelModelElement globalDefinition = model1.getGlobalDefinitions().get("_jndiProperties");
+		
+		assertThat(globalDefinition).isInstanceOf(GlobalDefinitionCamelModelElement.class);
 	}
 	
 	private Object getAttributeValue(String attrName, Node camelNode) {

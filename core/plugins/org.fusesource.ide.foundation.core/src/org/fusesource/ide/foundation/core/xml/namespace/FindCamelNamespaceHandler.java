@@ -18,10 +18,13 @@ import java.util.Set;
 
 public class FindCamelNamespaceHandler extends FindNamespaceHandlerSupport {
 	
-	private static String[] camelNamesapceArray = new String[]{ "http://camel.apache.org/schema/spring", "http://camel.apache.org/schema/blueprint", 
-			"http://www.osgi.org/xmlns/blueprint/v1.0.0", "https://www.osgi.org/xmlns/blueprint/v1.0.0" };
+	private static final String[] camelNamespaceArray = new String[]{
+			SpringNamespaceHandler.NAMESPACEURI_CAMEL_SPRING,
+			BlueprintNamespaceHandler.NAMESPACEURI_CAMEL_BLUEPRINT,
+			BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP,
+			BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTPS };
 	
-	public static Set<String> camelNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(camelNamesapceArray)));
+	private static final Set<String> camelNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(camelNamespaceArray)));
 	
 	public FindCamelNamespaceHandler() {
 		super(camelNamespaces);
