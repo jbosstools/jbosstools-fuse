@@ -52,6 +52,7 @@ public class CamelIOHandlerIT {
 		return Arrays.asList(
 				"usingCamelPrefixNamespace-blueprint.xml",
 				"usingCamelPrefixNamespace-spring.xml",
+				"externalTagNameCollisionWithCamelTags.xml",
 				"sample.xml",
 				"filterSample.xml",
 				"filterSampleBlueprint.xml",

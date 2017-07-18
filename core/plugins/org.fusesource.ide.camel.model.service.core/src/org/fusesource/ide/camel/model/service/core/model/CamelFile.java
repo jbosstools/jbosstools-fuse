@@ -47,12 +47,9 @@ import org.w3c.dom.events.EventTarget;
  */
 public class CamelFile extends AbstractCamelModelElement implements EventListener {
 	
-	private static final String SPRING_BEANS_NAMESPACE = "http://www.springframework.org/schema/beans";
-	private static final String OSGI_BLUEPRINT_NAMESPACE = "http://www.osgi.org/xmlns/blueprint/v1.0.0";
 	public static final int XML_INDENT_VALUE = 3;
 	protected static final String CAMEL_CONTEXT = "camelContext";
 	protected static final String CAMEL_ROUTES = "routes";
-	protected static final String GLOBAL_BEAN = "bean";
 	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value
@@ -137,7 +134,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 					cre.initialize();
 					// then add the context to the file
 					addChildElement(cre);
-				} else if (isGlobalBean(child)) {
+				} else if (CamelUtils.isGlobalBean(child)) {
 					// found a camel bean
 					CamelBean cb = new CamelBean(this, child);
 					cb.setId(id);
@@ -155,11 +152,6 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		}
 	}
 
-	private boolean isGlobalBean(Node child) {
-		return GLOBAL_BEAN.equals(CamelUtils.getTagNameWithoutPrefix(child))
-				&& startsWithNamespace(child, OSGI_BLUEPRINT_NAMESPACE) || startsWithNamespace(child, SPRING_BEANS_NAMESPACE);
-	}
-
 	private String computeId(Node child) {
 		Node idNode = child.getAttributes().getNamedItem("id");
 		if (idNode != null){
@@ -172,15 +164,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	}
 	
 	private boolean ignoreNode(Node child) {
-		return !isCamelNamespaceElement(child) && !isSupportedGlobalType(child);
-	}
-	
-	private boolean isCamelNamespaceElement(Node child) {
-		return startsWithNamespace(child, "http://camel.apache.org/schema/");
-	}
-	
-	private boolean startsWithNamespace(Node child, String namespace) {
-		return child.getNamespaceURI() != null && child.getNamespaceURI().startsWith(namespace);
+		return !CamelUtils.isCamelNamespaceElement(child) && !isSupportedGlobalType(child);
 	}
 	
 	private boolean isSupportedGlobalType(Node child) {

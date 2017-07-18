@@ -18,8 +18,8 @@ import org.w3c.dom.Node;
 public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement {
 
 	/**
-	 * @param parent
-	 * @param underlyingNode
+	 * @param parent The parent in the Camel Model
+	 * @param underlyingNode The XML node that this Object is representing
 	 */
 	public GlobalDefinitionCamelModelElement(AbstractCamelModelElement parent, Node underlyingNode) {
 		super(parent, underlyingNode);
@@ -34,4 +34,5 @@ public class GlobalDefinitionCamelModelElement extends AbstractCamelModelElement
 		// directly - see FUSETOOLS-1884 (except for Beans)
 		return false;
 	}
+	
 }

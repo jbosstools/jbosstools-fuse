@@ -21,8 +21,9 @@ import java.util.Set;
  */
 public class SpringNamespaceHandler extends FindNamespaceHandlerSupport {
 	
-	private static String[] springNamespaces = new String[]{ "http://camel.apache.org/schema/spring" };
-	public static Set<String> sprNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(springNamespaces)));
+	public static final String NAMESPACEURI_CAMEL_SPRING = "http://camel.apache.org/schema/spring";
+	private static final String[] springNamespaces = new String[]{ NAMESPACEURI_CAMEL_SPRING };
+	private static final Set<String> sprNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(springNamespaces)));
 	
 	public SpringNamespaceHandler() {
 		super(sprNamespaces);

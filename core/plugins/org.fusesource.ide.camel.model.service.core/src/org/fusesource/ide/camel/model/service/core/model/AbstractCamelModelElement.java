@@ -786,8 +786,9 @@ public abstract class AbstractCamelModelElement {
 
 		// this is needed for FUSETOOLS-1884, otherwise some global config
 		// elements lose their children and get corrupted
-		if (getEipByName(CamelUtils.getTagNameWithoutPrefix(getXmlNode())) == null && "id".equalsIgnoreCase(name)) {
-			kind=NODE_KIND_ATTRIBUTE;
+		if ((!CamelUtils.isCamelNamespaceElement(getXmlNode()) || getEipByName(CamelUtils.getTagNameWithoutPrefix(getXmlNode())) == null)
+				&& "id".equalsIgnoreCase(name)) {
+			kind = NODE_KIND_ATTRIBUTE;
 		}
 
 		
