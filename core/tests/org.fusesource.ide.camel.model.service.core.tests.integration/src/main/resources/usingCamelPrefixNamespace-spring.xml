@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+		<bean id="accountOne" class="org.apache.aries.simple.Account" />
+		<bean id="accountTwo" class="org.apache.aries.simple.Account2">
+				<constructor-arg value="1" />
+		</bean>
+		<bean id="accountThree" class="org.apache.aries.simple.Account3">
+				<constructor-arg value="1" />
+				<property name="description" value="#1 account" />
+		</bean>
+		<c:camelContext id="cbr-example-context"
+				xmlns:c="http://camel.apache.org/schema/spring">
+				<c:route id="cbr-route">
+						<c:from id="_from1" uri="file:work/cbr/input" />
+						<c:log id="_log1" message="Receiving order ${file:name}" />
+						<c:choice id="_choice1">
+								<c:when id="_when1">
+										<c:xpath id="_xpath1">/order/customer/country = 'UK'</c:xpath>
+										<c:log id="_log2" message="Sending order ${file:name} to the UK" />
+										<c:to id="_to1" uri="file:work/cbr/output/uk" />
+								</c:when>
+								<c:when id="_when2">
+										<c:xpath id="_xpath2">/order/customer/country = 'US'</c:xpath>
+										<c:log id="_log3" message="Sending order ${file:name} to the US" />
+										<c:to id="_to2" uri="file:work/cbr/output/us" />
+								</c:when>
+								<c:otherwise id="_otherwise1">
+										<c:log id="_log4"
+												message="Sending order ${file:name} to another country" />
+										<c:to id="_to3" uri="file:work/cbr/output/others" />
+								</c:otherwise>
+						</c:choice>
+						<c:log id="_log5" message="Done processing ${file:name}" />
+				</c:route>
+		</c:camelContext>
+</beans>
