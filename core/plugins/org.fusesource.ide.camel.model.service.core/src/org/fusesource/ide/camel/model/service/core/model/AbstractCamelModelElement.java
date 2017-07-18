@@ -121,7 +121,7 @@ public abstract class AbstractCamelModelElement {
 			setUnderlyingMetaModelObject(getEipByName(CamelUtils.getTagNameWithoutPrefix(underlyingNode)));
 		}
 		if (parent != null && parent.getXmlNode() != null && underlyingNode != null
-				&& (getXmlNode().getParentNode() == null || !CamelUtils.getTagNameWithoutPrefix(getXmlNode().getParentNode()).equals(DATA_FORMATS_NODE_NAME))) {
+				&& (getXmlNode().getParentNode() == null || !DATA_FORMATS_NODE_NAME.equals(CamelUtils.getTagNameWithoutPrefix(getXmlNode().getParentNode())))) {
 			boolean alreadyChild = false;
 			final NodeList siblingNodes = parent.getXmlNode().getChildNodes();
 			for (int i = 0; i < siblingNodes.getLength(); i++) {
@@ -131,18 +131,18 @@ public abstract class AbstractCamelModelElement {
 				}
 			}
 			if (!alreadyChild) {
-				if (parent.getNodeTypeId().equals(CHOICE_NODE_NAME)) {
-					if (this.getNodeTypeId().equals(WHEN_NODE_NAME)) {
+				if (CHOICE_NODE_NAME.equals(parent.getNodeTypeId())) {
+					if (WHEN_NODE_NAME.equals(this.getNodeTypeId())) {
 						Node otherwiseNode = null;
 						for (int i = 0; i < siblingNodes.getLength(); i++) {
-							if (CamelUtils.getTagNameWithoutPrefix(siblingNodes.item(i)).equals(OTHERWISE_NODE_NAME)) {
+							if (OTHERWISE_NODE_NAME.equals(CamelUtils.getTagNameWithoutPrefix(siblingNodes.item(i)))) {
 								otherwiseNode = siblingNodes.item(i);
 								break;
 							}
 						}
 						// move all when nodes before the otherwise
 						parent.getXmlNode().insertBefore(getXmlNode(), otherwiseNode);
-					} else if (getNodeTypeId().equals(OTHERWISE_NODE_NAME)) {
+					} else if (OTHERWISE_NODE_NAME.equals(getNodeTypeId())) {
 						parent.getXmlNode().appendChild(getXmlNode());
 					}
 				} else {
@@ -321,7 +321,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public CamelRouteElement getRoute() {
 		AbstractCamelModelElement cme = getParent();
-		while (cme instanceof CamelRouteElement == false && cme != null) {
+		while (!(cme instanceof CamelRouteElement) && cme != null) {
 			cme = cme.getParent();
 		}
 		if (cme != null && cme instanceof CamelRouteElement) {
@@ -508,7 +508,7 @@ public abstract class AbstractCamelModelElement {
 		if (inputElement != null) {
 			Node inputNode = inputElement.getXmlNode();
 			Node insertPosNode = getNextNode(inputNode);
-			if (insertPosNode != null && getXmlNode().isEqualNode(insertPosNode) == false) {
+			if (insertPosNode != null && !getXmlNode().isEqualNode(insertPosNode)) {
 				inputNode.getParentNode().insertBefore(getXmlNode(), insertPosNode);
 			}
 			if (insertPosNode == null) {
@@ -810,7 +810,7 @@ public abstract class AbstractCamelModelElement {
 				e.setTextContent(null);
 			}
 		} else {
-			if (kind == null && value instanceof AbstractCamelModelElement == false) {
+			if (kind == null && !(value instanceof AbstractCamelModelElement)) {
 				kind = NODE_KIND_VALUE;
 			}
 			if (kind == null && value instanceof AbstractCamelModelElement) {
@@ -997,7 +997,7 @@ public abstract class AbstractCamelModelElement {
 					if (NODE_KIND_VALUE.equalsIgnoreCase(subEipParameter.getKind())) {
 						((Element) subNode).setNodeValue(oValue.toString());
 					} else if(isElementKind(subEipParameter) && isArrayType(subEipParameter) && oValue instanceof List<?>) {
-						updateElementList(((Element) subNode), pKey, (List<?>) oValue);
+						updateElementList((Element) subNode, pKey, (List<?>) oValue);
 					} else {
 						((Element) subNode).setAttribute(pKey, oValue.toString());
 					}
@@ -1408,7 +1408,7 @@ public abstract class AbstractCamelModelElement {
 		// then we get the eip meta model
 		Eip eip = model.getEip(name);
 		// special case for context wide endpoint definitions
-		if (eip == null && name.equals(ENDPOINT_NODE_NAME)) {
+		if (eip == null && ENDPOINT_NODE_NAME.equals(name)) {
 			eip = model.getEip(ENDPOINT_TYPE_TO);
 		}
 		// and return it
@@ -1446,7 +1446,7 @@ public abstract class AbstractCamelModelElement {
 	protected boolean hasSpecialHandling(String name) {
 		Eip eip = getEipByName(name);
 		if (eip != null) {
-			return eip.getName().equalsIgnoreCase(CHOICE_NODE_NAME); // choice
+			return CHOICE_NODE_NAME.equalsIgnoreCase(eip.getName()); // choice
 																		// is
 																// special case
 		}
@@ -1639,7 +1639,7 @@ public abstract class AbstractCamelModelElement {
 	public CamelFile getCamelFile() {
 		if (this.cf == null) {
 			AbstractCamelModelElement tmp = this;
-			while (tmp.getParent() != null && tmp.getParent() instanceof CamelFile == false) {
+			while (tmp.getParent() != null && !(tmp.getParent() instanceof CamelFile)) {
 				tmp = tmp.getParent();
 			}
 			if (tmp.getParent() != null && tmp.getParent() instanceof CamelFile) {

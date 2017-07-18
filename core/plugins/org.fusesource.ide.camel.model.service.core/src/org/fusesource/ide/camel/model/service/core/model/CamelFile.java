@@ -121,21 +121,21 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 				}
 				String name = CamelUtils.getTagNameWithoutPrefix(child);
 				String id = computeId(child);
-				if (name.equals(CAMEL_CONTEXT)) {
+				if (CAMEL_CONTEXT.equals(name)) {
 					// found a camel context
 					CamelContextElement cce = new CamelContextElement(this, child);
 					cce.setId(id);
 					cce.initialize();
 					// then add the context to the file
 					addChildElement(cce);
-				} else if (name.equals(CAMEL_ROUTES)) {
+				} else if (CAMEL_ROUTES.equals(name)) {
 					// found a camel context
 					CamelRoutesElement cre = new CamelRoutesElement(this, child);
 					cre.setId(id);
 					cre.initialize();
 					// then add the context to the file
 					addChildElement(cre);
-				} else if (name.equals(CAMEL_BEAN)) {
+				} else if (CAMEL_BEAN.equals(name)) {
 					// found a camel bean
 					CamelBean cb = new CamelBean(this, child);
 					cb.setId(id);
@@ -379,7 +379,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 			int lineWidth = Integer.parseInt(XMLCorePlugin.getDefault().getPluginPreferences().getString("lineWidth"));
 			int indentValue = XMLCorePlugin.getDefault().getPluginPreferences().getInt("indentationSize");
 			String indentChar = XMLCorePlugin.getDefault().getPluginPreferences().getString("indentationChar");
-			if (indentChar.equalsIgnoreCase("tab")) {
+			if ("tab".equalsIgnoreCase(indentChar)) {
 				// calculate tabWidth * indent
 				int tabWidth = org.eclipse.ui.internal.editors.text.EditorsPlugin.getDefault().getPreferenceStore().getInt("tabWidth");
 				indentValue = indentValue * tabWidth;
@@ -415,7 +415,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 * @param listener
 	 */
 	public void addModelListener(ICamelModelListener listener) {
-		if (this.modelListeners.contains(listener) == false) {
+		if (!this.modelListeners.contains(listener)) {
 			this.modelListeners.add(listener);
 		}
 	}
@@ -436,7 +436,9 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	 */
 	public void fireModelChanged() {
 		for (ICamelModelListener listener : this.modelListeners) {
-			if (listener != null) listener.modelChanged();
+			if (listener != null) {
+				listener.modelChanged();
+			}
 		}
 	}
 	
@@ -480,19 +482,25 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		List<AbstractCamelModelElement> result = new ArrayList<>();
 
 		if (nodeId != null) { 
-			if (getGlobalDefinitions() != null) {
-				for (AbstractCamelModelElement e : getGlobalDefinitions().values()) {
-					if (nodeId.equals(e.getId())) {
-						result.add(e);
-					}
-				}
-			}
+			result.addAll(findAllGlobalelementsWithId(nodeId));
 			List<AbstractCamelModelElement> superResult = super.findAllNodesWithId(nodeId);
 			if (superResult != null && !superResult.isEmpty()) {
 				result.addAll(superResult);
 			}
 		}
 
+		return result;
+	}
+
+	private List<AbstractCamelModelElement> findAllGlobalelementsWithId(String nodeId) {
+		List<AbstractCamelModelElement> result = new ArrayList<>();
+		if (getGlobalDefinitions() != null) {
+			for (AbstractCamelModelElement e : getGlobalDefinitions().values()) {
+				if (nodeId.equals(e.getId())) {
+					result.add(e);
+				}
+			}
+		}
 		return result;
 	}
 }
