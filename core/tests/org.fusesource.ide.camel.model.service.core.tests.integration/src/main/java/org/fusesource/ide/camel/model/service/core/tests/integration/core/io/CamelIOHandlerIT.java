@@ -50,6 +50,8 @@ public class CamelIOHandlerIT {
 	public static Collection<String> params() {
 		//@formatter:off
 		return Arrays.asList(
+				"usingCamelPrefixNamespace-blueprint.xml",
+				"usingCamelPrefixNamespace-spring.xml",
 				"sample.xml",
 				"filterSample.xml",
 				"filterSampleBlueprint.xml",
