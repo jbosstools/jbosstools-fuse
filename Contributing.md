@@ -73,38 +73,6 @@ If you introduced new dependencies or changed versions it is always a good idea 
 - hit _Next_ to install the software
 - if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 
-## Code generation
-__IMPORTANT:__
-
-_This step is only required if the Apache Camel model, the documentation or used archetypes and xml catalogs changed! 
-Usually thats the case if the underlying Apache Camel version changed._
-
-### How to generate	model classes
-From the _fuseide_ directory type:
-
-    cd tools/ide-codegen
-    mvn compile exec:java
-
-The generator then runs and updates the sources. Don't forget to commit and push the regenerated source files.
-
-### How to generate archetypes and latest XSDs
-From the _fuseide_ directory type:
-
-    cd tools/ide-buildtools
-    mvn compile exec:java
-
-Be sure to have the file 
-
-    <userhome>/.repo.fusesource.com.properties
-
-which should contain the credentials for the FuseSource Nexus EA repository like
-
-    username=<your login>
-    password=<your password>
-
-Without this file the build will not work!
-
-
 ## Changing versions before / after a release
 There is a bash script called [_changeVersion.sh_](https://github.com/fusesource/fuseide/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
 
