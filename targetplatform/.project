@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.fusesource.ide.targetplatform</name>
+	<name>org.jboss.tools.targetplatforms.fuse-multiple</name>
 	<comment></comment>
 	<projects>
 	</projects>

@@ -48,8 +48,6 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-		<jbtis.version>4.5.0.AM1d-SNAPSHOT</jbtis.version>
-
 		<!-- camel version -->
 		<camel.version>2.17.0.redhat-630187</camel.version>
 
