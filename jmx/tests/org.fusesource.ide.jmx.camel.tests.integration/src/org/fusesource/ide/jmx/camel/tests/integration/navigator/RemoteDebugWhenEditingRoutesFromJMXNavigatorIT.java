@@ -25,6 +25,7 @@ import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeCon
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.tests.integration.remote.debug.ProjectWithDebugAvailableDeployedHelper;
 import org.fusesource.ide.launcher.tests.integration.remote.debug.RemoteCamelDebugTester;
 import org.jboss.tools.jmx.core.ExtensionManager;
@@ -74,7 +75,7 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 	}
 
 	private DefaultConnectionWrapper initializeConnection() throws MalformedURLException, IOException, CoreException {
-		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
+		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote Debug scenario test", ICamelDebugConstants.DEFAULT_JMX_URI, null, null);
 		jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
