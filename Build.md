@@ -33,9 +33,9 @@ If you want to do development in Eclipse for Fuse Tooling you need to use the JB
 Here's how to retrieve the target files describing the Target Platform...
 
     $ cd fuseide/targetplatform
-    $ mvn generate-sources
+    $ mvn install
 
-Once the build is done you end up with a file aggregate-\*.target inside the *target/tp* subfolder. Now open this file with Target File editor from Eclipse IDE and click "Set as target Platform" at the top right. Be patient... and it will be ready.
+Once the build is done you end up with a file *fuse-multiple.target* inside the *target* subfolder. Now open this file with Target File editor from Eclipse IDE and click "Set as target Platform" at the top right. Be patient... and it will be ready.
 
 ## Eclipse Setup
 At _master_ branch we always try to use the latest Eclipse version. Please refer to the target platform plugin to see which versions of Eclipse are supported. The _master_ branch was using *Eclipse Luna* when this document was created.
