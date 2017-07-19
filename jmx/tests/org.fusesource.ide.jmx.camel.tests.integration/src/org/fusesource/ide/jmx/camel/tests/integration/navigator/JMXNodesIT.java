@@ -31,6 +31,7 @@ import org.fusesource.ide.jmx.camel.navigator.EndpointsNode;
 import org.fusesource.ide.jmx.camel.navigator.ProcessorNode;
 import org.fusesource.ide.jmx.camel.navigator.RouteNode;
 import org.fusesource.ide.jmx.camel.navigator.RoutesNode;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.tests.integration.remote.debug.ProjectWithDebugAvailableDeployedHelper;
 import org.jboss.tools.jmx.core.ExtensionManager;
 import org.jboss.tools.jmx.core.IConnectionProvider;
@@ -75,7 +76,7 @@ public class JMXNodesIT {
 	
 	@Test
 	public void testAllNodesAvailable() throws Exception {
-		DefaultConnectionWrapper jmxConnection = initializeConnection("JMX Connection for Remote connection test");
+		DefaultConnectionWrapper jmxConnection = initializeConnection("JMX Connection for Remote connection test all nodes available");
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		List<NodeSupport> traverseNodes = traverseNodes(jmxConnection, camelNodeContentProvider);
 		
@@ -118,7 +119,7 @@ public class JMXNodesIT {
 	
 	@Test
 	public void testRefreshprovidesEqualityOnDifferentObjects() throws Exception {
-		DefaultConnectionWrapper jmxConnection = initializeConnection("JMX Connection for Remote connection test");
+		DefaultConnectionWrapper jmxConnection = initializeConnection("JMX Connection for Remote connection test refresh");
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		List<NodeSupport> traversedNodes = traverseNodes(jmxConnection, camelNodeContentProvider);
 		
@@ -158,7 +159,7 @@ public class JMXNodesIT {
 	}
 	
 	private DefaultConnectionWrapper initializeConnection(String connectioName) throws MalformedURLException, IOException, CoreException {
-		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor(connectioName, "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
+		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor(connectioName, ICamelDebugConstants.DEFAULT_JMX_URI, null, null);
 		DefaultConnectionWrapper jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
