@@ -105,7 +105,7 @@ public final class TextParameterValidator implements IValidator {
 				if (value == null || value instanceof String == false || value.toString().trim().length() < 1) {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
 				} else {
-					if (camelModelElement.getRouteContainer().isIDUnique((String) value) == false) {
+					if (camelModelElement.getRouteContainer() != null && camelModelElement.getRouteContainer().isIDUnique((String) value) == false) {
 						return ValidationStatus.warning("Parameter " + parameter.getName() + " does not contain a unique value.");
 					}
 				}

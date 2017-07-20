@@ -16,6 +16,7 @@ import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 
 /**
@@ -30,7 +31,11 @@ public class BeanValidationUtil {
 
 	public static IStatus validateIdInParent(AbstractCamelModelElement parent, Object value) {
 		String id = (String) value;
-		if (parent.findAllNodesWithId(id).size() > 1){
+		if (parent instanceof CamelBean) {
+			// we don't want the bean, we need the whole configuration
+			parent = parent.getCamelFile();
+		}
+		if (parent.findAllNodesWithId(id).size() > 1) {
 			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();
