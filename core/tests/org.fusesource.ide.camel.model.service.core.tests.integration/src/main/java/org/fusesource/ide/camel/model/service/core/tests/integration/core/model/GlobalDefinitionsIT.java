@@ -147,8 +147,7 @@ public class GlobalDefinitionsIT {
 		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_VALUE)).isEqualTo("1");
 		assertThat(bean2arg1.getAttribute(GlobalBeanEIP.ARG_TYPE)).isNullOrEmpty();
 		
-		GlobalDefinitionCamelModelElement globalDefinition3 = model1.getGlobalDefinitions().get("accountThree");
-		CamelBean bean3 = (CamelBean) globalDefinition3;
+		CamelBean bean3 = (CamelBean)model1.getGlobalDefinitions().get("accountThree");
 		assertThat(bean3.getId()).isEqualTo("accountThree");
 		assertThat(bean3.getClassName()).isEqualTo("org.apache.aries.simple.Account3");
 		assertThat(getBeanArguments(bean3.getXmlNode())).isNotEmpty();
@@ -159,6 +158,18 @@ public class GlobalDefinitionsIT {
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_NAME)).isEqualTo("description");
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_VALUE)).isEqualTo("#1 account");
 		
+		CamelBean beanWithAllAttributes = (CamelBean)model1.getGlobalDefinitions().get("whateverWithAllFields");
+		checkAllCommonAttributesLoaded(beanWithAllAttributes);
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_FACTORY_BEAN)).isEqualTo("factoryMethod");
+	}
+
+	private void checkAllCommonAttributesLoaded(CamelBean beanWithAllAttributes) {
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_DESTROY_METHOD)).isEqualTo("destroyMethod");
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_CLASS)).isEqualTo("org.class");
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_DEPENDS_ON)).isEqualTo("dependsOnMethod");
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_INIT_METHOD)).isEqualTo("initMethod");
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_DESTROY_METHOD)).isEqualTo("destroyMethod");
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_SCOPE)).isEqualTo("singleton");
 	}
 
 	@Test
@@ -211,6 +222,10 @@ public class GlobalDefinitionsIT {
 		Element bean3prop1 = (Element) bean3props[0];
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_NAME)).isEqualTo("description");
 		assertThat(bean3prop1.getAttribute(GlobalBeanEIP.PROP_VALUE)).isEqualTo("#1 account");
+		
+		CamelBean beanWithAllAttributes = (CamelBean)model1.getGlobalDefinitions().get("whateverWithAllFields");
+		checkAllCommonAttributesLoaded(beanWithAllAttributes);
+		assertThat(beanWithAllAttributes.getParameter(GlobalBeanEIP.PROP_FACTORY_METHOD)).isEqualTo("factoryMethod");
 	}
 	
 	@Test
