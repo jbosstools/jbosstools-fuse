@@ -87,11 +87,9 @@ public class EditorManipulator {
 		File testFile = new File(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, source));
 		String text = "";
 
-		try {
-			Scanner scanner = new Scanner(testFile);
+		try (Scanner scanner = new Scanner(testFile)){
 			scanner.useDelimiter("\\Z");
 			text = scanner.next();
-			scanner.close();
 		} catch (FileNotFoundException e) {
 			log.error("Resource missing: can't find a failing test case to copy (" + source + ")!");
 		}

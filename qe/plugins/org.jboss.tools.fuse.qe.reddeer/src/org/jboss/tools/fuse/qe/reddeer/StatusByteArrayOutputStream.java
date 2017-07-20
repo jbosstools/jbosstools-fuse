@@ -34,6 +34,7 @@ public class StatusByteArrayOutputStream extends ByteArrayOutputStream {
 	/**
 	 * Closes the output stream
 	 */
+	@Override
 	public void close() {
 
 		this.close();

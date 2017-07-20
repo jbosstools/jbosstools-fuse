@@ -121,7 +121,8 @@ public class ShellManager {
 	public void asyncExecute(final String command, final OutputStream out) {
 
 		Thread t = new Thread(new Runnable() {
-
+			
+			@Override
 			public void run() {
 				Channel channel = null;
 				try {
