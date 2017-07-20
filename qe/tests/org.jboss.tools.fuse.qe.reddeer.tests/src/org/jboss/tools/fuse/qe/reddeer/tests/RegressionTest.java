@@ -126,10 +126,10 @@ public class RegressionTest extends DefaultTest {
 		File testFile = new File(
 				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, "resources/camel-context.xml"));
 		DefaultStyledText editor = new DefaultStyledText();
-		Scanner scanner = new Scanner(testFile);
-		scanner.useDelimiter("\\Z");
-		editor.setText(scanner.next());
-		scanner.close();
+		try (Scanner scanner = new Scanner(testFile)) {
+			scanner.useDelimiter("\\Z");
+			editor.setText(scanner.next());
+		}
 
 		new DefaultCTabItem("Design").activate();
 		new DefaultCTabItem("Source").activate();
