@@ -17,6 +17,6 @@ public class RemoteCamelLaunchConfigurationDelegateOverJMXIT extends AbstractRem
 	
 	@Override
 	protected void configureConnection(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel");
+		configuration.setAttribute(ICamelDebugConstants.ATTR_JMX_URI_ID, "service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi/camel");
 	}
 }

@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.rmi.registry.LocateRegistry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -21,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.model.IProcess;
 import org.fusesource.ide.jmx.camel.jmx.content.navigator.providers.CamelNodeContentProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextNode;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
@@ -57,11 +59,18 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 			ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID).removeConnection(jmxConnection);
 		}
 		projectWithDebugAvailableDeployedHelper.clean();
+		if (remoteDebuglaunch != null) {
+			IProcess[] procs = remoteDebuglaunch.getProcesses();
+			for (IProcess p : procs) {
+				p.terminate();
+			}
+			remoteDebuglaunch.terminate();
+		}
 	}
 	
 	@Test
 	public void testRemoteDebugScenario() throws Exception {
-		DefaultConnectionWrapper jmxConnection = initializeConnection();
+		initializeConnection();
 		CamelNodeContentProvider camelNodeContentProvider = new CamelNodeContentProvider();
 		CamelContextsNode camelContextsNode = (CamelContextsNode)camelNodeContentProvider.getChildren(jmxConnection)[0];
 		CamelContextNode camelContextNode = (CamelContextNode)camelNodeContentProvider.getChildren(camelContextsNode)[0];
@@ -73,15 +82,13 @@ public class RemoteDebugWhenEditingRoutesFromJMXNavigatorIT {
 		new RemoteCamelDebugTester(remoteDebuglaunch, contextFile.getProject(), contextFile).test();
 	}
 
-	private DefaultConnectionWrapper initializeConnection() throws MalformedURLException, IOException, CoreException {
-		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel", null, null);
+	private void initializeConnection() throws MalformedURLException, IOException, CoreException {
+		MBeanServerConnectionDescriptor descriptor = new MBeanServerConnectionDescriptor("JMX Connection for Remote connection test", "service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi/camel", null, null);
 		jmxConnection = new DefaultConnectionWrapper(descriptor);
 		IConnectionProvider provider = ExtensionManager.getProvider(DefaultConnectionProvider.PROVIDER_ID);
 		provider.getConnections();
 		provider.addConnection(jmxConnection);
 		jmxConnection.connect();
 		jmxConnection.loadRoot(new NullProgressMonitor());
-		return jmxConnection;
 	}
-
 }
