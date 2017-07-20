@@ -49,6 +49,7 @@ public class GlobalBeanEIP extends Eip {
 		createParameter(PROP_INIT_METHOD, String.class.getName());
 		createParameter(PROP_DESTROY_METHOD, String.class.getName());
 		createParameter(PROP_FACTORY_METHOD, String.class.getName());
+		createParameter(PROP_FACTORY_BEAN, String.class.getName());
 		setProperties(parameters);
 	}
 	

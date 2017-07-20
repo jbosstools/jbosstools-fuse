@@ -12,6 +12,16 @@
         <argument value="1"/>
         <property name="description" value="#1 account"/>
     </bean>
+ 	<bean id="accountFactory"
+    	class="org.apache.aries.simple.StaticAccountFactory" 
+     	factory-method="createAccount">   
+       <argument value="2"/>
+   	</bean>
+   	 <bean
+        class="org.class"
+        depends-on="dependsOnMethod" destroy-method="destroyMethod"
+        factory-method="factoryMethod" id="whateverWithAllFields"
+        init-method="initMethod" scope="singleton"/>
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
         <route/>
     </camelContext>
