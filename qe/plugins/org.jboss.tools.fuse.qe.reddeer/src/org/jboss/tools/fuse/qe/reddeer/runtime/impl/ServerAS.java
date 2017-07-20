@@ -164,21 +164,11 @@ public class ServerAS extends ServerBase {
 
 		if (isRemote()) {
 			boolean portOpen = false;
-			Socket socket = null;
 
-			try {
-				socket = new Socket(remote.getHost(), port);
+			try (Socket socket = new Socket(remote.getHost(), port)) {
 				portOpen = true;
 			} catch (IOException e) {
 				portOpen = false;
-			} finally {
-				if (socket != null) {
-					try {
-						socket.close();
-					} catch (IOException e) {
-						// ignore
-					}
-				}
 			}
 
 			if (remote.isExternallyManaged() && !portOpen) {
