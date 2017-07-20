@@ -45,7 +45,7 @@ public abstract class AbstractTextFieldParameterPropertyUICreator extends Abstra
 		txtField.setLayoutData(createPropertyFieldLayoutData());
 		setControl(txtField);
 
-		setUiObservable(WidgetProperties.text(SWT.Modify).observe(txtField));
+		setUiObservable(WidgetProperties.text(SWT.Modify).observeDelayed(300, txtField));
 		setValidator(createValidator());
 	}
 

@@ -35,7 +35,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreatorWithBrowse;
 import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
@@ -43,6 +42,7 @@ import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator
 import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
+import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
@@ -131,7 +131,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 
 	private AbstractTextFieldParameterPropertyUICreator createTextField(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
 				getWidgetFactory());
 		txtFieldCreator.create();
 		return txtFieldCreator;
@@ -167,9 +167,8 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
 			validator = new BeanClassExistsValidator(project);
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName)
-				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
-			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)
 				|| GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
