@@ -14,8 +14,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
-import org.fusesource.ide.camel.editor.properties.bean.AttributeComboParameterPropertyModifyListenerForAdvanced;
-import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.AbstractComboParameterPropertyModifyListener;
+import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -29,11 +28,11 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 	public ComboParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
-				new AttributeComboParameterPropertyModifyListenerForAdvanced(camelModelElement, parameter));
+				new ComboParameterPropertyModifyListener(camelModelElement, parameter.getName()));
 	}
 
 	public ComboParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
-			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, AbstractComboParameterPropertyModifyListener listener) {
+			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
 	}
 
@@ -57,13 +56,12 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 		}
 		return findInitialValue(parameterValue, defaultValue);
 	}
-
-	/* (non-Javadoc)
-	 * Made visible for testing
-	 * @see org.fusesource.ide.camel.editor.properties.creators.AbstractComboFieldParameterPropertyUICreator#setValues(java.lang.String[])
+	
+	/**
+	 * Public for test purpose
 	 */
 	@Override
 	public void setValues(String[] values) {
-		super.setValues(values); 
+		super.setValues(values);
 	}
 }

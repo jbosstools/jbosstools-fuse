@@ -16,6 +16,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -24,12 +25,12 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  * @author brianf
  *
  */
-public class AttributeTextFieldPropertyUICreatorWithBrowse extends AttributeTextFieldPropertyUICreator {
+public class AttributeTextFieldPropertyUICreatorWithBrowse extends TextParameterPropertyUICreator {
 
 		public AttributeTextFieldPropertyUICreatorWithBrowse(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip,
 				AbstractCamelModelElement camelModelElement, Parameter parameter, Composite parent,
 				TabbedPropertySheetWidgetFactory widgetFactory) {
-			super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, new AttributeTextParameterPropertyModifyListenerForAdvanced(camelModelElement, parameter));
+			super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
 		}
     	
 		@Override

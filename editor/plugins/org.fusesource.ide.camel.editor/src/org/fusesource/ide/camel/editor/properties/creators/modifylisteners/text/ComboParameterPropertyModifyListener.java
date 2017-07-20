@@ -18,9 +18,9 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  * @author brianf
  *
  */
-public abstract class AbstractComboParameterPropertyModifyListener extends AbstractTextParameterPropertyModifyListener {
+public class ComboParameterPropertyModifyListener extends AbstractTextParameterPropertyModifyListener {
 
-	public AbstractComboParameterPropertyModifyListener(AbstractCamelModelElement camelModelElement,
+	public ComboParameterPropertyModifyListener(AbstractCamelModelElement camelModelElement,
 			String parameterName) {
 		super(camelModelElement, parameterName);
 	}
@@ -29,5 +29,10 @@ public abstract class AbstractComboParameterPropertyModifyListener extends Abstr
 	public void modifyText(ModifyEvent e) {
 		Combo txt = (Combo) e.getSource();
 		updateModel(txt.getText());
+	}
+	
+	@Override
+	protected void updateModel(String newValue) {
+		camelModelElement.setParameter(parameterName, newValue);
 	}
 }

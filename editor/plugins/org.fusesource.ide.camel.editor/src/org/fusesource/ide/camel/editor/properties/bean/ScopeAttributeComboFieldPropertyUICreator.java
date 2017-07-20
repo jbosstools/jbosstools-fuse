@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;
-import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.AbstractComboParameterPropertyModifyListener;
+import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -29,17 +29,18 @@ import org.w3c.dom.Node;
  */
 public class ScopeAttributeComboFieldPropertyUICreator extends ComboParameterPropertyUICreator {
 	
+	private static final String SINGLETON_SCOPE = "singleton"; //$NON-NLS-1$
+	private static final String PROTOTYPE_SCOPE = "prototype";  //$NON-NLS-1$
+	private static final String DEFAULT_SCOPE = SINGLETON_SCOPE;
+	private static final String[] blueprintScope = new String[] {SINGLETON_SCOPE, PROTOTYPE_SCOPE};
+	private static final String[] springScope = new String[] {SINGLETON_SCOPE, PROTOTYPE_SCOPE};
+	
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
-	private static String singletonScope = "singleton"; //$NON-NLS-1$
-	private static String defaultScope = singletonScope;
-	private static String prototypeScope = "prototype";  //$NON-NLS-1$
-	private static String[] blueprintScope = new String[] {singletonScope, prototypeScope};
-	private static String[] springScope = new String[] {singletonScope, prototypeScope};
 
 	public ScopeAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
-				new AttributeComboParameterPropertyModifyListenerForAdvanced(camelModelElement, parameter));
+				new ComboParameterPropertyModifyListener(camelModelElement, parameter.getName()));
 		if (beanConfigUtil.isBlueprintConfig(camelModelElement.getXmlNode())) {
 			setValues(blueprintScope);
 		} else {
@@ -48,7 +49,7 @@ public class ScopeAttributeComboFieldPropertyUICreator extends ComboParameterPro
 	}
 
 	public ScopeAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
-			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, AbstractComboParameterPropertyModifyListener listener) {
+			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
 		if (beanConfigUtil.isBlueprintConfig(camelModelElement.getXmlNode())) {
 			setValues(blueprintScope);
@@ -62,7 +63,7 @@ public class ScopeAttributeComboFieldPropertyUICreator extends ComboParameterPro
 		final String parameterName = parameter.getName();
 		final Object parameterValue = camelModelElement.getParameter(parameterName);
 		final Parameter param = eip.getParameter(parameterName);
-		String defaultValue = defaultScope;
+		String defaultValue = DEFAULT_SCOPE;
 		if (param != null && param.getDefaultValue() != null) {
 			defaultValue = param.getDefaultValue();
 		}
