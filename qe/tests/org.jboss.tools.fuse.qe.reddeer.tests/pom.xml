@@ -63,7 +63,6 @@
 			<plugin>
 				<groupId>com.googlecode.maven-download-plugin</groupId>
 				<artifactId>maven-download-plugin</artifactId>
-				<version>1.0.0</version>
 				<configuration>
 					<skip>${skipRequirements}</skip>
 				</configuration>

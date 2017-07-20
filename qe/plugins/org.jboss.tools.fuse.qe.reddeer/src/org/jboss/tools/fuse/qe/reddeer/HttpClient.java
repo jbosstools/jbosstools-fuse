@@ -34,12 +34,12 @@ public class HttpClient {
 		StringBuffer response = new StringBuffer();
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setRequestMethod("GET");
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line = null;
-		while ((line = in.readLine()) != null) {
-			response.append(line);
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				response.append(line);
+			}
 		}
-		in.close();
 		return response.toString();
 	}
 
@@ -51,12 +51,12 @@ public class HttpClient {
 			con.setDoOutput(true);
 			con.getOutputStream().write(data.getBytes());
 		}
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line = null;
-		while ((line = in.readLine()) != null) {
-			response.append(line);
+		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				response.append(line);
+			}
 		}
-		in.close();
 		return response.toString();
 	}
 }

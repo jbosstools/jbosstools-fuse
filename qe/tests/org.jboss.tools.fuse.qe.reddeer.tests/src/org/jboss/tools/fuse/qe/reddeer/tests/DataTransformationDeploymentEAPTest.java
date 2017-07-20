@@ -113,11 +113,11 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 		File output = new File(
 				serverRequirement.getConfig().getServerBase().getHome() + "/bin/target/messages/xyz-order.json");
 		assertTrue("Transformation did not create output file - bin/target/messages/xyz-order.json", output.exists());
-		Scanner scanner = new Scanner(output);
-		String text = scanner.nextLine();
-		scanner.close();
-		assertEquals("Transformation has weird output \n\n" + text,
-				"{\"custId\":\"[ACME-123]\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"web\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}",
-				text);
+		try (Scanner scanner = new Scanner(output)) {
+			String text = scanner.nextLine();
+			assertEquals("Transformation has weird output \n\n" + text,
+					"{\"custId\":\"[ACME-123]\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"web\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}",
+					text);
+		}
 	}
 }
