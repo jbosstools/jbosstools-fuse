@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.resources.IProject;
@@ -32,10 +34,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreatorWithBrowse;
+import org.fusesource.ide.camel.editor.properties.bean.CompoundValidator;
 import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
@@ -45,6 +49,8 @@ import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldPara
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -130,11 +136,39 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		return txtFieldCreator;
 	}
 
+	private AbstractTextFieldParameterPropertyUICreator createIDTextField(final Parameter p, final Composite page) {
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new BeanIDPropertyValidator(dbc, modelMap, eip, selectedEP, p, page,
+				getWidgetFactory(), p);
+		txtFieldCreator.create();
+		return txtFieldCreator;
+	}
+
 	private AbstractTextFieldParameterPropertyUICreator createTextField(final Parameter p, final Composite page) {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
 				getWidgetFactory());
 		txtFieldCreator.create();
 		return txtFieldCreator;
+	}
+	
+	class BeanIDPropertyValidator extends TextParameterPropertyUICreator {
+
+		private Parameter p;
+		
+		public BeanIDPropertyValidator(DataBindingContext dbc, IObservableMap modelMap, Eip eip,
+				AbstractCamelModelElement camelModelElement, Parameter parameter, Composite parent,
+				TabbedPropertySheetWidgetFactory widgetFactory, Parameter p) {
+			super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
+			this.p = p;
+		}
+
+		@Override
+		protected IValidator createValidator() {
+			IValidator superValidator = super.createValidator();
+			NewBeanIdPropertyValidator validator = new NewBeanIdPropertyValidator(p, selectedEP);
+			CompoundValidator compoundValidator = new CompoundValidator(superValidator, validator);
+			return compoundValidator;
+		}
+		
 	}
 
 	private ScopeAttributeComboFieldPropertyUICreator createScopeCombo(final Parameter p, final Composite page) {
@@ -191,7 +225,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName) || GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
 			fieldCreator = createTextFieldWithPublicStaticMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			fieldCreator = createTextField(p, page);
+			fieldCreator = createIDTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
 			fieldCreator = createScopeCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
