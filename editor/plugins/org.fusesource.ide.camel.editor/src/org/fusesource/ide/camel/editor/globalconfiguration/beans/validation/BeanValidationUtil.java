@@ -31,11 +31,14 @@ public class BeanValidationUtil {
 
 	public static IStatus validateIdInParent(AbstractCamelModelElement parent, Object value) {
 		String id = (String) value;
+		AbstractCamelModelElement elementToSearchIn;
 		if (parent instanceof CamelBean) {
 			// we don't want the bean, we need the whole configuration
-			parent = parent.getCamelFile();
+			elementToSearchIn = parent.getCamelFile();
+		} else {
+			elementToSearchIn = parent;
 		}
-		if (parent.findAllNodesWithId(id).size() > 1) {
+		if (elementToSearchIn.findAllNodesWithId(id).size() > 1) {
 			return ValidationStatus.error(UIMessages.newBeanIdValidatorErrorBeanIDAlreadyUsed);
 		}
 		return ValidationStatus.ok();
