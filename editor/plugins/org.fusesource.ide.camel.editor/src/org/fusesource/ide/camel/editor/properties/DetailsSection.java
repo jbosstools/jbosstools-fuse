@@ -135,7 +135,7 @@ public class DetailsSection extends FusePropertySection {
             } else if (CamelComponentUtils.isBooleanProperty(prop)) {
 				new BooleanParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             } else if (CamelComponentUtils.isTextProperty(prop) || CamelComponentUtils.isCharProperty(prop)) {
-				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
+				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, null, page, getWidgetFactory()).create();
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
 				new NumberParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             } else if (CamelComponentUtils.isChoiceProperty(prop)) {
@@ -394,7 +394,7 @@ public class DetailsSection extends FusePropertySection {
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
 				new UnsupportedParameterPropertyUICreatorForDetails(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
             } else if ("redeliveryPolicy".equals(prop.getName())) {
-				Object valueToDisplay = (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
+				Object valueToDisplay = this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue();
 				if (valueToDisplay instanceof AbstractCamelModelElement) {
 					Group objectGroup = getWidgetFactory().createGroup(page, "");
 					objectGroup.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).create());
@@ -412,7 +412,7 @@ public class DetailsSection extends FusePropertySection {
 				}
 			// CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
 			} else {
-				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory()).create();
+				new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, null, page, getWidgetFactory()).create();
             }
             
 			// bind the observables

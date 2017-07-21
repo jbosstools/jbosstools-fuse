@@ -13,14 +13,8 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.Binding;
-import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.observable.Observables;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
-import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -40,7 +34,6 @@ import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidato
 import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
-import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
@@ -104,7 +97,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithClassBrowseAndNew(final Parameter p, final Composite page) {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
-				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.setColumnSpan(1);
 		txtFieldCreator.create();
 		createClassBrowseButton(page, txtFieldCreator.getControl());
@@ -113,8 +106,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 	
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithPublicStaticMethodBrowse(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
-				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p,  getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.setColumnSpan(2);
 		txtFieldCreator.create();
 		createPublicStaticMethodBrowseButton(page, txtFieldCreator.getControl());
@@ -122,8 +114,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithNoArgMethodBrowse(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = 
-				new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p,  getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.setColumnSpan(2);
 		txtFieldCreator.create();
 		createNoArgMethodBrowseButton(page, txtFieldCreator.getControl());
@@ -131,22 +122,19 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 
 	private AbstractTextFieldParameterPropertyUICreator createIDTextField(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreatorWithBeanIDPropertyValidator(this, dbc, modelMap, eip, selectedEP, p, page,
-				getWidgetFactory());
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.create();
 		return txtFieldCreator;
 	}
 
 	private AbstractTextFieldParameterPropertyUICreator createTextField(final Parameter p, final Composite page) {
-		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
-				getWidgetFactory());
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, selectedEP, p, getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.create();
 		return txtFieldCreator;
 	}
 	
 	private ScopeAttributeComboFieldPropertyUICreator createScopeCombo(final Parameter p, final Composite page) {
-		ScopeAttributeComboFieldPropertyUICreator scopeFieldCreator = new ScopeAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page,
-				getWidgetFactory());
+		ScopeAttributeComboFieldPropertyUICreator scopeFieldCreator = new ScopeAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 		scopeFieldCreator.create();
 		return scopeFieldCreator;
 	}
@@ -188,59 +176,25 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	}
 	
 	private void createPropertyFieldEditor(final Composite page, Parameter p) {
-		IValidator validator = getValidatorForField(p);
-		AbstractParameterPropertyUICreator fieldCreator = null;
 		String propName = p.getName();
 		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
-			fieldCreator = createTextFieldWithClassBrowseAndNew(p, page);
+			createTextFieldWithClassBrowseAndNew(p, page);
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
-			fieldCreator = createTextFieldWithNoArgMethodBrowse(p, page);
+			createTextFieldWithNoArgMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName) || GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
-			fieldCreator = createTextFieldWithPublicStaticMethodBrowse(p, page);
+			createTextFieldWithPublicStaticMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			fieldCreator = createIDTextField(p, page);
+			createIDTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
-			fieldCreator = createScopeCombo(p, page);
+			createScopeCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
-			fieldCreator = createTextField(p, page);
+			createTextField(p, page);
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { // handle unsupported props
 			new UnsupportedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page,
 					getWidgetFactory()).create();
 		}
-		if (fieldCreator != null && fieldCreator instanceof AbstractTextFieldParameterPropertyUICreator) {
-			ISWTObservableValue uiObservable = handleObservable((AbstractTextFieldParameterPropertyUICreator) fieldCreator, p);
-			if (uiObservable != null) { 
-				bindField(validator, uiObservable, p);
-			}
-		}
 	}	
 	
-	private ISWTObservableValue handleObservable(AbstractTextFieldParameterPropertyUICreator txtFieldCreator, Parameter p) {
-		// initialize the map entry
-		modelMap.put(p.getName(), txtFieldCreator.getControl().getText());
-		// create observables for the control
-		return txtFieldCreator.getUiObservable();
-	}
-	
-	private void bindField(IValidator validator, ISWTObservableValue uiObservable, Parameter p) {
-		// create UpdateValueStrategy and assign to the binding
-		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(validator);
-
-		// create observables for the Map entries
-		IObservableValue<Object> modelObservable = Observables.observeMapEntry(modelMap, p.getName());
-		// bind the observables
-		Binding bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
-		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#
-	 * createControls (org.eclipse.swt.widgets.Composite,
-	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
-	 */
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		this.toolkit = new FormToolkit(parent.getDisplay());

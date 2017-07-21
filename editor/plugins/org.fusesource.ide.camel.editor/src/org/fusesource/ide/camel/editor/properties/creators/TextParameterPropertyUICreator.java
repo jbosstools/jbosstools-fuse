@@ -28,11 +28,14 @@ import org.fusesource.ide.foundation.core.util.CompoundValidator;
  *
  */
 public class TextParameterPropertyUICreator extends AbstractTextFieldParameterPropertyUICreator {
+	
+	private IValidator extraValidator;
 
-	public TextParameterPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+	public TextParameterPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter, IValidator extraValidator,
 			Composite parent,
 			TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, new TextParameterPropertyModifyListenerForDetails(camelModelElement, parameter.getName()));
+		this.extraValidator = extraValidator;
 	}
 
 	@Override
@@ -40,7 +43,8 @@ public class TextParameterPropertyUICreator extends AbstractTextFieldParameterPr
 		return new CompoundValidator(
 				super.createValidator(),
 				new TextParameterValidator(camelModelElement, parameter),
-				new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter));
+				new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter),
+				extraValidator);
 	}
 
 }
