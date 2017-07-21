@@ -32,7 +32,7 @@ public class NewBeanIdPropertyValidator extends PropertyRequiredValidator {
 	@Override
 	public IStatus validate(Object value) {
 		IStatus superStatus = super.validate(value);
-		if (superStatus.equals(Status.OK_STATUS)) {
+		if (Status.OK_STATUS.equals(superStatus)) {
 			return BeanValidationUtil.validateIdInParent(parent, value);
 		}
 		return superStatus;
