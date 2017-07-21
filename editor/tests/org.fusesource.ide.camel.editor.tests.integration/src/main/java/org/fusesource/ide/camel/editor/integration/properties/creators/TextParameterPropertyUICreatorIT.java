@@ -15,6 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -26,6 +29,8 @@ import org.junit.Test;
  *
  */
 public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertySectionUICreatorITHelper {
+	
+	private boolean extraValidationCalled = false;
 
 	@Test
 	public void testUIDisplayed() throws Exception {
@@ -37,7 +42,7 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		parameters.put(parameter.getName(), parameter);
 		eip.setProperties(parameters);
 
-		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent,
+		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, null, parent,
 				widgetFactory);
 		textParameterPropertyUICreator.create();
 
@@ -60,7 +65,7 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 		parameters.put(parameter.getName(), parameter);
 		eip.setProperties(parameters);
 
-		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
+		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, null, parent, widgetFactory);
 		textParameterPropertyUICreator.create();
 
 		final Text control = textParameterPropertyUICreator.getControl();
@@ -70,6 +75,37 @@ public class TextParameterPropertyUICreatorIT extends AbstractParameterPropertyS
 
 		assertThat(modelMap.get("testParameterName")).isEqualTo(">");
 		assertThat(camelModelElement.getParameter("testParameterName")).isEqualTo(">");
+	}
+	
+	@Test
+	public void testExtraValidator() throws Exception {
+		extraValidationCalled = false;
+		
+		Parameter parameter = new Parameter();
+		parameter.setName("testParameterName");
+		parameter.setKind("parameter");
+		Eip eip = new Eip();
+		final Map<String, Parameter> parameters = new HashMap<>();
+		parameters.put(parameter.getName(), parameter);
+		eip.setProperties(parameters);
+
+		final TextParameterPropertyUICreator textParameterPropertyUICreator = new TextParameterPropertyUICreator(dbc, modelMap, eip, camelModelElement, parameter, new IValidator() {
+			
+			@Override
+			public IStatus validate(Object value) {
+				extraValidationCalled = true;
+				return ValidationStatus.ok();
+			}
+		}, parent,
+				widgetFactory);
+		textParameterPropertyUICreator.create();
+
+		final Text control = textParameterPropertyUICreator.getControl();
+		control.setText("newValue");
+		
+		assertThat(modelMap.get("testParameterName")).isEqualTo("newValue");
+		assertThat(camelModelElement.getParameter("testParameterName")).isEqualTo("newValue");
+		assertThat(extraValidationCalled).isTrue();
 	}
 
 }

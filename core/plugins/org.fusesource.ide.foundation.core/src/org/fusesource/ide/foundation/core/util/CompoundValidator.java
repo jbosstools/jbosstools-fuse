@@ -32,14 +32,16 @@ public class CompoundValidator implements IValidator {
 
     @Override
     public IStatus validate(final Object value) {
-        IStatus result = ValidationStatus.ok();
-        for (IValidator validator : validators) {
-            IStatus status = validator.validate(value);
+    	IStatus result = ValidationStatus.ok();
+    	for (IValidator validator : validators) {
+    		if(validator != null){
+    			IStatus status = validator.validate(value);
 
-            if (status.getSeverity() > result.getSeverity()) {
-                result = status;
-            }
-        }
+    			if (status.getSeverity() > result.getSeverity()) {
+    				result = status;
+    			}
+    		}
+    	}
         return result;
     }
 

@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.properties.bean;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -28,9 +29,9 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 public class AttributeTextFieldPropertyUICreatorWithBrowse extends TextParameterPropertyUICreator {
 
 		public AttributeTextFieldPropertyUICreatorWithBrowse(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip,
-				AbstractCamelModelElement camelModelElement, Parameter parameter, Composite parent,
+				AbstractCamelModelElement camelModelElement, Parameter parameter, IValidator extraValidator, Composite parent,
 				TabbedPropertySheetWidgetFactory widgetFactory) {
-			super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory);
+			super(dbc, modelMap, eip, camelModelElement, parameter, extraValidator, parent, widgetFactory);
 		}
     	
 		@Override
