@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -51,9 +52,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.foundation.core.util.CompoundValidator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CompoundValidator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
@@ -163,9 +164,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 }
                 hl7PreviewText.setText(buffer.toString());
 
-            } catch (CoreException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            } catch (CoreException | IOException e1) {
                 e1.printStackTrace();
             }
         }
@@ -362,9 +361,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                     }
                 }
                 return buffer.toString();
-            } catch (final CoreException e1) {
-                e1.printStackTrace();
-            } catch (final IOException e1) {
+            } catch (final CoreException | IOException e1) {
                 e1.printStackTrace();
             }
         }

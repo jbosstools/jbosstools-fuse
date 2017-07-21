@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.fuse.transformation.editor.internal.util;
+package org.fusesource.ide.foundation.core.util;
 
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -30,11 +30,6 @@ public class CompoundValidator implements IValidator {
         this.validators = validators;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-     */
     @Override
     public IStatus validate(final Object value) {
         IStatus result = ValidationStatus.ok();

@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.editor.properties.creators;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.TextParameterPropertyModifyListenerForDetails;
@@ -22,6 +21,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 import org.fusesource.ide.camel.validation.model.TextParameterValidator;
+import org.fusesource.ide.foundation.core.util.CompoundValidator;
 
 /**
  * @author Aurelien Pupier
@@ -37,19 +37,10 @@ public class TextParameterPropertyUICreator extends AbstractTextFieldParameterPr
 
 	@Override
 	protected IValidator createValidator() {
-		final IValidator superValidator = super.createValidator();
-		return value -> {
-			IStatus superValidation = superValidator.validate(value);
-			if (!superValidation.isOK()) {
-				return superValidation;
-			}
-			final IStatus commonValidation = new TextParameterValidator(camelModelElement, parameter).validate(value);
-			if (!commonValidation.isOK()) {
-				return commonValidation;
-			}
-			return new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter).validate(value);
-		};
-
+		return new CompoundValidator(
+				super.createValidator(),
+				new TextParameterValidator(camelModelElement, parameter),
+				new RefOrDataFormatUnicityChoiceValidator(camelModelElement, parameter));
 	}
 
 }
