@@ -8,7 +8,7 @@
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">twitter://endpoint[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_TwitterComponent"></a>TwitterComponent:</h2></div></div></div><p>The twitter component can be configured with the Twitter account settings which is mandatory to configure before using.
 You can also configure these options directly in the endpoint.
 
-    </p><table id="d0e172390"><tr>
+    </p><table id="d0e172903"><tr>
         <th> Option </th>
         <th> Description </th>
       </tr><tr>
@@ -35,7 +35,7 @@ You can also configure these options directly in the endpoint.
         <code class="code">camel-twitter</code> creates one route exchange per returned object. As an example, if
         <code class="code">timeline/home</code> results in five statuses, the route will be executed five times
       (once for each <code class="code">Status</code>). 
-    </p><table id="d0e172463"><tr>
+    </p><table id="d0e172976"><tr>
         <th> Endpoint </th>
         <th> Context </th>
         <th> Body Type </th>
@@ -118,7 +118,7 @@ You can also configure these options directly in the endpoint.
         <td>
           <code class="code">twitter4j.Status</code></td>
         <td></td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_ProducerEndpoints"></a>Producer Endpoints:</h2></div></div></div><p></p><table id="d0e172664"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_ProducerEndpoints"></a>Producer Endpoints:</h2></div></div></div><p></p><table id="d0e173177"><tr>
         <th> Endpoint </th>
         <th> Body Type </th>
       </tr><tr>
@@ -141,7 +141,7 @@ You can also configure these options directly in the endpoint.
         <td>
           <code class="code">String</code>
         </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e172719"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e173232"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -348,7 +348,7 @@ You can also configure these options directly in the endpoint.
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_Messageheader"></a>Message header</h2></div></div></div><p></p><p>
       
-    </p><table id="d0e173250"><tr>
+    </p><table id="d0e173763"><tr>
         <th> Name </th>
         <th> Description </th>
       </tr><tr>
@@ -380,7 +380,7 @@ You can also configure these options directly in the endpoint.
                 <td><code class="literal">CamelTwitterNumberOfPages</code>
                 </td>
                 <td><span class="bold"><strong>Camel 2.17.0:</strong></span> Identifies a party role.</td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_Messagebody"></a>Message body</h2></div></div></div><p>All message bodies utilize objects provided by the Twitter4J API.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173359"></a>API rate limits</h2></div></div></div><p>Twitter REST APIs encapsulated by <a class="link" href="http://twitter4j.org/" target="_top">Twitter4J</a> are subjected to <a class="link" href="https://dev.twitter.com/rest/public/rate-limiting" target="_top">API Rate
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_Messagebody"></a>Message body</h2></div></div></div><p>All message bodies utilize objects provided by the Twitter4J API.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e173872"></a>API rate limits</h2></div></div></div><p>Twitter REST APIs encapsulated by <a class="link" href="http://twitter4j.org/" target="_top">Twitter4J</a> are subjected to <a class="link" href="https://dev.twitter.com/rest/public/rate-limiting" target="_top">API Rate
             Limiting</a>. You can find the per method limits in the <a class="link" href="https://dev.twitter.com/rest/public/rate-limits" target="_top">API Rate Limits</a>
             documentation. Note that endpoints/resources not listed in that page are default to 15
             requests per allotted user per window.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Twitter_HSH_TocreateastatusupdatewithinyourTwitterprofilesendthisproduceraStringbody."></a>To create a status update within your Twitter profile, send this producer a String body.</h2></div></div></div><p></p><pre class="programlisting">from("direct:foo")

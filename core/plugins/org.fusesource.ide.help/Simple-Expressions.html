@@ -23,7 +23,7 @@ simple("The order type is ${bean:orderService?method=getOrderType}")</pre></div>
                 attribute. For example:</p><pre class="programlisting">&lt;setHeader headerName="five"&gt;
   &lt;!-- use resultType to indicate that the type should be a java.lang.Integer --&gt; 
   &lt;simple <span class="bold"><strong>resultType="java.lang.Integer"</strong></span>&gt;5&lt;/simple&gt;
-&lt;/setHeader&gt;    </pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e14113"></a>Dynamic Header Key</h3></div></div></div><p>
+&lt;/setHeader&gt;    </pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="d0e14627"></a>Dynamic Header Key</h3></div></div></div><p>
 From Camel 2.17, the <span class="property">setHeader</span>and <span class="property">setExchange</span> properties allows to use a dynamic header key using the Simple language, if the name of the key is a Simple language expression. 
 </p><pre class="programlisting">
 &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;

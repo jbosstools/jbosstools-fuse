@@ -4,7 +4,7 @@
     </p><p>The S3 component supports storing and retrieving objetcs from/to <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon's S3</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon S3. More information are available at <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon S3</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIFormat"></a>URI Format</h3></div></div></div><pre class="programlisting">aws-s3://bucketNameOrARN[?options]</pre><p>Where <code class="code">bucketNameOrARN</code> can be either a bucket name or an Amazon Resource Name
             (ARN). The bucket will be created if it doesn't already exists. You can append query
             options to the URI in the following format,
-                <code class="code">?options=value&amp;option2=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e50071"><tr>
+                <code class="code">?options=value&amp;option2=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e50584"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -151,7 +151,7 @@
             </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Required S3 component options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Required S3 component options</th></tr><tr><td align="left" valign="top"><p>You have to provide the amazonS3Client in the Registry or your accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon's S3</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_BatchConsumer"></a>Batch Consumer</h3></div></div></div><p></p><p>This component implements the <a class="link" href="http://camel.apache.org/batch-consumer.html" target="_top">Batch Consumer</a>.</p><p>This allows you, for example, to know how many messages exist in this batch and let the <span class="phrase">Aggregator</span> aggregate this number of
             messages.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_Usage"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheadersevaluatedbytheS3producer"></a>Message headers evaluated by the S3 producer</h3></div></div></div><p></p><p>
 
-    </p><table width="1364" id="d0e50489"><col width="308pt"><col width="494pt"><col width="554pt"><tr>
+    </p><table width="1364" id="d0e51002"><col width="308pt"><col width="494pt"><col width="554pt"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -246,7 +246,7 @@
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheaderssetbytheS3producer"></a>Message headers set by the S3 producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e50729"><tr>
+    </p><table id="d0e51242"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -266,7 +266,7 @@
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheaderssetbytheS3consumer"></a>Message headers set by the S3 consumer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e50787"><tr>
+    </p><table id="d0e51300"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

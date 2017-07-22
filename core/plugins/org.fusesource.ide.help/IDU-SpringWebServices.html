@@ -5,7 +5,7 @@
         Services</a>. It offers both <span class="emphasis"><em>client</em></span><span class="del">side
         support, for accessing web services, and <span class="emphasis"><em>server</em></span></span>side support
       for creating your own contract-first web services.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Dependencies"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Dependencies</th></tr><tr><td align="left" valign="top"><p>As of Camel 2.8 this component ships with Spring-WS 2.0.x which (like the rest of Camel) requires Spring 3.0.x. </p><p>Earlier Camel versions shipped Spring-WS 1.5.9 which is compatible with Spring 2.5.x and 3.0.x. In order to run earlier versions of <code class="literal">camel-spring-ws</code> on Spring 2.5.x you need to add the <code class="literal">spring-webmvc</code> module from Spring 2.5.x. In order to run Spring-WS 1.5.9 on Spring 3.0.x you need to exclude the OXM module from Spring 3.0.x as this module is also included in Spring-WS 1.5.9 (see <a class="link" href="http://stackoverflow.com/questions/3313314/can-spring-ws-1-5-be-used-with-spring-3" target="_top">this post</a>)</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI scheme for this component is as follows</p><pre class="programlisting">spring-ws:[mapping-type:]address[?options]</pre><p>To expose a web service, <code class="code">mapping-type</code> needs to be set to one of the following
-      values:</p><table id="d0e165473"><tr>
+      values:</p><table id="d0e165986"><tr>
         <th> Mapping type </th>
         <th> Description </th>
       </tr><tr>
@@ -40,7 +40,7 @@
     </p><p>As a consumer the <code class="code">address</code> should contain a value relevant to the specified
       mapping-type (e.g. a SOAP action, XPath expression). As a producer the address should be set
       to the URI of the web service you are calling upon.</p><p>You can append query options to the URI in the following format,
-        <code class="literal">?option=value&amp;option=value&amp;...</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e165566"><tr>
+        <code class="literal">?option=value&amp;option=value&amp;...</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e166079"><tr>
         <th> Name </th>
         <th> Required? </th>
         <th> Description </th>
@@ -176,7 +176,7 @@
                 <td><code class="literal">webServiceEndpointUri</code></td>
                 <td> No </td>
                 <td>The default Web Service endpoint URI to use for the producer.</td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><table id="d0e165966"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringWebServices_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><table id="d0e166479"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>

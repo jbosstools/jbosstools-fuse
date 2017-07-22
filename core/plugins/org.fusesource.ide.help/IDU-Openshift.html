@@ -8,7 +8,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-208"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">openshift:clientId[?options]</pre></div><p>You can append query options to the URI in the following format,
-                    <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-209"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e138525"><tbody><tr>
+                    <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-209"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e139038"><tbody><tr>
                     <th class="confluenceTh"><p> Name </p></th>
                     <th class="confluenceTh"><p> Default Value </p></th>
                     <th class="confluenceTh"><p> Description </p></th>
@@ -75,7 +75,7 @@ from("direct:control")
 from("openshift:myClient?username=foo&amp;password=secret&amp;delay=30s")
     .log("Event ${header.CamelOpenShiftEventType} on application ${body.name} changed state to ${header.CamelOpenShiftEventNewState}");</pre></div><p>When the consumer emits an Exchange then the body contains the
                         <code class="code">com.openshift.client.IApplication</code> as the message body. And the
-                    following headers is included.</p><table id="d0e138814"><colgroup> </colgroup><thead><tr>
+                    following headers is included.</p><table id="d0e139327"><colgroup> </colgroup><thead><tr>
                             <td>
                                 <p>Header</p>
                             </td>

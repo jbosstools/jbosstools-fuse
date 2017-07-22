@@ -15,8 +15,8 @@
             <topic label="Configuring a pattern" href="RiderPatternConfig.html"/>
             <topic label="Removing patterns from a route" href="RiderRemovePattern.html"/>
             <topic label="Deleting a route" href="RiderRemoveRoute.html"/>
-            <topic label="Adding beans and configuration" href="RiderAddBeans.html"/>
-            <topic label="Adding global endpoints and data formats" href="RiderAddGlobalCnfg.html"/>
+            <topic label="Manually adding beans and configuration" href="RiderAddBeans.html"/>
+            <topic label="Adding global endpoints, data formats or beans" href="RiderAddGlobalCnfg.html"/>
             <topic label="Configuring the route editor" href="RiderEditPrefs.html"/>
          </topic>
          <topic label="The Source View" href="RiderEditSource.html"/>
@@ -74,6 +74,7 @@
             <topic label="Adding a routing endpoint" href="RiderAddEndpoint.html"/>
             <topic label="Deleting a routing endpoint" href="RiderDeleteEndpoint.html"/>
          </topic>
+         <topic label="Editing running routes" href="RiderEditRunRoute.html"/>
          <topic label="Managing routing contexts" href="RiderManageRouteContexts.html">
             <topic label="Suspending a routing context" href="RiderContextSuspend.html"/>
             <topic label="Resuming a routing context" href="RiderContextResume.html"/>
