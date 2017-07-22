@@ -8,7 +8,7 @@
       POST callback (a <a class="link" href="http://www.webhooks.org/" target="_top">web hook</a>) initiated by the
       task queueing service. Whenever a new task is added to a queue a callback will be sent. The
         <code class="literal">gtask</code> component abstracts from these details and supports endpoint URIs
-      that make message queueing on GAE as easy as message queueing with <a href="IDU-JMS.html" class="olink">JMS</a> or <a href="IDU-SEDA.html" class="olink">SEDA</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-gtask_HSH_URIformat"></a>URI format</h3></div></div></div><pre class="programlisting">gtask://queue-name</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-gtask_HSH_Options"></a>Options</h3></div></div></div><table id="d0e88204"><tr>
+      that make message queueing on GAE as easy as message queueing with <a href="IDU-JMS.html" class="olink">JMS</a> or <a href="IDU-SEDA.html" class="olink">SEDA</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-gtask_HSH_URIformat"></a>URI format</h3></div></div></div><pre class="programlisting">gtask://queue-name</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-gtask_HSH_Options"></a>Options</h3></div></div></div><table id="d0e88717"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -45,7 +45,7 @@
             <code class="literal">Exchange</code> to the task queueing service.</td>
       </tr></table><p>On the consumer-side, all options of the <a href="IDU-SERVLET.html" class="olink">Servlet
         component</a> are supported.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-gtask_HSH_Messageheaders"></a>Message headers</h3></div></div></div><p>On the consumer-side all headers of the <a href="IDU-SERVLET.html" class="olink">Servlet
-        component</a> component are supported plus the following.</p><table id="d0e88313"><tr>
+        component</a> component are supported plus the following.</p><table id="d0e88826"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Context </th>
