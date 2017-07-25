@@ -14,7 +14,6 @@ package org.fusesource.ide.camel.editor.provider;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
@@ -113,15 +112,5 @@ public class CamelEditorContextMenuProvider extends ContextMenuProvider {
 		menu.add(new Separator());
 		// auto layout action
 		menu.add(new AutoLayoutAction());
-	}
-
-	/**
-	 * retrieves an action for a given id
-	 * 
-	 * @param actionId	the action id
-	 * @return	the action or null if not found
-	 */
-	private IAction getAction(String actionId) {
-		return actionRegistry.getAction(actionId);
 	}
 }

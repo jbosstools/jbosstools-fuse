@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.preferences.ViewSettingsDialog;
 import org.fusesource.ide.foundation.ui.actions.Messages;
-import org.fusesource.ide.foundation.ui.config.ColumnConfiguration;
 import org.fusesource.ide.foundation.ui.views.ColumnViewSupport;
 
 
@@ -196,23 +195,6 @@ public class TableChartDialog extends ViewSettingsDialog {
 		}
 		columnsViewer.setInput(columnList);
 		columnsViewer.setCheckedElements(checkedList.toArray());
-	}
-
-	/**
-	 * Stores the current preference.
-	 */
-	private void storePreference() {
-		// TODO....
-	}
-
-	/**
-	 * Gets the columns.
-	 * 
-	 * @return The columns
-	 */
-	@SuppressWarnings("unchecked")
-	private List<ColumnConfiguration> getColumns() {
-		return (List<ColumnConfiguration>) columnsViewer.getInput();
 	}
 
 	protected List selectedList() {

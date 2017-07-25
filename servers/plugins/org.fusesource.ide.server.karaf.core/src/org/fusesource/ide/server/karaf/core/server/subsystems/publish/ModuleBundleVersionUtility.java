@@ -68,17 +68,6 @@ public class ModuleBundleVersionUtility {
 		return null;
 	}
 	
-	private BundleDetails getFuseCamelDetails(IModule[] module) {
-		try {
-			String version2 = KarafUtils.getBundleVersion(module[0], null);
-			String symbolicName2 = KarafUtils.getBundleSymbolicName(module[0]);
-			return new BundleDetails(symbolicName2, version2 );
-		} catch(CoreException ce) {
-			Activator.getLogger().error(ce);
-		}
-		return null;
-	}
-	
 	private BundleDetails getJBossOSGiDetails(IModule[] module, IPath srcFile) {
 		if( srcFile != null ) {
 			return getJBossOSGiDetailsFromJar(srcFile);

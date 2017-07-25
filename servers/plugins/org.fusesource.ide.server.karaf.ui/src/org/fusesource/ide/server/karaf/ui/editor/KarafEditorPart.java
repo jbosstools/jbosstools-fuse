@@ -11,8 +11,6 @@
 
 package org.fusesource.ide.server.karaf.ui.editor;
 
-import javax.management.MBeanServerConnection;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -77,9 +75,5 @@ public class KarafEditorPart extends ServerEditorPart {
 	@Override
 	public void setFocus() {
 
-	}
-
-	private MBeanServerConnection getKarafConnection() {
-		return null;
 	}
 }

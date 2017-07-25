@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,18 +25,15 @@ import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.junit.ui.JUnitPlugin;
 import org.eclipse.jdt.internal.junit.wizards.JUnitWizard;
-import org.eclipse.jdt.ui.text.java.ClasspathFixProcessor;
 import org.eclipse.jdt.ui.text.java.ClasspathFixProcessor.ClasspathFixProposal;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -53,8 +48,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.PerformChangeOperation;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.swt.SWT;
@@ -286,59 +279,6 @@ public class NewCamelTestWizard extends JUnitWizard {
 		setWindowTitle(WizardMessages.Wizard_title_new_testcase);
 		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "/icons/new_camel_test_case_wizard.png"));
 		initDialogSettings();
-	}
-
-	private IRunnableWithProgress addJUnitToClasspath(IJavaProject project, final IRunnableWithProgress runnable,
-			boolean isJUnit4) {
-		String typeToLookup = isJUnit4 ? "org.junit.*" : "junit.awtui.*"; //$NON-NLS-1$//$NON-NLS-2$
-		ClasspathFixProposal[] fixProposals = ClasspathFixProcessor.getContributedFixImportProposals(project,
-				typeToLookup, null);
-		String superClass = "org.apache.camel.test.junit4.*";
-		// String superClass = fPage1.getSuperClass();
-		ClasspathFixProposal[] fixProposals2 = ClasspathFixProcessor.getContributedFixImportProposals(project,
-				superClass, null);
-
-		List<ClasspathFixProposal> proposals = new ArrayList<ClasspathFixProposal>();
-		proposals.addAll(Arrays.asList(fixProposals));
-		proposals.addAll(Arrays.asList(fixProposals2));
-		fixProposals = proposals.toArray(new ClasspathFixProposal[proposals.size()]);
-
-		ClasspathFixSelectionDialog dialog = new ClasspathFixSelectionDialog(getShell(), isJUnit4, project,
-				fixProposals);
-		if (dialog.open() != 0) {
-			throw new OperationCanceledException();
-		}
-
-		final ClasspathFixProposal fix = dialog.getSelectedClasspathFix();
-		if (fix != null) {
-			return new IRunnableWithProgress() {
-
-				/*
-				 * (non-Javadoc)
-				 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-				 */
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					if (monitor == null) {
-						monitor = new NullProgressMonitor();
-					}
-					monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
-					try {
-						Change change = fix.createChange(new SubProgressMonitor(monitor, 1));
-						new PerformChangeOperation(change).run(new SubProgressMonitor(monitor, 1));
-
-						runnable.run(new SubProgressMonitor(monitor, 2));
-					} catch (OperationCanceledException e) {
-						throw new InterruptedException();
-					} catch (CoreException e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
-					}
-				}
-			};
-		}
-		return runnable;
 	}
 
 	/*

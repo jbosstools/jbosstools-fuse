@@ -24,7 +24,6 @@ import org.eclipse.emf.transaction.RollbackException;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramBehavior;
-import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 
@@ -131,10 +130,6 @@ public class CamelModelChangeListener  implements ResourceSetListener {
 	
 	private IDiagramTypeProvider getDiagramTypeProvider() {
 		return getDiagramBehavior().getDiagramContainer().getDiagramTypeProvider();
-	}
-	
-	private IDiagramContainer getDiagramContainer() {
-		return getDiagramBehavior().getDiagramContainer();
 	}
 	
 	private IDiagramBehavior getDiagramBehavior() {

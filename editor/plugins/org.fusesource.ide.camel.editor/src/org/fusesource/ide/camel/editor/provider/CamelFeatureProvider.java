@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.provider;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
@@ -61,8 +57,6 @@ import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
-import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
-import org.fusesource.ide.foundation.ui.archetypes.BeanDef;
 
 /**
  * @author lhein
@@ -228,51 +222,6 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	public IFeature[] getDragAndDropFeatures(IPictogramElementContext context) {
 		// simply return all create connection features
 		return getCreateConnectionFeatures();
-	}
-
-	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, BeanDef> beans) {
-//		ArrayList<String> processedBeans = new ArrayList<String>();
-//		Set<Entry<String, BeanDef>> entrySet = beans.entrySet();
-//		for (Entry<String, BeanDef> entry : entrySet) {
-//			String name = entry.getKey();
-//			String aClass = entry.getValue().getClassName();
-//
-//			if ((Strings.isBlank(name) && Strings.isBlank(aClass)) || !entry.getValue().getBeanType().equalsIgnoreCase("bean")) {
-//				continue;
-//			}
-//
-//			if (processedBeans.contains(name)) continue;
-//			processedBeans.add(name);
-//			
-//			CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
-//			Eip eip = model.getEipModel().getEIPByName("bean");
-//			UniversalEIPNode bean = new UniversalEIPNode(eip);
-//			bean.setName(name);
-//			bean.setShortPropertyValue("ref", name); 
-//			bean.setShortPropertyValue("beanType", aClass); 
-//
-//			String title = bean.getDisplayText();
-//			String description = "bean '" + name + "' of type " + aClass;
-//
-//			featureList.add(new CreateDefinedBeanFigureFeature(this, title, description, bean));
-//		}
-	}
-
-	private void addEndpointInstances(List<ICreateFeature> featureList, Set<CamelEndpoint> endpoints) {
-//		ArrayList<String> processedURIs = new ArrayList<String>();
-//		for (Endpoint endpoint : endpoints) {
-//			String id = endpoint.getId();
-//			String url = endpoint.getUri();
-//			if (Strings.isBlank(id) && Strings.isBlank(url)) {
-//				continue;
-//			}
-//			if (processedURIs.contains(url)) continue;
-//			processedURIs.add(url);
-//			String description = endpoint.getDescription();
-//			String title = endpoint.getDisplayText();
-//			featureList.add(new CreateDefinedEndpointFigureFeature(this, title, description, endpoint));
-//		}
-
 	}
 	
 	public CamelModelIndependenceSolver getModelIndependenceSolver() {
