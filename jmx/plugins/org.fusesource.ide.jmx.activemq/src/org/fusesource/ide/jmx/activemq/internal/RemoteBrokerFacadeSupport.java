@@ -11,10 +11,12 @@
 
 package org.fusesource.ide.jmx.activemq.internal;
 
-import org.apache.activemq.broker.jmx.BrokerViewMBean;
-import org.apache.activemq.broker.jmx.ManagementContext;
-import org.apache.activemq.broker.jmx.QueueViewMBean;
-import org.apache.activemq.command.ActiveMQDestination;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MBeanServerInvocationHandler;
@@ -22,8 +24,11 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.QueryExp;
 import javax.management.remote.JMXConnector;
-import java.io.IOException;
-import java.util.*;
+
+import org.apache.activemq.broker.jmx.BrokerViewMBean;
+import org.apache.activemq.broker.jmx.ManagementContext;
+import org.apache.activemq.broker.jmx.QueueViewMBean;
+import org.apache.activemq.command.ActiveMQDestination;
 
 
 /**
@@ -50,20 +55,11 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         this.brokerName = brokerName;
     }
 
-    private ObjectName getBrokerObjectName(MBeanServerConnection connection)
-            throws IOException, MalformedObjectNameException {
-        Set<ObjectName> brokers = findBrokers(connection);
-        if (brokers.isEmpty()) {
-            throw new IOException("No broker could be found in the JMX.");
-        }
-        return brokers.iterator().next();
-    }
-
     @Override
 	public BrokerViewFacade getBrokerAdmin() throws Exception {
         MBeanServerConnection connection = getMBeanServerConnection();
 
-        Set brokers = findBrokers(connection);
+        Set<ObjectName> brokers = findBrokers(connection);
         if (brokers.isEmpty()) {
             throw new IOException("No broker could be found in the JMX.");
         }

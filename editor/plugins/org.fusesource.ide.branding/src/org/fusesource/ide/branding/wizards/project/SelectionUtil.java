@@ -21,9 +21,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PlatformUI;
@@ -201,128 +198,6 @@ public class SelectionUtil {
       }
     }
     return list;
-  }
-  
-  
-/*  public static ArtifactKey getArtifactKey(Object element) throws CoreException {
-    if(element instanceof Artifact) {
-      return new ArtifactKey(((Artifact) element));
-      
-    } else if(element instanceof org.sonatype.aether.graph.DependencyNode) {
-      org.sonatype.aether.artifact.Artifact artifact = ((org.sonatype.aether.graph.DependencyNode) element)
-          .getDependency().getArtifact();
-      return new ArtifactKey(artifact);
-      
-    } else if(element instanceof Dependency) {
-      Dependency dependency = (Dependency) element;
-      String groupId = dependency.getGroupId();
-      String artifactId = dependency.getArtifactId();
-      String version = dependency.getVersion();
-      
-      if(version == null) {
-        //mkleint: this looks scary
-        IEditorPart editor = getActiveEditor();
-        if(editor!=null) {
-          MavenProject mavenProject = getMavenProject(editor.getEditorInput(), null);
-          if(mavenProject!=null) {
-            Artifact a = mavenProject.getArtifactMap().get(groupId + ":" + artifactId); //$NON-NLS-1$
-            version = a.getBaseVersion();
-          }
-        }
-      }
-      return new ArtifactKey(dependency.getGroupId(), dependency.getArtifactId(), version, null);
-    }
-    
-    return SelectionUtil.getType(element, ArtifactKey.class);
-  }
-
-  public static MavenProject getMavenProject(IEditorInput editorInput, IProgressMonitor monitor) throws CoreException {
-    if(editorInput instanceof IFileEditorInput) {
-      IFile pomFile = ((IFileEditorInput) editorInput).getFile();
-      MavenProjectManager projectManager = MavenPlugin.getDefault().getMavenProjectManager();
-      IMavenProjectFacade facade = projectManager.create(pomFile, true, monitor);
-      if(facade!=null) {
-        return facade.getMavenProject(monitor);
-      }
-
-    } else if(editorInput instanceof IStorageEditorInput) {
-      IStorageEditorInput storageInput = (IStorageEditorInput) editorInput;
-      IStorage storage = storageInput.getStorage();
-      IPath path = storage.getFullPath();
-      if(path == null || !new File(path.toOSString()).exists()) {
-        File tempPomFile = null;
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-          tempPomFile = File.createTempFile("maven-pom", ".pom"); //$NON-NLS-1$ //$NON-NLS-2$
-          os = new FileOutputStream(tempPomFile);
-          is = storage.getContents();
-          IOUtil.copy(is, os);
-          return readMavenProject(tempPomFile, monitor);
-        } catch(IOException ex) {
-          log.error("Can't close stream", ex);
-        } finally {
-          IOUtil.close(is);
-          IOUtil.close(os);
-          if(tempPomFile != null) {
-            tempPomFile.delete();
-          }
-        }
-      } else {
-        return readMavenProject(path.toFile(), monitor);
-      }
-
-    } else if(editorInput.getClass().getName().endsWith("FileStoreEditorInput")) { //$NON-NLS-1$
-      return readMavenProject(new File(Util.proxy(editorInput, FileStoreEditorInputStub.class).getURI().getPath()), monitor);
-    }
-    
-    return null;
-  }
-  
-  private static MavenProject readMavenProject(File pomFile, IProgressMonitor monitor) throws CoreException {
-    if(monitor==null) {
-      monitor = new NullProgressMonitor();
-    }
-    
-    IMaven maven = MavenPlugin.getDefault().getMaven();
-
-    MavenExecutionRequest request = maven.createExecutionRequest(monitor);
-    request.setOffline(false);
-    request.setUpdateSnapshots(false);
-    request.setRecursive(false);
-    request.setPom(pomFile);
-
-    MavenExecutionResult result = maven.execute(request, monitor);
-
-    MavenProject project = result.getProject();
-    if(project!=null) {
-      return project;
-    }
-
-    if(result.hasExceptions()) {
-      List<IStatus> statuses = new ArrayList<IStatus>();
-      List<Throwable> exceptions = result.getExceptions();
-      for(Throwable e : exceptions) {
-        statuses.add(new Status(IStatus.ERROR, IMavenConstants.PLUGIN_ID, -1, e.getMessage(), e));
-      }
-
-      throw new CoreException(new MultiStatus(IMavenConstants.PLUGIN_ID, IStatus.ERROR, //
-          statuses.toArray(new IStatus[statuses.size()]), Messages.SelectionUtil_error_cannot_read, null));
-    }
-
-    throw new CoreException(new Status(IStatus.ERROR, IMavenConstants.PLUGIN_ID, -1, //
-        Messages.SelectionUtil_error_cannot_read, null));
-  }
-*/
-  private static IEditorPart getActiveEditor() {
-    IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-    if(window != null) {
-      IWorkbenchPage page = window.getActivePage();
-      if(page != null) {
-        return page.getActiveEditor();
-      }
-    }
-    return null;
   }
 
 }
