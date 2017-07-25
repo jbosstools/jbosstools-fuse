@@ -19,7 +19,6 @@ import java.util.Properties;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class MavenUtilsTest {
