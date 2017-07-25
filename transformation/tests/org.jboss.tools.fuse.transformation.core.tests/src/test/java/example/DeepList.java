@@ -2,6 +2,7 @@ package example;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class DeepList {
 
     private String fieldL1;

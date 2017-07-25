@@ -77,6 +77,7 @@ public class ModelBuilderIT {
     }
 }
 
+@SuppressWarnings("unused")
 class ListOfStringsAndNumbers {
     private List<Number> numbers;
     private List<String> strings;
@@ -104,6 +105,7 @@ class NoSuper {
     }
 }
 
+@SuppressWarnings("unused")
 class ClassWithDateEtc {
     private String field1;
     private Date field2;
@@ -150,22 +152,26 @@ class ContainsNumber {
 
 }
 
+@SuppressWarnings("unused")
 class SelfReference {
     private String field1;
     private SelfReference self;
 }
 
+@SuppressWarnings("unused")
 class Parent {
     private Child child;
     private String field1;
 }
 
+@SuppressWarnings("unused")
 class Child {
     private Parent parent;
     private String field2;
     private Grandchild grandchild;
 }
 
+@SuppressWarnings("unused")
 class Grandchild {
     private Parent grandparent;
     private String field3;

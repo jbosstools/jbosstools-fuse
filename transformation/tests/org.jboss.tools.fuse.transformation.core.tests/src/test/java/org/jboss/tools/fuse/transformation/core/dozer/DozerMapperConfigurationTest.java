@@ -527,27 +527,33 @@ public class DozerMapperConfigurationTest {
 	}
 }
 
+@SuppressWarnings("unused")
 class A {
     private String data;
 }
 
+@SuppressWarnings("unused")
 class B {
     private C c;
     private String data;
 }
 
+@SuppressWarnings("unused")
 class C {
     private D d;
 }
 
+@SuppressWarnings("unused")
 class D {
     private String data;
 }
 
+@SuppressWarnings("unused")
 class ListOfC {
     private List<C> listOfCs = new ArrayList<C>(1);
 }
 
+@SuppressWarnings("unused")
 class ListOfD {
     private List<D> listOfDs = new ArrayList<D>(1);
 }
