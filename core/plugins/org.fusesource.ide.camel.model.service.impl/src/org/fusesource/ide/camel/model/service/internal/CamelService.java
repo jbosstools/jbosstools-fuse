@@ -42,26 +42,38 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 
 /**
  * @author lhein
  */
 public class CamelService implements ICamelManagerService {
 	
+	private static final String OLDER_CAMEL_VERSION_WITH_CATALOG = "2.15.0";
+	private static final String OLDER_CAMEL_CATALOG_VERSION_TO_LOAD_IN_CASE_OF_ERROR = "2.15.6";
+
 	private static final boolean ENCODE_DEFAULT = false;
 
 	private Map<CamelCatalogCoordinates, CamelCatalog> cachedCatalogs = new HashMap<>();
 	
 	private File tempFolder;
 
+	private CamelMavenUtils camelMavenUtils = new CamelMavenUtils();
+	private IPluginLog logger;
+
 	public CamelService() {
+		this(CamelServiceImplementationActivator.pluginLog());
+	}
+	
+	public CamelService(IPluginLog logger) {
 		try {
 			Path grapeFolder = getGrapeFolderInsideTempFolder();
 			Files.createTempDirectory(grapeFolder,"m2repo");
 		} catch (IOException ex) {
-			CamelServiceImplementationActivator.pluginLog().logError(ex);
+			logger.logError(ex);
 			tempFolder = null;
 		}
+		this.logger = logger;
 	}
 
 	private Path getGrapeFolderInsideTempFolder() throws IOException {
@@ -81,15 +93,44 @@ public class CamelService implements ICamelManagerService {
 			}
 			configureAdditionalRepos(versionManager);
 			catalog.setVersionManager(versionManager);
-			if (!catalog.loadVersion(coords.getVersion())) {
-				CamelServiceImplementationActivator.pluginLog().logError("Unable to load Camel Catalog for version " + coords.getVersion());
-			}
-			if (!CamelCatalogUtils.isCamelVersionWithoutProviderSupport(coords.getVersion())) {
+			String version = coords.getVersion();
+			String loadedVersion = loadVersion(catalog, version);
+			coords.setVersion(loadedVersion);
+			if (!CamelCatalogUtils.isCamelVersionWithoutProviderSupport(loadedVersion)) {
 				configureRuntimeprovider(coords, catalog);
 			}
 			cachedCatalogs.put(coords, catalog);
 		}
 		return cachedCatalogs.get(coords);
+	}
+
+	/**
+	 * @param catalog
+	 * @param requestedVersion
+	 * @return the version which was really loaded for the catalog.
+	 */
+	private String loadVersion(CamelCatalog catalog, String requestedVersion) {
+		if (!catalog.loadVersion(requestedVersion)) {
+			if(OLDER_CAMEL_VERSION_WITH_CATALOG.compareTo(requestedVersion) > 1) {
+				logger.logError("No catalog available for older version than 2.15.0, the 2.15.6 catalog will be used."); //$NON-NLS-0$
+				if(catalog.loadVersion(OLDER_CAMEL_CATALOG_VERSION_TO_LOAD_IN_CASE_OF_ERROR)) {
+					return OLDER_CAMEL_CATALOG_VERSION_TO_LOAD_IN_CASE_OF_ERROR;
+				} else {
+					return loadVersion(catalog, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
+				}
+			} else {
+				logger.logError("Unable to load Camel Catalog for version " + requestedVersion); //$NON-NLS-0$
+				logger.logError("The version "+ CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY +" will be used instead."); //$NON-NLS-0$ //$NON-NLS-1$
+				if(catalog.loadVersion(CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY)) {
+					return CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY;
+				} else {
+					logger.logError("Unable to load Camel Catalog for version " + CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY + ". Please check your connection and your local .m2 repository."); //$NON-NLS-0$ //$NON-NLS-1$
+					return null;
+				}
+			}
+		} else {
+			return requestedVersion;
+		}
 	}
 
 	private void configureRuntimeprovider(CamelCatalogCoordinates coords, CamelCatalog catalog) {
@@ -100,12 +141,12 @@ public class CamelService implements ICamelManagerService {
 			catalog.setRuntimeProvider(new KarafRuntimeProvider());
 		}
 		if (!catalog.loadRuntimeProviderVersion(coords.getGroupId(), coords.getArtifactId(), coords.getVersion())) {
-			CamelServiceImplementationActivator.pluginLog().logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
+			logger.logError(String.format("Unable to load the Camel Catalog for %s! Loaded %s as fallback.", coords, catalog.getCatalogVersion()));
 		}
 	}
 
 	private void configureAdditionalRepos(MavenVersionManager versionManager) {
-		List<List<String>> additionalM2Repos = new CamelMavenUtils().getAdditionalRepos();
+		List<List<String>> additionalM2Repos = camelMavenUtils.getAdditionalRepos();
 		for (List<String> repo : additionalM2Repos) {
 			String repoName = repo.get(0);
 			String repoUri = repo.get(1);
@@ -216,7 +257,7 @@ public class CamelService implements ICamelManagerService {
 			try {
 				ctx.shutdown();
 			} catch (Exception ex) {
-				CamelServiceImplementationActivator.pluginLog().logError(ex);
+				logger.logError(ex);
 			}
 			ctx = null;
 		}
@@ -277,43 +318,54 @@ public class CamelService implements ICamelManagerService {
 			tmpMan.setCacheDirectory(tmpFolder.getPath());
 			tmpMan.setLog(true);
 		} catch (IOException ex) {
-			CamelServiceImplementationActivator.pluginLog().logError(ex);
+			logger.logError(ex);
 		} finally {
-			for (List<String> rep : new CamelMavenUtils().getAdditionalRepos()) {
+			for (List<String> rep : camelMavenUtils.getAdditionalRepos()) {
 				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
 			}
 		}
 		return tmpMan.loadVersion(camelVersion);
 	}
 	
-	private CamelModel loadCamelModelFromCatalog(CamelCatalog catalog) {
+	CamelModel loadCamelModelFromCatalog(CamelCatalog catalog) {
 		CamelModel model = new CamelModel();
-		
-		for (String name : catalog.findComponentNames()) {
-			String json = catalog.componentJSonSchema(name);
-			Component elem = Component.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
-			model.addComponent(elem);
-		}
+		loadCamelComponents(catalog, model);
+		loadDataformats(catalog, model);
+		loadLanguages(catalog, model);
+		loadEips(catalog, model);
+		return model;
+	}
 
-		for (String name : catalog.findDataFormatNames()) {
-			String json = catalog.dataFormatJSonSchema(name);
-			DataFormat elem = DataFormat.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
-			model.addDataFormat(elem);
-		}
-
-		for (String name : catalog.findLanguageNames()) {
-			String json = catalog.languageJSonSchema(name);
-			Language elem = Language.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
-			model.addLanguage(elem);
-		}
-
+	private void loadEips(CamelCatalog catalog, CamelModel model) {
 		for (String name : catalog.findModelNames()) {
 			String json = catalog.modelJSonSchema(name);
 			Eip elem = Eip.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
 			model.addEip(elem);
 		}
-		
-		return model;
+	}
+
+	private void loadLanguages(CamelCatalog catalog, CamelModel model) {
+		for (String name : catalog.findLanguageNames()) {
+			String json = catalog.languageJSonSchema(name);
+			Language elem = Language.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
+			model.addLanguage(elem);
+		}
+	}
+
+	private void loadDataformats(CamelCatalog catalog, CamelModel model) {
+		for (String name : catalog.findDataFormatNames()) {
+			String json = catalog.dataFormatJSonSchema(name);
+			DataFormat elem = DataFormat.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
+			model.addDataFormat(elem);
+		}
+	}
+
+	private void loadCamelComponents(CamelCatalog catalog, CamelModel model) {
+		for (String name : catalog.findComponentNames()) {
+			String json = catalog.componentJSonSchema(name);
+			Component elem = Component.getJSONFactoryInstance(new ByteArrayInputStream(getUnicodeEncodedStreamIfPossible(json)));
+			model.addComponent(elem);
+		}
 	}
 	
 	private byte[] getUnicodeEncodedStreamIfPossible(String json) {
