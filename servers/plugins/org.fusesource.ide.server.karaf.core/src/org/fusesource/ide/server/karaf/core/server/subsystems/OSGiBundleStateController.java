@@ -80,7 +80,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			this.objectNameBundleState = new ObjectName(OSGI_BUNDLESTATE_MBEAN);
 	    	this.objectNameFramework = new ObjectName(OSGI_FRAMEWORK_MBEAN);
 	    	
-	    	Set mbeans = mbsc.queryMBeans(this.objectNameBundleState, null);
+	    	Set<ObjectInstance> mbeans = mbsc.queryMBeans(this.objectNameBundleState, null);
 	    	if (mbeans.size() != 1) {
 		    	// no bundleState mbean found - can't handle the jmx connection
 		    	return false;

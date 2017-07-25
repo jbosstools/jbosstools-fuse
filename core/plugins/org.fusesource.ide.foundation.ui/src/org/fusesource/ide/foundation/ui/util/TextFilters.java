@@ -43,9 +43,9 @@ public class TextFilters {
 		} else if (object instanceof TextFilter) {
 			return matches(searchText, (TextFilter) object);
 		} else if (object instanceof Map) {
-			return matches(searchText, (Map) object);
+			return matches(searchText, (Map<?,?>) object);
 		} else if (object instanceof Collection) {
-			return matches(searchText, (Collection) object);
+			return matches(searchText, (Collection<?>) object);
 		} else if (object instanceof IPropertySource) {
 			return matches(searchText, (IPropertySource)object);
 		} else if (object instanceof Object[]) {
@@ -81,7 +81,7 @@ public class TextFilters {
 		return false;
 	}
 
-	public static boolean matches(String searchText, Collection collection) {
+	public static boolean matches(String searchText, Collection<?> collection) {
 		for (Object element : collection) {
 			if (matches(searchText, element)) {
 				return true;

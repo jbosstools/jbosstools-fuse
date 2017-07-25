@@ -11,6 +11,11 @@
 
 package org.fusesource.ide.jmx.activemq.internal;
 
+import java.util.Set;
+
+import javax.management.ObjectName;
+import javax.management.QueryExp;
+
 import org.apache.activemq.broker.Broker;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.jmx.BrokerView;
@@ -19,11 +24,6 @@ import org.apache.activemq.broker.jmx.ManagementContext;
 import org.apache.activemq.broker.region.Destination;
 import org.apache.activemq.broker.region.Queue;
 import org.apache.activemq.command.ActiveMQDestination;
-
-import javax.management.ObjectName;
-import javax.management.QueryExp;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * @author lhein
@@ -75,18 +75,16 @@ public class LocalBrokerFacade extends BrokerFacadeSupport {
 
     @Override
 	public void purgeQueue(ActiveMQDestination destination) throws Exception {
-        Set destinations = getManagedBroker().getQueueRegion().getDestinations(destination);
-        for (Iterator i = destinations.iterator(); i.hasNext();) {
-            Destination dest = (Destination) i.next();
-            if (dest instanceof Queue) {
-                Queue regionQueue = (Queue) dest;
-                regionQueue.purge();
-            }
-        }
+        Set<Destination> destinations = getManagedBroker().getQueueRegion().getDestinations(destination);
+        for (Destination dest : destinations) {
+			if(dest instanceof Queue) {
+				((Queue) dest).purge();
+			}
+		}
     }
 
     @Override
-    public Set queryNames(ObjectName name, QueryExp query) throws Exception {
+    public Set<ObjectName> queryNames(ObjectName name, QueryExp query) throws Exception {
         return getManagementContext().queryNames(name, query);
     }
 

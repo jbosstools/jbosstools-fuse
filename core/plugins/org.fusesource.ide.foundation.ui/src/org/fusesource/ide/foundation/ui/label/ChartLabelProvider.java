@@ -95,14 +95,14 @@ public class ChartLabelProvider extends OwnerDrawLabelProvider implements Wrappe
 		Object[] elements = scp.getElements(viewer.getInput());
 		if (scp instanceof ITreeContentProvider) {
 			ITreeContentProvider tcp = (ITreeContentProvider) scp;
-			List list = new ArrayList();
+			List<Object> list = new ArrayList<>();
 			appendChildren(list, tcp, elements);
 			return list.toArray();
 		}
 		return elements;
 	}
 
-	protected void appendChildren(List list, ITreeContentProvider tcp, Object[] elements) {
+	protected void appendChildren(List<Object> list, ITreeContentProvider tcp, Object[] elements) {
 		for (Object object : elements) {
 			list.add(object);
 			Object[] children = tcp.getChildren(object);

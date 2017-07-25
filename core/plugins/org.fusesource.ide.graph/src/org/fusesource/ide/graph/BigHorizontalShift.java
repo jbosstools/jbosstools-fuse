@@ -45,43 +45,40 @@ public class BigHorizontalShift extends AbstractLayoutAlgorithm {
 	@Override
 	protected void applyLayoutInternal(InternalNode[] entitiesToLayout, InternalRelationship[] relationshipsToConsider, double boundsX, double boundsY, double boundsWidth, double boundsHeight) {
 
-		ArrayList row = new ArrayList();
+		List<List<InternalNode>> row = new ArrayList<>();
 		for (int i = 0; i < entitiesToLayout.length; i++) {
 			addToRowList(entitiesToLayout[i], row);
 		}
 
 		int heightSoFar = 0;
 
-		Collections.sort(row, new Comparator() {
+		Collections.sort(row, new Comparator<List<InternalNode>>() {
 
 			@Override
-			public int compare(Object arg0, Object arg1) {
-				// TODO Auto-generated method stub
-				List a0 = (List) arg0;
-				List a1 = (List) arg1;
-				LayoutEntity node0 = ((InternalNode) a0.get(0)).getLayoutEntity();
-				LayoutEntity node1 = ((InternalNode) a1.get(0)).getLayoutEntity();
-				return (int) (node0.getYInLayout() - (node1.getYInLayout()));
+			public int compare(List<InternalNode> a0, List<InternalNode> a1) {
+				LayoutEntity node0 = a0.get(0).getLayoutEntity();
+				LayoutEntity node1 = a1.get(0).getLayoutEntity();
+				return (int) (node0.getYInLayout() - node1.getYInLayout());
 			}
 
 		});
 
-		Iterator iterator = row.iterator();
+		Iterator<List<InternalNode>> iterator = row.iterator();
 		while (iterator.hasNext()) {
-			List currentRow = (List) iterator.next();
-			Collections.sort(currentRow, new Comparator() {
+			List<InternalNode> currentRow = iterator.next();
+			Collections.sort(currentRow, new Comparator<InternalNode>() {
 				@Override
-				public int compare(Object arg0, Object arg1) {
-					return (int) (((InternalNode) arg1).getLayoutEntity().getYInLayout() - ((InternalNode) arg0).getLayoutEntity().getYInLayout());
+				public int compare(InternalNode arg0, InternalNode arg1) {
+					return (int) (arg1.getLayoutEntity().getYInLayout() - arg0.getLayoutEntity().getYInLayout());
 				}
 			});
-			Iterator iterator2 = currentRow.iterator();
+			Iterator<InternalNode> iterator2 = currentRow.iterator();
 			int i = 0;
 			int width = (int) ((boundsWidth / 2) - currentRow.size() * 75);
 
-			heightSoFar += ((InternalNode) currentRow.get(0)).getLayoutEntity().getHeightInLayout() + VSPACING * 8;
+			heightSoFar += currentRow.get(0).getLayoutEntity().getHeightInLayout() + VSPACING * 8;
 			while (iterator2.hasNext()) {
-				InternalNode currentNode = (InternalNode) iterator2.next();
+				InternalNode currentNode = iterator2.next();
 
 				double location = width + 10 * ++i;
 				currentNode.setLocation(location, heightSoFar);
@@ -90,12 +87,12 @@ public class BigHorizontalShift extends AbstractLayoutAlgorithm {
 		}
 	}
 
-	private void addToRowList(InternalNode node, ArrayList list) {
+	private void addToRowList(InternalNode node, List<List<InternalNode>> list) {
 		double layoutY = node.getLayoutEntity().getYInLayout();
 
 		for (int i = 0; i < list.size(); i++) {
-			List currentRow = (List) list.get(i);
-			InternalNode currentRowNode = (InternalNode) currentRow.get(0);
+			List<InternalNode> currentRow = list.get(i);
+			InternalNode currentRowNode = currentRow.get(0);
 			double currentRowY = currentRowNode.getLayoutEntity().getYInLayout();
 			//double currentRowHeight = currentRowNode.getLayoutEntity().getHeightInLayout();
 			if (layoutY >= (currentRowY - DELTA) && layoutY <= currentRowY + DELTA) {
@@ -104,7 +101,7 @@ public class BigHorizontalShift extends AbstractLayoutAlgorithm {
 				return;
 			}
 		}
-		List newRow = new ArrayList();
+		List<InternalNode> newRow = new ArrayList<>();
 		newRow.add(node);
 		list.add(newRow);
 	}

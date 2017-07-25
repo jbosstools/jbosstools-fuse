@@ -1469,7 +1469,7 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 
 	private static class FontManager {
 		private final String fontName = getFontType();
-		private List registrants = new ArrayList();
+		private List<Control> registrants = new ArrayList<>();
 		private Font titleFont;
 		private final IPropertyChangeListener fontListener = new IPropertyChangeListener() {
 			@Override
@@ -1501,8 +1501,8 @@ public class CamelDesignEditorFlyoutPaletteComposite  extends FlyoutPaletteCompo
 				return;
 			Font oldFont = titleFont;
 			titleFont = createTitleFont();
-			for (Iterator iter = registrants.iterator(); iter.hasNext();)
-				((Control) iter.next()).setFont(titleFont);
+			for (Iterator<Control> iter = registrants.iterator(); iter.hasNext();)
+				iter.next().setFont(titleFont);
 			oldFont.dispose();
 		}
 

@@ -65,7 +65,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
 	public Collection<QueueViewFacade> getQueues() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         ObjectName[] queues = broker.getQueues();
         return getManagedObjects(queues, QueueViewMBean.class, QueueViewFacade.class);
@@ -75,7 +75,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
 	public Collection<TopicViewFacade> getTopics() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         ObjectName[] queues = broker.getTopics();
         return getManagedObjects(queues, TopicViewMBean.class, TopicViewFacade.class);
@@ -85,7 +85,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
 	public Collection<DurableSubscriptionViewFacade> getDurableTopicSubscribers() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         ObjectName[] queues = broker.getDurableTopicSubscribers();
         return getManagedObjects(queues, DurableSubscriptionViewMBean.class, DurableSubscriptionViewFacade.class);
@@ -95,7 +95,7 @@ public abstract class BrokerFacadeSupport implements BrokerFacade {
 	public Collection<DurableSubscriptionViewFacade> getInactiveDurableTopicSubscribers() throws Exception {
         BrokerViewFacade broker = getBrokerAdmin();
         if (broker == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         ObjectName[] queues = broker.getInactiveDurableTopicSubscribers();
         return getManagedObjects(queues, DurableSubscriptionViewMBean.class, DurableSubscriptionViewFacade.class);

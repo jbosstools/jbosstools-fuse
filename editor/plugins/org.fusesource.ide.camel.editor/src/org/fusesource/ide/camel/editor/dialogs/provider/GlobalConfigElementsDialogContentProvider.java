@@ -53,7 +53,7 @@ public class GlobalConfigElementsDialogContentProvider implements ITreeContentPr
 	@Override
 	public Object[] getElements(Object parent) {
 		if (parent instanceof List) {
-			return ((List)parent).toArray();
+			return ((List<?>)parent).toArray();
 		} else if (parent instanceof GlobalConfigCategoryItem) {
 			return ((GlobalConfigCategoryItem)parent).getChildren().toArray();
 		}

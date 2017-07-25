@@ -13,6 +13,7 @@ package org.fusesource.ide.graph;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -38,7 +39,7 @@ public class DirectedDiagramViewLayoutAlgorithm extends AbstractLayoutAlgorithm 
 
 	@Override
 	protected void applyLayoutInternal(InternalNode[] entitiesToLayout, InternalRelationship[] relationshipsToConsider, double boundsX, double boundsY, double boundsWidth, double boundsHeight) {
-		HashMap mapping = new HashMap(entitiesToLayout.length);
+		Map<InternalNode, Node> mapping = new HashMap<>(entitiesToLayout.length);
 		DirectedGraph graph = new DirectedGraph();
 		
 		graph.setDirection(PositionConstants.SOUTH);
@@ -54,8 +55,8 @@ public class DirectedDiagramViewLayoutAlgorithm extends AbstractLayoutAlgorithm 
 		}
 		for (int i = 0; i < relationshipsToConsider.length; i++) {
 			InternalRelationship relationship = relationshipsToConsider[i];
-			Node source = (Node) mapping.get(relationship.getSource());
-			Node dest = (Node) mapping.get(relationship.getDestination());
+			Node source = mapping.get(relationship.getSource());
+			Node dest = mapping.get(relationship.getDestination());
 			Edge edge = new Edge(relationship, source, dest);
 			graph.edges.add(edge);
 		}

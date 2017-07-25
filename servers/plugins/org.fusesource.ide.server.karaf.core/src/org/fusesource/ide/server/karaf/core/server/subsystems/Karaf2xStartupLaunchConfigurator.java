@@ -92,7 +92,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 	}
 	
 	protected String[] getClassPathEntries(String installPath) {
-		List cp = new ArrayList();
+		List<Object> cp = new ArrayList<>();
 		
 		IPath libPath = new Path(String.format("%s%s%s%s", installPath, SEPARATOR, "lib", SEPARATOR));
 		if (libPath.toFile().exists()) {
@@ -110,7 +110,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 		return entries;
 	}
 	
-	private void findJars(IPath path, List cp) {
+	private void findJars(IPath path, List<Object> cp) {
 		File[] libs = path.toFile().listFiles(new FileFilter() {
 			/*
 			 * (non-Javadoc)
