@@ -222,8 +222,7 @@ public class CamelMavenUtils {
 		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
 		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
-		boolean enabled = s.getBoolean("enableStagingRepositories");
-		if (enabled) {
+		if (s.getBoolean("enableStagingRepositories")) {
 			String repos = s.getString("stagingRepositories");
 			repoList.addAll(Arrays.asList(repos.split(";"))
 					.stream()
