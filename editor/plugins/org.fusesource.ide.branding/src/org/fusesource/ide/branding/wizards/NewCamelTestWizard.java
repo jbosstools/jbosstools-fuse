@@ -16,9 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -34,32 +32,10 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.junit.ui.JUnitPlugin;
 import org.eclipse.jdt.internal.junit.wizards.JUnitWizard;
-import org.eclipse.jdt.ui.text.java.ClasspathFixProcessor.ClasspathFixProposal;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.window.Window;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.contenttype.BlueprintXmlMatchingStrategy;
@@ -80,196 +56,6 @@ public class NewCamelTestWizard extends JUnitWizard {
 	private String camelVersion = null;
 	private XmlMatchingStrategySupport blueprintXmlMatcher = new BlueprintXmlMatchingStrategy();
 	
-	private static class ClasspathFixSelectionDialog extends MessageDialog implements SelectionListener,
-	IDoubleClickListener {
-
-		static class ClasspathFixLabelProvider extends LabelProvider {
-
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-			 */
-			@Override
-			public Image getImage(Object element) {
-				if (element instanceof ClasspathFixProposal) {
-					ClasspathFixProposal classpathFixProposal = (ClasspathFixProposal) element;
-					return classpathFixProposal.getImage();
-				}
-				return null;
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-			 */
-			@Override
-			public String getText(Object element) {
-				if (element instanceof ClasspathFixProposal) {
-					ClasspathFixProposal classpathFixProposal = (ClasspathFixProposal) element;
-					return classpathFixProposal.getDisplayString();
-				}
-				return null;
-			}
-		}
-
-		private static final String BUILD_PATH_BLOCK = "block_until_buildpath_applied"; //$NON-NLS-1$
-		private static final String BUILD_PATH_PAGE_ID = "org.eclipse.jdt.ui.propertyPages.BuildPathsPropertyPage"; //$NON-NLS-1$
-
-		private static String getDialogMessage(boolean isJunit4) {
-			return isJunit4 ? WizardMessages.NewTestCaseCreationWizard_fix_selection_junit4_description
-					: WizardMessages.NewTestCaseCreationWizard_fix_selection_junit3_description;
-		}
-
-		private final ClasspathFixProposal[] fFixProposals;
-		private TableViewer fFixSelectionTable;
-		private Button fNoActionRadio;
-
-		private Button fOpenBuildPathRadio;
-
-		private Button fPerformFix;
-
-		private final IJavaProject fProject;
-
-		private ClasspathFixProposal fSelectedFix;
-
-		public ClasspathFixSelectionDialog(Shell parent, boolean isJUnit4, IJavaProject project,
-				ClasspathFixProposal[] fixProposals) {
-			super(parent, WizardMessages.Wizard_title_new_testcase, null, getDialogMessage(isJUnit4),
-					MessageDialog.QUESTION, new String[] { IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL },
-					0);
-			fProject = project;
-			fFixProposals = fixProposals;
-			fSelectedFix = null;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.MessageDialog#buttonPressed(int)
-		 */
-		@Override
-		protected void buttonPressed(int buttonId) {
-			fSelectedFix = null;
-			if (buttonId == 0) {
-				if (fNoActionRadio.getSelection()) {
-					// nothing to do
-				} else if (fOpenBuildPathRadio.getSelection()) {
-					String id = BUILD_PATH_PAGE_ID;
-					Map<String, Boolean> input = new HashMap<String, Boolean>();
-					input.put(BUILD_PATH_BLOCK, Boolean.TRUE);
-					if (PreferencesUtil.createPropertyDialogOn(getShell(), fProject, id, new String[] { id }, input)
-							.open() != Window.OK) {
-						return;
-					}
-				} else if (fFixSelectionTable != null) {
-					IStructuredSelection selection = (IStructuredSelection) fFixSelectionTable.getSelection();
-					Object firstElement = selection.getFirstElement();
-					if (firstElement instanceof ClasspathFixProposal) {
-						fSelectedFix = (ClasspathFixProposal) firstElement;
-					}
-				}
-			}
-			super.buttonPressed(buttonId);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.MessageDialog#createCustomArea(org.eclipse.swt.widgets.Composite)
-		 */
-		@Override
-		protected Control createCustomArea(Composite composite) {
-			fNoActionRadio = new Button(composite, SWT.RADIO);
-			fNoActionRadio.setLayoutData(new GridData(SWT.LEAD, SWT.TOP, false, false));
-			fNoActionRadio.setText(WizardMessages.NewTestCaseCreationWizard_fix_selection_not_now);
-			fNoActionRadio.addSelectionListener(this);
-
-			fOpenBuildPathRadio = new Button(composite, SWT.RADIO);
-			fOpenBuildPathRadio.setLayoutData(new GridData(SWT.LEAD, SWT.TOP, false, false));
-			fOpenBuildPathRadio.setText(WizardMessages.NewTestCaseCreationWizard_fix_selection_open_build_path_dialog);
-			fOpenBuildPathRadio.addSelectionListener(this);
-
-			if (fFixProposals.length > 0) {
-
-				fPerformFix = new Button(composite, SWT.RADIO);
-				fPerformFix.setLayoutData(new GridData(SWT.LEAD, SWT.TOP, false, false));
-				fPerformFix.setText(WizardMessages.NewTestCaseCreationWizard_fix_selection_invoke_fix);
-				fPerformFix.addSelectionListener(this);
-
-				fFixSelectionTable = new TableViewer(composite, SWT.SINGLE | SWT.BORDER);
-				fFixSelectionTable.setContentProvider(new ArrayContentProvider());
-				fFixSelectionTable.setLabelProvider(new ClasspathFixLabelProvider());
-				fFixSelectionTable.setComparator(new ViewerComparator());
-				fFixSelectionTable.addDoubleClickListener(this);
-				fFixSelectionTable.setInput(fFixProposals);
-				fFixSelectionTable.setSelection(new StructuredSelection(fFixProposals[0]));
-
-				GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-				gridData.heightHint = convertHeightInCharsToPixels(4);
-				gridData.horizontalIndent = convertWidthInCharsToPixels(2);
-
-				fFixSelectionTable.getControl().setLayoutData(gridData);
-
-				fNoActionRadio.setSelection(false);
-				fOpenBuildPathRadio.setSelection(false);
-				fPerformFix.setSelection(true);
-
-			} else {
-				fNoActionRadio.setSelection(true);
-				fOpenBuildPathRadio.setSelection(false);
-			}
-
-			updateEnableStates();
-
-			return composite;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.IDoubleClickListener#doubleClick(org.eclipse.jface.viewers.DoubleClickEvent)
-		 */
-		@Override
-		public void doubleClick(DoubleClickEvent event) {
-			okPressed();
-
-		}
-
-		public ClasspathFixProposal getSelectedClasspathFix() {
-			return fSelectedFix;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.Dialog#isResizable()
-		 */
-		@Override
-		protected boolean isResizable() {
-			return true;
-		}
-
-		private void updateEnableStates() {
-			if (fPerformFix != null) {
-				fFixSelectionTable.getTable().setEnabled(fPerformFix.getSelection());
-			}
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			updateEnableStates();
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			updateEnableStates();
-		}
-	}
-
 	private NewCamelTestWizardPageOne fPage1;
 
 	private NewCamelTestWizardPageTwo fPage2;

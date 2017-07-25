@@ -46,8 +46,7 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
     }
 
     @Override
-	public String getBrokerName() throws Exception,
-            MalformedObjectNameException {
+	public String getBrokerName() throws Exception {
         return getBrokerAdmin().getBrokerName();
     }
 
@@ -63,7 +62,7 @@ public abstract class RemoteBrokerFacadeSupport extends BrokerFacadeSupport {
         if (brokers.isEmpty()) {
             throw new IOException("No broker could be found in the JMX.");
         }
-        ObjectName name = (ObjectName) brokers.iterator().next();
+        ObjectName name = brokers.iterator().next();
         BrokerViewMBean mbean = MBeanServerInvocationHandler.newProxyInstance(connection, name, BrokerViewMBean.class, true);
         return proxy(BrokerViewFacade.class, mbean, name.getCanonicalName());
     }
