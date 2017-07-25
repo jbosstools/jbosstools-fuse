@@ -7,10 +7,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<version>10.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.fusesource.ide</groupId>
 	<artifactId>editor</artifactId>
 	<name>JBoss Fuse Tooling :: Camel Editor</name>
-	<version>10.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>plugins</module>

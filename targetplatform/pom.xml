@@ -11,8 +11,6 @@
 
 	<groupId>org.jboss.tools.targetplatforms</groupId>
 	<artifactId>fuse-multiple</artifactId>
-	<version>10.0.0-SNAPSHOT</version>
-
 	<name>JBoss Tools Fuse Multiple (Composite) Target Platform</name>
 	<packaging>pom</packaging>
 	<properties>
