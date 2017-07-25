@@ -6,10 +6,10 @@
     &lt;artifactId&gt;camel-elasticsearch&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73667"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73691"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">elasticsearch://clusterName?[options]</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>If you want to run against a local (in JVM/classloader) ElasticSearch server, just set
-                the clusterName value in the URI to <code class="code">local</code>. See the <a class="link" href="http://www.elasticsearch.org/guide/reference/java-api/client.html" target="_top">client guide</a> for more details.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following options may be configured on the ElasticSearch endpoint.  All are required to be set as either an endpoint URI parameter or as a header (headers override endpoint properties)</p><table width="837" id="d0e73694"><col width="257pt"><col width="572pt"><tr>
+                the clusterName value in the URI to <code class="code">local</code>. See the <a class="link" href="http://www.elasticsearch.org/guide/reference/java-api/client.html" target="_top">client guide</a> for more details.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following options may be configured on the ElasticSearch endpoint.  All are required to be set as either an endpoint URI parameter or as a header (headers override endpoint properties)</p><table width="837" id="d0e73718"><col width="257pt"><col width="572pt"><tr>
                 <th>name </th>
                 <th>description</th>
             </tr><tr>
@@ -77,7 +77,7 @@
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_MessageOperations"></a>Message Operations</h2></div></div></div><p>The following ElasticSearch operations are currently supported. Simply set an endpoint URI
       option or exchange header with a key of <code class="code">operation</code> and a value set to one of the
-      following. Some operations also require other parameters or the message body to be set.</p><table id="d0e73892"><tr>
+      following. Some operations also require other parameters or the message body to be set.</p><table id="d0e73916"><tr>
         <th>operation </th>
         <th>message body </th>
         <th>description</th>
@@ -169,7 +169,7 @@
     &lt;to uri="elasticsearch://local?operation=INDEX&amp;indexName=twitter&amp;indexType=tweet"/&gt;
 &lt;/route&gt;</pre><p>A client would simply need to pass a body message containing a Map to the route.  The result body contains the indexId created.</p><pre class="programlisting">Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
 map.put("content", "test");
-String indexId = template.requestBody("direct:index", map, String.class);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74178"></a>Java Example</h2></div></div></div><p>The following example shows how to use the ElasticSearch component from a Camel route
+String indexId = template.requestBody("direct:index", map, String.class);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74202"></a>Java Example</h2></div></div></div><p>The following example shows how to use the ElasticSearch component from a Camel route
             defined in Java:  </p><pre class="programlisting">CamelContext camelContext = new DefaultCamelContext();
 camelContext.addRoutes(new RouteBuilder() {
     @Override

@@ -14,7 +14,7 @@
     	&lt;artifactId&gt;camel-olingo2&lt;/artifactId&gt;
     	&lt;version&gt;${camel-version}&lt;/version&gt;
 	&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-332"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">olingo2://endpoint/&lt;resource-path&gt;?[options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-333"></a>Olingo2Component</h2></div></div></div><p>The Olingo2 Component can be configured with the options below. These options can
-                be provided using the component's bean property <span class="strong"><strong><code class="code">configuration</code></strong></span> of type <span class="strong"><strong><code class="code">org.apache.camel.component.olingo2.Olingo2Configuration</code></strong></span>.</p><table id="d0e138055"><colgroup> </colgroup><thead><tr>
+                be provided using the component's bean property <span class="strong"><strong><code class="code">configuration</code></strong></span> of type <span class="strong"><strong><code class="code">org.apache.camel.component.olingo2.Olingo2Configuration</code></strong></span>.</p><table id="d0e138079"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Option</p>
                         </td>
@@ -123,7 +123,7 @@
                 the URI path, as an endpoint option ?resourcePath=&lt;resource-path&gt; or as a
                 header value CamelOlingo2.resourcePath. The OData entity key predicate can either be
                 a part of the resource path, e.g. <span class="italics">Manufacturers('1')</span>, where <span class="italics">'</span><span class="italics">1'</span> is the key predicate, or be
-                specified separately with resource path <span class="italics">Manufacturers</span> and keyPredicate option <span class="italics">'1'</span>.</p><table id="d0e138296"><colgroup> </colgroup><thead><tr>
+                specified separately with resource path <span class="italics">Manufacturers</span> and keyPredicate option <span class="italics">'1'</span>.</p><table id="d0e138320"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Endpoint</p>
                         </td>
@@ -230,7 +230,7 @@
                         </td>
                     </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-335"></a>OData Resource Type Mapping</h2></div></div></div><p>The result of <span class="strong"><strong>read</strong></span> endpoint and data type of
                     <span class="strong"><strong>data</strong></span> option depends on the OData resource
-                being queried, created or modified.</p><table id="d0e138523"><colgroup> </colgroup><thead><tr>
+                being queried, created or modified.</p><table id="d0e138547"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>OData Resource Type</p>
                         </td>
@@ -347,7 +347,7 @@
                     </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-336"></a>URI Options</h2></div></div></div><p>If a value is not provided for <span class="strong"><strong>queryParams</strong></span>
                 either in the endpoint URI or in a message header, it will be assumed to be
                     <span class="strong"><strong><code class="code">null</code></strong></span>. Note that the <span class="strong"><strong><code class="code">null</code></strong></span> value will only be used if other
-                options do not satisfy matching endpoints.</p><table id="d0e138779"><colgroup> </colgroup><thead><tr>
+                options do not satisfy matching endpoints.</p><table id="d0e138803"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Name</p>
                         </td>

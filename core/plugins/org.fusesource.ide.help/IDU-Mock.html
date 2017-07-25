@@ -13,7 +13,7 @@
       messages in a <a href="IDU-File2.html" class="olink">File</a> or <a href="IDU-JPA.html" class="olink">database</a>, for example.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Mock endpoints keep received Exchanges in memory indefinitely"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Mock endpoints keep received Exchanges in memory indefinitely</th></tr><tr><td align="left" valign="top"><p>Remember that Mock is designed for testing.  When you add Mock endpoints to a route, each <a class="link" href="Exchange" target="_top">Exchange</a> sent to the endpoint will be stored (to allow for later validation) in memory until explicitly reset or the JVM is restarted.  If you are sending high volume and/or large messages, this may cause excessive memory use.  If your goal is to test deployable routes inline, consider using <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/builder/NotifyBuilder.html" target="_top">NotifyBuilder</a> or <a class="link" href="http://camel.apache.org/advicewith.html" target="_top">AdviceWith</a> in your tests instead of adding Mock endpoints to routes directly.</p><p>From Camel 2.10 onwards there are two new options <code class="literal">retainFirst</code>, and <code class="literal">retainLast</code> that can be used to limit the number of messages the Mock endpoints keep in memory.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mock_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">mock:someName[?options]</pre><p>Where <span class="bold"><strong>someName</strong></span> can be any string that uniquely identifies
       the endpoint.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mock_HSH_Options"></a>Options</h2></div></div></div><table id="d0e128198"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mock_HSH_Options"></a>Options</h2></div></div></div><table id="d0e128222"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -54,7 +54,7 @@ resultEndpoint.expectedMessageCount(2);
 
 // now lets assert that the mock:foo endpoint received 2 messages
 resultEndpoint.assertIsSatisfied();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mock_HSH_Settingexpectations"></a>Setting expectations</h2></div></div></div><p>You can see from the javadoc of <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html" target="_top">MockEndpoint</a> the various helper methods you can use to set expectations. The main
-      methods are as follows: </p><table id="d0e128304"><tr>
+      methods are as follows: </p><table id="d0e128328"><tr>
         <th> Method </th>
         <th> Description </th>
       </tr><tr>

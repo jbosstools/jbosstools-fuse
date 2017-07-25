@@ -4,13 +4,13 @@
             exchanges when a scheduler fires. This component is similar to the <a class="link" href="http://camel.apache.org/timer.html" target="_top">Timer</a> component, but it offers more
             functionality in terms of scheduling. Also this component uses JDK
                 <code class="code">ScheduledExecutorService</code>. Where as the timer uses a JDK
-                <code class="code">Timer</code>.</p><p>You can only consume events from this endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e152792"></a>URI format</h2></div></div></div><pre class="programlisting">scheduler:name[?options]</pre><p>Where <code class="code">name</code> is the name of the scheduler, which is created and shared
+                <code class="code">Timer</code>.</p><p>You can only consume events from this endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e152816"></a>URI format</h2></div></div></div><pre class="programlisting">scheduler:name[?options]</pre><p>Where <code class="code">name</code> is the name of the scheduler, which is created and shared
             across endpoints. So if you use the same name for all your timer endpoints, only one
             scheduler thread pool and thread will be used - but you can configure the thread pool to
             allow more concurrent threads.</p><p>You can append query options to the URI in the following format,
                 <code class="code">?option=value&amp;option=value&amp;...</code></p><p><span class="bold"><strong>Note:</strong></span> The IN body of the generated exchange is
                 <code class="code">null</code>. So <code class="code">exchange.getIn().getBody()</code> returns
-                <code class="code">null</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e152819"></a>Options</h2></div></div></div><table id="d0e152822"><tbody><tr>
+                <code class="code">null</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e152843"></a>Options</h2></div></div></div><table id="d0e152846"><tbody><tr>
                     <th><p>Name</p></th>
                     <th><p>Default Value</p></th>
                     <th><p>Description</p></th>
@@ -99,10 +99,10 @@
                     <td><code class="code">0</code></td>
                     <td>The number of subsequent error polls (failed due some error) that should
                         happen before the <code class="code">backoffMultipler</code> should kick-in.</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153104"></a>More information</h2></div></div></div><p>This component is a scheduler <a class="link" href="http://camel.apache.org/polling-consumer.html" target="_top">Polling Consumer</a>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153128"></a>More information</h2></div></div></div><p>This component is a scheduler <a class="link" href="http://camel.apache.org/polling-consumer.html" target="_top">Polling Consumer</a>
             where you can find more information about the options above, and examples at the <a class="link" href="http://camel.apache.org/polling-consumer.html" target="_top">Polling Consumer</a>
-            page.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153115"></a>Exchange Properties</h2></div></div></div><p>When the timer is fired, it adds the following information as properties to the
-                <code class="code">Exchange</code>:</p><table id="d0e153123"><tbody><tr>
+            page.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153139"></a>Exchange Properties</h2></div></div></div><p>When the timer is fired, it adds the following information as properties to the
+                <code class="code">Exchange</code>:</p><table id="d0e153147"><tbody><tr>
                     <th><p>Name</p></th>
                     <th><p>Type</p></th>
                     <th><p>Description</p></th>
@@ -114,13 +114,13 @@
                     <td><p><code class="code">Exchange.TIMER_FIRED_TIME</code></p></td>
                     <td><p><code class="code">Date</code></p></td>
                     <td><p>The time when the consumer fired.</p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153174"></a>Sample</h2></div></div></div><p>To set up a route that generates an event every 60 seconds:</p><pre class="programlisting">from("scheduler://foo?period=60s").to("bean:myBean?method=someMethodName");</pre><p>The above route will generate an event and then invoke the <code class="code">someMethodName</code>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153198"></a>Sample</h2></div></div></div><p>To set up a route that generates an event every 60 seconds:</p><pre class="programlisting">from("scheduler://foo?period=60s").to("bean:myBean?method=someMethodName");</pre><p>The above route will generate an event and then invoke the <code class="code">someMethodName</code>
             method on the bean called <code class="code">myBean</code> in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a> such as JNDI or <a class="link" href="http://camel.apache.org/spring.html" target="_top">Spring</a>.</p><p>And the route in Spring DSL:</p><pre class="programlisting">&lt;route&gt;
   &lt;from uri="scheduler://foo?period=60s"/&gt;
   &lt;to uri="bean:myBean?method=someMethodName"/&gt;
-&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153199"></a>Forcing the scheduler to trigger immediately when completed</h2></div></div></div><p>To let the scheduler trigger as soon as the previous task is complete, you can set the
+&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153223"></a>Forcing the scheduler to trigger immediately when completed</h2></div></div></div><p>To let the scheduler trigger as soon as the previous task is complete, you can set the
             option greedy=true. But beware then the scheduler will keep firing all the time. So use
-            this with caution.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153204"></a>Forcing the scheduler to be idle</h2></div></div></div><p>There can be use cases where you want the scheduler to trigger and be greedy. But
+            this with caution.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e153228"></a>Forcing the scheduler to be idle</h2></div></div></div><p>There can be use cases where you want the scheduler to trigger and be greedy. But
             sometimes you want "tell the scheduler" that there was no task to poll, so the
             scheduler can change into idle mode using the backoff options. To do this you would need
             to set a property on the exchange with the key

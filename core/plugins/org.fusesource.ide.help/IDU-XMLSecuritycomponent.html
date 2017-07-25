@@ -119,7 +119,7 @@
             parent element of the Signature element; see option <code class="literal">parentLocalName</code>
             for more details. </p><p>For creating detached XML signatures, see <a class="xref" href="IDU-XMLSecuritycomponent.html#scroll-bookmark-2001" title="Detached XML Signatures as Siblings of the Signed Elements">Detached XML Signatures as Siblings of the Signed Elements</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_CommonSigningandVerifyingOptions"></a>Common Signing and Verifying Options</h2></div></div></div><p>There are options which can be used for both endpoints, signer and verifier.</p><p>
             
-        </p><table width="1046" id="d0e176559"><col width="161pt"><col width="228pt"><col width="115pt"><col width="534pt"><tr>
+        </p><table width="1046" id="d0e176583"><col width="161pt"><col width="228pt"><col width="115pt"><col width="534pt"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
@@ -234,7 +234,7 @@
                 </td>
                 <td> Since <span class="bold"><strong>Camel 2.15.0</strong></span>. Character encoding of the
                     output XML document. If null then UTF-8 is used. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_SigningOptions"></a>Signing Options</h2></div></div></div><p>The signer endpoint has the following options.</p><table id="d0e176815"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_SigningOptions"></a>Signing Options</h2></div></div></div><p>The signer endpoint has the following options.</p><table id="d0e176839"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
@@ -478,7 +478,7 @@
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-XMLSecuritycomponent_HSH_VerifyingOptions"></a>Verifying Options</h2></div></div></div><p>The verifier endpoint has the following options.</p><p>
             
-        </p><table id="d0e177404"><tr>
+        </p><table id="d0e177428"><tr>
                 <th> Name </th>
                 <th> Type </th>
                 <th> Default </th>
@@ -654,7 +654,7 @@
             element. The following example contains two detached signatures. The first signature
             is for the element "C" and the second signature is for element "A". The signatures
             are <span class="strong"><strong>nested</strong></span>; the second signature is for the
-            element A which also contains the first signature.</p><div class="example"><a name="d0e177698"></a><p class="title"><b>Example&nbsp;13.&nbsp;Example Detached XML Signatures</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+            element A which also contains the first signature.</p><div class="example"><a name="d0e177722"></a><p class="title"><b>Example&nbsp;13.&nbsp;Example Detached XML Signatures</b></p><div class="example-contents"><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
 &lt;root&gt;
     &lt;A ID="IDforA"&gt;
         &lt;B&gt;
@@ -696,10 +696,10 @@
             elements to be signed. The elements are signed by the same key given by the
             <span class="italics">keyAccessor</span> bean. Ements with higher
             (=deeper) hierarachy level are signed first. In the example, the element "C" is
-            signed before the element "A".</p><div class="example"><a name="d0e177714"></a><p class="title"><b>Example&nbsp;14.&nbsp;Java DSL Example</b></p><div class="example-contents"><pre class="programlisting">from("direct:detached")
+            signed before the element "A".</p><div class="example"><a name="d0e177738"></a><p class="title"><b>Example&nbsp;14.&nbsp;Java DSL Example</b></p><div class="example-contents"><pre class="programlisting">from("direct:detached")
   .to("xmlsecurity:sign://detached?keyAccessor=#keyAccessorBeant&amp;xpathsToIdAttributes=#xpathsToIdAttributesBean&amp;schemaResourceUri=Test.xsd")
   .to("xmlsecurity:verify://detached?keySelector=#keySelectorBean&amp;schemaResourceUri=org/apache/camel/component/xmlsecurity/Test.xsd")
-  .to("mock:result");</pre></div></div><br class="example-break"><div class="example"><a name="d0e177719"></a><p class="title"><b>Example&nbsp;15.&nbsp;Spring Example</b></p><div class="example-contents"><pre class="programlisting">   
+  .to("mock:result");</pre></div></div><br class="example-break"><div class="example"><a name="d0e177743"></a><p class="title"><b>Example&nbsp;15.&nbsp;Spring Example</b></p><div class="example-contents"><pre class="programlisting">   
   &lt;bean id="xpathsToIdAttributesBean" class="java.util.ArrayList"&gt;
         &lt;constructor-arg type="java.util.Collection"&gt;
             &lt;list&gt;
@@ -733,7 +733,7 @@
                 Signature (XAdES-EPES) for the Signer Endpoint. The forms Electronic Signature with
                 Validation Data</em></span> XAdES-T and XAdES-C are not supported. We support the
             following properties of the XAdES-EPES form ("?" denotes zero or one
-            occurrence):</p><table id="d0e177746"><tr>
+            occurrence):</p><table id="d0e177770"><tr>
                 <td>
                     <pre class="programlisting">        &lt;QualifyingProperties Target&gt;
             &lt;SignedProperties&gt;
@@ -763,7 +763,7 @@
                 <code class="code">DefaultXAdESSignatureProperties</code> overwrites the method
                 <code class="code">getSigningCertificate()</code> and allows you to specify the signing
             certificate via a keystore and alias. The following example shows all parameters you can
-            specify. If you do not need certain parameters you can just omit them.</p><table id="d0e177786"><tr>
+            specify. If you do not need certain parameters you can just omit them.</p><table id="d0e177810"><tr>
                 <td>
                     <pre class="programlisting">        Keystore keystore = ... // load a keystore
         DefaultKeyAccessor accessor = new DefaultKeyAccessor();
@@ -842,7 +842,7 @@
 
 </pre>
                 </td>
-            </tr></table><table id="d0e177795"><tr>
+            </tr></table><table id="d0e177819"><tr>
                 <td>
                     <pre class="programlisting">   ...
    &lt;from uri="direct:xades" /&gt;
@@ -874,7 +874,7 @@
         &lt;/constructor-arg&gt;
     &lt;/bean&gt;</pre>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e177804"></a>Headers</h2></div></div></div><table id="d0e177807"><tbody><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e177828"></a>Headers</h2></div></div></div><table id="d0e177831"><tbody><tr>
                     <th>Header</th>
                     <th>Type</th>
                     <th>Description</th>
@@ -909,7 +909,7 @@
                     <td>String</td>
                     <td>overwrites the XAdES prefix parameter
                         value</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e177912"></a>Limitations with regard to XAdES version 1.4.2</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>No support for signature form XAdES-T and XAdES-C</p></li><li class="listitem"><p>Only signer part implemented. Verifier part currently not available.</p></li><li class="listitem"><p>No support for the '<code class="code">QualifyingPropertiesReference</code>' element (see
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e177936"></a>Limitations with regard to XAdES version 1.4.2</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>No support for signature form XAdES-T and XAdES-C</p></li><li class="listitem"><p>Only signer part implemented. Verifier part currently not available.</p></li><li class="listitem"><p>No support for the '<code class="code">QualifyingPropertiesReference</code>' element (see
                 section 6.3.2 of spec).</p></li><li class="listitem"><p>No support for the <code class="code">Transforms</code> element contained in the
                 <code class="code">SignaturePolicyId</code> element contained in the
                 <code class="code">SignaturePolicyIdentifier element</code></p></li><li class="listitem"><p>No support of the <code class="code">CounterSignature</code> element --&gt; no support for
@@ -922,4 +922,4 @@
                 XML signer endpoint).</p></li><li class="listitem"><p>A <code class="code">CommitmentTypeIndication</code> element contains always the
                 <code class="code">AllSignedDataObjects</code> element. The
                 <code class="code">ObjectReference</code> element within
-                <code class="code">CommitmentTypeIndication</code> element is not supported.</p></li><li class="listitem"><p>The<code class="code"> AllDataObjectsTimeStamp</code> element is not supported</p></li><li class="listitem"><p>The<code class="code"> IndividualDataObjectsTimeStamp</code> element is not supported</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e177993"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://www.w3.org/TR/xmldsig-bestpractices/" target="_top">Best Practices</a></p></li></ul></div></div></div></body></html>
+                <code class="code">CommitmentTypeIndication</code> element is not supported.</p></li><li class="listitem"><p>The<code class="code"> AllDataObjectsTimeStamp</code> element is not supported</p></li><li class="listitem"><p>The<code class="code"> IndividualDataObjectsTimeStamp</code> element is not supported</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e178017"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://www.w3.org/TR/xmldsig-bestpractices/" target="_top">Best Practices</a></p></li></ul></div></div></div></body></html>
