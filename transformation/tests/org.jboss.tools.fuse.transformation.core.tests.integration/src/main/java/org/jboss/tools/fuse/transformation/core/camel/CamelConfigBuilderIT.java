@@ -116,14 +116,14 @@ public class CamelConfigBuilderIT {
 	}
 
 	@Test
-	public void readSpringConfig() throws Exception {
+	public void readSpringConfig() {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(XML_JSON));
 		Assert.assertEquals(1, config.getEndpoints().size());
 		Assert.assertEquals(2, config.getDataFormats().size());
 	}
 
 	@Test
-	public void readBlueprintConfig() throws Exception {
+	public void readBlueprintConfig() {
 		CamelConfigBuilder config = new CamelConfigBuilder(getFile(BLUEPRINT_CONFIG));
 		Assert.assertEquals(1, config.getEndpoints().size());
 		Assert.assertEquals(2, config.getDataFormats().size());
