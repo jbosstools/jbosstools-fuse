@@ -13,7 +13,7 @@
                 from their processing as a RESTful or SOAP web service. This has the potential of
                 using a multitude of transports to consume web services. The bean component's
                 configuration is also simpler and provides the fastest method to implement web
-                services using Camel and CXF.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF in streaming modes (see DataFormat option), then also read about <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream caching</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65752"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+                services using Camel and CXF.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When using CXF in streaming modes (see DataFormat option), then also read about <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream caching</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65776"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
             offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
  </p><p> The CXF component integrates with the JBoss EAP <code class="code">webservices</code> susbsystem
             that also uses Apache CXF. For more information, see <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/javaee/jaxws.html" target="_top">JAX-WS</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>At present, the Camel on EAP subsystem does <span class="emphasis"><em>not</em></span> support CXF
@@ -22,7 +22,7 @@
             references a bean in the Spring bean registry. With this URI format, most of the
             endpoint details are specified in the bean definition.</p><pre class="programlisting">cxf://someAddress[?options]</pre><p>Where <span class="bold"><strong>someAddress</strong></span> specifies the CXF endpoint's
             address. With this URI format, most of the endpoint details are specified using
-            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e65800"><tr>
+            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e65824"><tr>
                 <th> Name </th>
                 <th>Required</th>
                 <th> Description </th>
@@ -289,7 +289,7 @@
                 </td>
             </tr></table><p> The <code class="code">serviceName</code> and <code class="code">portName</code> are <a class="link" href="http://en.wikipedia.org/wiki/QName" target="_top">QNames</a>, so if you provide them
             be sure to prefix them with their <code class="literal">{namespace}</code> as shown in the
-            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e66475"><tr>
+            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e66499"><tr>
                 <th> DataFormat </th>
                 <th> Description </th>
             </tr><tr>
@@ -469,7 +469,7 @@
     &lt;/property&gt;
 &lt;/bean&gt;
 </pre></li><li class="listitem"><p>Other than <code class="literal">relayHeaders</code>, there are new properties that can
-                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e66749"><tr>
+                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e66773"><tr>
                 <th> Name </th>
                 <th> Description </th>
                 <th> type </th>
@@ -525,7 +525,7 @@
             the namespace declarations at the end of the <code class="literal">&lt;cxf:cxfEndpoint/&gt;</code>
             tag--these are required because the combined <code class="code">{namespace}localName</code> syntax is
             presently not supported for this tag's attribute values.</p><p>The <code class="literal">cxf:cxfEndpoint</code> element supports many additional
-            attributes:</p><table id="d0e66906"><tr>
+            attributes:</p><table id="d0e66930"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>
@@ -564,7 +564,7 @@
                 </td>
                 <td> The class name of the SEI (Service Endpoint Interface) class which could have
                     JSR181 annotation or not. </td>
-            </tr></table><p>It also supports many child elements:</p><table id="d0e67008"><tr>
+            </tr></table><p>It also supports many child elements:</p><table id="d0e67032"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>

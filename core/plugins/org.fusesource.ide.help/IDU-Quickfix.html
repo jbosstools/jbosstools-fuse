@@ -31,7 +31,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       must include the session-related fields in the FIX message being sent. If a session is
       specified in the URI then the component will automatically inject the session-related fields
       into the FIX message.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_ExchangeFormat"></a>Exchange Format</h2></div></div></div><p>The exchange headers include information to help with exchange filtering, routing and
-      other processing. The following headers are available:</p><table id="d0e142425"><tr>
+      other processing. The following headers are available:</p><table id="d0e142449"><tr>
         <th> Header Name </th>
         <th> Description </th>
       </tr><tr>
@@ -72,7 +72,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         manual</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_CommunicationConnectors"></a>Communication Connectors</h2></div></div></div><p>When the component detects an initiator or acceptor session setting in the QuickFIX/J
       configuration file it will automatically create the corresponding initiator and/or acceptor
       connector. These settings can be in the default or in a specific session section of the
-      configuration file.</p><table id="d0e142527"><tr>
+      configuration file.</p><table id="d0e142551"><tr>
         <th> Session Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -85,7 +85,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         <td> Create an acceptor connector </td>
       </tr></table><p>The threading model for the QuickFIX/J session connectors can also be specified. These
       settings affect all sessions in the configuration file and must be placed in the settings
-      default section.</p><table id="d0e142558"><tr>
+      default section.</p><table id="d0e142582"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -102,7 +102,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_Logging"></a>Logging</h2></div></div></div><p>The QuickFIX/J logger implementation can be specified by including the following settings
       in the default section of the configuration file. The <code class="literal">ScreenLog</code> is the
       default if none of the following settings are present in the configuration. It's an error to
-      include settings that imply more than one log implementation.</p><table id="d0e142608"><tr>
+      include settings that imply more than one log implementation.</p><table id="d0e142632"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -138,7 +138,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_MessageStore"></a>Message Store</h2></div></div></div><p>The QuickFIX/J message store implementation can be specified by including the following
       settings in the default section of the configuration file. The <code class="literal">MemoryStore</code>
       is the default if none of the following settings are present in the configuration. It's an
-      error to include settings that imply more than one message store implementation.</p><table id="d0e142706"><tr>
+      error to include settings that imply more than one message store implementation.</p><table id="d0e142730"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -158,7 +158,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_MessageFactory"></a>Message Factory</h2></div></div></div><p>A message factory is used to construct domain objects from raw FIX messages. The default
       message factory is <code class="literal">DefaultMessageFactory</code>. However, advanced applications
-      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e142767"><tr>
+      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e142791"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -187,7 +187,7 @@ TargetCompID=YOUR_TARGET</pre></div><div class="simplesect"><div class="titlepag
  </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_ImplementingInOutExchangesforProducers"></a>Implementing InOut Exchanges for Producers</h2></div></div></div><p>For producers, sending a message will block until a reply is received or a timeout occurs. There
       is no standard way to correlate reply messages in FIX. Therefore, a correlation criteria must be
       defined for each type of InOut exchange. The correlation criteria and timeout can be specified
-      using <code class="literal">Exchange</code> properties.</p><table id="d0e142840"><tr>
+      using <code class="literal">Exchange</code> properties.</p><table id="d0e142864"><tr>
         <th> Description </th>
         <th> Key String </th>
         <th> Key Constant </th>
