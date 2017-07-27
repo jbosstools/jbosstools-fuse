@@ -48,11 +48,13 @@ public class CamelCatalogUtils {
 	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
 	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
 	private static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
+	private static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
 
 	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
 	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
 	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
 	private static final String FUSE_63_R3_BOM_VERSION = "6.3.0.redhat-262";
+	private static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
 	
 	private static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
 	private static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
@@ -64,7 +66,7 @@ public class CamelCatalogUtils {
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.1";
 	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
-	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R3_CAMEL_VERSION;
+	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
 	private static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
@@ -125,6 +127,7 @@ public class CamelCatalogUtils {
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R1_CAMEL_VERSION, FUSE_63_R1_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R2_CAMEL_VERSION, FUSE_63_R2_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R3_CAMEL_VERSION, FUSE_63_R3_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R4_CAMEL_VERSION, FUSE_63_R4_BOM_VERSION);
 			
 			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_BOM_MAPPING.keySet());
 		}
