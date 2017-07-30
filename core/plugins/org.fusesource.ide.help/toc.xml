@@ -19,7 +19,7 @@
             <topic label="Adding global endpoints, data formats or beans" href="RiderAddGlobalCnfg.html"/>
             <topic label="Configuring the route editor" href="RiderEditPrefs.html"/>
          </topic>
-         <topic label="The Source View" href="RiderEditSource.html"/>
+         <topic label="The Source Tab" href="RiderEditSource.html"/>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="Running routes inside Red Hat JBoss Fuse Tooling" href="RiderRunning.html">
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
@@ -76,8 +76,8 @@
          </topic>
          <topic label="Editing running routes" href="RiderEditRunRoute.html"/>
          <topic label="Managing routing contexts" href="RiderManageRouteContexts.html">
-            <topic label="Suspending a routing context" href="RiderContextSuspend.html"/>
-            <topic label="Resuming a routing context" href="RiderContextResume.html"/>
+            <topic label="Suspending operation of a routing context" href="RiderContextSuspend.html"/>
+            <topic label="Resuming operation of a routing context" href="RiderContextResume.html"/>
          </topic>
       </topic>
       <topic label="Publishing Applications to a Container" href="RiderDeployPart.html">
