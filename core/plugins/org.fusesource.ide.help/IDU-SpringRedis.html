@@ -6,7 +6,7 @@
             provides pub/sub functionality for inter-app communications. Camel provides a producer
             for executing commands, consumer for subscribing to pub/sub messages an idempotent
             repository for filtering out duplicate messages.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>In order to use this component, you must have a Redis server running. </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_URIFormat"></a>URI Format</h2></div></div></div><p></p><pre class="programlisting">spring-redis://host:port[?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?options=value&amp;option2=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e164020"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e164069"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -69,7 +69,7 @@
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_Usage"></a>Usage</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_MessageheadersevaluatedbytheRedisproducer"></a>Message headers evaluated by the Redis producer</h2></div></div></div><p>The producer issues commands to the server and each command has different set of
             parameters with specific types. The result from the command execution is returned in the
             message body. 
-        </p><table id="d0e164196"><tr>
+        </p><table id="d0e164245"><tr>
         <th> Hash Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -146,7 +146,7 @@
         <td> Get all the fields and values in a hash </td>
         <td> CamelRedis.Key (String) </td>
         <td> Map&lt;String, Object&gt; </td>
-      </tr></table><table id="d0e164403"><tr>
+      </tr></table><table id="d0e164452"><tr>
         <th> List Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -247,7 +247,7 @@
         <td> Remove and get the last element in a list, or block until one is available </td>
         <td> CamelRedis.Key (String), CamelRedis.Timeout (Long) </td>
         <td> String </td>
-      </tr></table><table id="d0e164674"><tr>
+      </tr></table><table id="d0e164723"><tr>
         <th> Set Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -336,7 +336,7 @@
         <td> Get one or multiple random members from a set </td>
         <td> CamelRedis.Key (String) </td>
         <td> String </td>
-      </tr></table><table id="d0e164913"><tr>
+      </tr></table><table id="d0e164962"><tr>
         <th> Ordered set Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -431,7 +431,7 @@
         <td> Intersect multiple sorted sets and store the resulting sorted set in a new key </td>
         <td> CamelRedis.Key (String), CamelRedis.Keys (String), CamelRedis.Destination (String) </td>
         <td> void </td>
-      </tr></table><table id="d0e165168"><tr>
+      </tr></table><table id="d0e165217"><tr>
         <th> String Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -544,7 +544,7 @@
         <td> Set the string value of a key and return its old value </td>
         <td> CamelRedis.Key (String), CamelRedis.Value (Object) </td>
         <td> Object </td>
-      </tr></table><table id="d0e165471"><tr>
+      </tr></table><table id="d0e165520"><tr>
         <th> Key Commands </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -639,7 +639,7 @@
         <td> Move a key to another database </td>
         <td> CamelRedis.Key (String), CamelRedis.Db (Integer) </td>
         <td> Boolean </td>
-      </tr></table><table id="d0e165726"><tr>
+      </tr></table><table id="d0e165775"><tr>
         <th> Other Command </th>
         <th> Description </th>
         <th> Parameters </th>
@@ -700,7 +700,7 @@
         <td> void </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SpringRedis_HSH_Redisconsumer"></a>Redis consumer</h2></div></div></div><p>The consumer subscribes to a channel either by channel name using <code class="literal">SUBSCRIBE</code> or a string pattern using <code class="literal">PSUBSCRIBE</code> commands. When a message is sent to the channel using PUBLISH command, it will be consumed and the message will be available as Camel message body. The message is also serialized using configured serializer or the default JdkSerializationRedisSerializer.</p><p>Message headers set by the Consumer
 
-    </p><table id="d0e165901"><tr>
+    </p><table id="d0e165950"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

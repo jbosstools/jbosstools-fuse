@@ -13,7 +13,7 @@
             append query options to the URI in the following format,
                 <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-BeanValidation_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>The following URI options are supported:</p><p>
             
-        </p><table id="d0e55329"><tr>
+        </p><table id="d0e55378"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -54,7 +54,7 @@
             <code class="code">org.apache.camel.component.bean.validator.HibernateValidationProviderResolver</code>.
             The snippet below demonstrates this approach. Keep in mind that you can use
             <code class="code">HibernateValidationProviderResolver</code> starting from the Camel
-            2.13.0.</p><div class="example"><a name="d0e55428"></a><p class="title"><b>Example&nbsp;1.&nbsp;Using HibernateValidationProviderResolver</b></p><div class="example-contents"><pre class="programlisting">from("direct:test")
+            2.13.0.</p><div class="example"><a name="d0e55477"></a><p class="title"><b>Example&nbsp;1.&nbsp;Using HibernateValidationProviderResolver</b></p><div class="example-contents"><pre class="programlisting">from("direct:test")
   .to("bean-validator://ValidationProviderResolverTest?validationProviderResolver=#myValidationProviderResolver");
 
 ...
