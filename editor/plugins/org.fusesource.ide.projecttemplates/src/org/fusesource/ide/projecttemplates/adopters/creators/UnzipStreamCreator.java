@@ -13,6 +13,8 @@ package org.fusesource.ide.projecttemplates.adopters.creators;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -90,5 +92,17 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	    	 return false;
 	     }
 	     return true;
+	}
+
+	protected InputStream getTemplateStream(String bundleEntry) {
+		URL archiveUrl = ProjectTemplatesActivator.getBundleContext().getBundle().getEntry(bundleEntry);
+		if (archiveUrl != null) {
+			try {
+				return new ZipInputStream(archiveUrl.openStream(), StandardCharsets.UTF_8);
+			} catch (IOException ex) {
+				ProjectTemplatesActivator.pluginLog().logError(ex);
+			}			
+		}
+		return null;
 	}
 }
