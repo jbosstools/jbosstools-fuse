@@ -532,6 +532,8 @@ public class BeanConfigUtil {
 		if (!Strings.isBlank(className)) {
 			newBeanNode.setAttribute(GlobalBeanEIP.PROP_CLASS, className);
 		}
+		// default for both Blueprint and Spring global beans to "singleton" as the scope
+		newBeanNode.setAttribute(GlobalBeanEIP.PROP_SCOPE, "singleton"); //$NON-NLS-1$
 		return newBeanNode;
 	}
 	
