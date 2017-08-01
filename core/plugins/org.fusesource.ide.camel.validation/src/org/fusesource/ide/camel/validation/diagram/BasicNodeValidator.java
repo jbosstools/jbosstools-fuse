@@ -176,7 +176,7 @@ public class BasicNodeValidator implements ValidationSupport {
 
 			Object value = selectedEP.getParameter(property);
 
-			if (PropertiesUtils.isRequired(prop))) {
+			if (PropertiesUtils.isRequired(prop) || "id".equals(prop.getName())) {
 				checkFor(result, value, new TextParameterValidator(selectedEP, prop));
 			}
 			checkFor(result, value, new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop));
