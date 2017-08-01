@@ -21,8 +21,10 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.validation.CamelValidationActivator;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
+import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 
 public class XMLCamelRoutesValidator extends AbstractValidator {
 
@@ -40,7 +42,7 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 		try {
 			resource.deleteMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error deleting Fuse validation markers.", e)); //$NON-NLS-0$
 		}
 
 		ValidationResult validationResult = super.validate(event, state, monitor);

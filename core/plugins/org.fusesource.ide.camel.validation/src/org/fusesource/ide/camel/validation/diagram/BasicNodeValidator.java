@@ -32,13 +32,14 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.CamelValidationActivator;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.camel.validation.ValidationSupport;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
 import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 import org.fusesource.ide.camel.validation.model.RequiredPropertyValidator;
 import org.fusesource.ide.camel.validation.model.TextParameterValidator;
-import org.fusesource.ide.foundation.core.util.Strings;
+import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 
 
 /**
@@ -56,29 +57,29 @@ public class BasicNodeValidator implements ValidationSupport {
 	public ValidationResult validate(AbstractCamelModelElement camelModelElement) {
 		ValidationResult result = new ValidationResult();
 
-		if (camelModelElement != null && camelModelElement.getRouteContainer() != null) {
-			// we check if all mandatory fields are filled
-			validateDetailProperties(camelModelElement, result);
-			final Component component = PropertiesUtils.getComponentFor(camelModelElement);
-			for (Parameter prop : new ArrayList<>(PropertiesUtils.getComponentPropertiesFor(camelModelElement))) {
-				Object value = PropertiesUtils.getPropertyFromUri(camelModelElement, prop, component);
-				checkFor(result, prop, value, new RequiredPropertyValidator(prop));
-				checkFor(result, prop, value, new NumberValidator(prop));
+		if (camelModelElement != null) {
+			if(camelModelElement.getRouteContainer() != null) {
+				// we check if all mandatory fields are filled
+				validateDetailProperties(camelModelElement, result);
+				final Component component = PropertiesUtils.getComponentFor(camelModelElement);
+				for (Parameter prop : new ArrayList<>(PropertiesUtils.getComponentPropertiesFor(camelModelElement))) {
+					Object value = PropertiesUtils.getPropertyFromUri(camelModelElement, prop, component);
+					checkFor(result, value, new RequiredPropertyValidator(prop));
+					checkFor(result, value, new NumberValidator(prop));
+				}
+			}
+			Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
+			
+			createOrReuseMarkers(camelModelElement, result, markersRelatedToElement);
+
+			for (IMarker markerToDelete : markersRelatedToElement) {
+				try {
+					markerToDelete.delete();
+				} catch (CoreException e) {
+					CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error while clearing validation marker.", e)); //$NON-NLS-0$
+				}
 			}
 		}
-		
-		Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
-		
-		createOrReuseMarkers(camelModelElement, result, markersRelatedToElement);
-
-		for (IMarker markerToDelete : markersRelatedToElement) {
-			try {
-				markerToDelete.delete();
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-
 		return result;
 	}
 
@@ -108,28 +109,33 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @return
 	 */
 	public Set<IMarker> getMarkersFor(AbstractCamelModelElement camelModelElement) {
-		Set<IMarker> res = new HashSet<>();
 		try {
 			final CamelFile camelFile = camelModelElement.getCamelFile();
 			if (camelFile != null) {
 				final IResource resource = camelFile.getResource();
 				if (resource != null && resource.exists()) {
-					for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
-						if (camelModelElement.getId() != null && camelModelElement.getId().equals(marker.getAttribute(IFuseMarker.CAMEL_ID))) {
-							res.add(marker);
-						} else {
-							final AbstractCamelModelElement cmeWithMarker = markers.get(marker);
-							if (camelModelElement.equals(cmeWithMarker)) {
-								// Used for id renaming
-								res.add(marker);
-							}
-
-						}
-					}
+					return getMarkersFor(camelModelElement, resource);
 				}
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();
+			CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error while retrieving validation markers.", e)); //$NON-NLS-0$
+		}
+		return new HashSet<>();
+	}
+
+	protected Set<IMarker> getMarkersFor(AbstractCamelModelElement camelModelElement, final IResource resource) throws CoreException {
+		Set<IMarker> res = new HashSet<>();
+		for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
+			if (camelModelElement.getId() != null && camelModelElement.getId().equals(marker.getAttribute(IFuseMarker.CAMEL_ID))) {
+				res.add(marker);
+			} else {
+				final AbstractCamelModelElement cmeWithMarker = markers.get(marker);
+				if (camelModelElement.equals(cmeWithMarker)) {
+					// Used for id renaming
+					res.add(marker);
+				}
+
+			}
 		}
 		return res;
 	}
@@ -140,7 +146,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param value
 	 * @param validator
 	 */
-	private void checkFor(ValidationResult result, Parameter prop, Object value, final IValidator validator) {
+	private void checkFor(ValidationResult result, Object value, final IValidator validator) {
 		IStatus status = validator.validate(value);
 		switch (status.getSeverity()) {
 		case IStatus.ERROR:
@@ -164,58 +170,31 @@ public class BasicNodeValidator implements ValidationSupport {
 	private void validateDetailProperties(AbstractCamelModelElement selectedEP, ValidationResult result) {
 		for (Parameter prop : PropertiesUtils.getPropertiesFor(selectedEP)) {
 			String property = prop.getName();
-			if ((prop.getKind().equalsIgnoreCase(AbstractCamelModelElement.NODE_KIND_ELEMENT) && prop.getType().equalsIgnoreCase("array")) || prop.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition"))
+			if ((AbstractCamelModelElement.NODE_KIND_ELEMENT.equalsIgnoreCase(prop.getKind()) && "array".equalsIgnoreCase(prop.getType()))
+					|| "org.apache.camel.model.OtherwiseDefinition".equals(prop.getJavaType()))
 				continue;
 
 			Object value = selectedEP.getParameter(property);
 
-			if (PropertiesUtils.isRequired(prop)) {
-				checkFor(result, prop, value, new TextParameterValidator(selectedEP, prop));
+			if (PropertiesUtils.isRequired(prop))) {
+				checkFor(result, value, new TextParameterValidator(selectedEP, prop));
 			}
-			checkFor(result, prop, value, new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop));
+			checkFor(result, value, new RefOrDataFormatUnicityChoiceValidator(selectedEP, prop));
 
 		}
-	}
-
-	/**
-	 * checks if the given node's id property is unique in the whole camel context
-	 * 
-	 * @param nodeUnderValidation
-	 * @param nodes
-	 * @param processedNodeIDs
-	 * @return
-	 */
-	protected boolean checkAllUniqueIDs(AbstractCamelModelElement nodeUnderValidation, List<AbstractCamelModelElement> nodes, ArrayList<String> processedNodeIDs) {
-		boolean noDoubledIDs = true;
-		for (AbstractCamelModelElement node : nodes) {
-			if (node.getChildElements() != null) {
-				noDoubledIDs = checkAllUniqueIDs(nodeUnderValidation, node.getChildElements(), processedNodeIDs);
-				if (!noDoubledIDs){
-					return false;
-				}
-			}
-			if (!Strings.isBlank(node.getId())) {
-				if (processedNodeIDs.contains(node.getId()) && node.equals(nodeUnderValidation)) {
-					return false;
-				} else {
-					processedNodeIDs.add(node.getId());
-				}
-			}
-		}
-		return noDoubledIDs;
 	}
 
 	private IMarker createOrReuseMarker(IResource resource, AbstractCamelModelElement cme, final String message, final int severity, Set<IMarker> markersRelatedToElement) {
 		IMarker res = null;
 		try {
-			Map<String, Object> attributesForPosition = managePosition(resource, cme);
+			Map<String, Object> attributesForPosition = managePosition(cme);
 			res = searchForExistingSimilarMarker(message, severity, markersRelatedToElement, res, attributesForPosition);
 			if (res == null) {
 				res = createMarker(resource, message, severity, attributesForPosition);
 			}
 			markers.put(res, cme);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error creating validation marker.", e)); //$NON-NLS-0$
 		}
 		markersRelatedToElement.remove(res);
 		return res;
@@ -230,18 +209,17 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @throws CoreException
 	 */
 	private IMarker createMarker(IResource resource, final String message, final int severity, Map<String, Object> attributesForPosition) throws CoreException {
-		IMarker res;
-		res = resource.createMarker(IFuseMarker.MARKER_TYPE);
-		res.setAttribute(IMarker.SEVERITY, severity);
-		res.setAttribute(IMarker.MESSAGE, message);
-		res.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+		IMarker marker = resource.createMarker(IFuseMarker.MARKER_TYPE);
+		marker.setAttribute(IMarker.SEVERITY, severity);
+		marker.setAttribute(IMarker.MESSAGE, message);
+		marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 
 		for (Entry<String, Object> attributeForPosition : attributesForPosition.entrySet()) {
-			res.setAttribute(attributeForPosition.getKey(), attributeForPosition.getValue());
+			marker.setAttribute(attributeForPosition.getKey(), attributeForPosition.getValue());
 		}
 		// marker.setAttribute(IMarker.CHAR_START, 0);
 		// marker.setAttribute(IMarker.CHAR_END, 10);
-		return res;
+		return marker;
 	}
 
 	/**
@@ -279,7 +257,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param marker
 	 * @throws CoreException
 	 */
-	private Map<String, Object> managePosition(IResource resource, AbstractCamelModelElement cme) throws CoreException {
+	private Map<String, Object> managePosition(AbstractCamelModelElement cme) {
 		Map<String, Object> attributesForPosition = new HashMap<>();
 		Integer lineNumber = -1;
 		if (cme.getId() != null) {
@@ -308,7 +286,7 @@ public class BasicNodeValidator implements ValidationSupport {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error while searching for line of validation marker.", e)); //$NON-NLS-0$
 		}
 		return results;
 	}
@@ -334,7 +312,7 @@ public class BasicNodeValidator implements ValidationSupport {
 			try {
 				marker.delete();
 			} catch (CoreException e) {
-				e.printStackTrace();
+				CamelValidationActivator.getDefault().getLog().log(StatusFactory.errorStatus(CamelValidationActivator.PLUGIN_ID, "Error while deleting validation marker.", e)); //$NON-NLS-0$
 			}
 		}
 	}

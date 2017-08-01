@@ -21,6 +21,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
@@ -42,9 +43,9 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 	@Override
 	public boolean canResizeShape(IResizeShapeContext context) {
 		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
-		if (bo != null && bo instanceof AbstractCamelModelElement) {
-			AbstractCamelModelElement cme = (AbstractCamelModelElement)bo;
-			if (cme.getUnderlyingMetaModelObject().canHaveChildren()){
+		if (bo instanceof AbstractCamelModelElement) {
+			Eip underlyingMetaModelObject = ((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject();
+			if (underlyingMetaModelObject != null && underlyingMetaModelObject.canHaveChildren()){
 				return true;
 			}
 		}
