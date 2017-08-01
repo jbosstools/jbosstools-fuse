@@ -13,13 +13,11 @@ package org.fusesource.ide.camel.editor.behaviours;
 
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
-import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelModelChangeListener;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -119,10 +117,5 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	protected void setEditorInitializationError(String editorInitializationError) {
 		super.setEditorInitializationError(UIMessages.camelDiagramBehaviourMessageOnErrorEditorInitialization);
 	}
-	
-	//TODO: remove after Graphiti issue fixed https://bugs.eclipse.org/bugs/show_bug.cgi?id=499720
-	@Override
-	protected IConfigurationProvider createConfigurationProvider(IDiagramTypeProvider diagramTypeProvider) {
-		return new CamelConfigurationProvider(this, diagramTypeProvider);
-	}
+
 }
