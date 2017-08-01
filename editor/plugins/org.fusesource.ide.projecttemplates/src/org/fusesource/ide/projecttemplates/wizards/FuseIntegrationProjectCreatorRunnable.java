@@ -56,6 +56,9 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.eclipse.wst.validation.internal.ValManager;
+import org.eclipse.wst.validation.internal.model.GlobalPreferences;
+import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
@@ -91,58 +94,79 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
-		// first create the project skeleton
-		BasicProjectCreator c = new BasicProjectCreator(metadata);
-		boolean ok = c.create(subMonitor.newChild(1));
-		IProject prj = c.getProject();
-		if (ok) {
-			// then configure the project for the given template
-			AbstractProjectTemplate template = metadata.getTemplate();
-			if (metadata.isBlankProject()) {
-				// we create a blank project
-				template = new EmptyProjectTemplate();
-			}
-			// now execute the template
-			try {
-				template.create(prj, metadata, subMonitor.newChild(1));
-			} catch (CoreException ex) {
-				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
-			}
-		}
-
-		// switch perspective if needed
-		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
-		IPerspectiveDescriptor currentPersp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
-		final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
-		if (switchPerspective) {
-			// switch to Fuse perspective if necessary.
-			switchToFusePerspective(workbenchWindow);
-			subMonitor.worked(1);
-		}
-		
-		// refresh
+		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
-			// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
-			updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
-		} catch (CoreException ex) {
-			ProjectTemplatesActivator.pluginLog().logError(ex);
-		}
-		// delete invalid MANIFEST files
-		IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
-		if (rs != null && rs.exists()) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
+			// first create the project skeleton
+			BasicProjectCreator c = new BasicProjectCreator(metadata);
+			boolean ok = c.create(subMonitor.newChild(1));
+			IProject prj = c.getProject();
+						
+			if (ok) {
+				// then configure the project for the given template
+				AbstractProjectTemplate template = metadata.getTemplate();
+				if (metadata.isBlankProject()) {
+					// we create a blank project
+					template = new EmptyProjectTemplate();
+				}
+				// now execute the template
+				try {
+					template.create(prj, metadata, subMonitor.newChild(1));
+				} catch (CoreException ex) {
+					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
+				}
+			}
+
+			// switch perspective if needed
+			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
+			IPerspectiveDescriptor currentPersp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
+			final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
+			if (switchPerspective) {
+				// switch to Fuse perspective if necessary.
+				switchToFusePerspective(workbenchWindow);
+				subMonitor.worked(1);
+			}
+
+			// refresh
 			try {
-				rs.delete(true, subMonitor.newChild(1));
+				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+				// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
+				updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
+			// delete invalid MANIFEST files
+			IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
+			if (rs != null && rs.exists()) {
+				try {
+					rs.delete(true, subMonitor.newChild(1));
+				} catch (CoreException ex) {
+					ProjectTemplatesActivator.pluginLog().logError(ex);
+				}
+			}
+			// finally open the camel context file
+			openCamelContextFile(prj, subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
+			subMonitor.done();
+		} finally {
+			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 		}
-		// finally open the camel context file
-		openCamelContextFile(prj, subMonitor.newChild(1));
-		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
-		subMonitor.done();
+	}
+
+	protected void setbackValidationValueAfterProjectCreation(boolean oldValueForValidation) {
+		GlobalPreferencesValues globalPreferencesAsValues = ValManager.getDefault().getGlobalPreferences().asValues();
+		globalPreferencesAsValues.disableAllValidation = oldValueForValidation;
+		ValManager.getDefault().replace(globalPreferencesAsValues);
+	}
+
+	protected boolean disableGlobalValidationDuringProjectCreation() {
+		GlobalPreferences globalPreferences = ValManager.getDefault().getGlobalPreferences();
+		GlobalPreferencesValues globalPreferencesAsValues = globalPreferences.asValues();
+		boolean oldValueForValidation = globalPreferencesAsValues.disableAllValidation;
+		globalPreferencesAsValues.disableAllValidation = true;
+		ValManager.getDefault().replace(globalPreferencesAsValues);
+		return oldValueForValidation;
 	}
 
 	/**
