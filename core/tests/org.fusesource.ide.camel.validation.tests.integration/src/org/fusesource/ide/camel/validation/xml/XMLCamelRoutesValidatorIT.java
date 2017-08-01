@@ -74,9 +74,9 @@ public class XMLCamelRoutesValidatorIT {
 		ValidationEvent event = new ValidationEvent(resource, IResourceDelta.CHANGED, null);
 		ValidationState state = new ValidationState();
 		
-		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
+		assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
 		// Check marker created
-		Mockito.verify(resource).createMarker(Mockito.anyString());
+		verify(resource).createMarker(Mockito.anyString());
 	}
 
 	/**

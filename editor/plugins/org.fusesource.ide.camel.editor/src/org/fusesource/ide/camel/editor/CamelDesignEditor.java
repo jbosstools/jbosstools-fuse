@@ -53,8 +53,6 @@ import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -275,12 +273,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	protected FlyoutPaletteComposite createPaletteComposite(Composite parent) {
         paletteComposite = new CamelDesignEditorFlyoutPaletteComposite(parent, SWT.NONE, getSite()
                 .getPage(), getPaletteViewerProvider(), getPalettePreferences());
-        paletteComposite.getFilter().addModifyListener(new ModifyListener() {
-            @Override
-            public void modifyText(ModifyEvent e) {
-                getDiagramBehavior().refreshPalette();
-            }
-        });
+        paletteComposite.getFilter().addModifyListener(modifyEvent -> getDiagramBehavior().refreshPalette());
         return paletteComposite;
     }
     
@@ -322,7 +315,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 
 	private void handleCamelThreadSelection(CamelThread t) {
 		try {
-			CamelStackFrame stackFrame = (CamelStackFrame)t.getTopStackFrame();
+			CamelStackFrame stackFrame = t.getTopStackFrame();
 			if (stackFrame != null && stackFrame.isSuspended()) {
 				highlightBreakpointNodeWithID(stackFrame.getEndpointId());	
 			}
@@ -602,7 +595,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 					if (kind == DebugEvent.SUSPEND && ev.getDetail() == DebugEvent.BREAKPOINT) {
 						// a breakpoint was hit and thread is on suspend -> stack should be selected in tree now
 						try {
-							CamelStackFrame stackFrame = (CamelStackFrame)thread.getTopStackFrame();
+							CamelStackFrame stackFrame = thread.getTopStackFrame();
 							if (stackFrame != null){
 								highlightBreakpointNodeWithID(stackFrame.getEndpointId());
 							}
