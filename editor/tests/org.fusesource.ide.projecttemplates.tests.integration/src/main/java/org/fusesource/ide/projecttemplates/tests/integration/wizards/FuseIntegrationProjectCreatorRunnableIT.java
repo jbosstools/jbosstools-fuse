@@ -193,6 +193,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		checkCorrectFacetsEnabled(project);
 		waitJob();
 		checkCorrectNatureEnabled(project);
+		waitForValidationThreads();
 		checkNoValidationError();
 		checkNoValidationWarning();
 		additionalChecks(project);
@@ -202,6 +203,23 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		} else {
 			//TODO: different Run? or implement the java local camel context?
 		}
+	}
+
+	private void waitForValidationThreads() throws InterruptedException {
+		int waitTimeLeft = 30000;
+		while(isValidationThreadRunning() && waitTimeLeft > 0) {
+			Thread.sleep(100);
+			waitTimeLeft -= 100;
+		}
+		if (waitTimeLeft < 0) {
+			ProjectTemplatesIntegrationTestsActivator.pluginLog().logError("The validation thread is still active!");
+		}
+	}
+
+	protected boolean isValidationThreadRunning() {
+		return Thread.getAllStackTraces().keySet().stream()
+				.filter(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor".equals(thread.getName()))
+				.findAny().isPresent();
 	}
 
 	protected void additionalChecks(IProject project2) {
