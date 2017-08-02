@@ -64,7 +64,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
-	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.1";
+	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.2";
 	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
 	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
 	private static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
