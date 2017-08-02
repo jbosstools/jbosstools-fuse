@@ -58,6 +58,7 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -371,7 +372,7 @@ public abstract class ExecutePomActionSupport implements ILaunchShortcut, IExecu
 	 * @return
 	 */
 	protected String getBasicLaunchConfigurationName(IFile camelFile) {
-		return "Run " + camelFile.getName() + " as Local CamelContext";
+		return NLS.bind(Messages.launchConfigurationName, camelFile.getProject().getName(), camelFile.getName());
 	}
 
 	/**

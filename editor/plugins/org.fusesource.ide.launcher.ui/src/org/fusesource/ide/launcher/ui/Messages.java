@@ -47,6 +47,8 @@ public class Messages extends NLS {
 	public static String disconnected;
 	public static String suspended;
 	public static String terminated;
+	public static String launchConfigurationName;
+	public static String launchConfiguraNameWithoutTest;
 	
 	static {
         // initialize resource bundle
