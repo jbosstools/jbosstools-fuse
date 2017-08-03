@@ -20,6 +20,7 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.validation.l10n.messages"; //$NON-NLS-1$
 	public static String NumberValidator_messageError;
 	public static String RequiredPropertyValidator_messageMissingParameter;
+	public static String eipWithoutChild;
 
 	static {
 		// initialize resource bundle

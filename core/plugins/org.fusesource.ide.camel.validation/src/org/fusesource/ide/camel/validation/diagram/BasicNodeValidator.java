@@ -35,6 +35,7 @@ import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.CamelValidationActivator;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.camel.validation.ValidationSupport;
+import org.fusesource.ide.camel.validation.model.EIPMandatoryChildValidator;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
 import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 import org.fusesource.ide.camel.validation.model.RequiredPropertyValidator;
@@ -67,7 +68,9 @@ public class BasicNodeValidator implements ValidationSupport {
 					checkFor(result, value, new RequiredPropertyValidator(prop));
 					checkFor(result, value, new NumberValidator(prop));
 				}
+				checkFor(result, camelModelElement, new EIPMandatoryChildValidator());
 			}
+			
 			Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
 			
 			createOrReuseMarkers(camelModelElement, result, markersRelatedToElement);

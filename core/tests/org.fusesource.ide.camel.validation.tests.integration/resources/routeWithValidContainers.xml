@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="org.apache.camel.component.bean.BeanInfo" id="dummyForPolicy"/>
+    <camelContext id="camelContext-4df065c2-b806-498e-b9d8-959716cfb416"
+        trace="false" xmlns="http://camel.apache.org/schema/spring">
+        <route id="_route1">
+            <from id="_to1" uri="timer:timerName"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <constant>dummy</constant>
+                    <log id="_log19" message="dummy"/>
+                </when>
+            </choice>
+            <aggregate id="aggregate1">
+                <correlationExpression>
+                    <constant>dummy</constant>
+                </correlationExpression>
+                <log id="_log2" message="dummy"/>
+            </aggregate>
+            <filter id="_filter1">
+                <constant>dummy</constant>
+                <log id="_log3" message="dummy"/>
+            </filter>
+            <idempotentConsumer id="_idempotentConsumer1" messageIdRepositoryRef="dummy">
+                <constant>dummy</constant>
+                <log id="_log4" message="dummy"/>
+            </idempotentConsumer>
+            <intercept id="_intercept1">
+                <log id="_log5" message="dummy"/>
+            </intercept>
+            <interceptFrom id="_interceptFrom1">
+                <log id="_log6" message="dummy"/>
+            </interceptFrom>
+            <interceptSendToEndpoint id="_interceptSendToEndpoint1" uri="dummy">
+                <log id="_log7" message="dummy"/>
+            </interceptSendToEndpoint>
+            <loop id="_loop1">
+                <constant>dummy</constant>
+                <log id="_log8" message="dummy"/>
+            </loop>
+            <multicast id="_multicast1">
+                <log id="_log9" message="dummy"/>
+            </multicast>
+            <onCompletion id="_onCompletion1">
+                <log id="_log10" message="dummy"/>
+            </onCompletion>
+            <pipeline id="_pipeline1">
+                <log id="_log11" message="dummy"/>
+            </pipeline>
+            <policy id="_policy1" ref="dummyForPolicy">
+                <log id="_log12" message="dummy"/>
+            </policy>
+            <sample id="_sample1">
+                <log id="_log13" message="dummy"/>
+            </sample>
+            <split id="_split1">
+                <constant>dummy</constant>
+                <log id="_log14" message="dummy"/>
+            </split>
+            <threads id="_threads1">
+                <log id="_log15" message="dummy"/>
+            </threads>
+            <throttle id="_throttle1">
+                <constant>dummy</constant>
+                <log id="_log16" message="dummy"/>
+            </throttle>
+            <transacted id="_transacted2">
+                <log id="_log17" message="dummy"/>
+            </transacted>
+            <resequence id="_resequence1">
+                <constant>dummy</constant>
+                <log id="_log18" message="dummy"/>
+            </resequence>
+            <log id="_log1" message="dummy"/>
+        </route>
+    </camelContext>
+</beans>
