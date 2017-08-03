@@ -13,4 +13,8 @@
 	<name>JBoss Fuse Tooling :: Update Site</name>
 	<packaging>eclipse-repository</packaging>
 
+	<properties>
+		<skipDeployToJBossOrg>false</skipDeployToJBossOrg>
+	</properties>
+
 </project>
