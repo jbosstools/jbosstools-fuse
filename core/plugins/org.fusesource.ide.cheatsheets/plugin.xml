@@ -8,24 +8,14 @@
             composite="false"
             contentFile="content/createCamelProject.xml"
             id="org.fusesource.ide.cheatsheets.createCamelProject"
-            name="Create a Fuse Camel Project">
+            name="Create a Fuse Integration Project based on Camel">
          <description>
-            Creates a new Fuse Camel project
-         </description>
-      </cheatsheet>
-      <cheatsheet
-            category="org.fusesource.ide"
-            composite="false"
-            contentFile="content/createCamelComponentProject.xml"
-            id="org.fusesource.ide.cheatsheets.createCamelComponentProject"
-            name="Create a Camel Component Project">
-         <description>
-            Create a new Camel component project
+            Creates a new Fuse Integration project based on Camel
          </description>
       </cheatsheet>
       <category
             id="org.fusesource.ide"
-            name="JBoss Fuse">
+            name="Red Hat JBoss Fuse">
       </category>
    </extension>
 
