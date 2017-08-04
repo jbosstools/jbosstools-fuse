@@ -47,17 +47,13 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	@Override
 	public Object[] getChildren(Object parent) { 
 		if(parent instanceof IFile){	
-			return getRoutes((IFile)parent,true);
+			return getRoutes((IFile)parent, false); // FUSETOOLS-2363 -> when doing lazy loading routes will duplicate
+													// once you expand the 2nd camel context location -> set to false
 		} 
-//		else if(parent instanceof CamelCtxNavRouteNode){
-//			List<CamelModelElement> rootNodes = ((CamelCtxNavRouteNode)parent).getCamelRoute().getChildElements();
-//			//show root nodes to differentiate routes with no id
-//			return rootNodes.toArray(new CamelModelElement[rootNodes.size()]); 
-//		} 
 		return new Object[0];
 	}
 	
-	private Object[] getRoutes(IFile camelFile,boolean deferred){
+	private Object[] getRoutes(IFile camelFile, boolean deferred){
 		if(deferred){
 			//deferred since load time for context files is unknown
 			LoadingPlaceHolder placeHolder = new LoadingPlaceHolder();
@@ -72,7 +68,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 		CamelIOHandler ioHandler = new CamelIOHandler();
 		final CamelFile rc = ioHandler.loadCamelModel(camelFile, new NullProgressMonitor());
 		if (rc != null && rc.getRouteContainer() != null) {
-			List<CamelCtxNavRouteNode> routes = new ArrayList<CamelCtxNavRouteNode>();
+			List<CamelCtxNavRouteNode> routes = new ArrayList<>();
 			for(AbstractCamelModelElement node : rc.getRouteContainer().getChildElements()) {
 				if(node instanceof CamelRouteElement) {
 					routes.add(new CamelCtxNavRouteNode((CamelRouteElement)node, camelFile));
@@ -94,16 +90,9 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 			protected IStatus run(IProgressMonitor monitor) {
 				final CamelCtxNavRouteNode[] routes = getRoutes(camelFile);
 				if (routes!=null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						/*
-						 * (non-Javadoc)
-						 * @see java.lang.Runnable#run()
-						 */
-						@Override
-						public void run() {
-							if (!Widgets.isDisposed(mViewer)) {
-								mViewer.add(camelFile,routes);
-							}
+					Display.getDefault().asyncExec(() -> {
+						if (!Widgets.isDisposed(mViewer)) {
+							mViewer.add(camelFile,routes);
 						}
 					});
 				}
@@ -118,12 +107,9 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	         */
 			@Override
 			public void done(IJobChangeEvent event) {
-	        	Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (!Widgets.isDisposed(mViewer)) {
-							mViewer.remove(camelFile, new Object[] { placeHolder});
-						}
+	        	Display.getDefault().asyncExec(() -> {
+					if (!Widgets.isDisposed(mViewer)) {
+						mViewer.remove(camelFile, new Object[] { placeHolder});
 					}
 				});
 	        }
@@ -186,6 +172,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	 */
 	@Override
 	public void restoreState(IMemento aMemento) {
+		// not needed
 	}
 
 	/*
@@ -194,6 +181,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	 */
 	@Override
 	public void saveState(IMemento aMemento) {
+		// not needed
 	}
 
 	/*
@@ -202,12 +190,13 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	 */
 	@Override
 	public void init(ICommonContentExtensionSite aConfig) {
+		// not needed
 	}
 	
 	
 	private static class LoadingPlaceHolder {
 		
-		private final String loadingMsg = "Pending ...";
+		private static final String LOADING_MSG = "Pending ...";
 		
 		/*
 		 * (non-Javadoc)
@@ -215,7 +204,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 		 */
 		@Override
 		public String toString() {
-			return loadingMsg;
+			return LOADING_MSG;
 		}		
 	}
 }
