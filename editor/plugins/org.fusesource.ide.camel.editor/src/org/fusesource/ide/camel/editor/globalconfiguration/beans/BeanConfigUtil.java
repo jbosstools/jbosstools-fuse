@@ -436,6 +436,7 @@ public class BeanConfigUtil {
 		}
 		return false;
 	}
+	
 	public String getArgumentTag(Node node) {
 		if (node != null) {
 			boolean isBlueprint = isBlueprintConfig(node);
@@ -526,7 +527,8 @@ public class BeanConfigUtil {
 	}
 	
 	public Element createBeanNode(final CamelFile camelFile, String id, String className) {
-		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getPrefix();
 		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
 		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
 		if (!Strings.isBlank(className)) {
