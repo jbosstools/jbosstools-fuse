@@ -89,6 +89,8 @@ public class BeanConfigUtil {
 				ncwp.setTypeName(initialClassName, true);
 				setInitialPackageFrament(project, ncwp);
 			}
+		} else {
+			setInitialPackageFrament(project, ncwp);
 		}
 		if (Window.OK == wd.open()) {
 			String value = ncwp.getCreatedType().getFullyQualifiedName();
@@ -157,7 +159,7 @@ public class BeanConfigUtil {
 	            if (tstRoot.exists()) {
 	            	return tstRoot;
 	            } else {
-	            	tstFolder.create(false, true, null);
+	            	tstFolder.create(true, true, new NullProgressMonitor());
 	            	
 	            	// now refresh the package root to ensure we have the right fragment
 	            	tstRoot = javaProject.getPackageFragmentRoot(tstFolder);
