@@ -11,9 +11,12 @@
 
 package org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.pages.DataFormatSelectionPage;
@@ -43,6 +46,7 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	public NewDataFormatWizard(CamelFile camelFile, CamelModel model) {
 		this.model = model;
 		this.camelFile = camelFile;
+		setNeedsProgressMonitor(true);
 	}
 
 	/* (non-Javadoc)
@@ -78,8 +82,17 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	 */
 	@Override
 	public boolean performFinish() {
-		dataformatSelected = dataFormatSelectionPage.getDataFormatSelected();
-		dataformatNode = createDataFormatNode(dataformatSelected, dataFormatSelectionPage.getId());
+		try {
+			getContainer().run(true,  true, new IRunnableWithProgress(){
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					dataformatSelected = dataFormatSelectionPage.getDataFormatSelected();
+					dataformatNode = createDataFormatNode(dataformatSelected, dataFormatSelectionPage.getId(), monitor);
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			CamelEditorUIActivator.pluginLog().logError(e);
+		}
 		return true;
 	}
 
@@ -90,7 +103,9 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 	 * @param id
 	 * @return
 	 */
-	public Element createDataFormatNode(DataFormat dataformat, String id) {
+	public Element createDataFormatNode(DataFormat dataformat, String id, IProgressMonitor monitor) 
+			throws InvocationTargetException, InterruptedException {
+		monitor.beginTask(UIMessages.newDataFormatWizardCreateDataFormatTask, 100);
 		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
 		Element newDataformatNode = camelFile.createElement(dataformat.getModelName(), prefixNS); // $NON-NLS-1$
 		newDataformatNode.setAttribute("id", id); //$NON-NLS-1$
@@ -100,11 +115,13 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 				newDataformatNode.setAttribute(parameter.getName(), defaultValue);
 			}
 		}
+		monitor.worked(40);
 		
 		List<Dependency> dependencies = dataformat.getDependencies();
 		MavenUtils utils = new MavenUtils();
 		try {
-			utils.updateMavenDependencies(dependencies, camelFile.getResource().getProject());
+			utils.updateMavenDependenciesWithMonitor(dependencies, camelFile.getResource().getProject(), monitor);
+			monitor.done();
 		} catch (CoreException e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
 		}

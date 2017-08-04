@@ -127,6 +127,8 @@ public class UIMessages extends NLS {
 	public static String globalEndpointWizardPageShowOnlyPaletteComonentsChecboxText;
 	public static String newBeanIdValidatorErrorBeanIDAlreadyUsed;
 	public static String newBeanIdValidatorErrorBeanIDMandatory;
+
+	public static String newDataFormatWizardCreateDataFormatTask;
 	public static String propertyInputDialogErrorNoNameSpecified;
 	public static String propertyInputDialogNameFieldLabel;
 	public static String propertyInputDialogNameNotUnique;
