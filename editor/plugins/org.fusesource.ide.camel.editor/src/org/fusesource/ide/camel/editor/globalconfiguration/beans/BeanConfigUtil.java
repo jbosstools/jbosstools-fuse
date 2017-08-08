@@ -551,7 +551,7 @@ public class BeanConfigUtil {
 	}
 	
 	private String getNSPrefixForURI(Node rootNode, String namespaceUri) {
-		List<String> prefixes = new ArrayList<String>();
+		List<String> prefixes = new ArrayList<>();
 		getNSPrefixes(rootNode, namespaceUri, prefixes);
 		if (!prefixes.isEmpty()) {
 			return prefixes.get(0);
@@ -575,7 +575,6 @@ public class BeanConfigUtil {
 		// get NS prefix from parent document, not route container node
 		final String prefixNS = 
 				getBeanPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
-//		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getPrefix();
 		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
 		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
 		if (!Strings.isBlank(className)) {
