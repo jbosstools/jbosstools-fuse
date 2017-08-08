@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.preference;
 
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
 
 /**
  * Represents <i>Console</i> preference page
@@ -21,7 +22,11 @@ import org.jboss.reddeer.swt.impl.button.CheckBox;
 public class ConsolePreferencePage extends PreferencePage {
 
 	public ConsolePreferencePage() {
-		super("Run/Debug", "Console");
+		this(null);
+	}
+	
+	public ConsolePreferencePage(ReferencedComposite ref) {
+		super(ref, "Run/Debug", "Console");
 	}
 
 	public void toggleShowConsoleStandardWrite(boolean checked) {

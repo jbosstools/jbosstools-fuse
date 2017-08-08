@@ -14,20 +14,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.JobIsKilled;
-import org.jboss.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
-import org.jboss.reddeer.eclipse.wst.server.ui.editor.ServerEditor;
-import org.jboss.reddeer.eclipse.wst.server.ui.view.ServersView;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
-import org.jboss.tools.fuse.qe.reddeer.runtime.Namespaces;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServersView2;
+import org.eclipse.reddeer.eclipse.wst.server.ui.editor.ServerEditor;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.workbench.core.condition.JobIsKilled;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.runtime.Remote;
 import org.jboss.tools.fuse.qe.reddeer.runtime.ServerBase;
 import org.jboss.tools.fuse.qe.reddeer.wizard.NewHostWizard;
@@ -37,11 +31,9 @@ import org.jboss.tools.fuse.qe.reddeer.wizard.ServerWizard;
 /**
  * AS Server
  * 
- * @author apodhrad
+ * @author Andrej Podhradsky (apodhrad@redhat.com)
  * 
  */
-@XmlRootElement(name = "as", namespace = Namespaces.SOA_REQ)
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ServerAS extends ServerBase {
 
 	public static final int DEFAULT_HTTP_PORT = 8080;
@@ -51,14 +43,16 @@ public class ServerAS extends ServerBase {
 
 	private final String label = "JBoss AS";
 
-	@XmlElement(name = "remote", namespace = Namespaces.SOA_REQ)
 	private Remote remote;
 
-	@XmlElement(name = "configuration", namespace = Namespaces.SOA_REQ, defaultValue = DEFAULT_CONFIGURATION)
 	private String configuration;
 
+	public ServerAS() {
+		setType("AS");
+	}
+	
 	public String getConfiguration() {
-		return configuration;
+		return configuration != null ? configuration : DEFAULT_CONFIGURATION;
 	}
 
 	public void setConfiguration(String configuration) {
@@ -117,7 +111,7 @@ public class ServerAS extends ServerBase {
 
 			serverWizard.finish();
 
-			ServersView servers = new ServersView();
+			ServersView2 servers = new ServersView2();
 			servers.open();
 			ServerEditor serverEditor = servers.getServer(name).open();
 			new LabeledText("User Name").setText(remote.getUsername()); // TODO: move this into ServerEditor
@@ -131,7 +125,7 @@ public class ServerAS extends ServerBase {
 			preferences.open();
 
 			// Add runtime
-			RuntimePreferencePage runtimePreferencePage = new RuntimePreferencePage();
+			RuntimePreferencePage runtimePreferencePage = new RuntimePreferencePage(preferences);
 			preferences.select(runtimePreferencePage);
 			runtimePreferencePage.addRuntime();
 			ServerRuntimeWizard runtimeWizard = new ServerRuntimeWizard();

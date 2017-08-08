@@ -13,33 +13,33 @@ package org.jboss.tools.fuse.qe.reddeer.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.exception.EclipseLayerException;
-import org.jboss.reddeer.eclipse.wst.server.ui.Runtime;
-import org.jboss.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
-import org.jboss.reddeer.eclipse.wst.server.ui.view.Server;
-import org.jboss.reddeer.eclipse.wst.server.ui.view.ServerLabel;
-import org.jboss.reddeer.eclipse.wst.server.ui.view.ServersView;
-import org.jboss.reddeer.swt.api.Tree;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.OkButton;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.exception.EclipseLayerException;
+import org.eclipse.reddeer.eclipse.wst.server.ui.Runtime;
+import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.Server;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServerLabel;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServersView2;
+import org.eclipse.reddeer.swt.api.Tree;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.preference.FuseServerRuntimePreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.wizard.FuseModifyModulesPage;
 import org.jboss.tools.fuse.qe.reddeer.wizard.FuseServerWizard;
@@ -87,7 +87,7 @@ public class FuseServerManipulator {
 	public static void deleteAllServerRuntimes() {
 
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		RuntimePreferencePage page = new RuntimePreferencePage();
+		RuntimePreferencePage page = new RuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		page.removeAllRuntimes();
@@ -106,7 +106,7 @@ public class FuseServerManipulator {
 
 	public static void deleteAllServers() {
 
-		ServersView view = new ServersView();
+		ServersView2 view = new ServersView2();
 		view.open();
 		for (Server server : view.getServers()) {
 			server.delete(true);
@@ -130,7 +130,7 @@ public class FuseServerManipulator {
 	public static void removeServer(String name) {
 
 		try {
-			new ServersView().getServer(name).delete();
+			new ServersView2().getServer(name).delete();
 		} catch (EclipseLayerException ex) {
 		}
 	}
@@ -152,15 +152,15 @@ public class FuseServerManipulator {
 
 	private static void doOperation(String operation, String name) {
 
-		new ServersView().open();
+		new ServersView2().open();
 		for (TreeItem item : new DefaultTree().getItems()) {
 			if (item.getText().startsWith(name)) {
 				item.select();
-				new ContextMenu(operation).select();
+				new ContextMenuItem(operation).select();
 
 				for (int i = 0; i < 10; i++) {
 					AbstractWait.sleep(TimePeriod.SHORT);
-					if (new ShellWithTextIsAvailable("Password Required").test()) {
+					if (new ShellIsAvailable("Password Required").test()) {
 						new DefaultShell("Password Required");
 						new LabeledText("Password:").setText("admin");
 						new PushButton("OK").click();
@@ -173,7 +173,7 @@ public class FuseServerManipulator {
 				if (name.toLowerCase().contains("fuse")) {
 					new WaitUntil(new ConsoleHasText("100%"), TimePeriod.VERY_LONG);
 				}
-				AbstractWait.sleep(TimePeriod.NORMAL);
+				AbstractWait.sleep(TimePeriod.DEFAULT);
 				break;
 			}
 		}
@@ -184,7 +184,7 @@ public class FuseServerManipulator {
 
 		try {
 			new FuseShellSSH().execute("log:clear");
-			ServersView serversView = new ServersView();
+			ServersView2 serversView = new ServersView2();
 			serversView.open();
 			Server server = serversView.getServer(name);
 			server.stop();
@@ -196,7 +196,7 @@ public class FuseServerManipulator {
 
 	public static List<String> getServers() {
 
-		ServersView serversView = new ServersView();
+		ServersView2 serversView = new ServersView2();
 		serversView.open();
 		List<String> temp = new ArrayList<String>();
 		try {
@@ -220,7 +220,7 @@ public class FuseServerManipulator {
 	 */
 	public static boolean isServerStarted(String name) {
 
-		return new ServersView().getServer(name).getLabel().getState().isRunningState();
+		return new ServersView2().getServer(name).getLabel().getState().isRunningState();
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class FuseServerManipulator {
 	public static boolean isServerPresent(String name) {
 
 		try {
-			new ServersView().getServer(name);
+			new ServersView2().getServer(name);
 		} catch (EclipseLayerException ex) {
 			return false;
 		}
@@ -267,7 +267,7 @@ public class FuseServerManipulator {
 	public static boolean hasServerModule(String server, String module) {
 
 		try {
-			new ServersView().getServer(server).getModule(new RegexMatcher(module + ".*"));
+			new ServersView2().getServer(server).getModule(new RegexMatcher(module + ".*"));
 			AbstractWait.sleep(TimePeriod.SHORT);
 		} catch (EclipseLayerException ex) {
 			return false;
@@ -283,7 +283,7 @@ public class FuseServerManipulator {
 	 */
 	public static void removeAllModules(String name) {
 
-		ServersView view = new ServersView();
+		ServersView2 view = new ServersView2();
 		view.open();
 		try {
 			view.getServer(name).addAndRemoveModules();
@@ -293,7 +293,7 @@ public class FuseServerManipulator {
 
 		// Maybe there is nothing to remove
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable("Server"));
+			new WaitUntil(new ShellIsAvailable("Server"));
 			new PushButton("OK").click();
 			return;
 		} catch (Exception e) {
@@ -307,12 +307,12 @@ public class FuseServerManipulator {
 		} catch (Exception ex) {
 			log.debug("Nothing to remove.");
 		}
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		page.close();
 		
 		// Maybe prompt "Are you sure ..." occurs
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable("Server"));
+			new WaitUntil(new ShellIsAvailable("Server"));
 			new OkButton().click();
 			return;
 		} catch (WaitTimeoutExpiredException e) {
@@ -333,7 +333,7 @@ public class FuseServerManipulator {
 	 */
 	public static void addModule(String server, String project) {
 
-		ServersView view = new ServersView();
+		ServersView2 view = new ServersView2();
 		view.open();
 		view.getServer(server).addAndRemoveModules();
 		new DefaultShell("Add and Remove...");
@@ -346,7 +346,7 @@ public class FuseServerManipulator {
 		}
 		page.close();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 	}
 
 	/**
@@ -359,12 +359,12 @@ public class FuseServerManipulator {
 	 */
 	public static void setImmeadiatelyPublishing(String name, boolean value) {
 
-		new ServersView().getServer(name).addAndRemoveModules();
+		new ServersView2().getServer(name).addAndRemoveModules();
 		new DefaultShell("Add and Remove...");
 		FuseModifyModulesPage page = new FuseModifyModulesPage();
 		page.setImmeadiatelyPublishing(value);
 		page.close();
-		new WaitWhile(new JobIsRunning(), TimePeriod.NORMAL);
+		new WaitWhile(new JobIsRunning(), TimePeriod.DEFAULT);
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
@@ -376,7 +376,7 @@ public class FuseServerManipulator {
 	 */
 	public static void publish(String name) {
 
-		ServersView view = new ServersView();
+		ServersView2 view = new ServersView2();
 		view.open();
 		view.getServer(name).publish();
 	}

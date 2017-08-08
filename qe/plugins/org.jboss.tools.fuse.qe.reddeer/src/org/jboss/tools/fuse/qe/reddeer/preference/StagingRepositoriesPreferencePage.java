@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.preference;
 
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
 
 /**
  * Represents the "Fuse Tooling --> Staging Repositories" preference page
@@ -21,7 +22,11 @@ import org.jboss.reddeer.swt.impl.button.CheckBox;
 public class StagingRepositoriesPreferencePage extends PreferencePage {
 
 	public StagingRepositoriesPreferencePage() {
-		super("Fuse Tooling", "Staging Repositories");
+		this(null);
+	}
+
+	public StagingRepositoriesPreferencePage(ReferencedComposite ref) {
+		super(ref, "Fuse Tooling", "Staging Repositories");
 	}
 
 	/**

@@ -14,6 +14,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.util.Display;
+import org.eclipse.reddeer.common.util.ResultRunnable;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.swt.condition.ControlIsEnabled;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -21,23 +38,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.util.Display;
-import org.jboss.reddeer.core.util.ResultRunnable;
-import org.jboss.reddeer.swt.condition.WidgetIsEnabled;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.combo.DefaultCombo;
-import org.jboss.reddeer.swt.impl.ctab.DefaultCTabItem;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.toolbar.DefaultToolItem;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
 
 /**
  * Data Transformation Editor
@@ -71,13 +71,13 @@ public class DataTransformationEditor extends DefaultEditor {
 		activate();
 		new DefaultToolItem("Add a new mapping").click();
 		log.info("Select a source entry: " + Arrays.toString(sourcePath));
-		invokeMappingContextMenu(source, "Set property");
+		invokeMappingContextMenuItem(source, "Set property");
 		new DefaultTreeItem(sourcePath).select();
 		new PushButton("OK").click();
 		log.info("Select a target entry: " + Arrays.toString(targetPath));
-		invokeMappingContextMenu(target, "Set property");
+		invokeMappingContextMenuItem(target, "Set property");
 		new DefaultTreeItem(targetPath).select();
-		new WaitUntil(new WidgetIsEnabled(new PushButton("OK")));
+		new WaitUntil(new ControlIsEnabled(new PushButton("OK")));
 		new PushButton("OK").click();
 	}
 
@@ -99,11 +99,11 @@ public class DataTransformationEditor extends DefaultEditor {
 		activate();
 		new DefaultToolItem("Add a new mapping").click();
 		log.info("Select variable: " + name);
-		invokeMappingContextMenu(source, "Set variable");
+		invokeMappingContextMenuItem(source, "Set variable");
 		new DefaultCombo().setSelection(name);
 		new PushButton("OK").click();
 		log.info("Select a target entry: " + Arrays.toString(targetPath));
-		invokeMappingContextMenu(target, "Set property");
+		invokeMappingContextMenuItem(target, "Set property");
 		new DefaultTreeItem(targetPath).select();
 		new PushButton("OK").click();
 	}
@@ -129,12 +129,12 @@ public class DataTransformationEditor extends DefaultEditor {
 		activate();
 		new DefaultToolItem("Add a new mapping").click();
 		log.info("Set expression: " + expression + " (" + language + ")");
-		invokeMappingContextMenu(source, "Set expression");
+		invokeMappingContextMenuItem(source, "Set expression");
 		new DefaultCombo().setSelection(language);
 		new DefaultText().setText(expression);
 		new PushButton("OK").click();
 		log.info("Select a target entry: " + Arrays.toString(targetPath));
-		invokeMappingContextMenu(target, "Set property");
+		invokeMappingContextMenuItem(target, "Set property");
 		new DefaultTreeItem(targetPath).select();
 		new PushButton("OK").click();
 	}
@@ -149,10 +149,10 @@ public class DataTransformationEditor extends DefaultEditor {
 
 		log.info("Create a new variable: " + name);
 		activate();
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		new DefaultCTabItem("Variables").activate();
 		new DefaultToolItem("Add a new variable").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Add Variable"));
+		new WaitUntil(new ShellIsAvailable("Add Variable"));
 		new DefaultShell("Add Variable");
 		new DefaultText().setText(name);
 		new PushButton("OK").click();
@@ -203,7 +203,7 @@ public class DataTransformationEditor extends DefaultEditor {
 	 * @param type
 	 *            Name of the context menu item we want to select
 	 */
-	private void invokeMappingContextMenu(final String name, final String type) {
+	private void invokeMappingContextMenuItem(final String name, final String type) {
 
 		log.debug("Start invoking mapping context menu");
 		log.debug("Looking for the right widget (" + name + ") and opening the context menu");

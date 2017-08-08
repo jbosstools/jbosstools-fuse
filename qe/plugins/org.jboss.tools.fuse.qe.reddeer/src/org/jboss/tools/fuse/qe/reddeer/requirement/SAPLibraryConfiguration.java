@@ -8,14 +8,39 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.fuse.qe.reddeer.runtime;
+package org.jboss.tools.fuse.qe.reddeer.requirement;
+
+import org.eclipse.reddeer.junit.requirement.configuration.RequirementConfiguration;
 
 /**
  * 
  * @author apodhrad
- *
+ * 
  */
-public class Namespaces {
+public class SAPLibraryConfiguration implements RequirementConfiguration {
 
-	public static final String SOA_REQ = "http://www.jboss.org/NS/SOAReq";
+	private String jco3;
+	private String jidoc;
+
+	public String getJco3() {
+		return jco3;
+	}
+
+	public void setJco3(String jco3) {
+		this.jco3 = jco3;
+	}
+
+	public String getJidoc() {
+		return jidoc;
+	}
+
+	public void setJidoc(String jidoc) {
+		this.jidoc = jidoc;
+	}
+
+	@Override
+	public String getId() {
+		return "SAP";
+	}
+
 }

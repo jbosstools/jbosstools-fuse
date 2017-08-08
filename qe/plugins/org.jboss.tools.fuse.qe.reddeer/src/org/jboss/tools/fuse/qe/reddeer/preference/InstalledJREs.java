@@ -12,17 +12,18 @@ package org.jboss.tools.fuse.qe.reddeer.preference;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.api.TableItem;
-import org.jboss.reddeer.swt.impl.button.FinishButton;
-import org.jboss.reddeer.swt.impl.button.NextButton;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.list.DefaultList;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.table.DefaultTable;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.api.TableItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.swt.impl.button.NextButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.list.DefaultList;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.table.DefaultTable;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 
 /**
  * 
@@ -32,7 +33,11 @@ import org.jboss.reddeer.swt.impl.text.LabeledText;
 public class InstalledJREs extends PreferencePage {
 
 	public InstalledJREs() {
-		super("Java", "Installed JREs");
+		this(null);
+	}
+	
+	public InstalledJREs(ReferencedComposite ref) {
+		super(ref, "Java", "Installed JREs");
 	}
 
 	/**
@@ -55,7 +60,7 @@ public class InstalledJREs extends PreferencePage {
 		new LabeledText("JRE home:").setText(jrePath);
 		new LabeledText("JRE name:").setText(jreName);
 		new FinishButton().click();
-		new WaitWhile(new ShellWithTextIsAvailable("Add JRE"));
+		new WaitWhile(new ShellIsAvailable("Add JRE"));
 	}
 
 	/**

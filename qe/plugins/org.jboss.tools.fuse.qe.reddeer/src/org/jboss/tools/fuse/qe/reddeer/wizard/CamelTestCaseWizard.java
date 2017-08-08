@@ -10,17 +10,17 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.wizard;
 
-import org.jboss.reddeer.jface.wizard.NewWizardDialog;
+import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
 
 /**
  * Wizard for creating a Camel Test Case.
  * 
  * @author tsedmik
  */
-public class CamelTestCaseWizard extends NewWizardDialog {
+public class CamelTestCaseWizard extends NewMenuWizard {
 
 	public CamelTestCaseWizard() {
-		super("JBoss Fuse", "Camel Test Case");
+		super("New Camel JUnit Test Case", "JBoss Fuse", "Camel Test Case");
 	}
 
 }

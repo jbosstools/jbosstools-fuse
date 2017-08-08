@@ -15,10 +15,10 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.core.util.Display;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.util.Display;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
 
 /**
  * Utilizes mouse operations via AWT Robot

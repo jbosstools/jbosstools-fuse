@@ -13,25 +13,25 @@ package org.jboss.tools.fuse.qe.reddeer.tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.core.matcher.WithTextMatcher;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.gef.impl.editpart.LabeledEditPart;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.core.matcher.WithTextMatcher;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.gef.impl.editpart.LabeledEditPart;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
@@ -112,24 +112,24 @@ public class FeaturesTest extends DefaultTest {
 
 		// 1. check context menu item "New Camel XML File"
 		try {
-			new ContextMenu("New Camel XML File");
+			new ContextMenuItem("New Camel XML File");
 		} catch (CoreLayerException ex) {
 			fail("'Camel Contexts' does not have a context menu entry 'New Camel XML File'!");
 		}
 
 		// 2. check "RouteContainer"
-		new ContextMenu("New Camel XML File").select();
-		new WaitUntil(new ShellWithTextIsAvailable("New Camel Context XML File"));
+		new ContextMenuItem("New Camel XML File").select();
+		new WaitUntil(new ShellIsAvailable("New Camel Context XML File"));
 		new DefaultShell("New Camel Context XML File");
 		assertTrue(new LabeledText("RouteContainer:").getText().contains("src/main/resources/OSGI-INF/blueprint"));
 		new PushButton("Finish").click();
-		new WaitWhile(new ShellWithTextIsAvailable("New Camel Context XML File"));
+		new WaitWhile(new ShellIsAvailable("New Camel Context XML File"));
 
 		// 3. check that wizard didn't overwrite existing file
 		new ProjectExplorer().getProject("camel-blueprint").getProjectItem("Camel Contexts").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new ContextMenu("New Camel XML File").select();
-		new WaitUntil(new ShellWithTextIsAvailable("New Camel Context XML File"));
+		new ContextMenuItem("New Camel XML File").select();
+		new WaitUntil(new ShellIsAvailable("New Camel Context XML File"));
 		new DefaultShell("New Camel Context XML File");
 		new DefaultText(new WithTextMatcher(new RegexMatcher(" A file with that name.*")));
 		new PushButton("Cancel").click();

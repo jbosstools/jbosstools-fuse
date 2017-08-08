@@ -13,30 +13,30 @@ package org.jboss.tools.fuse.qe.reddeer.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.jface.wizard.NewWizardDialog;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.button.RadioButton;
-import org.jboss.reddeer.swt.impl.combo.DefaultCombo;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.button.RadioButton;
+import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 
 /**
  * @author tsedmik
  */
-public class NewFuseIntegrationProjectWizard extends NewWizardDialog {
+public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	private static Logger log = Logger.getLogger(NewFuseIntegrationProjectWizard.class);
 
 	public NewFuseIntegrationProjectWizard() {
-		super("JBoss Fuse", "Fuse Integration Project");
+		super("New Fuse Integration Project", "JBoss Fuse", "Fuse Integration Project");
 	}
 
 	public void setProjectName(String name) {
@@ -66,7 +66,7 @@ public class NewFuseIntegrationProjectWizard extends NewWizardDialog {
 	public ServerRuntimeWizard newTargetRuntime() {
 		log.debug("Invoking new server runtime wizard");
 		new PushButton("New").click();
-		new WaitUntil(new ShellWithTextIsAvailable("New Server Runtime Environment"));
+		new WaitUntil(new ShellIsAvailable("New Server Runtime Environment"));
 		new DefaultShell("New Server Runtime Environment");
 		return new ServerRuntimeWizard();
 	}

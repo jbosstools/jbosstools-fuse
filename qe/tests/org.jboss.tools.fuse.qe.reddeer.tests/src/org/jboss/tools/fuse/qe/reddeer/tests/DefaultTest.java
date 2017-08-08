@@ -12,22 +12,22 @@ package org.jboss.tools.fuse.qe.reddeer.tests;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.core.handler.ShellHandler;
-import org.jboss.reddeer.core.matcher.WithTooltipTextMatcher;
-import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
-import org.jboss.reddeer.eclipse.ui.views.log.LogMessage;
-import org.jboss.reddeer.swt.impl.toolbar.DefaultToolItem;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.core.matcher.WithTooltipTextMatcher;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -56,7 +56,8 @@ public class DefaultTest {
 		ConsolePreferenceUtil.setConsoleOpenOnOutput(false);
 
 		log.info("Disable showing Error Log view after changes");
-		new ErrorLogView().selectActivateOnNewEvents(false);
+		new LogView().open();
+		new LogView().setActivateOnNewEvents(false);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class DefaultTest {
 		new WorkbenchShell();
 
 		log.info("Deleting Error Log.");
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class DefaultTest {
 		new WorkbenchShell();
 
 		log.info("Closing all non workbench shells.");
-		ShellHandler.getInstance().closeAllNonWorbenchShells();
+		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 
 		log.info("Try to terminate a console.");
 		ConsoleView console = new ConsoleView();
@@ -126,7 +127,7 @@ public class DefaultTest {
 
 		log.info("Receiving count of errors from fuse plugins");
 		int count = 0;
-		ErrorLogView errorLog = new ErrorLogView();
+		LogView errorLog = new LogView();
 		List<LogMessage> messages = errorLog.getErrorMessages();
 		for (LogMessage message : messages) {
 			if (message.getPlugin().toLowerCase().contains("fuse"))
@@ -141,7 +142,7 @@ public class DefaultTest {
 	protected void deleteErrorLog() {
 
 		log.info("Deleting error log");
-		ErrorLogView errorLog = new ErrorLogView();
+		LogView errorLog = new LogView();
 		errorLog.deleteLog();
 	}
 }

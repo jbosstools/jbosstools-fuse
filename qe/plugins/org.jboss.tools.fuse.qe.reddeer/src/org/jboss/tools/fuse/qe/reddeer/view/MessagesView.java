@@ -13,11 +13,11 @@ package org.jboss.tools.fuse.qe.reddeer.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.swt.api.Table;
-import org.jboss.reddeer.swt.api.TableItem;
-import org.jboss.reddeer.swt.impl.table.DefaultTable;
-import org.jboss.reddeer.workbench.impl.view.WorkbenchView;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.swt.api.Table;
+import org.eclipse.reddeer.swt.api.TableItem;
+import org.eclipse.reddeer.swt.impl.table.DefaultTable;
+import org.eclipse.reddeer.workbench.impl.view.WorkbenchView;
 
 /**
  * Represents 'Messages View'

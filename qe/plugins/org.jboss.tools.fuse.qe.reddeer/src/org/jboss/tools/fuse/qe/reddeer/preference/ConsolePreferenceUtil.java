@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.preference;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.direct.preferences.Preferences;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.direct.preferences.Preferences;
 
 /**
  * 

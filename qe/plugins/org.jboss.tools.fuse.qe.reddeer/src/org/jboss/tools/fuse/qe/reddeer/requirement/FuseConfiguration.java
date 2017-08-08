@@ -10,22 +10,27 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.requirement;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.jboss.tools.fuse.qe.reddeer.runtime.Namespaces;
+import org.eclipse.reddeer.junit.requirement.configuration.RequirementConfiguration;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerBase;
 
 /**
- * @author tsedmik
+ * 
+ * @author Andrej Podhradsky (apodhrad@redhat.com)
+ * 
  */
-@XmlRootElement(name = "fuse-requirement", namespace = Namespaces.SOA_REQ)
-@XmlAccessorType(XmlAccessType.FIELD)
-public class FuseConfig extends ServerConfig {
+public class FuseConfiguration implements RequirementConfiguration {
 
-	@XmlElement(name = "camelVersion", namespace = Namespaces.SOA_REQ)
+	private String name;
 	private String camelVersion;
+	private ServerBase server;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getCamelVersion() {
 		return camelVersion;
@@ -33,5 +38,21 @@ public class FuseConfig extends ServerConfig {
 
 	public void setCamelVersion(String camelVersion) {
 		this.camelVersion = camelVersion;
+	}
+
+	public ServerBase getServer() {
+		return server;
+	}
+
+	public void setServer(ServerBase serverBase) {
+		this.server = serverBase;
+	}
+
+	@Override
+	public String getId() {
+		if (getName() != null) {
+			return getName();
+		}
+		return getServer().getName();
 	}
 }

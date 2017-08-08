@@ -17,24 +17,24 @@ import static org.junit.Assert.fail;
 
 import java.util.Collection;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.jboss.reddeer.gef.view.PaletteView;
-import org.jboss.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.workbench.exception.WorkbenchLayerException;
-import org.jboss.reddeer.workbench.handler.EditorHandler;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.gef.view.PaletteView;
+import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
+import org.eclipse.reddeer.workbench.handler.EditorHandler;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.component.CamelComponent;
 import org.jboss.tools.fuse.qe.reddeer.component.CamelComponents;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class ComponentTest extends DefaultTest {
 
 		new WorkbenchShell();
 		ProjectFactory.newProject("camel-spring").type(SPRING).version(CAMEL_2_17_0_REDHAT_630187).create();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 	}
 
 	@BeforeClass

@@ -10,18 +10,18 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.wizard;
 
-import org.jboss.reddeer.jface.wizard.NewWizardDialog;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 
 /**
  * 
  * @author apodhrad
  * 
  */
-public class CamelXmlFileWizard extends NewWizardDialog {
+public class CamelXmlFileWizard extends NewMenuWizard {
 
 	public CamelXmlFileWizard() {
-		super("JBoss Fuse", "Camel XML File");
+		super("New Camel COntext XML File", "JBoss Fuse", "Camel XML File");
 	}
 
 	public CamelXmlFileWizard openWizard() {

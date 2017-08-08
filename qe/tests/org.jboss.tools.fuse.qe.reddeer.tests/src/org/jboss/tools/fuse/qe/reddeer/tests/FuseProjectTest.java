@@ -21,28 +21,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.eclipse.exception.EclipseLayerException;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
-import org.jboss.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView.ProblemType;
-import org.jboss.reddeer.eclipse.ui.views.log.LogMessage;
-import org.jboss.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.eclipse.exception.EclipseLayerException;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
+import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.qe.reddeer.preference.StagingRepositoriesPreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -247,7 +247,7 @@ public class FuseProjectTest extends DefaultTest {
 		/*
 		 * Check Error log view for possible Camel editor errors
 		 */
-		ErrorLogView err = new ErrorLogView();
+		LogView err = new LogView();
 		List<LogMessage> msg = err.getErrorMessages();
 		for (LogMessage logMessage : msg) {
 			if (logMessage.getPlugin().equals("org.fusesource.ide.camel.editor"))

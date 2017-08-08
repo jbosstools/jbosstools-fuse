@@ -10,21 +10,22 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Karaf;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerKaraf;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.junit.Before;
@@ -36,7 +37,7 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
-@Fuse(server = @Server(type = { Fuse, Karaf }, state = PRESENT))
+@Fuse(state = PRESENT)
 @CleanWorkspace
 @OpenPerspective(JavaEEPerspective.class)
 @RunWith(RedDeerSuite.class)
@@ -44,7 +45,12 @@ public class ServerTest extends DefaultTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
-
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class, ServerKaraf.class));
+	}
+	
 	/**
 	 * Prepares test environment
 	 */
@@ -73,7 +79,7 @@ public class ServerTest extends DefaultTest {
 	@Test
 	public void testComplexServer() {
 
-		ServerKaraf fuse = (ServerKaraf) serverRequirement.getConfig().getServerBase();
+		ServerKaraf fuse = (ServerKaraf) serverRequirement.getConfiguration().getServer();
 
 		FuseServerManipulator.addServerRuntime(fuse.getRuntimeType(), fuse.getHome());
 		assertEquals("New server runtime is not listed in Server Runtimes", 1,

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.perspectives;
 
-import org.jboss.reddeer.eclipse.ui.perspectives.AbstractPerspective;
+import org.eclipse.reddeer.eclipse.ui.perspectives.AbstractPerspective;
 
 /**
  * Fuse Integration perspective implementation

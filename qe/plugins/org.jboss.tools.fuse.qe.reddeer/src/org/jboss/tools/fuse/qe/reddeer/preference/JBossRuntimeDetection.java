@@ -13,18 +13,19 @@ package org.jboss.tools.fuse.qe.reddeer.preference;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.api.TableItem;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.table.DefaultTable;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.api.TableItem;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.table.DefaultTable;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.jboss.tools.fuse.qe.reddeer.runtime.RuntimeEntry;
 import org.jboss.tools.fuse.qe.reddeer.wizard.DownloadRuntimesWizard;
 
@@ -34,14 +35,18 @@ import org.jboss.tools.fuse.qe.reddeer.wizard.DownloadRuntimesWizard;
  * @author tsedmik
  */
 public class JBossRuntimeDetection extends PreferencePage {
-
+	
 	public JBossRuntimeDetection() {
-		super("JBoss Tools", "JBoss Runtime Detection");
+		this(null);
+	}
+	
+	public JBossRuntimeDetection(ReferencedComposite ref) {
+		super(ref, "JBoss Tools", "JBoss Runtime Detection");
 	}
 
 	public DownloadRuntimesWizard downloadRuntime() {
 		new PushButton("Download...").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Download Runtimes"));
+		new WaitUntil(new ShellIsAvailable("Download Runtimes"));
 		new DefaultShell("Download Runtimes");
 		return new DownloadRuntimesWizard();
 	}

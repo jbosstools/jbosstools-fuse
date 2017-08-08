@@ -10,29 +10,30 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectTemplate.CBR;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectType.BLUEPRINT;
 import static org.jboss.tools.fuse.qe.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.condition.FuseLogContainsText;
@@ -40,7 +41,8 @@ import org.jboss.tools.fuse.qe.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.qe.reddeer.preference.FuseServerRuntimePreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.junit.After;
@@ -55,11 +57,16 @@ import org.junit.runner.RunWith;
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = Fuse, state = PRESENT))
+@Fuse(state = PRESENT)
 public class RegressionFuseTest extends DefaultTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	}
 
 	/**
 	 * Cleans up test environment
@@ -67,7 +74,7 @@ public class RegressionFuseTest extends DefaultTest {
 	@After
 	public void setupClean() {
 
-		String server = serverRequirement.getConfig().getName();
+		String server = serverRequirement.getConfiguration().getName();
 		if (FuseServerManipulator.isServerStarted(server)) {
 			FuseServerManipulator.stopServer(server);
 		}
@@ -107,7 +114,7 @@ public class RegressionFuseTest extends DefaultTest {
 				new DefaultTreeItem("JBoss Fuse").select();
 				AbstractWait.sleep(TimePeriod.SHORT);
 				new PushButton("Cancel").click();
-				AbstractWait.sleep(TimePeriod.NORMAL);
+				AbstractWait.sleep(TimePeriod.DEFAULT);
 				new DefaultShell().close();
 				throw ex;
 			}
@@ -115,7 +122,7 @@ public class RegressionFuseTest extends DefaultTest {
 
 		// tests the _Cancel_ button
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new DefaultTreeItem("JBoss Fuse", "JBoss Fuse " + serverRequirement.getConfig().getServerBase().getVersion())
+		new DefaultTreeItem("JBoss Fuse", "JBoss Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
 				.select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		new PushButton("Cancel").click();
@@ -128,7 +135,7 @@ public class RegressionFuseTest extends DefaultTest {
 			new DefaultTreeItem("JBoss Fuse").select();
 			AbstractWait.sleep(TimePeriod.SHORT);
 			new PushButton("Cancel").click();
-			AbstractWait.sleep(TimePeriod.NORMAL);
+			AbstractWait.sleep(TimePeriod.DEFAULT);
 			new DefaultShell().close();
 			throw ex;
 		}
@@ -145,10 +152,10 @@ public class RegressionFuseTest extends DefaultTest {
 	public void issue_1152() {
 
 		ProjectFactory.newProject("cbr-blueprint").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(BLUEPRINT).create();
-		String server = serverRequirement.getConfig().getName();
+		String server = serverRequirement.getConfiguration().getName();
 		FuseServerManipulator.startServer(server);
 		FuseServerManipulator.addModule(server, "cbr-blueprint");
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		FuseServerManipulator.removeAllModules(server);
 		new WaitUntil(new FuseLogContainsText("(CamelContext: cbr-example-context) is shutdown"), TimePeriod.VERY_LONG);
 	}
@@ -164,12 +171,12 @@ public class RegressionFuseTest extends DefaultTest {
 	public void issue_1252() {
 
 		ProjectFactory.newProject("camel-blueprint").template(ProjectTemplate.CBR).type(ProjectType.BLUEPRINT).create();
-		String server = serverRequirement.getConfig().getName();
+		String server = serverRequirement.getConfiguration().getName();
 		FuseServerManipulator.addModule(server, "camel-blueprint");
 		FuseServerManipulator.startServer(server);
 		FuseServerManipulator.restartInDebug(server);
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable("Problem Occurred"));
+			new WaitUntil(new ShellIsAvailable("Problem Occurred"));
 			new DefaultShell("Problem Occurred");
 			new PushButton("OK");
 		} catch (Exception e) {

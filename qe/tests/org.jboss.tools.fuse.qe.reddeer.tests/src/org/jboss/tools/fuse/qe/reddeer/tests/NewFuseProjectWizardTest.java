@@ -10,9 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.EAP;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,25 +23,28 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.reddeer.core.handler.ShellHandler;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.direct.project.Project;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.qe.reddeer.FileUtils;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
-import org.jboss.tools.fuse.qe.reddeer.ext.ProjectExt;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerEAP;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.junit.After;
 import org.junit.Test;
@@ -55,11 +56,16 @@ import org.junit.runner.RunWith;
  * @author tsedmik
  */
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = { Fuse, EAP }, state = PRESENT))
+@Fuse(state = PRESENT)
 public class NewFuseProjectWizardTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class));
+	}
 
 	/**
 	 * Prepares test environment
@@ -67,8 +73,8 @@ public class NewFuseProjectWizardTest {
 	@After
 	public void setupDeleteProjects() {
 		ProjectFactory.deleteAllProjects();
-		new ErrorLogView().deleteLog();
-		ShellHandler.getInstance().closeAllNonWorbenchShells();
+		new LogView().deleteLog();
+		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 
 	/**
@@ -95,7 +101,7 @@ public class NewFuseProjectWizardTest {
 		wiz.useDefaultLocation(false);
 		wiz.setLocation(targetLocation.getAbsolutePath());
 		wiz.finish();
-		File actualLocation = new File(new ProjectExt().getLocation("test"));
+		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
@@ -126,13 +132,13 @@ public class NewFuseProjectWizardTest {
 		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2, wiz.getTargetRuntimes().size());
 		for (String temp : wiz.getTargetRuntimes()) {
 			if (!(temp.equals("No Runtime selected")
-					|| temp.equals(serverRequirement.getConfig().getServerBase().getRuntimeName()))) {
+					|| temp.equals(serverRequirement.getConfiguration().getServer().getRuntimeName()))) {
 				fail("'Target Runtime' Combo box contains something wrong!");
 			}
 		}
-		wiz.selectTargetRuntime(serverRequirement.getConfig().getServerBase().getRuntimeName());
+		wiz.selectTargetRuntime(serverRequirement.getConfiguration().getServer().getRuntimeName());
 		assertFalse("Path should not be editable!. The runtime is set.", wiz.isCamelVersionEditable());
-		assertEquals("Camel versions are different (runtime vs wizard)!", serverRequirement.getConfig().getCamelVersion(), wiz.getCamelVersion());
+		assertEquals("Camel versions are different (runtime vs wizard)!", serverRequirement.getConfiguration().getCamelVersion(), wiz.getCamelVersion());
 		wiz.cancel();
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
@@ -167,7 +173,7 @@ public class NewFuseProjectWizardTest {
 		assertFalse("Project was created with errors", hasErrors());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		try {
-			String pom = FileUtils.getFileContent(new ProjectExt().getLocation("test") + "/pom.xml");
+			String pom = FileUtils.getFileContent(Project.getLocation("test") + "/pom.xml");
 			assertTrue(pom.contains("<version>2.17.3</version>"));
 		} catch (IOException e) {
 			fail("Cannot access project's pom.xml file!");
@@ -304,7 +310,7 @@ public class NewFuseProjectWizardTest {
 		wiz.setProjectType(ProjectType.JAVA);
 		wiz.finish();
 		assertTrue("Project created with Java DSL do not contain 'CamelRoute.java' file", new ProjectExplorer()
-				.getProject("java").containsItem("src/main/java", "com.mycompany", "CamelRoute.java"));
+				.getProject("java").containsResource("src/main/java", "com.mycompany", "CamelRoute.java"));
 		assertFalse("Project with Java DSL was created with errors", hasErrors());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
