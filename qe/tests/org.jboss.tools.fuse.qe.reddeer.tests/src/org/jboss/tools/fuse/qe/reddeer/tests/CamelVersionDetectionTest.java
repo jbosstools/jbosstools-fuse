@@ -10,19 +10,16 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.EAP;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.core.handler.ShellHandler;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.junit.After;
 import org.junit.Before;
@@ -34,8 +31,8 @@ import org.junit.runner.RunWith;
  * 
  * @author djelinek
  */
+@Fuse(state = PRESENT)
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = { Fuse, EAP }, state = PRESENT))
 public class CamelVersionDetectionTest {
 	
 	@InjectRequirement
@@ -48,10 +45,10 @@ public class CamelVersionDetectionTest {
 	@After
 	public void setupDeleteProjects() {
 		ProjectFactory.deleteAllProjects();
-		ErrorLogView log = new ErrorLogView();
+		LogView log = new LogView();
 		log.open();
 		log.deleteLog();
-		ShellHandler.getInstance().closeAllNonWorbenchShells();
+		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 	
 	/**
@@ -75,7 +72,7 @@ public class CamelVersionDetectionTest {
 		projectWizard.next();
 		projectWizard.selectTargetRuntime(projectWizard.getTargetRuntimes().get(1));
 		String detected = projectWizard.getCamelVersion();
-		String expected = serverRequirement.getConfig().getCamelVersion();
+		String expected = serverRequirement.getConfiguration().getCamelVersion();
 		assertTrue("Camel detection failed -> Detected: '" + detected + "', Expected: '" + expected + "'",
 				detected.equals(expected));
 		projectWizard.cancel();

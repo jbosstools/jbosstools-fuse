@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.eclipse.ui.problems.ProblemsView.ProblemType.ERROR;
+import static org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType.ERROR;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectTemplate.CBR;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectType.BLUEPRINT;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectType.SPRING;
@@ -31,36 +31,38 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.core.matcher.WithTooltipTextMatcher;
-import org.jboss.reddeer.eclipse.debug.core.IsSuspended;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView;
-import org.jboss.reddeer.eclipse.ui.views.properties.PropertiesView;
-import org.jboss.reddeer.junit.execution.annotation.RunIf;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.button.CancelButton;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.OkButton;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.ctab.DefaultCTabItem;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.menu.ShellMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.jboss.reddeer.swt.impl.toolbar.DefaultToolItem;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.core.matcher.WithTooltipTextMatcher;
+import org.eclipse.reddeer.eclipse.condition.LaunchIsSuspended;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
+import org.eclipse.reddeer.eclipse.ui.views.properties.PropertySheet;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.CancelButton;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabItem;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
@@ -76,12 +78,10 @@ import org.jboss.tools.fuse.qe.reddeer.preference.FuseServerRuntimePreferencePag
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.EditorManipulator;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.qe.reddeer.view.FusePropertiesView;
-import org.jboss.tools.fuse.qe.reddeer.view.ProblemsViewExt;
 import org.jboss.tools.fuse.qe.reddeer.view.FusePropertiesView.PropertyType;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledTextExt;
+import org.jboss.tools.fuse.qe.reddeer.view.ProblemsViewExt;
 import org.jboss.tools.fuse.qe.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.junit.After;
 import org.junit.Test;
@@ -103,7 +103,7 @@ public class RegressionTest extends DefaultTest {
 	public void setupClean() {
 
 		ProjectFactory.deleteAllProjects();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class RegressionTest extends DefaultTest {
 
 		new DefaultCTabItem("Design").activate();
 		new DefaultCTabItem("Source").activate();
-		new ShellMenu("File", "Save").select();
+		new ShellMenuItem(new WorkbenchShell(), "File", "Save").select();
 
 		// check XML content
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -159,7 +159,7 @@ public class RegressionTest extends DefaultTest {
 		new ProjectExplorer().getProject("camel-blueprint")
 				.getProjectItem("src/main/resources", "OSGI-INF", "blueprint", "blueprint.xml").select();
 		try {
-			new ContextMenu("Debug As", "3 Local Camel Context (without tests)");
+			new ContextMenuItem("Debug As", "3 Local Camel Context (without tests)");
 		} catch (Exception e) {
 			fail("Context menu 'Debug As --> Local Camel Context' is missing");
 		}
@@ -180,7 +180,7 @@ public class RegressionTest extends DefaultTest {
 		dialog.open();
 		dialog.select(serverRuntime);
 		new PushButton("Add...").click();
-		new WaitUntil(new ShellWithTextIsAvailable("New Server Runtime Environment"));
+		new WaitUntil(new ShellIsAvailable("New Server Runtime Environment"));
 		new DefaultShell("New Server Runtime Environment").setFocus();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		new DefaultTreeItem("JBoss Fuse", "JBoss Fuse 6.1").select();
@@ -203,11 +203,11 @@ public class RegressionTest extends DefaultTest {
 
 		ProjectFactory.newProject("camel-spring").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(ProjectType.SPRING).create();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		new FuseJMXNavigator().getNode("Local Camel Context", "Camel", "cbr-example-context").select();
 
 		try {
-			new ContextMenu("Close Camel Context");
+			new ContextMenuItem("Close Camel Context");
 		} catch (CoreLayerException ex) {
 			return;
 		} finally {
@@ -250,7 +250,7 @@ public class RegressionTest extends DefaultTest {
 	@Test
 	public void issue_1149() {
 
-		new ShellMenu("File", "New", "Fuse Integration Project").select();
+		new ShellMenuItem(new WorkbenchShell(), "File", "New", "Fuse Integration Project").select();
 		new DefaultShell("New Fuse Integration Project");
 		if (new PushButton("Finish").isEnabled()) {
 			new DefaultShell().close();
@@ -278,7 +278,7 @@ public class RegressionTest extends DefaultTest {
 		editor.setProperty("Uri *", "file:src/main/data?noop=true");
 		editor.save();
 		project.debugCamelContextWithoutTests("camel-context.xml");
-		new WaitUntil(new IsSuspended(), TimePeriod.LONG);
+		new WaitUntil(new LaunchIsSuspended(), TimePeriod.LONG);
 		try {
 			new DefaultEditor(new RegexMatcher("camel-context.xml"));
 		} catch (Exception e) {
@@ -353,8 +353,8 @@ public class RegressionTest extends DefaultTest {
 
 		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).create();
 		new ProjectExplorer().selectProjects("camel-spring");
-		new ContextMenu("Run As", "Run Configurations...").select();
-		new WaitUntil(new ShellWithTextIsAvailable("Run Configurations"));
+		new ContextMenuItem("Run As", "Run Configurations...").select();
+		new WaitUntil(new ShellIsAvailable("Run Configurations"));
 		new DefaultShell("Run Configurations");
 		new DefaultTreeItem("Java Application").select();
 		try {
@@ -382,7 +382,7 @@ public class RegressionTest extends DefaultTest {
 		ProjectFactory.newProject("camel-blueprint").template(CBR).type(BLUEPRINT).create();
 		new CamelProject("camel-blueprint").selectProjectItem("src/main/resources", "OSGI-INF", "blueprint",
 				"blueprint.xml");
-		new ContextMenu("Open").select();
+		new ContextMenuItem("Open").select();
 		assertFalse("Camel Editor is dirty! But no editing was performed.", new CamelEditor("blueprint.xml").isDirty());
 	}
 
@@ -431,7 +431,7 @@ public class RegressionTest extends DefaultTest {
 		problems.open();
 		editor.deleteCamelComponent("ConvertBodyTo _convertBodyTo1");
 		new CamelProject("cbr-spring").selectCamelContext("camel-context.xml");
-		new ContextMenu("Validate").select();
+		new ContextMenuItem("Validate").select();
 		assertTrue("Problems view contains errors", problems.getProblems(ERROR).isEmpty());
 	}
 
@@ -456,7 +456,7 @@ public class RegressionTest extends DefaultTest {
 		editor.addComponent("Log", "file:directoryName");
 		editor.setProperty("Message *", "XXX");
 		editor.save();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 		editor.activate();
 		editor.deleteCamelComponent("file:src/main/data?noop=true");
 		editor.deleteCamelComponent("file:directoryName");
@@ -483,7 +483,7 @@ public class RegressionTest extends DefaultTest {
 		editor.activate();
 		editor.addComponent("IMAP", "Route _route1");
 		editor.close();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 		ProblemsViewExt problems = new ProblemsViewExt();
 		problems.open();
 		AbstractWait.sleep(TimePeriod.getCustom(5));
@@ -494,11 +494,11 @@ public class RegressionTest extends DefaultTest {
 		} catch (Exception e) {
 			fail("Camel Editor was not opened after double-click on a problem in Problems view!");
 		}
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.activate();
 		try {
 			properties.selectTab("Details");
-			String title = new LabeledTextExt("Uri *").getText();
+			String title = new LabeledText("Uri *").getText();
 			assertEquals("imap:host:port", title);
 		} catch (Exception e) {
 			fail("Properties view does not contains properties of appropriate Camel Component!");
@@ -521,15 +521,15 @@ public class RegressionTest extends DefaultTest {
 		editor.save();
 		CamelEditor.switchTab("Source");
 		new ProjectExplorer().getProject("camel-spring").select();
-		new ContextMenu("Delete").select();
-		new WaitUntil(new ShellWithTextIsAvailable("Delete Resources"));
+		new ContextMenuItem("Delete").select();
+		new WaitUntil(new ShellIsAvailable("Delete Resources"));
 		new DefaultShell("Delete Resources");
 		new CheckBox().toggle(true);
 		new OkButton().click();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		try {
 			// issue occurred!
-			new WaitUntil(new ShellWithTextIsAvailable("Delete Resources"));
+			new WaitUntil(new ShellIsAvailable("Delete Resources"));
 			new CancelButton().click();
 			// perform workaround to project deletion
 			new DefaultEditor().close();

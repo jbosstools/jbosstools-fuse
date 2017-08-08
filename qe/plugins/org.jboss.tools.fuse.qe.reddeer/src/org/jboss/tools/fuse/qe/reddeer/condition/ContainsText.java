@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.condition;
 
-import org.jboss.reddeer.common.condition.AbstractWaitCondition;
-import org.jboss.reddeer.swt.api.Text;
+import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
+import org.eclipse.reddeer.swt.api.Text;
 
 /**
  * 

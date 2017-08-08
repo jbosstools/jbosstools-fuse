@@ -13,31 +13,23 @@ package org.jboss.tools.fuse.qe.reddeer.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-
+import org.eclipse.reddeer.junit.requirement.configuration.RequirementConfiguration;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * 
- * @author apodhrad
+ * @author Andrej Podhradsky (apodhrad@redhat.com)
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-public abstract class RuntimeBase {
+public abstract class RuntimeBase implements RequirementConfiguration {
 
 	protected String name;
 
-	@XmlAttribute(name = "version")
 	private String version;
 
-	@XmlElement(name = "home", namespace = Namespaces.SOA_REQ)
 	private String home;
 
-	@XmlElement(name = "properties", namespace = Namespaces.SOA_REQ)
 	private Properties properties;
 
 	public String getName() {
@@ -92,4 +84,9 @@ public abstract class RuntimeBase {
 	}
 
 	public abstract void create();
+
+	@Override
+	public String getId() {
+		return null;
+	}
 }

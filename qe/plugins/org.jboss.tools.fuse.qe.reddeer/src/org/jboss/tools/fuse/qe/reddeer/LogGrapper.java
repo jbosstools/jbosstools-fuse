@@ -13,8 +13,8 @@ package org.jboss.tools.fuse.qe.reddeer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.eclipse.ui.views.log.LogMessage;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 
 /**
  * Utilizes access to Error Log View
@@ -32,7 +32,7 @@ public class LogGrapper {
 	public static List<LogMessage> getPluginErrors(String plugin) {
 
 		List<LogMessage> fuseErrors = new ArrayList<LogMessage>();
-		List<LogMessage> allErrors = new ErrorLogView().getErrorMessages();
+		List<LogMessage> allErrors = new LogView().getErrorMessages();
 		for (LogMessage message : allErrors) {
 			if (message.getPlugin().toLowerCase().contains(plugin)) {
 				fuseErrors.add(message);

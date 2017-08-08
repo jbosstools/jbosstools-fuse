@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.preference;
 
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
 
 /**
  * Represents "Maven --> User Settings" preference page
@@ -22,7 +23,11 @@ import org.jboss.reddeer.swt.impl.text.DefaultText;
 public class MavenUserSettingsPreferencePage extends PreferencePage {
 
 	public MavenUserSettingsPreferencePage() {
-		super("Maven", "User Settings");
+		this(null);
+	}
+		
+	public MavenUserSettingsPreferencePage(ReferencedComposite ref) {
+		super(ref, "Maven", "User Settings");
 	}
 
 	public String getGlobalSettings() {

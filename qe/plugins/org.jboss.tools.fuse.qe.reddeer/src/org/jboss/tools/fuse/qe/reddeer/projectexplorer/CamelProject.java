@@ -17,26 +17,26 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.core.matcher.WithTextMatcher;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.core.resources.Project;
-import org.jboss.reddeer.eclipse.core.resources.ProjectItem;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.OkButton;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.core.matcher.WithTextMatcher;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.core.resources.Project;
+import org.eclipse.reddeer.eclipse.core.resources.ProjectItem;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
 
 /**
@@ -80,9 +80,9 @@ public class CamelProject {
 
 		project.getProjectItem("Camel Contexts").getChildren().get(0).select();
 		try {
-			new ContextMenu("Run As", "2 Local Camel Context").select();
+			new ContextMenuItem("Run As", "2 Local Camel Context").select();
 		} catch (CoreLayerException ex) {
-			new ContextMenu("Run As", "1 Local Camel Context").select();
+			new ContextMenuItem("Run As", "1 Local Camel Context").select();
 		}
 
 		ConsoleHasText camel = new ConsoleHasText("Starting Camel ...");
@@ -103,7 +103,7 @@ public class CamelProject {
 			new WaitTimeoutExpiredException("Console doesn't contains 'Starting Camel ...' or 'Started Jetty Server'");
 		}
 
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		new WaitUntil(new ConsoleHasText("started and consuming from"), TimePeriod.VERY_LONG);
 	}
 
@@ -111,7 +111,7 @@ public class CamelProject {
 
 		String id = getCamelContextId("src/main/resources", "META-INF", "spring", name);
 		project.getProjectItem("src/main/resources", "META-INF", "spring", name).select();
-		new ContextMenu("Run As", "3 Local Camel Context (without tests)").select();
+		new ContextMenuItem("Run As", "3 Local Camel Context (without tests)").select();
 		new WaitUntil(new ConsoleHasText("(CamelContext: " + id + ") started"), TimePeriod.VERY_LONG);
 	}
 
@@ -119,7 +119,7 @@ public class CamelProject {
 
 		new ProjectExplorer().open();
 		project.getProjectItem("src/main/resources", "META-INF", "spring", name).select();
-		new ContextMenu("Debug As", "3 Local Camel Context (without tests)").select();
+		new ContextMenuItem("Debug As", "3 Local Camel Context (without tests)").select();
 		closeSecureStorage();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		closePerspectiveSwitchWindow();
@@ -130,7 +130,7 @@ public class CamelProject {
 	 */
 	private static void closeSecureStorage() {
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable(new WithTextMatcher(new RegexMatcher("Secure Storage.*"))), TimePeriod.NORMAL);
+			new WaitUntil(new ShellIsAvailable(new WithTextMatcher(new RegexMatcher("Secure Storage.*"))), TimePeriod.DEFAULT);
 		} catch (RuntimeException ex1) {
 			return;
 		}
@@ -144,7 +144,7 @@ public class CamelProject {
 
 		project.select();
 		try {
-			new ContextMenu("Enable Fuse Camel Nature").select();
+			new ContextMenuItem("Enable Fuse Camel Nature").select();
 			new WaitWhile(new JobIsRunning());
 		} catch (CoreLayerException e) {
 			// Nature is probably already enabled
@@ -157,7 +157,7 @@ public class CamelProject {
 	private void closePerspectiveSwitchWindow() {
 
 		for (int i = 0; i < 5; i++) {
-			if (new ShellWithTextIsAvailable("Confirm Perspective Switch").test()) {
+			if (new ShellIsAvailable("Confirm Perspective Switch").test()) {
 				new DefaultShell("Confirm Perspective Switch");
 				new CheckBox("Remember my decision").toggle(true);
 				new PushButton("No").click();
@@ -187,12 +187,12 @@ public class CamelProject {
 
 	public void update() {
 		project.select();
-		new ContextMenu("Maven", "Update Project...").select();
+		new ContextMenuItem("Maven", "Update Project...").select();
 		new DefaultShell("Update Maven Project");
 		new CheckBox("Force Update of Snapshots/Releases").toggle(true);
 		new PushButton("OK").click();
 
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
 	}
 

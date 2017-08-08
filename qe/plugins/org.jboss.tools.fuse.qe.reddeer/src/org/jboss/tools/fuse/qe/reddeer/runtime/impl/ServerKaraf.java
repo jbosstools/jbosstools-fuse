@@ -20,26 +20,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.JobIsKilled;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.direct.preferences.Preferences;
-import org.jboss.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.direct.preferences.Preferences;
+import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.workbench.core.condition.JobIsKilled;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.Activator;
 import org.jboss.tools.fuse.qe.reddeer.condition.TreeHasItem;
-import org.jboss.tools.fuse.qe.reddeer.runtime.Namespaces;
 import org.jboss.tools.fuse.qe.reddeer.runtime.ServerBase;
 import org.jboss.tools.fuse.qe.reddeer.wizard.ServerRuntimeWizard;
 import org.jboss.tools.fuse.qe.reddeer.wizard.ServerWizard;
@@ -49,23 +43,21 @@ import org.jboss.tools.fuse.qe.reddeer.wizard.ServerWizard;
  * 
  * @author apodhrad, tsedmik
  */
-@XmlRootElement(name = "karaf", namespace = Namespaces.SOA_REQ)
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ServerKaraf extends ServerBase {
 
 	private final String category = "JBoss Fuse";
 
 	private final String label = "Apache Karaf";
 
-	@XmlElement(name = "host", namespace = Namespaces.SOA_REQ)
 	private String host;
-	@XmlElement(name = "port", namespace = Namespaces.SOA_REQ)
 	private String port;
-	@XmlElement(name = "username", namespace = Namespaces.SOA_REQ)
 	private String username;
-	@XmlElement(name = "password", namespace = Namespaces.SOA_REQ)
 	private String password;
 
+	public ServerKaraf() {
+		setType("Karaf");
+	}
+	
 	public String getHost() {
 		return host;
 	}
@@ -142,7 +134,7 @@ public class ServerKaraf extends ServerBase {
 		preferences.open();
 
 		// Add runtime
-		RuntimePreferencePage runtimePreferencePage = new RuntimePreferencePage();
+		RuntimePreferencePage runtimePreferencePage = new RuntimePreferencePage(preferences);
 		preferences.select(runtimePreferencePage);
 		runtimePreferencePage.addRuntime();
 		ServerRuntimeWizard runtimeWizard = new ServerRuntimeWizard();
@@ -201,10 +193,7 @@ public class ServerKaraf extends ServerBase {
 	 * @throws IOException
 	 */
 	private static void copyFileUsingStream(File source, File dest) throws IOException {
-		try (
-				InputStream is = new FileInputStream(source);
-				OutputStream os = new FileOutputStream(dest))
-		{
+		try (InputStream is = new FileInputStream(source); OutputStream os = new FileOutputStream(dest)) {
 			byte[] buffer = new byte[1024];
 			int length;
 			while ((length = is.read(buffer)) > 0) {
@@ -218,7 +207,7 @@ public class ServerKaraf extends ServerBase {
 	 */
 	private static void closeSecureStorage() {
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable("Secure Storage"), TimePeriod.NORMAL);
+			new WaitUntil(new ShellIsAvailable("Secure Storage"), TimePeriod.DEFAULT);
 		} catch (RuntimeException ex1) {
 			return;
 		}

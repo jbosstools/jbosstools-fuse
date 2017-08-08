@@ -15,16 +15,16 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.util.Display;
+import org.eclipse.reddeer.common.util.ResultRunnable;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.jboss.tools.fuse.qe.reddeer.view.FuseJMXNavigator;
-import org.jboss.reddeer.core.util.Display;
-import org.jboss.reddeer.core.util.ResultRunnable;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
 
 /**
  * Utilizes sending messages into the Camel Endpoint - drag a message XML file in 'Project Explorer' and drop it on a

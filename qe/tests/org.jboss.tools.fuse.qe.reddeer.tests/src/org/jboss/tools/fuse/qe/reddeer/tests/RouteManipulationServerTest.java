@@ -10,26 +10,29 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.RUNNING;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.requirements.server.ServerRequirementState;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenu;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
@@ -38,12 +41,12 @@ import org.jboss.tools.fuse.qe.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.EditorManipulator;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseShellSSH;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.qe.reddeer.view.MessagesView;
 import org.junit.After;
@@ -58,7 +61,7 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
-@Fuse(server = @Server(type = Fuse, state = RUNNING))
+@Fuse(state = ServerRequirementState.RUNNING)
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
@@ -66,6 +69,11 @@ public class RouteManipulationServerTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
+
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	}
 
 	/**
 	 * Prepares test environment
@@ -75,7 +83,8 @@ public class RouteManipulationServerTest {
 		new WorkbenchShell().maximize();
 		ConsolePreferenceUtil.setConsoleOpenOnError(false);
 		ConsolePreferenceUtil.setConsoleOpenOnOutput(false);
-		new ErrorLogView().selectActivateOnNewEvents(false);
+		new LogView().open();
+		new LogView().setActivateOnNewEvents(false);
 		ProjectFactory.importExistingProject(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/test-route-manipulation"), "test-route-manipulation", false);
 		CamelProject project = new CamelProject("test-route-manipulation");
@@ -84,7 +93,7 @@ public class RouteManipulationServerTest {
 
 	@Before
 	public void setupImportProject() {
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "test-route-manipulation");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "test-route-manipulation");
 	}
 
 	@After
@@ -94,12 +103,12 @@ public class RouteManipulationServerTest {
 		} catch (Exception e) {
 			// editor is not opened --> ok
 		}
-		FuseServerManipulator.publish(serverRequirement.getConfig().getName());
+		FuseServerManipulator.publish(serverRequirement.getConfiguration().getName());
 	}
 
 	@AfterClass
 	public static void defaultFinalClean() {
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
 		ConsoleView console = new ConsoleView();
 		console.open();
 		try {
@@ -146,8 +155,9 @@ public class RouteManipulationServerTest {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
 		jmx.getNode("JBoss Fuse", "Camel");
-		jmx.getNode("JBoss Fuse", "Camel", "_context1").select();
-		new ContextMenu("Edit Routes").select();
+		TreeItem jmxNode = jmx.getNode("JBoss Fuse", "Camel", "_context1");
+		jmxNode.select();
+		new ContextMenu(jmxNode).getItem("Edit Routes").select();
 		CamelEditor editor = new CamelEditor(new DefaultEditor(new RegexMatcher("<connected>Remote CamelContext:.*")).getTitle());
 		assertTrue(editor.isComponentAvailable("Log _log1"));
 		editor.selectEditPart("Route _route1");
@@ -188,18 +198,21 @@ public class RouteManipulationServerTest {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
 		jmx.getNode("JBoss Fuse", "Camel");
-		AbstractWait.sleep(TimePeriod.NORMAL);
-		jmx.getNode("JBoss Fuse", "Camel", "_context1").select();
-		new ContextMenu("Start Tracing").select();
+		AbstractWait.sleep(TimePeriod.DEFAULT);
+		TreeItem jmxNode = jmx.getNode("JBoss Fuse", "Camel", "_context1");
+		jmxNode.select();
+		new ContextMenu(jmxNode).getItem("Start Tracing").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
-		jmx.getNode("JBoss Fuse", "Camel", "_context1").select();
-		new ContextMenu("Stop Tracing Context");
+		jmxNode = jmx.getNode("JBoss Fuse", "Camel", "_context1");
+		jmxNode.select();
+		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();;
 		MessagesView msg = new MessagesView();
 		msg.open();
 		jmx.getNode("JBoss Fuse", "Camel", "_context1").select();
 		assertTrue(msg.getAllMessages().size() > 4);
-		jmx.getNode("JBoss Fuse", "Camel", "_context1").select();
-		new ContextMenu("Stop Tracing Context").select();
+		jmxNode = jmx.getNode("JBoss Fuse", "Camel", "_context1");
+		jmxNode.select();
+		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 }

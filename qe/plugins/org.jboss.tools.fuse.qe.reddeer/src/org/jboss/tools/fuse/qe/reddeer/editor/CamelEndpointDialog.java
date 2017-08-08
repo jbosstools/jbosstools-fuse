@@ -13,18 +13,18 @@ package org.jboss.tools.fuse.qe.reddeer.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.jface.wizard.WizardDialog;
-import org.jboss.reddeer.swt.api.Button;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.group.DefaultGroup;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.jface.wizard.WizardDialog;
+import org.eclipse.reddeer.swt.api.Button;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.group.DefaultGroup;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 
 /**
  * Manipulates with dialog (Wizard) for adding Global Camel Endpoints
@@ -36,7 +36,7 @@ public class CamelEndpointDialog extends WizardDialog {
 	private static final String TYPE = "JBoss Fuse";
 
 	public void activate() {
-		new WaitUntil(new ShellWithTextIsAvailable("Choose Global Camel endpoint"));
+		new WaitUntil(new ShellIsAvailable("Choose Global Camel endpoint"));
 		new DefaultShell("Choose Global Camel endpoint");
 	}	
 	
@@ -121,7 +121,7 @@ public class CamelEndpointDialog extends WizardDialog {
 
 		CamelEditor.switchTab("Configurations");		
 		new PushButton("Add").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Create new global element..."));
+		new WaitUntil(new ShellIsAvailable("Create new global element..."));
 		new DefaultShell("Create new global element...");
 		new DefaultTreeItem(new String[] { TYPE, "Endpoint" }).select();	
 		new PushButton("OK").click();	

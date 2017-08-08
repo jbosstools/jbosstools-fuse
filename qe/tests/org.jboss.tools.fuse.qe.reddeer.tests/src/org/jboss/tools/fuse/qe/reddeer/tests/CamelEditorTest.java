@@ -16,19 +16,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.jboss.reddeer.gef.view.PaletteView;
-import org.jboss.reddeer.jface.text.contentassist.ContentAssistant;
-import org.jboss.reddeer.junit.execution.annotation.RunIf;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.workbench.exception.WorkbenchLayerException;
-import org.jboss.reddeer.workbench.handler.EditorHandler;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.exception.RedDeerException;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.gef.view.PaletteView;
+import org.eclipse.reddeer.jface.text.contentassist.ContentAssistant;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.autobuilding.AutoBuildingRequirement.AutoBuilding;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
+import org.eclipse.reddeer.workbench.handler.EditorHandler;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
@@ -42,7 +43,6 @@ import org.jboss.tools.fuse.qe.reddeer.editor.SourceEditor;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.EditorManipulator;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class CamelEditorTest extends DefaultTest {
 
 		new WorkbenchShell();
 		ProjectFactory.newProject("cbr").template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 	}
 
 	@Before
@@ -253,12 +253,12 @@ public class CamelEditorTest extends DefaultTest {
 		editor.addCamelComponent(new Log(), "Otherwise");
 		try {
 			editor.setProperty("Log _log2", "Message *", "Other message");
-		} catch (CoreLayerException e) {
+		} catch (RedDeerException e) {
 			log.warn("There is no component with label 'Log _log2'! See https://issues.jboss.org/browse/FUSETOOLS-2294");
 			editor.setProperty("Log", "Message *", "Other message");
 		}
 		editor.addCamelComponent(new File(), "Otherwise");
-		editor.setProperty("file:directoryName", "Uri *", "file:target/messages/others");
+		editor.setProperty("file:directoryName", "Uri", "file:target/messages/others");
 		CamelEditor.switchTab("Source");
 		assertTrue(EditorManipulator.isEditorContentEqualsFile("resources/camel-context-all.xml"));
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);

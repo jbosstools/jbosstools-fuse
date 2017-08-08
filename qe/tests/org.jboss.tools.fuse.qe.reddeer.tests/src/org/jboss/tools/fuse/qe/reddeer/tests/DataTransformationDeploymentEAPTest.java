@@ -11,8 +11,7 @@
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.jboss.reddeer.requirements.server.ServerReqState.RUNNING;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.EAP;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -23,17 +22,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Scanner;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.qe.reddeer.FileUtils;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerEAP;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.junit.AfterClass;
@@ -46,21 +48,27 @@ import org.junit.runner.RunWith;
  * @author tsedmik
  */
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = EAP, state = RUNNING))
+@Fuse(state = RUNNING)
 public class DataTransformationDeploymentEAPTest extends DefaultTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class));
+	}
+
 
 	/**
 	 * Cleans up test environment
 	 */
 	@AfterClass
 	public static void setupStopServer() {
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
-		FuseServerManipulator.stopServer(serverRequirement.getConfig().getName());
-		FileUtils.deleteDir(new File(serverRequirement.getConfig().getServerBase().getHome() + "/bin/target/"));
-		FileUtils.deleteDir(new File(serverRequirement.getConfig().getServerBase().getHome() + "/bin/src/"));
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getName());
+		FileUtils.deleteDir(new File(serverRequirement.getConfiguration().getServer().getHome() + "/bin/target/"));
+		FileUtils.deleteDir(new File(serverRequirement.getConfiguration().getServer().getHome() + "/bin/src/"));
 	}
 
 	/**
@@ -84,7 +92,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 		ProjectFactory.importExistingProject(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/datatrans"), "wildfly-transformation", false);
 		new CamelProject("wildfly-transformation").update();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "wildfly-transformation");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "wildfly-transformation");
 		try {
 			new WaitUntil(new ConsoleHasText(
 					"started and consuming from: Endpoint[file://src/data?fileName=abc-order.xml&noop=true]"));
@@ -96,7 +104,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 		// invoke the route with copying a file
 		String from = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/datatrans/src/data/abc-order.xml");
-		String to = serverRequirement.getConfig().getServerBase().getHome() + "/bin/src/data/abc-order.xml";
+		String to = serverRequirement.getConfiguration().getServer().getHome() + "/bin/src/data/abc-order.xml";
 		try {
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);
 		} catch (IOException e) {
@@ -111,7 +119,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 			fail("Transformation did not happen! ");
 		}
 		File output = new File(
-				serverRequirement.getConfig().getServerBase().getHome() + "/bin/target/messages/xyz-order.json");
+				serverRequirement.getConfiguration().getServer().getHome() + "/bin/target/messages/xyz-order.json");
 		assertTrue("Transformation did not create output file - bin/target/messages/xyz-order.json", output.exists());
 		try (Scanner scanner = new Scanner(output)) {
 			String text = scanner.nextLine();

@@ -10,22 +10,23 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Karaf;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.eclipse.ui.console.ConsoleView;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.label.DefaultLabel;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.impl.label.DefaultLabel;
 import org.jboss.tools.fuse.qe.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerKaraf;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.junit.Test;
@@ -36,7 +37,7 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
-@Fuse(server = @Server(type = { Fuse, Karaf }, state = PRESENT))
+@Fuse(state = PRESENT)
 @OpenPerspective(FuseIntegrationPerspective.class)
 @CleanWorkspace
 @RunWith(RedDeerSuite.class)
@@ -44,6 +45,11 @@ public class ServerJRETest extends DefaultTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class, ServerKaraf.class));
+	}
 
 	/**
 	 * <p>
@@ -60,7 +66,7 @@ public class ServerJRETest extends DefaultTest {
 	@Test
 	public void testJRE() {
 
-		ServerKaraf fuse = (ServerKaraf) serverRequirement.getConfig().getServerBase();
+		ServerKaraf fuse = (ServerKaraf) serverRequirement.getConfiguration().getServer();
 		assertNotNull("Different JRE is not specified!", fuse.getJre());
 		FuseServerManipulator.startServer(fuse.getName());
 		new ConsoleView().open();

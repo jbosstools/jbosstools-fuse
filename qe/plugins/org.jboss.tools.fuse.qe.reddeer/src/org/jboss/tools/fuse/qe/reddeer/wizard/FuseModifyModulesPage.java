@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.wizard;
 
-import org.jboss.reddeer.eclipse.wst.server.ui.wizard.ModifyModulesPage;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.eclipse.wst.server.ui.wizard.ModifyModulesPage;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
 
 /**
  * Wizard page for adding and removing Fuse modules on the Fuse server.
@@ -20,6 +21,14 @@ import org.jboss.reddeer.swt.impl.button.PushButton;
  * @author tsedmik
  */
 public class FuseModifyModulesPage extends ModifyModulesPage {
+
+	public FuseModifyModulesPage() {
+		super(null);
+	}
+
+	public FuseModifyModulesPage(ReferencedComposite ref) {
+		super(ref);
+	}
 
 	/**
 	 * Sets option 'If server is started, publish changes immediately'

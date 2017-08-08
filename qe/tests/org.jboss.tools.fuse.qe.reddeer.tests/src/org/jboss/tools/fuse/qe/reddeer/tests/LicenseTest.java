@@ -16,18 +16,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ShellMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.tab.DefaultTabItem;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.tab.DefaultTabItem;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class LicenseTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		new ShellMenu("Help", "Installation Details").select();
+		new ShellMenuItem(new WorkbenchShell(), "Help", "Installation Details").select();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 		new DefaultTabItem("Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
@@ -86,7 +87,7 @@ public class LicenseTest {
 	@Before
 	public void setupOpenInstallationDetails() {
 
-		new ShellMenu("Help", "Installation Details").select();
+		new ShellMenuItem(new WorkbenchShell(), "Help", "Installation Details").select();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 	}
 

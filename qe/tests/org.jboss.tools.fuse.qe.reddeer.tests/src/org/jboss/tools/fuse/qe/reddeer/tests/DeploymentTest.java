@@ -10,29 +10,31 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.RUNNING;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
 import static org.jboss.tools.fuse.qe.reddeer.ProjectType.SPRING;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.EAP;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.ui.browser.BrowserView;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.ui.browser.WebBrowserView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerEAP;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseShellSSH;
@@ -46,7 +48,7 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
-@Fuse(server = @Server(type = {EAP, Fuse}, state = RUNNING))
+@Fuse(state = RUNNING)
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
@@ -63,6 +65,11 @@ public class DeploymentTest extends DefaultTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class, ServerFuse.class));
+	}
 
 	/**
 	 * Prepares test environment
@@ -70,8 +77,8 @@ public class DeploymentTest extends DefaultTest {
 	@BeforeClass
 	public static void setupInitial() {
 
-		String version = serverRequirement.getConfig().getCamelVersion();
-		if (serverRequirement.getConfig().getServerBase().getClass().getName().contains("EAP")) {
+		String version = serverRequirement.getConfiguration().getCamelVersion();
+		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
 			ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.EAP).version(version).type(SPRING).create();
 		} else {
 			ProjectFactory.newProject(PROJECT_NAME).version(version).template(ProjectTemplate.CBR).type(ProjectType.BLUEPRINT).create();
@@ -85,9 +92,9 @@ public class DeploymentTest extends DefaultTest {
 	public void setupManageServers() {
 
 		new WorkbenchShell().setFocus();
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
-		FuseServerManipulator.stopServer(serverRequirement.getConfig().getName());
-		FuseServerManipulator.removeServer(serverRequirement.getConfig().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.removeServer(serverRequirement.getConfiguration().getName());
 	}
 
 	/**
@@ -132,13 +139,13 @@ public class DeploymentTest extends DefaultTest {
 	public void testServerDeployment() {
 
 		// add module
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), PROJECT_NAME);
-		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfig().getName(), PROJECT_NAME));
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME);
+		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME));
 
 		// check deployment
-		if (serverRequirement.getConfig().getServerBase().getClass().getName().contains("EAP")) {
+		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
 			new WaitUntil(new ConsoleHasText(PROJECT_EAP_IS_DEPLOYED), TimePeriod.LONG);
-			BrowserView browser = new BrowserView();
+			WebBrowserView browser = new WebBrowserView();
 			browser.open();
 			browser.openPageURL(BROWSER_URL);
 			assertTrue(browser.getText().contains(BROWSER_CONTENT_DEPLOYED));
@@ -147,14 +154,14 @@ public class DeploymentTest extends DefaultTest {
 		}
 
 		// remove module
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
 		AbstractWait.sleep(TimePeriod.getCustom(30));
-		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfig().getName(), PROJECT_NAME));
+		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME));
 
 		// check deployment
-		if (serverRequirement.getConfig().getServerBase().getClass().getName().contains("EAP")) {
+		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
 			new WaitUntil(new ConsoleHasText(PROJECT_EAP_IS_UNDEPLOYED), TimePeriod.LONG);
-			BrowserView browser = new BrowserView();
+			WebBrowserView browser = new WebBrowserView();
 			browser.open();
 			browser.openPageURL(BROWSER_URL);
 			assertTrue(browser.getText().contains(BROWSER_CONTENT_UNDEPLOYED));

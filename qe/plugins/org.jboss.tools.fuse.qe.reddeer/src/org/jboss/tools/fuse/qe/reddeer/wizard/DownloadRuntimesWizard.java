@@ -13,20 +13,20 @@ package org.jboss.tools.fuse.qe.reddeer.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.jface.wizard.WizardDialog;
-import org.jboss.reddeer.swt.api.TableItem;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.button.RadioButton;
-import org.jboss.reddeer.swt.impl.link.DefaultLink;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.table.DefaultTable;
-import org.jboss.reddeer.swt.impl.table.DefaultTableItem;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.jface.wizard.WizardDialog;
+import org.eclipse.reddeer.swt.api.TableItem;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.button.RadioButton;
+import org.eclipse.reddeer.swt.impl.link.DefaultLink;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.table.DefaultTable;
+import org.eclipse.reddeer.swt.impl.table.DefaultTableItem;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 
 /**
  * Represents <i>Download Runtimes</i> dialog that is displayed after click on <i>Download...</i> button in <i>JBoss
@@ -112,8 +112,8 @@ public class DownloadRuntimesWizard extends WizardDialog {
 	public void finish(String runtime) {
 
 		new PushButton("Finish").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Download '" + runtime), TimePeriod.getCustom(5));
-		new WaitWhile(new ShellWithTextIsAvailable("Download '" + runtime), TimePeriod.getCustom(900));
+		new WaitUntil(new ShellIsAvailable("Download '" + runtime), TimePeriod.getCustom(5));
+		new WaitWhile(new ShellIsAvailable("Download '" + runtime), TimePeriod.getCustom(900));
 		new DefaultShell("Preferences");
 	}
 }

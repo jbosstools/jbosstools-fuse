@@ -10,25 +10,27 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.RUNNING;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.eclipse.m2e.core.ui.wizard.MavenImportWizard;
-import org.jboss.reddeer.eclipse.ui.problems.Problem;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView;
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView.ProblemType;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.m2e.core.ui.wizard.MavenImportWizard;
+import org.eclipse.reddeer.eclipse.ui.problems.Problem;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView.ProblemType;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.JiraIssue;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.condition.FuseLogContainsText;
@@ -36,10 +38,10 @@ import org.jboss.tools.fuse.qe.reddeer.preference.ConsolePreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -51,12 +53,17 @@ import org.junit.runner.RunWith;
  * 
  * @author tsedmik
  */
-@Fuse(server = @Server(type = Fuse, state = RUNNING))
+@Fuse(state = RUNNING)
 @RunWith(RedDeerSuite.class)
 public class QuickStartsTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	}
 
 	/**
 	 * Prepares test environment
@@ -84,8 +91,8 @@ public class QuickStartsTest {
 	public void setupDefault() {
 
 		new WorkbenchShell();
-		new ErrorLogView().open();
-		new ErrorLogView().deleteLog();
+		new LogView().open();
+		new LogView().deleteLog();
 	}
 
 	/**
@@ -94,9 +101,9 @@ public class QuickStartsTest {
 	@After
 	public void setupUndeployProjects() {
 
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		new WorkbenchShell();
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
 	}
 
 	/**
@@ -123,12 +130,12 @@ public class QuickStartsTest {
 	@Test
 	public void testBeginnerCamelCBR() {
 
-		String quickstart = serverRequirement.getConfig().getServerBase().getHome() + "/quickstarts/beginner/camel-cbr";
+		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-cbr";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		CamelProject project = new CamelProject("beginner-camel-cbr");
 		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "beginner-camel-cbr");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "beginner-camel-cbr");
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: cbr-example-context) started"));
 		} catch (WaitTimeoutExpiredException e) {
@@ -153,13 +160,13 @@ public class QuickStartsTest {
 	@Test
 	public void testBeginnerCamelEIPs() {
 
-		String quickstart = serverRequirement.getConfig().getServerBase().getHome()
+		String quickstart = serverRequirement.getConfiguration().getServer().getHome()
 				+ "/quickstarts/beginner/camel-eips";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		CamelProject project = new CamelProject("beginner-camel-eips");
 		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "beginner-camel-eips");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "beginner-camel-eips");
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: eip-example-context) started"));
 		} catch (WaitTimeoutExpiredException e) {
@@ -184,13 +191,13 @@ public class QuickStartsTest {
 	@Test
 	public void testBeginnerCamelErrorHandler() {
 
-		String quickstart = serverRequirement.getConfig().getServerBase().getHome()
+		String quickstart = serverRequirement.getConfiguration().getServer().getHome()
 				+ "/quickstarts/beginner/camel-errorhandler";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		CamelProject project = new CamelProject("beginner-camel-errorhandler");
 		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "beginner-camel-errorhandler");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "beginner-camel-errorhandler");
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: errors-example-context) started"));
 		} catch (WaitTimeoutExpiredException e) {
@@ -215,12 +222,12 @@ public class QuickStartsTest {
 	@Test
 	public void testBeginnerCamelLog() {
 
-		String quickstart = serverRequirement.getConfig().getServerBase().getHome() + "/quickstarts/beginner/camel-log";
+		String quickstart = serverRequirement.getConfiguration().getServer().getHome() + "/quickstarts/beginner/camel-log";
 		MavenImportWizard.importProject(quickstart);
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 		CamelProject project = new CamelProject("beginner-camel-log");
 		project.enableCamelNature();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "beginner-camel-log");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "beginner-camel-log");
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: log-example-context) started"));
 		} catch (WaitTimeoutExpiredException e) {

@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.editor;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 
 /**
@@ -54,7 +54,7 @@ public class ConfigurationsEditor extends DefaultEditor {
 	public void addConfig(String... path) {
 		activate();
 		new PushButton("Add").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Create new global element..."));
+		new WaitUntil(new ShellIsAvailable("Create new global element..."));
 		new DefaultShell("Create new global element...");
 		new DefaultTreeItem(path).select();
 		new PushButton("OK").click();
@@ -84,7 +84,7 @@ public class ConfigurationsEditor extends DefaultEditor {
 		log.debug("Trying to create new Global Endpoint, with title - " + title + " and component is - " + component);
 		activate();
 		new PushButton("Add").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Create new global element..."));
+		new WaitUntil(new ShellIsAvailable("Create new global element..."));
 		new DefaultShell("Create new global element...");
 		new DefaultTreeItem(new String[] { TYPE, "Endpoint" }).select();
 		new PushButton("OK").click();
@@ -110,7 +110,7 @@ public class ConfigurationsEditor extends DefaultEditor {
 		log.debug("Trying to create new Global Data Format with title - " + title + " and Data Format is - " + format);
 		activate();
 		new PushButton("Add").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Create new global element..."));
+		new WaitUntil(new ShellIsAvailable("Create new global element..."));
 		new DefaultShell("Create new global element...");
 		new DefaultTreeItem(new String[] { TYPE, "Data Format" }).select();
 		new PushButton("OK").click();

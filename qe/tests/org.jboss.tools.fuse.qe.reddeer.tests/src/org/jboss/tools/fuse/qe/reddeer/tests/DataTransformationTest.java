@@ -13,21 +13,21 @@ package org.jboss.tools.fuse.qe.reddeer.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.jdt.ui.junit.JUnitHasFinished;
-import org.jboss.reddeer.eclipse.jdt.ui.junit.JUnitView;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ShellMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.table.DefaultTableItem;
-import org.jboss.reddeer.workbench.impl.editor.TextEditor;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.condition.JUnitHasFinished;
+import org.eclipse.reddeer.eclipse.jdt.junit.ui.TestRunnerViewPart;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.table.DefaultTableItem;
+import org.eclipse.reddeer.workbench.impl.editor.TextEditor;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.JiraIssue;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
@@ -117,7 +117,7 @@ public class DataTransformationTest extends DefaultTest {
 		NewFuseTransformationTestWizard test = new NewFuseTransformationTestWizard();
 		test.open();
 		try {
-			new WaitUntil(new ShellWithTextIsAvailable("New Fuse Transformation Test"));
+			new WaitUntil(new ShellIsAvailable("New Fuse Transformation Test"));
 		} catch (WaitTimeoutExpiredException e) {
 			fail("'New Fuse Transformation Test' wizard is not opened!");
 		}
@@ -126,7 +126,7 @@ public class DataTransformationTest extends DefaultTest {
 		try {
 			test.finish();
 		} catch (WaitTimeoutExpiredException e) {
-			if (new ShellWithTextIsAvailable("New Fuse Transformation Test").test()) {
+			if (new ShellIsAvailable("New Fuse Transformation Test").test()) {
 				throw new JiraIssue("FUSETOOLS-2398");
 			}
 		}
@@ -134,14 +134,14 @@ public class DataTransformationTest extends DefaultTest {
 		javaEditor.insertLine(25,
 				"startEndpoint.sendBodyAndHeader(readFile(\"src/data/abc-order.xml\"), \"approvalID\", \"AUTO_OK\");");
 		javaEditor.save();
-		new ShellMenu("Run", "Run").select();
-		new WaitUntil(new ShellWithTextIsAvailable("Run As"));
+		new ShellMenuItem(new WorkbenchShell(), "Run", "Run").select();
+		new WaitUntil(new ShellIsAvailable("Run As"));
 		new DefaultShell("Run As");
 		new DefaultTableItem("JUnit Test").select();
 		new PushButton("OK").click();
 		new WaitUntil(new JUnitHasFinished(), TimePeriod.getCustom(20));
 		new WorkbenchShell();
-		assertEquals("Result of JUnit test is wrong", "1/1", new JUnitView().getRunStatus());
+		assertEquals("Result of JUnit test is wrong", "1/1", new TestRunnerViewPart().getRunStatus());
 		new WaitUntil(new ConsoleHasText(
 				"{\"custId\":\"ACME-123\",\"priority\":\"GOLD\",\"orderId\":\"ORDER1\",\"origin\":\"ORIGIN\",\"approvalCode\":\"AUTO_OK\",\"lineItems\":[{\"itemId\":\"PICKLE\",\"amount\":1000,\"cost\":2.25},{\"itemId\":\"BANANA\",\"amount\":400,\"cost\":1.25}]}"));
 	}

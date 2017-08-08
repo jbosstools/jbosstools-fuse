@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.editor;
 
-import org.jboss.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 
 /**
  * Represents 'Source' tab of the Camel Route Editor

@@ -20,7 +20,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
-import org.jboss.reddeer.gef.finder.FigureFinder;
+import org.eclipse.reddeer.gef.finder.FigureFinder;
 
 /**
  * Matches edit part which contains {@link org.eclipse.draw2d.Label} or {@link org.eclipse.draw2d.text.TextFlow} with a

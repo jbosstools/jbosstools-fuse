@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests.suite;
 
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.qe.reddeer.tests.DataTransformationDeploymentTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DataTransformationTest;
 import org.junit.runner.RunWith;

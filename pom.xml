@@ -101,6 +101,20 @@
 			<url>${jbosstools-central-site}</url>
 		</repository>
 
+		<!-- Remove it once RedDeer 2.0.0 is on targetplatform -->
+		<repository>
+			<id>reddeer-snapshots</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/reddeer/milestones/2.0.0.Beta/</url>
+		</repository>
+
+		<!-- Remove it once https://github.com/eclipse/reddeer/pull/1803 is merged -->
+		<repository>
+			<id>orbit-oxygen</id>
+			<layout>p2</layout>
+			<url>http://tooling.fuse-qe.eng.rdu2.redhat.com/p2/download.jboss.org/jbosstools/updates/requirements/orbit/S20170516192513/</url>
+		</repository>
+
 		<repository>
 			<id>asf.snapshot.repo</id>
 			<name>ASF SNAPSHOT Repository</name>

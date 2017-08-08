@@ -12,13 +12,13 @@ package org.jboss.tools.fuse.qe.reddeer.wizard;
 
 import java.util.List;
 
-import org.jboss.reddeer.jface.wizard.WizardDialog;
-import org.jboss.reddeer.swt.impl.button.RadioButton;
-import org.jboss.reddeer.swt.impl.combo.DefaultCombo;
-import org.jboss.reddeer.swt.impl.group.DefaultGroup;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.jface.wizard.WizardDialog;
+import org.eclipse.reddeer.swt.impl.button.RadioButton;
+import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.group.DefaultGroup;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 
 /**
  * Server Runtime Wizard
@@ -29,6 +29,10 @@ import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
 public class ServerRuntimeWizard extends WizardDialog {
 
 	public static final String TITLE = "New Server Runtime Environment";
+	
+	public ServerRuntimeWizard() {
+		super(TITLE);
+	}
 
 	public ServerRuntimeWizard activate() {
 		new DefaultShell(TITLE).setFocus();
