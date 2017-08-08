@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -61,6 +63,7 @@ import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -69,6 +72,10 @@ import org.w3c.dom.Node;
  */
 public class BeanConfigUtil {
 
+	private static final String XMLNAMESPACE = "xmlns"; //$NON-NLS-1$
+	private static final String BLUEPRINT_NS_URI = "http://www.osgi.org/xmlns/blueprint/v1.0.0"; //$NON-NLS-1$
+	private static final String SPRING_NS_URI = "http://www.springframework.org/schema/beans"; //$NON-NLS-1$
+	
 	/*
 	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
 	 */
@@ -525,10 +532,50 @@ public class BeanConfigUtil {
 			xmlElement.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		}
 	}
+
+	private void getNSPrefixes(Node rootNode, String namespaceUri, List<String> prefixes) {
+		NamedNodeMap atts = rootNode.getAttributes();
+		for (int i = 0; i < atts.getLength(); i++) {
+			Node node = atts.item(i);
+			String name = node.getNodeName();
+			if (namespaceUri.equals(node.getNodeValue())
+					&& (name != null && (XMLNAMESPACE.equals(name) || name.startsWith(XMLNAMESPACE + ":")))) { //$NON-NLS-1$
+				if (name.startsWith(XMLNAMESPACE + ":")) { //$NON-NLS-1$
+					String woPrefix = name.substring(name.indexOf(':') + 1);
+					prefixes.add(woPrefix);
+				} else {
+					prefixes.add(node.getPrefix());
+				}
+			}
+		}
+	}
 	
+	private String getNSPrefixForURI(Node rootNode, String namespaceUri) {
+		List<String> prefixes = new ArrayList<String>();
+		getNSPrefixes(rootNode, namespaceUri, prefixes);
+		if (!prefixes.isEmpty()) {
+			return prefixes.get(0);
+		}
+		return null;
+	}
+	
+	private String getBeanPrefix(Node rootNode) {
+		String blueprintPrefix = getNSPrefixForURI(rootNode, BLUEPRINT_NS_URI);
+		if (blueprintPrefix != null) {
+			return blueprintPrefix;
+		}
+		String springPrefix = getNSPrefixForURI(rootNode, SPRING_NS_URI);
+		if (springPrefix != null) {
+			return springPrefix;
+		}
+		return null;
+	}
+
 	public Element createBeanNode(final CamelFile camelFile, String id, String className) {
 		// get NS prefix from parent document, not route container node
-		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getPrefix();
+		final String prefixNS = 
+				getBeanPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+//		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getPrefix();
 		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
 		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
 		if (!Strings.isBlank(className)) {
