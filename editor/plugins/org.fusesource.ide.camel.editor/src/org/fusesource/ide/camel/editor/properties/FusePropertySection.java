@@ -659,7 +659,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				initialTextValue = p.getDefaultValue();
 			}
 			CCombo txtField = getWidgetFactory().createCCombo(parent, SWT.DROP_DOWN | SWT.LEFT | SWT.READ_ONLY);
-			txtField.setItems(CamelComponentUtils.getChoices(p));
+			txtField.setItems(CamelComponentUtils.getChoicesWithExtraEmptyEntry(p));
 			txtField.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

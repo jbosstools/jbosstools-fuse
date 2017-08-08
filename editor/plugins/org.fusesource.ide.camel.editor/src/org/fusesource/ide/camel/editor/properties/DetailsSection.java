@@ -142,7 +142,7 @@ public class DetailsSection extends FusePropertySection {
                 CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
-                choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
+                choiceCombo.setItems(CamelComponentUtils.getChoicesWithExtraEmptyEntry(prop));
                 String value = (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
                 for (int i=0; i < choiceCombo.getItems().length; i++) {
                     if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {

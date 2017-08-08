@@ -158,7 +158,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 				CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
 				toolkit.adapt(choiceCombo, true, true);
 				choiceCombo.setEditable(false);
-				choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
+				choiceCombo.setItems(CamelComponentUtils.getChoicesWithExtraEmptyEntry(prop));
 				String selectedValue = PropertiesUtils.getPropertyFromUri(selectedEP, prop, component);
 				for (int i=0; i < choiceCombo.getItems().length; i++) {
 					if (selectedValue != null && choiceCombo.getItem(i).equalsIgnoreCase(selectedValue)) {
