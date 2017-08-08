@@ -279,6 +279,7 @@ public class DetailsSection extends FusePropertySection {
             // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+            	deactivateMouseWheel(choiceCombo);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -336,6 +337,7 @@ public class DetailsSection extends FusePropertySection {
              // DATAFORMAT PROPERTIES
             } else if (CamelComponentUtils.isDataFormatProperty(prop)) {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+            	deactivateMouseWheel(choiceCombo);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -460,6 +462,11 @@ public class DetailsSection extends FusePropertySection {
         }
         page.layout();
     }
+
+	protected void deactivateMouseWheel(CCombo choiceCombo) {
+		choiceCombo.addListener(SWT.MouseVerticalWheel, event -> event.doit = false);
+		choiceCombo.addListener(SWT.MouseWheel, event -> event.doit = false);
+	}
 
 	boolean shouldHidePropertyFromGroup(final String group, Parameter p, String currentPropertyGroup) {
 		return isNotMatchingGroup(group, currentPropertyGroup)
