@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.view;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 
 /**
  * Performs operations with the Fuse JMX Navigator View
@@ -33,7 +33,7 @@ public class FuseJMXNavigator extends JMXNavigator {
 		activate();
 		try {
 			getNode(path).select();
-			new ContextMenu("Suspend Camel Context").select();
+			new ContextMenuItem("Suspend Camel Context").select();
 		} catch (Exception e) {
 			log.info("Camel Context was not suspended!");
 			return false;
@@ -52,7 +52,7 @@ public class FuseJMXNavigator extends JMXNavigator {
 		activate();
 		try {
 			getNode(path).select();
-			new ContextMenu("Resume Camel Context").select();
+			new ContextMenuItem("Resume Camel Context").select();
 		} catch (Exception e) {
 			log.info("Camel Context was not resumed!");
 			return false;

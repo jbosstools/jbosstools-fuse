@@ -16,8 +16,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.junit.execution.TestMethodShouldRun;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.junit.execution.TestMethodShouldRun;
 import org.jboss.tools.fuse.qe.reddeer.JiraClient;
 import org.junit.runners.model.FrameworkMethod;
 

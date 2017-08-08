@@ -16,43 +16,44 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.reddeer.common.exception.RedDeerException;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.util.Display;
+import org.eclipse.reddeer.common.util.ResultRunnable;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.eclipse.ui.views.properties.PropertySheet;
+import org.eclipse.reddeer.gef.api.Palette;
+import org.eclipse.reddeer.gef.editor.GEFEditor;
+import org.eclipse.reddeer.gef.handler.ViewerHandler;
+import org.eclipse.reddeer.gef.view.PaletteView;
+import org.eclipse.reddeer.swt.api.CCombo;
+import org.eclipse.reddeer.swt.api.Combo;
+import org.eclipse.reddeer.swt.api.Text;
+import org.eclipse.reddeer.swt.api.Widget;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.exception.SWTLayerException;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.ccombo.LabeledCCombo;
+import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.combo.LabeledCombo;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabItem;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.core.util.Display;
-import org.jboss.reddeer.core.util.ResultRunnable;
-import org.jboss.reddeer.eclipse.ui.views.properties.PropertiesView;
-import org.jboss.reddeer.gef.api.Palette;
-import org.jboss.reddeer.gef.editor.GEFEditor;
-import org.jboss.reddeer.gef.handler.ViewerHandler;
-import org.jboss.reddeer.gef.view.PaletteView;
-import org.jboss.reddeer.swt.api.CCombo;
-import org.jboss.reddeer.swt.api.Combo;
-import org.jboss.reddeer.swt.api.Text;
-import org.jboss.reddeer.swt.exception.SWTLayerException;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.combo.DefaultCombo;
-import org.jboss.reddeer.swt.impl.ctab.DefaultCTabItem;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.menu.ShellMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.widgets.Widget;
 import org.jboss.tools.fuse.qe.reddeer.MouseAWTManager;
 import org.jboss.tools.fuse.qe.reddeer.XPathEvaluator;
 import org.jboss.tools.fuse.qe.reddeer.component.AbstractURICamelComponent;
 import org.jboss.tools.fuse.qe.reddeer.component.CamelComponent;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledCComboExt;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledComboExt;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledTextExt;
 
 /**
  * Manipulates with Camel Editor
@@ -72,7 +73,7 @@ public class CamelEditor extends GEFEditor {
 	public void save() {
 		activate();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		new ShellMenu("File", "Save").select();
+		new ShellMenuItem(new WorkbenchShell(), "File", "Save").select();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 	}
 
@@ -220,7 +221,7 @@ public class CamelEditor extends GEFEditor {
 
 		log.debug("Setting a new breakpoint on component: " + label);
 		doOperation(label, "Set Breakpoint");
-		if (new ShellWithTextIsAvailable("Please confirm...").test()) {
+		if (new ShellIsAvailable("Please confirm...").test()) {
 			new DefaultShell("Please confirm...");
 			new PushButton("OK").click();
 		}
@@ -244,7 +245,7 @@ public class CamelEditor extends GEFEditor {
 		new DefaultCombo().setSelection(language);
 		new DefaultStyledText().setText(condition);
 		new PushButton("OK").click();
-		if (new ShellWithTextIsAvailable("Please confirm...").test()) {
+		if (new ShellIsAvailable("Please confirm...").test()) {
 			new DefaultShell("Please confirm...");
 			new PushButton("OK").click();
 		}
@@ -318,7 +319,7 @@ public class CamelEditor extends GEFEditor {
 		new GEFEditor().click(5, 5);
 		new CamelComponentEditPart(label).select();
 		try {
-			new ContextMenu("Set Breakpoint");
+			new ContextMenuItem("Set Breakpoint");
 		} catch (SWTLayerException | CoreLayerException ex) {
 			return true;
 		}
@@ -341,7 +342,7 @@ public class CamelEditor extends GEFEditor {
 		new GEFEditor().click(5, 5);
 		new CamelComponentEditPart(label).select();
 		try {
-			new ContextMenu("Enable Breakpoint");
+			new ContextMenuItem("Enable Breakpoint");
 		} catch (SWTLayerException | CoreLayerException ex) {
 			return true;
 		}
@@ -363,7 +364,7 @@ public class CamelEditor extends GEFEditor {
 		new GEFEditor().click(5, 5);
 		new CamelComponentEditPart(label).select();
 		try {
-			new ContextMenu(operation).select();
+			new ContextMenuItem(operation).select();
 		} catch (SWTLayerException | CoreLayerException ex) {
 			log.error("Given operation is not present in the context menu of the component: " + label);
 		}
@@ -380,7 +381,7 @@ public class CamelEditor extends GEFEditor {
 	public void setId(String label, String id) {
 
 		log.debug("Setting id '" + id + "' to the component: " + label);
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.open();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		selectEditPart(label);
@@ -419,7 +420,7 @@ public class CamelEditor extends GEFEditor {
 		AbstractWait.sleep(TimePeriod.SHORT);
 		try {
 			new CamelComponentEditPart(name).select();
-		} catch (CoreLayerException ex) {
+		} catch (RedDeerException ex) {
 			return false;
 		}
 		return true;
@@ -449,16 +450,16 @@ public class CamelEditor extends GEFEditor {
 	 */
 	public void setProperty(Class<? extends Widget> type, String name, String value) {
 		log.debug("Setting '" + value + "' as the property '" + name + "' of selelected component in the Camel Editor");
-		PropertiesView prop = new PropertiesView();
+		PropertySheet prop = new PropertySheet();
 		prop.open();
 		prop.activate();
 		prop.selectTab("Details");
 		if (type.equals(Text.class)) {
-			new LabeledTextExt(name).setText(value);
+			new LabeledText(name).setText(value);
 		} else if (type.equals(Combo.class)) {
-			new LabeledComboExt(name).setSelection(value);
+			new LabeledCombo(name).setSelection(value);
 		} else if (type.equals(CCombo.class)) {
-			new LabeledCComboExt(name).setSelection(value);
+			new LabeledCCombo(name).setSelection(value);
 		} else {
 			throw new UnsupportedOperationException("Property of type '" + type + "' is not supported");
 		}
@@ -479,12 +480,12 @@ public class CamelEditor extends GEFEditor {
 	public void setProperty(String component, String name, String value) {
 
 		log.debug("Setting '" + value + "' as the property '" + name + "' of selelected component in the Camel Editor");
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.open();
 		selectEditPart(component);
 		properties.activate();
 		properties.selectTab("Details");
-		new LabeledTextExt(name).setText(value);
+		new LabeledText(name).setText(value);
 		activate();
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
@@ -503,12 +504,12 @@ public class CamelEditor extends GEFEditor {
 
 		log.debug("Setting '" + value + "' as the advanced property '" + name
 				+ "' of selelected component in the Camel Editor");
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.open();
 		selectEditPart(component);
 		properties.activate();
 		properties.selectTab("Advanced");
-		new LabeledTextExt(name).setText(value);
+		new LabeledText(name).setText(value);
 		activate();
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
@@ -527,13 +528,13 @@ public class CamelEditor extends GEFEditor {
 
 		log.debug("Setting '" + value + "' as the advanced property '" + name
 				+ "' of selelected component in the Camel Editor");
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.open();
 		activate();
 		new CamelComponentEditPart(component).select();
 		properties.activate();
 		properties.selectTab("Advanced");
-		new LabeledTextExt(name).setText(value);
+		new LabeledText(name).setText(value);
 		component.setProperty(name, value);
 		activate();
 		AbstractWait.sleep(TimePeriod.SHORT);
@@ -549,8 +550,8 @@ public class CamelEditor extends GEFEditor {
 	public void setUriProperty(String value) {
 
 		log.debug("Setting '" + value + "' as the property 'Uri' of selelected component in the Camel Editor");
-		new PropertiesView().open();
-		new PropertiesView().selectTab("Generic");
+		new PropertySheet().open();
+		new PropertySheet().selectTab("Generic");
 		new DefaultCombo(0).setText(value);
 		activate();
 		AbstractWait.sleep(TimePeriod.SHORT);
@@ -570,7 +571,7 @@ public class CamelEditor extends GEFEditor {
 
 		log.debug("Setting '" + value + "' as the property number '" + position
 				+ "' of selelected component in the Camel Editor");
-		PropertiesView properties = new PropertiesView();
+		PropertySheet properties = new PropertySheet();
 		properties.open();
 		selectEditPart(component);
 		properties.activate();
@@ -639,7 +640,7 @@ public class CamelEditor extends GEFEditor {
 	public void layoutDiagram(String name) {
 
 		new CamelComponentEditPart(name).select();
-		new ContextMenu("Layout Diagram").select();
+		new ContextMenuItem("Layout Diagram").select();
 	}
 
 	/**

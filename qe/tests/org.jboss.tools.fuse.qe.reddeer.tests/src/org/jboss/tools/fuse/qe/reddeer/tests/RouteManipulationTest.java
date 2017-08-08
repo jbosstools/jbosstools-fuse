@@ -18,20 +18,21 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.matcher.RegexMatcher;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.api.Shell;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.workbench.impl.editor.DefaultEditor;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.api.Shell;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.JiraIssue;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.editor.CamelEditor;
@@ -40,7 +41,6 @@ import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.EditorManipulator;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.TracingDragAndDropManager;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.qe.reddeer.view.MessagesView;
 import org.junit.After;
@@ -66,7 +66,7 @@ public class RouteManipulationTest extends DefaultTest {
 
 		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).version(CAMEL_2_17_0_REDHAT_630254)
 				.create();
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 	}
 
 	/**
@@ -123,16 +123,16 @@ public class RouteManipulationTest extends DefaultTest {
 		Shell workbenchShell = new WorkbenchShell();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
 		new WaitUntil(new ConsoleHasText("cbr-route started and consuming"), TimePeriod.getCustom(300));
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		workbenchShell.setFocus();
 
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.getNode("Local Camel Context", "Camel");
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		assertNotNull(jmx.getNode("Local Camel Context", "Camel", "cbr-example-context", "Routes", "cbr-route",
 				"file:src/main/data?noop=true", "Log _log1", "Choice", "Log _log5"));
 		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context").select();
-		new ContextMenu("Edit Routes").select();
+		new ContextMenuItem("Edit Routes").select();
 		editor = new CamelEditor(new DefaultEditor(new RegexMatcher("<connected>Remote CamelContext:.*")).getTitle());
 		assertTrue(editor.isComponentAvailable("Log _log1"));
 		editor.selectEditPart("Route cbr-route");
@@ -194,17 +194,17 @@ public class RouteManipulationTest extends DefaultTest {
 		Shell workbenchShell = new WorkbenchShell();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
 		new WaitUntil(new ConsoleHasText("cbr-route started and consuming"), TimePeriod.getCustom(300));
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		workbenchShell.setFocus();
 
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.getNode("Local Camel Context", "Camel");
-		AbstractWait.sleep(TimePeriod.NORMAL);
+		AbstractWait.sleep(TimePeriod.DEFAULT);
 		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context").select();
-		new ContextMenu("Start Tracing").select();
+		new ContextMenuItem("Start Tracing").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context").select();
-		new ContextMenu("Stop Tracing Context");
+		new ContextMenuItem("Stop Tracing Context");
 
 		String[] from = { "camel-spring", "src", "main", "data", "order1.xml" };
 		String[] from2 = { "camel-spring", "src", "main", "data", "order2.xml" };

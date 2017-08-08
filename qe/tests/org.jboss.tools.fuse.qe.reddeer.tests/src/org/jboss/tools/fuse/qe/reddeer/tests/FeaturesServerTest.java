@@ -14,24 +14,24 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.core.handler.ShellHandler;
-import org.jboss.reddeer.eclipse.wst.server.ui.view.ServersView;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServersView2;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.FileUtils;
 import org.jboss.tools.fuse.qe.reddeer.condition.RadioButtonIsAvailable;
 import org.jboss.tools.fuse.qe.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.qe.reddeer.preference.FuseServerRuntimePreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.preference.JBossRuntimeDetection;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledTextExt;
 import org.jboss.tools.fuse.qe.reddeer.wizard.DownloadRuntimesWizard;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class FeaturesServerTest extends DefaultTest {
 		// clean previous runtime installations
 		FileUtils.deleteDir(new File(getPath() + "target/temp_install/jboss-fuse-6.3.0.redhat-187"));
 		// close all shells
-		ShellHandler.getInstance().closeAllNonWorbenchShells();
+		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class FeaturesServerTest extends DefaultTest {
 	@Test
 	public void testFuseJbossRuntimeDetection() {
 		downloadRuntime("JBoss Fuse 6.3.0");
-		assertTrue("Server was not created in view", new ServersView().getServers().size() == 1);
+		assertTrue("Server was not created in view", new ServersView2().getServers().size() == 1);
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
 		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
 		dialog.open();
@@ -100,17 +100,17 @@ public class FeaturesServerTest extends DefaultTest {
 		 * temporary solution ... credentials should not be in public repository -> use system parameters or something
 		 * else solution
 		 */
-		new LabeledTextExt("Username:").setText("aqtwrdnr");
-		new LabeledTextExt("Password:").setText("aqtwrdnr");
+		new LabeledText("Username:").setText("aqtwrdnr");
+		new LabeledText("Password:").setText("aqtwrdnr");
 		new PushButton("OK").click();
 		runtimeWiz.next();
-		new WaitUntil(new ShellWithTextIsAvailable("Download Runtimes"));
+		new WaitUntil(new ShellIsAvailable("Download Runtimes"));
 		new WaitUntil(new RadioButtonIsAvailable("I accept the terms of the license agreement"));
 		runtimeWiz.next();
 		runtimeWiz.setInstallFolder(getPath() + "target/temp_install");
 		runtimeWiz.setDownloadFolder(getPath() + "target/temp");
 		runtimeWiz.finish(name);
-		new WaitWhile(new ShellWithTextIsAvailable("Download 'JBoss Fuse 6.3.0'"), TimePeriod.getCustom(900));
+		new WaitWhile(new ShellIsAvailable("Download 'JBoss Fuse 6.3.0'"), TimePeriod.getCustom(900));
 		dialog.ok();
 	}
 

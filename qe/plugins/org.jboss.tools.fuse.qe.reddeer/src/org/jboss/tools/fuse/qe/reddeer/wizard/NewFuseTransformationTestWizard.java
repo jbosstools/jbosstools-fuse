@@ -10,24 +10,24 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.wizard;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.jface.wizard.NewWizardDialog;
-import org.jboss.reddeer.swt.impl.combo.DefaultCombo;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
+import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 
 /**
  * Represents 'New Fuse Transformation Test Wizard'
  * 
  * @author tsedmik
  */
-public class NewFuseTransformationTestWizard extends NewWizardDialog {
+public class NewFuseTransformationTestWizard extends NewMenuWizard {
 
 	private Logger log = Logger.getLogger(NewFuseTransformationTestWizard.class);
 
 	public NewFuseTransformationTestWizard() {
-		super("JBoss Fuse", "Fuse Transformation Test");
+		super("Fuse Transformation Test", "JBoss Fuse", "Fuse Transformation Test");
 	}
 
 	public void selectTransformationID(String name) {

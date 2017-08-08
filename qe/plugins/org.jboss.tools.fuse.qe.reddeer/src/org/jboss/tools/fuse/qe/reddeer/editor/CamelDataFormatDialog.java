@@ -12,14 +12,14 @@ package org.jboss.tools.fuse.qe.reddeer.editor;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.condition.ShellWithTextIsAvailable;
-import org.jboss.reddeer.jface.wizard.WizardDialog;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.combo.LabeledCombo;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.jface.wizard.WizardDialog;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.combo.LabeledCombo;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 
 /**
  * Manipulates with dialog (Wizard) for adding Global Camel Data Formats
@@ -31,7 +31,7 @@ public class CamelDataFormatDialog extends WizardDialog {
 	private static final String TYPE = "JBoss Fuse";
 	
 	public void activate() {
-		new WaitUntil(new ShellWithTextIsAvailable("Create a new Data Format..."));
+		new WaitUntil(new ShellIsAvailable("Create a new Data Format..."));
 		new DefaultShell("Create a new Data Format...");		
 	}
 	
@@ -77,11 +77,11 @@ public class CamelDataFormatDialog extends WizardDialog {
 
 		CamelEditor.switchTab("Configurations");
 		new PushButton("Add").click();
-		new WaitUntil(new ShellWithTextIsAvailable("Create new global element..."));
+		new WaitUntil(new ShellIsAvailable("Create new global element..."));
 		new DefaultShell("Create new global element...");
 		new DefaultTreeItem(new String[] { TYPE, "Data Format" }).select();
 		new PushButton("OK").click();		
-		new WaitUntil(new ShellWithTextIsAvailable("Create a new Data Format..."));
+		new WaitUntil(new ShellIsAvailable("Create a new Data Format..."));
 		new DefaultShell("Create a new Data Format...");				
 		CamelDataFormatDialog formatDialog = new CamelDataFormatDialog();
 		formatDialog.activate();			

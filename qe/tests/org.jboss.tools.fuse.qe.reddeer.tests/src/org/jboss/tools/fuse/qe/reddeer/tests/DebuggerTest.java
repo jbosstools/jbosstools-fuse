@@ -17,23 +17,23 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.eclipse.condition.ConsoleHasText;
-import org.jboss.reddeer.eclipse.debug.core.Breakpoint;
-import org.jboss.reddeer.eclipse.debug.core.BreakpointsView;
-import org.jboss.reddeer.eclipse.debug.core.IsSuspended;
-import org.jboss.reddeer.eclipse.debug.core.ResumeButton;
-import org.jboss.reddeer.eclipse.debug.core.TerminateButton;
-import org.jboss.reddeer.eclipse.debug.core.VariablesView;
-import org.jboss.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
-import org.jboss.reddeer.eclipse.ui.views.log.LogMessage;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.swt.impl.styledtext.DefaultStyledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
+import org.eclipse.reddeer.eclipse.condition.LaunchIsSuspended;
+import org.eclipse.reddeer.eclipse.debug.ui.views.breakpoints.Breakpoint;
+import org.eclipse.reddeer.eclipse.debug.ui.views.breakpoints.BreakpointsView;
+import org.eclipse.reddeer.eclipse.debug.ui.views.launch.ResumeButton;
+import org.eclipse.reddeer.eclipse.debug.ui.views.launch.TerminateButton;
+import org.eclipse.reddeer.eclipse.debug.ui.views.variables.VariablesView;
+import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.jboss.tools.fuse.qe.reddeer.JiraIssue;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
@@ -188,7 +188,7 @@ public class DebuggerTest extends DefaultTest {
 		new CamelProject(PROJECT_NAME).debugCamelContextWithoutTests(CAMEL_CONTEXT);
 
 		// should stop on the 'choice1' node
-		new WaitUntil(new IsSuspended(), TimePeriod.NORMAL);
+		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
 		assertTrue(new ConsoleHasText("Enabling debugger").test());
 		VariablesView variables = new VariablesView();
 		AbstractWait.sleep(TimePeriod.getCustom(5));
@@ -205,14 +205,14 @@ public class DebuggerTest extends DefaultTest {
 		ResumeButton resume = new ResumeButton();
 		assertTrue(resume.isEnabled());
 		resume.click();
-		new WaitUntil(new IsSuspended(), TimePeriod.NORMAL);
+		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
 		AbstractWait.sleep(TimePeriod.getCustom(2));
 		assertEquals(LOG_ID, variables.getValue("Endpoint"));
 
 		// step over then should stop on the 'to1' endpoint
 		assertTrue(resume.isEnabled());
 		new StepOverButton().select();
-		new WaitUntil(new IsSuspended(), TimePeriod.NORMAL);
+		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
 		assertTrue(new ConsoleHasText("Sending order order2.xml to the UK").test());
 		assertTrue(resume.isEnabled());
 		AbstractWait.sleep(TimePeriod.getCustom(5));
@@ -225,7 +225,7 @@ public class DebuggerTest extends DefaultTest {
 		resume.click();
 
 		// all breakpoints should be processed
-		new WaitUntil(new IsRunning(), TimePeriod.NORMAL);
+		new WaitUntil(new IsRunning(), TimePeriod.DEFAULT);
 		new TerminateButton().click();
 		testIssue2306();
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
@@ -266,7 +266,7 @@ public class DebuggerTest extends DefaultTest {
 		editor.setConditionalBreakpoint(LOG, "simple", "${in.header.CamelFileName} == 'order1.xml'");
 		ResumeButton resume = new ResumeButton();
 		new CamelProject(PROJECT_NAME).debugCamelContextWithoutTests(CAMEL_CONTEXT);
-		new WaitUntil(new IsSuspended(), TimePeriod.NORMAL);
+		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
 
 		// should stop on '_choice1' node
 		VariablesView variables = new VariablesView();
@@ -275,7 +275,7 @@ public class DebuggerTest extends DefaultTest {
 
 		// all breakpoint should be processed
 		resume.click();
-		new WaitUntil(new IsRunning(), TimePeriod.NORMAL);
+		new WaitUntil(new IsRunning(), TimePeriod.DEFAULT);
 		assertTrue(new ConsoleHasText("Receiving order order1.xml").test());
 		assertTrue(new ConsoleHasText("Receiving order order2.xml").test());
 		assertTrue(new ConsoleHasText("Receiving order order3.xml").test());

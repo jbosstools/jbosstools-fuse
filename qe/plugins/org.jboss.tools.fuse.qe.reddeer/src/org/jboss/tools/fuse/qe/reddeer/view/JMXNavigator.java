@@ -12,15 +12,16 @@ package org.jboss.tools.fuse.qe.reddeer.view;
 
 import java.util.List;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.core.exception.CoreLayerException;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
-import org.jboss.reddeer.workbench.impl.view.WorkbenchView;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.core.exception.CoreLayerException;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenu;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.impl.view.WorkbenchView;
 
 /**
  * Performs operations with JMX Navigator View
@@ -75,7 +76,7 @@ public class JMXNavigator extends WorkbenchView {
 				item.select();
 				AbstractWait.sleep(TimePeriod.getCustom(2));
 				try {
-					new ContextMenu(CONNECT_CONTEXT_MENU).select();
+					new ContextMenuItem(CONNECT_CONTEXT_MENU).select();
 				} catch (CoreLayerException ex) {
 					log.info("Already connected to '" + name + "'.");
 				}
@@ -151,14 +152,15 @@ public class JMXNavigator extends WorkbenchView {
 
 	public void refreshNode(String... path) {
 		getNode(path);
-		new ContextMenu("Refresh").select();
+		new ContextMenuItem("Refresh").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
 	public void refreshLocalProcesses() {
 		activate();
-		new DefaultTreeItem("Local Processes").select();
-		new ContextMenu("Refresh").select();
+		TreeItem localProcess = new DefaultTreeItem("Local Processes");
+		localProcess.select();
+		new ContextMenu(localProcess).getItem("Refresh").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 

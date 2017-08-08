@@ -17,22 +17,22 @@ import static org.jboss.tools.fuse.qe.reddeer.ProjectType.SPRING;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitWhile;
-import org.jboss.reddeer.core.condition.JobIsRunning;
-import org.jboss.reddeer.direct.preferences.PreferencesUtil;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.eclipse.ui.wizards.datatransfer.ExternalProjectImportWizardDialog;
-import org.jboss.reddeer.eclipse.ui.wizards.datatransfer.WizardProjectsImportPage;
-import org.jboss.reddeer.eclipse.utils.DeleteUtils;
-import org.jboss.reddeer.swt.api.Shell;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
-import org.jboss.reddeer.swt.impl.button.FinishButton;
-import org.jboss.reddeer.swt.impl.button.PushButton;
-import org.jboss.reddeer.swt.impl.menu.ContextMenu;
-import org.jboss.reddeer.swt.impl.shell.DefaultShell;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitWhile;
+import org.eclipse.reddeer.direct.preferences.PreferencesUtil;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.ExternalProjectImportWizardDialog;
+import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.WizardProjectsImportPage;
+import org.eclipse.reddeer.eclipse.utils.DeleteUtils;
+import org.eclipse.reddeer.swt.api.Shell;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.swt.impl.button.FinishButton;
+import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
 import org.jboss.tools.fuse.qe.reddeer.wizard.NewFuseIntegrationProjectWizard;
 
@@ -111,13 +111,13 @@ public class ProjectFactory {
 		explorer.activate();
 		if (explorer.getProjects().size() > 0) {
 			explorer.selectAllProjects();
-			new ContextMenu("Refresh").select();
+			new ContextMenuItem("Refresh").select();
 			new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 			AbstractWait.sleep(TimePeriod.SHORT);
 			new WorkbenchShell();
 			explorer.activate();
 			explorer.selectAllProjects();
-			new ContextMenu("Delete").select();
+			new ContextMenuItem("Delete").select();
 			Shell s = new DefaultShell("Delete Resources");
 			new CheckBox().toggle(true);
 			new PushButton("OK").click();
@@ -141,7 +141,7 @@ public class ProjectFactory {
 
 		ExternalProjectImportWizardDialog dialog = new ExternalProjectImportWizardDialog();
 		dialog.open();
-		WizardProjectsImportPage page = new WizardProjectsImportPage();
+		WizardProjectsImportPage page = new WizardProjectsImportPage(dialog);
 		page.copyProjectsIntoWorkspace(true);
 		page.setRootDirectory(path);
 		page.selectProjects(name);
@@ -149,7 +149,7 @@ public class ProjectFactory {
 
 		if (maven) {
 			new ProjectExplorer().selectProjects(name);
-			new ContextMenu("Configure", "Convert to Maven Project").select();
+			new ContextMenuItem("Configure", "Convert to Maven Project").select();
 			new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
 		}
 	}

@@ -15,9 +15,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jboss.reddeer.junit.requirement.CustomConfiguration;
-import org.jboss.reddeer.junit.requirement.Requirement;
-import org.jboss.tools.fuse.qe.reddeer.requirement.SAPRequirement.SAP;
+import org.eclipse.reddeer.junit.requirement.ConfigurableRequirement;
+import org.jboss.tools.fuse.qe.reddeer.requirement.SAPLibraryRequirement.SAPLibrary;
 
 /**
  * 
@@ -25,21 +24,15 @@ import org.jboss.tools.fuse.qe.reddeer.requirement.SAPRequirement.SAP;
  * 
  */
 
-public class SAPRequirement implements Requirement<SAP>, CustomConfiguration<SAPConfig> {
+public class SAPLibraryRequirement implements ConfigurableRequirement<SAPLibraryConfiguration, SAPLibrary> {
 
-	private SAPConfig config;
-	@SuppressWarnings("unused")
-	private SAP sap;
+	private SAPLibraryConfiguration config;
+	private SAPLibrary sap;
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
-	public @interface SAP {
+	public @interface SAPLibrary {
 
-	}
-
-	@Override
-	public boolean canFulfill() {
-		return true;
 	}
 
 	@Override
@@ -48,21 +41,27 @@ public class SAPRequirement implements Requirement<SAP>, CustomConfiguration<SAP
 	}
 
 	@Override
-	public void setDeclaration(SAP sap) {
+	public void setDeclaration(SAPLibrary sap) {
 		this.sap = sap;
 	}
 
 	@Override
-	public Class<SAPConfig> getConfigurationClass() {
-		return SAPConfig.class;
+	public SAPLibrary getDeclaration() {
+		return this.sap;
 	}
 
 	@Override
-	public void setConfiguration(SAPConfig config) {
+	public Class<SAPLibraryConfiguration> getConfigurationClass() {
+		return SAPLibraryConfiguration.class;
+	}
+
+	@Override
+	public void setConfiguration(SAPLibraryConfiguration config) {
 		this.config = config;
 	}
 
-	public SAPConfig getConfig() {
+	@Override
+	public SAPLibraryConfiguration getConfiguration() {
 		return this.config;
 	}
 

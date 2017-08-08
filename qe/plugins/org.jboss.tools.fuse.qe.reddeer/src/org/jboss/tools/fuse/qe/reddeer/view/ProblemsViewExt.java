@@ -12,9 +12,9 @@ package org.jboss.tools.fuse.qe.reddeer.view;
 
 import java.util.List;
 
-import org.jboss.reddeer.eclipse.ui.problems.ProblemsView;
-import org.jboss.reddeer.swt.api.TreeItem;
-import org.jboss.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
+import org.eclipse.reddeer.swt.api.TreeItem;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 
 public class ProblemsViewExt extends ProblemsView {
 

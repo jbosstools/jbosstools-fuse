@@ -12,9 +12,9 @@ package org.jboss.tools.fuse.qe.reddeer.utils;
 
 import java.io.IOException;
 
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.wait.AbstractWait;
-import org.jboss.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.AbstractWait;
+import org.eclipse.reddeer.common.wait.TimePeriod;
 
 import com.jcraft.jsch.JSchException;
 

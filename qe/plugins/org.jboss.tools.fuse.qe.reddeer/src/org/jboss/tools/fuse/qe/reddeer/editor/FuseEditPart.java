@@ -13,9 +13,9 @@ package org.jboss.tools.fuse.qe.reddeer.editor;
 import java.util.List;
 
 import org.hamcrest.Matcher;
-import org.jboss.reddeer.gef.handler.ViewerHandler;
-import org.jboss.reddeer.gef.lookup.ViewerLookup;
-import org.jboss.reddeer.graphiti.impl.graphitieditpart.AbstractGraphitiEditPart;
+import org.eclipse.reddeer.gef.handler.ViewerHandler;
+import org.eclipse.reddeer.gef.lookup.ViewerLookup;
+import org.eclipse.reddeer.graphiti.impl.graphitieditpart.AbstractGraphitiEditPart;
 
 /**
  * Abstract class for EditPart implementation in Camel Editor 

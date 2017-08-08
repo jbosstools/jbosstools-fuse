@@ -16,6 +16,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
+import org.eclipse.reddeer.common.util.Display;
+import org.eclipse.reddeer.eclipse.ui.views.properties.PropertySheet;
+import org.eclipse.reddeer.eclipse.ui.views.properties.TabbedPropertyList;
+import org.eclipse.reddeer.swt.impl.button.LabeledCheckBox;
+import org.eclipse.reddeer.swt.impl.ccombo.LabeledCCombo;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabFolder;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabItem;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -25,21 +34,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
-import org.jboss.reddeer.common.condition.AbstractWaitCondition;
-import org.jboss.reddeer.core.util.Display;
-import org.jboss.reddeer.eclipse.ui.views.properties.TabbedPropertyList;
-import org.jboss.reddeer.swt.impl.button.LabeledCheckBox;
-import org.jboss.reddeer.swt.impl.ccombo.LabeledCCombo;
-import org.jboss.reddeer.swt.impl.ctab.DefaultCTabFolder;
-import org.jboss.reddeer.swt.impl.ctab.DefaultCTabItem;
-import org.jboss.tools.fuse.qe.reddeer.ext.AbstractViewExt;
-import org.jboss.tools.fuse.qe.reddeer.widget.LabeledTextExt;
 
 /**
  * 
  * @author djelinek
  */
-public class FusePropertiesView extends AbstractViewExt {
+public class FusePropertiesView extends PropertySheet {
 
 	public enum PropertyType {
 
@@ -58,7 +58,7 @@ public class FusePropertiesView extends AbstractViewExt {
 
 	public FusePropertiesView() {
 
-		super("Properties");
+		super();
 	}
 
 	public String getProperty(PropertyType type, String label) {
@@ -66,7 +66,7 @@ public class FusePropertiesView extends AbstractViewExt {
 		activate();
 		switch (type) {
 		case TEXT:
-			return new LabeledTextExt(label).getText();
+			return new LabeledText(label).getText();
 		case COMBO:
 			return new LabeledCCombo(label).getSelection();
 		case CHECKBOX:
@@ -81,8 +81,8 @@ public class FusePropertiesView extends AbstractViewExt {
 		activate();
 		switch (type) {
 		case TEXT:
-			new LabeledTextExt(label).setText(value);
-			return new LabeledTextExt(label).getText();
+			new LabeledText(label).setText(value);
+			return new LabeledText(label).getText();
 		case COMBO:
 			List<String> list = new LabeledCCombo(label).getItems();
 			if (list.size() == 1)
@@ -107,13 +107,13 @@ public class FusePropertiesView extends AbstractViewExt {
 		activate();
 		switch (property) {
 		case URI:
-			new LabeledTextExt("Uri *").setText(value);
+			new LabeledText("Uri *").setText(value);
 			break;
 		case DESC:
-			new LabeledTextExt("Description").setText(value);
+			new LabeledText("Description").setText(value);
 			break;
 		case ID:
-			new LabeledTextExt("Id").setText(value);
+			new LabeledText("Id").setText(value);
 			break;
 		case PATTERN:
 			List<String> items = new LabeledCCombo("Pattern").getItems();
@@ -143,11 +143,11 @@ public class FusePropertiesView extends AbstractViewExt {
 		activate();
 		switch (property) {
 		case URI:
-			return new LabeledTextExt("Uri").getText();
+			return new LabeledText("Uri").getText();
 		case DESC:
-			return new LabeledTextExt("Description").getText();
+			return new LabeledText("Description").getText();
 		case ID:
-			new LabeledTextExt("Id").getText();
+			new LabeledText("Id").getText();
 		case PATTERN:
 			return new LabeledCCombo("Pattern").getSelection();
 		case REF:
@@ -175,7 +175,7 @@ public class FusePropertiesView extends AbstractViewExt {
 						new LabeledCCombo(((Label) label).getText()).setSelection(items.get(1));
 				} else if (property instanceof Text) {
 					activate();
-					new LabeledTextExt(((Label) label).getText()).setText(value);
+					new LabeledText(((Label) label).getText()).setText(value);
 				} else if (property instanceof Button) {
 					activate();
 					new LabeledCheckBox(((Label) label).getText()).click();
@@ -269,7 +269,7 @@ public class FusePropertiesView extends AbstractViewExt {
 		} catch (Exception ex) {
 			// probably not rendered yet
 		}
-		//new WaitUntil(new AnotherTabsRendered(old), TimePeriod.NORMAL, false);
+		//new WaitUntil(new AnotherTabsRendered(old), TimePeriod.DEFAULT, false);
 
 		if (old.contains(label))
 			new TabbedPropertyList().selectTab(label);

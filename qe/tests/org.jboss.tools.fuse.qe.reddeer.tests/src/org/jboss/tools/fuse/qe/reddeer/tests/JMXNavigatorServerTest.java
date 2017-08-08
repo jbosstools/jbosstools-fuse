@@ -10,24 +10,26 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
-import static org.jboss.reddeer.requirements.server.ServerReqState.RUNNING;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
 import static org.jboss.tools.fuse.qe.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.wait.TimePeriod;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.core.handler.ShellHandler;
-import org.jboss.reddeer.eclipse.jdt.ui.ProjectExplorer;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
-import org.jboss.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.jboss.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.jboss.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
+import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
+import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
+import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.qe.reddeer.LogGrapper;
 import org.jboss.tools.fuse.qe.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.qe.reddeer.ProjectType;
@@ -36,10 +38,10 @@ import org.jboss.tools.fuse.qe.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.qe.reddeer.preference.ConsolePreferencePage;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
-import org.jboss.tools.fuse.qe.reddeer.view.ErrorLogView;
 import org.jboss.tools.fuse.qe.reddeer.view.FuseJMXNavigator;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,7 +61,7 @@ import org.junit.runner.RunWith;
 @CleanWorkspace
 @OpenPerspective(FuseIntegrationPerspective.class)
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = Fuse, state = RUNNING))
+@Fuse(state = RUNNING)
 public class JMXNavigatorServerTest {
 
 	private static final String PROJECT_NAME = "cbr-blueprint";
@@ -69,6 +71,12 @@ public class JMXNavigatorServerTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverReq;
+		
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	}
+
 
 	/**
 	 * Prepares test environment
@@ -93,15 +101,15 @@ public class JMXNavigatorServerTest {
 		dialog.ok();
 
 		// Disable showing Error Log view after changes
-		ErrorLogView error = new ErrorLogView();
-		error.selectActivateOnNewEvents(false);
+		LogView error = new LogView();
+		error.setActivateOnNewEvents(false);
 
 		ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.CBR).version(CAMEL_2_17_0_REDHAT_630187).type(ProjectType.BLUEPRINT).create();
-		serverName = serverReq.getConfig().getName();
+		serverName = serverReq.getConfiguration().getName();
 		FuseServerManipulator.addModule(serverName, PROJECT_NAME);
 
 		// Deleting Error Log
-		new ErrorLogView().deleteLog();
+		new LogView().deleteLog();
 
 		setupIsDone = true;
 	}
@@ -115,7 +123,7 @@ public class JMXNavigatorServerTest {
 		new WorkbenchShell();
 
 		// Closing all non workbench shells
-		ShellHandler.getInstance().closeAllNonWorbenchShells();
+		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 
 	/**
@@ -197,13 +205,13 @@ public class JMXNavigatorServerTest {
 		assertNotNull("Camel context was not found in JMX Navigator View!", camel);
 		assertTrue("Suspension was not performed", jmx.suspendCamelContext("karaf", "Camel", camel));
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") is suspended"), TimePeriod.NORMAL);
+			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") is suspended"), TimePeriod.DEFAULT);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not suspended!");
 		}
 		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("karaf", "Camel", camel));
 		try {
-			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") resumed"), TimePeriod.NORMAL);
+			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") resumed"), TimePeriod.DEFAULT);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not resumed!");
 		}

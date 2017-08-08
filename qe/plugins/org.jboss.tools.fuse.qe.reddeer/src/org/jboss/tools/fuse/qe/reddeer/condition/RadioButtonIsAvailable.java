@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.condition;
 
-import org.jboss.reddeer.common.condition.AbstractWaitCondition;
-import org.jboss.reddeer.swt.impl.button.RadioButton;
+import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
+import org.eclipse.reddeer.swt.impl.button.RadioButton;
 
 /**
  * Wait condition which try toogle a radio button with defined label

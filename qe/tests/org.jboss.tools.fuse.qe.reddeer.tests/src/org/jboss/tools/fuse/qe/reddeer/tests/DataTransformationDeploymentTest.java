@@ -11,19 +11,20 @@
 package org.jboss.tools.fuse.qe.reddeer.tests;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.jboss.reddeer.requirements.server.ServerReqState.PRESENT;
-import static org.jboss.tools.fuse.qe.reddeer.requirement.ServerReqType.Fuse;
+import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.jboss.reddeer.common.exception.WaitTimeoutExpiredException;
-import org.jboss.reddeer.common.wait.WaitUntil;
-import org.jboss.reddeer.junit.execution.annotation.RunIf;
-import org.jboss.reddeer.junit.requirement.inject.InjectRequirement;
-import org.jboss.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.execution.annotation.RunIf;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
+import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.condition.FuseLogContainsText;
 import org.jboss.tools.fuse.qe.reddeer.condition.IssueIsClosed;
@@ -31,7 +32,8 @@ import org.jboss.tools.fuse.qe.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.qe.reddeer.requirement.ServerRequirement.Server;
+import org.jboss.tools.fuse.qe.reddeer.runtime.ServerTypeMatcher;
+import org.jboss.tools.fuse.qe.reddeer.runtime.impl.ServerFuse;
 import org.jboss.tools.fuse.qe.reddeer.tests.utils.ProjectFactory;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseServerManipulator;
 import org.jboss.tools.fuse.qe.reddeer.utils.FuseShellSSH;
@@ -46,18 +48,23 @@ import org.junit.runner.RunWith;
  * @author tsedmik
  */
 @RunWith(RedDeerSuite.class)
-@Fuse(server = @Server(type = Fuse, state = PRESENT))
+@Fuse(state = PRESENT)
 public class DataTransformationDeploymentTest extends DefaultTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverRequirement;
+	
+	@RequirementRestriction
+	public static RequirementMatcher getRestrictionMatcher() {
+		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
+	}
 
 	/**
 	 * Prepares test environment
 	 */
 	@BeforeClass
 	public static void setupStartServer() {
-		FuseServerManipulator.startServer(serverRequirement.getConfig().getName());
+		FuseServerManipulator.startServer(serverRequirement.getConfiguration().getName());
 	}
 
 	/**
@@ -65,8 +72,8 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 	 */
 	@AfterClass
 	public static void setupStopServer() {
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfig().getName());
-		FuseServerManipulator.stopServer(serverRequirement.getConfig().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getName());
 	}
 
 	/**
@@ -94,12 +101,12 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 				"trans217", false);
 		CamelProject project = new CamelProject("trans217");
 		project.update();
-		FuseServerManipulator.addModule(serverRequirement.getConfig().getName(), "trans217");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "trans217");
 
 		// invoke the route with copying a file
 		String from = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/trans217/src/main/data/abc-order.xml");
-		String to = serverRequirement.getConfig().getServerBase().getHome() + "/src/main/data/abc-order.xml";
+		String to = serverRequirement.getConfiguration().getServer().getHome() + "/src/main/data/abc-order.xml";
 		try {
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);
 		} catch (IOException e) {

@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.qe.reddeer.preference;
 
-import org.jboss.reddeer.jface.preference.PreferencePage;
-import org.jboss.reddeer.swt.impl.button.CheckBox;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.preference.PreferencePage;
+import org.eclipse.reddeer.swt.impl.button.CheckBox;
 
 /**
  * Represents the "Fuse Tooling --> Editor" preference page
@@ -19,9 +20,13 @@ import org.jboss.reddeer.swt.impl.button.CheckBox;
  * @author tsedmik
  */
 public class FuseToolingEditorPreferencePage extends PreferencePage {
-
+	
 	public FuseToolingEditorPreferencePage() {
-		super("Fuse Tooling", "Editor");
+		this(null);
+	}
+	
+	public FuseToolingEditorPreferencePage(ReferencedComposite ref) {
+		super(ref, "Fuse Tooling", "Editor");
 	}
 
 	/**
