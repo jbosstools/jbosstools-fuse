@@ -64,10 +64,10 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		final NewProjectMetaData metadata = getProjectMetaData();
 		try {
-			// TODO: try to make fork true
-			getContainer().run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
+			getContainer().run(true, true, new FuseIntegrationProjectCreatorRunnable(metadata));
 		} catch (InterruptedException iex) {
 			ProjectTemplatesActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
+			Thread.currentThread().interrupt();
 			return false;
 		} catch (InvocationTargetException ite) {
 			ProjectTemplatesActivator.pluginLog().logError("Error occured executing the wizard!", ite); //$NON-NLS-1$
