@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -532,8 +530,7 @@ public class BeanConfigUtil {
 		}
 	}
 
-	private List<String> getNSPrefixes(Node rootNode, String namespaceUri) {
-		List<String> prefixes = new ArrayList<>();
+	private String getFirstNSPrefixForURI(Node rootNode, String namespaceUri) {
 		NamedNodeMap atts = rootNode.getAttributes();
 		for (int i = 0; i < atts.getLength(); i++) {
 			Node node = atts.item(i);
@@ -541,30 +538,21 @@ public class BeanConfigUtil {
 			if (namespaceUri.equals(node.getNodeValue())
 					&& (name != null && (XMLNAMESPACE.equals(name) || name.startsWith(XMLNAMESPACE + ":")))) { //$NON-NLS-1$
 				if (name.startsWith(XMLNAMESPACE + ":")) { //$NON-NLS-1$
-					String woPrefix = name.substring(name.indexOf(':') + 1);
-					prefixes.add(woPrefix);
+					return name.substring(name.indexOf(':') + 1);
 				} else {
-					prefixes.add(node.getPrefix());
+					return node.getPrefix();
 				}
 			}
-		}
-		return prefixes;
-	}
-	
-	private String getNSPrefixForURI(Node rootNode, String namespaceUri) {
-		List<String> prefixes = getNSPrefixes(rootNode, namespaceUri);
-		if (!prefixes.isEmpty()) {
-			return prefixes.get(0);
 		}
 		return null;
 	}
 	
 	private String getBeanPrefix(Node rootNode) {
-		String blueprintPrefix = getNSPrefixForURI(rootNode, BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP);
+		String blueprintPrefix = getFirstNSPrefixForURI(rootNode, BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP);
 		if (blueprintPrefix != null) {
 			return blueprintPrefix;
 		}
-		String springPrefix = getNSPrefixForURI(rootNode, org.fusesource.ide.foundation.core.util.CamelUtils.SPRING_BEANS_NAMESPACE);
+		String springPrefix = getFirstNSPrefixForURI(rootNode, org.fusesource.ide.foundation.core.util.CamelUtils.SPRING_BEANS_NAMESPACE);
 		if (springPrefix != null) {
 			return springPrefix;
 		}
