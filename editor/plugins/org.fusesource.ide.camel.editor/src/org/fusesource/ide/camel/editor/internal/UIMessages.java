@@ -155,6 +155,8 @@ public class UIMessages extends NLS {
 	public static String selectEndpointWizardWindowTitle;
 
 	public static String updatePomDependenciesProgressDialogLabel;
+	public static String loadingCamelFile;
+	public static String pending;
 
 	static {
 		// initialize resource bundle
