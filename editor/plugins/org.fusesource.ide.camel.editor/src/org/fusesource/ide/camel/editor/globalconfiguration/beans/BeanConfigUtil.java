@@ -533,7 +533,8 @@ public class BeanConfigUtil {
 		}
 	}
 
-	private void getNSPrefixes(Node rootNode, String namespaceUri, List<String> prefixes) {
+	private List<String> getNSPrefixes(Node rootNode, String namespaceUri) {
+		List<String> prefixes = new ArrayList<>();
 		NamedNodeMap atts = rootNode.getAttributes();
 		for (int i = 0; i < atts.getLength(); i++) {
 			Node node = atts.item(i);
@@ -548,11 +549,11 @@ public class BeanConfigUtil {
 				}
 			}
 		}
+		return prefixes;
 	}
 	
 	private String getNSPrefixForURI(Node rootNode, String namespaceUri) {
-		List<String> prefixes = new ArrayList<>();
-		getNSPrefixes(rootNode, namespaceUri, prefixes);
+		List<String> prefixes = getNSPrefixes(rootNode, namespaceUri);
 		if (!prefixes.isEmpty()) {
 			return prefixes.get(0);
 		}
