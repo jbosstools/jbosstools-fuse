@@ -111,14 +111,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 		}
 
-		try {
-			Display.getDefault().syncExec( () -> postProjectCreationSetup(prj, subMonitor.split(6)));
-		} finally {
-			subMonitor.done();
-		}
+		Display.getDefault().syncExec( () -> postProjectCreationSetup(prj, subMonitor.split(6)));
 	}
 
-	private void postProjectCreationSetup(IProject prj, SubMonitor subMonitor) {
+	private void postProjectCreationSetup(IProject prj, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 6);
 		// switch perspective if needed
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
