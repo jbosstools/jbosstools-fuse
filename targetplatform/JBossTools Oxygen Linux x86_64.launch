@@ -9,7 +9,7 @@
 <booleanAttribute key="clearConfig" value="false"/>
 <booleanAttribute key="clearws" value="true"/>
 <booleanAttribute key="clearwslog" value="false"/>
-<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/JBTIS Oxygen Linux x86_64"/>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/JBossTools Oxygen Linux x86_64"/>
 <booleanAttribute key="default" value="false"/>
 <stringAttribute key="deselected_workspace_plugins" value="org.fusesource.ide.camel.editor.tests.integration,org.fusesource.ide.camel.validation.tests.integration,org.fusesource.ide.jmx.camel.tests.integration,org.fusesource.ide.launcher.tests.integration,org.fusesource.ide.launcher.ui.tests.integration,org.fusesource.ide.project.tests.integration,org.fusesource.ide.projecttemplates.tests.integration,org.fusesource.ide.server.tests,org.jboss.tools.fuse.transformation.core.tests.integration,org.jboss.tools.fuse.transformation.editor.tests.integration"/>
 <booleanAttribute key="includeOptional" value="true"/>

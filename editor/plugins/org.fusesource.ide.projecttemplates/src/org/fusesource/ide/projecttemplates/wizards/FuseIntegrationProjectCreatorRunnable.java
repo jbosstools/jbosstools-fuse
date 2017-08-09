@@ -111,6 +111,14 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 		}
 
+		try {
+			Display.getDefault().syncExec( () -> postProjectCreationSetup(prj, subMonitor));
+		} finally {
+			subMonitor.done();
+		}
+	}
+
+	private void postProjectCreationSetup(IProject prj, SubMonitor subMonitor) {
 		// switch perspective if needed
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
@@ -142,7 +150,6 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		// finally open the camel context file
 		openCamelContextFile(prj, subMonitor.newChild(1));
 		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
-		subMonitor.done();
 	}
 
 	/**
@@ -238,14 +245,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	void switchToFusePerspective(final IWorkbenchWindow workbenchWindow) {
 		IPerspectiveDescriptor activePerspective = workbenchWindow.getActivePage().getPerspective();
 		if (activePerspective == null || !activePerspective.getId().equals(FUSE_PERSPECTIVE_ID)) {
-			workbenchWindow.getShell().getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						workbenchWindow.getWorkbench().showPerspective(FUSE_PERSPECTIVE_ID, workbenchWindow);
-					} catch (WorkbenchException e) {
-						ProjectTemplatesActivator.pluginLog().logError(e);
-					}
+			workbenchWindow.getShell().getDisplay().syncExec(() -> {
+				try {
+					workbenchWindow.getWorkbench().showPerspective(FUSE_PERSPECTIVE_ID, workbenchWindow);
+				} catch (WorkbenchException e) {
+					ProjectTemplatesActivator.pluginLog().logError(e);
 				}
 			});
 		}
@@ -308,39 +312,36 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param project
 	 */
 	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
-		if (project != null) {
-			final IFile[] holder = new IFile[1];
-			searchCamelContextXMLFile(project, holder);
-			try {
-				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-					searchCamelContextJavaFile(project, monitor, holder);
-					isJavaEditorToOpen = true;
-				}
-			} catch (CoreException e1) {
-				ProjectTemplatesActivator.pluginLog().logError(e1);
+		if (project == null) return;
+		
+		final IFile[] holder = new IFile[1];
+		searchCamelContextXMLFile(project, holder);
+		try {
+			if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
+				searchCamelContextJavaFile(project, monitor, holder);
+				isJavaEditorToOpen = true;
 			}
+		} catch (CoreException e1) {
+			ProjectTemplatesActivator.pluginLog().logError(e1);
+		}
 
-			if (holder[0] != null) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (!holder[0].exists()) {
-								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
-							}
-							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-							if(isJavaEditorToOpen){
-								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
-							} else {
-								IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
-								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
-							}
-						} catch (PartInitException e) {
-							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
-						}
+		if (holder[0] != null) {
+			Display.getDefault().asyncExec( () -> {
+				try {
+					if (!holder[0].exists()) {
+						new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
 					}
-				});
-			}
+					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					if(isJavaEditorToOpen){
+						IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
+					} else {
+						IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
+						IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
+					}
+				} catch (PartInitException e) {
+					ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
+				}
+			});
 		}
 	}
 
