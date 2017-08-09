@@ -61,6 +61,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -73,8 +74,6 @@ import org.w3c.dom.Node;
 public class BeanConfigUtil {
 
 	private static final String XMLNAMESPACE = "xmlns"; //$NON-NLS-1$
-	private static final String BLUEPRINT_NS_URI = "http://www.osgi.org/xmlns/blueprint/v1.0.0"; //$NON-NLS-1$
-	private static final String SPRING_NS_URI = "http://www.springframework.org/schema/beans"; //$NON-NLS-1$
 	
 	/*
 	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
@@ -561,11 +560,11 @@ public class BeanConfigUtil {
 	}
 	
 	private String getBeanPrefix(Node rootNode) {
-		String blueprintPrefix = getNSPrefixForURI(rootNode, BLUEPRINT_NS_URI);
+		String blueprintPrefix = getNSPrefixForURI(rootNode, BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP);
 		if (blueprintPrefix != null) {
 			return blueprintPrefix;
 		}
-		String springPrefix = getNSPrefixForURI(rootNode, SPRING_NS_URI);
+		String springPrefix = getNSPrefixForURI(rootNode, org.fusesource.ide.foundation.core.util.CamelUtils.SPRING_BEANS_NAMESPACE);
 		if (springPrefix != null) {
 			return springPrefix;
 		}
