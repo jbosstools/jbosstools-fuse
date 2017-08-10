@@ -8,14 +8,14 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.projecttemplates.util;
+package org.fusesource.ide.camel.editor.utils;
 
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 public class JobWaiterUtil {
 	
@@ -35,13 +35,13 @@ public class JobWaiterUtil {
 		int currentCounter;
 		if(isEndless){
 			currentCounter = decreasingCounter;
-			ProjectTemplatesActivator.pluginLog().logInfo("log trace to ensure it is not looping");
+			CamelEditorUIActivator.pluginLog().logInfo("log trace to ensure it is not looping");
 		} else {
 			if (decreasingCounter <= 0) {
 				if(exception != null){
-					ProjectTemplatesActivator.pluginLog().logError(exception);
+					CamelEditorUIActivator.pluginLog().logError(exception);
 				} else {
-					ProjectTemplatesActivator.pluginLog().logWarning("Waiting for job to finish unsuccessfully.");
+					CamelEditorUIActivator.pluginLog().logWarning("Waiting for job to finish unsuccessfully.");
 				}
 				return;
 			}

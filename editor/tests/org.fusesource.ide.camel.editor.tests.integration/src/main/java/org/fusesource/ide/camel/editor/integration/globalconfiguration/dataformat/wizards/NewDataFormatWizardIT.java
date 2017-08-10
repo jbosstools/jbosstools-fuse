@@ -29,6 +29,8 @@ import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEdit
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.provider.DataFormatContributor;
 import org.fusesource.ide.camel.editor.globalconfiguration.dataformat.wizards.NewDataFormatWizard;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
@@ -39,8 +41,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
-import org.fusesource.ide.projecttemplates.util.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -97,7 +97,7 @@ public class NewDataFormatWizardIT {
 		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
 
 		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel);
-		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id);
+		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id, new NullProgressMonitor());
 		new CamelGlobalConfigEditor(null).addDataFormat(camelFile, dataFormatNode);
 		
 		// Check that element just created has been correctly initialized

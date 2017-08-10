@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.projecttemplates.util;
+package org.fusesource.ide.camel.editor.utils;
 
 import java.util.Arrays;
 import java.util.List;
