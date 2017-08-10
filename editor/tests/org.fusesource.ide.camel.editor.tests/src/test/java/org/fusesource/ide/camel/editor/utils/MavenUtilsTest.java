@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -63,7 +64,7 @@ public class MavenUtilsTest {
 	@Before
 	public void setup() throws CoreException {
 		doReturn(pomFile).when(mavenUtils).getPomFile(project);
-		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class));
+		doNothing().when(mavenUtils).writeNewPomFile(eq(project), eq(pomFile), any(Model.class), any(IProgressMonitor.class));
 		when(mavenProjectFacade.getMavenProject(Mockito.any(NullProgressMonitor.class)).getCompileDependencies()).thenReturn(Collections.emptyList());
 		// TODO: repair this broken test
 		// mavenUtils.setCamelMavenUtils(camelMavenUtils);
@@ -85,7 +86,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
+		mavenUtils.updateMavenDependencies(compDeps, project, new NullProgressMonitor());
 		assertThat(mavenDependency.getVersion()).isEqualTo("test-version");
 	}
 
@@ -113,7 +114,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
+		mavenUtils.updateMavenDependencies(compDeps, project, new NullProgressMonitor());
 		assertThat(m2eDependency.getVersion()).isEqualTo("test-version");
 	}
 
@@ -136,7 +137,7 @@ public class MavenUtilsTest {
 		dep.setGroupId("test-groupID");
 		dep.setVersion("test-version");
 		compDeps.add(dep);
-		mavenUtils.internalUpdateMavenDependencies(compDeps, project);
+		mavenUtils.updateMavenDependencies(compDeps, project, new NullProgressMonitor());
 		verify(mavenUtils).addDependency(eq(mavenModel), captor.capture(), eq((String) null));
 		assertThat(captor.getValue().get(0).getArtifactId()).isEqualTo("test-artifactID");
 	}
