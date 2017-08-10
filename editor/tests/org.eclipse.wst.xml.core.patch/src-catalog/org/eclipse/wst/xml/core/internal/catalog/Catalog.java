@@ -433,6 +433,7 @@ public class Catalog implements ICatalog
 			} catch (Exception e)
 			{
 				// This is OK since the catalog may not exist before we create it
+				Logger.logException(e);
 			} finally
 			{
 				if (inputStream != null)
@@ -442,6 +443,7 @@ public class Catalog implements ICatalog
 						inputStream.close();
 					} catch (Exception e)
 					{
+						Logger.logException(e);
 					}
 				}
 			}

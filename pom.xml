@@ -288,17 +288,17 @@
 				<configuration>
 					<dependency-resolution>
 						<extraRequirements>
-						<!-- deactivate for now because can't have the two patches due to cyclic dependencies :( -->
-<!-- 							<requirement>
+							<requirement>
 								<type>p2-installable-unit</type>
 								<id>org.eclipse.wst.xml.core.patch</id>
 								<versionRange>0.0.0</versionRange>
-							</requirement> -->
-							<requirement>
+							</requirement>
+						<!-- deactivate for now because can't have the two patches due to cyclic dependencies :( -->
+<!-- 							<requirement>
 								<type>p2-installable-unit</type>
 								<id>org.eclipse.wst.xsd.core.patch</id>
 								<versionRange>0.0.0</versionRange>
-							</requirement>
+							</requirement> -->
 						</extraRequirements>
 					</dependency-resolution>
 				</configuration>
