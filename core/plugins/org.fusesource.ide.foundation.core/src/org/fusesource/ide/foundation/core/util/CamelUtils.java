@@ -53,7 +53,7 @@ public class CamelUtils {
 	
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	public static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
-	private static final String SPRING_BEANS_NAMESPACE = "http://www.springframework.org/schema/beans";
+	public static final String SPRING_BEANS_NAMESPACE = "http://www.springframework.org/schema/beans";
 	private static final String GLOBAL_BEAN = "bean";
 	
 	private static FindNamespaceHandlerSupport blueprintXmlMatcher = new BlueprintNamespaceHandler();
