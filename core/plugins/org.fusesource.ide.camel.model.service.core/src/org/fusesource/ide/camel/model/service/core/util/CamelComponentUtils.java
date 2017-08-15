@@ -186,7 +186,7 @@ public final class CamelComponentUtils {
 	public static String[] getChoicesWithExtraEmptyEntry(Parameter p) {
 		String[] choices = p.getChoice();
 		List<String> res = new ArrayList<>();
-		res.add(" "); // empty entry
+		res.add(""); // empty entry
 		for (String choice : choices) {
 			res.add(choice);
 		}
