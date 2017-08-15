@@ -59,8 +59,10 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -69,6 +71,8 @@ import org.w3c.dom.Node;
  */
 public class BeanConfigUtil {
 
+	private static final String XMLNAMESPACE = "xmlns"; //$NON-NLS-1$
+	
 	/*
 	 * This code reused from org.fusesource.ide.camel.editor.properties.creators.AbstractClassBasedParameterUICreator in the createBrowseButton method
 	 */
@@ -89,6 +93,8 @@ public class BeanConfigUtil {
 				ncwp.setTypeName(initialClassName, true);
 				setInitialPackageFrament(project, ncwp);
 			}
+		} else {
+			setInitialPackageFrament(project, ncwp);
 		}
 		if (Window.OK == wd.open()) {
 			String value = ncwp.getCreatedType().getFullyQualifiedName();
@@ -157,7 +163,7 @@ public class BeanConfigUtil {
 	            if (tstRoot.exists()) {
 	            	return tstRoot;
 	            } else {
-	            	tstFolder.create(false, true, null);
+	            	tstFolder.create(true, true, new NullProgressMonitor());
 	            	
 	            	// now refresh the package root to ensure we have the right fragment
 	            	tstRoot = javaProject.getPackageFragmentRoot(tstFolder);
@@ -436,6 +442,7 @@ public class BeanConfigUtil {
 		}
 		return false;
 	}
+	
 	public String getArgumentTag(Node node) {
 		if (node != null) {
 			boolean isBlueprint = isBlueprintConfig(node);
@@ -524,14 +531,47 @@ public class BeanConfigUtil {
 			xmlElement.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		}
 	}
+
+	private String getFirstNSPrefixForURI(Node rootNode, String namespaceUri) {
+		NamedNodeMap atts = rootNode.getAttributes();
+		for (int i = 0; i < atts.getLength(); i++) {
+			Node node = atts.item(i);
+			String name = node.getNodeName();
+			if (namespaceUri.equals(node.getNodeValue())
+					&& (name != null && (XMLNAMESPACE.equals(name) || name.startsWith(XMLNAMESPACE + ":")))) { //$NON-NLS-1$
+				if (name.startsWith(XMLNAMESPACE + ":")) { //$NON-NLS-1$
+					return name.substring(name.indexOf(':') + 1);
+				} else {
+					return node.getPrefix();
+				}
+			}
+		}
+		return null;
+	}
 	
+	private String getBeanPrefix(Node rootNode) {
+		String blueprintPrefix = getFirstNSPrefixForURI(rootNode, BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP);
+		if (blueprintPrefix != null) {
+			return blueprintPrefix;
+		}
+		String springPrefix = getFirstNSPrefixForURI(rootNode, org.fusesource.ide.foundation.core.util.CamelUtils.SPRING_BEANS_NAMESPACE);
+		if (springPrefix != null) {
+			return springPrefix;
+		}
+		return null;
+	}
+
 	public Element createBeanNode(final CamelFile camelFile, String id, String className) {
-		final String prefixNS = camelFile.getRouteContainer().getXmlNode().getPrefix();
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getBeanPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
 		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
 		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
 		if (!Strings.isBlank(className)) {
 			newBeanNode.setAttribute(GlobalBeanEIP.PROP_CLASS, className);
 		}
+		// default for both Blueprint and Spring global beans to "singleton" as the scope
+		newBeanNode.setAttribute(GlobalBeanEIP.PROP_SCOPE, "singleton"); //$NON-NLS-1$
 		return newBeanNode;
 	}
 	

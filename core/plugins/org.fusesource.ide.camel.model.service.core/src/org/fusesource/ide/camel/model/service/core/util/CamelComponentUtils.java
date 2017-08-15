@@ -141,7 +141,7 @@ public final class CamelComponentUtils {
 	}
 
 	public static boolean isChoiceProperty(Parameter p) {
-		return p.getChoice() != null && p.getChoice().trim().length() > 0;
+		return p.getChoice() != null && p.getChoice().length > 0;
 	}
 
 	public static boolean isFileProperty(Parameter p) {
@@ -183,10 +183,10 @@ public final class CamelComponentUtils {
 		return isMapProperty(p) || p.getJavaType().toLowerCase().startsWith("java.util.date");
 	}
 
-	public static String[] getChoices(Parameter p) {
-		String[] choices = p.getChoice().split(",");
+	public static String[] getChoicesWithExtraEmptyEntry(Parameter p) {
+		String[] choices = p.getChoice();
 		List<String> res = new ArrayList<>();
-		res.add(" "); // empty entry
+		res.add(""); // empty entry
 		for (String choice : choices) {
 			res.add(choice);
 		}

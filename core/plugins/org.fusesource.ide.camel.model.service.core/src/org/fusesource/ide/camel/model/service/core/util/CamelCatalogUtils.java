@@ -64,7 +64,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
-	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.1";
+	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.2";
 	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
 	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
 	private static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
@@ -119,9 +119,12 @@ public class CamelCatalogUtils {
 
 			// DEFAULTS
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621090", "6.2.1.redhat-090");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621107", "6.2.1.redhat-107");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621159", "6.2.1.redhat-159");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621169", "6.2.1.redhat-169");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621177", "6.2.1.redhat-177");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621186", "6.2.1.redhat-186");
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R0_CAMEL_VERSION, FUSE_63_R0_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R1_CAMEL_VERSION, FUSE_63_R1_BOM_VERSION);

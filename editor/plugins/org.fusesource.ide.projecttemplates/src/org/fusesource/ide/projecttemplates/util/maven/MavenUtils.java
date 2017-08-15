@@ -77,7 +77,7 @@ public class MavenUtils {
 			properties.setProperty(MAVEN_PROPERTY_CAMEL_VERSION, camelVersion);
 		}
 		if(camelVersion.contains(REDHAT_NAMING_USED_IN_VERSION) || camelVersion.contains(FUSE_NAMING_USED_IN_VERSION)) { 
-			updatePluginVersionsForProductizedVersion(mavenModel, plugins, camelVersion, properties);
+			updatePluginVersionsForProductizedVersion(plugins, camelVersion, properties);
 		} else {
 			updatePluginVersionForNonProductizedVersion(plugins, camelVersion);
 		}
@@ -91,12 +91,14 @@ public class MavenUtils {
 		}
 	}
 	
-	private static void updatePluginVersionsForProductizedVersion(Model mavenModel, List<Plugin> plugins, String camelVersion, Properties properties) {
+	private static void updatePluginVersionsForProductizedVersion(List<Plugin> plugins, String camelVersion, Properties properties) {
 		for (Plugin p : plugins) {
 			if (isCamelPlugin(p)) {
-				if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies()) && !CamelCatalogUtils.isPureFISVersion(camelVersion)) {
-					p.setVersion(null);
-				} else if(isMavenPropertyCamelVersionSet(properties)){
+				//TODO : when io.fabric8 bug is fixed, need to check for camel version.
+				/* If inferior to the version in which it is fixed, keep the behavior of this commit,
+				 * if upper to the version in which it is fixed, get back to the previous behavior
+				 * */
+				if(isMavenPropertyCamelVersionSet(properties)){
 					p.setVersion(MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE);
 				} else {
 					p.setVersion(camelVersion);

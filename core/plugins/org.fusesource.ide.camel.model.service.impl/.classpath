@@ -17,12 +17,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/camel-blueprint-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-catalog-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-catalog-maven-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-catalog-provider-karaf-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-catalog-provider-springboot-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-core-2.19.1.jar"/>
-	<classpathentry kind="lib" path="libs/camel-spring-2.19.1.jar"/>
+	<classpathentry kind="lib" path="libs/camel-blueprint-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-catalog-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-catalog-maven-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-catalog-provider-karaf-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-catalog-provider-springboot-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-core-2.19.2.jar"/>
+	<classpathentry kind="lib" path="libs/camel-spring-2.19.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

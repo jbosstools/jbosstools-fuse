@@ -8,8 +8,8 @@
           description="%runtimeTypeKarafDescription_22"
           id="org.fusesource.ide.karaf.runtime.22"
           name="%runtimeTypeKarafLabel_22"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%apache"
+          vendorId="%apache"
           version="2.2">
        <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
@@ -20,8 +20,8 @@
           description="%runtimeTypeKarafDescription_23"
           id="org.fusesource.ide.karaf.runtime.23"
           name="%runtimeTypeKarafLabel_23"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%apache"
+          vendorId="%apache"
           version="2.3">
        <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
@@ -32,8 +32,8 @@
           description="%runtimeTypeKarafDescription_24"
           id="org.fusesource.ide.karaf.runtime.24"
           name="%runtimeTypeKarafLabel_24"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%apache"
+          vendorId="%apache"
           version="2.4">
        <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
@@ -44,8 +44,8 @@
           description="%runtimeTypeKarafDescription_30"
           id="org.fusesource.ide.karaf.runtime.30"
           name="%runtimeTypeKarafLabel_30"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%apache"
+          vendorId="%apache"
           version="3.0">
        <moduleType types="fuse.camel" versions="1.0"></moduleType>
        <moduleType types="jst.utility" versions="1.0"></moduleType>
@@ -142,7 +142,7 @@
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
-           category="JBoss Fuse"
+           category="Apache"
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.karaf2x.launch"
            modes="run,debug"

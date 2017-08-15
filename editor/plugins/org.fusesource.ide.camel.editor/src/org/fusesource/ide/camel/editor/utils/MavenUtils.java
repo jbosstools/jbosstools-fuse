@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -100,9 +101,8 @@ public class MavenUtils {
 			dialog.run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					monitor.beginTask(UIMessages.updatePomDependenciesProgressDialogLabel, 100);
-					internalUpdateMavenDependencies(compDeps, project);
-					monitor.done();
+					SubMonitor subMonitor = SubMonitor.convert(monitor, UIMessages.updatePomDependenciesProgressDialogLabel, 1);
+					updateMavenDependencies(compDeps, project, subMonitor.split(1));
 				}
 			});
 		} catch (Exception ex) {
@@ -115,7 +115,8 @@ public class MavenUtils {
 	 * @param project
 	 * @throws CoreException
 	 */
-	protected void internalUpdateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) {
+	public void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
 		final File pomFile = getPomFile(project);
 		CamelMavenUtils cmu = new CamelMavenUtils();
 		final Model model = cmu.getMavenModel(project);
@@ -148,12 +149,15 @@ public class MavenUtils {
 				missingDeps.add(conDep);
 			}
 		}
+		subMonitor.worked(1);
 
 		addDependency(model, missingDeps, scope);
+		subMonitor.worked(1);
 
 		if (!missingDeps.isEmpty()) {
-			writeNewPomFile(project, pomFile, model);
+			writeNewPomFile(project, pomFile, model, subMonitor.split(8));
 		}
+		subMonitor.setWorkRemaining(0);
 	}
 
 	/**
@@ -173,13 +177,17 @@ public class MavenUtils {
 	 * @param project
 	 * @param pomFile
 	 * @param model
+	 * @param monitor 
 	 */
-	public void writeNewPomFile(IProject project, final File pomFile, final Model model) {
+	public void writeNewPomFile(IProject project, final File pomFile, final Model model, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
 		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 			MavenPlugin.getMaven().writeModel(model, os);
+			subMonitor.worked(1);
 			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
-				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, subMonitor.split(1));
+				new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 			}
 		} catch (Exception ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);

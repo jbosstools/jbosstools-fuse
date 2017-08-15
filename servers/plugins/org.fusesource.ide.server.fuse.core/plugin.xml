@@ -8,8 +8,8 @@
           description="%runtimeTypeFuseESBDescription_60"
           id="org.fusesource.ide.fuseesb.runtime.60"
           name="%runtimeTypeFuseESBLabel_60"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%redhat"
+          vendorId="%redhat"
           version="6.0">
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
@@ -20,8 +20,8 @@
           description="%runtimeTypeFuseESBDescription_61"
           id="org.fusesource.ide.fuseesb.runtime.61"
           name="%runtimeTypeFuseESBLabel_61"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%redhat"
+          vendorId="%redhat"
           version="6.1">
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
@@ -32,8 +32,8 @@
           description="%runtimeTypeFuseESBDescription_62"
           id="org.fusesource.ide.fuseesb.runtime.62"
           name="%runtimeTypeFuseESBLabel_62"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%redhat"
+          vendorId="%redhat"
           version="6.2">
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
@@ -44,8 +44,8 @@
           description="%runtimeTypeFuseESBDescription_63"
           id="org.fusesource.ide.fuseesb.runtime.63"
           name="%runtimeTypeFuseESBLabel_63"
-          vendor="%fusesource"
-          vendorId="%fusesource"
+          vendor="%redhat"
+          vendorId="%redhat"
           version="6.3">
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jst.web" versions="1.0"></moduleType>       
@@ -143,7 +143,7 @@
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
-           category="JBoss Fuse"
+           category="Red Hat JBoss Fuse"
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.fuseesb6x.launch"
            modes="run,debug"

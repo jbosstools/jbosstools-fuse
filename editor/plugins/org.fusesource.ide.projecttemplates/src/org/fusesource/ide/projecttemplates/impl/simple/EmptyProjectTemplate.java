@@ -12,16 +12,12 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.zip.ZipInputStream;
 
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 /**
@@ -69,17 +65,7 @@ public class EmptyProjectTemplate extends AbstractProjectTemplate {
 								break;
 				default:
 			}
-			URL archiveUrl = ProjectTemplatesActivator.getBundleContext().getBundle().getEntry(bundleEntry);
-			if (archiveUrl != null) {
-				InputStream is = null;
-				try {
-					is = archiveUrl.openStream();
-					return new ZipInputStream(is, StandardCharsets.UTF_8);
-				} catch (IOException ex) {
-					ProjectTemplatesActivator.pluginLog().logError(ex);
-				}			
-			}
-			return null;
+			return getTemplateStream(bundleEntry);
 		}
 	}
 }

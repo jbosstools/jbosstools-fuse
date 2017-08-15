@@ -22,13 +22,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.JMXCamelConnectJob;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
-import org.fusesource.ide.projecttemplates.util.JobWaiterUtil;
 
 public class RemoteCamelDebugTester {
 

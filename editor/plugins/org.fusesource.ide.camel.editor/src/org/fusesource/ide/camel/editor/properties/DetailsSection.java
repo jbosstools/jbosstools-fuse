@@ -142,7 +142,7 @@ public class DetailsSection extends FusePropertySection {
                 CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
-                choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
+                choiceCombo.setItems(CamelComponentUtils.getChoicesWithExtraEmptyEntry(prop));
                 String value = (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
                 for (int i=0; i < choiceCombo.getItems().length; i++) {
                     if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
@@ -279,6 +279,7 @@ public class DetailsSection extends FusePropertySection {
             // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+            	deactivateMouseWheel(choiceCombo);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -336,6 +337,7 @@ public class DetailsSection extends FusePropertySection {
              // DATAFORMAT PROPERTIES
             } else if (CamelComponentUtils.isDataFormatProperty(prop)) {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+            	deactivateMouseWheel(choiceCombo);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
@@ -460,6 +462,11 @@ public class DetailsSection extends FusePropertySection {
         }
         page.layout();
     }
+
+	protected void deactivateMouseWheel(CCombo choiceCombo) {
+		choiceCombo.addListener(SWT.MouseVerticalWheel, event -> event.doit = false);
+		choiceCombo.addListener(SWT.MouseWheel, event -> event.doit = false);
+	}
 
 	boolean shouldHidePropertyFromGroup(final String group, Parameter p, String currentPropertyGroup) {
 		return isNotMatchingGroup(group, currentPropertyGroup)

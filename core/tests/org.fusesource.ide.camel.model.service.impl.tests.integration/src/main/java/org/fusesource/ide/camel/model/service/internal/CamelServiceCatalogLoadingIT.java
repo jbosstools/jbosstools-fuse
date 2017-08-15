@@ -40,7 +40,7 @@ public class CamelServiceCatalogLoadingIT {
 				"2.16.4",
 				"2.17.7",
 				"2.18.4",
-				"2.19.1");
+				"2.19.2");
 	}
 	
 	public CamelServiceCatalogLoadingIT(String camelVersion) {

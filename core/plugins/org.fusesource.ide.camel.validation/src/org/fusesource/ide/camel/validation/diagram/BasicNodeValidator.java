@@ -70,8 +70,8 @@ public class BasicNodeValidator implements ValidationSupport {
 				}
 				checkFor(result, camelModelElement, new EIPMandatoryChildValidator());
 			}
-			
-			Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
+
+      Set<IMarker> markersRelatedToElement = getMarkersFor(camelModelElement);
 			
 			createOrReuseMarkers(camelModelElement, result, markersRelatedToElement);
 

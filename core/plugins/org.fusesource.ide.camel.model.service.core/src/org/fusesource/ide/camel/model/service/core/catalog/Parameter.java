@@ -40,8 +40,8 @@ public class Parameter {
 	private String required;
 	@JsonProperty
 	private String defaultValue;
-	@JsonProperty
-	private String choice;
+	@JsonProperty("enum")
+	private String[] choice;
 	@JsonProperty
 	private String label;
 	@JsonProperty
@@ -86,7 +86,7 @@ public class Parameter {
 	/**
 	 * @return the choice
 	 */
-	public String getChoice() {
+	public String[] getChoice() {
 		return this.choice;
 	}
 
@@ -180,7 +180,7 @@ public class Parameter {
 	 * @param choice
 	 *            the choice to set
 	 */
-	public void setChoice(String choice) {
+	public void setChoice(String[] choice) {
 		this.choice = choice;
 	}
 

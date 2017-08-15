@@ -15,8 +15,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
+import org.fusesource.ide.launcher.ui.Messages;
 
 /**
  * @author lhein
@@ -49,8 +51,9 @@ public class ExecutePomActionNoTests extends ExecutePomActionSupport {
 	protected boolean isTestStrategyMatching(ILaunchConfiguration configuration) {
 		return isSkipTest(configuration);
 	}
-
-	protected String getBasicLaunchConfigurationName(IContainer basedir, IFile camelFile, String launchSafeGoalName) {
-		return super.getBasicLaunchConfigurationName(camelFile) + " (without Tests)";
+	
+	@Override
+	protected String getBasicLaunchConfigurationName( IFile camelFile) {
+		return NLS.bind(Messages.launchConfiguraNameWithoutTest, super.getBasicLaunchConfigurationName(camelFile));
 	}
 }
