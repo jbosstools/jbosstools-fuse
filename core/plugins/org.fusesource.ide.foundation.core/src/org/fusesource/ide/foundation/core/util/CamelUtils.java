@@ -141,7 +141,11 @@ public class CamelUtils {
 	}
 	
 	public static boolean startsWithNamespace(Node child, String namespace) {
-		return child != null && child.getNamespaceURI() != null && child.getNamespaceURI().startsWith(namespace);
+		String nsUri = child.getNamespaceURI();
+		if (nsUri == null && child.getParentNode() != null) {
+			nsUri = child.getParentNode().getNamespaceURI();
+		}
+		return child != null && nsUri != null && nsUri.startsWith(namespace);
 	}
 	
 	public static boolean startsWithOneOfNamespace(Node child, Collection<String> namespaces) {
