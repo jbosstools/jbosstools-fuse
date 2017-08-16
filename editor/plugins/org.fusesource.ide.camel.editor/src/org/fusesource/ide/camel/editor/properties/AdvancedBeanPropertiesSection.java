@@ -275,7 +275,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 							getDisplay().getActiveShell());
 					break;
 				case PUBLIC_NO_ARG_METHOD_BROWSE:
-					methodName = beanConfigUtil.handleNoArgMethodBrowse(project, className,
+					methodName = beanConfigUtil.handlePublicNoArgMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					break;
 				default:

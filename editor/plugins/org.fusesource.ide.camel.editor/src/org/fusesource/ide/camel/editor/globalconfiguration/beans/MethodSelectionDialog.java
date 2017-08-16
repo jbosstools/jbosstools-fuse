@@ -16,10 +16,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -98,9 +96,9 @@ public class MethodSelectionDialog extends TitleAreaDialog {
         });
 		
 		treeViewer = elementTable.getViewer();
-		treeViewer.addPostSelectionChangedListener(input -> {
-			getButton(IDialogConstants.OK_ID).setEnabled(validate());
-		});
+		treeViewer.addPostSelectionChangedListener(input -> 
+			getButton(IDialogConstants.OK_ID).setEnabled(validate())
+		);
 		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new MethodTreeContentProvider());
 		treeViewer.setLabelProvider(labelProvider);

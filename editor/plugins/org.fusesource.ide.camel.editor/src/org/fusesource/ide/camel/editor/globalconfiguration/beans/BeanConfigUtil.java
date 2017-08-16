@@ -221,7 +221,7 @@ public class BeanConfigUtil {
 		return Stream.of(foundClass.getMethods())
 				.filter(method -> {
 					try {
-						return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0;
+						return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0 && !method.isConstructor();
 					} catch (JavaModelException e) {
 						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & no arguments.", e); //$NON-NLS-1$
 						return false;
@@ -233,6 +233,14 @@ public class BeanConfigUtil {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
 			return openMethodDialog(shell, getNoParamMethods(foundClass), UIMessages.beanConfigUtilNoParmMethodSelectionMessage);
+		}
+		return null;
+	}
+
+	private String openPublicNoArgMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+		IType foundClass = jproject.findType(className);
+		if (foundClass != null) {
+			return openMethodDialog(shell, getPublicNoArgMethods(foundClass), UIMessages.beanConfigUtilNoParmMethodSelectionMessage);
 		}
 		return null;
 	}
@@ -250,9 +258,17 @@ public class BeanConfigUtil {
 		return null;
 	}
 	
+	private boolean methodIsConstructor(IMethod method) {
+		try {
+			return method.isConstructor();
+		} catch (JavaModelException e) {
+			return false;
+		}
+	}
+	
 	private IMethod[] getNoParamMethods(IType foundClass) throws JavaModelException {
 		return Stream.of(foundClass.getMethods())
-				.filter(method -> method.getNumberOfParameters() == 0)
+				.filter(method -> method.getNumberOfParameters() == 0 && !methodIsConstructor(method))
 				.toArray(IMethod[]::new);
 	}
 
@@ -270,6 +286,20 @@ public class BeanConfigUtil {
 			if (jproject.exists()) {
 				try {
 					return openNoArgMethodDialog(jproject, className, shell);
+				} catch (JavaModelException e) {
+					CamelEditorUIActivator.pluginLog().logError(e);
+				}
+			}
+		}
+		return null;
+	}
+
+	public String handlePublicNoArgMethodBrowse(IProject project, String className, Shell shell) {
+		if (project != null) {
+			IJavaProject jproject = JavaCore.create(project);
+			if (jproject.exists()) {
+				try {
+					return openPublicNoArgMethodDialog(jproject, className, shell);
 				} catch (JavaModelException e) {
 					CamelEditorUIActivator.pluginLog().logError(e);
 				}
