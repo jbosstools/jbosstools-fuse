@@ -24,7 +24,7 @@ import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
  */
 public class ValidationFactory {
 	
-	private static Map<Class<? extends AbstractCamelModelElement>, ValidationSupport> registeredValidators = new HashMap<Class<? extends AbstractCamelModelElement>, ValidationSupport>();
+	private static Map<Class<? extends AbstractCamelModelElement>, ValidationSupport> registeredValidators = new HashMap<>();
 	private static ValidationFactory instance;
 	
 	static {
@@ -42,7 +42,7 @@ public class ValidationFactory {
 	private ValidationFactory() {
 	}
 	
-	public synchronized static ValidationFactory getInstance() {
+	public static synchronized ValidationFactory getInstance() {
 		if (instance == null) {
 			instance = new ValidationFactory();
 		}
