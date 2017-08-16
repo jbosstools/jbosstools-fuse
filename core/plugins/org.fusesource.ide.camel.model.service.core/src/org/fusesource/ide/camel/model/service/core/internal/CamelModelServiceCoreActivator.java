@@ -55,7 +55,6 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		setContext(context);
-		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 		registerWorkspaceProjectListener();
 		JavaCore.addElementChangedListener(listener);
 	}
