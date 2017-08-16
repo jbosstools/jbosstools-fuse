@@ -71,7 +71,7 @@
       </snapshots>
       <id>fusesource.ea.repo</id>
       <name>JBoss Fuse Early Access Repository</name>
-      <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+      <url>https://${jbossNexus}/nexus/content/groups/ea</url>
     </repository>
     <repository>
       <releases>
@@ -82,7 +82,7 @@
       </snapshots>
       <id>fusesource.release.repo</id>
       <name>JBoss Fuse Release Repository</name>
-      <url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
+      <url>${fusesourceNexusRelease}</url>
     </repository>
     <repository>
       <releases>
@@ -93,7 +93,7 @@
       </snapshots>
       <id>jboss.public.repo</id>
       <name>JBoss Public Repository</name>
-      <url>http://repository.jboss.org/nexus/content/repositories/public</url>
+      <url>https://${jbossNexus}/nexus/content/repositories/public</url>
     </repository>
   </repositories>
   <build>

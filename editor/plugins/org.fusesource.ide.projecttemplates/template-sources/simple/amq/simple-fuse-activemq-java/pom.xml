@@ -87,7 +87,7 @@
 			</snapshots>
 			<id>fuse-public-repository</id>
 			<name>FuseSource Community Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/public</url>
+			<url>${fusesourceNexusCommunity}</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -101,7 +101,7 @@
 			</snapshots>
 			<id>fuse-public-repository</id>
 			<name>FuseSource Community Release Repository</name>
-			<url>https://repo.fusesource.com/nexus/content/groups/public</url>
+			<url>${fusesourceNexusCommunity}</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<build>

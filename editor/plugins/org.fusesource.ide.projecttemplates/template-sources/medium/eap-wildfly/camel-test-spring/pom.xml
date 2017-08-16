@@ -189,7 +189,7 @@
         </repository>
         <repository>
             <id>fusesource-release-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/public/</url>
+            <url>${fusesourceNexusCommunity}/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -199,7 +199,7 @@
         </repository>
         <repository>
             <id>fusesource-earlyaccess-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+            <url>https://${jbossNexus}/nexus/content/groups/ea</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -231,7 +231,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>fusesource-release-plugin-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/public/</url>
+            <url>${fusesourceNexusCommunity}/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -241,7 +241,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>fusesource-earlyaccess-plugin-repository</id>
-            <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+            <url>https://${jbossNexus}/nexus/content/groups/ea</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
