@@ -49,6 +49,8 @@ public class UIMessages extends NLS {
 	public static String routingDrawerTitle;
 	public static String controlFlowDrawerTitle;
 	public static String transformationDrawerTitle;
+	public static String methodSelectionDialogNoMethodSelectedError;
+
 	public static String miscellaneousDrawerTitle;
 	public static String propertiesDetailsTitle;
 	public static String propertiesDocumentationTitle;
