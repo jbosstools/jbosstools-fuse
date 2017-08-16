@@ -40,7 +40,6 @@ import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -48,7 +47,6 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -243,8 +241,6 @@ public class BeanConfigUtil {
 		MethodSelectionDialog dialog = new MethodSelectionDialog(shell, new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT));
 		dialog.setTitle(UIMessages.beanConfigUtilMethodSelectionDialogTitle);
 		dialog.setMessage(dialogMessage);
-		dialog.setMultipleSelection(false);
-		dialog.setEmptyListMessage(UIMessages.beanConfigUtilNoMethodsAvailable);
 		dialog.setElements(methods);
 		dialog.setHelpAvailable(false);
 		if (dialog.open()  == SelectionDialog.OK) {
@@ -254,20 +250,6 @@ public class BeanConfigUtil {
 		return null;
 	}
 	
-	private class MethodSelectionDialog extends ElementListSelectionDialog {
-
-		public MethodSelectionDialog(Shell parent, ILabelProvider renderer) {
-			super(parent, renderer);
-		}
-		@Override
-	    public void setElements(Object[] elements) {
-	    	super.setElements(elements);
-	    	if (elements == null || elements.length == 0) {
-	    		setMessage(UIMessages.beanConfigUtilNoMethodsAvailable);
-	    	}
-	    }		
-	}
-
 	private IMethod[] getNoParamMethods(IType foundClass) throws JavaModelException {
 		return Stream.of(foundClass.getMethods())
 				.filter(method -> method.getNumberOfParameters() == 0)
