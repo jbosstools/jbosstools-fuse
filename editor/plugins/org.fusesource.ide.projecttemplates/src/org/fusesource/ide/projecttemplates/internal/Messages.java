@@ -88,6 +88,8 @@ public class Messages extends NLS {
 	public static String dozerInformationApiBreakTitle;
 	public static String dozerInformationApiBreakMessage;
 
+	public static String camelCatalogVersionNotMatching;
+	
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

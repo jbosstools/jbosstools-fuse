@@ -171,6 +171,7 @@ public class CamelService implements ICamelManagerService {
 		CamelCatalog catalog = getCatalog(coords);
 		CamelModel loadedModel = loadCamelModelFromCatalog(catalog);
 		CamelModelPatcher.applyVersionSpecificCatalogFixes(catalog, loadedModel);
+		loadedModel.setVersion(camelVersion);
 		return loadedModel;
 	}
 	
