@@ -30,8 +30,10 @@ import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreatorWithBrowse;
+import org.fusesource.ide.camel.editor.properties.bean.BeanRefAttributeComboFieldPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.bean.NewBeanIdPropertyValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
+import org.fusesource.ide.camel.editor.properties.bean.PropertyRefValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
@@ -74,6 +76,10 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DEPENDS_ON, String.class.getName()));
 		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_INIT_METHOD, String.class.getName()));
 		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DESTROY_METHOD, String.class.getName()));
+
+		String factoryBeanTag = beanConfigUtil.getFactoryBeanTag(selectedEP.getXmlNode());
+		Parameter factoryBeanParameter = beanConfigUtil.createParameter(factoryBeanTag, String.class.getName());
+		props.add(factoryBeanParameter);
 		
 		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(selectedEP.getXmlNode());
 		props.add(beanConfigUtil.createParameter(factoryAttribute, String.class.getName()));
@@ -138,6 +144,12 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		scopeFieldCreator.create();
 		return scopeFieldCreator;
 	}
+	
+	private BeanRefAttributeComboFieldPropertyUICreator createRefCombo(final Parameter p, final Composite page) {
+		BeanRefAttributeComboFieldPropertyUICreator refFieldCreator = new BeanRefAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
+		refFieldCreator.create();
+		return refFieldCreator;
+	}
 
 	/**
 	 * 
@@ -163,9 +175,10 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			validator = new BeanClassExistsValidator(project);
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName)
 				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)
-				|| GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)
-				|| GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
+				|| GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
 			validator = new PropertyMethodValidator(modelMap, project);
+		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
+			validator = new PropertyRefValidator(p, selectedEP);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			validator = new NewBeanIdPropertyValidator(p, selectedEP);
 		}
@@ -181,12 +194,14 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			createTextFieldWithClassBrowseAndNew(p, page);
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			createTextFieldWithNoArgMethodBrowse(p, page);
-		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName) || GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName)) {
+		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
 			createTextFieldWithPublicStaticMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			createIDTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
 			createScopeCombo(p, page);
+		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
+			createRefCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
 			createTextField(p, page);
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { // handle unsupported props
@@ -293,4 +308,6 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	private void createPublicStaticMethodBrowseButton(Composite composite, Text field) {
 		createMethodBrowseBtn(composite, field, PUBLIC_STATIC_METHOD_BROWSE);
 	}
+	
+	
 }
