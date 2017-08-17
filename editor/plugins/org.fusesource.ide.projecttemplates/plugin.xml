@@ -271,7 +271,23 @@
      </delegate>
   </action>
    	</extension>
-
+    <extension
+         id="CamelCatalogVersionProblem"
+         name="%catalog.version.problem.marker.name"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker2">
+      </super>
+      <attribute
+            name="kind">
+      </attribute>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+    </extension>
 	<extension point="org.eclipse.ui.popupMenus">
 		<objectContribution
 			adaptable="true"
