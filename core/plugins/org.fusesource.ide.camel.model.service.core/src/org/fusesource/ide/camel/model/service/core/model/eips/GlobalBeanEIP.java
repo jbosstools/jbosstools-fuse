@@ -38,6 +38,7 @@ public class GlobalBeanEIP extends Eip {
 	public static final String TAG_PROPERTY = "property"; //$NON-NLS-1$
 	public static final String TAG_ARGUMENT = "argument"; //$NON-NLS-1$
 	public static final String TAG_CONSTRUCTOR_ARG = "constructor-arg"; //$NON-NLS-1$
+	public static final String PROP_FACTORY_REF = "factory-ref"; //$NON-NLS-1$
 	
 	private Map<String, Parameter> parameters = new HashMap<>();
 	
@@ -50,6 +51,7 @@ public class GlobalBeanEIP extends Eip {
 		createParameter(PROP_DESTROY_METHOD, String.class.getName());
 		createParameter(PROP_FACTORY_METHOD, String.class.getName());
 		createParameter(PROP_FACTORY_BEAN, String.class.getName());
+		createParameter(PROP_FACTORY_REF, String.class.getName());
 		setProperties(parameters);
 	}
 	

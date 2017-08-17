@@ -469,6 +469,20 @@ public class BeanConfigUtil {
 		return null;
 	}
 	
+	public String getFactoryBeanTag(Node node) {
+		if (node != null) {
+			boolean isBlueprint = isBlueprintConfig(node);
+			String tagName;
+			if (isBlueprint) {
+				tagName = GlobalBeanEIP.PROP_FACTORY_REF;
+			} else {
+				tagName = GlobalBeanEIP.PROP_FACTORY_BEAN;
+			}
+			return tagName;
+		}
+		return null;
+	}
+
 	public String getArgumentTag(AbstractCamelModelElement camelElement) {
 		if (camelElement instanceof CamelFile) {
 			return getArgumentTag(camelElement.getRouteContainer().getXmlNode());
