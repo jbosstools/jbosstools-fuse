@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -34,21 +32,21 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.foundation.ui.util.Selections;
 
 /**
  * @author brianf
  *
- *    Basic method selection dialog. 
- *    Pass in array of elements (i.e. list of applicable methods)
- *    Return a selected method      
+ *         Basic method selection dialog. Pass in array of elements (i.e. list
+ *         of applicable methods) Return a selected method
  */
 public class MethodSelectionDialog extends TitleAreaDialog {
 
 	private ILabelProvider labelProvider;
 	private Object[] elementArray;
-	private TreeViewer treeViewer;
 	private String message = ""; //$NON-NLS-1$
 	private String title = ""; //$NON-NLS-1$
+	private Object selection = null;
 
 	public MethodSelectionDialog(Shell parent, ILabelProvider renderer) {
 		super(parent);
@@ -72,40 +70,61 @@ public class MethodSelectionDialog extends TitleAreaDialog {
 		// list of elements
 		final FilteredTree elementTable = new FilteredTree(area, SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER,
 				new LocalPatternFilter(), true);
-		elementTable.getFilterControl().addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                // ignore
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                getButton(IDialogConstants.OK_ID).setEnabled(validate());
-            }
-        });
-		elementTable.getFilterControl().addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                // ignore
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                getButton(IDialogConstants.OK_ID).setEnabled(validate());
-            }
-        });
-		
-		treeViewer = elementTable.getViewer();
-		treeViewer.addPostSelectionChangedListener(input -> 
-			getButton(IDialogConstants.OK_ID).setEnabled(validate())
-		);
+		final TreeViewer treeViewer = elementTable.getViewer();
 		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new MethodTreeContentProvider());
 		treeViewer.setLabelProvider(labelProvider);
+
+		// set up for validation
+		elementTable.getFilterControl().addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				// ignore
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				getButton(IDialogConstants.OK_ID).setEnabled(validate());
+			}
+		});
+		elementTable.getFilterControl().addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// ignore
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				getButton(IDialogConstants.OK_ID).setEnabled(validate());
+			}
+		});
+		treeViewer.addPostSelectionChangedListener(input -> {
+			// stash selection
+			if (!elementTable.getViewer().getSelection().isEmpty()) {
+				selection = Selections.getFirstSelection(elementTable.getViewer().getSelection());
+			} else {
+				selection = null;
+			}
+			getButton(IDialogConstants.OK_ID).setEnabled(validate());
+		});
+
+		// handle double-click of item in list automatically closing the dialog
+		treeViewer.addDoubleClickListener(input -> {
+			if (!elementTable.getViewer().getSelection().isEmpty()) {
+				selection = Selections.getFirstSelection(elementTable.getViewer().getSelection());
+				setReturnCode(OK);
+			} else {
+				selection = null;
+				setReturnCode(CANCEL);
+			}
+			close();
+		});
+
 		treeViewer.setInput(elementArray);
 
+		// disable all controls and flag error when nothing to select
 		if (elementArray == null || elementArray.length == 0) {
-			super.setMessage(UIMessages.beanConfigUtilNoMethodsAvailable,  IMessageProvider.ERROR);
+			super.setMessage(UIMessages.beanConfigUtilNoMethodsAvailable, IMessageProvider.ERROR);
 			treeViewer.getTree().setEnabled(false);
 			elementTable.getFilterControl().setEnabled(false);
 		}
@@ -115,22 +134,11 @@ public class MethodSelectionDialog extends TitleAreaDialog {
 
 	/**
 	 * Set the list of available elements to choose from.
+	 * 
 	 * @param elements
 	 */
 	public void setElements(Object[] elements) {
 		elementArray = elements;
-	}
-
-	/**
-	 * Returns an array of the currently selected elements. To be called within or
-	 * after open().
-	 * 
-	 * @return returns an array of the currently selected elements.
-	 */
-	protected Object[] getSelectedElements() {
-		Assert.isNotNull(treeViewer);
-		IStructuredSelection ssel = treeViewer.getStructuredSelection();
-		return ssel.toArray();
 	}
 
 	/**
@@ -140,11 +148,7 @@ public class MethodSelectionDialog extends TitleAreaDialog {
 	 * @return object or null
 	 */
 	public Object getFirstResult() {
-		Object[] result = getSelectedElements();
-		if (result == null || result.length == 0) {
-			return null;
-		}
-		return result[0];
+		return selection;
 	}
 
 	@Override
@@ -173,11 +177,12 @@ public class MethodSelectionDialog extends TitleAreaDialog {
 		return rtnControl;
 	}
 
-	/**
-	 * Validate 
+	/*
+	 * Validate
+	 * 
 	 * @return boolean
 	 */
-	protected boolean validate() {
+	private boolean validate() {
 		setErrorMessage(null);
 		if (elementArray == null || elementArray.length == 0) {
 			setErrorMessage(UIMessages.beanConfigUtilNoMethodsAvailable);
@@ -211,7 +216,6 @@ public class MethodSelectionDialog extends TitleAreaDialog {
 	 *
 	 */
 	class MethodTreeContentProvider implements ITreeContentProvider {
-
 		@Override
 		public Object[] getElements(Object inputElement) {
 			return elementArray;
