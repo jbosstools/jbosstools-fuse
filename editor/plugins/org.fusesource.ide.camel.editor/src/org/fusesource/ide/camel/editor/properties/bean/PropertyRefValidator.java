@@ -13,10 +13,8 @@ package org.fusesource.ide.camel.editor.properties.bean;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.fusesource.ide.camel.editor.globalconfiguration.beans.validation.BeanValidationUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
-import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.model.RefOrDataFormatUnicityChoiceValidator;
 
 /**
