@@ -502,7 +502,7 @@ public class BeanConfigUtil {
 				if (isBlueprint) {
 					tagName = GlobalBeanEIP.PROP_FACTORY_METHOD;
 				} else {
-					tagName = GlobalBeanEIP.PROP_FACTORY_BEAN;
+					tagName = GlobalBeanEIP.PROP_FACTORY_METHOD;
 				}
 				return tagName;
 			}
