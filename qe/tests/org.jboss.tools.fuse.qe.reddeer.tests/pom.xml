@@ -100,6 +100,12 @@
 						<rd.skipUnfixedIssues>${rd.skipUnfixedIssues}</rd.skipUnfixedIssues>
 					</systemProperties>
 					<dependencies combine.children="append">
+						<!-- Workaround for JBIDE-16161/Eclipse bug 424104 -->
+						<dependency>
+							<type>eclipse-feature</type>
+							<artifactId>org.eclipse.e4.rcp</artifactId>
+							<version>0.0.0</version>
+						</dependency>
 						<!-- This entry should enable creating of default JDK on Mac -->
 						<dependency>
 							<type>p2-installable-unit</type>
