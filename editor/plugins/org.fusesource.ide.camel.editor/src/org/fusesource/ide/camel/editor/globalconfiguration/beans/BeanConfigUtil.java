@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -54,6 +55,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -197,7 +199,28 @@ public class BeanConfigUtil {
 		return null;
 	}
 
-	private String openStaticPublicMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+	private String openStaticOrPublicMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+		IType foundClass = jproject.findType(className);
+		if (foundClass != null) {
+			return openMethodDialog(shell, getStaticOrPublicMethods(foundClass), UIMessages.beanConfigUtilSelectStaticPublicMethod);
+		}
+		return null;
+	}
+
+	private IMethod[] getStaticOrPublicMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> {
+					try {
+						return (Flags.isStatic(method.getFlags()) && Flags.isPublic(method.getFlags())) ||
+								(Flags.isPublic(method.getFlags()));
+					} catch (JavaModelException e) {
+						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & static flags.", e); //$NON-NLS-1$
+						return false;
+					}
+				}).toArray(IMethod[]::new);
+	}
+
+	private String openStaticAndPublicMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
 			return openMethodDialog(shell, getStaticPublicMethods(foundClass), UIMessages.beanConfigUtilSelectStaticPublicMethod);
@@ -322,12 +345,26 @@ public class BeanConfigUtil {
 		return null;
 	}
 
-	public String handlePublicStaticMethodBrowse(IProject project, String className, Shell shell) {
+	public String handlePublicOrStaticMethodBrowse(IProject project, String className, Shell shell) {
 		if (project != null) {
 			IJavaProject jproject = JavaCore.create(project);
 			if (jproject.exists()) {
 				try {
-					return openStaticPublicMethodDialog(jproject, className, shell);
+					return openStaticOrPublicMethodDialog(jproject, className, shell);
+				} catch (JavaModelException e) {
+					CamelEditorUIActivator.pluginLog().logError(e);
+				}
+			}
+		}
+		return null;
+	}
+
+	public String handlePublicAndStaticMethodBrowse(IProject project, String className, Shell shell) {
+		if (project != null) {
+			IJavaProject jproject = JavaCore.create(project);
+			if (jproject.exists()) {
+				try {
+					return openStaticAndPublicMethodDialog(jproject, className, shell);
 				} catch (JavaModelException e) {
 					CamelEditorUIActivator.pluginLog().logError(e);
 				}
@@ -667,5 +704,17 @@ public class BeanConfigUtil {
 		if (!Strings.isEmpty(value)) {
 			xmlElement.setAttribute(GlobalBeanEIP.PROP_VALUE, value);
 		}
+	}
+	
+	public String getClassNameFromReferencedCamelBean(AbstractCamelModelElement selectedEP, String refID) {
+		if (!Strings.isEmpty((String) refID)) {
+			Map<String, GlobalDefinitionCamelModelElement> globalDefs = 
+					selectedEP.getCamelFile().getGlobalDefinitions();
+			GlobalDefinitionCamelModelElement referencedBean = globalDefs.get(refID);
+			if (referencedBean != null) {
+				return ((CamelBean) referencedBean).getClassName();
+			}
+		}
+		return null;
 	}
 }

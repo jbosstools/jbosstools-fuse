@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.resources.IProject;
@@ -40,6 +41,8 @@ import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldPara
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
+import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -50,8 +53,9 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
-	private static final int PUBLIC_STATIC_METHOD_BROWSE = 1;
+	private static final int PUBLIC_AND_STATIC_METHOD_BROWSE = 1;
 	private static final int PUBLIC_NO_ARG_METHOD_BROWSE = 2;
+	private static final int PUBLIC_OR_STATIC_METHOD_BROWSE = 3;
 	
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
@@ -115,7 +119,15 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p,  getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.setColumnSpan(2);
 		txtFieldCreator.create();
-		createPublicStaticMethodBrowseButton(page, txtFieldCreator.getControl());
+		createPublicAndStaticMethodBrowseButton(page, txtFieldCreator.getControl());
+		return txtFieldCreator;
+	}
+
+	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithPublicOrStaticMethodBrowse(final Parameter p, final Composite page) {
+		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p,  getValidatorForField(p), page, getWidgetFactory());
+		txtFieldCreator.setColumnSpan(2);
+		txtFieldCreator.create();
+		createPublicOrStaticMethodBrowseButton(page, txtFieldCreator.getControl());
 		return txtFieldCreator;
 	}
 
@@ -195,7 +207,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			createTextFieldWithNoArgMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
-			createTextFieldWithPublicStaticMethodBrowse(p, page);
+			createTextFieldWithPublicOrStaticMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			createIDTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
@@ -280,17 +292,26 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+			// if the class isn't set explicitly, see if there's a bean reference
+			if (Strings.isEmpty((String) control)) {
+				Object ref = modelMap.get(beanConfigUtil.getFactoryBeanTag(selectedEP.getXmlNode()));
+				control = beanConfigUtil.getClassNameFromReferencedCamelBean(selectedEP, (String) ref);
+			}
 			if (control != null) {
 				final IProject project = selectedEP.getCamelFile().getResource().getProject();
 				String className = (String) control;
 				String methodName;
 				switch (methodBrowseType) {
-				case PUBLIC_STATIC_METHOD_BROWSE:
-					methodName = beanConfigUtil.handlePublicStaticMethodBrowse(project, className,
+				case PUBLIC_AND_STATIC_METHOD_BROWSE:
+					methodName = beanConfigUtil.handlePublicAndStaticMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					break;
 				case PUBLIC_NO_ARG_METHOD_BROWSE:
 					methodName = beanConfigUtil.handlePublicNoArgMethodBrowse(project, className,
+							getDisplay().getActiveShell());
+					break;
+				case PUBLIC_OR_STATIC_METHOD_BROWSE:
+					methodName = beanConfigUtil.handlePublicOrStaticMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					break;
 				default:
@@ -305,8 +326,11 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		}
 	}
 
-	private void createPublicStaticMethodBrowseButton(Composite composite, Text field) {
-		createMethodBrowseBtn(composite, field, PUBLIC_STATIC_METHOD_BROWSE);
+	private void createPublicOrStaticMethodBrowseButton(Composite composite, Text field) {
+		createMethodBrowseBtn(composite, field, PUBLIC_OR_STATIC_METHOD_BROWSE);
+	}
+	private void createPublicAndStaticMethodBrowseButton(Composite composite, Text field) {
+		createMethodBrowseBtn(composite, field, PUBLIC_AND_STATIC_METHOD_BROWSE);
 	}
 	
 	
