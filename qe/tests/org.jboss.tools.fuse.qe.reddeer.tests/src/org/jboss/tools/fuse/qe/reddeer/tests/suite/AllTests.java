@@ -16,7 +16,6 @@ import org.jboss.tools.fuse.qe.reddeer.tests.ComponentTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DataTransformationDeploymentTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DataTransformationTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DebuggerTest;
-import org.jboss.tools.fuse.qe.reddeer.tests.DeploymentEAPTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DeploymentTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DownloadServerTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.FeaturesTest;
@@ -47,7 +46,6 @@ import junit.framework.TestSuite;
 	DataTransformationTest.class,
 	DataTransformationDeploymentTest.class,
 	DebuggerTest.class,
-	DeploymentEAPTest.class,
 	DeploymentTest.class,
 	DownloadServerTest.class,
 	FeaturesTest.class,
