@@ -155,6 +155,13 @@ public class JMXNavigator extends WorkbenchView {
 		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
+	public void refreshLocalProcesses() {
+		activate();
+		new DefaultTreeItem("Local Processes").select();
+		new ContextMenu("Refresh").select();
+		AbstractWait.sleep(TimePeriod.SHORT);
+	}
+
 	private void expand(TreeItem item) {
 
 		for (int i = 0; i < 10; i++) {

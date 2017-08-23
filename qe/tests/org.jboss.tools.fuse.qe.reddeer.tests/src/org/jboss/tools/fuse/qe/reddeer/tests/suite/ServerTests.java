@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.qe.reddeer.tests.suite;
 
 import org.jboss.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.qe.reddeer.tests.DataTransformationDeploymentTest;
-import org.jboss.tools.fuse.qe.reddeer.tests.DeploymentEAPTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.DeploymentTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.JMXNavigatorServerTest;
 import org.jboss.tools.fuse.qe.reddeer.tests.QuickStartsTest;
@@ -29,7 +28,6 @@ import junit.framework.TestSuite;
  * @author tsedmik
  */
 @SuiteClasses({
-	DeploymentEAPTest.class,
 	DataTransformationDeploymentTest.class,
 	DeploymentTest.class,
 	JMXNavigatorServerTest.class,
