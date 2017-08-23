@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.fusesource.ide.qe</groupId>
 		<artifactId>tests</artifactId>
-		<version>10.0.0-SNAPSHOT</version>
+		<version>10.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.jboss.tools.fuse.qe.reddeer.tests</artifactId>
 	<name>JBoss Fuse Tooling :: QE :: Tests :: RedDeer Tests</name>

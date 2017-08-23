@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>qe</artifactId>
-		<version>10.0.0-SNAPSHOT</version>
+		<version>10.1.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.fusesource.ide.qe</groupId>
 	<artifactId>tests</artifactId>
 	<name>JBoss Fuse Tooling :: QE :: Tests</name>
-	<version>10.0.0-SNAPSHOT</version>
+	<version>10.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.jboss.tools.fuse.qe.reddeer.tests</module>
