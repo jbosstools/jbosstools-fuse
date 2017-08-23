@@ -109,6 +109,13 @@ public class Messages extends NLS {
 
 	public static String UnzipStreamCreator_UnzippingTemplateFileMonitorMessage;
 	
+	public static String SwitchCamelVersionDialogName;
+	public static String SwitchCamelVersionDialogTitle;
+	public static String SwitchCamelVersionDialog_versionsLabel;
+	
+	public static String ReOpenCamelEditorAfterVersionVersionChangeDialogTitle;
+	public static String ReOpenCamelEditorAfterVersionVersionChangeDialogText;
+	
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

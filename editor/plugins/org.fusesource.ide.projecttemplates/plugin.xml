@@ -240,5 +240,32 @@
             name="%integration.preferences.project.templates">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.fusesource.ide.projecttemplates.modifycamelversion"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.fusesource.ide.projecttemplates.actions.SwitchCamelVersionAction"
+               icon="icons/camel_project_16x16.png"
+               id="org.fusesource.ide.projecttemplates.switchcamelversion"
+               label="%project.popup.modifycamelversion.name"
+               menubarPath="org.eclipse.ui.projectConfigure/additions">
+         </action>
+         <visibility>
+            <and>
+               <objectState
+                     name="projectNature"
+                     value="org.eclipse.jdt.core.javanature">
+               </objectState>
+               <objectState
+                     name="projectNature"
+                     value="org.fusesource.ide.project.RiderProjectNature">
+               </objectState>
+            </and>
+         </visibility>
+      </objectContribution>
+   </extension>
 
 </plugin>
