@@ -39,10 +39,10 @@ import org.fusesource.ide.foundation.core.util.Strings;
  * @author lhein
  */
 public class CamelCatalogUtils {
-	// TODO change the URL once we merged it into master...all versions should point to the file on master
 	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
 	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
-	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/testversions.properties";
+	
+	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
 	
 	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
 	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
@@ -65,9 +65,9 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.2";
-	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
-	private static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
-	private static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -152,17 +152,19 @@ public class CamelCatalogUtils {
 			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000013");
 		}
 
-		try {
-			Properties versionMapping = new Properties();
-			URL url = new URL(TEST_VERSIONS_URL);
-			versionMapping.load(url.openStream());
-		
-			for(String camelVersion : versionMapping.stringPropertyNames()) {
-				TEST_CAMEL_VERSIONS.add(camelVersion);
+		String camelVersionsForTesting = System.getProperty(KEY_CAMEL_TEST_VERSIONS, "").trim();
+		if (camelVersionsForTesting.equalsIgnoreCase("null")) {
+			camelVersionsForTesting = "";
+		}
+		if (!Strings.isBlank(camelVersionsForTesting)) {
+			String[] testVersions = camelVersionsForTesting.split(",");
+			for (String testVersion : testVersions) {
+				String versionToAdd = testVersion.trim();
+				if (!Strings.isBlank(versionToAdd)) {
+					TEST_CAMEL_VERSIONS.add(testVersion.trim());
+				}
 			}
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Test Camel Versions list from online repo. Falling back to defaults.", ex);
-
+		} else {
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_COMMUNITY);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_62);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_63);
