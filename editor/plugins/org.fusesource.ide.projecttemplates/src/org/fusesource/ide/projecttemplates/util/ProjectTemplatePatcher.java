@@ -48,7 +48,6 @@ public class ProjectTemplatePatcher {
 		if (areAriesProxyDependenciesToBeRemoved(this.projectMetaData)) {
 			removeAriesProxyDependencies(m2m);
 		}
-		monitor.done();
 	}
 	
 	private void removeAriesProxyDependencies(Model m2m) {

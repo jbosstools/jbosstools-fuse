@@ -44,10 +44,10 @@ public class CamelCatalogUtils {
 	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
 	public static final String TEST_VERSIONS_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/testversions.properties";
 	
-	public static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
-	public static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
-	public static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
-	public static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
+	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
+	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
+	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
+	private static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
 	public static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
 
 	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
