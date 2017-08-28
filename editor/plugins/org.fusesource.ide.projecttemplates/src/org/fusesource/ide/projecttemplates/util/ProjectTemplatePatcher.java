@@ -10,12 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.util;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
@@ -25,7 +25,6 @@ import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
  */
 public class ProjectTemplatePatcher {
 	
-	private IProject project;
 	private NewProjectMetaData projectMetaData;
 	
 	/**
@@ -34,8 +33,7 @@ public class ProjectTemplatePatcher {
 	 * @param project
 	 * @param projectMetaData
 	 */
-	public ProjectTemplatePatcher(IProject project, NewProjectMetaData projectMetaData) {
-		this.project = project;
+	public ProjectTemplatePatcher(NewProjectMetaData projectMetaData) {
 		this.projectMetaData = projectMetaData;
 	}
 	
@@ -54,15 +52,12 @@ public class ProjectTemplatePatcher {
 	}
 	
 	private void removeAriesProxyDependencies(Model m2m) {
-		if (m2m.getDependencies() == null) return;
-		ArrayList<Dependency> remove = new ArrayList<>();
-		for (Dependency dep : m2m.getDependencies()) {
-			if (dep.getGroupId().equalsIgnoreCase("org.apache.aries.proxy")) {
-				remove.add(dep);
-			}
-		}
-		for (Dependency depToRemove : remove) {
-			m2m.removeDependency(depToRemove);
+		List<Dependency> dependencies = m2m.getDependencies();
+		if(dependencies != null) {
+			dependencies.stream()
+			.filter(dep -> dep != null && "org.apache.aries.proxy".equalsIgnoreCase(dep.getGroupId()))
+			.collect(Collectors.toList())
+			.forEach(m2m::removeDependency);
 		}
 	}
 	

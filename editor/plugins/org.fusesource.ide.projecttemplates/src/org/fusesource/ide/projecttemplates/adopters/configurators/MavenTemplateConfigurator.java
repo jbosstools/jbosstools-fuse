@@ -12,10 +12,7 @@
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -26,7 +23,6 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -123,7 +119,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			
 			MavenUtils.manageStagingRepositories(m2m);
 			
-			ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(project, projectMetaData);
+			ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(projectMetaData);
 			patcher.patch(m2m, subMonitor.split(1));
 			
 			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
