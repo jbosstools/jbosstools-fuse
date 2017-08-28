@@ -17,6 +17,7 @@ import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 
@@ -44,20 +45,31 @@ public class ProjectTemplatePatcher {
 	 * @param monitor	the progress monitor
 	 */
 	public void patch(Model m2m, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 1);
 		// since Fuse 6.3.0.R4 patch release Aries Proxy has been removed - we need to strip them from the templates pom.xml then
 		if (areAriesProxyDependenciesToBeRemoved(this.projectMetaData)) {
-			removeAriesProxyDependencies(m2m);
+			removeAriesProxyDependencies(m2m, subMonitor.split(1));
 		}
+		subMonitor.setWorkRemaining(0);
 	}
 	
-	private void removeAriesProxyDependencies(Model m2m) {
+	private void removeAriesProxyDependencies(Model m2m, IProgressMonitor monitor) {
 		List<Dependency> dependencies = m2m.getDependencies();
 		if(dependencies != null) {
-			dependencies.stream()
-			.filter(dep -> dep != null && "org.apache.aries.proxy".equalsIgnoreCase(dep.getGroupId()))
-			.collect(Collectors.toList())
-			.forEach(m2m::removeDependency);
+			List<Dependency> toRemove = getDependenciesToRemove(dependencies);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, toRemove.size());
+			toRemove.forEach(
+					depToRemove -> {
+						m2m.removeDependency(depToRemove);
+						subMonitor.worked(1);
+						});
 		}
+	}
+
+	protected List<Dependency> getDependenciesToRemove(List<Dependency> dependencies) {
+		return dependencies.stream()
+		.filter(dep -> dep != null && "org.apache.aries.proxy".equalsIgnoreCase(dep.getGroupId()))
+		.collect(Collectors.toList());
 	}
 	
 	private boolean areAriesProxyDependenciesToBeRemoved(NewProjectMetaData projectMetaData) {
