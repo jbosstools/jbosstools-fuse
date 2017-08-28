@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.projecttemplates.preferences;
+package org.fusesource.ide.preferences;
 
 /**
  * @author bfitzpat
@@ -21,5 +21,5 @@ public interface StagingRepositoriesConstants {
 	static final String NAME_URL_SEPARATOR = ","; //$NON-NLS-1$
 	static final String REPO_SEPARATOR = ";"; //$NON-NLS-1$
 	
-	static final String STAGING_REPOSITORIES_PREFERENCE_PAGE_ID = "org.fusesource.ide.projecttemplates.preferences.ProjectTemplatesPreferencePage"; //$NON-NLS-1$
+	static final String STAGING_REPOSITORIES_PREFERENCE_PAGE_ID = "org.fusesource.ide.preferences.StagingRepositoryPreferencePage"; //$NON-NLS-1$
 }

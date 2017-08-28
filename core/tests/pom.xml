@@ -20,9 +20,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.fusesource.ide.camel.model.service.core.tests.integration</module>
 		<module>org.fusesource.ide.camel.model.service.impl.tests.integration</module>
 		<module>org.fusesource.ide.camel.model.tests.integration</module>
+		<module>org.fusesource.ide.preferences.tests</module>
+		<module>org.fusesource.ide.preferences.tests.integration</module>
 		<module>org.fusesource.ide.camel.tests.util</module>
 		<module>org.fusesource.ide.camel.validation.tests</module>
 		<module>org.fusesource.ide.camel.validation.tests.integration</module>
 	</modules>
 </project>
-	

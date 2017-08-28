@@ -85,28 +85,6 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageDSLLabel;
 	public static String newProjectWizardTemplatePageFilterBoxText;
 
-	public static String enableStagingRepositories_field;
-
-	public static String NewRepoDialog_message;
-
-	public static String NewRepoDialog_nameinvalid;
-
-	public static String NewRepoDialog_nameNotUnique;
-
-	public static String NewRepoDialog_urlinvalid;
-
-	public static String NewStagingRepositoryDialogTitle;
-
-	public static String RepositoryName_field;
-
-	public static String RepositoryName_tooltip;
-
-	public static String RepositoryURL_field;
-
-	public static String RepositoryURL_tooltip;
-	public static String stagingRepositoriesList_field;
-	public static String stagingRepositoriesPreferencePageDescription;
-
 	public static String UnzipStreamCreator_UnzippingTemplateFileMonitorMessage;
 	
 	static {

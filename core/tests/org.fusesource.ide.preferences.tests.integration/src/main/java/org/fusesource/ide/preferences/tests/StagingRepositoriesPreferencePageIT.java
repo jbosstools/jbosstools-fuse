@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.tests.preferences;
+package org.fusesource.ide.preferences.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,11 +16,11 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConstants;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesPreferencePage;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoryDialog;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.preferences.Activator;
+import org.fusesource.ide.preferences.StagingRepositoriesConstants;
+import org.fusesource.ide.preferences.StagingRepositoriesPreferencePage;
+import org.fusesource.ide.preferences.StagingRepositoryDialog;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.junit.After;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class StagingRepositoriesPreferencePageIT {
 	@Test
 	public void testStagingRepositoryPreferencePage() throws Exception {
 		// grab the preference store
-		IPreferenceStore preferenceStore = ProjectTemplatesActivator.getDefault().getPreferenceStore();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		assertThat(preferenceStore).isNotNull();
 		
 		// set new test values

@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.preferences;
+package org.fusesource.ide.preferences.initializer;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.draw2d.PositionConstants;
@@ -17,6 +17,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.fusesource.ide.preferences.PreferenceManager;
+import org.fusesource.ide.preferences.PreferencesConstants;
 
 /**
  * @author lhein

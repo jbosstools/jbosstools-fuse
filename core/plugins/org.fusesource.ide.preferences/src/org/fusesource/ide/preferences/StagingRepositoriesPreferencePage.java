@@ -9,7 +9,7 @@
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.projecttemplates.preferences;
+package org.fusesource.ide.preferences;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -18,8 +18,6 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
-import org.fusesource.ide.projecttemplates.internal.Messages;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -52,7 +50,6 @@ public class StagingRepositoriesPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public void createFieldEditors() {
-
 		enableStagingRepositorieslEditor = new BooleanFieldEditor(
 				StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES,
 				Messages.enableStagingRepositories_field, getFieldEditorParent());
@@ -84,7 +81,7 @@ public class StagingRepositoriesPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(ProjectTemplatesActivator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription(Messages.stagingRepositoriesPreferencePageDescription);
 	}
 
@@ -99,7 +96,7 @@ public class StagingRepositoriesPreferencePage extends FieldEditorPreferencePage
 	 */
 	@Override
 	public void setElement(IAdaptable element) {
-		setPreferenceStore(ProjectTemplatesActivator.getDefault().getPreferenceStore());
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription(Messages.stagingRepositoriesPreferencePageDescription);
 	}
 

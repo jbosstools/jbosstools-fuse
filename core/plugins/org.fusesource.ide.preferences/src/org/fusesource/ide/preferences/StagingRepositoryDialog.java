@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.preferences;
+package org.fusesource.ide.preferences;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -29,8 +29,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.projecttemplates.internal.Messages;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 /**
  * Simple dialog to manage a new staging repository entry.

@@ -4,7 +4,24 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.fusesource.ide.preferences.PreferencesInitializer">
+            class="org.fusesource.ide.preferences.initializer.PreferencesInitializer">
       </initializer>
    </extension>
+   <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer
+             class="org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer">
+       </initializer>
+   </extension>
+   <!-- definitions for editor specific preference pages -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.fusesource.ide.branding.preferences.root"
+            class="org.fusesource.ide.preferences.StagingRepositoriesPreferencePage"
+            id="org.fusesource.ide.preferences.StagingRepositoryPreferencePage"
+            name="%integration.preferences.project.templates">
+      </page>
+   </extension>
+   
 </plugin>

@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.preferences.initializer;
+package org.fusesource.ide.preferences.initializer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.doReturn;
 import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConstants;
+import org.fusesource.ide.preferences.StagingRepositoriesConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
