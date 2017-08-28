@@ -19,18 +19,18 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.preferences.l10n.messages";
 
-	public static String enableStagingRepositories_field;
-	public static String stagingRepositoriesList_field;
+	public static String enableStagingRepositoriesField;
+	public static String stagingRepositoriesListField;
 	public static String stagingRepositoriesPreferencePageDescription;
-	public static String NewRepoDialog_message;
-	public static String NewRepoDialog_nameinvalid;
-	public static String NewRepoDialog_nameNotUnique;
-	public static String NewRepoDialog_urlinvalid;
-	public static String NewStagingRepositoryDialogTitle;
-	public static String RepositoryName_field;
-	public static String RepositoryName_tooltip;
-	public static String RepositoryURL_field;
-	public static String RepositoryURL_tooltip;
+	public static String newRepoDialogMessage;
+	public static String newRepoDialogNameInvalid;
+	public static String newRepoDialogNameNotUnique;
+	public static String newRepoDialogUrlInvalid;
+	public static String newStagingRepositoryDialogTitle;
+	public static String repositoryNameField;
+	public static String repositoryNameTooltip;
+	public static String repositoryURLField;
+	public static String repositoryURLTooltip;
 
 	static {
         // initialize resource bundle

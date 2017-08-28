@@ -10,26 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.preferences.tests;
 
-import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
 
 public class PreferencesIntegrationTestsActivator extends BaseUIPlugin {
-	
-	private static PreferencesIntegrationTestsActivator instance = null;
-	
-	public PreferencesIntegrationTestsActivator() {
-		instance = this;
-	}
-	
-	public static PreferencesIntegrationTestsActivator getDefault() {
-		if(instance == null){
-			instance = new PreferencesIntegrationTestsActivator();
-		}
-		return instance;
-	}
-
-	public static IPluginLog pluginLog() {
-		return getDefault().pluginLogInternal();
-	}
-
 }

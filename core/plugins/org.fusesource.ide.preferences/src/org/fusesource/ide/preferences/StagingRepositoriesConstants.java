@@ -14,12 +14,17 @@ package org.fusesource.ide.preferences;
 /**
  * @author bfitzpat
  */
-public interface StagingRepositoriesConstants {
-	static final String ENABLE_STAGING_REPOSITORIES = "enableStagingRepositories"; //$NON-NLS-1$
-	static final String STAGING_REPOSITORIES = "stagingRepositories"; //$NON-NLS-1$
-
-	static final String NAME_URL_SEPARATOR = ","; //$NON-NLS-1$
-	static final String REPO_SEPARATOR = ";"; //$NON-NLS-1$
+public class StagingRepositoriesConstants {
 	
-	static final String STAGING_REPOSITORIES_PREFERENCE_PAGE_ID = "org.fusesource.ide.preferences.StagingRepositoryPreferencePage"; //$NON-NLS-1$
+	private StagingRepositoriesConstants() {
+		// util class
+	}
+	
+	public static final String ENABLE_STAGING_REPOSITORIES = "enableStagingRepositories"; //$NON-NLS-1$
+	public static final String STAGING_REPOSITORIES = "stagingRepositories"; //$NON-NLS-1$
+
+	public static final String NAME_URL_SEPARATOR = ","; //$NON-NLS-1$
+	public static final String REPO_SEPARATOR = ";"; //$NON-NLS-1$
+	
+	public static final String STAGING_REPOSITORIES_PREFERENCE_PAGE_ID = "org.fusesource.ide.preferences.StagingRepositoryPreferencePage"; //$NON-NLS-1$
 }

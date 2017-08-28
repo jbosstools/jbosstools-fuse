@@ -52,12 +52,12 @@ public class StagingRepositoriesPreferencePage extends FieldEditorPreferencePage
 	public void createFieldEditors() {
 		enableStagingRepositorieslEditor = new BooleanFieldEditor(
 				StagingRepositoriesConstants.ENABLE_STAGING_REPOSITORIES,
-				Messages.enableStagingRepositories_field, getFieldEditorParent());
+				Messages.enableStagingRepositoriesField, getFieldEditorParent());
 
 		addField(enableStagingRepositorieslEditor);
 
 		stagingRepositoriesListEditor = new StagingRepositoryListEditor(
-				StagingRepositoriesConstants.STAGING_REPOSITORIES, Messages.stagingRepositoriesList_field,
+				StagingRepositoriesConstants.STAGING_REPOSITORIES, Messages.stagingRepositoriesListField,
 				getFieldEditorParent());
 
 		addField(stagingRepositoriesListEditor);
