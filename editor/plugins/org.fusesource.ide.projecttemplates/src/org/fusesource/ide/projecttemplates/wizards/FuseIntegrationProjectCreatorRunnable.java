@@ -91,10 +91,10 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 8);
 		// first create the project skeleton
 		BasicProjectCreator c = new BasicProjectCreator(metadata);
-		boolean ok = c.create(subMonitor.newChild(1));
+		boolean ok = c.create(subMonitor.split(1));
 		IProject prj = c.getProject();
 		if (ok) {
 			// then configure the project for the given template
@@ -105,12 +105,17 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			}
 			// now execute the template
 			try {
-				template.create(prj, metadata, subMonitor.newChild(1));
+				template.create(prj, metadata, subMonitor.split(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 			}
 		}
 
+		Display.getDefault().syncExec( () -> postProjectCreationSetup(prj, subMonitor.split(6)));
+	}
+
+	private void postProjectCreationSetup(IProject prj, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 6);
 		// switch perspective if needed
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
@@ -119,14 +124,14 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (switchPerspective) {
 			// switch to Fuse perspective if necessary.
 			switchToFusePerspective(workbenchWindow);
-			subMonitor.worked(1);
 		}
+		subMonitor.worked(1);
 		
 		// refresh
 		try {
-			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
-			updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
+			updateBundlePluginConfiguration(prj, subMonitor.split(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
@@ -134,15 +139,14 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
 		if (rs != null && rs.exists()) {
 			try {
-				rs.delete(true, subMonitor.newChild(1));
+				rs.delete(true, subMonitor.split(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
 		}
 		// finally open the camel context file
-		openCamelContextFile(prj, subMonitor.newChild(1));
-		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
-		subMonitor.done();
+		openCamelContextFile(prj, subMonitor.split(1));
+		new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 	}
 
 	/**
@@ -238,14 +242,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	void switchToFusePerspective(final IWorkbenchWindow workbenchWindow) {
 		IPerspectiveDescriptor activePerspective = workbenchWindow.getActivePage().getPerspective();
 		if (activePerspective == null || !activePerspective.getId().equals(FUSE_PERSPECTIVE_ID)) {
-			workbenchWindow.getShell().getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						workbenchWindow.getWorkbench().showPerspective(FUSE_PERSPECTIVE_ID, workbenchWindow);
-					} catch (WorkbenchException e) {
-						ProjectTemplatesActivator.pluginLog().logError(e);
-					}
+			workbenchWindow.getShell().getDisplay().syncExec(() -> {
+				try {
+					workbenchWindow.getWorkbench().showPerspective(FUSE_PERSPECTIVE_ID, workbenchWindow);
+				} catch (WorkbenchException e) {
+					ProjectTemplatesActivator.pluginLog().logError(e);
 				}
 			});
 		}
@@ -309,62 +310,61 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 */
 	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
 		if (project != null) {
-			final IFile[] holder = new IFile[1];
-			searchCamelContextXMLFile(project, holder);
+			final IFile camelContext;
+			final IFile camelContextXml = searchCamelContextXMLFile(project);
+			IFile camelContextJava = null;
 			try {
-				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-					searchCamelContextJavaFile(project, monitor, holder);
+				if (camelContextXml == null && project.hasNature(JavaCore.NATURE_ID)) {
+					camelContextJava = searchCamelContextJavaFile(project, monitor);
 					isJavaEditorToOpen = true;
 				}
 			} catch (CoreException e1) {
 				ProjectTemplatesActivator.pluginLog().logError(e1);
 			}
+			if(camelContextXml != null) {
+				camelContext = camelContextXml;
+			} else {
+				camelContext = camelContextJava;
+			}
 
-			if (holder[0] != null) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (!holder[0].exists()) {
-								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
-							}
-							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-							if(isJavaEditorToOpen){
-								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
-							} else {
-								IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
-								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
-							}
-						} catch (PartInitException e) {
-							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
-						}
-					}
-				});
+			if (camelContext != null) {
+				openEditorForCamelContext(camelContext, monitor);
 			}
 		}
+	}
+
+	protected void openEditorForCamelContext(final IFile camelContext, IProgressMonitor monitor) {
+		Display.getDefault().asyncExec( () -> {
+			try {
+				if (!camelContext.exists()) {
+					new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
+				}
+				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				if(isJavaEditorToOpen){
+					IDE.openEditor(activePage, camelContext, OpenStrategy.activateOnOpen());
+				} else {
+					IDE.setDefaultEditor(camelContext, CamelUtils.CAMEL_EDITOR_ID);
+					IDE.openEditor(activePage, camelContext, CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
+				}
+			} catch (PartInitException e) {
+				ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
+			}
+		});
 	}
 
 	/**
 	 * @param project
 	 * @param monitor
-	 * @param holder
 	 */
-	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
-		if (f != null) {
-			holder[0] = f;
-		}
+	private IFile searchCamelContextJavaFile(IProject project, IProgressMonitor monitor) {
+		return new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
 	}
 
 	/**
 	 * @param project
-	 * @param holder
 	 */
-	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
-		if(!camelFiles.isEmpty()){
-			holder[0] = camelFiles.iterator().next();
-		}
+	private IFile searchCamelContextXMLFile(IProject project) {
+		return new CamelFilesFinder().findFiles(project).stream().findAny().orElse(null);
 	}
 
 }
