@@ -72,7 +72,7 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 	}
 
 	@Override
-	protected void createClassBinding(UpdateValueStrategy strategy) {
+	protected Binding createClassBinding(UpdateValueStrategy strategy) {
 		ComputedValue<?> classValue = new ComputedValue<Object>() {
 
 			@Override
@@ -92,15 +92,21 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 		};
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classValue, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
+		return binding;
 	}
 
 	@Override
-	protected void createIdBinding(UpdateValueStrategy strategy) {
-		// empty
+	protected Binding createIdBinding(UpdateValueStrategy strategy) {
+		return null;
 	}
 
 	@Override
 	protected void createIdLine(Composite composite) {
 		// do not add id line for edit page
+	}
+
+	@Override
+	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
+		return null;
 	}
 }

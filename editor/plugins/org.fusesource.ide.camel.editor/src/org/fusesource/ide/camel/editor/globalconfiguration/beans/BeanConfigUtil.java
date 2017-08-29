@@ -531,20 +531,7 @@ public class BeanConfigUtil {
 	}
 
 	public String getFactoryMethodAttribute(Node node) {
-		if (node != null) {
-			String nsURI = getNamespace(node);
-			if(!Strings.isEmpty(nsURI) && nsURI != null) {
-				boolean isBlueprint = nsURI.contains("blueprint"); //$NON-NLS-1$
-				String tagName;
-				if (isBlueprint) {
-					tagName = GlobalBeanEIP.PROP_FACTORY_METHOD;
-				} else {
-					tagName = GlobalBeanEIP.PROP_FACTORY_METHOD;
-				}
-				return tagName;
-			}
-		}
-		return null;
+		return GlobalBeanEIP.PROP_FACTORY_METHOD;
 	}
 	
 	public String getFactoryMethodAttribute(AbstractCamelModelElement camelElement) {

@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 
+import java.util.ArrayList;
+
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -21,14 +24,19 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author brianf
@@ -39,12 +47,18 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	protected DataBindingContext dbc;
 	protected String id;
 	protected String classname;
+	protected String beanRefId;
 	protected AbstractCamelModelElement parent;
 	protected IObservableValue<String> classObservable;
 	protected BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	protected IProject project = null;
 	protected Text classText;
 	protected Text idText;
+	protected Combo beanRefIdCombo;
+	private Binding refBinding;
+	private Binding classBinding;
+	private BeanRefClassExistsValidator refValidator;
+	private BeanClassExistsValidator classValidator;
 
 	public GlobalBeanBaseWizardPage(String pageName) {
 		super(pageName);
@@ -62,6 +76,9 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		createClassLine(composite);
 		createBrowseButton(composite);
 		createClassNewButton(composite);
+		createBeanRefIdLine(composite);
+		refValidator.setControl(classText);
+		classValidator.setControl(beanRefIdCombo);
 
 		Group argsPropsGroup = new Group(composite, SWT.NONE);
 		argsPropsGroup.setText(UIMessages.globalBeanWizardPageArgumentsGroupLabel);
@@ -83,8 +100,9 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	
 	protected abstract void createArgumentsControls(Composite parent, int cols);
 	protected abstract void createPropsControls(Composite parent, int cols);
-	protected abstract void createClassBinding(UpdateValueStrategy strategy);
-	protected abstract void createIdBinding(UpdateValueStrategy strategy);
+	protected abstract Binding createBeanRefBinding(UpdateValueStrategy strategy);
+	protected abstract Binding createClassBinding(UpdateValueStrategy strategy);
+	protected abstract Binding createIdBinding(UpdateValueStrategy strategy);
 
 	/**
 	 * @param composite
@@ -108,8 +126,10 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new BeanClassExistsValidator(project));
-		createClassBinding(strategy);
+		classValidator = new BeanClassExistsValidator(project, parent, beanRefIdCombo);
+		strategy.setBeforeSetValidator(classValidator);
+		classBinding = createClassBinding(strategy);
+		classText.addModifyListener(value -> pingBindings());
 	}
 
 	private void createBrowseButton(Composite composite) {
@@ -143,6 +163,60 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	}
 
 	/**
+	 * @param composite
+	 */
+	protected void createBeanRefIdLine(Composite composite) {
+		Label beanRefIdLabel = new Label(composite, SWT.NONE);
+		beanRefIdLabel.setText("Factory Bean");
+		beanRefIdCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE | SWT.DROP_DOWN);
+		beanRefIdCombo.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
+        String[] beanRefs = CamelComponentUtils.getRefs(parent.getCamelFile());
+        String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
+        beanRefIdCombo.setItems(updatedBeanRefs);
+		UpdateValueStrategy strategy = new UpdateValueStrategy();
+		refValidator = new BeanRefClassExistsValidator(project, parent, classText);
+		strategy.setBeforeSetValidator(refValidator);
+		beanRefIdCombo.addModifyListener(value -> pingBindings());
+		beanRefIdCombo.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				pingBindings();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// empty
+			}
+		});
+		refBinding = createBeanRefBinding(strategy);
+	}
+
+	private String[] removeRefsWithNoClassFromArray(String[] input) {
+	    ArrayList<String> result = new ArrayList<>();
+	    for(String item : input) {
+	    	String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, item);
+	    	if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
+	            result.add(item);
+	        }
+	    }
+	    return result.toArray(new String[0]);
+	}
+	
+	
+	private void pingBindings() {
+		Display.getCurrent().asyncExec( () -> {
+			if (classBinding != null) {
+				classValidator.setControl(beanRefIdCombo);
+				classBinding.validateTargetToModel();
+			}
+			if (refBinding != null) {
+				refValidator.setControl(classText);
+				refBinding.validateTargetToModel();
+			}
+		});
+	}
+	
+	/**
 	 * @return the id
 	 */
 	public String getId() {
@@ -155,6 +229,20 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the bean ref ID
+	 */
+	public String getBeanRefId() {
+		return beanRefId;
+	}
+
+	/**
+	 * @param beanRefId id to set
+	 */
+	public void setBeanRefId(String beanRefId) {
+		this.beanRefId = beanRefId;
 	}
 
 	/**
