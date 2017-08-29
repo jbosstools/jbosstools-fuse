@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jst.common.project.facet.WtpUtils;
 import org.eclipse.jst.j2ee.web.project.facet.WebFacetUtils;
@@ -217,43 +218,51 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor)
 			throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
 		boolean hasCamelDeps = checkCamelDependencies(m2Project);
 		boolean hasCamelContextXML = false;
 
 		// now determine if we have camel context files in the project
 		// (only if we don't have any camel deps already)
 		if (!hasCamelDeps) {
-			hasCamelContextXML = checkCamelContextsExist(project, monitor);
+			hasCamelContextXML = checkCamelContextsExist(project, subMonitor.split(1));
 		}
+		subMonitor.setWorkRemaining(1);
 
 		// if we got camel deps and/or camel context files we add the fuse
 		// camel nature to this project
 		if (hasCamelDeps || hasCamelContextXML) {
-			addNature(project, RiderProjectNature.NATURE_ID, monitor);
+			addNature(project, RiderProjectNature.NATURE_ID, subMonitor.split(1));
 		}
+		subMonitor.setWorkRemaining(0);
 	}
 
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
-
-		if (!checkCamelContextsExist(project, monitor)) {
+		
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 4);
+		
+		if (!checkCamelContextsExist(project, subMonitor.split(1))) {
 			return;
 		}
-		IFacetedProject fproj = ProjectFacetsManager.create(project, true, monitor);
+		IFacetedProject fproj = ProjectFacetsManager.create(project, true, subMonitor.split(1));
 
 		if (fproj == null) {
 			// Add the modulecore nature
 			WtpUtils.addNatures(project);
-			addNature(project, FacetedProjectNature.NATURE_ID, monitor);
+			addNature(project, FacetedProjectNature.NATURE_ID, subMonitor.split(1));
 			fproj = ProjectFacetsManager.create(project);
 		}
+		subMonitor.setWorkRemaining(1);
 
 		if (fproj != null) {
-			installDefaultFacets(project, mavenProject, fproj, monitor);
+			installDefaultFacets(project, mavenProject, fproj, subMonitor.split(1));
 		}
+		subMonitor.setWorkRemaining(0);
 	}
 
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
 		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(project, false);
 		if (camelVersion != null) {
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
@@ -269,9 +278,9 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
 				}
 			}
-			installCamelFacet(fproj, fpwc, camelVersion, monitor);
-			fpwc.commitChanges(monitor);
-			configureNature(project, mavenProject, monitor);
+			installCamelFacet(fproj, fpwc, camelVersion, subMonitor.split(1));
+			fpwc.commitChanges(subMonitor.split(1));
+			configureNature(project, mavenProject, subMonitor.split(1));
 			updateMavenProject(project);
 		}
 	}
