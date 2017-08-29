@@ -71,17 +71,28 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 	}
 
 	@Override
-	protected void createClassBinding(UpdateValueStrategy strategy) {
+	protected Binding createClassBinding(UpdateValueStrategy strategy) {
 		classObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "classname", String.class).observe(this); //$NON-NLS-1$
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
+		return binding;
 	}
 
 	@Override
-	protected void createIdBinding(UpdateValueStrategy strategy) {
+	protected Binding createIdBinding(UpdateValueStrategy strategy) {
 		final IObservableValue<?> idObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "id", String.class).observe(this); //$NON-NLS-1$
 		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(idText), idObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
+		return binding;
+	}
+
+	@Override
+	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
+		final IObservableValue<?> refObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "beanRefId", String.class).observe(this); //$NON-NLS-1$
+		final IObservableValue<?> selectedBeanRef = WidgetProperties.selection().observe(beanRefIdCombo);
+		Binding binding = dbc.bindValue(selectedBeanRef, refObservable, strategy, null);
+		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
+		return binding;
 	}
 
 }

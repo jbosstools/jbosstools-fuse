@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text
 
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
@@ -31,8 +32,13 @@ public abstract class AbstractTextParameterPropertyModifyListener implements Mod
 
 	@Override
 	public void modifyText(ModifyEvent e) {
-		Text txt = (Text) e.getSource();
-		updateModel(txt.getText());
+		if (e.getSource() instanceof Text) {
+			Text txt = (Text) e.getSource();
+			updateModel(txt.getText());
+		} else if (e.getSource() instanceof Combo) {
+			Combo combo = (Combo) e.getSource();
+			updateModel(combo.getText());
+		}
 	}
 
 	protected abstract void updateModel(String newValue);
