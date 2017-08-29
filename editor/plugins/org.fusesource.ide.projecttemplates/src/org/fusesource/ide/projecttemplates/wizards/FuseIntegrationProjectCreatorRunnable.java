@@ -124,8 +124,8 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		if (switchPerspective) {
 			// switch to Fuse perspective if necessary.
 			switchToFusePerspective(workbenchWindow);
-			subMonitor.worked(1);
 		}
+		subMonitor.worked(1);
 		
 		// refresh
 		try {
@@ -309,60 +309,62 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 * @param project
 	 */
 	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
-		if (project == null) return;
-		
-		final IFile[] holder = new IFile[1];
-		searchCamelContextXMLFile(project, holder);
-		try {
-			if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-				searchCamelContextJavaFile(project, monitor, holder);
-				isJavaEditorToOpen = true;
-			}
-		} catch (CoreException e1) {
-			ProjectTemplatesActivator.pluginLog().logError(e1);
-		}
-
-		if (holder[0] != null) {
-			Display.getDefault().asyncExec( () -> {
-				try {
-					if (!holder[0].exists()) {
-						new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
-					}
-					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					if(isJavaEditorToOpen){
-						IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
-					} else {
-						IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
-						IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
-					}
-				} catch (PartInitException e) {
-					ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
+		if (project != null) {
+			final IFile camelContext;
+			final IFile camelContextXml = searchCamelContextXMLFile(project);
+			IFile camelContextJava = null;
+			try {
+				if (camelContextXml == null && project.hasNature(JavaCore.NATURE_ID)) {
+					camelContextJava = searchCamelContextJavaFile(project, monitor);
+					isJavaEditorToOpen = true;
 				}
-			});
+			} catch (CoreException e1) {
+				ProjectTemplatesActivator.pluginLog().logError(e1);
+			}
+			if(camelContextXml != null) {
+				camelContext = camelContextXml;
+			} else {
+				camelContext = camelContextJava;
+			}
+
+			if (camelContext != null) {
+				openEditorForCamelContext(camelContext, monitor);
+			}
 		}
+	}
+
+	protected void openEditorForCamelContext(final IFile camelContext, IProgressMonitor monitor) {
+		Display.getDefault().asyncExec( () -> {
+			try {
+				if (!camelContext.exists()) {
+					new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
+				}
+				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				if(isJavaEditorToOpen){
+					IDE.openEditor(activePage, camelContext, OpenStrategy.activateOnOpen());
+				} else {
+					IDE.setDefaultEditor(camelContext, CamelUtils.CAMEL_EDITOR_ID);
+					IDE.openEditor(activePage, camelContext, CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
+				}
+			} catch (PartInitException e) {
+				ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
+			}
+		});
 	}
 
 	/**
 	 * @param project
 	 * @param monitor
-	 * @param holder
 	 */
-	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
-		if (f != null) {
-			holder[0] = f;
-		}
+	private IFile searchCamelContextJavaFile(IProject project, IProgressMonitor monitor) {
+		return new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
 	}
 
 	/**
 	 * @param project
-	 * @param holder
 	 */
-	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
-		if(!camelFiles.isEmpty()){
-			holder[0] = camelFiles.iterator().next();
-		}
+	private IFile searchCamelContextXMLFile(IProject project) {
+		return new CamelFilesFinder().findFiles(project).stream().findAny().orElse(null);
 	}
 
 }
