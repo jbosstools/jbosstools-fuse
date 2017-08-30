@@ -14,6 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -28,6 +35,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -37,13 +45,20 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 /**
  * @author Renjith M. 
  */
-public class CamelCtxNavContentProvider implements ICommonContentProvider, ITreeViewerListener {
+public class CamelCtxNavContentProvider implements ICommonContentProvider, ITreeViewerListener, IResourceChangeListener {
 	
 	public static final Object JOB_FAMILY = new Object();
 	
 	private AbstractTreeViewer mViewer;
 	private Job job;
 	private Map<IFile, Object[]> contents = new HashMap<>();	
+	
+	/**
+	 * 
+	 */
+	public CamelCtxNavContentProvider() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+	}
 	
 	@Override
 	public Object[] getChildren(Object parent) { 
@@ -91,8 +106,21 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 		if (!Widgets.isDisposed(mViewer)) {
 			mViewer.removeTreeListener(this);
 		}
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
+	 */
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		try {
+			event.getDelta().accept(new DeltaWalker());
+		} catch (CoreException ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeCollapsed(org.eclipse.jface.viewers.TreeExpansionEvent)
 	 */
@@ -181,5 +209,20 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 		public String toString() {
 			return UIMessages.pending;
 		}		
+	}
+	
+	private class DeltaWalker implements IResourceDeltaVisitor {
+
+		@Override
+		public boolean visit(IResourceDelta delta) {
+			IResource resource = delta.getResource();
+
+			if (resource instanceof IFile && contents.containsKey(resource) && !Widgets.isDisposed(mViewer)) {
+	        	contents.remove(resource);
+	        	Display.getCurrent().asyncExec( () -> mViewer.refresh());
+	        	return false;
+	        }
+			return true; // visit the children
+		}
 	}
 }
