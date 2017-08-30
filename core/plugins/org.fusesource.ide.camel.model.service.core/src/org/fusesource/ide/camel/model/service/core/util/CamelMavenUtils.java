@@ -38,7 +38,7 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 
 public class CamelMavenUtils {
 
-	private static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
+	public static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
 		
 	public List<Repository> getRepositories(IProject project) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
@@ -136,7 +136,7 @@ public class CamelMavenUtils {
 		}
 		return camelVersion;
 	}
-
+	
 	public Model getMavenModel(IProject project) {
 		return getMavenModel(project, false);
 	}

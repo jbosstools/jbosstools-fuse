@@ -70,14 +70,14 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		getShell().setText("New Staging Repository");
-		setTitle(Messages.NewStagingRepositoryDialogTitle);
+		setTitle(Messages.newStagingRepositoryDialogTitle);
 		resetMessage();	    
 	}
 
 	private void resetMessage() {
 		isValid();
 		setErrorMessage(null);
-		setMessage(Messages.NewRepoDialog_message, IMessageProvider.NONE);
+		setMessage(Messages.newRepoDialogMessage, IMessageProvider.NONE);
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		Label lblName = new Label(container, SWT.NONE);
 		GridData gdlblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		lblName.setLayoutData(gdlblNewLabel);
-		lblName.setText(Messages.RepositoryName_field);
-		lblName.setToolTipText(Messages.RepositoryName_tooltip);
+		lblName.setText(Messages.repositoryNameField);
+		lblName.setToolTipText(Messages.repositoryNameTooltip);
 
 		txtRepositoryName = new Text(container, SWT.BORDER);
 		txtRepositoryName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -117,8 +117,8 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		Label lblURL = new Label(container, SWT.NONE);
 		gdlblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		lblURL.setLayoutData(gdlblNewLabel);
-		lblURL.setText(Messages.RepositoryURL_field);
-		lblURL.setToolTipText(Messages.RepositoryURL_tooltip);
+		lblURL.setText(Messages.repositoryURLField);
+		lblURL.setToolTipText(Messages.repositoryURLTooltip);
 
 		txtRepositoryURL = new Text(container, SWT.BORDER);
 		txtRepositoryURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -247,16 +247,16 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		lblNameErrors.setText("");
 		lblURLErrors.setText("");
 		if (!isNameValid) {
-			setErrorMessage(Messages.NewRepoDialog_nameinvalid);
-			lblNameErrors.setText(Messages.NewRepoDialog_nameinvalid);
+			setErrorMessage(Messages.newRepoDialogNameInvalid);
+			lblNameErrors.setText(Messages.newRepoDialogNameInvalid);
 			return isNameValid;
 		} else if (!isNameUnique) {
-			setErrorMessage(Messages.NewRepoDialog_nameNotUnique);
-			lblNameErrors.setText(Messages.NewRepoDialog_nameNotUnique);
+			setErrorMessage(Messages.newRepoDialogNameNotUnique);
+			lblNameErrors.setText(Messages.newRepoDialogNameNotUnique);
 			return isNameUnique;
 		} else if (!isURLValid) {
-			setErrorMessage(Messages.NewRepoDialog_urlinvalid);
-			lblURLErrors.setText(Messages.NewRepoDialog_urlinvalid);
+			setErrorMessage(Messages.newRepoDialogUrlInvalid);
+			lblURLErrors.setText(Messages.newRepoDialogUrlInvalid);
 			return isURLValid;
 		}
 		setErrorMessage(null);

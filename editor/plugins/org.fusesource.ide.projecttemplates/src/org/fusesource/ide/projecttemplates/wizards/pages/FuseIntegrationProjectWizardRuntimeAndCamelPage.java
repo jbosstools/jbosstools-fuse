@@ -366,7 +366,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			if (!Widgets.isDisposed(camelVersionCombo)){
 				camelVersionCombo.setEnabled(true);
 			}
-			setErrorMessage(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
+			setErrorMessage(Messages.fuseIntegrationProjectWizardRuntimeAndCamelPageWarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
 		} else {
 			// and compare if selected camel version fits that version
 			if (!isCompatible(runtimeCamelVersion, getSelectedCamelVersion())) {

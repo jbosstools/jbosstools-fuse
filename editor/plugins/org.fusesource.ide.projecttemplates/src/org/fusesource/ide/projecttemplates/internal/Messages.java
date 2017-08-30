@@ -20,15 +20,15 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.projecttemplates.l10n.messages";
 
-	public static String ArchetypeTemplateCreator_CreatingTemplateFromArchetypeMonitorMessage;
-	public static String BasicProjectCreator_CreatingProjectMonitorMessage;
-	public static String DefaultTemplateConfigurator_ConfiguringJavaProjectMonitorMessage;
-	public static String FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage;
+	public static String archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage;
+	public static String basicProjectCreatorCreatingProjectMonitorMessage;
+	public static String defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage;
+	public static String fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage;
 
-	public static String FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime;
-	public static String MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage;
-	public static String MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage;
-	public static String MavenTemplateConfigurator_ConfiguringTemplatesMonitorMessage;
+	public static String fuseIntegrationProjectWizardRuntimeAndCamelPageWarningMessageWhenCamelVersionCannotBeDeterminedInRuntime;
+	public static String mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage;
+	public static String mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage;
+	public static String mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage;
 	public static String newProjectWizardTitle;
 	public static String newProjectWizardLocationPageName;
 	public static String newProjectWizardLocationPageTitle;
@@ -85,29 +85,36 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageDSLLabel;
 	public static String newProjectWizardTemplatePageFilterBoxText;
 
-	public static String enableStagingRepositories_field;
+	public static String enableStagingRepositoriesField;
 
-	public static String NewRepoDialog_message;
+	public static String newRepoDialogMessage;
 
-	public static String NewRepoDialog_nameinvalid;
+	public static String newRepoDialogNameInvalid;
 
-	public static String NewRepoDialog_nameNotUnique;
+	public static String newRepoDialogNameNotUnique;
 
-	public static String NewRepoDialog_urlinvalid;
+	public static String newRepoDialogUrlInvalid;
 
-	public static String NewStagingRepositoryDialogTitle;
+	public static String newStagingRepositoryDialogTitle;
 
-	public static String RepositoryName_field;
+	public static String repositoryNameField;
 
-	public static String RepositoryName_tooltip;
+	public static String repositoryNameTooltip;
 
-	public static String RepositoryURL_field;
+	public static String repositoryURLField;
 
-	public static String RepositoryURL_tooltip;
-	public static String stagingRepositoriesList_field;
+	public static String repositoryURLTooltip;
+	public static String stagingRepositoriesListField;
 	public static String stagingRepositoriesPreferencePageDescription;
 
-	public static String UnzipStreamCreator_UnzippingTemplateFileMonitorMessage;
+	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
+	
+	public static String switchCamelVersionDialogName;
+	public static String switchCamelVersionDialogTitle;
+	public static String switchCamelVersionDialogVersionsLabel;
+	
+	public static String reOpenCamelEditorAfterVersionVersionChangeDialogTitle;
+	public static String reOpenCamelEditorAfterVersionVersionChangeDialogText;
 	
 	static {
         // initialize resource bundle
