@@ -46,8 +46,8 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 	@Override
 	public void create() {
 		super.create();
-		setTitle(Messages.SwitchCamelVersionDialogName);
-        setMessage(Messages.SwitchCamelVersionDialogTitle, IMessageProvider.INFORMATION);
+		setTitle(Messages.switchCamelVersionDialogName);
+        setMessage(Messages.switchCamelVersionDialogTitle, IMessageProvider.INFORMATION);
 	}
 	
 	/* (non-Javadoc)
@@ -88,7 +88,7 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 
     private void createVersionCombo(Composite container) {
         Label lbtVersion = new Label(container, SWT.NONE);
-        lbtVersion.setText(Messages.SwitchCamelVersionDialog_versionsLabel);
+        lbtVersion.setText(Messages.switchCamelVersionDialogVersionsLabel);
 
         GridData dataVersion = new GridData();
         dataVersion.grabExcessHorizontalSpace = true;

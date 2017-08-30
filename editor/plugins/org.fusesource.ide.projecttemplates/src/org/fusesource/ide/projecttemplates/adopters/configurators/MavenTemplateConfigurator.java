@@ -33,7 +33,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.MavenTemplateConfigurator_ConfiguringTemplatesMonitorMessage, 3);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);
 		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
 		if (ok) {
@@ -57,7 +57,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success
 	 */
 	protected boolean configureMavenNature(IProject project, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage, 4);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage, 4);
 		try {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);

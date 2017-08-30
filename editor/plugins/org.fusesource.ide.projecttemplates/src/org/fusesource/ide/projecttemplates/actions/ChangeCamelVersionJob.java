@@ -46,7 +46,7 @@ public class ChangeCamelVersionJob extends WorkspaceJob {
 	 * 
 	 */
 	public ChangeCamelVersionJob(IProject project, String newVersion) {
-		super(Messages.SwitchCamelVersionDialogName);
+		super(Messages.switchCamelVersionDialogName);
 		this.project = project;
 		this.newVersion = newVersion;
 	}
@@ -88,7 +88,7 @@ public class ChangeCamelVersionJob extends WorkspaceJob {
 					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), input.getCamelContextFile()); 
 				} else {
 					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), input, CamelUtils.CAMEL_EDITOR_ID);
-					MessageDialog.openWarning(editor.getEditorSite().getShell(), Messages.ReOpenCamelEditorAfterVersionVersionChangeDialogTitle, Messages.ReOpenCamelEditorAfterVersionVersionChangeDialogText);
+					MessageDialog.openWarning(editor.getEditorSite().getShell(), Messages.reOpenCamelEditorAfterVersionVersionChangeDialogTitle, Messages.reOpenCamelEditorAfterVersionVersionChangeDialogText);
 				}
 			}
 		}

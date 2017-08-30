@@ -281,7 +281,7 @@ public class MavenUtils {
 	 * @return	true on success, otherwise false
 	 */
 	public static boolean configureCamelVersionForProject(IProject project, String camelVersion, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = new CamelMavenUtils().getMavenModel(project);

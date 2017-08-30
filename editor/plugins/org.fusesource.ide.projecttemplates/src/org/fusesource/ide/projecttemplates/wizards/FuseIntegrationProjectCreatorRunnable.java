@@ -55,10 +55,10 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.model.GlobalPreferences;
 import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
@@ -96,7 +96,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
 			// first create the project skeleton
 			BasicProjectCreator c = new BasicProjectCreator(metadata);
 			boolean ok = c.create(subMonitor.newChild(1));
