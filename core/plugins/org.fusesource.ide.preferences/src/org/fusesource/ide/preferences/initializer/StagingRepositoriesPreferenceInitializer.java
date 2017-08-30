@@ -82,8 +82,7 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	 * @return the stored string list of repositories
 	 */
 	public String getStagingRepositoriesString(){
-		String storedValue = getPreferenceStore().getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
-		return storedValue;
+		return getPreferenceStore().getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
 	}
 	
 	/**
