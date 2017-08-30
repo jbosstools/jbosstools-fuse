@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.navigator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -17,6 +20,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
@@ -32,11 +37,13 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 /**
  * @author Renjith M. 
  */
-public class CamelCtxNavContentProvider implements ICommonContentProvider {
+public class CamelCtxNavContentProvider implements ICommonContentProvider, ITreeViewerListener {
+	
+	public static final Object JOB_FAMILY = new Object();
 	
 	private AbstractTreeViewer mViewer;
 	private Job job;
-	public static final Object JOB_FAMILY = new Object();
+	private Map<IFile, Object[]> contents = new HashMap<>();	
 	
 	@Override
 	public Object[] getChildren(Object parent) { 
@@ -48,15 +55,17 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	
 	private Object[] getRoutes(IFile camelFile){
 		//deferred since load time for context files is unknown
-		LoadingPlaceHolder placeHolder = new LoadingPlaceHolder();
-		doDeferredLoad(camelFile, placeHolder);
-		return new Object[] { placeHolder};
+		if (!contents.containsKey(camelFile)) {
+			LoadingPlaceHolder placeHolder = new LoadingPlaceHolder();
+			doDeferredLoad(camelFile, placeHolder);
+			contents.put(camelFile, new Object[] { placeHolder});
+		}
+		return contents.get(camelFile);
 	}
 	
 	private void doDeferredLoad(final IFile camelFile,final LoadingPlaceHolder placeHolder){
 		//instead of DeferredTreeContentManager
-		job = new LoadingCamelRoutesForNavigatorViewerJob(NLS.bind(UIMessages.loadingCamelFile, camelFile.getName(), camelFile.getProject().getName()), camelFile, placeHolder);
-		
+		job = new LoadingCamelRoutesForNavigatorViewerJob(NLS.bind(UIMessages.loadingCamelFile, camelFile.getName(), camelFile.getProject().getName()), camelFile);
 		job.schedule();
 	}
 
@@ -70,20 +79,42 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (viewer instanceof AbstractTreeViewer) {
 			mViewer = (AbstractTreeViewer) viewer;
+			mViewer.addTreeListener(this);
 		}
 	}
 	
 	@Override
 	public void dispose() {
-		if(mViewer != null && mViewer.getControl() != null) {
-			mViewer.getControl().dispose();
-		}
-		mViewer = null;
 		if(job != null){
 			job.cancel();
 		}
+		if (!Widgets.isDisposed(mViewer)) {
+			mViewer.removeTreeListener(this);
+		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeCollapsed(org.eclipse.jface.viewers.TreeExpansionEvent)
+	 */
+	@Override
+	public void treeCollapsed(TreeExpansionEvent event) {
+		Object collapsedNode = event.getElement();
+		if (collapsedNode instanceof IFile) {
+			contents.remove(collapsedNode);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeExpanded(org.eclipse.jface.viewers.TreeExpansionEvent)
+	 */
+	@Override
+	public void treeExpanded(TreeExpansionEvent event) {
+		Object collapsedNode = event.getElement();
+		if (collapsedNode instanceof IFile && !contents.containsKey(collapsedNode)) {
+			Display.getCurrent().asyncExec( () -> event.getTreeViewer().refresh());
+		}
+	}
+	
 	@Override
 	public Object[] getElements(Object inputElement) {
 		return getChildren(inputElement);
@@ -101,37 +132,27 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	@Override
 	public void init(ICommonContentExtensionSite aConfig) { /*Not supported*/ }
 	
+	
 	private final class LoadingCamelRoutesForNavigatorViewerJob extends Job {
 		private final IFile camelFile;
-		private LoadingPlaceHolder placeHolder;
 
-		private LoadingCamelRoutesForNavigatorViewerJob(String name, IFile camelFile, LoadingPlaceHolder placeHolder) {
+		private LoadingCamelRoutesForNavigatorViewerJob(String name, IFile camelFile) {
 			super(name);
 			this.camelFile = camelFile;
-			this.placeHolder = placeHolder;
 		}
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final CamelCtxNavRouteNode[] routes = getRoutes(camelFile, monitor);
 			if (routes!=null) {
+				contents.put(camelFile, routes);
 				Display.getDefault().asyncExec(() -> {
 					if (!Widgets.isDisposed(mViewer)) {
-						clearPreviouslyComputedData();
-						mViewer.add(camelFile, routes);
-						mViewer.getControl().setData(camelFile.getLocationURI().toString(), routes);
+						mViewer.refresh(true);
 					}
 				});
 			}
 			return Status.OK_STATUS;
-		}
-
-		protected void clearPreviouslyComputedData() {
-			Object[] storedData = (Object[])mViewer.getControl().getData(camelFile.getLocationURI().toString());
-			if(storedData != null) {
-				mViewer.remove(camelFile, storedData);
-			}
-			mViewer.remove(camelFile, new Object[] { placeHolder});
 		}
 		
 		private CamelCtxNavRouteNode[] getRoutes(IFile camelFile, IProgressMonitor monitor) {
