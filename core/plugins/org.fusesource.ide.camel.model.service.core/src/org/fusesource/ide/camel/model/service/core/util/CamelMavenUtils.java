@@ -213,9 +213,11 @@ public class CamelMavenUtils {
 	public List<List<String>> getAdditionalRepos() {
 		List<List<String>> repoList = new ArrayList<>();
 
+		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
+		
 		// add staging repos if enabled
-		if (new StagingRepositoriesPreferenceInitializer().isStagingRepositoriesEnabled()) {
-			repoList.addAll(new StagingRepositoriesPreferenceInitializer().getStagingRepositories());
+		if (initializer.isStagingRepositoriesEnabled()) {
+			repoList.addAll(initializer.getStagingRepositories());
 		}
 				
 		// public asf repo
