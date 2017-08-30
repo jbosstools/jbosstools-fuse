@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.model.Build;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -127,6 +129,10 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
 			// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
 			updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
+			// remove Fuse BOM definition if needed
+			if (!isRedHatBrandedCamelVersion()) {
+				removeFuseBOM(prj, subMonitor.newChild(1));
+			}
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
@@ -145,6 +151,53 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		subMonitor.done();
 	}
 
+	private void removeFuseBOM(IProject project, IProgressMonitor monitor) throws CoreException {
+		try {
+			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
+			Model pomModel = new CamelMavenUtils().getMavenModel(project);
+
+			deleteFuseBOMDependency(pomModel, project);
+
+			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
+				MavenPlugin.getMaven().writeModel(pomModel, out);
+				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
+			}
+		} catch (CoreException | XmlPullParserException | IOException e1) {
+			ProjectTemplatesActivator.pluginLog().logError(e1);
+		}
+	}
+	
+	private void deleteFuseBOMDependency(Model pomModel, IProject project) throws XmlPullParserException, IOException {
+		DependencyManagement depMan = pomModel.getDependencyManagement();
+		if (depMan != null && depMan.getDependencies() != null) {
+			Dependency fuseBOMDep = null;
+			for (Dependency dependency : depMan.getDependencies()) {
+				if (isFuseBOMDep(dependency)) {
+					fuseBOMDep = dependency;
+					break;
+				}
+			}
+			if (fuseBOMDep != null) {
+				depMan.removeDependency(fuseBOMDep);
+			}
+			if (depMan.getDependencies().isEmpty()) {
+				pomModel.setDependencyManagement(null);
+			}
+		}
+	}
+	
+	private boolean isFuseBOMDep(Dependency dep) {
+		return 	dep != null && 
+				dep.getGroupId().equals("org.jboss.fuse.bom") &&
+				dep.getArtifactId().equals("jboss-fuse-parent") && 
+				dep.getType().equals("pom") && 
+				dep.getScope().equals("import");
+	}
+	
+	private boolean isRedHatBrandedCamelVersion() {
+		return metadata.getCamelVersion().indexOf(".redhat-") != -1;
+	}
+	
 	/**
 	 * responsible to update the manifest.mf to use the project name as Bundle-SymbolicName
 	 * 
