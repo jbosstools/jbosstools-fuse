@@ -11,11 +11,21 @@
 package org.fusesource.ide.camel.editor.properties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.MultiValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -37,12 +47,11 @@ import org.fusesource.ide.camel.editor.properties.bean.PropertyMethodValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRefValidator;
 import org.fusesource.ide.camel.editor.properties.bean.PropertyRequiredValidator;
 import org.fusesource.ide.camel.editor.properties.bean.ScopeAttributeComboFieldPropertyUICreator;
+import org.fusesource.ide.camel.editor.properties.creators.AbstractParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.AbstractTextFieldParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.TextParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.advanced.UnsupportedParameterPropertyUICreatorForAdvanced;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.model.CamelBean;
-import org.fusesource.ide.camel.model.service.core.model.GlobalDefinitionCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -58,51 +67,191 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 	private static final int PUBLIC_OR_STATIC_METHOD_BROWSE = 3;
 	
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private List<Parameter> parameterList;
+	private Map<String, IObservableValue<?>> modelValueMap;
+	private Map<String, IObservableValue<?>> targetValueMap;
+	private String factoryBeanTag;
+	
+	@Override
+	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		this.toolkit = new FormToolkit(parent.getDisplay());
+		super.createControls(parent, aTabbedPropertySheetPage);
+	
+		createStandardTabLayout(UIMessages.advancedBeanPropertiesSectionTitle);
+	}
 
+	private void createParameterList() {
+		parameterList = new ArrayList<>();
+
+		// define the properties we're handling here
+		Parameter idParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_ID, String.class.getName());
+		idParam.setRequired("true"); //$NON-NLS-1$
+		parameterList.add(idParam);
+		Parameter classParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_CLASS, String.class.getName());
+		classParam.setRequired("true"); //$NON-NLS-1$
+		parameterList.add(classParam);
+		parameterList.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_SCOPE, String.class.getName()));
+		parameterList.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DEPENDS_ON, String.class.getName()));
+		parameterList.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_INIT_METHOD, String.class.getName()));
+		parameterList.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DESTROY_METHOD, String.class.getName()));
+
+		factoryBeanTag = beanConfigUtil.getFactoryBeanTag(selectedEP.getXmlNode());
+		Parameter factoryBeanParameter = beanConfigUtil.createParameter(factoryBeanTag, String.class.getName());
+		parameterList.add(factoryBeanParameter);
+		
+		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(selectedEP.getXmlNode());
+		parameterList.add(beanConfigUtil.createParameter(factoryAttribute, String.class.getName()));
+
+		parameterList.sort(new ParameterPriorityComparator());
+	}
+	
 	/**
 	 * 
 	 * @param folder
 	 */
 	@Override
 	protected void createContentTabs(CTabFolder folder) {
-		List<Parameter> props = new ArrayList<>();
-		List<String> tabsToCreate = new ArrayList<>();
-		tabsToCreate.add(GROUP_COMMON);
+		createParameterList();
 		
-		// define the properties we're handling here
-		Parameter idParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_ID, String.class.getName());
-		idParam.setRequired("true"); //$NON-NLS-1$
-		props.add(idParam);
-		Parameter classParam = beanConfigUtil.createParameter(GlobalBeanEIP.PROP_CLASS, String.class.getName());
-		classParam.setRequired("true"); //$NON-NLS-1$
-		props.add(classParam);
-		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_SCOPE, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DEPENDS_ON, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_INIT_METHOD, String.class.getName()));
-		props.add(beanConfigUtil.createParameter(GlobalBeanEIP.PROP_DESTROY_METHOD, String.class.getName()));
+		CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
+		contentTab.setText(Strings.humanize(GROUP_COMMON));
+		Composite page = this.toolkit.createComposite(folder);
+		page.setLayout(new GridLayout(4, false));
 
-		String factoryBeanTag = beanConfigUtil.getFactoryBeanTag(selectedEP.getXmlNode());
-		Parameter factoryBeanParameter = beanConfigUtil.createParameter(factoryBeanTag, String.class.getName());
-		props.add(factoryBeanParameter);
-		
-		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(selectedEP.getXmlNode());
-		props.add(beanConfigUtil.createParameter(factoryAttribute, String.class.getName()));
+		generateTabContents(parameterList, page);
+		contentTab.setControl(page);
+		this.tabs.add(contentTab);
+	}
 
-		props.sort(new ParameterPriorityComparator());
-
-		for (String group : tabsToCreate) {
-			CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
-			contentTab.setText(Strings.humanize(group));
-
-			Composite page = this.toolkit.createComposite(folder);
-			page.setLayout(new GridLayout(4, false));
-
-			generateTabContents(props, page);
-
-			contentTab.setControl(page);
-
-			this.tabs.add(contentTab);
+	/**
+	 * 
+	 * @param props
+	 * @param page
+	 * @param ignorePathProperties
+	 * @param group
+	 */
+	protected void generateTabContents(List<Parameter> props, final Composite page) {
+		modelValueMap = new HashMap<>();
+		targetValueMap = new HashMap<>();
+		for (Parameter p : props) {
+			createPropertyLabel(toolkit, page, p);
+			AbstractParameterPropertyUICreator creator = createPropertyFieldEditor(page, p);
+			if (creator != null) {
+				IObservableValue<?> modelValue = (IObservableValue<?>) creator.getBinding().getModel();
+				IObservableValue<?> targetValue = (IObservableValue<?>) creator.getUiObservable();
+				modelValueMap.put(p.getName(), modelValue);
+				targetValueMap.put(p.getName(), targetValue);
+			}
 		}
+
+		IObservableValue<?> classNameObservable = modelValueMap.get(GlobalBeanEIP.PROP_CLASS);
+		IObservableValue<?> beanRefObservable = modelValueMap.get(factoryBeanTag);
+		MultiValidator beanClassAndReferenceValidator = new BeanClassOrReferenceValidator(
+				selectedEP.getCamelFile().getResource().getProject(), classNameObservable, beanRefObservable);
+		dbc.addValidationStatusProvider(beanClassAndReferenceValidator);
+
+//		final IObservableValue<?> classNameTargetObservable = targetValueMap.get(GlobalBeanEIP.PROP_CLASS);
+//		final IObservableValue<?> beanRefTargetObservable = targetValueMap.get(factoryBeanTag);
+		ControlDecorationSupport.create(beanClassAndReferenceValidator, SWT.TOP | SWT.LEFT, parent);
+	}
+	
+	class BeanClassOrReferenceValidator extends MultiValidator {
+		
+		private final IObservableValue<?> classNameObservable;
+		private final IObservableValue<?> beanRefObservable;
+		private final IProject project;
+		
+		BeanClassOrReferenceValidator(final IProject project,
+				final IObservableValue<?> classNameObservable,
+				final IObservableValue<?> beanRefObservable) {
+			this.project = project;
+			this.classNameObservable = classNameObservable;
+			this.beanRefObservable = beanRefObservable;
+		}
+
+		@Override
+		protected IStatus validate() {
+			final String className = (String) classNameObservable.getValue();
+			final String beanRefId = (String) beanRefObservable.getValue();
+			if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
+				return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one.");
+			}
+			if (!Strings.isEmpty(className) && !Strings.isEmpty(beanRefId)) {
+				return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one, not both.");
+			}
+			
+			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(selectedEP, beanRefId);
+			IStatus firstStatus = classExistsInProject(referencedClassName);
+			if (firstStatus != ValidationStatus.ok() && !Strings.isEmpty(className)) {
+				return classExistsInProject(className);
+			}
+			return ValidationStatus.ok();
+		}
+		
+		private IStatus classExistsInProject(String className) {
+			if (className == null || className.isEmpty()) {
+				return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
+			}
+			IJavaProject javaProject = JavaCore.create(this.project);
+	        IType javaClass;
+			try {
+				javaClass = javaProject == null ? null : javaProject.findType(className);
+				if (javaClass == null) {
+					return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMustExist);
+				}
+			} catch (JavaModelException e) {
+				return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMustExist, e);
+			}
+			return ValidationStatus.ok();
+		}
+	}
+
+	private AbstractParameterPropertyUICreator createPropertyFieldEditor(final Composite page, Parameter p) {
+		String propName = p.getName();
+		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
+			return createTextFieldWithClassBrowseAndNew(p, page);
+		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
+			return createTextFieldWithNoArgMethodBrowse(p, page);
+		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
+			return createTextFieldWithPublicOrStaticMethodBrowse(p, page);
+		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
+			return createIDTextField(p, page);
+		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
+			return createScopeCombo(p, page);
+		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
+			return createRefCombo(p, page);
+		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
+			createTextField(p, page);
+		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { 
+			// handle unsupported props
+			AbstractParameterPropertyUICreator creator = new UnsupportedParameterPropertyUICreatorForAdvanced(
+					dbc, modelMap, eip, selectedEP, p, page,getWidgetFactory());
+			creator.create();
+			return creator;
+		}
+		return null;
+	}
+
+	private IValidator getValidatorForField(Parameter p) {
+		IValidator validator = null;
+		IProject project = selectedEP.getCamelFile().getResource().getProject();
+		String propName = p.getName();
+	
+		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
+			validator = new BeanClassExistsValidator(project);
+		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)
+				|| GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
+			validator = new PropertyMethodValidator(modelMap, project);
+		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
+			validator = new PropertyRefValidator(p, selectedEP);
+		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
+			validator = new NewBeanIdPropertyValidator(p, selectedEP);
+		}
+		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
+			validator = new PropertyRequiredValidator(p);
+		}
+		return validator;
 	}
 
 	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithClassBrowseAndNew(final Parameter p, final Composite page) {
@@ -161,73 +310,6 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		BeanRefAttributeComboFieldPropertyUICreator refFieldCreator = new BeanRefAttributeComboFieldPropertyUICreator(dbc, modelMap, eip, selectedEP, p, page, getWidgetFactory());
 		refFieldCreator.create();
 		return refFieldCreator;
-	}
-
-	/**
-	 * 
-	 * @param props
-	 * @param page
-	 * @param ignorePathProperties
-	 * @param group
-	 */
-	protected void generateTabContents(List<Parameter> props, final Composite page) {
-		props.sort(new ParameterPriorityComparator());
-		for (Parameter p : props) {
-			createPropertyLabel(toolkit, page, p);
-			createPropertyFieldEditor(page, p);
-		}
-	}
-
-	private IValidator getValidatorForField(Parameter p) {
-		IValidator validator = null;
-		IProject project = selectedEP.getCamelFile().getResource().getProject();
-		String propName = p.getName();
-
-		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
-			validator = new BeanClassExistsValidator(project);
-		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName)
-				|| GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)
-				|| GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
-			validator = new PropertyMethodValidator(modelMap, project);
-		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
-			validator = new PropertyRefValidator(p, selectedEP);
-		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			validator = new NewBeanIdPropertyValidator(p, selectedEP);
-		}
-		if (validator == null && p.getRequired() != null && "true".contentEquals(p.getRequired())) { //$NON-NLS-1$
-			validator = new PropertyRequiredValidator(p);
-		}
-		return validator;
-	}
-	
-	private void createPropertyFieldEditor(final Composite page, Parameter p) {
-		String propName = p.getName();
-		if (GlobalBeanEIP.PROP_CLASS.equals(propName)) {
-			createTextFieldWithClassBrowseAndNew(p, page);
-		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
-			createTextFieldWithNoArgMethodBrowse(p, page);
-		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
-			createTextFieldWithPublicOrStaticMethodBrowse(p, page);
-		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
-			createIDTextField(p, page);
-		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
-			createScopeCombo(p, page);
-		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
-			createRefCombo(p, page);
-		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
-			createTextField(p, page);
-		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { // handle unsupported props
-			new UnsupportedParameterPropertyUICreatorForAdvanced(dbc, modelMap, eip, selectedEP, p, page,
-					getWidgetFactory()).create();
-		}
-	}	
-	
-	@Override
-	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-		this.toolkit = new FormToolkit(parent.getDisplay());
-		super.createControls(parent, aTabbedPropertySheetPage);
-
-		createStandardTabLayout(UIMessages.advancedBeanPropertiesSectionTitle);
 	}
 
 	private void createClassBrowseButton(Composite composite, Text field) {
