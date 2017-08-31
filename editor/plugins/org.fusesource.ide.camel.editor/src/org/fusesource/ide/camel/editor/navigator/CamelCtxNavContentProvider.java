@@ -27,8 +27,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
-import org.eclipse.jface.viewers.ITreeViewerListener;
-import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
@@ -45,7 +43,7 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 /**
  * @author Renjith M. 
  */
-public class CamelCtxNavContentProvider implements ICommonContentProvider, ITreeViewerListener, IResourceChangeListener {
+public class CamelCtxNavContentProvider implements ICommonContentProvider, IResourceChangeListener {
 	
 	public static final Object JOB_FAMILY = new Object();
 	
@@ -90,7 +88,6 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (viewer instanceof AbstractTreeViewer) {
 			mViewer = (AbstractTreeViewer) viewer;
-			mViewer.addTreeListener(this);
 		}
 	}
 	
@@ -98,9 +95,6 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 	public void dispose() {
 		if(job != null){
 			job.cancel();
-		}
-		if (!Widgets.isDisposed(mViewer)) {
-			mViewer.removeTreeListener(this);
 		}
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
@@ -114,28 +108,6 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 			event.getDelta().accept(new DeltaWalker());
 		} catch (CoreException ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeCollapsed(org.eclipse.jface.viewers.TreeExpansionEvent)
-	 */
-	@Override
-	public void treeCollapsed(TreeExpansionEvent event) {
-		Object collapsedNode = event.getElement();
-		if (collapsedNode instanceof IFile) {
-			contents.remove(collapsedNode);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeViewerListener#treeExpanded(org.eclipse.jface.viewers.TreeExpansionEvent)
-	 */
-	@Override
-	public void treeExpanded(TreeExpansionEvent event) {
-		Object collapsedNode = event.getElement();
-		if (collapsedNode instanceof IFile && !contents.containsKey(collapsedNode)) {
-			Display.getCurrent().asyncExec( () -> event.getTreeViewer().refresh());
 		}
 	}
 	
@@ -213,7 +185,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 		public boolean visit(IResourceDelta delta) {
 			IResource resource = delta.getResource();
 
-			if (resource instanceof IFile && contents.containsKey(resource) && !Widgets.isDisposed(mViewer)) {
+			if (contents.containsKey(resource) && !Widgets.isDisposed(mViewer)) {
 	        	contents.remove(resource);
 	        	Display.getCurrent().asyncExec( () -> mViewer.refresh());
 	        	return false;
