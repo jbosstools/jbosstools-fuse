@@ -212,6 +212,16 @@ public class CamelMavenUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * tests if a given version contains the Red Hat brand string
+	 * 
+	 * @param version
+	 * @return
+	 */
+	public boolean isRedHatBrandedVersion(String version) {
+		return version.toLowerCase().indexOf(".redhat-") != -1;
+	}
 	
 	public List<List<String>> getAdditionalRepos() {
 		List<List<String>> repoList = new ArrayList<>();

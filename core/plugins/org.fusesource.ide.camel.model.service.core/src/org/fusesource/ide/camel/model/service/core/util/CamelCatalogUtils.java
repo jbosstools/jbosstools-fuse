@@ -48,7 +48,7 @@ public class CamelCatalogUtils {
 	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
 	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
 	private static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
-	private static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
+	public static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
 
 	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
 	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
@@ -56,8 +56,8 @@ public class CamelCatalogUtils {
 	private static final String FUSE_63_R3_BOM_VERSION = "6.3.0.redhat-262";
 	private static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
 	
-	private static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
-	private static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
+	public static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
+	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
 	
 	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R1_CAMEL_VERSION;
 	

@@ -27,6 +27,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ProjectTemplatePatcher;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 /**
@@ -89,7 +90,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success, otherwise false
 	 */
 	protected boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 7);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage, 8);
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = new CamelMavenUtils().getMavenModel(project);
@@ -117,6 +118,9 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			subMonitor.worked(1);
 			
 			MavenUtils.manageStagingRepositories(m2m);
+			
+			ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(projectMetaData);
+			patcher.patch(m2m, subMonitor.split(1));
 			
 			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
 		} catch (Exception ex) {
