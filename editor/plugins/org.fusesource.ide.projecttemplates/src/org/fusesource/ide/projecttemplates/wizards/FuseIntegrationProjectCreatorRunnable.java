@@ -96,7 +96,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage, 7);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
 			// first create the project skeleton
 			BasicProjectCreator c = new BasicProjectCreator(metadata);
 			boolean ok = c.create(subMonitor.newChild(1));

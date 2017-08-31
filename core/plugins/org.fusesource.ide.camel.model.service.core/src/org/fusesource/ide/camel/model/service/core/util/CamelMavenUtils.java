@@ -35,7 +35,7 @@ import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceI
 
 public class CamelMavenUtils {
 
-	private static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
+	public static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
 		
 	public List<Repository> getRepositories(IProject project) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);

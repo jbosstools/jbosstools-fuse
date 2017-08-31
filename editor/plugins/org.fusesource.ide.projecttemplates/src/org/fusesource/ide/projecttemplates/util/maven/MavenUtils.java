@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.projecttemplates.util.maven;
 
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,14 +19,23 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Repository;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ProjectTemplatePatcher;
 
 /**
  * @author lhein
@@ -263,5 +273,64 @@ public class MavenUtils {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * changes all occurrences of Camel version in the pom.xml file with the
+	 * version defined in the wizard
+	 * 
+	 * @param project			the project
+	 * @param projectMetaData	the metadata containing the new version
+	 * @param monitor			the progress monitor
+	 * @return	true on success, otherwise false
+	 */
+	public static boolean configureCamelVersionForProject(IProject project, String camelVersion, IProgressMonitor monitor) {
+		return configurePomCamelVersion(project, null, camelVersion, monitor);
+	}
+	
+	/**
+	 * changes all occurrences of Camel version in the pom.xml file with the
+	 * version defined in the wizard
+	 * 
+	 * @param project			the project
+	 * @param projectMetaData	the metadata containing the new version
+	 * @param monitor			the progress monitor
+	 * @return	true on success, otherwise false
+	 */
+	public static boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
+		String newCamelVersion = Strings.isBlank(camelVersion) && projectMetaData != null ? projectMetaData.getCamelVersion() : camelVersion;
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 8);
+		try {
+			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
+			Model m2m = new CamelMavenUtils().getMavenModel(project);
+			subMonitor.worked(1);
+			if (m2m.getDependencyManagement() != null) {
+				MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencyManagement().getDependencies(), newCamelVersion);
+			}
+			subMonitor.worked(1);
+			MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencies(), newCamelVersion);
+			if (m2m.getBuild().getPluginManagement() != null) {
+				MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPluginManagement().getPlugins(), newCamelVersion);
+			}
+			subMonitor.worked(1);
+			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), newCamelVersion);
+			subMonitor.worked(1);
+			
+			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion);
+			subMonitor.worked(1);
+			
+			MavenUtils.manageStagingRepositories(m2m);
+			subMonitor.worked(1);
+			
+			if (projectMetaData != null) {
+				ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(projectMetaData);
+				patcher.patch(m2m, subMonitor.split(1));
+			}
+			
+			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
+		} catch (Exception ex) {
+			ProjectTemplatesActivator.pluginLog().logError(ex);
+			return false;
+		}
+		return true;
+	}
 }

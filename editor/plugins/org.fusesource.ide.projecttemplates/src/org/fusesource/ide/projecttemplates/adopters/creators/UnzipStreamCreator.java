@@ -50,7 +50,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	 * @return
 	 */
 	protected boolean unzipStream(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.UnzipStreamCreator_UnzippingTemplateFileMonitorMessage,  2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.unzipStreamCreatorUnzippingTemplateFileMonitorMessage,  2);
 	     try {
 	    	 // create output directory is not exists
 	    	 File folder = new File(project.getLocation().toOSString());
