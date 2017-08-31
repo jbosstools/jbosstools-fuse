@@ -224,21 +224,5 @@
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>
    	</extension>
-        <extension
-          point="org.eclipse.core.runtime.preferences">
-       <initializer
-             class="org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer">
-       </initializer>
-    </extension>
-   <!-- definitions for editor specific preference pages -->
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.fusesource.ide.branding.preferences.root"
-            class="org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesPreferencePage"
-            id="org.fusesource.ide.projecttemplates.preferences.ProjectTemplatesPreferencePage"
-            name="%integration.preferences.project.templates">
-      </page>
-   </extension>
 
 </plugin>

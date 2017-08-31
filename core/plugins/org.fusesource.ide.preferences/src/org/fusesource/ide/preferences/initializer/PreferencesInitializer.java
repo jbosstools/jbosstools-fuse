@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.preferences;
+package org.fusesource.ide.preferences.initializer;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.draw2d.PositionConstants;
@@ -17,6 +17,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.fusesource.ide.preferences.PreferenceManager;
+import org.fusesource.ide.preferences.PreferencesConstants;
 
 /**
  * @author lhein
@@ -40,16 +42,9 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferencesConstants.EDITOR_FIGURE_FG_COLOR, "128,128,128");
 		store.setDefault(PreferencesConstants.EDITOR_TEXT_COLOR, "0,0,0");
 
-		Display.getDefault().syncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-				store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));				
-			}
+		Display.getDefault().syncExec( () -> {
+			Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+			store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));				
 		});
 	}
 }

@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.preferences.initializer;
+package org.fusesource.ide.preferences.initializer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.preferences.StagingRepositoriesConstants;
+import org.fusesource.ide.preferences.Activator;
+import org.fusesource.ide.preferences.StagingRepositoriesConstants;
 
 public class StagingRepositoriesPreferenceInitializer extends AbstractPreferenceInitializer {
 	
@@ -59,7 +59,7 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	}
 
 	IPreferenceStore getPreferenceStore() {
-		return ProjectTemplatesActivator.getDefault().getPreferenceStore();
+		return Activator.getDefault().getPreferenceStore();
 	}
 	
 	public boolean isStagingRepositoriesEnabled(){
@@ -82,8 +82,7 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	 * @return the stored string list of repositories
 	 */
 	public String getStagingRepositoriesString(){
-		String storedValue = getPreferenceStore().getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
-		return storedValue;
+		return getPreferenceStore().getString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
 	}
 	
 	/**

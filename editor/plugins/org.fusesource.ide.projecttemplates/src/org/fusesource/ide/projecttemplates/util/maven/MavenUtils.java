@@ -24,8 +24,8 @@ import org.eclipse.core.runtime.Platform;
 import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 /**
  * @author lhein

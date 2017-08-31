@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.preferences;
+package org.fusesource.ide.preferences;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -20,7 +20,6 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -29,8 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.projecttemplates.internal.Messages;
-import org.fusesource.ide.projecttemplates.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 /**
  * Simple dialog to manage a new staging repository entry.
@@ -70,14 +68,14 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		getShell().setText("New Staging Repository");
-		setTitle(Messages.NewStagingRepositoryDialogTitle);
+		setTitle(Messages.newStagingRepositoryDialogTitle);
 		resetMessage();	    
 	}
 
 	private void resetMessage() {
 		isValid();
 		setErrorMessage(null);
-		setMessage(Messages.NewRepoDialog_message, IMessageProvider.NONE);
+		setMessage(Messages.newRepoDialogMessage, IMessageProvider.NONE);
 	}
 
 	@Override
@@ -92,21 +90,17 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		Label lblName = new Label(container, SWT.NONE);
 		GridData gdlblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		lblName.setLayoutData(gdlblNewLabel);
-		lblName.setText(Messages.RepositoryName_field);
-		lblName.setToolTipText(Messages.RepositoryName_tooltip);
+		lblName.setText(Messages.repositoryNameField);
+		lblName.setToolTipText(Messages.repositoryNameTooltip);
 
 		txtRepositoryName = new Text(container, SWT.BORDER);
 		txtRepositoryName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtRepositoryName.setText(strRepositoryName);
-		txtRepositoryName.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Text textWidget = (Text) e.getSource();
-				String nameText = textWidget.getText();
-				strRepositoryName = nameText;
-				isValid();
-			}
+		txtRepositoryName.addModifyListener( (ModifyEvent e) -> {
+			Text textWidget = (Text) e.getSource();
+			String nameText = textWidget.getText();
+			strRepositoryName = nameText;
+			isValid();
 		});
 		lblNameErrors = new Label(container, SWT.WRAP);
 		GridData gdLblNameErrors = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
@@ -117,21 +111,17 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		Label lblURL = new Label(container, SWT.NONE);
 		gdlblNewLabel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		lblURL.setLayoutData(gdlblNewLabel);
-		lblURL.setText(Messages.RepositoryURL_field);
-		lblURL.setToolTipText(Messages.RepositoryURL_tooltip);
+		lblURL.setText(Messages.repositoryURLField);
+		lblURL.setToolTipText(Messages.repositoryURLTooltip);
 
 		txtRepositoryURL = new Text(container, SWT.BORDER);
 		txtRepositoryURL.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtRepositoryURL.setText(strRepositoryURL);
-		txtRepositoryURL.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				Text textWidget = (Text) e.getSource();
-				String urlText = textWidget.getText();
-				strRepositoryURL = urlText;
-				isValid();
-			}
+		txtRepositoryURL.addModifyListener( (ModifyEvent e) -> {
+			Text textWidget = (Text) e.getSource();
+			String urlText = textWidget.getText();
+			strRepositoryURL = urlText;
+			isValid();
 		});
 
 		lblURLErrors = new Label(container, SWT.WRAP);
@@ -215,23 +205,10 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 	 * @return true/false
 	 */
 	private boolean isValidName(String name) {
-		// can't be null or blank
-		if (Strings.isBlank(name)) { 
-			return false;
-		}
-		// can't contain spaces 
-		if (name.contains(" ")) { //$NON-NLS-1$
-			return false;
-		}
-		// can't contain the repository separator (semicolon)
-		if (name.contains(StagingRepositoriesConstants.REPO_SEPARATOR)) {
-			return false;
-		}
-		// can't contain the name/url separator (comma)
-		if (name.contains(StagingRepositoriesConstants.NAME_URL_SEPARATOR)) {
-			return false;
-		}
-		return true;
+		return  !Strings.isBlank(name) && 
+				!name.contains(" ") &&
+				!name.contains(StagingRepositoriesConstants.REPO_SEPARATOR) &&
+				!name.contains(StagingRepositoriesConstants.NAME_URL_SEPARATOR);
 	}
 
 	public void pressOK() {
@@ -247,16 +224,16 @@ public class StagingRepositoryDialog extends TitleAreaDialog {
 		lblNameErrors.setText("");
 		lblURLErrors.setText("");
 		if (!isNameValid) {
-			setErrorMessage(Messages.NewRepoDialog_nameinvalid);
-			lblNameErrors.setText(Messages.NewRepoDialog_nameinvalid);
+			setErrorMessage(Messages.newRepoDialogNameInvalid);
+			lblNameErrors.setText(Messages.newRepoDialogNameInvalid);
 			return isNameValid;
 		} else if (!isNameUnique) {
-			setErrorMessage(Messages.NewRepoDialog_nameNotUnique);
-			lblNameErrors.setText(Messages.NewRepoDialog_nameNotUnique);
+			setErrorMessage(Messages.newRepoDialogNameNotUnique);
+			lblNameErrors.setText(Messages.newRepoDialogNameNotUnique);
 			return isNameUnique;
 		} else if (!isURLValid) {
-			setErrorMessage(Messages.NewRepoDialog_urlinvalid);
-			lblURLErrors.setText(Messages.NewRepoDialog_urlinvalid);
+			setErrorMessage(Messages.newRepoDialogUrlInvalid);
+			lblURLErrors.setText(Messages.newRepoDialogUrlInvalid);
 			return isURLValid;
 		}
 		setErrorMessage(null);

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -27,14 +26,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 public class CamelMavenUtils {
 
@@ -225,20 +222,21 @@ public class CamelMavenUtils {
 	
 	public List<List<String>> getAdditionalRepos() {
 		List<List<String>> repoList = new ArrayList<>();
+
+		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
+		
+		// add staging repos if enabled
+		if (initializer.isStagingRepositoriesEnabled()) {
+			repoList.addAll(initializer.getStagingRepositories());
+		}
+				
 		// public asf repo
 		repoList.add(Arrays.asList("asf-public", "https://repo.maven.apache.org/maven2"));
 		// old fuse repo
 		repoList.add(Arrays.asList("old-fuse", "https://repository.jboss.org/nexus/content/repositories/fs-releases"));
 		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
-		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.fusesource.ide.projecttemplates");
-		if (s.getBoolean("enableStagingRepositories")) {
-			String repos = s.getString("stagingRepositories");
-			repoList.addAll(Arrays.asList(repos.split(";"))
-					.stream()
-					.map(repoName -> Arrays.asList(repoName.split(",")))
-					.collect(Collectors.toList()));
-		}
+		
 		return repoList;
 	}
 }

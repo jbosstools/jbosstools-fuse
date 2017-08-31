@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.preferences;
+package org.fusesource.ide.preferences;
 
 import java.util.ArrayList;
 import java.util.List;
