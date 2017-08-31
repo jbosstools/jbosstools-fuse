@@ -52,6 +52,7 @@ public abstract class AbstractParameterPropertyUICreator {
 	protected Component component = null;
 	private Composite parent;
 	private int columnSpan = 3;
+	private Binding bindValue;
 
 	public AbstractParameterPropertyUICreator(DataBindingContext dbc, IObservableMap modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
@@ -87,7 +88,7 @@ public abstract class AbstractParameterPropertyUICreator {
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
 		strategy.setBeforeSetValidator(validator);
 
-		Binding bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
+		bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
 
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 	}
@@ -96,6 +97,10 @@ public abstract class AbstractParameterPropertyUICreator {
 
 	public abstract Object getInitialValue();
 
+	public Binding getBinding() {
+		return bindValue;
+	}
+	
 	public Control getControl() {
 		return control;
 	}
