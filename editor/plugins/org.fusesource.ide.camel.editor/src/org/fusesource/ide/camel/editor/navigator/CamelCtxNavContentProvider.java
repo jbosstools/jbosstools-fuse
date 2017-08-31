@@ -10,7 +10,17 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.navigator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -23,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -32,11 +43,17 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 /**
  * @author Renjith M. 
  */
-public class CamelCtxNavContentProvider implements ICommonContentProvider {
+public class CamelCtxNavContentProvider implements ICommonContentProvider, IResourceChangeListener {
+	
+	public static final Object JOB_FAMILY = new Object();
 	
 	private AbstractTreeViewer mViewer;
 	private Job job;
-	public static final Object JOB_FAMILY = new Object();
+	private Map<IFile, Object[]> contents = new HashMap<>();	
+	
+	public CamelCtxNavContentProvider() {
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+	}
 	
 	@Override
 	public Object[] getChildren(Object parent) { 
@@ -48,15 +65,16 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	
 	private Object[] getRoutes(IFile camelFile){
 		//deferred since load time for context files is unknown
-		LoadingPlaceHolder placeHolder = new LoadingPlaceHolder();
-		doDeferredLoad(camelFile, placeHolder);
-		return new Object[] { placeHolder};
+		if (!contents.containsKey(camelFile)) {
+			doDeferredLoad(camelFile);
+			contents.put(camelFile, new Object[] { new LoadingPlaceHolder()});
+		}
+		return contents.get(camelFile);
 	}
 	
-	private void doDeferredLoad(final IFile camelFile,final LoadingPlaceHolder placeHolder){
+	private void doDeferredLoad(final IFile camelFile){
 		//instead of DeferredTreeContentManager
-		job = new LoadingCamelRoutesForNavigatorViewerJob(NLS.bind(UIMessages.loadingCamelFile, camelFile.getName(), camelFile.getProject().getName()), camelFile, placeHolder);
-		
+		job = new LoadingCamelRoutesForNavigatorViewerJob(NLS.bind(UIMessages.loadingCamelFile, camelFile.getName(), camelFile.getProject().getName()), camelFile);
 		job.schedule();
 	}
 
@@ -75,15 +93,24 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	
 	@Override
 	public void dispose() {
-		if(mViewer != null && mViewer.getControl() != null) {
-			mViewer.getControl().dispose();
-		}
-		mViewer = null;
 		if(job != null){
 			job.cancel();
 		}
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
+	 */
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		try {
+			event.getDelta().accept(new DeltaWalker());
+		} catch (CoreException ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		}
+	}
+	
 	@Override
 	public Object[] getElements(Object inputElement) {
 		return getChildren(inputElement);
@@ -101,37 +128,27 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 	@Override
 	public void init(ICommonContentExtensionSite aConfig) { /*Not supported*/ }
 	
+	
 	private final class LoadingCamelRoutesForNavigatorViewerJob extends Job {
 		private final IFile camelFile;
-		private LoadingPlaceHolder placeHolder;
 
-		private LoadingCamelRoutesForNavigatorViewerJob(String name, IFile camelFile, LoadingPlaceHolder placeHolder) {
+		private LoadingCamelRoutesForNavigatorViewerJob(String name, IFile camelFile) {
 			super(name);
 			this.camelFile = camelFile;
-			this.placeHolder = placeHolder;
 		}
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final CamelCtxNavRouteNode[] routes = getRoutes(camelFile, monitor);
 			if (routes!=null) {
+				contents.put(camelFile, routes);
 				Display.getDefault().asyncExec(() -> {
 					if (!Widgets.isDisposed(mViewer)) {
-						clearPreviouslyComputedData();
-						mViewer.add(camelFile, routes);
-						mViewer.getControl().setData(camelFile.getLocationURI().toString(), routes);
+						mViewer.refresh(true);
 					}
 				});
 			}
 			return Status.OK_STATUS;
-		}
-
-		protected void clearPreviouslyComputedData() {
-			Object[] storedData = (Object[])mViewer.getControl().getData(camelFile.getLocationURI().toString());
-			if(storedData != null) {
-				mViewer.remove(camelFile, storedData);
-			}
-			mViewer.remove(camelFile, new Object[] { placeHolder});
 		}
 		
 		private CamelCtxNavRouteNode[] getRoutes(IFile camelFile, IProgressMonitor monitor) {
@@ -160,5 +177,20 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 		public String toString() {
 			return UIMessages.pending;
 		}		
+	}
+	
+	private class DeltaWalker implements IResourceDeltaVisitor {
+
+		@Override
+		public boolean visit(IResourceDelta delta) {
+			IResource resource = delta.getResource();
+
+			if (contents.containsKey(resource) && !Widgets.isDisposed(mViewer)) {
+	        	contents.remove(resource);
+	        	Display.getCurrent().asyncExec( () -> mViewer.refresh());
+	        	return false;
+	        }
+			return true; // visit the children
+		}
 	}
 }
