@@ -53,9 +53,6 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 	private Job job;
 	private Map<IFile, Object[]> contents = new HashMap<>();	
 	
-	/**
-	 * 
-	 */
 	public CamelCtxNavContentProvider() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
