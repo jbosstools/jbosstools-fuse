@@ -156,14 +156,9 @@ public class CamelCatalogUtils {
 		if (camelVersionsForTesting.equalsIgnoreCase("null")) {
 			camelVersionsForTesting = "";
 		}
+
 		if (!Strings.isBlank(camelVersionsForTesting)) {
-			String[] testVersions = camelVersionsForTesting.split(",");
-			for (String testVersion : testVersions) {
-				String versionToAdd = testVersion.trim();
-				if (!Strings.isBlank(versionToAdd)) {
-					TEST_CAMEL_VERSIONS.add(testVersion.trim());
-				}
-			}
+			Arrays.stream(camelVersionsForTesting.split(",")).map(String::trim).filter(Strings::isBlank).forEach(TEST_CAMEL_VERSIONS::add);
 		} else {
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_COMMUNITY);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_62);
