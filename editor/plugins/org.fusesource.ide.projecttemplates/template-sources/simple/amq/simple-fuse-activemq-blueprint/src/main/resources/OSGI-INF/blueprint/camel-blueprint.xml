@@ -46,11 +46,17 @@
     <!-- 
          Lets connect the Camel ActiveMQ component to the broker.
     -->
-    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="activemq-connection-factory">
         <property name="brokerURL" value="${broker.url}"/>
         <property name="userName" value="${broker.username}"/>
         <property name="password" value="${broker.password}"/>
-        <property name="usePooledConnection" value="false"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="configuration">
+            <bean class="org.apache.activemq.camel.component.ActiveMQConfiguration">
+                <property name="connectionFactory" ref="activemq-connection-factory"/>
+            </bean>
+        </property>
     </bean>
     <!--
         The namespace for the camelContext element in Blueprint is 'http://camel.apache.org/schema/blueprint'. 
@@ -85,7 +91,7 @@
         <route id="file-to-jms-route">
             <from id="incomingFolder" uri="file:work/in"/>
             <log id="logReceivingOrder" message="Receiving order ${file:name}"/>
-            <to id="sendIncomingOrder" uri="activemq:incomingOrders?username=${broker.userName}&amp;password=${broker.password}"/>
+            <to id="sendIncomingOrder" uri="activemq:incomingOrders"/>
         </route>
         <!--
           This route consumes messages from the JMS queue incomingOrders on the 
@@ -99,7 +105,7 @@
           the <when/> elements will be moved to the work/jms/output/others directory.
         -->
         <route id="jms-cbr-route" streamCache="true">
-            <from id="listenToIncomingOrder" uri="activemq:incomingOrders?username=${broker.userName}&amp;password=${broker.password}"/>
+            <from id="listenToIncomingOrder" uri="activemq:incomingOrders"/>
             <choice id="countrySelection">
                 <when id="UKCustomer">
                     <xpath id="_xpath1">/order:order/order:customer/order:country = 'UK'</xpath>
