@@ -71,14 +71,13 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, ITree
 	private Object[] getRoutes(IFile camelFile){
 		//deferred since load time for context files is unknown
 		if (!contents.containsKey(camelFile)) {
-			LoadingPlaceHolder placeHolder = new LoadingPlaceHolder();
-			doDeferredLoad(camelFile, placeHolder);
-			contents.put(camelFile, new Object[] { placeHolder});
+			doDeferredLoad(camelFile);
+			contents.put(camelFile, new Object[] { new LoadingPlaceHolder()});
 		}
 		return contents.get(camelFile);
 	}
 	
-	private void doDeferredLoad(final IFile camelFile,final LoadingPlaceHolder placeHolder){
+	private void doDeferredLoad(final IFile camelFile){
 		//instead of DeferredTreeContentManager
 		job = new LoadingCamelRoutesForNavigatorViewerJob(NLS.bind(UIMessages.loadingCamelFile, camelFile.getName(), camelFile.getProject().getName()), camelFile);
 		job.schedule();
