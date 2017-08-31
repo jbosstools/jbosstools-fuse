@@ -13,6 +13,8 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
@@ -41,5 +43,10 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	protected void additionalChecks(IProject project) {
 		assertThat(project.findMember("src/main/java/META-INF/MANIFEST.MF")).as("A bad Manifest has been generated").isNull();
 		assertThat(project.getFile(".settings/fusetooling/Deploy " + project.getName() + " on OpenShift.launch").getLocation().toFile()).exists();
+	}
+	
+	@Override
+	protected void additionalMavenAttributes(ILaunchConfigurationWorkingCopy workingCopy) {
+		workingCopy.setAttribute(MavenLaunchConstants.ATTR_DEBUG_OUTPUT, true);
 	}
 }
