@@ -43,7 +43,7 @@ public class BasicProjectCreator {
 	 * @return	true on success
 	 */
 	public boolean create(IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.BasicProjectCreator_CreatingProjectMonitorMessage, 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.basicProjectCreatorCreatingProjectMonitorMessage, 2);
 		try {
 			// first create the project
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

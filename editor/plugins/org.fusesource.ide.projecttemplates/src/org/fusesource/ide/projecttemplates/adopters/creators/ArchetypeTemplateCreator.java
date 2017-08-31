@@ -36,7 +36,7 @@ public abstract class ArchetypeTemplateCreator implements TemplateCreatorSupport
 	 */
 	@Override
 	public boolean create(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.ArchetypeTemplateCreator_CreatingTemplateFromArchetypeMonitorMessage, 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage, 2);
 		Archetype archetype = getArchetype(metadata, subMonitor.newChild(1));
 		
 		ProjectImportConfiguration config = null;

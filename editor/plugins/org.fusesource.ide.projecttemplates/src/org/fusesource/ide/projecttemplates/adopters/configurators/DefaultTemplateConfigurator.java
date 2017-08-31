@@ -49,7 +49,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.DefaultTemplateConfigurator_ConfiguringJavaProjectMonitorMessage, 9);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 9);
 		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
 			// add java facet

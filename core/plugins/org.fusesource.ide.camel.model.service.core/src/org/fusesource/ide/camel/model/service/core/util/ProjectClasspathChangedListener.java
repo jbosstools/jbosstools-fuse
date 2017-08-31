@@ -132,16 +132,18 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
     	// refresh catalog if needed
 		IProject prj = project.getProject();
 		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj);
-		boolean camelVersionChanged = true;
-		String oldCamelVersion = knownProjects.get(prj);
-		if (!knownProjects.containsKey(prj)) {
-			knownProjects.put(prj, camelVersion);
-		} else {
-			camelVersionChanged = !camelVersion.equals(oldCamelVersion);
-		}
-		if (camelVersionChanged) {
-			knownProjects.put(prj, camelVersion);
-			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj);
+		if (camelVersion != null) {
+			boolean camelVersionChanged = true;
+			String oldCamelVersion = knownProjects.get(prj);
+			if (!knownProjects.containsKey(prj)) {
+				knownProjects.put(prj, camelVersion);
+			} else {
+				camelVersionChanged = !camelVersion.equals(oldCamelVersion);
+			}
+			if (camelVersionChanged) {
+				knownProjects.put(prj, camelVersion);
+				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj);
+			}
 		}
     }
 }

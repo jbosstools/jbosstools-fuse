@@ -64,7 +64,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 		doReturn(runtime).when(page).getSelectedRuntime();
 		when(runtime.getRuntimeType().getId()).thenReturn(RuntimeCamelVersionFinder.FUSE_RUNTIME_PREFIX);
 		page.validate();
-		verify(page).setErrorMessage(Messages.FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
+		verify(page).setErrorMessage(Messages.fuseIntegrationProjectWizardRuntimeAndCamelPageWarningMessageWhenCamelVersionCannotBeDeterminedInRuntime);
 	}
 	
 	@Test

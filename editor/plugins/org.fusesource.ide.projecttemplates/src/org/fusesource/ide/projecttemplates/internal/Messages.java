@@ -20,15 +20,15 @@ public class Messages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.fusesource.ide.projecttemplates.l10n.messages";
 
-	public static String ArchetypeTemplateCreator_CreatingTemplateFromArchetypeMonitorMessage;
-	public static String BasicProjectCreator_CreatingProjectMonitorMessage;
-	public static String DefaultTemplateConfigurator_ConfiguringJavaProjectMonitorMessage;
-	public static String FuseIntegrationProjectCreatorRunnable_CreatingTheProjectMonitorMessage;
+	public static String archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage;
+	public static String basicProjectCreatorCreatingProjectMonitorMessage;
+	public static String defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage;
+	public static String fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage;
 
-	public static String FuseIntegrationProjectWizardRuntimeAndCamelPage_WarningMessageWhenCamelVersionCannotBeDeterminedInRuntime;
-	public static String MavenTemplateConfigurator_AdaptingprojectToCamelVersionMonitorMessage;
-	public static String MavenTemplateConfigurator_ConfiguringMavenNatureMonitorMessage;
-	public static String MavenTemplateConfigurator_ConfiguringTemplatesMonitorMessage;
+	public static String fuseIntegrationProjectWizardRuntimeAndCamelPageWarningMessageWhenCamelVersionCannotBeDeterminedInRuntime;
+	public static String mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage;
+	public static String mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage;
+	public static String mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage;
 	public static String newProjectWizardTitle;
 	public static String newProjectWizardLocationPageName;
 	public static String newProjectWizardLocationPageTitle;
@@ -85,7 +85,14 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageDSLLabel;
 	public static String newProjectWizardTemplatePageFilterBoxText;
 
-	public static String UnzipStreamCreator_UnzippingTemplateFileMonitorMessage;
+	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
+	
+	public static String switchCamelVersionDialogName;
+	public static String switchCamelVersionDialogTitle;
+	public static String switchCamelVersionDialogVersionsLabel;
+
+	public static String reOpenCamelEditorAfterVersionVersionChangeDialogTitle;
+	public static String reOpenCamelEditorAfterVersionVersionChangeDialogText;
 	
 	static {
         // initialize resource bundle
