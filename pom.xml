@@ -66,6 +66,9 @@
 		<jackson.version>2.5.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<sonar.test.inclusions>**/*Test.*,**/test/**/*,**/*IT.*</sonar.test.inclusions>
+		
+		<!-- This property allows to specify Camel version used during test executions (where applicable). It is a comma-separated list. -->
+		<camelVersionsToTestWith />
 	</properties>
 
 	<modules>
@@ -248,7 +251,8 @@
 						<id>test</id>
 						<phase>test</phase>
 						<configuration>
-							<systemProperties>
+							<systemProperties combine.children="append">
+								<FUSE_TOOLING_CAMEL_TEST_VERSIONS>${camelVersionsToTestWith}</FUSE_TOOLING_CAMEL_TEST_VERSIONS>
 								<osgi.nls.warnings>ignore</osgi.nls.warnings>
 							</systemProperties>
 						</configuration>
@@ -264,6 +268,9 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tychoVersion}</version>
 				<configuration>
+					<systemProperties combine.children="append">
+						<FUSE_TOOLING_CAMEL_TEST_VERSIONS>${camelVersionsToTestWith}</FUSE_TOOLING_CAMEL_TEST_VERSIONS>
+					</systemProperties>
 					<useUIThread>true</useUIThread>
 					<useUIHarness>true</useUIHarness>
 					<includes>
