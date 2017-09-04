@@ -74,7 +74,7 @@ public class ServerBeanTypeKaraf3x extends ServerBeanType {
 		 * @return
 		 */
 		protected static boolean checkKarafVersion(File location, String property, String propPrefix) {
-			String mainFolder = new ServerBeanTypeKaraf2x().getSystemJarPath();
+			String mainFolder = new ServerBeanTypeKaraf3x().getSystemJarPath();
 			String value = getJarProperty(new File(location + File.separator + mainFolder), property);
 			return value != null && value.startsWith(propPrefix);
 		}

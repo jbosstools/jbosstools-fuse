@@ -17,6 +17,7 @@ public class KarafBeanProvider implements IServerBeanTypeProvider {
 
 	public static final ServerBeanTypeKaraf2x KARAF_2x = new ServerBeanTypeKaraf2x();
 	public static final ServerBeanTypeKaraf3x KARAF_3x = new ServerBeanTypeKaraf3x();
+	public static final ServerBeanTypeKaraf4x KARAF_4x = new ServerBeanTypeKaraf4x();
 	
 	/*
 	 * (non-Javadoc)
@@ -24,6 +25,6 @@ public class KarafBeanProvider implements IServerBeanTypeProvider {
 	 */
 	@Override
 	public ServerBeanType[] getServerBeanTypes() {
-		return new ServerBeanType[] { KARAF_2x, KARAF_3x };
+		return new ServerBeanType[] { KARAF_2x, KARAF_3x, KARAF_4x };
 	}
 }

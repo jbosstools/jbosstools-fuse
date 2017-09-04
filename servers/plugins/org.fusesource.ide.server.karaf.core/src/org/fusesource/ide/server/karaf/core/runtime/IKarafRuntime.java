@@ -15,6 +15,8 @@ import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.R
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_23;
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_24;
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_30;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_40;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_41;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -27,7 +29,7 @@ import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 public interface IKarafRuntime {
 
 	static final String[] KARAF_RUNTIME_TYPES_SUPPORTED = new String[] {
-		RUNTIME_KARAF_22, RUNTIME_KARAF_23, RUNTIME_KARAF_24, RUNTIME_KARAF_30
+		RUNTIME_KARAF_22, RUNTIME_KARAF_23, RUNTIME_KARAF_24, RUNTIME_KARAF_30, RUNTIME_KARAF_40, RUNTIME_KARAF_41
 	};
 	
 	/**

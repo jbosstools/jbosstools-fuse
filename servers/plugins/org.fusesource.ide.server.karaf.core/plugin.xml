@@ -51,6 +51,30 @@
        <moduleType types="jst.utility" versions="1.0"></moduleType>
        <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
+          description="%runtimeTypeKarafDescription_40"
+          id="org.fusesource.ide.karaf.runtime.40"
+          name="%runtimeTypeKarafLabel_40"
+          vendor="%apache"
+          vendorId="%apache"
+          version="4.0">
+       <moduleType types="fuse.camel" versions="1.0"></moduleType>
+       <moduleType types="jst.utility" versions="1.0"></moduleType>
+       <moduleType types="jboss.osgi" versions="1.0"></moduleType>
+    </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
+          description="%runtimeTypeKarafDescription_41"
+          id="org.fusesource.ide.karaf.runtime.41"
+          name="%runtimeTypeKarafLabel_41"
+          vendor="%apache"
+          vendorId="%apache"
+          version="4.1">
+       <moduleType types="fuse.camel" versions="1.0"></moduleType>
+       <moduleType types="jst.utility" versions="1.0"></moduleType>
+       <moduleType types="jboss.osgi" versions="1.0"></moduleType>
+    </runtimeType>
   </extension>
 
   <extension point="org.eclipse.debug.core.sourceLocators">
@@ -137,6 +161,40 @@
            startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.karaf.core.server.Karaf4xServerDelegate"
+           description="%karafServerDescription_40"
+           hasConfiguration="false"
+           id="org.fusesource.ide.karaf.server.40"
+           initialState="stopped"
+           launchModes="run,debug"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
+           name="%karafServerType_40"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.karaf.runtime.40"
+           startTimeout="90000"
+           stopTimeout="45000"
+           startBeforePublish="false" 
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.karaf.core.server.Karaf4xServerDelegate"
+           description="%karafServerDescription_41"
+           hasConfiguration="false"
+           id="org.fusesource.ide.karaf.server.41"
+           initialState="stopped"
+           launchModes="run,debug"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
+           name="%karafServerType_41"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.karaf.runtime.41"
+           startTimeout="90000"
+           stopTimeout="45000"
+           startBeforePublish="false" 
+           supportsRemoteHosts="false">
+     </serverType>
   </extension>
   
   <extension
@@ -202,7 +260,7 @@
          <subsystemMapping
             id="launch.karaf.local.default"
             mappedId="launch.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
          </subsystemMapping>
          
          <subsystem
@@ -214,7 +272,7 @@
          <subsystemMapping
             id="shutdown.karaf.local.default"
             mappedId="shutdown.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
          </subsystemMapping>
          
          <subsystem
@@ -226,7 +284,7 @@
          <subsystemMapping
             id="publish.karaf.local.default"
             mappedId="publish.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
          </subsystemMapping>
          
          <subsystem
@@ -238,7 +296,7 @@
          <subsystemMapping
             id="modules.karaf.local.default"
             mappedId="modules.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
          </subsystemMapping>
          
          <subsystem
@@ -250,7 +308,7 @@
          <subsystemMapping
             id="port.karaf.local.default"
             mappedId="port.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
          </subsystemMapping>
   
   
@@ -267,14 +325,14 @@
       <subsystemMapping
             id="publishDelegate.fuse.default"
             mappedId="publishDelegate.fuse.default"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
       </subsystemMapping>
       
       <!-- osgi assembler mapping -->
       <subsystemMapping
             id="publishDelegate.osgi.default"
             mappedId="publishDelegate.osgi.default"
-			serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
+			serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30,org.fusesource.ide.karaf.server.40,org.fusesource.ide.karaf.server.41">
       </subsystemMapping>
   </extension>
   
@@ -300,6 +358,14 @@
             runtimeTypeId="org.fusesource.ide.karaf.runtime.30"
             runtime-component="org.fusesource.ide.karaf.runtime.component"
             version="3.0"/>
+      <runtimeFacetMapping
+            runtimeTypeId="org.fusesource.ide.karaf.runtime.40"
+            runtime-component="org.fusesource.ide.karaf.runtime.component"
+            version="4.0"/>
+      <runtimeFacetMapping
+            runtimeTypeId="org.fusesource.ide.karaf.runtime.41"
+            runtime-component="org.fusesource.ide.karaf.runtime.component"
+            version="4.1"/>
   </extension>
   <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
@@ -308,6 +374,8 @@
       		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="2.3"/>
       		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="2.4"/>
       		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="3.0"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="4.0"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="4.1"/>
    			<supported>
         		<runtime-component
          			id="org.fusesource.ide.karaf.runtime.component"
@@ -348,27 +416,57 @@
        			<facet id="jst.utility" version="1.0"/>
        			<facet id="jst.camel" version="3.0"/>
      		</supported>
+     		<supported>
+        		<runtime-component
+         			id="org.fusesource.ide.karaf.runtime.component"
+         			version="4.0"/>
+                <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       			<facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       			<facet id="jst.java" version="1.3,1.4,5.0,6.0,1.7,1.8"/>
+       			<facet id="jst.utility" version="1.0"/>
+       			<facet id="jst.camel" version="3.0"/>
+     		</supported>
+     		<supported>
+        		<runtime-component
+         			id="org.fusesource.ide.karaf.runtime.component"
+         			version="4.1"/>
+                <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       			<facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       			<facet id="jst.java" version="1.3,1.4,5.0,6.0,1.7,1.8"/>
+       			<facet id="jst.utility" version="1.0"/>
+       			<facet id="jst.camel" version="3.0"/>
+     		</supported>
    </extension>  
    
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
-     <adapter>
+    <adapter>
       <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.2"/>
       <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
       <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
 	</adapter>
-     <adapter>
+    <adapter>
       <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.3"/>
       <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
       <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
 	</adapter>
-     <adapter>
+    <adapter>
       <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.4"/>
       <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
       <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
 	</adapter>
-     <adapter>
+    <adapter>
       <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="3.0"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+	<adapter>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="4.0"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+	<adapter>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="4.1"/>
       <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
       <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
 	</adapter>
@@ -380,7 +478,7 @@
 <!--   <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
      <runtimeClasspathProvider
         id="org.fusesource.ide.server.karaf.core.runtime.classpath.runtimeTarget"
-        runtimeTypeIds="org.fusesource.ide.karaf.runtime.22,org.fusesource.ide.karaf.runtime.23,org.fusesource.ide.karaf.runtime.24,org.fusesource.ide.karaf.runtime.30"
+        runtimeTypeIds="org.fusesource.ide.karaf.runtime.22,org.fusesource.ide.karaf.runtime.23,org.fusesource.ide.karaf.runtime.24,org.fusesource.ide.karaf.runtime.30,org.fusesource.ide.karaf.runtime.40,org.fusesource.ide.karaf.runtime.41"
         class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafProjectRuntimeClasspathProvider"/>
    </extension> -->
    

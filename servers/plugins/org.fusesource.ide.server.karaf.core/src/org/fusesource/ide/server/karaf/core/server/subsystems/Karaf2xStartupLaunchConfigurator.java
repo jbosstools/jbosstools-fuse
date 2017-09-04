@@ -110,7 +110,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 		return entries;
 	}
 	
-	private void findJars(IPath path, List<Object> cp) {
+	protected void findJars(IPath path, List<Object> cp) {
 		File[] libs = path.toFile().listFiles(new FileFilter() {
 			/*
 			 * (non-Javadoc)

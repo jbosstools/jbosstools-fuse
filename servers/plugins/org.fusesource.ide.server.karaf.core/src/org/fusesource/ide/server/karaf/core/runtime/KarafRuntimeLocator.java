@@ -144,7 +144,8 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 			ServerBeanType type = sb.getBeanType();
 			if( type != null ) {
 				if( type.equals(KarafBeanProvider.KARAF_2x) || 
-					type.equals(KarafBeanProvider.KARAF_3x) ) {
+					type.equals(KarafBeanProvider.KARAF_3x) ||
+					type.equals(KarafBeanProvider.KARAF_4x)) {
 					String serverType = l.getServerAdapterId();
 					if( serverType != null ) {
 						IServerType t = ServerCore.findServerType(serverType);

@@ -31,9 +31,14 @@ public interface IKarafServerDelegate {
 	   // KARAF VERSIONS
 	     SERVER_TYPE_PREFIX_KARAF   + "22"
 	   , SERVER_TYPE_PREFIX_KARAF   + "23"
+	   , SERVER_TYPE_PREFIX_KARAF   + "24"
+	   , SERVER_TYPE_PREFIX_KARAF   + "30"
+	   , SERVER_TYPE_PREFIX_KARAF   + "40"
+	   , SERVER_TYPE_PREFIX_KARAF   + "41"
 	   
 	   // FUSE ESB VERSIONS
 	   , SERVER_TYPE_PREFIX_FUSEESB + "6x"
+	   , SERVER_TYPE_PREFIX_FUSEESB + "7x"
 		
 	   // more server type id's to be added here!
 	};
