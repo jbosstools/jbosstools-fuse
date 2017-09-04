@@ -107,10 +107,8 @@ public class KarafServerDelegate extends ServerDelegate implements
 		try {
 			ServerSecureStorageUtil.storeInSecureStorage(Activator.PLUGIN_ID, 
 					getServer(), IKarafServerDelegate.PASSWORD, pass);
-        } catch (StorageException e) {
+        } catch (StorageException|UnsupportedEncodingException e) {
         	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Could not save password for server in secure storage.", e)); //$NON-NLS-1$
-        } catch (UnsupportedEncodingException e) {
-        	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Could not save password for server in secure storage.", e)); //$NON-NLS-1$	
         }
 	}
 	

@@ -23,6 +23,16 @@
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.30"
             typeIds="org.fusesource.ide.karaf.runtime.30">
       </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.40"
+            typeIds="org.fusesource.ide.karaf.runtime.40">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.41"
+            typeIds="org.fusesource.ide.karaf.runtime.41">
+      </fragment>
 
       <fragment
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
@@ -43,6 +53,16 @@
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
             id="org.fusesource.ide.server.karaf.ui.server.fragment.30"
             typeIds="org.fusesource.ide.karaf.server.30">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.40"
+            typeIds="org.fusesource.ide.karaf.server.40">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.41"
+            typeIds="org.fusesource.ide.karaf.server.41">
       </fragment>
    </extension>
 
@@ -68,6 +88,16 @@
             id="org.fusesource.ide.server.karaf.ui.server.image.30"
             typeIds="org.fusesource.ide.karaf.server.30">
       </image>
+      <image
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.server.image.40"
+            typeIds="org.fusesource.ide.karaf.server.40">
+      </image>
+      <image
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.server.image.41"
+            typeIds="org.fusesource.ide.karaf.server.41">
+      </image>
 
       <image
             icon="icons/karaf.png"
@@ -88,6 +118,16 @@
             icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.runtime.image.30"
             typeIds="org.fusesource.ide.karaf.runtime.30">
+      </image>
+      <image
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.40"
+            typeIds="org.fusesource.ide.karaf.runtime.40">
+      </image>
+      <image
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.41"
+            typeIds="org.fusesource.ide.karaf.runtime.41">
       </image>
    </extension>
 
