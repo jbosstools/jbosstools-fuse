@@ -74,7 +74,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 			File[] files = jarFilePath.listFiles( (File dir, String name) -> {
 				return name.toLowerCase().startsWith("org.apache.karaf.main-") && name.toLowerCase().endsWith(".jar");
 			}); 
-			if (files.length>0) {
+			if (files != null && files.length>0) {
 				return files[0];
 			}
 			return jarFilePath;
