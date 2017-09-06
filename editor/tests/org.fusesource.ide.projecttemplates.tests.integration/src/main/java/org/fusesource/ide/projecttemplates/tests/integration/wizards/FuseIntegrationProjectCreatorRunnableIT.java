@@ -403,6 +403,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				super.appendAttributes(basedir, workingCopy, goal);
 				System.out.println("Maven output file path: "+mavenOutputFilePath);
 				workingCopy.setAttribute("org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", mavenOutputFilePath);
+				additionalMavenAttributes(workingCopy);
 			}
 			
 		};
@@ -453,5 +454,14 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 
 	protected StructuredSelection getSelectionForLaunch(IProject project) {
 		return new StructuredSelection(project);
+	}
+	
+	/**
+	 * call workingCopy.setAttribute(key, value) in the subclass if needed
+	 * 
+	 * @param workingCopy
+	 */
+	protected void additionalMavenAttributes(ILaunchConfigurationWorkingCopy workingCopy) {
+		/* Used in subclass*/		
 	}
 }
