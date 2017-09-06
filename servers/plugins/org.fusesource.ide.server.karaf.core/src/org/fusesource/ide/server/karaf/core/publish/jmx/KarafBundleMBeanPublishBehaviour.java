@@ -48,12 +48,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			for (Object row : rows) {
 				if (row instanceof CompositeData) {
 					CompositeData cd = (CompositeData) row;
-					String bsn = null;
-					try {
-						bsn = cd.get("Symbolic Name").toString();
-					} catch (InvalidKeyException ex) {
-						bsn = cd.get("Name").toString();
-					}
+					String bsn = getBundleSymbolicName(cd);
 					String id = cd.get("ID").toString();
 					String ver = cd.get("Version").toString();
 					if (version != null) {
@@ -164,5 +159,15 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		}
 
 	    return false;
+	}
+	
+	protected String getBundleSymbolicName(CompositeData cd) {
+		String bsn = null;
+		try {
+			bsn = cd.get("Symbolic Name").toString();
+		} catch (InvalidKeyException ex) {
+			bsn = cd.get("Name").toString();
+		}
+		return bsn;
 	}
 }

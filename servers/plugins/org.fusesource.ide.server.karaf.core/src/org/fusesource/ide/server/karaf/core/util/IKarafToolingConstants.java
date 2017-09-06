@@ -14,9 +14,9 @@ package org.fusesource.ide.server.karaf.core.util;
  * Keep track of the server and runtime id's for the karaf servers
  */
 public interface IKarafToolingConstants {
-	public static final String KARAF_VERSION_2x = "2.";
-	public static final String KARAF_VERSION_3x = "3.";
-	public static final String KARAF_VERSION_4x = "4.";
+	public static final String KARAF_VERSION_2X = "2.";
+	public static final String KARAF_VERSION_3X = "3.";
+	public static final String KARAF_VERSION_4X = "4.";
 	
 	public static final String RUNTIME_KARAF_PREFIX = "org.fusesource.ide.karaf.runtime.";
 	
