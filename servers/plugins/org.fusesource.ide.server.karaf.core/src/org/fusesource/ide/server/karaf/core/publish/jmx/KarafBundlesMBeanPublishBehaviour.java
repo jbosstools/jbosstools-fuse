@@ -17,7 +17,6 @@ import javax.management.MBeanServerConnection;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.wst.server.core.IServer;
@@ -43,12 +42,7 @@ public class KarafBundlesMBeanPublishBehaviour extends
 			for (Object row : rows) {
 				if (row instanceof CompositeData) {
 					CompositeData cd = (CompositeData) row;
-					String bsn = null;
-					try {
-						bsn = cd.get("Symbolic Name").toString();
-					} catch (InvalidKeyException ex) {
-						bsn = cd.get("Name").toString();
-					}
+					String bsn = getBundleSymbolicName(cd);
 					String id = cd.get("ID").toString();
 					String ver = cd.get("Version").toString();
 					if (version != null) {

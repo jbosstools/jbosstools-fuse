@@ -11,7 +11,6 @@
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -31,29 +30,11 @@ public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfig
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#getClassPathEntries(java.lang.String)
-	 */
-	@Override
-	protected String[] getClassPathEntries(String installPath) {
-		String[] cpEntries = super.getClassPathEntries(installPath);
-		return cpEntries;
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#findJars(org.eclipse.core.runtime.IPath, java.util.List)
 	 */
 	@Override
 	protected void findJars(IPath path, List<Object> cp) {
-		File[] libs = path.toFile().listFiles(new FileFilter() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.io.FileFilter#accept(java.io.File)
-			 */
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.isDirectory() || (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar"));
-			}
-		});
+		File[] libs = path.toFile().listFiles( (File pathname) -> pathname.isDirectory() || (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar")));
 		for (File lib : libs) {
 			IPath p = path.append(lib.getName());
 			if (lib.isFile()) {

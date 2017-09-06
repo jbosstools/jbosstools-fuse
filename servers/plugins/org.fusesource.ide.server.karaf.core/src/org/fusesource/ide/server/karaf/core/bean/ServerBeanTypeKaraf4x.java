@@ -21,11 +21,11 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
  * @author lhein
  */
 public class ServerBeanTypeKaraf4x extends ServerBeanType {
-	private static final String KARAF4x_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
+	private static final String KARAF4X_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 
 	public static final String V4_0 = "4.0";
 	public static final String V4_1 = "4.1";
-	public static final String V4_x = "4.";
+	public static final String V4_X = "4.";
 	
 	protected ServerBeanTypeKaraf4x() {
 		super(	"KARAF4x", //$NON-NLS-1$
@@ -43,7 +43,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 		 */
 		@Override
 		public boolean isServerRoot(File location) {
-			return checkKarafVersion(location, KARAF4x_RELEASE_VERSION, V4_x)
+			return checkKarafVersion(location, KARAF4X_RELEASE_VERSION, V4_X)
 					&& !isIntegratedKaraf(location);
 		}
 
@@ -55,9 +55,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 		 */
 		protected static boolean isIntegratedKaraf(File location) {
 			File libFolder = new File(location + File.separator + "lib");
-			File[] files = libFolder.listFiles( (File dir, String name) -> {
-				return name.toLowerCase().endsWith("-version.jar");
-			});
+			File[] files = libFolder.listFiles( (File dir, String name) -> name.toLowerCase().endsWith("-version.jar") );
 			return files.length > 0;
 		}
 
@@ -71,9 +69,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 		}
 		
 		protected static File getRealJarFile(File jarFilePath) {
-			File[] files = jarFilePath.listFiles( (File dir, String name) -> {
-				return name.toLowerCase().startsWith("org.apache.karaf.main-") && name.toLowerCase().endsWith(".jar");
-			}); 
+			File[] files = jarFilePath.listFiles( (File dir, String name) -> name.toLowerCase().startsWith("org.apache.karaf.main-") && name.toLowerCase().endsWith(".jar") ); 
 			if (files != null && files.length>0) {
 				return files[0];
 			}
@@ -103,7 +99,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 			if( version.equals(V4_0)) return SERVER_KARAF_40;
 			if( version.equals(V4_1)) return SERVER_KARAF_41;
 			// In case new 4.x comes out, it should work on 4.1 until fixed
-			if( version.startsWith(V4_x)) return SERVER_KARAF_41;
+			if( version.startsWith(V4_X)) return SERVER_KARAF_41;
 			return null;
 		}
 	}
