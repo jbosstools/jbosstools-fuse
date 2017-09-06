@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.server.karaf.ui;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public class SshConnector  {
 		data.put(ITerminalsConnectorConstants.PROP_SSH_KEEP_ALIVE, Integer.valueOf(300));
 		data.put(ITerminalsConnectorConstants.PROP_SSH_PASSWORD, passwd);
 		data.put(ITerminalsConnectorConstants.PROP_SSH_USER, userName);
-		data.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
+		data.put(ITerminalsConnectorConstants.PROP_ENCODING, StandardCharsets.UTF_8.name());
     }
 	
 	/**
