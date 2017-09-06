@@ -71,7 +71,7 @@ public class CompositeDataPropertySource implements IPropertySource {
 					descriptor = new BooleanPropertyDescriptor(key, keyText);
 				} else {
 					Class<?> aClass = nameToClassIndex.get(className);
-					if (aClass != null) {
+					if (aClass != null && !isNumberProperty(className)) {
 						descriptor = new ComplexPropertyDescriptor(key, keyText, aClass);
 					} else {
 						descriptor = new PropertyDescriptor(key, keyText);
@@ -81,6 +81,14 @@ public class CompositeDataPropertySource implements IPropertySource {
 			}
 		}
 		descriptors = properties.toArray(new IPropertyDescriptor[properties.size()]);
+	}
+	
+	private boolean isNumberProperty(String className) {
+		return 	className.equalsIgnoreCase("java.lang.byte") ||
+				className.equalsIgnoreCase("java.lang.short") ||
+				className.equalsIgnoreCase("java.lang.integer") ||
+				className.equalsIgnoreCase("java.lang.long") ||
+				className.equalsIgnoreCase("java.lang.float");
 	}
 
 	@Override
