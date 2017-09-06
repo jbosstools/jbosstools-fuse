@@ -31,7 +31,7 @@ public class Karaf4xServerDelegate extends Karaf3xServerDelegate {
 		// check if the folder exists and the karaf.jar is in place
 		IPath rtLoc = getServer().getRuntime().getLocation();
 		String version = KarafUtils.getVersion(rtLoc.toFile());
-		IPath karafJar = rtLoc.append("lib").append("boot").append(String.format("org.apache.karaf.main-%s.jar", version));
+		IPath karafJar = rtLoc.append("lib").append("boot").append(String.format("org.apache.karaf.main-%s.jar", version.replaceAll(".SNAPSHOT", "-SNAPSHOT")));
 		if (rtLoc.toFile().exists() && rtLoc.toFile().isDirectory() && karafJar.toFile().exists() && karafJar.toFile().isFile()) {
 			return Status.OK_STATUS;	
 		}
