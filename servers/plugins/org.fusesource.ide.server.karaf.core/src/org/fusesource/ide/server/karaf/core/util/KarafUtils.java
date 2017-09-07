@@ -513,7 +513,9 @@ public class KarafUtils {
 				url = url.substring(pos + placeHolder.length() + 3);
 			}
 		}
-		if (retVal.length()<1) retVal.append(url);
+		if (retVal.length()<1) {
+			retVal.append(url);
+		}
 		return retVal.toString();
 	}
 }

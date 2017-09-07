@@ -35,14 +35,17 @@ public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfig
 	@Override
 	protected void findJars(IPath path, List<Object> cp) {
 		File[] libs = path.toFile().listFiles( (File pathname) -> pathname.isDirectory() || (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar")));
-		for (File lib : libs) {
-			IPath p = path.append(lib.getName());
-			if (lib.isFile()) {
-				if (lib.getName().toLowerCase().indexOf("karaf")!=-1 || lib.getPath().toLowerCase().indexOf("boot")!=-1) {
-					cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
+		if (libs != null) {
+			for (File lib : libs) {
+				String libName = lib.getName();
+				IPath p = path.append(libName);
+				if (lib.isFile()) {
+					if (libName.toLowerCase().indexOf("karaf")!=-1 || lib.getPath().toLowerCase().indexOf("boot")!=-1) {
+						cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
+					}
+				} else {
+					findJars(p, cp);
 				}
-			} else {
-				findJars(p, cp);
 			}
 		}
 	}

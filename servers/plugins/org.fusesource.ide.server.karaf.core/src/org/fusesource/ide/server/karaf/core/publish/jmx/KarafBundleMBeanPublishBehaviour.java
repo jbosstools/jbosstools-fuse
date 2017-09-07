@@ -162,7 +162,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	}
 	
 	protected String getBundleSymbolicName(CompositeData cd) {
-		String bsn = null;
+		String bsn;
 		try {
 			bsn = cd.get("Symbolic Name").toString();
 		} catch (InvalidKeyException ex) {

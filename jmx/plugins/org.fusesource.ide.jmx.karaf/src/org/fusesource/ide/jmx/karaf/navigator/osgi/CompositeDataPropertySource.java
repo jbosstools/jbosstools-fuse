@@ -84,11 +84,11 @@ public class CompositeDataPropertySource implements IPropertySource {
 	}
 	
 	private boolean isNumberProperty(String className) {
-		return 	className.equalsIgnoreCase("java.lang.byte") ||
-				className.equalsIgnoreCase("java.lang.short") ||
-				className.equalsIgnoreCase("java.lang.integer") ||
-				className.equalsIgnoreCase("java.lang.long") ||
-				className.equalsIgnoreCase("java.lang.float");
+		return 	"java.lang.byte".equalsIgnoreCase(className) ||
+				"java.lang.short".equalsIgnoreCase(className) ||
+				"java.lang.integer".equalsIgnoreCase(className) ||
+				"java.lang.long".equalsIgnoreCase(className) ||
+				"java.lang.float".equalsIgnoreCase(className);
 	}
 
 	@Override
