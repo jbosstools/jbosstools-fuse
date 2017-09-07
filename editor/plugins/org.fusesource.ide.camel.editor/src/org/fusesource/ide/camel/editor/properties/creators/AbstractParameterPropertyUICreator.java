@@ -101,6 +101,10 @@ public abstract class AbstractParameterPropertyUICreator {
 		return bindValue;
 	}
 	
+	public void setBinding(Binding binding) {
+		this.bindValue = binding;
+	}
+	
 	public Control getControl() {
 		return control;
 	}
@@ -125,7 +129,7 @@ public abstract class AbstractParameterPropertyUICreator {
 		this.control = control;
 	}
 
-	protected void setValidator(IValidator validator) {
+	public void setValidator(IValidator validator) {
 		this.validator = validator;
 	}
 

@@ -12,12 +12,15 @@ package org.fusesource.ide.camel.editor.properties.creators;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.fusesource.ide.camel.editor.properties.bean.PropertyRefValidator;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.foundation.core.util.CompoundValidator;
 
 /**
  * @author brianf
@@ -25,6 +28,8 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class ComboParameterPropertyUICreator extends AbstractComboFieldParameterPropertyUICreator {
 
+	private IValidator extraValidator;
+	
 	public ComboParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
@@ -34,6 +39,12 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 	public ComboParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
+	}
+
+	public ComboParameterPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
+			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener, IValidator extraValidator) {
+		this(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
+		this.extraValidator = extraValidator;
 	}
 
 	protected String findInitialValue(Object value, String defaultValue) {
@@ -64,4 +75,11 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 	public void setValues(String[] values) {
 		super.setValues(values);
 	}
+
+	protected IValidator createValidator() {
+		return new CompoundValidator(
+				super.getValidator(),
+				extraValidator);
+	}
+	
 }
