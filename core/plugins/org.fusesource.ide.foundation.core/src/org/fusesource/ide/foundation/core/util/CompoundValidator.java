@@ -24,9 +24,9 @@ import org.eclipse.core.runtime.IStatus;
  */
 public class CompoundValidator implements IValidator {
 
-    private IValidator[] validators;
+    private final IValidator[] validators;
 
-    public CompoundValidator(IValidator... validators) {
+    public CompoundValidator(final IValidator... validators) {
         this.validators = validators;
     }
 
@@ -44,9 +44,4 @@ public class CompoundValidator implements IValidator {
     	}
         return result;
     }
-    
-    public IValidator[] getValidators() {
-    	return validators;
-    }
-
 }
