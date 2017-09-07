@@ -12,7 +12,6 @@
 package org.fusesource.ide.server.karaf.core.runtime;
 
 import java.io.File;
-import java.io.FileFilter;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -41,12 +40,6 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 
 	private static final int MAX_RECURSION_DEPTH = 5;
 	
-	/**
-	 * empty default constructor
-	 */
-	public KarafRuntimeLocator() {
-	}
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.wst.server.core.model.RuntimeLocatorDelegate#searchForRuntimes(org.eclipse.core.runtime.IPath, org.eclipse.wst.server.core.model.RuntimeLocatorDelegate.IRuntimeSearchListener, org.eclipse.core.runtime.IProgressMonitor)
 	 */
@@ -92,12 +85,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		if (folder == null) {
 			files = File.listRoots();
 		} else {
-			files = folder.listFiles(new FileFilter() {
-				@Override
-				public boolean accept(File pathname) {
-					return pathname.isDirectory();
-				}
-			});
+			files = folder.listFiles( (File pathname) -> pathname.isDirectory() );
 		}
 		
 		for (File f: files) {
@@ -143,9 +131,9 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		if( sb != null ) {
 			ServerBeanType type = sb.getBeanType();
 			if( type != null ) {
-				if( type.equals(KarafBeanProvider.KARAF_2x) || 
-					type.equals(KarafBeanProvider.KARAF_3x) ||
-					type.equals(KarafBeanProvider.KARAF_4x)) {
+				if( KarafBeanProvider.KARAF_2x.equals(type) || 
+					KarafBeanProvider.KARAF_3x.equals(type) ||
+					KarafBeanProvider.KARAF_4x.equals(type)) {
 					String serverType = l.getServerAdapterId();
 					if( serverType != null ) {
 						IServerType t = ServerCore.findServerType(serverType);

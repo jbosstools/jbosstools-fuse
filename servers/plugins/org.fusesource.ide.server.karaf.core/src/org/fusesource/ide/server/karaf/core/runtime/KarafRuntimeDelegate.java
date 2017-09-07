@@ -21,6 +21,7 @@ import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
@@ -31,11 +32,9 @@ import org.jboss.ide.eclipse.as.wtp.core.util.VMInstallUtil;
  */
 public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRuntimeWorkingCopy {
 
-	/**
-	 * empty default constructor
-	 */
-	public KarafRuntimeDelegate() {
-	}
+	private static String PROPERTY_VM_ID = "PROPERTY_VM_ID"; //$NON-NLS-1$
+	private static String PROPERTY_VM_TYPE_ID = "PROPERTY_VM_TYPE_ID"; //$NON-NLS-1$
+	private static String PROPERTY_EXECUTION_ENVIRONMENT = "PROPERTY_EXEC_ENVIRONMENT"; //$NON-NLS-1$
 	
 	@Override
 	public void setDefaults(IProgressMonitor monitor) {
@@ -48,8 +47,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	}
 	
 	protected String getRuntimeNameBase() {
-		String base = getRuntime().getRuntimeType().getName() + " Runtime";  //$NON-NLS-1$//$NON-NLS-2$
-		return base;
+		return getRuntime().getRuntimeType().getName() + " Runtime";  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public static String getNextRuntimeName(String base) {
@@ -81,31 +79,27 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 		String id = getRuntime().getRuntimeType().getId();
 		String version = getVersion();
-		if (version != null && version.trim().startsWith("2.2")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.22")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("2.3")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.23")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("2.4")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.24")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-        } else if (version != null && version.trim().startsWith("3.0")) {
-            if (!id.toLowerCase().endsWith("karaf.runtime.30")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-        } else if (version != null && version.trim().startsWith("4.0")) {
-            if (!id.toLowerCase().endsWith("karaf.runtime.40")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-        } else if (version != null && version.trim().startsWith("4.1")) {
-            if (!id.toLowerCase().endsWith("karaf.runtime.41")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else {
-			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
-		}
 		
+		return validateRuntimeAndVersion(id, version);
+	}
+
+	protected IStatus validateRuntimeAndVersion(String runtimeId, String runtimeVersion) {
+		if (Strings.isBlank(runtimeVersion)) {
+			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Empty runtime version found for runtime " + runtimeId + "...");
+		}
+		String versionStartString = getMajorMinorString(runtimeVersion);
+		if (!runtimeId.toLowerCase().endsWith(String.format("karaf.runtime.%s", versionStartString))) {
+			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type " + runtimeId + " is not compatible with found version " + runtimeVersion);
+		}
 		return Status.OK_STATUS;
 	}
-	
-	
 
-	private static String PROPERTY_VM_ID = "PROPERTY_VM_ID"; //$NON-NLS-1$
-	private static String PROPERTY_VM_TYPE_ID = "PROPERTY_VM_TYPE_ID"; //$NON-NLS-1$
-	private static String PROPERTY_EXECUTION_ENVIRONMENT = "PROPERTY_EXEC_ENVIRONMENT"; //$NON-NLS-1$
-
+	protected String getMajorMinorString(String runtimeVersion) {
+		int pos = runtimeVersion.indexOf('.');
+		pos = runtimeVersion.indexOf('.', pos+1);
+		return runtimeVersion.substring(0, pos).replaceAll("\\.", "");
+	}
+	
 	@Override
 	public IExecutionEnvironment getExecutionEnvironment() {
 		String id = getAttribute(PROPERTY_EXECUTION_ENVIRONMENT, (String)null);
@@ -114,7 +108,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 	@Override
 	public IExecutionEnvironment getMinimumExecutionEnvironment() {
-		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.7"); //$NON-NLS-1$
+		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.8"); //$NON-NLS-1$
 	}
 	
 
@@ -169,5 +163,4 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	public IPath getLocation() {
 		return getRuntime().getLocation();
 	}
-
 }
