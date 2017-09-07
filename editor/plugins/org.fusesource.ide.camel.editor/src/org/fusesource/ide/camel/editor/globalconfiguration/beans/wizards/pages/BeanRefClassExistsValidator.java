@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 
+import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IProject;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -30,24 +32,31 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class BeanRefClassExistsValidator implements IValidator {
 	
+	private IObservableMap<?, ?> modelMap = null;
 	private IProject project;
 	private AbstractCamelModelElement parent;
-	private Text beanClassText;
+	private Text beanClassText = null;
 	protected BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private IJavaProject javaProject = null;
 
 	public BeanRefClassExistsValidator(IProject project) {
-		this(project, null, null);
+		this.project = project;
+		javaProject = JavaCore.create(this.project);
 	}
 
 	public BeanRefClassExistsValidator(IProject project, AbstractCamelModelElement element) {
-		this.project = project;
+		this(project);
 		this.parent = element;
 	}
 	
 	public BeanRefClassExistsValidator(IProject project, AbstractCamelModelElement element, Text control) {
-		this.project = project;
-		this.parent = element;
+		this(project, element);
 		this.beanClassText = control;
+	}
+
+	public BeanRefClassExistsValidator(IProject project, AbstractCamelModelElement element, IObservableMap<?, ?> modelMap) {
+		this (project, element);
+		this.modelMap = modelMap;
 	}
 
 	public void setControl(Text textControl) {
@@ -58,7 +67,6 @@ public class BeanRefClassExistsValidator implements IValidator {
 		if (className == null || className.isEmpty()) {
 			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
 		}
-		IJavaProject javaProject = JavaCore.create(this.project);
         IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
@@ -77,7 +85,12 @@ public class BeanRefClassExistsValidator implements IValidator {
 		String className = null;
 		if (beanClassText != null && !beanClassText.isDisposed()) {
 			className = beanClassText.getText();
-		}
+		} else if (modelMap != null) {
+			Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+			if (control != null) {
+				className = (String) control;
+			}
+		} 
 		if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
 			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one.");
 		}
