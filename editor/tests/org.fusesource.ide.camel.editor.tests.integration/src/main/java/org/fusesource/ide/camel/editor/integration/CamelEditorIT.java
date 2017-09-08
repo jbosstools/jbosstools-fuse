@@ -78,6 +78,23 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	}
 	
 	@Test
+	public void openRoutesFileAndCheckFor2Tabs() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/routes.xml");
+		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(2);
+	}
+	
+	@Test
+	public void openContextFileAndCheckFor3Tabs() throws Exception {
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(3);
+	}
+	
+	private int getAvailableEditorTabCount(IEditorPart editorPart) {
+		CamelEditor ed = (CamelEditor)editorPart;
+		return ed.getTabFolder().getItemCount();
+	}
+	
+	@Test
 	public void addWiredElementsAfterThenBeforeLog() throws Exception {
 		IEditorPart openEditorOnFileStore = openFileInEditor("/basic.xml");
 		assertThat(openEditorOnFileStore).isNotNull();
