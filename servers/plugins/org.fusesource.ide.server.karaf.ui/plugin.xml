@@ -121,6 +121,11 @@
             icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.launch.image">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.server.karaf2x.launch"
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf2x.ui.launch.image">
+      </launchConfigurationTypeImage>
    </extension>
 
 	<extension

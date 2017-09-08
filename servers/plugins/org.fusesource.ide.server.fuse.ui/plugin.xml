@@ -120,6 +120,11 @@
             icon="icons/run_fuse_server.png"
             id="org.fusesource.ide.server.fuse.ui.launch.image">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.server.fuseesb6x.launch"
+            icon="icons/run_fuse_server.png"
+            id="org.fusesource.ide.server.fuse6x.ui.launch.image">
+      </launchConfigurationTypeImage>
    </extension>
    
 </plugin>
