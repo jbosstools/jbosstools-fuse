@@ -26,6 +26,7 @@ import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.wtp.core.util.VMInstallUtil;
+import org.osgi.framework.Version;
 
 /**
  * @author lhein
@@ -47,7 +48,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	}
 	
 	protected String getRuntimeNameBase() {
-		return getRuntime().getRuntimeType().getName() + " Runtime";  //$NON-NLS-1$//$NON-NLS-2$
+		return getRuntime().getRuntimeType().getName() + " Runtime";  //$NON-NLS-1$
 	}
 
 	public static String getNextRuntimeName(String base) {
@@ -88,12 +89,19 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Empty runtime version found for runtime " + runtimeId + "...");
 		}
 		String versionStartString = getMajorMinorString(runtimeVersion);
-		if (!runtimeId.toLowerCase().endsWith(String.format("karaf.runtime.%s", versionStartString))) {
+		if (!runtimeId.toLowerCase().endsWith(String.format("karaf.runtime.%s", versionStartString)) && !isNewerUnsupportedVersion(runtimeVersion)) {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type " + runtimeId + " is not compatible with found version " + runtimeVersion);
 		}
 		return Status.OK_STATUS;
 	}
 
+	protected boolean isNewerUnsupportedVersion(String runtimeVersion) {
+		Version foundVersion = Version.parseVersion(runtimeVersion);
+		Version rtVersion = Version.parseVersion(getRuntime().getRuntimeType().getVersion());
+		// if same major version then we accept newer minor/micro versions which might be yet unknown in tooling
+		return foundVersion.getMajor() == rtVersion.getMajor() && foundVersion.compareTo(rtVersion) > 0;
+	}
+	
 	protected String getMajorMinorString(String runtimeVersion) {
 		int pos = runtimeVersion.indexOf('.');
 		pos = runtimeVersion.indexOf('.', pos+1);
@@ -108,7 +116,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 	@Override
 	public IExecutionEnvironment getMinimumExecutionEnvironment() {
-		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.8"); //$NON-NLS-1$
+		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.7"); //$NON-NLS-1$
 	}
 	
 
