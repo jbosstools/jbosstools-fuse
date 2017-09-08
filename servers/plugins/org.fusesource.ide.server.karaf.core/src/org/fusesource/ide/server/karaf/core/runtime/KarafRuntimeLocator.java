@@ -85,7 +85,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		if (folder == null) {
 			files = File.listRoots();
 		} else {
-			files = folder.listFiles( (File pathname) -> pathname.isDirectory() );
+			files = folder.listFiles(File::isDirectory);
 		}
 		
 		for (File f: files) {
