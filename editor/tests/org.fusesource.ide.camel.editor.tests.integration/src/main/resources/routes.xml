@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+	<route id="route1">
+		<from id="inbox" uri="file:/tmp/inbox/" />
+		<to id="outbox" uri="file:/tmp/outbox/" />
+	</route>
+</routes>

@@ -88,7 +88,7 @@ public class AbstractCamelEditorIT {
 		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 		readAndDispatch(20);
-		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
+		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, CamelUtils.CAMEL_EDITOR_ID);
 		page.activate(editor);
 		editor.setFocus();
 		readAndDispatch(20);

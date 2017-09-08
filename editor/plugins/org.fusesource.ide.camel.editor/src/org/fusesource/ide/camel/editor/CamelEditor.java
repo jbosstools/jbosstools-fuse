@@ -36,6 +36,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -65,6 +66,7 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRoutesElement;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -319,6 +321,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * 			  the page index
 	 */
 	private void createGlobalConfPage(int index) {
+		if (designEditor.getModel() != null && designEditor.getModel().getRouteContainer() instanceof CamelRoutesElement) {
+			return;
+		}
 		try {
 			globalConfigEditor = new CamelGlobalConfigEditor(this);
 			IEditorInput editorInput = getEditorInput();
@@ -806,5 +811,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	public void updatePartName() {
 		setPartName(getTitle());
+	}
+	
+	public CTabFolder getTabFolder() {
+		return (CTabFolder)super.getContainer();
 	}
 }
