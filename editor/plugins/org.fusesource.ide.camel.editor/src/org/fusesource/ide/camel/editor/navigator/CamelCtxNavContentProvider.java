@@ -187,7 +187,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, IReso
 
 			if (contents.containsKey(resource) && !Widgets.isDisposed(mViewer)) {
 	        	contents.remove(resource);
-	        	Display.getCurrent().asyncExec( () -> mViewer.refresh());
+	        	Display.getDefault().asyncExec( () -> mViewer.refresh());
 	        	return false;
 	        }
 			return true; // visit the children
