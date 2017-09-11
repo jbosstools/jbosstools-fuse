@@ -235,7 +235,7 @@ public class BeanEditWizardIT {
 		logInfo("Bean created: " + basicEditCaseBeanIdWithArgumentAndFactoryMethod);
 		
 		// update factory-method
-		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(camelFile);
+		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute();
 		beanConfigUtil.setAttributeValue(beanNode, factoryAttribute, CREATE_ACCOUNT_METHOD);
 		logInfo("Updated " + factoryAttribute + " in global configuration model");
 
@@ -265,7 +265,7 @@ public class BeanEditWizardIT {
 		CamelFile reloadedCamelFile = camelIOHandler.loadCamelModel(camelFile.getResource(), new NullProgressMonitor());
 
 		Element reloadedBeanElement = getBeanElement(basicEditCaseBeanIdWithArgumentAndFactoryMethod, reloadedCamelFile);
-		String retestedFactoryAttribute = beanConfigUtil.getFactoryMethodAttribute(reloadedBeanElement);
+		String retestedFactoryAttribute = beanConfigUtil.getFactoryMethodAttribute();
 		assertThat(reloadedBeanElement.getAttribute(retestedFactoryAttribute)).isNotNull();
 		assertThat(reloadedBeanElement.getAttribute(retestedFactoryAttribute)).isEqualTo(CREATE_ACCOUNT_METHOD);
 		
