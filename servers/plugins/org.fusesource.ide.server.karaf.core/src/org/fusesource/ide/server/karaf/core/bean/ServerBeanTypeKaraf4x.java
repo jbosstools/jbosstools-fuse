@@ -34,8 +34,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 				new Karaf4xServerTypeCondition());
 	}
 
-	public static class Karaf4xServerTypeCondition extends
-			org.jboss.ide.eclipse.as.core.server.bean.AbstractCondition {
+	public static class Karaf4xServerTypeCondition extends BaseKarafServerTypeCondition {
 
 		/*
 		 * (non-Javadoc)
@@ -45,18 +44,6 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 		public boolean isServerRoot(File location) {
 			return checkKarafVersion(location, KARAF4X_RELEASE_VERSION, V4_X)
 					&& !isIntegratedKaraf(location);
-		}
-
-		/**
-		 * checks if the karaf is a standalone karaf or an integrated version
-		 * used in JBoss Fuse
-		 * @param location
-		 * @return
-		 */
-		protected static boolean isIntegratedKaraf(File location) {
-			File libFolder = new File(location + File.separator + "lib");
-			File[] files = libFolder.listFiles( (File dir, String name) -> name.toLowerCase().endsWith("-version.jar") );
-			return files.length > 0;
 		}
 
 		/* (non-Javadoc)
