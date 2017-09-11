@@ -813,7 +813,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPartName(getTitle());
 	}
 	
-	public CTabFolder getTabFolder() {
+	public CTabFolder getTabbedFolder() {
 		return (CTabFolder)super.getContainer();
 	}
 }

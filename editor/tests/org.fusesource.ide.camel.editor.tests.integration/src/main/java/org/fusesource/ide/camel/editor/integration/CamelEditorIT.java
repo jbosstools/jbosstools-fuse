@@ -91,7 +91,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	private int getAvailableEditorTabCount(IEditorPart editorPart) {
 		CamelEditor ed = (CamelEditor)editorPart;
-		return ed.getTabFolder().getItemCount();
+		return ed.getTabbedFolder().getItemCount();
 	}
 	
 	@Test
