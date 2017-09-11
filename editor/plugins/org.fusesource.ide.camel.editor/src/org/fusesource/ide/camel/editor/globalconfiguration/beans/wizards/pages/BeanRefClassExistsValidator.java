@@ -31,7 +31,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
  *
  */
 public class BeanRefClassExistsValidator implements IValidator {
-	
+
 	private IObservableMap<?, ?> modelMap = null;
 	private IProject project;
 	private AbstractCamelModelElement parent;
@@ -48,7 +48,7 @@ public class BeanRefClassExistsValidator implements IValidator {
 		this(project);
 		this.parent = element;
 	}
-	
+
 	public BeanRefClassExistsValidator(IProject project, AbstractCamelModelElement element, Text control) {
 		this(project, element);
 		this.beanClassText = control;
@@ -62,12 +62,12 @@ public class BeanRefClassExistsValidator implements IValidator {
 	public void setControl(Text textControl) {
 		this.beanClassText = textControl;
 	}
-	
+
 	private IStatus classExistsInProject(String className) {
 		if (className == null || className.isEmpty()) {
 			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
 		}
-        IType javaClass;
+		IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
 			if (javaClass == null) {
@@ -78,7 +78,7 @@ public class BeanRefClassExistsValidator implements IValidator {
 		}
 		return ValidationStatus.ok();
 	}
-	
+
 	@Override
 	public IStatus validate(Object value) {
 		String beanRefId = (String) value;
@@ -92,12 +92,12 @@ public class BeanRefClassExistsValidator implements IValidator {
 			}
 		} 
 		if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one.");
+			return ValidationStatus.error(UIMessages.BeanRefClassExistsValidatorBeanClassOrBeanRefRequired);
 		}
 		if (!Strings.isEmpty(className) && !Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one, not both.");
+			return ValidationStatus.error(UIMessages.BeanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass);
 		}
-		
+
 		String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
 		IStatus firstStatus = classExistsInProject(referencedClassName);
 		if (firstStatus != ValidationStatus.ok() && !Strings.isEmpty(className)) {
