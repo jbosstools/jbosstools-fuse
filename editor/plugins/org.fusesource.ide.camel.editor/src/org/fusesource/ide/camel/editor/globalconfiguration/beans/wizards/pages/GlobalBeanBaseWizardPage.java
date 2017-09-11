@@ -24,7 +24,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -84,7 +83,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		argsPropsGroup.setText(UIMessages.globalBeanWizardPageArgumentsGroupLabel);
 		argsPropsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		argsPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
-		
+
 		createArgumentsControls(argsPropsGroup, 4);
 
 		Group beanPropsGroup = new Group(composite, SWT.NONE);
@@ -97,7 +96,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		setControl(composite);
 		WizardPageSupport.create(this, dbc);
 	}
-	
+
 	protected abstract void createArgumentsControls(Composite parent, int cols);
 	protected abstract void createPropsControls(Composite parent, int cols);
 	protected abstract Binding createBeanRefBinding(UpdateValueStrategy strategy);
@@ -170,39 +169,34 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		beanRefIdLabel.setText("Factory Bean");
 		beanRefIdCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE | SWT.DROP_DOWN);
 		beanRefIdCombo.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
-        String[] beanRefs = CamelComponentUtils.getRefs(parent.getCamelFile());
-        String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
-        beanRefIdCombo.setItems(updatedBeanRefs);
+		String[] beanRefs = CamelComponentUtils.getRefs(parent.getCamelFile());
+		String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
+		beanRefIdCombo.setItems(updatedBeanRefs);
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
 		refValidator = new BeanRefClassExistsValidator(project, parent, classText);
 		strategy.setBeforeSetValidator(refValidator);
 		beanRefIdCombo.addModifyListener(value -> pingBindings());
-		beanRefIdCombo.addSelectionListener(new SelectionListener() {
+		beanRefIdCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				pingBindings();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// empty
 			}
 		});
 		refBinding = createBeanRefBinding(strategy);
 	}
 
 	private String[] removeRefsWithNoClassFromArray(String[] input) {
-	    ArrayList<String> result = new ArrayList<>();
-	    for(String item : input) {
-	    	String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, item);
-	    	if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
-	            result.add(item);
-	        }
-	    }
-	    return result.toArray(new String[0]);
+		ArrayList<String> result = new ArrayList<>();
+		for(String item : input) {
+			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, item);
+			if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
+				result.add(item);
+			}
+		}
+		return result.toArray(new String[result.size()]);
 	}
-	
-	
+
+
 	private void pingBindings() {
 		Display.getCurrent().asyncExec( () -> {
 			if (classBinding != null) {
@@ -215,7 +209,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 			}
 		});
 	}
-	
+
 	/**
 	 * @return the id
 	 */

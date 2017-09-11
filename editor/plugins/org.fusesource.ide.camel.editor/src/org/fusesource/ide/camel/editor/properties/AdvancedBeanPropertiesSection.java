@@ -13,8 +13,6 @@ package org.fusesource.ide.camel.editor.properties;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.databinding.observable.ChangeEvent;
-import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.resources.IProject;
@@ -25,7 +23,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -37,6 +34,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanClassExistsValidator;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages.BeanRefClassExistsValidator;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.properties.bean.AttributeTextFieldPropertyUICreatorWithBrowse;
 import org.fusesource.ide.camel.editor.properties.bean.BeanRefAttributeComboFieldPropertyUICreator;
@@ -103,7 +101,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		Parameter factoryBeanParameter = beanConfigUtil.createParameter(factoryBeanTag, String.class.getName());
 		parameterList.put(factoryBeanTag, factoryBeanParameter);
 
-		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute(selectedEP.getXmlNode());
+		String factoryAttribute = beanConfigUtil.getFactoryMethodAttribute();
 		parameterList.put(factoryAttribute, beanConfigUtil.createParameter(factoryAttribute, String.class.getName()));
 	}
 
@@ -135,7 +133,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 			targetValueMap.put(p.getName(), targetValue);
 			return creator;
 		}
-		return null;
+		throw new NullPointerException();
 	}
 
 	/**
@@ -166,52 +164,48 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		optBeanRef.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
 
 		final Parameter beanRefParm = props.get(factoryBeanTag);
-		beanRefCreator = handleField(beanRefParm, classOrBeanGroup);
-		props.remove(factoryBeanTag);
+		try {
+			beanRefCreator = handleField(beanRefParm, classOrBeanGroup);
+			props.remove(factoryBeanTag);
+			final IObservableValue<?> classNameObservable = modelValueMap.get(GlobalBeanEIP.PROP_CLASS);
+			classNameObservable.addChangeListener(event -> refreshClassAndBeanRefBindings());
+			final IObservableValue<?> beanRefObservable = (IObservableValue<?>) beanRefCreator.getBinding().getModel();
+			beanRefObservable.addChangeListener(event -> refreshClassAndBeanRefBindings());
+			
+			optBeanRef.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					boolean isSelected = optBeanRef.getSelection();
+					beanRefCreator.getControl().setEnabled(isSelected);
+					classCreator.getControl().setEnabled(!isSelected);
+				}
+			});
 
+			optClass.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					boolean isSelected = optClass.getSelection();
+					beanRefCreator.getControl().setEnabled(!isSelected);
+					classCreator.getControl().setEnabled(isSelected);
+				}
+			});
+
+			if (!Strings.isEmpty((String) beanRefObservable.getValue())) {
+				optBeanRef.setSelection(true);
+				optBeanRef.notifyListeners(SWT.Selection, new Event());
+			} else {
+				// assume class by default
+				optClass.setSelection(true);
+				optClass.notifyListeners(SWT.Selection, new Event());
+			}
+		} catch (NullPointerException npe) {
+			CamelEditorUIActivator.pluginLog().logError("Error encountered while generating bean text and reference controls.", npe);
+		}
+		
 		for (Parameter p : props.values()) {
 			handleField(p, page);
 		}
 
-		final IObservableValue<?> classNameObservable = modelValueMap.get(GlobalBeanEIP.PROP_CLASS);
-		classNameObservable.addChangeListener(event -> refreshClassAndBeanRefBindings());
-		final IObservableValue<?> beanRefObservable = (IObservableValue<?>) beanRefCreator.getBinding().getModel();
-		beanRefObservable.addChangeListener(event -> refreshClassAndBeanRefBindings());
-		
-		optBeanRef.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean isSelected = optBeanRef.getSelection();
-				beanRefCreator.getControl().setEnabled(isSelected);
-				classCreator.getControl().setEnabled(!isSelected);
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// empty
-			}
-		});
-
-		optClass.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean isSelected = optClass.getSelection();
-				beanRefCreator.getControl().setEnabled(!isSelected);
-				classCreator.getControl().setEnabled(isSelected);
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// empty
-			}
-		});
-
-		if (!Strings.isEmpty((String) beanRefObservable.getValue())) {
-			optBeanRef.setSelection(true);
-			optBeanRef.notifyListeners(SWT.Selection, new Event());
-		} else {
-			// assume class by default
-			optClass.setSelection(true);
-			optClass.notifyListeners(SWT.Selection, new Event());
-		}
 	}
 
 	private void refreshClassAndBeanRefBindings() {

@@ -31,7 +31,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
  *
  */
 public class BeanClassExistsValidator implements IValidator {
-	
+
 	private IObservableMap<?, ?> modelMap = null;
 	private IProject project;
 	private AbstractCamelModelElement parent = null;
@@ -50,7 +50,7 @@ public class BeanClassExistsValidator implements IValidator {
 		this.parent = element;
 		this.factoryBeanTag = beanConfigUtil.getFactoryBeanTag(element.getXmlNode());
 	}
-	
+
 	public BeanClassExistsValidator(IProject project, AbstractCamelModelElement element, Combo refCombo) {
 		this (project, element);
 		this.beanRefIdCombo = refCombo;
@@ -64,12 +64,12 @@ public class BeanClassExistsValidator implements IValidator {
 	public void setControl(Combo control) {
 		this.beanRefIdCombo = control;
 	}
-	
+
 	private IStatus classExistsInProject(String className) {
 		if (className == null || className.isEmpty()) {
 			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
 		}
-        IType javaClass;
+		IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
 			if (javaClass == null) {
@@ -80,7 +80,7 @@ public class BeanClassExistsValidator implements IValidator {
 		}
 		return ValidationStatus.ok();
 	}
-	
+
 	private String getBeanReferenceId() {
 		String beanRefId = null;
 		if (beanRefIdCombo != null && !beanRefIdCombo.isDisposed()) {
@@ -98,7 +98,7 @@ public class BeanClassExistsValidator implements IValidator {
 		}
 		return beanRefId;
 	}
-	
+
 	@Override
 	public IStatus validate(Object value) {
 		String className = (String) value;
@@ -117,5 +117,5 @@ public class BeanClassExistsValidator implements IValidator {
 			return firstStatus;
 		}
 	}
-	
+
 }
