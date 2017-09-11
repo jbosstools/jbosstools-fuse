@@ -15,7 +15,6 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
-import org.fusesource.ide.camel.editor.properties.bean.PropertyRefValidator;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -76,6 +75,7 @@ public class ComboParameterPropertyUICreator extends AbstractComboFieldParameter
 		super.setValues(values);
 	}
 
+	@Override
 	protected IValidator createValidator() {
 		return new CompoundValidator(
 				super.getValidator(),

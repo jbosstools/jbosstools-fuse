@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;

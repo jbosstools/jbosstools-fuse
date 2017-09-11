@@ -530,20 +530,10 @@ public class BeanConfigUtil {
 		return null;
 	}
 
-	public String getFactoryMethodAttribute(Node node) {
+	public String getFactoryMethodAttribute() {
 		return GlobalBeanEIP.PROP_FACTORY_METHOD;
 	}
 	
-	public String getFactoryMethodAttribute(AbstractCamelModelElement camelElement) {
-		if (camelElement instanceof CamelFile) {
-			return getFactoryMethodAttribute(camelElement.getRouteContainer().getXmlNode());
-		}
-		if (camelElement != null && camelElement.getXmlNode() != null) {
-			return getFactoryMethodAttribute(camelElement.getXmlNode());
-		}
-		return null;
-	}
-
 	public Element createBeanArgument(final Element inputElement, String type, String value) {
 		String prefixNS = inputElement.getPrefix();
 		String tagName = getArgumentTag(inputElement);
@@ -698,7 +688,7 @@ public class BeanConfigUtil {
 			Map<String, GlobalDefinitionCamelModelElement> globalDefs = 
 					selectedEP.getCamelFile().getGlobalDefinitions();
 			GlobalDefinitionCamelModelElement referencedBean = globalDefs.get(refID);
-			if (referencedBean != null) {
+			if (referencedBean != null && referencedBean instanceof CamelBean) {
 				return ((CamelBean) referencedBean).getClassName();
 			}
 		}
