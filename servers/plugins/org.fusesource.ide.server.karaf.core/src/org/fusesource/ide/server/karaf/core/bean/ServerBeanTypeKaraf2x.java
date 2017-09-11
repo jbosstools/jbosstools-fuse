@@ -15,7 +15,6 @@ import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.S
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_24;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -38,8 +37,7 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 				new Karaf2xServerTypeCondition());
 	}
 
-	public static class Karaf2xServerTypeCondition extends
-			org.jboss.ide.eclipse.as.core.server.bean.AbstractCondition {
+	public static class Karaf2xServerTypeCondition extends BaseKarafServerTypeCondition {
 
 		/*
 		 * (non-Javadoc)
@@ -49,26 +47,6 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		public boolean isServerRoot(File location) {
 			return checkKarafVersion(location, KARAF2x_RELEASE_VERSION, V2_x)
 					&& !isIntegratedKaraf(location);
-		}
-
-		/**
-		 * checks if the karaf is a standalone karaf or an integrated version
-		 * used in JBoss Fuse
-		 * @param location
-		 * @return
-		 */
-		protected static boolean isIntegratedKaraf(File location) {
-			File libFolder = new File(location + File.separator + "lib");
-			File[] files = libFolder.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					if (name.toLowerCase().endsWith("-version.jar")) {
-						return true;
-					}
-					return false;
-				}
-			});
-			return files.length > 0;
 		}
 
 		/**
