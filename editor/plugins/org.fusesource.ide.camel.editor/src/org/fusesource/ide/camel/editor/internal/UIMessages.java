@@ -85,9 +85,9 @@ public class UIMessages extends NLS {
 	public static String beanConfigUtilMethodSelectionMessage;
 	public static String beanConfigUtilNoParmMethodSelectionMessage;
 
-	public static String BeanRefClassExistsValidatorBeanClassOrBeanRefRequired;
+	public static String beanRefClassExistsValidatorBeanClassOrBeanRefRequired;
 
-	public static String BeanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass;
+	public static String beanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass;
 	public static String beanRequiredPropertyValidatorErrorMandatoryProperty;
 	public static String createGlobalElementDialogTitle;
 	public static String createGlobalElementDiaglogText;

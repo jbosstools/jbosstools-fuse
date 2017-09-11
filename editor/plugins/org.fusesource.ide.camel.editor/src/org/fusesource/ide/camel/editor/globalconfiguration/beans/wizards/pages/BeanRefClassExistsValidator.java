@@ -92,10 +92,10 @@ public class BeanRefClassExistsValidator implements IValidator {
 			}
 		} 
 		if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error(UIMessages.BeanRefClassExistsValidatorBeanClassOrBeanRefRequired);
+			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorBeanClassOrBeanRefRequired);
 		}
 		if (!Strings.isEmpty(className) && !Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error(UIMessages.BeanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass);
+			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass);
 		}
 
 		String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
