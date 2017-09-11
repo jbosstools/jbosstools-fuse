@@ -158,7 +158,10 @@ public class CamelCatalogUtils {
 		}
 
 		if (!Strings.isBlank(camelVersionsForTesting)) {
-			Arrays.stream(camelVersionsForTesting.split(",")).map(String::trim).filter(Strings::isBlank).forEach(TEST_CAMEL_VERSIONS::add);
+			Arrays.stream(camelVersionsForTesting.split(","))
+				.map(String::trim)
+				.filter( (String s) -> !Strings.isBlank(s))
+				.forEach(TEST_CAMEL_VERSIONS::add);
 		} else {
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_COMMUNITY);
 			TEST_CAMEL_VERSIONS.add(CAMEL_VERSION_LATEST_PRODUCTIZED_62);
