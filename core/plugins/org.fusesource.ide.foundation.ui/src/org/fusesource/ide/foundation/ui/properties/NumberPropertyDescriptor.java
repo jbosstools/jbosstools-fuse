@@ -17,7 +17,7 @@ import org.fusesource.ide.foundation.core.functions.ReturnType;
  * @author lheinema
  *
  */
-public class NumberPropertyDescriptor extends PropertyDescriptor implements ReturnType {
+public class NumberPropertyDescriptor extends PropertyDescriptor implements ReturnType<String> {
 	
 	/**
 	 * creates a property descriptor for number properties
@@ -33,7 +33,7 @@ public class NumberPropertyDescriptor extends PropertyDescriptor implements Retu
 	 * @see org.fusesource.ide.foundation.core.functions.ReturnType#getReturnType()
 	 */
 	@Override
-	public Class<?> getReturnType() {
+	public Class<String> getReturnType() {
 		return String.class;
 	}
 }
