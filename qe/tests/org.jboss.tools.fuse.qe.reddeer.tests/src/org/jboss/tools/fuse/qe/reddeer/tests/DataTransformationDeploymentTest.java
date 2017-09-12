@@ -21,14 +21,11 @@ import java.nio.file.Files;
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
-import org.eclipse.reddeer.junit.execution.annotation.RunIf;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.qe.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.qe.reddeer.condition.FuseLogContainsText;
-import org.jboss.tools.fuse.qe.reddeer.condition.IssueIsClosed;
-import org.jboss.tools.fuse.qe.reddeer.condition.IssueIsClosed.Jira;
 import org.jboss.tools.fuse.qe.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.qe.reddeer.requirement.FuseRequirement.Fuse;
@@ -64,7 +61,7 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 	 */
 	@BeforeClass
 	public static void setupStartServer() {
-		FuseServerManipulator.startServer(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.startServer(serverRequirement.getConfiguration().getServer().getName());
 	}
 
 	/**
@@ -92,8 +89,6 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	@Jira("ENTESB-4452")
-	@RunIf(conditionClass = IssueIsClosed.class)
 	public void testDeployment() {
 
 		ProjectFactory.importExistingProject(
@@ -101,7 +96,7 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 				"trans217", false);
 		CamelProject project = new CamelProject("trans217");
 		project.update();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "trans217");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "trans217");
 
 		// invoke the route with copying a file
 		String from = ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,

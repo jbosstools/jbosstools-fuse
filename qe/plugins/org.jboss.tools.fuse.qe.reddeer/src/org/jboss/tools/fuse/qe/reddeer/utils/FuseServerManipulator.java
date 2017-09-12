@@ -23,6 +23,7 @@ import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.core.exception.CoreLayerException;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.exception.EclipseLayerException;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.wst.server.ui.Runtime;
 import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
 import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.Server;
@@ -171,6 +172,7 @@ public class FuseServerManipulator {
 
 				new WaitWhile(new JobIsRunning(), TimePeriod.VERY_LONG);
 				if (name.toLowerCase().contains("fuse")) {
+					new ConsoleView().open();
 					new WaitUntil(new ConsoleHasText("100%"), TimePeriod.VERY_LONG);
 				}
 				AbstractWait.sleep(TimePeriod.DEFAULT);
@@ -285,11 +287,8 @@ public class FuseServerManipulator {
 
 		ServersView2 view = new ServersView2();
 		view.open();
-		try {
-			view.getServer(name).addAndRemoveModules();
-		} catch (EclipseLayerException ex) {
-			return;
-		}
+		view.getServer(name).select();
+		new ContextMenuItem("Add and Remove...").select();
 
 		// Maybe there is nothing to remove
 		try {

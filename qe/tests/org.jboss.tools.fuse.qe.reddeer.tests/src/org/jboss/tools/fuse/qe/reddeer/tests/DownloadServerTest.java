@@ -48,8 +48,8 @@ public class DownloadServerTest extends DefaultTest {
 	private static final String CANCEL_BUTTON = "Cancel";
 	private static final String FINISH_BUTTON = "Finish";
 	private static final String NEW_WINDOW = "New Server Runtime Environment";
-	private static final String SERVER_SECTION = "JBoss Fuse";
-	private static final String SERVER_TYPE = "Apache Karaf 3.0";
+	private static final String SERVER_SECTION = "Apache";
+	private static final String SERVER_TYPE = "Karaf 3.0";
 	private static final String DOWNLOAD_LINK = "Download and install runtime...";
 	private static final String DOWNLOAD_FOLDER = "Download folder:";
 	private static final String DOWNLOAD_TITLE = "Download Runtimes";

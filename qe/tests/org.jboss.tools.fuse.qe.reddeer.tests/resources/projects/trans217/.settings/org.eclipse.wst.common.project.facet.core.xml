@@ -3,5 +3,5 @@
   <installed facet="java" version="1.8"/>
   <installed facet="jboss.m2" version="1.0"/>
   <installed facet="jst.utility" version="1.0"/>
-  <installed facet="jst.camel" version="2.17.0.redhat-630187"/>
+  <installed facet="jst.camel" version="3.0"/>
 </faceted-project>

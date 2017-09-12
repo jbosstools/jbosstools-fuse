@@ -32,7 +32,9 @@ public class LogGrapper {
 	public static List<LogMessage> getPluginErrors(String plugin) {
 
 		List<LogMessage> fuseErrors = new ArrayList<LogMessage>();
-		List<LogMessage> allErrors = new LogView().getErrorMessages();
+		LogView log = new LogView();
+		log.open();
+		List<LogMessage> allErrors = log.getErrorMessages();
 		for (LogMessage message : allErrors) {
 			if (message.getPlugin().toLowerCase().contains(plugin)) {
 				fuseErrors.add(message);

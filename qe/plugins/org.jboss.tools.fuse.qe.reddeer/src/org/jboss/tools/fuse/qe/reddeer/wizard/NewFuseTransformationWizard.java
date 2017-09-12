@@ -38,8 +38,7 @@ public class NewFuseTransformationWizard extends WizardDialog {
 	private Logger log = Logger.getLogger(NewFuseTransformationWizard.class);
 
 	public NewFuseTransformationWizard() {
-		new WaitUntil(new ShellIsAvailable(TITLE));
-		new DefaultShell(TITLE);
+		super(TITLE);
 	}
 
 	@Override

@@ -16,9 +16,9 @@
     </license>
   </licenses>
   <properties>
-    <camel.version>2.15.1.redhat-621084</camel.version>
+    <camel.version>2.17.0.redhat-630187</camel.version>
+    <version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
     <jboss.fuse.bom.version>6.3.0.redhat-187</jboss.fuse.bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -37,12 +37,10 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
-      <version>2.17.0.redhat-630187</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-blueprint</artifactId>
-      <version>2.17.0.redhat-630187</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -59,13 +57,13 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test-blueprint</artifactId>
-      <version>2.17.0.redhat-630187</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-dozer</artifactId>
-      <version>2.17.0.redhat-630187</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>org.apache.felix.fileinstall</artifactId>
+          <groupId>org.apache.felix</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -109,8 +107,24 @@
       <url>https://maven.repository.redhat.com/ga</url>
     </repository>
     <repository>
-      <id>redhat-early-access-repository</id>
+      <id>fuse-internal</id>
+      <url>http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven/</url>
+    </repository>
+    <repository>
+      <id>redhat-ea</id>
       <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+    </repository>
+    <repository>
+      <id>fis-internal</id>
+      <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
+    </repository>
+    <repository>
+      <id>asf-snapshots</id>
+      <url>https://repository.apache.org/content/groups/snapshots/</url>
+    </repository>
+    <repository>
+      <id>fuse-early-access</id>
+      <url>https://origin-repository.jboss.org/nexus/content/groups/ea/</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -139,8 +153,24 @@
       <url>https://maven.repository.redhat.com/ga</url>
     </pluginRepository>
     <pluginRepository>
-      <id>redhat-early-access-repository</id>
+      <id>fuse-internal</id>
+      <url>http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>redhat-ea</id>
       <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>fis-internal</id>
+      <url>http://download-node-02.eng.bos.redhat.com/brewroot/repos/jb-fis-2.0-maven-build/latest/maven/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>asf-snapshots</id>
+      <url>https://repository.apache.org/content/groups/snapshots/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>fuse-early-access</id>
+      <url>https://origin-repository.jboss.org/nexus/content/groups/ea/</url>
     </pluginRepository>
   </pluginRepositories>
   <build>
@@ -185,7 +215,6 @@
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-maven-plugin</artifactId>
-        <version>2.17.0.redhat-630187</version>
         <configuration>
           <useBlueprint>true</useBlueprint>
         </configuration>

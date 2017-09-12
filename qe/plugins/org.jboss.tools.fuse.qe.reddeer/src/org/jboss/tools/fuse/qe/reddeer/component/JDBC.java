@@ -19,7 +19,7 @@ public class JDBC implements CamelComponent {
 
 	@Override
 	public String getLabel() {
-		return "jdbc:dataSourceName";
+		return "jdbc:dataSource";
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class Servlet implements CamelComponent {
 
 	@Override
 	public String getLabel() {
-		return "servlet:contextPath";
+		return "servlet:servletName";
 	}
 
 	@Override
