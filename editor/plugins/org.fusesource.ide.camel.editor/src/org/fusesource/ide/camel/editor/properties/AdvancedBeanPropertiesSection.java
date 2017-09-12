@@ -227,7 +227,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		} else if (GlobalBeanEIP.PROP_FACTORY_BEAN.equals(propName) || GlobalBeanEIP.PROP_FACTORY_REF.equals(propName)) {
 			return createRefCombo(p, page);
 		} else if (CamelComponentUtils.isTextProperty(p) || CamelComponentUtils.isCharProperty(p)) {
-			createTextField(p, page);
+			return createTextField(p, page);
 		} else if (CamelComponentUtils.isUnsupportedProperty(p)) { 
 			// handle unsupported props
 			AbstractParameterPropertyUICreator creator = new UnsupportedParameterPropertyUICreatorForAdvanced(
