@@ -73,7 +73,9 @@ public class NewFuseProjectWizardTest {
 	@After
 	public void setupDeleteProjects() {
 		ProjectFactory.deleteAllProjects();
-		new LogView().deleteLog();
+		LogView log = new LogView();
+		log.open();
+		log.deleteLog();
 		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
 

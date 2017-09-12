@@ -102,10 +102,11 @@ public class JMXNavigatorServerTest {
 
 		// Disable showing Error Log view after changes
 		LogView error = new LogView();
+		error.open();
 		error.setActivateOnNewEvents(false);
 
 		ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.CBR).version(CAMEL_2_17_0_REDHAT_630187).type(ProjectType.BLUEPRINT).create();
-		serverName = serverReq.getConfiguration().getName();
+		serverName = serverReq.getConfiguration().getServer().getName();
 		FuseServerManipulator.addModule(serverName, PROJECT_NAME);
 
 		// Deleting Error Log

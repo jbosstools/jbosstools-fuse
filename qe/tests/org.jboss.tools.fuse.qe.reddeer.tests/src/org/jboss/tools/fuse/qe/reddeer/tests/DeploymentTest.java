@@ -139,8 +139,8 @@ public class DeploymentTest extends DefaultTest {
 	public void testServerDeployment() {
 
 		// add module
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME);
-		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME));
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME);
+		assertTrue(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME));
 
 		// check deployment
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
@@ -154,9 +154,9 @@ public class DeploymentTest extends DefaultTest {
 		}
 
 		// remove module
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
 		AbstractWait.sleep(TimePeriod.getCustom(30));
-		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getName(), PROJECT_NAME));
+		assertFalse(FuseServerManipulator.hasServerModule(serverRequirement.getConfiguration().getServer().getName(), PROJECT_NAME));
 
 		// check deployment
 		if (serverRequirement.getConfiguration().getServer().getClass().getName().contains("EAP")) {
