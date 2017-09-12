@@ -26,45 +26,47 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 
 /**
  * @author lheinema
- *
  */
 public class SwitchCamelVersionDialog extends TitleAreaDialog {
-	
+
 	private String selectedCamelVersion;
 	private Combo versionCombo;
-	
+
 	/**
+	 * 
 	 * @param parentShell
 	 */
 	public SwitchCamelVersionDialog(Shell parentShell) {
 		super(parentShell);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#create()
 	 */
 	@Override
 	public void create() {
 		super.create();
 		setTitle(Messages.switchCamelVersionDialogName);
-        setMessage(Messages.switchCamelVersionDialogTitle, IMessageProvider.INFORMATION);
+		setMessage(Messages.switchCamelVersionDialogTitle, IMessageProvider.INFORMATION);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.TitleAreaDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite area = (Composite) super.createDialogArea(parent);
-		
-        Composite container = new Composite(area, SWT.NONE);
-        container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-        GridLayout layout = new GridLayout(2, false);
-        container.setLayout(layout);
 
-        createVersionCombo(container);
+		Composite container = new Composite(area, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridLayout layout = new GridLayout(2, false);
+		container.setLayout(layout);
 
-        return area;
+		createVersionCombo(container);
+
+		return area;
 	}
 
 	/*
@@ -72,39 +74,40 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 	 * @see org.eclipse.jface.dialogs.Dialog#isResizable()
 	 */
 	@Override
-    protected boolean isResizable() {
-        return true;
-    }
-	
+	protected boolean isResizable() {
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
 	 */
-    @Override
-    protected void okPressed() {
-        saveInput();
-        super.okPressed();
-    }
+	@Override
+	protected void okPressed() {
+		saveInput();
+		super.okPressed();
+	}
 
-    private void createVersionCombo(Composite container) {
-        Label lbtVersion = new Label(container, SWT.NONE);
-        lbtVersion.setText(Messages.switchCamelVersionDialogVersionsLabel);
+	private void createVersionCombo(Composite container) {
+		Label lbtVersion = new Label(container, SWT.NONE);
+		lbtVersion.setText(Messages.switchCamelVersionDialogVersionsLabel);
 
-        GridData dataVersion = new GridData();
-        dataVersion.grabExcessHorizontalSpace = true;
-        dataVersion.horizontalAlignment = GridData.FILL;
+		GridData dataVersion = new GridData();
+		dataVersion.grabExcessHorizontalSpace = true;
+		dataVersion.horizontalAlignment = GridData.FILL;
 
-        versionCombo = new Combo(container, SWT.DROP_DOWN | SWT.RIGHT);
-        versionCombo.setLayoutData(dataVersion);
-        versionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream().sorted( (String o1, String o2) -> o2.compareToIgnoreCase(o1)).toArray(String[]::new));
-        if (!Strings.isBlank(selectedCamelVersion)) {
-        	versionCombo.setText(selectedCamelVersion);
-        }
-    }
-	
-    private void saveInput() {
-        this.selectedCamelVersion =this.versionCombo.getText();
-    }
+		versionCombo = new Combo(container, SWT.DROP_DOWN | SWT.RIGHT);
+		versionCombo.setLayoutData(dataVersion);
+		versionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream()
+				.sorted((String o1, String o2) -> o2.compareToIgnoreCase(o1)).toArray(String[]::new));
+		if (!Strings.isBlank(selectedCamelVersion)) {
+			versionCombo.setText(selectedCamelVersion);
+		}
+	}
+
+	private void saveInput() {
+		this.selectedCamelVersion = this.versionCombo.getText();
+	}
 
 	/**
 	 * @return the selectedCamelVersion
@@ -112,9 +115,10 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 	public String getSelectedCamelVersion() {
 		return this.selectedCamelVersion;
 	}
-	
+
 	/**
-	 * @param selectedCamelVersion the selectedCamelVersion to set
+	 * @param selectedCamelVersion
+	 *            the selectedCamelVersion to set
 	 */
 	public void setSelectedCamelVersion(String selectedCamelVersion) {
 		this.selectedCamelVersion = selectedCamelVersion;

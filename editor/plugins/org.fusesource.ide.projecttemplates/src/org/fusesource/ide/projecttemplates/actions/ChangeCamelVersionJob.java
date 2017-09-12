@@ -103,11 +103,11 @@ public class ChangeCamelVersionJob extends WorkspaceJob {
 	}
 	
 	private List<IEditorReference> findOpenCamelEditors() {
-		ArrayList<IEditorReference> openCamelEditors = new ArrayList<>();
+		List<IEditorReference> openCamelEditors = new ArrayList<>();
 		
 		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null && PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() != null) {
 			for (IEditorReference eRef : PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences()) {
-				if (eRef.getId().equals(CamelUtils.CAMEL_EDITOR_ID)) {
+				if (CamelUtils.CAMEL_EDITOR_ID.equals(eRef.getId())) {
 					// we found an open camel editor
 					openCamelEditors.add(eRef);
 				}
