@@ -32,6 +32,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.properties.BooleanPropertyDescriptor;
 import org.fusesource.ide.foundation.ui.properties.ComplexPropertyDescriptor;
 import org.fusesource.ide.foundation.ui.properties.ListPropertyDescriptor;
+import org.fusesource.ide.foundation.ui.properties.NumberPropertyDescriptor;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 
 public class CompositeDataPropertySource implements IPropertySource {
@@ -69,9 +70,11 @@ public class CompositeDataPropertySource implements IPropertySource {
 					descriptor = new TextPropertyDescriptor(key, keyText);
 				} else if ("java.lang.Boolean".equals(className)) {
 					descriptor = new BooleanPropertyDescriptor(key, keyText);
+				} else if (isNumberProperty(className)) {
+					descriptor = new NumberPropertyDescriptor(key, keyText);
 				} else {
 					Class<?> aClass = nameToClassIndex.get(className);
-					if (aClass != null && !isNumberProperty(className)) {
+					if (aClass != null) {
 						descriptor = new ComplexPropertyDescriptor(key, keyText, aClass);
 					} else {
 						descriptor = new PropertyDescriptor(key, keyText);
