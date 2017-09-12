@@ -141,11 +141,15 @@ public class CamelUtils {
 	}
 	
 	public static boolean startsWithNamespace(Node child, String namespace) {
-		String nsUri = child.getNamespaceURI();
-		if (nsUri == null && child.getParentNode() != null) {
-			nsUri = child.getParentNode().getNamespaceURI();
+		if(child != null) {
+			String nsUri = child.getNamespaceURI();
+			if (nsUri == null && child.getParentNode() != null) {
+				nsUri = child.getParentNode().getNamespaceURI();
+			}
+			return nsUri != null && nsUri.startsWith(namespace);
+		} else {
+			return false;
 		}
-		return child != null && nsUri != null && nsUri.startsWith(namespace);
 	}
 	
 	public static boolean startsWithOneOfNamespace(Node child, Collection<String> namespaces) {
