@@ -178,10 +178,12 @@ public class KarafServerDelegate extends ServerDelegate implements
 	 */
 	public IStatus validate() {
 		// check if the folder exists and the karaf.jar is in place
-		IPath rtLoc = getServer().getRuntime().getLocation();
-		IPath karafJar = rtLoc.append("lib").append("karaf.jar");
-		if (rtLoc.toFile().exists() && rtLoc.toFile().isDirectory() && karafJar.toFile().exists() && karafJar.toFile().isFile()) {
-			return Status.OK_STATUS;	
+		if (getServer() != null && getServer().getRuntime() != null) {
+			IPath rtLoc = getServer().getRuntime().getLocation();
+			IPath karafJar = rtLoc.append("lib").append("karaf.jar");
+			if (rtLoc.toFile().exists() && rtLoc.toFile().isDirectory() && karafJar.toFile().exists() && karafJar.toFile().isFile()) {
+				return Status.OK_STATUS;	
+			}
 		}
 		return Status.CANCEL_STATUS;
 	}
