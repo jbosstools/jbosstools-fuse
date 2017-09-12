@@ -92,7 +92,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 		ProjectFactory.importExistingProject(ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID,
 				"resources/projects/datatrans"), "wildfly-transformation", false);
 		new CamelProject("wildfly-transformation").update();
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "wildfly-transformation");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "wildfly-transformation");
 		try {
 			new WaitUntil(new ConsoleHasText(
 					"started and consuming from: Endpoint[file://src/data?fileName=abc-order.xml&noop=true]"));

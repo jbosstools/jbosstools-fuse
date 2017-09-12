@@ -90,7 +90,7 @@ public class DataTransformationTest extends DefaultTest {
 		editor.activate();
 		editor.addConnection("file:src/data?fileName=abc-order.xml&noop=true", "ref:xml2json");
 		editor.addCamelComponent("File", "Route _route1");
-		editor.setProperty("file:directoryName", "Uri *", "file:target/messages?fileName=xyz-order.json");
+		editor.setProperty("file:directoryName", "Uri", "file:target/messages?fileName=xyz-order.json");
 		editor.addConnection("ref:xml2json", "file:target/messages?fileName=xyz-order.json");
 		editor.close(true);
 

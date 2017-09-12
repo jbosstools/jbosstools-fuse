@@ -32,7 +32,7 @@ public class FuseServerRuntimePreferencePage extends RuntimePreferencePage {
 	private static final String EDIT_WINDOW = "Edit Server Runtime Environment";
 	private static final String INSTALL_DIR = "Home Directory";
 	private static final String NAME = "Name";
-	private static final String SERVER_SECTION = "JBoss Fuse";
+	private static final String SERVER_SECTION = "Red Hat JBoss Middleware";
 
 	public FuseServerRuntimePreferencePage() {
 		super(null);

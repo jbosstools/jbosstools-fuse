@@ -7,7 +7,7 @@
         </variables>
     </configuration>
     <mapping>
-        <class-a>generated_1476202608356.ABCOrder</class-a>
+        <class-a>generated_1500624415702.ABCOrder</class-a>
         <class-b>xyzorder.XyzOrder</class-b>
         <field>
             <a>header.customerNum</a>
@@ -27,12 +27,8 @@
         </field>
     </mapping>
     <mapping>
-        <class-a>generated_1476202608356.ABCOrder$OrderItems$Item</class-a>
+        <class-a>generated_1500624415702.ABCOrder$OrderItems$Item</class-a>
         <class-b>xyzorder.LineItem</class-b>
-        <field>
-            <a>id</a>
-            <b>itemId</b>
-        </field>
         <field>
             <a>quantity</a>
             <b>amount</b>
@@ -40,6 +36,10 @@
         <field>
             <a>price</a>
             <b>cost</b>
+        </field>
+        <field>
+            <a>id</a>
+            <b>itemId</b>
         </field>
     </mapping>
     <mapping>

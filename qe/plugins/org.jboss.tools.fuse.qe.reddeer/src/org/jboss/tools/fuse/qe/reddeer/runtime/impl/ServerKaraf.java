@@ -11,13 +11,12 @@
 package org.jboss.tools.fuse.qe.reddeer.runtime.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -45,7 +44,7 @@ import org.jboss.tools.fuse.qe.reddeer.wizard.ServerWizard;
  */
 public class ServerKaraf extends ServerBase {
 
-	private final String category = "JBoss Fuse";
+	private final String category = "Apache";
 
 	private final String label = "Apache Karaf";
 
@@ -57,7 +56,7 @@ public class ServerKaraf extends ServerBase {
 	public ServerKaraf() {
 		setType("Karaf");
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
@@ -169,10 +168,9 @@ public class ServerKaraf extends ServerBase {
 		Preferences.set("org.eclipse.jsch.core", "SSH2HOME", Activator.getResources(".ssh").getAbsolutePath());
 
 		// Copy host.key
-		File src = Activator.getResources("host.key");
-		File dest = new File(getHome(), "etc/host.key");
 		try {
-			copyFileUsingStream(src, dest);
+			Files.copy(this.getClass().getResourceAsStream("/resources/host.key"),
+					Paths.get(getHome() + "/etc/host.key"), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException("Can't copy 'host.key' file!", e);
 		}
@@ -181,25 +179,6 @@ public class ServerKaraf extends ServerBase {
 	@Override
 	protected void checkDeployment(String project, String checkPhrase) {
 		return;
-	}
-
-	/**
-	 * Copies a source file to given destination
-	 * 
-	 * @param source
-	 *            Source file
-	 * @param dest
-	 *            Destination
-	 * @throws IOException
-	 */
-	private static void copyFileUsingStream(File source, File dest) throws IOException {
-		try (InputStream is = new FileInputStream(source); OutputStream os = new FileOutputStream(dest)) {
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = is.read(buffer)) > 0) {
-				os.write(buffer, 0, length);
-			}
-		}
 	}
 
 	/**

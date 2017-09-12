@@ -81,7 +81,9 @@ public class CamelEditorRoutesTest {
 	public void createProject() {
 		new WorkbenchShell();
 		ProjectFactory.newProject(PROJECT_NAME).type(type).create();
-		new LogView().deleteLog();
+		LogView errorLog = new LogView();
+		errorLog.open();
+		errorLog.deleteLog();
 
 		new WorkbenchShell();
 		log.info("Trying to close Palette View (if it's open)");

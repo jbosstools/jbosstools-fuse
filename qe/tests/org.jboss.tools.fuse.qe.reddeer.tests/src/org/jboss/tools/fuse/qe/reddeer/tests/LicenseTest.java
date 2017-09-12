@@ -60,12 +60,13 @@ public class LicenseTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		new ShellMenuItem(new WorkbenchShell(), "Help", "Installation Details").select();
+		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
+		new PushButton("Installation Details").click();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 		new DefaultTabItem("Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
 		for (TreeItem item : new DefaultTree().getItems()) {
-			if (item.getText().startsWith("JBoss Fuse Tooling")) {
+			if (item.getText().startsWith("Red Hat JBoss Fuse Tools")) {
 				fusePlugins.add(item.getText());
 			}
 		}
@@ -87,14 +88,15 @@ public class LicenseTest {
 	@Before
 	public void setupOpenInstallationDetails() {
 
-		new ShellMenuItem(new WorkbenchShell(), "Help", "Installation Details").select();
+		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
+		new PushButton("Installation Details").click();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 	}
 
 	@After
 	public void setupCloseShells() {
 
-		new PushButton("OK").click();
+		new PushButton("Apply and Close").click();
 		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 		new PushButton("Close").click();
 	}

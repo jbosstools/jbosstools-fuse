@@ -27,6 +27,7 @@ import org.eclipse.reddeer.eclipse.debug.ui.views.breakpoints.BreakpointsView;
 import org.eclipse.reddeer.eclipse.debug.ui.views.launch.ResumeButton;
 import org.eclipse.reddeer.eclipse.debug.ui.views.launch.TerminateButton;
 import org.eclipse.reddeer.eclipse.debug.ui.views.variables.VariablesView;
+import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -62,8 +63,8 @@ public class DebuggerTest extends DefaultTest {
 	private static final String CAMEL_CONTEXT = "camel-context.xml";
 	private static final String CHOICE = "Choice";
 	private static final String CHOICE_ID = "_choice1";
-	private static final String LOG = "Log _log2";
-	private static final String LOG_ID = "_log2";
+	private static final String LOG = "Log _log3";
+	private static final String LOG_ID = "_log3";
 
 	/**
 	 * Prepares test environment
@@ -163,17 +164,17 @@ public class DebuggerTest extends DefaultTest {
 	 * <li>wait until process is suspended</li>
 	 * <li>check if the Console View contains text Enabling Debugger</li>
 	 * <li>check if the Variables View contains variable Endpoint with value choice1</li>
-	 * <li>check if the Variables View contains variable Message with value <name>Antwerp Zoo</name></li>
+	 * <li>check if the Variables View contains variable Message with value <name>Erie Zoo</name></li>
 	 * <li>resume debugging</li>
 	 * <li>wait until process is suspended</li>
-	 * <li>check if the Variables View contains variable Endpoint with value log4</li>
+	 * <li>check if the Variables View contains variable Endpoint with value log3</li>
 	 * <li>click on the Step over button</li>
 	 * <li>wait until process is suspended</li>
-	 * <li>check if the Console View contains text "Sending order order1.xml to another country"</li>
+	 * <li>check if the Console View contains text "Sending order order5.xml to US"</li>
 	 * <li>check if the Variables View contains variable Endpoint with value to3</li>
 	 * <li>remove all breakpoints</li>
 	 * <li>check if the Console View contains text Removing breakpoint choice1</li>
-	 * <li>check if the Console View contains text Removing breakpoint log1</li>
+	 * <li>check if the Console View contains text Removing breakpoint log3</li>
 	 * <li>resume debugging</li>
 	 * <li>terminate process via Terminate button in the Console View</li>
 	 * </ol>
@@ -189,6 +190,7 @@ public class DebuggerTest extends DefaultTest {
 
 		// should stop on the 'choice1' node
 		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
+		new ConsoleView().open();
 		assertTrue(new ConsoleHasText("Enabling debugger").test());
 		VariablesView variables = new VariablesView();
 		AbstractWait.sleep(TimePeriod.getCustom(5));
@@ -199,7 +201,7 @@ public class DebuggerTest extends DefaultTest {
 		AbstractWait.sleep(TimePeriod.SHORT);
 		variables.open();
 		new DefaultTree().getItems().get(4).getItems().get(0).select();
-		assertTrue(new DefaultStyledText().getText().contains("<name>Bristol Zoo Gardens</name>"));
+		assertTrue(new DefaultStyledText().getText().contains("<name>Erie Zoo</name>"));
 
 		// resume and then should stop on the 'log1' node
 		ResumeButton resume = new ResumeButton();
@@ -213,15 +215,15 @@ public class DebuggerTest extends DefaultTest {
 		assertTrue(resume.isEnabled());
 		new StepOverButton().select();
 		new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
-		assertTrue(new ConsoleHasText("Sending order order2.xml to the UK").test());
+		assertTrue(new ConsoleHasText("Sending order order5.xml to the US").test());
 		assertTrue(resume.isEnabled());
 		AbstractWait.sleep(TimePeriod.getCustom(5));
-		assertEquals("_to1", variables.getValue("Endpoint"));
+		assertEquals("_to2", variables.getValue("Endpoint"));
 
 		// remove all breakpoints
 		new BreakpointsView().removeAllBreakpoints();
 		assertTrue(new ConsoleHasText("Removing breakpoint _choice1").test());
-		assertTrue(new ConsoleHasText("Removing breakpoint _log2").test());
+		assertTrue(new ConsoleHasText("Removing breakpoint _log3").test());
 		resume.click();
 
 		// all breakpoints should be processed
