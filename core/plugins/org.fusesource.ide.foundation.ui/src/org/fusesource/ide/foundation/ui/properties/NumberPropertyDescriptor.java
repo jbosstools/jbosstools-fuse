@@ -20,7 +20,7 @@ import org.fusesource.ide.foundation.core.functions.ReturnType;
 public class NumberPropertyDescriptor extends PropertyDescriptor implements ReturnType {
 	
 	/**
-	 * creates a property descriptor for boolean properties
+	 * creates a property descriptor for number properties
 	 * 
 	 * @param id	the id
 	 * @param displayName	the display name
