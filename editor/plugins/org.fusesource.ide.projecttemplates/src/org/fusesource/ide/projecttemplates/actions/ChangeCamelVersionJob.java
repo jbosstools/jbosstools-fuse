@@ -43,7 +43,10 @@ public class ChangeCamelVersionJob extends WorkspaceJob {
 	private String newVersion;
 	
 	/**
+	 * creates a new camel version change job
 	 * 
+	 * @param project		the project to use
+	 * @param newVersion	the new camel version to set
 	 */
 	public ChangeCamelVersionJob(IProject project, String newVersion) {
 		super(Messages.switchCamelVersionDialogName);
