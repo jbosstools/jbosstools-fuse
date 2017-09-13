@@ -101,7 +101,7 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	 */
 	@Override
 	public boolean performFinish() {
-		newBeanNode = beanConfigUtil.createBeanNode(camelFile, globalBeanPage.getId(), globalBeanPage.getClassname());
+		newBeanNode = beanConfigUtil.createBeanNode(camelFile, globalBeanPage.getId(), globalBeanPage.getClassname(), globalBeanPage.getBeanRefId());
 		if (!globalBeanPage.getArgumentsList().isEmpty()) {
 			for (AbstractCamelModelElement argument : globalBeanPage.getArgumentsList()) {
 				Element children = (Element) newBeanNode.getChildNodes();

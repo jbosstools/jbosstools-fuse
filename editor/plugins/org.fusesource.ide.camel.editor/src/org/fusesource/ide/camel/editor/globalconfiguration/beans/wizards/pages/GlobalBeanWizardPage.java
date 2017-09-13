@@ -44,7 +44,7 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 		setTitle(title);
 		setDescription(description);
 		this.dbc = dbc;
-		this.parent = parent;
+		this.element = parent;
 		this.project = parent.getCamelFile().getResource().getProject();
 	}
 
@@ -60,14 +60,14 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 	protected void createArgumentsControls(Composite parent, int cols) {
 		beanArgsTable = new ArgumentStyleChildTableControl(parent, SWT.NULL);
 		beanArgsTable.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(cols, 2).create());
-		beanArgsTable.setInput(this.parent);
+		beanArgsTable.setInput(this.element);
 	}
 
 	@Override
 	protected void createPropsControls(Composite parent, int cols) {
 		beanPropsTable = new PropertyStyleChildTableControl(parent, SWT.NULL);
 		beanPropsTable.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(cols, 2).create());
-		beanPropsTable.setInput(this.parent);
+		beanPropsTable.setInput(this.element);
 	}
 
 	@Override
