@@ -10,16 +10,25 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.actions.ui;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.internal.Messages;
@@ -65,7 +74,7 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 		container.setLayout(layout);
 
 		createVersionCombo(container);
-
+		
 		return area;
 	}
 
@@ -84,8 +93,13 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void okPressed() {
-		saveInput();
-		super.okPressed();
+		BusyIndicator.showWhile(Display.getCurrent(), () -> { 
+			validate();
+			if (getButton(IDialogConstants.OK_ID).isEnabled()) {
+				saveInput();
+				close();
+			}
+		});
 	}
 
 	private void createVersionCombo(Composite container) {
@@ -103,8 +117,37 @@ public class SwitchCamelVersionDialog extends TitleAreaDialog {
 		if (!Strings.isBlank(selectedCamelVersion)) {
 			versionCombo.setText(selectedCamelVersion);
 		}
+		versionCombo.addSelectionListener(new SelectionAdapter() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				super.widgetSelected(e);
+				getButton(IDialogConstants.OK_ID).setEnabled(true);
+			}
+		});
+		versionCombo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getButton(IDialogConstants.OK_ID).setEnabled(true);
+			}
+		});
 	}
 
+	private void validate() {
+		final String camelVersion = versionCombo.getText();
+		setMessage(NLS.bind(Messages.validatingCamelVersionMessage, camelVersion), IMessageProvider.INFORMATION);
+		while(Display.getCurrent().readAndDispatch()) {
+			// wait
+		}
+		boolean valid = CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
+		getButton(IDialogConstants.OK_ID).setEnabled(valid);
+		if (!valid) {
+			setMessage(NLS.bind(Messages.invalidCamelVersionMessage, camelVersion), IMessageProvider.ERROR);
+		}
+	}
+	
 	private void saveInput() {
 		this.selectedCamelVersion = this.versionCombo.getText();
 	}
