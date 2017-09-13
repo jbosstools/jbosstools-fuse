@@ -1,0 +1,10 @@
+org.eclipse.core.resources/restore/markers=true
+org.eclipse.core.resources/save/markers=true
+org.eclipse.core.resources/debug=true
+rg.eclipse.core.net/debug=true
+org.eclipse.wst.validation/debug=true
+org.eclipse.wst.xml.core/debug=true
+org.eclipse.wst.xml.core/cmdocumentcache=true
+org.eclipse.wst.xml.core/cmdocumentcachemanager=true
+org.eclipse.wst.xml.core/debug/validation=true
+org.eclipse.wst.xml.core/externalSchemaLocation=true
