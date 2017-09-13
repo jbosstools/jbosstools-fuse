@@ -90,7 +90,9 @@ public class Messages extends NLS {
 	public static String switchCamelVersionDialogName;
 	public static String switchCamelVersionDialogTitle;
 	public static String switchCamelVersionDialogVersionsLabel;
-
+	public static String validatingCamelVersionMessage;
+	public static String invalidCamelVersionMessage;
+	
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogTitle;
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogText;
 	

@@ -52,7 +52,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.eclipse.wst.validation
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator
-Export-Package: org.fusesource.ide.projecttemplates.adopters,
+Export-Package: org.fusesource.ide.projecttemplates.actions;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.actions.ui;x-friends:="org.fusesource.ide.projecttemplates.tests.integration",
+ org.fusesource.ide.projecttemplates.adopters,
  org.fusesource.ide.projecttemplates.adopters.util,
  org.fusesource.ide.projecttemplates.impl.medium,
  org.fusesource.ide.projecttemplates.impl.simple,
