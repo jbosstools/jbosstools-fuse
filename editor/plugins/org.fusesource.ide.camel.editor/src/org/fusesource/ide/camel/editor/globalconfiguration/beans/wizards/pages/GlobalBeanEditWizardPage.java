@@ -43,6 +43,7 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 		super(UIMessages.globalBeanEditWizardPageDefaultName);
 		setTitle(title);
 		setDescription(description);
+		this.element = parent;
 		this.dbc = dbc;
 		this.project = parent.getCamelFile().getResource().getProject();
 	}
@@ -83,7 +84,7 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 			@Override
 			protected void doSetValue(Object value) {
 				final String strValue = (String) value;
-				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_ID);
+				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS);
 				if (!oldValue.contentEquals(strValue)) {
 					beanConfigUtil.setAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS, strValue);
 				}
@@ -107,6 +108,29 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 
 	@Override
 	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
-		return null;
+		ComputedValue<?> refIdValue = new ComputedValue<Object>() {
+
+			@Override
+			protected Object calculate() {
+				final String beanTag =
+						beanConfigUtil.getFactoryBeanTag(selectedElement);
+				return beanConfigUtil.getAttributeValue(selectedElement, beanTag);
+			}
+
+			@Override
+			protected void doSetValue(Object value) {
+				final String beanTag =
+						beanConfigUtil.getFactoryBeanTag(selectedElement);
+				final String strValue = (String) value;
+				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, beanTag);
+				if (!oldValue.contentEquals(strValue)) {
+					beanConfigUtil.setAttributeValue(selectedElement, beanTag, strValue);
+				}
+				getValue();
+			}
+		};
+		Binding binding = dbc.bindValue(WidgetProperties.selection().observe(beanRefIdCombo), refIdValue, strategy, null);
+		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
+		return binding;
 	}
 }

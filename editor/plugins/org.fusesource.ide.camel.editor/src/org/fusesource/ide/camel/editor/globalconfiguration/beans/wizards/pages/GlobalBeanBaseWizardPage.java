@@ -47,7 +47,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	protected String id;
 	protected String classname;
 	protected String beanRefId;
-	protected AbstractCamelModelElement parent;
+	protected AbstractCamelModelElement element;
 	protected IObservableValue<String> classObservable;
 	protected BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	protected IProject project = null;
@@ -112,7 +112,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		idText = new Text(composite, SWT.BORDER);
 		idText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		strategy.setBeforeSetValidator(new NewBeanIdValidator(parent));
+		strategy.setBeforeSetValidator(new NewBeanIdValidator(element));
 		createIdBinding(strategy);
 	}
 
@@ -125,7 +125,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		classText = new Text(composite, SWT.BORDER);
 		classText.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).create());
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		classValidator = new BeanClassExistsValidator(project, parent, beanRefIdCombo);
+		classValidator = new BeanClassExistsValidator(project, element, beanRefIdCombo);
 		strategy.setBeforeSetValidator(classValidator);
 		classBinding = createClassBinding(strategy);
 		classText.addModifyListener(value -> pingBindings());
@@ -169,11 +169,13 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		beanRefIdLabel.setText("Factory Bean");
 		beanRefIdCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE | SWT.DROP_DOWN);
 		beanRefIdCombo.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
-		String[] beanRefs = CamelComponentUtils.getRefs(parent.getCamelFile());
-		String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
-		beanRefIdCombo.setItems(updatedBeanRefs);
+		if (element != null) {
+			String[] beanRefs = CamelComponentUtils.getRefs(element.getCamelFile());
+			String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
+			beanRefIdCombo.setItems(updatedBeanRefs);
+		}
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
-		refValidator = new BeanRefClassExistsValidator(project, parent, classText);
+		refValidator = new BeanRefClassExistsValidator(project, element, classText);
 		strategy.setBeforeSetValidator(refValidator);
 		beanRefIdCombo.addModifyListener(value -> pingBindings());
 		beanRefIdCombo.addSelectionListener(new SelectionAdapter() {
@@ -188,7 +190,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	private String[] removeRefsWithNoClassFromArray(String[] input) {
 		ArrayList<String> result = new ArrayList<>();
 		for(String item : input) {
-			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, item);
+			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(element, item);
 			if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
 				result.add(item);
 			}

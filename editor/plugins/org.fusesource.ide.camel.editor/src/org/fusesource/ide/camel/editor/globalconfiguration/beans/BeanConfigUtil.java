@@ -615,6 +615,25 @@ public class BeanConfigUtil {
 		return newBeanNode;
 	}
 	
+	public Element createBeanNode(final CamelFile camelFile, String id, String className, String refId) {
+		// get NS prefix from parent document, not route container node
+		final String prefixNS = 
+				getBeanPrefix(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+		Element newBeanNode = camelFile.createElement(CamelBean.BEAN_NODE, prefixNS);
+		newBeanNode.setAttribute(GlobalBeanEIP.PROP_ID, id);
+		if (!Strings.isBlank(className)) {
+			newBeanNode.setAttribute(GlobalBeanEIP.PROP_CLASS, className);
+		}
+		if (!Strings.isBlank(refId)) {
+			String beanTag =
+					getFactoryBeanTag(camelFile.getRouteContainer().getXmlNode().getOwnerDocument().getDocumentElement());
+			newBeanNode.setAttribute(beanTag, refId);
+		}
+		// default for both Blueprint and Spring global beans to "singleton" as the scope
+		newBeanNode.setAttribute(GlobalBeanEIP.PROP_SCOPE, "singleton"); //$NON-NLS-1$
+		return newBeanNode;
+	}
+
 	public Element createBeanProperty(String name, String value) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
