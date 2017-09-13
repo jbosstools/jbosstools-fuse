@@ -43,7 +43,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 	private static final String FEATURE_PROPERTIES_FILE_NAME = "feature.properties";
 	private static final String FEATURE_PROPERTIES_FILE = 
 			"###############################################################################\n" +
-			"# Copyright (c) 2010-2017 Red Hat, Inc. and others.\n" +
+			"# Copyright (c) 2006-2017 Red Hat, Inc. and others.\n" +
 			"# All rights reserved. This program and the accompanying materials \n" +
 			"# are made available under the terms of the Eclipse Public License v1.0\n" +
 			"# which accompanies this distribution, and is available at\n" +
@@ -71,7 +71,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			"\n" +
 			"# \"description\" property - description of the feature\n" +
 			"description=Provides SAP JCo3 and IDoc3 Libraries for JBoss Fuse SAP Tooling Suite installations.\n" +
-			"copyright=JBoss, Home of Professional Open Source Copyright (c) Red Hat, Inc., and individual contributors as indicated by the @authors tag, 2006-2015. See the copyright.txt in the distribution for a full listing of individual contributors.\n ";
+			"copyright=Copyright (c) Red Hat, Inc., and individual contributors as indicated by the @authors tag, 2006-2017.\n ";
 
 	private static final String LICENSE_FILE_NAME = "license.html";
 	private static final String LICENSE_FILE = 
