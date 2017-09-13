@@ -20,10 +20,6 @@
       %license
    </license>
 
-   <url>
-      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/neon/"/>
-   </url>
-
    <requires>
       <import plugin="org.eclipse.core.commands" version="3.6.100" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.9.0" match="greaterOrEqual"/>

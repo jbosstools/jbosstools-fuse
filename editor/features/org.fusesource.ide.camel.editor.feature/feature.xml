@@ -20,10 +20,6 @@
       %license
    </license>
  
-   <url>
-      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/neon/"/>
-   </url>
-
    <requires>
       <import feature="org.fusesource.ide.core.feature" version="10.0.0" match="greaterOrEqual"/>
       
