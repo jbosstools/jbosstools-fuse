@@ -13,7 +13,7 @@ package org.fusesource.ide.server.fuse.ui.runtime.fuseesb;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.core.IRuntime;
-import org.fusesource.ide.server.fuse.ui.FuseSharedImages;
+import org.fusesource.ide.server.fuse.ui.FuseESBUIPlugin;
 import org.fusesource.ide.server.fuse.ui.Messages;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment;
 
@@ -22,10 +22,6 @@ import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment;
  */
 public class FuseESBRuntimeFragment extends KarafRuntimeFragment {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment#updateWizardHandle(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	protected void updateWizardHandle(Composite parent) {
 		// make modifications to parentComposite
@@ -37,22 +33,13 @@ public class FuseESBRuntimeFragment extends KarafRuntimeFragment {
 		initiateHelp(parent);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment#getExplanationText()
-	 */
 	@Override
 	protected String getExplanationText() {
 		return "Please point to a JBoss Fuse installation.";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment#getImageDescriptor()
-	 */
 	@Override
 	protected ImageDescriptor getImageDescriptor() {
-		String imageKey = FuseSharedImages.IMG_FUSE_LOGO_LARGE;
-		return FuseSharedImages.getImageDescriptor(imageKey);
+		return FuseESBUIPlugin.getDefault().getImageRegistry().getDescriptor(FuseESBUIPlugin.IMG_JBOSS_BY_RH_LOGO_LARGE);
 	}
 }

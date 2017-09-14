@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -41,6 +43,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.server.karaf.ui";
 
 	public static final String TERMINAL_VIEW_ID = "org.eclipse.tm.terminal.view.ui.TerminalsView";
+	public static final String IMG_KARAF_LOGO_LARGE = "karaf-logo_lg.png"; //$NON-NLS-1$
 	
 	// The shared instance
 	private static KarafUIPlugin plugin;
@@ -56,16 +59,6 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	/**
-	 * The constructor
-	 */
-	public KarafUIPlugin() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -120,7 +113,6 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		KarafSharedImages.instance().cleanup();
 		if( serverListener != null ) {
 			UnitedServerListenerManager.getDefault().removeListener(serverListener);
 		}
@@ -155,5 +147,11 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	
 	public static RiderLogFacade getLogger() {
 		return RiderLogFacade.getLog(getDefault().getLog());
+	}
+	
+	@Override
+	protected void initializeImageRegistry(ImageRegistry reg) {
+		super.initializeImageRegistry(reg);
+		reg.put(IMG_KARAF_LOGO_LARGE, ImageDescriptor.createFromURL(plugin.getBundle().getEntry("/icons/karaf-logo_lg.png")));  //$NON-NLS-1$
 	}
 }
