@@ -33,11 +33,11 @@ public class AddGlobalBeanWizard extends Wizard implements GlobalConfigurationTy
 	private DataBindingContext dbc;
 	private Element newBeanNode;
 	private GlobalBeanWizardPage globalBeanPage;
-	private CamelFile camelFile;
+	private final CamelFile camelFile;
 	private ComponentManager componentManager;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
-	public AddGlobalBeanWizard(CamelFile camelFile, CamelModel camelModel) {
+	public AddGlobalBeanWizard(final CamelFile camelFile, CamelModel camelModel) {
 		super();
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();

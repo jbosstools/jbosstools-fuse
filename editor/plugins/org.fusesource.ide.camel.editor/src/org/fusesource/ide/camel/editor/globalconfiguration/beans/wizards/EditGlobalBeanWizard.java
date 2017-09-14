@@ -31,9 +31,9 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	private DataBindingContext dbc;
 	private Element inputNode;
 	private ComponentManager componentManager;
-	private CamelFile camelFile;
+	private final CamelFile camelFile;
 
-	public EditGlobalBeanWizard(CamelFile camelFile, CamelModel camelModel) {
+	public EditGlobalBeanWizard(final CamelFile camelFile, CamelModel camelModel) {
 		super();
 		this.camelFile = camelFile;
 		this.dbc = new DataBindingContext();

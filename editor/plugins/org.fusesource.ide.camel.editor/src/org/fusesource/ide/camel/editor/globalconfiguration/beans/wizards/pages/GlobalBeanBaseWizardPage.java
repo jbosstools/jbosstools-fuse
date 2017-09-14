@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 
@@ -172,7 +173,12 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		if (element != null) {
 			String[] beanRefs = CamelComponentUtils.getRefs(element.getCamelFile());
 			String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
-			beanRefIdCombo.setItems(updatedBeanRefs);
+			if (element instanceof CamelBean) {
+				String[] updatedBeanRefsNoId = removeRefsWithID(beanRefs, ((CamelBean) element).getId());
+				beanRefIdCombo.setItems(updatedBeanRefsNoId);
+			} else {
+				beanRefIdCombo.setItems(updatedBeanRefs);
+			}
 		}
 		UpdateValueStrategy strategy = new UpdateValueStrategy();
 		refValidator = new BeanRefClassExistsValidator(project, element, classText);
@@ -198,6 +204,15 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		return result.toArray(new String[result.size()]);
 	}
 
+	private String[] removeRefsWithID(String[] input, String id) {
+		ArrayList<String> result = new ArrayList<>();
+		for(String item : input) {
+			if (!Strings.isEmpty(id) && !Strings.isEmpty(item) && !id.contentEquals(item)) {
+				result.add(item);
+			}
+		}
+		return result.toArray(new String[result.size()]);
+	}
 
 	private void pingBindings() {
 		Display.getCurrent().asyncExec( () -> {
