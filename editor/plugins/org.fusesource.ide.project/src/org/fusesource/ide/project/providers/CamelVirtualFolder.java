@@ -108,7 +108,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			if (resource.getProject() != null
 					&& !resource.getProject().equals(project)) {
 				// we are not interested in changes of other projects
-				return true;
+				return false;
 			}
 
 			int deltaKind = delta.getKind();

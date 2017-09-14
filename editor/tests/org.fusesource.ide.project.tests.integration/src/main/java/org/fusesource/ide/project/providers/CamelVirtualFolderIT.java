@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
@@ -27,13 +28,16 @@ public class CamelVirtualFolderIT {
 	public FuseProject fuseProject = new FuseProject(CamelVirtualFolderIT.class.getName());
 	
 	@Rule
+	public FuseProject fuseProject2 = new FuseProject(CamelVirtualFolderIT.class.getName()+"-secondProject");
+	
+	@Rule
 	public TemporaryFolder tmp = new TemporaryFolder();
 	
 	@Test
 	public void testCamelVirtualFolderFindCamelFile() throws Exception {
 		fuseProject.createEmptyCamelFile();
 		
-		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder();
+		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder(fuseProject.getProject());
 		
 		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(1);
 	}
@@ -41,7 +45,7 @@ public class CamelVirtualFolderIT {
 	@Test
 	public void testCamelVirtualFolderDetectRemovedCamelFile() throws Exception {
 		CamelFile camelFile = fuseProject.createEmptyCamelFile();
-		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder();
+		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder(fuseProject.getProject());
 		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(1);
 		
 		camelFile.getResource().delete(true, new NullProgressMonitor());
@@ -56,13 +60,25 @@ public class CamelVirtualFolderIT {
 		IFile camelFileInsideTargetFolder = targetFolder.getFile("emptyCamelFileInTargetFolder.xml");
 		fuseProject.createEmptyCamelFile(camelFileInsideTargetFolder);
 		
-		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder();
+		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder(fuseProject.getProject());
 		
 		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(0);
 	}
 	
-	private CamelVirtualFolder initializeCamelVirtualFolder() {
-		CamelVirtualFolder camelVirtualFolder = new CamelVirtualFolder(fuseProject.getProject());
+	@Test
+	public void testUpdateInOtherProject() throws Exception {
+		fuseProject.createEmptyCamelFile();
+		CamelVirtualFolder camelVirtualFolder = initializeCamelVirtualFolder(fuseProject.getProject());
+		
+		fuseProject2.createEmptyCamelFile();
+		CamelVirtualFolder camelVirtualFolder2 = initializeCamelVirtualFolder(fuseProject2.getProject());
+		
+		assertThat(camelVirtualFolder.getCamelFiles()).hasSize(1);
+		assertThat(camelVirtualFolder2.getCamelFiles()).hasSize(1);
+	}
+	
+	private CamelVirtualFolder initializeCamelVirtualFolder(IProject project) {
+		CamelVirtualFolder camelVirtualFolder = new CamelVirtualFolder(project);
 		camelVirtualFolder.populateChildren();
 		return camelVirtualFolder;
 	}
