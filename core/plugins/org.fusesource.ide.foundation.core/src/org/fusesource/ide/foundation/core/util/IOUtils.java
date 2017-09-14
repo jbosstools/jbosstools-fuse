@@ -27,8 +27,6 @@ import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
  */
 public class IOUtils {
 	
-	public static String includeRegEx = "\"@include(\"(.+)\")\".r";
-	
     /**
      * reads text from an input stream with the given encoding
      * 

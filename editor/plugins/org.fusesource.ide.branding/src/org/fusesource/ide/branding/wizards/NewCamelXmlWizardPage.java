@@ -45,9 +45,9 @@ import org.fusesource.ide.branding.RiderHelpContextIds;
  */
 
 public class NewCamelXmlWizardPage extends WizardPage {
-	public static String springFormat = "Spring";
-	public static String blueprintFormat = "OSGi Blueprint";
-	public static String routesFormat = "Routes";
+	public static final String SPRING_FORMAT = "Spring";
+	public static final String BLUEPRINT_FORMAT = "OSGi Blueprint";
+	public static final String ROUTES_FORMAT = "Routes";
 
 	protected static final String DEFAULT_CAMEL_XML_NAME = "camelContext.xml";
 
@@ -139,9 +139,9 @@ public class NewCamelXmlWizardPage extends WizardPage {
 		gd.horizontalSpan = 2;
 		formatCombo.setLayoutData(gd);
 		 */
-		formatCombo.setItems(new String[] { springFormat, blueprintFormat, routesFormat });
+		formatCombo.setItems(new String[] { SPRING_FORMAT, BLUEPRINT_FORMAT, ROUTES_FORMAT });
 		// TODO remember the last selection each time??
-		formatCombo.setText(springFormat);
+		formatCombo.setText(SPRING_FORMAT);
 
 		initialize();
 		dialogChanged();
