@@ -69,7 +69,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	 */
 	protected boolean connect() {
 		KarafServerDelegate del = (KarafServerDelegate)getServer().loadAdapter(KarafServerDelegate.class, new NullProgressMonitor());
-		Map<String, Object> envMap = new HashMap<String, Object>();
+		Map<String, Object> envMap = new HashMap<>();
 		envMap.put("jmx.remote.credentials", new String[] { del.getUserName(), del.getPassword() });
 		try {
 			String conUrl = KarafUtils.getJMXConnectionURL(getServer());
@@ -102,6 +102,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		    	if (oMbean instanceof ObjectInstance) {
 		    		ObjectInstance oi = (ObjectInstance)oMbean;
 		    		this.objectNameFramework = oi.getObjectName();
+		    		return true;
 		    	}
 		    }
 		} catch (Exception ex) {
