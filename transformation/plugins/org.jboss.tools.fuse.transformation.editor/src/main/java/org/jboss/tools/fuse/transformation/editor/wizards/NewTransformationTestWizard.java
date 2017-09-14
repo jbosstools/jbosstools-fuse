@@ -34,6 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
@@ -147,7 +148,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
                     try {
                         srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
                     } catch (CoreException e) {
-                        e.printStackTrace();
+                    	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while refreshing source folder", e)); //$NON-NLS-1$
                     }
                 }
 
@@ -178,7 +179,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
                         BasicNewResourceWizard.selectAndReveal(resource, activePage
                                 .getWorkbenchWindow());
                     } catch (PartInitException e) {
-                        e.printStackTrace();
+                    	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error opening editor", e)); //$NON-NLS-1$
                     }
                 }
             }

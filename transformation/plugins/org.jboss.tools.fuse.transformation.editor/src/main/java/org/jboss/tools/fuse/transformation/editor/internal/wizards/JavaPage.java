@@ -161,7 +161,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                                     _javaModel = ModelBuilder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
                                 } catch (ClassNotFoundException e) {
-                                    e.printStackTrace();
+                                	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while reading Java model", e)); //$NON-NLS-1$
                                 }
                                 return Status.OK_STATUS;
                             }
@@ -171,7 +171,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                         _javaClassText.notifyListeners(SWT.Modify, new Event());
                     }
                 } catch (JavaModelException e1) {
-                    e1.printStackTrace();
+                	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while trying to update the newly selected class", e1)); //$NON-NLS-1$
                 }
             }
         });

@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
@@ -165,7 +166,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 hl7PreviewText.setText(buffer.toString());
 
             } catch (CoreException | IOException e1) {
-                e1.printStackTrace();
+            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while trying to update preview", e1)); //$NON-NLS-1$
             }
         }
     }
@@ -362,7 +363,7 @@ public class Hl7Page extends XformWizardPage implements TransformationTypePage {
                 }
                 return buffer.toString();
             } catch (final CoreException | IOException e1) {
-                e1.printStackTrace();
+            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while retrieving json text", e1)); //$NON-NLS-1$
             }
         }
         return null;
