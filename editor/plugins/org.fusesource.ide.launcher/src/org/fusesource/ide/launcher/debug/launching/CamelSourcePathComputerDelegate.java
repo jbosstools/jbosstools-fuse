@@ -132,7 +132,7 @@ public class CamelSourcePathComputerDelegate implements
 							javaProjectList.add(javaProject);
 					}
 				} catch (CoreException e) {
-					e.printStackTrace();
+					Activator.getLogger().error(e);
 				}
 			}
 		}

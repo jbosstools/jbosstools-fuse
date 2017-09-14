@@ -112,7 +112,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 				}
 			}				
 		} catch (Exception e) {
-			e.printStackTrace();
+			CamelEditorUIActivator.pluginLog().logError(e);
 			// ignore
 		}
 	}

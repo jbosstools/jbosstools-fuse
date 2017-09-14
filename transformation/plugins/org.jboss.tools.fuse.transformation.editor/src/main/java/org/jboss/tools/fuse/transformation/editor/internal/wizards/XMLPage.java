@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
@@ -137,10 +138,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 _xmlPreviewText.setText(buffer.toString());
 
-            } catch (CoreException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            } catch (CoreException | IOException e1) {
+            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while trying to update preview", e1)); //$NON-NLS-1$
             }
         }
     }
@@ -436,7 +435,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             try {
                                 elements = modelGen.getElementsFromSchema(new File(path));
                             } catch (Exception e) {
-                                e.printStackTrace();
+                            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while retrieving elements from Schema", e)); //$NON-NLS-1$
                             }
                         } else if (model.getSourceType().equals(ModelType.XML)) {
                             try {
@@ -446,7 +445,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                                     elements.add(element);
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+                            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while retrieving root element", e)); //$NON-NLS-1$
                             }
                         }
                     } else if (!isSourcePage() && model.getTargetType() != null) {
@@ -454,7 +453,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             try {
                                 elements = modelGen.getElementsFromSchema(new File(path));
                             } catch (Exception e) {
-                                e.printStackTrace();
+                            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while retrieving elements from Schema", e)); //$NON-NLS-1$
                             }
                         } else if (model.getTargetType().equals(ModelType.XML)) {
                             try {
@@ -464,7 +463,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                                     elements.add(element);
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+                            	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while retrieving root element", e)); //$NON-NLS-1$
                             }
                         }
                     }

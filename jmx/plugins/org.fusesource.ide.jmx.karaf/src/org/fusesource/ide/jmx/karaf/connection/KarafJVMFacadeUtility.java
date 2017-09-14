@@ -18,6 +18,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.jboss.ide.eclipse.as.core.util.JBossServerBehaviorUtils;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IControllableServerBehavior;
 import org.jboss.ide.eclipse.as.wtp.core.server.launch.AbstractStartJavaServerLaunchDelegate;
@@ -42,7 +43,7 @@ public class KarafJVMFacadeUtility {
 					main = lc.getAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, (String)null);
 				}
 			} catch( CoreException ce) {
-				ce.printStackTrace();
+				KarafJMXPlugin.getLogger().error(ce);
 			}
 		}
 		

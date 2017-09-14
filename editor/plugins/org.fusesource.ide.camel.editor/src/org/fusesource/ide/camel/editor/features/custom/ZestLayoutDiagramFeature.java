@@ -44,6 +44,7 @@ import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.VerticalLayoutAlgorithm;
 import org.eclipse.zest.layouts.dataStructures.BendPoint;
 import org.eclipse.zest.layouts.exampleStructures.SimpleNode;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 
 /**
@@ -148,7 +149,7 @@ public class ZestLayoutDiagramFeature extends AbstractCustomFeature {
                     adaptSelfBendPoints(selves);
 
                 } catch (InvalidLayoutConfiguration e) {
-                    e.printStackTrace();
+                	CamelEditorUIActivator.pluginLog().logError(e);
                 }
             }
         }
@@ -163,7 +164,7 @@ public class ZestLayoutDiagramFeature extends AbstractCustomFeature {
      */
     private Map<Connection, Point> getSelfConnections() {
         IGaService gaService = Graphiti.getGaService();
-        Map<Connection, Point> selves = new HashMap<Connection, Point>();
+        Map<Connection, Point> selves = new HashMap<>();
         EList<Connection> connections = getDiagram().getConnections();
         for (Connection connection : connections) {
             AnchorContainer source = connection.getStart().getParent();

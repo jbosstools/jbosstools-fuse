@@ -100,7 +100,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		try {
 			bundleUrl = new File(bundlePath.replaceFirst("file:", "")).toURI().toURL().toExternalForm();
 		} catch(MalformedURLException murle) {
-			murle.printStackTrace();		
+			Activator.getLogger().error(murle);
 		}
 		return bundleUrl;
 	}

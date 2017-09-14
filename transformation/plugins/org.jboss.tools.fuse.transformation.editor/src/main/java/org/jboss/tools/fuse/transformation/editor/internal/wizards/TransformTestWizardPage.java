@@ -293,7 +293,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                     try {
                         folder.refreshLocal(IResource.DEPTH_INFINITE, null);
                     } catch (CoreException e) {
-                        e.printStackTrace();
+                    	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while refreshing folder", e)); //$NON-NLS-1$
                     }
                 }
 
@@ -357,7 +357,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        	Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Error while creating Java class", e)); //$NON-NLS-1$
         }
         return null;
     }
