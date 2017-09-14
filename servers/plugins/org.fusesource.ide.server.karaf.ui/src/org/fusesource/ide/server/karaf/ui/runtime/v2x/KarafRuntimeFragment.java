@@ -30,7 +30,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
-import org.fusesource.ide.server.karaf.ui.KarafSharedImages;
+import org.fusesource.ide.server.karaf.ui.KarafUIPlugin;
 import org.fusesource.ide.server.karaf.ui.Messages;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.wtp.ui.composites.AbstractJREComposite;
@@ -83,8 +83,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 	}
 	
 	protected ImageDescriptor getImageDescriptor() {
-		String imageKey = KarafSharedImages.IMG_KARAF_LOGO_LARGE;
-		return KarafSharedImages.getImageDescriptor(imageKey);
+		return KarafUIPlugin.getDefault().getImageRegistry().getDescriptor(KarafUIPlugin.IMG_KARAF_LOGO_LARGE);
 	}
 	
 	/*
