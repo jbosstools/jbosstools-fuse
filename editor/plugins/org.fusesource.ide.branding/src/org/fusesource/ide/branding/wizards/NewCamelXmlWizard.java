@@ -188,11 +188,11 @@ public class NewCamelXmlWizard extends Wizard implements INewWizard {
 		String camelContext = "camelContext";
 		String namespace =  "http://camel.apache.org/schema/spring";
 		if (!Strings.isBlank(format)) {
-			if (Objects.equal(format, NewCamelXmlWizardPage.blueprintFormat)) {
+			if (Objects.equal(format, NewCamelXmlWizardPage.BLUEPRINT_FORMAT)) {
 				namespace = "http://camel.apache.org/schema/blueprint";
 				spring = false;
 				osgi = true;
-			} else if (Objects.equal(format, NewCamelXmlWizardPage.routesFormat)) {
+			} else if (Objects.equal(format, NewCamelXmlWizardPage.ROUTES_FORMAT)) {
 				camelContext = "routes";
 				spring = false;
 				osgi = false;

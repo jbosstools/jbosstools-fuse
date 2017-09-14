@@ -18,12 +18,12 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public final class EndpointHelper {
 
-    public static String DOZER_SCHEME = "dozer"; //$NON-NLS-1$
-    public static String SOURCE_MODEL = "sourceModel"; //$NON-NLS-1$
-    public static String TARGET_MODEL = "targetModel"; //$NON-NLS-1$
-    public static String MARSHAL_ID = "marshalId"; //$NON-NLS-1$
-    public static String UNMARSHAL_ID = "unmarshalId"; //$NON-NLS-1$
-    public static String MAPPING_FILE = "mappingFile"; //$NON-NLS-1$
+    public static final String DOZER_SCHEME = "dozer"; //$NON-NLS-1$
+    private static final String SOURCE_MODEL = "sourceModel"; //$NON-NLS-1$
+    private static final String TARGET_MODEL = "targetModel"; //$NON-NLS-1$
+    private static final String MARSHAL_ID = "marshalId"; //$NON-NLS-1$
+    private static final String UNMARSHAL_ID = "unmarshalId"; //$NON-NLS-1$
+    public static final String MAPPING_FILE = "mappingFile"; //$NON-NLS-1$
 
     public static String createEndpointUri(
             String dozerConfigPath,
