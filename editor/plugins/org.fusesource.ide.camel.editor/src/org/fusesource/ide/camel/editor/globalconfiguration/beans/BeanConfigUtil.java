@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -704,7 +705,7 @@ public class BeanConfigUtil {
 	}
 	
 	public String getClassNameFromReferencedCamelBean(AbstractCamelModelElement selectedEP, String refID) {
-		if (!Strings.isEmpty((String) refID) && selectedEP != null) {
+		if (!Strings.isEmpty(refID) && selectedEP != null) {
 			Map<String, GlobalDefinitionCamelModelElement> globalDefs = 
 					selectedEP.getCamelFile().getGlobalDefinitions();
 			GlobalDefinitionCamelModelElement referencedBean = globalDefs.get(refID);
@@ -716,16 +717,13 @@ public class BeanConfigUtil {
 	}
 	
 	public String[] removeStringFromStringArray(String[] input, String deleteMe) {
-		ArrayList<String> result = new ArrayList<>();
-		for(String item : input)
-			if(!deleteMe.equals(item)) {
-				result.add(item);
-			}
-		return result.toArray(new String[0]);
+		return Stream.of(input)
+			.filter(item -> !deleteMe.equals(item))
+			.toArray(String[]::new);
 	}
 	
 	public String[] removeRefsWithNoClassFromArray(String[] input, AbstractCamelModelElement selectedEP) {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		for(String item : input) {
 			String referencedClassName = getClassNameFromReferencedCamelBean(selectedEP, item);
 			if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {

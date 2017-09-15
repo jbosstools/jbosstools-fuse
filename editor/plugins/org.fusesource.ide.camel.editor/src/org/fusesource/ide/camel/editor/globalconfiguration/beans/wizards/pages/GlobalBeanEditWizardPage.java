@@ -107,6 +107,14 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 	}
 
 	@Override
+	protected String getEditedBeanId() {
+		if (selectedElement != null) {
+			return (String) beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_ID);
+		}
+		return null;
+	}
+	
+	@Override
 	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
 		ComputedValue<?> refIdValue = new ComputedValue<Object>() {
 

@@ -112,6 +112,8 @@ public class UIMessages extends NLS {
 	public static String editGlobalBeanWizardWindowTitle;
 	public static String genericEndpointFigureFeaturePaletteDescription;
 	public static String genericEndpointFigureFeaturePaletteName;
+	public static String globalBeanBaseWizardPageFactoryBeanLabel;
+
 	public static String globalBeanEditWizardPageArgumentsGroupLabel;
 	public static String globalBeanEditWizardPageClassLabel;
 	public static String globalBeanEditWizardPageDefaultName;
