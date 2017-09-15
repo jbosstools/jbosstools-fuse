@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.properties.bean;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.properties.creators.ComboParameterPropertyUICreator;
 import org.fusesource.ide.camel.editor.properties.creators.modifylisteners.text.ComboParameterPropertyModifyListener;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -29,7 +28,9 @@ import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
  *
  */
 public class BeanRefAttributeComboFieldPropertyUICreator extends ComboParameterPropertyUICreator {
-	
+
+	protected BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+
 	public BeanRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, 
@@ -42,7 +43,7 @@ public class BeanRefAttributeComboFieldPropertyUICreator extends ComboParameterP
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener);
 		setValues();
 	}
-	
+
 	public BeanRefAttributeComboFieldPropertyUICreator(DataBindingContext dbc, IObservableMap<String, String> modelMap, Eip eip, AbstractCamelModelElement camelModelElement, Parameter parameter,
 			Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, ComboParameterPropertyModifyListener listener, IValidator extraValidator) {
 		super(dbc, modelMap, eip, camelModelElement, parameter, parent, widgetFactory, listener, extraValidator);
@@ -50,17 +51,9 @@ public class BeanRefAttributeComboFieldPropertyUICreator extends ComboParameterP
 	}
 
 	private void setValues() {
-        String[] beanRefs = CamelComponentUtils.getRefs(this.camelModelElement.getCamelFile());
-        String[] cleanedBeanRefs = removeStringFromStringArray(beanRefs, this.camelModelElement.getId());
-        super.setValues(cleanedBeanRefs);
-	}
-
-	private String[] removeStringFromStringArray(String[] input, String deleteMe) {
-	    ArrayList<String> result = new ArrayList<>();
-	    for(String item : input)
-	        if(!deleteMe.equals(item)) {
-	            result.add(item);
-	        }
-	    return result.toArray(new String[0]);
+		String[] beanRefs = CamelComponentUtils.getRefs(this.camelModelElement.getCamelFile());
+		String[] classRefs = beanConfigUtil.removeRefsWithNoClassFromArray(beanRefs, this.camelModelElement);
+		String[] cleanedBeanRefs = beanConfigUtil.removeStringFromStringArray(classRefs, this.camelModelElement.getId());
+		super.setValues(cleanedBeanRefs);
 	}
 }

@@ -10,8 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.pages;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -36,7 +34,6 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
-import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author brianf
@@ -172,9 +169,9 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		beanRefIdCombo.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
 		if (element != null) {
 			String[] beanRefs = CamelComponentUtils.getRefs(element.getCamelFile());
-			String[] updatedBeanRefs = removeRefsWithNoClassFromArray(beanRefs);
+			String[] updatedBeanRefs = beanConfigUtil.removeRefsWithNoClassFromArray(beanRefs, element);
 			if (element instanceof CamelBean) {
-				String[] updatedBeanRefsNoId = removeRefsWithID(beanRefs, ((CamelBean) element).getId());
+				String[] updatedBeanRefsNoId = beanConfigUtil.removeStringFromStringArray(updatedBeanRefs, ((CamelBean) element).getId());
 				beanRefIdCombo.setItems(updatedBeanRefsNoId);
 			} else {
 				beanRefIdCombo.setItems(updatedBeanRefs);
@@ -191,27 +188,6 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 			}
 		});
 		refBinding = createBeanRefBinding(strategy);
-	}
-
-	private String[] removeRefsWithNoClassFromArray(String[] input) {
-		ArrayList<String> result = new ArrayList<>();
-		for(String item : input) {
-			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(element, item);
-			if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
-				result.add(item);
-			}
-		}
-		return result.toArray(new String[result.size()]);
-	}
-
-	private String[] removeRefsWithID(String[] input, String id) {
-		ArrayList<String> result = new ArrayList<>();
-		for(String item : input) {
-			if (!Strings.isEmpty(id) && !Strings.isEmpty(item) && !id.contentEquals(item)) {
-				result.add(item);
-			}
-		}
-		return result.toArray(new String[result.size()]);
 	}
 
 	private void pingBindings() {
