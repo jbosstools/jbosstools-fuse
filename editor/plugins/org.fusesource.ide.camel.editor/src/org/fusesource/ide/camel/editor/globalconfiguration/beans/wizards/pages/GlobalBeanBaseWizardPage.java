@@ -159,19 +159,27 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		});
 	}
 
+	protected String getEditedBeanId() {
+		if (element instanceof CamelBean) {
+			return ((CamelBean) element).getId();
+		}
+		return null;
+	}
+
 	/**
 	 * @param composite
 	 */
 	protected void createBeanRefIdLine(Composite composite) {
 		Label beanRefIdLabel = new Label(composite, SWT.NONE);
-		beanRefIdLabel.setText("Factory Bean");
+		beanRefIdLabel.setText(UIMessages.globalBeanBaseWizardPageFactoryBeanLabel);
 		beanRefIdCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE | SWT.DROP_DOWN);
 		beanRefIdCombo.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(3, 1).create());
 		if (element != null) {
 			String[] beanRefs = CamelComponentUtils.getRefs(element.getCamelFile());
 			String[] updatedBeanRefs = beanConfigUtil.removeRefsWithNoClassFromArray(beanRefs, element);
-			if (element instanceof CamelBean) {
-				String[] updatedBeanRefsNoId = beanConfigUtil.removeStringFromStringArray(updatedBeanRefs, ((CamelBean) element).getId());
+			String beanId = getEditedBeanId();
+			if (beanId != null) {
+				String[] updatedBeanRefsNoId = beanConfigUtil.removeStringFromStringArray(updatedBeanRefs, beanId);
 				beanRefIdCombo.setItems(updatedBeanRefsNoId);
 			} else {
 				beanRefIdCombo.setItems(updatedBeanRefs);
