@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.globalconfiguration.beans;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -703,14 +704,35 @@ public class BeanConfigUtil {
 	}
 	
 	public String getClassNameFromReferencedCamelBean(AbstractCamelModelElement selectedEP, String refID) {
-		if (!Strings.isEmpty((String) refID)) {
+		if (!Strings.isEmpty((String) refID) && selectedEP != null) {
 			Map<String, GlobalDefinitionCamelModelElement> globalDefs = 
 					selectedEP.getCamelFile().getGlobalDefinitions();
 			GlobalDefinitionCamelModelElement referencedBean = globalDefs.get(refID);
-			if (referencedBean != null && referencedBean instanceof CamelBean) {
+			if (referencedBean instanceof CamelBean) {
 				return ((CamelBean) referencedBean).getClassName();
 			}
 		}
 		return null;
 	}
+	
+	public String[] removeStringFromStringArray(String[] input, String deleteMe) {
+		ArrayList<String> result = new ArrayList<>();
+		for(String item : input)
+			if(!deleteMe.equals(item)) {
+				result.add(item);
+			}
+		return result.toArray(new String[0]);
+	}
+	
+	public String[] removeRefsWithNoClassFromArray(String[] input, AbstractCamelModelElement selectedEP) {
+		ArrayList<String> result = new ArrayList<>();
+		for(String item : input) {
+			String referencedClassName = getClassNameFromReferencedCamelBean(selectedEP, item);
+			if(!Strings.isEmpty(referencedClassName) || Strings.isEmpty(item)) {
+				result.add(item);
+			}
+		}
+		return result.toArray(new String[result.size()]);
+	}
+	
 }
