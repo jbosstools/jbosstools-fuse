@@ -29,7 +29,7 @@ import org.junit.Test;
 public class SwitchCamelVersionIT {
 	
 	private static final String INVALID_VERSION = "2.20.756a";
-	private static final String VALID_VERSION = "2.19.2";
+	private static final String VALID_VERSION = "2.19.3";
 	
 	@Rule
 	public FuseProject fuseProject = new FuseProject(SwitchCamelVersionIT.class.getSimpleName());
