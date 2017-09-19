@@ -15,7 +15,9 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -73,6 +75,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
 	@Override
 	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		super.createControls(parent, aTabbedPropertySheetPage);
 
@@ -202,6 +205,10 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		for (Parameter p : props.values()) {
 			handleField(p, page);
 		}
+		
+		MultiValidator beanRefAndClassCrossValidator = new BeanRefAndClassCrossValidator(classCreator.getUiObservable(), beanRefCreator.getUiObservable());
+		
+		ControlDecorationSupport.create(beanRefAndClassCrossValidator, SWT.TOP | SWT.LEFT);
 	}
 	
 	private void updateOptionButtons(final SelectionEvent e, 
@@ -211,22 +218,20 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		Button selectedOption = (Button) e.widget;
 		boolean isSelected = selectedOption.getSelection();
 		boolean isClassBtn = selectedOption.equals(optClass);
-		beanRefCreator.getControl().setEnabled(!isClassBtn && isSelected);
-		classCreator.getControl().setEnabled(isClassBtn && isSelected);
+		boolean beanRefCreatorEnablement = !isClassBtn && isSelected;
+		boolean classCreatorEnablement = isClassBtn && isSelected;
 		
-		if (beanRefCreator.getControl().isEnabled()) {
+		if (beanRefCreatorEnablement) {
 			// clear class field
 	        Text textControl = (Text) classCreator.getControl();
 	        textControl.setText("");
-	        textControl.notifyListeners(SWT.Modify, new Event());
-			classCreator.getBinding().updateModelToTarget();
-		} else if (classCreator.getControl().isEnabled()) {
+		} else if (classCreatorEnablement) {
 			// clear ref field
 	        Combo comboControl = (Combo) beanRefCreator.getControl();
 			comboControl.deselectAll();
-			comboControl.notifyListeners(SWT.Selection, new Event());
-			beanRefCreator.getBinding().updateModelToTarget();
 		}
+		beanRefCreator.getControl().setEnabled(beanRefCreatorEnablement);
+		classCreator.getControl().setEnabled(classCreatorEnablement);
 	}
 
 	private void refreshClassAndBeanRefBindings() {
