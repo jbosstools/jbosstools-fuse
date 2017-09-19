@@ -64,9 +64,6 @@ public class BeanRefClassExistsValidator implements IValidator {
 	}
 
 	private IStatus classExistsInProject(String className) {
-		if (className == null || className.isEmpty()) {
-			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
-		}
 		IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
@@ -82,26 +79,22 @@ public class BeanRefClassExistsValidator implements IValidator {
 	@Override
 	public IStatus validate(Object value) {
 		String beanRefId = (String) value;
-		String className = null;
-		if (beanClassText != null && !beanClassText.isDisposed()) {
-			className = beanClassText.getText();
-		} else if (modelMap != null) {
-			Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
-			if (control != null) {
-				className = (String) control;
-			}
-		} 
-		if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorBeanClassOrBeanRefRequired);
-		}
-		if (!Strings.isEmpty(className) && !Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass);
-		}
+		if(!Strings.isEmpty(beanRefId)) {
+			String className = null;
+			if (beanClassText != null && !beanClassText.isDisposed()) {
+				className = beanClassText.getText();
+			} else if (modelMap != null) {
+				Object control = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+				if (control != null) {
+					className = (String) control;
+				}
+			} 
 
-		String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
-		IStatus firstStatus = classExistsInProject(referencedClassName);
-		if (firstStatus != ValidationStatus.ok() && !Strings.isEmpty(className)) {
-			return classExistsInProject(className);
+			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
+			IStatus firstStatus = classExistsInProject(referencedClassName);
+			if (firstStatus != ValidationStatus.ok() && !Strings.isEmpty(className)) {
+				return classExistsInProject(className);
+			}
 		}
 		return ValidationStatus.ok();
 	}

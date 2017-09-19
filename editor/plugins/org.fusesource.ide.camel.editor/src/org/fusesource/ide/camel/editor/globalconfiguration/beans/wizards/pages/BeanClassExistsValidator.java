@@ -66,9 +66,6 @@ public class BeanClassExistsValidator implements IValidator {
 	}
 
 	private IStatus classExistsInProject(String className) {
-		if (className == null || className.isEmpty()) {
-			return ValidationStatus.error(UIMessages.beanClassExistsValidatorErrorBeanClassMandatory);
-		}
 		IType javaClass;
 		try {
 			javaClass = javaProject == null ? null : javaProject.findType(className);
@@ -102,19 +99,17 @@ public class BeanClassExistsValidator implements IValidator {
 	@Override
 	public IStatus validate(Object value) {
 		String className = (String) value;
-		String beanRefId = getBeanReferenceId();
-		if (Strings.isEmpty(className) && Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one.");
-		}
-		if (!Strings.isEmpty(className) && !Strings.isEmpty(beanRefId)) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one, not both.");
-		}
-		IStatus firstStatus = classExistsInProject(className);
-		if (Strings.isEmpty(className) && firstStatus != ValidationStatus.ok() && !Strings.isEmpty(beanRefId)) {
-			String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
-			return classExistsInProject(referencedClassName);
+		if (!Strings.isEmpty(className)) {
+			String beanRefId = getBeanReferenceId();
+			IStatus firstStatus = classExistsInProject(className);
+			if (Strings.isEmpty(className) && firstStatus != ValidationStatus.ok() && !Strings.isEmpty(beanRefId)) {
+				String referencedClassName = beanConfigUtil.getClassNameFromReferencedCamelBean(parent, beanRefId);
+				return classExistsInProject(referencedClassName);
+			} else {
+				return firstStatus;
+			}
 		} else {
-			return firstStatus;
+			return ValidationStatus.ok();
 		}
 	}
 
