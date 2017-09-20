@@ -53,16 +53,14 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		ServerBeanType type = serverBean.getBeanType();
 		List<ServerBeanType> valid = Arrays.asList(getServerBeanTypes());
 		if( valid.contains(type)) {
-			RuntimeDefinition runtimeDefinition = new RuntimeDefinition(serverBean.getName(), 
-					serverBean.getVersion(), type.getId(), new File(serverBean.getLocation()));
-			return runtimeDefinition;
+			return new RuntimeDefinition(serverBean.getName(), serverBean.getVersion(), type.getId(), new File(serverBean.getLocation()));
 		}
 		return null;
 	}
 
 	protected ServerBeanType[] getServerBeanTypes() {
 		return new ServerBeanType[]{
-				KarafBeanProvider.KARAF_2x, KarafBeanProvider.KARAF_3x
+				KarafBeanProvider.KARAF_2x, KarafBeanProvider.KARAF_3x, KarafBeanProvider.KARAF_4x
 		};
 	}
 
@@ -124,7 +122,10 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		return false;
 	}
 	
-	@Override
+	/**
+	 * @deprecated
+	 */
+	@Override @Deprecated
 	public void computeIncludedRuntimeDefinition(
 			RuntimeDefinition runtimeDefinition) {
 		// Karaf has no nested runtime types

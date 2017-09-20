@@ -45,7 +45,7 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 			return checkKarafVersion(location, KARAF4X_RELEASE_VERSION, V4_X)
 					&& !isIntegratedKaraf(location);
 		}
-
+		
 		/* (non-Javadoc)
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.AbstractCondition#getFullVersion(java.io.File, java.io.File)
 		 */
@@ -88,6 +88,12 @@ public class ServerBeanTypeKaraf4x extends ServerBeanType {
 			// In case new 4.x comes out, it should work on 4.1 until fixed
 			if( version.startsWith(V4_X)) return SERVER_KARAF_41;
 			return null;
+		}
+		
+		protected static boolean isIntegratedKaraf(File location) {
+			File libFolder = new File(location + File.separator + "lib");
+			File[] files = libFolder.listFiles( (File dir, String name) -> name.toLowerCase().startsWith("fuse-branding-") );
+			return files != null && files.length > 0;
 		}
 	}
 }
