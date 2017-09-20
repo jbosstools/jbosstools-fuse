@@ -84,13 +84,13 @@
 
    <!-- reddeer tests -->
 
-   <bundle id="org.jboss.tools.fuse.qe.reddeer"><category name="AllRedDeerTests"/></bundle>
-   <bundle id="org.jboss.tools.fuse.qe.reddeer.tests"><category name="AllRedDeerTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.reddeer"><category name="AllUITests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.ui.bot.tests"><category name="AllUITests"/></bundle>
 
    <!-- reddeer test sources -->
 
-   <bundle id="org.jboss.tools.fuse.qe.reddeer.source"><category name="AllRedDeerTests"/></bundle>
-   <bundle id="org.jboss.tools.fuse.qe.reddeer.tests.source"><category name="AllRedDeerTests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.reddeer.source"><category name="AllUITests"/></bundle>
+   <bundle id="org.jboss.tools.fuse.ui.bot.tests.source"><category name="AllUITests"/></bundle>
 
    <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site - Features">
       <description>
@@ -107,9 +107,9 @@
          JBoss Fuse Tooling Nightly Build Update Site: contains all tests in this build.
       </description>
    </category-def>
-   <category-def name="AllRedDeerTests" label="JBoss Fuse Tooling Nightly Build Update Site - Tests (QE)">
+   <category-def name="AllUITests" label="JBoss Fuse Tooling Nightly Build Update Site - UI Tests">
       <description>
-         JBoss Fuse Tooling Nightly Build Update Site: contains all qe tests in this build.
+         JBoss Fuse Tooling Nightly Build Update Site: contains all UI tests in this build.
       </description>
    </category-def>
 </site>
