@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -59,8 +58,7 @@ public class KarafServerBean4xIT {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return ParametizedTestUtil
-				.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_4X_RUNTIMES);
+		return KarafMockRuntimeCreationUtil.SUPPORTED_4X_RUNTIMES;
 	}
 
 	/**

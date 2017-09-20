@@ -12,41 +12,44 @@ package org.fusesource.ide.server.fuse.core.runtime;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.fuse.core.Activator;
-import org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants;
+import org.fusesource.ide.server.fuse.core.util.FuseToolingConstants;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
+import org.jboss.ide.eclipse.as.wtp.core.launching.IExecutionEnvironmentConstants;
 
 /**
  * @author lhein
  */
 public class FuseESBRuntimeDelegate extends KarafRuntimeDelegate {
 	
-	/**
-	 * empty default constructor
-	 */
-	public FuseESBRuntimeDelegate() {
-	}
-	
 	@Override
 	public IStatus validate() {
 		String id = getRuntime().getRuntimeType().getId();
 		String version = getVersion();
-		if (version != null && version.trim().startsWith("6.0")) {
-			if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_60)) 
-				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("6.1")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_61)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("6.2")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_62)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("6.3")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_63)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-        } else {
-			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
-		}
 		
+		return validateRuntimeAndVersion(id, version);
+	}
+	
+	@Override
+	protected IStatus validateRuntimeAndVersion(String runtimeId, String runtimeVersion) {
+		if (Strings.isBlank(runtimeVersion)) {
+			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Empty runtime version found for runtime " + runtimeId + "...");
+		}
+		String versionStartString = getMajorMinorString(runtimeVersion);
+		if (!runtimeId.toLowerCase().endsWith(String.format("fuseesb.runtime.%s", versionStartString)) && !isNewerUnsupportedVersion(runtimeVersion)) {
+			return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type " + runtimeId + " is not compatible with found version " + runtimeVersion);
+		}
 		return Status.OK_STATUS;
+	}
+	
+	@Override
+	public IExecutionEnvironment getMinimumExecutionEnvironment() {
+		if (getRuntime().getRuntimeType().getVersion().startsWith(FuseToolingConstants.FUSE_VERSION_7X)) {
+			return JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(IExecutionEnvironmentConstants.EXEC_ENV_JavaSE18);
+		}
+		return JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(IExecutionEnvironmentConstants.EXEC_ENV_JavaSE17);
 	}
 }

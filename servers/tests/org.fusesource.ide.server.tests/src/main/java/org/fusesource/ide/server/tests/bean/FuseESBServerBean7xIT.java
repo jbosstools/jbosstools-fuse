@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -28,15 +28,12 @@ import org.junit.runners.Parameterized.Parameters;
 import junit.framework.TestCase;
 
 @RunWith(value = Parameterized.class)
-public class FuseESBServerBean6xIT extends TestCase {
+public class FuseESBServerBean7xIT extends TestCase {
 
 	protected static final HashMap<String, String> TYPE_TO_VERSION;
 	static {
 		TYPE_TO_VERSION = new HashMap<>();
-		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_60, "6.0.0.redhat-065");
-		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_61, "6.1.0.redhat-376");
-		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_62, "6.2.1.redhat-084");
-		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_63, "6.3.0.redhat-187");
+		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_70, "7.0.0.fuse-000080");
 	}
 	
 	private String fRuntimeType;
@@ -45,7 +42,7 @@ public class FuseESBServerBean6xIT extends TestCase {
 	 * creates a server bean loader test for the given runtime type id
 	 * @param runtimeType
 	 */
-	public FuseESBServerBean6xIT(String runtimeType) {
+	public FuseESBServerBean7xIT(String runtimeType) {
 		this.fRuntimeType = runtimeType;
 	}
 	
@@ -55,7 +52,7 @@ public class FuseESBServerBean6xIT extends TestCase {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return FuseESBMockRuntimeCreationUtil.SUPPORTED_6X_RUNTIMES;
+		return FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES;
 	}
 
 	/**
@@ -67,10 +64,10 @@ public class FuseESBServerBean6xIT extends TestCase {
 	@Test
 	public void testFuseESB() {
 		IPath dest = FuseServerTestActivator.getDefault().getStateLocation().append(this.fRuntimeType);
-		FuseESBMockRuntimeCreationUtil.create6xRuntimeMock(this.fRuntimeType, dest);
+		FuseESBMockRuntimeCreationUtil.create7xRuntimeMock(this.fRuntimeType, dest);
 		ServerBeanLoader l = new ServerBeanLoader(dest.toFile());
 		ServerBean b = l.getServerBean();
-		assertTrue(b.getBeanType() == FuseBeanProvider.FUSE_6x);
+		assertTrue(b.getBeanType() == FuseBeanProvider.FUSE_7x);
 		assertEquals(b.getFullVersion(), TYPE_TO_VERSION.get(this.fRuntimeType));
 		assertEquals(b.getVersion(), ServerBeanLoader.getMajorMinorVersion(TYPE_TO_VERSION.get(this.fRuntimeType)));
 	}

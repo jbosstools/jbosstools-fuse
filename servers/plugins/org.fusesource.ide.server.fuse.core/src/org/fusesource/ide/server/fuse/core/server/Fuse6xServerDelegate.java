@@ -18,7 +18,7 @@ import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
 /**
  * @author lhein
  */
-public class FuseESBServerDelegate extends KarafServerDelegate {
+public class Fuse6xServerDelegate extends KarafServerDelegate {
 	
 	public static final String DEFAULT_FUSEESB_SSH_USER = "admin";
 	public static final String DEFAULT_FUSEESB_SSH_PASSWORD = "admin";

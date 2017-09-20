@@ -35,7 +35,26 @@ public final class FuseESBMockServerCreationUtil {
 		
 		return serverCreated;
 	}
-	
+
+	/**
+	 * creates a mock server structure and configures it
+	 * 
+	 * @param runtimeId		the id of the runtime type
+	 * @param runtimePath	the path where to create the server
+	 * @return	true on success
+	 */
+	public static boolean create7xServerMock(String runtimeId, IPath runtimePath) {
+		boolean serverCreated = false;
+		
+		// create the runtime mock structure
+		if (FuseESBMockRuntimeCreationUtil.create7xRuntimeMock(runtimeId, runtimePath)) {
+			// configure the runtime mock
+			serverCreated = configureMockRuntime(runtimeId, runtimePath);
+		}
+		
+		return serverCreated;
+	}
+		
 	private static boolean configureMockRuntime(String runtimeId, IPath runtimePath) {
 		boolean serverConfigured = true;
 		

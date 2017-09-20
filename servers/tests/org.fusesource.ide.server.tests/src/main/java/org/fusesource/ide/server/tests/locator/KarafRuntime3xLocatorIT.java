@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -23,12 +21,13 @@ import org.eclipse.wst.server.core.model.RuntimeLocatorDelegate;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import junit.framework.TestCase;
 
 @RunWith(value = Parameterized.class)
 public class KarafRuntime3xLocatorIT extends TestCase {
@@ -50,7 +49,7 @@ public class KarafRuntime3xLocatorIT extends TestCase {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES);
+		return KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES;
 	}
 			
 	/**

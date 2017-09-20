@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -22,9 +22,10 @@ import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 /**
  * @author lhein
  */
-public class FuseESBRuntimeComposite6x extends AbstractFuseESBRuntimeComposite {
+public class FuseESBRuntimeComposite7x extends AbstractFuseESBRuntimeComposite {
 
-	private static final String LIB_FUSE_VERSION_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "esb-version.jar");
+	private static final String FUSE_BRANDING_PREFIX = "fuse-branding-";
+	private static final String VERSION_FILE = "version.properties";
 	
 	/**
 	 * constructor 
@@ -33,7 +34,7 @@ public class FuseESBRuntimeComposite6x extends AbstractFuseESBRuntimeComposite {
 	 * @param wizardHandle
 	 * @param model
 	 */
-	public FuseESBRuntimeComposite6x(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
+	public FuseESBRuntimeComposite7x(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, wizardHandle, model);
 		wizardHandle.setTitle(Messages.FuseESBRuntimeComposite_wizard_tite);
 		wizardHandle.setDescription(Messages.FuseESBRuntimeComposite_wizard_desc);
@@ -41,7 +42,13 @@ public class FuseESBRuntimeComposite6x extends AbstractFuseESBRuntimeComposite {
 	
 	@Override
 	protected boolean doClassPathEntiresExist(String karafInstallDir) {
-		File libESBVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FUSE_VERSION_JAR));
-		return super.doClassPathEntiresExist(karafInstallDir) && libESBVersionJar.exists();
+		File versionsFile = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, VERSION_FILE));
+		File fuseLibFolder = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FOLDER));
+		File[] files = fuseLibFolder.listFiles( (File file) -> file.getName().startsWith(FUSE_BRANDING_PREFIX) && file.getName().endsWith(".jar"));
+		boolean brandingFound = false;
+		if (files != null) {
+			brandingFound = files.length>0;
+		}
+		return super.doClassPathEntiresExist(karafInstallDir) && (brandingFound || versionsFile.exists() && versionsFile.isFile());
 	}
 }

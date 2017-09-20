@@ -11,6 +11,8 @@
 package org.fusesource.ide.server.tests.util;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -31,17 +33,9 @@ public final class KarafMockRuntimeCreationUtil {
 	public static final String KARAF_41 = "org.fusesource.ide.karaf.runtime.41";
 	public static final String KARAF_4X = "org.fusesource.ide.karaf.runtime.4x";
 	
-	public static final String[] SUPPORTED_2X_RUNTIMES = new String[] {
-		KARAF_22, KARAF_23
-	};
-	
-	public static final String[] SUPPORTED_3X_RUNTIMES = new String[] {
-		KARAF_30 
-	};
-	
-	public static final String[] SUPPORTED_4X_RUNTIMES = new String[] {
-		KARAF_40, KARAF_41
-	};
+	public static final List SUPPORTED_2X_RUNTIMES = Arrays.asList(KARAF_22, KARAF_23);
+	public static final List SUPPORTED_3X_RUNTIMES = Arrays.asList(KARAF_30);
+	public static final List SUPPORTED_4X_RUNTIMES = Arrays.asList(KARAF_40, KARAF_41);
 	
 	private KarafMockRuntimeCreationUtil() {
 		// util class
@@ -114,24 +108,15 @@ public final class KarafMockRuntimeCreationUtil {
 	}
 	
 	private static boolean isSupported2xRuntime (String runtimeId) {
-		for (String id : SUPPORTED_2X_RUNTIMES) {
-			if (id.equals(runtimeId)) return true;
-		}
-		return false;
+		return SUPPORTED_2X_RUNTIMES.contains(runtimeId);
 	}
 	
 	private static boolean isSupported3xRuntime (String runtimeId) {
-		for (String id : SUPPORTED_3X_RUNTIMES) {
-			if (id.equals(runtimeId)) return true;
-		}
-		return false;
+		return SUPPORTED_3X_RUNTIMES.contains(runtimeId);
 	}
 	
 	private static boolean isSupported4xRuntime (String runtimeId) {
-		for (String id : SUPPORTED_4X_RUNTIMES) {
-			if (id.equals(runtimeId)) return true;
-		}
-		return false;
+		return SUPPORTED_4X_RUNTIMES.contains(runtimeId);
 	}
 	
 	private static void createBaseKarafFolderSkeleton(IPath path) {

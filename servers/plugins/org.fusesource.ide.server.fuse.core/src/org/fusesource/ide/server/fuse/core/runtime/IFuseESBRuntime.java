@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.server.fuse.core.runtime;
 
-import org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants;
+import org.fusesource.ide.server.fuse.core.util.FuseToolingConstants;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 
 /**
@@ -19,9 +19,10 @@ import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 public interface IFuseESBRuntime extends IKarafRuntime{
 	
 	static final String[] FUSEESB_RUNTIME_TYPES_SUPPORTED = new String[] {
-		IFuseToolingConstants.RUNTIME_FUSE_60,
-		IFuseToolingConstants.RUNTIME_FUSE_61,
-		IFuseToolingConstants.RUNTIME_FUSE_62,
-		IFuseToolingConstants.RUNTIME_FUSE_63
+		FuseToolingConstants.RUNTIME_FUSE_60,
+		FuseToolingConstants.RUNTIME_FUSE_61,
+		FuseToolingConstants.RUNTIME_FUSE_62,
+		FuseToolingConstants.RUNTIME_FUSE_63,
+		FuseToolingConstants.RUNTIME_FUSE_70
 	};
 }

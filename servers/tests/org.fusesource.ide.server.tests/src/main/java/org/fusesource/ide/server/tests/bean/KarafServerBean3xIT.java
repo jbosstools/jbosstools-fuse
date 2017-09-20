@@ -13,19 +13,18 @@ package org.fusesource.ide.server.tests.bean;
 import java.util.Collection;
 import java.util.HashMap;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import junit.framework.TestCase;
 
 /**
  * @author lhein
@@ -57,8 +56,7 @@ public class KarafServerBean3xIT extends TestCase {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return ParametizedTestUtil
-				.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES);
+		return KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES;
 	}
 
 	/**
