@@ -18,6 +18,7 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -73,7 +74,9 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 	@Override
 	protected Binding createClassBinding(UpdateValueStrategy strategy) {
 		classObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "classname", String.class).observe(this); //$NON-NLS-1$
-		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classObservable, strategy, null);
+		final IObservableValue<?> classTextObservable = WidgetProperties.text(SWT.Modify).observe(classText);
+		setClassUiObservable((ISWTObservableValue) classTextObservable);
+		Binding binding = dbc.bindValue(classTextObservable, classObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 		return binding;
 	}
@@ -90,6 +93,7 @@ public class GlobalBeanWizardPage extends GlobalBeanBaseWizardPage {
 	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
 		final IObservableValue<?> refObservable = PojoProperties.value(GlobalBeanBaseWizardPage.class, "beanRefId", String.class).observe(this); //$NON-NLS-1$
 		final IObservableValue<?> selectedBeanRef = WidgetProperties.selection().observe(beanRefIdCombo);
+		setRefUiObservable((ISWTObservableValue) selectedBeanRef);
 		Binding binding = dbc.bindValue(selectedBeanRef, refObservable, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 		return binding;
