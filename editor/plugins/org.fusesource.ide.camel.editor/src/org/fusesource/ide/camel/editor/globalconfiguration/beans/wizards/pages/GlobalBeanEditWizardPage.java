@@ -14,7 +14,9 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.ComputedValue;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -74,24 +76,31 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 
 	@Override
 	protected Binding createClassBinding(UpdateValueStrategy strategy) {
-		ComputedValue<?> classValue = new ComputedValue<Object>() {
+		ComputedValue<String> classValue = new ComputedValue<String>() {
 
 			@Override
-			protected Object calculate() {
-				return beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS);
+			protected String calculate() {
+				Object value = beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS);
+				if (value instanceof String) {
+					return (String) value;
+				}
+				return null;
 			}
 
 			@Override
-			protected void doSetValue(Object value) {
-				final String strValue = (String) value;
+			protected void doSetValue(String value) {
+				final String strValue = value;
 				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS);
-				if (!oldValue.contentEquals(strValue)) {
+				if ((strValue != null && oldValue == null) || (oldValue != null && !oldValue.contentEquals(strValue))) {
 					beanConfigUtil.setAttributeValue(selectedElement, GlobalBeanEIP.PROP_CLASS, strValue);
 				}
 				getValue();
 			}
 		};
-		Binding binding = dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(classText), classValue, strategy, null);
+		IObservableValue<?> observable = WidgetProperties.text(SWT.Modify).observe(classText);
+		setClassUiObservable((ISWTObservableValue) observable);
+		classObservable = classValue;
+		Binding binding = dbc.bindValue(observable, classValue, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 		return binding;
 	}
@@ -116,28 +125,34 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 	
 	@Override
 	protected Binding createBeanRefBinding(UpdateValueStrategy strategy) {
-		ComputedValue<?> refIdValue = new ComputedValue<Object>() {
+		ComputedValue<String> refIdValue = new ComputedValue<String>() {
 
 			@Override
-			protected Object calculate() {
+			protected String calculate() {
 				final String beanTag =
 						beanConfigUtil.getFactoryBeanTag(selectedElement);
-				return beanConfigUtil.getAttributeValue(selectedElement, beanTag);
+				final Object value = beanConfigUtil.getAttributeValue(selectedElement, beanTag);
+				if (value instanceof String) {
+					return (String) value;
+				}
+				return null;
 			}
 
 			@Override
-			protected void doSetValue(Object value) {
+			protected void doSetValue(String value) {
 				final String beanTag =
 						beanConfigUtil.getFactoryBeanTag(selectedElement);
-				final String strValue = (String) value;
+				final String strValue = value;
 				final String oldValue = (String) beanConfigUtil.getAttributeValue(selectedElement, beanTag);
-				if (!oldValue.contentEquals(strValue)) {
+				if ((strValue != null && oldValue == null) || (oldValue != null && !oldValue.contentEquals(strValue))) {
 					beanConfigUtil.setAttributeValue(selectedElement, beanTag, strValue);
 				}
 				getValue();
 			}
 		};
-		Binding binding = dbc.bindValue(WidgetProperties.selection().observe(beanRefIdCombo), refIdValue, strategy, null);
+		IObservableValue<?> observable = WidgetProperties.selection().observe(beanRefIdCombo);
+		setRefUiObservable((ISWTObservableValue) observable);
+		Binding binding = dbc.bindValue(observable, refIdValue, strategy, null);
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 		return binding;
 	}

@@ -14,7 +14,10 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -31,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.properties.BeanRefAndClassCrossValidator;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -56,6 +60,8 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	private Binding classBinding;
 	private BeanRefClassExistsValidator refValidator;
 	private BeanClassExistsValidator classValidator;
+	protected ISWTObservableValue refUiObservable = null;
+	protected ISWTObservableValue classUiObservable = null;
 
 	public GlobalBeanBaseWizardPage(String pageName) {
 		super(pageName);
@@ -90,6 +96,9 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		beanPropsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(4, 1).create());
 
 		createPropsControls(beanPropsGroup, 4);
+		
+		MultiValidator beanRefAndClassCrossValidator = new BeanRefAndClassCrossValidator(classUiObservable, refUiObservable);
+		ControlDecorationSupport.create(beanRefAndClassCrossValidator, SWT.TOP | SWT.LEFT);
 
 		setControl(composite);
 		WizardPageSupport.create(this, dbc);
@@ -138,6 +147,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 				String value = beanConfigUtil.handleClassBrowse(project, getShell());
 				if (value != null) {
 					classObservable.setValue(value);
+					classText.setText(value);
 				}
 			}
 		});
@@ -153,6 +163,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 				String value = beanConfigUtil.handleNewClassWizard(project, getShell(), initialClassName);
 				if (value != null) {
 					classObservable.setValue(value);
+					classText.setText(value);
 				}
 			}
 
@@ -255,4 +266,10 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		this.classname = classname;
 	}
 
+	protected void setClassUiObservable(ISWTObservableValue uiObservable) {
+		this.classUiObservable = uiObservable;
+	}
+	protected void setRefUiObservable(ISWTObservableValue uiObservable) {
+		this.refUiObservable = uiObservable;
+	}
 }

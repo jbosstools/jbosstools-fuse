@@ -15,8 +15,13 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 
-final class BeanRefAndClassCrossValidator extends MultiValidator {
+/**
+ * @author apupier
+ *
+ */
+public final class BeanRefAndClassCrossValidator extends MultiValidator {
 	
 	private ISWTObservableValue classObservable;
 	private ISWTObservableValue beanrefObservable;
@@ -31,10 +36,10 @@ final class BeanRefAndClassCrossValidator extends MultiValidator {
 		String className = (String)classObservable.getValue();
 		String beanRef = (String)beanrefObservable.getValue();
 		if((className == null || className.isEmpty()) && (beanRef == null || beanRef.isEmpty())) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one.");
+			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorBeanClassOrBeanRefRequired);
 		} 
 		if(className != null && !className.isEmpty() && beanRef != null && !beanRef.isEmpty()) {
-			return ValidationStatus.error("Must specify either an explicit class name in the project or a reference to a global bean that exposes one, not both.");
+			return ValidationStatus.error(UIMessages.beanRefClassExistsValidatorMustPickEitherBeanRefOrBeanClass);
 		}
 		return Status.OK_STATUS;
 	}
