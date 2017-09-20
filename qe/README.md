@@ -47,19 +47,25 @@ and in IDE create a configuration for Remote Java Application in Run > Debug Con
 
 ## Executing tests from IDE
 
-Current version of JBoss Tools Fuse is built on Eclipse Oxygen, so download Eclipse Oxygen for JEE Developers. For executing the tests from IDE you need
+Current version of JBoss Tools Fuse is built on Eclipse Oxygen, so download Eclipse Oxygen for JEE Developers. There are two ways how we can execute the tests from IDE
+1. Importing all jbosstools-fuse plugins and setting the appropriate target platform
+2. Install all needed dependencies into Eclipse IDE and import only the test plugins
 
- - Target Platform (targetplatform/multiple)
- - RedDeer UI Tools (http://download.jboss.org/jbosstools/neon/development/updates/reddeer/)
+### Executing tests from IDE with a target platform
 
-and follow these steps:
-
-1. Import the project as Existing Projects into Workspace (Search for nested projects)
-2. Check 'Search for nested projects' and select all projects except 'm2-repo-cleaner'
-3. In preferences go to Plug-in Development > Target Platform
-4. Add empty target definition and include the Target Platform as a directory
-5. In preferences also allow forbidden references (Java > Compiler > Errors/Warnings)
-6. One project requires API baseline, so create it via Quick Fix
-7. Install RedDeer UI Tools which includes RedDeer launcher
-8. After restart you should see a launcher called 'RedDeer Test Linux x86_64'
+1. Install RedDeer 2.x (at least UI Tools), e.g. from http://download.eclipse.org/reddeer/releases/2.0.0/
+2. Import the project as Existing Projects into Workspace
+3. Check 'Search for nested projects' and select all projects except 'm2-repo-cleaner'
+4. In preferences go to Plug-in Development > Target Platform
+5. Add empty target definition and include the Target Platform as a directory
+6. In preferences also allow forbidden references (Java > Compiler > Errors/Warnings)
+7. One project requires API baseline, so create it via Quick Fix
+8. After restart you should see a launcher called 'RedDeer Test'
 9. Run the launcher (at the moment it takes about 2 minutes to run the tests)
+
+### Executing tests from IDE without target platform
+
+1. Install JBoss Fuse Tools, e.g from http://download.jboss.org/jbosstools/oxygen/staging/updates/
+2. Install RedDeer 2.x, e.g. from http://download.eclipse.org/reddeer/releases/2.0.0/
+3. Import the tests as Existing Projects into Workspace
+4. Now, we can launch 'RedDeer Test' which is available in Run configuration
