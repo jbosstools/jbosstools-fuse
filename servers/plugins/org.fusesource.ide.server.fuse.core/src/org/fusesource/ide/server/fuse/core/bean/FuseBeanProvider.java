@@ -19,6 +19,7 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 public class FuseBeanProvider implements IServerBeanTypeProvider {
 	
 	public static final ServerBeanTypeFuse6x FUSE_6x = new ServerBeanTypeFuse6x();
+	public static final ServerBeanTypeFuse7x FUSE_7x = new ServerBeanTypeFuse7x();
 	
 	/*
 	 * (non-Javadoc)
@@ -26,6 +27,6 @@ public class FuseBeanProvider implements IServerBeanTypeProvider {
 	 */
 	@Override
 	public ServerBeanType[] getServerBeanTypes() {
-		return new ServerBeanType[] { FUSE_6x };
+		return new ServerBeanType[] { FUSE_6x, FUSE_7x };
 	}
 }

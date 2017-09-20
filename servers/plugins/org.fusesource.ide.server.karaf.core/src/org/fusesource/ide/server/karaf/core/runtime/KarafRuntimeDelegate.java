@@ -8,15 +8,14 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.server.karaf.core.runtime;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.internal.launching.environments.EnvironmentsManager;
 import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
@@ -25,6 +24,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
+import org.jboss.ide.eclipse.as.wtp.core.launching.IExecutionEnvironmentConstants;
 import org.jboss.ide.eclipse.as.wtp.core.util.VMInstallUtil;
 import org.osgi.framework.Version;
 
@@ -111,14 +111,13 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	@Override
 	public IExecutionEnvironment getExecutionEnvironment() {
 		String id = getAttribute(PROPERTY_EXECUTION_ENVIRONMENT, (String)null);
-		return id == null ? getMinimumExecutionEnvironment() : EnvironmentsManager.getDefault().getEnvironment(id);
+		return id == null ? getMinimumExecutionEnvironment() : JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(id);
 	}
 
 	@Override
 	public IExecutionEnvironment getMinimumExecutionEnvironment() {
-		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.7"); //$NON-NLS-1$
+		return JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(IExecutionEnvironmentConstants.EXEC_ENV_JavaSE17);
 	}
-	
 
 	@Override
 	public void setExecutionEnvironment(IExecutionEnvironment environment) {

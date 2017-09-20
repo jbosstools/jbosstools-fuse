@@ -5,16 +5,17 @@ Bundle-SymbolicName: org.fusesource.ide.server.fuse.ui;singleton:=true
 Bundle-Version: 10.2.0.qualifier
 Bundle-Activator: org.fusesource.ide.server.fuse.ui.FuseESBUIPlugin
 Bundle-Vendor: %Bundle-Vendor
-Require-Bundle: org.fusesource.ide.server.karaf.core,
- org.fusesource.ide.server.karaf.ui,
- org.fusesource.ide.server.fuse.core,
- org.eclipse.ui,
+Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.debug.ui,
  org.eclipse.ui.forms,
  org.eclipse.wst.server.ui,
  org.eclipse.wst.server.core,
  org.eclipse.jdt.debug.ui,
+ org.fusesource.ide.server.karaf.core,
+ org.fusesource.ide.server.karaf.ui,
+ org.fusesource.ide.server.fuse.core,
+ org.fusesource.ide.foundation.core;bundle-version="10.1.0",
  org.jboss.ide.eclipse.as.wtp.core;bundle-version="3.0.0",
  org.jboss.ide.eclipse.as.wtp.ui;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
