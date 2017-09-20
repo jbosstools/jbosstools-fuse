@@ -26,8 +26,10 @@ public class FuseESBRuntimeLocator extends KarafRuntimeLocator {
 	protected boolean isValidServerBeanType(ServerBean sb) {
 		if (sb != null) {
 			ServerBeanType type = sb.getBeanType();
-			return FuseBeanProvider.FUSE_6x.equals(type);	
+			return 	type != null && 
+					FuseBeanProvider.FUSE_6x.equals(type) ||
+					FuseBeanProvider.FUSE_7x.equals(type);
 		}
-		return false;		
+		return false;
 	}
 }

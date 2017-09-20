@@ -21,7 +21,7 @@ import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2
 /**
  * @author lhein
  */
-public class FuseESBServerWizardFragment6x extends
+public class FuseESBServerWizardFragment extends
 		KarafServerWizardFragment2x {
 
 	/*

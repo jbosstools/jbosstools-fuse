@@ -17,16 +17,24 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 
 /**
  * @author lheinema
- *
  */
 public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfigurator {
 	
-	public Karaf4xStartupLaunchConfigurator(IServer server)
-			throws CoreException {
+	public Karaf4xStartupLaunchConfigurator(IServer server) throws CoreException {
 		super(server);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.BaseKarafStartupLaunchConfigurator#isSupportedRuntimeVersion(java.lang.String)
+	 */
+	@Override
+	protected boolean isSupportedRuntimeVersion(String version) {
+		return !Strings.isBlank(version) && version.startsWith(IKarafToolingConstants.KARAF_VERSION_4X);
 	}
 	
 	/* (non-Javadoc)
@@ -34,6 +42,7 @@ public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfig
 	 */
 	@Override
 	protected void findJars(IPath path, List<Object> cp) {
+		// need to override because findJars is used for isStartable() check for servers
 		File[] libs = path.toFile().listFiles( (File pathname) -> pathname.isDirectory() || (pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar")));
 		if (libs != null) {
 			for (File lib : libs) {

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.fusesource.ide.server.fuse.core.bean;
 
-import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_60;
-import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_61;
-import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_62;
-import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_63;
+import static org.fusesource.ide.server.fuse.core.util.FuseToolingConstants.SERVER_FUSE_60;
+import static org.fusesource.ide.server.fuse.core.util.FuseToolingConstants.SERVER_FUSE_61;
+import static org.fusesource.ide.server.fuse.core.util.FuseToolingConstants.SERVER_FUSE_62;
+import static org.fusesource.ide.server.fuse.core.util.FuseToolingConstants.SERVER_FUSE_63;
 
 import java.io.File;
 
@@ -24,13 +24,13 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
  */
 public class ServerBeanTypeFuse6x extends ServerBeanType {
 	
-	protected static final String FUSE6x_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
+	protected static final String FUSE6X_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 
-	public static final String V6_0 = "6.0";
-	public static final String V6_1 = "6.1";
-	public static final String V6_2 = "6.2";
-	public static final String V6_3 = "6.3";
-	public static final String V6_x = "6.";
+	public static final String V60 = "6.0";
+	public static final String V61 = "6.1";
+	public static final String V62 = "6.2";
+	public static final String V63 = "6.3";
+	public static final String V6X = "6.";
 	
 	protected ServerBeanTypeFuse6x() {
 		super(	"FUSE6x", //$NON-NLS-1$
@@ -48,7 +48,7 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 		 */
 		@Override
 		public boolean isServerRoot(File location) {
-			return checkFuseVersion(location, FUSE6x_RELEASE_VERSION, V6_x);
+			return checkFuseVersion(location, FUSE6X_RELEASE_VERSION, V6X);
 		}
 
 		/**
@@ -70,12 +70,12 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 		 */
 		@Override
 		public String getServerTypeId(String version) {
-			if( version.equals(V6_0)) return SERVER_FUSE_60;
-			if( version.equals(V6_1)) return SERVER_FUSE_61;
-			if( version.equals(V6_2)) return SERVER_FUSE_62;
-			if( version.equals(V6_3)) return SERVER_FUSE_63;
+			if( version.equals(V60)) return SERVER_FUSE_60;
+			if( version.equals(V61)) return SERVER_FUSE_61;
+			if( version.equals(V62)) return SERVER_FUSE_62;
+			if( version.equals(V63)) return SERVER_FUSE_63;
 			// In case a 6.4 comes out, it should work on 6.3 until fixed
-			if( version.startsWith(V6_x)) return SERVER_FUSE_63;
+			if( version.startsWith(V6X)) return SERVER_FUSE_63;
 			return null;
 		}
 	}

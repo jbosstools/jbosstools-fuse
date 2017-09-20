@@ -24,24 +24,34 @@
             typeIds="org.fusesource.ide.fuseesb.runtime.63">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeFragment"
+            id="org.fusesource.ide.server.fuse.ui.runtime.fragment.70"
+            typeIds="org.fusesource.ide.fuseesb.runtime.70">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.60"
             typeIds="org.fusesource.ide.fuseesb.server.60">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.61"
             typeIds="org.fusesource.ide.fuseesb.server.61">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.62"
             typeIds="org.fusesource.ide.fuseesb.server.62">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.63"
             typeIds="org.fusesource.ide.fuseesb.server.63">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment"
+            id="org.fusesource.ide.server.fuse.ui.server.fragment.70"
+            typeIds="org.fusesource.ide.fuseesb.server.70">
       </fragment>
    </extension>
    <extension
@@ -68,6 +78,11 @@
       </image>
       <image
             icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.fuseesb.ui.server.image.70"
+            typeIds="org.fusesource.ide.fuseesb.server.70">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
             id="org.fusesource.ide.server.fuseesb.ui.runtime.image.60"
             typeIds="org.fusesource.ide.fuseesb.runtime.60">
       </image>
@@ -86,6 +101,11 @@
             id="org.fusesource.ide.server.fuseesb.ui.runtime.image.63"
             typeIds="org.fusesource.ide.fuseesb.runtime.63">
       </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.fuseesb.ui.runtime.image.70"
+            typeIds="org.fusesource.ide.fuseesb.runtime.70">
+      </image>
    </extension>
    
    <extension
@@ -99,6 +119,11 @@
             class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
             id="org.fusesource.ide.server.fuse6x.launch.tab"
             type="org.fusesource.ide.server.fuseesb6x.launch">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.fuse7x.launch.tab"
+            type="org.fusesource.ide.server.fuseesb7x.launch">
       </launchConfigurationTabGroup>
    </extension>
    
@@ -124,6 +149,11 @@
             configTypeID="org.fusesource.ide.server.fuseesb6x.launch"
             icon="icons/run_fuse_server.png"
             id="org.fusesource.ide.server.fuse6x.ui.launch.image">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.server.fuseesb7x.launch"
+            icon="icons/run_fuse_server.png"
+            id="org.fusesource.ide.server.fuse7x.ui.launch.image">
       </launchConfigurationTypeImage>
    </extension>
    

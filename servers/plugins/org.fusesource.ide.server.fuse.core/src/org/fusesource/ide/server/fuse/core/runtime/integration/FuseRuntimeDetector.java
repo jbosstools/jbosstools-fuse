@@ -13,7 +13,7 @@ package org.fusesource.ide.server.fuse.core.runtime.integration;
 import java.util.Arrays;
 
 import org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider;
-import org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants;
+import org.fusesource.ide.server.fuse.core.util.FuseToolingConstants;
 import org.fusesource.ide.server.karaf.core.runtime.integration.KarafRuntimeDetector;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -27,12 +27,12 @@ public class FuseRuntimeDetector extends KarafRuntimeDetector {
 	@Override
 	protected ServerBeanType[] getServerBeanTypes() {
 		return new ServerBeanType[]{
-				FuseBeanProvider.FUSE_6x
+				FuseBeanProvider.FUSE_6x, FuseBeanProvider.FUSE_7x
 		};
 	}
 
 	@Override
 	protected boolean isValidServerType(String type) {
-		return Arrays.asList(IFuseToolingConstants.ALL_FUSE_SERVER_TYPES).contains(type);
+		return Arrays.asList(FuseToolingConstants.ALL_FUSE_SERVER_TYPES).contains(type);
 	}
 }
