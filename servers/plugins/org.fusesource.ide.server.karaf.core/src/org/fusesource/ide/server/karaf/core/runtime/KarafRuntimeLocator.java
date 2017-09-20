@@ -28,7 +28,6 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
-
 /**
  * This locator delegates most functionality to the the server bean loader. 
  * There we open the jar and lookup the bundle version
@@ -81,12 +80,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		}
 		
 		// Get list of folders to check
-		File[] files;
-		if (folder == null) {
-			files = File.listRoots();
-		} else {
-			files = folder.listFiles(File::isDirectory);
-		}
+		File[] files = folder.listFiles(File::isDirectory);
 		
 		for (File f: files) {
 			monitor.beginTask("Searching for Apache Karaf in " + f.getPath() + "...", IProgressMonitor.UNKNOWN);
@@ -128,35 +122,38 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 		String absolutePath = dir.getAbsolutePath();
 		ServerBeanLoader l = new ServerBeanLoader(dir);
 		ServerBean sb = l.getServerBean();
-		if( sb != null ) {
-			ServerBeanType type = sb.getBeanType();
-			if( type != null ) {
-				if( KarafBeanProvider.KARAF_2x.equals(type) || 
-					KarafBeanProvider.KARAF_3x.equals(type) ||
-					KarafBeanProvider.KARAF_4x.equals(type)) {
-					String serverType = l.getServerAdapterId();
-					if( serverType != null ) {
-						IServerType t = ServerCore.findServerType(serverType);
-						if( t != null ) {
-							IRuntimeType rtt = t.getRuntimeType();
-							try {
-								IRuntimeWorkingCopy runtime = rtt.createRuntime(rtt.getId(), monitor);
-								// commented out the naming of the runtime as it seems to break server to runtime links
-								runtime.setName(dir.getName());
-								runtime.setLocation(new Path(absolutePath));
-								IStatus status = runtime.validate(monitor);
-								if (status == null || status.getSeverity() != IStatus.ERROR) {
-									return runtime;
-								}
-							} catch (Exception e) {
-								Activator.getLogger().error(e);
-							}
+		if( isValidServerBeanType(sb) ) {
+			String serverType = l.getServerAdapterId();
+			if( serverType != null ) {
+				IServerType t = ServerCore.findServerType(serverType);
+				if( t != null ) {
+					IRuntimeType rtt = t.getRuntimeType();
+					try {
+						IRuntimeWorkingCopy runtime = rtt.createRuntime(rtt.getId(), monitor);
+						// commented out the naming of the runtime as it seems to break server to runtime links
+						runtime.setName(dir.getName());
+						runtime.setLocation(new Path(absolutePath));
+						IStatus status = runtime.validate(monitor);
+						if (status == null || status.getSeverity() != IStatus.ERROR) {
+							return runtime;
 						}
+					} catch (Exception e) {
+						Activator.getLogger().error(e);
 					}
-					
 				}
 			}
 		}
 		return null;
+	}
+	
+	protected boolean isValidServerBeanType(ServerBean sb) {
+		if (sb != null) {
+			ServerBeanType type = sb.getBeanType();
+			return 	type != null && 
+					KarafBeanProvider.KARAF_2x.equals(type) || 
+					KarafBeanProvider.KARAF_3x.equals(type) ||
+					KarafBeanProvider.KARAF_4x.equals(type);	
+		}
+		return false;		
 	}
 }
