@@ -511,17 +511,6 @@ public class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Object#finalize()
-     */
-    @Override
-    protected void finalize() throws Throwable {
-        dispose();
-        super.finalize();
-    }
-
     private void managerEvent(String eventType,
                               Object oldValue,
                               Object newValue) {

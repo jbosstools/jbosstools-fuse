@@ -309,6 +309,9 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 Activator.error(e);
             }
         }
+        if (mappingDetailViewer != null) {
+        	mappingDetailViewer.dispose();
+        }
     }
 
     /**
