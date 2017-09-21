@@ -128,7 +128,7 @@ abstract class MappingViewer {
         });
     }
 
-    void dispose() {
+    public void dispose() {
         sourceDropTarget.dispose();
         targetDropTarget.dispose();
         for (Iterator<PotentialDropTarget> iter = potentialDropTargets.iterator();
