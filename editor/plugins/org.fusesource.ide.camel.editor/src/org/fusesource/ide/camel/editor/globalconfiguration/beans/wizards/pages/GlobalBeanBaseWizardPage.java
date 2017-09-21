@@ -62,6 +62,8 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	private BeanClassExistsValidator classValidator;
 	protected ISWTObservableValue refUiObservable = null;
 	protected ISWTObservableValue classUiObservable = null;
+	protected Button browseBeanButton;
+	protected Button newBeanButton;
 
 	public GlobalBeanBaseWizardPage(String pageName) {
 		super(pageName);
@@ -126,7 +128,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	/**
 	 * @param composite
 	 */
-	private void createClassLine(Composite composite) {
+	protected void createClassLine(Composite composite) {
 		Label classLabel = new Label(composite, SWT.NONE);
 		classLabel.setText(UIMessages.globalBeanWizardPageClassLabel);
 		classText = new Text(composite, SWT.BORDER);
@@ -139,7 +141,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	}
 
 	private void createBrowseButton(Composite composite) {
-		Button browseBeanButton = new Button(composite, SWT.PUSH);
+		browseBeanButton = new Button(composite, SWT.PUSH);
 		browseBeanButton.setText("..."); //$NON-NLS-1$
 		browseBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -154,7 +156,7 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 	}
 
 	private void createClassNewButton(Composite composite) {
-		Button newBeanButton = new Button(composite, SWT.PUSH);
+		newBeanButton = new Button(composite, SWT.PUSH);
 		newBeanButton.setText("+"); //$NON-NLS-1$
 		newBeanButton.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -156,4 +156,14 @@ public class GlobalBeanEditWizardPage extends GlobalBeanBaseWizardPage {
 		ControlDecorationSupport.create(binding, SWT.LEFT | SWT.TOP);
 		return binding;
 	}
+
+	@Override
+	public void createControl(Composite parent) {
+		super.createControl(parent);
+		classText.setEditable(false);
+		classText.setEnabled(false);
+		browseBeanButton.setEnabled(false);
+		newBeanButton.setEnabled(false);
+		beanRefIdCombo.setEnabled(false);
+	}
 }
