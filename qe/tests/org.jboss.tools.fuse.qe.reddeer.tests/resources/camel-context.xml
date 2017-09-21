@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Sample of camel-context.xml for Regression test ... issue FUSETOOLS-674 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<camel:camelContext xmlns="http://camel.apache.org/schema/spring">
+		<route id="cxfIngangRoute">
+			<from uri="direct:cxf" />
+			<onException>
+				<exception>org.apache.camel.component.bean.validator.BeanValidationException</exception>
+				<redeliveryPolicy maximumRedeliveries="0" />
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<to uri="direct:violations" />
+				<to uri="xslt:nl/hetcak/exporttrigger/xslt/createNokResponse.xsl" />
+			</onException>
+			<to uri="xslt:nl/hetcak/exporttrigger/xslt/Bi2Bc03ProcesRequest.xsl" />
+			<unmarshal>
+				<jaxb contextPath="nl.hetcak.exporttrigger.domain"
+					partClass="nl.hetcak.exporttrigger.domain.BC03ProcesRequest" />
+			</unmarshal>
+			<to uri="direct:validation" />
+			<to uri="direct:queue" />
+			<transform>
+				<language language="simple">&lt;message&gt;dummy&lt;/message&gt; </language>
+			</transform>
+			<to uri="xslt:nl/hetcak/exporttrigger/xslt/createResponse.xsl" />
+		</route>
+	</camel:camelContext>
+</beans>

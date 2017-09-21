@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<profiles>
+		<!-- JBoss -->
+		<profile>
+			<properties>
+				<jboss.qa.url>download.englab.brq.redhat.com/pub/rhel/jbossqa/services/http</jboss.qa.url>
+			</properties>
+
+			<id>jboss-default</id>
+			<repositories>
+				<repository>
+					<id>jboss-public-repository-group</id>
+					<name>JBoss Public Repository Group</name>
+					<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+				</repository>
+				<repository>
+					<id>jboss-snapshots-repository</id>
+					<name>JBoss Snapshots Repository</name>
+					<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+				</repository>
+				<repository>
+					<id>jboss-early-access</id>
+					<name>JBoss Early Access</name>
+					<url>https://repository.jboss.org/nexus/content/groups/ea/</url>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>jboss-public-repository-group</id>
+					<name>JBoss Public Repository Group</name>
+					<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+				</pluginRepository>
+				<pluginRepository>
+					<id>jboss-snapshots-repository</id>
+					<name>JBoss Snapshots Repository</name>
+					<url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+				</pluginRepository>
+				<pluginRepository>
+					<id>jboss-early-access</id>
+					<name>JBoss Early Access</name>
+					<url>https://repository.jboss.org/nexus/content/groups/ea/</url>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+
+		<profile>
+			<id>hudson-repository</id>
+			<repositories>
+				<repository>
+					<id>hudson-repository</id>
+					<url>http://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-ip-6.1-build</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>hudson-repository</id>
+					<url>http://repository.engineering.redhat.com/nexus/content/groups/hudson-jb-ip-6.1-build</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+
+	<activeProfiles>
+		<activeProfile>jboss-default</activeProfile>
+		<activeProfile>hudson-repository</activeProfile>
+	</activeProfiles>
+</settings>
