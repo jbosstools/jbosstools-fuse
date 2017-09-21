@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<breakpoints>
+<breakpoint enabled="true" persistant="true" registered="true">
+<resource path="/camel-blueprint/src/main/java/com/mycompany/camel/blueprint/HelloBean.java" type="1"/>
+<marker charStart="255" lineNumber="14" type="org.eclipse.jdt.debug.javaLineBreakpointMarker">
+<attrib name="message" value="Line breakpoint:HelloBean [line: 14] - hello()"/>
+<attrib name="org.eclipse.debug.core.id" value="org.eclipse.jdt.debug"/>
+<attrib name="org.eclipse.jdt.debug.ui.JAVA_ELEMENT_HANDLE_ID" value="=camel-blueprint/src\/main\/java&lt;com.mycompany.camel.blueprint{HelloBean.java[HelloBean"/>
+<attrib name="org.eclipse.jdt.debug.core.suspendPolicy" value="2"/>
+<attrib name="charStart" value="255"/>
+<attrib name="charEnd" value="330"/>
+<attrib name="org.eclipse.debug.core.enabled" value="true"/>
+<attrib name="org.eclipse.jdt.debug.core.typeName" value="com.mycompany.camel.blueprint.HelloBean"/>
+<attrib name="workingset_name" value=""/>
+<attrib name="workingset_id" value="org.eclipse.debug.ui.breakpointWorkingSet"/>
+</marker>
+</breakpoint>
+</breakpoints>

@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="fuse-10.1.0-SNAPSHOT" sequenceNumber="4">
+<?pde version="3.8"?><target includeMode="feature" name="fuse-10.1.0-SNAPSHOT" sequenceNumber="8">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.110.v20170308-1750"/>
-<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.3.0.v20170629-0212"/>
-<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.3.0.v20170629-0212"/>
-<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.3.0.v20170629-0212"/>
-<unit id="org.jboss.tools.archives.scanner.feature.feature.group" version="3.6.110.v20170308-1750"/>
-<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.9.0.v20170316-1838"/>
-<unit id="org.jboss.tools.common.feature.feature.group" version="3.9.0.v20170531-1022"/>
-<unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.9.0.v20170316-1838"/>
-<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.4.0.v20170630-0039"/>
-<unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.0.v20170712-1450"/>
-<unit id="org.jboss.tools.maven.feature.feature.group" version="1.8.100.v20170420-1329"/>
-<unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.2.100.v20170629-0136"/>
-<unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.0.v20170519-2128"/>
-<unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.100.v20170505-1845"/>
-<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.9.0.v20170316-1838"/>
-<unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.9.0.v20170519-2103"/>
+<unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.111.v20170811-1737"/>
+<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.3.1.v20170823-1958"/>
+<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.3.1.v20170823-1958"/>
+<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.3.1.v20170823-1958"/>
+<unit id="org.jboss.tools.archives.scanner.feature.feature.group" version="3.6.111.v20170811-1737"/>
+<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.9.1.v20170821-1410"/>
+<unit id="org.jboss.tools.common.feature.feature.group" version="3.9.1.v20170821-1410"/>
+<unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.9.1.v20170821-1410"/>
+<unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.9.1.v20170821-1410"/>
+<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.9.1.v20170821-1410"/>
+<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.4.1.v20170821-1421"/>
+<unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.1.v20170815-1129"/>
+<unit id="org.jboss.tools.maven.feature.feature.group" version="1.8.101.v20170822-1709"/>
+<unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.3.1.v20170821-1410"/>
+<unit id="org.jboss.tools.stacks.core.feature.feature.group" version="1.4.1.v20170821-1410"/>
+<unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.101.v20170821-1410"/>
 <repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.jboss.tools.jmx.test.feature.feature.group" version="1.10.0.v20170517-1358"/>
-<unit id="org.jboss.ide.eclipse.as.test.feature.feature.group" version="3.3.0.v20170628-2210"/>
-<unit id="org.jboss.tools.test.feature.feature.group" version="3.7.100.v20170529-1436"/>
-<repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/coretests/4.5.0.AM2/"/>
-</location>
 </locations>
-<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 </target>
