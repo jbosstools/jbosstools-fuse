@@ -20,10 +20,6 @@ import org.eclipse.reddeer.swt.impl.button.CheckBox;
  * @author tsedmik
  */
 public class ConsolePreferencePage extends PreferencePage {
-
-	public ConsolePreferencePage() {
-		this(null);
-	}
 	
 	public ConsolePreferencePage(ReferencedComposite ref) {
 		super(ref, "Run/Debug", "Console");

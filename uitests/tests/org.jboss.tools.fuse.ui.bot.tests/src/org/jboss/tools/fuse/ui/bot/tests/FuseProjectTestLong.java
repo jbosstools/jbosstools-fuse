@@ -108,7 +108,7 @@ public class FuseProjectTestLong extends DefaultTest {
 	@BeforeClass
 	public static void setupMaven() {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		MavenUserSettingsPreferencePage page = new MavenUserSettingsPreferencePage();
+		MavenUserSettingsPreferencePage page = new MavenUserSettingsPreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		maven = page.getUserSettings();
@@ -121,7 +121,7 @@ public class FuseProjectTestLong extends DefaultTest {
 	@BeforeClass
 	public static void useStagingRepos() {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		StagingRepositoriesPreferencePage page = new StagingRepositoriesPreferencePage();
+		StagingRepositoriesPreferencePage page = new StagingRepositoriesPreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		if (System.getProperty("staging.repositories").equals("true")) {
@@ -147,7 +147,7 @@ public class FuseProjectTestLong extends DefaultTest {
 	@AfterClass
 	public static void setupMavenBack() {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		MavenUserSettingsPreferencePage page = new MavenUserSettingsPreferencePage();
+		MavenUserSettingsPreferencePage page = new MavenUserSettingsPreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		page.setUserSettings(maven);

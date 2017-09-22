@@ -31,10 +31,6 @@ import org.eclipse.reddeer.swt.impl.text.LabeledText;
  *
  */
 public class InstalledJREs extends PreferencePage {
-
-	public InstalledJREs() {
-		this(null);
-	}
 	
 	public InstalledJREs(ReferencedComposite ref) {
 		super(ref, "Java", "Installed JREs");

@@ -56,7 +56,7 @@ public class FuseServerManipulator {
 
 	public static void addServerRuntime(String type, String path) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		serverRuntime.addServerRuntime(type, path);
@@ -65,7 +65,7 @@ public class FuseServerManipulator {
 
 	public static void editServerRuntime(String name, String path) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		serverRuntime.editServerRuntime(name, path);
@@ -74,7 +74,7 @@ public class FuseServerManipulator {
 
 	public static void removeServerRuntime(String name) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		try {
@@ -97,7 +97,7 @@ public class FuseServerManipulator {
 
 	public static List<Runtime> getServerRuntimes() {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		List<Runtime> temp = serverRuntime.getServerRuntimes();

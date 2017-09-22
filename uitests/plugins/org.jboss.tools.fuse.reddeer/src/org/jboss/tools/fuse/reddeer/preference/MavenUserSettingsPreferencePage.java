@@ -21,10 +21,6 @@ import org.eclipse.reddeer.swt.impl.text.DefaultText;
  * @author tsedmik
  */
 public class MavenUserSettingsPreferencePage extends PreferencePage {
-
-	public MavenUserSettingsPreferencePage() {
-		this(null);
-	}
 		
 	public MavenUserSettingsPreferencePage(ReferencedComposite ref) {
 		super(ref, "Maven", "User Settings");

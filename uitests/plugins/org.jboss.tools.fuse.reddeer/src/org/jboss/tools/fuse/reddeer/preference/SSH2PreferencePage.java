@@ -22,10 +22,6 @@ import org.eclipse.reddeer.swt.impl.text.LabeledText;
 public class SSH2PreferencePage extends PreferencePage {
 
 	private static final String SSH2HOME = "SSH2 home:";
-
-	public SSH2PreferencePage() {
-		this(null);
-	}
 	
 	public SSH2PreferencePage(ReferencedComposite ref) {
 		super(ref, "General", "Network Connections", "SSH2");

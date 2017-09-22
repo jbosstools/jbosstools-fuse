@@ -21,10 +21,6 @@ import org.eclipse.reddeer.swt.impl.button.CheckBox;
  */
 public class FuseToolingEditorPreferencePage extends PreferencePage {
 	
-	public FuseToolingEditorPreferencePage() {
-		this(null);
-	}
-	
 	public FuseToolingEditorPreferencePage(ReferencedComposite ref) {
 		super(ref, "Fuse Tooling", "Editor");
 	}

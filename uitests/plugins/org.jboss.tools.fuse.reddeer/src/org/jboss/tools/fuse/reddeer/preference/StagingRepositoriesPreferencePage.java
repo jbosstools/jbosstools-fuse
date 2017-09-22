@@ -21,10 +21,6 @@ import org.eclipse.reddeer.swt.impl.button.CheckBox;
  */
 public class StagingRepositoriesPreferencePage extends PreferencePage {
 
-	public StagingRepositoriesPreferencePage() {
-		this(null);
-	}
-
 	public StagingRepositoriesPreferencePage(ReferencedComposite ref) {
 		super(ref, "Fuse Tooling", "Staging Repositories");
 	}
