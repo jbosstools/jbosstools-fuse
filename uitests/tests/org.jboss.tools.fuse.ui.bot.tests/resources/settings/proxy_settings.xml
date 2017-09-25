@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<profiles>
+		<profile>
+			<id>maven-proxy</id>
+			<repositories>
+				<repository>
+					<id>maven-proxy-repo</id>
+					<url>${test.mavenProxy}</url>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>maven-proxy-repo</id>
+					<url>${test.mavenProxy}</url>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+	<activeProfiles>
+		<activeProfile>maven-proxy</activeProfile>
+	</activeProfiles>
+	<mirrors>
+		<mirror>
+			<id>maven-proxy-mirror</id>
+			<url>${test.mavenProxy}</url>
+			<mirrorOf>*</mirrorOf>
+		</mirror>
+	</mirrors>
+</settings>

@@ -168,5 +168,43 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>maven-proxy</id>
+			<activation>
+				<property>
+					<name>test.mavenProxy</name>
+				</property>
+			</activation>
+			<properties>
+				<customization.file>target/plugin_customization_with_proxy_settings.ini</customization.file>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${basedir}/target/</outputDirectory>
+									<resources>
+										<resource>
+											<directory>resources/settings</directory>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
