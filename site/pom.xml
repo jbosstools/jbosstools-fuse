@@ -16,7 +16,7 @@
 		<skipDeployToJBossOrg>false</skipDeployToJBossOrg>
 		<update.site.name>JBoss Tools Fuse Tooling</update.site.name>
 		<update.site.description>CI Build</update.site.description>
-		<update.site.version>${version}</update.site.version>
+		<update.site.version>${project.version}</update.site.version>
 		<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
 		<target.eclipse.version>4.5 (Oxygen)</target.eclipse.version>
 	</properties>
