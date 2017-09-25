@@ -732,5 +732,18 @@ public class BeanConfigUtil {
 		}
 		return result.toArray(new String[result.size()]);
 	}
-	
+
+	public String getBeanRef(AbstractCamelModelElement selectedEP) {
+		if (selectedEP != null) {
+			String beanRefTag = getFactoryBeanTag(selectedEP.getXmlNode());
+			if (beanRefTag != null) {
+				Object refParm = selectedEP.getParameter(beanRefTag);
+				if (refParm != null && refParm instanceof String) {
+					return (String) refParm;
+				}
+			}
+		}
+		return null;
+	}
+
 }

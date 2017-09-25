@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.fusesource.ide.camel.editor.globalconfiguration.beans.BeanConfigUtil;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.AddGlobalBeanWizard;
 import org.fusesource.ide.camel.editor.globalconfiguration.beans.wizards.EditGlobalBeanWizard;
 import org.fusesource.ide.camel.editor.provider.ext.GlobalConfigElementType;
@@ -29,6 +30,7 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author brianf
@@ -38,6 +40,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 
 	private AddGlobalBeanWizard wizard = null;
 	private GlobalConfigUtils globalConfigUtils = null;
+	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#createGlobalElement(org.w3c.dom.Document)
@@ -79,7 +82,6 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	public boolean canHandle(AbstractCamelModelElement camelModelElementToHandle) {
 		// to avoid clash with SAP extension, needs to NOT handle a bean with the class 
 		// org.fusesource.camel.component.sap.SapConnectionConfiguration
-		
 		if (globalConfigUtils == null) {
 			globalConfigUtils = new GlobalConfigUtils();
 		}
@@ -87,8 +89,13 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		boolean isSAPClass = true;
 		if (isGlobalBeanElement) {
 			Object classParm = camelModelElementToHandle.getParameter(GlobalBeanEIP.PROP_CLASS);
-			if (classParm != null && classParm instanceof String) {
+			if (classParm != null && classParm instanceof String && Strings.isEmpty((String) classParm)) {
 				isSAPClass = "org.fusesource.camel.component.sap.SapConnectionConfiguration".equals((String)classParm); //$NON-NLS-1$
+			} else {
+				String refParm = beanConfigUtil.getBeanRef(camelModelElementToHandle);
+				if (!Strings.isEmpty(refParm)) {
+					isSAPClass = false;
+				}
 			}
 		}
 		if (!globalConfigUtils.isSAPExtInstalled() || !isSAPClass) {
