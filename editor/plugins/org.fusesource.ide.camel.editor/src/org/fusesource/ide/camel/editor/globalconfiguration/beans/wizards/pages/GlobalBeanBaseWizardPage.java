@@ -215,11 +215,15 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		Display.getCurrent().asyncExec( () -> {
 			if (classBinding != null) {
 				classValidator.setControl(beanRefIdCombo);
-				classBinding.validateTargetToModel();
+				if (!classText.isDisposed()) {
+					classBinding.validateTargetToModel();
+				}
 			}
 			if (refBinding != null) {
 				refValidator.setControl(classText);
-				refBinding.validateTargetToModel();
+				if (!beanRefIdCombo.isDisposed()) {
+					refBinding.validateTargetToModel();
+				}
 			}
 		});
 	}
