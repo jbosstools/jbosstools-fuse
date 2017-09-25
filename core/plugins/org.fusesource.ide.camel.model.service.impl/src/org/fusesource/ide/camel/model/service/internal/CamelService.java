@@ -119,8 +119,8 @@ public class CamelService implements ICamelManagerService {
 					return loadVersion(catalog, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
 				}
 			} else {
-				logger.logError("Unable to load Camel Catalog for version " + requestedVersion); //$NON-NLS-0$
-				logger.logError("The version "+ CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY +" will be used instead."); //$NON-NLS-0$ //$NON-NLS-1$
+				logger.logWarning("Unable to load Camel Catalog for version " + requestedVersion); //$NON-NLS-0$
+				logger.logWarning("The version "+ CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY +" will be used instead."); //$NON-NLS-0$ //$NON-NLS-1$
 				if(catalog.loadVersion(CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY)) {
 					return CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY;
 				} else {
