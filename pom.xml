@@ -83,6 +83,9 @@
 	</modules>
 
 	<repositories>
+		<!-- Start of repository definitions which cause a warning in early build (see FUSETOOLS-2547) -->
+		<!-- These repositories will trigger a WARNING in early phase of Maven build but they are used later on and correctly resolved
+		see https://issues.jboss.org/browse/FUSETOOLS-2547?focusedCommentId=13467753&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-13467753 for more details -->
 		<repository>
 			<id>jbosstools-base</id>
 			<layout>p2</layout>
@@ -100,6 +103,7 @@
 			<layout>p2</layout>
 			<url>${jbosstools-central-site}</url>
 		</repository>
+		<!-- End of repository definitions causing a warning (see FUSETOOLS-2547) -->
 
 		<repository>
 			<id>asf.snapshot.repo</id>
