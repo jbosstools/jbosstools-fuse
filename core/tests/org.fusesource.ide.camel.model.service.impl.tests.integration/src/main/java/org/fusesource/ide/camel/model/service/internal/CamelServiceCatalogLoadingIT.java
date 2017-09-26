@@ -39,7 +39,7 @@ public class CamelServiceCatalogLoadingIT {
 				"2.15.6",
 				"2.16.4",
 				"2.17.7",
-				"2.18.4",
+				"2.18.5",
 				"2.19.3");
 	}
 	
