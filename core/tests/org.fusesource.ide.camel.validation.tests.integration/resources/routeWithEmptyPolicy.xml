@@ -6,7 +6,7 @@
     <camelContext id="camelContext-4df065c2-b806-498e-b9d8-959716cfb416"
         trace="false" xmlns="http://camel.apache.org/schema/spring">
         <route id="_route1">
-        	<from id="timer" uri="timer:timerName"></from>
+        	<from id="timer1" uri="timer:timerName"></from>
  			<policy id="_policy1" ref="dummyForPolicy">
             </policy>
         </route>
