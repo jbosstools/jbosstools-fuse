@@ -21,6 +21,7 @@ public class Messages extends NLS {
 	public static String NumberValidator_messageError;
 	public static String RequiredPropertyValidator_messageMissingParameter;
 	public static String eipWithoutChild;
+	public static String validationSameComponentIdAndComponentDefinitionId;
 
 	static {
 		// initialize resource bundle
