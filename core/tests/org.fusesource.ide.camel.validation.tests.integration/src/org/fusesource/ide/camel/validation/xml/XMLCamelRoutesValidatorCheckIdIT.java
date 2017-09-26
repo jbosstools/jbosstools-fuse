@@ -23,5 +23,10 @@ public class XMLCamelRoutesValidatorCheckIdIT extends AbstractXMLCamelRouteValid
 	public void testValidateWithCamelContextAndRouteWithSameIdReportsError() throws Exception {
 		testValidateCreatesAValidationMarker("routeWithCamelContextAndRouteDuplicatedId.xml");
 	}
+	
+	@Test
+	public void testValidateWithSameComponentIdAndComponentDefintionIdReportsError() throws Exception {
+		testValidateCreatesAValidationMarker("routeWithSameComponentIdAndComponentDefintionId.xml");
+	}
 
 }

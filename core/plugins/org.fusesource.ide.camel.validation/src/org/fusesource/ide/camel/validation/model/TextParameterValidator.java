@@ -16,11 +16,14 @@ import java.util.List;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.l10n.Messages;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -108,6 +111,11 @@ public final class TextParameterValidator implements IValidator {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
 				} else if (routeContainer != null && !routeContainer.isIDUnique((String) value)) {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " does not contain a unique value.");
+				} else {
+					Component component = PropertiesUtils.getComponentFor(camelModelElement);
+					if (component != null && value.equals(component.getScheme())) {
+						return ValidationStatus.error(NLS.bind(Messages.validationSameComponentIdAndComponentDefinitionId, parameter.getName(), value));
+					}
 				}
 			} else {
 				// by default we only check for a value != null and
