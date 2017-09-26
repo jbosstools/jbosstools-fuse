@@ -82,6 +82,8 @@
 		<module>site</module>
 	</modules>
 
+	<!-- FUSETOOLS-2547 Note: upstream repo variables jbosstools-*-site are defined in jbosstools parent pom
+		 and so will throw a harmless resolution warning but WILL be resolved later when needed --> 
 	<repositories>
 		<repository>
 			<id>jbosstools-base</id>
