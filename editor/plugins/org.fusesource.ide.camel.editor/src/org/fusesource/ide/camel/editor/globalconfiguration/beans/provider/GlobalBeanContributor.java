@@ -83,7 +83,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		// to avoid clash with SAP extension, needs to NOT handle a bean with the class 
 		// org.fusesource.camel.component.sap.SapConnectionConfiguration
 		if (globalConfigUtils == null) {
-			globalConfigUtils = new GlobalConfigUtils();
+			setGlobalConfigUtils(new GlobalConfigUtils());
 		}
 		boolean isGlobalBeanElement = CamelUtils.isGlobalBean(camelModelElementToHandle.getXmlNode());
 		boolean isSAPClass = true;
@@ -133,5 +133,13 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 		AddGlobalBeanWizard addWizard = new AddGlobalBeanWizard(camelFile, camelModel);
 		addWizard.init();
 		return addWizard;
+	}
+
+	/**
+	 * /!\ for test purpose
+	 * @param globalConfigUtils
+	 */
+	public void setGlobalConfigUtils(GlobalConfigUtils globalConfigUtils) {
+		this.globalConfigUtils = globalConfigUtils;
 	}
 }
