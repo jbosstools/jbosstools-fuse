@@ -738,7 +738,7 @@ public class BeanConfigUtil {
 			String beanRefTag = getFactoryBeanTag(selectedEP.getXmlNode());
 			if (beanRefTag != null) {
 				Object refParm = selectedEP.getParameter(beanRefTag);
-				if (refParm != null && refParm instanceof String) {
+				if (refParm instanceof String) {
 					return (String) refParm;
 				}
 			}
