@@ -11,8 +11,6 @@
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-
 import org.fusesource.ide.camel.editor.utils.GlobalConfigUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
@@ -24,7 +22,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl; //NOSONAR
 
 @RunWith(MockitoJUnitRunner.class)
 public class GlobalBeanContributorIT {
@@ -33,30 +31,33 @@ public class GlobalBeanContributorIT {
 	private GlobalConfigUtils globalConfigUtils = new GlobalConfigUtils();
 
 	@Test
-	public void testHandleBeanWithClass() throws Exception {
+	public void testHandleBeanWithClass() throws Exception { //NOSONAR
 		CamelBean camelBean = createBeanWithClass("with.classname");
 		assertThat(new GlobalBeanContributor().canHandle(camelBean)).isTrue();
 	}
 
 	@Test
-	public void testHandleBeanWithRef() throws Exception {
+	public void testHandleBeanWithRef() throws Exception { //NOSONAR
 		CamelBean camelBean = createBeanWithRef();
 		assertThat(new GlobalBeanContributor().canHandle(camelBean)).isTrue();
 	}
 	
 	@Test
-	public void testNotHandleSAPBeanWithClassWhenSAPInstalled() throws Exception {
-		doReturn(true).when(globalConfigUtils).isSAPExtInstalled();
+	public void testNotHandleSAPBeanWithClassWhenSAPInstalled() throws Exception { //NOSONAR
 		CamelBean camelBean = createBeanWithClass("org.fusesource.camel.component.sap.SapConnectionConfiguration");
 		GlobalBeanContributor globalBeanContributor = new GlobalBeanContributor();
 		globalBeanContributor.setGlobalConfigUtils(globalConfigUtils);
+		globalBeanContributor.setSAPInstalledFlag(true);
 		assertThat(globalBeanContributor.canHandle(camelBean)).isFalse();
 	}
 		
 	@Test
-	public void testHandleSAPBeanWithClassWhenSAPNotInstalled() throws Exception {
+	public void testHandleSAPBeanWithClassWhenSAPNotInstalled() throws Exception { //NOSONAR
 		CamelBean camelBean = createBeanWithClass("org.fusesource.camel.component.sap.SapConnectionConfiguration");
-		assertThat(new GlobalBeanContributor().canHandle(camelBean)).isTrue();
+		GlobalBeanContributor globalBeanContributor = new GlobalBeanContributor();
+		globalBeanContributor.setGlobalConfigUtils(globalConfigUtils);
+		globalBeanContributor.setSAPInstalledFlag(false);
+		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
 	}
 	
 	protected CamelBean createBeanWithClass(String className) {

@@ -41,6 +41,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	private AddGlobalBeanWizard wizard = null;
 	private GlobalConfigUtils globalConfigUtils = null;
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
+	private boolean isSAPInstalled = false;
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution#createGlobalElement(org.w3c.dom.Document)
@@ -98,7 +99,7 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 				}
 			}
 		}
-		if (!globalConfigUtils.isSAPExtInstalled() || !isSAPClass) {
+		if (!isSAPInstalled || !isSAPClass) {
 			return isGlobalBeanElement;
 		}
 		return false;
@@ -141,5 +142,14 @@ public class GlobalBeanContributor implements ICustomGlobalConfigElementContribu
 	 */
 	public void setGlobalConfigUtils(GlobalConfigUtils globalConfigUtils) {
 		this.globalConfigUtils = globalConfigUtils;
+		setSAPInstalledFlag(globalConfigUtils.isSAPExtInstalled());
+	}
+
+	/**
+	 * /!\ for test purpose to override SAP install flag
+	 * @param flag
+	 */
+	public void setSAPInstalledFlag(boolean flag) {
+		this.isSAPInstalled = flag;
 	}
 }
