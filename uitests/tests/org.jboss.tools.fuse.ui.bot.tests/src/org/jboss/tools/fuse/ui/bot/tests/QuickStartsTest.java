@@ -74,7 +74,7 @@ public class QuickStartsTest {
 		new WorkbenchShell().maximize();
 
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		ConsolePreferencePage consolePref = new ConsolePreferencePage();
+		ConsolePreferencePage consolePref = new ConsolePreferencePage(dialog);
 		dialog.open();
 		dialog.select(consolePref);
 		consolePref.toggleShowConsoleErrorWrite(false);

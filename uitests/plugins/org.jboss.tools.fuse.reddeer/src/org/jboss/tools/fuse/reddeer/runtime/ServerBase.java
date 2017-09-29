@@ -199,7 +199,7 @@ public abstract class ServerBase extends RuntimeBase {
 	protected void addJre() {
 		if (jre != null) {
 			WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-			InstalledJREs page = new InstalledJREs();
+			InstalledJREs page = new InstalledJREs(dialog);
 			dialog.open();
 			dialog.select(page);
 			page.addJre(jre, jreName);

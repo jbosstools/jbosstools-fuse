@@ -92,7 +92,7 @@ public class RegressionFuseTest extends DefaultTest {
 	public void issue_1067() {
 
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 

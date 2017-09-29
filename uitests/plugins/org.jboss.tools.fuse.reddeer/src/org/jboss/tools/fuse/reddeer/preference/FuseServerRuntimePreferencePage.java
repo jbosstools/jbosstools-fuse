@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.reddeer.preference;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
 import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
 import org.eclipse.reddeer.eclipse.wst.server.ui.wizard.NewRuntimeWizardDialog;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
@@ -34,10 +35,10 @@ public class FuseServerRuntimePreferencePage extends RuntimePreferencePage {
 	private static final String NAME = "Name";
 	private static final String SERVER_SECTION = "Red Hat JBoss Middleware";
 
-	public FuseServerRuntimePreferencePage() {
-		super(null);
+	public FuseServerRuntimePreferencePage(ReferencedComposite referencedComposite) {
+		super(referencedComposite);
 	}
-	
+
 	/**
 	 * Adds a new server runtime.
 	 * 

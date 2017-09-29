@@ -89,7 +89,7 @@ public class FuseProjectTest extends DefaultTest {
 	@BeforeClass
 	public static void useStagingRepos() {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		StagingRepositoriesPreferencePage page = new StagingRepositoriesPreferencePage();
+		StagingRepositoriesPreferencePage page = new StagingRepositoriesPreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		if (System.getProperty("staging.repositories").equals("true")) {

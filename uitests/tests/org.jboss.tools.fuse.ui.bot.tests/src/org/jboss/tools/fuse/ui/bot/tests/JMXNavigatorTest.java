@@ -78,7 +78,7 @@ public class JMXNavigatorTest {
 
 		log.info("Disable showing Console view after standard output changes");
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		ConsolePreferencePage consolePref = new ConsolePreferencePage();
+		ConsolePreferencePage consolePref = new ConsolePreferencePage(dialog);
 		dialog.open();
 		dialog.select(consolePref);
 		consolePref.toggleShowConsoleErrorWrite(false);

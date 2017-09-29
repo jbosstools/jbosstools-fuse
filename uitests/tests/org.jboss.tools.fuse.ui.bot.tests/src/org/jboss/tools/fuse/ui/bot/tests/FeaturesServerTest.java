@@ -75,7 +75,7 @@ public class FeaturesServerTest extends DefaultTest {
 		downloadRuntime("JBoss Fuse 6.3.0");
 		assertTrue("Server was not created in view", new ServersView2().getServers().size() == 1);
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		assertTrue("Server runtime was not created", serverRuntime.getServerRuntimes().size() == 1);
@@ -89,7 +89,7 @@ public class FeaturesServerTest extends DefaultTest {
 	 */
 	private void downloadRuntime(String name) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		JBossRuntimeDetection page = new JBossRuntimeDetection();
+		JBossRuntimeDetection page = new JBossRuntimeDetection(dialog);
 		dialog.open();
 		dialog.select(page);
 		DownloadRuntimesWizard runtimeWiz = page.downloadRuntime();

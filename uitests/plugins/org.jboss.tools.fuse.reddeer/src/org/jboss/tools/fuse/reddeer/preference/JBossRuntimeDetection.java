@@ -36,10 +36,6 @@ import org.jboss.tools.fuse.reddeer.wizard.DownloadRuntimesWizard;
  */
 public class JBossRuntimeDetection extends PreferencePage {
 	
-	public JBossRuntimeDetection() {
-		this(null);
-	}
-	
 	public JBossRuntimeDetection(ReferencedComposite ref) {
 		super(ref, "JBoss Tools", "JBoss Runtime Detection");
 	}

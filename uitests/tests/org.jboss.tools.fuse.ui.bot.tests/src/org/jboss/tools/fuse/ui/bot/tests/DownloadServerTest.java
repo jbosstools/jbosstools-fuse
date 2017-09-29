@@ -72,7 +72,7 @@ public class DownloadServerTest extends DefaultTest {
 	public void testDownloadServerRuntimeTest() {
 
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage();
+		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
 		new PushButton(ADD_BUTTON).click();

@@ -71,7 +71,7 @@ public class FeaturesTest extends DefaultTest {
 
 		// enable "If enabled the ID values will be used for labels if existing"
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		FuseToolingEditorPreferencePage page = new FuseToolingEditorPreferencePage();
+		FuseToolingEditorPreferencePage page = new FuseToolingEditorPreferencePage(dialog);
 		dialog.open();
 		dialog.select(page);
 		page.setShowIDinEditor(true);
