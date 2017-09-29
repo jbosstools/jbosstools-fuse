@@ -11,6 +11,12 @@
 package org.fusesource.ide.camel.editor.globalconfiguration.beans.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.fusesource.ide.camel.editor.utils.GlobalConfigUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelBean;
 import org.fusesource.ide.camel.model.service.core.model.eips.GlobalBeanEIP;
@@ -22,60 +28,92 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl; //NOSONAR
-
 @RunWith(MockitoJUnitRunner.class)
 public class GlobalBeanContributorIT {
 	
 	@Mock
-	private GlobalConfigUtils globalConfigUtils = new GlobalConfigUtils();
+	private GlobalConfigUtils globalConfigUtils;
 
 	@Test
-	public void testHandleBeanWithClass() throws Exception { //NOSONAR
+	public void testHandleBeanWithClassWithoutSAPInstalled() throws ParserConfigurationException {
 		CamelBean camelBean = createBeanWithClass("with.classname");
-		assertThat(new GlobalBeanContributor().canHandle(camelBean)).isTrue();
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanWithoutSAPInstalled();
+		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
 	}
 
 	@Test
-	public void testHandleBeanWithRef() throws Exception { //NOSONAR
+	public void testHandleBeanWithRefWithoutSAPInstalled() throws ParserConfigurationException {
 		CamelBean camelBean = createBeanWithRef();
-		assertThat(new GlobalBeanContributor().canHandle(camelBean)).isTrue();
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanWithoutSAPInstalled();
+		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
 	}
 	
 	@Test
-	public void testNotHandleSAPBeanWithClassWhenSAPInstalled() throws Exception { //NOSONAR
+	public void testHandleBeanWithClassWithSAPInstalled() throws ParserConfigurationException {
+		CamelBean camelBean = createBeanWithClass("with.classname");
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanContributorFakingSAPInstalled();
+		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
+	}
+
+	@Test
+	public void testHandleBeanWithRefWithSAPInstalled() throws ParserConfigurationException {
+		CamelBean camelBean = createBeanWithRef();
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanContributorFakingSAPInstalled();
+		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
+	}
+	
+	@Test
+	public void testNotHandleSAPBeanWithClassWhenSAPInstalled() throws ParserConfigurationException {
 		CamelBean camelBean = createBeanWithClass("org.fusesource.camel.component.sap.SapConnectionConfiguration");
-		GlobalBeanContributor globalBeanContributor = new GlobalBeanContributor();
-		globalBeanContributor.setGlobalConfigUtils(globalConfigUtils);
-		globalBeanContributor.setSAPInstalledFlag(true);
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanContributorFakingSAPInstalled();
 		assertThat(globalBeanContributor.canHandle(camelBean)).isFalse();
 	}
 		
 	@Test
-	public void testHandleSAPBeanWithClassWhenSAPNotInstalled() throws Exception { //NOSONAR
+	public void testHandleSAPBeanWithClassWhenSAPNotInstalled() throws ParserConfigurationException {
 		CamelBean camelBean = createBeanWithClass("org.fusesource.camel.component.sap.SapConnectionConfiguration");
-		GlobalBeanContributor globalBeanContributor = new GlobalBeanContributor();
-		globalBeanContributor.setGlobalConfigUtils(globalConfigUtils);
-		globalBeanContributor.setSAPInstalledFlag(false);
+		GlobalBeanContributor globalBeanContributor = createGlobalBeanWithoutSAPInstalled();
 		assertThat(globalBeanContributor.canHandle(camelBean)).isTrue();
 	}
 	
-	protected CamelBean createBeanWithClass(String className) {
+	protected CamelBean createBeanWithClass(String className) throws ParserConfigurationException {
 		CamelBean camelBean = new CamelBean("myBeanWithClass");
 		camelBean.setClassName(className);
-		Document xmlDoc = new DocumentImpl();
+		Document xmlDoc = createDocument();
 		Element beanNode = xmlDoc.createElementNS(BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP, "bean");
 		camelBean.setXmlNode(beanNode);
 		return camelBean;
 	}
+
 	
-	protected CamelBean createBeanWithRef() {
+	protected CamelBean createBeanWithRef() throws ParserConfigurationException {
 		CamelBean camelBean = new CamelBean("myBeanWithRef");
 		camelBean.setParameter(GlobalBeanEIP.PROP_FACTORY_REF, "aRefId");
-		Document xmlDoc = new DocumentImpl();
+		Document xmlDoc = createDocument();
 		Element beanNode = xmlDoc.createElementNS(BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP, "bean");
 		camelBean.setXmlNode(beanNode);
 		return camelBean;
+	}
+
+	protected Document createDocument() throws ParserConfigurationException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		return docBuilder.newDocument();
+	}
+	
+	protected GlobalBeanContributor createGlobalBeanWithoutSAPInstalled() {
+		return createGlobeanContributorWithSAP(false);
+	}
+	
+	protected GlobalBeanContributor createGlobalBeanContributorFakingSAPInstalled() {
+		return createGlobeanContributorWithSAP(true);
+	}
+
+	protected GlobalBeanContributor createGlobeanContributorWithSAP(boolean installed) {
+		GlobalBeanContributor globalBeanContributor = new GlobalBeanContributor();
+		doReturn(installed).when(globalConfigUtils).isSAPExtInstalled();
+		globalBeanContributor.setGlobalConfigUtils(globalConfigUtils);
+		return globalBeanContributor;
 	}
 
 }
