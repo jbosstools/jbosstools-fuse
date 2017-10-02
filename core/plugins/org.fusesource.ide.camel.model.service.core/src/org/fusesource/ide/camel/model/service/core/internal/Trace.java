@@ -21,14 +21,22 @@ import org.jboss.tools.foundation.core.plugin.AbstractTrace;
  * only for convenience and easy of use
  */
 public class Trace extends AbstractTrace implements DebugOptionsListener {
+	
 	private static Trace instance = null;
+	
 	/**
 	 * Trace constructor. This should never be explicitly called by clients and is used to register this class with the
 	 * {@link DebugOptions} service.
 	 */
-	Trace(CamelModelServiceCoreActivator p) {
+	private Trace(CamelModelServiceCoreActivator p) {
 		super(p);
-		instance = this;
+	}
+	
+	public static Trace getInstance(CamelModelServiceCoreActivator p) {
+		if(instance == null) {
+			instance = new Trace(p);
+		}
+		return instance;
 	}
 
 	public static void trace(final String level, String s) {
