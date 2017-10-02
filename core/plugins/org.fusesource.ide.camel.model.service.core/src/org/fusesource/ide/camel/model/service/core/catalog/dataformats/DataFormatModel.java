@@ -11,7 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.catalog.dataformats;
 
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,7 +34,7 @@ import org.xml.sax.InputSource;
 public class DataFormatModel {
 
 	private CamelModel model;
-	private ArrayList<DataFormat> supportedDataFormats;
+	private List<DataFormat> supportedDataFormats;
 
 	/**
 	 * @return the model
@@ -54,14 +54,14 @@ public class DataFormatModel {
 	 * @return the supportedDataFormats
 	 */
 	@XmlElement(name = "dataformat")
-	public ArrayList<DataFormat> getSupportedDataFormats() {
+	public List<DataFormat> getSupportedDataFormats() {
 		return this.supportedDataFormats;
 	}
 
 	/**
 	 * @param supportedDataFormats the supportedDataFormats to set
 	 */
-	public void setSupportedDataFormats(ArrayList<DataFormat> supportedDataFormats) {
+	public void setSupportedDataFormats(List<DataFormat> supportedDataFormats) {
 		this.supportedDataFormats = supportedDataFormats;
 	}
 
