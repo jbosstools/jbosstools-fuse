@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -38,7 +37,6 @@ import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBund
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilter;
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilterProvider;
 import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
-import org.jboss.ide.eclipse.as.core.util.ProgressMonitorUtil;
 import org.jboss.ide.eclipse.as.wtp.core.modules.filter.patterns.ComponentModuleInclusionFilterUtility;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IPrimaryPublishController;
@@ -149,18 +147,19 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 	}
 	
 	private int handleZippedPublish(IModule[] module, int publishType, boolean force, IProgressMonitor monitor) throws CoreException{
-		IPath tmpArchive = getTempBundlePath(module);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Packaging Module", 3); //$NON-NLS-1$
+		IPath tmpArchive = getTempBundlePath(module, subMonitor.newChild(1));
 		
 		LocalZippedModulePublishRunner runner = createZippedRunner(module, tmpArchive); 
-		monitor.beginTask("Packaging Module", 200); //$NON-NLS-1$
 		
 		// Trimmed code from StandardFilesystemPublishController
-		IStatus result = runner.fullPublishModule(ProgressMonitorUtil.submon(monitor, 100));
+		IStatus result = runner.fullPublishModule(subMonitor.newChild(1));
 		if( result == null || result.isOK()) {
 			if( tmpArchive.toFile().exists()) {
-				return transferBuiltModule(module, tmpArchive, ProgressMonitorUtil.submon(monitor, 100));
+				return transferBuiltModule(module, tmpArchive, subMonitor.newChild(1));
 			}
 		}
+		subMonitor.setWorkRemaining(0);
 		return IServer.PUBLISH_STATE_UNKNOWN;
 	}
 	
@@ -230,7 +229,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 
 	@Override
 	public int removeModule(IModule[] module, IProgressMonitor monitor) throws CoreException {
-		IPath tmpArchive = getTempBundlePath(module);
+		IPath tmpArchive = getTempBundlePath(module, monitor);
 		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, tmpArchive);   
 		if( bd != null ) {
 			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
@@ -246,25 +245,29 @@ public class Karaf2xPublishController extends AbstractSubsystemController implem
 		return IServer.PUBLISH_STATE_FULL;
 	}
 
-    private IPath getTempBundlePath(IModule[] module) {
+    private IPath getTempBundlePath(IModule[] module, IProgressMonitor monitor) {
         IPath localTempLocation = getMetadataTemporaryLocation(getServer());
-        String moduleVersion = null;
-        try {
-            moduleVersion = getModuleVersion(module[0]);
-        } catch (CoreException e) {
-            moduleVersion = Long.toString(System.currentTimeMillis());
-        }
+        String moduleVersion = getModuleVersion(module[0], monitor);
         String archiveName = module[0].getName() + "-" + moduleVersion + //$NON-NLS-1$
                 ServerModelUtilities.getDefaultSuffixForModule(module[0]);
-        IPath tempBundlePath = localTempLocation.append(archiveName);
-        return tempBundlePath;
+        return localTempLocation.append(archiveName);
     }
 
-    private String getModuleVersion(IModule module) throws CoreException {
-        IProgressMonitor monitor = new NullProgressMonitor();
+    private String getModuleVersion(IModule module, IProgressMonitor monitor) {
         IProject project = module.getProject();
-        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project.getFile(IMavenConstants.POM_FILE_NAME), true, monitor);
-        MavenProject mavenProject = facade.getMavenProject(monitor);
-        return mavenProject.getVersion();
+        if (project != null) {
+        	SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
+        	IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create(project.getFile(IMavenConstants.POM_FILE_NAME), true, subMonitor.newChild(1));
+        	try {
+				MavenProject mavenProject = facade.getMavenProject(subMonitor.newChild(1));
+				return mavenProject.getVersion();
+			} catch (CoreException e) {
+				Activator.getLogger().warning(e);
+				return Long.toString(System.currentTimeMillis());
+			}
+        } else {
+        	Activator.getLogger().warning("Cannot determine project associated with module: " + module.getName()); //$NON-NLS-1$
+        	return Long.toString(System.currentTimeMillis());
+        }
     }
 }
