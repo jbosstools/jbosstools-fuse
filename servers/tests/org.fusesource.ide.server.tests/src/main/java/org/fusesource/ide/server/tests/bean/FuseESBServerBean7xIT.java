@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc.
+ * Copyright (c) 2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -11,7 +11,6 @@
 
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import org.eclipse.core.runtime.IPath;
@@ -30,9 +29,8 @@ import junit.framework.TestCase;
 @RunWith(value = Parameterized.class)
 public class FuseESBServerBean7xIT extends TestCase {
 
-	protected static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final HashMap<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<>();
 		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_70, "7.0.0.fuse-000080");
 	}
 	
@@ -51,7 +49,7 @@ public class FuseESBServerBean7xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
+	public static Object[] data() {
 		return FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES;
 	}
 

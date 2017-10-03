@@ -28,6 +28,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
+import org.jboss.ide.eclipse.as.core.util.ArgsUtil;
 import org.jboss.ide.eclipse.as.wtp.core.server.launch.LaunchConfiguratorWithOverrides;
 
 /**
@@ -103,17 +104,35 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 		}
 	}
 
+	/**
+	 * /!\ Public for test purpose
+	 * 
+	 */
 	@Override
-	protected void doOverrides(ILaunchConfigurationWorkingCopy launchConfig) throws CoreException {
+	public void doOverrides(ILaunchConfigurationWorkingCopy launchConfig) throws CoreException {
 		IRuntime serverRuntime = server.getRuntime();
 		if (serverRuntime != null) {
 			IKarafRuntime runtime = (IKarafRuntime)serverRuntime.loadAdapter(IKarafRuntime.class, null);
 			String karafInstallDir = serverRuntime.getLocation().toOSString();
 			configureJRE(launchConfig, runtime, karafInstallDir);
+			configureVMArguments(launchConfig, karafInstallDir);
 		}
 	}
 
-	private void configureJRE(ILaunchConfigurationWorkingCopy workingCopy, IKarafRuntime runtime, String karafInstallDir) throws CoreException {
+	protected void configureVMArguments(ILaunchConfigurationWorkingCopy launchConfig, String karafInstallDir)
+			throws CoreException {
+		String vmArguments = launchConfig.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "");
+		IKarafRuntime karafRuntime = (IKarafRuntime) server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+		File vmLoc = karafRuntime.getVM().getInstallLocation();
+		vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.ext.dirs", createExtDirValue(karafInstallDir, vmLoc));
+		vmArguments = ArgsUtil.setArg(vmArguments, null, "-Djava.endorsed.dirs", createEndorsedDirValue(karafInstallDir, vmLoc));
+		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArguments);
+	}
+
+	/**
+	 *  /!\ public for test purpose
+	 */
+	public void configureJRE(ILaunchConfigurationWorkingCopy workingCopy, IKarafRuntime runtime, String karafInstallDir) throws CoreException {
 		List<String> classPathList = new LinkedList<>();
 		String[] classPathEntries = getClassPathEntries(karafInstallDir);
 		if (classPathEntries != null && classPathEntries.length > 0) {
@@ -191,16 +210,21 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 	protected String getMainProgram() {
 		return KARAF_MAIN_CLASS;
 	}
-
-	protected String getVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
+	
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public String getVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
+		return getBaseVMArguments(karafInstallDir, endorsedDirs, extDirs);
+	}
+	
+	private String getBaseVMArguments(String karafInstallDir, String endorsedDirs, String extDirs) {
 		StringBuilder vmArguments = new StringBuilder();
 
 		vmArguments.append("-Xms128M");
 		vmArguments.append(SPACE + "-Xmx512M");
 		vmArguments.append(SPACE + "-XX:+UnlockDiagnosticVMOptions");
 		vmArguments.append(SPACE + "-XX:+UnsyncloadClass");
-		vmArguments.append(SPACE + "-Dderby.system.home=" + QUOTE + karafInstallDir + SEPARATOR + "data" + SEPARATOR + "derby" + QUOTE); 
-		vmArguments.append(SPACE + "-Dderby.storage.fileSyncTransactionLog=true");
 		vmArguments.append(SPACE + "-server");
 		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
 		vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + QUOTE);
@@ -217,11 +241,12 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 	}
 
 	/**
+	 * /!\ Public for test purpose
 	 * @param karafInstallDir
 	 * @param vmLoc
 	 * @return
 	 */
-	protected String createEndorsedDirValue(String karafInstallDir, File vmLoc) {
+	public String createEndorsedDirValue(String karafInstallDir, File vmLoc) {
 		//@formatter:off
 		return  Paths.get(vmLoc.getPath(), "jre", LIB, ENDORSED).toString() + File.pathSeparator +
 				Paths.get(vmLoc.getPath(), LIB, ENDORSED).toString() + File.pathSeparator +
@@ -230,11 +255,12 @@ public abstract class BaseKarafStartupLaunchConfigurator extends LaunchConfigura
 	}
 
 	/**
+	 * /!\ Public for test purpose
 	 * @param karafInstallDir
 	 * @param vmLoc
 	 * @return
 	 */
-	protected String createExtDirValue(String karafInstallDir, File vmLoc) {
+	public String createExtDirValue(String karafInstallDir, File vmLoc) {
 		//@formatter:off
 		return  Paths.get(vmLoc.getPath(), "jre", LIB, EXT).toString() + File.pathSeparator +
 				Paths.get(vmLoc.getPath(), LIB, EXT).toString() + File.pathSeparator +

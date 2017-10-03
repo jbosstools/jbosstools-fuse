@@ -12,8 +12,6 @@ package org.fusesource.ide.server.tests.locator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collection;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -27,10 +25,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import junit.framework.TestCase;
-
 @RunWith(value = Parameterized.class)
-public class KarafRuntime3xLocatorIT extends TestCase {
+public class KarafRuntime3xLocatorIT {
 	
 	private String fRuntimeType;
 	
@@ -48,7 +44,7 @@ public class KarafRuntime3xLocatorIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
+	public static Object[] data() {
 		return KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES;
 	}
 			

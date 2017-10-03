@@ -27,7 +27,13 @@ import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
  *
  */
 public abstract class AbstractFuseESBRuntimeComposite extends KarafRuntimeComposite2x {
-
+	/**
+	 * constructor 
+	 * 
+	 * @param parentComposite
+	 * @param wizardHandle
+	 * @param model
+	 */
 	public AbstractFuseESBRuntimeComposite(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, wizardHandle, model);
 		wizardHandle.setTitle(Messages.FuseESBRuntimeComposite_wizard_tite);

@@ -10,8 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
@@ -24,17 +27,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import junit.framework.TestCase;
-
 /**
  * @author lhein
  */
 @RunWith(value = Parameterized.class)
-public class KarafServerBean3xIT extends TestCase {
+public class KarafServerBean3xIT {
 
-	public static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final Map<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<String, String>();
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_30, "3.0.1");		
 	}
 
@@ -55,7 +55,7 @@ public class KarafServerBean3xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
+	public static Object[] data() {
 		return KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES;
 	}
 
