@@ -10,16 +10,16 @@
  ******************************************************************************/
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
-import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.TestCase;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -31,11 +31,10 @@ import org.junit.runners.Parameterized.Parameters;
  * @author lhein
  */
 @RunWith(value = Parameterized.class)
-public class KarafServerBean3xIT extends TestCase {
+public class KarafServerBean3xIT {
 
-	public static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final Map<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<String, String>();
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_30, "3.0.1");		
 	}
 
@@ -56,9 +55,8 @@ public class KarafServerBean3xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
-		return ParametizedTestUtil
-				.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES);
+	public static Object[] data() {
+		return KarafMockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES;
 	}
 
 	/**

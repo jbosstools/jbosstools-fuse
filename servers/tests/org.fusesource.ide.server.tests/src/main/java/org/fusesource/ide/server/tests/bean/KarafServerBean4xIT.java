@@ -13,14 +13,13 @@ package org.fusesource.ide.server.tests.bean;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -34,9 +33,8 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class KarafServerBean4xIT {
 
-	protected static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final Map<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<>();
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_40, "4.0.9");		
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_41, "4.1.2");
 	}
@@ -58,9 +56,8 @@ public class KarafServerBean4xIT {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
-		return ParametizedTestUtil
-				.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_4X_RUNTIMES);
+	public static Object[] data() {
+		return KarafMockRuntimeCreationUtil.SUPPORTED_4X_RUNTIMES;
 	}
 
 	/**

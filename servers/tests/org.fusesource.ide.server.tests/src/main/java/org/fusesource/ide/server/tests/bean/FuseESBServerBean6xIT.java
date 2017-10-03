@@ -11,16 +11,12 @@
 
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
 import java.util.HashMap;
-
-import junit.framework.TestCase;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.FuseESBMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -28,12 +24,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import junit.framework.TestCase;
+
 @RunWith(value = Parameterized.class)
 public class FuseESBServerBean6xIT extends TestCase {
 
-	protected static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final HashMap<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<>();
 		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_60, "6.0.0.redhat-065");
 		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_61, "6.1.0.redhat-376");
 		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_62, "6.2.1.redhat-084");
@@ -55,8 +52,8 @@ public class FuseESBServerBean6xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(FuseESBMockRuntimeCreationUtil.SUPPORTED_6X_RUNTIMES);
+	public static Object[] data() {
+		return FuseESBMockRuntimeCreationUtil.SUPPORTED_6X_RUNTIMES;
 	}
 
 	/**

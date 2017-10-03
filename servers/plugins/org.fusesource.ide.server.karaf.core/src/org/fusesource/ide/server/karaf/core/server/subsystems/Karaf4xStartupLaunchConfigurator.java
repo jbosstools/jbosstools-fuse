@@ -29,17 +29,11 @@ public class Karaf4xStartupLaunchConfigurator extends Karaf3xStartupLaunchConfig
 		super(server);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.BaseKarafStartupLaunchConfigurator#isSupportedRuntimeVersion(java.lang.String)
-	 */
 	@Override
 	protected boolean isSupportedRuntimeVersion(String version) {
 		return !Strings.isBlank(version) && version.startsWith(IKarafToolingConstants.KARAF_VERSION_4X);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#findJars(org.eclipse.core.runtime.IPath, java.util.List)
-	 */
 	@Override
 	protected void findJars(IPath path, List<Object> cp) {
 		// need to override because findJars is used for isStartable() check for servers
