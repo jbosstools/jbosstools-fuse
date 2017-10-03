@@ -11,16 +11,13 @@
 
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
 import java.util.HashMap;
-
-import junit.framework.TestCase;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -28,12 +25,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import junit.framework.TestCase;
+
 @RunWith(value = Parameterized.class)
 public class KarafServerBean2xIT extends TestCase {
 
-	public static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final Map<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<String,String>();
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_22, "2.2.11");
 		TYPE_TO_VERSION.put(KarafMockRuntimeCreationUtil.KARAF_23, "2.3.5");
 	}
@@ -53,8 +51,8 @@ public class KarafServerBean2xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_2X_RUNTIMES);
+	public static Object[] data() {
+		return KarafMockRuntimeCreationUtil.SUPPORTED_2X_RUNTIMES;
 	}
 
 	/**

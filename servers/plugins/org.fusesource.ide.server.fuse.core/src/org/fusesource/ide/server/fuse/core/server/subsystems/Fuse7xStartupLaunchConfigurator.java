@@ -25,9 +25,6 @@ public class Fuse7xStartupLaunchConfigurator extends Karaf4xStartupLaunchConfigu
 		super(server);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.BaseKarafStartupLaunchConfigurator#isSupportedRuntimeVersion(java.lang.String)
-	 */
 	@Override
 	protected boolean isSupportedRuntimeVersion(String version) {
 		return !Strings.isBlank(version) && version.startsWith(FuseToolingConstants.FUSE_VERSION_7X);

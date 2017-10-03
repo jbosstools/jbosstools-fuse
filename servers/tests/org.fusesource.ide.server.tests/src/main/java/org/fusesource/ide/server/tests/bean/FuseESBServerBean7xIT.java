@@ -11,14 +11,12 @@
 
 package org.fusesource.ide.server.tests.bean;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import org.eclipse.core.runtime.IPath;
 import org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.FuseESBMockRuntimeCreationUtil;
-import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.junit.Test;
@@ -31,9 +29,8 @@ import junit.framework.TestCase;
 @RunWith(value = Parameterized.class)
 public class FuseESBServerBean7xIT extends TestCase {
 
-	protected static final HashMap<String, String> TYPE_TO_VERSION;
+	private static final HashMap<String, String> TYPE_TO_VERSION = new HashMap<>();
 	static {
-		TYPE_TO_VERSION = new HashMap<>();
 		TYPE_TO_VERSION.put(FuseESBMockRuntimeCreationUtil.FUSEESB_70, "7.0.0.fuse-000080");
 	}
 	
@@ -52,8 +49,8 @@ public class FuseESBServerBean7xIT extends TestCase {
 	 * @return
 	 */
 	@Parameters
-	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES);
+	public static Object[] data() {
+		return FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES;
 	}
 
 	/**
