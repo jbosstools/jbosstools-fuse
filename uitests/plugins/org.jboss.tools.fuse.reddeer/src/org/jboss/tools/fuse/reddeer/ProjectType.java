@@ -13,25 +13,30 @@ package org.jboss.tools.fuse.reddeer;
 public enum ProjectType {
 
 	JAVA("Java DSL"),
-	SPRING("Spring DSL", "camel-context.xml", "beans"),
-	BLUEPRINT("Blueprint DSL", "blueprint.xml", "blueprint");
+	SPRING("Spring DSL", "camel-context.xml", "beans", "factory-bean", "constructor-arg"),
+	BLUEPRINT("Blueprint DSL", "blueprint.xml", "blueprint", "factory-ref", "argument");
 
 	private String description;
 	private String camelContext;
 	private String rootElement;
+	private String factoryElement;
+	private String argumentElement;
 
 	private ProjectType(String description) {
 		this(description, null);
 	}
 
 	private ProjectType(String description, String camelContext) {
-		this(description, camelContext, null);
+		this(description, camelContext, null, null, null);
 	}
 
-	private ProjectType(String description, String camelContext, String rootElement) {
+	private ProjectType(String description, String camelContext, String rootElement, String factoryElement,
+			String argumentElement) {
 		this.description = description;
 		this.camelContext = camelContext;
 		this.rootElement = rootElement;
+		this.factoryElement = factoryElement;
+		this.argumentElement = argumentElement;
 	}
 
 	public String getDescription() {
@@ -44,5 +49,13 @@ public enum ProjectType {
 
 	public String getRootElement() {
 		return rootElement;
+	}
+
+	public String getFactoryElement() {
+		return factoryElement;
+	}
+
+	public String getArgumentElement() {
+		return argumentElement;
 	}
 }
