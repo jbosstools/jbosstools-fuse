@@ -11,11 +11,16 @@
 package org.jboss.tools.fuse.reddeer.editor;
 
 import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
+import org.eclipse.reddeer.swt.impl.ctab.DefaultCTabItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 
@@ -26,11 +31,25 @@ import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
  */
 public class ConfigurationsEditor extends DefaultEditor {
 
+	public static final String CONFIGURATIONS_TAB = "Configurations";
+	public static final String ROOT_ELEMENT = "JBoss Fuse";
+
 	private static Logger log = Logger.getLogger(ConfigurationsEditor.class);
 	private static final String TYPE = "JBoss Fuse";
 
 	public enum Element {
-		ENDPOINT, DATAFORMAT
+
+		ENDPOINT("Endpoint"), DATAFORMAT("Data Format"), BEAN("Bean");
+
+		private String name;
+
+		private Element(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
 	}
 
 	public ConfigurationsEditor(String project, String title) {
@@ -44,6 +63,11 @@ public class ConfigurationsEditor extends DefaultEditor {
 
 		log.info("Switching to Configurations Tab");
 		CamelEditor.switchTab("Configurations");
+	}
+
+	public ConfigurationsEditor(String name) {
+		super(name);
+		new DefaultCTabItem(this, CONFIGURATIONS_TAB).activate();
 	}
 
 	public void selectConfig(String... path) {
@@ -163,23 +187,54 @@ public class ConfigurationsEditor extends DefaultEditor {
 
 		log.debug("Trying to delete Global Element - " + element + ", with title - " + title);
 		activate();
-		switch (element) {
-		case ENDPOINT:
-			title += " (Endpoint)";
-			break;
-		case DATAFORMAT:
-			title += " (Data Format)";
-			break;
-		default:
-			break;
-		}
+		title += "(" + element.getName() + ")";
 		try {
 			new DefaultTreeItem(new String[] { TYPE, title }).select();
 			new PushButton("Delete").click();
 			save();
 		} catch (Exception e) {
-			log.debug("Component with title - " + title + " isn't exist", e);
+			log.debug("Component with title - " + title + " doesn't exist", e);
 		}
+	}
+
+	public ConfigurationsDialog add() {
+		activate();
+		new PushButton(this, "Add").click();
+		return new ConfigurationsDialog();
+	}
+
+	public void edit() {
+		new PushButton(this, "Edit").click();
+	}
+
+	public void delete() {
+		new PushButton(this, "Delete").click();
+	}
+
+	public AddBeanWizard addBean() {
+		add().select(Element.BEAN).ok();
+		return new AddBeanWizard();
+	}
+
+	public void selectBean(String beanName) {
+		new DefaultTree(this).getItem(ROOT_ELEMENT, beanName + " (Bean)").select();
+	}
+
+	public EditBeanWizard editBean(String beanName) {
+		selectBean(beanName);
+		edit();
+		return new EditBeanWizard();
+	}
+
+	public void deleteBean(String beanName) {
+		selectBean(beanName);
+		delete();
+	}
+
+	@Override
+	public void close(boolean save) {
+		super.close(save);
+		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 	}
 
 }
