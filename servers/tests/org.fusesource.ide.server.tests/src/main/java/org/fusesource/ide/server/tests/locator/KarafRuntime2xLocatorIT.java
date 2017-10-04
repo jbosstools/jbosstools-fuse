@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.server.tests.locator;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 
 import junit.framework.TestCase;
@@ -66,7 +68,7 @@ public class KarafRuntime2xLocatorIT extends TestCase {
 		MockListener listener = new MockListener();
 		locator.searchForRuntimes(dest, 
 				listener, new NullProgressMonitor());
-		assertTrue(listener.getFoundRuntime() != null);
+		assertThat(listener.getFoundRuntime().getName()).contains("Karaf 2");
 	}
 	
 	/**

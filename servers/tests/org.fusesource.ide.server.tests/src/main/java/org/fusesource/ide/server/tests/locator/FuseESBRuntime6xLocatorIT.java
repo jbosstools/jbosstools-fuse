@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.server.tests.locator;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 
 import junit.framework.TestCase;
@@ -57,16 +59,14 @@ public class FuseESBRuntime6xLocatorIT extends TestCase {
 	 */
 	@Test
 	public void testFuseESB() throws Exception {
-		IPath dest = FuseServerTestActivator.getDefault()
-				.getStateLocation().append(fRuntimeType);
-		FuseESBMockRuntimeCreationUtil.create6xRuntimeMock(
-				fRuntimeType, dest);
+		IPath dest = FuseServerTestActivator.getDefault().getStateLocation().append(fRuntimeType);
+		FuseESBMockRuntimeCreationUtil.create6xRuntimeMock(fRuntimeType, dest);
 		
 		FuseESBRuntimeLocator locator = new FuseESBRuntimeLocator();
 		MockListener listener = new MockListener();
-		locator.searchForRuntimes(dest, 
-				listener, new NullProgressMonitor());
-		assertTrue(listener.getFoundRuntime() != null);
+		locator.searchForRuntimes(dest, listener, new NullProgressMonitor());
+		
+		assertThat(listener.getFoundRuntime().getName()).contains("Red Hat JBoss Fuse 6");
 	}
 	
 	/**

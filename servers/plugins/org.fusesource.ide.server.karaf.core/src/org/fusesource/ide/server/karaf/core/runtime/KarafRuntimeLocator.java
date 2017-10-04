@@ -39,9 +39,6 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 
 	private static final int MAX_RECURSION_DEPTH = 5;
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.wst.server.core.model.RuntimeLocatorDelegate#searchForRuntimes(org.eclipse.core.runtime.IPath, org.eclipse.wst.server.core.model.RuntimeLocatorDelegate.IRuntimeSearchListener, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void searchForRuntimes(IPath path, IRuntimeSearchListener listener,
 			IProgressMonitor monitor) {
@@ -130,8 +127,6 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 					IRuntimeType rtt = t.getRuntimeType();
 					try {
 						IRuntimeWorkingCopy runtime = rtt.createRuntime(rtt.getId(), monitor);
-						// commented out the naming of the runtime as it seems to break server to runtime links
-						runtime.setName(dir.getName());
 						runtime.setLocation(new Path(absolutePath));
 						IStatus status = runtime.validate(monitor);
 						if (status == null || status.getSeverity() != IStatus.ERROR) {
@@ -149,10 +144,9 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 	protected boolean isValidServerBeanType(ServerBean sb) {
 		if (sb != null) {
 			ServerBeanType type = sb.getBeanType();
-			return 	type != null && 
-					KarafBeanProvider.KARAF_2x.equals(type) || 
+			return KarafBeanProvider.KARAF_2x.equals(type) ||
 					KarafBeanProvider.KARAF_3x.equals(type) ||
-					KarafBeanProvider.KARAF_4x.equals(type);	
+					KarafBeanProvider.KARAF_4x.equals(type);
 		}
 		return false;		
 	}
