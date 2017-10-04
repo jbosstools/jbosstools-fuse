@@ -1,0 +1,45 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+        
+    <cxf:cxfEndpoint id="cxfConsumer" 
+        address="http://localhost:8080/rpclit/AddressService" 
+        serviceClass="org.jboss.fuse.wsdl2rest.test.rpclit.Address" />
+        
+    <bean id="addressBean" class="org.jboss.fuse.wsdl2rest.test.rpclit.AddressBean"/>
+    
+    <camelContext id="cxfws" xmlns="http://camel.apache.org/schema/spring">
+        <route id="consumerRoute">
+            <from uri="cxf:bean:cxfConsumer" />
+            <log loggingLevel="INFO" message="${header.operationName}"/>
+            <log loggingLevel="INFO" message="${body}"/>
+            <choice>
+                <when>
+                    <simple>${header.operationName} == 'listAddresses'</simple>
+                    <to uri="bean:addressBean?method=listAddresses"/>
+                </when>
+                <when>
+                    <simple>${header.operationName} == 'getAddress'</simple>
+                    <to uri="bean:addressBean?method=getAddress"/>
+                </when>
+                <when>
+                    <simple>${header.operationName} == 'addAddress'</simple>
+                    <to uri="bean:addressBean?method=addAddress"/>
+                </when>
+                <when>
+                    <simple>${header.operationName} == 'updAddress'</simple>
+                    <to uri="bean:addressBean?method=updAddress"/>
+                </when>
+                <when>
+                    <simple>${header.operationName} == 'delAddress'</simple>
+                    <to uri="bean:addressBean?method=delAddress"/>
+                </when>
+            </choice>
+        </route>
+    </camelContext>
+
+</beans>

@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="targetBean" class="$targetBean"/>
+    
+    <camelContext id="cxfrs" xmlns="http://camel.apache.org/schema/spring">
+
+        <restConfiguration component="jetty" host="localhost" port="8080" bindingMode="json">
+        </restConfiguration>
+
+        <rest path="/">
+#foreach( $method in $allMethods )
+
+          <$method.httpMethod.toLowerCase() uri="/$method.path" 
+#if ( $method.params.size() == 1 )
+            type="$method.params[0].paramType"
+#end    
+            outType="$method.returnType" 
+#if ( $method.httpMethod.toLowerCase() == 'post' || $method.httpMethod.toLowerCase() == 'put' ) 
+            consumes="application/json" 
+#end
+            >
+            <to uri="direct:$method.methodName"/>
+          </$method.httpMethod.toLowerCase()>
+#end
+        </rest>
+
+#foreach( $method in $allMethods )
+        <route id="$method.methodName">
+            <from uri="direct:$method.methodName" />
+            <log loggingLevel="INFO" message="$method.methodName"/>
+#if ( $method.path.contains('arg0') )
+#set( $Param = "(header.arg0)" )
+            <to uri="bean:targetBean?method=$method.methodName$Param"/>
+#else    
+            <to uri="bean:targetBean?method=$method.methodName"/>
+#end    
+        </route>
+#end
+
+    </camelContext>
+
+</beans>
