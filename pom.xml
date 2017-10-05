@@ -28,7 +28,7 @@
 		<system>jira</system>
 		<url>https://issues.jboss.org/browse/FUSETOOLS</url>
 	</issueManagement>
-  
+
 	<scm>
 		<connection>scm:git:git://git@github.com:jbosstools/jbosstools-fuse.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:jbosstools/jbosstools-fuse.git</developerConnection>
