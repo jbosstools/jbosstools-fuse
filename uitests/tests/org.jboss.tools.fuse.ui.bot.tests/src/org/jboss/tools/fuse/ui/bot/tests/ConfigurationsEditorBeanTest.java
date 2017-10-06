@@ -18,6 +18,8 @@ import static org.junit.Assert.assertFalse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -54,6 +56,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 import org.xml.sax.SAXException;
 
 /**
+ * Tests manipulating with beans in Configuration editor. All tests are performed on prepared projects.
  * 
  * @author apodhrad
  *
@@ -103,6 +106,18 @@ public class ConfigurationsEditorBeanTest {
 		new CleanErrorLogRequirement().fulfill();
 	}
 
+	/**
+	 * <p>
+	 * Tests deleting a bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Delete bean 'fooBean'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testDeletingBean() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -113,6 +128,21 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath(false, "/bean[@id='fooBean']");
 	}
 
+	/**
+	 * <p>
+	 * Tests adding a new bean with an existing Java class.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add a new bean</li>
+	 * <li>Set Id</li>
+	 * <li>Browse Java classes and select 'HelloBean'</li>
+	 * <li>Click 'Finish'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testAddingBeanWithExistingClass() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -130,6 +160,21 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath("singleton", "/bean[@id='newBeanWithExistingClass']/@scope");
 	}
 
+	/**
+	 * <p>
+	 * Tests adding a new bean with creating a new Java class.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add a bean</li>
+	 * <li>Set Id</li>
+	 * <li>Create new Java class 'NewBean'</li>
+	 * <li>Click 'Finish'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testAddingBeanAndCreatingNewClass() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -148,6 +193,21 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath("singleton", "/bean[@id='newBeanWithNewClass']/@scope");
 	}
 
+	/**
+	 * <p>
+	 * Tests add a new bean referencing a factory bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add new bean</li>
+	 * <li>Set Id</li>
+	 * <li>Select factory bean 'factoryBean'</li>
+	 * <li>Click 'Finish'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testAddingBeanWithFactoryBean() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -163,6 +223,21 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath("singleton", "/bean[@id='newBeanWithFactoryBean']/@scope");
 	}
 
+	/**
+	 * <p>
+	 * Tests whether we can create a bean with missing some mandatory attributes.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add new bean</li>
+	 * <li>Check if the button 'Finish' is enabled</li>
+	 * <li>Set id</li>
+	 * <li>Check if the button 'Finish' is enabled</li>
+	 * <li>Click 'Cancel'</li>
+	 * </ol>
+	 */
 	@Test
 	public void testAddingBeanWithoutMandatoryAttributes() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -170,12 +245,30 @@ public class ConfigurationsEditorBeanTest {
 		AddBeanWizard beanWizard = editor.addBean();
 		assertFalse("Finish button is enabled even there is no id specified", beanWizard.isFinishEnabled());
 		beanWizard.setId("BeanWithoutMandatoryAttributes");
-		assertFalse("Finish button is enabled even there is no class nor factory bean specified",
-				beanWizard.isFinishEnabled());
-		beanWizard.cancel();
-		editor.close(true);
+		try {
+			assertFalse("Finish button is enabled even there is no class nor factory bean specified",
+					beanWizard.isFinishEnabled());
+		} finally {
+			beanWizard.cancel();
+			editor.close(true);
+		}
 	}
 
+	/**
+	 * <p>
+	 * Tests whether we can add a bean with a non-existing Java class.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Add new bean</li>
+	 * <li>Set Id</li>
+	 * <li>Directly set class to 'hello.NonExistingClass'</li>
+	 * <li>Check if the button 'Finish' is enabled</li>
+	 * <li>Click 'Cancel'</li>
+	 * </ol>
+	 */
 	@Test
 	public void testAddingBeanWithNonExistingClass() {
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
@@ -189,6 +282,101 @@ public class ConfigurationsEditorBeanTest {
 		editor.close(true);
 	}
 
+	/**
+	 * <p>
+	 * Tests setting init-method in an existing bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse init-methods and select 'publicVoid()'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
+	@Test
+	public void testSettingInitMethod() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanClass();
+		FilteredSelectionDialog dialog = properties.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.selectItem("HelloBean - hello");
+		dialog.ok();
+		MethodSelectionDialog methodDialog = properties.browseInitMethod();
+		methodDialog.setText("publicVoid");
+		methodDialog.waitForItems();
+		methodDialog.selectItem("publicVoid()");
+		methodDialog.ok();
+		editor.close(true);
+
+		assertXPath("publicVoid", "/bean[@id='helloBean']/@init-method");
+	}
+
+	/**
+	 * <p>
+	 * Tests setting destroy-method in an existing bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse destroy-methods and select 'publicVoid()'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
+	@Test
+	public void testSettingDestroyMethod() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanClass();
+		FilteredSelectionDialog dialog = properties.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.selectItem("HelloBean - hello");
+		dialog.ok();
+		MethodSelectionDialog methodDialog = properties.browseDestroyMethod();
+		methodDialog.setText("publicVoid");
+		methodDialog.waitForItems();
+		methodDialog.selectItem("publicVoid()");
+		methodDialog.ok();
+		editor.close(true);
+
+		assertXPath("publicVoid", "/bean[@id='helloBean']/@destroy-method");
+	}
+
+	/**
+	 * <p>
+	 * Tests setting factory-method in an existing bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse factory-methods and select 'publicStaticFactory()'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testSettingFactoryMethod() {
 		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
@@ -215,6 +403,21 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath(false, "/bean[@id='helloBean']/@" + projectType.getFactoryElement());
 	}
 
+	/**
+	 * <p>
+	 * Tests setting factory-method in an existing bean referencing a factory bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select factory bean 'factoryBean'</li>
+	 * <li>Browse factory-methods and select 'publicCreateHelloBean()'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testSettingReferenceFactoryMethod() {
 		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
@@ -237,11 +440,23 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath("factoryBean", "/bean[@id='helloBean']/@" + projectType.getFactoryElement());
 	}
 
+	/**
+	 * <p>
+	 * Tests setting bean arguments.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean' and click 'Edit'</li>
+	 * <li>Add new argument (value='no type', type='')</li>
+	 * <li>Add new argument (value='string type', type='java.lang.String')</li>
+	 * <li>Click 'Finish'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testSettingBeanArguments() {
-		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
-		properties.open();
-
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
 		editor = new ConfigurationsEditor();
 		EditBeanWizard beanWizard = editor.editBean("helloBean");
@@ -262,11 +477,22 @@ public class ConfigurationsEditorBeanTest {
 		assertXPath("java.lang.String", "/bean[@id='helloBean']/" + argumentElement + "[@value='string type']/@type");
 	}
 
+	/**
+	 * <p>
+	 * Tests setting bean properties.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean' and click 'Edit'</li>
+	 * <li>Add new property (name='greeting', value='Hello World')</li>
+	 * <li>Click 'Finish'</li>
+	 * <li>Save and check the XML file</li>
+	 * </ol>
+	 */
 	@Test
 	public void testSettingBeanProperties() {
-		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
-		properties.open();
-
 		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
 		editor = new ConfigurationsEditor();
 		EditBeanWizard beanWizard = editor.editBean("helloBean");
@@ -280,6 +506,190 @@ public class ConfigurationsEditorBeanTest {
 
 		assertXPath(1, "/bean[@id='helloBean']/property");
 		assertXPath("Hello World", "/bean[@id='helloBean']/property[@name='greeting']/@value");
+	}
+
+	/**
+	 * <p>
+	 * Tests the list of factory methods in a bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse factory methods</li>
+	 * <li>Check if the list contains only public static methods from 'HelloBean'</li>
+	 * </ol>
+	 */
+	@Test
+	public void testListingFactoryMethods() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanClass();
+		FilteredSelectionDialog dialog = properties.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.selectItem("HelloBean - hello");
+		dialog.ok();
+
+		Set<String> actualMethods = new HashSet<>();
+		MethodSelectionDialog methodDialog = properties.browseFactoryMethod();
+		methodDialog.getItems().stream().forEach(item -> actualMethods.add(item.getText()));
+		methodDialog.cancel();
+		editor.close(true);
+
+		assertEquals("Only public static methods should be listed as possible factory methods",
+				asSet("publicStaticVoid()", "publicStaticFactory()"), actualMethods);
+	}
+
+	/**
+	 * <p>
+	 * Tests the list of factory methods in a bean referencing a factory bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select factory bean 'factoryBean'</li>
+	 * <li>Browse factory methods</li>
+	 * <li>Check if the list contains only public non-static methods from 'FactoryBean'</li>
+	 * </ol>
+	 */
+	@Test
+	public void testListingReferenceFactoryMethods() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanReference();
+		properties.selectBeanReference("factoryBean");
+
+		Set<String> actualMethods = new HashSet<>();
+		MethodSelectionDialog methodDialog = properties.browseFactoryMethod();
+		methodDialog.getItems().stream().forEach(item -> actualMethods.add(item.getText()));
+		methodDialog.cancel();
+		editor.close(true);
+
+		assertEquals("Only public non-static methods should be listed as possible reference factory methods",
+				asSet("publicCreateHelloBean()"), actualMethods);
+	}
+
+	/**
+	 * <p>
+	 * Tests the list of init methods in a bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse init methods</li>
+	 * <li>Check if the list contains only public void parameter-free methods from 'HelloBean'</li>
+	 * </ol>
+	 */
+	@Test
+	public void testListingInitMethods() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanClass();
+		FilteredSelectionDialog dialog = properties.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.selectItem("HelloBean - hello");
+		dialog.ok();
+
+		Set<String> actualMethods = new HashSet<>();
+		MethodSelectionDialog methodDialog = properties.browseInitMethod();
+		methodDialog.getItems().stream().forEach(item -> actualMethods.add(item.getText()));
+		methodDialog.cancel();
+		editor.close(true);
+
+		// Blueprint doesn't allow specifying methods with a return value
+		if (projectType.equals(ProjectType.BLUEPRINT)) {
+			assertEquals("Only public void parameter-free methods should be listed as possible init methods",
+					asSet("publicVoid()", "publicStaticVoid()"), actualMethods);
+		}
+		// Spring allows specifying methods with a return value
+		if (projectType.equals(ProjectType.SPRING)) {
+			assertEquals("Only public parameter-free methods should be listed as possible init methods",
+					asSet("publicVoid()", "publicStaticVoid()", "getName()", "hello()", "publicFactory()",
+							"publicStaticFactory()"),
+					actualMethods);
+		}
+	}
+
+	/**
+	 * <p>
+	 * Tests the list of destroy methods in a bean.
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Open Properties view</li>
+	 * <li>Open a camel context in Camel editor</li>
+	 * <li>Switch to Configurations</li>
+	 * <li>Select bean 'helloBean'</li>
+	 * <li>Select Java class 'HelloBean'</li>
+	 * <li>Browse destroy methods</li>
+	 * <li>Check if the list contains only public void parameter-free methods from 'HelloBean'</li>
+	 * </ol>
+	 */
+	@Test
+	public void testListingDestroyMethods() {
+		ConfigurationsPropertiesView properties = new ConfigurationsPropertiesView();
+		properties.open();
+
+		new CamelProject(projectName).openCamelContext(projectType.getCamelContext());
+		editor = new ConfigurationsEditor();
+		editor.selectBean("helloBean");
+		properties.activate();
+		properties.toggleBeanClass();
+		FilteredSelectionDialog dialog = properties.browseClass();
+		dialog.setText("HelloBean");
+		dialog.waitForItems();
+		dialog.selectItem("HelloBean - hello");
+		dialog.ok();
+
+		Set<String> actualMethods = new HashSet<>();
+		MethodSelectionDialog methodDialog = properties.browseDestroyMethod();
+		methodDialog.getItems().stream().forEach(item -> actualMethods.add(item.getText()));
+		methodDialog.cancel();
+		editor.close(true);
+
+		// Blueprint doesn't allow specifying methods with a return value
+		if (projectType.equals(ProjectType.BLUEPRINT)) {
+			assertEquals("Only public void parameter-free methods should be listed as possible destroy methods",
+					asSet("publicVoid()", "publicStaticVoid()"), actualMethods);
+		}
+		// Spring allows specifying methods with a return value
+		if (projectType.equals(ProjectType.SPRING)) {
+			assertEquals("Only public parameter-free methods should be listed as possible destroy methods",
+					asSet("publicVoid()", "publicStaticVoid()", "getName()", "hello()", "publicFactory()",
+							"publicStaticFactory()"),
+					actualMethods);
+		}
+	}
+
+	private static Set<String> asSet(String... items) {
+		return new HashSet<String>(Arrays.asList(items));
 	}
 
 	private void assertXPath(String expectedResult, String xPathExpression) {

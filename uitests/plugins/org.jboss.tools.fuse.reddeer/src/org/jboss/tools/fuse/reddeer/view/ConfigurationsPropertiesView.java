@@ -77,14 +77,12 @@ public class ConfigurationsPropertiesView extends PropertySheet {
 	}
 
 	public MethodSelectionDialog browseInitMethod() {
-		toggleBeanReference();
-		new PushButton(this, 1, new WithMnemonicTextMatcher("...")).click();
+		new PushButton(this, 2, new WithMnemonicTextMatcher("...")).click();
 		return new MethodSelectionDialog();
 	}
 
 	public MethodSelectionDialog browseDestroyMethod() {
-		toggleBeanReference();
-		new PushButton(this, 1, new WithMnemonicTextMatcher("...")).click();
+		new PushButton(this, 3, new WithMnemonicTextMatcher("...")).click();
 		return new MethodSelectionDialog();
 	}
 
