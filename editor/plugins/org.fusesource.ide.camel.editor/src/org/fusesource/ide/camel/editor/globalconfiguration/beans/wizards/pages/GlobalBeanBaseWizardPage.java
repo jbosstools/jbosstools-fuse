@@ -101,7 +101,8 @@ public abstract class GlobalBeanBaseWizardPage extends WizardPage {
 		
 		MultiValidator beanRefAndClassCrossValidator = new BeanRefAndClassCrossValidator(classUiObservable, refUiObservable);
 		ControlDecorationSupport.create(beanRefAndClassCrossValidator, SWT.TOP | SWT.LEFT);
-
+		dbc.addValidationStatusProvider(beanRefAndClassCrossValidator);
+		
 		setControl(composite);
 		WizardPageSupport.create(this, dbc);
 	}
