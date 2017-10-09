@@ -77,7 +77,12 @@ public class CamelUtils {
 	}
 	
 	public static IProject project() {
-        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
-        return editor == null ? null : editor.getWorkspaceProject();
+		CamelDesignEditor editor = CamelUtils.getDiagramEditor();
+		return editor == null ? null : editor.getWorkspaceProject();
+	}
+	
+	public static IProject project(IFeatureProvider fp) {
+		CamelDesignEditor editor = CamelUtils.getDiagramEditor(fp.getDiagramTypeProvider());
+		return editor == null ? null : editor.getWorkspaceProject();
 	}
 }

@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ElementChangedEvent;
 import org.eclipse.jdt.core.IElementChangedListener;
 import org.eclipse.jdt.core.IJavaElement;
@@ -37,6 +38,7 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 public class ProjectClasspathChangedListener implements IElementChangedListener, IResourceChangeListener {
 
 	private Map<IProject, String> knownProjects = new HashMap<>();
+	private boolean isActivated = true;
 	
 	/**
 	 * creates a change listener watching for events in the classpath of the project
@@ -49,25 +51,27 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	
 	@Override
 	public void elementChanged(ElementChangedEvent event) {
-		visit(event.getDelta());
+		if (isActivated) {
+			visit(event.getDelta());
+		}
 	}
 
 	@Override
     public void resourceChanged(IResourceChangeEvent event) {
-        IResource rsrc = event.getResource();
-        if (rsrc instanceof IProject) {
-        	IProject prj = (IProject)rsrc;
-            if (event.getType() == IResourceChangeEvent.PRE_CLOSE || 
-            	event.getType() == IResourceChangeEvent.PRE_DELETE) {
-            	// closed and deleted projects are not considered
-            	knownProjects.remove(prj);
-            } else {
-            	if (!knownProjects.containsKey(prj)) {
-            		initializeProject(prj);
-            	}
-            }            	
-        }
-    }
+		IResource rsrc = event.getResource();
+		if (rsrc instanceof IProject) {
+			IProject prj = (IProject)rsrc;
+			if (event.getType() == IResourceChangeEvent.PRE_CLOSE || 
+					event.getType() == IResourceChangeEvent.PRE_DELETE) {
+				// closed and deleted projects are not considered
+				knownProjects.remove(prj);
+			} else {
+				if (isActivated && !knownProjects.containsKey(prj)) {
+					initializeProject(prj);
+				}
+			}            	
+		}
+	}
 	
 	private void initializeProject(IProject project) {
 		notifyClasspathChanged(getJavaProjectForProject(project));
@@ -129,7 +133,7 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 	}
 	
 	private void notifyClasspathChanged(IJavaProject project) {
-    	// refresh catalog if needed
+		// refresh catalog if needed
 		IProject prj = project.getProject();
 		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(prj);
 		if (camelVersion != null) {
@@ -142,8 +146,16 @@ public class ProjectClasspathChangedListener implements IElementChangedListener,
 			}
 			if (camelVersionChanged) {
 				knownProjects.put(prj, camelVersion);
-				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj);
+				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, new NullProgressMonitor());
 			}
 		}
-    }
+	}
+
+	public void deactivate() {
+		this.isActivated = false;
+	}
+
+	public void activate() {
+		this.isActivated = true;
+	}
 }

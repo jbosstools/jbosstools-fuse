@@ -60,6 +60,8 @@ import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.model.GlobalPreferences;
 import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
@@ -96,10 +98,11 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
+			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
 			// first create the project skeleton
 			BasicProjectCreator c = new BasicProjectCreator(metadata);
-			boolean ok = c.create(subMonitor.newChild(1));
+			boolean ok = c.create(subMonitor.split(1));
 			IProject prj = c.getProject();
 						
 			if (ok) {
@@ -111,7 +114,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 				}
 				// now execute the template
 				try {
-					template.create(prj, metadata, subMonitor.newChild(1));
+					template.create(prj, metadata, subMonitor.split(1));
 				} catch (CoreException ex) {
 					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 				}
@@ -125,14 +128,14 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			if (switchPerspective) {
 				// switch to Fuse perspective if necessary.
 				switchToFusePerspective(workbenchWindow);
-				subMonitor.worked(1);
 			}
+			subMonitor.setWorkRemaining(6);
 
 			// refresh
 			try {
-				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 				// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
-				updateBundlePluginConfiguration(prj, subMonitor.newChild(1));
+				updateBundlePluginConfiguration(prj, subMonitor.split(1));
 			} catch (CoreException ex) {
 				ProjectTemplatesActivator.pluginLog().logError(ex);
 			}
@@ -140,17 +143,21 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
 			if (rs != null && rs.exists()) {
 				try {
-					rs.delete(true, subMonitor.newChild(1));
+					rs.delete(true, subMonitor.split(1));
 				} catch (CoreException ex) {
 					ProjectTemplatesActivator.pluginLog().logError(ex);
 				}
 			}
+			subMonitor.setWorkRemaining(3);
+			
+			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1));
+			
 			// finally open the camel context file
-			openCamelContextFile(prj, subMonitor.newChild(1));
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
-			subMonitor.done();
+			openCamelContextFile(prj, subMonitor.split(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
+			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
 		}
 	}
 

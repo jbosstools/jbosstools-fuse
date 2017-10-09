@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
@@ -118,7 +119,7 @@ public class ProviderHelper {
      * @return an array of create features for the palette
      */
     public static ICreateFeature[] getCreateFeatures(IFeatureProvider fp) {
-    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
+    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project(fp), new NullProgressMonitor());
     	Collection<Eip> list = model.getEips();
     	return list.stream()
     		.map(eip -> new CreateFigureFeature(fp, convertCamelCase(eip.getName()), eip.getDescription(), eip))
@@ -131,7 +132,7 @@ public class ProviderHelper {
      * @param imageProvider the image provider to use
      */
     public static void addFigureIcons(ImageProvider imageProvider) {
-    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
+    	CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project(), new NullProgressMonitor());
     	model.getEips().forEach(imageProvider::addIconsForEIP);
     }
 

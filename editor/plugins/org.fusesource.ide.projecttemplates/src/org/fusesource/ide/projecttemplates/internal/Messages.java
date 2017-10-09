@@ -95,6 +95,9 @@ public class Messages extends NLS {
 	
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogTitle;
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogText;
+
+	public static String configuringFacets;
+	public static String installingRequiredFacetsForCamelProject;
 	
 	static {
         // initialize resource bundle
