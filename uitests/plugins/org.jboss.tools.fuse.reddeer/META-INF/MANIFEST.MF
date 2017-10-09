@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.hamcrest.core;bundle-version="1.3.0",
  org.eclipse.reddeer.go;bundle-version="2.0.0",
  org.eclipse.reddeer.gef;bundle-version="2.0.0",
- org.eclipse.reddeer.graphiti;bundle-version="2.0.0"
+ org.eclipse.reddeer.graphiti;bundle-version="2.0.0",
+ org.eclipse.reddeer.eclipse
 Export-Package: org.jboss.tools.fuse.reddeer,
  org.jboss.tools.fuse.reddeer.component,
  org.jboss.tools.fuse.reddeer.condition,

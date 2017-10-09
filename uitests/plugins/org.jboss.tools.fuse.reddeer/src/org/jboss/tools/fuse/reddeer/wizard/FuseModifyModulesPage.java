@@ -13,7 +13,6 @@ package org.jboss.tools.fuse.reddeer.wizard;
 import org.eclipse.reddeer.core.reference.ReferencedComposite;
 import org.eclipse.reddeer.eclipse.wst.server.ui.wizard.ModifyModulesPage;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
-import org.eclipse.reddeer.swt.impl.button.PushButton;
 
 /**
  * Wizard page for adding and removing Fuse modules on the Fuse server.
@@ -21,10 +20,6 @@ import org.eclipse.reddeer.swt.impl.button.PushButton;
  * @author tsedmik
  */
 public class FuseModifyModulesPage extends ModifyModulesPage {
-
-	public FuseModifyModulesPage() {
-		super(null);
-	}
 
 	public FuseModifyModulesPage(ReferencedComposite ref) {
 		super(ref);
@@ -39,13 +34,5 @@ public class FuseModifyModulesPage extends ModifyModulesPage {
 	public void setImmeadiatelyPublishing(boolean value) {
 
 		new CheckBox().toggle(value);
-	}
-
-	/**
-	 * Closes the page via 'Finish' button
-	 */
-	public void close() {
-
-		new PushButton("Finish").click();
 	}
 }
