@@ -15,7 +15,12 @@ import java.util.Map;
 
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
+import org.fusesource.ide.camel.model.service.core.internal.Messages;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 
@@ -27,6 +32,7 @@ public class CamelCatalogCacheManager {
 	private static Map<CamelCatalogCoordinates, CamelModel> camelModelCache = new HashMap<>();
 
 	private static final CamelCatalogCacheManager instance = new CamelCatalogCacheManager();
+	private static CamelModel lastRetrievedCamelCatalog;
 
 	protected CamelCatalogCacheManager() {
 	}
@@ -48,13 +54,16 @@ public class CamelCatalogCacheManager {
 	 * 
 	 * @param coordinates
 	 *            the coordinates
+	 * @param monitor 
 	 * @return the cached catalog or an empty one if not yet in cache
 	 */
-	private synchronized CamelModel getCachedCatalog(CamelCatalogCoordinates coordinates) {
+	private synchronized CamelModel getCachedCatalog(CamelCatalogCoordinates coordinates, IProgressMonitor monitor) {
 		if (!camelModelCache.containsKey(coordinates)) {
-			initializeCatalog(coordinates);
+			initializeCatalog(coordinates, monitor);
 		}
-		return camelModelCache.get(coordinates);
+		CamelModel camelModel = camelModelCache.get(coordinates);
+		lastRetrievedCamelCatalog = camelModel;
+		return camelModel;
 	}
 
 	/**
@@ -72,22 +81,11 @@ public class CamelCatalogCacheManager {
 	 * 
 	 * @param project
 	 * @return	the model or NULL
+	 * @deprecated prefer to use the version with progress Monitor as first load can take several minutes
 	 */
+	@Deprecated
 	public CamelModel getCamelModelForProject(IProject project) {
-		CamelCatalogCoordinates coords;
-		if (project == null) {
-			coords = CamelCatalogUtils.getDefaultCatalogCoordinates();
-		} else {
-			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project);
-		}
-		// initialize repos for the dep lookup
-		if (project != null) {
-			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(new CamelMavenUtils().getRepositories(project), coords);
-		}
-		if (coords != null) {
-			return getCachedCatalog(coords);
-		}
-		return null;
+		return getCamelModelForProject(project, new NullProgressMonitor());
 	}
 	
 	public CamelModel getDefaultCamelModel(String version) {
@@ -96,20 +94,64 @@ public class CamelCatalogCacheManager {
 		if (CamelCatalogUtils.isCamelVersionWithoutProviderSupport(version) ) {
 			coords.setArtifactId(CamelCatalogUtils.CATALOG_CAMEL_ARTIFACTID);
 		}
-		return getCachedCatalog(coords);
+		return getCachedCatalog(coords, new NullProgressMonitor());
 	}
 	
 	/**
 	 * initializes the catalog for the given coords
 	 * 
 	 * @param coordinates
+	 * @param monitor 
 	 */
-	protected void initializeCatalog(CamelCatalogCoordinates coordinates) {
+	protected void initializeCatalog(CamelCatalogCoordinates coordinates, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.initializingCamelModel, coordinates.getVersion()), 1);
 		Dependency dep = new Dependency();
 		dep.setGroupId(coordinates.getGroupId());
 		dep.setArtifactId(coordinates.getArtifactId());
 		dep.setVersion(coordinates.getVersion());
 		
 		camelModelCache.put(coordinates, CamelServiceManagerUtil.getManagerService().getCamelModel(coordinates.getVersion(), CamelCatalogUtils.getRuntimeProviderFromDependency(dep)));
+		subMonitor.setWorkRemaining(0);
 	}
+	
+	public CamelModel getCamelModelForProject(IProject project, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.retrievingCamelModel, 2);
+		CamelCatalogCoordinates coords;
+		if (project == null) {
+			if(lastRetrievedCamelCatalog != null) {
+				return lastRetrievedCamelCatalog;
+			}
+			coords = CamelCatalogUtils.getDefaultCatalogCoordinates();
+		} else {
+			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project);
+			// initialize repos for the dep lookup
+			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(new CamelMavenUtils().getRepositories(project), coords);
+		}
+
+		subMonitor.setWorkRemaining(1);
+		if (coords != null) {
+			return getCachedCatalog(coords, subMonitor.split(1));
+		}
+		subMonitor.setWorkRemaining(0);
+		return null;
+	}
+
+	/**
+	 *  /!\ public for test purpose
+	 *  
+	 * @return
+	 */
+	public Map<CamelCatalogCoordinates, CamelModel> getCachedCatalog() {
+		return camelModelCache;
+	}
+	
+	/**
+	 *  /!\ public for test purpose
+	 *  
+	 * @param cachedCatalog
+	 */
+	public static void setCachedCatalog(Map<CamelCatalogCoordinates, CamelModel> cachedCatalog) {
+		camelModelCache = cachedCatalog;
+	}
+
 }

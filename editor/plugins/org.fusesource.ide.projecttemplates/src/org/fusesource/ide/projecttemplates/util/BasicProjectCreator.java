@@ -52,11 +52,11 @@ public class BasicProjectCreator {
 			if (specificLocationPath != null) {
 				IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(metadata.getProjectName());
 				description.setLocation(specificLocationPath);
-				project.create(description, subMonitor.newChild(1));
+				project.create(description, subMonitor.split(1));
 			} else {
-				project.create(subMonitor.newChild(1));
+				project.create(subMonitor.split(1));
 			}
-			project.open(subMonitor.newChild(1));
+			project.open(subMonitor.split(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;

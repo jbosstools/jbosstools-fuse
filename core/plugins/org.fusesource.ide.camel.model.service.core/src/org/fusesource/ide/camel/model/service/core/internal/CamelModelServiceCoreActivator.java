@@ -114,5 +114,9 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
 	 */
 	public static StatusFactory statusFactory() {
 		return getDefault().statusFactoryInternal();
-}
+	}
+	
+	public static ProjectClasspathChangedListener getProjectClasspathChangeListener() {
+		return listener;
+	}
 }

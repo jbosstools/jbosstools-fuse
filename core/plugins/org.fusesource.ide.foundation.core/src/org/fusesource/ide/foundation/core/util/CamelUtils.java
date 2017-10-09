@@ -250,9 +250,9 @@ public class CamelUtils {
 						// we need to check if the id of the editor ref matches our editor id
 						// and also if the active editor is equal to the ref editor otherwise we might pick
 						// a wrong editor and return it...bad thing
-						if (ref.getId().equals(CAMEL_EDITOR_ID) && 
+						if (CAMEL_EDITOR_ID.equals(ref.getId()) && 
 							page.getActiveEditor().equals(ref.getEditor(false))) {
-							// ok, we found a route editor and it is also the acitve editor
+							// ok, we found a route editor and it is also the active editor
 							return ref.getEditor(true);
 						}
 					}
