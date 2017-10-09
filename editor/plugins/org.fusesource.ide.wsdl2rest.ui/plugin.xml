@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.fusesource.ide.newwizards"
+            class="org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard"
+            hasPages="true"
+            id="org.fusesource.ide.wsdl2rest.wizard"
+            name="WSDL to Camel Rest DSL Wizard">
+      </wizard>
+   </extension>
+
+</plugin>
