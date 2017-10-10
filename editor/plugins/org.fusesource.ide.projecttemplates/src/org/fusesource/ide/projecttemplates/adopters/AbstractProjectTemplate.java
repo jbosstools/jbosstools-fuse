@@ -64,13 +64,14 @@ public abstract class AbstractProjectTemplate {
 	}
 
 	private void refreshProjectSync(IProject project, IProgressMonitor monitor) throws CoreException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
 		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, subMonitor.split(1));
 		} catch (OperationCanceledException | InterruptedException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		}
+		subMonitor.setWorkRemaining(0);
 	}
 	
 	/**

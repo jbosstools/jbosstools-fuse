@@ -11,9 +11,11 @@
 package org.fusesource.ide.camel.model.service.core.catalog.cache;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Repository;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -115,7 +117,7 @@ public class CamelCatalogCacheManager {
 	}
 	
 	public CamelModel getCamelModelForProject(IProject project, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.retrievingCamelModel, 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.retrievingCamelModel, 3);
 		CamelCatalogCoordinates coords;
 		if (project == null) {
 			if(lastRetrievedCamelCatalog != null) {
@@ -123,9 +125,10 @@ public class CamelCatalogCacheManager {
 			}
 			coords = CamelCatalogUtils.getDefaultCatalogCoordinates();
 		} else {
-			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project);
+			coords = CamelCatalogUtils.getCatalogCoordinatesForProject(project, subMonitor.split(1));
 			// initialize repos for the dep lookup
-			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(new CamelMavenUtils().getRepositories(project), coords);
+			List<Repository> mavenRepositories = new CamelMavenUtils().getRepositories(project, subMonitor.split(1));
+			CamelServiceManagerUtil.getManagerService().updateMavenRepositoryLookup(mavenRepositories, coords);
 		}
 
 		subMonitor.setWorkRemaining(1);
