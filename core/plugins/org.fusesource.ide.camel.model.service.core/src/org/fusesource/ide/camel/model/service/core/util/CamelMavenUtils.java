@@ -23,6 +23,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
@@ -37,12 +38,12 @@ public class CamelMavenUtils {
 
 	public static final QualifiedName CAMEL_VERSION_QNAME = new QualifiedName(CamelModelServiceCoreActivator.PLUGIN_ID, "camelVersionString");
 		
-	public List<Repository> getRepositories(IProject project) {
+	public List<Repository> getRepositories(IProject project, IProgressMonitor monitor) {
 		IMavenProjectFacade projectFacade = getMavenProjectFacade(project);
 		List<Repository> reps = new ArrayList<>();
 		if (projectFacade != null) {
 			try {
-				MavenProject mavenProject = projectFacade.getMavenProject(new NullProgressMonitor());
+				MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 				reps.addAll(getRepositories(mavenProject));
 			} catch (CoreException e) {
 				CamelModelServiceCoreActivator.pluginLog().logError(

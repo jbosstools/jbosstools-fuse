@@ -25,7 +25,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
@@ -307,9 +307,9 @@ public class CamelCatalogUtils {
 		return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_KARAF_GROUPID, CATALOG_KARAF_ARTIFACTID, DEFAULT_CAMEL_VERSION);
 	}
 	
-	public static CamelCatalogCoordinates getCatalogCoordinatesForProject(IProject project) {
+	public static CamelCatalogCoordinates getCatalogCoordinatesForProject(IProject project, IProgressMonitor monitor) {
 		String camelVersion = new CamelMavenUtils().getCamelVersionFromMaven(project);
-		String runtimeProvider = CamelCatalogUtils.getRuntimeprovider(project, new NullProgressMonitor());
+		String runtimeProvider = CamelCatalogUtils.getRuntimeprovider(project, monitor);
 		if (CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equalsIgnoreCase(runtimeProvider)) {
 			return CamelCatalogUtils.getCatalogCoordinatesFor(CATALOG_SPRINGBOOT_GROUPID, CATALOG_SPRINGBOOT_ARTIFACTID, camelVersion);
 		} else {
@@ -319,11 +319,12 @@ public class CamelCatalogUtils {
 	}
 	
 	public static String getRuntimeprovider(IProject camelProject, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
 		if(camelProject != null){
-			IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(camelProject, monitor);
+			IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(camelProject, subMonitor.split(1));
 			try {
 				if(m2prj != null){
-					MavenProject mavenProject = m2prj.getMavenProject(monitor);
+					MavenProject mavenProject = m2prj.getMavenProject(subMonitor.split(1));
 					if(mavenProject != null){
 						List<org.apache.maven.model.Dependency> dependencies = mavenProject.getDependencies();
 						return getRuntimeProviderFromDependencyList(dependencies);
