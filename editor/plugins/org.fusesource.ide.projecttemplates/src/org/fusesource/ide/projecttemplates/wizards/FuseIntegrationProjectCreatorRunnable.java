@@ -55,10 +55,10 @@ import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.model.GlobalPreferences;
 import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
+import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
@@ -143,14 +143,14 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 			IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
 			if (rs != null && rs.exists()) {
 				try {
-					rs.delete(true, subMonitor.split(1));
+					rs.delete(true, subMonitor.split(1, SubMonitor.SUPPRESS_SUBTASK));
 				} catch (CoreException ex) {
 					ProjectTemplatesActivator.pluginLog().logError(ex);
 				}
 			}
 			subMonitor.setWorkRemaining(3);
 			
-			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1));
+			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			
 			// finally open the camel context file
 			openCamelContextFile(prj, subMonitor.split(1));
@@ -268,7 +268,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	 */
 	void switchToFusePerspective(final IWorkbenchWindow workbenchWindow) {
 		IPerspectiveDescriptor activePerspective = workbenchWindow.getActivePage().getPerspective();
-		if (activePerspective == null || !activePerspective.getId().equals(FUSE_PERSPECTIVE_ID)) {
+		if (activePerspective == null || !FUSE_PERSPECTIVE_ID.equals(activePerspective.getId())) {
 			workbenchWindow.getShell().getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
