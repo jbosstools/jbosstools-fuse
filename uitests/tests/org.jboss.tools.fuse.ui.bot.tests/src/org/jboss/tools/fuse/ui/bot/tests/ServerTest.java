@@ -81,12 +81,11 @@ public class ServerTest extends DefaultTest {
 
 		ServerKaraf fuse = (ServerKaraf) serverRequirement.getConfiguration().getServer();
 
-		FuseServerManipulator.addServerRuntime(fuse.getRuntimeType(), fuse.getHome());
+		FuseServerManipulator.addServerRuntime(fuse);
 		assertEquals("New server runtime is not listed in Server Runtimes", 1,
 				FuseServerManipulator.getServerRuntimes().size());
 		FuseServerManipulator.editServerRuntime(fuse.getRuntimeType(), fuse.getHome());
-		FuseServerManipulator.addServer(fuse.getServerType(), fuse.getHost(), fuse.getName(), fuse.getPort(),
-				fuse.getUsername(), fuse.getPassword());
+		FuseServerManipulator.addServer(fuse);
 		assertEquals("No server's record is in Servers View", 1, FuseServerManipulator.getServers().size());
 		assertTrue("New server is not listed in Servers View", FuseServerManipulator.isServerPresent(fuse.getName()));
 		FuseServerManipulator.startServer(fuse.getName());

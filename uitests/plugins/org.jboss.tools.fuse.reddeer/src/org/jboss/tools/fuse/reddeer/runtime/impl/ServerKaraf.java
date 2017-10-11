@@ -46,7 +46,7 @@ public class ServerKaraf extends ServerBase {
 
 	private final String category = "Apache";
 
-	private final String label = "Apache Karaf";
+	private final String label = "Karaf";
 
 	private String host;
 	private String port;

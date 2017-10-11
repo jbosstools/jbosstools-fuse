@@ -20,7 +20,7 @@
 		<integrationTestsSystemProperties>-Dorg.jboss.tools.central.donotshow=true -Dreddeer.skipUnfixedIssues=${reddeer.skipUnfixedIssues} -Dorg.eclipse.swt.internal.gtk.disablePrinting</integrationTestsSystemProperties>
 		<test.installPath.OSX/>
 		<karaf.version>3.0.3</karaf.version>
-		<rd.config>${project.build.directory}/requirements/karaf-3.0.3.xml</rd.config>
+		<rd.config>${project.build.directory}/requirements/karaf-3.0.3.json</rd.config>
 		<reddeerConfig>-Drd.config=${rd.config}</reddeerConfig>
 		<enable.debug.log>false</enable.debug.log>
 		<systemProperties>${integrationTestsSystemProperties} ${reddeerConfig}</systemProperties>
@@ -30,7 +30,7 @@
 		<staging.repos>false</staging.repos>
 		<rd.skipUnfixedIssues>true</rd.skipUnfixedIssues>
 		<skipUITests>true</skipUITests>
-		<skipRequirements>true</skipRequirements>
+		<skipRequirements>false</skipRequirements>
 	</properties>
 
 	<build>
@@ -41,7 +41,7 @@
 				<version>2.6</version>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copy-files</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>copy-resources</goal>

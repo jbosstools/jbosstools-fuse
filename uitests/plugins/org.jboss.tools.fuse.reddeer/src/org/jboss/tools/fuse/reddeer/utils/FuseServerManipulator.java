@@ -42,6 +42,7 @@ import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.preference.FuseServerRuntimePreferencePage;
+import org.jboss.tools.fuse.reddeer.runtime.impl.ServerKaraf;
 import org.jboss.tools.fuse.reddeer.wizard.FuseModifyModulesPage;
 import org.jboss.tools.fuse.reddeer.wizard.FuseServerWizard;
 
@@ -54,12 +55,12 @@ public class FuseServerManipulator {
 
 	private static final Logger log = Logger.getLogger(FuseServerManipulator.class);
 
-	public static void addServerRuntime(String type, String path) {
+	public static void addServerRuntime(ServerKaraf base) {
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
 		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
 		dialog.open();
 		dialog.select(serverRuntime);
-		serverRuntime.addServerRuntime(type, path);
+		serverRuntime.addServerRuntime(base);
 		dialog.ok();
 	}
 
@@ -114,18 +115,16 @@ public class FuseServerManipulator {
 		}
 	}
 
-	public static void addServer(String type, String hostname, String name, String portNumber, String userName,
-			String password, String... projects) {
-
+	public static void addServer(ServerKaraf base, String... projects) {
 		FuseServerWizard serverWizard = new FuseServerWizard();
-		serverWizard.setType(type);
-		serverWizard.setHostName(hostname);
-		serverWizard.setName(name);
-		serverWizard.setPortNumber(portNumber);
-		serverWizard.setUserName(userName);
-		serverWizard.setPassword(password);
+		serverWizard.setType(base.getServerType());
+		serverWizard.setHostName(base.getHost());
+		serverWizard.setName(base.getName());
+		serverWizard.setPortNumber(base.getPort());
+		serverWizard.setUserName(base.getUsername());
+		serverWizard.setPassword(base.getPassword());
 		serverWizard.setProjects(projects);
-		serverWizard.execute();
+		serverWizard.execute(base.getCategory());
 	}
 
 	public static void removeServer(String name) {

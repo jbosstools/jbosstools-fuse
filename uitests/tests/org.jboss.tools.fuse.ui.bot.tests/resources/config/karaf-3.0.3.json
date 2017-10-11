@@ -1,0 +1,18 @@
+{
+  "org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse": [
+    {
+      "camelVersion": "2.15.1.redhat-620133",
+      "server":
+      {
+        "@type": "karaf",
+        "name": "Karaf 3.0.3",
+        "version": "3.0",
+        "home": "${project.build.directory}/requirements/apache-karaf-3.0.3",
+        "host": "localhost",
+        "port": "8101",
+        "username": "karaf",
+        "password": "karaf"
+      }
+    }
+  ]
+}

@@ -28,7 +28,6 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
  */
 public class FuseServerWizard extends NewServerWizard {
 
-	private static final String SERVER_SECTION = "Red Hat JBoss Middleware";
 	private static final String HOST_NAME = "Server's host name:";
 	private static final String NAME = "Server name:";
 	private static final String PORT_NUMBER = "SSH Port: ";
@@ -75,10 +74,9 @@ public class FuseServerWizard extends NewServerWizard {
 		this.projects = projects;
 	}
 
-	public void execute() {
+	public void execute(String category) {
 		open();
-
-		new DefaultTreeItem(SERVER_SECTION, type).select();
+		new DefaultTreeItem(category, type).select();
 		if (name != null) {
 			new LabeledText(NAME).setText(name);
 		}
