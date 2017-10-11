@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preference;
 
-import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabels_errorMessageDuplicateComponent;
-import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabels_errorMessageEmptyComponent;
-import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabels_errorMessageWrongCharacter;
+import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabelsErrorMessageDuplicateComponent;
+import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabelsErrorMessageEmptyComponent;
+import static org.fusesource.ide.camel.editor.internal.UIMessages.preferredLabelsErrorMessageWrongCharacter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -36,19 +36,19 @@ public class ComponentValidatorTest {
 
 	@Test
 	public void testErrorMessageForEmptyInput() {
-		assertEquals(preferredLabels_errorMessageEmptyComponent, new ComponentValidator().isValid(""));
+		assertEquals(preferredLabelsErrorMessageEmptyComponent, new ComponentValidator().isValid(""));
 	}
 
 	@Test
 	public void testErrorMessageForInputWithSpecialCharacter() {
-		assertEquals(preferredLabels_errorMessageWrongCharacter, new ComponentValidator().isValid("abc;"));
-		assertEquals(preferredLabels_errorMessageWrongCharacter, new ComponentValidator().isValid("abc/xyz"));
+		assertEquals(preferredLabelsErrorMessageWrongCharacter, new ComponentValidator().isValid("abc;"));
+		assertEquals(preferredLabelsErrorMessageWrongCharacter, new ComponentValidator().isValid("abc/xyz"));
 	}
 
 	@Test
 	public void testErrorMessageForDuplicateInput() {
-		assertEquals(preferredLabels_errorMessageDuplicateComponent, new ComponentValidator("abc").isValid("abc"));
-		assertEquals(preferredLabels_errorMessageDuplicateComponent,
+		assertEquals(preferredLabelsErrorMessageDuplicateComponent, new ComponentValidator("abc").isValid("abc"));
+		assertEquals(preferredLabelsErrorMessageDuplicateComponent,
 				new ComponentValidator("abc", "xyz").isValid("xyz"));
 	}
 

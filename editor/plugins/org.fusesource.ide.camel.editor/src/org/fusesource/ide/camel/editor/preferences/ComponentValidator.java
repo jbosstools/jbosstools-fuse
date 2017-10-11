@@ -36,13 +36,13 @@ public class ComponentValidator implements IInputValidator {
 	@Override
 	public String isValid(String newText) {
 		if (newText.isEmpty()) {
-			return UIMessages.preferredLabels_errorMessageEmptyComponent;
+			return UIMessages.preferredLabelsErrorMessageEmptyComponent;
 		}
 		if (newText.matches(".*[\\W&&[^-]].*")) {
-			return UIMessages.preferredLabels_errorMessageWrongCharacter;
+			return UIMessages.preferredLabelsErrorMessageWrongCharacter;
 		}
 		if (isDuplicate(newText)) {
-			return UIMessages.preferredLabels_errorMessageDuplicateComponent;
+			return UIMessages.preferredLabelsErrorMessageDuplicateComponent;
 		}
 		return null;
 	}

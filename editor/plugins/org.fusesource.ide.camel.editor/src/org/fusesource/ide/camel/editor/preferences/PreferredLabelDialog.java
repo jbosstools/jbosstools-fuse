@@ -24,11 +24,9 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,7 +39,6 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.internal.CamelService;
 
 /**
@@ -124,17 +121,14 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	@Override
 	public void create() {
 		super.create();
-		setTitle(UIMessages.preferredLabels_title);
+		setTitle(UIMessages.preferredLabelsTitle);
 
-		componentCombo.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection selection = event.getSelection();
-				if (selection instanceof StructuredSelection) {
-					Object selectedObject = ((StructuredSelection) selection).getFirstElement();
-					if (selectedObject instanceof Eip) {
-						parameterCombo.setInput(((Eip) selectedObject).getParameters());
-					}
+		componentCombo.addSelectionChangedListener(event -> {
+			ISelection selection = event.getSelection();
+			if (selection instanceof StructuredSelection) {
+				Object selectedObject = ((StructuredSelection) selection).getFirstElement();
+				if (selectedObject instanceof Eip) {
+					parameterCombo.setInput(((Eip) selectedObject).getParameters());
 				}
 			}
 		});
@@ -162,8 +156,8 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 
-		componentCombo = createComboViewer(container, UIMessages.preferredLabels_component);
-		parameterCombo = createComboViewer(container, UIMessages.preferredLabels_parameter);
+		componentCombo = createComboViewer(container, UIMessages.preferredLabelsComponent);
+		parameterCombo = createComboViewer(container, UIMessages.preferredLabelsParameter);
 
 		return area;
 	}
@@ -179,7 +173,7 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 		ComboViewer comboViewer = new ComboViewer(container, SWT.BORDER | SWT.READ_ONLY);
 		comboViewer.getCombo().setLayoutData(gd);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setSorter(new ViewerSorter());
+		comboViewer.setComparator(new ViewerComparator());
 		comboViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -192,12 +186,7 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 				return element.toString();
 			}
 		});
-		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				validate();
-			}
-		});
+		comboViewer.addSelectionChangedListener(event -> validate());
 		return comboViewer;
 	}
 
@@ -205,9 +194,9 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		if (getComponent() != null && !getComponent().isEmpty()) {
-			shell.setText(UIMessages.preferredLabels_editDialogTitle);
+			shell.setText(UIMessages.preferredLabelsEditDialogTitle);
 		} else {
-			shell.setText(UIMessages.preferredLabels_newDialogTitle);
+			shell.setText(UIMessages.preferredLabelsNewDialogTitle);
 		}
 	}
 
