@@ -13,9 +13,11 @@ package org.jboss.tools.fuse.transformation.core.model.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
@@ -30,12 +33,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2XsdOptions;
 import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.fuse.transformation.core.internal.DataTransformationCoreActivator;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,6 +52,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -69,6 +78,10 @@ import com.sun.tools.xjc.api.XJC;
 public class XmlModelGenerator {
 
 	private static final String JAVAX_XML_ACCESS_EXTERNAL_SCHEMA = "javax.xml.accessExternalSchema"; //$NON-NLS-1$
+	
+	private static final String BINDINGS_FILE = "bindings.xml"; //$NON-NLS-1$
+	
+	private boolean useBindingsFile = true;
 
     void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
                                    JPrimitiveType voidType) {
@@ -172,8 +185,31 @@ public class XmlModelGenerator {
 				DataTransformationCoreActivator.pluginLog().logError(arg0);
 			}
 		});
+        
+        if (useBindingsFile) {
+	        final File optionsFile = getFileFromPlugin(BINDINGS_FILE);
+	        if (optionsFile !=  null) {
+	        	sc.getOptions().addBindFile(optionsFile);
+	        }
+        }
         sc.parseSchema(is);
         return sc;
+    }
+    
+    private File getFileFromPlugin(String filename) {
+    	Bundle bundle = Platform.getBundle(DataTransformationCoreActivator.PLUGIN_ID);
+    	URL url = FileLocator.find(bundle, new Path(filename), null);
+    	File file = null;
+    	try {
+        	URL fileUrl = FileLocator.toFileURL(url);
+        	file = new File(fileUrl.getPath());
+    		if (file != null && file.exists()) {
+    			return file;
+    		}
+    	} catch (IOException e1) {
+    		DataTransformationCoreActivator.pluginLog().logError(e1);
+    	}
+		return null;
     }
 
     /**
@@ -462,5 +498,9 @@ public class XmlModelGenerator {
             throw new Exception("Invalid instance document : no root element"); //$NON-NLS-1$
         }
         return new QName(root.getNamespaceURI(), root.getLocalName());
+    }
+    
+    public void setUseBindingsFile(boolean flag) {
+    	this.useBindingsFile = flag;
     }
 }
