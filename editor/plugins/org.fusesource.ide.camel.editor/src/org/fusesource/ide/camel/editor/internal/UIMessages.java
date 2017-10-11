@@ -170,21 +170,21 @@ public class UIMessages extends NLS {
 	public static String pending;
 
 	/* Preferred Labels */	
-	public static String preferredLabels_newDialogTitle;
-	public static String preferredLabels_editDialogTitle;
-	public static String preferredLabels_title;
-	public static String preferredLabels_component;
-	public static String preferredLabels_componentHeader;
-	public static String preferredLabels_parameter;
-	public static String preferredLabels_parameterHeader;
-	public static String preferredLabels_errorMessage;
-	public static String preferredLabels_errorMessageEmptyComponent;
-	public static String preferredLabels_errorMessageEmptyParameter;
-	public static String preferredLabels_errorMessageWrongCharacter;
-	public static String preferredLabels_errorMessageDuplicateComponent;
-	public static String preferredLabels_addButtonText;
-	public static String preferredLabels_editButtonText;
-	public static String preferredLabels_removeButtonText;
+	public static String preferredLabelsNewDialogTitle;
+	public static String preferredLabelsEditDialogTitle;
+	public static String preferredLabelsTitle;
+	public static String preferredLabelsComponent;
+	public static String preferredLabelsComponentHeader;
+	public static String preferredLabelsParameter;
+	public static String preferredLabelsParameterHeader;
+	public static String preferredLabelsErrorMessage;
+	public static String preferredLabelsErrorMessageEmptyComponent;
+	public static String preferredLabelsErrorMessageEmptyParameter;
+	public static String preferredLabelsErrorMessageWrongCharacter;
+	public static String preferredLabelsErrorMessageDuplicateComponent;
+	public static String preferredLabelsAddButtonText;
+	public static String preferredLabelsEditButtonText;
+	public static String preferredLabelsRemoveButtonText;
 
 	static {
 		// initialize resource bundle

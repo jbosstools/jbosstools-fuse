@@ -18,8 +18,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -116,14 +114,11 @@ public class PreferredLabelEditor extends FieldEditor {
 			layout.marginWidth = 0;
 			buttonBox.setLayout(layout);
 			createButtons(buttonBox);
-			buttonBox.addDisposeListener(new DisposeListener() {
-				@Override
-				public void widgetDisposed(DisposeEvent event) {
-					addButton = null;
-					editButton = null;
-					removeButton = null;
-					buttonBox = null;
-				}
+			buttonBox.addDisposeListener(event -> {
+				addButton = null;
+				editButton = null;
+				removeButton = null;
+				buttonBox = null;
 			});
 
 		} else {
@@ -162,9 +157,9 @@ public class PreferredLabelEditor extends FieldEditor {
 	 *            the box for the buttons
 	 */
 	private void createButtons(Composite box) {
-		addButton = createPushButton(box, UIMessages.preferredLabels_addButtonText);
-		editButton = createPushButton(box, UIMessages.preferredLabels_editButtonText);
-		removeButton = createPushButton(box, UIMessages.preferredLabels_removeButtonText);
+		addButton = createPushButton(box, UIMessages.preferredLabelsAddButtonText);
+		editButton = createPushButton(box, UIMessages.preferredLabelsEditButtonText);
+		removeButton = createPushButton(box, UIMessages.preferredLabelsRemoveButtonText);
 	}
 
 	/**
@@ -200,12 +195,7 @@ public class PreferredLabelEditor extends FieldEditor {
 			table = new Table(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 			table.setFont(parent.getFont());
 			table.addSelectionListener(getSelectionListener());
-			table.addDisposeListener(new DisposeListener() {
-				@Override
-				public void widgetDisposed(DisposeEvent event) {
-					table = null;
-				}
-			});
+			table.addDisposeListener(event -> table = null);
 			String[] columnHeaders = getColumnHeaders();
 			if (columnHeaders.length > 0) {
 				table.setHeaderVisible(true);
@@ -249,7 +239,7 @@ public class PreferredLabelEditor extends FieldEditor {
 	}
 
 	protected String[] getColumnHeaders() {
-		return new String[] { UIMessages.preferredLabels_componentHeader, UIMessages.preferredLabels_parameterHeader };
+		return new String[] { UIMessages.preferredLabelsComponentHeader, UIMessages.preferredLabelsParameterHeader };
 	}
 
 	/**
@@ -347,7 +337,7 @@ public class PreferredLabelEditor extends FieldEditor {
 
 	@Override
 	protected void doStore() {
-		String s = createList(table.getItems());
+		String s = createList(getPreferredLabels());
 		if (s != null) {
 			getPreferenceStore().setValue(getPreferenceName(), s);
 		}
@@ -383,8 +373,8 @@ public class PreferredLabelEditor extends FieldEditor {
 	 * @return the combined string
 	 * @see #parseString
 	 */
-	private String createList(TableItem[] rows) {
-		return String.join(AbstractCamelModelElement.USER_LABEL_DELIMETER, getPreferredLabels());
+	private String createList(List<String> items) {
+		return String.join(AbstractCamelModelElement.USER_LABEL_DELIMETER, items);
 	}
 
 	public List<String> getPreferredLabels() {

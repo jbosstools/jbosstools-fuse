@@ -23,10 +23,10 @@ public class ParameterValidator implements IInputValidator {
 	@Override
 	public String isValid(String newText) {
 		if (newText.isEmpty()) {
-			return UIMessages.preferredLabels_errorMessageEmptyParameter;
+			return UIMessages.preferredLabelsErrorMessageEmptyParameter;
 		}
 		if (newText.matches(".*[\\W&&[^-]].*")) {
-			return UIMessages.preferredLabels_errorMessageWrongCharacter;
+			return UIMessages.preferredLabelsErrorMessageWrongCharacter;
 		}
 		return null;
 	}
