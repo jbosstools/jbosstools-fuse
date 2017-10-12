@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -47,7 +48,7 @@ public class DataFormatsInCamelModelElementIT {
 
 	@Rule
 	public FuseProject fuseProject;
-
+ 	
 	public DataFormatsInCamelModelElementIT(String camelVersion) {
 		this.fuseProject = new FuseProject(DataFormatsInCamelModelElementIT.class.getSimpleName(), camelVersion);
 	}
@@ -78,4 +79,12 @@ public class DataFormatsInCamelModelElementIT {
 		assertThat(((AbstractCamelModelElement) unmarshallElement.getParameter("dataFormatType")).getNodeTypeId()).isEqualTo("json");
 	}
 
+	@Test
+	public void testCanFindTypes() throws CoreException, IOException {
+		String[] typesToFind = {"csv", "json", "string"};
+		CamelModel model = fuseProject.createEmptyCamelFile().getCamelModel();
+		for (String searchFor : typesToFind) {
+			assertThat(model.getDataFormatsByModelName(searchFor)).isNotEmpty();
+		}
+	}
 }
