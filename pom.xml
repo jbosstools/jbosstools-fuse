@@ -11,7 +11,7 @@
 		<artifactId>parent</artifactId>
 		<version>4.5.1.Final-SNAPSHOT</version>
 	</parent>
-
+	
 	<groupId>org.fusesource.ide</groupId>
 	<artifactId>project</artifactId>
 	<version>10.1.0-SNAPSHOT</version>
@@ -28,7 +28,7 @@
 		<system>jira</system>
 		<url>https://issues.jboss.org/browse/FUSETOOLS</url>
 	</issueManagement>
-  
+
 	<scm>
 		<connection>scm:git:git://git@github.com:jbosstools/jbosstools-fuse.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:jbosstools/jbosstools-fuse.git</developerConnection>
