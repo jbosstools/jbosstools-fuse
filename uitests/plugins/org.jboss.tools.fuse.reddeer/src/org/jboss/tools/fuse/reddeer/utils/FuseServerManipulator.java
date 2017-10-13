@@ -13,7 +13,6 @@ package org.jboss.tools.fuse.reddeer.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.logging.Logger;
 import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -28,11 +27,12 @@ import org.eclipse.reddeer.eclipse.wst.server.ui.Runtime;
 import org.eclipse.reddeer.eclipse.wst.server.ui.RuntimePreferencePage;
 import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.Server;
 import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServerLabel;
+import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServerModule;
 import org.eclipse.reddeer.eclipse.wst.server.ui.cnf.ServersView2;
+import org.eclipse.reddeer.eclipse.wst.server.ui.wizard.ModifyModulesDialog;
 import org.eclipse.reddeer.swt.api.Tree;
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
-import org.eclipse.reddeer.swt.impl.button.OkButton;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
@@ -287,37 +287,9 @@ public class FuseServerManipulator {
 
 		ServersView2 view = new ServersView2();
 		view.open();
-		view.getServer(name).select();
-		new ContextMenuItem("Add and Remove...").select();
-
-		// Maybe there is nothing to remove
-		try {
-			new WaitUntil(new ShellIsAvailable("Server"));
-			new PushButton("OK").click();
-			return;
-		} catch (Exception e) {
+		for (ServerModule module : view.getServer(name).getModules()) {
+			module.remove();
 		}
-
-		// There is something to remove - remove it
-		new DefaultShell("Add and Remove...");
-		FuseModifyModulesPage page = new FuseModifyModulesPage();
-		try {
-			page.removeAll();
-		} catch (Exception ex) {
-			log.debug("Nothing to remove.");
-		}
-		AbstractWait.sleep(TimePeriod.DEFAULT);
-		page.close();
-		
-		// Maybe prompt "Are you sure ..." occurs
-		try {
-			new WaitUntil(new ShellIsAvailable("Server"));
-			new OkButton().click();
-			return;
-		} catch (WaitTimeoutExpiredException e) {
-			log.debug("Are you sure you want to remove ... didn't appeared");
-		}
-
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		new WorkbenchShell();
 	}
@@ -334,37 +306,17 @@ public class FuseServerManipulator {
 
 		ServersView2 view = new ServersView2();
 		view.open();
-		view.getServer(server).addAndRemoveModules();
-		new DefaultShell("Add and Remove...");
-		FuseModifyModulesPage page = new FuseModifyModulesPage();
+		ModifyModulesDialog dialog = view.getServer(server).addAndRemoveModules();
+		FuseModifyModulesPage page = new FuseModifyModulesPage(dialog);
 		for (String module : page.getAvailableModules()) {
 			if (module.startsWith(project)) {
 				page.add(module);
 				break;
 			}
 		}
-		page.close();
+		dialog.finish();
 		new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-	}
-
-	/**
-	 * Sets option 'If server is started, publish changes immediately'
-	 * 
-	 * @param name
-	 *            name of the server in the Servers view
-	 * @param value
-	 *            true - option is checked, false - option is not checked
-	 */
-	public static void setImmeadiatelyPublishing(String name, boolean value) {
-
-		new ServersView2().getServer(name).addAndRemoveModules();
-		new DefaultShell("Add and Remove...");
-		FuseModifyModulesPage page = new FuseModifyModulesPage();
-		page.setImmeadiatelyPublishing(value);
-		page.close();
-		new WaitWhile(new JobIsRunning(), TimePeriod.DEFAULT);
-		AbstractWait.sleep(TimePeriod.SHORT);
 	}
 
 	/**

@@ -92,9 +92,9 @@ public class DeploymentTest extends DefaultTest {
 	public void setupManageServers() {
 
 		new WorkbenchShell().setFocus();
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
-		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getName());
-		FuseServerManipulator.removeServer(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
+		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getServer().getName());
+		FuseServerManipulator.removeServer(serverRequirement.getConfiguration().getServer().getName());
 	}
 
 	/**

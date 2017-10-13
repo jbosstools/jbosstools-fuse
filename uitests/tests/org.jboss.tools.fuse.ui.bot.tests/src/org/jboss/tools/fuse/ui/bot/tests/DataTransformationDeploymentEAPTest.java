@@ -65,8 +65,8 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 	 */
 	@AfterClass
 	public static void setupStopServer() {
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
-		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
+		FuseServerManipulator.stopServer(serverRequirement.getConfiguration().getServer().getName());
 		FileUtils.deleteDir(new File(serverRequirement.getConfiguration().getServer().getHome() + "/bin/target/"));
 		FileUtils.deleteDir(new File(serverRequirement.getConfiguration().getServer().getHome() + "/bin/src/"));
 	}

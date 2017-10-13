@@ -100,7 +100,7 @@ public class FuseServerWizard extends NewServerWizard {
 		}
 
 		next();
-		new ModifyModulesPage(null).add(projects);
+		new ModifyModulesPage(this).add(projects);
 
 		finish(TimePeriod.VERY_LONG);
 	}
