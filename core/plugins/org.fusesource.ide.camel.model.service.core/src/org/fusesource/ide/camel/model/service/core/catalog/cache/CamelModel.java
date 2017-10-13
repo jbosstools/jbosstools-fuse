@@ -130,6 +130,24 @@ public class CamelModel {
 	}
 	
 	/**
+	 * retrieves all dataformats for the given tag
+	 * 
+	 * @param tagName
+	 * @return
+	 */
+	public Collection<DataFormat> getDataFormatsByTag(String tagName) {
+		List<DataFormat> dfs = new ArrayList<>();
+		
+		for (DataFormat df : dataformats.values()) {
+			if (!df.getTags().isEmpty() && df.getTags().contains(tagName)) {
+				dfs.add(df);
+			}
+		}
+		
+		return dfs;
+	}
+
+	/**
 	 * sets the dataformats
 	 * 
 	 * @param dataformats

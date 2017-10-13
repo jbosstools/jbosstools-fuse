@@ -12,6 +12,8 @@ package org.fusesource.ide.camel.editor.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -535,6 +537,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		client.setLayout(new GridLayout(4, false));
 
 		DataFormat df = getCamelModel(dataFormatElement).getDataFormat(dataformat);
+		if (df == null) {
+			Collection<DataFormat> dfs = getCamelModel(dataFormatElement).getDataFormatsByTag(dataformat);
+			if (dfs != null && !dfs.isEmpty() && dfs.size() == 1) {
+				df = dfs.iterator().next(); // take first element
+			}
+		}
 		if (dataFormatElement != null && df != null && dataFormatElement.getTagNameWithoutPrefix().equals(dataformat) == false) {
 			Node oldExpNode = null;
 			for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {

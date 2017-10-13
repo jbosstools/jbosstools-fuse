@@ -80,11 +80,20 @@ public class DataFormatsInCamelModelElementIT {
 	}
 
 	@Test
-	public void testCanFindTypes() throws CoreException, IOException {
-		String[] typesToFind = {"csv", "json", "string"};
+	public void testCanFindTypesFromCamelModel() throws CoreException, IOException {
+		String[] typesToFind = {"json"};
 		CamelModel model = fuseProject.createEmptyCamelFile().getCamelModel();
 		for (String searchFor : typesToFind) {
 			assertThat(model.getDataFormatsByModelName(searchFor)).isNotEmpty();
+		}
+	}
+
+	@Test
+	public void testCanFindTypesByTagFromCamelModel() throws CoreException, IOException {
+		String[] typesToFind = {"json"};
+		CamelModel model = fuseProject.createEmptyCamelFile().getCamelModel();
+		for (String searchFor : typesToFind) {
+			assertThat(model.getDataFormatsByTag(searchFor)).isNotEmpty();
 		}
 	}
 }
