@@ -25,6 +25,7 @@ Bundle-ClassPath: lib/args4j-2.0.31.jar,
  lib/cxf-tools-common-3.1.7.jar,
  lib/cxf-tools-wsdlto-core-3.1.7.jar,
  lib/cxf-tools-wsdlto-frontend-jaxws-3.1.7.jar,
+ lib/commons-lang-2.4.jar,
  lib/velocity-1.7.jar,
  lib/javax.ws.rs-api-2.0.1.jar,
  lib/slf4j-api-1.7.21.jar,
@@ -43,4 +44,3 @@ Bundle-ClassPath: lib/args4j-2.0.31.jar,
  lib/cxf-tools-wsdlto-frontend-javascript-3.1.7.jar,
  resources/,
  .
- 

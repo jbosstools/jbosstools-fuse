@@ -1,10 +1,12 @@
 package org.jboss.fuse.wsdl2rest.impl;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Display;
 import org.jboss.fuse.wsdl2rest.ClassGenerator;
 import org.jboss.fuse.wsdl2rest.EndpointInfo;
 import org.jboss.fuse.wsdl2rest.ResourceMapper;
@@ -43,28 +45,39 @@ public class Wsdl2Rest {
     }
 
     public List<EndpointInfo> process() throws Exception {
-        
-        WSDLProcessor wsdlProcessor = new WSDLProcessorImpl();
-        wsdlProcessor.process(wsdlUrl);
-        
-        List<EndpointInfo> clazzDefs = wsdlProcessor.getClassDefinitions();
-        ResourceMapper resMapper = new ResourceMapperImpl();
-        resMapper.assignResources(clazzDefs);
+        try {
+        	Thread thread = Thread.currentThread();
+        	ClassLoader loader = thread.getContextClassLoader();
+        	thread.setContextClassLoader(this.getClass().getClassLoader());
+        	try {
+                WSDLProcessor wsdlProcessor = new WSDLProcessorImpl();
+                wsdlProcessor.process(wsdlUrl);
+                
+                List<EndpointInfo> clazzDefs = wsdlProcessor.getClassDefinitions();
+                ResourceMapper resMapper = new ResourceMapperImpl();
+                resMapper.assignResources(clazzDefs);
 
-        JavaTypeGenerator typeGen = new JavaTypeGenerator(outpath, wsdlUrl);
-        typeGen.execute();
-        
-        ClassGenerator classGen = ClassGeneratorFactory.getClassGenerator(outpath);
-        classGen.generateClasses(clazzDefs);
-        
-        if (targetContext != null) {
-            CamelContextGenerator camelGen = new CamelContextGenerator(outpath);
-            camelGen.setTargetContext(targetContext);
-            camelGen.setTargetAddress(targetAddress);
-            camelGen.setTargetBean(targetBean);
-            camelGen.process(clazzDefs);
-        }
-        
-        return Collections.unmodifiableList(clazzDefs);
+                JavaTypeGenerator typeGen = new JavaTypeGenerator(outpath, wsdlUrl);
+                typeGen.execute();
+                
+                ClassGenerator classGen = ClassGeneratorFactory.getClassGenerator(outpath);
+                classGen.generateClasses(clazzDefs);
+                
+                if (targetContext != null) {
+                    CamelContextGenerator camelGen = new CamelContextGenerator(outpath);
+                    camelGen.setTargetContext(targetContext);
+                    camelGen.setTargetAddress(targetAddress);
+                    camelGen.setTargetBean(targetBean);
+                    camelGen.process(clazzDefs);
+                }
+                
+                return Collections.unmodifiableList(clazzDefs);
+        	} finally {
+        	  thread.setContextClassLoader(loader);
+        	}		        	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return null;
     }
 }

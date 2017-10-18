@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
@@ -85,7 +86,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
     private void generate(final URL wsdlLocation, final String outputPath) throws Exception {
         Path outpath = new File(outputPath).toPath();
         Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
-        tool.process();
+		tool.process();
     }
 
 

@@ -3,6 +3,7 @@ package org.jboss.fuse.wsdl2rest.impl.codegen;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Path;
@@ -40,7 +41,7 @@ public class CamelContextGenerator {
         this.targetBean = targetBean;
     }
 
-    public void process(List<EndpointInfo> clazzDefs) throws Exception {
+    public void process(List<EndpointInfo> clazzDefs) throws IOException {
         IllegalArgumentAssertion.assertNotNull(clazzDefs, "clazzDefs");
         IllegalArgumentAssertion.assertTrue(clazzDefs.size() == 1, "Multiple endpoints not supported");
         
@@ -54,7 +55,7 @@ public class CamelContextGenerator {
         ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         ve.init();
 
-        String tmplPath = "templates/jaxrs-camel-context.vm";
+        String tmplPath = "org/jboss/fuse/wsdl2rest/impl/codegen/jaxrs-camel-context.vm";
         try (InputStreamReader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(tmplPath))) {
 
             VelocityContext context = new VelocityContext();

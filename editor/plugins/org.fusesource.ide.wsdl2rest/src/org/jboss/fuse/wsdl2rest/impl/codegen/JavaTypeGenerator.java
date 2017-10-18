@@ -30,22 +30,26 @@ public class JavaTypeGenerator {
 
 
     public void execute() throws Exception {
-        
-        String args[] = new String[] {
-                "-d", outpath.toString(),
-                wsdlURL.toExternalForm(),
-        };
-        ToolContext ctx = new ToolContext();
-        new WSDLToJava(args).run(ctx);
-        
-        JavaModel javaModel = ctx.getJavaModel();
-        for (JavaInterface aux : javaModel.getInterfaces().values()) {
-            File auxFile = outpath.resolve(aux.getPackageName().replace('.', '/') + "/" + aux.getName() + ".java").toFile();
-            auxFile.delete();
-        }
-        for (JavaServiceClass aux : javaModel.getServiceClasses().values()) {
-            File auxFile = outpath.resolve(aux.getPackageName().replace('.', '/') + "/" + aux.getName() + ".java").toFile();
-            auxFile.delete();
+        try {
+	        final String[] args = new String[] {
+	                "-d", outpath.toString(),
+	                wsdlURL.toExternalForm(),
+	        };
+	        final ToolContext ctx = new ToolContext();
+	        final WSDLToJava wsdl2Java = new WSDLToJava(args);
+	        wsdl2Java.run(ctx);
+	        
+	        JavaModel javaModel = ctx.getJavaModel();
+	        for (JavaInterface aux : javaModel.getInterfaces().values()) {
+	            File auxFile = outpath.resolve(aux.getPackageName().replace('.', '/') + "/" + aux.getName() + ".java").toFile();
+	            auxFile.delete();
+	        }
+	        for (JavaServiceClass aux : javaModel.getServiceClasses().values()) {
+	            File auxFile = outpath.resolve(aux.getPackageName().replace('.', '/') + "/" + aux.getName() + ".java").toFile();
+	            auxFile.delete();
+	        }
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
     }
 }
