@@ -58,8 +58,9 @@ public class CamelCatalogUtils {
 	
 	public static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
 	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
+	public static final String FIS_20_R3_CAMEL_VERSION = "2.18.1.redhat-000021";
 	
-	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R1_CAMEL_VERSION;
+	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
@@ -67,7 +68,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.3";
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R4_CAMEL_VERSION;
-	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R1_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -150,6 +151,7 @@ public class CamelCatalogUtils {
 			// DEFAULTS
 			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R0_CAMEL_VERSION, "2.2.170.redhat-000010");			
 			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000013");
+			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
 		}
 
 		String camelVersionsForTesting = System.getProperty(KEY_CAMEL_TEST_VERSIONS, "").trim();
