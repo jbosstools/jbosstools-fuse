@@ -56,8 +56,8 @@ public class CamelCatalogUtils {
 	private static final String FUSE_63_R3_BOM_VERSION = "6.3.0.redhat-262";
 	private static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
 	
-	public static final String FIS_20_R0_CAMEL_VERSION = "2.18.1.redhat-000012";
-	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000015";
+	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
+	public static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
 	public static final String FIS_20_R3_CAMEL_VERSION = "2.18.1.redhat-000021";
 	
 	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R3_CAMEL_VERSION;
@@ -149,8 +149,8 @@ public class CamelCatalogUtils {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R0_CAMEL_VERSION, "2.2.170.redhat-000010");			
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000013");
+			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
+			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
 			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
 		}
 
