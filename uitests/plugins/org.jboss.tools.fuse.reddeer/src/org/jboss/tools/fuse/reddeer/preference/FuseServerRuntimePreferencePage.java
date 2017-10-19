@@ -20,6 +20,7 @@ import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.table.DefaultTable;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.jboss.tools.fuse.reddeer.runtime.impl.ServerKaraf;
 
 /**
  * Represents the Fuse server runtime preference page
@@ -33,7 +34,6 @@ public class FuseServerRuntimePreferencePage extends RuntimePreferencePage {
 	private static final String EDIT_WINDOW = "Edit Server Runtime Environment";
 	private static final String INSTALL_DIR = "Home Directory";
 	private static final String NAME = "Name";
-	private static final String SERVER_SECTION = "Red Hat JBoss Middleware";
 
 	public FuseServerRuntimePreferencePage(ReferencedComposite referencedComposite) {
 		super(referencedComposite);
@@ -47,12 +47,12 @@ public class FuseServerRuntimePreferencePage extends RuntimePreferencePage {
 	 * @param type
 	 *            server type (e.g. "JBoss Fuse", "JBoss Fuse 6.1")
 	 */
-	public void addServerRuntime(String type, String path) {
+	public void addServerRuntime(ServerKaraf base) {
 		NewRuntimeWizardDialog dialog = addRuntime();
-		new DefaultTreeItem(SERVER_SECTION, type).select();
+		new DefaultTreeItem(base.getCategory(), base.getRuntimeType()).select();
 		dialog.next();
-		new LabeledText(NAME).setText(type);
-		new LabeledText(INSTALL_DIR).setText(path);
+		new LabeledText(NAME).setText(base.getRuntimeType());
+		new LabeledText(INSTALL_DIR).setText(base.getHome());
 		dialog.finish(TimePeriod.DEFAULT);
 	}
 
