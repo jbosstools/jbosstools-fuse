@@ -33,6 +33,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -246,9 +247,26 @@ public class BeanConfigUtil {
 		return Stream.of(foundClass.getMethods())
 				.filter(method -> {
 					try {
-						return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0 && !method.isConstructor();
+						return isPublicNoArgNotConstructorMethod(method);
 					} catch (JavaModelException e) {
 						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & no arguments.", e); //$NON-NLS-1$
+						return false;
+					}
+				}).toArray(IMethod[]::new);
+	}
+
+	protected boolean isPublicNoArgNotConstructorMethod(IMethod method) throws JavaModelException {
+		return Flags.isPublic(method.getFlags()) && method.getNumberOfParameters() == 0 && !method.isConstructor();
+	}
+	
+
+	private IMethod[] getVoidPublicNoArgMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> {
+					try {
+						return isPublicNoArgNotConstructorMethod(method)&& Signature.SIG_VOID.equals(method.getReturnType());
+					} catch (JavaModelException e) {
+						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public void & no arguments.", e); //$NON-NLS-1$
 						return false;
 					}
 				}).toArray(IMethod[]::new);
@@ -266,6 +284,14 @@ public class BeanConfigUtil {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
 			return openMethodDialog(shell, getPublicNoArgMethods(foundClass), UIMessages.beanConfigUtilNoParmMethodSelectionMessage);
+		}
+		return null;
+	}
+	
+	private String openVoidPublicNoArgMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+		IType foundClass = jproject.findType(className);
+		if (foundClass != null) {
+			return openMethodDialog(shell, getVoidPublicNoArgMethods(foundClass), UIMessages.beanConfigUtilNoParmAndVoidMethodSelectionMessage);
 		}
 		return null;
 	}
@@ -325,6 +351,20 @@ public class BeanConfigUtil {
 			if (jproject.exists()) {
 				try {
 					return openPublicNoArgMethodDialog(jproject, className, shell);
+				} catch (JavaModelException e) {
+					CamelEditorUIActivator.pluginLog().logError(e);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String handleVoidPublicNoArgMethodBrowse(IProject project, String className, Shell shell) {
+		if (project != null) {
+			IJavaProject jproject = JavaCore.create(project);
+			if (jproject.exists()) {
+				try {
+					return openVoidPublicNoArgMethodDialog(jproject, className, shell);
 				} catch (JavaModelException e) {
 					CamelEditorUIActivator.pluginLog().logError(e);
 				}

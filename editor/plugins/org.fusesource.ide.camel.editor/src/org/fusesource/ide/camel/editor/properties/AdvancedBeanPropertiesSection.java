@@ -414,8 +414,13 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 							getDisplay().getActiveShell());
 					break;
 				case PUBLIC_NO_ARG_METHOD_BROWSE:
-					methodName = beanConfigUtil.handlePublicNoArgMethodBrowse(project, className,
+					if(beanConfigUtil.isBlueprintConfig(selectedEP.getXmlNode())) {
+						methodName = beanConfigUtil.handleVoidPublicNoArgMethodBrowse(project, className,
 							getDisplay().getActiveShell());
+					} else {
+						methodName = beanConfigUtil.handlePublicNoArgMethodBrowse(project, className,
+								getDisplay().getActiveShell());
+					}
 					break;
 				case PUBLIC_OR_STATIC_METHOD_BROWSE:
 					methodName = beanConfigUtil.handlePublicOrStaticMethodBrowse(project, className,

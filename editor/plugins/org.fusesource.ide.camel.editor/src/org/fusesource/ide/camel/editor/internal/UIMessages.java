@@ -84,6 +84,7 @@ public class UIMessages extends NLS {
 	public static String beanConfigUtilMethodSelectionErrorNoTypeFound;
 	public static String beanConfigUtilMethodSelectionMessage;
 	public static String beanConfigUtilNoParmMethodSelectionMessage;
+	public static String beanConfigUtilNoParmAndVoidMethodSelectionMessage;
 
 	public static String beanRefClassExistsValidatorBeanClassOrBeanRefRequired;
 
