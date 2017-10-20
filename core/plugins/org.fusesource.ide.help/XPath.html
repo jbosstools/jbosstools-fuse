@@ -1,6 +1,356 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>The XPath Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="When processing XML messages, the XPath language enables you to select part of a message, by specifying an XPath expression that acts on the message's Document Object Model (DOM). You can also define XPath predicates to test the contents of an element or an attribute."><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderExLang.html" title="Expression and Predicates Languages"><link rel="prev" href="SQL.html" title="JoSQL"><link rel="next" href="Xpath-JavaDSL.html" title="Java DSL"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="XPath"></a>The XPath Language</h1></div><div><div class="abstract"><p>When processing XML messages, the XPath language enables you to select part of a
-                message, by specifying an XPath expression that acts on the message's Document
-                Object Model (DOM). You can also define XPath predicates to test the contents of an
-                element or an attribute.</p></div></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="Xpath-JavaDSL.html">Java DSL</a></span></dt><dt><span class="section"><a href="Xpath-SpringDSL.html">XML DSL</a></span></dt><dt><span class="section"><a href="Xpath-Injection.html">XPath Injection</a></span></dt><dt><span class="section"><a href="Xpath-Builder.html">XPath Builder</a></span></dt><dt><span class="section"><a href="Xpath-EnableSaxon.html">Enabling Saxon</a></span></dt><dt><span class="section"><a href="Xpath-Expressions.html">Expressions</a></span></dt><dt><span class="section"><a href="Xpath-Predicates.html">Predicates</a></span></dt><dt><span class="section"><a href="Xpath-VarsAndFuncs.html">Using Variables and Functions</a></span></dt><dt><span class="section"><a href="Xpath-VarNspc.html">Variable Namespaces</a></span></dt><dt><span class="section"><a href="Xpath-FuncRef.html">Function Reference</a></span></dt></dl></div></div></body></html>
+   <title>The XPath Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="When processing XML messages, the XPath language enables you to select part of a message, by specifying an XPath expression that acts on the message&#8217;s Document Object Model (DOM). You can also define XPath predicates to test the contents of an element or an attribute."><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderExLang.html" title="Part&nbsp;III.&nbsp;Expression and Predicates Languages"><link rel="prev" href="SQL.html" title="JoSQL"><link rel="next" href="XQuery.html" title="XQuery"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="XPath"></a>The XPath Language</h2></div><div><div class="abstract"><p>When processing XML messages, the XPath language enables you to select part of a
+message, by specifying an XPath expression that acts on the message&#8217;s Document
+Object Model (DOM). You can also define XPath predicates to test the contents of an
+element or an attribute.</p></div></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="XPath.html#Xpath-JavaDSL">Java DSL</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-SpringDSL">XML DSL</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-Injection">XPath Injection</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-Builder">XPath Builder</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-EnableSaxon">Enabling Saxon</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-Expressions">Expressions</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-Predicates">Predicates</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-VarsAndFuncs">Using Variables and Functions</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-VarNspc">Variable Namespaces</a></span></dt><dt><span class="section"><a href="XPath.html#Xpath-FuncRef">Function Reference</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-JavaDSL"></a>Java DSL</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33461"></a>Basic expressions</h3></div></div></div><p>You can use <code class="literal">xpath("<span class="emphasis"><em>Expression</em></span>")</code> to
+evaluate an XPath expression on the current exchange (where the XPath expression is
+applied to the body of the current <span class="strong"><strong>In</strong></span> message). The result of
+the <code class="literal">xpath()</code> expression is an XML node (or node set, if more than one
+node matches).</p><p>For example, to extract the contents of the <code class="literal">/person/name</code> element from
+the current <span class="strong"><strong>In</strong></span> message body and use it to set a header named
+<code class="literal">user</code>, you could define a route like the following:</p><pre class="screen">from("queue:foo")
+    .setHeader("user", xpath("/person/name/text()"))
+    .to("direct:tie");</pre><p>Instead of specifying <code class="literal">xpath()</code> as an argument to
+<code class="literal">setHeader()</code>, you can use the fluent builder <code class="literal">xpath()</code>
+command&#8212;for example:</p><pre class="screen">from("queue:foo")
+    .setHeader("user").xpath("/person/name/text()")
+    .to("direct:tie");</pre><p>If you want to convert the result to a specific type, specify the result type as
+the second argument of <code class="literal">xpath()</code>. For example, to specify explicitly that
+the result type is <code class="literal">String</code>:</p><pre class="screen">xpath("/person/name/text()", String.class)</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33462"></a>Namespaces</h3></div></div></div><p>Typically, XML elements belong to a schema, which is identified by a namespace
+URI. When processing documents like this, it is necessary to associate namespace
+URIs with prefixes, so that you can identify element names unambiguously in your
+XPath expressions. Apache Camel provides the helper class,
+<code class="literal">org.apache.camel.builder.xml.Namespaces</code>, which enables you to
+define associations between namespaces and prefixes.</p><p>For example, to associate the prefix, <code class="literal">cust</code>, with the namespace,
+<code class="literal"><a class="link" href="http://acme.com/customer/record" target="_top">http://acme.com/customer/record</a></code>, and then extract the contents of
+the element, <code class="literal">/cust:person/cust:name</code>, you could define a route like the
+following:</p><pre class="screen">import org.apache.camel.builder.xml.Namespaces;
+...
+Namespaces ns = new Namespaces("cust", "http://acme.com/customer/record");
+
+from("queue:foo")
+    .setHeader("user", xpath("/cust:person/cust:name/text()", <span class="strong"><strong>ns</strong></span>))
+    .to("direct:tie");</pre><p>Where you make the namespace definitions available to the <code class="literal">xpath()</code>
+expression builder by passing the <code class="literal">Namespaces</code> object, <code class="literal">ns</code>,
+as an additional argument. If you need to define multiple namespaces, use the
+<code class="literal">Namespace.add()</code> method, as follows:</p><pre class="screen">import org.apache.camel.builder.xml.Namespaces;
+...
+Namespaces ns = new Namespaces("cust", "http://acme.com/customer/record");
+ns.add("inv", "http://acme.com/invoice");
+ns.add("xsi", "http://www.w3.org/2001/XMLSchema-instance");</pre><p>If you need to specify the result type <span class="strong"><strong>and</strong></span> define namespaces,
+you can use the three-argument form of <code class="literal">xpath()</code>, as follows:</p><pre class="screen">xpath("/person/name/text()", String.class, ns)</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33463"></a>Auditing namespaces</h3></div></div></div><p>One of the most frequent problems that can occur when using XPath expressions is
+that there is a mismatch between the namespaces appearing in the incoming messages
+and the namespaces used in the XPath expression. To help you troubleshoot this kind
+of problem, the XPath language supports an option to dump all of the namespaces from
+all of the incoming messages into the system log.</p><p>To enable namespace logging at the <code class="literal">INFO</code> log level, enable the
+<code class="literal">logNamespaces</code> option in the Java DSL, as follows:</p><pre class="screen">xpath("/foo:person/@id", String.class).logNamespaces()</pre><p>Alternatively, you could configure your logging system to enable
+<code class="literal">TRACE</code> level logging on the
+<code class="literal">org.apache.camel.builder.xml.XPathBuilder</code> logger.</p><p>When namespace logging is enabled, you will see log messages like the following
+for each processed message:</p><pre class="screen">2012-01-16 13:23:45,878 [stSaxonWithFlag] INFO  XPathBuilder  -
+Namespaces discovered in message: {xmlns:a=[http://apache.org/camel],
+DEFAULT=[http://apache.org/default],
+xmlns:b=[http://apache.org/camelA, http://apache.org/camelB]}</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-SpringDSL"></a>XML DSL</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33464"></a>Basic expressions</h3></div></div></div><p>To evaluate an XPath expression in the XML DSL, put the XPath expression inside an
+<code class="literal">xpath</code> element. The XPath expression is applied to the body of the
+current <span class="strong"><strong>In</strong></span> message and returns an XML node (or node set).
+Typically, the returned XML node is automatically converted to a string.</p><p>For example, to extract the contents of the <code class="literal">/person/name</code> element from
+the current <span class="strong"><strong>In</strong></span> message body and use it to set a header named
+<code class="literal">user</code>, you could define a route like the following:</p><pre class="screen">&lt;beans ...&gt;
+
+  &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    &lt;route&gt;
+      &lt;from uri="queue:foo"/&gt;
+      &lt;setHeader headerName="user"&gt;
+        &lt;xpath&gt;/person/name/text()&lt;/xpath&gt;
+      &lt;/setHeader&gt;
+      &lt;to uri="direct:tie"/&gt;
+    &lt;/route&gt;
+  &lt;/camelContext&gt;
+
+&lt;/beans&gt;</pre><p>If you want to convert the result to a specific type, specify the result type by
+setting the <code class="literal">resultType</code> attribute to a Java type name (where you must
+specify the fully-qualified type name). For example, to specify explicitly that the
+result type is <code class="literal">java.lang.String</code> (you can omit the
+<code class="literal">java.lang.</code> prefix here):</p><pre class="screen">&lt;xpath resultType="String"&gt;/person/name/text()&lt;/xpath&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33465"></a>Namespaces</h3></div></div></div><p>When processing documents whose elements belong to one or more XML schemas, it is
+typically necessary to associate namespace URIs with prefixes, so that you can
+identify element names unambiguously in your XPath expressions. It is possible to
+use the standard XML mechanism for associating prefixes with namespace URIs. That
+is, you can set an attribute like this:
+<code class="literal">xmlns:<span class="emphasis"><em>Prefix</em></span>="<span class="emphasis"><em>NamespaceURI</em></span>"</code>.</p><p>For example, to associate the prefix, <code class="literal">cust</code>, with the namespace,
+<code class="literal"><a class="link" href="http://acme.com/customer/record" target="_top">http://acme.com/customer/record</a></code>, and then extract the contents of
+the element, <code class="literal">/cust:person/cust:name</code>, you could define a route like the
+following:</p><pre class="screen">&lt;beans ...&gt;
+
+  &lt;camelContext xmlns="http://camel.apache.org/schema/spring"
+                <span class="strong"><strong>xmlns:cust="http://acme.com/customer/record"</strong></span> &gt;
+    &lt;route&gt;
+      &lt;from uri="queue:foo"/&gt;
+      &lt;setHeader headerName="user"&gt;
+        &lt;xpath&gt;/cust:person/cust:name/text()&lt;/xpath&gt;
+      &lt;/setHeader&gt;
+      &lt;to uri="direct:tie"/&gt;
+    &lt;/route&gt;
+  &lt;/camelContext&gt;
+
+&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33466"></a>Auditing namespaces</h3></div></div></div><p>One of the most frequent problems that can occur when using XPath expressions is
+that there is a mismatch between the namespaces appearing in the incoming messages
+and the namespaces used in the XPath expression. To help you troubleshoot this kind
+of problem, the XPath language supports an option to dump all of the namespaces from
+all of the incoming messages into the system log.</p><p>To enable namespace logging at the <code class="literal">INFO</code> log level, enable the
+<code class="literal">logNamespaces</code> option in the XML DSL, as follows:</p><pre class="screen">&lt;xpath logNamespaces="true" resultType="String"&gt;/foo:person/@id&lt;/xpath&gt;</pre><p>Alternatively, you could configure your logging system to enable
+<code class="literal">TRACE</code> level logging on the
+<code class="literal">org.apache.camel.builder.xml.XPathBuilder</code> logger.</p><p>When namespace logging is enabled, you will see log messages like the following
+for each processed message:</p><pre class="screen">2012-01-16 13:23:45,878 [stSaxonWithFlag] INFO  XPathBuilder  -
+Namespaces discovered in message: {xmlns:a=[http://apache.org/camel],
+DEFAULT=[http://apache.org/default],
+xmlns:b=[http://apache.org/camelA, http://apache.org/camelB]}</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-Injection"></a>XPath Injection</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33467"></a>Parameter binding annotation</h3></div></div></div><p>When using Apache Camel bean integration to invoke a method on a Java bean, you can
+use the <code class="literal">@XPath</code> annotation to extract a value from the exchange and bind
+it to a method parameter.</p><p>For example, consider the following route fragment, which invokes the
+<code class="literal">credit</code> method on an <code class="literal">AccountService</code> object:</p><pre class="screen">from("queue:payments")
+    .beanRef("accountService","credit")
+    ...</pre><p>The <code class="literal">credit</code> method uses parameter binding annotations to extract
+relevant data from the message body and inject it into its parameters, as
+follows:</p><pre class="screen">public class AccountService {
+    ...
+    public void credit(
+            @XPath("/transaction/transfer/receiver/text()") String name,
+            @XPath("/transaction/transfer/amount/text()") String amount
+            )
+    {
+        ...
+    }
+    ...
+}</pre><p>For more information about bean integration,
+see <a class="xref" href="">???</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33468"></a>Namespaces</h3></div></div></div><p><a class="xref" href="XPath.html#Xpath-Injection-TablePNXP" title="Table&nbsp;20.&nbsp;Predefined Namespaces for @XPath">Table&nbsp;20, &#8220;Predefined Namespaces for @XPath&#8221;</a> shows the namespaces that are
+predefined for XPath. You can use these namespace prefixes in the <code class="literal">XPath</code>
+expression that appears in the <code class="literal">@XPath</code> annotation.</p><div class="table"><a name="Xpath-Injection-TablePNXP"></a><p class="title"><b>Table&nbsp;20.&nbsp;Predefined Namespaces for @XPath</b></p><div class="table-contents"><table summary="Predefined Namespaces for @XPath" border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Namespace URI</th><th align="left" valign="top">Prefix</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://www.w3.org/2001/XMLSchema" target="_top">http://www.w3.org/2001/XMLSchema</a></code></p></td><td align="left" valign="top"><p><code class="literal">xsd</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://www.w3.org/2003/05/soap-envelope" target="_top">http://www.w3.org/2003/05/soap-envelope</a></code></p></td><td align="left" valign="top"><p><code class="literal">soap</code></p></td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33469"></a>Custom namespaces</h3></div></div></div><p>You can use the <code class="literal">@NamespacePrefix</code> annotation to define custom XML
+namespaces. Invoke the <code class="literal">@NamespacePrefix</code> annotation to initialize the
+<code class="literal">namespaces</code> argument of the <code class="literal">@XPath</code> annotation. The
+namespaces defined by <code class="literal">@NamespacePrefix</code> can then be used in the
+<code class="literal">@XPath</code> annotation&#8217;s expression value.</p><p>For example, to associate the prefix, <code class="literal">ex</code>, with the custom namespace,
+<code class="literal"><a class="link" href="http://fusesource.com/examples" target="_top">http://fusesource.com/examples</a></code>, invoke the <code class="literal">@XPath</code>
+annotation as follows:</p><pre class="screen">public class AccountService {
+  ...
+  public void credit(
+    @XPath(
+      value = "/ex:transaction/ex:transfer/ex:receiver/text()",
+      <span class="strong"><strong>namespaces = @NamespacePrefix(
+        prefix = "ex",
+        uri = "http://fusesource.com/examples"</strong></span>
+      )
+    ) String name,
+    @XPath(
+      value = "/ex:transaction/ex:transfer/ex:amount/text()",
+      <span class="strong"><strong>namespaces = @NamespacePrefix(
+        prefix = "ex",
+        uri = "http://fusesource.com/examples"</strong></span>
+      )
+    ) String amount,
+  )
+  {
+    ...
+  }
+  ...
+}</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-Builder"></a>XPath Builder</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33470"></a>Overview</h3></div></div></div><p>The <code class="literal">org.apache.camel.builder.xml.XPathBuilder</code> class enables you to
+evaluate XPath expressions independently of an exchange. That is, if you have an XML
+fragment from any source, you can use <code class="literal">XPathBuilder</code> to evaluate an XPath
+expression on the XML fragment.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33471"></a>Matching expressions</h3></div></div></div><p>Use the <code class="literal">matches()</code> method to check whether one or more XML nodes can
+be found that match the given XPath expression. The basic syntax for matching an
+XPath expression using <code class="literal">XPathBuilder</code> is as follows:</p><pre class="screen">boolean matches = XPathBuilder
+                    .xpath("<span class="emphasis"><em>Expression</em></span>")
+                    .matches(CamelContext, "<span class="emphasis"><em>XMLString</em></span>");</pre><p>Where the given expression, <span class="emphasis"><em>Expression</em></span>, is evaluated
+against the XML fragment, <span class="emphasis"><em>XMLString</em></span>, and the result is
+true, if at least one node is found that matches the expression. For example, the
+following example returns <code class="literal">true</code>, because the XPath expression finds a
+match in the <code class="literal">xyz</code> attribute.</p><pre class="screen">boolean matches = XPathBuilder
+                    .xpath("/foo/bar/@xyz")
+                    .matches(getContext(), "&lt;foo&gt;&lt;bar xyz='cheese'/&gt;&lt;/foo&gt;"));</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33472"></a>Evaluating expressions</h3></div></div></div><p>Use the <code class="literal">evaluate()</code> method to return the contents of the first node
+that matches the given XPath expression. The basic syntax for evaluating an XPath
+expression using <code class="literal">XPathBuilder</code> is as follows:</p><pre class="screen">String nodeValue = XPathBuilder
+                    .xpath("<span class="emphasis"><em>Expression</em></span>")
+                    .evaluate(CamelContext, "<span class="emphasis"><em>XMLString</em></span>");</pre><p>You can also specify the result type by passing the required type as the second
+argument to <code class="literal">evaluate()</code>&#8212;for example:</p><pre class="screen">String name = XPathBuilder
+                   .xpath("foo/bar")
+                   .evaluate(context, "&lt;foo&gt;&lt;bar&gt;cheese&lt;/bar&gt;&lt;/foo&gt;", String.class);
+Integer number = XPathBuilder
+                   .xpath("foo/bar")
+                   .evaluate(context, "&lt;foo&gt;&lt;bar&gt;123&lt;/bar&gt;&lt;/foo&gt;", Integer.class);
+Boolean bool = XPathBuilder
+                   .xpath("foo/bar")
+                   .evaluate(context, "&lt;foo&gt;&lt;bar&gt;true&lt;/bar&gt;&lt;/foo&gt;", Boolean.class);</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-EnableSaxon"></a>Enabling Saxon</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33473"></a>Prerequisites</h3></div></div></div><p>A prerequisite for using the Saxon parser is that you add a dependency on the
+<code class="literal">camel-saxon</code> artifact (either adding this dependency to your Maven
+POM, if you use Maven, or adding the <code class="literal">camel-saxon-6.3.0.redhat-187.jar</code> file
+to your classpath, otherwise).</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33474"></a>Using the Saxon parser in Java DSL</h3></div></div></div><p>In Java DSL, the simplest way to enable the Saxon parser is to call the
+<code class="literal">saxon()</code> fluent builder method. For example, you could invoke the
+Saxon parser as shown in the following example:</p><pre class="screen">// Java
+// create a builder to evaluate the xpath using saxon
+XPathBuilder builder = XPathBuilder.xpath("tokenize(/foo/bar, '_')[2]").saxon();
+
+// evaluate as a String result
+String result = builder.evaluate(context, "&lt;foo&gt;&lt;bar&gt;abc_def_ghi&lt;/bar&gt;&lt;/foo&gt;");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33475"></a>Using the Saxon parser in XML DSL</h3></div></div></div><p>In XML DSL, the simplest way to enable the Saxon parser is to set the
+<code class="literal">saxon</code> attribute to true in the <code class="literal">xpath</code> element. For
+example, you could invoke the Saxon parser as shown in the following example:</p><pre class="screen">&lt;xpath saxon="true" resultType="java.lang.String"&gt;current-dateTime()&lt;/xpath&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33476"></a>Programming with Saxon</h3></div></div></div><p>If you want to use the Saxon XML parser in your application code, you can create
+an instance of the Saxon transformer factory explicitly using the following
+code:</p><pre class="screen">// Java
+import javax.xml.transform.TransformerFactory;
+import net.sf.saxon.TransformerFactoryImpl;
+...
+TransformerFactory saxonFactory = new net.sf.saxon.TransformerFactoryImpl();</pre><p>On the other hand, if you prefer to use the generic JAXP API to create a
+transformer factory instance, you <span class="strong"><strong>must</strong></span> first set the
+<code class="literal">javax.xml.transform.TransformerFactory</code> property in the
+<code class="literal"><span class="emphasis"><em>ESBInstall</em></span>/etc/system.properties</code>
+file, as follows:</p><pre class="screen">javax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</pre><p>You can then instantiate the Saxon factory using the generic JAXP API, as
+follows:</p><pre class="screen">// Java
+import javax.xml.transform.TransformerFactory;
+...
+TransformerFactory factory = TransformerFactory.newInstance();</pre><p>If your application depends on any third-party libraries that use Saxon, it might
+be necessary to use the second, generic approach.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The Saxon library must be installed in the container as the OSGi bundle,
+<code class="literal">net.sf.saxon/saxon9he</code> (normally installed by default). In
+versions of Fuse ESB prior to 7.1, it is not possible to load Saxon using the
+generic JAXP API.</p></td></tr></table></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-Expressions"></a>Expressions</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33477"></a>Result type</h3></div></div></div><p>By default, an XPath expression returns a list of one or more XML nodes, of
+<code class="literal">org.w3c.dom.NodeList</code> type. You can use the type converter mechanism
+to convert the result to a different type, however. In the Java DSL, you can specify
+the result type in the second argument of the <code class="literal">xpath()</code> command. For
+example, to return the result of an XPath expression as a
+<code class="literal">String</code>:</p><pre class="screen">xpath("/person/name/text()", String.class)</pre><p>In the XML DSL, you can specify the result type in the <code class="literal">resultType</code>
+attribute, as follows:</p><pre class="screen">&lt;xpath resultType="java.lang.String"&gt;/person/name/text()&lt;/xpath&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33478"></a>Patterns in location paths</h3></div></div></div><p>You can use the following patterns in XPath location paths:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">/people/person</code></span></dt><dd><p class="simpara">The basic location path specifies the nested location of a particular
+element. That is, the preceding location path would match the person
+element in the following XML fragment:</p><pre class="screen">&lt;people&gt;
+  &lt;person&gt;...&lt;/person&gt;
+&lt;/people&gt;</pre><p class="simpara">Note that this basic pattern can match <span class="strong"><strong>multiple</strong></span>
+nodes&#8212;for example, if there is more than one <code class="literal">person</code>
+element inside the <code class="literal">people</code> element.</p></dd><dt><span class="term"><code class="literal">/name/text()</code></span></dt><dd>If you just want to access the <span class="strong"><strong>text</strong></span> inside by the
+element, append <code class="literal">/text()</code> to the location path, otherwise the
+node includes the element&#8217;s start and end tags (and these tags would be
+included when you convert the node to a string).</dd><dt><span class="term"><code class="literal">/person/telephone/@isDayTime</code></span></dt><dd><p class="simpara">To select the value of an attribute,
+<span class="emphasis"><em>AttributeName</em></span>, use the syntax
+<code class="literal">@<span class="emphasis"><em>AttributeName</em></span></code>. For
+example, the preceding location path returns <code class="literal">true</code> when
+applied to the following XML fragment:</p><pre class="screen">&lt;person&gt;
+  &lt;telephone isDayTime="true"&gt;1234567890&lt;/telephone&gt;
+&lt;/person&gt;</pre></dd><dt><span class="term"><code class="literal">*</code></span></dt><dd>A wildcard that matches all elements in the specified scope. For
+example, <code class="literal">/people/person/\*</code> matches all the child elements of
+<code class="literal">person</code>.</dd><dt><span class="term"><code class="literal">@*</code></span></dt><dd>A wildcard that matches all attributes of the matched elements. For
+example, <code class="literal">/person/name/@\*</code> matches all attributes of every
+matched <code class="literal">name</code> element.</dd><dt><span class="term"><code class="literal">//</code></span></dt><dd><p class="simpara">Match the location path at every nesting level. For example, the
+<code class="literal">//name</code> pattern matches every <code class="literal">name</code> element
+highlighted in the following XML fragment:</p><pre class="screen">&lt;invoice&gt;
+  &lt;person&gt;
+    &lt;<span class="strong"><strong>name</strong></span> .../&gt;
+  &lt;/person&gt;
+&lt;/invoice&gt;
+&lt;person&gt;
+  &lt;<span class="strong"><strong>name</strong></span> .../&gt;
+&lt;/person&gt;
+&lt;<span class="strong"><strong>name</strong></span> .../&gt;</pre></dd><dt><span class="term"><code class="literal">..</code></span></dt><dd>Selects the parent of the current context node. Not normally useful in
+the Apache Camel XPath language, because the current context node is the
+document root, which has no parent.</dd><dt><span class="term"><code class="literal">node()</code></span></dt><dd>Match any kind of node.</dd><dt><span class="term"><code class="literal">text()</code></span></dt><dd>Match a text node.</dd><dt><span class="term"><code class="literal">comment()</code></span></dt><dd>Match a comment node.</dd><dt><span class="term"><code class="literal">processing-instruction()</code></span></dt><dd>Match a processing-instruction node.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33479"></a>Predicate filters</h3></div></div></div><p>You can filter the set of nodes matching a location path by appending a predicate
+in square brackets, <code class="literal">[<span class="emphasis"><em>Predicate</em></span>]</code>. For
+example, you can select the
+<span class="emphasis"><em>N</em></span><sup>th</sup> node from the list of
+matches by appending <code class="literal">[<span class="emphasis"><em>N</em></span>]</code> to a location path.
+The following expression selects the first matching <code class="literal">person</code>
+element:</p><pre class="screen">/people/person[1]</pre><p>The following expression selects the second-last <code class="literal">person</code>
+element:</p><pre class="screen">/people/person[last()-1]</pre><p>You can test the value of attributes in order to select elements with particular
+attribute values. The following expression selects the <code class="literal">name</code> elements,
+whose <code class="literal">surname</code> attribute is either Strachan or Davies:</p><pre class="screen">/person/name[@surname="Strachan" or @surname="Davies"]</pre><p>You can combine predicate expressions using any of the conjunctions
+<code class="literal">and</code>, <code class="literal">or</code>, <code class="literal">not()</code>, and you can compare
+expressions using the comparators, <code class="literal">=</code>, <code class="literal">!=</code>, <code class="literal">&gt;</code>,
+<code class="literal">&gt;=</code>, <code class="literal">&lt;</code>, <code class="literal">&#8656;</code> (in practice, the
+less-than symbol must be replaced by the <code class="literal">&lt;</code> entity). You can also
+use XPath functions in the predicate filter.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33480"></a>Axes</h3></div></div></div><p>When you consider the structure of an XML document, the root element contains a
+sequence of children, and some of those child elements contain further children, and
+so on. Looked at in this way, where nested elements are linked together by the
+<span class="strong"><strong>child-of</strong></span> relationship, the whole XML document has the
+structure of a <span class="strong"><strong>tree</strong></span>. Now, if you choose a particular node in
+this element tree (call it the <span class="emphasis"><em>context node</em></span>), you might want
+to refer to different parts of the tree relative to the chosen node. For example,
+you might want to refer to the children of the context node, to the parent of the
+context node, or to all of the nodes that share the same parent as the context node
+(<span class="emphasis"><em>sibling nodes</em></span>).</p><p>An <span class="emphasis"><em>XPath axis</em></span> is used to specify the scope of a node match,
+restricting the search to a particular part of the node tree, relative to the
+current context node. The axis is attached as a prefix to the node name that you
+want to match, using the syntax,
+<code class="literal"><span class="emphasis"><em>AxisType</em></span>::<span class="emphasis"><em>MatchingNode</em></span></code>.
+For example, you can use the <code class="literal">child::</code> axis to search the children of the
+current context node, as follows:</p><pre class="screen">/invoice/items/child::item</pre><p>The context node of <code class="literal">child::item</code> is the <code class="literal">items</code> element
+that is selected by the path, <code class="literal">/invoice/items</code>. The <code class="literal">child::</code>
+axis restricts the search to the children of the context node, <code class="literal">items</code>,
+so that <code class="literal">child::item</code> matches the children of <code class="literal">items</code> that are
+named <code class="literal">item</code>. As a matter of fact, the <code class="literal">child::</code> axis is the
+default axis, so the preceding example can be written equivalently as:</p><pre class="screen">/invoice/items/item</pre><p>But there several other axes (13 in all), some of which you have already seen in
+abbreviated form: <code class="literal">@</code> is an abbreviation of <code class="literal">attribute::</code>, and
+<code class="literal">//</code> is an abbreviation of <code class="literal">descendant-or-self::</code>. The
+full list of axes is as follows (for details consult the reference below):</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">ancestor</code></li><li class="listitem"><code class="literal">ancestor-or-self</code></li><li class="listitem"><code class="literal">attribute</code></li><li class="listitem"><code class="literal">child</code></li><li class="listitem"><code class="literal">descendant</code></li><li class="listitem"><code class="literal">descendant-or-self</code></li><li class="listitem"><code class="literal">following</code></li><li class="listitem"><code class="literal">following-sibling</code></li><li class="listitem"><code class="literal">namespace</code></li><li class="listitem"><code class="literal">parent</code></li><li class="listitem"><code class="literal">preceding</code></li><li class="listitem"><code class="literal">preceding-sibling</code></li><li class="listitem"><code class="literal">self</code></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33481"></a>Functions</h3></div></div></div><p>XPath provides a small set of standard functions, which can be useful when
+evaluating predicates. For example, to select the last matching node from a node
+set, you can use the last() function, which returns the index of the last node in a
+node set, as follows:</p><pre class="screen">/people/person[last()]</pre><p>Where the preceding example selects the last <code class="literal">person</code> element in a
+sequence (in document order).</p><p>For full details of all the functions that XPath provides, consult the reference
+below.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33482"></a>Reference</h3></div></div></div><p>For full details of the XPath grammar, see the <a class="link" href="http://www.w3.org/TR/xpath/" target="_top">XML Path Language, Version 1.0</a>
+specification.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-Predicates"></a>Predicates</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33483"></a>Basic predicates</h3></div></div></div><p>You can use <code class="literal">xpath</code> in the Java DSL or the XML DSL in a context where a
+predicate is expected&#8212;for example, as the argument to a <code class="literal">filter()</code>
+processor or as the argument to a <code class="literal">when()</code> clause.</p><p>For example, the following route filters incoming messages, allowing a message to
+pass, only if the <code class="literal">/person/city</code> element contains the value,
+<code class="literal">London</code>:</p><pre class="screen">from("direct:tie")
+    .filter().xpath("/person/city = 'London'").to("file:target/messages/uk");</pre><p>The following route evaluates the XPath predicate in a <code class="literal">when()</code>
+clause:</p><pre class="screen">from("direct:tie")
+    .choice()
+        .when(xpath("/person/city = 'London'")).to("file:target/messages/uk")
+        .otherwise().to("file:target/messages/others");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33484"></a>XPath predicate operators</h3></div></div></div><p>The XPath language supports the standard XPath predicate operators, as shown in
+<a class="xref" href="XPath.html#Xpath-Predicates-TableOps" title="Table&nbsp;21.&nbsp;Operators for the XPath Language">Table&nbsp;21, &#8220;Operators for the XPath Language&#8221;</a>.</p><div class="table"><a name="Xpath-Predicates-TableOps"></a><p class="title"><b>Table&nbsp;21.&nbsp;Operators for the XPath Language</b></p><div class="table-contents"><table summary="Operators for the XPath Language" border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Operator</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">=</code></p></td><td align="left" valign="top"><p>Equals.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">!=</code></p></td><td align="left" valign="top"><p>Not equal to.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">&gt;</code></p></td><td align="left" valign="top"><p>Greater than.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">&gt;=</code></p></td><td align="left" valign="top"><p>Greater than or equals.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">&lt;</code></p></td><td align="left" valign="top"><p>Less than.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">&#8656;</code></p></td><td align="left" valign="top"><p>Less than or equals.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">or</code></p></td><td align="left" valign="top"><p>Combine two predicates with logical
+                                <span class="strong"><strong>and</strong></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">and</code></p></td><td align="left" valign="top"><p>Combine two predicates with logical <span class="strong"><strong>inclusive
+                                    or</strong></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">not()</code></p></td><td align="left" valign="top"><p>Negate predicate argument.</p></td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-VarsAndFuncs"></a>Using Variables and Functions</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33485"></a>Evaluating variables in a route</h3></div></div></div><p>When evaluating XPath expressions inside a route, you can use XPath variables to
+access the contents of the current exchange, as well as O/S environment variables
+and Java system properties. The syntax to access a variable value is
+<code class="literal">$<span class="emphasis"><em>VarName</em></span></code> or
+<code class="literal">$<span class="emphasis"><em>Prefix</em></span>:<span class="emphasis"><em>VarName</em></span></code>,
+if the variable is accessed through an XML namespace.</p><p>For example, you can access the <span class="strong"><strong>In</strong></span> message&#8217;s body as
+<code class="literal">$in:body</code> and the <span class="strong"><strong>In</strong></span> message&#8217;s header value as
+<code class="literal">$in:<span class="emphasis"><em>HeaderName</em></span></code>. O/S environment
+variables can be accessed as <code class="literal">$env:<span class="emphasis"><em>EnvVar</em></span></code> and
+Java system properties can be accessed as
+<code class="literal">$system:<span class="emphasis"><em>SysVar</em></span></code>.</p><p>In the following example, the first route extracts the value of the
+<code class="literal">/person/city</code> element and inserts it into the <code class="literal">city</code>
+header. The second route filters exchanges using the XPath expression,
+<code class="literal">$in:city = 'London'</code>, where the <code class="literal">$in:city</code> variable is
+replaced by the value of the <code class="literal">city</code> header.</p><pre class="screen">from("file:src/data?noop=true")
+    .setHeader("city").xpath("/person/city/text()")
+    .to("direct:tie");
+
+from("direct:tie")
+    .filter().xpath("$in:city = 'London'").to("file:target/messages/uk");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33486"></a>Evaluating functions in a route</h3></div></div></div><p>In addition to the standard XPath functions, the XPath language defines additional
+functions. These additional functions (which are listed in <a class="xref" href="XPath.html#Xpath-FuncRef-TableXPCF" title="Table&nbsp;23.&nbsp;XPath Custom Functions">Table&nbsp;23, &#8220;XPath Custom Functions&#8221;</a>) can be used to access the underlying
+exchange, to evaluate a simple expression or to look up a property in the Apache Camel
+property placeholder component.</p><p>For example, the following example uses the <code class="literal">in:header()</code> function and
+the <code class="literal">in:body()</code> function to access a head and the body from the
+underlying exchange:</p><pre class="screen">from("direct:start").choice()
+  .when().xpath("in:header('foo') = 'bar'").to("mock:x")
+  .when().xpath("in:body() = '&lt;two/&gt;'").to("mock:y")
+  .otherwise().to("mock:z");</pre><p>Notice the similarity between theses functions and the corresponding
+<code class="literal">in:<span class="emphasis"><em>HeaderName</em></span></code> or
+<code class="literal">in:body</code> variables. The functions have a slightly different syntax
+however: <code class="literal">in:header(<span class="emphasis"><em>'HeaderName'</em></span>)</code> instead of
+<code class="literal">in:<span class="emphasis"><em>HeaderName</em></span></code>; and
+<code class="literal">in:body()</code> instead of <code class="literal">in:body</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33487"></a>Evaluating variables in XPathBuilder</h3></div></div></div><p>You can also use variables in expressions that are evaluated using the
+<code class="literal">XPathBuilder</code> class. In this case, you cannot use variables such as
+<code class="literal">$in:body</code> or <code class="literal">$in:<span class="emphasis"><em>HeaderName</em></span></code>,
+because there is no exchange object to evaluate against. But you
+<span class="strong"><strong>can</strong></span> use variables that are defined inline using the
+<code class="literal">variable(<span class="emphasis"><em>Name</em></span>,
+<span class="emphasis"><em>Value</em></span>)</code> fluent builder method.</p><p>For example, the following XPathBuilder construction evaluates the
+<code class="literal">$test</code> variable, which is defined to have the value,
+<code class="literal">London</code>:</p><pre class="screen">String var = XPathBuilder.xpath("$test")
+               .variable("test", "London")
+               .evaluate(getContext(), "&lt;name&gt;foo&lt;/name&gt;");</pre><p>Note that variables defined in this way are automatically entered into the global
+namespace (for example, the variable, <code class="literal">$test</code>, uses no prefix).</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-VarNspc"></a>Variable Namespaces</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33488"></a>Table of namespaces</h3></div></div></div><p><a class="xref" href="XPath.html#Xpath-VarNspc-TableXPVN" title="Table&nbsp;22.&nbsp;XPath Variable Namespaces">Table&nbsp;22, &#8220;XPath Variable Namespaces&#8221;</a> shows the namespace URIs that are
+associated with the various namespace prefixes.</p><div class="table"><a name="Xpath-VarNspc-TableXPVN"></a><p class="title"><b>Table&nbsp;22.&nbsp;XPath Variable Namespaces</b></p><div class="table-contents"><table summary="XPath Variable Namespaces" border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Namespace URI</th><th align="left" valign="top">Prefix</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/schema/spring" target="_top">http://camel.apache.org/schema/spring</a></code></p></td><td align="left" valign="top"><p><span class="strong"><strong>None</strong></span></p></td><td align="left" valign="top"><p>Default namespace (associated with variables that have no
+                                namespace prefix).</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/in/" target="_top">http://camel.apache.org/xml/in/</a></code></p></td><td align="left" valign="top"><p><code class="literal">in</code></p></td><td align="left" valign="top"><p>Used to reference header or body of the current exchange&#8217;s
+                                    <span class="strong"><strong>In</strong></span> message.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/out/" target="_top">http://camel.apache.org/xml/out/</a></code></p></td><td align="left" valign="top"><p><code class="literal">out</code></p></td><td align="left" valign="top"><p>Used to reference header or body of the current exchange&#8217;s
+                                    <span class="strong"><strong>Out</strong></span> message.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/functions/" target="_top">http://camel.apache.org/xml/functions/</a></code></p></td><td align="left" valign="top"><p><code class="literal">functions</code></p></td><td align="left" valign="top"><p>Used to reference some custom functions.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/variables/environment-variables" target="_top">http://camel.apache.org/xml/variables/environment-variables</a></code></p></td><td align="left" valign="top"><p><code class="literal">env</code></p></td><td align="left" valign="top"><p>Used to reference O/S environment variables.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/variables/system-properties" target="_top">http://camel.apache.org/xml/variables/system-properties</a></code></p></td><td align="left" valign="top"><p><code class="literal">system</code></p></td><td align="left" valign="top"><p>Used to reference Java system properties.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal"><a class="link" href="http://camel.apache.org/xml/variables/exchange-property" target="_top">http://camel.apache.org/xml/variables/exchange-property</a></code></p></td><td align="left" valign="top"><p><span class="strong"><strong>Undefined</strong></span></p></td><td align="left" valign="top"><p>Used to reference exchange properties. You must define your own
+                                prefix for this namespace.</p></td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-FuncRef"></a>Function Reference</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33489"></a>Table of custom functions</h3></div></div></div><p><a class="xref" href="XPath.html#Xpath-FuncRef-TableXPCF" title="Table&nbsp;23.&nbsp;XPath Custom Functions">Table&nbsp;23, &#8220;XPath Custom Functions&#8221;</a> shows the custom functions that you can
+use in Apache Camel XPath expressions. These functions can be used in addition to the
+standard XPath functions.</p><div class="table"><a name="Xpath-FuncRef-TableXPCF"></a><p class="title"><b>Table&nbsp;23.&nbsp;XPath Custom Functions</b></p><div class="table-contents"><table summary="XPath Custom Functions" border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Function</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">in:body()</code></p></td><td align="left" valign="top"><p>Returns the <span class="strong"><strong>In</strong></span> message body.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">in:header(<span class="emphasis"><em>HeaderName</em></span>)</code></p></td><td align="left" valign="top"><p>Returns the <span class="strong"><strong>In</strong></span> message header with name,
+                                    <span class="emphasis"><em>HeaderName</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">out:body()</code></p></td><td align="left" valign="top"><p>Returns the <span class="strong"><strong>Out</strong></span> message body.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">out:header(<span class="emphasis"><em>HeaderName</em></span>)</code></p></td><td align="left" valign="top"><p>Returns the <span class="strong"><strong>Out</strong></span> message header with name,
+                                    <span class="emphasis"><em>HeaderName</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">function:properties(<span class="emphasis"><em>PropKey</em></span>)</code></p></td><td align="left" valign="top"><p>Looks up a property with the key,
+                                    <span class="emphasis"><em>PropKey</em></span> .</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">function:simple(<span class="emphasis"><em>SimpleExp</em></span>)</code></p></td><td align="left" valign="top"><p>Evaluates the specified simple expression,
+                                    <span class="emphasis"><em>SimpleExp</em></span>.</p></td></tr></tbody></table></div></div><br class="table-break"></div></div></div></body></html>

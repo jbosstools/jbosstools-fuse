@@ -1,0 +1,120 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Spring Security Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="SpringRedis-SpringRedisComponent.html" title="Spring Redis Component"><link rel="next" href="SpringWebServices-SpringWebServicesComponent.html" title="Spring Web Services Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="SpringSecurity-SpringSecurity"></a>Spring Security Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-Creatingauthorizationpolicies">Creating authorization policies</a></span></dt><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-ControllingaccesstoCamelroutes">Controlling access to Camel routes</a></span></dt><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-Authentication">Authentication</a></span></dt><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-Handlingauthenticationandauthorizationerrors">Handling authentication and authorization errors</a></span></dt><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-Dependencies">Dependencies</a></span></dt><dt><span class="section"><a href="SpringSecurity-SpringSecurity.html#SpringSecurity-SeeAlso">See Also</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel 2.3</strong></span></p><p>The <span class="strong"><strong>camel-spring-security</strong></span> component provides role-based authorization
+for Camel routes. It leverages the authentication and user services
+provided by
+<a class="link" href="http://static.springsource.org/spring-security/site/index.html" target="_top">Spring
+Security</a> (formerly Acegi Security) and adds a declarative, role-based
+policy system to control whether a route can be executed by a given
+principal.</p><p>If you are not familiar with the Spring Security authentication and
+authorization system, please review the current reference documentation
+on the SpringSource web site linked above.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-Creatingauthorizationpolicies"></a>Creating authorization policies</h2></div></div></div><p>Access to a route is controlled by an instance of a
+<code class="literal">SpringSecurityAuthorizationPolicy</code> object. A policy object contains the
+name of the Spring Security authority (role) required to run a set of
+endpoints and references to Spring Security <code class="literal">AuthenticationManager</code> and
+<code class="literal">AccessDecisionManager</code> objects used to determine whether the current
+principal has been assigned that role. Policy objects may be configured
+as Spring beans or by using an <code class="literal">&lt;authorizationPolicy&gt;</code> element in Spring
+XML.</p><p>The <code class="literal">&lt;authorizationPolicy&gt;</code> element may contain the following
+attributes:</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default Value</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">id</code></p></td><td align="left" valign="top"><p><code class="literal">null</code></p></td><td align="left" valign="top"><p>The unique Spring bean identifier which is used to reference the policy
+in routes (required)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">access</code></p></td><td align="left" valign="top"><p><code class="literal">null</code></p></td><td align="left" valign="top"><p>The Spring Security authority name that is passed to the access decision
+manager (required)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">authenticationManager</code></p></td><td align="left" valign="top"><p><code class="literal">authenticationManager</code></p></td><td align="left" valign="top"><p>The name of the Spring Security <code class="literal">AuthenticationManager</code> object in the
+context</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">accessDecisionManager</code></p></td><td align="left" valign="top"><p><code class="literal">accessDecisionManager</code></p></td><td align="left" valign="top"><p>The name of the Spring Security <code class="literal">AccessDecisionManager</code> object in the
+context</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">authenticationAdapter</code></p></td><td align="left" valign="top"><p>DefaultAuthenticationAdapter</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.4</strong></span> The name of a <span class="strong"><strong>camel-spring-security</strong></span>
+<code class="literal">AuthenticationAdapter</code> object in the context that is used to convert a
+<code class="literal">javax.security.auth.Subject</code> into a Spring Security <code class="literal">Authentication</code>
+instance.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">useThreadSecurityContext</code></p></td><td align="left" valign="top"><p><code class="literal">true</code></p></td><td align="left" valign="top"><p>If a <code class="literal">javax.security.auth.Subject</code> cannot be found in the In message
+header under Exchange.AUTHENTICATION, check the Spring Security
+<code class="literal">SecurityContextHolder</code> for an <code class="literal">Authentication</code> object.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">alwaysReauthenticate</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If set to true, the <code class="literal">SpringSecurityAuthorizationPolicy</code> will always call
+<code class="literal">AuthenticationManager.authenticate()</code> each time the policy is accessed.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-ControllingaccesstoCamelroutes"></a>Controlling access to Camel routes</h2></div></div></div><p>A Spring Security <code class="literal">AuthenticationManager</code> and <code class="literal">AccessDecisionManager</code>
+are required to use this component. Here is an example of how to
+configure these objects in Spring XML using the Spring Security
+namespace:</p><p>Now that the underlying security objects are set up, we can use them to
+configure an authorization policy and use that policy to control access
+to a route:</p><p>In this example, the endpoint <code class="literal">mock:end</code> will not be executed unless a
+Spring Security <code class="literal">Authentication</code> object that has been or can be
+authenticated and contains the <code class="literal">ROLE_ADMIN</code> authority can be located by
+the <span class="emphasis"><em>admin</em></span> <code class="literal">SpringSecurityAuthorizationPolicy</code>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-Authentication"></a>Authentication</h2></div></div></div><p>The process of obtaining security credentials that are used for
+authorization is not specified by this component. You can write your own
+processors or components which get authentication information from the
+exchange depending on your needs. For example, you might create a
+processor that gets credentials from an HTTP request header originating
+in the <a class="link" href="jetty.html" target="_top">Jetty</a> component. No matter how the credentials
+are collected, they need to be placed in the In message or the
+<code class="literal">SecurityContextHolder</code> so the Camel <a class="link" href="spring-security.html" target="_top">Spring
+Security</a> component can access them:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> javax.security.auth.Subject;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.*;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.commons.codec.binary.Base64;
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.springframework.security.authentication.*;
+
+
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> MyAuthService <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">implements</strong> Processor {
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> process(Exchange exchange) <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// get the username and password from the HTTP header</em>
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// http://en.wikipedia.org/wiki/Basic_access_authentication</em>
+        String userpass = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> String(Base64.decodeBase64(exchange.getIn().getHeader(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Authorization"</em></strong>, String.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>)));
+        String[] tokens = userpass.split(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">":"</em></strong>);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// create an Authentication object</em>
+        UsernamePasswordAuthenticationToken authToken = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> UsernamePasswordAuthenticationToken(tokens[<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>], tokens[<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>]);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// wrap it in a Subject</em>
+        Subject subject = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> Subject();
+        subject.getPrincipals().add(authToken);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// place the Subject in the In message</em>
+        exchange.getIn().setHeader(Exchange.AUTHENTICATION, subject);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// you could also do this if useThreadSecurityContext is set to true</em>
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// SecurityContextHolder.getContext().setAuthentication(authToken);</em>
+    }
+}</pre><p>The <code class="literal">SpringSecurityAuthorizationPolicy</code> will automatically authenticate
+the <code class="literal">Authentication</code> object if necessary.</p><p>There are two issues to be aware of when using the
+<code class="literal">SecurityContextHolder</code> instead of or in addition to the
+<code class="literal">Exchange.AUTHENTICATION</code> header. First, the context holder uses a
+thread-local variable to hold the <code class="literal">Authentication</code> object. Any routes
+that cross thread boundaries, like <span class="strong"><strong>seda</strong></span> or <span class="strong"><strong>jms</strong></span>, will lose the
+<code class="literal">Authentication</code> object. Second, the Spring Security system appears to
+expect that an <code class="literal">Authentication</code> object in the context is already
+authenticated and has roles (see the Technical Overview
+<a class="link" href="http://static.springsource.org/spring-security/site/docs/3.0.x/reference/technical-overview.html#tech-intro-authentication" target="_top">section
+5.3.1</a> for more details).</p><p>The default behavior of <span class="strong"><strong>camel-spring-security</strong></span> is to look for a
+<code class="literal">Subject</code> in the <code class="literal">Exchange.AUTHENTICATION</code> header. This <code class="literal">Subject</code> must
+contain at least one principal, which must be a subclass of
+<code class="literal">org.springframework.security.core.Authentication</code>. You can customize
+the mapping of <code class="literal">Subject</code> to <code class="literal">Authentication</code> object by providing an
+implementation of the
+<code class="literal">org.apache.camel.component.spring.security.AuthenticationAdapter</code> to
+your <code class="literal">&lt;authorizationPolicy&gt;</code> bean. This can be useful if you are working
+with components that do not use Spring Security but do provide a
+<code class="literal">Subject</code>. At this time, only the <a class="link" href="cxf.html" target="_top">CXF</a> component populates
+the <code class="literal">Exchange.AUTHENTICATION</code> header.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-Handlingauthenticationandauthorizationerrors"></a>Handling authentication and authorization errors</h2></div></div></div><p>If authentication or authorization fails in the
+<code class="literal">SpringSecurityAuthorizationPolicy</code>, a <code class="literal">CamelAuthorizationException</code>
+will be thrown. This can be handled using Camel&#8217;s standard exception
+handling methods, like the <a class="link" href="exception-clause.html" target="_top">Exception Clause</a>.
+The <code class="literal">CamelAuthorizationException</code> will have a reference to the ID of the
+policy which threw the exception so you can handle errors based on the
+policy as well as the type of exception:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;onException&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;exception&gt;</strong>org.springframework.security.authentication.AccessDeniedException<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/exception&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;choice&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;when&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;simple&gt;</strong>${exception.policyId} == 'user'<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/simple&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;transform&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>You do not have ROLE_USER access!<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/transform&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/when&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;when&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;simple&gt;</strong>${exception.policyId} == 'admin'<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/simple&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;transform&gt;</strong>
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>You do not have ROLE_ADMIN access!<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+      <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/transform&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/when&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/choice&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/onException&gt;</strong></pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-Dependencies"></a>Dependencies</h2></div></div></div><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+for this component:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-spring-security<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>2.4.0<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><p>This dependency will also pull in
+<code class="literal">org.springframework.security:spring-security-core:3.0.3.RELEASE</code> and
+<code class="literal">org.springframework.security:spring-security-config:3.0.3.RELEASE</code>.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringSecurity-SeeAlso"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a class="link" href="configuring-camel.html" target="_top">Configuring Camel</a></li><li class="listitem"><a class="link" href="component.html" target="_top">Component</a></li><li class="listitem"><a class="link" href="endpoint.html" target="_top">Endpoint</a></li><li class="listitem"><a class="link" href="getting-started.html" target="_top">Getting Started</a></li><li class="listitem"><a class="link" href="components.html" target="_top">Components</a></li></ul></div></div></div></body></html>

@@ -1,0 +1,175 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Shiro Security Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="SFTPComponent.html" title="SFTP Component"><link rel="next" href="Sip-SIPComponent.html" title="SIP Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="ShiroSecurity-ShiroSecurityComponent"></a>Shiro Security Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-ShiroSecurityBasics">Shiro Security Basics</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-InstantiatingaShiroSecurityPolicyObject">Instantiating a ShiroSecurityPolicy Object</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-ShiroSecurityPolicyOptions">ShiroSecurityPolicy Options</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-ApplyingShiroAuthenticationonaCamelRoute">Applying Shiro Authentication on a Camel Route</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-ApplyingShiroAuthorizationonaCamelRoute">Applying Shiro Authorization on a Camel Route</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-CreatingaShiroSecurityTokenandinjectingitintoaMessageExchange">Creating a ShiroSecurityToken and injecting it into a Message Exchange</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-SendingMessagestoroutessecuredbyaShiroSecurityPolicy">Sending Messages to routes secured by a ShiroSecurityPolicy</a></span></dt><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-SendingMessagestoroutessecuredbyaShiroSecurityPolicymucheasierfromCamel2.12onwards">Sending Messages to routes secured by a ShiroSecurityPolicy (much easier from Camel 2.12 onwards)</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel 2.5</strong></span></p><p>The <span class="strong"><strong>shiro-security</strong></span> component in Camel is a security focused component,
+based on the Apache Shiro security project.</p><p>Apache Shiro is a powerful and flexible open-source security framework
+that cleanly handles authentication, authorization, enterprise session
+management and cryptography. The objective of the Apache Shiro project
+is to provide the most robust and comprehensive application security
+framework available while also being very easy to understand and
+extremely simple to use.</p><p>This camel shiro-security component allows authentication and
+authorization support to be applied to different segments of a camel
+route.</p><p>Shiro security is applied on a route using a Camel Policy. A Policy in
+Camel utilizes a strategy pattern for applying interceptors on Camel
+Processors. It offering the ability to apply cross-cutting concerns (for
+example. security, transactions etc) on sections/segments of a camel
+route.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+for this component:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-shiro<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-ShiroSecurityBasics"></a>Shiro Security Basics</h2></div></div></div><p>To employ Shiro security on a camel route, a ShiroSecurityPolicy object
+must be instantiated with security configuration details (including
+users, passwords, roles etc). This object must then be applied to a
+camel route. This ShiroSecurityPolicy Object may also be registered in
+the Camel registry (JNDI or ApplicationContextRegistry) and then
+utilized on other routes in the Camel Context.</p><p>Configuration details are provided to the ShiroSecurityPolicy using an
+Ini file (properties file) or an Ini object. The Ini file is a standard
+Shiro configuration file containing user/role details as shown below</p><pre class="programlisting">[users]
+# user <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'ringo'</em></strong> with password <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'starr'</em></strong> and the <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'sec-level1'</em></strong> role
+ringo = starr, sec-level1
+george = harrison, sec-level2
+john = lennon, sec-level3
+paul = mccartney, sec-level3
+
+[roles]
+# <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'sec-level3'</em></strong> role has all permissions, indicated by the
+# wildcard <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'*'</em></strong>
+sec-level3 = *
+
+# The <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'sec-level2'</em></strong> role can <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">do</strong> anything with access of permission
+# readonly (*) to help
+sec-level2 = zone1:*
+
+# The <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">'sec-level1'</em></strong> role can <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">do</strong> anything with access of permission
+# readonly
+sec-level1 = zone1:readonly:*</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-InstantiatingaShiroSecurityPolicyObject"></a>Instantiating a ShiroSecurityPolicy Object</h2></div></div></div><p>A ShiroSecurityPolicy object is instantiated as follows</p><pre class="programlisting">        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> String iniResourcePath = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"classpath:shiro.ini"</em></strong>;
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>[] passPhrase = {
+            (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x08</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x09</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0A</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0B</span>,
+            (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0C</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0D</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0E</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x0F</span>,
+            (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x10</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x11</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x12</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x13</span>,
+            (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x14</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x15</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x16</span>, (<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">byte</strong>) <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0x17</span>};
+        List&lt;permission&gt; permissionsList = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ArrayList&lt;permission&gt;();
+        Permission permission = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> WildcardPermission(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"zone1:readwrite:*"</em></strong>);
+        permissionsList.add(permission);
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> ShiroSecurityPolicy securityPolicy =
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityPolicy(iniResourcePath, passPhrase, true, permissionsList);</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-ShiroSecurityPolicyOptions"></a>ShiroSecurityPolicy Options</h2></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="8%" class="col_1"><col width="8%" class="col_2"><col width="8%" class="col_3"><col width="76%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default Value</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">iniResourcePath or ini</code></p></td><td align="left" valign="top"><p><code class="literal">none</code></p></td><td align="left" valign="top"><p>Resource String or Ini Object</p></td><td align="left" valign="top"><p>A mandatory Resource String for the iniResourcePath or an instance of an
+Ini object must be passed to the security policy. Resources can be
+acquired from the file system, classpath, or URLs when prefixed with
+"file:, classpath:, or url:" respectively. For e.g "classpath:shiro.ini"</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">passPhrase</code></p></td><td align="left" valign="top"><p><code class="literal">An AES 128 based key</code></p></td><td align="left" valign="top"><p>byte[]</p></td><td align="left" valign="top"><p>A passPhrase to decrypt ShiroSecurityToken(s) sent along with Message
+Exchanges</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">alwaysReauthenticate</code></p></td><td align="left" valign="top"><p><code class="literal">true</code></p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>Setting to ensure re-authentication on every individual request. If set
+to false, the user is authenticated and locked such than only requests
+from the same user going forward are authenticated.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">permissionsList</code></p></td><td align="left" valign="top"><p><code class="literal">none</code></p></td><td align="left" valign="top"><p>List&lt;Permission&gt;</p></td><td align="left" valign="top"><p>A List of permissions required in order for an authenticated user to be
+authorized to perform further action i.e continue further on the route.
+If no Permissions list or Roles List (see below) is provided to the
+ShiroSecurityPolicy object, then authorization is deemed as not
+required. Note that the default is that authorization is granted if any
+of the Permission Objects in the list are applicable.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">rolesList</code></p></td><td align="left" valign="top"><p><code class="literal">none</code></p></td><td align="left" valign="top"><p>List&lt;String&gt;</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.13:</strong></span> A List of roles required in order for an authenticated
+user to be authorized to perform further action i.e continue further on
+the route. If no roles list or permissions list (see above) is provided
+to the ShiroSecurityPolicy object, then authorization is deemed as not
+required. Note that the default is that authorization is granted if any
+of the roles in the list are applicable.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">cipherService</code></p></td><td align="left" valign="top"><p><code class="literal">AES</code></p></td><td align="left" valign="top"><p>org.apache.shiro.crypto.CipherService</p></td><td align="left" valign="top"><p>Shiro ships with AES &amp; Blowfish based CipherServices. You may use one
+these or pass in your own Cipher implementation</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">base64</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">boolean</code></p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.12:</strong></span> To use base64 encoding for the security token header,
+which allows transferring the header over <a class="link" href="jms.html" target="_top">JMS</a> etc. This
+option must also be set on <code class="literal">ShiroSecurityTokenInjector</code> as well.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">allPermissionsRequired</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">boolean</code></p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.13:</strong></span> The default is that authorization is granted if any of the
+Permission Objects in the permissionsList parameter are applicable. Set
+this to true to require all of the Permissions to be met.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">allRolesRequired</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><code class="literal">boolean</code></p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.13:</strong></span> The default is that authorization is granted if any of the
+roles in the rolesList parameter are applicable. Set this to true to
+require all of the roles to be met.</p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-ApplyingShiroAuthenticationonaCamelRoute"></a>Applying Shiro Authentication on a Camel Route</h2></div></div></div><p>The ShiroSecurityPolicy, tests and permits incoming message exchanges
+containing a encrypted SecurityToken in the Message Header to proceed
+further following proper authentication. The SecurityToken object
+contains a Username/Password details that are used to determine where
+the user is a valid user.</p><pre class="programlisting">    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> RouteBuilder createRouteBuilder() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> ShiroSecurityPolicy securityPolicy =
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityPolicy(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"classpath:shiro.ini"</em></strong>, passPhrase);
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() {
+                onException(UnknownAccountException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(IncorrectCredentialsException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(LockedAccountException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(AuthenticationException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+
+                from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:incoming payload"</em></strong>).
+                    policy(securityPolicy).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:success"</em></strong>);
+            }
+        };
+    }</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-ApplyingShiroAuthorizationonaCamelRoute"></a>Applying Shiro Authorization on a Camel Route</h2></div></div></div><p>Authorization can be applied on a camel route by associating a
+Permissions List with the ShiroSecurityPolicy. The Permissions List
+specifies the permissions necessary for the user to proceed with the
+execution of the route segment. If the user does not have the proper
+permission set, the request is not authorized to continue any further.</p><pre class="programlisting">    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> RouteBuilder createRouteBuilder() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">final</strong> ShiroSecurityPolicy securityPolicy =
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityPolicy(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"./src/test/resources/securityconfig.ini"</em></strong>, passPhrase);
+
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() {
+                onException(UnknownAccountException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(IncorrectCredentialsException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(LockedAccountException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+                onException(AuthenticationException.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:authenticationException"</em></strong>);
+
+                from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"log:incoming payload"</em></strong>).
+                    policy(securityPolicy).
+                    to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"mock:success"</em></strong>);
+            }
+        };
+    }</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-CreatingaShiroSecurityTokenandinjectingitintoaMessageExchange"></a>Creating a ShiroSecurityToken and injecting it into a Message Exchange</h2></div></div></div><p>A ShiroSecurityToken object may be created and injected into a Message
+Exchange using a Shiro Processor called ShiroSecurityTokenInjector. An
+example of injecting a ShiroSecurityToken using a
+ShiroSecurityTokenInjector in the client is shown below</p><pre class="programlisting">    ShiroSecurityToken shiroSecurityToken = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityToken(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ringo"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"starr"</em></strong>);
+    ShiroSecurityTokenInjector shiroSecurityTokenInjector =
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityTokenInjector(shiroSecurityToken, passPhrase);
+
+    from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:client"</em></strong>).
+        process(shiroSecurityTokenInjector).
+        to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>);</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-SendingMessagestoroutessecuredbyaShiroSecurityPolicy"></a>Sending Messages to routes secured by a ShiroSecurityPolicy</h2></div></div></div><p>Messages and Message Exchanges sent along the camel route where the
+security policy is applied need to be accompanied by a SecurityToken in
+the Exchange Header. The SecurityToken is an encrypted object that holds
+a Username and Password. The SecurityToken is encrypted using AES 128
+bit security by default and can be changed to any cipher of your choice.</p><p>Given below is an example of how a request may be sent using a
+ProducerTemplate in Camel along with a SecurityToken</p><pre class="programlisting">    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Test</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> testSuccessfulShiroAuthenticationWithNoAuthorization() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//Incorrect password</em>
+        ShiroSecurityToken shiroSecurityToken = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityToken(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ringo"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"stirr"</em></strong>);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// TestShiroSecurityTokenInjector extends ShiroSecurityTokenInjector</em>
+        TestShiroSecurityTokenInjector shiroSecurityTokenInjector =
+            <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> TestShiroSecurityTokenInjector(shiroSecurityToken, passPhrase);
+
+        successEndpoint.expectedMessageCount(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>);
+        failureEndpoint.expectedMessageCount(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>);
+
+        template.send(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>, shiroSecurityTokenInjector);
+
+        successEndpoint.assertIsSatisfied();
+        failureEndpoint.assertIsSatisfied();
+    }</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ShiroSecurity-SendingMessagestoroutessecuredbyaShiroSecurityPolicymucheasierfromCamel2.12onwards"></a>Sending Messages to routes secured by a ShiroSecurityPolicy (much easier from Camel 2.12 onwards)</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ShiroSecurity-ShiroSecurityComponent.html#ShiroSecurity-UsingShiroSecurityToken">Using ShiroSecurityToken</a></span></dt></dl></div><p>From <span class="strong"><strong>Camel 2.12</strong></span> onwards its even easier as you can provide the subject
+in two different ways.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="ShiroSecurity-UsingShiroSecurityToken"></a>Using ShiroSecurityToken</h3></div></div></div><p>You can send a message to a Camel route with a header of key
+<code class="literal">ShiroSecurityConstants.SHIRO_SECURITY_TOKEN</code> of the type
+<code class="literal">org.apache.camel.component.shiro.security.ShiroSecurityToken</code> that
+contains the username and password. For example:</p><pre class="programlisting">        ShiroSecurityToken shiroSecurityToken = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> ShiroSecurityToken(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ringo"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"starr"</em></strong>);
+
+        template.sendBodyAndHeader(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Beatle Mania"</em></strong>, ShiroSecurityConstants.SHIRO_SECURITY_TOKEN, shiroSecurityToken);</pre><p>You can also provide the username and password in two different headers
+as shown below:</p><pre class="programlisting">        Map&lt;String, Object&gt; headers = <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> HashMap&lt;String, Object&gt;();
+        headers.put(ShiroSecurityConstants.SHIRO_SECURITY_USERNAME, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"ringo"</em></strong>);
+        headers.put(ShiroSecurityConstants.SHIRO_SECURITY_PASSWORD, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"starr"</em></strong>);
+        template.sendBodyAndHeaders(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"direct:secureEndpoint"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Beatle Mania"</em></strong>, headers);</pre><p>When you use the username and password headers, then the
+ShiroSecurityPolicy in the Camel route will automatic transform those
+into a single header with key
+ShiroSecurityConstants.SHIRO_SECURITY_TOKEN with the token. Then token
+is either a <code class="literal">ShiroSecurityToken</code> instance, or a base64 representation as
+a String (the latter is when you have set base64=true).</p></div></div></div></body></html>

@@ -1,9 +1,1602 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>SAP Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="The SAP component is a package consisting of a suite of ten different SAP components. There are remote function call (RFC) components that support the sRFC, tRFC, and qRFC protocols; and there are IDoc components that facilitate communication using messages in IDoc format. The component uses the SAP Java Connector (SAP JCo) library to facilitate bidirectional communication with SAP and the SAP IDoc library to facilitate the transmission of documents in the Intermediate Document (IDoc) format."><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Salesforce.html" title="Salesforce"><link rel="next" href="SAP-Overview.html" title="Overview"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="SAP"></a>SAP Component</h1></div><div><div class="abstract"><p>The SAP component is a package consisting of a suite of ten different SAP
-                components. There are remote function call (RFC) components that support the sRFC,
-                tRFC, and qRFC protocols; and there are IDoc components that facilitate
-                communication using messages in IDoc format. The component uses the SAP Java
-                Connector (SAP JCo) library to facilitate bidirectional communication with SAP and
-                the SAP IDoc library to facilitate the transmission of documents in the Intermediate
-                Document (IDoc) format.</p></div></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SAP-Overview.html">Overview</a></span></dt><dt><span class="section"><a href="SAP-Config.html">Configuration</a></span></dt><dt><span class="section"><a href="SAP-Message-RFC.html">Message Body for RFC</a></span></dt><dt><span class="section"><a href="SAP-Message-IDoc.html">Message Body for IDoc</a></span></dt><dt><span class="section"><a href="SAP-Txn.html">Transaction Support</a></span></dt><dt><span class="section"><a href="SAP-XMLSerial-RFC.html">XML Serialization for RFC</a></span></dt><dt><span class="section"><a href="SAP-XMLSerial-IDoc.html">XML Serialization for IDoc</a></span></dt><dt><span class="section"><a href="SAP-Example1.html">Example 1: Reading Data from SAP</a></span></dt><dt><span class="section"><a href="SAP-Example2.html">Example 2: Writing Data to SAP</a></span></dt><dt><span class="section"><a href="SAP-Example3.html">Example 3: Handling Requests from SAP</a></span></dt></dl></div></div></body></html>
+   <title>SAP Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="Salesforce-Salesforcecomponent.html" title="Salesforce Component"><link rel="next" href="SAPNetWeaver-SAPNetWeaverGatewaycomponent.html" title="SAP NetWeaver Gateway Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="SAP"></a>SAP Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SAP.html#SAP-Overview">Overview</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Config">Configuration</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Message-RFC">Message Body for RFC</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Message-IDoc">Message Body for IDoc</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Txn">Transaction Support</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-XMLSerial-RFC">XML Serialization for RFC</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-XMLSerial-IDoc">XML Serialization for IDoc</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Example1">Example 1: Reading Data from SAP</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Example2">Example 2: Writing Data to SAP</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-Example3">Example 3: Handling Requests from SAP</a></span></dt></dl></div><p>The SAP component is a package consisting of a suite of ten different SAP
+components. There are remote function call (RFC) components that support the sRFC,
+tRFC, and qRFC protocols; and there are IDoc components that facilitate
+communication using messages in IDoc format. The component uses the SAP Java
+Connector (SAP JCo) library to facilitate bidirectional communication with SAP and
+the SAP IDoc library to facilitate the transmission of documents in the Intermediate
+Document (IDoc) format.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Overview"></a>Overview</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37497"></a>Dependencies</h3></div></div></div><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
+file to use this component:</p><pre class="screen">&lt;dependency&gt;
+    &lt;groupId&gt;org.fusesource&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-sap&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+&lt;dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_additional_platform_restrictions_for_the_sap_component"></a>Additional platform restrictions for the SAP component</h3></div></div></div><p>Because the SAP component depends on the third-party JCo 3.0 and IDoc 3.0
+libraries, it can only be installed on the platforms that these libraries support.
+For more details about the platform restrictions, see <a class="link" href="https://access.redhat.com/site/articles/310603" target="_top">Red Hat JBoss Fuse
+Supported Configurations</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_sap_jco_and_sap_idoc_libraries"></a>SAP JCo and SAP IDoc libraries</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
+JCo) libraries and the SAP IDoc library are installed into the <code class="literal">lib/</code>
+directory of the Java runtime. You must make sure that you download the appropriate
+set of SAP libraries for your target operating system from the SAP Service
+Marketplace.</p><p>The names of the library files vary depending on the target operating system, as
+shown in <a class="xref" href="SAP.html#SAP-Overview-TableRSAPL" title="Table&nbsp;148.&nbsp;Required SAP Libraries">Table&nbsp;148, &#8220;Required SAP Libraries&#8221;</a>.</p><div class="table"><a name="SAP-Overview-TableRSAPL"></a><p class="title"><b>Table&nbsp;148.&nbsp;Required SAP Libraries</b></p><div class="table-contents"><table summary="Required SAP Libraries" border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">SAP Component</th><th align="left" valign="top">Linux and UNIX</th><th align="left" valign="top">Windows</th></tr></thead><tbody><tr><td align="left" valign="top"><p>SAP JCo 3</p></td><td align="left" valign="top"><p><code class="literal">sapjco3.jar</code></p>
+<p><code class="literal">libsapjco3.so</code></p></td><td align="left" valign="top"><p><code class="literal">sapjco3.jar</code></p>
+<p><code class="literal">sapjco3.dll</code></p></td></tr><tr><td align="left" valign="top"><p>SAP IDoc</p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td><td align="left" valign="top"><p><code class="literal">sapidoc3.jar</code></p></td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_fuse_osgi_container_non_fabric"></a>Deploying in a Fuse OSGi Container (non-Fabric)</h3></div></div></div><p>You can install the SAP JCo libraries and the SAP IDoc library into the JBoss Fuse
+OSGi container (non-Fabric) as follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Download the SAP JCo libraries and the SAP IDoc library from the SAP
+Service Marketplace (<a class="link" href="https://websmp210.sap-ag.de/public/connectors" target="_top">https://websmp210.sap-ag.de/public/connectors</a>), making sure to choose the
+appropriate version of the libraries for your operating system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You require version 3.0.11 or greater of the JCo library and version
+3.0.10 or greater of the IDoc library. You must have an <span class="strong"><strong>SAP
+Service Marketplace Account</strong></span> in order to download and use
+these libraries.</p></td></tr></table></div></li><li class="listitem">Copy the <code class="literal">sapjco3.jar</code>, <code class="literal">libsapjco3.so</code> (or
+<code class="literal">sapjco3.dll</code> on Windows), and <code class="literal">sapidoc3.jar</code>
+library files into the <code class="literal">lib/</code> directory of your JBoss Fuse
+installation.</li><li class="listitem"><p class="simpara">Open both the configuration properties file,
+<code class="literal">etc/config.properties</code>, and the custom properties file,
+<code class="literal">etc/custom.properties</code>, in a text editor. In the
+<code class="literal">etc/config.properties</code> file, look for the
+<code class="literal">org.osgi.framework.system.packages.extra</code> property and copy
+the complete property setting (this setting extends over multiple lines,
+with a backslash character, <code class="literal">\</code>, used to indicate line
+continuation). Now paste this setting into the
+<code class="literal">etc/custom.properties</code> file.</p><p class="simpara">You can now add the extra packages required to support the SAP libraries.
+In the <code class="literal">etc/custom.properties</code> file, add the required packages to
+the <code class="literal">org.osgi.framework.system.packages.extra</code> setting as
+shown:</p><pre class="screen">org.osgi.framework.system.packages.extra = \
+ ... , \
+ com.sap.conn.idoc, \
+ com.sap.conn.idoc.jco, \
+ com.sap.conn.jco, \
+ com.sap.conn.jco.ext, \
+ com.sap.conn.jco.monitor, \
+ com.sap.conn.jco.rt, \
+ com.sap.conn.jco.server</pre><p class="simpara">Don&#8217;t forget to include a comma and a backslash, <code class="literal">, \</code>, at
+the end of each line preceding the new entries, so that the list is
+properly continued.</p></li><li class="listitem">You need to restart the container for these changes to take effect.</li><li class="listitem"><p class="simpara">You need to install the <code class="literal">camel-sap</code> feature in the container.
+In the Karaf console, enter the following command:</p><pre class="screen">JBossFuse:karaf@root&gt; features:install camel-sap</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_fuse_fabric"></a>Deploying in a Fuse Fabric</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
+JCo) libraries and the SAP IDoc library must be installed into the <code class="literal">lib/</code>
+directory of the Java runtime: that is, <code class="literal">sapjco3.jar</code>,
+<code class="literal">libsapjco3.so</code> (or <code class="literal">sapjco3.dll</code> on Windows), and
+<code class="literal">sapidoc3.jar</code>.</p><p>In the case of a Fuse Fabric deployment, this requires some special configuration.
+There is no point in simply installing the SAP libraries in the Java
+<code class="literal">lib</code> directory on a single machine, because Fabric containers need
+to be deployable anywhere in the network. The correct approach is to define a
+special profile that is capable of downloading and installing the SAP JCo libraries
+and the SAP IDoc library on whichever host it is running on.</p><p>You can define a profile for the SAP JCo libraries and the SAP IDoc library as
+follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">Deploy the JCo libraries and the IDoc
+library&#8212;<code class="literal">sapjco3.jar</code>, <code class="literal">libsapjco3.so</code> (or
+<code class="literal">sapjco3.dll</code> on Windows), and
+<code class="literal">sapidoc3.jar</code>&#8212;to a network accessible location. For
+example, you could install the libraries in a Web server, so that the JCo
+libraries and the IDoc library can be downloaded through HTTP URLs,
+<code class="literal"><a class="link" href="http://mywebserver/sapjco3.jar" target="_top">http://mywebserver/sapjco3.jar</a></code>,
+<code class="literal"><a class="link" href="http://mywebserver/libsapjco3.so" target="_top">http://mywebserver/libsapjco3.so</a></code>, and
+<code class="literal"><a class="link" href="http://mywebserver/sapidoc3.jar" target="_top">http://mywebserver/sapidoc3.jar</a></code>.</li><li class="listitem"><p class="simpara">Create a new profile, <code class="literal">camel-sap-profile</code>, by entering the
+following console command:</p><pre class="screen">JBossFuse:karaf@root&gt; profile-create camel-sap-profile</pre></li><li class="listitem"><p class="simpara">Edit the agent properties of the <code class="literal">camel-sap-profile</code> profile,
+by entering the following console command:</p><pre class="screen">JBossFuse:karaf@root&gt; profile-edit camel-sap-profile</pre></li><li class="listitem"><p class="simpara">The built-in profile editor starts up. Use this built-in text editor to
+add the following contents to the agent properties:</p><pre class="screen"># Profile:my-camel-sap-profile
+attribute.parents = feature-camel
+
+# Deploy JCo3 Libs to Container
+lib.sapjco3.jar = http://mywebserver/sapjco3.jar
+lib.sapjco3.so = http://mywebserver/libsapjco3.so
+lib.sapidoc3.jar = http://mywebserver/sapidoc3.jar
+
+# Append JCo3 Packages and IDoc packages to OSGi system property
+# in order to expose JCo3 and IDoc classes to OSGi environment
+config.org.osgi.framework.system.packages.extra= \
+    ... pass:quotes[_Packages from etc/config.properties file_] ...\
+    com.sap.conn.jco, \
+    com.sap.conn.jco.ext, \
+    com.sap.conn.jco.monitor, \
+    com.sap.conn.jco.rt, \
+    com.sap.conn.jco.server, \
+    com.sap.conn.idoc, \
+    com.sap.conn.idoc.jco</pre><p class="simpara">Customize the property settings as follows:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">lib.sapjco3.jar</code></span></dt><dd>Customize the HTTP URL to the actual location of the
+<code class="literal">sapjco3.jar</code> file on your Web server.</dd><dt><span class="term"><code class="literal">lib.sapjco3.so</code></span></dt><dd>Customize the HTTP URL to the actual location of the
+<code class="literal">libsapjco3.so</code> file (or
+<code class="literal">sapjco3.dll</code>) on your Web server.</dd><dt><span class="term"><code class="literal">lib.sapidoc3.jar</code></span></dt><dd>Customize the HTTP URL to the actual location of the
+<code class="literal">sapidoc3.jar</code> file on your Web server.</dd><dt><span class="term"><code class="literal">config.org.osgi.framework.system.packages.extra</code></span></dt><dd><p class="simpara">Open the container configuration properties file,
+<code class="literal">etc/config.properties</code>, of your JBoss Fuse
+installation and look for the
+<code class="literal">org.osgi.framework.system.packages.extra</code>
+property setting. Copy the list of packages from that setting
+and paste them into the profile&#8217;s agent properties, replacing
+the line:</p><pre class="screen">    ... <span class="emphasis"><em>Packages from etc/config.properties file</em></span> ...\</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <code class="literal">config.*</code> prefix in
+<code class="literal">config.org.osgi.framework.system.packages.extra</code>
+indicates to Fabric that you are setting a container
+configuration property in the profile.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The backslash, <code class="literal">\</code>, is the line continuation
+character (UNIX convention) and must be followed immediately
+by a newline character.</p></td></tr></table></div><p class="simpara">Type Ctrl-S to save the properties when you are finished.</p></dd></dl></div></li><li class="listitem"><p class="simpara">You can now deploy the <code class="literal">camel-sap-profile</code> profile to any
+Fabric container where you want to run the SAP component. For example, to
+deploy the <code class="literal">camel-sap-profile</code>profile to the
+<code class="literal">sap-instance</code> container:</p><pre class="screen">JBossFuse:karaf@root&gt; container-add-profile sap-instance came-sap-profile</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_deploying_in_a_jboss_eap_container"></a>Deploying in a JBoss EAP container</h3></div></div></div><p>To deploy the SAP component in a JBoss EAP container, perform the following
+steps:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">Download the SAP JCo libraries and the SAP IDoc library from the SAP
+Service Marketplace (<a class="link" href="https://websmp210.sap-ag.de/public/connectors" target="_top">https://websmp210.sap-ag.de/public/connectors</a>), making sure to
+choose the appropriate version of the libraries for your operating
+system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You require version 3.0.11 or greater of the JCo library and version
+3.0.10 or greater of the IDoc library. You must have an <span class="strong"><strong>SAP
+Service Marketplace Account</strong></span> in order to download and use
+these libraries.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Copy the JCo library files and the IDoc library file into the appropriate
+subdirectory of your JBoss EAP installation. For example, if your host
+platform is 64-bit Linux (<code class="literal">linux-x86_64</code>), install the library
+files as follows:</p><pre class="screen">cp sapjco3.jar sapidoc3.jar $JBOSS_HOME/modules/system/layers/fuse/com/sap/conn/jco/main/
+mkdir -p $JBOSS_HOME/modules/system/layers/fuse/com/sap/conn/jco/main/lib/linux-x86_64
+cp libsapjco3.so $JBOSS_HOME/modules/system/layers/fuse/com/sap/conn/jco/main/lib/linux-x86_64/</pre><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>For installing native libraries (such as <code class="literal">libsapjco3.so</code>)
+into the JBoss EAP installation, there is a standardized convention for
+naming the library subdirectory, which must be followed. In the case of
+64-bit Linux, the subdirectory is <code class="literal">linux-x86_64</code>. For other
+platforms, see <a class="link" href="https://docs.jboss.org/author/display/MODULES/Native+Libraries" target="_top">https://docs.jboss.org/author/display/MODULES/Native+Libraries</a>.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Uncomment the <code class="literal">org.switchyard.component.camel.sap</code> module in
+the SwitchYard subsystem configuration. For example, to enable the SAP
+component in JBoss EAP standalone mode, edit the
+<code class="literal">$JBOSS_HOME/standalone/configuration/standalone.xml</code> file
+and look for the following line to uncomment:</p><pre class="screen">&lt;!-- Uncomment this module to enable camel-sap binding
+&lt;module identifier="org.switchyard.component.camel.sap" implClass="org.switchyard.component.camel.sap.deploy.CamelSapComponent"/&gt;
+--&gt;</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37499"></a>URI format</h3></div></div></div><p>There are two different kinds of endpoint provided by the SAP component: the
+Remote Function Call (RFC) endpoints, and the Intermediate Document (IDoc)
+endpoints.</p><p>The URI formats for the RFC endpoints are as follows:</p><pre class="screen">sap-srfc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>rfcName</em></span>
+sap-trfc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>rfcName</em></span>
+sap-qrfc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>queueName</em></span>:<span class="emphasis"><em>rfcName</em></span>
+sap-srfc-server:<span class="emphasis"><em>serverName</em></span>:<span class="emphasis"><em>rfcName</em></span>[?<span class="emphasis"><em>options</em></span>]
+sap-trfc-server:<span class="emphasis"><em>serverName</em></span>:<span class="emphasis"><em>rfcName</em></span>[?<span class="emphasis"><em>options</em></span>]</pre><p>The URI formats for the IDoc endpoints are as follows:</p><pre class="screen">sap-idoc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>idocType</em></span>[:<span class="emphasis"><em>idocTypeExtension</em></span>[:<span class="emphasis"><em>systemRelease</em></span>[:<span class="emphasis"><em>applicationRelease</em></span>]]]
+sap-idoclist-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>idocType</em></span>[:<span class="emphasis"><em>idocTypeExtension</em></span>[:<span class="emphasis"><em>systemRelease</em></span>[:<span class="emphasis"><em>applicationRelease</em></span>]]]
+sap-qidoc-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>queueName</em></span>:<span class="emphasis"><em>idocType</em></span>[:<span class="emphasis"><em>idocTypeExtension</em></span>[:<span class="emphasis"><em>systemRelease</em></span>[:<span class="emphasis"><em>applicationRelease</em></span>]]]
+sap-qidoclist-destination:<span class="emphasis"><em>destinationName</em></span>:<span class="emphasis"><em>queueName</em></span>:<span class="emphasis"><em>idocType</em></span>[:<span class="emphasis"><em>idocTypeExtension</em></span>[:<span class="emphasis"><em>systemRelease</em></span>[:<span class="emphasis"><em>applicationRelease</em></span>]]]
+sap-idoclist-server:<span class="emphasis"><em>serverName</em></span>:<span class="emphasis"><em>idocType</em></span>[:<span class="emphasis"><em>idocTypeExtension</em></span>[:<span class="emphasis"><em>systemRelease</em></span>[:<span class="emphasis"><em>applicationRelease</em></span>]]][?<span class="emphasis"><em>options</em></span>]</pre><p>The URI formats prefixed by
+sap-<span class="emphasis"><em>endpointKind</em></span>-destination are used to
+define destination endpoints (in other words, Camel producer endpoints) and
+<span class="emphasis"><em>destinationName</em></span> is the name of a
+specific outbound connection to an SAP instance. Outbound connections are named and
+configured at the component level, as described in <a class="xref" href="SAP.html#SAP-DestConfig" title="Destination Configuration">Destination Configuration</a>.</p><p>The URI formats prefixed by
+sap-<span class="emphasis"><em>endpointKind</em></span>-server are used to
+define server endpoints (in other words, Camel consumer endpoints) and
+<span class="emphasis"><em>serverName</em></span> is the name of a specific
+inbound connection from an SAP instance. Inbound connections are named and
+configured at the component level, as described in the <a class="xref" href="SAP.html#SAP-ServConfig" title="Server Configuration">Server Configuration</a>.</p><p>The other components of an RFC endpoint URI are as follows:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>rfcName</em></span></span></dt><dd><span class="strong"><strong>(Required)</strong></span> In a destination endpoint URI, is the
+name of the RFC invoked by the endpoint in the connected SAP instance.
+In a server endpoint URI, is the name of the RFC handled by the endpoint
+when invoked from the connected SAP instance.</dd><dt><span class="term"><span class="emphasis"><em>queueName</em></span></span></dt><dd>Specifies the queue this endpoint sends an SAP request to.</dd></dl></div><p>The other components of an IDoc endpoint URI are as follows:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="emphasis"><em>idocType</em></span></span></dt><dd><span class="strong"><strong>(Required)</strong></span> Specifies the Basic IDoc Type of an
+IDoc produced by this endpoint.</dd><dt><span class="term"><span class="emphasis"><em>idocTypeExtension</em></span></span></dt><dd>Specifies the IDoc Type Extension, if any, of an IDoc produced by this
+endpoint.</dd><dt><span class="term"><span class="emphasis"><em>systemRelease</em></span></span></dt><dd>Specifies the associated SAP Basis Release, if any, of an IDoc
+produced by this endpoint.</dd><dt><span class="term"><span class="emphasis"><em>applicationRelease</em></span></span></dt><dd>Specifes the associated Application Release, if any, of an IDoc
+produced by this endpoint.</dd><dt><span class="term"><span class="emphasis"><em>queueName</em></span></span></dt><dd>Specifies the queue this endpoint sends an SAP request to.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_options_for_rfc_destination_endpoints"></a>Options for RFC destination endpoints</h3></div></div></div><p>The RFC destination endpoints (<code class="literal">sap-srfc-destination</code>,
+<code class="literal">sap-trfc-destination</code>, and <code class="literal">sap-qrfc-destination</code>)
+support the following URI options:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">stateful</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, specifies that this endpoint initiates an SAP
+                            stateful session</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">transacted</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, specifies that this endpoint initiates an SAP
+                            transaction</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_options_for_rfc_server_endpoints"></a>Options for RFC server endpoints</h3></div></div></div><p>The SAP RFC server endpoints (<code class="literal">sap-srfc-server</code> and
+<code class="literal">sap-trfc-server</code>) support the following URI options:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">stateful</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, specifies that this endpoint initiates an SAP
+                            stateful session.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">propagateExceptions</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p><span class="strong"><strong>(sap-trfc-server endpoint only)</strong></span> If
+                                <code class="literal">true</code>, specifies that this endpoint propagates
+                            exceptions back to the caller in SAP, instead of the exchange&#8217;s
+                            exception handler</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_options_for_the_idoc_list_server_endpoint"></a>Options for the IDoc List Server endpoint</h3></div></div></div><p>The SAP IDoc List Server endpoint (<code class="literal">sap-idoclist-server</code>) supports the
+following URI options:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Default</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">stateful</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, specifies that this endpoint initiates an SAP
+                            stateful session.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">propagateExceptions</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, specifies that this endpoint propagates exceptions
+                            back to the caller in SAP, instead of the exchange&#8217;s exception
+                            handler</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_summary_of_the_rfc_and_idoc_endpoints"></a>Summary of the RFC and IDoc endpoints</h3></div></div></div><p>The SAP component package provides the following RFC and IDoc endpoints:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">sap-srfc-destination</code></span></dt><dd><p class="simpara">JBoss Fuse SAP Synchronous Remote Function Call Destination Camel
+component. This endpoint should be used in cases where Camel routes
+require synchronous delivery of requests to and responses from an SAP
+system.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The sRFC protocol used by this component delivers requests and
+responses to and from an SAP system with <span class="strong"><strong>best
+effort</strong></span>. In case of a communication error while
+sending a request, the completion status of a remote function call
+in the receiving SAP system remains <span class="strong"><strong>in
+doubt</strong></span>.</p></td></tr></table></div></dd><dt><span class="term"><code class="literal">sap-trfc-destination</code></span></dt><dd><p class="simpara">JBoss Fuse SAP Transactional Remote Function Call Destination Camel
+component. This endpoint should be used in cases where requests must be
+delivered to the receiving SAP system <span class="strong"><strong>at most once</strong></span>.
+To accomplish this, the component generates a transaction ID,
+<code class="literal">tid</code>, which accompanies every request sent through the
+component in a route&#8217;s exchange. The receiving SAP system records the
+<code class="literal">tid</code> accompanying a request before delivering the
+request; if the SAP system receives the request again with the same
+<code class="literal">tid</code> it will not deliver the request. Thus if a route
+encounters a communication error when sending a request through an
+endpoint of this component, it can retry sending the request within the
+same exchange knowing it will be delivered and executed only
+once.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The tRFC protocol used by this component is asynchronous and does
+not return a response. Thus the endpoints of this component do not
+return a response message.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This component does not guarantee the order of a series of
+requests through its endpoints, and the delivery and execution order
+of these requests may differ on the receiving SAP system due to
+communication errors and resends of a request. For guaranteed
+delivery order, please see the JBoss Fuse SAP Queued Remote Function
+Call Destination Camel component.</p></td></tr></table></div></dd><dt><span class="term"><code class="literal">sap-qrfc-destination</code></span></dt><dd><p class="simpara">JBoss Fuse SAP Queued Remote Function Call Destination Camel
+component. This component extends the capabilities of the JBoss Fuse
+Transactional Remote Function Call Destination camel component by adding
+<span class="strong"><strong>in order</strong></span> delivery guarantees to the delivery of
+requests through its endpoints. This endpoint should be used in cases
+where a series of requests depend on each other and must be delivered to
+the receiving SAP system <span class="strong"><strong>at most once</strong></span> and
+<span class="strong"><strong>in order</strong></span>. The component accomplishes the
+<span class="strong"><strong>at most once</strong></span> delivery guarantees using the same
+mechanisms as the JBoss Fuse SAP Transactional Remote Function Call
+Destination Camel component. The ordering guarantee is accomplished by
+serializing the requests in the order they are received by the SAP
+system to an <span class="emphasis"><em>inbound queue</em></span>. Inbound queues are
+processed by the <span class="emphasis"><em>QIN scheduler</em></span> within SAP. When
+the inbound queue is <span class="strong"><strong>activated</strong></span>, the QIN Scheduler
+will execute the queue requests in order.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The qRFC protocol used by this component is asynchronous and does
+not return a response. Thus the endpoints of this component do not
+return a response message.</p></td></tr></table></div></dd><dt><span class="term"><code class="literal">sap-srfc-server</code></span></dt><dd>JBoss Fuse SAP Synchronous Remote Function Call Server Camel
+component. This component and its endpoints should be used in cases
+where a Camel route is required to synchronously handle requests from
+and responses to an SAP system.</dd><dt><span class="term"><code class="literal">sap-trfc-server</code></span></dt><dd>JBoss Fuse SAP Transactional Remote Function Call Server Camel
+component. This endpoint should be used in cases where the sending SAP
+system requires <span class="strong"><strong>at most once</strong></span> delivery of its
+requests to a Camel route. To accomplish this, the sending SAP system
+generates a transaction ID, <code class="literal">tid</code>, which accompanies every
+request it sends to the component&#8217;s endpoints. The sending SAP system
+will first check with the component whether a given <code class="literal">tid</code> has
+been received by it before sending a series of requests associated with
+the <code class="literal">tid</code>. The component will check the list of received
+<code class="literal">tid</code>s it maintains, record the sent <code class="literal">tid</code> if
+it is not in that list, and then respond to the sending SAP system,
+indicating whether or not the <code class="literal">tid</code> had already been
+recorded. The sending SAP system will only then send the series of
+requests, if the <code class="literal">tid</code> has not been previously recorded. This
+enables a sending SAP system to reliably send a series of requests once
+to a camel route.</dd><dt><span class="term"><code class="literal">sap-idoc-destination</code></span></dt><dd>JBoss Fuse SAP IDoc Destination Camel component. This endpoint should
+be used in cases where a Camel route is required to send a list of
+Intermediate Documents (IDocs) to an SAP system.</dd><dt><span class="term"><code class="literal">sap-idoclist-destination</code></span></dt><dd>JBoss Fuse SAP IDoc List Destination Camel component. This endpoint
+should be used in cases where a Camel route is required to send a list
+of Intermediate documents (IDocs) list to an SAP system.</dd><dt><span class="term"><code class="literal">sap-qidoc-destination</code></span></dt><dd>JBoss Fuse SAP Queued IDoc Destination Camel component. This component
+and its endpoints should be used in cases where a Camel route is
+required to send a list of Intermediate documents (IDocs) to an SAP
+system in order.</dd><dt><span class="term"><code class="literal">sap-qidoclist-destination</code></span></dt><dd>JBoss Fuse SAP Queued IDoc List Destination Camel component. This
+component and its endpoints should be used in cases where a camel route
+is required to send a list of Intermediate documents (IDocs) list to an
+SAP system in order.</dd><dt><span class="term"><code class="literal">sap-idoclist-server</code></span></dt><dd>JBoss Fuse SAP IDoc List Server Camel component. This endpoint should
+be used in cases where a sending SAP system requires delivery of
+Intermediate Document lists to a Camel route. This component uses the
+tRFC protocol to communicate with SAP as described in the
+<code class="literal">sap-trfc-server-standalone</code> quick start.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37501"></a>SAP RFC destination endpoint</h3></div></div></div><p>An RFC destination endpoint supports outbound communication to SAP, which enable
+these endpoints to make RFC calls out to ABAP function modules in SAP. An RFC
+destination endpoint is configured to make an RFC call to a specific ABAP function
+over a specific connection to an SAP instance. An RFC destination is a logical
+designation for an outbound connection and has a unique name. An RFC destination is
+specified by a set of connection parameters called <span class="emphasis"><em>destination
+data</em></span>.</p><p>An RFC destination endpoint will extract an RFC request from the input message of
+the IN-OUT exchanges it receives and dispatch that request in a function call to
+SAP. The response from the function call will be returned in the output message of
+the exchange. Since SAP RFC destination endpoints only support outbound
+communication, an RFC destination endpoint only supports the creation of
+producers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37502"></a>SAP RFC server endpoint</h3></div></div></div><p>An RFC server endpoint supports inbound communication from SAP, which enables ABAP
+applications in SAP to make RFC calls into server endpoints. An ABAP application
+interacts with an RFC server endpoint as if it were a remote function module. An RFC
+server endpoint is configured to receive an RFC call to a specific RFC function over
+a specific connection from an SAP instance. An RFC server is a logical designation
+for an inbound connection and has a unique name. An RFC server is specified by a set
+of connection parameters called <span class="emphasis"><em>server data</em></span>.</p><p>An RFC server endpoint will handle an incoming RFC request and dispatch it as the
+input message of an IN-OUT exchange. The output message of the exchange will be
+returned as the response of the RFC call. Since SAP RFC server endpoints only
+support inbound communication, an RFC server endpoint only supports the creation of
+consumers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_sap_idoc_and_idoc_list_destination_endpoints"></a>SAP IDoc and IDoc list destination endpoints</h3></div></div></div><p>An IDoc destination endpoint supports outbound communication to SAP, which can
+then perform further processing on the IDoc message. An IDoc document represents a
+business transaction, which can easily be exchanged with non-SAP systems. An IDoc
+destination is specified by a set of connection parameters called
+<span class="emphasis"><em>destination data</em></span>.</p><p>An IDoc list destination endpoint is similar to an IDoc destination endpoint,
+except that the messages it handles consist of a <span class="strong"><strong>list</strong></span> of IDoc
+documents.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_sap_idoc_list_server_endpoint"></a>SAP IDoc list server endpoint</h3></div></div></div><p>An IDoc list server endpoint supports inbound communication from SAP, enabling a
+Camel route to receive a list of IDoc documents from an SAP system. An IDoc list
+server is specified by a set of connection parameters called <span class="emphasis"><em>server
+data</em></span>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37503"></a>Meta-data repositories</h3></div></div></div><p>A meta-data repository is used to store the following kinds of meta-data:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Interface descriptions of function modules</span></dt><dd>This meta-data is used by the JCo and ABAP runtimes to check RFC calls
+to ensure the type-safe transfer of data between communication partners
+before dispatching those calls. A repository is populated with
+repository data. Repository data is a map of named function templates. A
+function template contains the meta-data describing all the parameters
+and their typing information passed to and from a function module and
+has the unique name of the function module it describes.</dd><dt><span class="term">IDoc type descriptions</span></dt><dd>This meta-data is used by the IDoc runtime to ensure that the IDoc
+documents are correctly formatted before being sent to a communication
+partner. A basic IDoc type consists of a name, a list of permitted
+segments, and a description of the hierarchical relationship between the
+segments. Some additional constraints can be imposed on the segments: a
+segment can be mandatory or optional; and it is possible to specify a
+minimum/maximum range for each segment (defining the number of allowed
+repetitions of that segment).</dd></dl></div><p>SAP destination and server endpoints thus require access to a repository, in order
+to send and receive RFC calls and in order to send and receive IDoc documents. For
+RFC calls, the meta-data for all function modules invoked and handled by the
+endpoints must reside within the repository; and for IDoc endpoints, the meta-data
+for all IDoc types and IDoc type extensions handled by the endpoints must reside
+within the repository. The location of the repository used by a destination and
+server endpoint is specified in the destination data and the server data of their
+respective connections.</p><p>In the case of an SAP destination endpoint, the repository it uses typically
+resides in an SAP system and it defaults to the SAP system it is connected to. This
+default requires no explicit configuration in the destination data. Furthermore, the
+meta-data for the remote function call that a destination endpoint makes will
+already exist in a repository for any existing function module that it calls. The
+meta-data for calls made by destination endpoints thus require no configuration in
+the SAP component.</p><p>On the other hand, the meta-data for function calls handled by server endpoints do
+not typically reside in the repository of an SAP system and must instead be provided
+by a repository residing in the SAP component. The SAP component maintains a map of
+named meta-data repositories. The name of a repository corresponds to the name of
+the server to which it provides meta-data.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Config"></a>Configuration</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SAP.html#SAP-Config-Overview">Configuration Overview</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-DestConfig">Destination Configuration</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-ServConfig">Server Configuration</a></span></dt><dt><span class="section"><a href="SAP.html#SAP-RepoConfig">Repository Configuration</a></span></dt></dl></div><p>The SAP component maintains three maps to store destination data, server data
+and repository data. The <span class="emphasis"><em>destination data store</em></span> and the
+<span class="emphasis"><em>server data store</em></span> are configured on a special
+configuration object, <code class="literal">SapConnectionConfiguration</code>, which
+automatically gets injected into the SAP component (in the context of Blueprint
+XML configuration or Spring XML configuration files). The <span class="emphasis"><em>repository
+data store</em></span> must be configured directly on the relevant SAP
+component.</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-Config-Overview"></a>Configuration Overview</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37516"></a>Overview</h4></div></div></div><p>The SAP component maintains three maps to store destination data, server data
+and repository data. The component&#8217;s property,
+<code class="literal">destinationDataStore</code>, stores destination data keyed by
+destination name, the property, <code class="literal">serverDataStore</code>, stores server data
+keyed by server name and the property, <code class="literal">repositoryDataStore</code>, stores
+repository data keyed by repository name. These configurations must be passed to
+the component during its initialization.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37517"></a>Example</h4></div></div></div><p>The following example shows how to configure a sample destination data store
+and a sample server data store in a Blueprint XML file. The
+<code class="literal">sap-configuration</code> bean (of type
+<code class="literal">SapConnectionConfiguration</code>) will automatically be injected into
+any SAP component that is used in this XML file.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;blueprint ... &gt;
+    ...
+    &lt;!-- Configures the Inbound and Outbound SAP Connections --&gt;
+    &lt;bean id="sap-configuration"
+        class="org.fusesource.camel.component.sap.SapConnectionConfiguration"&gt;
+        &lt;property name="destinationDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="quickstartDest" value-ref="quickstartDestinationData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+        &lt;property name="serverDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="quickstartServer" value-ref="quickstartServerData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures an Outbound SAP Connection --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment *** --&gt;
+    &lt;bean id="quickstartDestinationData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl"&gt;
+        &lt;property name="ashost" value="example.com" /&gt;
+        &lt;property name="sysnr" value="00" /&gt;
+        &lt;property name="client" value="000" /&gt;
+        &lt;property name="user" value="username" /&gt;
+        &lt;property name="passwd" value="passowrd" /&gt;
+        &lt;property name="lang" value="en" /&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures an Inbound SAP Connection --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment ** --&gt;
+    &lt;bean id="quickstartServerData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl"&gt;
+        &lt;property name="gwhost" value="example.com" /&gt;
+        &lt;property name="gwserv" value="3300" /&gt;
+        &lt;!-- The following property values should not be changed --&gt;
+        &lt;property name="progid" value="QUICKSTART" /&gt;
+        &lt;property name="repositoryDestination" value="quickstartDest" /&gt;
+        &lt;property name="connectionCount" value="2" /&gt;
+    &lt;/bean&gt;
+&lt;/blueprint&gt;</pre></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-DestConfig"></a>Destination Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37518"></a>Overview</h4></div></div></div><p>The configurations for destinations are maintained in the
+<code class="literal">destinationDataStore</code> property of the SAP component. Each entry
+in this map configures a distinct outbound connection to an SAP instance. The
+key for each entry is the name of the outbound connection and is used in the
+<span class="emphasis"><em>destinationName</em></span> component of a
+destination endpoint URI as described in the URI format section.</p><p>The value for each entry is a destination data configuration object -
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl</code>
+- that specifies the configuration of an outbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_sample_destination_configuration"></a>Sample destination configuration</h4></div></div></div><p>The following Blueprint XML code shows how to configure a sample destination
+with the name, <code class="literal">quickstartDest</code>.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;blueprint ... &gt;
+    ...
+    &lt;!-- Create interceptor to support tRFC processing --&gt;
+    &lt;bean id="currentProcessorDefinitionInterceptor"
+          class="org.fusesource.camel.component.sap.CurrentProcessorDefinitionInterceptStrategy" /&gt;
+
+    &lt;!-- Configures the Inbound and Outbound SAP Connections --&gt;
+    &lt;bean id="sap-configuration"
+        class="org.fusesource.camel.component.sap.SapConnectionConfiguration"&gt;
+        &lt;property name="destinationDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="quickstartDest" value-ref="quickstartDestinationData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures an Outbound SAP Connection --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment *** --&gt;
+    &lt;bean id="quickstartDestinationData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl"&gt;
+        &lt;property name="ashost" value="example.com" /&gt;
+        &lt;property name="sysnr" value="00" /&gt;
+        &lt;property name="client" value="000" /&gt;
+        &lt;property name="user" value="username" /&gt;
+        &lt;property name="passwd" value="password" /&gt;
+        &lt;property name="lang" value="en" /&gt;
+    &lt;/bean&gt;
+
+&lt;/blueprint&gt;</pre><p>For example, after configuring the destination as shown in the preceding
+Blueprint XML file, you could invoke the <code class="literal">BAPI_FLCUST_GETLIST</code> remote
+function call on the <code class="literal">quickstartDest</code> destination using the following
+URI:</p><pre class="screen">sap-srfc-destination:quickstartDest:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="SAP-DestConfig-Intercept"></a>Interceptor for tRFC and qRFC destinations</h4></div></div></div><p>The preceding sample destination configuration shows the instantiation of a
+<code class="literal">CurrentProcessorDefinitionInterceptStrategy</code> object. This object
+installs an interceptor in the Camel runtime, which enables the Camel SAP
+component to keep track of its position within a Camel route while it is
+handling RFC transactions. For more details, see <a class="xref" href="SAP.html#SAP-Txn-RFCDestination" title="Transactional RFC destination endpoints">Transactional RFC destination endpoints</a>.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>This interceptor is critically important for transactional RFC destination
+endpoints (such as <code class="literal">sap-trfc-destination</code> and
+<code class="literal">sap-qrfc-destination</code>) and must be installed in the Camel
+runtime in order for outbound transactional RFC communication to be properly
+managed. The Destination RFC Transaction Handlers will issue warnings into
+the Camel log if the strategy is not found at runtime and in this situation
+the Camel runtime will need to be re-provisioned and restarted to properly
+manage outbound transactional RFC communication.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37519"></a>Logon and authentication options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>logon and authentication</strong></span>
+options for configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">client</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP client, mandatory logon parameter</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">user</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Logon user, logon parameter for password based
+                            authentication</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">aliasUser</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Logon user alias, can be used instead of logon
+                            user</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">userId</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>User identity which is used for logon to the
+                            ABAP AS. Used by the JCo runtime, if the destination configuration uses
+                            SSO/assertion ticket, certificate, current user ,or SNC environment for
+                            authentication. The user ID is mandatory, if neither user nor user alias
+                            is set. This ID will never be sent to the SAP backend, it will be used
+                            by the JCo runtime locally.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">passwd</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Logon password, logon parameter for
+                            password-based authentication</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">lang</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Logon language, if not defined, the default
+                            user language is used</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">mysapsso2</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Use the specified SAP Cookie Version 2 as logon
+                            ticket for SSO based authentication</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">x509cert</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Use the specified X509 certificate for
+                            certificate based authentication</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">lcheck</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Postpone the authentication until the first
+                            call - 1 (enable). Used in special cases only .</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">useSapGui</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Use a visible, hidden, or do not use SAP GUI</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">codePage</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Additional logon parameter to define the
+                            codepage that will used to convert the logon parameters. Used in special
+                            cases only</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">getsso2</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Order a SSO ticket after logon, the obtained
+                            ticket is available in the destination attributes</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">denyInitialPassword</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>If set to <code class="literal">1</code>, using initial
+                            passwords will lead to an exception (default is <code class="literal">0</code>).</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37520"></a>Connection options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>connection</strong></span> options for
+configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">saprouter</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP Router string for connection to systems
+                            behind a SAP Router. SAP Router string contains the chain of SAP Routers
+                            and its port numbers and has the form:
+                                <code class="literal">(/H/&lt;host&gt;[/S/&lt;port&gt;])+</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sysnr</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>System number of the SAP ABAP application
+                            server, mandatory for a direct connection</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">ashost</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP ABAP application server, mandatory for a
+                            direct connection</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">mshost</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP message server, mandatory property for a
+                            load balancing connection</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">msserv</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP message server port, optional property for
+                            a load balancing connection. In order to resolve the service names
+                            sapmsXXX a lookup in <code class="literal">etc/services</code> is performed by the
+                            network layer of the operating system. If using port numbers instead of
+                            symbolic service names, no look-ups are performed and no additional
+                            entries are needed.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">gwhost</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Allows specifying a concrete gateway, which
+                            should be used for establishing the connection to an application server.
+                            If not specified the gateway on the application server is used</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">gwserv</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Should be set, when using gwhost. Allows
+                            specifying the port used on that gateway. If not specified the port of
+                            the gateway on the application server is used. In order to resolve the
+                            service names sapgwXXX a lookup in etc/services is performed by the
+                            network layer of the operating system. If using port numbers instead of
+                            symbolic service names, no lookups are performed and no additional
+                            entries are needed.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">r3name</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>System ID of the SAP system, mandatory property
+                            for a load balancing connection.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">group</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Group of SAP application servers, mandatory
+                            property for a load balancing connection</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37521"></a>Connection pool options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>connection pool</strong></span> options for
+configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">peakLimit</code></p></td><td align="left" valign="top"><p><code class="literal">0</code></p></td><td align="left" valign="top"><p>Maximum number of active outbound connections
+                            that can be created for a destination simultaneously. A value of
+                                <code class="literal">0</code> allows an unlimited number of active connections,
+                            otherwise if the value is less than the value of
+                                <code class="literal">jpoolCapacity</code>, it will be automatically increased to
+                            this value. Default setting is the value of <code class="literal">poolCapacity</code>,
+                            or in case of <code class="literal">poolCapacity</code> not being specified as well, the
+                            default is <code class="literal">0</code> (unlimited).</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">poolCapacity</code></p></td><td align="left" valign="top"><p><code class="literal">1</code></p></td><td align="left" valign="top"><p>Maximum number of idle outbound connections
+                            kept open by the destination. A value of <code class="literal">0</code> has the effect
+                            that there is no connection pooling (default is <code class="literal">1</code>).</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">expirationTime</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Time in milliseconds after which a free
+                            connection held internally by the destination can be closed</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">expirationPeriod</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Period in milliseconds after which the
+                            destination checks the released connections for expiration.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">maxGetTime</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Maximum time in milliseconds to wait for a
+                            connection, if the maximum allowed number of connections has already
+                            been allocated by the application.</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37522"></a>Secure network connection options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>secure network</strong></span> options for
+configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncMode</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Secure network connection (SNC) mode,
+                                <code class="literal">0</code> (off) or <code class="literal">1</code> (on)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncPartnername</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SNC partner, for example: <code class="literal">p:CN=R3,
+                                O=XYZ-INC, C=EN</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncQop</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SNC level of security: <code class="literal">1</code> to
+                                <code class="literal">9</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncMyname</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Own SNC name. Overrides environment settings</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncLibrary</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Path to library that provides SNC service</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37523"></a>Repository options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>repository</strong></span> options for
+configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositoryDest</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Specifies which destination should be used as
+                            repository.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositoryUser</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>If a repository destination is not set, and
+                            this property is set, it will be used as user for repository calls. This
+                            enables you to use a different user for repository look-ups.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositoryPasswd</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The password for a repository user. Mandatory,
+                            if a repository user should be used.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositorySnc</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><span class="strong"><strong>(Optional)</strong></span> If SNC is used for this destination, it
+                            is possible to turn it off for repository connections, if this property
+                            is set to <code class="literal">0</code>. Default setting is the value of
+                                <code class="literal">jco.client.snc</code>_mode. For special cases only.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositoryRoundtripOptimization</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Enable the <code class="literal">RFC_METADATA_GET</code> API, which provides
+repository data in one single round trip.</p>
+<div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">1</code></span></dt><dd>Activates use of <code class="literal">RFC_METADATA_GET</code> in ABAP
+System,</dd><dt><span class="term"><code class="literal">0</code></span></dt><dd>Deactivates <code class="literal">RFC_METADATA_GET</code> in ABAP
+System.</dd></dl></div>
+<p>If the property is not set, the destination initially does a
+remote call to check whether <code class="literal">RFC_METADATA_GET</code> is
+available. If it is available, the destination will use it.</p>
+<p><span class="strong"><strong>Note:</strong></span> If the repository is
+already initialized (for example because it is used by some other
+destination) this property does not have any effect. Generally, this
+property is related to the ABAP System, and should have the same
+value on all destinations pointing to the same ABAP System. See note
+<a class="link" href="https://support.sap.com/home.html" target="_top">1456826</a>
+for backend prerequisites.</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37524"></a>Trace configuration options</h4></div></div></div><p>The following table lists the <span class="strong"><strong>trace configuration</strong></span> options
+for configuring a destination in the SAP destination data store:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">trace</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Enable/disable RFC trace (<code class="literal">0</code> or
+                                <code class="literal">1</code>)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">cpicTrace</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Enable/disable CPIC trace
+                            <code class="literal">[0..3]</code></p></td></tr></tbody></table></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-ServConfig"></a>Server Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37526"></a>Overview</h4></div></div></div><p>The configurations for servers are maintained in the
+<code class="literal">serverDataStore</code> property of the SAP component. Each entry in
+this map configures a distinct inbound connection from an SAP instance. The key
+for each entry is the name of the outbound connection and is used in the
+<code class="literal">serverName</code> component of a server endpoint URI as described in
+the URI format section.</p><p>The value for each entry is a <span class="emphasis"><em>server data configuration object</em></span>,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl</code>,
+that defines the configuration of an inbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="_sample_server_configuration"></a>Sample server configuration</h4></div></div></div><p>The following Blueprint XML code shows how to create a sample server
+configuration with the name, <code class="literal">quickstartServer</code>.</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;blueprint ... &gt;
+    ...
+    &lt;!-- Configures the Inbound and Outbound SAP Connections --&gt;
+    &lt;bean id="sap-configuration"
+        class="org.fusesource.camel.component.sap.SapConnectionConfiguration"&gt;
+        &lt;property name="destinationDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="quickstartDest" value-ref="quickstartDestinationData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+        &lt;property name="serverDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="quickstartServer" value-ref="quickstartServerData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures an Outbound SAP Connection --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment *** --&gt;
+    &lt;bean id="quickstartDestinationData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl"&gt;
+        &lt;property name="ashost" value="example.com" /&gt;
+        &lt;property name="sysnr" value="00" /&gt;
+        &lt;property name="client" value="000" /&gt;
+        &lt;property name="user" value="username" /&gt;
+        &lt;property name="passwd" value="passowrd" /&gt;
+        &lt;property name="lang" value="en" /&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures an Inbound SAP Connection --&gt;
+    &lt;!-- *** Please enter the connection property values for your environment ** --&gt;
+    &lt;bean id="quickstartServerData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl"&gt;
+        &lt;property name="gwhost" value="example.com" /&gt;
+        &lt;property name="gwserv" value="3300" /&gt;
+        &lt;!-- The following property values should not be changed --&gt;
+        &lt;property name="progid" value="QUICKSTART" /&gt;
+        &lt;property name="repositoryDestination" value="quickstartDest" /&gt;
+        &lt;property name="connectionCount" value="2" /&gt;
+    &lt;/bean&gt;
+&lt;/blueprint&gt;</pre><p>Notice how this example also configures a destination connection,
+<code class="literal">quickstartDest</code>, which the server uses to retrieve meta-data
+from a remote SAP instance. This destination is configured in the server data
+through the <code class="literal">repositoryDestination</code> option. If you do not configure
+this option, you would need to create a local meta-data repository instead (see
+<a class="xref" href="SAP.html#SAP-RepoConfig" title="Repository Configuration">Repository Configuration</a>).</p><p>For example, after configuring the destination as shown in the preceding
+Blueprint XML file, you could handle the <code class="literal">BAPI_FLCUST_GETLIST</code> remote
+function call from an invoking client, using the following URI:</p><pre class="screen">sap-srfc-server:quickstartServer:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37527"></a>Required options</h4></div></div></div><p>The required options for the server data configuration object are, as
+follows:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">gwhost</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Gateway host on which the server connection
+                            should be registered.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">gwserv</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Gateway service, which is the port on which a
+                            registration can be done. In order to resolve the service names
+                                <code class="literal">sapgwXXX</code>, a look-up in <code class="literal">etc/services</code> is
+                            performed by the network layer of the operating system. If using port
+                            numbers instead of symbolic service names, no look-ups are performed and
+                            no additional entries are needed.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">progid</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The program ID with which the registration is
+                            done. Serves as identifier on the gateway and in the destination in the
+                            ABAP system.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">repositoryDestination</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Specifies a destination name that the server
+                            can use in order to retrieve meta-data from a meta-data repository
+                            hosted in a remote SAP server.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">connectionCount</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The number of connections that should be
+                            registered at the gateway.</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37528"></a>Secure network connection options</h4></div></div></div><p>The secure network connection options for the server data configuration object
+are, as follows:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncMode</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Secure network connection (SNC) mode,
+                                <code class="literal">0</code> (off) or <code class="literal">1</code> (on)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncQop</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SNC level of security, <code class="literal">1</code> to
+                                <code class="literal">9</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncMyname</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SNC name of your server. Overrides the default
+                            SNC name. Typically something like <code class="literal">p:CN=JCoServer, O=ACompany,
+                                C=EN</code>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">sncLib</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Path to library which provides SNC service. If
+                            this property is not provided, the value of the
+                                <code class="literal">jco.middleware.snc_lib</code> property is used instead</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37529"></a>Other options</h4></div></div></div><p>The other options for the server data configuration object are, as
+follows:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">saprouter</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>SAP router string to use for a system protected
+                            by a firewall, which can therefore only be reached through a SAProuter,
+                            when registering the server at the gateway of that ABAP System. A
+                            typical router string is <code class="literal">/H/firewall.hostname/H/</code></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">maxStartupDelay</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The maximum time (in seconds) between two
+                            start-up attempts in case of failures. The waiting time is doubled from
+                            initially 1 second after each start-up failure until either the maximum
+                            value is reached or the server could be started successfully.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">trace</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>Enable/disable RFC trace (<code class="literal">0</code> or
+                                <code class="literal">1</code>)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">workerThreadCount</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The maximum number of threads used by the
+                            server connection. If not set, the value for the
+                                <code class="literal">connectionCount</code> is used as the
+                                <code class="literal">workerThreadCount</code>. The maximum number of threads can
+                            not exceed 99.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">workerThreadMinCount</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p>The minimum number of threads used by server
+                            connection. If not set, the value for <code class="literal">connectionCount</code> is
+                            used as the <code class="literal">workerThreadMinCount</code>.</p></td></tr></tbody></table></div></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-RepoConfig"></a>Repository Configuration</h3></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37531"></a>Overview</h4></div></div></div><p>The configuration for repositories are maintain in the
+<code class="literal">repositoryDataStore</code> property of the SAP Component. Each entry
+in this map configures a distinct repository. The key for each entry is the name
+of the repository and this key also corresponds to the name of server to which
+this repository is attached.</p><p>The value of each entry is a repository data configuration object,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.RepositoryDataImpl</code>,
+that defines the contents of a meta-data repository. A repository data object is
+a map of function template configuration objects,
+<code class="literal">org.fuesource.camel.component.sap.model.rfc.impl.FunctionTemplateImpl</code>.
+Each entry in this map specifies the interface of a function module and the key
+for each entry is the name of the function module specified.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37532"></a>Repository data example</h4></div></div></div><p>The following code shows a simple example of configuring a meta-data
+repository:</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;blueprint ... &gt;
+    ...
+    &lt;!-- Configures the sap-srfc-server component --&gt;
+    &lt;bean id="sap-srfc-server"
+        class="org.fusesource.camel.component.sap.SapSynchronousRfcServerComponent"&gt;
+        &lt;property name="repositoryDataStore"&gt;
+            &lt;map&gt;
+                &lt;entry key="nplServer" value-ref="nplRepositoryData" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- Configures a Meta-Data Repository --&gt;
+    &lt;bean id="nplRepositoryData"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.RepositoryDataImpl"&gt;
+        &lt;property name="functionTemplates"&gt;
+            &lt;map&gt;
+                &lt;entry key="BOOK_FLIGHT" value-ref="bookFlightFunctionTemplate" /&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+    ...
+&lt;/blueprint&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37533"></a>Function template properties</h4></div></div></div><p>The interface of a function module consists of four parameter lists by which
+data is transferred back and forth to the function module in an RFC call. Each
+parameter list consists of one or more fields, each of which is a named
+parameter transferred in an RFC call. The following parameter lists and
+exception list are supported:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">The <span class="emphasis"><em>import parameter list</em></span> contains parameter
+values that are sent to a function module in an RFC call;</li><li class="listitem">The <span class="emphasis"><em>export parameter list</em></span> contains parameter
+values that are returned by a function module in an RFC call;</li><li class="listitem">The <span class="emphasis"><em>changing parameter list</em></span> contains parameter
+values that are sent to and returned by a function module in an RFC
+call;</li><li class="listitem">The <span class="emphasis"><em>table parameter list</em></span> contains internal
+table values that are sent to and returned by a function module in an
+RFC call.</li><li class="listitem">The interface of a function module also consists of an
+<span class="emphasis"><em>exception list</em></span> of ABAP exceptions that may be
+raised when the module is invoked in an RFC call.</li></ul></div><p>A function template describes the name and type of parameters in each
+parameter list of a function interface and the ABAP exceptions thrown by the
+function. A function template object maintains five property lists of meta-data
+objects, as described in the following table.</p><div class="informaltable"><table border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Property</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">importParameterList</code></p></td><td align="left" valign="top"><p>A list of list field meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMeataDataImpl</code>.
+                            Specifies the parameters that are sent in an RFC call to a function
+                            module.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">changingParameterList</code></p></td><td align="left" valign="top"><p>A list of list field meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMeataDataImpl</code>.
+                            Specifies the parameters that sent and returned in an RFC call to and
+                            from a function module.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">exportParameterList</code></p></td><td align="left" valign="top"><p>A list of list field meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMeataDataImpl</code>.
+                            Specifies the parameters that are returned in an RFC call from a
+                            function module.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">tableParameterList</code></p></td><td align="left" valign="top"><p>A list of list field meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMeataDataImpl</code>.
+                            Specifies the table parameters that are sent and returned in an RFC call
+                            to and from a function module.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">exceptionList</code></p></td><td align="left" valign="top"><p>A list of ABAP exception meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.AbapExceptionImpl</code>.
+                            Specifies the ABAP exceptions potentially raised in an RFC call of
+                            function module.</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37534"></a>Function template example</h4></div></div></div><p>The following example shows an outline of how to configure a function
+template:</p><pre class="screen">&lt;bean id="bookFlightFunctionTemplate"
+    class="org.fusesource.camel.component.sap.model.rfc.impl.FunctionTemplateImpl"&gt;
+    &lt;property name="importParameterList"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="changingParameterList"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="exportParameterList"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="tableParameterList"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name="exceptionList"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37535"></a>List field meta-data properties</h4></div></div></div><p>A list field meta-data object,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMeataDataImpl</code>,
+specifies the name and type of a field in a parameter list. For an elementary
+parameter field (<code class="literal">CHAR</code>, <code class="literal">DATE</code>, <code class="literal">BCD</code>,
+<code class="literal">TIME</code>, <code class="literal">BYTE</code>, <code class="literal">NUM</code>, <code class="literal">FLOAT</code>,
+<code class="literal">INT</code>, <code class="literal">INT1</code>, <code class="literal">INT2</code>, <code class="literal">DECF16</code>,
+<code class="literal">DECF34</code>, <code class="literal">STRING</code>, <code class="literal">XSTRING</code>), the
+following table lists the configuration properties that may be set on a list
+field meta-data object:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">name</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The name of the parameter field.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">type</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The parameter type of the field.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">byteLength</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field length in bytes for a non-Unicode
+                            layout. This value depends on the parameter type. See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">unicodeByteLength</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field length in bytes for a Unicode layout.
+                            This value depends on the parameter type. See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">decimals</code></p></td><td align="left" valign="top"><p><code class="literal">0</code></p></td><td align="left" valign="top"><p>The number of decimals in field value; only
+                            required for parameter types BCD and FLOAT. See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">optional</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, the field is optional and
+                            need not be set in a RFC call</p></td></tr></tbody></table></div><p>Note that all elementary parameter fields require that the <code class="literal">name</code>,
+<code class="literal">type</code>, <code class="literal">byteLength</code> and
+<code class="literal">unicodeByteLength</code> properties be specified in the field
+meta-data object. In addition, the <code class="literal">BCD</code>, <code class="literal">FLOAT</code>,
+<code class="literal">DECF16</code> and <code class="literal">DECF34</code> fields require the decimal
+property to be specified in the field meta-data object.</p><p>For a complex parameter field of type <code class="literal">TABLE</code> or
+<code class="literal">STRUCTURE</code>, the following table lists the configuration
+properties that may be set on a list field meta-data object:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">name</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The name of the parameter field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">type</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The parameter type of the field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recordMetaData</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The meta-data for the structure or table. A
+                            record meta-data object,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.RecordMetaDataImpl</code>,
+                            is passed to specify the fields in the structure or table rows.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">optional</code></p></td><td align="left" valign="top"><p><code class="literal">false</code></p></td><td align="left" valign="top"><p>If <code class="literal">true</code>, the field is optional and
+                            need not be set in a RFC call</p></td></tr></tbody></table></div><p>Note that all complex parameter fields require that the <code class="literal">name</code>,
+<code class="literal">type</code> and <code class="literal">recordMetaData</code> properties be specified in
+the field meta-data object. The value of the <code class="literal">recordMetaData</code>
+property is a record field meta-data object,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.RecordMetaDataImpl</code>,
+which specifies the structure of a nested structure or the structure of a table
+row.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37536"></a>Elementary list field meta-data example</h4></div></div></div><p>The following meta-data configuration specifies an optional, 24-digit packed
+BCD number parameter with two decimal places named
+<code class="literal">TICKET_PRICE</code>:</p><pre class="screen">&lt;bean    class="org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMetaDataImpl"&gt;
+    &lt;property name="name" value="TICKET_PRICE" /&gt;
+    &lt;property name="type" value="BCD" /&gt;
+    &lt;property name="byteLength" value="12" /&gt;
+    &lt;property name="unicodeByteLength" value="24" /&gt;
+    &lt;property name="decimals" value="2" /&gt;
+    &lt;property name="optional" value="true" /&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37537"></a>Complex list field meta-data example</h4></div></div></div><p>The following meta-data configuration specifies a required <code class="literal">TABLE</code>
+parameter named <code class="literal">CONNINFO</code> with a row structure specified by the
+<code class="literal">connectionInfo</code> record meta-data object:</p><pre class="screen">&lt;bean    class="org.fusesource.camel.component.sap.model.rfc.impl.ListFieldMetaDataImpl"&gt;
+    &lt;property name="name" value="CONNINFO" /&gt;
+    &lt;property name="type" value="TABLE" /&gt;
+    &lt;property name="recordMetaData" ref="connectionInfo" /&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37538"></a>Record meta-data properties</h4></div></div></div><p>A record meta-data object,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.RecordMetaDataImpl</code>,
+specifies the name and contents of a nested <code class="literal">STRUCTURE</code> or the row of
+a <code class="literal">TABLE</code> parameter. A record meta-data object maintains a list of
+record field meta data objects,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.FieldMetaDataImpl</code>,
+which specify the parameters that reside in the nested structure or table
+row.</p><p>The following table lists configuration properties that may be set on a record
+meta-data object:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">name</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The name of the record.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recordFieldMetaData</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The list of record field meta-data objects,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.FieldMetaDataImpl</code>.
+                            Specifies the fields contained within the structure.</p></td></tr></tbody></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>All properties of the record meta-data object are required.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37539"></a>Record meta-data example</h4></div></div></div><p>The following example shows how to configure a record meta-data object:</p><pre class="screen">&lt;bean    id="connectionInfo"
+        class="org.fusesource.camel.component.sap.model.rfc.impl.RecordMetaDataImpl"&gt;
+    &lt;property name="name" value="CONNECTION_INFO" /&gt;
+    &lt;property name="recordFieldMetaData"&gt;
+        &lt;list&gt;
+            ...
+        &lt;/list&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37540"></a>Record field meta-data properties</h4></div></div></div><p>A record field meta-data object,
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.FieldMetaDataImpl</code>,
+specifies the name and type of a parameter field withing a structure.</p><p>A record field meta-data object is similar to a parameter field meta-data
+object, except that the offsets of the individual field locations within the
+nested structure or table row must be additionally specified. The non-Unicode
+and Unicode offsets of an individual field must be calculated and specified from
+the sum of non-Unicode and Unicode byte lengths of the preceding fields in the
+structure or row. Note that failure to properly specify the offsets of fields in
+nested structures and table rows will cause the field storage of parameters in
+the underlying JCo and ABAP runtimes to overlap and prevent the proper transfer
+of values in RFC calls.</p><p>For an elementary parameter field (<code class="literal">CHAR</code>, <code class="literal">DATE</code>,
+<code class="literal">BCD</code>, <code class="literal">TIME</code>, <code class="literal">BYTE</code>, <code class="literal">NUM</code>,
+<code class="literal">FLOAT</code>, <code class="literal">INT</code>, <code class="literal">INT1</code>, <code class="literal">INT2</code>,
+<code class="literal">DECF16</code>, <code class="literal">DECF34</code>, <code class="literal">STRING</code>,
+<code class="literal">XSTRING</code>), the following table lists the configuration
+properties that may be set on a record field meta-data object:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">name</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The name of the parameter field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">type</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The parameter type of the field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">byteLength</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field length in bytes for a non-Unicode
+                            layout. This value depends on the parameter type. See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">unicodeByteLength</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field length in bytes for a Unicode layout.
+                            This value depends on the parameter type. See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">byteOffset</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field offset in bytes for non-Unicode
+                            layout. This offset is the byte location of the field within the
+                            enclosing structure.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">unicodeByteOffset</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field offset in bytes for Unicode layout.
+                            This offset is the byte location of the field within the enclosing
+                            structure.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">decimals</code></p></td><td align="left" valign="top"><p><code class="literal">0</code></p></td><td align="left" valign="top"><p>The number of decimals in field value; only
+                            required for parameter types <code class="literal">BCD</code> and <code class="literal">FLOAT</code>.
+                            See <a class="xref" href="SAP.html#SAP-Message-RFC" title="Message Body for RFC">Message Body for RFC</a>.</p></td></tr></tbody></table></div><p>For a complex parameter field of type <code class="literal">TABLE</code> or
+<code class="literal">STRUCTURE</code>, the following table lists the configuration
+properties that may be set on a record field meta-data object:</p><div class="informaltable"><table border="1"><colgroup><col width="33%" class="col_1"><col width="33%" class="col_2"><col width="34%" class="col_3"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Name</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Default Value</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">name</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The name of the parameter field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">type</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The parameter type of the field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">byteOffset</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field offset in bytes for non-Unicode
+                            layout. This offset is the byte location of the field within the
+                            enclosing structure.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">unicodeByteOffset</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The field offset in bytes for Unicode layout.
+                            This offset is the byte location of the field within the enclosing
+                            structure.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recordMetaData</code></p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>The meta-data for the structure or table. A
+                            record meta-data object,
+                                <code class="literal">org.fusesource.camel.component.sap.model.rfc.impl.RecordMetaDataImpl</code>,
+                            is passed to specify the fields in the structure or table rows.</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37541"></a>Elementary record field meta-data example</h4></div></div></div><p>The following meta-data configuration specifies a <code class="literal">DATE</code> field
+parameter named <code class="literal">ARRDATE</code> located 85 bytes into the enclosing
+structure in the case of a non-Unicode layout and located 170 bytes into the
+enclosing structure in the case of a Unicode layout:</p><pre class="screen">&lt;bean    class="org.fusesource.camel.component.sap.model.rfc.impl.FieldMetaDataImpl"&gt;
+    &lt;property name="name" value="ARRDATE" /&gt;
+    &lt;property name="type" value="DATE" /&gt;
+    &lt;property name="byteLength" value="8" /&gt;
+    &lt;property name="unicodeByteLength" value="16" /&gt;
+    &lt;property name="byteOffset" value="85" /&gt;
+    &lt;property name="unicodeByteOffset" value="170" /&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37542"></a>Complex record field meta-data example</h4></div></div></div><p>The following meta-data configuration specifies a <code class="literal">STRUCTURE</code> field
+parameter named <code class="literal">FLTINFO</code> with a structure specified by the
+<code class="literal">flightInfo</code> record meta-data object. The parameter is located at
+the beginning of the enclosing structure in both the case of a non-Unicode and
+Unicode layout.</p><pre class="screen">&lt;bean    class="org.fusesource.camel.component.sap.model.rfc.impl.FieldMetaDataImpl"&gt;
+    &lt;property name="name" value="FLTINFO" /&gt;
+    &lt;property name="type" value="STRUCTURE" /&gt;
+    &lt;property name="byteOffset" value="0" /&gt;
+    &lt;property name="unicodeByteOffset" value="0" /&gt;
+    &lt;property name="recordMetaData" ref="flightInfo" /&gt;
+&lt;/bean&gt;</pre></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Message-RFC"></a>Message Body for RFC</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37504"></a>Request and response objects</h3></div></div></div><p>An SAP endpoint expects to receive a message with a message body containing an SAP
+request object and will return a message with a message body containing an SAP
+response object. SAP requests and responses are fixed map data structures containing
+named fields with each field having a predefined data type.</p><p>Note that the named fields in an SAP request and response are specific to an SAP
+endpoint, with each endpoint defining the parameters in the SAP request and response
+it will accept. An SAP endpoint provides factory methods to create the request and
+response objects that are specific to it.</p><pre class="screen">public class SAPEndpoint ... {
+    ...
+    public Structure getRequest() throws Exception;
+
+    public Structure getResponse() throws Exception;
+    ...
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37505"></a>Structure objects</h3></div></div></div><p>Both SAP request and response objects are represented in Java as a structure
+object which supports the
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.Structure</code> interface.
+This interface extends both the <code class="literal">java.util.Map</code> and
+<code class="literal">org.eclipse.emf.ecore.EObject</code> interfaces.</p><pre class="screen">public interface Structure extends org.eclipse.emf.ecore.EObject,
+                                        java.util.Map&lt;String, Object&gt; {
+
+    &lt;T&gt; T get(Object key, Class&lt;T&gt; type);
+
+}</pre><p>The field values in a structure object are accessed through the field&#8217;s getter
+methods in the map interface. In addition, the structure interface provides a
+type-restricted method to retrieve field values.</p><p>Structure objects are implemented in the component runtime using the Eclipse
+Modeling Framework (EMF) and support that framework&#8217;s <code class="literal">EObject</code>
+interface. Instances of a structure object have attached meta-data which define and
+restrict the structure and contents of the map of fields it provides. This meta-data
+can be accessed and introspected using the standard methods provided by EMF. Please
+refer to the EMF documentation for further details.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Attempts to get a parameter not defined on a structure object will return
+null. Attempts to set a parameter not defined on a structure will throw an
+exception as well as attempts to set the value of a parameter with an incorrect
+type.</p></td></tr></table></div><p>As discussed in the following sections, structure objects can contain fields that
+contain values of the complex field types, <code class="literal">STRUCTURE</code> and
+<code class="literal">TABLE</code>. Note that it is unnecessary to create instances of these
+types and add them to the structure. Instances of these field values are created on
+demand if necessary when accessed in the enclosing structure.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37506"></a>Field types</h3></div></div></div><p>The fields that reside within the structure object of an SAP request or response
+may be either <span class="emphasis"><em>elementary</em></span> or <span class="emphasis"><em>complex</em></span>.
+An elementary field contains a single scalar value, whereas a complex field will
+contain one or more fields of either a elementary or complex type.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37507"></a>Elementary field types</h3></div></div></div><p>An elementary field may be either a character, numeric, hexadecimal or string
+field type. The following table summarizes the types of elementary fields that may
+reside in a structure object:</p><div class="informaltable"><table border="1"><colgroup><col width="16%" class="col_1"><col width="17%" class="col_2"><col width="17%" class="col_3"><col width="16%" class="col_4"><col width="17%" class="col_5"><col width="17%" class="col_6"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Field Type</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Corresponding Java Type</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Byte Length</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Unicode Byte Length</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Number</strong></span>
+                        <span class="strong"><strong>Decimals</strong></span>
+                        <span class="strong"><strong>Digits</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">CHAR</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.String</code></p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;C&#8217;: Fixed sized character string</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">DATE</code></p></td><td align="left" valign="top"><p><code class="literal">java.util.Date</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>16</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;D&#8217;: Date (format: YYYYMMDD)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">BCD</code></p></td><td align="left" valign="top"><p><code class="literal">java.math.BigDecimal</code></p></td><td align="left" valign="top"><p>1 to 16</p></td><td align="left" valign="top"><p>1 to 16</p></td><td align="left" valign="top"><p>0 to 14</p></td><td align="left" valign="top"><p>ABAP Type &#8216;P&#8217;: Packed BCD number. A BCD number
+                        contains two digits per byte.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">TIME</code></p></td><td align="left" valign="top"><p><code class="literal">java.util.Date</code></p></td><td align="left" valign="top"><p>6</p></td><td align="left" valign="top"><p>12</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;T&#8217;: Time (format: HHMMSS)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">BYTE</code></p></td><td align="left" valign="top"><p><code class="literal">byte[]</code></p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;X&#8217;:Fixed sized byte array</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">NUM</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.String</code></p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>1 to 65535</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;N&#8217;: Fixed sized numeric character string</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">FLOAT</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.Double</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>0 to 15</p></td><td align="left" valign="top"><p>ABAP Type &#8216;F&#8217;: Floating point number</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">INT</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.Integer</code></p></td><td align="left" valign="top"><p>4</p></td><td align="left" valign="top"><p>4</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;I&#8217;: 4-byte Integer</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">INT2</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.Integer</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;S&#8217;: 2-byte Integer</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">INT1</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.Integer</code></p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;B&#8217;: 1-byte Integer</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">DECF16</code></p></td><td align="left" valign="top"><p><code class="literal">java.match.BigDecimal</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>16</p></td><td align="left" valign="top"><p>ABAP Type &#8216;decfloat16&#8217;: 8 -byte Decimal Floating
+                        Point Number</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">DECF34</code></p></td><td align="left" valign="top"><p><code class="literal">java.math.BigDecimal</code></p></td><td align="left" valign="top"><p>16</p></td><td align="left" valign="top"><p>16</p></td><td align="left" valign="top"><p>34</p></td><td align="left" valign="top"><p>ABAP Type &#8216;decfloat34&#8217;: 16-byte Decimal Floating
+                        Point Number</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">STRING</code></p></td><td align="left" valign="top"><p><code class="literal">java.lang.String</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;G&#8217;: Variable length character string</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">XSTRING</code></p></td><td align="left" valign="top"><p><code class="literal">byte[]</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;Y&#8217;: Variable length byte array</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37508"></a>Character field types</h3></div></div></div><p>A character field contains a fixed sized character string that may use either a
+non-Unicode or Unicode character encoding in the underlying JCo and ABAP runtimes.
+Non-Unicode character strings encode one character per byte. Unicode characters
+strings are encoded in two bytes using UTF-16 encoding. Character field values are
+represented in Java as <code class="literal">java.lang.String</code> objects and the underlying JCo
+runtime is responsible for the conversion to their ABAP representation.</p><p>A character field declares its field length in its associated
+<code class="literal">byteLength</code> and <code class="literal">unicodeByteLength</code> properties, which
+determine the length of the field&#8217;s character string in each encoding system.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">CHAR</code></span></dt><dd>A <code class="literal">CHAR</code> character field is a text field containing
+alphanumeric characters and corresponds to the ABAP type C.</dd><dt><span class="term"><code class="literal">NUM</code></span></dt><dd>A <code class="literal">NUM</code> character field is a numeric text field containing
+numeric characters only and corresponds to the ABAP type N.</dd><dt><span class="term"><code class="literal">DATE</code></span></dt><dd>A <code class="literal">DATE</code> character field is an 8 character date field with
+the year, month and day formatted as <code class="literal">YYYYMMDD</code> and
+corresponds to the ABAP type D.</dd><dt><span class="term"><code class="literal">TIME</code></span></dt><dd>A <code class="literal">TIME</code> character field is a 6 character time field with
+the hours, minutes and seconds formatted as <code class="literal">HHMMSS</code> and
+corresponds to the ABAP type T.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37509"></a>Numeric field types</h3></div></div></div><p>A numeric field contains a number. The following numeric field types are
+supported:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">INT</code></span></dt><dd>An <code class="literal">INT</code> numeric field is an integer field stored as a
+4-byte integer value in the underlying JCo and ABAP runtimes and
+corresponds to the ABAP type I. An <code class="literal">INT</code> field value is
+represented in Java as a <code class="literal">java.lang.Integer</code> object.</dd><dt><span class="term"><code class="literal">INT2</code></span></dt><dd>An <code class="literal">INT2</code> numeric field is an integer field stored as a
+2-byte integer value in the underlying JCo and ABAP runtimes and
+corresponds to the ABAP type S. An <code class="literal">INT2</code> field value is
+represented in Java as a <code class="literal">java.lang.Integer</code> object.</dd><dt><span class="term"><code class="literal">INT1</code></span></dt><dd>An <code class="literal">INT1</code> field is an integer field stored as a 1-byte
+integer value in the underlying JCo and ABAP runtimes value and
+corresponds to the ABAP type B. An <code class="literal">INT1</code> field value is
+represented in Java as a <code class="literal">java.lang.Integer</code> object.</dd><dt><span class="term"><code class="literal">FLOAT</code></span></dt><dd>A <code class="literal">FLOAT</code> field is a binary floating point number field
+stored as an 8-byte double value in the underlying JCo and ABAP runtimes
+and corresponds to the ABAP type F. A <code class="literal">FLOAT</code> field declares
+the number of decimal digits that the field&#8217;s value contains in its
+associated decimal property. In the case of a <code class="literal">FLOAT</code> field,
+this decimal property can have a value between 1 and 15 digits. A
+<code class="literal">FLOAT</code> field value is represented in Java as a
+<code class="literal">java.lang.Double</code> object.</dd><dt><span class="term"><code class="literal">BCD</code></span></dt><dd>A <code class="literal">BCD</code> field is a binary coded decimal field stored as a 1
+to 16 byte packed number in the underlying JCo and ABAP runtimes and
+corresponds to the ABAP type P. A packed number stores two decimal
+digits per byte. A <code class="literal">BCD</code> field declares its field length in
+its associated <code class="literal">byteLength</code> and
+<code class="literal">unicodeByteLength</code> properties. In the case of a
+<code class="literal">BCD</code> field, these properties can have a value between 1
+and 16 bytes and both properties will have the same value. A
+<code class="literal">BCD</code> field declares the number of decimal digits that
+the field&#8217;s value contains in its associated decimal property. In the
+case of a <code class="literal">BCD</code> field, this decimal property can have a value
+between 1 and 14 digits. A <code class="literal">BCD</code> field value is represented
+in Java as a <code class="literal">java.math.BigDecimal</code>.</dd><dt><span class="term"><code class="literal">DECF16</code></span></dt><dd>A <code class="literal">DECF16</code> field is a decimal floating point stored as an
+8-byte IEEE 754 decimal64 floating point value in the underlying JCo and
+ABAP runtimes and corresponds to the ABAP type <code class="literal">decfloat16</code>.
+The value of a <code class="literal">DECF16</code> field has 16 decimal digits. The
+value of a <code class="literal">DECF16</code> field is represented in Java as
+<code class="literal">java.math.BigDecimal</code>.</dd><dt><span class="term"><code class="literal">DECF34</code></span></dt><dd>A <code class="literal">DECF34</code> field is a decimal floating point stored as a
+16-byte IEEE 754 decimal128 floating point value in the underlying JCo
+and ABAP runtimes and corresponds to the ABAP type
+<code class="literal">decfloat34</code>. The value of a <code class="literal">DECF34</code> field
+has 34 decimal digits. The value of a <code class="literal">DECF34</code> field is
+represented in Java as <code class="literal">java.math.BigDecimal</code>.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37510"></a>Hexadecimal field types</h3></div></div></div><p>A hexadecimal field contains raw binary data. The following hexadecimal field
+types are supported:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">BYTE</code></span></dt><dd>A <code class="literal">BYTE</code> field is a fixed sized byte string stored as a
+byte array in the underlying JCo and ABAP runtimes and corresponds to
+the ABAP type X. A <code class="literal">BYTE</code> field declares its field length in
+its associated <code class="literal">byteLength</code> and
+<code class="literal">unicodeByteLength</code> properties. In the case of a
+<code class="literal">BYTE</code> field, these properties can have a value between 1
+and 65535 bytes and both properties will have the same value. The value
+of a <code class="literal">BYTE</code> field is represented in Java as a
+<code class="literal">byte[]</code> object.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37511"></a>String field types</h3></div></div></div><p>A string field references a variable length string value. The length of that
+string value is not fixed until runtime. The storage for the string value is
+dynamically created in the underlying JCo and ABAP runtimes. The storage for the
+string field itself is fixed and contains only a string header.</p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">STRING</code></span></dt><dd>A <code class="literal">STRING</code> field refers to a character string and is stored
+in the underlying JCo and ABAP runtimes as an 8-byte value. It
+corresponds to the ABAP type G. The value of the <code class="literal">STRING</code>
+field is represented in Java as a <code class="literal">java.lang.String</code>
+object.</dd><dt><span class="term"><code class="literal">XSTRING</code></span></dt><dd>An <code class="literal">XSTRING</code> field refers to a byte string and is stored in
+the underlying JCo and ABAP runtimes as an 8-byte value. It corresponds
+to the ABAP type Y. The value of the <code class="literal">STRING</code> field is
+represented in Java as a <code class="literal">byte[]</code> object.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37512"></a>Complex field types</h3></div></div></div><p>A complex field may be either a structure or table field type. The following table
+summarizes these complex field types.</p><div class="informaltable"><table border="1"><colgroup><col width="16%" class="col_1"><col width="17%" class="col_2"><col width="17%" class="col_3"><col width="16%" class="col_4"><col width="17%" class="col_5"><col width="17%" class="col_6"></colgroup><tbody><tr><td align="left" valign="top"><p><span class="strong"><strong>Field Type</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Corresponding Java Type</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Byte Length</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Unicode Byte Length</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Number</strong></span>
+                        <span class="strong"><strong>Decimals</strong></span>
+                        <span class="strong"><strong>Digits</strong></span></p></td><td align="left" valign="top"><p><span class="strong"><strong>Description</strong></span></p></td></tr><tr><td align="left" valign="top"><p><code class="literal">STRUCTURE</code></p></td><td align="left" valign="top"><p><code class="literal">org.fusesource.camel.component.sap.model.rfc.Structure</code></p></td><td align="left" valign="top"><p>Total of individual field byte
+                        lengths</p></td><td align="left" valign="top"><p>Total of individual field Unicode
+                        byte lengths</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;u&#8217; &amp; &#8216;v&#8217;: Heterogeneous Structure</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">TABLE</code></p></td><td align="left" valign="top"><p><code class="literal">org.fusesource.camel.component.sap.model.rfc.Table</code></p></td><td align="left" valign="top"><p>Byte length of row structure</p></td><td align="left" valign="top"><p>Unicode byte length of row structure</p></td><td align="left" valign="top"><p>-</p></td><td align="left" valign="top"><p>ABAP Type &#8216;h&#8217;: Table</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37513"></a>Structure field types</h3></div></div></div><p>A <code class="literal">STRUCTURE</code> field contains a structure object and is stored in the
+underlying JCo and ABAP runtimes as an ABAP structure record. It corresponds to
+either an ABAP type <code class="literal">u</code> or <code class="literal">v</code>. The value of a
+<code class="literal">STRUCTURE</code> field is represented in Java as a structure object with
+the interface
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.Structure</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37514"></a>Table field types</h3></div></div></div><p>A <code class="literal">TABLE</code> field contains a table object and is stored in the underlying
+JCo and ABAP runtimes as an ABAP internal table. It corresponds to the ABAP type
+<code class="literal">h</code>. The value of the field is represented in Java by a table object
+with the interface
+<code class="literal">org.fusesource.camel.component.sap.model.rfc.Table</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37515"></a>Table objects</h3></div></div></div><p>A table object is a homogeneous list data structure containing rows of structure
+objects with the same structure. This interface extends both the
+<code class="literal">java.util.List</code> and <code class="literal">org.eclipse.emf.ecore.EObject</code>
+interfaces.</p><pre class="screen">public interface Table&lt;S extends Structure&gt;
+    extends org.eclipse.emf.ecore.EObject,
+    java.util.List&lt;S&gt; {
+
+    /**
+     * Creates and adds table row at end of row list
+     */
+    S add();
+
+    /**
+     * Creates and adds table row at index in row list
+     */
+    S add(int index);
+
+}</pre><p>The list of rows in a table object are accessed and managed using the standard
+methods defined in the list interface. In addition the table interface provides two
+factory methods for creating and adding structure objects to the row list.</p><p>Table objects are implemented in the component runtime using the Eclipse Modeling
+Framework (EMF) and support that framework&#8217;s EObject interface. Instances of a table
+object have attached meta-data which define and restrict the structure and contents
+of the rows it provides. This meta-data can be accessed and introspected using the
+standard methods provided by EMF. Please refer to the EMF documentation for further
+details.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Attempts to add or set a row structure value of the wrong type will throw an
+exception.</p></td></tr></table></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Message-IDoc"></a>Message Body for IDoc</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_idoc_message_type"></a>IDoc message type</h3></div></div></div><p>When using one of the IDoc Camel SAP endpoints, the type of the message body
+depends on which particular endpoint you are using.</p><p>For a <code class="literal">sap-idoc-destination</code> endpoint or a
+<code class="literal">sap-qidoc-destination</code> endpoint, the message body is of
+<code class="literal">Document</code> type:</p><pre class="screen">org.fusesource.camel.component.sap.model.idoc.Document</pre><p>For a <code class="literal">sap-idoclist-destination</code> endpoint, a
+<code class="literal">sap-qidoclist-destination</code> endpoint, or a
+<code class="literal">sap-idoclist-server</code> endpoint, the message body is of
+<code class="literal">DocumentList</code> type:</p><pre class="screen">org.fusesource.camel.component.sap.model.idoc.DocumentList</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_the_idoc_document_model"></a>The IDoc document model</h3></div></div></div><p>For the Camel SAP component, an IDoc document is modelled using the Eclipse
+Modelling Framework (EMF), which provides a wrapper API around the underlying SAP
+IDoc API. The most important types in this model are:</p><pre class="screen">org.fusesource.camel.component.sap.model.idoc.Document
+org.fusesource.camel.component.sap.model.idoc.Segment</pre><p>The <code class="literal">Document</code> type represents an IDoc document instance. In outline,
+the <code class="literal">Document</code> interface exposes the following methods:</p><pre class="screen">// Java
+package org.fusesource.camel.component.sap.model.idoc;
+...
+public interface Document extends EObject {
+    // Access the field values from the IDoc control record
+    String getArchiveKey();
+    void setArchiveKey(String value);
+    String getClient();
+    void setClient(String value);
+    ...
+
+    // Access the IDoc document contents
+    Segment getRootSegment();
+}</pre><p>The following kinds of method are exposed by the <code class="literal">Document</code>
+interface:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Methods for accessing the control record</span></dt><dd>Most of the methods are for accessing or modifying field values of the
+IDoc control record. These methods are of the form
+<span class="emphasis"><em>AttributeName</em></span>,
+<span class="emphasis"><em>AttributeName</em></span>, where
+<span class="emphasis"><em>AttributeName</em></span> is the
+name of a field value (see <a class="xref" href="SAP.html#SAP-Message-IDoc-TableIDDA">???</a>).</dd><dt><span class="term">Method for accessing the document contents</span></dt><dd><p class="simpara">The <code class="literal">getRootSegment</code> method provides access to the document
+contents (IDoc data records), returning the contents as a
+<code class="literal">Segment</code> object. Each <code class="literal">Segment</code> object can
+contain an arbitrary number of child segments, and the segments can be
+nested to an arbitrary degree.</p><p class="simpara">Note, however, that the precise layout of the segment hierarchy is
+defined by the particular <span class="emphasis"><em>IDoc type</em></span> of the
+document. When creating (or reading) a segment hierarchy, therefore, you
+must be sure to follow the exact structure as defined by the IDoc
+type.</p></dd></dl></div><p>The <code class="literal">Segment</code> type is used to access the data records of the IDoc
+document, where the segments are laid out in accordance with the structure defined
+by the document&#8217;s IDoc type. In outline, the <code class="literal">Segment</code> interface exposes
+the following methods:</p><pre class="screen">// Java
+package org.fusesource.camel.component.sap.model.idoc;
+...
+public interface Segment extends EObject, java.util.Map&lt;String, Object&gt; {
+    // Returns the value of the '&lt;em&gt;&lt;b&gt;Parent&lt;/b&gt;&lt;/em&gt;' reference.
+    Segment getParent();
+
+    // Return a immutable list of all child segments
+    &lt;S extends Segment&gt; EList&lt;S&gt; getChildren();
+
+    // Returns a list of child segments of the specified segment type.
+    &lt;S extends Segment&gt; SegmentList&lt;S&gt; getChildren(String segmentType);
+
+    EList&lt;String&gt; getTypes();
+
+    Document getDocument();
+
+    String getDescription();
+
+    String getType();
+
+    String getDefinition();
+
+    int getHierarchyLevel();
+
+    String getIdocType();
+
+    String getIdocTypeExtension();
+
+    String getSystemRelease();
+
+    String getApplicationRelease();
+
+    int getNumFields();
+
+    long getMaxOccurrence();
+
+    long getMinOccurrence();
+
+    boolean isMandatory();
+
+    boolean isQualified();
+
+    int getRecordLength();
+
+    &lt;T&gt; T get(Object key, Class&lt;T&gt; type);
+}</pre><p>The <code class="literal">getChildren(String segmentType)</code> method is particularly useful for
+adding new (nested) children to a segment. It returns an object of type,
+<code class="literal">SegmentList</code>, which is defined as follows:</p><pre class="screen">// Java
+package org.fusesource.camel.component.sap.model.idoc;
+...
+public interface SegmentList&lt;S extends Segment&gt; extends EObject, EList&lt;S&gt; {
+    S add();
+
+    S add(int index);
+}</pre><p>Hence, to create a data record of <code class="literal">E1SCU_CRE</code> type, you could use Java
+code like the following:</p><pre class="screen">Segment rootSegment = document.getRootSegment();
+
+Segment E1SCU_CRE_Segment = rootSegment.getChildren("E1SCU_CRE").add();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_how_an_idoc_is_related_to_a_document_object"></a>How an IDoc is related to a Document object</h3></div></div></div><p>According to the SAP documentation, an IDoc document consists of the following
+main parts:</p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Control record</span></dt><dd>The control record (which contains the meta-data for the IDoc
+document) is represented by the attributes on the <code class="literal">Document</code>
+object&#8212;see <a class="xref" href="SAP.html#SAP-Message-IDoc-TableIDDA">???</a> for
+details.</dd><dt><span class="term">Data records</span></dt><dd>The data records are represented by the <code class="literal">Segment</code> objects,
+which are constructed as a nested hierarchy of segments. You can access
+the root segment through the <code class="literal">Document.getRootSegment</code>
+method.</dd><dt><span class="term">Status records</span></dt><dd>In the Camel SAP component, the status records are
+<span class="strong"><strong>not</strong></span> represented by the document model. But you
+do have access to the latest status value through the
+<code class="literal">status</code> attribute on the control record.</dd></dl></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_example_of_creating_a_document_instance"></a>Example of creating a Document instance</h3></div></div></div><p>For example, <a class="xref" href="SAP.html#SAP-Message-IDoc-ExCIDDJ" title="Example&nbsp;28.&nbsp;Creating an IDoc Document in Java">Example&nbsp;28, &#8220;Creating an IDoc Document in Java&#8221;</a> shows how to create an
+IDoc document with the IDoc type, <code class="literal">FLCUSTOMER_CREATEFROMDATA01</code>, using
+the IDoc model API in Java.</p><div class="example"><a name="SAP-Message-IDoc-ExCIDDJ"></a><p class="title"><b>Example&nbsp;28.&nbsp;Creating an IDoc Document in Java</b></p><div class="example-contents"><pre class="screen">// Java
+import org.fusesource.camel.component.sap.model.idoc.Document;
+import org.fusesource.camel.component.sap.model.idoc.Segment;
+import org.fusesource.camel.component.sap.util.IDocUtil;
+
+import org.fusesource.camel.component.sap.model.idoc.Document;
+import org.fusesource.camel.component.sap.model.idoc.DocumentList;
+import org.fusesource.camel.component.sap.model.idoc.IdocFactory;
+import org.fusesource.camel.component.sap.model.idoc.IdocPackage;
+import org.fusesource.camel.component.sap.model.idoc.Segment;
+import org.fusesource.camel.component.sap.model.idoc.SegmentChildren;
+...
+//
+// Create a new IDoc instance using the modelling classes
+//
+
+// Get the SAP Endpoint bean from the Camel context.
+// In this example, it's a 'sap-idoc-destination' endpoint.
+SapTransactionalIDocDestinationEndpoint endpoint =
+    exchange.getContext().getEndpoint(
+        "bean:<span class="emphasis"><em>SapEndpointBeanID</em></span>",
+        SapTransactionalIDocDestinationEndpoint.class
+    );
+
+// The endpoint automatically populates some required control record attributes
+Document document = endpoint.createDocument()
+
+// Initialize additional control record attributes
+document.setMessageType("FLCUSTOMER_CREATEFROMDATA");
+document.setRecipientPartnerNumber("QUICKCLNT");
+document.setRecipientPartnerType("LS");
+document.setSenderPartnerNumber("QUICKSTART");
+document.setSenderPartnerType("LS");
+
+Segment rootSegment = document.getRootSegment();
+
+Segment E1SCU_CRE_Segment = rootSegment.getChildren("E1SCU_CRE").add();
+
+Segment E1BPSCUNEW_Segment = E1SCU_CRE_Segment.getChildren("E1BPSCUNEW").add();
+E1BPSCUNEW_Segment.put("CUSTNAME", "Fred Flintstone");
+E1BPSCUNEW_Segment.put("FORM", "Mr.");
+E1BPSCUNEW_Segment.put("STREET", "123 Rubble Lane");
+E1BPSCUNEW_Segment.put("POSTCODE", "01234");
+E1BPSCUNEW_Segment.put("CITY", "Bedrock");
+E1BPSCUNEW_Segment.put("COUNTR", "US");
+E1BPSCUNEW_Segment.put("PHONE", "800-555-1212");
+E1BPSCUNEW_Segment.put("EMAIL", "<a class="link" href="mailto:fred@bedrock.com" target="_top">fred@bedrock.com</a>");
+E1BPSCUNEW_Segment.put("CUSTTYPE", "P");
+E1BPSCUNEW_Segment.put("DISCOUNT", "005");
+E1BPSCUNEW_Segment.put("LANGU", "E");</pre></div></div><br class="example-break"></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_document_attributes"></a>Document attributes</h3></div></div></div><p><a class="xref" href="SAP.html#SAP-Message-IDoc-TableIDDA">???</a> shows the control record attributes
+that you can set on the <code class="literal">Document</code> object.</p><div class="informaltable"><a name="SAP-Message-IDoc-TableIDDA"></a><table border="1"><colgroup><col width="25%" class="col_1"><col width="25%" class="col_2"><col width="25%" class="col_3"><col width="25%" class="col_4"></colgroup><thead><tr><th align="left" valign="top">Attribute</th><th align="left" valign="top">Length</th><th align="left" valign="top">SAP Field</th><th align="left" valign="top">Description
+IDoc Document Attributes</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">archiveKey</code></p></td><td align="left" valign="top"><p>70</p></td><td align="left" valign="top"><p><code class="literal">ARCKEY</code></p></td><td align="left" valign="top"><p>EDI archive key</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">client</code></p></td><td align="left" valign="top"><p>3</p></td><td align="left" valign="top"><p><code class="literal">MANDT</code></p></td><td align="left" valign="top"><p>Client</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">creationDate</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p><code class="literal">CREDAT</code></p></td><td align="left" valign="top"><p>Date IDoc was created</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">creationTime</code></p></td><td align="left" valign="top"><p>6</p></td><td align="left" valign="top"><p><code class="literal">CRETIM</code></p></td><td align="left" valign="top"><p>Time IDoc was created</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">direction</code></p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p><code class="literal">DIRECT</code></p></td><td align="left" valign="top"><p>Direction</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDIMessage</code></p></td><td align="left" valign="top"><p>14</p></td><td align="left" valign="top"><p><code class="literal">REFMES</code></p></td><td align="left" valign="top"><p>Reference to message</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDIMessageGroup</code></p></td><td align="left" valign="top"><p>14</p></td><td align="left" valign="top"><p><code class="literal">REFGRP</code></p></td><td align="left" valign="top"><p>Reference to message group</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDIMessageType</code></p></td><td align="left" valign="top"><p>6</p></td><td align="left" valign="top"><p><code class="literal">STDMES</code></p></td><td align="left" valign="top"><p>EDI message type</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDIStandardFlag</code></p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p><code class="literal">STD</code></p></td><td align="left" valign="top"><p>EDI standard</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDIStandardVersion</code></p></td><td align="left" valign="top"><p>6</p></td><td align="left" valign="top"><p><code class="literal">STDVRS</code></p></td><td align="left" valign="top"><p>Version of EDI standard</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">eDITransmissionFile</code></p></td><td align="left" valign="top"><p>14</p></td><td align="left" valign="top"><p><code class="literal">REFINT</code></p></td><td align="left" valign="top"><p>Reference to interchange file</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">iDocCompoundType</code></p></td><td align="left" valign="top"><p>8</p></td><td align="left" valign="top"><p><code class="literal">DOCTYP</code></p></td><td align="left" valign="top"><p>IDoc type</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">iDocNumber</code></p></td><td align="left" valign="top"><p>16</p></td><td align="left" valign="top"><p><code class="literal">DOCNUM</code></p></td><td align="left" valign="top"><p>IDoc number</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">iDocSAPRelease</code></p></td><td align="left" valign="top"><p>4</p></td><td align="left" valign="top"><p><code class="literal">DOCREL</code></p></td><td align="left" valign="top"><p>SAP Release of IDoc</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">iDocType</code></p></td><td align="left" valign="top"><p>30</p></td><td align="left" valign="top"><p><code class="literal">IDOCTP</code></p></td><td align="left" valign="top"><p>Name of basic IDoc type</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">iDocTypeExtension</code></p></td><td align="left" valign="top"><p>30</p></td><td align="left" valign="top"><p><code class="literal">CIMTYP</code></p></td><td align="left" valign="top"><p>Name of extension type</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">messageCode</code></p></td><td align="left" valign="top"><p>3</p></td><td align="left" valign="top"><p><code class="literal">MESCOD</code></p></td><td align="left" valign="top"><p>Logical message code</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">messageFunction</code></p></td><td align="left" valign="top"><p>3</p></td><td align="left" valign="top"><p><code class="literal">MESFCT</code></p></td><td align="left" valign="top"><p>Logical message function</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">messageType</code></p></td><td align="left" valign="top"><p>30</p></td><td align="left" valign="top"><p><code class="literal">MESTYP</code></p></td><td align="left" valign="top"><p>Logical message type</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">outputMode</code></p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p><code class="literal">OUTMOD</code></p></td><td align="left" valign="top"><p>Output mode</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientAddress</code></p></td><td align="left" valign="top"><p>10</p></td><td align="left" valign="top"><p><code class="literal">RCVSAD</code></p></td><td align="left" valign="top"><p>Receiver address (SADR)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientLogicalAddress</code></p></td><td align="left" valign="top"><p>70</p></td><td align="left" valign="top"><p><code class="literal">RCVLAD</code></p></td><td align="left" valign="top"><p>Logical address of receiver</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientPartnerFunction</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p><code class="literal">RCVPFC</code></p></td><td align="left" valign="top"><p>Partner function of receiver</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientPartnerNumber</code></p></td><td align="left" valign="top"><p>10</p></td><td align="left" valign="top"><p><code class="literal">RCVPRN</code></p></td><td align="left" valign="top"><p>Partner number of receiver</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientPartnerType</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p><code class="literal">RCVPRT</code></p></td><td align="left" valign="top"><p>Partner type of receiver</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">recipientPort</code></p></td><td align="left" valign="top"><p>10</p></td><td align="left" valign="top"><p><code class="literal">RCVPOR</code></p></td><td align="left" valign="top"><p>Receiver port (SAP System, EDI subsystem)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderAddress</code></p></td><td align="left" valign="top">&nbsp;</td><td align="left" valign="top"><p><code class="literal">SNDSAD</code></p></td><td align="left" valign="top"><p>Sender address (SADR)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderLogicalAddress</code></p></td><td align="left" valign="top"><p>70</p></td><td align="left" valign="top"><p><code class="literal">SNDLAD</code></p></td><td align="left" valign="top"><p>Logical address of sender</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderPartnerFunction</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p><code class="literal">SNDPFC</code></p></td><td align="left" valign="top"><p>Partner function of sender</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderPartnerNumber</code></p></td><td align="left" valign="top"><p>10</p></td><td align="left" valign="top"><p><code class="literal">SNDPRN</code></p></td><td align="left" valign="top"><p>Partner number of sender</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderPartnerType</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p><code class="literal">SNDPRT</code></p></td><td align="left" valign="top"><p>Partner type of sender</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">senderPort</code></p></td><td align="left" valign="top"><p>10</p></td><td align="left" valign="top"><p><code class="literal">SNDPOR</code></p></td><td align="left" valign="top"><p>Sender port (SAP System, EDI subsystem)</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">serialization</code></p></td><td align="left" valign="top"><p>20</p></td><td align="left" valign="top"><p><code class="literal">SERIAL</code></p></td><td align="left" valign="top"><p>EDI/ALE: Serialization field</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">status</code></p></td><td align="left" valign="top"><p>2</p></td><td align="left" valign="top"><p><code class="literal">STATUS</code></p></td><td align="left" valign="top"><p>Status of IDoc</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">testFlag</code></p></td><td align="left" valign="top"><p>1</p></td><td align="left" valign="top"><p><code class="literal">TEST</code></p></td><td align="left" valign="top"><p>Test flag</p></td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_setting_document_attributes_in_java"></a>Setting document attributes in Java</h3></div></div></div><p>When setting the control record attributes in Java (from <a class="xref" href="SAP.html#SAP-Message-IDoc-TableIDDA">???</a>), the usual convention for Java bean
+properties is followed. That is, a <code class="literal">name</code> attribute can be accessed
+through the <code class="literal">getName</code> and <code class="literal">setName</code> methods, for getting and
+setting the attribute value. For example, the <code class="literal">iDocType</code>,
+<code class="literal">iDocTypeExtension</code>, and <code class="literal">messageType</code> attributes can be
+set as follows on a <code class="literal">Document</code> object:</p><pre class="screen">// Java
+document.setIDocType("FLCUSTOMER_CREATEFROMDATA01");
+document.setIDocTypeExtension("");
+document.setMessageType("FLCUSTOMER_CREATEFROMDATA");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_setting_document_attributes_in_xml"></a>Setting document attributes in XML</h3></div></div></div><p>When setting the control record attributes in XML, the attributes must be set on
+the <code class="literal">idoc:Document</code> element. For example, the <code class="literal">iDocType</code>,
+<code class="literal">iDocTypeExtension</code>, and <code class="literal">messageType</code> attributes can be
+set as follows:</p><pre class="screen">&lt;?xml version="1.0" encoding="ASCII"?&gt;
+&lt;idoc:Document ...
+               iDocType="FLCUSTOMER_CREATEFROMDATA01"
+               iDocTypeExtension=""
+               messageType="FLCUSTOMER_CREATEFROMDATA" ... &gt;
+    ...
+&lt;/idoc:Document&gt;</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Txn"></a>Transaction Support</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37543"></a>BAPI transaction model</h3></div></div></div><p>The SAP Component supports the BAPI transaction model for outbound communication
+with SAP. A destination endpoint with a URL containing the transacted option set to
+<code class="literal">true</code> will, if necessary, initiate a stateful session on the
+outbound connection of the endpoint and register a Camel Synchronization object with
+the exchange. This synchronization object will call the BAPI service method
+<code class="literal">BAPI_TRANSACTION_COMMIT</code> and end the stateful session when the
+processing of the message exchange is complete. If the processing of the message
+exchange fails, the synchronization object will call the BAPI server method
+<code class="literal">BAPI_TRANSACTION_ROLLBACK</code> and end the stateful session.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_rfc_transaction_model"></a>RFC transaction model</h3></div></div></div><p>The tRFC protocol accomplishes an AT-MOST-ONCE delivery and processing guarantee
+by identifying each transactional request with a unique transaction identifier
+(TID). A TID accompanies each request sent in the protocol. A sending application
+using the tRFC protocol must identify each instance of a request with a unique TID
+when sending the request. An application may send a request with a given TID
+multiple times, but the protocol ensures that the request is delivered and processed
+in the receiving system at most once. An application may choose to resend a request
+with a given TID when encountering a communication or system error when sending the
+request, and is thus in doubt as to whether that request was delivered and processed
+in the receiving system. By resending a request when encountering an communication
+error, a client application using the tRFC protocol can thus ensure EXACTLY-ONCE
+delivery and processing guarantees for its request.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_which_transaction_model_to_use"></a>Which transaction model to use?</h3></div></div></div><p>A BAPI transaction is an application level transaction, in the sense that it
+imposes ACID guarantees on the persistent data changes performed by a BAPI method or
+RFC function in the SAP database. An RFC transaction is a communication transaction,
+in the sense that it imposes delivery guarantees (AT-MOST-ONCE, EXACTLY-ONCE,
+EXACTLY-ONCE-IN-ORDER) on requests to a BAPI method and/or RFC function.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="SAP-Txn-RFCDestination"></a>Transactional RFC destination endpoints</h3></div></div></div><p>The following destination endpoints support RFC transactions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">sap-trfc-destination</code></li><li class="listitem"><code class="literal">sap-qrfc-destination</code></li></ul></div><p>A single Camel route can include multiple transactional RFC destination endpoints,
+sending messages to multiple RFC destinations and even sending messages to the same
+RFC destination multiple times. This implies that the Camel SAP component
+potentially needs to keep track of <span class="strong"><strong>many</strong></span> transaction IDs (TIDs)
+for each <code class="literal">Exchange</code> object passing along a route. Now if the route
+processing fails and must be retried, the situation gets quite complicated. The RFC
+transaction semantics demand that each RFC destination along the route must be
+invoked using the <span class="strong"><strong>same</strong></span> TID that was used the first time around
+(and where the TIDs for each of the destinations are distinct from each other). In
+other words, the Camel SAP component must keep track of which TID was used at which
+point along the route, and remember this information, so that the TIDs can be
+replayed in the correct order.</p><p>By default, Camel does not provide a mechanism that enables an
+<code class="literal">Exchange</code> to know where it is in a route. To provide such a
+mechanism, it is necessary to install the
+<code class="literal">CurrentProcessorDefinitionInterceptStrategy</code> interceptor into the
+Camel runtime. This interceptor must be installed into the Camel runtime, in order
+for the Camel SAP component to keep track of the TIDs in a route. For details of how
+to configure the interceptor, see <a class="xref" href="SAP.html#SAP-DestConfig-Intercept" title="Interceptor for tRFC and qRFC destinations">Interceptor for tRFC and qRFC destinations</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_transactional_rfc_server_endpoints"></a>Transactional RFC server endpoints</h3></div></div></div><p>The following server endpoints support RFC transactions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">sap-trfc-server</code></li></ul></div><p>When a Camel exchange processing a transactional request encounters a processing
+error, Camel handles the processing error through its standard error handling
+mechanisms. If the Camel route processing the exchange is configured to propagate
+the error back to the caller, the SAP server endpoint that initiated the exchange
+takes note of the failure and the sending SAP system is notified of the error. The
+sending SAP system can then respond by sending another transaction request with the
+same TID to process the request again.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-XMLSerial-RFC"></a>XML Serialization for RFC</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37544"></a>Overview</h3></div></div></div><p>SAP request and response objects support an XML serialization format which enable
+these objects to be serialized to and from an XML document.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37545"></a>XML namespace</h3></div></div></div><p>Each RFC in a repository defines a specific XML name space for the elements which
+compose the serialized forms of its Request and Response objects. The form of this
+namespace URL is as follows:</p><pre class="screen">http://sap.fusesource.org/rfc/&lt;Repository Name&gt;/&lt;RFC Name&gt;</pre><p>RFC namespace URLs have a common <code class="literal"><a class="link" href="http://sap.fusesource.org/rfc" target="_top">http://sap.fusesource.org/rfc</a></code> prefix
+followed by the name of the repository in which the RFC&#8217;s metadata is defined. The
+final component in the URL is the name of the RFC itself.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37546"></a>Request and response XML documents</h3></div></div></div><p>An SAP request object will be serialized into an XML document with the root
+element of that document named Request and scoped by the namespace of the request&#8217;s
+RFC.</p><pre class="screen">&lt;?xml version="1.0" encoding="ASCII"?&gt;
+&lt;BOOK_FLIGHT:Request
+     xmlns:BOOK_FLIGHT="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+    ...
+&lt;/BOOK_FLIGHT:Request&gt;</pre><p>An SAP response object will be serialized into an XML document with the root
+element of that document named Response and scoped by the namespace of the
+response&#8217;s RFC.</p><pre class="screen">&lt;?xml version="1.0" encoding="ASCII"?&gt;
+&lt;BOOK_FLIGHT:Response
+     xmlns:BOOK_FLIGHT="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+    ...
+&lt;/BOOK_FLIGHT:Response&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37547"></a>Structure fields</h3></div></div></div><p>Structure fields in parameter lists or nested structures are serialized as
+elements. The element name of the serialized structure corresponds to the field name
+of the structure within the enclosing parameter list, structure or table row entry
+it resides.</p><pre class="screen">&lt;BOOK_FLIGHT:FLTINFO
+     xmlns:BOOK_FLIGHT="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+    ...
+&lt;/BOOK_FLIGHT:FLTINFO&gt;</pre><p>Note that the type name of the structure element in the RFC namespace will
+correspond to the name of the record meta data object which defines the structure,
+as in the following example:</p><pre class="screen">&lt;xs:schema
+     targetNamespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"&gt;
+    ...
+    &lt;xs:complexType name="FLTINFO_STRUCTURE&#8221;&gt;
+    ...
+    &lt;/xs:complexType&gt;
+    ...
+&lt;/xs:schema&gt;</pre><p>This distinction will be important when specifying a JAXB bean to marshal and
+unmarshal the structure as will be seen in <a class="xref" href="SAP.html#SAP-Example3" title="Example 3: Handling Requests from SAP">Example 3: Handling Requests from SAP</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37548"></a>Table fields</h3></div></div></div><p>Table fields in parameter lists or nested structures are serialized as elements.
+The element name of the serialized structure will correspond to the field name of
+the table within the enclosing parameter list, structure, or table row entry it
+resides. The table element will contain a series of row elements to hold the
+serialized values of the table&#8217;s row entries.</p><pre class="screen">&lt;BOOK_FLIGHT:CONNINFO
+     xmlns:BOOK_FLIGHT="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+    &lt;row ... &gt; ... &lt;/row&gt;
+    ...
+    &lt;row ... &gt; ... &lt;/row&gt;
+&lt;/BOOK_FLIGHT:CONNINFO&gt;</pre><p>Note that the type name of the table element in the RFC namespace will correspond
+to the name of the record meta data object which defines the row structure of the
+table suffixed by <code class="literal">_TABLE</code>. The type name of the table row element in the
+RFC name corresponds to the name of the record meta data object which defines the
+row structure of the table, as in the following example:</p><pre class="screen">&lt;xs:schema
+     targetNamespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"&gt;
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"&gt;
+    ...
+    &lt;xs:complextType name="CONNECTION_INFO_STRUCTURE_TABLE&#8221;&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element
+                name="row&#8221;
+                minOccures="0&#8221;
+                maxOccurs="unbounded&#8221;
+                type="CONNECTION_INFO_STRUCTURE&#8221;/&gt;
+            ...
+            &lt;xs:sequence&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+
+    &lt;xs:complextType name="CONNECTION_INFO_STRUCTURE&#8221;&gt;
+            ...
+    &lt;/xs:complexType&gt;
+    ...
+&lt;/xs:schema&gt;</pre><p>This distinction will be important when specifying a JAXB bean to marshal and
+unmarshal the structure as will be seen in <a class="xref" href="SAP.html#SAP-Example3" title="Example 3: Handling Requests from SAP">Example 3: Handling Requests from SAP</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37549"></a>Elementary fields</h3></div></div></div><p>Elementary fields in parameter lists or nested structures are serialized as
+attributes on the element of the enclosing parameter list or structure. The
+attribute name of the serialized field corresponds to the field name of the field
+within the enclosing parameter list, structure, or table row entry it resides, as in
+the following example:</p><pre class="screen">&lt;?xml version="1.0" encoding="ASCII"?&gt;
+&lt;BOOK_FLIGHT:Request
+     xmlns:BOOK_FLIGHT="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT"
+     CUSTNAME="James Legrand"
+    PASSFORM="Mr"
+    PASSNAME="Travelin Joe"
+    PASSBIRTH="1990-03-17T00:00:00.000-0500"
+    FLIGHTDATE="2014-03-19T00:00:00.000-0400"
+    TRAVELAGENCYNUMBER="00000110"
+    DESTINATION_FROM="SFO"
+    DESTINATION_TO="FRA"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37550"></a>Date and time formats</h3></div></div></div><p>Date and Time fields are serialized into attribute values using the following
+format:</p><pre class="screen">yyyy-MM-dd'T'HH:mm:ss.SSSZ</pre><p>Date fields will be serialized with only the year, month, day and timezone
+components set:</p><pre class="screen">DEPDATE="2014-03-19T00:00:00.000-0400"</pre><p>Time fields will be serialized with only the hour, minute, second, millisecond and
+timezone components set:</p><pre class="screen">DEPTIME="1970-01-01T16:00:00.000-0500"</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-XMLSerial-IDoc"></a>XML Serialization for IDoc</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_overview_53"></a>Overview</h3></div></div></div><p>An IDoc message body can be serialized into an XML string format, with the help of
+a built-in type converter.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_xml_namespace"></a>XML namespace</h3></div></div></div><p>Each serialized IDoc is associated with an XML namespace, which has the following
+general format:</p><pre class="screen"><a class="link" href="http://sap.fusesource.org/idoc/" target="_top">http://sap.fusesource.org/idoc/</a><span class="emphasis"><em>repositoryName</em></span>/<span class="emphasis"><em>idocType</em></span>/<span class="emphasis"><em>idocTypeExtension</em></span>/<span class="emphasis"><em>systemRelease</em></span>/<span class="emphasis"><em>applicationRelease</em></span></pre><p>Both the <span class="emphasis"><em>repositoryName</em></span> (name of the
+remote SAP meta-data repository) and the
+<span class="emphasis"><em>idocType</em></span> (IDoc document type) are
+mandatory, but the other components of the namespace can be left blank. For example,
+you could have an XML namespace like the following:</p><pre class="screen">http://sap.fusesource.org/idoc/MY_REPO/FLCUSTOMER_CREATEFROMDATA01///</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_built_in_type_converter"></a>Built-in type converter</h3></div></div></div><p>The Camel SAP component has a built-in type converter, which is capable of
+converting a <code class="literal">Document</code> object or a <code class="literal">DocumentList</code> object to
+and from a <code class="literal">String</code> type.</p><p>For example, to serialize a <code class="literal">Document</code> object to an XML string, you can
+simply add the following line to a route in XML DSL:</p><pre class="screen">&lt;convertBodyTo type="java.lang.String"/&gt;</pre><p>You can also use this approach to a serialized XML message into a
+<code class="literal">Document</code> object. For example, given that the current message body
+is a serialized XML string, you can convert it back into a <code class="literal">Document</code>
+object by adding the following line to a route in XML DSL:</p><pre class="screen">&lt;convertBodyTo type="org.fusesource.camel.component.sap.model.idoc.Document"/&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="_sample_idoc_message_body_in_xml_format"></a>Sample IDoc message body in XML format</h3></div></div></div><p>When you convert an IDoc message to a <code class="literal">String</code>, it is serialized into
+an XML document, where the root element is either <code class="literal">idoc:Document</code> (for a
+single document) or <code class="literal">idoc:DocumentList</code> (for a list of documents). <a class="xref" href="SAP.html#SAP-XMLSerial-IDoc-ExIDMBX" title="Example&nbsp;29.&nbsp;IDoc Message Body in XML">Example&nbsp;29, &#8220;IDoc Message Body in XML&#8221;</a> shows a single IDoc document that has
+been serialized to an <code class="literal">idoc:Document</code> element.</p><div class="example"><a name="SAP-XMLSerial-IDoc-ExIDMBX"></a><p class="title"><b>Example&nbsp;29.&nbsp;IDoc Message Body in XML</b></p><div class="example-contents"><pre class="screen">&lt;?xml version="1.0" encoding="ASCII"?&gt;
+&lt;idoc:Document
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:FLCUSTOMER_CREATEFROMDATA01---="http://sap.fusesource.org/idoc/XXX/FLCUSTOMER_CREATEFROMDATA01///"
+    xmlns:idoc="http://sap.fusesource.org/idoc"
+    creationDate="2015-01-28T12:39:13.980-0500"
+    creationTime="2015-01-28T12:39:13.980-0500"
+    iDocType="FLCUSTOMER_CREATEFROMDATA01"
+    iDocTypeExtension=""
+    messageType="FLCUSTOMER_CREATEFROMDATA"
+    recipientPartnerNumber="QUICKCLNT"
+    recipientPartnerType="LS"
+    senderPartnerNumber="QUICKSTART"
+    senderPartnerType="LS"&gt;
+  &lt;rootSegment xsi:type="FLCUSTOMER_CREATEFROMDATA01---:ROOT" document="/"&gt;
+    &lt;segmentChildren parent="//@rootSegment"&gt;
+      &lt;E1SCU_CRE parent="//@rootSegment" document="/"&gt;
+        &lt;segmentChildren parent="//@rootSegment/@segmentChildren/@E1SCU_CRE.0"&gt;
+          &lt;E1BPSCUNEW parent="//@rootSegment/@segmentChildren/@E1SCU_CRE.0"
+              document="/"
+              CUSTNAME="Fred Flintstone" FORM="Mr."
+              STREET="123 Rubble Lane"
+              POSTCODE="01234"
+              CITY="Bedrock"
+              COUNTR="US"
+              PHONE="800-555-1212"
+              EMAIL="fred@bedrock.com"
+              CUSTTYPE="P"
+              DISCOUNT="005"
+              LANGU="E"/&gt;
+        &lt;/segmentChildren&gt;
+      &lt;/E1SCU_CRE&gt;
+    &lt;/segmentChildren&gt;
+  &lt;/rootSegment&gt;
+&lt;/idoc:Document&gt;</pre></div></div><br class="example-break"></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Example1"></a>Example 1: Reading Data from SAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37551"></a>Overview</h3></div></div></div><p>This example demonstrates a route which reads <code class="literal">FlightCustomer</code> business
+object data from SAP. The route invokes the <code class="literal">FlightCustomer</code> BAPI method,
+<code class="literal">BAPI_FLCUST_GETLIST</code>, using an SAP synchronous RFC destination
+endpoint to retrieve the data.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37552"></a>Java DSL for route</h3></div></div></div><p>The Java DSL for the example route is as follows:</p><pre class="screen">from("direct:getFlightCustomerInfo")
+    .to("bean:createFlightCustomerGetListRequest")
+    .to("sap-srfc-destination:nplDest:BAPI_FLCUST_GETLIST")
+    .to("bean:returnFlightCustomerInfo");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37553"></a>XML DSL for route</h3></div></div></div><p>And the Spring DSL for the same route is as follows:</p><pre class="screen">&lt;route&gt;
+    &lt;from uri="direct:getFlightCustomerInfo"/&gt;
+    &lt;to uri="bean:createFlightCustomerGetListRequest"/&gt;
+    &lt;to uri="sap-srfc-destination:nplDest:BAPI_FLCUST_GETLIST"/&gt;
+    &lt;to uri="bean:returnFlightCustomerInfo"/&gt;
+&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37554"></a>createFlightCustomerGetListRequest bean</h3></div></div></div><p>The <code class="literal">createFlightCustomerGetListRequest</code> bean is responsible for
+building an SAP request object in its exchange method that is used in the RFC call
+of the subsequent SAP endpoint . The following code snippet demonstrates the
+sequence of operations to build the request object:</p><pre class="screen">public void create(Exchange exchange) throws Exception {
+
+    // Get SAP Endpoint to be called from context.
+    SAPEndpoint endpoint =
+        exchange.getContext().getEndpoint("bean:returnFlightCustomerInfo",
+                                                 SAPEndpoint.class);
+
+    // Retrieve bean from message containing Flight Customer name to
+    // look up.
+    BookFlightRequest bookFlightRequest =
+        exchange.getIn().getBody(BookFlightRequest.class);
+
+    // Create SAP Request object from target endpoint.
+    Structure request = endpoint.getRequest();
+
+    // Add Customer Name to request if set
+    if (bookFlightRequest.getCustomerName() != null &amp;&amp;
+        bookFlightRequest.getCustomerName().length() &gt; 0) {
+            request.put("CUSTOMER_NAME",
+                          bookFlightRequest.getCustomerName());
+        }
+    } else {
+        throw new Exception("No Customer Name");
+    }
+
+    // Put request object into body of exchange message.
+    exchange.getIn().setBody(request);
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37555"></a>returnFlightCustomerInfo bean</h3></div></div></div><p>The <code class="literal">returnFlightCustomerInfo</code> bean is responsible for extracting data
+from the SAP response object in its exchange method that it receives from the
+previous SAP endpoint . The following code snippet demonstrates the sequence of
+operations to extract the data from the response object:</p><pre class="screen">public void createFlightCustomerInfo(Exchange exchange) throws Exception {
+
+    // Retrieve SAP response object from body of exchange message.
+    Structure flightCustomerGetListResponse =
+        exchange.getIn().getBody(Structure.class);
+
+    if (flightCustomerGetListResponse == null) {
+        throw new Exception("No Flight Customer Get List Response");
+    }
+
+    // Check BAPI return parameter for errors
+    @SuppressWarnings("unchecked")
+    Table&lt;Structure&gt; bapiReturn =
+        flightCustomerGetListResponse.get("RETURN", Table.class);
+    Structure bapiReturnEntry = bapiReturn.get(0);
+    if (bapiReturnEntry.get("TYPE", String.class) != "S") {
+        String message = bapiReturnEntry.get("MESSAGE", String.class);
+        throw new Exception("BAPI call failed: " + message);
+    }
+
+    // Get customer list table from response object.
+    @SuppressWarnings("unchecked")
+    Table&lt;? extends Structure&gt; customerList =
+        flightCustomerGetListResponse.get("CUSTOMER_LIST", Table.class);
+
+    if (customerList == null || customerList.size() == 0) {
+        throw new Exception("No Customer Info.");
+    }
+
+    // Get Flight Customer data from first row of table.
+    Structure customer = customerList.get(0);
+
+    // Create bean to hold Flight Customer data.
+    FlightCustomerInfo flightCustomerInfo = new FlightCustomerInfo();
+
+    // Get customer id from Flight Customer data and add to bean.
+    String customerId = customer.get("CUSTOMERID", String.class);
+    if (customerId != null) {
+        flightCustomerInfo.setCustomerNumber(customerId);
+    }
+
+    ...
+
+    // Put bean into body of exchange message.
+    exchange.getIn().setHeader("flightCustomerInfo", flightCustomerInfo);
+
+}</pre></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Example2"></a>Example 2: Writing Data to SAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37556"></a>Overview</h3></div></div></div><p>This example demonstrates a route which creates a <code class="literal">FlightTrip</code> business
+object instance in SAP. The route invokes the <code class="literal">FlightTrip</code> BAPI method,
+<code class="literal">BAPI_FLTRIP_CREATE</code>, using a destination endpoint to create the
+object.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37557"></a>Java DSL for route</h3></div></div></div><p>The Java DSL for the example route is as follows:</p><pre class="screen">from("direct:createFlightTrip")
+    .to("bean:createFlightTripRequest")
+    .to("sap-srfc-destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true")
+    .to("bean:returnFlightTripResponse");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37558"></a>XML DSL for route</h3></div></div></div><p>And the Spring DSL for the same route is as follows:</p><pre class="screen">&lt;route&gt;
+    &lt;from uri="direct:createFlightTrip"/&gt;
+    &lt;to uri="bean:createFlightTripRequest"/&gt;
+    &lt;to uri="sap-srfc-destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true"/&gt;
+    &lt;to uri="bean:returnFlightTripResponse"/&gt;
+&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37559"></a>Transaction support</h3></div></div></div><p>Note that the URL for the SAP endpoint has the <code class="literal">transacted</code> option set
+to <code class="literal">true</code>. As discussed in <a class="xref" href="SAP.html#SAP-Txn" title="Transaction Support">Transaction Support</a>, when this option is
+enabled the endpoint ensures that an SAP transaction session has been initiated
+before invoking the RFC call. Because this endpoint&#8217;s RFC creates new data in SAP,
+this options is necessary to make the route&#8217;s changes permanent in SAP.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37560"></a>Populating request parameters</h3></div></div></div><p>The <code class="literal">createFlightTripRequest</code> and <code class="literal">returnFlightTripResponse</code>
+beans are responsible for populating request parameters into the SAP request and
+extracting response parameters from the SAP response respectively following the same
+sequence of operations as demonstrated in the previous example.</p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Example3"></a>Example 3: Handling Requests from SAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37561"></a>Overview</h3></div></div></div><p>This example demonstrates a route which handles a request from SAP to the
+<code class="literal">BOOK_FLIGHT</code> RFC, which is implemented by the route. In addition, it
+demonstrates the component&#8217;s XML serialization support, using JAXB to unmarshal and
+marshal SAP request objects and response objects to custom beans.</p><p>This route creates a <code class="literal">FlightTrip</code> business object on behalf of a travel
+agent, <code class="literal">FlightCustomer</code>. The route first unmarshals the SAP request
+object received by the SAP server endpoint into a custom JAXB bean. This custom bean
+is then multicasted in the exchange to three sub-routes, which gather the travel
+agent, flight connection and passenger information required to create the flight
+trip. The final sub-route creates the flight trip object in SAP as demonstrated in
+the previous example. The final sub-route also creates and returns a custom JAXB
+bean which is marshaled into an SAP response object and returned by the server
+endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37562"></a>Java DSL for route</h3></div></div></div><p>The Java DSL for the example route is as follows:</p><pre class="screen">DataFormat jaxb = new JaxbDataFormat("org.fusesource.sap.example.jaxb");
+
+from("sap-srfc-server:nplserver:BOOK_FLIGHT")
+    .unmarshal(jaxb)
+    .multicast()
+    .to("direct:getFlightConnectionInfo",
+        "direct:getFlightCustomerInfo",
+        "direct:getPassengerInfo")
+    .end()
+    .to("direct:createFlightTrip")
+    .marshal(jaxb);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37563"></a>XML DSL for route</h3></div></div></div><p>And the XML DSL for the same route is as follows:</p><pre class="screen">&lt;route&gt;
+    &lt;from uri="sap-srfc-server:nplserver:BOOK_FLIGHT"/&gt;
+    &lt;unmarshal&gt;
+        &lt;jaxb contextPath="org.fusesource.sap.example.jaxb"/&gt;
+    &lt;/unmarshal&gt;
+    &lt;multicast&gt;
+        &lt;to uri="direct:getFlightConnectionInfo"/&gt;
+        &lt;to uri="direct:getFlightCustomerInfo"/&gt;
+        &lt;to uri="direct:getPassengerInfo"/&gt;
+    &lt;/multicast&gt;
+    &lt;to uri="direct:createFlightTrip"/&gt;
+    &lt;marshal&gt;
+        &lt;jaxb contextPath="org.fusesource.sap.example.jaxb"/&gt;
+    &lt;/marshal&gt;
+&lt;/route&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37564"></a>BookFlightRequest bean</h3></div></div></div><p>The following listing illustrates a JAXB bean which unmarshals from the serialized
+form of an SAP <code class="literal">BOOK_FLIGHT</code> request object:</p><pre class="screen">@XmlRootElement(name="Request", namespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class BookFlightRequest {
+
+    @XmlAttribute(name="CUSTNAME")
+    private String customerName;
+
+    @XmlAttribute(name="FLIGHTDATE")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date flightDate;
+
+    @XmlAttribute(name="TRAVELAGENCYNUMBER")
+    private String travelAgencyNumber;
+
+    @XmlAttribute(name="DESTINATION_FROM")
+    private String startAirportCode;
+
+    @XmlAttribute(name="DESTINATION_TO")
+    private String endAirportCode;
+
+    @XmlAttribute(name="PASSFORM")
+    private String passengerFormOfAddress;
+
+    @XmlAttribute(name="PASSNAME")
+    private String passengerName;
+
+    @XmlAttribute(name="PASSBIRTH")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date passengerDateOfBirth;
+
+    @XmlAttribute(name="CLASS")
+    private String flightClass;
+
+    ...
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37565"></a>BookFlightResponse bean</h3></div></div></div><p>The following listing illustrates a JAXB bean which marshals to the serialized
+form of an SAP <code class="literal">BOOK_FLIGHT</code> response object:</p><pre class="screen">@XmlRootElement(name="Response", namespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class BookFlightResponse {
+
+    @XmlAttribute(name="TRIPNUMBER")
+    private String tripNumber;
+
+    @XmlAttribute(name="TICKET_PRICE")
+    private BigDecimal ticketPrice;
+
+    @XmlAttribute(name="TICKET_TAX")
+    private BigDecimal ticketTax;
+
+    @XmlAttribute(name="CURRENCY")
+    private String currency;
+
+    @XmlAttribute(name="PASSFORM")
+    private String passengerFormOfAddress;
+
+    @XmlAttribute(name="PASSNAME")
+    private String passengerName;
+
+    @XmlAttribute(name="PASSBIRTH")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date passengerDateOfBirth;
+
+    @XmlElement(name="FLTINFO")
+    private FlightInfo flightInfo;
+
+    @XmlElement(name="CONNINFO")
+    private ConnectionInfoTable connectionInfo;
+
+    ...
+}</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The complex parameter fields of the response object are serialized as child
+elements of the response.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37566"></a>FlightInfo bean</h3></div></div></div><p>The following listing illustrates a JAXB bean which marshals to the serialized
+form of the complex structure parameter <code class="literal">FLTINFO</code>:</p><pre class="screen">@XmlRootElement(name="FLTINFO", namespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class FlightInfo {
+
+    @XmlAttribute(name="FLIGHTTIME")
+    private String flightTime;
+
+    @XmlAttribute(name="CITYFROM")
+    private String cityFrom;
+
+    @XmlAttribute(name="DEPDATE")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date departureDate;
+
+    @XmlAttribute(name="DEPTIME")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date departureTime;
+
+    @XmlAttribute(name="CITYTO")
+    private String cityTo;
+
+    @XmlAttribute(name="ARRDATE")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date arrivalDate;
+
+    @XmlAttribute(name="ARRTIME")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    private Date arrivalTime;
+
+    ...
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37567"></a>ConnectionInfoTable bean</h3></div></div></div><p>The following listing illustrates a JAXB bean which marshals to the serialized
+form of the complex table parameter, <code class="literal">CONNINFO</code>. Note that the name of
+the root element type of the JAXB bean corresponds to the name of the row structure
+type suffixed with <code class="literal">_TABLE</code> and the bean contains a list of row
+elements.</p><pre class="screen">@XmlRootElement(name="CONNINFO_TABLE", namespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ConnectionInfoTable {
+
+    @XmlElement(name="row")
+    List&lt;ConnectionInfo&gt; rows;
+
+    ...
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37568"></a>ConnectionInfo bean</h3></div></div></div><p>The following listing illustrates a JAXB bean, which marshals to the serialized
+form of the above tables row elements:</p><pre class="screen">@XmlRootElement(name="CONNINFO", namespace="http://sap.fusesource.org/rfc/nplServer/BOOK_FLIGHT")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ConnectionInfo {
+
+    @XmlAttribute(name="CONNID")
+    String connectionId;
+
+    @XmlAttribute(name="AIRLINE")
+    String airline;
+
+    @XmlAttribute(name="PLANETYPE")
+    String planeType;
+
+    @XmlAttribute(name="CITYFROM")
+    String cityFrom;
+
+    @XmlAttribute(name="DEPDATE")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    Date departureDate;
+
+    @XmlAttribute(name="DEPTIME")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    Date departureTime;
+
+    @XmlAttribute(name="CITYTO")
+    String cityTo;
+
+    @XmlAttribute(name="ARRDATE")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    Date arrivalDate;
+
+    @XmlAttribute(name="ARRTIME")
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    Date arrivalTime;
+
+    ...
+}</pre></div></div></div></body></html>

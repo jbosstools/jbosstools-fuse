@@ -1,283 +1,282 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>To Test a Route with JUnit</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="This tutorial shows you how to use the New Camel Test Case wizard to create a test case for your route and then test the route."><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTutorials.html" title="Tutorials"><link rel="prev" href="RiderTutorialTrace.html" title="To Trace a Message Through a Route"><link rel="next" href="RiderTutDeployFESB.html" title="To Publish a Fuse Project to Red Hat JBoss Fuse"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="RiderTutorialJUnit"></a>To Test a Route with JUnit</h1></div><div><div class="abstract"><p>This tutorial shows you how to use the <span class="guilabel">New Camel Test Case</span>
-                wizard to create a test case for your route and then test the route.</p></div></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e23942"></a>Overview</h2></div></div></div><p>The <span class="guilabel">New Camel Test Case</span> wizard generates a boilerplate JUnit test
-            case. When you create or modify a route (for example, adding more processors to it), you
-            create or modify the generated test case to add expectations and assertions specific to
-            the route you created or updated.This ensures that the test is valid for the
-            route.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e23950"></a>Goals</h2></div></div></div><p>In this tutorial you will:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Create the <code class="filename">/src/test/</code> folder to store the JUnit test case </p></li><li class="listitem"><p>Generate the JUnit test case for the <span class="guilabel">CBRroute</span>
-                    project</p></li><li class="listitem"><p>Modify the newly generated JUnit test case</p></li><li class="listitem"><p>Modify the <span class="guilabel">CBRroute</span> project's
-                        <code class="filename">pom.xml</code> file</p></li><li class="listitem"><p>Run the <span class="guilabel">CBRroute</span> with the new JUnit test case</p></li><li class="listitem"><p>Observe the output</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e23989"></a>Prerequisites</h2></div></div></div><p>To complete this tutorial you need the <span class="bold"><strong>CBRroute</strong></span>
-            project you used in <a href="RiderTutorialTrace.html" class="olink"><i>To Trace a Message Through a Route</i></a></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you skipped any tutorial after <a href="RiderTutorialCreate.html" class="olink"><i>To Create a New Route</i></a>, you can use the
-                prefabricated <code class="filename">blueprintContext6.xml</code> file to work through this
-                tutorial (for details, see <a href="RiderTutorialResources.html" class="olink"><i>Using the Fuse Tooling Resource Files</i></a>).</p></td></tr></table></div><p>Delete any trace-generated messages from the
-                <span class="guilabel">CBRroute</span> project's
-                <code class="filename">/src/data/</code> directory and
-                <code class="filename">/target/messages/</code> subdirectories in
-                <span class="guilabel">Project Explorer</span>. Trace-generated messages
-            begin with the <code class="literal">ID-</code> prefix. For example, <a class="xref" href="RiderTutorialJUnit.html#tutTraceMsgExample" title="Figure&nbsp;5.&nbsp;Trace-generated messages">Figure&nbsp;5, &#8220;Trace-generated messages&#8221;</a> shows six trace-generated
-            messages:</p><div class="figure"><a name="tutTraceMsgExample"></a><p class="title"><b>Figure&nbsp;5.&nbsp;Trace-generated messages</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutTraceGenMsgs.png" width="147.7" alt="Trace-generated messages"></div></div></div><br class="figure-break"><p>Select all trace-generated messages in batch, right-click to open the
-            context menu, and select <span class="guimenuitem">Delete</span>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24038"></a>Creating the <code class="filename">src/test</code> folder</h2></div></div></div><p>Before you create a JUnit test case for the <span class="guilabel">CBRroute</span> project, you
-            must create a folder for it that is included in the build path:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, right-click the
-                        <span class="guilabel">CBRroute</span> project's root to open the context menu, and
-                    then select <span class="guimenu">New</span> &gt; <span class="guimenuitem">Folder</span>.</p></li><li class="step"><p>In the 
-                        <span class="guilabel">New Folder</span>
-                     dialog, in the project tree pane, expand the
-                        <code class="literal">CBRroute</code> node and select the <code class="filename">src</code>
-                    folder.</p><p>Make sure <code class="literal">CBRroute/src</code> appears in the <span class="guilabel">Enter or
-                    select the parent folder</span>
-                    field.</p></li><li class="step"><p>In <span class="guilabel">Folder name</span>, enter
-                    <strong class="userinput"><code>/test/java</code></strong>:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCreateJUnitTestFolder.png" width="232.2"></div></div></li><li class="step"><p>Click <span class="guibutton">Finish</span>.</p><p>In <span class="guilabel">Project Explorer</span>, the new
-                        <code class="filename">src/test/java</code> folder appears under the
-                        <code class="filename">src/main/resources</code> folder:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutTestFolderAdded.png" width="217.79999999999998"></div></div></li><li class="step"><p>Verify that the new <code class="filename">/src/test/java</code> folder is included in
-                    the build path.</p><ol type="a" class="substeps"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, right-click the <code class="filename">/src/test/java</code>
-                            folder to open the context menu.</p></li><li class="step"><p>Select <span class="guisubmenu">Build Path </span> to see the menu options:</p><p>The menu option <span class="guimenuitem">Remove from Build Path</span> verifies
-                            that the <code class="filename">/src/test/java</code> folder is currently
-                            included in the build path:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutJavaFolderOnBldPath.png" width="192.6"></div></div></li></ol></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24153"></a>Creating the JUnit test case</h2></div></div></div><p>To create a JUnit test case for the <span class="guilabel">CBRroute</span> project:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, select
-                        <code class="filename">src/test/java</code>.</p></li><li class="step"><p>Right-click it to open the context menu, and then select <span class="guimenu">New</span> &gt; <span class="guimenuitem">Camel Test Case</span>:</p><div class="informalfigure"><div class="mediaobject"><img src="images/NewCamTstCaseTut.png" width="358.8"></div></div></li><li class="step"><p>In the <span class="guilabel">Camel JUnit Test Case</span> wizard, make sure the
-                        <span class="guilabel">Source folder</span> field contains
-                        <strong class="userinput"><code>CBRroute/src/test/java</code></strong>. To find the proper folder,
-                    click <span class="inlinemediaobject"><img src="images/BrowseButton.jpg" alt="browse button"></span> .</p></li><li class="step"><p>In the <span class="guilabel">Package</span> field, enter
-                        <strong class="userinput"><code>tutorial.cbr.route</code></strong>. This is the package that will
-                    include the new test case.</p></li><li class="step"><p>Next to the <span class="guilabel">Camel XML file under test</span> field,  click
-                        <span class="guibutton">Browse</span> to open a file explorer configured to screen
-                    for XML files, and then select the <span class="guilabel">CBRroute</span> project's
-                        <code class="filename">blueprint.xml</code> file:</p><div class="informalfigure"><div class="mediaobject"><img src="images/tutCamXMLUnderTst.png" width="292.2"></div></div></li><li class="step"><p>Click <span class="guibutton">OK</span>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/tutCamJUnitTstPgComplete.png" width="337.8"></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <span class="guilabel">Name</span> field defaults to
-                            <em class="replaceable"><code>BlueprintXmlTest</code></em>.</p></td></tr></table></div></li><li class="step"><p>Click <span class="guibutton">Next</span> to open the <span class="guilabel">Test
-                        Endpoints</span> page.</p></li><li class="step"><p>By default, all endpoints are selected and will be included in the test case.
-                    Click <span class="guibutton">Finish</span>.
-                    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If prompted, add JUnit to the build path.</p></td></tr></table></div></li></ol></div><p>The artifacts for the test are added to your project and appear in
-                <span class="guilabel">Project Explorer</span> under
-            <code class="filename">src/test/java</code>. The
-            class implementing the test case opens in the tooling's Java
-            editor:</p><div class="informalexample"><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">package</strong> tutorial.cbr.route;
+   <title>To Test a Route with JUnit</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEclipseHelp.html" title="Part&nbsp;I.&nbsp;Tooling Tutorials"><link rel="prev" href="RiderTutorialTrace.html" title="To Trace a Message Through a Route"><link rel="next" href="RiderTutDeployFESB.html" title="To Publish a Fuse Project to JBoss Fuse"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="RiderTutorialJUnit"></a>To Test a Route with JUnit</h2></div></div></div><p>This tutorial shows you how to use the <code class="literal">New Camel Test Case</code>
+wizard to create a test case for your route and then test the route.</p><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_overview"></a>Overview</h2></div></div></div><p>The <code class="literal">New Camel Test Case</code> wizard generates a boilerplate JUnit test
+case. When you create or modify a route (for example, adding more processors to it), you
+create or modify the generated test case to add expectations and assertions specific to
+the route you created or updated.This ensures that the test is valid for the
+route.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_goals_7"></a>Goals</h2></div></div></div><p>In this tutorial you will:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Create the <code class="literal">/src/test/</code> folder to store the JUnit test case</li><li class="listitem">Generate the JUnit test case for the <code class="literal">CBRroute</code>
+project</li><li class="listitem">Modify the newly generated JUnit test case</li><li class="listitem">Modify the <code class="literal">CBRroute</code> project&#8217;s
+<code class="literal">pom.xml</code> file</li><li class="listitem">Run the <code class="literal">CBRroute</code> with the new JUnit test case</li><li class="listitem">Observe the output</li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_prerequisites_8"></a>Prerequisites</h2></div></div></div><p>To complete this tutorial you need the <span class="strong"><strong>CBRroute</strong></span>
+project you used in <a class="xref" href="RiderTutorialTrace.html" title="To Trace a Message Through a Route"><i>To Trace a Message Through a Route</i></a></p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you skipped any tutorial after <a class="xref" href="RiderTutorialCreate.html" title="To Create a New Route"><i>To Create a New Route</i></a>, you can use the
+prefabricated <code class="literal">blueprintContext6.xml</code> file to work through this
+tutorial (for details, see <a class="xref" href="RiderTutorialResources.html" title="Using the Fuse Tooling Resource Files"><i>Using the Fuse Tooling Resource Files</i></a>).</p></td></tr></table></div><p>Delete any trace-generated messages from the
+<code class="literal">CBRroute</code> project&#8217;s
+<code class="literal">/src/data/</code> directory and
+<code class="literal">/target/messages/</code> subdirectories in
+<code class="literal">Project Explorer</code>. Trace-generated messages
+begin with the <code class="literal">ID-</code> prefix. For example, <a class="xref" href="RiderTutorialJUnit.html#tutTraceMsgExample" title="Figure&nbsp;3.&nbsp;Trace-generated messages">Figure&nbsp;3, &#8220;Trace-generated messages&#8221;</a> shows six trace-generated
+messages:</p><div class="figure"><a name="tutTraceMsgExample"></a><p class="title"><b>Figure&nbsp;3.&nbsp;Trace-generated messages</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutTraceGenMsgs.png" alt="tutTraceGenMsgs"></div></div></div><br class="figure-break"><p>Select all trace-generated messages in batch, right-click to open the
+context menu, and select <code class="literal">Delete</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_creating_the_literal_src_test_literal_folder"></a>Creating the <code class="literal">src/test</code> folder</h2></div></div></div><p>Before you create a JUnit test case for the <code class="literal">CBRroute</code> project, you
+must create a folder for it that is included in the build path:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In <code class="literal">Project Explorer</code>, right-click the
+<code class="literal">CBRroute</code> project&#8217;s root to open the context menu, and
+then select <span class="guimenu">New</span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"><code class="literal">Folder</code></span> &gt; <span class="guimenuitem"></span>.</li><li class="listitem"><p class="simpara">In the
+<code class="literal">New Folder</code>
+dialog, in the project tree pane, expand the
+<code class="literal">CBRroute</code> node and select the <code class="literal">src</code>
+folder.</p><p class="simpara">Make sure <code class="literal">CBRroute/src</code> appears in the <code class="literal">Enter or
+select the parent folder</code>
+field.</p></li><li class="listitem"><p class="simpara">In <code class="literal">Folder name</code>, enter
+<code class="literal">/test/java</code>:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCreateJUnitTestFolder.png" alt="tutCreateJUnitTestFolder"></div></div></li><li class="listitem"><p class="simpara">Click <span class="guibutton">Finish</span>.</p><p class="simpara">In <code class="literal">Project Explorer</code>, the new
+<code class="literal">src/test/java</code> folder appears under the
+<code class="literal">src/main/resources</code> folder:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutTestFolderAdded.png" alt="tutTestFolderAdded"></div></div></li><li class="listitem"><p class="simpara">Verify that the new <code class="literal">/src/test/java</code> folder is included in
+the build path.</p><div class="orderedlist"><ol class="orderedlist" type="a"><li class="listitem">In <code class="literal">Project Explorer</code>, right-click the <code class="literal">/src/test/java</code>
+folder to open the context menu.</li><li class="listitem"><p class="simpara">Select Build Path  to see the menu options:</p><p class="simpara">The menu option <code class="literal">Remove from Build Path</code> verifies
+that the <code class="literal">/src/test/java</code> folder is currently
+included in the build path:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutJavaFolderOnBldPath.png" alt="tutJavaFolderOnBldPath"></div></div></li></ol></div></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_creating_the_junit_test_case"></a>Creating the JUnit test case</h2></div></div></div><p>To create a JUnit test case for the <code class="literal">CBRroute</code> project:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In <code class="literal">Project Explorer</code>, select
+<code class="literal">src/test/java</code>.</li><li class="listitem"><p class="simpara">Right-click it to open the context menu, and then select <span class="guimenu">New</span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"><code class="literal">Camel Test Case</code></span> &gt; <span class="guimenuitem"></span>:</p><div class="informalfigure"><div class="mediaobject"><img src="images/NewCamTstCaseTut.png" alt="NewCamTstCaseTut"></div></div></li><li class="listitem">In the <code class="literal">Camel JUnit Test Case</code> wizard, make sure the
+<code class="literal">Source folder</code> field contains
+<code class="literal">CBRroute/src/test/java</code>. To find the proper folder,
+click
+<span class="inlinemediaobject"><img src="images/BrowseButton.jpg" alt="browse button"></span> .</li><li class="listitem">In the <code class="literal">Package</code> field, enter
+<code class="literal">tutorial.cbr.route</code>. This is the package that will
+include the new test case.</li><li class="listitem"><p class="simpara">Next to the <code class="literal">Camel XML file under test</code> field, click
+<span class="guibutton">Browse</span> to open a file explorer configured to screen
+for XML files, and then select the <code class="literal">CBRroute</code> project&#8217;s
+<code class="literal">blueprint.xml</code> file:</p><div class="informalfigure"><div class="mediaobject"><img src="images/tutCamXMLUnderTst.png" alt="tutCamXMLUnderTst"></div></div></li><li class="listitem"><p class="simpara">Click <span class="guibutton">OK</span>.</p><div class="informalfigure"><div class="mediaobject"><img src="images/tutCamJUnitTstPgComplete.png" alt="tutCamJUnitTstPgComplete"></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <code class="literal">Name</code> field defaults to
+<span class="emphasis"><em>BlueprintXmlTest</em></span>.</p></td></tr></table></div></li><li class="listitem">Click <span class="guibutton">Next</span> to open the <code class="literal">Test
+Endpoints</code> page.</li><li class="listitem"><p class="simpara">By default, all endpoints are selected and will be included in the test case.
+Click <span class="guibutton">Finish</span>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If prompted, add JUnit to the build path.</p></td></tr></table></div></li></ol></div><p>The artifacts for the test are added to your project and appear in
+<code class="literal">Project Explorer</code> under
+<code class="literal">src/test/java</code>. The
+class implementing the test case opens in the tooling&#8217;s Java
+editor:</p><pre class="screen">package tutorial.cbr.route;
 
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.EndpointInject;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.Produce;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.ProducerTemplate;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.builder.RouteBuilder;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.component.mock.MockEndpoint;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.Test;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
+import org.junit.Test;
 
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> BlueprintXmlTest <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> CamelBlueprintTestSupport {
+public class BlueprintXmlTest extends CamelBlueprintTestSupport {
 
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// TODO Create test message bodies that work for the route(s) being tested</em>
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Expected message bodies</em>
-	
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> object[] expectBodies = {
-        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"&lt;something id='1'&gt;expectedBody1&lt;/something&gt;"</em></strong>, 
-        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"&lt;something id='2'&gt;expectedBody2&lt;/something&gt;"</em></strong>;
-	
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Templates to send to input endpoints</em>
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Produce(uri = "file:src/data?noop=true")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> ProducerTemplate inputEndpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Produce(uri = "direct:OrderFulfillment")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> ProducerTemplate input2Endpoint;
-	
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Mock endpoints used to consume messages from the output endpoints and </em>
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// then perform assertions</em>
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint outputEndpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output2")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output2Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output3")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output3Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output4")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output4Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output5")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output5Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output6")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output6Endpoint;
+	// TODO Create test message bodies that work for the route(s) being tested
+	// Expected message bodies
 
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Test</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> testCamelRoute() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Create routes from the output endpoints to our mock endpoints so we can </em>
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// assert expectations</em>
-		context.addRoutes(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
-			<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
-			<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/invalidOrders"</em></strong>).to(outputEndpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/GreatBritain"</em></strong>).to(output3Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/Germany"</em></strong>).to(output4Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/USA"</em></strong>).to(output2Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/France"</em></strong>).to(output5Endpoint);
+	protected object[] expectBodies = {
+        "&lt;something id='1'&gt;expectedBody1&lt;/something&gt;",
+        "&lt;something id='2'&gt;expectedBody2&lt;/something&gt;";
+
+	// Templates to send to input endpoints
+	@Produce(uri = "file:src/data?noop=true")
+	protected ProducerTemplate inputEndpoint;
+	@Produce(uri = "direct:OrderFulfillment")
+	protected ProducerTemplate input2Endpoint;
+
+	// Mock endpoints used to consume messages from the output endpoints and
+	// then perform assertions
+	@EndpointInject(uri = "mock:output")
+	protected MockEndpoint outputEndpoint;
+	@EndpointInject(uri = "mock:output2")
+	protected MockEndpoint output2Endpoint;
+	@EndpointInject(uri = "mock:output3")
+	protected MockEndpoint output3Endpoint;
+	@EndpointInject(uri = "mock:output4")
+	protected MockEndpoint output4Endpoint;
+	@EndpointInject(uri = "mock:output5")
+	protected MockEndpoint output5Endpoint;
+	@EndpointInject(uri = "mock:output6")
+	protected MockEndpoint output6Endpoint;
+
+	@Test
+	public void testCamelRoute() throws Exception {
+		// Create routes from the output endpoints to our mock endpoints so we can
+		// assert expectations
+		context.addRoutes(new RouteBuilder() {
+			@Override
+			public void configure() throws Exception {
+				from("file:target/messages/invalidOrders").to(outputEndpoint);
+				from("file:target/messages/GreatBritain").to(output3Endpoint);
+				from("file:target/messages/Germany").to(output4Endpoint);
+				from("file:target/messages/USA").to(output2Endpoint);
+				from("file:target/messages/France").to(output5Endpoint);
 			}
 		});
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Define some expectations</em>
+		// Define some expectations
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// TODO Ensure expectations make sense for the route(s) we're testing</em>
+		// TODO Ensure expectations make sense for the route(s) we're testing
 		outputEndpoint.expectedBodiesReceivedInAnyOrder(expectedBodies);
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Send some messages to input endpoints</em>
-		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">for</strong> (Object expectedBody : expectedBodies) {
+		// Send some messages to input endpoints
+		for (Object expectedBody : expectedBodies) {
 			inputEndpoint.sendBody(expectedBody);
 		}
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Validate our expectations</em>
+		// Validate our expectations
 		assertMockEndpointsSatisfied();
 	}
 
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String getBlueprintDescriptor() {
-		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"OSGI-INF/blueprint/blueprint.xml"</em></strong>;
+	@Override
+	protected String getBlueprintDescriptor() {
+		return "OSGI-INF/blueprint/blueprint.xml";
 	}
 
-}</pre></div><p>This generated JUnit test case is insufficient for the <span class="guilabel">CBRroute</span>
-            project, and it will fail to run successfully. You need to modify it and the project's
-                <code class="filename">pom.xml</code>, as described in <a class="xref" href="RiderTutorialJUnit.html#modifyCamContext" title="Modifying the BlueprintXmlTest file">Modifying the BlueprintXmlTest file </a> and
-                <a class="xref" href="RiderTutorialJUnit.html#modifyPomXml" title="Modifying the pom.xml file">Modifying the pom.xml file</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifyCamContext"></a>Modifying the BlueprintXmlTest file </h2></div></div></div><p>You must modify the <code class="filename">BlueprintXmlTest.java</code> file to: </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Import several classes that support required file functions</p></li><li class="listitem"><p>Create variables for holding the content of the various source
-                            <code class="filename">.xml</code> files</p></li><li class="listitem"><p>Read the content of the source <code class="filename">.xml</code> files</p></li><li class="listitem"><p>Define appropriate expectations</p></li></ul></div><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, expand the <span class="guilabel">CBRroute</span> project to
-                    expose the <code class="filename">BlueprintXmlTest.java</code> file:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutBlueprintXMLTestProjExp.png" width="179.4"></div></div></li><li class="step"><p>Double-click <code class="filename">BlueprintXmlTest.java</code> to open the file in the tooling's Java
-                    editor.</p></li><li class="step"><p>In the Java editor, click the expand button next to <code class="code">import
-                        org.apache.camel.EndpointInject;</code> to expand the list.</p></li><li class="step"><p>Add the two lines shown below. Adding the first line will cause an error that will be resolved
-                    when you update the <code class="filename">pom.xml</code> file as instructed in the next
-                    section. </p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutBPTstImportFileUtils.png" width="281.05"></div></div></li><li class="step"><p>Scroll down to the lines that follow directly after <code class="code">// Expected
-                        message bodies</code>. </p></li><li class="step"><p>Replace those lines&#8212;<code class="code">protected Object[] expectedBodies={ ......
-                        expectedBody2&lt;/something&gt;"};</code>&#8212; with the
-                    <code class="code">protected String body#;</code> lines shown here:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile2.png" width="540.8"></div></div></li><li class="step"><p>Scroll down to the line <code class="code">public void testCamelRoute() throws Exception {</code>, and
-                    insert directly after it the lines <code class="code">body# = FileUtils.readFileToString(new
-                        File("src/data/message#.xml"), "UTF-8");</code> shown below. These lines
-                    will indicate an error until you update the <code class="filename">pom.xml </code>file as
-                    instructed in the next section. </p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile3.png" width="382.2"></div></div></li><li class="step"><p>Scroll down to the lines that follow directly after
-                <code class="code">// TODO Ensure
-                    expectations make sense for the route(s) we're
-                    testing</code>.</p></li><li class="step"><p>Replace the block of code that begins with
-                        <code class="code">outputEndpoint.expectedBodiesReceivedInAnyOrder(expectedBodies);</code>
-                    and ends with ...<code class="code">inputEndpoint.sendBody(expectedBody); }</code> with the
-                    lines shown here:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile4.png" width="346.45"></div></div><p>Leave the remaining code as is.</p></li><li class="step"><p>Save the file.</p></li><li class="step"><p>Check that your updated <code class="filename">BlueprintXmlTest.java</code> file has the required
-                    modifications. It should look something like this:</p><div class="informalexample"><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">package</strong> tutorial.cbr.route;
+}</pre><p>This generated JUnit test case is insufficient for the <code class="literal">CBRroute</code>
+project, and it will fail to run successfully. You need to modify it and the project&#8217;s
+<code class="literal">pom.xml</code>, as described in <a class="xref" href="RiderTutorialJUnit.html#modifyCamContext" title="Modifying the BlueprintXmlTest file">Modifying the BlueprintXmlTest file</a> and
+<a class="xref" href="RiderTutorialJUnit.html#modifyPomXml" title="Modifying the pom.xml file">Modifying the pom.xml file</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifyCamContext"></a>Modifying the BlueprintXmlTest file</h2></div></div></div><p>You must modify the <code class="literal">BlueprintXmlTest.java</code> file to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Import several classes that support required file functions</li><li class="listitem">Create variables for holding the content of the various source
+<code class="literal">.xml</code> files</li><li class="listitem">Read the content of the source <code class="literal">.xml</code> files</li><li class="listitem"><p class="simpara">Define appropriate expectations</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p class="simpara">In <code class="literal">Project Explorer</code>, expand the <code class="literal">CBRroute</code> project to
+expose the <code class="literal">BlueprintXmlTest.java</code> file:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutBlueprintXMLTestProjExp.png" alt="tutBlueprintXMLTestProjExp"></div></div></li><li class="listitem">Double-click <code class="literal">BlueprintXmlTest.java</code> to open the file in the tooling&#8217;s Java
+editor.</li><li class="listitem">In the Java editor, click the expand button next to <code class="literal">import
+org.apache.camel.EndpointInject;</code> to expand the list.</li><li class="listitem"><p class="simpara">Add the two lines shown below. Adding the first line will cause an error that will be resolved
+when you update the <code class="literal">pom.xml</code> file as instructed in the next
+section.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutBPTstImportFileUtils.png" alt="tutBPTstImportFileUtils"></div></div></li><li class="listitem">Scroll down to the lines that follow directly after <code class="literal">// Expected
+message bodies</code>.</li><li class="listitem"><p class="simpara">Replace those lines&#8201;&#8212;&#8201;<code class="literal">protected Object[] expectedBodies={ &#8230;&#8203;&#8230;&#8203;
+expectedBody2&lt;/something&gt;"};</code>&#8201;&#8212;&#8201; with the
+<code class="literal">protected String body#;</code> lines shown here:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile2.png" alt="tutCamCntxtFile2"></div></div></li><li class="listitem"><p class="simpara">Scroll down to the line <code class="literal">public void testCamelRoute() throws Exception {</code>, and
+insert directly after it the lines <code class="literal">body# = FileUtils.readFileToString(new
+File("src/data/message#.xml"), "UTF-8");</code> shown below. These lines
+will indicate an error until you update the <code class="literal">pom.xml</code> file as
+instructed in the next section.</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile3.png" alt="tutCamCntxtFile3"></div></div></li><li class="listitem">Scroll down to the lines that follow directly after
+<code class="literal">// TODO Ensure
+expectations make sense for the route(s) we&#8217;re
+testing</code>.</li><li class="listitem"><p class="simpara">Replace the block of code that begins with
+<code class="literal">outputEndpoint.expectedBodiesReceivedInAnyOrder(expectedBodies);</code>
+and ends with &#8230;&#8203;<code class="literal">inputEndpoint.sendBody(expectedBody); }</code> with the
+lines shown here:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/tutCamCntxtFile4.png" alt="tutCamCntxtFile4"></div></div><p class="simpara">Leave the remaining code as is.</p></li><li class="listitem">Save the file.</li><li class="listitem"><p class="simpara">Check that your updated <code class="literal">BlueprintXmlTest.java</code> file has the required
+modifications. It should look something like this:</p><pre class="screen">package tutorial.cbr.route;
 
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.EndpointInject;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.Produce;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.ProducerTemplate;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.builder.RouteBuilder;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.component.mock.MockEndpoint;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.apache.commons.io.FileUtils;
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> org.junit.Test;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong> java.io.File;
+import java.io.File;
 
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> BlueprintXmlTest <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> CamelBlueprintTestSupport {
+public class BlueprintXmlTest extends CamelBlueprintTestSupport {
 
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// TODO Create test message bodies that work for the route(s) being tested</em>
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Expected message bodies</em>
-	
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// To assert that everything works as it should, you must read </em>
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// the content of the created xml files</em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body1;
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body2;
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body3;
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body4;
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body5;
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String body6;
-	
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Templates to send to input endpoints</em>
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Produce(uri = "file:src/data?noop=true")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> ProducerTemplate inputEndpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Mock endpoints used to consume messages from the output endpoints </em>
-	<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// and then perform assertions</em>
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint outputEndpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output2")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output2Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output3")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output3Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output4")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output4Endpoint;
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@EndpointInject(uri = "mock:output5")</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> MockEndpoint output5Endpoint;
+	// TODO Create test message bodies that work for the route(s) being tested
+	// Expected message bodies
 
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Test</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> testCamelRoute() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Easy way of reading content of xml files to String object, but you must </em>
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// add a dependency to the commons-io project to the CBRroute pom.xml file</em>
-		body1 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message1.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);
-		body3 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message3.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);
-		body5 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message5.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);
-		body6 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message6.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);
-		
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Invalid Orders</em>
-		body2 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message2.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);		
-		body4 = FileUtils.readFileToString(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> File(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"src/data/message4.xml"</em></strong>), <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>);		
-		
-		context.addRoutes(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">new</strong> RouteBuilder() {
-			<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
-			<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/invalidOrders"</em></strong>).to(outputEndpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/GreatBritain"</em></strong>).to(output3Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/Germany"</em></strong>).to(output4Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/USA"</em></strong>).to(output2Endpoint);
-				from(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"file:target/messages/France"</em></strong>).to(output5Endpoint);
+	// To assert that everything works as it should, you must read
+	// the content of the created xml files
+	protected String body1;
+	protected String body2;
+	protected String body3;
+	protected String body4;
+	protected String body5;
+	protected String body6;
+
+	// Templates to send to input endpoints
+	@Produce(uri = "file:src/data?noop=true")
+	protected ProducerTemplate inputEndpoint;
+	// Mock endpoints used to consume messages from the output endpoints
+	// and then perform assertions
+	@EndpointInject(uri = "mock:output")
+	protected MockEndpoint outputEndpoint;
+	@EndpointInject(uri = "mock:output2")
+	protected MockEndpoint output2Endpoint;
+	@EndpointInject(uri = "mock:output3")
+	protected MockEndpoint output3Endpoint;
+	@EndpointInject(uri = "mock:output4")
+	protected MockEndpoint output4Endpoint;
+	@EndpointInject(uri = "mock:output5")
+	protected MockEndpoint output5Endpoint;
+
+	@Test
+	public void testCamelRoute() throws Exception {
+		// Easy way of reading content of xml files to String object, but you must
+		// add a dependency to the commons-io project to the CBRroute pom.xml file
+		body1 = FileUtils.readFileToString(new File("src/data/message1.xml"), "UTF-8");
+		body3 = FileUtils.readFileToString(new File("src/data/message3.xml"), "UTF-8");
+		body5 = FileUtils.readFileToString(new File("src/data/message5.xml"), "UTF-8");
+		body6 = FileUtils.readFileToString(new File("src/data/message6.xml"), "UTF-8");
+
+		// Invalid Orders
+		body2 = FileUtils.readFileToString(new File("src/data/message2.xml"), "UTF-8");
+		body4 = FileUtils.readFileToString(new File("src/data/message4.xml"), "UTF-8");
+
+		context.addRoutes(new RouteBuilder() {
+			@Override
+			public void configure() throws Exception {
+				from("file:target/messages/invalidOrders").to(outputEndpoint);
+				from("file:target/messages/GreatBritain").to(output3Endpoint);
+				from("file:target/messages/Germany").to(output4Endpoint);
+				from("file:target/messages/USA").to(output2Endpoint);
+				from("file:target/messages/France").to(output5Endpoint);
 			}
 		});
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Define some expectations</em>
+		// Define some expectations
 
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// TODO Ensure expectations make sense for the route(s) we're testing</em>
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Invalid Orders</em>
+		// TODO Ensure expectations make sense for the route(s) we're testing
+		// Invalid Orders
 		outputEndpoint.expectedBodiesReceived(body2, body4);
-		
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//For each country, one order</em>
+
+		//For each country, one order
 		output2Endpoint.expectedBodiesReceived(body1);
 		output3Endpoint.expectedBodiesReceived(body3);
 		output4Endpoint.expectedBodiesReceived(body6);
 		output5Endpoint.expectedBodiesReceived(body5);
 
-
-		<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// Validate our expectations</em>
+		// Validate our expectations
 		assertMockEndpointsSatisfied();
 	}
 
-	<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
-	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">protected</strong> String getBlueprintDescriptor() {
-		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"OSGI-INF/blueprint/blueprint.xml"</em></strong>;
+	@Override
+	protected String getBlueprintDescriptor() {
+		return "OSGI-INF/blueprint/blueprint.xml";
 	}
 
-}</pre></div></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifyPomXml"></a>Modifying the pom.xml file</h2></div></div></div><p>You need to add a dependency on the <code class="literal">commons-io</code> project to the
-            CBRroute project's <code class="filename">pom.xml</code> file:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, double-click <code class="filename">pom.xml</code>, located
-                    below the <code class="filename">target</code> folder, to open the file in the tooling's
-                    XML editor.</p></li><li class="step"><p>Click the <span class="guilabel">pom.xml</span> tab at the bottom of the page to open the file for
-                    editing.</p></li><li class="step"><p>Add these lines to the end of the
-                <code class="code">&lt;dependencies&gt;</code> section:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
+}</pre></li></ol></div></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modifyPomXml"></a>Modifying the pom.xml file</h2></div></div></div><p>You need to add a dependency on the <code class="literal">commons-io</code> project to the
+CBRroute project&#8217;s <code class="literal">pom.xml</code> file:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">In <code class="literal">Project Explorer</code>, double-click <code class="literal">pom.xml</code>, located
+below the <code class="literal">target</code> folder, to open the file in the tooling&#8217;s
+XML editor.</li><li class="listitem">Click the <code class="literal">pom.xml</code> tab at the bottom of the page to open the file for
+editing.</li><li class="listitem"><p class="simpara">Add these lines to the end of the
+<code class="literal">&lt;dependencies&gt;</code> section:</p><pre class="screen">&lt;dependency&gt;
        &lt;groupId&gt;commons-io&lt;/groupId&gt;
        &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
-       &lt;version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2.5</span>&lt;/version&gt;
+       &lt;version&gt;2.5&lt;/version&gt;
        &lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;</pre></div></li><li class="step"><p>Save the file.</p><p>The contents of the entire <code class="filename">pom.xml</code>
-                    file should look like this:</p><div class="informalexample"><pre class="programlisting">&lt;?xml version=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"1.0"</em></strong> encoding=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"UTF-8"</em></strong>?&gt;
+&lt;/dependency&gt;</pre></li><li class="listitem"><p class="simpara">Save the file.</p><p class="simpara">The contents of the entire <code class="literal">pom.xml</code>
+file should look like this:</p><pre class="screen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
-&lt;project xsi:schemaLocation=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"http://maven.apache.org/POM/4.0.0 
-</em></strong>  http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//maven.apache.org/xsd/maven-4.0.0.xsd" </em>
-  xmlns=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"http://maven.apache.org/POM/4.0.0"</em></strong>
-  xmlns:xsi=<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"http://www.w3.org/2001/XMLSchema-instance"</em></strong>&gt;
-  
-  &lt;modelVersion&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">4.0</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>&lt;/modelVersion&gt;
+&lt;project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
   &lt;groupId&gt;co&lt;/groupId&gt;
   &lt;artifactId&gt;camel-blueprint&lt;/artifactId&gt;
-  &lt;version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1.0</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">0</span>-SNAPSHOT&lt;/version&gt;
+  &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
   &lt;packaging&gt;bundle&lt;/packaging&gt;
   &lt;name&gt;Camel Blueprint Quickstart&lt;/name&gt;
   &lt;description&gt;Empty Camel Blueprint Example&lt;/description&gt;
-  
+
   &lt;licenses&gt;
     &lt;license&gt;
-      &lt;name&gt;Apache License, Version <span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2.0</span>&lt;/name&gt;
-      &lt;url&gt;http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//www.apache.org/licenses/LICENSE-2.0.html&lt;/url&gt;</em>
+      &lt;name&gt;Apache License, Version 2.0&lt;/name&gt;
+      &lt;url&gt;http://www.apache.org/licenses/LICENSE-2.0.html&lt;/url&gt;
       &lt;distribution&gt;repo&lt;/distribution&gt;
     &lt;/license&gt;
   &lt;/licenses&gt;
-  
+
   &lt;properties&gt;
-    &lt;camel.version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2.18</span>.1.redhat-<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">000015</span>&lt;/camel.version&gt;
-    &lt;project.reporting.outputEncoding&gt;UTF-<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">8</span>&lt;/project.reporting.outputEncoding&gt;
-    &lt;version.maven-bundle-plugin&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2.3</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">7</span>&lt;&lt;/version.maven-bundle-plugin&gt;
-    &lt;jboss.fuse.bom.version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">6.3</span>.0.redhat-<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">187</span>&lt;/jboss.fuse.bom.version&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">8</span>&lt;/project.build.sourceEncoding&gt;
+    &lt;camel.version&gt;2.18.1.redhat-000015&lt;/camel.version&gt;
+    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+    &lt;version.maven-bundle-plugin&gt;2.3.7&lt;&lt;/version.maven-bundle-plugin&gt;
+    &lt;jboss.fuse.bom.version&gt;6.3.0.redhat-187&lt;/jboss.fuse.bom.version&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
   &lt;/properties&gt;
-  
+
   &lt;dependencyManagement&gt;
     &lt;dependencies&gt;
       &lt;dependency&gt;
@@ -285,11 +284,11 @@
         &lt;artifactId&gt;jboss-fuse-parent&lt;/artifactId&gt;
         &lt;version&gt;${jboss.fuse.bom.version}&lt;/version&gt;
         &lt;type&gt;pom&lt;/type&gt;
-        &lt;scope&gt;<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">import</strong>&lt;/scope&gt;
+        &lt;scope&gt;import&lt;/scope&gt;
       &lt;/dependency&gt;
     &lt;/dependencies&gt;
   &lt;/dependencyManagement&gt;
-  
+
   &lt;dependencies&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -322,11 +321,11 @@
     &lt;dependency&gt;
       &lt;groupId&gt;commons-io&lt;/groupId&gt;
       &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
-      &lt;version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">2.5</span>&lt;/version&gt;
+      &lt;version&gt;2.5&lt;/version&gt;
       &lt;scope&gt;test&lt;/scope&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;
-  
+
   &lt;repositories&gt;
     &lt;repository&gt;
       &lt;releases&gt;
@@ -336,9 +335,9 @@
       &lt;snapshots&gt;
         &lt;enabled&gt;false&lt;/enabled&gt;
       &lt;/snapshots&gt;
-      &lt;id&gt;fuse-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong>-repository&lt;/id&gt;
+      &lt;id&gt;fuse-public-repository&lt;/id&gt;
       &lt;name&gt;FuseSource Community Release Repository&lt;/name&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//repo.fusesource.com/nexus/content/groups/public&lt;/url&gt;</em>
+      &lt;url&gt;https://repo.fusesource.com/nexus/content/groups/public&lt;/url&gt;
     &lt;/repository&gt;
     &lt;repository&gt;
       &lt;releases&gt;
@@ -350,18 +349,18 @@
       &lt;/snapshots&gt;
       &lt;id&gt;red-hat-ga-repository&lt;/id&gt;
       &lt;name&gt;Red Hat GA Repository&lt;/name&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//maven.repository.redhat.com/ga&lt;/url&gt;</em>
+      &lt;url&gt;https://maven.repository.redhat.com/ga&lt;/url&gt;
     &lt;/repository&gt;
     &lt;repository&gt;
       &lt;id&gt;fuse-ea&lt;/id&gt;
-      &lt;url&gt;http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven&lt;/url&gt;</em>
+      &lt;url&gt;http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven&lt;/url&gt;
     &lt;/repository&gt;
     &lt;repository&gt;
       &lt;id&gt;redhat-ea-repository&lt;/id&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//maven.repository.redhat.com/earlyaccess/all&lt;/url&gt;</em>
+      &lt;url&gt;https://maven.repository.redhat.com/earlyaccess/all&lt;/url&gt;
     &lt;/repository&gt;
   &lt;/repositories&gt;
-  
+
   &lt;pluginRepositories&gt;
     &lt;pluginRepository&gt;
       &lt;releases&gt;
@@ -371,9 +370,9 @@
       &lt;snapshots&gt;
         &lt;enabled&gt;false&lt;/enabled&gt;
       &lt;/snapshots&gt;
-      &lt;id&gt;fuse-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong>-repository&lt;/id&gt;
+      &lt;id&gt;fuse-public-repository&lt;/id&gt;
       &lt;name&gt;FuseSource Community Release Repository&lt;/name&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//repo.fusesource.com/nexus/content/groups/public&lt;/url&gt;</em>
+      &lt;url&gt;https://repo.fusesource.com/nexus/content/groups/public&lt;/url&gt;
     &lt;/pluginRepository&gt;
     &lt;pluginRepository&gt;
       &lt;releases&gt;
@@ -385,22 +384,22 @@
       &lt;/snapshots&gt;
       &lt;id&gt;red-hat-ga-repository&lt;/id&gt;
       &lt;name&gt;Red Hat GA Repository&lt;/name&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//maven.repository.redhat.com/ga&lt;url&gt;</em>
+      &lt;url&gt;https://maven.repository.redhat.com/ga&lt;url&gt;
     &lt;/pluginRepository&gt;
     &lt;pluginRepository&gt;
       &lt;id&gt;fuse-ea&lt;/id&gt;
-      &lt;url&gt;http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven&lt;/url&gt;</em>
+      &lt;url&gt;http://download.eng.brq.redhat.com/brewroot/repos/jb-fuse-6.2-build/latest/maven&lt;/url&gt;
     &lt;/pluginRepository&gt;
     &lt;pluginRepository&gt;
       &lt;id&gt;redhat-ea-repository&lt;/id&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//maven.repository.redhat.com/earlyaccess/all&lt;/url&gt;</em>
+      &lt;url&gt;https://maven.repository.redhat.com/earlyaccess/all&lt;/url&gt;
     &lt;/pluginRepository&gt;
     &lt;pluginRepository&gt;
       &lt;id&gt;camelStaging&lt;/id&gt;
-      &lt;url&gt;https:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384&lt;/url&gt;</em>
+      &lt;url&gt;https://repository.jboss.org/nexus/content/repositories/fusesource_releases_external-2384&lt;/url&gt;
     &lt;/pluginRepository&gt;
   &lt;/pluginRepositories&gt;
-  
+
   &lt;build&gt;
     &lt;defaultGoal&gt;install&lt;/defaultGoal&gt;
     &lt;plugins&gt;
@@ -418,17 +417,17 @@
       &lt;/plugin&gt;
       &lt;plugin&gt;
         &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-        &lt;version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">3.5</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>&lt;/version&gt;
+        &lt;version&gt;3.5.1&lt;/version&gt;
         &lt;configuration&gt;
-          &lt;source&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1.8</span>&lt;/source&gt;
-          &lt;target&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1.8</span>&lt;/target&gt;
+          &lt;source&gt;1.8&lt;/source&gt;
+          &lt;target&gt;1.8&lt;/target&gt;
         &lt;/configuration&gt;
       &lt;/plugin&gt;
       &lt;plugin&gt;
         &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
-        &lt;version&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">3.0</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>&lt;/version&gt;
+        &lt;version&gt;3.0.1&lt;/version&gt;
         &lt;configuration&gt;
-          &lt;encoding&gt;UTF-<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">8</span>&lt;/encoding&gt;
+          &lt;encoding&gt;UTF-8&lt;/encoding&gt;
         &lt;/configuration&gt;
       &lt;/plugin&gt;
       &lt;plugin&gt;
@@ -441,20 +440,21 @@
       &lt;/plugin&gt;
     &lt;/plugins&gt;
   &lt;/build&gt;
-  
-&lt;/project&gt;</pre></div></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24478"></a>Running the JUnit test</h2></div></div></div><p>To run the test:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>Switch to <span class="guilabel">JBoss</span> perspective to free up more
-                    workspace.</p></li><li class="step"><p>Select the project root, <code class="filename">CBRroute</code>, in the
-                        <span class="guilabel">Project Explorer</span>.</p></li><li class="step"><p>Open the context menu.</p></li><li class="step"><p>Select <span class="guimenu">Run As</span> &gt; <span class="guimenuitem">JUnit Test</span>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>By default, the <span class="guilabel">JUnit</span> view opens in the sidebar. (To provide a better
-                        view, drag it to the bottom, right panel that displays the
-                            <span class="guilabel">Console</span>, <span class="guilabel">Servers</span>, and
-                            <span class="guilabel">Properties</span> tabs.)</p></td></tr></table></div></li><li class="step"><p>If the test runs successfully, you'll see something like this:</p><div class="figure"><a name="JunitTestSuccess"></a><p class="title"><b>Figure&nbsp;6.&nbsp;Successful JUnit run</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutJunitResult2.png" width="544.0500000000001" alt="JUnit success"></div></div></div><br class="figure-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Sometimes the test fails the first time JUnit is run on a project. Rerunning the test ususally
-                        results in a successful  outcome.</p></td></tr></table></div><p>When the test does fail, you'll see something like this:</p><div class="figure"><a name="RiderTutorialJUnitFig030"></a><p class="title"><b>Figure&nbsp;7.&nbsp;Failed JUnit run</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutJunitResult.png" width="642.2" alt="JUnit failure"></div></div></div><br class="figure-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>JUnit will fail if your execution environment is not set to Java SE 8 or 7. The message bar at
-                        the top of the <span class="guilabel">JUnit</span> tab will display an error message
-                        indicating that it cannot find the correct SDK. </p><p>To resolve the issue, open the project's context menu, and select <span class="guimenu">Run As</span> &gt; <span class="guisubmenu">Run Configurations</span> &gt; <span class="guimenuitem">JRE</span>. Click the <span class="guibutton">Environments</span> button next to
-                        the <span class="guilabel">Execution environment</span> field to locate and select a
-                        Java SE 8 or 7 environment.</p></td></tr></table></div></li><li class="step"><p>Examine the output and take action to resolve any test failures.</p><p>To see more of the errors displayed in the JUnit panel,
-                    click <span class="inlinemediaobject"><img src="images/maximize.gif" width="19.2" alt="Maximize button"></span> on the panel's menu bar to maximize the
-                    view. </p><p>Before you run the JUnit test case again, delete any
-                    JUnit-generated test messages from the CBRroute project's
-                        <code class="filename">/src/data</code> folder in
-                        <span class="guilabel">Project Explorer</span> (see <a class="xref" href="RiderTutorialJUnit.html#tutTraceMsgExample" title="Figure&nbsp;5.&nbsp;Trace-generated messages">Figure&nbsp;5, &#8220;Trace-generated messages&#8221;</a>).</p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e24596"></a>Further reading</h2></div></div></div><p>To learn more about JUnit testing see <a class="link" href="http://www.junit.org/" target="_top">JUnit</a>.</p></div></div></body></html>
+
+&lt;/project&gt;</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_running_the_junit_test"></a>Running the JUnit test</h2></div></div></div><p>To run the test:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">Switch to <code class="literal">JBoss</code> perspective to free up more
+workspace.</li><li class="listitem">Select the project root, <code class="literal">CBRroute</code>, in the
+<code class="literal">Project Explorer</code>.</li><li class="listitem">Open the context menu.</li><li class="listitem"><p class="simpara">Select <span class="guimenu">Run As</span> &gt; <span class="guisubmenu"></span> &gt; <span class="guimenuitem"><code class="literal">JUnit Test</code></span>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>By default, the <code class="literal">JUnit</code> view opens in the sidebar. (To provide a better
+view, drag it to the bottom, right panel that displays the
+<code class="literal">Console</code>, <code class="literal">Servers</code>, and
+<code class="literal">Properties</code> tabs.)</p></td></tr></table></div></li><li class="listitem"><p class="simpara">If the test runs successfully, you&#8217;ll see something like this:</p><div class="figure"><a name="JunitTestSuccess"></a><p class="title"><b>Figure&nbsp;4.&nbsp;Successful JUnit run</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutJunitResult2.png" alt="JUnit success"></div></div></div><br class="figure-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Sometimes the test fails the first time JUnit is run on a project. Rerunning the test ususally
+results in a successful outcome.</p></td></tr></table></div><p class="simpara">When the test does fail, you&#8217;ll see something like this:</p><div class="figure"><a name="RiderTutorialJUnitFig030"></a><p class="title"><b>Figure&nbsp;5.&nbsp;Failed JUnit run</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/tutJunitResult.png" alt="JUnit failure"></div></div></div><br class="figure-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>JUnit will fail if your execution environment is not set to Java SE 8 or 7. The message bar at
+the top of the <code class="literal">JUnit</code> tab will display an error message
+indicating that it cannot find the correct SDK.</p><p>To resolve the issue, open the project&#8217;s context menu, and select <span class="guimenu">Run As</span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu">Run Configurations</span> &gt; <span class="guisubmenu"></span> &gt; <span class="guisubmenu"><code class="literal">JRE</code></span> &gt; <span class="guimenuitem"></span>. Click the <span class="guibutton">Environments</span> button next to
+the <code class="literal">Execution environment</code> field to locate and select a
+Java SE 8 or 7 environment.</p></td></tr></table></div></li><li class="listitem"><p class="simpara">Examine the output and take action to resolve any test failures.</p><p class="simpara">To see more of the errors displayed in the JUnit panel,
+click
+<span class="inlinemediaobject"><img src="images/maximize.gif" alt="Maximize button"></span> on the panel&#8217;s menu bar to maximize the
+view.</p><p class="simpara">Before you run the JUnit test case again, delete any
+JUnit-generated test messages from the CBRroute project&#8217;s
+<code class="literal">/src/data</code> folder in
+<code class="literal">Project Explorer</code> (see <a class="xref" href="RiderTutorialJUnit.html#tutTraceMsgExample" title="Figure&nbsp;3.&nbsp;Trace-generated messages">Figure&nbsp;3, &#8220;Trace-generated messages&#8221;</a>).</p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_further_reading_5"></a>Further reading</h2></div></div></div><p>To learn more about JUnit testing see <a class="link" href="http://www.junit.org/" target="_top">JUnit</a>.</p></div></div></body></html>

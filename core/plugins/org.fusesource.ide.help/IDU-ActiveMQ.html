@@ -1,26 +1,24 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>ActiveMQ</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="bk05ch01s03s02.html" title="Adding a Reference"><link rel="next" href="IDU-AHC.html" title="AHC"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-ActiveMQ"></a>ActiveMQ</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ActiveMQComponent"></a>ActiveMQ Component</h2></div></div></div><p>The ActiveMQ component allows messages to be sent to a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> Queue or Topic; or messages to be
-      consumed from a JMS Queue or Topic using <a class="link" href="http://activemq.apache.org/" target="_top">Apache
-        ActiveMQ</a>. </p><p>This component is based on the <a href="IDU-JMS.html" class="olink">JMS Component</a> and uses
-      Spring's JMS support for declarative transactions, using Spring's
-        <code class="literal">JmsTemplate</code> for sending and a <code class="literal">MessageListenerContainer</code>
-      for consuming. All the options from the <a href="IDU-JMS.html" class="olink">JMS</a> component also
-      apply for this component.</p><p>To use this component, make sure you have the <code class="literal">activemq.jar</code> or
-        <code class="literal">activemq-core.jar</code> on your classpath along with any Apache Camel dependencies
-      such as <code class="literal">camel-core.jar</code>, <code class="literal">camel-spring.jar</code> and
-        <code class="literal">camel-jms.jar</code>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Transacted and caching"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Transacted and caching</th></tr><tr><td align="left" valign="top"><p>See section <span class="emphasis"><em>Transactions and Cache Levels</em></span> below on JMS page if you are using transactions with JMS as it can impact performance.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">activemq:[queue:|topic:]destinationName</pre><p>Where <span class="bold"><strong>destinationName</strong></span> is an ActiveMQ queue or topic name.
-      By default, the <span class="bold"><strong>destinationName</strong></span> is interpreted as a queue
-      name. For example, to connect to the queue, <code class="literal">FOO.BAR</code>, use:</p><pre class="programlisting">activemq:FOO.BAR</pre><p>You can include the optional <code class="literal">queue:</code> prefix, if you prefer:</p><pre class="programlisting">activemq:queue:FOO.BAR</pre><p>To connect to a topic, you must include the <code class="literal">topic:</code> prefix. For example,
-      to connect to the topic, <code class="literal">Stocks.Prices</code>, use:</p><pre class="programlisting">activemq:topic:Stocks.Prices</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_Options"></a>Options</h2></div></div></div><p>See Options on the <a href="IDU-JMS.html" class="olink">JMS</a> component as all these options
-      also apply for this component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e45757"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
-            offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.
- </p><p>You can configure the ActiveMQ Camel component to work either with an embedded broker
-            or an external broker. To embed a broker in the JBoss EAP container, configure the
-            ActiveMQ Resource Adapter in the EAP container configuration file&#8212;for details, see
-                <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/components/camel-activemq.html" target="_top">ActiveMQ Resource Adapter Configuration</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ConfiguringtheConnectionFactory"></a>Configuring the Connection Factory</h2></div></div></div><p>The following <a class="link" href="https://github.com/apache/activemq/blob/master/activemq-camel/src/test/java/org/apache/activemq/camel/component/ActiveMQRouteTest.java" target="_top">test case</a> shows how to add an ActiveMQComponent to the <a class="link" href="CamelContext" target="_top">CamelContext</a> using the <a class="link" href="http://activemq.apache.org/maven/apidocs/org/apache/activemq/camel/component/ActiveMQComponent.html" target="_top"><code class="literal">activeMQComponent()</code> method</a> while specifying the <a class="link" href="http://activemq.apache.org/configuring-transports.html" target="_top">brokerURL</a> used to
-      connect to ActiveMQ.</p><pre class="programlisting">camelContext.addComponent("activemq", activeMQComponent("vm://localhost?broker.persistent=false"));</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ConfiguringtheConnectionFactoryusingSpringXML"></a>Configuring the Connection Factory using Spring XML</h2></div></div></div><p>You can configure the ActiveMQ broker URL on the ActiveMQComponent as follows</p><pre class="programlisting">
-&lt;beans xmlns="http://www.springframework.org/schema/beans"
+   <title>ActiveMQ</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="next" href="AHC-AsyncHttpClientComponent.html" title="Async Http Client Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="IDU-ActiveMQ"></a>ActiveMQ</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ActiveMQComponent"></a>ActiveMQ Component</h2></div></div></div><p>The ActiveMQ component allows messages to be sent to a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> Queue or Topic; or messages to be
+consumed from a JMS Queue or Topic using <a class="link" href="http://activemq.apache.org/" target="_top">Apache
+ActiveMQ</a>.</p><p>This component is based on the <a class="xref" href="JMS-JMSComponent.html" title="JMS Component"><i>JMS Component</i></a> and uses
+Spring&#8217;s JMS support for declarative transactions, using Spring&#8217;s
+<code class="literal">JmsTemplate</code> for sending and a <code class="literal">MessageListenerContainer</code>
+for consuming. All the options from the <a class="xref" href="JMS-JMSComponent.html" title="JMS Component"><i>JMS Component</i></a> component also
+apply for this component.</p><p>To use this component, make sure you have the <code class="literal">activemq.jar</code> or
+<code class="literal">activemq-core.jar</code> on your classpath along with any Apache Camel dependencies
+such as <code class="literal">camel-core.jar</code>, <code class="literal">camel-spring.jar</code> and
+<code class="literal">camel-jms.jar</code>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Transacted and caching"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Transacted and caching</th></tr><tr><td align="left" valign="top"><p>See section <span class="strong"><strong>Transactions and Cache Levels</strong></span> below on JMS page if you are using transactions with JMS as it can impact performance.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="screen">activemq:[queue:|topic:]destinationName</pre><p>Where <span class="strong"><strong>destinationName</strong></span> is an ActiveMQ queue or topic name.
+By default, the <span class="strong"><strong>destinationName</strong></span> is interpreted as a queue
+name. For example, to connect to the queue, <code class="literal">FOO.BAR</code>, use:</p><pre class="screen">activemq:FOO.BAR</pre><p>You can include the optional <code class="literal">queue:</code> prefix, if you prefer:</p><pre class="screen">activemq:queue:FOO.BAR</pre><p>To connect to a topic, you must include the <code class="literal">topic:</code> prefix. For example,
+to connect to the topic, <code class="literal">Stocks.Prices</code>, use:</p><pre class="screen">activemq:topic:Stocks.Prices</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_Options"></a>Options</h2></div></div></div><p>See Options on the <a class="xref" href="JMS-JMSComponent.html" title="JMS Component"><i>JMS Component</i></a> component as all these options
+also apply for this component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_camel_on_eap_deployment_4"></a>Camel on EAP deployment</h2></div></div></div><p>This component is supported by the Camel on EAP (Wildfly Camel) framework, which
+offers a simplified deployment model on the Red Hat JBoss Enterprise Application Platform (JBoss EAP) container.</p><p>You can configure the ActiveMQ Camel component to work either with an embedded broker
+or an external broker. To embed a broker in the JBoss EAP container, configure the
+ActiveMQ Resource Adapter in the EAP container configuration file&#8212;for details, see
+<a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/components/camel-activemq.html" target="_top">ActiveMQ Resource Adapter Configuration</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ConfiguringtheConnectionFactory"></a>Configuring the Connection Factory</h2></div></div></div><p>The following <a class="link" href="https://github.com/apache/activemq/blob/master/activemq-camel/src/test/java/org/apache/activemq/camel/component/ActiveMQRouteTest.java" target="_top">test case</a> shows how to add an ActiveMQComponent to the <a class="link" href="CamelContext" target="_top">CamelContext</a> using the <a class="link" href="http://activemq.apache.org/maven/apidocs/org/apache/activemq/camel/component/ActiveMQComponent.html" target="_top"><code class="literal">activeMQComponent()</code> method</a> while specifying the <a class="link" href="http://activemq.apache.org/configuring-transports.html" target="_top">brokerURL</a> used to
+connect to ActiveMQ.</p><pre class="screen">camelContext.addComponent("activemq", activeMQComponent("vm://localhost?broker.persistent=false"));</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ConfiguringtheConnectionFactoryusingSpringXML"></a>Configuring the Connection Factory using Spring XML</h2></div></div></div><p>You can configure the ActiveMQ broker URL on the ActiveMQComponent as follows</p><pre class="screen">&lt;beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
@@ -29,19 +27,18 @@
   &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
   &lt;/camelContext&gt;
 
-
   &lt;bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent"&gt;
     &lt;property name="brokerURL" value="tcp://somehost:61616"/&gt;
   &lt;/bean&gt;
 
-&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_Usingconnectionpooling"></a>Using connection pooling</h2></div></div></div><p>When sending to an ActiveMQ broker using Camel it's recommended to use a pooled connection
-      factory to handle efficient pooling of JMS connections, sessions and producers. This is
-      documented in the page <a class="link" href="http://activemq.apache.org/spring-support.html" target="_top">ActiveMQ
-        Spring Support</a>.</p><p>You can grab Jencks AMQ pool with Maven:</p><pre class="programlisting">    &lt;dependency&gt;
+&lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_Usingconnectionpooling"></a>Using connection pooling</h2></div></div></div><p>When sending to an ActiveMQ broker using Camel it&#8217;s recommended to use a pooled connection
+factory to handle efficient pooling of JMS connections, sessions and producers. This is
+documented in the page <a class="link" href="http://activemq.apache.org/spring-support.html" target="_top">ActiveMQ
+Spring Support</a>.</p><p>You can grab Jencks AMQ pool with Maven:</p><pre class="screen">    &lt;dependency&gt;
       &lt;groupId&gt;org.apache.activemq&lt;/groupId&gt;
       &lt;artifactId&gt;activemq-pool&lt;/artifactId&gt;
       &lt;version&gt;5.3.2&lt;/version&gt;
-    &lt;/dependency&gt;</pre><p>And then setup the <span class="bold"><strong>activemq</strong></span> component as follows:</p><pre class="programlisting">    &lt;bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"&gt;
+    &lt;/dependency&gt;</pre><p>And then setup the <span class="strong"><strong>activemq</strong></span> component as follows:</p><pre class="screen">    &lt;bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"&gt;
         &lt;property name="brokerURL" value="tcp://localhost:61616" /&gt;
     &lt;/bean&gt;
 
@@ -50,7 +47,6 @@
         &lt;property name="connectionFactory" ref="jmsConnectionFactory" /&gt;
     &lt;/bean&gt;
 
-
     &lt;bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration"&gt;
         &lt;property name="connectionFactory" ref="pooledConnectionFactory"/&gt;
         &lt;property name="concurrentConsumers" value="10"/&gt;
@@ -58,31 +54,30 @@
 
     &lt;bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent"&gt;
         &lt;property name="configuration" ref="jmsConfig"/&gt;
-    &lt;/bean&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Notice the <span class="bold"><strong>init</strong></span> and <span class="bold"><strong>destroy</strong></span> methods on the pooled connection factory. This is important to ensure the connection pool is properly started and shutdown.</p></td></tr></table></div><p>The <code class="literal">PooledConnectionFactory</code> will then create a connection pool with up to 8 connections in use at the same time. Each connection can be shared by many sessions. There is an option named <code class="literal">maxActive</code> you can use to configure the maximum number of sessions per connection; the default value is <code class="literal">500</code>. From <span class="bold"><strong>ActiveMQ 5.7</strong></span> onwards the option has been renamed to better reflect its purpose, being named as <code class="literal">maxActiveSessionPerConnection</code>. Notice the <code class="literal">concurrentConsumers</code> is set to a higher value than <code class="literal">maxConnections</code> is. This is okay, as each consumer is using a session, and as a session can share the same connection, we are in the safe. In this example we can have 8 * 500 = 4000 active sessions at the same time.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_InvokingMessageListenerPOJOsinaCamelroute"></a>Invoking MessageListener POJOs in a route</h2></div></div></div><p>The ActiveMQ component also provides a helper <a class="link" href="Type Converter" target="_top">Type
-        Converter</a> from a JMS MessageListener to a <a class="link" href="Processor" target="_top">Processor</a>.
-      This means that the <a href="IDU-Bean.html" class="olink">Bean</a> component is capable of invoking
-      any JMS MessageListener bean directly inside any route.</p><p>So for example you can create a MessageListener in JMS as follows:</p><pre class="programlisting">public class MyListener implements MessageListener {
+    &lt;/bean&gt;</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Notice the <span class="strong"><strong>init</strong></span> and <span class="strong"><strong>destroy</strong></span> methods on the pooled connection factory. This is important to ensure the connection pool is properly started and shutdown.</p></td></tr></table></div><p>The <code class="literal">PooledConnectionFactory</code> will then create a connection pool with up to 8 connections in use at the same time. Each connection can be shared by many sessions. There is an option named <code class="literal">maxActive</code> you can use to configure the maximum number of sessions per connection; the default value is <code class="literal">500</code>. From <span class="strong"><strong>ActiveMQ 5.7</strong></span> onwards the option has been renamed to better reflect its purpose, being named as <code class="literal">maxActiveSessionPerConnection</code>. Notice the <code class="literal">concurrentConsumers</code> is set to a higher value than <code class="literal">maxConnections</code> is. This is okay, as each consumer is using a session, and as a session can share the same connection, we are in the safe. In this example we can have 8 * 500 = 4000 active sessions at the same time.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_InvokingMessageListenerPOJOsinaCamelroute"></a>Invoking MessageListener POJOs in a route</h2></div></div></div><p>The ActiveMQ component also provides a helper <a class="link" href="Type Converter" target="_top">Type
+Converter</a> from a JMS MessageListener to a <a class="link" href="Processor" target="_top">Processor</a>.
+This means that the <a class="xref" href="Bean-BeanComponent.html" title="Bean Component"><i>Bean Component</i></a> component is capable of invoking
+any JMS MessageListener bean directly inside any route.</p><p>So for example you can create a MessageListener in JMS as follows:</p><pre class="screen">public class MyListener implements MessageListener {
    public void onMessage(Message jmsMessage) {
        // ...
    }
-}</pre><p>Then use it in your route as follows</p><pre class="programlisting">from("file://foo/bar").
+}</pre><p>Then use it in your route as follows</p><pre class="screen">from("file://foo/bar").
   bean(MyListener.class);</pre><p>That is, you can reuse any of the Apache Camel
-      <a href="IDU-Components.html" class="olink">Components</a> and easily integrate them into your JMS
-        <code class="literal">MessageListener</code> POJO\!</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_UsingActiveMQDestinationOptions"></a>Using ActiveMQ Destination Options</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of ActiveMQ 5.6</strong></span>
-    </p><p>You can configure the <a class="link" href="http://activemq.apache.org/destination-options.html" target="_top">Destination Options</a> in the endpoint uri, using the "destination." prefix. For example to mark a consumer as exclusive, and set its prefetch size to 50, you can do as follows:</p><pre class="programlisting">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+components and easily integrate them into your JMS
+<code class="literal">MessageListener</code> POJO\!</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_UsingActiveMQDestinationOptions"></a>Using ActiveMQ Destination Options</h2></div></div></div><p><span class="strong"><strong>Available as of ActiveMQ 5.6</strong></span></p><p>You can configure the <a class="link" href="http://activemq.apache.org/destination-options.html" target="_top">Destination Options</a> in the endpoint uri, using the "destination." prefix. For example to mark a consumer as exclusive, and set its prefetch size to 50, you can do as follows:</p><pre class="screen">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
   &lt;route&gt;
     &lt;from uri="file://src/test/data?noop=true"/&gt;
     &lt;to uri="activemq:queue:foo"/&gt;
   &lt;/route&gt;
   &lt;route&gt;
     &lt;!-- use consumer.exclusive ActiveMQ destination option, notice we have to prefix with destination. --&gt;
-    &lt;from uri="activemq:foo?destination.consumer.exclusive=true&amp;estination.consumer.prefetchSize=50"/&gt;
+    &lt;from uri="activemq:foo?destination.consumer.exclusive=true&amp;amp;destination.consumer.prefetchSize=50"/&gt;
     &lt;to uri="mock:results"/&gt;
   &lt;/route&gt;
 &lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_ConsumingAdvisoryMessages"></a>Consuming Advisory Messages</h2></div></div></div><p>ActiveMQ can generate <a class="link" href="http://activemq.apache.org/advisory-message.html" target="_top">Advisory messages</a> which are put in topics that you can consume. Such messages can
-      help you send alerts in case you detect slow consumers or to build statistics (number of
-      messages/produced per day, etc.) The following Spring DSL example shows you how to read
-      messages from a topic.</p><pre class="programlisting">&lt;route&gt;
+help you send alerts in case you detect slow consumers or to build statistics (number of
+messages/produced per day, etc.) The following Spring DSL example shows you how to read
+messages from a topic.</p><pre class="screen">&lt;route&gt;
 	&lt;from uri="activemq:topic:ActiveMQ.Advisory.Connection?mapJmsMessage=false" /&gt;
 	&lt;convertBodyTo type="java.lang.String"/&gt;
 	&lt;transform&gt;
@@ -90,21 +85,19 @@
 	&lt;/transform&gt;
 	&lt;to uri="file://data/activemq/?fileExist=Append&amp;ileName=advisoryConnection-${date:now:yyyyMMdd}.txt" /&gt;
 &lt;/route&gt;</pre><p>If you consume a message on a queue, you should see the following files under
-      data/activemq folder :</p><p>advisoryConnection-20100312.txt advisoryProducer-20100312.txt</p><p>and containing string:</p><pre class="programlisting">      ActiveMQMessage {commandId = 0, responseRequired = false, messageId = ID:dell-charles-3258-1268399815140
+data/activemq folder :</p><p>advisoryConnection-20100312.txt advisoryProducer-20100312.txt</p><p>and containing string:</p><pre class="screen">      ActiveMQMessage {commandId = 0, responseRequired = false, messageId = ID:dell-charles-3258-1268399815140
       -1:0:0:0:221, originalDestination = null, originalTransactionId = null, producerId = ID:dell-charles-
-      3258-1268399815140-1:0:0:0, destination = topic://ActiveMQ.Advisory.Connection, transactionId = null, 
-      expiration = 0, timestamp = 0, arrival = 0, brokerInTime = 1268403383468, brokerOutTime = 1268403383468, 
-      correlationId = null, replyTo = null, persistent = false, type = Advisory, priority = 0, groupID = null, 
-      groupSequence = 0, targetConsumerId = null, compressed = false, userID = null, content = null, 
-      marshalledProperties = org.apache.activemq.util.ByteSequence@17e2705, dataStructure = ConnectionInfo 
-      {commandId = 1, responseRequired = true, connectionId = ID:dell-charles-3258-1268399815140-2:50, 
-      clientId = ID:dell-charles-3258-1268399815140-14:0, userName = , password = *****, 
-      brokerPath = null, brokerMasterConnector = false, manageable = true, clientMaster = true}, 
+      3258-1268399815140-1:0:0:0, destination = topic://ActiveMQ.Advisory.Connection, transactionId = null,
+      expiration = 0, timestamp = 0, arrival = 0, brokerInTime = 1268403383468, brokerOutTime = 1268403383468,
+      correlationId = null, replyTo = null, persistent = false, type = Advisory, priority = 0, groupID = null,
+      groupSequence = 0, targetConsumerId = null, compressed = false, userID = null, content = null,
+      marshalledProperties = org.apache.activemq.util.ByteSequence@17e2705, dataStructure = ConnectionInfo
+      {commandId = 1, responseRequired = true, connectionId = ID:dell-charles-3258-1268399815140-2:50,
+      clientId = ID:dell-charles-3258-1268399815140-14:0, userName = , password = *****,
+      brokerPath = null, brokerMasterConnector = false, manageable = true, clientMaster = true},
       redeliveryCounter = 0, size = 0, properties = {originBrokerName=master, originBrokerId=ID:dell-charles-
-      3258-1268399815140-0:0, originBrokerURL=vm://master}, readOnlyProperties = true, readOnlyBody = true, 
-      droppable = false}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_GettingComponentJAR"></a>Getting Component JAR</h2></div></div></div><p>You need this dependency:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">activemq-camel</code>
-        </p></li></ul></div><p>
-      <a href="IDU-ActiveMQ.html" class="olink">ActiveMQ</a> is an extension of the <a href="IDU-JMS.html" class="olink">JMS</a> component released with the <a class="link" href="http://activemq.apache.org" target="_top">ActiveMQ project</a>.</p><pre class="programlisting">&lt;dependency&gt;
+      3258-1268399815140-0:0, originBrokerURL=vm://master}, readOnlyProperties = true, readOnlyBody = true,
+      droppable = false}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ActiveMQ_HSH_GettingComponentJAR"></a>Getting Component JAR</h2></div></div></div><p>You need this dependency:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">activemq-camel</code></li></ul></div><p>ActiveMQ is an extension of the <a class="xref" href="JMS-JMSComponent.html" title="JMS Component"><i>JMS Component</i></a> component released with the <a class="link" href="http://activemq.apache.org" target="_top">ActiveMQ project</a>.</p><pre class="screen">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.activemq&lt;/groupId&gt;
   &lt;artifactId&gt;activemq-camel&lt;/artifactId&gt;
   &lt;version&gt;5.6.0&lt;/version&gt;
