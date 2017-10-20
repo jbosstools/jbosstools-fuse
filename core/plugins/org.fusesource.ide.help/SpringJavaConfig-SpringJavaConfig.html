@@ -1,0 +1,49 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Spring Java Config</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="SpringIntegration-SpringIntegrationComponent.html" title="Spring Integration Component"><link rel="next" href="SpringLDAP-SpringLDAPComponent.html" title="Spring LDAP Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="SpringJavaConfig-SpringJavaConfig"></a>Spring Java Config</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SpringJavaConfig-SpringJavaConfig.html#SpringJavaConfig-UsingSpringJavaConfig">Using Spring Java Config</a></span></dt><dt><span class="section"><a href="SpringJavaConfig-SpringJavaConfig.html#SpringJavaConfig-Configuration">Configuration</a></span></dt><dt><span class="section"><a href="SpringJavaConfig-SpringJavaConfig.html#SpringJavaConfig-Testing">Testing</a></span></dt></dl></div><p><a class="link" href="spring.html" target="_top">Spring</a> started life using XML Config to wire beans
+together. However some folks don&#8217;t like using XML and would rather use
+Java code which led to the creation of Guice along with the Spring
+JavaConfig project.</p><p>You can use either the XML or Java config approaches with Camel; its
+your choice really on which you prefer.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringJavaConfig-UsingSpringJavaConfig"></a>Using Spring Java Config</h2></div></div></div><p>To use Spring Java Config in your Camel project the easiest thing to do
+is add the following to your pom.xml</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-spring-javaconfig<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${camel-version}<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre><p>This will then add the dependencies on the Spring JavaConfig library
+along with some helper classes for configuring Camel inside Spring.</p><p>Note that this library is totally optional; you could just wire Camel
+together yourself with Java Config.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringJavaConfig-Configuration"></a>Configuration</h2></div></div></div><p>The most common case of using JavaConfig with Camel would be to create
+configuration with defined list of routes to be used by router.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Configuration</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> MyRouteConfiguration <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> CamelConfiguration {
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Autowire</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> MyRouteBuilder myRouteBuilder;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Autowire</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">private</strong> MyAnotherRouteBuilder myAnotherRouteBuilder;
+
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> List&lt;RouteBuilder&gt; routes() {
+        <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">return</strong> Arrays.asList(myRouteBuilder, myAnotherRouteBuilder);
+    }
+
+}</pre><p>Starting from Camel 2.13.0 you can skip the <span class="strong"><strong>routes()</strong></span> definition, and
+fall back to the <span class="strong"><strong>RouteBuilder</strong></span> instances located in the Spring context.</p><pre class="programlisting"><em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Configuration</span></em>
+<em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@ComponentScan("com.example.routes")</span></em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> MyRouteConfiguration <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> CamelConfiguration {
+}</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SpringJavaConfig-Testing"></a>Testing</h2></div></div></div><p>Since <span class="strong"><strong>Camel 2.11.0</strong></span> you can use the <code class="literal">CamelSpringJUnit4ClassRunner</code> with
+<code class="literal">CamelSpringDelegatingTestContextLoader</code>. This is the recommended way to
+test Java Config and Camel integration.</p><p>If you wish to create a collection of <span class="strong"><strong>RouteBuilder</strong></span> instances then
+derive from the <span class="strong"><strong>CamelConfiguration</strong></span> helper class and implement the
+<span class="strong"><strong>routes()</strong></span> method. Keep in mind that (starting from the Camel 2.13.0) if
+you don&#8217;t override <span class="strong"><strong>routes()</strong></span> method, then <span class="strong"><strong>CamelConfiguration</strong></span> will use
+all <span class="strong"><strong>RouteBuilder</strong></span> instances available in the Spring context.</p><p>The following
+<a class="link" href="http://svn.apache.org/repos/asf/camel/trunk/components/camel-spring-javaconfig/src/test/java/org/apache/camel/spring/javaconfig/patterns/FilterTest.java" target="_top">example
+using Java Config</a> demonstrates how to test Java Config integration with
+Camel 2.10 and lower. Keep in mind that <code class="literal">JavaConfigContextLoader</code> is
+deprecated and could be removed in the future versions of Camel on the
+behalf of the <code class="literal">CamelSpringDelegatingTestContextLoader</code>.</p><p>The <span class="strong"><strong>@ContextConfiguration</strong></span> annotation tells the
+<a class="link" href="spring-testing.html" target="_top">Spring Testing</a> framework to load the
+<span class="strong"><strong>ContextConfig</strong></span> class as the configuration to use. This class derives
+from <span class="strong"><strong>SingleRouteCamelConfiguration</strong></span> which is a helper Spring Java
+Config class which will configure the CamelContext for us and then
+register the RouteBuilder we create.</p></div></div></body></html>

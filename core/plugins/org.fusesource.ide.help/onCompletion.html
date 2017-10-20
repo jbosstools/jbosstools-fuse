@@ -1,35 +1,33 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>On Completion</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderControlFlowRef.html" title="Control Flow"><link rel="prev" href="loop.html" title="Loop"><link rel="next" href="onException.html" title="On Exception"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="onCompletion"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>On Completion &#8212; Task to be executed when normal route processing completes</p></div><div class="refsection"><a name="d0e29822"></a><h2>Usage</h2><p>The On Completion pattern defines a set of steps that are executed when normal route
-      processing is completed. It can either be scoped local to a specific route or globally for all
-      routes defined in the context.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Locally scoped On Completion patterns take precedent over globally scoped ones.
-        Therefore, the globally scoped pattern will not be executed when a locally scoped On
-        Completion pattern exists.</p></td></tr></table></div><p>When specifying a locally scoped On Completion pattern, the pattern directly follows the
-        <code class="code">from</code> endpoint in the route.</p><p>When specifying a globally scoped On Completion pattern, the pattern starts a new
-      route.</p></div><div class="refsection"><a name="d0e29837"></a><h2>Properties</h2><p><a class="xref" href="onCompletion.html#RiderOnCompletionRefTbl1" title="Table&nbsp;42.&nbsp;On Completion Properties">Table&nbsp;42</a> describes the properties you can specify 
-    using the properties editor.</p><div class="table"><a name="RiderOnCompletionRefTbl1"></a><p class="title"><b>Table&nbsp;42.&nbsp;On Completion Properties</b></p><div class="table-contents"><table summary="On Completion Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><span class="property">Description</span></td><td>Specifies a text description for the node. This description is included in the
-              generated XML file, but it is informational only. It is not used by Apache Camel.</td></tr><tr><td><span class="property">Executor Service Ref</span></td><td>Specifies a reference for looking up the 
-                  <code class="interfacename">executorService</code> to use for 
-                  thread pool management.</td></tr><tr><td><span class="property">Id</span></td><td><p>Specifies a unique identifier for the endpoint.</p>
-                    <p>The tooling automatically generates an id for a node when it is
-                        created, but you can remove  that id or replace it with your own.
-                        The Camel debugger requires all nodes with a breakpoint set to have
-                        a unique id.</p>
-                    <p>You can use the id to refer to endpoints in your Camel XML
-                        file.</p></td></tr><tr><td><span class="property">Mode</span></td><td><p>Specifies when the <span class="property">onCompletion</span> task runs.</p>
-                <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">AfterConsumer</code>&#8212;[<span class="bold"><strong>Default</strong></span>] runs after
-                                        the route consumer writes its response back to the
-                                        callee.</p></li><li class="listitem"><p><code class="literal">BeforeConsumer</code>&#8212;runs before the route consumer writes its response
-                                        back to the callee (if the exchange pattern is
-                                            <span class="property">InOut</span>). This option enables the
-                                            <span class="property">onCompletion</span> task to modify the
-                                        exchange (for example, to add special headers).</p></li></ul></div>
-            </td></tr><tr><td><span class="property">On Complete Only</span></td><td>Specifies whether the path will be taken only if message processing completes
-              successfully. Cannot be enabled if <span class="property">On Failure Only</span> is enabled.
-              The default is <em class="replaceable"><code>Disabled</code></em>.
-            </td></tr><tr><td><span class="property">On Failure Only</span></td><td>Specifies whether the path will be taken only if message processing fails. Cannot
-              be enabled if <span class="property">On Complete Only</span> is enabled. The default is
-              <em class="replaceable"><code>Disabled</code></em>.</td></tr><tr><td><span class="property">On When</span></td><td>Sets an additional logic that should be true before the OnCompletion is triggered. It is used for fine grained controlling whether a completion callback should be invoked or not.</td></tr><tr><td><span class="property">Parallel Processing</span></td><td>Specifies whether the aggregate method on the <span class="property">AggregationStrategy</span> can be
-                            called concurrently.</td></tr><tr><td><span class="property">Use Original Message Policy</span></td><td>Specifies whether the message that began the route is placed in the dead letter
+   <title>On Completion</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEIPRef.html" title="Part&nbsp;IV.&nbsp;Enterprise Integration Pattern Reference"><link rel="prev" href="loop.html" title="Loop"><link rel="next" href="onException.html" title="On Exception"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="onCompletion"></a>On Completion</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="onCompletion.html#_usage_30">Usage</a></span></dt><dt><span class="section"><a href="onCompletion.html#_properties_28">Properties</a></span></dt></dl></div><p>Task to be executed when normal route processing completes</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_usage_30"></a>Usage</h2></div></div></div><p>The On Completion pattern defines a set of steps that are executed when normal route
+processing is completed. It can either be scoped local to a specific route or globally for all
+routes defined in the context.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Locally scoped On Completion patterns take precedent over globally scoped ones.
+Therefore, the globally scoped pattern will not be executed when a locally scoped On
+Completion pattern exists.</p></td></tr></table></div><p>When specifying a locally scoped On Completion pattern, the pattern directly follows the
+<code class="literal">from</code> endpoint in the route.</p><p>When specifying a globally scoped On Completion pattern, the pattern starts a new
+route.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_properties_28"></a>Properties</h2></div></div></div><p><a class="xref" href="onCompletion.html#RiderOnCompletionRefTbl1" title="Table&nbsp;66.&nbsp;On Completion Properties">Table&nbsp;66, &#8220;On Completion Properties&#8221;</a> describes the properties you can specify
+using the properties editor.</p><div class="table"><a name="RiderOnCompletionRefTbl1"></a><p class="title"><b>Table&nbsp;66.&nbsp;On Completion Properties</b></p><div class="table-contents"><table summary="On Completion Properties" border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">Description</code></p></td><td align="left" valign="top"><p>Specifies a text description for the node. This description is included in the
+              generated XML file, but it is informational only. It is not used by Apache Camel.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Executor Service Ref</code></p></td><td align="left" valign="top"><p>Specifies a reference for looking up the
+                  executorService to use for
+                  thread pool management.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Id</code></p></td><td align="left" valign="top"><p>Specifies a unique identifier for the endpoint.</p>
+<p>The tooling automatically generates an id for a node when it is
+created, but you can remove that id or replace it with your own.
+The Camel debugger requires all nodes with a breakpoint set to have
+a unique id.</p>
+<p>You can use the id to refer to endpoints in your Camel XML
+file.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Mode</code></p></td><td align="left" valign="top"><p>Specifies when the <code class="literal">onCompletion</code> task runs.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">AfterConsumer</code>&#8201;&#8212;&#8201;[<span class="strong"><strong>Default</strong></span>] runs after
+the route consumer writes its response back to the
+callee.</li><li class="listitem"><code class="literal">BeforeConsumer</code>&#8201;&#8212;&#8201;runs before the route consumer writes its response
+back to the callee (if the exchange pattern is
+<code class="literal">InOut</code>). This option enables the
+<code class="literal">onCompletion</code> task to modify the
+exchange (for example, to add special headers).</li></ul></div></td></tr><tr><td align="left" valign="top"><p><code class="literal">On Complete Only</code></p></td><td align="left" valign="top"><p>Specifies whether the path will be taken only if message processing completes
+              successfully. Cannot be enabled if <code class="literal">On Failure Only</code> is enabled.
+              The default is <span class="emphasis"><em>Disabled</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">On Failure Only</code></p></td><td align="left" valign="top"><p>Specifies whether the path will be taken only if message processing fails. Cannot
+              be enabled if <code class="literal">On Complete Only</code> is enabled. The default is
+              <span class="emphasis"><em>Disabled</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">On When</code></p></td><td align="left" valign="top"><p>Sets an additional logic that should be true before the OnCompletion is triggered. It is used for fine grained controlling whether a completion callback should be invoked or not.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Parallel Processing</code></p></td><td align="left" valign="top"><p>Specifies whether the aggregate method on the <code class="literal">AggregationStrategy</code> can be
+                            called concurrently.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Use Original Message Policy</code></p></td><td align="left" valign="top"><p>Specifies whether the message that began the route is placed in the dead letter
               queue instead of the message that caused the exception. The default is
-              <em class="replaceable"><code>Disabled</code></em>.</td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>
+              <span class="emphasis"><em>Disabled</em></span>.</p></td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>

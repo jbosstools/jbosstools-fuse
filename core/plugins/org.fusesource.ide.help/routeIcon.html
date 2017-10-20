@@ -1,88 +1,55 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Route</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderRouteRef.html" title="Routing"><link rel="prev" href="resequence.html" title="Resequence"><link rel="next" href="routingSlip.html" title="Routing Slip"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="routeIcon"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Route &#8212; Contains all elements that make up an individual route in a routing
-            context</p></div><div class="refsection"><a name="d0e28495"></a><h2>Usage</h2><p>The Route pattern represents the <code class="code">&lt;route/&gt;</code> element within the
-                <code class="code">&lt;camelContext/&gt;</code> element in a routing context file. You can insert
-            multiple Route patterns inside the <code class="code">&lt;camelContext/&gt;</code> element to build a
-            multiple route project.</p><p>All route-building patterns and components must be placed on the canvas within a Route
-            node.</p></div><div class="refsection"><a name="d0e28511"></a><h2>Properties</h2><p><a class="xref" href="routeIcon.html#RiderRouteRefTbl" title="Table&nbsp;28.&nbsp;Route Properties">Table&nbsp;28</a> describes the
-            properties you can specify for a route using the <span class="guilabel">Properties</span>
-            editor.</p><div class="table"><a name="RiderRouteRefTbl"></a><p class="title"><b>Table&nbsp;28.&nbsp;Route Properties</b></p><div class="table-contents"><table summary="Route Properties" width="100%" border="1"><colgroup><col width="22%" class="c1"><col width="78%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
-                            <span class="property">Auto Startup</span>
-                        </td><td>
-                            <p>Specifies whether to start the route automatically when Camel
-                                starts up. The default is <em class="replaceable"><code>true</code></em>.</p>
-                        </td></tr><tr><td>
-                            <span class="property">Delayer</span>
-                        </td><td>Specifies a delay, in milliseconds, that slows down message
+   <title>Route</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEIPRef.html" title="Part&nbsp;IV.&nbsp;Enterprise Integration Pattern Reference"><link rel="prev" href="resequence.html" title="Resequence"><link rel="next" href="routingSlip.html" title="Routing Slip"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="routeIcon"></a>Route</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="routeIcon.html#_usage_16">Usage</a></span></dt><dt><span class="section"><a href="routeIcon.html#_properties_14">Properties</a></span></dt><dt><span class="section"><a href="routeIcon.html#_related_topics_36">Related topics</a></span></dt></dl></div><p>Contains all elements that make up an individual route in a routing context</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_usage_16"></a>Usage</h2></div></div></div><p>The Route pattern represents the <code class="literal">&lt;route/&gt;</code> element within the
+<code class="literal">&lt;camelContext/&gt;</code> element in a routing context file. You can insert
+multiple Route patterns inside the <code class="literal">&lt;camelContext/&gt;</code> element to build a
+multiple route project.</p><p>All route-building patterns and components must be placed on the canvas within a Route
+node.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_properties_14"></a>Properties</h2></div></div></div><p><a class="xref" href="routeIcon.html#RiderRouteRefTbl" title="Table&nbsp;52.&nbsp;Route Properties">Table&nbsp;52, &#8220;Route Properties&#8221;</a> describes the
+properties you can specify for a route using the <code class="literal">Properties</code>
+editor.</p><div class="table"><a name="RiderRouteRefTbl"></a><p class="title"><b>Table&nbsp;52.&nbsp;Route Properties</b></p><div class="table-contents"><table summary="Route Properties" border="1"><colgroup><col width="50%" class="col_1"><col width="50%" class="col_2"></colgroup><thead><tr><th align="left" valign="top">Name</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p><code class="literal">Auto Startup</code></p></td><td align="left" valign="top"><p>Specifies whether to start the route automatically when Camel
+starts up. The default is <span class="emphasis"><em>true</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Delayer</code></p></td><td align="left" valign="top"><p>Specifies a delay, in milliseconds, that slows down message
                             processing. This is useful during debugging, making it easier to inspect
                             the logs while tracking messages. The default is
-                                <em class="replaceable"><code>0</code></em>.</td></tr><tr><td>
-                            <span class="property">Description</span>
-                        </td><td>Specifies a textual description for the route. This description is
+                                <span class="emphasis"><em>0</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Description</code></p></td><td align="left" valign="top"><p>Specifies a textual description for the route. This description is
                             included in the generated XML file, but it is informational only. It is
-                            not used by Apache Camel.</td></tr><tr><td>
-                            <span class="property">Error Handler Ref</span>
-                        </td><td>Specifies a reference to a bean that defines and applies an error
-                            handler.</td></tr><tr><td>
-                            <span class="property">Group</span>
-                        </td><td>Specifies the name of a group of which the route is a member. This
-                            property is informational only. It is not used by Apache Camel.</td></tr><tr><td>
-                            <span class="property">Handle Fault</span>
-                        </td><td>Specifies whether to convert fault messages into exceptions. Intended
+                            not used by Apache Camel.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Error Handler Ref</code></p></td><td align="left" valign="top"><p>Specifies a reference to a bean that defines and applies an error
+                            handler.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Group</code></p></td><td align="left" valign="top"><p>Specifies the name of a group of which the route is a member. This
+                            property is informational only. It is not used by Apache Camel.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Handle Fault</code></p></td><td align="left" valign="top"><p>Specifies whether to convert fault messages into exceptions. Intended
                             for applications deployed into a JBI container, so the Camel error
                             handler can react to faults. The default is
-                                <em class="replaceable"><code>false</code></em>.</td></tr><tr><td>
-                            <span class="property">Id</span>
-                        </td><td>[<span class="bold"><strong>Required</strong></span>] Specifies a unique id for
+                                <span class="emphasis"><em>false</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Id</code></p></td><td align="left" valign="top"><p>[<span class="strong"><strong>Required</strong></span>] Specifies a unique id for
                             the route. This id appears in the generated XML in Source view,  on the
                             label of the route node on the canvas, and in log entries. The tooling
                             automatically generates and assigns a default Id, but you can change
-                            it.</td></tr><tr><td>
-                            <span class="property">Message History</span>
-                        </td><td>Specifies whether to enable/disable Message History. When enabled,
+                            it.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Message History</code></p></td><td align="left" valign="top"><p>Specifies whether to enable/disable Message History. When enabled,
                             Apache Camel captures how the exchange is routed as an
-                                <code class="filename">org.apache.camel.MessageHistory</code> entity that is
+                                <code class="literal">org.apache.camel.MessageHistory</code> entity that is
                             stored on the exchange. This information can be retrieved through Java
                             code or through the error handler exhausted exceptions logs. For
                             details, see <a class="link" href="https://camel.apache.org/message-history.html" target="_top">Apache
                                 Camel: Message History</a> The default is
-                                <em class="replaceable"><code>true</code></em>. </td></tr><tr><td>
-                            <span class="property">Route Policy Ref</span>
-                        </td><td>Specifies a reference to a bean that defines and applies a policy
+                                <span class="emphasis"><em>true</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Route Policy Ref</code></p></td><td align="left" valign="top"><p>Specifies a reference to a bean that defines and applies a policy
                             that controls routes at runtime. The bean can implement any logic that
-                            you want Apache Camel to invoke at route startup or at route shutdown. </td></tr><tr><td>
-                            <span class="property">Shutdown Route</span>
-                        </td><td><p>Specifies how to gracefully shut down the route. The options are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><em class="replaceable"><code>Default</code></em>&#8212;Shuts the route down as soon as possible, but waits a
-                                            timeout period of 300 seconds for any inflight and
-                                            pending messages to complete. After the timeout period,
-                                            it forces the route and its services to shutdown
-                                            immediately.</p></li><li class="listitem"><p><em class="replaceable"><code>Defer</code></em>&#8212;For use when an internal route depends on another. This option defers shutdown
-                                            until all inflight exchanges have completed, and allows
-                                            the route to remain active through the graceful shutdown
-                                            timeout period.</p></li></ul></div>
-                        </td></tr><tr><td>
-                            <span class="property">Shutdown Running Task</span>
-                        </td><td><p>Specifies how to shut down a running task, and determines how a route consumer behaves during
-                                the shutdown. The options are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><em class="replaceable"><code>Complete Current Task
-                                            Only</code></em>&#8212;[Default] The route consumer
-                                            shut down as soon as the current, in-progress task
-                                            (message) has been completed.</p></li><li class="listitem"><p><em class="replaceable"><code>Complete All
-                                            Tasks</code></em>&#8212;For use with batch consumers
-                                            that operate on many messages in batch. The route
-                                            consumer shuts down after all pending tasks (messages)
-                                            have been completed.</p></li></ul></div>
-                        </td></tr><tr><td>
-                            <span class="property">Startup Order</span>
-                        </td><td>Configures the ordering of the routes being started.</td></tr><tr><td>
-                            <span class="property">Stream Cache</span>
-                        </td><td>Specifies whether to cache streams that otherwise could not be
+                            you want Apache Camel to invoke at route startup or at route shutdown.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Shutdown Route</code></p></td><td align="left" valign="top"><p>Specifies how to gracefully shut down the route. The options are:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="emphasis"><em>Default</em></span>&#8201;&#8212;&#8201;Shuts the route down as soon as possible, but waits a
+timeout period of 300 seconds for any inflight and
+pending messages to complete. After the timeout period,
+it forces the route and its services to shutdown
+immediately.</li><li class="listitem"><span class="emphasis"><em>Defer</em></span>&#8201;&#8212;&#8201;For use when an internal route depends on another. This option defers shutdown
+until all inflight exchanges have completed, and allows
+the route to remain active through the graceful shutdown
+timeout period.</li></ul></div></td></tr><tr><td align="left" valign="top"><p><code class="literal">Shutdown Running Task</code></p></td><td align="left" valign="top"><p>Specifies how to shut down a running task, and determines how a route consumer behaves during
+the shutdown. The options are:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><span class="emphasis"><em>Complete Current Task
+Only</em></span>&#8201;&#8212;&#8201;[Default] The route consumer
+shut down as soon as the current, in-progress task
+(message) has been completed.</li><li class="listitem"><span class="emphasis"><em>Complete All
+Tasks</em></span>&#8201;&#8212;&#8201;For use with batch consumers
+that operate on many messages in batch. The route
+consumer shuts down after all pending tasks (messages)
+have been completed.</li></ul></div></td></tr><tr><td align="left" valign="top"><p><code class="literal">Startup Order</code></p></td><td align="left" valign="top"><p>Configures the ordering of the routes being started.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Stream Cache</code></p></td><td align="left" valign="top"><p>Specifies whether to cache streams that otherwise could not be
                             accessed multiple times. This is necessary for implementing redelivery
                             during error handling, which requires reading the stream multiple times.
-                            The default is <em class="replaceable"><code>false</code></em>.</td></tr><tr><td>
-                            <span class="property">Trace</span>
-                        </td><td>Specifies whether to trace the path of an exchange through a
+                            The default is <span class="emphasis"><em>false</em></span>.</p></td></tr><tr><td align="left" valign="top"><p><code class="literal">Trace</code></p></td><td align="left" valign="top"><p>Specifies whether to trace the path of an exchange through a
                             particular route. The default is
-                            <em class="replaceable"><code>false</code></em>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28702"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
-                <a href="RiderNewRoute.html" class="olink">Adding routes to the routing context</a>
-            </td></tr></table></div></div></body></html>
+                            <span class="emphasis"><em>false</em></span>.</p></td></tr></tbody></table></div></div><br class="table-break"></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_related_topics_36"></a>Related topics</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><a href="RiderNewRoute.html" class="olink">Adding routes to the routing context</a></li></ul></div></div></div></body></html>

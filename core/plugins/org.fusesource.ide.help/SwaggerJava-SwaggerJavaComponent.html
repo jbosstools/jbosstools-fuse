@@ -1,0 +1,140 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Swagger Java Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Part&nbsp;V.&nbsp;Apache Camel Component Reference"><link rel="prev" href="Stub-StubComponent.html" title="Stub Component"><link rel="next" href="Telegram-TelegramComponent.html" title="Telegram Component"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="SwaggerJava-SwaggerJavaComponent"></a>Swagger Java Component</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-UsingSwaggerasaServlet">Using Swagger as a Servlet</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-UsingSwaggerinrest-dsl">Using Swagger in rest-dsl</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-Options">Options</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-CorsFilter">CorsFilter</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-ContextIdListingenabled">ContextIdListing enabled</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-JSonorYaml">JSon or Yaml</a></span></dt><dt><span class="section"><a href="SwaggerJava-SwaggerJavaComponent.html#SwaggerJava-Examples">Examples</a></span></dt></dl></div><p><span class="strong"><strong>Available as of Camel 2.16</strong></span></p><p>The &nbsp;<a class="link" href="rest-dsl.html" target="_top">Rest DSL</a>&nbsp;can be integrated with
+the&nbsp;<code class="literal">camel-swagger-java</code>&nbsp;module which is used for exposing the REST
+services and their APIs using <a class="link" href="http://swagger.io/" target="_top">Swagger</a>.</p><p>Maven users will need to add the following dependency to
+their&nbsp;<code class="literal">pom.xml</code>&nbsp;for this component:</p><p>From&nbsp;<span class="strong"><strong>Camel 2.16</strong></span> onwards the swagger component is purely Java based,
+and its&nbsp;</p><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-swagger-java&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;</pre><p>The camel-swagger-java module can be used as a Servlet or directly from
+the REST components (without the need for servlet)</p><p>For an example see the&nbsp;<code class="literal">camel-example-swagger-cdi</code> in the examples
+directory of the Apache Camel distribution.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-UsingSwaggerasaServlet"></a>Using Swagger as a Servlet</h2></div></div></div><p>You configure the swagger in the web.xml as shown below:</p><pre class="programlisting">  &lt;servlet&gt;
+&nbsp;
+    &lt;servlet-name&gt;SwaggerServlet&lt;/servlet-name&gt;
+    &lt;servlet-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>&gt;org.apache.camel.swagger.servlet.RestSwaggerServlet&lt;/servlet-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>&gt;
+
+    &lt;init-param&gt;
+      &lt;!-- we specify the base.path using relative notation, that means the actual path will be calculated at runtime as
+           http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//server:port/contextpath/rest --&gt;</em>
+      &lt;param-name&gt;base.path&lt;/param-name&gt;
+      &lt;param-value&gt;rest&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;!-- we specify the api.path using relative notation, that means the actual path will be calculated at runtime as
+           http:<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">//server:port/contextpath/api-docs --&gt;</em>
+      &lt;param-name&gt;api.path&lt;/param-name&gt;
+      &lt;param-value&gt;api-docs&lt;/param-value&gt;
+    &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+      &lt;param-name&gt;api.version&lt;/param-name&gt;
+      &lt;param-value&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1.2</span>.<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">3</span>&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;api.title&lt;/param-name&gt;
+      &lt;param-value&gt;User Services&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;api.description&lt;/param-name&gt;
+      &lt;param-value&gt;Camel Rest Example with Swagger that provides an User REST service&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">1</span>&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+
+  &lt;!-- swagger api --&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;SwaggerServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/api-docs<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;</em></pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-UsingSwaggerinrest-dsl"></a>Using Swagger in rest-dsl</h2></div></div></div><p>You can enable the swagger api from the rest-dsl by configuring the
+<code class="literal">apiContextPath</code>&nbsp;dsl as shown below:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong> UserRouteBuilder <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">extends</strong> RouteBuilder {
+    <em xmlns="http://www.w3.org/1999/xhtml"><span class="hl-annotation" style="color: gray">@Override</span></em>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">public</strong> <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">void</strong> configure() <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">throws</strong> Exception {
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// configure we want to use servlet as the component for the rest DSL</em>
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// and we enable json binding mode</em>
+        restConfiguration().component(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"netty4-http"</em></strong>).bindingMode(RestBindingMode.json)
+            <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// and output using pretty print</em>
+            .dataFormatProperty(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"prettyPrint"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"true"</em></strong>)
+            <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// setup context path and port number that netty will use</em>
+            .contextPath(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"/"</em></strong>).port(<span xmlns="http://www.w3.org/1999/xhtml" class="hl-number">8080</span>)
+            <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// add swagger api-doc out of the box</em>
+            .apiContextPath(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"/api-doc"</em></strong>)
+                .apiProperty(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"api.title"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"User API"</em></strong>).apiProperty(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"api.version"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"1.2.3"</em></strong>)
+                <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// and enable CORS</em>
+                .apiProperty(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"cors"</em></strong>, <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"true"</em></strong>);
+
+        <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">// this user REST service is json only</em>
+        rest(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"/user"</em></strong>).description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"User rest service"</em></strong>)
+            .consumes(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"application/json"</em></strong>).produces(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"application/json"</em></strong>)
+            .get(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"/{id}"</em></strong>).description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Find user by id"</em></strong>).outType(User.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>)
+                .param().name(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"id"</em></strong>).type(path).description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"The id of the user to get"</em></strong>).dataType(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"int"</em></strong>).endParam()
+                .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"bean:userService?method=getUser(${header.id})"</em></strong>)
+            .put().description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Updates or create a user"</em></strong>).type(User.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>)
+                .param().name(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"body"</em></strong>).type(body).description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"The user to update or create"</em></strong>).endParam()
+                .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"bean:userService?method=updateUser"</em></strong>)
+            .get(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"/findAll"</em></strong>).description(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"Find all users"</em></strong>).outTypeList(User.<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>)
+                .to(<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-string"><em style="color:red">"bean:userService?method=listUsers"</em></strong>);
+    }
+}</pre><p>&nbsp;</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-Options"></a>Options</h2></div></div></div><p>The swagger module can be configured using the following options. To
+configure using a servlet you use the init-param as shown above. When
+configuring directly in the rest-dsl, you use the appropriate method,
+such as <code class="literal">enableCORS</code>,&nbsp;<code class="literal">host,contextPath</code>,&nbsp;dsl. The options
+with&nbsp;<code class="literal">api.xxx</code> is configured using&nbsp;<code class="literal">apiProperty</code> dsl.</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="10%" class="col_1"><col width="10%" class="col_2"><col width="80%" class="col_3"></colgroup><thead><tr><th align="left" valign="top">Option</th><th align="left" valign="top">Type</th><th align="left" valign="top">Description</th></tr></thead><tbody><tr><td align="left" valign="top"><p>cors</p></td><td align="left" valign="top"><p>Boolean</p></td><td align="left" valign="top"><p>Whether to enable CORS. Notice this only enables CORS for the api
+browser, and not the actual access to the REST services. Is default
+false. Instead of using this option is recommended to use the CorsFilte, see
+further below.</p></td></tr><tr><td align="left" valign="top"><p>swagger.version</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>Swagger spec version. Is default 2.0.</p></td></tr><tr><td align="left" valign="top"><p>host</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>To setup the hostname. If not configured camel-swagger-java will
+calculate the name as localhost based.</p></td></tr><tr><td align="left" valign="top"><p>schemas</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The protocol schemes to use. Multiple values can be separated by comma
+such as "http,https". The default value is "http". This option is
+<span class="strong"><strong>deprecated</strong></span> from Camel 2.17 onwards due it should have been named
+schemes.</p></td></tr><tr><td align="left" valign="top"><p>schemes</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p><span class="strong"><strong>Camel 2.17:</strong></span> The protocol schemes to use. Multiple values can be
+separated by comma such as "http,https". The default value is "http".</p></td></tr><tr><td align="left" valign="top"><p>base.path</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p><span class="strong"><strong>Required</strong></span>: To setup the base path where the REST services is available.
+The path is relative (eg do not start with http/https) and
+camel-swagger-java will calculate the absolute base path at runtime,
+which will be <code class="literal">protocol://host:port/context-path/base.path</code></p></td></tr><tr><td align="left" valign="top"><p>api.path</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>To setup the path where the API is available (eg /api-docs). The path is
+relative (eg do not start with http/https) and camel-swagger-java will
+calculate the absolute base path at runtime, which will be <code class="literal">protocol://host:port/context-path/api.path</code>
+So using relative paths is much easier. See above for an example.</p></td></tr><tr><td align="left" valign="top"><p>api.version</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The version of the api. Is default 0.0.0.</p></td></tr><tr><td align="left" valign="top"><p>api.title</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The title of the application.</p></td></tr><tr><td align="left" valign="top"><p>api.description</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A short description of the application.</p></td></tr><tr><td align="left" valign="top"><p>api.termsOfService</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A URL to the Terms of Service of the API.</p></td></tr><tr><td align="left" valign="top"><p>api.contact.name</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>Name of person or organization to contact</p></td></tr><tr><td align="left" valign="top"><p>api.contact.email</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>An email to be used for API-related correspondence.</p></td></tr><tr><td align="left" valign="top"><p>api.contact.url</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A URL to a website for more contact information.</p></td></tr><tr><td align="left" valign="top"><p>api.license.name</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>The license name used for the API.</p></td></tr><tr><td align="left" valign="top"><p>api.license.url</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A URL to the license used for the API.</p></td></tr><tr><td align="left" valign="top"><p>apiContextIdListing</p></td><td align="left" valign="top"><p>boolean</p></td><td align="left" valign="top"><p>Whether to allow listing all the CamelContext names in the JVM that has
+REST services. When enabled then the root path of the api-doc will list
+all the contexts. When disabled then no context ids is listed and the
+root path of the api-doc lists the current CamelContext. Is default
+false.</p></td></tr><tr><td align="left" valign="top"><p>apiContextIdPattern</p></td><td align="left" valign="top"><p>String</p></td><td align="left" valign="top"><p>A pattern that allows to filter which CamelContext names is shown in the
+context listing. The pattern is using regular expression and * as
+wildcard. Its the same pattern matching as used by
+<a class="link" href="intercept.html" target="_top">Intercept</a></p></td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-CorsFilter"></a>CorsFilter</h2></div></div></div><p>If you use the swagger ui to view the REST api then you likely need to
+enable support for CORS. This is needed if the swagger ui is hosted and
+running on another hostname/port than the actual REST apis. When doing
+this the swagger ui needs to be allowed to access the REST resources
+across the origin (CORS). The CorsFilter adds the necessary HTTP headers
+to enable CORS.</p><p>To use CORS adds the following filter
+<code class="literal">org.apache.camel.swagger.servlet.RestSwaggerCorsFilter</code> to your
+web.xml.</p><pre class="programlisting">  &lt;!-- enable CORS filter so people can use swagger ui to browse and test the apis --&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;RestSwaggerCorsFilter&lt;/filter-name&gt;
+    &lt;filter-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>&gt;org.apache.camel.swagger.servlet.RestSwaggerCorsFilter&lt;/filter-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-keyword">class</strong>&gt;
+  &lt;/filter&gt;
+
+
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;RestSwaggerCorsFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/api-docs<em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">/*&lt;/url-pattern&gt;
+    &lt;url-pattern&gt;/rest/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;</em></pre><p>The CorsFilter sets the following headers for all requests</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">Access-Control-Allow-Origin = *</li><li class="listitem">Access-Control-Allow-Methods =&nbsp;GET, HEAD, POST, PUT, DELETE, TRACE,
+OPTIONS, CONNECT, PATCH</li><li class="listitem">Access-Control-Max-Age = 3600</li><li class="listitem">Access-Control-Allow-Headers =&nbsp;Origin, Accept, X-Requested-With,
+Content-Type, Access-Control-Request-Method,
+Access-Control-Request-Headers</li></ul></div><p>Notice this is a very simple CORS filter. You may need to use a more
+sophisticated filter to set the header values differently for a given
+client. Or block certain clients etc.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-ContextIdListingenabled"></a>ContextIdListing enabled</h2></div></div></div><p>When contextIdListing is enabled then its detecting all the running
+CamelContexts in the same JVM. These contexts are listed in the root
+path, eg <code class="literal">/api-docs</code> as a simple list of names in json format. To access
+the swagger documentation then the context-path must be appended with
+the Camel context id, such as <code class="literal">api-docs/myCamel</code>. The
+option&nbsp;apiContextIdPattern can be used to filter the names in this list.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-JSonorYaml"></a>JSon or Yaml</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.17</strong></span></p><p>The camel-swagger-java module supports both JSon and Yaml out of the
+box. You can specify in the request url what you want returned by using
+/swagger.json or /swagger.yaml for either one. If none is specified then
+the HTTP Accept header is used to detect if json or yaml can be
+accepted. If either both is accepted or none was set as accepted then
+json is returned as the default format.</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SwaggerJava-Examples"></a>Examples</h2></div></div></div><p>In the Apache Camel distribution we ship
+the&nbsp;<code class="literal">camel-example-swagger-cdi</code>&nbsp;and <code class="literal">camel-example-swagger-java</code>&nbsp;which
+demonstrates using this Swagger component.</p></div></div></body></html>

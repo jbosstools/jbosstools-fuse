@@ -1,0 +1,15 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Generic</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderEIPRef.html" title="Part&nbsp;IV.&nbsp;Enterprise Integration Pattern Reference"><link rel="prev" href="RefIntroToEIP.html" title="Route Editor Patterns"><link rel="next" href="bean.html" title="Bean"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="endpoint"></a>Generic</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="endpoint.html#_usage">Usage</a></span></dt></dl></div><p>Provides access to all supported Camel connector endpoints. These endpoints act as either a message source or a message sink.</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_usage"></a>Usage</h2></div></div></div><p>Endpoints can be placed at any point along a route. A route must start with an endpoint
+and typically ends with one.</p><p>Dropping a <code class="literal">Generic</code> component on a Route container in the route
+editor opens the <code class="literal">Select component</code> wizard:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/genericSelCompPaletteOnly.png" alt="genericSelCompPaletteOnly"></div></div><p>By default, the wizard shows only the connector components available in the
+<code class="literal">Palette</code>. To see all supported Camel connector components, clear
+the <code class="literal">Show only palette components</code> check box to disable it:</p><div class="informalfigure"><div class="mediaobject"><img src="./images/genericSelCompAll.png" alt="genericSelCompAll"></div></div><p>Select a component from the list, enter an Id for it in the <code class="literal">Id</code>
+field, and then click <span class="guibutton">Finish</span>.</p><p>The tooling adds the newly defined connector endpoint to the Route container in
+<code class="literal">Design</code> view and populates the <code class="literal">Properties</code>
+editor with the component&#8217;s properties for you to edit. In <code class="literal">Source</code>
+view, you can see that it also updated the routing context file, adding the connector
+endpoint to the <code class="literal">&lt;camelContext&gt;</code> element.</p><p>With the new connector endpoint selected on the canvas, click the
+<code class="literal">Documentation</code> tab on the left side of the
+<code class="literal">Properties</code> editor pane to access detailed information on how to
+configure it.</p></div></div></body></html>
