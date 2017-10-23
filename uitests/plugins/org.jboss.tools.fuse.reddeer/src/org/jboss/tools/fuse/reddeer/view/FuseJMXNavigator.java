@@ -11,12 +11,18 @@
 package org.jboss.tools.fuse.reddeer.view;
 
 import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.core.matcher.WithTooltipTextMatcher;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
 
 /**
  * Performs operations with the Fuse JMX Navigator View
  * 
  * @author tsedmik
+ * @author djelinek
  */
 public class FuseJMXNavigator extends JMXNavigator {
 
@@ -25,7 +31,8 @@ public class FuseJMXNavigator extends JMXNavigator {
 	/**
 	 * Tries to suspend Local Camel Context
 	 * 
-	 * @param path Path to Camel Context in JMX Navigator View
+	 * @param path
+	 *            Path to Camel Context in JMX Navigator View
 	 * @return true - given Camel Context was suspended, false - otherwise
 	 */
 	public boolean suspendCamelContext(String... path) {
@@ -44,7 +51,8 @@ public class FuseJMXNavigator extends JMXNavigator {
 	/**
 	 * Tries to resume Local Camel Context
 	 * 
-	 * @param path Path to Camel Context in JMX Navigator View
+	 * @param path
+	 *            Path to Camel Context in JMX Navigator View
 	 * @return true - given Camel Context was resumed, false - otherwise
 	 */
 	public boolean resumeCamelContext(String... path) {
@@ -59,4 +67,42 @@ public class FuseJMXNavigator extends JMXNavigator {
 		}
 		return true;
 	}
+
+	/**
+	 * Tries to open wizard 'Create JMX Connection'
+	 *
+	 * @author djelinek
+	 * @throws Exception 
+	 */
+	public void clickNewConnection() throws Exception {
+		log.info("Trying to open wizard 'Create JMX Connection'");
+		activate();
+		DefaultToolItem newConnection = new DefaultToolItem(this.cTabItem.getFolder(), "New Connection...");
+		if (newConnection.isEnabled()) {
+			newConnection.click();
+			new WaitUntil(new ShellIsAvailable("Create JMX Connection"));
+			log.info("Wizard 'Create JMX Connection' is open");
+		} else {
+			throw new Exception("Wizard 'Create JMX Connection' could not been open.");
+		}	
+	}
+
+	/**
+	 * Tries to collapse all nodes in JMX Navigator
+	 *
+	 * @author djelinek
+	 * @throws Exception 
+	 */
+	public void collapseAll() throws Exception {
+		log.info("Trying to collapse all nodes in JMX Navigator");
+		activate();
+		DefaultToolItem collapse = new DefaultToolItem(new WithTooltipTextMatcher(new RegexMatcher("Collapse All.*"))); 
+		if (collapse.isEnabled()) {
+			collapse.click();
+			log.info("Nodes were collapsed");
+		} else {
+			throw new Exception("Nodes in JMX Navigator were not collapsed properly.");
+		}
+	}
+
 }

@@ -50,73 +50,64 @@ public class JMXNavigator extends WorkbenchView {
 	}
 
 	/**
-	 * Tries to connect to a specified node under <i>Local Processes</i> in
-	 * <i>JMX Navigator</i> View.
+	 * Tries to connect to a specified node in <i>JMX Navigator</i> View.
 	 * 
 	 * @param name
 	 *            prefix name of the node
 	 * @return the desired node or null if the searched node is not present
 	 */
-	public TreeItem connectTo(String name) {
-
-		log.info("Connecting to '" + name + "'.");
+	public TreeItem connectTo(String... strings) {
+		log.info("Connecting to '" + strings + "'.");
 		open();
 		List<TreeItem> items = new DefaultTree().getItems();
-
 		for (TreeItem item : items) {
-			if (item.getText().equals("Local Processes")) {
+			if (item.getText().equals(strings[0])) {
 				item.expand();
 				items = item.getItems();
 				break;
 			}
 		}
-
 		for (TreeItem item : items) {
-			if (item.getText().contains(name)) {
+			if (item.getText().contains(strings[1])) {
 				item.select();
-				AbstractWait.sleep(TimePeriod.getCustom(2));
+				AbstractWait.sleep(TimePeriod.MEDIUM);
 				try {
 					new ContextMenuItem(CONNECT_CONTEXT_MENU).select();
 				} catch (CoreLayerException ex) {
-					log.info("Already connected to '" + name + "'.");
+					log.info("Already connected to '" + strings[1] + "'.");
 				}
-				AbstractWait.sleep(TimePeriod.getCustom(2));
+				AbstractWait.sleep(TimePeriod.MEDIUM);
 				item.expand();
 				return item;
 			}
 		}
-
 		return null;
 	}
 
 	/**
-	 * Tries to decide if a particular node described with the path is in the
-	 * tree in <i>JMX Navigator</i> View (below the node <i>Local Processes</i>
-	 * ).
+	 * Tries to decide if a particular node described with the path is in the tree in <i>JMX Navigator</i> View.
 	 * 
 	 * @param path
-	 *            Path to the desired node (names of nodes in the tree in <i>JMX
-	 *            Navigator</i> View without the <i>Local Processes</i> node.
+	 *            Path to the desired node (names of nodes in the tree in <i>JMX Navigator</i>.
 	 * @return The node if exists, <b>null</b> - otherwise
 	 */
 	public TreeItem getNode(String... path) {
-
 		activate();
-		if (path == null)
+		if (path == null || path.length == 0)
 			return null;
-		log.info("Accessing child items of 'Local Processes'");
-		List<TreeItem> items = new DefaultTreeItem("Local Processes").getItems();
-		log.info("Child items of 'Local Processes' are: " + logTreeItems(items));
+		log.info("Accessing child items of '" + path[0] + "'");
+		List<TreeItem> items = new DefaultTreeItem(path[0]).getItems();
+		log.info("Child items of '" + path[0] + "' are: " + logTreeItems(items));
 		log.info("Trying to identify the right process");
 		TreeItem rightItem = null;
-		log.info("Looking for '" + path[0] + "' item");
-		rightItem = getTreeItem(items, path[0]);
+		log.info("Looking for '" + path[1] + "' item");
+		rightItem = getTreeItem(items, path[1]);
 		if (rightItem == null) {
 			for (TreeItem item : items) {
-				if (path[0].equals("Local Camel Context") && item.getText().startsWith("maven [")
-						|| path[0].equals("karaf")
-								&& (item.getText().contains("karaf") || item.getText().startsWith("JBoss Fuse"))
-								|| item.getText().contains(path[0])) {
+				if ((path[1].equals("Local Camel Context") && item.getText().startsWith("maven [")
+						|| path[1].equals("karaf")
+								&& (item.getText().contains("karaf") || item.getText().startsWith("JBoss Fuse")) || item.getText().contains(path[1]))
+						|| path[0].equals("User-Defined Connections")) {
 					item.select();
 					item.doubleClick();
 					expand(item);
@@ -128,16 +119,16 @@ public class JMXNavigator extends WorkbenchView {
 				}
 			}
 		} else {
-			log.info("'" + path[0] + "' item was found");
+			log.info("'" + path[1] + "' item was found");
 			rightItem.select();
 			rightItem.doubleClick();
 			expand(rightItem);
 		}
 		if (rightItem == null) {
-			log.warn("'" + path[0] + "' item was NOT found");
+			log.warn("'" + path[1] + "' item was NOT found");
 			return rightItem;
 		}
-		for (int i = 1; i < path.length; i++) {
+		for (int i = 2; i < path.length; i++) {
 			log.info("Looking for '" + path[i] + "'");
 			rightItem = getTreeItem(rightItem.getItems(), path[i]);
 			if (rightItem == null) {
@@ -166,7 +157,6 @@ public class JMXNavigator extends WorkbenchView {
 	}
 
 	private void expand(TreeItem item) {
-
 		for (int i = 0; i < 10; i++) {
 			log.info("Trying to expand '" + item.getText() + "' Tree Item");
 			item.expand();
@@ -181,7 +171,6 @@ public class JMXNavigator extends WorkbenchView {
 	}
 
 	private String logTreeItems(List<TreeItem> items) {
-
 		StringBuilder output = new StringBuilder();
 		output.append("\n");
 		for (TreeItem item : items) {
@@ -199,4 +188,5 @@ public class JMXNavigator extends WorkbenchView {
 		}
 		return null;
 	}
+
 }

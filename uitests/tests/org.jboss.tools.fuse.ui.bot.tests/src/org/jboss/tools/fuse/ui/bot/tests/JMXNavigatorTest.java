@@ -103,9 +103,9 @@ public class JMXNavigatorTest {
 	@Test
 	public void testProcessesView() {
 		String root = camelExample.getConfiguration().getJarFile().getName();
-		assertJMXNode(root, "Camel", "SampleCamel", "Endpoints", "stream", "out");
-		assertJMXNode(root, "Camel", "SampleCamel", "Endpoints", "timer", "hello?period=2000");
-		assertJMXNode(root, "Camel", "SampleCamel", "Routes", "route1", "timer:hello?period={{timer.period}}",
+		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Endpoints", "stream", "out");
+		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Endpoints", "timer", "hello?period=2000");
+		assertJMXNode("Local Processes", root, "Camel", "SampleCamel", "Routes", "route1", "timer:hello?period={{timer.period}}",
 				"Transform transform1", "stream:out");
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
@@ -132,13 +132,13 @@ public class JMXNavigatorTest {
 		CamelExampleRunner runner = camelExample.getRunner();
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.open();
-		assertTrue("Suspension was not performed", jmx.suspendCamelContext(root, "Camel", "SampleCamel"));
+		assertTrue("Suspension was not performed", jmx.suspendCamelContext("Local Processes", root, "Camel", "SampleCamel"));
 		try {
 			runner.waitForOutputWithPattern(IS_SUSPENDED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not suspended!\n" + runner.getOutput());
 		}
-		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext(root, "Camel", "SampleCamel"));
+		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("Local Processes", root, "Camel", "SampleCamel"));
 		try {
 			runner.waitForOutputWithPattern(IS_RESUMED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
