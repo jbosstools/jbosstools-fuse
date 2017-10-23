@@ -143,6 +143,14 @@ public class CamelModelPatcher {
 		applyFixToComponent(loadedModel, "ignite-cache", "ignite-cache:[cacheName]", "ignite-cache:cacheName");
 		applyFixToComponent(loadedModel, "ignite-set", "ignite-set:[name]", "ignite-set:name");
 		applyFixToComponent(loadedModel, "ignite-events", "ignite-events:[endpointId]", "ignite-events:endpointId");
+		applyFixToComponent(loadedModel, "atomix-set", "atomix-set:setName", "atomix-set:resourceName");
+		applyFixToComponent(loadedModel, "atomix-value", "atomix-value:valueName", "atomix-value:resourceName");
+		applyFixToComponent(loadedModel, "atomix-queue", "atomix-queue:queueName", "atomix-queue:resourceName");
+		applyFixToComponent(loadedModel, "atomix-map", "atomix-map:mapName", "atomix-map:resourceName");
+		applyFixToComponent(loadedModel, "atomix-multimap", "atomix-multimap:multiMapName", "atomix-multimap:resourceName");
+		applyFixToComponent(loadedModel, "atomix-messaging", "atomix-messaging:group", "atomix-messaging:resourceName");
+		applyFixToComponent(loadedModel, "iec60870-client", "iec60870-client:endpointUri", "iec60870-client:uriPath");
+		applyFixToComponent(loadedModel, "iec60870-server", "iec60870-server:endpointUri", "iec60870-server:uriPath");
 	}
 
 	private static void applyFixToComponent(CamelModel loadedModel, String componentScheme, String invalidSyntaxBugFromOlderVersion, String correctSyntax) {

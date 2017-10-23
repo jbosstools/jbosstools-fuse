@@ -29,7 +29,6 @@ import org.junit.Test;
  * @author Aurelien Pupier
  *
  */
-// @RunWith(MockitoJUnitRunner.class)
 public class ValidateSyntaxInCatalogIT {
 
 	@Test
