@@ -41,6 +41,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -66,8 +67,7 @@ public class NewDataFormatWizardIT {
 	@Parameter(value = 2)
 	public DataFormat dataFormat;
 	
-	@Rule
-	public FuseProject fuseProject = new FuseProject(NewDataFormatWizardIT.class.getName());
+	public FuseProject fuseProject;
 	
 	public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
 	
@@ -83,6 +83,17 @@ public class NewDataFormatWizardIT {
 		}
 		return res;
 	}
+	
+	@Before
+	public void before() throws Throwable {
+		fuseProject = new FuseProject(NewDataFormatWizardIT.class.getName(), camelVersion);
+		fuseProject.before();
+	}
+	
+	@After
+	public void after() {
+		fuseProject.after();
+	}
 
 	@Test
 	public void testCreationWithDeps() throws CoreException, IOException, InterruptedException, InvocationTargetException {
@@ -94,7 +105,7 @@ public class NewDataFormatWizardIT {
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
 		CamelEditorUIActivator.pluginLog().logInfo("Project created: " + project.getName());
 
-		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject());
+		CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(fuseProject.getProject(), new NullProgressMonitor());
 
 		NewDataFormatWizard newDataFormatWizard = new NewDataFormatWizard(camelFile, camelModel);
 		Element dataFormatNode = newDataFormatWizard.createDataFormatNode(dataFormat, id, new NullProgressMonitor());

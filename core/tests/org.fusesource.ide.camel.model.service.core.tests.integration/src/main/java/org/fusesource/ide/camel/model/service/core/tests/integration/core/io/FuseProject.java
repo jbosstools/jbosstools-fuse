@@ -85,7 +85,7 @@ public class FuseProject extends ExternalResource {
 	}
 
 	@Override
-	protected void before() throws Throwable {
+	public void before() throws Throwable {
 		super.before();
 		IWorkspace ws = ResourcesPlugin.getWorkspace();
 		project = ws.getRoot().getProject(projectName);
@@ -101,7 +101,7 @@ public class FuseProject extends ExternalResource {
 	}
 
 	@Override
-	protected void after() {
+	public void after() {
 		super.after();
 		if (project != null && project.exists()) {
 			try {
