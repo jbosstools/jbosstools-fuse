@@ -204,7 +204,7 @@ public class RegressionTest extends DefaultTest {
 		ProjectFactory.newProject("camel-spring").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(ProjectType.SPRING).create();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		new FuseJMXNavigator().getNode("Local Camel Context", "Camel", "cbr-example-context").select();
+		new FuseJMXNavigator().getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context").select();
 
 		try {
 			new ContextMenuItem("Close Camel Context");

@@ -163,14 +163,14 @@ public class JMXNavigatorServerTest {
 
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.open();
-		assertNotNull("There is no Fuse node in JMX Navigator View!", jmx.getNode("karaf"));
-		jmx.connectTo("karaf");
+		assertNotNull("There is no Fuse node in JMX Navigator View!", jmx.getNode("Local Processes", "karaf"));
+		jmx.connectTo("Local Processes", "karaf");
 		assertNotNull(
 				"The following path is inaccesible: karaf/Camel/cbr-example-context/Endpoints/file/work/cbr/input",
-				jmx.getNode("karaf", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/input"));
+				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/input"));
 		assertNotNull(
 				"The following path is inaccesible: karaf/Camel/camel-*/Routes/cbr-route/file:work/cbr/input/Log _log1/Choice/Otherwise/Log _log4/file:work/cbr/output/others",
-				jmx.getNode("karaf", "Camel", "cbr-example-context", "Routes", "cbr-route", "file:work/cbr/input", "Log _log1",
+				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Routes", "cbr-route", "file:work/cbr/input", "Log _log1",
 						"Choice", "Otherwise", "Log _log4", "file:work/cbr/output/others"));
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
@@ -202,15 +202,15 @@ public class JMXNavigatorServerTest {
 
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.open();
-		String camel = jmx.getNode("karaf", "Camel", "cbr-example-context").getText();
+		String camel = jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context").getText();
 		assertNotNull("Camel context was not found in JMX Navigator View!", camel);
-		assertTrue("Suspension was not performed", jmx.suspendCamelContext("karaf", "Camel", camel));
+		assertTrue("Suspension was not performed", jmx.suspendCamelContext("Local Processes", "karaf", "Camel", camel));
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") is suspended"), TimePeriod.DEFAULT);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not suspended!");
 		}
-		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("karaf", "Camel", camel));
+		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("Local Processes", "karaf", "Camel", camel));
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") resumed"), TimePeriod.DEFAULT);
 		} catch (WaitTimeoutExpiredException e) {
