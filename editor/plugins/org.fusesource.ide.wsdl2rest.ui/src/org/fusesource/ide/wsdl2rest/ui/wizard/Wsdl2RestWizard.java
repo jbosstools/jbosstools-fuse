@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
@@ -78,14 +77,28 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		super.addPages();
 		IProject project = sampleGetSelectedProject();
 		page = new Wsdl2RestWizardPage("page", "Select Incoming WSDL and Location for Generated Output", null);
-		page.setWsdlURL("http://www.webservicex.com/globalweather.asmx?wsdl");
-		page.setOutputPathURL(project.getLocation().toOSString());
+//		page.setWsdlURL("http://www.webservicex.com/globalweather.asmx?wsdl");
+//		page.setWsdlURL("http://www.thomas-bayer.com/axis2/services/BLZService?wsdl");
+		page.setWsdlURL("http://localhost:9292/cxf/order?wsdl");
+		page.setOutputPathURL(project.getLocation().append("reststuff").toOSString());
+		page.setTargetAddress("http://localhost:8080/mycontext");
+		page.setBeanClass("com.demo.order.DemoOrderService");
 		addPage(page);
 	}
 	
     private void generate(final URL wsdlLocation, final String outputPath) throws Exception {
         Path outpath = new File(outputPath).toPath();
-        Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
+        Path contextpath = new File(outputPath + File.pathSeparator + "rest-camel-context.xml").toPath();
+        Wsdl2Rest tool = new Wsdl2Rest(new URL(page.getWsdlURL()), outpath);
+        if (page.getTargetAddress() != null) {
+        	tool.setTargetAddress(new URL(page.getTargetAddress()));
+//        	tool.setTargetAddress(new URL("http://localhost:8080/mycontext"));
+        }
+        if (page.getBeanClass() != null) {
+        	tool.setTargetBean(page.getBeanClass());
+//            tool.setTargetBean("com.demo.order.DemoOrderService");
+        }
+        tool.setTargetContext(contextpath);
 		tool.process();
     }
 
