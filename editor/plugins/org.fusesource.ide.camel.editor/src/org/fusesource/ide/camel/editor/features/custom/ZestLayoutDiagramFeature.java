@@ -185,11 +185,11 @@ public class ZestLayoutDiagramFeature extends AbstractCustomFeature {
      *            The {@link Map} of initial {@link Anchor} location {@link Point} per {@link Connection}s
      */
     private void adaptSelfBendPoints(Map<Connection, Point> selves) {
-        for (Connection connection : selves.keySet()) {
-            Point p = selves.get(connection);
-            FreeFormConnection ffcon = (FreeFormConnection) connection;
+        for (Map.Entry<Connection, Point> entry : selves.entrySet()) {
+            Point p = entry.getValue();
+            FreeFormConnection ffcon = (FreeFormConnection) entry.getKey();
             EList<Point> pointList = ffcon.getBendpoints();
-            AnchorContainer source = connection.getStart().getParent();
+            AnchorContainer source = ffcon.getStart().getParent();
             GraphicsAlgorithm start = source.getGraphicsAlgorithm();
             int deltaX = start.getX() - p.getX();
             int deltaY = start.getY() - p.getY();
