@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.transformation.core.model.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.net.URI;
@@ -145,7 +146,7 @@ public class XmlModelGenerator {
         }
     }
 
-    private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
+    private SchemaCompiler createSchemaCompiler(final File schemaFile) throws FileNotFoundException {
         final SchemaCompiler sc = XJC.createSchemaCompiler();
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
         final InputSource is = new InputSource(schemaStream);

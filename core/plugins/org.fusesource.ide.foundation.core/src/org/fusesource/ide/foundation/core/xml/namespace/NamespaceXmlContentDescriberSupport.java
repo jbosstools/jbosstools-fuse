@@ -37,9 +37,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 	static boolean isProcessed(Map properties) {
 		Boolean result = (Boolean) properties.get(RESULT);
 		// It can be set to false which means that content can't be parsed
-		if (result != null)
-			return true;
-		return false;
+		return result != null;
 	}
 
 	private int checkCriteria(InputSource contents, Map properties) throws IOException {
@@ -48,7 +46,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 		return checkCriteria(properties);
 	}
 
-	private int checkCriteria(Map properties) throws IOException {
+	private int checkCriteria(Map properties) {
 		Boolean result = (Boolean) properties.get(RESULT);
 		if (!result.booleanValue())
 			return INDETERMINATE;
@@ -63,7 +61,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 
 	@Override
 	public int describe(InputStream contents, IContentDescription description) throws IOException {
-		return describe(contents, description, new HashMap());
+		return describe(contents, description, new HashMap<Object, Object>());
 	}
 
 	/**
@@ -81,7 +79,7 @@ public abstract class NamespaceXmlContentDescriberSupport extends XMLContentDesc
 
 	@Override
 	public int describe(Reader contents, IContentDescription description) throws IOException {
-		return describe(contents, description, new HashMap());
+		return describe(contents, description, new HashMap<Object, Object>());
 	}
 
 	/**

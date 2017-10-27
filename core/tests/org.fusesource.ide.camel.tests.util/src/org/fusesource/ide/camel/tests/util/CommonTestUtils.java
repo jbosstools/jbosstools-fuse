@@ -19,6 +19,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.fusesource.ide.branding.perspective.FusePerspective;
@@ -29,14 +30,18 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
  */
 public class CommonTestUtils {
 	
+	private CommonTestUtils() {
+		//static access only
+	}
+	
 	/**
 	 * closes all editors, perspectives, the welcome page and then switches to fuse integration perspective
 	 * and creating a screenshot folder
 	 * 
 	 * @param screenshotFolder	the folder to store screenshots
-	 * @throws Exception
+	 * @throws WorkbenchException Occurs when an error occurred while interacting with the Eclipse Workbench, for instance, an error while opening Fuse Perspective
 	 */
-	public static void prepareIntegrationTestLaunch(String screenshotFolder) throws Exception {
+	public static void prepareIntegrationTestLaunch(String screenshotFolder) throws WorkbenchException {
 		closeAllEditors();
 		enablePerspectiveSwitchPreset();
 		createScreenshotFolder(screenshotFolder);		
@@ -48,10 +53,10 @@ public class CommonTestUtils {
 
 	/**
 	 * opens the fuse integration perspective
+	 * @throws WorkbenchException 
 	 * 
-	 * @throws Exception
 	 */
-	public static void openFuseIntegrationPerspective() throws Exception {
+	public static void openFuseIntegrationPerspective() throws WorkbenchException {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		if (page != null) {
 			PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());

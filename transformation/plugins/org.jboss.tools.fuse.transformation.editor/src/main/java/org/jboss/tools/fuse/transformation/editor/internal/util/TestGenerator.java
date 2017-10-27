@@ -11,6 +11,7 @@
  */
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
@@ -26,6 +27,10 @@ public class TestGenerator {
     private static final String PACKAGE_KEY = "\\$\\[package-name\\]"; //$NON-NLS-1$
     private static final String CLASSNAME_KEY = "\\$\\[test-name\\]"; //$NON-NLS-1$
     private static final String FILENAME_KEY = "\\$\\[camel-name\\]"; //$NON-NLS-1$
+    
+    private TestGenerator() {
+    	// allow only static access
+    }
 
     /**
      * Creates a test class for a transformation endpoint with the specified transform ID.
@@ -36,13 +41,13 @@ public class TestGenerator {
      * @param fileName
      * @param isSpring boolean flag indicating this is spring or blueprint
      * @return The contents of the test class
-     * @throws Exception failed to create the test class
+     * @throws IOException failed to create the test class
      */
     public static String createTransformTestText(String transformId,
             String packageName,
             String className,
             String fileName,
-            boolean isSpring) throws Exception {
+            boolean isSpring) throws IOException {
 
         String template;
         if (isSpring) {
@@ -66,7 +71,7 @@ public class TestGenerator {
         return template;
     }
 
-    private static String readTemplate(String template) throws Exception {
+    private static String readTemplate(String template) throws IOException {
         StringBuilder templateStr = new StringBuilder();
         try (InputStreamReader reader =
                  new InputStreamReader(TestGenerator.class.getClassLoader().getResourceAsStream(template),

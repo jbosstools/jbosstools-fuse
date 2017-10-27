@@ -25,9 +25,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.junit.ui.JUnitPlugin;
@@ -58,8 +57,6 @@ public class NewCamelTestWizard extends JUnitWizard {
 	
 	private NewCamelTestWizardPageOne fPage1;
 
-	private NewCamelTestWizardPageTwo fPage2;
-
 	public NewCamelTestWizard() {
 		super();
 		setWindowTitle(WizardMessages.Wizard_title_new_testcase);
@@ -75,7 +72,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 	public void addPages() {
 		super.addPages();
 
-		fPage2 = new NewCamelTestWizardPageTwo();
+		NewCamelTestWizardPageTwo fPage2 = new NewCamelTestWizardPageTwo();
 		fPage1 = new NewCamelTestWizardPageOne(this, fPage2);
 		addPage(fPage1);
 		addPage(fPage2);
@@ -101,20 +98,14 @@ public class NewCamelTestWizard extends JUnitWizard {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException,
 			InterruptedException {
-				if (monitor == null) {
-					monitor = new NullProgressMonitor();
-				}
-				monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 2);
+				SubMonitor subMonitor = SubMonitor.convert(monitor, WizardMessages.NewTestCaseCreationWizard_create_progress, 2);
 				
 				fPage1.superClassChanged();
-				monitor.worked(1);
+				subMonitor.setWorkRemaining(1);
 				try {
-					fPage1.createType(monitor);
-					monitor.worked(1);
+					fPage1.createType(subMonitor.split(1));
 				} catch (Exception ex) {
 					Activator.getLogger().error(ex);
-				} finally {
-					monitor.done();
 				}
 			}
 		};
@@ -172,14 +163,11 @@ public class NewCamelTestWizard extends JUnitWizard {
 		return isBlueprint;
 	}
 	
-	private IRunnableWithProgress addCamelTestToPomDeps(final IJavaProject project, final IRunnableWithProgress runnable) throws Exception {
+	private IRunnableWithProgress addCamelTestToPomDeps(final IJavaProject project, final IRunnableWithProgress runnable) {
 		return new IRunnableWithProgress() {
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				if (monitor == null) {
-					monitor = new NullProgressMonitor();
-				}
-				monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
+				SubMonitor subMonitor = SubMonitor.convert(monitor, WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
 
 				// first load the pom file into some model
 				IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append(IMavenConstants.POM_FILE_NAME) : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append(IMavenConstants.POM_FILE_NAME));
@@ -230,15 +218,17 @@ public class NewCamelTestWizard extends JUnitWizard {
 						model.addDependency(dep);
 						changes = true;
 					}
+					subMonitor.setWorkRemaining(3);
 					
 					if (changes) {
 						try (OutputStream os = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 							MavenPlugin.getMaven().writeModel(model, os);
 							IFile pomIFile = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 							if (pomIFile != null){
-								pomIFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+								pomIFile.refreshLocal(IResource.DEPTH_INFINITE, subMonitor.split(1));
 							}
-							runnable.run(new SubProgressMonitor(monitor, 2));
+							subMonitor.setWorkRemaining(2);
+							runnable.run(subMonitor.split(2));
 						} catch (Exception ex) {
 							Activator.getLogger().error(ex);
 						}
@@ -246,7 +236,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 				} catch (Exception ex) {
 					Activator.getLogger().error(ex);
 				} finally {
-					monitor.done();
+					subMonitor.setWorkRemaining(0);
 				}
 			}
 		};

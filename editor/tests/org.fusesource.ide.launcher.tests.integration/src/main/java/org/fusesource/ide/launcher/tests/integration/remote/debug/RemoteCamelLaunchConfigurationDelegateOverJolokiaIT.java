@@ -78,7 +78,7 @@ public class RemoteCamelLaunchConfigurationDelegateOverJolokiaIT extends Abstrac
 	protected ProjectWithDebugAvailableDeployedHelper createProjectHelper() {
 		return new ProjectWithDebugAvailableDeployedHelper(RemoteCamelLaunchConfigurationDelegateOverJolokiaIT.class.getSimpleName()) {
 			@Override
-			protected void addExtraAttributesToLocalProjectLaunch(ILaunchConfigurationWorkingCopy configuration) throws Exception {
+			protected void addExtraAttributesToLocalProjectLaunch(ILaunchConfigurationWorkingCopy configuration) throws CoreException, IOException {
 				super.addExtraAttributesToLocalProjectLaunch(configuration);
 				String vmArguments = configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "");
 				configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-javaagent:\""+jolokiaAgentPath.toFile().getCanonicalPath()+"=port="+JOLOKIA_PORT+"\" " + vmArguments);

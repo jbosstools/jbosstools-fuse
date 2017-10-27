@@ -10,6 +10,7 @@
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -28,39 +29,37 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-/**
- *
- */
 public final class JavaUtil {
 
-    /**
+    private static final String ECLIPSE_PATH_SEPARATOR = "/";
+
+	/**
      * Creates a ClassLoader using the project's build path.
      *
      * @param javaProject the Java project.
      * @param parentClassLoader the parent class loader, may be null.
      *
      * @return a new ClassLoader based on the project's build path.
+     * @throws JavaModelException When there is a failure in the Java model.
+     * @throws MalformedURLException When there is a problem with the project location or its output path.
      *
-     * @throws Exception if something goes wrong.
      */
-    public static ClassLoader getProjectClassLoader(IJavaProject javaProject,
-            ClassLoader parentClassLoader)
-            throws Exception {
+    public static ClassLoader getProjectClassLoader(IJavaProject javaProject, ClassLoader parentClassLoader) throws MalformedURLException, JavaModelException {
         IProject project = javaProject.getProject();
         IWorkspaceRoot root = project.getWorkspace().getRoot();
         List<URL> urls = new ArrayList<>();
         urls.add(new File(project.getLocation()
-                + "/" + javaProject.getOutputLocation().removeFirstSegments(1) //$NON-NLS-1$
-                + "/") //$NON-NLS-1$
+                + ECLIPSE_PATH_SEPARATOR + javaProject.getOutputLocation().removeFirstSegments(1) //$NON-NLS-1$
+                + ECLIPSE_PATH_SEPARATOR) //$NON-NLS-1$
                 .toURI().toURL());
         for (IClasspathEntry classpathEntry : javaProject.getResolvedClasspath(true)) {
             if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
                 IPath projectPath = classpathEntry.getPath();
                 IProject otherProject = root.getProject(projectPath.segment(0));
                 IJavaProject otherJavaProject = JavaCore.create(otherProject);
-                urls.add(new File(otherProject.getLocation() + "/" //$NON-NLS-1$
+                urls.add(new File(otherProject.getLocation() + ECLIPSE_PATH_SEPARATOR
                         + otherJavaProject.getOutputLocation().removeFirstSegments(1)
-                        + "/").toURI().toURL()); //$NON-NLS-1$
+                        + ECLIPSE_PATH_SEPARATOR).toURI().toURL()); //$NON-NLS-1$
             } else if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
                 urls.add(new File(classpathEntry.getPath().toOSString()).toURI().toURL());
             }

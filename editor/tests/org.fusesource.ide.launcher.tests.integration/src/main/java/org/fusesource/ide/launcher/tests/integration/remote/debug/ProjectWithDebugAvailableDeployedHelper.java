@@ -68,7 +68,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 		this.projectNameAfterImport = projectNameAfterImport;
 	}
 
-	public void start() throws Exception {
+	public void start() throws IOException, CoreException, MalformedObjectNameException, InterruptedException {
 		File projectFolder = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile(), projectNameAfterImport);
 		projectFolder.mkdirs();
 		File pomFile = new File(projectFolder, POM_XML);
@@ -116,7 +116,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 				try {
 					addExtraAttributesToLocalProjectLaunch(workingCopy);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.ID,"Cannot configure the Maven out put file path", e));
 				}
 			}
 			
@@ -166,7 +166,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 		return "MavenLaunchOutput-"+project.getName()+".txt";
 	}
 	
-	protected void addExtraAttributesToLocalProjectLaunch(ILaunchConfigurationWorkingCopy configuration) throws Exception {
+	protected void addExtraAttributesToLocalProjectLaunch(ILaunchConfigurationWorkingCopy configuration) throws CoreException, IOException {
 		/* Only subclass will provide parameters to configure Jolokia for instance */
 	}
 

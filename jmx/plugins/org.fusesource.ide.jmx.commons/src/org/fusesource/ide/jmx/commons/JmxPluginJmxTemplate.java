@@ -35,14 +35,7 @@ public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 				@Override
 				public void run(MBeanServerConnection connection) throws Exception {
 					try {
-						// TODO replace with better JmxTemplate reusing the
-						// Connection!!!
-						JMXConnector connector = null; // TODO: find out how to improve -->  connectionWrapper.getConnector();
-						if (connector == null) {
-							connector = new LocalJMXConnector(connection);
-						}
-						Object answer = callback.doWithJmxConnector(connector);
-						answerHolder[0] = answer;
+						call(callback, answerHolder, connection);
 					} catch (Exception e) {
 						Activator.getLogger().warning("Failed to connect to JMX: " + e, e);
 					}
@@ -52,10 +45,9 @@ public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
-	public <T> T executeAndThrow(final JmxConnectorCallback<T> callback) throws Exception {
+	public <T> T executeAndThrow(final JmxConnectorCallback<T> callback) throws JMXException {
 		final Object[] answerHolder = new Object[1];
 
 		try {
@@ -63,14 +55,7 @@ public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 				@Override
 				public void run(MBeanServerConnection connection) throws JMXException {
 					try {
-						// TODO replace with better JmxTemplate reusing the
-						// Connection!!!
-						JMXConnector connector = null; //TODO: find out how to improve -->  connectionWrapper.getConnector();
-						if (connector == null) {
-							connector = new LocalJMXConnector(connection);
-						}
-						Object answer = callback.doWithJmxConnector(connector);
-						answerHolder[0] = answer;
+						call(callback, answerHolder, connection);
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
@@ -81,7 +66,15 @@ public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 			Activator.getLogger().error(e);
 			return null;
 		}
-
+	}
+	
+	protected <T> void call(final JmxConnectorCallback<T> callback, final Object[] answerHolder,
+			MBeanServerConnection connection) throws Exception {
+		//TODO: replace with better JmxTemplate reusing the Connection!!!
+		//TODO: find out how to improve -->  connectionWrapper.getConnector();
+		JMXConnector connector = new LocalJMXConnector(connection);
+		Object answer = callback.doWithJmxConnector(connector);
+		answerHolder[0] = answer;
 	}
 
 }

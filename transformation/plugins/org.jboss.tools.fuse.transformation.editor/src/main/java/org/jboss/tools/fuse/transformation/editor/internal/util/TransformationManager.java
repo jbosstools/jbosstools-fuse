@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.xml.bind.JAXBException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -40,8 +42,7 @@ public class TransformationManager {
     private final List<PropertyChangeListener> listeners = new CopyOnWriteArrayList<>();
     private final List<MappingPlaceholder> mappingPlaceholders = new ArrayList<>();
 
-    public TransformationManager(IFile file,
-                                 URLClassLoader loader) throws Exception {
+    public TransformationManager(IFile file, URLClassLoader loader) throws JAXBException {
         this.file = file;
         delegate = DozerMapperConfiguration.loadConfig(new File(file.getLocationURI()), loader);
     }
