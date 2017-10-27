@@ -450,7 +450,6 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 		} else if (lang.equalsIgnoreCase("groovy") ||
 				   lang.equalsIgnoreCase("ruby") ||
 				   lang.equalsIgnoreCase("php") ||
-				   lang.equalsIgnoreCase("ruby") ||
 				   lang.equalsIgnoreCase("el") ||
 				   lang.equalsIgnoreCase("sql") ||
 				   lang.equalsIgnoreCase("jxpath") ||
