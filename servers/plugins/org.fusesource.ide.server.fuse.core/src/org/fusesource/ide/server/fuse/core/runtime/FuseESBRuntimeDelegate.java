@@ -21,10 +21,10 @@ import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
  */
 public class FuseESBRuntimeDelegate extends KarafRuntimeDelegate {
 	
-	/**
-	 * empty default constructor
-	 */
+	private static final String RUNTIME_TYPE_NOT_COMPATIBLE_WITH_FOUND_VERSION = "Runtime type not compatible with found version..."; //$NON-NLS-1$
+
 	public FuseESBRuntimeDelegate() {
+		// empty for reflection instantiation
 	}
 	
 	@Override
@@ -32,17 +32,17 @@ public class FuseESBRuntimeDelegate extends KarafRuntimeDelegate {
 		String id = getRuntime().getRuntimeType().getId();
 		String version = getVersion();
 		if (version != null && version.trim().startsWith("6.0")) {
-			if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_60)) 
-				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+			if (!IFuseToolingConstants.RUNTIME_FUSE_60.equalsIgnoreCase(id)) 
+				return new Status(Status.ERROR, Activator.PLUGIN_ID, RUNTIME_TYPE_NOT_COMPATIBLE_WITH_FOUND_VERSION);
 		} else if (version != null && version.trim().startsWith("6.1")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_61)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+            if (!IFuseToolingConstants.RUNTIME_FUSE_61.equalsIgnoreCase(id)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, RUNTIME_TYPE_NOT_COMPATIBLE_WITH_FOUND_VERSION);
 		} else if (version != null && version.trim().startsWith("6.2")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_62)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+            if (!IFuseToolingConstants.RUNTIME_FUSE_62.equalsIgnoreCase(id)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, RUNTIME_TYPE_NOT_COMPATIBLE_WITH_FOUND_VERSION);
 		} else if (version != null && version.trim().startsWith("6.3")) {
-            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_63)) 
-                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+            if (!IFuseToolingConstants.RUNTIME_FUSE_63.equalsIgnoreCase(id)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, RUNTIME_TYPE_NOT_COMPATIBLE_WITH_FOUND_VERSION);
         } else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}
