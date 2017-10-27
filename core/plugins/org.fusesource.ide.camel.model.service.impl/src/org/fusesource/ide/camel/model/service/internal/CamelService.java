@@ -246,13 +246,12 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public String testExpression(String language, String expression) {
-		String result = null;
+		String errorResult = null;
 		org.apache.camel.impl.DefaultCamelContext ctx = new org.apache.camel.impl.DefaultCamelContext();
 		try {
 			ctx.resolveLanguage(language).createPredicate(expression.replaceAll("\n", "").replaceAll("\r", "").trim());
-			result = null;
 		} catch (Exception ex) {
-			result = ex.getMessage();
+			errorResult = ex.getMessage();
 		} finally {
 			try {
 				ctx.shutdown();
@@ -261,7 +260,7 @@ public class CamelService implements ICamelManagerService {
 			}
 			ctx = null;
 		}
-		return result;
+		return errorResult;
 	}
 	
 	/* (non-Javadoc)

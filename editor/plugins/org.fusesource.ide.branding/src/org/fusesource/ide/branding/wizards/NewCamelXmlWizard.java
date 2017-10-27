@@ -195,7 +195,6 @@ public class NewCamelXmlWizard extends Wizard implements INewWizard {
 			} else if (Objects.equal(format, NewCamelXmlWizardPage.ROUTES_FORMAT)) {
 				camelContext = "routes";
 				spring = false;
-				osgi = false;
 				trace = false;
 			}
 		}
