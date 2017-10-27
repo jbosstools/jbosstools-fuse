@@ -129,20 +129,18 @@ public class CollapseFeature extends AbstractCustomFeature {
 	 */
 	public void collapseShape(PictogramElement pe) {
 		ContainerShape cs = (ContainerShape) pe;
-		int width = pe.getGraphicsAlgorithm().getWidth();
-		int height = pe.getGraphicsAlgorithm().getHeight(); 
 
 		int changeWidth = 0;
 		int changeHeight = 0;
 
 		boolean childFiguresVisible = false;
-		if (Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) == null || 
-			Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("false")) {
+		String initialCollapsedState = Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE);
+		if (initialCollapsedState == null || initialCollapsedState.equals("false")) {
+			int width = pe.getGraphicsAlgorithm().getWidth();
+			int height = pe.getGraphicsAlgorithm().getHeight(); 
 			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_WIDTH, String.valueOf(width));
 			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_HEIGHT, String.valueOf(height));
-			childFiguresVisible = false;
-		} else if (	Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) != null && 
-					Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("true")) {
+		} else if (initialCollapsedState.equals("true")) {
 			changeWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_WIDTH));
 			changeHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_HEIGHT));
 			Graphiti.getPeService().setPropertyValue(pe, PROP_COLLAPSED_STATE, "false");

@@ -99,7 +99,6 @@ public final class JavaUtil {
                 element = frag;
                 if (!frag.isDefaultPackage()
                         && (!frag.hasSubpackages() || frag.containsJavaResources())) {
-                    element = frag;
                     break;
                 }
             }

@@ -18,8 +18,8 @@ import java.io.File;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -45,7 +45,6 @@ public class RTIComposite extends Composite implements Listener {
 		super(parent, SWT.NONE);
 		this.taskModel = taskModel;
 		this.wizardHandle = wizard;
-		this.taskModel = taskModel;
 
 		createControl();
 	}
@@ -107,25 +106,18 @@ public class RTIComposite extends Composite implements Listener {
 		fuseRTLoc.setLayoutData(fuseRTLocGridData);
 
 		browseButton = new Button(this, SWT.PUSH);
-		browseButton
-				.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
-		browseButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+		browseButton.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
+		browseButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dlg = new DirectoryDialog(browseButton
-						.getShell(), SWT.OPEN);
+				DirectoryDialog dlg = new DirectoryDialog(browseButton.getShell(), SWT.OPEN);
 				dlg.setFilterPath(fuseRTLoc.getText());
 				String path = dlg.open();
 
-				if (path == null)
-					return;
-
-				fuseRTLoc.setText(path);
+				if (path != null) {
+					fuseRTLoc.setText(path);
+				}
 			}
 		});
 	}
