@@ -62,7 +62,7 @@ public class ServicesNode extends RefreshableCollectionNode implements ImageProv
 
 	@Override
 	public List<IPropertySource> getPropertySourceList() {
-		List<IPropertySource> answer = new ArrayList<IPropertySource>();
+		List<IPropertySource> answer = new ArrayList<>();
 		try {
 			final TabularData tabularData = facade.listServices();
 			return TabularDataHelper.toPropertySources(tabularData);

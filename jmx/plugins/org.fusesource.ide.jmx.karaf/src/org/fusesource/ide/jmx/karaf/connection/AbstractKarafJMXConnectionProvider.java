@@ -13,6 +13,7 @@ package org.fusesource.ide.jmx.karaf.connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,19 +37,17 @@ import org.jboss.tools.jmx.core.IConnectionWrapper;
 public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnectionProvider 
 	implements IServerConnectionProvider, IConnectionProviderEventEmitter, IConnectionCategory {
 
-	private HashMap<String, IConnectionWrapper> idToConnection;
+	private Map<String, IConnectionWrapper> idToConnection;
 	public AbstractKarafJMXConnectionProvider() {
 		UnitedServerListener listener = createUnitedListener();
 		UnitedServerListenerManager.getDefault().addListener(listener);
 	}
 	
 	private UnitedServerListener createUnitedListener() {
-		UnitedServerListener listener = new UnitedServerListener() {
+		return new UnitedServerListener() {
 			@Override
 			public boolean canHandleServer(IServer server) {
-				if (server.loadAdapter(KarafServerDelegate.class, new NullProgressMonitor()) != null)
-					return true;
-				return false;
+				return server.loadAdapter(KarafServerDelegate.class, new NullProgressMonitor()) != null;
 			}
 
 			@Override
@@ -68,10 +67,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				if( belongsHere(server)) {
 					getConnections();
 					if( !idToConnection.containsKey(server.getId())) {
-						IConnectionWrapper connection = createConnection(server);
-						idToConnection.put(server.getId(), connection);
-						if( connection != null && server.getServerState() == IServer.STATE_STARTED )
-							fireAdded(idToConnection.get(server.getId()));
+						updateConnection(server);
 					}
 				}
 			}
@@ -82,12 +78,16 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 					getConnections();
 					Object o = idToConnection.get(server.getId());
 					if( o == null ) {
-						IConnectionWrapper connection = createConnection(server);
-						idToConnection.put(server.getId(), connection);
-						if( connection != null && server.getServerState() == IServer.STATE_STARTED )
-							fireAdded(idToConnection.get(server.getId()));
+						updateConnection(server);
 					}
 				}
+			}
+			
+			protected void updateConnection(IServer server) {
+				IConnectionWrapper connection = createConnection(server);
+				idToConnection.put(server.getId(), connection);
+				if( connection != null && server.getServerState() == IServer.STATE_STARTED )
+					fireAdded(idToConnection.get(server.getId()));
 			}
 
 			@Override
@@ -114,16 +114,10 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				}
 			}
 		};
-		return listener;
 	}
 	
 	protected abstract boolean belongsHere(IServer server);
-	@Override
-	public abstract String getId();
 	protected abstract IConnectionWrapper createConnection(IServer server);
-	@Override
-	public abstract String getName(IConnectionWrapper wrapper);
-
 
 	@Override
 	public IConnectionWrapper findConnection(IServer s) {
@@ -136,7 +130,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 		// do it all on demand right now
 		if( idToConnection == null ) {
 			// load them all
-			idToConnection = new HashMap<String, IConnectionWrapper>();
+			idToConnection = new HashMap<>();
 			IServer[] allServers = ServerCore.getServers();
 			IConnectionWrapper c;
 			for( int i = 0; i < allServers.length; i++ ) {
@@ -147,7 +141,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 				}
 			}
 		} 
-		ArrayList<IConnectionWrapper> list = new ArrayList<IConnectionWrapper>();
+		List<IConnectionWrapper> list = new ArrayList<>();
 		Set<String> serverIds = idToConnection.keySet();
 		Iterator<String> it = serverIds.iterator();
 		while(it.hasNext()) {
@@ -174,7 +168,7 @@ public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnect
 
 	@Override
 	public IConnectionWrapper createConnection(Map map) throws CoreException {
-		throw new CoreException(new Status(IStatus.ERROR, KarafJMXPlugin.PLUGIN_ID, "", null));
+		throw new CoreException(new Status(IStatus.ERROR, KarafJMXPlugin.PLUGIN_ID, "Creation of the connection is Unsupported", null));
 	}
 
 	@Override

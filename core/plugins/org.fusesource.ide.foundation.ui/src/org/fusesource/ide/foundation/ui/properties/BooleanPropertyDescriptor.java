@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.functions.ReturnType;
 /**
  * @author jstrachan
  */
-public class BooleanPropertyDescriptor extends PropertyDescriptor implements ReturnType {
+public class BooleanPropertyDescriptor extends PropertyDescriptor implements ReturnType<Boolean> {
 
 	/**
 	 * creates a property descriptor for boolean properties
@@ -31,7 +31,7 @@ public class BooleanPropertyDescriptor extends PropertyDescriptor implements Ret
 	}
 
 	@Override
-	public Class<?> getReturnType() {
+	public Class<Boolean> getReturnType() {
 		return Boolean.class;
 	}
 }
