@@ -91,7 +91,7 @@ public class BundlesNode extends RefreshableCollectionNode implements ImageProvi
 
 	@Override
 	public List<IPropertySource> getPropertySourceList() {
-		List<IPropertySource> answer = new ArrayList<IPropertySource>();
+		List<IPropertySource> answer = new ArrayList<>();
 		try {
 			final TabularData tabularData = facade.listBundles();
 			return TabularDataHelper.toPropertySources(tabularData);

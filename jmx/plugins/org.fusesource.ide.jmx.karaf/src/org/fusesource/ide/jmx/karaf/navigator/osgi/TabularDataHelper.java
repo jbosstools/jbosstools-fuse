@@ -24,6 +24,10 @@ import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 
 
 public class TabularDataHelper {
+	
+	private TabularDataHelper() {
+		//static access only
+	}
 
 	/**
 	 * Converts a TabularData to a list of IPropertySource
@@ -38,7 +42,7 @@ public class TabularDataHelper {
 						CompositeData cd = (CompositeData) row;
 						answer.add(new CompositeDataPropertySource(cd));
 					} else {
-						KarafJMXPlugin.getLogger().debug("===== uknown row type: " + row + " of type " + Objects.typeName(row));
+						KarafJMXPlugin.getLogger().debug("===== unknown row type: " + row + " of type " + Objects.typeName(row));
 					}
 				}
 			}

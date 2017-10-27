@@ -36,14 +36,14 @@ import org.fusesource.ide.foundation.ui.properties.PropertyDescriptors;
 
 
 public class BeanTypePropertyMetadata {
-	private static Map<Class<?>, BeanTypePropertyMetadata> cache = new WeakHashMap<Class<?>, BeanTypePropertyMetadata>();
+	private static Map<Class<?>, BeanTypePropertyMetadata> cache = new WeakHashMap<>();
 
-	private Map<String, IPropertyDescriptor> propertyMap = new HashMap<String, IPropertyDescriptor>();
-	private Map<String, PropertyDescriptor> descriptorMap = new HashMap<String, PropertyDescriptor>();
-	private TreeMap<String, IPropertyDescriptor> sortedMap = new TreeMap<String, IPropertyDescriptor>();
+	private Map<String, IPropertyDescriptor> propertyMap = new HashMap<>();
+	private Map<String, PropertyDescriptor> descriptorMap = new HashMap<>();
+	private TreeMap<String, IPropertyDescriptor> sortedMap = new TreeMap<>();
 	private IPropertyDescriptor[] properties;
 
-	public synchronized static BeanTypePropertyMetadata beanMetadata(Class<?> beanType) throws IntrospectionException {
+	public static synchronized BeanTypePropertyMetadata beanMetadata(Class<?> beanType) throws IntrospectionException {
 		BeanTypePropertyMetadata answer = cache.get(beanType);
 		if (answer == null) {
 			answer = new BeanTypePropertyMetadata(beanType);
