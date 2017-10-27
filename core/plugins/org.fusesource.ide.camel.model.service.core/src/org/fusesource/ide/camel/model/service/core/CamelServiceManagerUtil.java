@@ -26,9 +26,13 @@ import org.osgi.framework.ServiceReference;
  */
 public class CamelServiceManagerUtil {
 
-	public static final String DEFAULT_SERVICE = "dynamic";	
+	public static final String DEFAULT_SERVICE = "dynamic";
 	
-	public static ICamelManagerService getManagerService() throws CamelManagerException {
+	private CamelServiceManagerUtil() {
+		// access through singleton
+	}
+	
+	public static ICamelManagerService getManagerService() {
 		return getManagerService(DEFAULT_SERVICE);
 	}
 	
@@ -39,7 +43,7 @@ public class CamelServiceManagerUtil {
 	 * @return
 	 * @throws CamelManagerException
 	 */
-	public static ICamelManagerService getManagerService(String serviceVersion) throws CamelManagerException {
+	public static ICamelManagerService getManagerService(String serviceVersion) {
 		try {
 			BundleContext context = CamelModelServiceCoreActivator.getBundleContext();
 			CamelManagerServiceProxy proxy = new CamelManagerServiceProxy(context, serviceVersion);
@@ -50,7 +54,7 @@ public class CamelServiceManagerUtil {
 		}
 	}
 	
-	public static String[] getAvailableVersions() throws CamelManagerException {
+	public static String[] getAvailableVersions() {
 		try {
 			BundleContext context = CamelModelServiceCoreActivator.getBundleContext();
 			Collection<ServiceReference<ICamelManagerService>> refs = BundleUtils.findServiceReferences(context, ICamelManagerService.class);

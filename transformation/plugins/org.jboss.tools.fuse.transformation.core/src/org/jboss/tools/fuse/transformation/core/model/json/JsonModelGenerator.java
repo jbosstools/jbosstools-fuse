@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.core.model.json;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
 
@@ -54,10 +55,10 @@ public class JsonModelGenerator {
      * @param packageName package name for generated model classes
      * @param schemaUrl url for the JSON schema
      * @param targetPath directory where class source will be generated
-     * @throws Exception failure during model generation
+     * @throws IOException failure during model generation
      */
     public JCodeModel generateFromSchema(final String className, final String packageName,
-            final URL schemaUrl, final File targetPath) throws Exception {
+            final URL schemaUrl, final File targetPath) throws IOException {
 
         return generate(className, packageName, schemaUrl, targetPath);
     }
@@ -70,17 +71,17 @@ public class JsonModelGenerator {
      * @param packageName package name for generated model classes
      * @param instanceUrl url for the JSON message containing instance data
      * @param targetPath directory where class source will be generated
-     * @throws Exception failure during model generation
+     * @throws IOException failure during model generation
      */
     public JCodeModel generateFromInstance(final String className, final String packageName,
-            final URL instanceUrl, final File targetPath) throws Exception {
+            final URL instanceUrl, final File targetPath) throws IOException {
 
         config.setSourceType(SourceType.JSON);
         return generate(className, packageName, instanceUrl, targetPath);
     }
 
     private JCodeModel generate(final String className, final String packageName,
-            final URL inputUrl, final File targetPath) throws Exception {
+            final URL inputUrl, final File targetPath) throws IOException {
 
         final SchemaMapper mapper = createSchemaMapper();
         final JCodeModel codeModel = new JCodeModel();

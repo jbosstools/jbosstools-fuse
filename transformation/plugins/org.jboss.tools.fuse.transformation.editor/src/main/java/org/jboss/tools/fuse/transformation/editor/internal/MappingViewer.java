@@ -20,7 +20,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.core.Expression;
@@ -66,7 +65,7 @@ abstract class MappingViewer {
         setSourceText();
         CLabel label = (CLabel)sourcePropPane.getChildren()[0];
         sourceDropTarget = new DropTarget(label, DND.DROP_MOVE);
-        sourceDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
+        sourceDropTarget.setTransfer(LocalSelectionTransfer.getTransfer());
         sourceDropTarget.addDropListener(new DropListener(label) {
 
             @Override
@@ -101,7 +100,7 @@ abstract class MappingViewer {
         setTargetText();
         CLabel label = (CLabel)targetPropPane.getChildren()[0];
         targetDropTarget = new DropTarget(label, DND.DROP_MOVE);
-        targetDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
+        targetDropTarget.setTransfer(LocalSelectionTransfer.getTransfer());
         targetDropTarget.addDropListener(new DropListener(label) {
 
             @Override

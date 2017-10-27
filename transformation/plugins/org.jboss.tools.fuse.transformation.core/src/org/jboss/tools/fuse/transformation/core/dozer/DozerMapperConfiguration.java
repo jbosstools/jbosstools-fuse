@@ -52,18 +52,18 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private static final String DOZER_SCHEMA_LOC =
             "http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd"; //$NON-NLS-1$
 
-    public static DozerMapperConfiguration loadConfig(final File file) throws Exception {
+    public static DozerMapperConfiguration loadConfig(final File file) throws JAXBException {
         return new DozerMapperConfiguration(file, null);
     }
     public static DozerMapperConfiguration loadConfig(final File file, ClassLoader loader)
-            throws Exception {
+            throws JAXBException {
         return new DozerMapperConfiguration(file, loader);
     }
-    public static DozerMapperConfiguration loadConfig(final InputStream stream) throws Exception {
+    public static DozerMapperConfiguration loadConfig(final InputStream stream) throws JAXBException {
         return new DozerMapperConfiguration(stream, null);
     }
     public static DozerMapperConfiguration loadConfig(final InputStream stream, ClassLoader loader)
-            throws Exception {
+            throws JAXBException {
         return new DozerMapperConfiguration(stream, loader);
     }
 
@@ -95,12 +95,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             new Model("expressions", EXPRESSION_MAPPER_CLASS) //$NON-NLS-1$
                     .addChild("expression", java.lang.String.class.getName()); //$NON-NLS-1$
 
-    private DozerMapperConfiguration(final File file, final ClassLoader loader) throws Exception {
+    private DozerMapperConfiguration(final File file, final ClassLoader loader) throws JAXBException {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(file);
         this.loader = loader;
     }
 
-    private DozerMapperConfiguration(final InputStream stream, final ClassLoader loader) throws Exception {
+    private DozerMapperConfiguration(final InputStream stream, final ClassLoader loader) throws JAXBException {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(stream);
         this.loader = loader;
     }
@@ -410,7 +410,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     @Override
     public List<Variable> getVariables() {
-        LinkedList<Variable> variableList = new LinkedList<Variable>();
+        LinkedList<Variable> variableList = new LinkedList<>();
         if (mapConfig.getConfiguration() == null
                 || mapConfig.getConfiguration().getVariables() == null) {
             return variableList;
@@ -426,7 +426,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return getParentCollection(model) != null;
     }
 
-    private Model loadModel(String className) throws RuntimeException {
+    private Model loadModel(String className) {
         try {
             Class<?> modelClass =
                     loader != null ? loader.loadClass(className) : Class.forName(className);
@@ -584,7 +584,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return xfromMapping;
     }
 
-    private void validateIndex(Model model, List<Integer> index) throws RuntimeException {
+    private void validateIndex(Model model, List<Integer> index) {
         int nodes = DozerUtil.numberOfNodes(model);
         if (nodes != index.size()) {
             throw new RuntimeException("Invalid index size for model, expected " //$NON-NLS-1$

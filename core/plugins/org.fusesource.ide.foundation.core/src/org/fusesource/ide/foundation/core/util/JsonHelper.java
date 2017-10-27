@@ -24,6 +24,10 @@ import org.jboss.dmr.Property;
  *
  */
 public class JsonHelper {
+	
+	private JsonHelper() {
+		// static access only
+	}
     
     /**
      * returns the model node of the json content
@@ -76,7 +80,7 @@ public class JsonHelper {
      */
     public static List<ModelNode> getAsList(final ModelNode node, String propertyName) {
         final ModelNode propertyNode = node.get(propertyName);
-        return propertyNode.isDefined() ? propertyNode.asList() : new ArrayList<ModelNode>();
+        return propertyNode.isDefined() ? propertyNode.asList() : new ArrayList<>();
     }
     
     /**
@@ -88,8 +92,8 @@ public class JsonHelper {
      */
     public static Map<String, String> getAsPropertiesMap(final ModelNode node, String propertyName) {
         final ModelNode propertyNode = node.get(propertyName);
-        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<Property>();
-        Map<String, String> properties = new HashMap<String, String>();
+        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<>();
+        Map<String, String> properties = new HashMap<>();
         for (Property prop : propertyList) {
             properties.put(prop.getName(), prop.getValue().asString());
         }
@@ -105,8 +109,8 @@ public class JsonHelper {
      */
     public static Map<String, Object> getAsMap(final ModelNode node, String propertyName) {
         final ModelNode propertyNode = node.get(propertyName);
-        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<Property>();
-        Map<String, Object> properties = new HashMap<String, Object>();
+        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<>();
+        Map<String, Object> properties = new HashMap<>();
         for (Property prop : propertyList) {
             properties.put(prop.getName(), prop.getValue());
         }
@@ -121,7 +125,7 @@ public class JsonHelper {
      * @return  the property or null if not defined
      */
     public static Map<String, Object> getAsMap(final ModelNode node) {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         for (String key : node.keys()) {
             
             ModelNode value = node.get(key);
@@ -169,7 +173,7 @@ public class JsonHelper {
     }
     
     public static List<String> getStringList(ModelNode node) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         List<ModelNode> l = node.asList();
         for (ModelNode n : l) {
             result.add(n.asString());
@@ -198,8 +202,8 @@ public class JsonHelper {
      */
     public static List<String> getAsStringList(final ModelNode node, String propertyName) {
         final ModelNode propertyNode = node.get(propertyName);
-        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<Property>();
-        List<String> result = new ArrayList<String>();
+        List<Property> propertyList = propertyNode.isDefined() ? propertyNode.asPropertyList() : new ArrayList<>();
+        List<String> result = new ArrayList<>();
         for (Property p : propertyList) {
             result.add(p.getValue().asString());
         }
