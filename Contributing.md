@@ -26,7 +26,7 @@ At any time, you can pull changes from the upstream and merge them onto your mas
 The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
 
 ## Building JBoss Fuse Tooling
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+). See this [link](https://github.com/fusesource/fuseide/blob/master/Build.md) for more information on how to setup, run and configure build.
+To build _JBoss Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](https://github.com/fusesource/fuseide/blob/master/Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
@@ -61,6 +61,19 @@ You can then push your topic branch and its changes into your public fork reposi
 
 And then [generate a pull-request](http://help.github.com/pull-requests/) where we can review the proposed changes, comment on them, discuss them with you, and if everything is good merge the changes right into the official repository.
 
+## Setup the Target Platform for development
+
+- Build targetplatform (mvn clean install)
+- Open targetplatform/target/fuse-multiple.target
+- Click "set as Target Platform"
+
+In case, the Target Platform doesn't resolve:
+- Open targetplatform/fuse-jbosstools.target
+- Click Update and Reload
+- Build targetplatform (mvn clean install)
+- Open targetplatform/target/fuse-multiple.target
+- Click "set as Target Platform"
+
 ## Testing the Update Site
 If you introduced new dependencies or changed versions it is always a good idea to check if the update site still contains everything needed to install successfully. To test the update site contents here's what to do:
 
@@ -74,7 +87,7 @@ If you introduced new dependencies or changed versions it is always a good idea 
 - if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 
 ## Changing versions before / after a release
-There is a bash script called [_changeVersion.sh_](https://github.com/fusesource/fuseide/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and maven versions in an easy way.
+There is a bash script called [_changeVersion.sh_](https://github.com/fusesource/fuseide/blob/master/changeVersion.sh "Version Change Script") in the root folder of the project. You can use that for changing the bundle and Maven versions in an easy way.
 
 *Invocation:*
 
