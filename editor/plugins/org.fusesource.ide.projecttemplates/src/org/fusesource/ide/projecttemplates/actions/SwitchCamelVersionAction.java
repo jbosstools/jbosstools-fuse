@@ -15,12 +15,13 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.ui.util.Selections;
-import org.fusesource.ide.projecttemplates.actions.ui.SwitchCamelVersionDialog;
+import org.fusesource.ide.projecttemplates.actions.ui.SwitchCamelVersionWizard;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
@@ -32,18 +33,14 @@ public class SwitchCamelVersionAction implements IObjectActionDelegate {
 	/** The current selection (a project). */
 	private ISelection selection = null;
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
 	@Override
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
 			IProject project = (IProject) Selections.getFirstSelection(selection);
 			String currentVersion = new CamelMavenUtils().getCamelVersionFromMaven(project, false);
-			SwitchCamelVersionDialog dialog = new SwitchCamelVersionDialog(Display.getDefault().getActiveShell());
-			dialog.setSelectedCamelVersion(currentVersion);
-			if (Window.OK == dialog.open() ) {
-				String newVersion = dialog.getSelectedCamelVersion();
+			SwitchCamelVersionWizard switchCamelVersionWizard = new SwitchCamelVersionWizard(currentVersion);
+			if (Window.OK == new WizardDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), switchCamelVersionWizard).open() ) {
+				String newVersion = switchCamelVersionWizard.getSelectedCamelVersion();
 				if (!newVersion.equalsIgnoreCase(currentVersion)) {
 					new ChangeCamelVersionJob(project, newVersion).schedule();
 				}
@@ -53,17 +50,11 @@ public class SwitchCamelVersionAction implements IObjectActionDelegate {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
-	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		// not used
