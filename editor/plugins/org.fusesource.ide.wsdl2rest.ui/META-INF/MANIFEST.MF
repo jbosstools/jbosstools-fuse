@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: wsdl2rest UI plug-in
 Bundle-SymbolicName: org.fusesource.ide.wsdl2rest.ui;singleton:=true
 Bundle-Version: 10.1.0.qualifier
-Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.Activator
+Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.fusesource.ide.wsdl2rest;bundle-version="10.1.0",
@@ -13,6 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
  org.eclipse.jdt,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.jboss.tools.foundation.core,
+ org.jboss.tools.foundation.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

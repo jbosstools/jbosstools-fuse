@@ -38,6 +38,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -46,13 +47,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 
 /**
  * @author brianf
  *
  */
 public class Wsdl2RestWizardPage extends WizardPage {
-	
+
 	private String wsdlURL;
 	private String outputPathURL;
 	private Text urlTextControl;
@@ -62,8 +64,7 @@ public class Wsdl2RestWizardPage extends WizardPage {
 	private String beanClass;
 
 	public Wsdl2RestWizardPage(String pageName) {
-		super(pageName);
-		setMessage("Provide a URL to your WSDL and select the project and folder to put the generated artifacts into.");
+		this(pageName, null, null);
 	}
 
 	public Wsdl2RestWizardPage(String pageName, String title, ImageDescriptor titleImage) {
@@ -76,11 +77,11 @@ public class Wsdl2RestWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
 		composite.setLayoutData(GridDataFactory.fillDefaults().grab(false, false).create());
-		
+
 		urlTextControl = createLabelAndText(composite, "WSDL File URL:", 2);
 		urlTextControl.addModifyListener( e ->
-			wsdlURL = urlTextControl.getText()
-		);
+		wsdlURL = urlTextControl.getText()
+				);
 		Button urlBrowseBtn = createButton(composite, "...");
 		urlBrowseBtn.addSelectionListener(new SelectionAdapter() {
 
@@ -89,21 +90,28 @@ public class Wsdl2RestWizardPage extends WizardPage {
 				browseWSDL();
 			}
 		});
-		
+
 		Text outputPathControl = createLabelAndText(composite, "Output Path:", 2);
 		outputPathControl.addModifyListener( e ->
-			outputPathURL = outputPathControl.getText()
-		);
-		createButton(composite, "...");
-		
+		outputPathURL = outputPathControl.getText()
+				);
+		Button outPathBrowseButton = createButton(composite, "...");
+		outPathBrowseButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				outputPathURL = selectFolder(Display.getCurrent().getActiveShell());
+			}
+		});
+
 		targetAddressText = createLabelAndText(composite, "Target Address:", 3);
 		targetAddressText.addModifyListener( e ->
-			targetAddress  = targetAddressText.getText()
-		);
+		targetAddress  = targetAddressText.getText()
+				);
 		beanClassText = createLabelAndText(composite, "Bean Class:", 2);
 		beanClassText.addModifyListener( e ->
-			beanClass  = beanClassText.getText()
-		);
+		beanClass  = beanClassText.getText()
+				);
 		Button classBrowse = createButton(composite, "...");
 		classBrowse.addSelectionListener(new SelectionAdapter() {
 
@@ -111,6 +119,9 @@ public class Wsdl2RestWizardPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				IProject project = sampleGetSelectedProject();
 				beanClass = handleClassBrowse(project, Display.getCurrent().getActiveShell());
+				if (!Strings.isEmpty(beanClass)) {
+					beanClassText.setText(beanClass);
+				}
 			}
 		});
 
@@ -136,7 +147,7 @@ public class Wsdl2RestWizardPage extends WizardPage {
 	protected Text createLabelAndText(Composite composite, String labelText) {
 		return createLabelAndText(composite, labelText, 3);
 	}
-	
+
 	protected Text createLabelAndText(Composite composite, String labelText, int span) {
 		Label label = new Label(composite, SWT.NONE);
 		label.setText(labelText);
@@ -144,7 +155,7 @@ public class Wsdl2RestWizardPage extends WizardPage {
 		textControl.setLayoutData(GridDataFactory.fillDefaults().indent(10, 0).grab(true, false).span(span, 1).create());
 		return textControl;
 	}
-	
+
 	protected Button createButton(Composite composite, String labelText) {
 		Button buttonControl = new Button(composite, SWT.PUSH);
 		buttonControl.setText(labelText);
@@ -166,37 +177,37 @@ public class Wsdl2RestWizardPage extends WizardPage {
 	public void setOutputPathURL(String outputPathURL) {
 		this.outputPathURL = outputPathURL;
 	}
-	
-    private void browseWSDL() {
-        FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(getShell(), false,
-        		ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE) {
-            @Override
-            protected ItemsFilter createFilter() {
-                return new ResourceFilter() {
-                    @Override
-                    public boolean matchItem(Object item) {
-                        IResource resource = (IResource) item;
-                        return super.matchItem(item) && "wsdl".equals(resource.getFileExtension()); //$NON-NLS-1$
-                    }
-                };
-            }
-        };
-        dialog.setInitialPattern("* "); //$NON-NLS-1$
-        if (dialog.open() == FilteredResourcesSelectionDialog.OK) {
-            Object[] result = dialog.getResult();
-            if (result == null || result.length != 1 || !(result[0] instanceof IResource)) {
-                return;
-            }
-            try {
-            	IResource resultFile = (IResource) result[0];
-            	File actualFile = resultFile.getLocation().toFile();
-            	wsdlURL = actualFile.toURI().toURL().toExternalForm();
-	            urlTextControl.setText(wsdlURL);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
+
+	private void browseWSDL() {
+		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(getShell(), false,
+				ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE) {
+			@Override
+			protected ItemsFilter createFilter() {
+				return new ResourceFilter() {
+					@Override
+					public boolean matchItem(Object item) {
+						IResource resource = (IResource) item;
+						return super.matchItem(item) && "wsdl".equals(resource.getFileExtension()); //$NON-NLS-1$
+					}
+				};
 			}
-        }
-    }
+		};
+		dialog.setInitialPattern("* "); //$NON-NLS-1$
+		if (dialog.open() == FilteredResourcesSelectionDialog.OK) {
+			Object[] result = dialog.getResult();
+			if (result == null || result.length != 1 || !(result[0] instanceof IResource)) {
+				return;
+			}
+			try {
+				IResource resultFile = (IResource) result[0];
+				File actualFile = resultFile.getLocation().toFile();
+				wsdlURL = actualFile.toURI().toURL().toExternalForm();
+				urlTextControl.setText(wsdlURL);
+			} catch (MalformedURLException e) {
+				Wsdl2RestUIActivator.pluginLog().logError(e);
+			}
+		}
+	}
 
 	public String getTargetAddress() {
 		return targetAddress;
@@ -235,12 +246,12 @@ public class Wsdl2RestWizardPage extends WizardPage {
 				}
 			}
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			Wsdl2RestUIActivator.pluginLog().logError(e);
 		}
 		return null;
 	}
 
-	protected IProject sampleGetSelectedProject() {
+	private IProject sampleGetSelectedProject() {
 		// This is a hack for some prototyping to make sure we know what project to stick the stuff in.
 		ISelectionService ss = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
 		String projExpID = "org.eclipse.ui.navigator.ProjectExplorer";
@@ -255,5 +266,14 @@ public class Wsdl2RestWizardPage extends WizardPage {
 			return res.getProject();
 		}
 		return null;
-	}	
+	}
+
+	private String selectFolder(Shell shell) {
+		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
+		if (!Strings.isEmpty(outputPathURL)) {
+			dialog.setFileName(outputPathURL);
+		}
+		
+		return dialog.open();
+	}
 }
