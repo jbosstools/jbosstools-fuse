@@ -302,29 +302,30 @@ public class MavenUtils {
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
 			Model m2m = new CamelMavenUtils().getMavenModel(project);
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(7);
 			if (m2m.getDependencyManagement() != null) {
 				MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencyManagement().getDependencies(), newCamelVersion);
 			}
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(6);
 			MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencies(), newCamelVersion);
 			if (m2m.getBuild().getPluginManagement() != null) {
 				MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPluginManagement().getPlugins(), newCamelVersion);
 			}
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(5);
 			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), newCamelVersion);
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(4);
 			
 			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion);
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(3);
 			
 			MavenUtils.manageStagingRepositories(m2m);
-			subMonitor.worked(1);
+			subMonitor.setWorkRemaining(2);
 			
 			if (projectMetaData != null) {
 				ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(projectMetaData);
 				patcher.patch(m2m, subMonitor.split(1));
 			}
+			subMonitor.setWorkRemaining(1);
 			
 			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
 		} catch (Exception ex) {
