@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.internal;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,8 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
  */
 public class CamelModelPatcher {
 
+	private static final String CAMEL_VERSION_FIXING_CAMEL_CONTEXT_IN_CATALOG = "2.18.0";
+
 	private CamelModelPatcher() {
 		// util class
 	}
@@ -41,6 +44,36 @@ public class CamelModelPatcher {
 		applyMissingOneOfValuesForExpressionsPatch(loadedModel);
 		applyMissingWhenChildDefinitionForChoice(loadedModel);
 		applyFixesToComponentsSyntax(loadedModel);
+		applyMissingCamelContextEip(camelVersion, loadedModel);
+	}
+
+	private static void applyMissingCamelContextEip(String camelVersion, CamelModel loadedModel) {
+		Eip eipLoadedFromInitialCatalog = loadedModel.getEip("camelContext");
+		if(CAMEL_VERSION_FIXING_CAMEL_CONTEXT_IN_CATALOG.compareTo(camelVersion) > 0 && eipLoadedFromInitialCatalog == null) {
+			Eip camelContextEip = getCamelContextModelForVersion(camelVersion);
+			loadedModel.addEip(camelContextEip);
+		}
+	}
+
+	protected static Eip getCamelContextModelForVersion(String camelVersion) {
+		String versionRange = "2.17.x";
+		if("2.11".compareTo(camelVersion) > 0) {
+			versionRange = "2.10.x";
+		} else if("2.12".compareTo(camelVersion) > 0) {
+			versionRange = "2.11.x";
+		} else if("2.13".compareTo(camelVersion) > 0) {
+			versionRange = "2.12.x";
+		} else if("2.14".compareTo(camelVersion) > 0) {
+			versionRange = "2.13.x";
+		} else if("2.15".compareTo(camelVersion) > 0) {
+			versionRange = "2.14.x";
+		} else if("2.16".compareTo(camelVersion) > 0) {
+			versionRange = "2.15.x";
+		} else if("2.17".compareTo(camelVersion) > 0) {
+			versionRange = "2.16.x";
+		}
+		InputStream inputStream = CamelModelPatcher.class.getResourceAsStream("camelContext-"+versionRange+".json");
+		return Eip.getJSONFactoryInstance(inputStream);
 	}
 
 	private static void applyMissingOneOfValuesForExpressionsPatch(CamelModel loadedModel) {

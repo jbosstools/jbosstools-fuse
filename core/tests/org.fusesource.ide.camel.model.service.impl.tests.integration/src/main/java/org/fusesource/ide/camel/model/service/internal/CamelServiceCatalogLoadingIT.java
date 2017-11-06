@@ -15,7 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 
+import org.assertj.core.api.AbstractBooleanAssert;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.junit.Test;
@@ -55,7 +57,23 @@ public class CamelServiceCatalogLoadingIT {
 		assertThat(camelModel.getDataFormats()).isNotEmpty();
 		assertThat(camelModel.getEips()).isNotEmpty();
 		assertThat(camelModel.getLanguages()).isNotEmpty();
-		
+		checkModelPatchedForCamelContextForVersionPriorTo218(camelModel);
+	}
+
+	protected void checkModelPatchedForCamelContextForVersionPriorTo218(CamelModel camelModel) {
+		Eip camelContextEIP = camelModel.getEip("camelContext");
+		assertThat(camelContextEIP).isNotNull();
+		check(camelContextEIP, "2.18.0", "logExhaustedMessageBody");
+		check(camelContextEIP, "2.16.0", "typeConverterExists");
+	}
+
+	protected void check(Eip camelContextEIP, String versionSinceContaining, String propertyKey) {
+		AbstractBooleanAssert<?> hasProperty = assertThat(camelContextEIP.getProperties().containsKey(propertyKey));
+		if(versionSinceContaining.compareTo(camelVersion) <= 0) {
+			hasProperty.isTrue();
+		} else {
+			hasProperty.isFalse();
+		}
 	}
 
 	private IPluginLog getLogger() {
