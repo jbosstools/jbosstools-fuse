@@ -44,7 +44,8 @@ public class StyleUtil {
 	public static final IColorConstant CONTAINER_FIGURE_COLLAPSED_BORDER_COLOR = getColorConstant("22,22,22");
 	public static final IColorConstant FROM_FIGURE_BACKGROUND_COLOR = getColorConstant("200,235,121"); //158,224,189
 	public static final IColorConstant TO_FIGURE_BACKGROUND_COLOR = getColorConstant("206,190,225"); 
-	public static final IColorConstant EIP_FIGURE_BACKGROUND_COLOR = getColorConstant("240,171,0"); 
+	public static final IColorConstant EIP_FIGURE_BACKGROUND_COLOR = getColorConstant("240,171,0");
+	public static final IColorConstant HIGHLIGHT_COLOR = getColorConstant("255,0,0");
 	// constants for the new design end here
 	
 	public static final AdaptedGradientColoredAreas E_CLASS_GRADIENT = PredefinedColoredAreas.getBlueWhiteGlossAdaptions();

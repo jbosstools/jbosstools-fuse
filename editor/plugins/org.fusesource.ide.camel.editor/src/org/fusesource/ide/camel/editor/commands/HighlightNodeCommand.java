@@ -53,11 +53,9 @@ public class HighlightNodeCommand extends RecordingCommand {
 		}
 		
 		// check if we need to switch to another route for highlighting
-		if (this.node != null && highlight) {
-			if (node.getRoute() != null && designEditor.getSelectedContainer() != node.getRouteContainer() && node.getRoute() != designEditor.getSelectedContainer()) {
-				// switch the route
-				this.designEditor.setSelectedContainer(node.getRoute());											
-			}
+		if (highlight && isDifferentRouteCurrentlySelected()) {
+			// switch the route
+			this.designEditor.setSelectedContainer(node.getRoute());											
 		}
 		
 		PictogramElement pe = designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
@@ -70,50 +68,59 @@ public class HighlightNodeCommand extends RecordingCommand {
 		
 		try {
 			if (pe instanceof ContainerShape) {
-				ContainerShape cs = (ContainerShape) pe;
-				if (highlight) {
-					if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
-						// container node - border already visible
-						cs.getGraphicsAlgorithm().setLineWidth(3);
-						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
-					} else {
-						// child node - no border visible
-						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
-						cs.getGraphicsAlgorithm().setLineWidth(3);
-						cs.getGraphicsAlgorithm().setLineVisible(true);
-					}
-				} else {
-					if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
-						// container node - border already visible
-						cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.CONTAINER_FIGURE_BORDER_COLOR));
-						cs.getGraphicsAlgorithm().setLineWidth(1);
-					} else {
-						// child node - no border visible
-						cs.getGraphicsAlgorithm().setForeground(cs.getGraphicsAlgorithm().getBackground());
-						cs.getGraphicsAlgorithm().setLineVisible(false);
-						cs.getGraphicsAlgorithm().setLineWidth(1);
-					}
-				}
-				
-				for (GraphicsAlgorithm ga : pe.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
-					if (ga instanceof Text) {
-						Text text = (Text) ga;
-						
-						// now update node highlight
-						if (highlight) {
-							// set highlight
-							text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
-						} else {
-							// delete highlight
-							text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_TEXT_FOREGROUND));
-						}
-						break;
-					}
-				}
+				updateShapeStyle(gaService, (ContainerShape) pe);
+				updateTextStyle(pe, gaService);
 			}				
 		} catch (Exception e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
 			// ignore
 		}
+	}
+
+	protected void updateTextStyle(PictogramElement pe, IGaService gaService) {
+		for (GraphicsAlgorithm ga : pe.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
+			if (ga instanceof Text) {
+				Text text = (Text) ga;
+				
+				// now update node highlight
+				if (highlight) {
+					// set highlight
+					text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.HIGHLIGHT_COLOR));
+				} else {
+					// delete highlight
+					text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_TEXT_FOREGROUND));
+				}
+			}
+		}
+	}
+
+	protected void updateShapeStyle(IGaService gaService, ContainerShape cs) {
+		if (highlight) {
+			if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
+				// container node - border already visible
+				cs.getGraphicsAlgorithm().setLineWidth(3);
+				cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.HIGHLIGHT_COLOR));
+			} else {
+				// child node - no border visible
+				cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.HIGHLIGHT_COLOR));
+				cs.getGraphicsAlgorithm().setLineWidth(3);
+				cs.getGraphicsAlgorithm().setLineVisible(true);
+			}
+		} else {
+			if (this.node.getUnderlyingMetaModelObject().canHaveChildren()) {
+				// container node - border already visible
+				cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.CONTAINER_FIGURE_BORDER_COLOR));
+				cs.getGraphicsAlgorithm().setLineWidth(1);
+			} else {
+				// child node - no border visible
+				cs.getGraphicsAlgorithm().setForeground(cs.getGraphicsAlgorithm().getBackground());
+				cs.getGraphicsAlgorithm().setLineVisible(false);
+				cs.getGraphicsAlgorithm().setLineWidth(1);
+			}
+		}
+	}
+
+	protected boolean isDifferentRouteCurrentlySelected() {
+		return node.getRoute() != null && designEditor.getSelectedContainer() != node.getRouteContainer() && node.getRoute() != designEditor.getSelectedContainer();
 	}
 }
