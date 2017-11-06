@@ -106,6 +106,7 @@ public class CamelIOHandlerIT {
 		assertEquals("Should have the same content", model1String, model2String);
 		
 		assertThat(model1.getRouteContainer()).isNotNull();
+		assertThat(model1.getRouteContainer().getUnderlyingMetaModelObject()).isNotNull();
 
 		return model2;
 	}
