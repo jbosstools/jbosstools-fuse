@@ -27,6 +27,8 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointsListener;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -770,7 +772,16 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * clears the cache
 	 */
 	public void clearCache() {
-		getDiagramTypeProvider().getDiagram().eResource().eAdapters().clear();
-		getEditingDomain().getResourceSet().getResources().remove(getDiagramTypeProvider().getDiagram().eResource());
+		Diagram diagram = getDiagramTypeProvider().getDiagram();
+		if (diagram != null) {
+			Resource underlyingResource = diagram.eResource();
+			if (underlyingResource != null) {
+				underlyingResource.eAdapters().clear();
+				TransactionalEditingDomain editingDomain = getEditingDomain();
+				if (editingDomain != null) {
+					editingDomain.getResourceSet().getResources().remove(underlyingResource);
+				}
+			}
+		}
 	}
 }
