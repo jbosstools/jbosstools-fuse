@@ -21,6 +21,7 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardExtensionDetailsPage;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardLocationPage;
+import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardVersionsPage;
 
 /**
  * @author lhein
@@ -30,6 +31,7 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 	protected IStructuredSelection selection;
 
 	protected SyndesisExtensionProjectWizardLocationPage locationPage;
+	protected SyndesisExtensionProjectWizardVersionsPage versionPage;
 	protected SyndesisExtensionProjectWizardExtensionDetailsPage extensionDetailsPage;
 
 	public SyndesisExtensionProjectWizard() {
@@ -62,7 +64,7 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 	public boolean performFinish() {
 		final SyndesisExtension extension = getSyndesisExtension();
 		try {
-			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(locationPage.getProjectName(), locationPage.getLocationPath(), extension));
+			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(locationPage.getProjectName(), locationPage.getLocationPath(), locationPage.isInWorkspace(), extension));
 		} catch (InterruptedException iex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
@@ -84,12 +86,18 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		locationPage = new SyndesisExtensionProjectWizardLocationPage();
 		addPage(locationPage);
 
+		versionPage = new SyndesisExtensionProjectWizardVersionsPage();
+		addPage(versionPage);
+		
 		extensionDetailsPage = new SyndesisExtensionProjectWizardExtensionDetailsPage();
 		addPage(extensionDetailsPage);
 	}
 
 	private SyndesisExtension getSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
+		extension.setSpringBootVersion(versionPage.getSpringBootVersion());
+		extension.setCamelVersion(versionPage.getCamelVersion());
+		extension.setSyndesisVersion(versionPage.getSyndesisVersion());
 		extension.setExtensionId(extensionDetailsPage.getExtensionId());
 		extension.setVersion(extensionDetailsPage.getExtensionVersion());
 		extension.setName(extensionDetailsPage.getExtensionName());

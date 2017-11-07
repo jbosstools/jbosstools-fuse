@@ -96,4 +96,62 @@
       </image>
    </extension>
 
+   <extension point="org.eclipse.wst.common.project.facet.ui.images">
+      <image facet="jst.syndesis.extension"
+           path="icons/syndesis.png">
+      </image>
+   </extension>
+   
+  .<!-- Camel Project -->
+   <extension point="org.eclipse.wst.common.project.facet.core.facets">
+      <project-facet id="jst.syndesis.extension">
+         	<label>Syndesis.io Extension</label>
+         	<description>
+             	Adds support for Syndesis.io Extensions to the project.
+         	</description>
+      </project-facet>
+      
+      <project-facet-version
+            facet="jst.syndesis.extension"
+            version="1.0">
+
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.7">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      </project-facet-version>
+
+	  <action
+        	facet="jst.syndesis.extension"
+            id="jst.syndesis.extension.install"
+            type="install">
+         	<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisExtensionFacetInstallationDelegate"/>
+			<config-factory class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetDataModelProvider"/>
+      </action>
+      <action
+        	facet="jst.syndesis.extension"
+        	id="jst.syndesis.extension.version.change"
+        	type="version-change">
+     		<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetVersionChangeDelegate"/>
+      </action>
+   	</extension>
+
 </plugin>

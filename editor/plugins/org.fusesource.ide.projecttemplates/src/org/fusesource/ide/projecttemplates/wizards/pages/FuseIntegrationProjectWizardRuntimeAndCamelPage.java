@@ -55,6 +55,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
 
 
 /**
@@ -65,12 +66,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	static final String UNKNOWN_CAMEL_VERSION = "unknown"; //$NON-NLS-1$
 	private static final Pattern MAVEN_VERSION_PATTERN = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+){1}?((\\.|\\-).*)?$");
 
+	private boolean activeCamelVersionValidation;
 	private ComboViewer runtimeComboViewer;
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
 	private Combo camelVersionCombo;
-	private boolean activeCamelVersionValidation;
-
+	
 	public FuseIntegrationProjectWizardRuntimeAndCamelPage() {
 		super(Messages.newProjectWizardRuntimePageName);
 		setTitle(Messages.newProjectWizardRuntimePageTitle);
@@ -401,19 +402,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		return super.isPageComplete() && getErrorMessage() == null;
 	}
 	
-	public synchronized boolean isCamelVersionValid(String camelVersion) {
-		boolean valid = false;
-		if (camelVersion != null) {
-			try {
-				activeCamelVersionValidation = true;
-				valid = CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
-			} finally {
-				activeCamelVersionValidation = false;
-			}
-		}
-		return valid;
-	}
-	
 	class FuseRuntimeLifecycleListener implements IRuntimeLifecycleListener {
 		@Override
 		public void runtimeRemoved(IRuntime runtime) {
@@ -435,57 +423,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}
 	}
 	
-	class CamelVersionChecker implements IRunnableWithProgress {
-		
-		private String camelVersionToValidate;
-		private Thread thread;
-		private IProgressMonitor monitor;
-		private boolean valid;
-		private boolean done;
-		
-		public CamelVersionChecker(String camelVersionToValidate) {
-			this.camelVersionToValidate = camelVersionToValidate;
-		}
-		
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-		 */
-		@Override
-		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			this.monitor = monitor;
-			monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
-			this.thread = createThread();
-			this.thread.start();
-			while (this.thread.isAlive() && !this.thread.isInterrupted() && !monitor.isCanceled()) {
-				// wait
-				Thread.sleep(100);
-			}
-			done = true;
-		}
-		
-		public void cancel() {
-			this.thread.interrupt();
-			monitor.setCanceled(true);
-		}
-		
-		private Thread createThread() {
-			return new Thread( () -> {
-					valid = isCamelVersionValid(camelVersionToValidate);
-					if (!monitor.isCanceled()) {
-						monitor.done();
-					}
-			});
-		}
-		
-		public boolean isDone() {
-			return done;
-		}
-		
-		public boolean isValid() {
-			return valid;
-		}
-	}
-	
 	class VersionValidationHandler extends SelectionAdapter {
 		
 		/* (non-Javadoc)
@@ -495,7 +432,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		public void widgetSelected(SelectionEvent e) {
 			String camelVersion = getSelectedCamelVersion();
 			CamelVersionChecker versionChecker = new CamelVersionChecker(camelVersion);
-			try {					
+			try {
+				activeCamelVersionValidation = true;
 				getWizard().getContainer().run(true, true, versionChecker);
 			} catch (InterruptedException iex) {
 				versionChecker.cancel();
@@ -510,6 +448,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 					Thread.currentThread().interrupt();
 				}
 			}
+			activeCamelVersionValidation = versionChecker.isDone();
 			updateCamelValidation(camelVersion, versionChecker.isValid());
 		}
 		
