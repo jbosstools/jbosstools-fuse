@@ -10,6 +10,7 @@
    <feature id="org.fusesource.ide.core.feature"><category name="AllFeatures"/></feature>
    <feature id="org.fusesource.ide.jmx.feature"><category name="AllFeatures"/></feature>
    <feature id="org.fusesource.ide.server.extensions.feature"><category name="AllFeatures"/></feature>
+   <feature id="org.fusesource.ide.syndesis.extension.feature"><category name="AllFeatures"/></feature>
    <feature id="org.jboss.tools.fuse.transformation.feature"><category name="AllFeatures"/></feature>
 
    <!-- tests -->
@@ -26,6 +27,7 @@
    <bundle id="org.fusesource.ide.projecttemplates.tests"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.server.karaf.core.tests"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.server.tests"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.syndesis.extension.core.tests"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests"><category name="AllTests"/></bundle>
 
@@ -49,6 +51,7 @@
    <feature id="org.fusesource.ide.core.feature.source"><category name="AllSources"/></feature>
    <feature id="org.fusesource.ide.jmx.feature.source"><category name="AllSources"/></feature>
    <feature id="org.fusesource.ide.server.extensions.feature.source"><category name="AllSources"/></feature>
+   <feature id="org.fusesource.ide.syndesis.extension.feature.source"><category name="AllSources"/></feature>
    <feature id="org.jboss.tools.fuse.transformation.feature.source"><category name="AllSources"/></feature>
 
    <!-- test sources -->
@@ -65,6 +68,7 @@
    <bundle id="org.fusesource.ide.projecttemplates.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.server.karaf.core.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.server.tests.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.syndesis.extension.core.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.source"><category name="AllTests"/></bundle>
 
