@@ -40,6 +40,23 @@ public class Messages extends NLS {
 	public static String newProjectWizardLocationPageDuplicateProjectNameText;
 	public static String newProjectWizardLocationPageInvalidProjectLocationText;
 	
+	public static String newProjectWizardExtensionVersionsPageName;
+	public static String newProjectWizardExtensionVersionsPageTitle;
+	public static String newProjectWizardExtensionVersionsPageDescription;
+	public static String newProjectWizardExtensionVersionsPageSpringBootVersionLabel;
+	public static String newProjectWizardExtensionVersionsPageSpringBootVersionTooltip;
+	public static String newProjectWizardExtensionVersionsPageCamelVersionLabel;
+	public static String newProjectWizardExtensionVersionsPageCamelVersionTooltip;
+	public static String newProjectWizardExtensionVersionsPageCamelVersionValidationLabel;
+	public static String newProjectWizardExtensionVersionsPageCamelVersionValidationTooltip;
+	public static String newProjectWizardExtensionVersionsPageSyndesisVersionLabel;
+	public static String newProjectWizardExtensionVersionsPageSyndesisVersionTooltip;
+	public static String newProjectWizardExtensionVersionsPageErrorMissingSpringBootVersion;
+	public static String newProjectWizardExtensionVersionsPageErrorMissingCamelVersion;
+	public static String newProjectWizardExtensionVersionsPageErrorMissingSyndesisVersion;
+	public static String newProjectWizardExtensionVersionsPageErrorInvalidCamelVersion;
+	public static String newProjectWizardExtensionVersionsPageCamelVersionValid;
+	
 	public static String newProjectWizardExtensionDetailsPageName;
 	public static String newProjectWizardExtensionDetailsPageTitle;
 	public static String newProjectWizardExtensionDetailsPageDescription;
@@ -51,17 +68,24 @@ public class Messages extends NLS {
 	public static String newProjectWizardExtensionDetailsPageNameTooltip;
 	public static String newProjectWizardExtensionDetailsPageDescriptionLabel;
 	public static String newProjectWizardExtensionDetailsPageDescriptionTooltip;
+	public static String newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint;
 	public static String newProjectWizardExtensionDetailsPageIconLabel;
 	public static String newProjectWizardExtensionDetailsPageIconTooltip;
+	public static String newProjectWizardExtensionDetailsPageOptionalIconFieldHint;
 	public static String newProjectWizardExtensionDetailsPageIconBrowseLabel;
 	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogTitle;
 	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogFileTypeLabel;
 	public static String newProjectWizardExtensionDetailsPageTagsLabel;
 	public static String newProjectWizardExtensionDetailsPageTagsTooltip;
+	public static String newProjectWizardExtensionDetailsPageOptionalTagsFieldHint;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionId;
+	public static String newProjectWizardExtensionDetailsPageErrorInvalidExtensionId;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionName;
 	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogFileUnavailableError;
+
+	public static String configuringFacets;
+	public static String installingRequiredFacetsForSyndesisExtensionProject;
 	
 	static {
         // initialize resource bundle

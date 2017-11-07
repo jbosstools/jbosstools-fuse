@@ -10,9 +10,29 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.wizards;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -20,10 +40,16 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.OpenStrategy;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.ide.IDE;
@@ -35,34 +61,46 @@ import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.model.GlobalPreferences;
 import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+import org.fusesource.ide.syndesis.extensions.ui.templates.BasicSyndesisExtensionXmlProjectTemplate;
 
 /**
  * @author lhein
  */
 public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableWithProgress {
 
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
+	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
+	
 	private NewProjectMetaData metadata;
 	private SyndesisExtension extension;
 	
-	public SyndesisExtensionProjectCreatorRunnable(String projectName, IPath location, SyndesisExtension extension) {
+	public SyndesisExtensionProjectCreatorRunnable(String projectName, IPath location, boolean isInWorkspace, SyndesisExtension extension) {
 		this.extension = extension;
 		this.metadata = new NewProjectMetaData();
 		metadata.setProjectName(projectName);
-		metadata.setLocationPath(location);
+		if (extension != null) this.metadata.setCamelVersion(extension.getCamelVersion());
+		if (!isInWorkspace) {
+			metadata.setLocationPath(location);
+		}
 	}
 	
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.syndesisExtensionProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.syndesisExtensionProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
 			
 			// first create the project skeleton
@@ -71,18 +109,23 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 			IProject prj = c.getProject();
 						
 			if (ok) {
-//				// then configure the project for the given template
-//				AbstractProjectTemplate template = metadata.getTemplate();
-//				if (metadata.isBlankProject()) {
-//					// we create a blank project
-//					template = new EmptyProjectTemplate();
-//				}
-//				// now execute the template
-//				try {
-//					template.create(prj, metadata, subMonitor.split(1));
-//				} catch (CoreException ex) {
-//					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
-//				}
+				// then configure the project for the given template
+				AbstractProjectTemplate template = new BasicSyndesisExtensionXmlProjectTemplate();
+				// now execute the template
+				try {
+					template.create(prj, metadata, subMonitor.split(1));
+				} catch (CoreException ex) {
+					SyndesisExtensionsUIActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
+				}
+			}
+			
+			// now configure pom.xml with values from SyndesisExtension instance
+			// refresh
+			try {
+				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
+				updateSyndesisConfiguration(prj, subMonitor.split(1));
+			} catch (CoreException ex) {
+				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
 			}
 
 			// switch perspective if needed
@@ -97,28 +140,18 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 			subMonitor.setWorkRemaining(6);
 
 			// refresh
-//			try {
-//				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
-//				// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
-//				updateBundlePluginConfiguration(prj, subMonitor.split(1));
-//			} catch (CoreException ex) {
-//				ProjectTemplatesActivator.pluginLog().logError(ex);
-//			}
-			// delete invalid MANIFEST files
-//			IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
-//			if (rs != null && rs.exists()) {
-//				try {
-//					rs.delete(true, subMonitor.split(1, SubMonitor.SUPPRESS_SUBTASK));
-//				} catch (CoreException ex) {
-//					ProjectTemplatesActivator.pluginLog().logError(ex);
-//				}
-//			}
+			try {
+				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
+			} catch (CoreException ex) {
+				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+			}
+
 			subMonitor.setWorkRemaining(3);
 			
-//			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
+			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			
 			// finally open the camel context file
-//			openCamelContextFile(prj, subMonitor.split(1));
+			openCamelContextFile(prj, subMonitor.split(1));
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
@@ -126,6 +159,79 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		}
 	}
 
+	/**
+	 * responsible to update the manifest.mf to use the project name as Bundle-SymbolicName
+	 * 
+	 * @param project
+	 * @param monitor
+	 * @throws CoreException
+	 */
+	protected void updateSyndesisConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
+		try {
+			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
+			Model pomModel = new CamelMavenUtils().getMavenModel(project);
+
+			configureProjectVersions(pomModel, project);
+			customizeSyndesisPlugin(pomModel, project);
+
+			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
+				MavenPlugin.getMaven().writeModel(pomModel, out);
+				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
+			}
+		} catch (CoreException | XmlPullParserException | IOException e1) {
+			SyndesisExtensionsUIActivator.pluginLog().logError(e1);
+		}
+	}
+	
+	private void customizeSyndesisPlugin(Model pomModel, IProject project) throws XmlPullParserException, IOException {
+		Build build = pomModel.getBuild();
+		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
+		Plugin plugin = pluginsByName.get(SYNDESIS_PLUGIN_GROUPID + ":" + SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$
+		if (plugin != null) {
+			manageConfiguration(plugin, project, pomModel);
+		}
+	}
+
+	private void manageConfiguration(Plugin plugin, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
+		if (config == null) {
+			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
+					"<configuration>" + //$NON-NLS-1$
+					"</configuration>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			plugin.setConfiguration(config);
+		}
+		manageInstructions(config, project, pomModel);
+	}
+
+	private void manageInstructions(Xpp3Dom config, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+		setOrChangeConfigValue(config, "extensionId", extension.getExtensionId()); //$NON-NLS-1$
+		setOrChangeConfigValue(config, "name", extension.getName()); //$NON-NLS-1$
+		setOrChangeConfigValue(config, "description", extension.getDescription()); //$NON-NLS-1$
+		setOrChangeConfigValue(config, "version", extension.getVersion()); //$NON-NLS-1$
+		setOrChangeConfigValue(config, "tags", extension.getTags().stream().collect(Collectors.joining(","))); //$NON-NLS-1$
+	}
+	
+	private void setOrChangeConfigValue(Xpp3Dom config, String keyName, String newValue) throws XmlPullParserException, IOException {
+		Xpp3Dom elem = config.getChild(keyName); 
+		if (elem == null) {
+			elem = Xpp3DomBuilder.build(
+					new ByteArrayInputStream((String.format("<%s>%s</%s>", keyName, newValue, keyName)).getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					StandardCharsets.UTF_8.name());
+			config.addChild(elem);
+		} else {
+			elem.setValue(newValue);
+		}
+	}
+	
+	private void configureProjectVersions(Model pomModel, IProject project) {
+		Properties props = pomModel.getProperties();
+		props.setProperty("spring.boot.version", extension.getSpringBootVersion());
+		props.setProperty("camel.version", extension.getCamelVersion());
+		props.setProperty("syndesis.version", extension.getSyndesisVersion());
+		pomModel.setProperties(props);
+	}
+	
 	protected void setbackValidationValueAfterProjectCreation(boolean oldValueForValidation) {
 		GlobalPreferencesValues globalPreferencesAsValues = ValManager.getDefault().getGlobalPreferences().asValues();
 		globalPreferencesAsValues.disableAllValidation = oldValueForValidation;
@@ -140,90 +246,6 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		ValManager.getDefault().replace(globalPreferencesAsValues);
 		return oldValueForValidation;
 	}
-
-//	/**
-//	 * responsible to update the manifest.mf to use the project name as Bundle-SymbolicName
-//	 * 
-//	 * @param project
-//	 * @param monitor
-//	 * @throws CoreException
-//	 */
-//	protected void updateBundlePluginConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
-//		try {
-//			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
-//			Model pomModel = new CamelMavenUtils().getMavenModel(project);
-//
-//			customizeBundlePlugin(pomModel, project);
-//
-//			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
-//				MavenPlugin.getMaven().writeModel(pomModel, out);
-//				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
-//			}
-//		} catch (CoreException | XmlPullParserException | IOException e1) {
-//			ProjectTemplatesActivator.pluginLog().logError(e1);
-//		}
-//	}
-//	
-//	private void customizeBundlePlugin(Model pomModel, IProject project) throws XmlPullParserException, IOException {
-//		Build build = pomModel.getBuild();
-//		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
-//		Plugin plugin = pluginsByName.get(ORG_APACHE_FELIX + ":" + MAVEN_BUNDLE_PLUGIN); //$NON-NLS-1$
-//		if (plugin != null) {
-//			manageConfigurations(plugin, project, pomModel);
-//		}
-//	}
-//
-//	private void manageConfigurations(Plugin plugin, IProject project, Model pomModel) throws XmlPullParserException, IOException {
-//		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
-//		if (config == null) {
-//			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
-//					"<configuration>" + //$NON-NLS-1$
-//					"</configuration>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-//					StandardCharsets.UTF_8.name());
-//			plugin.setConfiguration(config);
-//		}
-//		manageInstructions(config, project, pomModel);
-//	}
-//
-//	private void manageInstructions(Xpp3Dom config, IProject project, Model pomModel) throws XmlPullParserException, IOException {
-//		Xpp3Dom instructions = config.getChild("instructions"); //$NON-NLS-1$
-//		if (instructions == null) {
-//			instructions = Xpp3DomBuilder.build(new ByteArrayInputStream(("<instructions>" + //$NON-NLS-1$
-//					"</instructions>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-//					StandardCharsets.UTF_8.name());
-//			config.addChild(instructions);
-//		}
-//		manageCustomInstructions(instructions, project, pomModel);
-//	}
-//	
-//	private void manageCustomInstructions(Xpp3Dom instructions, IProject project, Model pomModel) throws XmlPullParserException, IOException {
-//		Xpp3Dom bundleSymbolicName = instructions.getChild("Bundle-SymbolicName"); //$NON-NLS-1$
-//		if (bundleSymbolicName == null) {
-//			bundleSymbolicName = Xpp3DomBuilder.build(
-//					new ByteArrayInputStream(("<Bundle-SymbolicName>" + getBundleSymbolicNameForProjectName(project.getName()) + "</Bundle-SymbolicName>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-//					StandardCharsets.UTF_8.name());
-//			instructions.addChild(bundleSymbolicName);
-//		}
-//		String description = pomModel.getDescription();
-//		String desc = description != null && description.trim().length()>0 ? description : String.format("%s.%s", pomModel.getGroupId(), pomModel.getArtifactId()); 
-//		Xpp3Dom bundleName = instructions.getChild("Bundle-Name"); //$NON-NLS-1$
-//		if (bundleName == null) {
-//			bundleName = Xpp3DomBuilder.build(
-//					new ByteArrayInputStream(("<Bundle-Name>" + String.format("%s [%s]", desc, project.getName()) + "</Bundle-Name>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-//					StandardCharsets.UTF_8.name());
-//			instructions.addChild(bundleName);
-//		}
-//	}
-//	
-//	/**
-//	 * converts a project name into a bundle symbolic name
-//	 * 
-//	 * @param projectName
-//	 * @return
-//	 */
-//	public String getBundleSymbolicNameForProjectName(String projectName) {
-//		return projectName.replaceAll("[^a-zA-Z0-9-_]","");
-//	}
 
 	/**
 	 * Switches, if necessary, the perspective of active workbench window to
@@ -295,69 +317,40 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		return result == IDialogConstants.YES_ID;
 	}
 
-//	/**
-//	 * Open the first detected camel context file in the editor
-//	 *
-//	 * @param project
-//	 */
-//	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
-//		if (project != null) {
-//			final IFile[] holder = new IFile[1];
-//			searchCamelContextXMLFile(project, holder);
-//			try {
-//				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-//					searchCamelContextJavaFile(project, monitor, holder);
-//					isJavaEditorToOpen = true;
-//				}
-//			} catch (CoreException e1) {
-//				ProjectTemplatesActivator.pluginLog().logError(e1);
-//			}
-//
-//			if (holder[0] != null) {
-//				Display.getDefault().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//						try {
-//							if (!holder[0].exists()) {
-//								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
-//							}
-//							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-//							if(isJavaEditorToOpen){
-//								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
-//							} else {
-//								IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
-//								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
-//							}
-//						} catch (PartInitException e) {
-//							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
-//						}
-//					}
-//				});
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * @param project
-//	 * @param monitor
-//	 * @param holder
-//	 */
-//	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-//		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
-//		if (f != null) {
-//			holder[0] = f;
-//		}
-//	}
-//
-//	/**
-//	 * @param project
-//	 * @param holder
-//	 */
-//	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-//		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
-//		if(!camelFiles.isEmpty()){
-//			holder[0] = camelFiles.iterator().next();
-//		}
-//	}
+	/**
+	 * Open the first detected camel context file in the editor
+	 *
+	 * @param project
+	 */
+	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
+		if (project != null) {
+			final IFile[] holder = new IFile[1];
+			searchCamelContextXMLFile(project, holder);
+			if (holder[0] != null) {
+				Display.getDefault().asyncExec( () -> {
+					try {
+						if (!holder[0].exists()) {
+							new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
+						}
+						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
+						IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
+					} catch (PartInitException e) {
+						SyndesisExtensionsUIActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
+					}
+				});
+			}
+		}
+	}
 
+	/**
+	 * @param project
+	 * @param holder
+	 */
+	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
+		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
+		if(!camelFiles.isEmpty()){
+			holder[0] = camelFiles.iterator().next();
+		}
+	}
 }

@@ -28,6 +28,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class SyndesisExtension {
 	
+	private transient String springBootVersion;
+	private transient String camelVersion;
+	private transient String syndesisVersion;
+
 	@JsonProperty("id")
 	private String id;				// assigned-by-syndesis-server (must not be hardcoded in packaged extensions)
 	
@@ -211,6 +215,49 @@ public class SyndesisExtension {
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * @return the camelVersion
+	 */
+	public String getCamelVersion() {
+		return this.camelVersion;
+	}
+	/**
+	 * @param camelVersion the camelVersion to set
+	 */
+	public void setCamelVersion(String camelVersion) {
+		this.camelVersion = camelVersion;
+	}
+	/**
+	 * @return the springBootVersion
+	 */
+	public String getSpringBootVersion() {
+		return this.springBootVersion;
+	}
+	
+	/**
+	 * @param springBootVersion the springBootVersion to set
+	 */
+	public void setSpringBootVersion(String springBootVersion) {
+		this.springBootVersion = springBootVersion;
+	}
+	
+	/**
+	 * @return the syndesisVersion
+	 */
+	public String getSyndesisVersion() {
+		return this.syndesisVersion;
+	}
+	
+	/**
+	 * @param syndesisVersion the syndesisVersion to set
+	 */
+	public void setSyndesisVersion(String syndesisVersion) {
+		this.syndesisVersion = syndesisVersion;
+	}
+	
+	/**
+>>>>>>> 70cce1ec9... FUSETOOLS-2647 - initial commit for Syndesis extension support
 	 * creates the model from the given input stream
 	 * 
 	 * @param stream

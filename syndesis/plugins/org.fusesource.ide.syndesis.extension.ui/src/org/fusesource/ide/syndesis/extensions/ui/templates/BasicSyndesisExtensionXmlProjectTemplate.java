@@ -1,0 +1,61 @@
+/*******************************************************************************
+ * Copyright (c) 2017 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+
+package org.fusesource.ide.syndesis.extensions.ui.templates;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
+import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
+import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
+import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
+import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+
+/**
+ * @author lheinema
+ *
+ */
+public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTemplate {
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getConfigurator()
+	 */
+	@Override
+	public TemplateConfiguratorSupport getConfigurator() {
+		return new MavenTemplateConfigurator();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+	 */
+	@Override
+	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+		return new SyndesisProjectCreator();
+	}
+	
+	private class SyndesisProjectCreator extends UnzipStreamCreator {
+
+		private static final String TEMPLATE_FOLDER = "templates/";
+		private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
+		
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+		 */
+		@Override
+		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {
+			String bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_XML);
+			return getTemplateStream(SyndesisExtensionsUIActivator.getBundleContext().getBundle(), bundleEntry);
+		}
+	}
+}
