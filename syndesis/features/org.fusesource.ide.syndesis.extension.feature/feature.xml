@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.syndesis.extension.feature"
+      label="%featureName"
+      version="10.2.0.qualifier"
+      provider-name="%providerName"
+      plugin="org.fusesource.ide.tooling"
+      license-feature="org.jboss.tools.foundation.license.feature"
+      license-feature-version="0.0.0">
+
+   <description url="http://tools.jboss.org/features/apachecamel.html">
+      %description
+   </description>
+
+   <copyright url="http://redhat.com/">
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.7.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.navigator" version="3.5.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.wst.validation" version="1.2.700" match="greaterOrEqual"/>
+      <import plugin="org.jboss.tools.usage"/>
+      
+      <import feature="org.fusesource.ide.core.feature" version="10.2.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.camel.editor.feature" version="10.2.0" match="greaterOrEqual"/>
+   </requires>
+   
+   <plugin
+         id="org.fusesource.ide.syndesis.extension.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="org.fusesource.ide.syndesis.extension.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
