@@ -13,4 +13,4 @@ runtime-EclipseApplication-m2eclipse
 .idea
 libs/
 /editor/plugins/org.fusesource.ide.projecttemplates/templates/*.zip
-
+/syndesis/plugins/org.fusesource.ide.syndesis.extension.ui/templates/*.zip

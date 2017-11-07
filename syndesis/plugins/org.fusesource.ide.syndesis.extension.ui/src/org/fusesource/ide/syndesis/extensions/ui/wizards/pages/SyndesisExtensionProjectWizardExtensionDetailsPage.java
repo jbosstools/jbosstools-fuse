@@ -20,6 +20,8 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -50,32 +52,20 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		
 		@Override
 		public void focusLost(FocusEvent e) {
-			setErrorMessage(null);
-			
-			if (Strings.isBlank(extensionIdText.getText())) {
-				setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
-				setPageComplete(false);
-				return;
-			}
-			
-			if (Strings.isBlank(extensionVersionText.getText())) {
-				setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
-				setPageComplete(false);
-				return;
-			}
-			
-			if (Strings.isBlank(extensionNameText.getText())) {
-				setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionName);
-				setPageComplete(false);
-				return;
-			}
-
-			setPageComplete(getErrorMessage() == null);
+			validateFields();
 		}
 		
 		@Override
 		public void focusGained(FocusEvent e) {
 			// not interested in that event
+		}
+	};
+	
+	private ModifyListener modifyListener = new ModifyListener() {
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+			validateFields();
 		}
 	};
 	
@@ -102,6 +92,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionIdText.setLayoutData(gridData);
 		extensionIdText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageExtensionIdTooltip);
 		extensionIdText.addFocusListener(focusListener);
+		extensionIdText.addModifyListener(modifyListener);
 		
 		Label extensionVersionLabel = new Label(container, SWT.NONE);
 		extensionVersionLabel.setText(Messages.newProjectWizardExtensionDetailsPageVersionLabel);
@@ -110,6 +101,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionVersionText.setLayoutData(gridData);
 		extensionVersionText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageVersionTooltip);
 		extensionVersionText.addFocusListener(focusListener);
+		extensionVersionText.addModifyListener(modifyListener);
 		
 		Label extensionNameLabel = new Label(container, SWT.NONE);
 		extensionNameLabel.setText(Messages.newProjectWizardExtensionDetailsPageNameLabel);
@@ -118,6 +110,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionNameText.setLayoutData(gridData);
 		extensionNameText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageNameTooltip);
 		extensionNameText.addFocusListener(focusListener);
+		extensionNameText.addModifyListener(modifyListener);
 		
 		Label extensionDescriptionLabel = new Label(container, SWT.NONE);
 		extensionDescriptionLabel.setText(Messages.newProjectWizardExtensionDetailsPageDescriptionLabel);
@@ -125,15 +118,19 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionDescriptionText = new Text(container, SWT.BORDER);
 		extensionDescriptionText.setLayoutData(gridData);
 		extensionDescriptionText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
+		extensionDescriptionText.setMessage(Messages.newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint);
 		extensionDescriptionText.addFocusListener(focusListener);
+		extensionDescriptionText.addModifyListener(modifyListener);
 		
 		Label extensionIconLabel = new Label(container, SWT.NONE);
 		extensionIconLabel.setText(Messages.newProjectWizardExtensionDetailsPageIconLabel);
 		gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
 		extensionIconText = new Text(container, SWT.BORDER);
 		extensionIconText.setLayoutData(gridData);
+		extensionIconText.setMessage(Messages.newProjectWizardExtensionDetailsPageOptionalIconFieldHint);
 		extensionIconText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageIconTooltip);
 		extensionIconText.addFocusListener(focusListener);
+		extensionIconText.addModifyListener(modifyListener);
 		Button extensionIconBrowseButton = new Button(container, SWT.PUSH | SWT.BORDER);
 		extensionIconBrowseButton.setText(Messages.newProjectWizardExtensionDetailsPageIconBrowseLabel);
 		extensionIconBrowseButton.addFocusListener(focusListener);
@@ -163,7 +160,9 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		extensionTagsText = new Text(container, SWT.BORDER);
 		extensionTagsText.setLayoutData(gridData);
 		extensionTagsText.setToolTipText(Messages.newProjectWizardExtensionDetailsPageTagsTooltip);
+		extensionTagsText.setMessage(Messages.newProjectWizardExtensionDetailsPageOptionalTagsFieldHint);
 		extensionTagsText.addFocusListener(focusListener);
+		extensionTagsText.addModifyListener(modifyListener);
 		
 		setControl(container);
 		
@@ -212,5 +211,33 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 			return tags;
 		}
 		return Arrays.asList();
+	}
+	
+	private void validateFields() {
+		setErrorMessage(null);
+		
+		if (Strings.isBlank(extensionIdText.getText())) {
+			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
+			setPageComplete(false);
+			return;
+		} else if (extensionIdText.getText().indexOf(' ') != -1) {
+			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionId);
+			setPageComplete(false);
+			return;
+		}
+		
+		if (Strings.isBlank(extensionVersionText.getText())) {
+			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
+			setPageComplete(false);
+			return;
+		}
+		
+		if (Strings.isBlank(extensionNameText.getText())) {
+			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionName);
+			setPageComplete(false);
+			return;
+		}
+
+		setPageComplete(getErrorMessage() == null);
 	}
 }
