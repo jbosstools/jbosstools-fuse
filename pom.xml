@@ -78,6 +78,7 @@
 		<module>transformation</module>
 		<module>jmx</module>
 		<module>servers</module>
+		<module>syndesis</module>
 		<module>uitests</module>
 		<module>site</module>
 	</modules>
