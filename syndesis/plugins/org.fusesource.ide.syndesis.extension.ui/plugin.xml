@@ -96,6 +96,18 @@
       </image>
    </extension>
 
+   <!-- Maven configurator  -->
+   <extension point="org.eclipse.m2e.core.projectConfigurators">
+      <configurator 
+       	    id="org.fusesource.ide.syndesis.extension.maven.configurator"
+       	    class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisExtensionProjectConfigurator"
+       	    name="%configurator.name" 
+       	    runsAfter="org.eclipse.m2e.jdt.javaConfigurator,org.maven.ide.eclipse.configuration.wtp.configurator?"/>
+   </extension>
+
+   <extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
+   </extension>
+ 
    <extension point="org.eclipse.wst.common.project.facet.ui.images">
       <image facet="jst.syndesis.extension"
            path="icons/syndesis64.png">
