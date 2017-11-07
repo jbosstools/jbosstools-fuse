@@ -215,8 +215,6 @@ public class SyndesisExtension {
 	}
 	
 	/**
-<<<<<<< HEAD
-=======
 	 * @return the camelVersion
 	 */
 	public String getCamelVersion() {
@@ -257,7 +255,6 @@ public class SyndesisExtension {
 	}
 	
 	/**
->>>>>>> 70cce1ec9... FUSETOOLS-2647 - initial commit for Syndesis extension support
 	 * creates the model from the given input stream
 	 * 
 	 * @param stream
