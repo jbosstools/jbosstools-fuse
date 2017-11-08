@@ -39,8 +39,12 @@ import org.fusesource.ide.foundation.core.util.Strings;
  * @author lhein
  */
 public class CamelCatalogUtils {
-	public static final String CAMEL_TO_BOM_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
-	public static final String FIS_MAPPING_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_PROPERTY = "org.jboss.tools.fuse.camel2bom.url";
+	public static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_URL = System.getProperty(CAMEL_TO_BOM_MAPPING_PROPERTY, CAMEL_TO_BOM_MAPPING_DEFAULT_URL);
+	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
+	public static final String FIS_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
+	public static final String FIS_MAPPING_URL = System.getProperty(FIS_MAPPING_PROPERTY, FIS_MAPPING_DEFAULT_URL);
 	
 	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
 	
