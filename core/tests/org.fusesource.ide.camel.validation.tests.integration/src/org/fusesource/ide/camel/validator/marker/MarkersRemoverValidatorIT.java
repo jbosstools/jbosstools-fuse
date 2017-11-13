@@ -121,5 +121,9 @@ public class MarkersRemoverValidatorIT extends AbstractCamelEditorIT {
 		readAndDispatch(20);
 		return editor;
 	}
+	
+	protected String computeFilePathoUse(String filePath) {
+		return filePath;
+	}
 
 }

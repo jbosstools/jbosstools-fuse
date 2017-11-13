@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElementIDUtil;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -456,10 +457,15 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	private boolean isAttemptToCreateWiredFigure(AbstractCamelModelElement selectedContainer, ICreateContext context) {
 		if (selectedContainer != null) {
 			Eip underlyingMetaModelObject = selectedContainer.getUnderlyingMetaModelObject();
-			return (underlyingMetaModelObject != null && !underlyingMetaModelObject.canHaveChildren() && !AbstractCamelModelElement.CAMEL_CONTEXT_NODE_NAME.equalsIgnoreCase(underlyingMetaModelObject.getName()))
+			return (underlyingMetaModelObject != null && !underlyingMetaModelObject.canHaveChildren() && !(selectedContainer instanceof CamelRouteContainerElement))
 					|| context.getTargetConnection() != null;
 		}
 		return false;
+	}
+
+	protected boolean isRouteContainer(Eip underlyingMetaModelObject) {
+		String tagName = underlyingMetaModelObject.getName();
+		return AbstractCamelModelElement.CAMEL_CONTEXT_NODE_NAME.equalsIgnoreCase(tagName) || CamelFile.CAMEL_ROUTES.equalsIgnoreCase(tagName);
 	}
 
 	/**

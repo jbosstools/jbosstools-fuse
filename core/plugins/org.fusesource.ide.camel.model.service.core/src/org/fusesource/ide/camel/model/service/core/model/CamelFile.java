@@ -49,7 +49,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	
 	public static final int XML_INDENT_VALUE = 3;
 	protected static final String CAMEL_CONTEXT = "camelContext";
-	protected static final String CAMEL_ROUTES = "routes";
+	public static final String CAMEL_ROUTES = "routes";
 	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value

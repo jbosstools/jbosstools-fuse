@@ -46,6 +46,8 @@ public class AbstractCamelEditorIT {
 	protected boolean statusHandlerCalled = false;
 
 	StatusHandler statusHandlerBeforetest;
+	
+	protected String routeContainerType;
 
 	public AbstractCamelEditorIT() {
 		super();
@@ -80,7 +82,8 @@ public class AbstractCamelEditorIT {
 		Policy.setStatusHandler(statusHandlerBeforetest);
 	}
 
-	protected IEditorPart openFileInEditor(String filePath) throws Exception {
+	protected IEditorPart openFileInEditor(String filePathPattern) throws Exception {
+		String filePath = computeFilePathoUse(filePathPattern);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
 		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
 		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
@@ -93,6 +96,10 @@ public class AbstractCamelEditorIT {
 		editor.setFocus();
 		readAndDispatch(20);
 		return editor;
+	}
+
+	protected String computeFilePathoUse(String filePath) {
+		return filePath+"-"+routeContainerType+".xml";
 	}
 
 	protected void readAndDispatch(int currentNumberOfTry) {
