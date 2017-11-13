@@ -23,8 +23,6 @@ import org.eclipse.jdt.internal.junit.util.LayoutUtil;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ITreePathLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNode;
@@ -135,19 +133,17 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		}
 	}
 
-	private final static String PAGE_NAME = "NewCamelTestWizardPage2"; //$NON-NLS-1$
+	private static final String PAGE_NAME = "NewCamelTestWizardPage2"; //$NON-NLS-1$
 
-	private final static String STORE_CREATE_FINAL_METHOD_STUBS = PAGE_NAME + ".CREATE_FINAL_METHOD_STUBS"; //$NON-NLS-1$
-	private final static String STORE_USE_TASKMARKER = PAGE_NAME + ".USE_TASKMARKER"; //$NON-NLS-1$
+	private static final String STORE_CREATE_FINAL_METHOD_STUBS = PAGE_NAME + ".CREATE_FINAL_METHOD_STUBS"; //$NON-NLS-1$
+	private static final String STORE_USE_TASKMARKER = PAGE_NAME + ".USE_TASKMARKER"; //$NON-NLS-1$
 	private Object[] fCheckedObjects;
 	private Button fCreateFinalMethodStubsButton;
 	private boolean fCreateFinalStubs;
 	private boolean fCreateTasks;
 	private Button fCreateTasksButton;
-	private Button fDeselectAllButton;
 	private ContainerCheckedTreeViewer fInputEndpointsTree;
 
-	private Button fSelectAllButton;
 
 	private Label fSelectedEndpointsLabel;
 
@@ -199,16 +195,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 
 		fInputEndpointsTree.setLabelProvider(new JavaElementLabelProvider());
 		fInputEndpointsTree.setAutoExpandLevel(2);
-		fInputEndpointsTree.addCheckStateListener(new ICheckStateListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.jface.viewers.ICheckStateListener#checkStateChanged(org.eclipse.jface.viewers.CheckStateChangedEvent)
-			 */
-			@Override
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				doCheckedStateChanged();
-			}
-		});
+		fInputEndpointsTree.addCheckStateListener(event -> doCheckedStateChanged());
 
 		Composite buttonContainer = new Composite(container, SWT.NONE);
 		gd = new GridData(GridData.FILL_VERTICAL);
@@ -218,7 +205,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		buttonLayout.marginHeight = 0;
 		buttonContainer.setLayout(buttonLayout);
 
-		fSelectAllButton = new Button(buttonContainer, SWT.PUSH);
+		Button fSelectAllButton = new Button(buttonContainer, SWT.PUSH);
 		fSelectAllButton.setText(WizardMessages.NewCamelTestWizardPageTwo_selectAll);
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		fSelectAllButton.setLayoutData(gd);
@@ -235,7 +222,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		});
 		LayoutUtil.setButtonDimensionHint(fSelectAllButton);
 
-		fDeselectAllButton = new Button(buttonContainer, SWT.PUSH);
+		Button fDeselectAllButton = new Button(buttonContainer, SWT.PUSH);
 		fDeselectAllButton.setText(WizardMessages.NewCamelTestWizardPageTwo_deselectAll);
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		fDeselectAllButton.setLayoutData(gd);
@@ -372,7 +359,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	}
 
 	private List<AbstractCamelModelElement> getInputs(CamelRouteContainerElement context) {
-		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
+		List<AbstractCamelModelElement> eps = new ArrayList<>();
 		
 		for (AbstractCamelModelElement route : context.getChildElements()) {
 			if (route instanceof CamelRouteElement) {
@@ -385,7 +372,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	}
 	
 	private List<AbstractCamelModelElement> getOutputs(CamelRouteContainerElement context) {
-		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
+		List<AbstractCamelModelElement> eps = new ArrayList<>();
 		
 		for (AbstractCamelModelElement route : context.getChildElements()) {
 			if (route instanceof CamelRouteElement) {
@@ -400,7 +387,9 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	private void collectEndpoints(List<AbstractCamelModelElement> searchList, List<AbstractCamelModelElement> resultList) {
 		for (AbstractCamelModelElement cme : searchList) {
 			if (cme.isEndpointElement()) resultList.add(cme);
-			if (cme.getChildElements().isEmpty() == false) collectEndpoints(cme.getChildElements(), resultList);
+			if (!cme.getChildElements().isEmpty()) {
+				collectEndpoints(cme.getChildElements(), resultList);
+			}
 		}
 	}
 	
@@ -442,9 +431,9 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	}
 
 	private void setChildren(TreeNode node, List<AbstractCamelModelElement> endpointList, boolean input) {
-		List<TreeNode> children = new ArrayList<TreeNode>();
+		List<TreeNode> children = new ArrayList<>();
 		for (AbstractCamelModelElement e : endpointList) {
-			if (e.isEndpointElement() == false) continue; 
+			if (!e.isEndpointElement()) continue; 
 			TreeNode child = new EndpointTreeNode(e.getParameter("uri"), input);
 			child.setParent(node);
 			children.add(child);
