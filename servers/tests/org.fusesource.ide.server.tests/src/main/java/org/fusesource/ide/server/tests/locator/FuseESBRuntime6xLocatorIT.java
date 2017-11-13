@@ -45,7 +45,7 @@ public class FuseESBRuntime6xLocatorIT {
 	 */
 	@Parameters
 	public static Object[] data() {
-		return FuseESBMockRuntimeCreationUtil.SUPPORTED_6X_RUNTIMES;
+		return FuseESBMockRuntimeCreationUtil.SUPPORTED_6X_RUNTIMES.toArray();
 	}
 			
 	/**
