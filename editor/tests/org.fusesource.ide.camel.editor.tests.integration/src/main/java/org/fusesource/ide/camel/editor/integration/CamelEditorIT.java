@@ -12,9 +12,6 @@ package org.fusesource.ide.camel.editor.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.InputStream;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.datatypes.ILocation;
@@ -34,11 +31,6 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
@@ -50,53 +42,31 @@ import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-public class CamelEditorIT extends AbstractCamelEditorIT{
+@RunWith(Parameterized.class)
+public class CamelEditorIT extends AbstractCamelEditorIT {
 	
-	private IViewPart contentOutlineView = null;
-	
-	@Test
-	public void openFileWithoutContext() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/beans.xml");
-		
-		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
+	@Parameters(name = "Route container of type: {0}")
+	public static String[] data() {
+	    return new String[] { "camelContext", "routes" };
 	}
 	
-	@Test
-	public void openFileWithoutContextWhenOutlinePageOpened() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditorWithOutlineViewOpened("/beans.xml");
-		
-		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
-		assertThat(statusHandlerCalled).isFalse();
-		
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(contentOutlineView);
-	}
-	
-	@Test
-	public void openRoutesFileAndCheckFor2Tabs() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/routes.xml");
-		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(2);
-	}
-	
-	@Test
-	public void openContextFileAndCheckFor3Tabs() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
-		assertThat(getAvailableEditorTabCount(openEditorOnFileStore)).isEqualTo(3);
-	}
-	
-	private int getAvailableEditorTabCount(IEditorPart editorPart) {
-		CamelEditor ed = (CamelEditor)editorPart;
-		return ed.getTabbedFolder().getItemCount();
+	public CamelEditorIT(String routeContainerType) {
+		this.routeContainerType = routeContainerType;
 	}
 	
 	@Test
 	public void addWiredElementsAfterThenBeforeLog() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/basic.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/basic");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -105,7 +75,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject(), new NullProgressMonitor());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement logEP = model.findNode("log1");
 		PictogramElement logPE = fp.getPictogramElementForBusinessObject(logEP);
@@ -132,7 +102,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void insertElementIntoFlow() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/insert.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/insert");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -141,7 +111,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		
 		CamelDesignEditor ed = ((CamelEditor)openEditorOnFileStore).getDesignEditor();
 		IFeatureProvider fp = ed.getFeatureProvider();
-		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject(), new NullProgressMonitor());
 		CamelFile model = ed.getModel();
 		AbstractCamelModelElement inbox = model.findNode("inbox");
 		AbstractCamelModelElement outbox = model.findNode("outbox");
@@ -168,7 +138,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void deleteElementFromFlow() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/delete");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -196,7 +166,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void deleteElementThenInsert2Elements() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/delete.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/delete");
 		
 		readAndDispatch(20);
 		
@@ -221,7 +191,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		assertThat(connections.size()).isEqualTo(1);
 
 		Connection con = connections.get(0);
-		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject());
+		CamelModel metaModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject(), new NullProgressMonitor());
 		// now drop another file endpoint onto the connection
 		createConnector(fp, 
 						(ContainerShape)fp.getPictogramElementForBusinessObject(inbox.getParent()), 
@@ -255,7 +225,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void deleteElement_respectComponentHeightWhenThereAreHighHeightChoiceContainer() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/deleteKeepHeight.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/deleteKeepHeight");
 		
 		readAndDispatch(20);
 		
@@ -277,7 +247,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void createASecondRoute() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
 		
 		readAndDispatch(20);
 		
@@ -290,16 +260,20 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer(fp.getDiagramTypeProvider().getDiagram());
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", getEIP(ed, "route"));
 		executeCommandInTransactionDomain(createCtx, createRouteFigureFeature);
 		
 		AbstractCamelModelElement createdRoute = model.findNode("_route1");
 		assertThat(createdRoute).isNotNull();
 	}
 
+	protected Eip getEIP(CamelDesignEditor ed, String name) {
+		return CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject(), new NullProgressMonitor()).getEip(name);
+	}
+
 	@Test
 	public void dropRouteOnRoute() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
 		
 		readAndDispatch(20);
 		
@@ -312,13 +286,13 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", getEIP(ed, "route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
 	@Test
 	public void dropWhenOnRoute() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
 		
 		readAndDispatch(20);
 		
@@ -332,7 +306,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("when"));
+		CreateFigureFeature createWhenFigureFeature = new CreateFigureFeature(fp, "When", "", getEIP(ed, "when"));
 		assertThat(createWhenFigureFeature.canExecute(createCtx)).isTrue();
 		executeCommandInTransactionDomain(createCtx, createWhenFigureFeature);
 		AbstractCamelModelElement when = model.findNode("_when1");
@@ -343,7 +317,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void dropRouteOnLog() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/basic.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/basic");
 		
 		readAndDispatch(20);
 		
@@ -356,13 +330,13 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngLoggraphic.getX());
 		createCtx.setY(exisitngLoggraphic.getY() + exisitngLoggraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(log));
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", getEIP(ed, "route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isFalse();
 	}
 	
 	@Test
 	public void dropRouteOnCamelContext() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/route.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/route");
 		
 		readAndDispatch(20);
 		
@@ -374,13 +348,13 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(1);
 		createCtx.setY(1);
 		createCtx.setTargetContainer(dia);
-		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("route"));
+		CreateFigureFeature createRouteFigureFeature = new CreateFigureFeature(fp, "Route", "", getEIP(ed, "route"));
 		assertThat(createRouteFigureFeature.canExecute(createCtx)).isTrue();
 	}
 	
 	@Test
 	public void reconnectToUnwiredNodeShouldBePossible() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect");
 		
 		readAndDispatch(20);
 		
@@ -396,7 +370,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		createCtx.setX(exisitngRoutegraphic.getX());
 		createCtx.setY(exisitngRoutegraphic.getY() + exisitngRoutegraphic.getWidth() + 5);
 		createCtx.setTargetContainer((ContainerShape)fp.getPictogramElementForBusinessObject(route));
-		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "",  CamelCatalogCacheManager.getInstance().getCamelModelForProject(ed.getWorkspaceProject()).getEip("bean"));
+		CreateFigureFeature createFigureFeature = new CreateFigureFeature(fp, "Bean", "",  getEIP(ed, "bean"));
 		executeCommandInTransactionDomain(createCtx, createFigureFeature);
 		
 		AbstractCamelModelElement createdBean = model.findNode("_bean1");
@@ -408,7 +382,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 
 	@Test
 	public void reconnectToWiredNodeShouldNotBepossible() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect");
 		
 		readAndDispatch(20);
 		
@@ -424,7 +398,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void reconnectToFirstInFlowShouldNotBePossible() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect");
 		
 		readAndDispatch(20);
 		
@@ -440,7 +414,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 
 	@Test
 	public void reconnectToNestedNodeShouldNotBePossible() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect");
 		
 		readAndDispatch(20);
 		
@@ -456,7 +430,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void reconnectSourceToLastElementOfFlowShouldBePossible() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect2.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/reconnect2");
 		
 		readAndDispatch(20);
 		
@@ -481,7 +455,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void collapsedRoutesStaySmallWhenCollapseExpandChoiceInOtherRoute() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -534,7 +508,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void collapsedAndExpandedOtherwiseAndChoiceStaysInParentBounds() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -583,7 +557,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void collapsedOtherwiseStaysSmallInChoice() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -610,7 +584,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 	
 	@Test
 	public void collapsedAndRestoredChoiceWithCollapsedOtherwiseKeepsOtherwiseSmall() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/collapseExpand");
 		assertThat(openEditorOnFileStore).isNotNull();
 		assertThat(openEditorOnFileStore).isInstanceOf(CamelEditor.class);
 		assertThat(((CamelEditor)openEditorOnFileStore).getDesignEditor()).isNotNull();
@@ -713,24 +687,4 @@ public class CamelEditorIT extends AbstractCamelEditorIT{
 		executeCommandInTransactionDomain(createCtx, ccff);
 	}
 		
-	private IEditorPart openFileInEditorWithOutlineViewOpened(String filePath) throws Exception {
-		InputStream inputStream = CamelEditorIT.class.getClassLoader().getResourceAsStream(filePath);
-		final IFile fileWithoutContext = fuseProject.getProject().getFile(filePath.startsWith("/") ? filePath.substring(1) : filePath);
-		fileWithoutContext.create(inputStream, true, new NullProgressMonitor());
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.closeAllPerspectives(false, false);
-		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
-		
-		readAndDispatch(20);
-		contentOutlineView  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ContentOutline");
-		readAndDispatch(20);
-		//Workaround to ignore Widget is disposed for JMX Navigator, issue fixed in JBoss Tools 10.0 (by side effect of a larger modification)
-		statusHandlerCalled = false;
-		IEditorPart editor = IDE.openEditor(page, fileWithoutContext, true);
-		page.activate(editor);
-		editor.setFocus();
-		readAndDispatch(20);
-		return editor;
-	}
-	
 }

@@ -27,14 +27,28 @@ import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelEleme
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.test.util.editor.AbstractCamelEditorIT;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Parameterized.class)
 public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	
+	@Parameters(name = "Route container of type: {0}")
+	public static String[] data() {
+	    return new String[] { "camelContext", "routes" };
+	}
+	
 	private CamelDesignEditor editor;
+	
+	public CamelEditorMoveIT(String routeContainerType) {
+		this.routeContainerType = routeContainerType;
+	}
 
 	@Test
 	public void testMoveInsideSameContainerNotAllowed() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
 		
 		readAndDispatch(20);
 		
@@ -53,7 +67,7 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	
 	@Test
 	public void testMoveToCanvasNotAllowed() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
 		
 		readAndDispatch(20);
 		
@@ -141,7 +155,7 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	
 	@Test
 	public void testMoveAndInsertDropOnConnectionNotAllowedOnConnectedConnection() throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
 		
 		readAndDispatch(20);
 		
@@ -187,7 +201,7 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	}
 	
 	private void testMoveAndInsert(String nodeIdToMove, String nodeIdSourceOFConnection, String nodeIdTargetOFconnection) throws Exception{
-		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
 		
 		readAndDispatch(20);
 		
@@ -226,7 +240,7 @@ public class CamelEditorMoveIT extends AbstractCamelEditorIT {
 	}
 
 	private void testMove(String nodeIdToMove, String nodeIdTargetForMoveIn) throws Exception {
-		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute.xml");
+		IEditorPart openEditorOnFileStore = openFileInEditor("/moveInRoute");
 		
 		readAndDispatch(20);
 		
