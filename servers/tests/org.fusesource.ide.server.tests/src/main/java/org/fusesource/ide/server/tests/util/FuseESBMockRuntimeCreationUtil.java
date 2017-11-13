@@ -13,6 +13,8 @@ package org.fusesource.ide.server.tests.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
@@ -37,13 +39,8 @@ public final class FuseESBMockRuntimeCreationUtil {
 	public static final String FUSEESB_70 = "org.fusesource.ide.fuseesb.runtime.70";
 	public static final String FUSEESB_7X = "org.fusesource.ide.fuseesb.runtime.7x";
 	
-	public static final String[] SUPPORTED_6X_RUNTIMES = new String[] {
-		FUSEESB_60, FUSEESB_61, FUSEESB_62, FUSEESB_63
-	};
-	
-	public static final String[] SUPPORTED_7X_RUNTIMES = new String[] {
-		FUSEESB_70
-	};
+	public static final List SUPPORTED_6X_RUNTIMES = Arrays.asList(FUSEESB_60, FUSEESB_61, FUSEESB_62, FUSEESB_63);
+	public static final List SUPPORTED_7X_RUNTIMES = Arrays.asList(FUSEESB_70);
 	
 	/**
 	 * creates a mock runtime folder structure 
@@ -90,17 +87,11 @@ public final class FuseESBMockRuntimeCreationUtil {
 	}
 	
 	private static boolean isSupported6xRuntime (String runtimeId) {
-		for (String id : SUPPORTED_6X_RUNTIMES) {
-			if (id.equals(runtimeId)) return true;
-		}
-		return false;
+		return SUPPORTED_6X_RUNTIMES.contains(runtimeId);
 	}
 	
 	private static boolean isSupported7xRuntime (String runtimeId) {
-		for (String id : SUPPORTED_7X_RUNTIMES) {
-			if (id.equals(runtimeId)) return true;
-		}
-		return false;
+		return SUPPORTED_7X_RUNTIMES.contains(runtimeId);
 	}
 	
 	private static void createBaseFuseFolderSkeleton(IPath path) {

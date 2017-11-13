@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -50,7 +50,7 @@ public class FuseESBServerBean7xIT extends TestCase {
 	 */
 	@Parameters
 	public static Object[] data() {
-		return FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES;
+		return FuseESBMockRuntimeCreationUtil.SUPPORTED_7X_RUNTIMES.toArray();
 	}
 
 	/**
