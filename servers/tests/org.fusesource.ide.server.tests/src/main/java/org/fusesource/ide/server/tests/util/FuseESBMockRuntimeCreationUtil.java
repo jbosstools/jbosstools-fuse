@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,6 +31,10 @@ import org.jboss.tools.as.test.core.internal.utils.BundleUtils;
  */
 public final class FuseESBMockRuntimeCreationUtil {
 	
+	private FuseESBMockRuntimeCreationUtil() {
+		// static access only
+	}
+	
 	public static final String FUSEESB_60 = "org.fusesource.ide.fuseesb.runtime.60";
 	public static final String FUSEESB_61 = "org.fusesource.ide.fuseesb.runtime.61";
 	public static final String FUSEESB_62 = "org.fusesource.ide.fuseesb.runtime.62";
@@ -39,8 +44,8 @@ public final class FuseESBMockRuntimeCreationUtil {
 	public static final String FUSEESB_70 = "org.fusesource.ide.fuseesb.runtime.70";
 	public static final String FUSEESB_7X = "org.fusesource.ide.fuseesb.runtime.7x";
 	
-	public static final List SUPPORTED_6X_RUNTIMES = Arrays.asList(FUSEESB_60, FUSEESB_61, FUSEESB_62, FUSEESB_63);
-	public static final List SUPPORTED_7X_RUNTIMES = Arrays.asList(FUSEESB_70);
+	public static final List<String> SUPPORTED_6X_RUNTIMES = Collections.unmodifiableList(Arrays.asList(FUSEESB_60, FUSEESB_61, FUSEESB_62, FUSEESB_63));
+	public static final List<String> SUPPORTED_7X_RUNTIMES = Collections.unmodifiableList(Arrays.asList(FUSEESB_70));
 	
 	/**
 	 * creates a mock runtime folder structure 
