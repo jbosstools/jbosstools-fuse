@@ -202,6 +202,9 @@ public class JMXCamelConnectJob extends Job {
 	public boolean belongsTo(Object family) {
 		return JMX_CONNECT_JOB_FAMILY.equals(family) || super.belongsTo(family);
 	}
-	
+
+	public MBeanServerConnection getMBeanConnection() {
+		return mBeanServerConnection;
+	}
 	
 }

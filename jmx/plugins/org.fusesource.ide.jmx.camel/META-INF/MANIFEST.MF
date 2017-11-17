@@ -36,5 +36,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.camel.CamelJMXPlugin
 Bundle-ClassPath: .
 Export-Package: org.fusesource.ide.jmx.camel,
+ org.fusesource.ide.jmx.camel.internal;x-friends:="org.fusesource.ide.jmx.camel.tests.integration",
  org.fusesource.ide.jmx.camel.jmx.content.navigator.providers,
  org.fusesource.ide.jmx.camel.navigator;x-friends:="org.fusesource.ide.jmx.camel.tests.integration,org.fusesource.ide.jmx.diagram.view"

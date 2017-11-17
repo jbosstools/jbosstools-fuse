@@ -14,6 +14,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.management.MBeanServerConnection;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -685,4 +687,8 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	public ThreadGarbageCollector getGarbageCollector() {
 		return garbageCollector;
 }
+
+	public MBeanServerConnection getMBeanConnection() {
+		return conJob.getMBeanConnection();
+	}
 }
