@@ -12,12 +12,8 @@ package org.fusesource.ide.projecttemplates.actions.ui;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.osgi.util.NLS;
-import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
@@ -44,29 +40,7 @@ public class SwitchCamelVersionWizard extends Wizard {
 	public boolean performFinish() {
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		try {
-			getContainer().run(true, false, new IRunnableWithProgress() {
-				
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.validatingCamelVersionMessage, selectedCamelVersion), 1);
-					Thread thread = new Thread(() -> {
-						while(true) {
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								ProjectTemplatesActivator.pluginLog().logError(e);
-								Thread.currentThread().interrupt();
-							}
-							subMonitor.setWorkRemaining(100).split(1);
-						}
-					});
-					thread.start();
-					hasValidCamelVersion = CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(selectedCamelVersion);
-					subMonitor.setWorkRemaining(0);
-					thread.interrupt();
-				}
-				
-			});
+			getContainer().run(true, false, new SwitchCamelVersionRunnableWithProgress(this, selectedCamelVersion));
 		} catch (InvocationTargetException | InterruptedException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		}
@@ -78,6 +52,10 @@ public class SwitchCamelVersionWizard extends Wizard {
 
 	public String getSelectedCamelVersion() {
 		return page.getSelectedCamelVersion();
+	}
+
+	public void setHasValidCamelVersion(boolean hasValidCamelVersion) {
+		this.hasValidCamelVersion = hasValidCamelVersion;
 	}
 
 }

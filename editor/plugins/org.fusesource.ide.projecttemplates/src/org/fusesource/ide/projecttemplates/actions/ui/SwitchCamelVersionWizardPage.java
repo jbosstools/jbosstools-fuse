@@ -24,7 +24,7 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 public class SwitchCamelVersionWizardPage extends WizardPage {
 
 	private String initialCamelVersion;
-	private Combo versionCombo;
+	private String currentSelectedVersion;
 
 	protected SwitchCamelVersionWizardPage(String initialCamelVersion) {
 		super(Messages.switchCamelVersionDialogName);
@@ -41,12 +41,13 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 		Label lbtVersion = new Label(parent, SWT.NONE);
 		lbtVersion.setText(Messages.switchCamelVersionDialogVersionsLabel);
 
-		versionCombo = new Combo(parent, SWT.DROP_DOWN | SWT.RIGHT);
+		Combo versionCombo = new Combo(parent, SWT.DROP_DOWN | SWT.RIGHT);
 		versionCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		versionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream()
 				.sorted((String o1, String o2) -> o2.compareToIgnoreCase(o1))
 				.filter(camelVersion -> !initialCamelVersion.equals(camelVersion))
 				.toArray(String[]::new));
+		versionCombo.addModifyListener(event -> currentSelectedVersion = versionCombo.getText());
 		versionCombo.select(0);
 		versionCombo.addModifyListener(event -> getWizard().getContainer().updateButtons());
 		
@@ -54,7 +55,7 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 	}
 
 	public String getSelectedCamelVersion() {
-		return versionCombo.getText();
+		return currentSelectedVersion;
 	}
 	
 	@Override
@@ -69,4 +70,5 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 		}
 		return isDifferentVersion && !Strings.isBlank(getSelectedCamelVersion());
 	}
+	
 }
