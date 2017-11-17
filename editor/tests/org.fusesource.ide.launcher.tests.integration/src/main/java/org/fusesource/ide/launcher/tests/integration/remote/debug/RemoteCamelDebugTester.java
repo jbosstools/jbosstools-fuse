@@ -24,8 +24,13 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
+import org.fusesource.ide.jmx.camel.internal.RemoteJMXCamelFacade;
+import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.JMXCamelConnectJob;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -42,7 +47,7 @@ public class RemoteCamelDebugTester {
 		this.camelFile = camelFile;
 	}
 
-	public void test() throws CoreException {
+	public void test() throws Exception {
 		CamelDebugTarget debugTarget = (CamelDebugTarget) remoteDebuglaunch.getDebugTarget();
 		
 		new JobWaiterUtil(Arrays.asList(JMXCamelConnectJob.JMX_CONNECT_JOB_FAMILY)).waitJob(new NullProgressMonitor());
@@ -57,7 +62,30 @@ public class RemoteCamelDebugTester {
 		
 		checkBreakpointDeletion(debugTarget, breakPointOnFirstElement);
 		
+		checkRouteUpdate(debugTarget);
+		
 		checkDisconnect(debugTarget);
+	}
+
+	private void checkRouteUpdate(CamelDebugTarget debugTarget) throws Exception {
+		CamelJMXFacade facade = createCamelFacade(debugTarget);
+		CamelContextMBean camelContextMBean = facade.getCamelContexts().get(0);
+		String initialRoute = camelContextMBean.dumpRoutesAsXml();
+		String updatedRouteXml = initialRoute.replaceFirst(getFirstProcessorId(facade, camelContextMBean), "anotherComponentId");
+		camelContextMBean.addOrUpdateRoutesFromXml(updatedRouteXml);
+		assertThat(getFirstProcessorId(facade, camelContextMBean)).isEqualTo("anotherComponentId");
+	}
+
+	protected CamelJMXFacade createCamelFacade(CamelDebugTarget debugTarget) throws Exception {
+		if(debugTarget.getJmxConnectionWrapper() != null) {
+			return new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(debugTarget.getJmxConnectionWrapper()));
+		} else {
+			return new RemoteJMXCamelFacade(debugTarget.getMBeanConnection());
+		}
+	}
+
+	private String getFirstProcessorId(CamelJMXFacade facade, CamelContextMBean camelContextMBean) throws Exception {
+		return facade.getProcessors(camelContextMBean.getManagementName()).get(0).getProcessorId();
 	}
 
 	private void checkInitialActionState(CamelDebugTarget debugTarget) {

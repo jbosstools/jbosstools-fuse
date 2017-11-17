@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 public interface CamelContextMBean {
 
     String getId();
-
     String getCamelId();
 
     String getManagementName();
@@ -35,50 +34,35 @@ public interface CamelContextMBean {
     Map<String,String> getProperties();
     
     Boolean getTracing();
-    
     void setTracing(java.lang.Boolean tracing);
     
     Integer getInflightExchanges();
     
     void setTimeout(long timeout);
-    
     long getTimeout();
     
     void setTimeUnit(TimeUnit timeUnit);
-    
     TimeUnit getTimeUnit();
     
     void setShutdownNowOnTimeout(boolean shutdownNowOnTimeout);
-    
     boolean isShutdownNowOnTimeout();
     
     void start();
-    
     void stop();
-    
     void suspend();
-    
     void resume();
     
     void sendBody(String endpointUri, Object body);
-    
     void sendStringBody(String endpointUri, String body);
-    
     void sendBodyAndHeaders(String endpointUri, Object body, java.util.Map<String, Object> headers);
-    
     Object requestBody(String endpointUri, Object body);
-    
     Object requestStringBody(String endpointUri, String body);
-    
     Object requestBodyAndHeaders(String endpointUri, Object body, Map<String, Object> headers);
     
     String dumpRoutesAsXml();
-    
     void addOrUpdateRoutesFromXml(String xml);
-
     String dumpRoutesStatsAsXml(boolean fullStats, boolean includeProcessors);
 
     boolean createEndpoint(String uri);
-
     int removeEndpoints(String pattern);
 }

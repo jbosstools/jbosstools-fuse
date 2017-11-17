@@ -66,7 +66,7 @@ public class RemoteCamelLaunchConfigurationDelegateOverJolokiaIT extends Abstrac
 		Map<String,Object> map = new HashMap<>();
 		map.put(JolokiaConnectionWrapper.ID, RemoteCamelLaunchConfigurationDelegateOverJolokiaIT.class.getName());
 		map.put(JolokiaConnectionWrapper.URL, JOLOKIA_URL);
-		map.put(JolokiaConnectionWrapper.GET_OR_POST, "GET");
+		map.put(JolokiaConnectionWrapper.GET_OR_POST, "POST");
 		map.put(JolokiaConnectionWrapper.IGNORE_SSL_ERRORS, true);
 		map.put(JolokiaConnectionWrapper.HEADERS, Collections.EMPTY_MAP);
 		jolokiaConnection = provider.createConnection(map);
