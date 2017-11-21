@@ -167,7 +167,7 @@ public class Mapping {
      */
     public List<Object> getFieldOrFieldExclude() {
         if (fieldOrFieldExclude == null) {
-            fieldOrFieldExclude = new ArrayList<Object>();
+            fieldOrFieldExclude = new ArrayList<>();
         }
         return this.fieldOrFieldExclude;
     }
