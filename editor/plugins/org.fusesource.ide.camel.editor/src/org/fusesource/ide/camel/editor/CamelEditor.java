@@ -65,8 +65,8 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelRoutesElement;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -321,17 +321,16 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * 			  the page index
 	 */
 	private void createGlobalConfPage(int index) {
-		if (designEditor.getModel() != null && designEditor.getModel().getRouteContainer() instanceof CamelRoutesElement) {
-			return;
-		}
-		try {
-			globalConfigEditor = new CamelGlobalConfigEditor(this);
-			IEditorInput editorInput = getEditorInput();
-			addPage(index, globalConfigEditor, editorInput);
-			setPageText(index, UIMessages.editorGlobalConfigurationPageTitle);
-		} catch (PartInitException e) {
-			ErrorDialog.openError(getSite().getShell(),
-					"Error creating nested global configuration page", null, e.getStatus());
+		CamelFile model = designEditor.getModel();
+		if (model != null && model.getRouteContainer() instanceof CamelContextElement) {
+			try {
+				globalConfigEditor = new CamelGlobalConfigEditor(this);
+				addPage(index, globalConfigEditor, editorInput);
+				setPageText(index, UIMessages.editorGlobalConfigurationPageTitle);
+			} catch (PartInitException e) {
+				ErrorDialog.openError(getSite().getShell(),
+						"Error creating nested global configuration page", null, e.getStatus());
+			}
 		}
 	}
 	

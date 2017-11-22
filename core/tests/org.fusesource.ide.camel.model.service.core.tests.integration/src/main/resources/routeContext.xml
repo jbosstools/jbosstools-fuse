@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <!-- some beans... -->
+  <bean id="devBean1" class="org.fusesource.camel.rider.sample.MyBean"/>
+
+  <bean id="devBean2" class="org.fusesource.camel.rider.sample.AnotherBean"/>
+
+  <!-- some camel route stuff now... -->
+
+  <routeContext xmlns="http://camel.apache.org/schema/spring" id="context1">
+
+    <route id="route3">
+      <description>edit file!</description>
+      <from uri="seda:someWhere"/>
+      <to uri="seda:anotherPlace"/>
+    </route>
+  </routeContext>
+
+  <!-- some other stuff here... -->
+
+</beans>

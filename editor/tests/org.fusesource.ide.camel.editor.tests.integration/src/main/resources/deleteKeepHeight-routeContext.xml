@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <routeContext id="context1" xmlns="http://camel.apache.org/schema/spring">
+        <route id="route1">
+            <from id="inbox" uri="file:inbox"/>
+            <log id="deleteMe" message="bla"/>
+            <choice id="_choice1">
+                <when id="_when1"/>
+            </choice>
+            <to id="outbox" uri="file:outbox"/>
+        </route>
+    </routeContext>
+</beans>

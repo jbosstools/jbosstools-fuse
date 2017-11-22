@@ -16,15 +16,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
+ * This currently can represent routes or routeContext.
+ * 
  * @author lhein
  */
-public class CamelRoutesElement extends CamelRouteContainerElement {
+public class CamelRouteContainerWithoutGlobalConfigElement extends CamelRouteContainerElement {
 
 	/**
 	 * @param parent
 	 * @param underlyingXmlNode
 	 */
-	public CamelRoutesElement(AbstractCamelModelElement parent, Node underlyingXmlNode) {
+	public CamelRouteContainerWithoutGlobalConfigElement(AbstractCamelModelElement parent, Node underlyingXmlNode) {
 		super(parent, underlyingXmlNode);
 	}
 
@@ -47,9 +49,6 @@ public class CamelRoutesElement extends CamelRouteContainerElement {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement#getRouteContainer()
-	 */
 	@Override
 	public CamelRouteContainerElement getRouteContainer() {
 		return this;

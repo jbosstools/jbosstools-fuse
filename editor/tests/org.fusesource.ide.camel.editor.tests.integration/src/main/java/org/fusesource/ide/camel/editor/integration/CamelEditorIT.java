@@ -57,7 +57,7 @@ public class CamelEditorIT extends AbstractCamelEditorIT {
 	
 	@Parameters(name = "Route container of type: {0}")
 	public static String[] data() {
-	    return new String[] { "camelContext", "routes" };
+	    return new String[] { "camelContext", "routes", "routeContext" };
 	}
 	
 	public CamelEditorIT(String routeContainerType) {

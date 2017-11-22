@@ -26,9 +26,6 @@ public abstract class CamelRouteContainerElement extends AbstractCamelModelEleme
 		super(parent, underlyingXmlNode);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#supportsBreakpoint()
-	 */
 	@Override
 	public boolean supportsBreakpoint() {
 		return false;
