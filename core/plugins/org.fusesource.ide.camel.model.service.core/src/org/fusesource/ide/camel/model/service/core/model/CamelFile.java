@@ -48,7 +48,8 @@ import org.w3c.dom.events.EventTarget;
 public class CamelFile extends AbstractCamelModelElement implements EventListener {
 	
 	public static final int XML_INDENT_VALUE = 3;
-	protected static final String CAMEL_CONTEXT = "camelContext";
+	private static final String CAMEL_CONTEXT = "camelContext";
+	private static final String ROUTE_CONTEXT = "routeContext";
 	public static final String CAMEL_ROUTES = "routes";
 	
 	/**
@@ -100,7 +101,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		NodeList childNodes = document.getDocumentElement().getChildNodes();
 		if (CAMEL_ROUTES.equals(CamelUtils.getTagNameWithoutPrefix(document.getDocumentElement()))) {
 			// found a routes element
-			CamelRoutesElement cre = new CamelRoutesElement(this, document.getDocumentElement());
+			CamelRouteContainerWithoutGlobalConfigElement cre = new CamelRouteContainerWithoutGlobalConfigElement(this, document.getDocumentElement());
 			Node namedItem = document.getDocumentElement().getAttributes().getNamedItem("id");
 			String containerId = namedItem != null ? namedItem.getNodeValue() : CamelUtils.getTagNameWithoutPrefix(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
 			int startIdx 	= resource.getFullPath().toOSString().indexOf("--");
@@ -127,9 +128,9 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 					cce.initialize();
 					// then add the context to the file
 					addChildElement(cce);
-				} else if (CAMEL_ROUTES.equals(name)) {
+				} else if (CAMEL_ROUTES.equals(name) || ROUTE_CONTEXT.equals(name)) {
 					// found a camel context
-					CamelRoutesElement cre = new CamelRoutesElement(this, child);
+					CamelRouteContainerWithoutGlobalConfigElement cre = new CamelRouteContainerWithoutGlobalConfigElement(this, child);
 					cre.setId(id);
 					cre.initialize();
 					// then add the context to the file
@@ -439,9 +440,7 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 	@Override
 	public CamelRouteContainerElement getRouteContainer() {
 		for (AbstractCamelModelElement e : getChildElements()) {
-			String translatedNodeName = e.getTagNameWithoutPrefix();
-			if (CAMEL_CONTEXT.equalsIgnoreCase(translatedNodeName) || 
-				CAMEL_ROUTES.equalsIgnoreCase(translatedNodeName)) {
+			if (e instanceof CamelRouteContainerElement) {
 				return (CamelRouteContainerElement) e;
 			}
 		}

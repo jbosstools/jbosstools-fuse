@@ -69,7 +69,8 @@ public class CamelIOHandlerIT {
 				"withQuestionMark.xml",
 				"globalElementsSample.xml",
 				"routes.xml",
-				"withMarshalCsvHeaders.xml");
+				"withMarshalCsvHeaders.xml",
+				"routeContext.xml");
 		//@formatter:on
 	}
 
