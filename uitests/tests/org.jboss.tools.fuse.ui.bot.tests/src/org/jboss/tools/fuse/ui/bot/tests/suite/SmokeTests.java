@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.ui.bot.tests.suite;
 
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.jboss.tools.fuse.ui.bot.tests.CamelEditorTest;
-import org.jboss.tools.fuse.ui.bot.tests.JMXNavigatorTest;
 import org.jboss.tools.fuse.ui.bot.tests.ProjectLocalRunTest;
 import org.jboss.tools.fuse.ui.bot.tests.SimpleTest;
 import org.junit.runner.RunWith;
@@ -27,7 +26,6 @@ import junit.framework.TestSuite;
  */
 @SuiteClasses({
 	CamelEditorTest.class,
-	JMXNavigatorTest.class,
 	ProjectLocalRunTest.class,
 	SimpleTest.class,
 	})

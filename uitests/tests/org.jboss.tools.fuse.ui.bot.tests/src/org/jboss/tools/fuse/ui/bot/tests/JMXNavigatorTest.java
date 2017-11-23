@@ -10,39 +10,27 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.requirement.CamelExampleRunner.IS_RESUMED_PATTERN;
+import static org.jboss.tools.fuse.reddeer.requirement.CamelExampleRunner.IS_SUSPENDED_PATTERN;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.StringJoiner;
+
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.common.matcher.RegexMatcher;
-import org.eclipse.reddeer.common.wait.TimePeriod;
-import org.eclipse.reddeer.common.wait.WaitUntil;
-import org.eclipse.reddeer.common.wait.WaitWhile;
-import org.eclipse.reddeer.core.exception.CoreLayerException;
-import org.eclipse.reddeer.core.matcher.WithTooltipTextMatcher;
-import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
-import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
+import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
+import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
+import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
-import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
-import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
-import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
-import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
-import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
-import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
-import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
-import org.jboss.tools.fuse.reddeer.preference.ConsolePreferencePage;
-import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement;
+import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExample;
+import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirementMatcher;
+import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRunner;
 import org.jboss.tools.fuse.reddeer.view.FuseJMXNavigator;
-import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,172 +43,118 @@ import org.junit.runner.RunWith;
  * <li><i>Suspend</i>, <i>Resume</i> options work</li>
  * </ul>
  * 
+ * This test requires an external Camel route specified by the requirement
+ * restriction. The Camel route is started and stopped by the requirement logic.
+ * 
  * @author tsedmik
+ * @author Andrej Podhradsky (apodhrad@redhat.com)
+ * 
  */
-@CleanWorkspace
-@OpenPerspective(FuseIntegrationPerspective.class)
+@CamelExample
 @RunWith(RedDeerSuite.class)
 public class JMXNavigatorTest {
 
-	private static final String PROJECT_NAME = "camel-spring";
-	private static final String PROJECT_CAMEL_CONTEXT = "camel-context.xml";
-
 	private static Logger log = Logger.getLogger(JMXNavigatorTest.class);
+
+	@InjectRequirement
+	private CamelExampleRequirement camelExample;
+
+	@RequirementRestriction
+	public static RequirementMatcher getRequirementMatcher() {
+		return new CamelExampleRequirementMatcher("camel-example-spring-boot", "2.20.1");
+	}
 
 	/**
 	 * Prepares test environment
 	 */
 	@BeforeClass
-	public static void setupCreateProject() {
-
-		log.info("Maximizing workbench shell.");
-		new WorkbenchShell().maximize();
-
-		log.info("Disable showing Console view after standard output changes");
-		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
-		ConsolePreferencePage consolePref = new ConsolePreferencePage(dialog);
-		dialog.open();
-		dialog.select(consolePref);
-		consolePref.toggleShowConsoleErrorWrite(false);
-		consolePref.toggleShowConsoleStandardWrite(false);
-		dialog.ok();
-
+	public static void prepareTestEnvironment() {
 		log.info("Disable showing Error Log view after changes");
-		new LogView().open();
-		new LogView().setActivateOnNewEvents(false);
-
-		log.info("Create a new Fuse project from 'Content Based Router' template");
-		ProjectFactory.newProject(PROJECT_NAME).version("2.15.1.redhat-621084").template(ProjectTemplate.CBR)
-				.type(ProjectType.SPRING).create();
-		new CamelProject(PROJECT_NAME).update();
-
-		log.info("Run the Fuse project as Local Camel Context");
-		new CamelProject(PROJECT_NAME).runCamelContextWithoutTests(PROJECT_CAMEL_CONTEXT);
+		LogView errorLog = new LogView();
+		errorLog.open();
+		errorLog.setActivateOnNewEvents(false);
 	}
 
 	/**
-	 * Prepares test environment
+	 * Deletes logs in Error Log view
 	 */
 	@Before
-	public void defaultSetup() {
-
-		new WorkbenchShell();
-
+	public void deleteErrorLog() {
 		log.info("Deleting Error Log.");
 		new LogView().deleteLog();
 	}
 
 	/**
-	 * Cleans up test environment
-	 */
-	@After
-	public void defaultClean() {
-
-		new WorkbenchShell();
-
-		log.info("Closing all non workbench shells.");
-		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
-
-		log.info("Save editor");
-		try {
-			new DefaultToolItem(new WorkbenchShell(), 0, new WithTooltipTextMatcher(new RegexMatcher("Save All.*")))
-					.click();
-		} catch (Exception e) {
-			log.info("Nothing to save");
-		}
-	}
-
-	/**
-	 * Cleans up test environment
-	 */
-	@AfterClass
-	public static void defaultFinalClean() {
-
-		new WorkbenchShell();
-
-		log.info("Try to terminate a console.");
-		ConsoleView console = new ConsoleView();
-		console.open();
-		try {
-			console.terminateConsole();
-			new WaitWhile(new JobIsRunning(), TimePeriod.LONG);
-		} catch (CoreLayerException ex) {
-			log.warn("Cannot terminate a console. Perhaps there is no active console.");
-		}
-
-		log.info("Deleting all projects");
-		ProjectFactory.deleteAllProjects();
-	}
-
-	/**
 	 * <p>
-	 * Test tries to access nodes relevant for Local Camel Context in JMX Navigator view.
+	 * Tests access to nodes relevant for Local Camel Context in JMX Navigator view.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>create a new project from 'Content Based Router' template</li>
-	 * <li>open Project Explorer View</li>
-	 * <li>run the Fuse project as Local Camel Context</li>
 	 * <li>open JMX Navigator View</li>
-	 * <li>try to access node "Local Camel Context", "Camel", "camelContext", "Endpoints", "file", "work/cbr/input"</li>
-	 * <li>try to access node "Local Camel Context", "Camel", "camelContext", "Routes", "cbr-route",
-	 * "file:work/cbr/input", "Log _log1", "Choice", "Otherwise", "Log _log4", "file:work/cbr/output/others"</li>
+	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * "Endpoints", "stream", "out"</li>
+	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * "Endpoints", "timer", "hello?period=2000"</li>
+	 * <li>try to access node "Local Camel Context", "Camel", "SampleCamel",
+	 * "Routes", "route1", "timer:hello?period={{timer.period}}"</li>
+	 * <li>check errors in Error Log</li>
 	 * </ol>
 	 */
 	@Test
 	public void testProcessesView() {
-
-		FuseJMXNavigator jmx = new FuseJMXNavigator();
-		assertNotNull(
-				"The following path is inaccesible: Local Camel Context/Camel/camelContext-.../Endpoints/file/work/cbr/input",
-				jmx.getNode("Local Camel Context", "Camel", "cbr-example-context", "Endpoints", "file",
-						"work/cbr/input"));
-		assertNotNull(
-				"The following path is inaccesible: Local Camel Context/Camel/camelContext-.../Routes/cbr-route/file:work/cbr/input/Log _log1/Choice/Otherwise/Log _log4/file:work/cbr/output/others",
-				jmx.getNode("Local Camel Context", "Camel", "cbr-example-context", "Routes", "cbr-route",
-						"file:work/cbr/input", "Log _log1", "Choice", "Otherwise", "Log _log4",
-						"file:work/cbr/output/others"));
+		String root = camelExample.getConfiguration().getJarFile().getName();
+		assertJMXNode(root, "Camel", "SampleCamel", "Endpoints", "stream", "out");
+		assertJMXNode(root, "Camel", "SampleCamel", "Endpoints", "timer", "hello?period=2000");
+		assertJMXNode(root, "Camel", "SampleCamel", "Routes", "route1", "timer:hello?period={{timer.period}}",
+				"Transform transform1", "stream:out");
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
 	/**
 	 * <p>
-	 * Test tries context menu options related to Camel Context runs as Local Camel Context - Suspend/Resume context.
+	 * Tests context menu options related to Camel Context runs as Local Camel
+	 * Context - Suspend/Resume context.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>create a new project from 'Content Based Router' template</li>
-	 * <li>open Project Explorer View</li>
-	 * <li>run the Fuse project as Local Camel Context</li>
 	 * <li>open JMX Navigator View</li>
-	 * <li>select node "Local Camel Context", "Camel", "camelContext-..."</li>
+	 * <li>select node "Local Camel Context", "Camel", "SampleCamel"</li>
 	 * <li>select the context menu option Suspend Camel Context</li>
-	 * <li>check if the Console View contains the text "Route: cbr-route suspend complete" (true)</li>
-	 * <li>open JMX Navigator View</li>
-	 * <li>select node "Local Camel Context", "Camel", "camelContext-..."</li>
+	 * <li>check if the camel output contains the text "is suspended in"</li>
+	 * <li>select node "Local Camel Context", "Camel", "SampleCamel"</li>
 	 * <li>select the context menu option Resume Camel Context</li>
-	 * <li>check if the Console View contains the text "Route: cbr-route resumed" (true)</li>
+	 * <li>check if the camel output contains the text "resumed in"</li>
 	 * </ol>
 	 */
 	@Test
 	public void testContextOperations() {
-
+		String root = camelExample.getConfiguration().getJarFile().getName();
+		CamelExampleRunner runner = camelExample.getRunner();
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.open();
-		assertTrue("Suspension was not performed",
-				jmx.suspendCamelContext("Local Camel Context", "Camel", "cbr-example-context"));
+		assertTrue("Suspension was not performed", jmx.suspendCamelContext(root, "Camel", "SampleCamel"));
 		try {
-			new WaitUntil(new ConsoleHasText("Route: cbr-route suspend complete"), TimePeriod.DEFAULT);
+			runner.waitForOutputWithPattern(IS_SUSPENDED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
-			fail("Camel context was not suspended!");
+			fail("Camel context was not suspended!\n" + runner.getOutput());
 		}
-		assertTrue("Resume of Camel Context was not performed",
-				jmx.resumeCamelContext("Local Camel Context", "Camel", "cbr-example-context"));
+		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext(root, "Camel", "SampleCamel"));
 		try {
-			new WaitUntil(new ConsoleHasText("Route: cbr-route resumed"), TimePeriod.DEFAULT);
+			runner.waitForOutputWithPattern(IS_RESUMED_PATTERN);
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not resumed!");
 		}
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+	}
+
+	private void assertJMXNode(String... path) {
+		StringJoiner msg = new StringJoiner("/");
+		for (String part : path) {
+			msg.add(part);
+		}
+
+		FuseJMXNavigator jmx = new FuseJMXNavigator();
+		jmx.open();
+		assertNotNull("The following path is inaccesible: " + msg.toString(), jmx.getNode(path));
 	}
 }
