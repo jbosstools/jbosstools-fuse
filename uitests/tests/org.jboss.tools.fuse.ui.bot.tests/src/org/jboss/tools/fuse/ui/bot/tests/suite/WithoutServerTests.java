@@ -17,7 +17,6 @@ import org.jboss.tools.fuse.ui.bot.tests.DataTransformationTest;
 import org.jboss.tools.fuse.ui.bot.tests.DebuggerTest;
 import org.jboss.tools.fuse.ui.bot.tests.DownloadServerTest;
 import org.jboss.tools.fuse.ui.bot.tests.FuseProjectTest;
-import org.jboss.tools.fuse.ui.bot.tests.JMXNavigatorTest;
 import org.jboss.tools.fuse.ui.bot.tests.LicenseTest;
 import org.jboss.tools.fuse.ui.bot.tests.NewFuseProjectWizardTest;
 import org.jboss.tools.fuse.ui.bot.tests.ProjectLocalRunTest;
@@ -40,7 +39,6 @@ import junit.framework.TestSuite;
 	DebuggerTest.class,
 	DownloadServerTest.class,
 	FuseProjectTest.class,
-	JMXNavigatorTest.class,
 	LicenseTest.class,
 	NewFuseProjectWizardTest.class,
 	ProjectLocalRunTest.class,

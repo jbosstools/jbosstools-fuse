@@ -4,5 +4,6 @@
   <extension point="org.eclipse.reddeer.junit.requirement">
     <requirement class="org.jboss.tools.fuse.reddeer.requirement.FuseRequirement"/>
     <requirement class="org.jboss.tools.fuse.reddeer.requirement.SAPLibraryRequirement"/>
+    <requirement class="org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement"/>
   </extension>
 </plugin>
