@@ -42,18 +42,15 @@ import org.fusesource.ide.projecttemplates.wizards.pages.provider.TemplateLabelP
  */
 public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 
-	private Button btn_emptyProject;
-	private Button btn_templateProject;
-	private Button btn_blueprintDSL;
-	private Button btn_springDSL;
-	private Button btn_javaDSL;
+	private Button buttonEmptyProject;
+	private Button buttonTemplateProject;
+	private Button buttonBlueprintDSL;
+	private Button buttonSpringDSL;
+	private Button buttonJavaDSL;
 	
-	private FilteredTree list_templates;
+	private FilteredTree listTemplates;
 	private Text templateInfoText;
 	
-	/**
-	 * 
-	 */
 	public FuseIntegrationProjectWizardTemplatePage() {
 		super(Messages.newProjectWizardTemplatePageName);
 		setTitle(Messages.newProjectWizardTemplatePageTitle);
@@ -70,23 +67,19 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
 		
-		Label lbl_headline = new Label(container, SWT.None);
-		lbl_headline.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
-		lbl_headline.setText(Messages.newProjectWizardTemplatePageHeadlineLabel);
+		Label lblHeadline = new Label(container, SWT.None);
+		lblHeadline.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
+		lblHeadline.setText(Messages.newProjectWizardTemplatePageHeadlineLabel);
 		
-		Composite grp_emptyVsTemplate = new Composite(container, SWT.None);
+		Composite grpEmptyVsTemplate = new Composite(container, SWT.None);
 		GridLayout gridLayout = new GridLayout(1, false);
-		grp_emptyVsTemplate.setLayout(gridLayout);
-	    grp_emptyVsTemplate.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		grpEmptyVsTemplate.setLayout(gridLayout);
+	    grpEmptyVsTemplate.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 	       
-	    btn_emptyProject = new Button(grp_emptyVsTemplate, SWT.RADIO);
-	    btn_emptyProject.setText(Messages.newProjectWizardTemplatePageEmptyProjectLabel);
-	    btn_emptyProject.setToolTipText(Messages.newProjectWizardTemplatePageEmptyProjectDescription);
-	    btn_emptyProject.addSelectionListener(new SelectionAdapter() {
-	    	/*
-	    	 * (non-Javadoc)
-	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	    	 */
+	    buttonEmptyProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
+	    buttonEmptyProject.setText(Messages.newProjectWizardTemplatePageEmptyProjectLabel);
+	    buttonEmptyProject.setToolTipText(Messages.newProjectWizardTemplatePageEmptyProjectDescription);
+	    buttonEmptyProject.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		setTemplatesActive(false);
@@ -94,14 +87,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	}
 	    });
 	    
-	    btn_templateProject = new Button(grp_emptyVsTemplate, SWT.RADIO);
-	    btn_templateProject.setText(Messages.newProjectWizardTemplatePageTemplateProjectLabel);
-	    btn_templateProject.setToolTipText(Messages.newProjectWizardTemplatePageTemplateProjectDescription);
-	    btn_templateProject.addSelectionListener(new SelectionAdapter() {
-	    	/*
-	    	 * (non-Javadoc)
-	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	    	 */
+	    buttonTemplateProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
+	    buttonTemplateProject.setText(Messages.newProjectWizardTemplatePageTemplateProjectLabel);
+	    buttonTemplateProject.setToolTipText(Messages.newProjectWizardTemplatePageTemplateProjectDescription);
+	    buttonTemplateProject.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		setTemplatesActive(true);
@@ -109,13 +98,13 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    	}
 	    });
 
-	    Composite templates = new Composite(grp_emptyVsTemplate, SWT.None);
+	    Composite templates = new Composite(grpEmptyVsTemplate, SWT.None);
 	    GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
 		gd.horizontalIndent = 20;
 	    templates.setLayoutData(gd);
 	    templates.setLayout(new GridLayout(2, true));
 	    
-	    list_templates = createFilteredTree(templates);
+	    listTemplates = createFilteredTree(templates);
 	    
 	    templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 	    templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -123,61 +112,49 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	    Label spacer = new Label(container, SWT.None);
 	    spacer.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1));
 	    
-	    Label lbl_dsl = new Label(container, SWT.None);
-		lbl_dsl.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
-		lbl_dsl.setText(Messages.newProjectWizardTemplatePageDSLLabel);
+	    Label lblDsl = new Label(container, SWT.None);
+		lblDsl.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
+		lblDsl.setText(Messages.newProjectWizardTemplatePageDSLLabel);
 			    
-		Composite grp_dslSelection = new Composite(container, SWT.None);
+		Composite grpDslSelection = new Composite(container, SWT.None);
 	    gridLayout = new GridLayout(1, false);
-		grp_dslSelection.setLayout(gridLayout);
+		grpDslSelection.setLayout(gridLayout);
 		gd = new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1);
 		gd.horizontalIndent = 20;
-	    grp_dslSelection.setLayoutData(gd);
+	    grpDslSelection.setLayoutData(gd);
 	    
-	    btn_blueprintDSL = new Button(grp_dslSelection, SWT.RADIO);
-	    btn_blueprintDSL.setText(Messages.newProjectWizardTemplatePageBlueprintDSLLabel);
-	    btn_blueprintDSL.setToolTipText(Messages.newProjectWizardTemplatePageBlueprintDSLDescription);
-	    btn_blueprintDSL.addSelectionListener(new SelectionAdapter() {
-	    	/*
-	    	 * (non-Javadoc)
-	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	    	 */
+	    buttonBlueprintDSL = new Button(grpDslSelection, SWT.RADIO);
+	    buttonBlueprintDSL.setText(Messages.newProjectWizardTemplatePageBlueprintDSLLabel);
+	    buttonBlueprintDSL.setToolTipText(Messages.newProjectWizardTemplatePageBlueprintDSLDescription);
+	    buttonBlueprintDSL.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
 	    	}
 	    });
 	    
-	    btn_springDSL = new Button(grp_dslSelection, SWT.RADIO);
-	    btn_springDSL.setText(Messages.newProjectWizardTemplatePageSpringDSLLabel);
-	    btn_springDSL.setToolTipText(Messages.newProjectWizardTemplatePageSpringDSLDescription);
-	    btn_springDSL.addSelectionListener(new SelectionAdapter() {
-	    	/*
-	    	 * (non-Javadoc)
-	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	    	 */
+	    buttonSpringDSL = new Button(grpDslSelection, SWT.RADIO);
+	    buttonSpringDSL.setText(Messages.newProjectWizardTemplatePageSpringDSLLabel);
+	    buttonSpringDSL.setToolTipText(Messages.newProjectWizardTemplatePageSpringDSLDescription);
+	    buttonSpringDSL.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
 	    	}
 	    });
 	    
-	    btn_javaDSL = new Button(grp_dslSelection, SWT.RADIO);
-	    btn_javaDSL.setText(Messages.newProjectWizardTemplatePageJavaDSLLabel);
-	    btn_javaDSL.setToolTipText(Messages.newProjectWizardTemplatePageJavaDSLDescription);
-	    btn_javaDSL.addSelectionListener(new SelectionAdapter() {
-	    	/*
-	    	 * (non-Javadoc)
-	    	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-	    	 */
+	    buttonJavaDSL = new Button(grpDslSelection, SWT.RADIO);
+	    buttonJavaDSL.setText(Messages.newProjectWizardTemplatePageJavaDSLLabel);
+	    buttonJavaDSL.setToolTipText(Messages.newProjectWizardTemplatePageJavaDSLDescription);
+	    buttonJavaDSL.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent event) {
 	    		validate();
 	    	}
 	    });
 
-	    btn_emptyProject.setSelection(true);
-	    btn_blueprintDSL.setSelection(true);
+	    buttonEmptyProject.setSelection(true);
+	    buttonBlueprintDSL.setSelection(true);
 	    
 		setControl(container);
 		
@@ -191,18 +168,14 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 */
 	private FilteredTree createFilteredTree(Composite parent) {
 		final int treeStyle = SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER;
-		list_templates = new FilteredTree(parent, treeStyle, new TemplateNameAndKeywordPatternFilter(), true);
-		list_templates.getFilterControl().setMessage(Messages.newProjectWizardTemplatePageFilterBoxText);
-		list_templates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
-		list_templates.getViewer().setContentProvider(new TemplateContentProvider());
-		list_templates.getViewer().setLabelProvider(new TemplateLabelProvider());
-		list_templates.getViewer().addFilter(new ExcludeEmptyCategoriesFilter());
-		list_templates.getViewer().setInput(getTemplates());
-		list_templates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-			 */
+		listTemplates = new FilteredTree(parent, treeStyle, new TemplateNameAndKeywordPatternFilter(), true);
+		listTemplates.getFilterControl().setMessage(Messages.newProjectWizardTemplatePageFilterBoxText);
+		listTemplates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
+		listTemplates.getViewer().setContentProvider(new TemplateContentProvider());
+		listTemplates.getViewer().setLabelProvider(new TemplateLabelProvider());
+		listTemplates.getViewer().addFilter(new ExcludeEmptyCategoriesFilter());
+		listTemplates.getViewer().setInput(getTemplates());
+		listTemplates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (!event.getSelection().isEmpty()) {
@@ -217,19 +190,19 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 				updateTemplateInfo(null);
 			}
 		});
-		return list_templates;
+		return listTemplates;
 	}
 	
 	private void updateTemplateInfo(TemplateItem template) {
 		if (template == null) {
-			btn_blueprintDSL.setEnabled(true);
-			btn_springDSL.setEnabled(true);
-			btn_javaDSL.setEnabled(true);
+			buttonBlueprintDSL.setEnabled(true);
+			buttonSpringDSL.setEnabled(true);
+			buttonJavaDSL.setEnabled(true);
 			templateInfoText.setText("");
 		} else {
-			btn_blueprintDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
-			btn_springDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.SPRING));
-			btn_javaDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.JAVA));
+			buttonBlueprintDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
+			buttonSpringDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.SPRING));
+			buttonJavaDSL.setEnabled(template.getTemplate().supportsDSL(CamelDSLType.JAVA));
 			templateInfoText.setText(template.getDescription());
 		}
 		validate();
@@ -243,21 +216,21 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	}
 	
 	private void setTemplatesActive(boolean active) {
-		list_templates.getViewer().getTree().setEnabled(active);
-		list_templates.getViewer().getTree().getParent().setEnabled(active);
-		list_templates.getFilterControl().setEnabled(active);
-		list_templates.setEnabled(active);
+		listTemplates.getViewer().getTree().setEnabled(active);
+		listTemplates.getViewer().getTree().getParent().setEnabled(active);
+		listTemplates.getFilterControl().setEnabled(active);
+		listTemplates.setEnabled(active);
 		templateInfoText.setEnabled(active);
 		if (!active) {
 			// user selected Empty Project -> activate all DSL buttons
-			btn_blueprintDSL.setEnabled(true);
-			btn_springDSL.setEnabled(true);
-			btn_javaDSL.setEnabled(true);
+			buttonBlueprintDSL.setEnabled(true);
+			buttonSpringDSL.setEnabled(true);
+			buttonJavaDSL.setEnabled(true);
 		} else {
 			// user wants to use template -> activate dsl buttons if supported
-			btn_blueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
-			btn_springDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
-			btn_javaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));
+			buttonBlueprintDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.BLUEPRINT));
+			buttonSpringDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.SPRING));
+			buttonJavaDSL.setEnabled(getSelectedTemplate() != null && getSelectedTemplate().getTemplate().supportsDSL(CamelDSLType.JAVA));
 			updateDSLButtonGroup(getSelectedTemplate());
 		}
 	}
@@ -278,17 +251,17 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	
 	private void selectButtonForDSL(CamelDSLType dsltype) {
 		if (dsltype.equals(CamelDSLType.BLUEPRINT)) {
-			btn_blueprintDSL.setSelection(true);
-			btn_javaDSL.setSelection(false);
-			btn_springDSL.setSelection(false);
+			buttonBlueprintDSL.setSelection(true);
+			buttonJavaDSL.setSelection(false);
+			buttonSpringDSL.setSelection(false);
 		} else if (dsltype.equals(CamelDSLType.JAVA)) {
-			btn_blueprintDSL.setSelection(false);
-			btn_javaDSL.setSelection(true);
-			btn_springDSL.setSelection(false);
+			buttonBlueprintDSL.setSelection(false);
+			buttonJavaDSL.setSelection(true);
+			buttonSpringDSL.setSelection(false);
 		} else {
-			btn_blueprintDSL.setSelection(false);
-			btn_javaDSL.setSelection(false);
-			btn_springDSL.setSelection(true);
+			buttonBlueprintDSL.setSelection(false);
+			buttonJavaDSL.setSelection(false);
+			buttonSpringDSL.setSelection(true);
 		}
 	}
 	
@@ -297,15 +270,15 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	}
 	
 	private boolean disabledDSLSelected() {
-		return 	isSelectedAndDisabled(btn_blueprintDSL) ||
-				isSelectedAndDisabled(btn_javaDSL) ||
-				isSelectedAndDisabled(btn_springDSL);
+		return 	isSelectedAndDisabled(buttonBlueprintDSL) ||
+				isSelectedAndDisabled(buttonJavaDSL) ||
+				isSelectedAndDisabled(buttonSpringDSL);
 	}
 	
 	private void validate() {
-		if (btn_templateProject.getSelection() &&
-			(list_templates.getViewer().getSelection().isEmpty() || 
-			 Selections.getFirstSelection(list_templates.getViewer().getSelection()) instanceof CategoryItem || !isSelectedDSLSupported())) {
+		if (buttonTemplateProject.getSelection() &&
+			(listTemplates.getViewer().getSelection().isEmpty() || 
+			 Selections.getFirstSelection(listTemplates.getViewer().getSelection()) instanceof CategoryItem || !isSelectedDSLSupported())) {
 			setPageComplete(false);
 		} else {
 			setPageComplete(true);
@@ -319,11 +292,11 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 */
 	private boolean isSelectedDSLSupported() {
 		CamelDSLType dsl = null;
-		if (btn_blueprintDSL.getSelection()) {
+		if (buttonBlueprintDSL.getSelection()) {
 			dsl = CamelDSLType.BLUEPRINT;
-		} else if (btn_springDSL.getSelection()) {
+		} else if (buttonSpringDSL.getSelection()) {
 			dsl = CamelDSLType.SPRING;
-		} else if (btn_javaDSL.getSelection()) {
+		} else if (buttonJavaDSL.getSelection()) {
 			dsl = CamelDSLType.JAVA;
 		}
 		return 	dsl != null && 
@@ -338,8 +311,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 * @return
 	 */
 	public boolean isEmptyProject() {
-		if (!Widgets.isDisposed(btn_emptyProject)) {
-			return btn_emptyProject.getSelection();
+		if (!Widgets.isDisposed(buttonEmptyProject)) {
+			return buttonEmptyProject.getSelection();
 		} else {
 			return getSelectedTemplate() == null;
 		}
@@ -351,8 +324,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 * @return
 	 */
 	public boolean isTemplateProject() {
-		if (btn_templateProject != null && !btn_templateProject.isDisposed()) {
-			return btn_templateProject.getSelection();
+		if (buttonTemplateProject != null && !buttonTemplateProject.isDisposed()) {
+			return buttonTemplateProject.getSelection();
 		}
 		return false;
 	}
@@ -363,9 +336,9 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 * @return
 	 */
 	public TemplateItem getSelectedTemplate() {
-		if (btn_templateProject.getSelection() && 
-			!list_templates.getViewer().getSelection().isEmpty()) {
-			Object o = Selections.getFirstSelection(list_templates.getViewer().getSelection());
+		if (buttonTemplateProject.getSelection() && 
+			!listTemplates.getViewer().getSelection().isEmpty()) {
+			Object o = Selections.getFirstSelection(listTemplates.getViewer().getSelection());
 			if (o instanceof TemplateItem) {
 				return (TemplateItem)o;
 			}
@@ -374,44 +347,44 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	}
 	
 	public CamelDSLType getDSL() {
-		if (btn_blueprintDSL.getSelection()) return CamelDSLType.BLUEPRINT;
-		if (btn_springDSL.getSelection()) return CamelDSLType.SPRING;
-		if (btn_javaDSL.getSelection()) return CamelDSLType.JAVA;
+		if (buttonBlueprintDSL.getSelection()) return CamelDSLType.BLUEPRINT;
+		if (buttonSpringDSL.getSelection()) return CamelDSLType.SPRING;
+		if (buttonJavaDSL.getSelection()) return CamelDSLType.JAVA;
 		return null;
 	}
 	
 	/**
 	 * /!\ Public for test purpose
 	 */
-	public FilteredTree getList_templates() {
-		return this.list_templates;
+	public FilteredTree getListTemplates() {
+		return this.listTemplates;
 	}
 	
 	/**
 	 * /!\ Public for test purpose
 	 */
-	public Button getBtn_blueprintDSL() {
-		return this.btn_blueprintDSL;
+	public Button getBtnBlueprintDSL() {
+		return this.buttonBlueprintDSL;
 	}
 	
 	/**
 	 * /!\ Public for test purpose
 	 */
-	public Button getBtn_javaDSL() {
-		return this.btn_javaDSL;
+	public Button getBtnJavaDSL() {
+		return this.buttonJavaDSL;
 	}
 	
 	/**
 	 * @return the btn_springDSL
 	 */
-	public Button getBtn_springDSL() {
-		return this.btn_springDSL;
+	public Button getBtnSpringDSL() {
+		return this.buttonSpringDSL;
 	}
 	
 	/**
 	 * /!\ Public for test purpose
 	 */
-	public Button getBtn_templateProject() {
-		return this.btn_templateProject;
+	public Button getBtnTemplateProject() {
+		return this.buttonTemplateProject;
 	}
 }
