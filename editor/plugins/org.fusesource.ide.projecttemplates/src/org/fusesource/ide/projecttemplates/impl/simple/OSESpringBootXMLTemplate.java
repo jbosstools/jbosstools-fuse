@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -22,6 +23,13 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
 public class OSESpringBootXMLTemplate extends AbstractProjectTemplate {
+	
+	private static ComparableVersion minimalCompatibleCamelVersion = new ComparableVersion("2.18.0");
+	
+	@Override
+	public boolean isCompatible(String camelVersion) {
+		return new ComparableVersion(camelVersion).compareTo(minimalCompatibleCamelVersion) >= 0;
+	}
 	
 	@Override
 	public boolean supportsDSL(CamelDSLType type) {

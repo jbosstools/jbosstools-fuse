@@ -74,10 +74,6 @@ public class TemplateItem implements NameAndWeightSupport {
 		return this.id;
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getName()
-	 */
 	@Override
 	public String getName() {
 		return this.name;
@@ -90,10 +86,6 @@ public class TemplateItem implements NameAndWeightSupport {
 		return this.description;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.wizards.pages.model.NameAndWeightSupport#getWeight()
-	 */
 	@Override
 	public int getWeight() {
 		return this.weight;
@@ -111,5 +103,9 @@ public class TemplateItem implements NameAndWeightSupport {
 	 */
 	public AbstractProjectTemplate getTemplate() {
 		return this.template;
+	}
+
+	public boolean isCompatible(String camelVersion) {
+		return template.isCompatible(camelVersion);
 	}
 }

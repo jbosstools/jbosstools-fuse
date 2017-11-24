@@ -29,6 +29,7 @@ import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.CompatibleCamelVersionFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.ExcludeEmptyCategoriesFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.TemplateNameAndKeywordPatternFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
@@ -50,116 +51,111 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	
 	private FilteredTree listTemplates;
 	private Text templateInfoText;
+	private FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
+	private CompatibleCamelVersionFilter compatibleCamelVersionFilter;
 	
-	public FuseIntegrationProjectWizardTemplatePage() {
+	public FuseIntegrationProjectWizardTemplatePage(FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage) {
 		super(Messages.newProjectWizardTemplatePageName);
+		this.runtimeAndCamelVersionPage = runtimeAndCamelVersionPage;
 		setTitle(Messages.newProjectWizardTemplatePageTitle);
 		setDescription(Messages.newProjectWizardTemplatePageDescription);
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		setPageComplete(false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
-		
+
 		Label lblHeadline = new Label(container, SWT.None);
 		lblHeadline.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
 		lblHeadline.setText(Messages.newProjectWizardTemplatePageHeadlineLabel);
-		
+
 		Composite grpEmptyVsTemplate = new Composite(container, SWT.None);
 		GridLayout gridLayout = new GridLayout(1, false);
 		grpEmptyVsTemplate.setLayout(gridLayout);
-	    grpEmptyVsTemplate.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-	       
-	    buttonEmptyProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
-	    buttonEmptyProject.setText(Messages.newProjectWizardTemplatePageEmptyProjectLabel);
-	    buttonEmptyProject.setToolTipText(Messages.newProjectWizardTemplatePageEmptyProjectDescription);
-	    buttonEmptyProject.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		setTemplatesActive(false);
-	    		validate();
-	    	}
-	    });
-	    
-	    buttonTemplateProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
-	    buttonTemplateProject.setText(Messages.newProjectWizardTemplatePageTemplateProjectLabel);
-	    buttonTemplateProject.setToolTipText(Messages.newProjectWizardTemplatePageTemplateProjectDescription);
-	    buttonTemplateProject.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		setTemplatesActive(true);
-	    		validate();
-	    	}
-	    });
+		grpEmptyVsTemplate.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-	    Composite templates = new Composite(grpEmptyVsTemplate, SWT.None);
-	    GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+		buttonEmptyProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
+		buttonEmptyProject.setText(Messages.newProjectWizardTemplatePageEmptyProjectLabel);
+		buttonEmptyProject.setToolTipText(Messages.newProjectWizardTemplatePageEmptyProjectDescription);
+		buttonEmptyProject.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				setTemplatesActive(false);
+				validate();
+			}
+		});
+
+		createTemplatesPanel(grpEmptyVsTemplate);
+
+		Label spacer = new Label(container, SWT.None);
+		spacer.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1));
+
+		createDSLRadioButtons(container);
+
+		buttonEmptyProject.setSelection(true);
+		buttonBlueprintDSL.setSelection(true);
+
+		setControl(container);
+
+		setTemplatesActive(false);
+		validate();
+	}
+
+	protected void createTemplatesPanel(Composite grpEmptyVsTemplate) {
+		buttonTemplateProject = new Button(grpEmptyVsTemplate, SWT.RADIO);
+		buttonTemplateProject.setText(Messages.newProjectWizardTemplatePageTemplateProjectLabel);
+		buttonTemplateProject.setToolTipText(Messages.newProjectWizardTemplatePageTemplateProjectDescription);
+		buttonTemplateProject.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				setTemplatesActive(true);
+				validate();
+			}
+		});
+
+		Composite templates = new Composite(grpEmptyVsTemplate, SWT.None);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
 		gd.horizontalIndent = 20;
-	    templates.setLayoutData(gd);
-	    templates.setLayout(new GridLayout(2, true));
-	    
-	    listTemplates = createFilteredTree(templates);
-	    
-	    templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-	    templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-	    
-	    Label spacer = new Label(container, SWT.None);
-	    spacer.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1));
-	    
-	    Label lblDsl = new Label(container, SWT.None);
+		templates.setLayoutData(gd);
+		templates.setLayout(new GridLayout(2, true));
+
+		listTemplates = createFilteredTree(templates);
+
+		templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+	}
+
+	protected void createDSLRadioButtons(Composite container) {
+		Label lblDsl = new Label(container, SWT.None);
 		lblDsl.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1));
 		lblDsl.setText(Messages.newProjectWizardTemplatePageDSLLabel);
 			    
 		Composite grpDslSelection = new Composite(container, SWT.None);
-	    gridLayout = new GridLayout(1, false);
+		GridLayout gridLayout = new GridLayout(1, false);
 		grpDslSelection.setLayout(gridLayout);
-		gd = new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1);
+		GridData gd = new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1);
 		gd.horizontalIndent = 20;
-	    grpDslSelection.setLayoutData(gd);
-	    
-	    buttonBlueprintDSL = new Button(grpDslSelection, SWT.RADIO);
-	    buttonBlueprintDSL.setText(Messages.newProjectWizardTemplatePageBlueprintDSLLabel);
-	    buttonBlueprintDSL.setToolTipText(Messages.newProjectWizardTemplatePageBlueprintDSLDescription);
-	    buttonBlueprintDSL.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		validate();
-	    	}
-	    });
-	    
-	    buttonSpringDSL = new Button(grpDslSelection, SWT.RADIO);
-	    buttonSpringDSL.setText(Messages.newProjectWizardTemplatePageSpringDSLLabel);
-	    buttonSpringDSL.setToolTipText(Messages.newProjectWizardTemplatePageSpringDSLDescription);
-	    buttonSpringDSL.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		validate();
-	    	}
-	    });
-	    
-	    buttonJavaDSL = new Button(grpDslSelection, SWT.RADIO);
-	    buttonJavaDSL.setText(Messages.newProjectWizardTemplatePageJavaDSLLabel);
-	    buttonJavaDSL.setToolTipText(Messages.newProjectWizardTemplatePageJavaDSLDescription);
-	    buttonJavaDSL.addSelectionListener(new SelectionAdapter() {
-	    	@Override
-	    	public void widgetSelected(SelectionEvent event) {
-	    		validate();
-	    	}
-	    });
+		grpDslSelection.setLayoutData(gd);
 
-	    buttonEmptyProject.setSelection(true);
-	    buttonBlueprintDSL.setSelection(true);
-	    
-		setControl(container);
-		
-		setTemplatesActive(false);
-		validate();
+		buttonBlueprintDSL = createDSLRadioButton(grpDslSelection, Messages.newProjectWizardTemplatePageBlueprintDSLLabel, Messages.newProjectWizardTemplatePageBlueprintDSLDescription);
+		buttonSpringDSL = createDSLRadioButton(grpDslSelection, Messages.newProjectWizardTemplatePageSpringDSLLabel, Messages.newProjectWizardTemplatePageSpringDSLDescription);
+		buttonJavaDSL = createDSLRadioButton(grpDslSelection, Messages.newProjectWizardTemplatePageJavaDSLLabel, Messages.newProjectWizardTemplatePageJavaDSLDescription);
+	}
+
+	protected Button createDSLRadioButton(Composite grpDslSelection, String text, String tooltipText) {
+		Button button = new Button(grpDslSelection, SWT.RADIO);
+		button.setText(text);
+		button.setToolTipText(tooltipText);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				validate();
+			}
+		});
+		return button;
 	}
 	
 	/**
@@ -173,7 +169,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		listTemplates.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).create());
 		listTemplates.getViewer().setContentProvider(new TemplateContentProvider());
 		listTemplates.getViewer().setLabelProvider(new TemplateLabelProvider());
-		listTemplates.getViewer().addFilter(new ExcludeEmptyCategoriesFilter());
+		compatibleCamelVersionFilter = new CompatibleCamelVersionFilter(runtimeAndCamelVersionPage.getSelectedCamelVersion());
+		listTemplates.getViewer().setFilters(
+				new ExcludeEmptyCategoriesFilter(),
+				compatibleCamelVersionFilter);
 		listTemplates.getViewer().setInput(getTemplates());
 		listTemplates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -386,5 +385,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	 */
 	public Button getBtnTemplateProject() {
 		return this.buttonTemplateProject;
+	}
+
+	public void refresh(String camelVersion) {
+		compatibleCamelVersionFilter.setCamelVersion(camelVersion);
+		listTemplates.getViewer().refresh();
 	}
 }

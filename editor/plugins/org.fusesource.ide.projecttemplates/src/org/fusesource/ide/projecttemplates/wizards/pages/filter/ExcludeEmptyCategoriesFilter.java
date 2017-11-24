@@ -18,9 +18,7 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
  * @author lhein
  */
 public class ExcludeEmptyCategoriesFilter extends ViewerFilter {
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-	 */
+
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		if (element instanceof CategoryItem) {
@@ -33,7 +31,9 @@ public class ExcludeEmptyCategoriesFilter extends ViewerFilter {
 		boolean empty = cat.getTemplates().isEmpty();
 		if (empty) {
 			for (CategoryItem subCat : cat.getSubCategories()) {
-				if (!isEmptyCategory(subCat)) return false;
+				if (!isEmptyCategory(subCat)) {
+					return false;
+				}
 			}
 		}
 		return empty;

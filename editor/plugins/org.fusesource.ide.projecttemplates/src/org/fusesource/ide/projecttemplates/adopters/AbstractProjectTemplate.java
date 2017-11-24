@@ -84,4 +84,8 @@ public abstract class AbstractProjectTemplate {
 	 * @return the creator
 	 */
 	public abstract TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData);
+
+	public boolean isCompatible(String camelVersion) {
+		return true;
+	}
 }

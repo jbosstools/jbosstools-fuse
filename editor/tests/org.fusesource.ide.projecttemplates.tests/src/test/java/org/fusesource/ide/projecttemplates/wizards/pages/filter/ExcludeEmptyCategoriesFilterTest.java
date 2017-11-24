@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.projecttemplates;
+package org.fusesource.ide.projecttemplates.wizards.pages.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
