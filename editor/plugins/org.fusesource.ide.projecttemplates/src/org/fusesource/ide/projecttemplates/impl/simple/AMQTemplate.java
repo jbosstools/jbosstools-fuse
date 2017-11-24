@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -25,6 +26,8 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
  * @author lhein
  */
 public class AMQTemplate extends AbstractProjectTemplate {
+	
+	private static ComparableVersion maximalCompatibleCamelVersion = new ComparableVersion("2.20.0");
 
 	@Override
 	public boolean supportsDSL(CamelDSLType type) {
@@ -34,6 +37,11 @@ public class AMQTemplate extends AbstractProjectTemplate {
 		case JAVA:		return false;
 		default:		return false;
 		}	
+	}
+	
+	@Override
+	public boolean isCompatible(String camelVersion) {
+		return new ComparableVersion(camelVersion).compareTo(maximalCompatibleCamelVersion) < 0;
 	}
 	
 	@Override

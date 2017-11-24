@@ -79,9 +79,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		setPageComplete(false);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
@@ -158,9 +155,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionCombo.setText(CamelCatalogUtils.getLatestCamelVersion());
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
+			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
@@ -175,7 +170,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 			}
 		});
 
-		camelVersionCombo.addModifyListener(e -> validate());
+		camelVersionCombo.addModifyListener(e -> {
+			validate();
+			((FuseIntegrationProjectWizardTemplatePage)getWizard().getPage(Messages.newProjectWizardTemplatePageName)).refresh(camelVersionCombo.getText());
+		});
 		
 		Button camelVersionValidationBtn = new Button(camelGrp, SWT.PUSH);
 		GridData camelButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);

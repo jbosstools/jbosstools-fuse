@@ -47,16 +47,16 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 		assertThat(eapTemplate).isNotNull();
 		
 		page.getBtnTemplateProject().setSelection(true);
-		assertThat(page.getBtnTemplateProject().getSelection());
+		assertThat(page.getBtnTemplateProject().getSelection()).isTrue();
 		
 		page.getListTemplates().getViewer().setSelection(new StructuredSelection(cbrTemplate));
-		assertThat(page.getBtnJavaDSL().isEnabled());
+		assertThat(page.getBtnJavaDSL().isEnabled()).isTrue();
 		
 		page.getBtnJavaDSL().setSelection(true);
-		assertThat(page.getBtnJavaDSL().getSelection());
+		assertThat(page.getBtnJavaDSL().getSelection()).isTrue();
 		
 		page.getListTemplates().getViewer().setSelection(new StructuredSelection(eapTemplate));
-		assertThat(page.getBtnBlueprintDSL().getSelection());
+		assertThat(page.getBtnBlueprintDSL().getSelection()).isTrue();
 	}
 
 	private TemplateItem findEAPTemplate(List<CategoryItem> cats) {

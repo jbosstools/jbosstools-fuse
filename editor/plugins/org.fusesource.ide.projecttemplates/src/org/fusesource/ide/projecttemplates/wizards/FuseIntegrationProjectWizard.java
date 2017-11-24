@@ -41,25 +41,11 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#needsProgressMonitor()
-	 */
-	@Override
-	public boolean needsProgressMonitor() {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		final NewProjectMetaData metadata = getProjectMetaData();
@@ -76,9 +62,6 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#addPages()
-	 */
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -89,7 +72,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage();
 		addPage(runtimeAndCamelVersionPage);
 
-		templateSelectionPage = new FuseIntegrationProjectWizardTemplatePage();
+		templateSelectionPage = new FuseIntegrationProjectWizardTemplatePage(runtimeAndCamelVersionPage);
 		addPage(templateSelectionPage);
 	}
 
