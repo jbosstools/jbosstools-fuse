@@ -16,8 +16,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
 import org.eclipse.reddeer.common.exception.RedDeerException;
 import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.ui.perspectives.JavaEEPerspective;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.gef.view.PaletteView;
@@ -30,7 +32,6 @@ import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequireme
 import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.component.File;
@@ -38,10 +39,12 @@ import org.jboss.tools.fuse.reddeer.component.Log;
 import org.jboss.tools.fuse.reddeer.component.Otherwise;
 import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed;
 import org.jboss.tools.fuse.reddeer.condition.IssueIsClosed.Jira;
+import org.jboss.tools.fuse.reddeer.editor.CamelComponentEditPart;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.editor.SourceEditor;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
+import org.jboss.tools.fuse.ui.bot.tests.utils.LogChecker;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -70,10 +73,11 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@Before
 	public void setupResetCamelContext() {
-
 		new WorkbenchShell();
 		ProjectFactory.newProject("cbr").template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
-		new LogView().deleteLog();
+		LogView view = new LogView();
+		view.open();
+		view.deleteLog();
 	}
 
 	@Before
@@ -92,7 +96,6 @@ public class CamelEditorTest extends DefaultTest {
 	 */
 	@After
 	public void setupDeleteProjects() {
-
 		new WorkbenchShell();
 		EditorHandler.getInstance().closeAll(true);
 		ProjectFactory.deleteAllProjects();
@@ -102,7 +105,6 @@ public class CamelEditorTest extends DefaultTest {
 	 * Prepares IDE for tests manipulate with components in the Camel Editor
 	 */
 	private static void setupPrepareIDEForManipulationTests() {
-
 		new CamelProject("cbr").openCamelContext("camel-context.xml");
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-otherwise.xml");
@@ -139,8 +141,8 @@ public class CamelEditorTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Test tries to manipulate with XML source of the camel-context.xml file and checks if it affects components in the
-	 * Camel Editor.
+	 * Test tries to manipulate with XML source of the camel-context.xml file and
+	 * checks if it affects components in the Camel Editor.
 	 * </p>
 	 * <b>Steps</b>
 	 * <ol>
@@ -150,7 +152,8 @@ public class CamelEditorTest extends DefaultTest {
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>cut branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
-	 * <li>check if the otherwise component is no longer available in the Camel Editor</li>
+	 * <li>check if the otherwise component is no longer available in the Camel
+	 * Editor</li>
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>paste branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
@@ -168,7 +171,7 @@ public class CamelEditorTest extends DefaultTest {
 		CamelEditor.switchTab("Design");
 		assertTrue(editor.isComponentAvailable("Otherwise"));
 		assertTrue(editor.isComponentAvailable("file:target/messages/others"));
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
@@ -223,13 +226,14 @@ public class CamelEditorTest extends DefaultTest {
 		assistent = editor.openContentAssistant();
 		proposals = assistent.getProposals();
 		assertTrue("Content Assistent does not contain 'uri' value", proposals.contains("uri"));
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 	/**
 	 * <p>
-	 * Test tries to add components in the Camel Editor via Drag&Drop feature (Adds components from Palette and
-	 * connections between components via the Camel Editor).
+	 * Test tries to add components in the Camel Editor via Drag&Drop feature (Adds
+	 * components from Palette and connections between components via the Camel
+	 * Editor).
 	 * </p>
 	 * <ol>
 	 * <li>create a new project from template 'Content Based Router'</li>
@@ -238,10 +242,11 @@ public class CamelEditorTest extends DefaultTest {
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>remove branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
-	 * <li>add back removed components (from branch otherwise) via Drag&Drop feature</li>
+	 * <li>add back removed components (from branch otherwise) via Drag&Drop
+	 * feature</li>
 	 * <li>switch to Source tab in the Camel Editor</li>
-	 * <li>check if the content of the file is equals to content of the same file immediately after project creation
-	 * </li>
+	 * <li>check if the content of the file is equals to content of the same file
+	 * immediately after project creation</li>
 	 * </ol>
 	 */
 	@Test
@@ -254,13 +259,71 @@ public class CamelEditorTest extends DefaultTest {
 		try {
 			editor.setProperty("Log _log2", "Message *", "Other message");
 		} catch (RedDeerException e) {
-			log.warn("There is no component with label 'Log _log2'! See https://issues.jboss.org/browse/FUSETOOLS-2294");
+			log.warn(
+					"There is no component with label 'Log _log2'! See https://issues.jboss.org/browse/FUSETOOLS-2294");
 			editor.setProperty("Log", "Message *", "Other message");
 		}
 		editor.addCamelComponent(new File(), "Otherwise");
 		editor.setProperty("file:directoryName", "Uri", "file:target/messages/others");
 		CamelEditor.switchTab("Source");
 		assertTrue(EditorManipulator.isEditorContentEqualsFile("resources/camel-context-all.xml"));
-		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
+	}
+
+	/**
+	 * <p>
+	 * Test checks collapse/expand feature of Camel editor components
+	 * </p>
+	 * <ol>
+	 * <li>create a new project from template 'Content Based Router'</li>
+	 * <li>open camel-context.xml file</li>
+	 * <li>Invoke 'Collapse' on route component 'Choice'</li>
+	 * <li>Check if component was collapsed (check if changed size of collapsed
+	 * component area and height is smaller then begin values)</li>
+	 * <li>Check fuse errors in Error Log View</li>
+	 * <li>Invoke 'Expand' on route component 'Choice'</li>
+	 * <li>Check if component was expanded (check changed size of expanded component
+	 * area -> should be same as area size and height before collapse)</li>
+	 * <li>Check fuse errors in Error Log View</li>
+	 * </ol>
+	 */
+	@Test
+	public void testCollapseExpandFeature() {
+
+		CamelEditor editor = new CamelEditor("camel-context.xml");
+		CamelComponentEditPart editPart = new CamelComponentEditPart("Choice");
+		int startHeight = editPart.getBounds().height;
+
+		editor.doOperation("Choice", "Collapse");
+		new WaitUntil(new AbstractWaitCondition() {
+
+			@Override
+			public boolean test() {
+				return editPart.getBounds().height < startHeight;
+			}
+
+			@Override
+			public String description() {
+				return "Route component 'Choice' wasn't collapsed properly";
+			}
+
+		});
+		LogChecker.assertNoFuseError();
+
+		editor.doOperation("Choice", "Expand");
+		new WaitUntil(new AbstractWaitCondition() {
+
+			@Override
+			public boolean test() {
+				return editPart.getBounds().height == startHeight;
+			}
+
+			@Override
+			public String description() {
+				return "Route component 'Choice' wasn't expanded properly";
+			}
+
+		});
+		LogChecker.assertNoFuseError();
 	}
 }
