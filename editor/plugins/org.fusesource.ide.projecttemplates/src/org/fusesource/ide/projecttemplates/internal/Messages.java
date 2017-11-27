@@ -84,6 +84,7 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageTemplateProjectDescription;
 	public static String newProjectWizardTemplatePageDSLLabel;
 	public static String newProjectWizardTemplatePageFilterBoxText;
+	public static String newProjectWizardTemplatePageTemplateFilterMessageInformation;
 
 	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
 	
@@ -99,7 +100,7 @@ public class Messages extends NLS {
 
 	public static String configuringFacets;
 	public static String installingRequiredFacetsForCamelProject;
-	
+
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

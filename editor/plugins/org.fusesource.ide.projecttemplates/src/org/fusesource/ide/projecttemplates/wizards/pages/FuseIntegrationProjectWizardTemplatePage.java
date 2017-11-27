@@ -11,6 +11,8 @@
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardPage;
@@ -23,6 +25,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.foundation.ui.util.Widgets;
@@ -53,6 +57,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	private Text templateInfoText;
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
 	private CompatibleCamelVersionFilter compatibleCamelVersionFilter;
+	private Label filteredTemplatesInformationMessage;
+	private Label filteredTemplatesInformationIcon;
 	
 	public FuseIntegrationProjectWizardTemplatePage(FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage) {
 		super(Messages.newProjectWizardTemplatePageName);
@@ -90,9 +96,6 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 
 		createTemplatesPanel(grpEmptyVsTemplate);
 
-		Label spacer = new Label(container, SWT.None);
-		spacer.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false, 3, 1));
-
 		createDSLRadioButtons(container);
 
 		buttonEmptyProject.setSelection(true);
@@ -126,6 +129,21 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 
 		templateInfoText = new Text(templates, SWT.MULTI | SWT.READ_ONLY | SWT.WRAP | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		templateInfoText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		createTemplatesBottomInformation(templates);
+	}
+
+	protected void createTemplatesBottomInformation(Composite templates) {
+		Composite infoComposite = new Composite(templates, SWT.NONE);
+		infoComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(2, 1).create());
+		infoComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
+		
+		filteredTemplatesInformationIcon = new Label(infoComposite, SWT.NONE);
+		filteredTemplatesInformationIcon.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+		filteredTemplatesInformationMessage = new Label(infoComposite, SWT.NONE);
+		filteredTemplatesInformationMessage.setText(Messages.newProjectWizardTemplatePageTemplateFilterMessageInformation);
+		filteredTemplatesInformationMessage.setFont(JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT));
 	}
 
 	protected void createDSLRadioButtons(Composite container) {
@@ -220,6 +238,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		listTemplates.getFilterControl().setEnabled(active);
 		listTemplates.setEnabled(active);
 		templateInfoText.setEnabled(active);
+		filteredTemplatesInformationIcon.setEnabled(active);
+		filteredTemplatesInformationMessage.setEnabled(active);
 		if (!active) {
 			// user selected Empty Project -> activate all DSL buttons
 			buttonBlueprintDSL.setEnabled(true);

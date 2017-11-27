@@ -35,9 +35,7 @@ public class CompatibleCamelVersionFilter extends ViewerFilter {
 
 	private boolean hasCompatibleChildren(CategoryItem category) {
 		boolean hasCompatibleTemplate = category.getTemplates().stream()
-				.filter(template -> template.isCompatible(camelVersion))
-				.findAny()
-				.isPresent();
+				.anyMatch(template -> template.isCompatible(camelVersion));
 		if (!hasCompatibleTemplate) {
 			for (CategoryItem subCat : category.getSubCategories()) {
 				if (hasCompatibleChildren(subCat)) {
