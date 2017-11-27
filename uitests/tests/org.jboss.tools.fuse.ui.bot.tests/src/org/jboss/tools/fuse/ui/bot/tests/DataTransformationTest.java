@@ -75,7 +75,7 @@ public class DataTransformationTest extends DefaultTest {
 		editor.activate();
 		editor.deleteCamelComponent("file:target/messages?fileName=xyz-order.json");
 		editor.save();
-		editor.addCamelComponent("Data Transformation", "Route _route1");
+		editor.addCamelComponent("Data Transformation", "file:src/data?fileName=abc-order.xml&noop=true");
 		NewFuseTransformationWizard wizard = new NewFuseTransformationWizard();
 		wizard.setTransformationID("xml2json");
 		wizard.setSourceType(TransformationType.XML);
@@ -88,10 +88,8 @@ public class DataTransformationTest extends DefaultTest {
 		wizard.setJSONTargetFile("xyz-order.json");
 		wizard.finish();
 		editor.activate();
-		editor.addConnection("file:src/data?fileName=abc-order.xml&noop=true", "ref:xml2json");
-		editor.addCamelComponent("File", "Route _route1");
+		editor.addCamelComponent("File", "ref:xml2json");
 		editor.setProperty("file:directoryName", "Uri", "file:target/messages?fileName=xyz-order.json");
-		editor.addConnection("ref:xml2json", "file:target/messages?fileName=xyz-order.json");
 		editor.close(true);
 
 		DataTransformationEditor transEditor = new DataTransformationEditor("transformation.xml");
