@@ -102,9 +102,18 @@
     </projectTemplateCategory>
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.simple"
-          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7"
           description="%template.simple.cbr.description"
-          id="org.fusesource.ide.projecttemplates.cbrTemplateSimple"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimplev7"
+          keywords="fuse cbr content based router"
+          name="%template.simple.cbr.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.simple"
+          class="org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6"
+          description="%template.simple.cbr.description"
+          id="org.fusesource.ide.projecttemplates.cbrTemplateSimplev6"
           keywords="fuse cbr content based router"
           name="%template.simple.cbr.name"
           weight="0">
@@ -126,9 +135,18 @@
     </projectTemplateCategory>
     <projectTemplate
           category="fuse.projecttemplates.eap.medium"
-          class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6"
           description="%template.medium.eapspring.description"
-          id="org.fusesource.ide.projecttemplates.eapSpringTemplateMedium"
+          id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv6"
+          keywords="eap camel spring bean"
+          name="%template.medium.eapspring.name"
+          weight="0">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.eap.medium"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7"
+          description="%template.medium.eapspring.description"
+          id="org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv7"
           keywords="eap camel spring bean"
           name="%template.medium.eapspring.name"
           weight="0">
@@ -144,9 +162,18 @@
     </projectTemplate>
     <projectTemplate
           category="fuse.projecttemplates.jbossfuse.advanced"
-          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplate"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse6"
           description="%template.medium.cxf.code.first.description"
-          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMedium"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMediumv6"
+          keywords="cxf"
+          name="%template.medium.cxf.code.first.name"
+          weight="50">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.jbossfuse.advanced"
+          class="org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse7"
+          description="%template.medium.cxf.code.first.description"
+          id="org.fusesource.ide.projecttemplates.cxfCodeFirstMediumv7"
           keywords="cxf"
           name="%template.medium.cxf.code.first.name"
           weight="50">

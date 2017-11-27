@@ -32,6 +32,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -222,7 +223,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				.findAny().isPresent();
 	}
 
-	protected void additionalChecks(IProject project2) {
+	protected void additionalChecks(IProject project) {
 	}
 
 	/**
@@ -235,8 +236,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		metadata = new NewProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
-		// TODO use latest version, or a parameterized test to test all versions
-		// available CamelModelFactory.getLatestCamelVersion()
 		metadata.setCamelVersion(camelVersion);
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(dsl);
@@ -453,5 +452,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 
 	protected StructuredSelection getSelectionForLaunch(IProject project) {
 		return new StructuredSelection(project);
+	}
+
+	protected boolean isOlderThan220() {
+		return new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) > 0;
 	}
 }

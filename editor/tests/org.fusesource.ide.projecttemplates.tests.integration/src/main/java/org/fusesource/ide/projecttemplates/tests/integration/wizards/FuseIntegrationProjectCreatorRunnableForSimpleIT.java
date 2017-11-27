@@ -11,8 +11,10 @@
 package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -75,5 +77,24 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 	@Override
 	protected void launchDebug(IProject project) throws InterruptedException {
 		// TODO: currently we generate simple project which are not valid so cannot be launched
+	}
+	
+	@Override
+	protected void additionalChecks(IProject project) {
+		String textToFind;
+		if(isOlderThan220()){
+			textToFind = "<groupId>org.jboss.fuse.bom</groupId>";
+		} else {
+			textToFind = "<groupId>org.jboss.fuse</groupId>";
+		}
+		try {
+			assertThat(Files.readAllLines(project.findMember("pom.xml").getLocation().toFile().toPath())
+					.stream()
+					.filter(line -> line.contains(textToFind))
+					.findAny().orElse(null))
+			.isNotNull();
+		} catch (IOException e) {
+			fail("pom seems not available", e);
+		}
 	}
 }

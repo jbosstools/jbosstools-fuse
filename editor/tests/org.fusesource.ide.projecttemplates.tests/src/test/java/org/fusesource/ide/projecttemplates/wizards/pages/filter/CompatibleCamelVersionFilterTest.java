@@ -16,7 +16,7 @@ import static org.mockito.Mockito.doReturn;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate;
-import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
@@ -64,7 +64,7 @@ public class CompatibleCamelVersionFilterTest {
 	public void testCategoryItemNotFilteredOutIfContainsChild() throws Exception {
 		CompatibleCamelVersionFilter filter = createFilter("2.20.0");
 		CategoryItem category = new CategoryItem("id", "name", 0, null);
-		createTemplateItemInCategory(new EmptyProjectTemplate(), category);
+		createTemplateItemInCategory(new EmptyProjectTemplateForFuse7(), category);
 		assertThat(filter.select(null, null, category)).isTrue();
 	}
 	
@@ -75,7 +75,7 @@ public class CompatibleCamelVersionFilterTest {
 		CategoryItem category2 = new CategoryItem("id2", "name", 0, category1.getName());
 		category2.setParentCategory(category1);
 		category1.addSubCategory(category2);
-		TemplateItem templateItem = createTemplateItemInCategory(new EmptyProjectTemplate(), category2);
+		TemplateItem templateItem = createTemplateItemInCategory(new EmptyProjectTemplateForFuse7(), category2);
 		assertThat(filter.select(null, null, category1)).isTrue();
 		assertThat(filter.select(null, null, category2)).isTrue();
 		assertThat(filter.select(null, null, templateItem)).isTrue();

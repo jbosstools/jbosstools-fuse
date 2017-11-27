@@ -36,7 +36,8 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,7 +66,11 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 	@Override
 	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
-		newProjectMetadata.setTemplate(new EAPSpringTemplate());
+		if (isOlderThan220()) {
+			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse6());
+		} else {
+			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse7());
+		}
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
