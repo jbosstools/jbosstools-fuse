@@ -66,7 +66,7 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 					if (subCat.getId().equals("fuse.projecttemplates.eap.medium")) {
 						List<TemplateItem> templates = subCat.getTemplates();
 						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.eapSpringTemplateMedium")) {
+							if (ti.getId().equals("org.fusesource.ide.projecttemplates.eapSpringTemplateMediumv7")) {
 								return ti;
 							}
 						}
@@ -84,7 +84,7 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 					if (subCat.getId().equals("fuse.projecttemplates.jbossfuse.simple")) {
 						List<TemplateItem> templates = subCat.getTemplates();
 						for (TemplateItem ti : templates) {
-							if (ti.getId().equals("org.fusesource.ide.projecttemplates.cbrTemplateSimple")) {
+							if (ti.getId().equals("org.fusesource.ide.projecttemplates.cbrTemplateSimplev7")) {
 								return ti;
 							}
 						}

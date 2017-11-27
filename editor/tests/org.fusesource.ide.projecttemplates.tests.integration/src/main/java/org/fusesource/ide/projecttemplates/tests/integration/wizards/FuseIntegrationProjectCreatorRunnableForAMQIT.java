@@ -42,12 +42,14 @@ public class FuseIntegrationProjectCreatorRunnableForAMQIT extends FuseIntegrati
 		//TODO: Known limitations see https://issues.jboss.org/browse/FUSETOOLS-1986
 		assumeFalse("Blueprint with 2.15 redhat version is not working, see https://issues.jboss.org/browse/FUSETOOLS-1986", camelVersion.startsWith("2.15"));
 		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse"));
+		assumeTrue(isOlderThan220());
 		
 		testProjectCreation("-AMQBlueprintProject-"+camelVersion, CamelDSLType.BLUEPRINT, "src/main/resources/OSGI-INF/blueprint/camel-blueprint.xml", null);
 	}
 
 	@Test
 	public void testAMQSpringProjectCreation() throws Exception {
+		assumeTrue(isOlderThan220());
 		testProjectCreation("-AMQSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	

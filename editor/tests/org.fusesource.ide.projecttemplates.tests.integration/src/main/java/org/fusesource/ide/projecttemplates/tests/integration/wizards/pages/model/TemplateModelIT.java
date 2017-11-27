@@ -13,7 +13,9 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards.pages.mode
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateModel;
 import org.junit.Test;
@@ -36,8 +38,16 @@ public class TemplateModelIT {
 		List<CategoryItem> templateCategories = new TemplateModel().getTemplateCategories();
 		CategoryItem fuseOnEapCategoryItem = templateCategories.stream().filter(templateCategory -> "fuse.projecttemplates.eap".equals(templateCategory.getId())).findFirst().get();
 		CategoryItem fuseOnEapMediumCategory = fuseOnEapCategoryItem.getSubCategories().stream().filter(templateCategory -> "fuse.projecttemplates.eap.medium".equals(templateCategory.getId())).findFirst().get();
-		assertThat(fuseOnEapMediumCategory.getTemplates()).hasSize(1);
+		checkSingleTemplateForVersion(fuseOnEapMediumCategory, CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63);
+		checkSingleTemplateForVersion(fuseOnEapMediumCategory, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
 	}
 
+	private void checkSingleTemplateForVersion(CategoryItem categoryItem, String camelVersionLatestProductized63) {
+		assertThat(categoryItem.getTemplates()
+				.stream()
+				.filter(template -> template.isCompatible(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63))
+				.collect(Collectors.toList()))
+		.hasSize(1);
+	}
 
 }

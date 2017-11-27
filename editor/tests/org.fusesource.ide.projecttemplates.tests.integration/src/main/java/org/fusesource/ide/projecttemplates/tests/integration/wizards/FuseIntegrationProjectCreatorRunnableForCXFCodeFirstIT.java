@@ -17,7 +17,8 @@ import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplate;
+import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.medium.CXfCodeFirstProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,21 +52,25 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 	@Test
 	public void testCXFCodeFirstSpringProjectCreation() throws Exception {
 		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
-		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse"));
+		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse") || !isOlderThan220());
 		testProjectCreation("-CXFCodeFirstSpringProject-"+camelVersion, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", null);
 	}
 	
 	@Test
 	public void testCXFCodeFirstJavaProjectCreation() throws Exception {
 		assumeFalse("2.18.x redhat version is not working, see https://issues.apache.org/jira/browse/CAMEL-10602", camelVersion.startsWith("2.18"));
-		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse"));
+		assumeTrue("Community versions upper to 2.19 are not working with a Fuse BOM refering 2.18- versions, see https://issues.jboss.org/browse/FUSETOOLS-2442", camelVersion.contains("redhat") || camelVersion.contains("fuse") || !isOlderThan220());
 		testProjectCreation("-CXFCodeFirstJavaProject-"+camelVersion, CamelDSLType.JAVA, "src/main/java/com/mycompany/camel/cxf/code/first/java/incident/CamelRoute.java", null);
 	}
 	
 	@Override
 	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
-		newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplate());
+		if(isOlderThan220()){
+			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse6());
+		} else {
+			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse7());
+		}
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}

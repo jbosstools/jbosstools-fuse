@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -66,7 +67,8 @@ import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
@@ -107,11 +109,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 						
 			if (ok) {
 				// then configure the project for the given template
-				AbstractProjectTemplate template = metadata.getTemplate();
-				if (metadata.isBlankProject()) {
-					// we create a blank project
-					template = new EmptyProjectTemplate();
-				}
+				AbstractProjectTemplate template = retrieveTemplate();
 				// now execute the template
 				try {
 					template.create(prj, metadata, subMonitor.split(1));
@@ -158,6 +156,18 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
+		}
+	}
+
+	protected AbstractProjectTemplate retrieveTemplate() {
+		if (metadata.isBlankProject()) {
+			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(metadata.getCamelVersion())) > 0){
+				return new EmptyProjectTemplateForFuse6();
+			} else {
+				return new EmptyProjectTemplateForFuse7();
+			}
+		} else {
+			return metadata.getTemplate();
 		}
 	}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.catalog.components;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
-import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -217,8 +217,7 @@ public class ComponentTest {
 	 */
 	@Test
 	public void testGetTags() {
-		assertTrue("Label value is missing", component.getTags() != null && !component.getTags().isEmpty());
-		assertTrue("Label value is not matching", component.getTags().contains("core") && component.getTags().contains("file"));
+		assertThat(component.getTags()).contains("core", "file");
 	}
 
 	/**
@@ -229,9 +228,9 @@ public class ComponentTest {
 		List<String> tags = component.getTags();
 		tags.add("test");
 		component.setTags(tags);
-		assertTrue("Component did not persist the new values for Label", component.getTags().contains("core") &&
-																		 component.getTags().contains("file") &&
-																		 component.getTags().contains("test"));
+		assertThat(component.getTags())
+			.as("Component did not persist the new values for Label")
+			.contains("core", "file", "test");
 	}
 
 	/**
@@ -239,7 +238,7 @@ public class ComponentTest {
 	 */
 	@Test
 	public void testGetDependencies() {
-		assertTrue("Dependency values are missing", component.getDependencies() != null && !component.getDependencies().isEmpty());
+		assertThat(component.getDependencies()).isNotEmpty();
 	}
 
 	/**
@@ -254,6 +253,8 @@ public class ComponentTest {
 		newOne.setVersion("test3");
 		deps.add(newOne);
 		component.setDependencies(deps);
-		assertTrue("Component did not persist the new value for Dependency", component.getDependencies().contains(newOne));
+		assertThat(component.getDependencies())
+			.as("Component did not persist the new value for Dependency")
+			.contains(newOne);
 	}
 }

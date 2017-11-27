@@ -16,7 +16,8 @@ import java.util.List;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +25,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrationProjectCreatorRunnableIT{
+public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrationProjectCreatorRunnableIT{
 
 	@Parameters(name = "{0}")
 	public static List<String> parameters(){
@@ -55,7 +56,11 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT  extends FuseIntegrat
 	@Override
 	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
-		newProjectMetadata.setTemplate(new CBRTemplate());
+		if(isOlderThan220()){
+			newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
+		} else {
+			newProjectMetadata.setTemplate(new CBRTemplateForFuse7());
+		}
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
