@@ -47,6 +47,28 @@ public class CamelCatalogUtils {
 	public static final String FIS_MAPPING_URL = System.getProperty(FIS_MAPPING_PROPERTY, FIS_MAPPING_DEFAULT_URL);
 	
 	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
+
+	private static final String FUSE_621_R0_CAMEL_VERSION = "2.15.1.redhat-621084";
+	private static final String FUSE_621_R1_CAMEL_VERSION = "2.15.1.redhat-621090";
+	private static final String FUSE_621_R2_CAMEL_VERSION = "2.15.1.redhat-621107";
+	private static final String FUSE_621_R3_CAMEL_VERSION = "2.15.1.redhat-621117";
+	private static final String FUSE_621_R4_CAMEL_VERSION = "2.15.1.redhat-621159";
+	private static final String FUSE_621_R5_CAMEL_VERSION = "2.15.1.redhat-621169";
+	private static final String FUSE_621_R6_CAMEL_VERSION = "2.15.1.redhat-621177";
+	private static final String FUSE_621_R7_CAMEL_VERSION = "2.15.1.redhat-621186";
+	private static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621195";
+	private static final String FUSE_621_R9_CAMEL_VERSION = "2.15.1.redhat-621216";
+	
+	private static final String FUSE_621_R0_BOM_VERSION = "6.2.1.redhat-084";
+	private static final String FUSE_621_R1_BOM_VERSION = "6.2.1.redhat-090";
+	private static final String FUSE_621_R2_BOM_VERSION = "6.2.1.redhat-107";
+	private static final String FUSE_621_R3_BOM_VERSION = "6.2.1.redhat-117";
+	private static final String FUSE_621_R4_BOM_VERSION = "6.2.1.redhat-159";
+	private static final String FUSE_621_R5_BOM_VERSION = "6.2.1.redhat-169";
+	private static final String FUSE_621_R6_BOM_VERSION = "6.2.1.redhat-177";
+	private static final String FUSE_621_R7_BOM_VERSION = "6.2.1.redhat-186";
+	private static final String FUSE_621_R8_BOM_VERSION = "6.2.1.redhat-195";
+	private static final String FUSE_621_R9_BOM_VERSION = "6.2.1.redhat-216";
 	
 	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
 	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
@@ -72,7 +94,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.19.3";
-	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = "2.15.1.redhat-621186";
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = FUSE_621_R9_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R5_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R3_CAMEL_VERSION;
 	
@@ -125,14 +147,16 @@ public class CamelCatalogUtils {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621084", "6.2.1.redhat-084");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621090", "6.2.1.redhat-090");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621107", "6.2.1.redhat-107");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621117", "6.2.1.redhat-117");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621159", "6.2.1.redhat-159");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621169", "6.2.1.redhat-169");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621177", "6.2.1.redhat-177");
-			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put("2.15.1.redhat-621186", "6.2.1.redhat-186");
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R0_CAMEL_VERSION, FUSE_621_R0_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R1_CAMEL_VERSION, FUSE_621_R1_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R2_CAMEL_VERSION, FUSE_621_R2_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R3_CAMEL_VERSION, FUSE_621_R3_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R4_CAMEL_VERSION, FUSE_621_R4_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R5_CAMEL_VERSION, FUSE_621_R5_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R6_CAMEL_VERSION, FUSE_621_R6_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R7_CAMEL_VERSION, FUSE_621_R7_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R8_CAMEL_VERSION, FUSE_621_R8_BOM_VERSION);
+			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_621_R9_CAMEL_VERSION, FUSE_621_R9_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R0_CAMEL_VERSION, FUSE_63_R0_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R1_CAMEL_VERSION, FUSE_63_R1_BOM_VERSION);
 			CAMEL_VERSION_2_FUSE_BOM_MAPPING.put(FUSE_63_R2_CAMEL_VERSION, FUSE_63_R2_BOM_VERSION);
