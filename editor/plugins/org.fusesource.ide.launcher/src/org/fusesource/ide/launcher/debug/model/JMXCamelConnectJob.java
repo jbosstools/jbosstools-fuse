@@ -47,7 +47,7 @@ public class JMXCamelConnectJob extends Job {
 	private String jmxUser;
 	private String jmxPass;
 	
-	private static final long CONNECTION_TIMEOUT_IN_MILLIS = 1000 * 60 * 5L; // 5 minutes timeout
+	private static final long CONNECTION_TIMEOUT_IN_MILLIS = 1000 * 60 * 10L; // 10 minutes timeout
 	
 	public JMXCamelConnectJob(CamelDebugTarget camelDebugTarget) {
 		super("Connect to Camel Debugger...");
