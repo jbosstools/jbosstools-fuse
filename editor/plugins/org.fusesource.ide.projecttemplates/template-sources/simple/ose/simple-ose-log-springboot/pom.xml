@@ -81,11 +81,12 @@
       <artifactId>fabric8-arquillian</artifactId>
       <scope>test</scope>
     </dependency>
-     <dependency>
+    <!-- Uncomment to hot-deploy your application (1/2)-->
+<!--      <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
         <optional>true</optional>
-    </dependency>
+    </dependency> -->
   </dependencies>
 
   <build>
@@ -107,7 +108,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring-boot.version}</version>
         <configuration>
-          <!-- Set value to false to hot-deploy your application -->
+          <!-- Set value to false to hot-deploy your application (2/2)-->
           <excludeDevtools>true</excludeDevtools>
         </configuration>
         <executions>
