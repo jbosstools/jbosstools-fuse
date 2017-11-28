@@ -18,11 +18,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.direct.project.Project;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
@@ -38,7 +43,6 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
-import org.jboss.tools.fuse.reddeer.utils.TracingDragAndDropManager;
 import org.jboss.tools.fuse.reddeer.view.FuseJMXNavigator;
 import org.jboss.tools.fuse.reddeer.view.MessagesView;
 import org.jboss.tools.fuse.ui.bot.tests.utils.EditorManipulator;
@@ -66,7 +70,9 @@ public class RouteManipulationTest extends DefaultTest {
 
 		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).version(CAMEL_2_17_0_REDHAT_630254)
 				.create();
-		new LogView().deleteLog();
+		LogView log = new LogView();
+		log.open();
+		log.deleteLog();
 	}
 
 	/**
@@ -187,9 +193,13 @@ public class RouteManipulationTest extends DefaultTest {
 	 * <li>in JMX Navigator open "Local Camel Context", "Camel", "cbr-example-context"</li>
 	 * <li>check if the messages in the Message View corresponds with sent messages</li>
 	 * </ol>
+	 * 
+	 * @throws IOException
+	 *             copying of test messages '.../camel-spring/src/main/data/order1.xml' to
+	 *             '/camel-spring/work/cbr/input/order1.xml' does not work
 	 */
 	@Test
-	public void testTracing() {
+	public void testTracing() throws IOException {
 
 		Shell workbenchShell = new WorkbenchShell();
 		new CamelProject("camel-spring").runCamelContextWithoutTests("camel-context.xml");
@@ -206,19 +216,14 @@ public class RouteManipulationTest extends DefaultTest {
 		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context").select();
 		new ContextMenuItem("Stop Tracing Context");
 
-		String[] from = { "camel-spring", "src", "main", "data", "order1.xml" };
-		String[] from2 = { "camel-spring", "src", "main", "data", "order2.xml" };
-		String[] to = { "Local Camel Context", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/input" };
 		MessagesView msg = new MessagesView();
 		msg.open();
-		jmx.refreshNode("Local Camel Context", "Camel", "cbr-example-context");
-		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/output/us")
-				.select();
-		new TracingDragAndDropManager(from, to).performDragAndDrop();
+		String location = Project.getLocation("camel-spring");
+		Files.copy(new File(location + "/src/main/data/order1.xml").toPath(),
+				new File(location + "/work/cbr/input/order1.xml").toPath());
 		new WaitUntil(new ConsoleHasText("to another country"), TimePeriod.getCustom(60));
-		jmx.getNode("Local Camel Context", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/output/us")
-				.select();
-		new TracingDragAndDropManager(from2, to).performDragAndDrop();
+		Files.copy(new File(location + "/src/main/data/order2.xml").toPath(),
+				new File(location + "/work/cbr/input/order2.xml").toPath());
 
 		msg = new MessagesView();
 		msg.open();

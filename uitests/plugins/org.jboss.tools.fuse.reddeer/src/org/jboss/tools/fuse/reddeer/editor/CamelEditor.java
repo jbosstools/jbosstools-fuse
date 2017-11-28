@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.reddeer.common.exception.RedDeerException;
 import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.common.util.Display;
-import org.eclipse.reddeer.common.util.ResultRunnable;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitWhile;
@@ -48,9 +46,7 @@ import org.eclipse.reddeer.swt.impl.text.DefaultText;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
-import org.jboss.tools.fuse.reddeer.MouseAWTManager;
 import org.jboss.tools.fuse.reddeer.XPathEvaluator;
 import org.jboss.tools.fuse.reddeer.component.AbstractURICamelComponent;
 import org.jboss.tools.fuse.reddeer.component.CamelComponent;
@@ -582,32 +578,6 @@ public class CamelEditor extends GEFEditor {
 	}
 
 	/**
-	 * Tries to add connection between 'source' component and 'target' component
-	 * 
-	 * @param source
-	 *            name of the source component
-	 * @param target
-	 *            name of the target component
-	 */
-	public void addConnection(String source, String target) {
-
-		activate();
-		final Point fromCoords = getCoords(source);
-		final Point toCoords = getCoords(target);
-		MouseAWTManager.AWTMouseMove(fromCoords.x, fromCoords.y);
-		new CamelComponentEditPart(source).click();
-		AbstractWait.sleep(TimePeriod.SHORT);
-		MouseAWTManager.AWTMouseMoveFromTo(new Point(fromCoords.x, fromCoords.y),
-				new Point(fromCoords.x + getFigureWidth(source) + 5, fromCoords.y + 5));
-		MouseAWTManager.AWTMousePress();
-		MouseAWTManager.AWTMouseMoveFromTo(new Point(fromCoords.x + getFigureWidth(source) + 5, fromCoords.y + 5),
-				new Point(toCoords.x + 10, toCoords.y + 10));
-		MouseAWTManager.AWTMouseRelease();
-		activate();
-		AbstractWait.sleep(TimePeriod.SHORT);
-	}
-
-	/**
 	 * Selects an edit part with a given name
 	 * 
 	 * @param name
@@ -641,38 +611,6 @@ public class CamelEditor extends GEFEditor {
 
 		new CamelComponentEditPart(name).select();
 		new ContextMenuItem("Layout Diagram").select();
-	}
-
-	/**
-	 * Retrieves coordinates of given component
-	 * 
-	 * @param item
-	 *            an item.
-	 * @return absolute coordinates of given element
-	 */
-	private Point getCoords(String name) {
-
-		activate();
-		final CamelComponentEditPart component = new CamelComponentEditPart(name);
-		final int x = component.getBounds().x;
-		final int y = component.getBounds().y;
-		return Display.syncExec(new ResultRunnable<Point>() {
-
-			@Override
-			public Point run() {
-
-				Composite parent = component.getControl().getParent();
-				int tempX = x + parent.toDisplay(1, 1).x;
-				int tempY = y + parent.toDisplay(1, 1).y;
-				return new Point(tempX, tempY);
-			}
-		});
-	}
-
-	private int getFigureWidth(String name) {
-		activate();
-		CamelComponentEditPart component = new CamelComponentEditPart(name);
-		return component.getBounds().width;
 	}
 
 	/**
