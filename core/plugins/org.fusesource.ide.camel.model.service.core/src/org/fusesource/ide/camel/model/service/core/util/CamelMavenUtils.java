@@ -97,8 +97,14 @@ public class CamelMavenUtils {
 	 */
 	public IMavenProjectFacade getMavenProjectFacade(IProject project) {
 		final IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
-		final IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
-		return projectRegistry.create(pomIFile, true, new NullProgressMonitor());
+		IMavenProjectFacade res = projectRegistry.create(project, new NullProgressMonitor());
+		if (res == null) {
+			IFile pomIFile = project.getFile(new Path(IMavenConstants.POM_FILE_NAME));
+			if (pomIFile.exists()) {
+				res =  projectRegistry.create(pomIFile, true, new NullProgressMonitor());
+			}
+		}
+		return res;
 	}
 
 	public String getCamelVersionFromMaven(IProject project) {

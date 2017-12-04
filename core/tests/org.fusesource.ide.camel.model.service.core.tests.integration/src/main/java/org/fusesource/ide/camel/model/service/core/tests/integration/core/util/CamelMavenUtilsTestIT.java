@@ -10,12 +10,15 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
+import java.util.List;
 
+import org.apache.maven.model.Repository;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -36,19 +39,28 @@ public class CamelMavenUtilsTestIT {
 	@Rule
 	public FuseProject fuseProject = new FuseProject("External Files");
 
+	private IFile pomFileInProject;
+
 	@Before
 	public void setup() throws CoreException {
-		InputStream inputStream = CamelMavenUtilsTestIT.class.getClassLoader().getResourceAsStream("/" + POM_NAME);
-		IFile fileInProject = fuseProject.getProject().getFile("pom.xml");
-		fileInProject.delete(true, null);
-		fileInProject.create(inputStream, true, new NullProgressMonitor());
+		pomFileInProject = fuseProject.getProject().getFile("pom.xml");
+		pomFileInProject.delete(true, null);
 	}
 
 	@Test
-	public void testUpdatePathParams() {
+	public void testUretrieveCamelVersionFromMaven() throws CoreException {
+		InputStream inputStream = CamelMavenUtilsTestIT.class.getClassLoader().getResourceAsStream("/" + POM_NAME);
+		pomFileInProject.create(inputStream, true, new NullProgressMonitor());
+		
 		String version = new CamelMavenUtils().getCamelVersionFromMaven(fuseProject.getProject());
 		assertNotNull("The retrieved camel version should not be null.", version);
 		assertNotEquals("The retrieved camel version should not resolve to the variable name.", "${camel.version}", version);
 		assertEquals("The retrieved version doesn't match the defined value in the pom file.", "2.19.0", version);
+	}
+	
+	@Test
+	public void testEmptyRepositoriesWhenPomMissing() {
+		List<Repository> repositories = new CamelMavenUtils().getRepositories(fuseProject.getProject(), new NullProgressMonitor());
+		assertThat(repositories).isEmpty();
 	}
 }
