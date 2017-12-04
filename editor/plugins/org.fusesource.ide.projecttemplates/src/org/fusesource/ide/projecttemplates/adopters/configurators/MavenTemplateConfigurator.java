@@ -31,6 +31,10 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
  */
 public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	
+	public MavenTemplateConfigurator(String bomVersion) {
+		super(bomVersion);
+	}
+
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);

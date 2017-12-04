@@ -25,11 +25,6 @@ public abstract class AbstractEmptyProjectTemplate extends AbstractProjectTempla
 		super();
 	}
 
-	@Override
-	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator();
-	}
-
 	protected class BlankProjectCreator extends UnzipStreamCreator {
 
 		private String suffix;

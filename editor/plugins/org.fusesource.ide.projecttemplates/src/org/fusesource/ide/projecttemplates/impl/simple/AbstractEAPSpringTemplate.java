@@ -36,11 +36,6 @@ public abstract class AbstractEAPSpringTemplate extends AbstractProjectTemplate 
 		}	
 	}
 
-	@Override
-	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator();
-	}
-	
 	/**
 	 * creator class for the CBR simple template 
 	 */

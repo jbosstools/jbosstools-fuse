@@ -52,7 +52,7 @@ public class SwitchCamelVersionIT {
 		job.join();
 		
 		String newCamelVersion = utils.getCamelVersionFromMaven(project, false);
-		assertThat(newCamelVersion.equals(INVALID_VERSION)).isTrue();
+		assertThat(newCamelVersion).isEqualTo(INVALID_VERSION);
 	}
 	
 	@Test
@@ -63,6 +63,6 @@ public class SwitchCamelVersionIT {
 		job.join();
 		
 		String newCamelVersion = utils.getCamelVersionFromMaven(project, false);
-		assertThat(newCamelVersion.equals(VALID_VERSION)).isTrue();
+		assertThat(newCamelVersion).isEqualTo(VALID_VERSION);
 	}
 }

@@ -11,13 +11,17 @@
 package org.fusesource.ide.projecttemplates.adopters;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.OnlineBomVersionSearcher;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
@@ -94,5 +98,17 @@ public abstract class AbstractProjectTemplate {
 	
 	protected boolean isStrictlyLowerThan2200(String camelVersion) {
 		return new ComparableVersion(camelVersion).compareTo(COMPARABLE_CAMEL_2_20_0_VERSION) < 0;
+	}
+	
+	public String getBomVersion(String groupId, String artifactId) {
+		Dependency bomToSearch = new Dependency();
+		bomToSearch.setGroupId(groupId);
+		bomToSearch.setArtifactId(artifactId);
+		try {
+			return new OnlineBomVersionSearcher().findLatestBomVersion(new NullProgressMonitor(), bomToSearch);
+		} catch (CoreException e) {
+			ProjectTemplatesActivator.pluginLog().logError(e);
+		}
+		return null;
 	}
 }

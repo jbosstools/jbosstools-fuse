@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -129,6 +130,9 @@ public class CamelMavenUtils {
 					camelVersion = CamelCatalogUtils.getLatestCamelVersion();
 				} else {
 					camelVersion = getCamelVersionFromDependencies(deps);
+					if (camelVersion == null) {
+						camelVersion = getCamelVersionFromProperty(project);
+					}
 				}				
 				project.setSessionProperty(CAMEL_VERSION_QNAME, camelVersion);
 			} else {
@@ -139,6 +143,18 @@ public class CamelMavenUtils {
 			camelVersion = CamelCatalogUtils.getLatestCamelVersion();
 		}
 		return camelVersion;
+	}
+
+	private String getCamelVersionFromProperty(IProject project) {
+		IMavenProjectFacade m2facade = getMavenProjectFacade(project);
+		try {
+			MavenProject m2Project = m2facade.getMavenProject(new NullProgressMonitor());
+			Properties mavenProperties = m2Project.getProperties();
+			return mavenProperties.getProperty("camel.version");
+		} catch (CoreException e) {
+			CamelModelServiceCoreActivator.pluginLog().logError(e);
+		}
+		return null;
 	}
 
 	public Model getMavenModel(IProject project) {
@@ -243,6 +259,7 @@ public class CamelMavenUtils {
 		repoList.add(Arrays.asList("old-fuse", "https://repository.jboss.org/nexus/content/repositories/fs-releases"));
 		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
+		
 		
 		return repoList;
 	}

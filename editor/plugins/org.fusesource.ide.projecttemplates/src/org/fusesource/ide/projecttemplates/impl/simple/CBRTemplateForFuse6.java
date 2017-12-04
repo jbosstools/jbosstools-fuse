@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
+import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 
@@ -26,6 +28,11 @@ public class CBRTemplateForFuse6 extends AbstractCBRTemplate {
 	@Override
 	public boolean isCompatible(String camelVersion) {
 		return isStrictlyLowerThan2200(camelVersion);
+	}
+	
+	@Override
+	public TemplateConfiguratorSupport getConfigurator() {
+		return new MavenTemplateConfigurator(null);
 	}
 	
 }
