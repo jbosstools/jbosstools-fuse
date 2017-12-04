@@ -30,6 +30,7 @@ import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.StagingRepositoriesConstants;
@@ -49,8 +50,6 @@ public class MavenUtils {
 	private static final String FUSE_NAMING_USED_IN_VERSION = "fuse";
 	private static final String CAMEL_ARTIFACT_ID_PREFIX = "camel-";
 	private static final String ORG_APACHE_CAMEL = "org.apache.camel";
-	private static final String JBOSS_FUSE_PARENT = "jboss-fuse-parent";
-	private static final String ORG_JBOSS_FUSE_BOM = "org.jboss.fuse.bom";
 	private static final String MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION = "jboss.fuse.bom.version";
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION = "camel.version";
 	private static final String MAVEN_PROPERTY_CAMEL_VERSION_REFERENCE = "${"+MAVEN_PROPERTY_CAMEL_VERSION+"}";
@@ -167,10 +166,7 @@ public class MavenUtils {
 	}
 
 	private static boolean isFuseBomImportDependency(Dependency dep) {
-		return 	ORG_JBOSS_FUSE_BOM.equals(dep.getGroupId()) &&
-				JBOSS_FUSE_PARENT.equals(dep.getArtifactId()) &&
-				"pom".equals(dep.getType()) &&
-				"import".equals(dep.getScope());
+		return new FuseBomFilter().test(dep);
 	}
 	
 	private static boolean isCamelDependency(Dependency dep) {
@@ -234,23 +230,25 @@ public class MavenUtils {
 	 * @param mavenModel
 	 * @param camelVersion
 	 * @param project 
+	 * @param monitor 
 	 */
-	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion, IProject project) {
-		if (CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion, project) != null) {
+	public static void alignFuseRuntimeVersion(Model mavenModel, String camelVersion, IProject project, IProgressMonitor monitor) {
+		String fuseVersionForCamelVersion = CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, project, mavenModel, monitor);
+		if (fuseVersionForCamelVersion != null) {
 			Properties properties = mavenModel.getProperties();
 			if(isMavenPropertyFuseBomVersionSet(properties) && mavenModel.getDependencyManagement() != null && isFuseBomImported(mavenModel.getDependencyManagement().getDependencies())) {
-				properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion, project));
+				properties.setProperty(MAVEN_PROPERTY_JBOSS_FUSE_BOM_VERSION, fuseVersionForCamelVersion);
 			} else {
-				alignFuseRuntimeVersionForNonBOMUsage(mavenModel, project, camelVersion);
+				alignFuseRuntimeVersionForNonBOMUsage(mavenModel, project, camelVersion, monitor);
 			}
 		}
 	}
 
-	private static void alignFuseRuntimeVersionForNonBOMUsage(Model mavenModel, IProject project, String camelVersion) {
+	private static void alignFuseRuntimeVersionForNonBOMUsage(Model mavenModel, IProject project, String camelVersion, IProgressMonitor monitor) {
 		if(mavenModel.getDependencyManagement() != null){
 			for(Dependency dependency : mavenModel.getDependencyManagement().getDependencies()){
 				if(isFuseBomImportDependency(dependency)){
-					dependency.setVersion(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion, project));
+					dependency.setVersion(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, project, mavenModel, monitor));
 					return;
 				}
 			}
@@ -319,8 +317,7 @@ public class MavenUtils {
 			MavenUtils.updateCamelVersionPlugins(m2m, m2m.getBuild().getPlugins(), newCamelVersion);
 			subMonitor.setWorkRemaining(4);
 			
-			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion, project);
-			subMonitor.setWorkRemaining(3);
+			MavenUtils.alignFuseRuntimeVersion(m2m, newCamelVersion, project, subMonitor.split(1));
 			
 			MavenUtils.manageStagingRepositories(m2m);
 			subMonitor.setWorkRemaining(2);

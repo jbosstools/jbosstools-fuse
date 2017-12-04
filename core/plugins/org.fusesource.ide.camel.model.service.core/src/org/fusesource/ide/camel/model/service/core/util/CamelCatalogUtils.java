@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -22,17 +21,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.index.IIndex;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.ui.internal.search.util.IndexSearchEngine;
-import org.eclipse.m2e.core.ui.internal.search.util.Packaging;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
@@ -90,8 +86,8 @@ public class CamelCatalogUtils {
 	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
 	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
 	private static final String FUSE_63_R3_BOM_VERSION = "6.3.0.redhat-262";
-	private static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
-	private static final String FUSE_63_R5_BOM_VERSION = "6.3.0.redhat-310";
+	static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
+	static final String FUSE_63_R5_BOM_VERSION = "6.3.0.redhat-310";
 	
 	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
 	public static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
@@ -129,13 +125,13 @@ public class CamelCatalogUtils {
 	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> TEST_CAMEL_VERSIONS;
-	private static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING;
-	private static final Map<String, String> PURE_FIS_CAMEL_VERSIONS;
-	private static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING;
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING;
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
 	
 	static {
 		CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new HashMap<>();
-		PURE_FIS_CAMEL_VERSIONS = new HashMap<>();
+		CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING = new HashMap<>();
 		CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new HashMap<>();
 		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
@@ -180,20 +176,20 @@ public class CamelCatalogUtils {
 		
 			for(String camelVersion : fisMapping.stringPropertyNames()) {
 				String bomVersion = fisMapping.getProperty(camelVersion);
-				PURE_FIS_CAMEL_VERSIONS.put(camelVersion, bomVersion);
+				CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(camelVersion, bomVersion);
 			}
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
-			PURE_FIS_CAMEL_VERSIONS.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
+			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
+			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
+			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
 		}
 
 		initCamelVersionToTest();
 		
-		ALL_CAMEL_CATALOG_VERSIONS.addAll(PURE_FIS_CAMEL_VERSIONS.keySet());
+		ALL_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.keySet());
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS);
 	}
 
@@ -248,7 +244,7 @@ public class CamelCatalogUtils {
 	}
 	
 	public static List<String> getPureFISVersions() {
-		return Arrays.asList(PURE_FIS_CAMEL_VERSIONS.keySet().toArray(new String[PURE_FIS_CAMEL_VERSIONS.size()]));
+		return Arrays.asList(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.keySet().toArray(new String[CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.size()]));
 	}
 	
 	/**
@@ -266,50 +262,48 @@ public class CamelCatalogUtils {
 	 * tries to map a FUSE BOM version to the Camel version
 	 * 
 	 * @param camelVersion
+	 * @param monitor 
 	 * @param mavenModel 
 	 * @return
 	 */
-	public static String getFuseVersionForCamelVersion(String camelVersion, IProject project) {
-		String bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.get(camelVersion);
-		// seems it's not a Fuse Camel version
-		// TODO: revisit once https://issues.apache.org/jira/browse/CAMEL-8502 got solved
-		if (bomVersion == null) {
-			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) >= 0){
-				// Get the latest known BOM version based on Fuse 6.3
-				bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
-			} else {
-				if(CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
+	public static String getBomVersionForCamelVersion(String camelVersion, IProject project, Model mavenModel, IProgressMonitor monitor) {
+		org.apache.maven.model.Dependency fuseBomUsed = new OnlineBomVersionSearcher().retrieveAnyFuseBomUsed(mavenModel.getDependencyManagement());
+		return getBomVersionForCamelVersion(camelVersion, project, monitor, fuseBomUsed);
+	}
+
+	protected static String getBomVersionForCamelVersion(String camelVersion, IProject project, IProgressMonitor monitor, org.apache.maven.model.Dependency fuseBomUsed) {
+		String bomVersion = null;
+		if(fuseBomUsed != null) {
+			if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
+				if(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.containsKey(camelVersion)) {
+					bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.get(camelVersion);
+				} else {
+					bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+				}
+			} else if(isBom(FuseBomFilter.BOM_FUSE_6_FIS, fuseBomUsed)) {
+				if(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion)) {
+					bomVersion = CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.get(camelVersion);
+				} else {
+					bomVersion = CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+				}
+			} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
+				if (CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
 					bomVersion = CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
 				} else {
-					bomVersion = findLatestBomVersionOnAvailableRepo(project);
+					bomVersion = new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
 				}
+			} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
+				bomVersion = new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+				//TODO: add a mapping for BOM_FUSE_7 wildfly boms?
 			}
+			//TODO add case for FIS for Fuse 7 when they will be known
 		}
 		return bomVersion;
 	}
 
-	protected static String findLatestBomVersionOnAvailableRepo(IProject project) {
-		String bomVersion = null;
-		try {
-			//search with m2e Index, it goes faster in case m2e indexing is activated
-			IIndex index = MavenPlugin.getIndexManager().getIndex(project);
-			IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-			Collection<String> versions = indexSearchEngine.findVersions("org.jboss.fuse", "jboss-fuse-parent", null, Packaging.POM);
-			if(!versions.isEmpty()) {
-				bomVersion = versions.iterator().next();
-			} else {
-				//search with Aether APi
-				IMavenProjectFacade mavenProjectFacade = new CamelMavenUtils().getMavenProjectFacade(project);
-				MavenProject mavenProject = mavenProjectFacade.getMavenProject(new NullProgressMonitor());
-				bomVersion = MavenPlugin.getMaven().createExecutionContext().execute(mavenProject, new SearchLatestBomVersionAvailable(mavenProject), new NullProgressMonitor());
-			}
-		} catch (CoreException e) {
-			CamelModelServiceCoreActivator.pluginLog().logError(e);
-		}
-		return bomVersion;
+	private static boolean isBom(org.apache.maven.model.Dependency bom, org.apache.maven.model.Dependency fuseBomUsed) {
+		return bom.getGroupId().equals(fuseBomUsed.getGroupId()) && bom.getArtifactId().equals(fuseBomUsed.getArtifactId());
 	}
-	
-
 
 	/**
 	 * checks if the given camel version is a pure fis version
@@ -318,7 +312,7 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static boolean isPureFISVersion(String camelVersion) {
-		return PURE_FIS_CAMEL_VERSIONS.containsKey(camelVersion);
+		return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion);
 	}
 	
 	/**

@@ -91,7 +91,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 	private void checkBomVersion() throws CoreException {
 		IMavenProjectFacade mavenProjectFacade = MavenPlugin.getMavenProjectRegistry().getProject(project);
 		MavenProject mavenProject = mavenProjectFacade.getMavenProject(new NullProgressMonitor());
-		assertThat(mavenProject.getProperties().getProperty("jboss.fuse.bom.version")).isEqualTo(CamelCatalogUtils.getFuseVersionForCamelVersion(camelVersion, project));
+		assertThat(mavenProject.getProperties().getProperty("jboss.fuse.bom.version")).isEqualTo(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, project, mavenProject.getModel(), new NullProgressMonitor()));
 		
 	}
 

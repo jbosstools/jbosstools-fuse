@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -46,24 +47,32 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	private static final String LAUNCH_CONFIGURATION_FILE_EXTENSION = ".launch";
 	private static final String SETTINGS_FUSETOOLING = ".settings/fusetooling";
 	private static final String PLACEHOLDER_PROJECTNAME_IN_LAUNCH_CONFIGURATION = "%%%PLACEHOLDER_PROJECTNAME%%%";
+	private static final String PLACEHOLDER_BOMVERSION = "%%%PLACEHOLDER_BOMVERSION%%%";
+	
+	private String bomVersion;
+	
+	public DefaultTemplateConfigurator(String bomVersion) {
+		this.bomVersion = bomVersion;
+	}
 	
 	@Override
 	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 9);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 10);
 		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
+			configureBomVersion(project, subMonitor.split(1));
 			// add java facet
-			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.newChild(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.split(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			// add m2 facet
-			installFacet(project, "jboss.m2", null, null, subMonitor.newChild(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
+			installFacet(project, "jboss.m2", null, null, subMonitor.split(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			// now add jst utility
-			installFacet(project, "jst.utility", null, null, subMonitor.newChild(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
-			project.getFile(".classpath").delete(true, subMonitor.newChild(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.newChild(1));
-			configureLaunchConfiguration(project, subMonitor.newChild(1));
+			installFacet(project, "jst.utility", null, null, subMonitor.split(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
+			project.getFile(".classpath").delete(true, subMonitor.split(1)); //$NON-NLS-1$
+			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
+			configureLaunchConfiguration(project, subMonitor.split(1));
 		} catch (CoreException ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
@@ -71,7 +80,16 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 		return true;
 	}
 
-	private void configureLaunchConfiguration(IProject project, SubMonitor monitor) throws CoreException {
+	private void configureBomVersion(IProject project, IProgressMonitor monitor) throws CoreException {
+		if(bomVersion != null) {
+			IFile pom = project.getFile("pom.xml");
+			Path pomAbsolutePath = pom.getLocation().toFile().toPath();
+			replace(bomVersion, PLACEHOLDER_BOMVERSION, pomAbsolutePath, pomAbsolutePath);
+			project.refreshLocal(IResource.DEPTH_ONE, monitor);
+		}
+	}
+
+	private void configureLaunchConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
 		IFolder fuseToolingSettingsFolder = project.getFolder(SETTINGS_FUSETOOLING);
 		if(fuseToolingSettingsFolder.exists()){
 			IResource[] potentialLaunchConfigurations = fuseToolingSettingsFolder.members();
@@ -86,17 +104,24 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 		}
 	}
 
-	private void replaceInLaunchConfiguration(IProject project, IFile launchConfiguration) {
-		Path templateLaunchConfiguration = launchConfiguration.getLocation().toFile().toPath();
-		String projectName = project.getName();
-		String targetFileName = launchConfiguration.getName().replaceAll(PLACEHOLDER_PROJECTNAME_IN_LAUNCH_CONFIGURATION, projectName);
-		Path targetLaunchConfiguration = templateLaunchConfiguration.getParent().resolve(targetFileName);
-		try (Stream<String> lines = Files.lines(templateLaunchConfiguration)) {
+	private void replaceInLaunchConfiguration(IProject project, IFile fileInWhichToReplace) {
+		replace(fileInWhichToReplace, project.getName(), PLACEHOLDER_PROJECTNAME_IN_LAUNCH_CONFIGURATION);
+	}
+
+	protected void replace(IFile fileInWhichToReplace, String valueRoReplace, String placeHolderToReplace) {
+		Path filePathInWhichToReplace = fileInWhichToReplace.getLocation().toFile().toPath();
+		String targetFileName = fileInWhichToReplace.getName().replaceAll(placeHolderToReplace, valueRoReplace);
+		Path newFilePathWitReplacedValue = filePathInWhichToReplace.getParent().resolve(targetFileName);
+		replace(valueRoReplace, placeHolderToReplace, filePathInWhichToReplace, newFilePathWitReplacedValue);
+		cleanTemplate(filePathInWhichToReplace);
+	}
+
+	protected void replace(String valueRoReplace, String placeHolderToReplace, Path filePathInWhichToReplace, Path newFilePathWitReplacedValue) {
+		try (Stream<String> lines = Files.lines(filePathInWhichToReplace)) {
 			List<String> replaced = lines
-					.map(line-> line.replaceAll(PLACEHOLDER_PROJECTNAME_IN_LAUNCH_CONFIGURATION, projectName))
+					.map(line-> line.replaceAll(placeHolderToReplace, valueRoReplace))
 					.collect(Collectors.toList());
-			Files.write(targetLaunchConfiguration, replaced);
-			cleanTemplate(templateLaunchConfiguration);
+			Files.write(newFilePathWitReplacedValue, replaced);
 		} catch (IOException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		}

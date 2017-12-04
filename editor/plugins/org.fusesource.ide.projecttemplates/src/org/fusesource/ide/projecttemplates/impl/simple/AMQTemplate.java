@@ -44,7 +44,7 @@ public class AMQTemplate extends AbstractProjectTemplate {
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator();
+		return new MavenTemplateConfigurator(null);
 	}
 
 	@Override

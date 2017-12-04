@@ -13,6 +13,10 @@ package org.fusesource.ide.projecttemplates.impl.medium;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.maven.model.Dependency;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.util.OnlineBomVersionSearcher;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -34,11 +38,6 @@ public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjec
 		case JAVA:		return true;
 		default:		return false;
 		}	
-	}
-
-	@Override
-	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator();
 	}
 
 	protected class CXfCodeFirstUnzipTemplateCreator extends UnzipStreamCreator {
