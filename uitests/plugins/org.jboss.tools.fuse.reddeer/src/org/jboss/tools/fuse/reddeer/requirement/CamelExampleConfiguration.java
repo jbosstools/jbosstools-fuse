@@ -25,7 +25,7 @@ public class CamelExampleConfiguration implements RequirementConfiguration {
 	private String name;
 	private String version;
 	private File jarFile;
-	private File jolokiaJarFile;
+	private JolokiaConfiguration jolokiaConfiguration;
 
 	public String getName() {
 		return name;
@@ -51,12 +51,12 @@ public class CamelExampleConfiguration implements RequirementConfiguration {
 		this.jarFile = jarFile;
 	}
 
-	public File getJolokiaJarFile() {
-		return jolokiaJarFile;
+	public JolokiaConfiguration getJolokiaConfiguration() {
+		return jolokiaConfiguration;
 	}
 
-	public void setJolokiaJarFile(File jolokiaJarFile) {
-		this.jolokiaJarFile = jolokiaJarFile;
+	public void setJolokiaConfiguration(JolokiaConfiguration jolokiaConfiguration) {
+		this.jolokiaConfiguration = jolokiaConfiguration;
 	}
 
 	@Override
