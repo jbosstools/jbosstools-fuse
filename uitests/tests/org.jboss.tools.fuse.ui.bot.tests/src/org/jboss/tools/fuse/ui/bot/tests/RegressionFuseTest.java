@@ -74,7 +74,7 @@ public class RegressionFuseTest extends DefaultTest {
 	@After
 	public void setupClean() {
 
-		String server = serverRequirement.getConfiguration().getName();
+		String server = serverRequirement.getConfiguration().getServer().getName();
 		if (FuseServerManipulator.isServerStarted(server)) {
 			FuseServerManipulator.stopServer(server);
 		}
@@ -98,20 +98,19 @@ public class RegressionFuseTest extends DefaultTest {
 
 		new PushButton("Add...").click();
 		new DefaultShell("New Server Runtime Environment").setFocus();
-		new DefaultTreeItem("JBoss Fuse").expand();
+		new DefaultTreeItem("Red Hat JBoss Middleware").expand();
 
 		// tests the _Finish_ button
-		for (TreeItem item : new DefaultTreeItem("JBoss Fuse").getItems()) {
-			if (!item.getText().startsWith("JBoss"))
+		for (TreeItem item : new DefaultTreeItem("Red Hat JBoss Middleware").getItems()) {
+			if (!item.getText().startsWith("Red Hat JBoss Fuse"))
 				continue;
 			AbstractWait.sleep(TimePeriod.SHORT);
 			item.select();
 			try {
-
 				assertFalse(new PushButton("Finish").isEnabled());
 			} catch (AssertionError ex) {
 
-				new DefaultTreeItem("JBoss Fuse").select();
+				new DefaultTreeItem("Red Hat JBoss Middleware").select();
 				AbstractWait.sleep(TimePeriod.SHORT);
 				new PushButton("Cancel").click();
 				AbstractWait.sleep(TimePeriod.DEFAULT);
@@ -122,7 +121,7 @@ public class RegressionFuseTest extends DefaultTest {
 
 		// tests the _Cancel_ button
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new DefaultTreeItem("JBoss Fuse", "JBoss Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
+		new DefaultTreeItem("Red Hat JBoss Middleware", "Red Hat JBoss Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
 				.select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		new PushButton("Cancel").click();
@@ -132,7 +131,7 @@ public class RegressionFuseTest extends DefaultTest {
 		} catch (AssertionError ex) {
 
 			new DefaultShell().close();
-			new DefaultTreeItem("JBoss Fuse").select();
+			new DefaultTreeItem("Red Hat JBoss Middleware").select();
 			AbstractWait.sleep(TimePeriod.SHORT);
 			new PushButton("Cancel").click();
 			AbstractWait.sleep(TimePeriod.DEFAULT);
@@ -152,7 +151,7 @@ public class RegressionFuseTest extends DefaultTest {
 	public void issue_1152() {
 
 		ProjectFactory.newProject("cbr-blueprint").version(CAMEL_2_17_0_REDHAT_630254).template(CBR).type(BLUEPRINT).create();
-		String server = serverRequirement.getConfiguration().getName();
+		String server = serverRequirement.getConfiguration().getServer().getName();
 		FuseServerManipulator.startServer(server);
 		FuseServerManipulator.addModule(server, "cbr-blueprint");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
@@ -171,7 +170,7 @@ public class RegressionFuseTest extends DefaultTest {
 	public void issue_1252() {
 
 		ProjectFactory.newProject("camel-blueprint").template(ProjectTemplate.CBR).type(ProjectType.BLUEPRINT).create();
-		String server = serverRequirement.getConfiguration().getName();
+		String server = serverRequirement.getConfiguration().getServer().getName();
 		FuseServerManipulator.addModule(server, "camel-blueprint");
 		FuseServerManipulator.startServer(server);
 		FuseServerManipulator.restartInDebug(server);

@@ -33,6 +33,7 @@ import org.eclipse.reddeer.eclipse.ui.views.log.LogMessage;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.requirements.cleanworkspace.CleanWorkspaceRequirement.CleanWorkspace;
 import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
+import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
@@ -185,7 +186,6 @@ public class DebuggerTest extends DefaultTest {
 		new CamelProject(PROJECT_NAME).openCamelContext(CAMEL_CONTEXT);
 		CamelEditor editor = new CamelEditor(CAMEL_CONTEXT);
 		editor.setBreakpoint(CHOICE);
-		editor.setBreakpoint(LOG);
 		new CamelProject(PROJECT_NAME).debugCamelContextWithoutTests(CAMEL_CONTEXT);
 
 		// should stop on the 'choice1' node
@@ -196,12 +196,42 @@ public class DebuggerTest extends DefaultTest {
 		AbstractWait.sleep(TimePeriod.getCustom(5));
 		assertEquals(CHOICE_ID, variables.getValue("Endpoint"));
 
-		// get body of message
-		variables.close();
-		AbstractWait.sleep(TimePeriod.SHORT);
-		variables.open();
-		new DefaultTree().getItems().get(4).getItems().get(0).select();
-		assertTrue(new DefaultStyledText().getText().contains("<name>Erie Zoo</name>"));
+		for (int i = 0; i < 5; i++) {
+			variables.close();
+			AbstractWait.sleep(TimePeriod.SHORT);
+			variables.open();
+			TreeItem msg = null;
+
+			// gets "Message" from "Variables View"
+			for (TreeItem item : new DefaultTree().getItems()) {
+				if (!item.getText().equals("Message")) {
+					continue;
+				}
+				msg = item;
+			}
+
+			// selects "MessageBody" from "Variables View"
+			if (msg != null) {
+ 				for (TreeItem item : msg.getItems()) {
+ 					item.select();
+					if (item.getText().equals("MessageBody")) {
+						item.select();
+						break;
+					}
+				}
+			}
+
+			String message = new DefaultStyledText().getText();
+			editor.activate();
+			if (message.contains("<name>Erie Zoo</name>")) {
+				editor.setBreakpoint(LOG);
+				break;
+			}
+			ResumeButton resume = new ResumeButton();
+			assertTrue(resume.isEnabled());
+			resume.click();
+			new WaitUntil(new LaunchIsSuspended(), TimePeriod.DEFAULT);
+		}
 
 		// resume and then should stop on the 'log1' node
 		ResumeButton resume = new ResumeButton();

@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.reddeer.common.wait.AbstractWait;
-import org.eclipse.reddeer.common.wait.TimePeriod;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.core.matcher.WithTextMatcher;
 import org.eclipse.reddeer.junit.internal.runner.ParameterizedRequirementsRunnerFactory;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.swt.api.Shell;
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.menu.ShellMenuItem;
@@ -61,17 +62,19 @@ public class LicenseTest {
 	@Parameters
 	public static Collection<String> setupData() {
 		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
-		new PushButton("Installation Details").click();
-		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
-		new DefaultTabItem("Installed Software").activate();
+		Shell shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new PushButton(shell, "Installation Details").click();
+		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		new DefaultTabItem(shell, "Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
-		for (TreeItem item : new DefaultTree().getItems()) {
+		for (TreeItem item : new DefaultTree(shell).getItems()) {
 			if (item.getText().startsWith("Red Hat JBoss Fuse Tools")) {
 				fusePlugins.add(item.getText());
 			}
 		}
-		new PushButton("Close").click();
-		;
+		new PushButton(shell, "Close").click();
+		shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new PushButton(shell, "Close").click();
 		return fusePlugins;
 	}
 
@@ -89,16 +92,19 @@ public class LicenseTest {
 	public void setupOpenInstallationDetails() {
 
 		new ShellMenuItem(new WorkbenchShell(), "Help", "About Red Hat JBoss Developer Studio").select();
-		new PushButton("Installation Details").click();
-		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		Shell shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new PushButton(shell, "Installation Details").click();
+		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
 	}
 
 	@After
 	public void setupCloseShells() {
-
-		new PushButton("Apply and Close").click();
-		new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
-		new PushButton("Close").click();
+		Shell shell = new DefaultShell(new WithTextMatcher(new RegexMatcher("Properties for.*")));
+		new PushButton(shell, "Apply and Close").click();
+		shell = new DefaultShell("Red Hat JBoss Developer Studio Installation Details");
+		new PushButton(shell, "Close").click();
+		shell = new DefaultShell("About Red Hat JBoss Developer Studio");
+		new PushButton(shell, "Close").click();
 	}
 
 	/**
@@ -117,7 +123,7 @@ public class LicenseTest {
 
 		new DefaultTreeItem(plugin).select();
 		new PushButton("Properties").click();
-		AbstractWait.sleep(TimePeriod.SHORT);
+		new DefaultShell(new WithTextMatcher(new RegexMatcher("Properties for.*")));
 		new DefaultTreeItem("License Agreement").select();
 		String text = new DefaultText(1).getText();
 		assertEquals(LICENSE, text);

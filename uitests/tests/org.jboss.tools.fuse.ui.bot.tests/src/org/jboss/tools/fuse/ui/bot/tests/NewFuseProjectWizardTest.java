@@ -27,9 +27,7 @@ import org.eclipse.reddeer.direct.project.Project;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
-import org.eclipse.reddeer.junit.annotation.RequirementRestriction;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
-import org.eclipse.reddeer.junit.requirement.matcher.RequirementMatcher;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
@@ -42,8 +40,6 @@ import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
-import org.jboss.tools.fuse.reddeer.runtime.ServerTypeMatcher;
-import org.jboss.tools.fuse.reddeer.runtime.impl.ServerEAP;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
@@ -61,11 +57,6 @@ public class NewFuseProjectWizardTest {
 
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
-	
-	@RequirementRestriction
-	public static RequirementMatcher getRestrictionMatcher() {
-		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerEAP.class));
-	}
 
 	/**
 	 * Prepares test environment
