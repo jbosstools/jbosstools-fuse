@@ -20,6 +20,13 @@
 <unit id="org.jboss.tools.usage.feature.feature.group" version="2.2.101.v20170908-0905"/>
 <repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/"/>
 </location>
+
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.jboss.ide.eclipse.as.test.feature.feature.group" version="3.5.2.v20171114-2016"/>
+<unit id="org.jboss.tools.test.feature.feature.group" version="3.7.100.v20170529-1436"/>
+<repository location="http://download.jboss.org/jbosstools/oxygen/staging/updates/coretests/"/>
+</location>
+
 </locations>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 </target>
