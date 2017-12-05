@@ -36,5 +36,5 @@ public interface ISyndesisExtensionFacetDataModelProperties extends ICamelFacetD
 	/*
 	 * Other constants
 	 */
-	public final static String SYNDESIS_PROJECT_NATURE = SyndesisExtensionProjectNature.NATURE_ID;
+	public static final String SYNDESIS_PROJECT_NATURE = SyndesisExtensionProjectNature.NATURE_ID;
 }

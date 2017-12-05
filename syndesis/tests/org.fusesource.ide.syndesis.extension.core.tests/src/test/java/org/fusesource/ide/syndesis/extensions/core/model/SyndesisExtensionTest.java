@@ -37,7 +37,6 @@ public class SyndesisExtensionTest {
 	 */
 	@Test
 	public void testGetExtensionId() {
-		assertTrue("extensionId value is missing", extension.getExtensionId() != null && extension.getExtensionId().trim().length()>0);
 		assertTrue("extensionId value is not matching", extension.getExtensionId().equals("my:test"));
 	}
 
@@ -46,7 +45,6 @@ public class SyndesisExtensionTest {
 	 */
 	@Test
 	public void testGetVersion() {
-		assertTrue("version value is missing", extension.getVersion() != null && extension.getVersion().trim().length()>0);
 		assertTrue("version value is not matching", extension.getVersion().equals("1.0.0"));
 	}
 
@@ -55,7 +53,6 @@ public class SyndesisExtensionTest {
 	 */
 	@Test
 	public void testGetName() {
-		assertTrue("name value is missing", extension.getName() != null && extension.getName().trim().length()>0);
 		assertTrue("name value is not matching", extension.getName().equals("Test Extension"));
 	}
 
@@ -64,19 +61,9 @@ public class SyndesisExtensionTest {
 	 */
 	@Test
 	public void testGetDescription() {
-		assertTrue("description value is missing", extension.getDescription() != null && extension.getDescription().trim().length()>0);
 		assertTrue("description value is not matching", extension.getDescription().equals("Testing"));
 	}
 	
-	/**
-	 * Test method for {@link org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension#getIcon()}.
-	 */
-	@Test
-	public void testGetIcon() {
-		assertTrue("icon value is missing", extension.getIcon() != null && extension.getIcon().trim().length()>0);
-		assertTrue("icon value is not matching", extension.getIcon().equals("test.png"));
-	}
-
 	/**
 	 * Test method for {@link org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension#getTags()}.
 	 */
@@ -111,19 +98,14 @@ public class SyndesisExtensionTest {
 	private void testSyndesisAction(SyndesisAction action) {
 		assertTrue("invalid null action", action != null);
 
-		assertTrue("Action ID missing", action.getId() != null && action.getId().trim().length()>0);
 		assertTrue("Action ID not matching", action.getId().equals("actionOne"));
 
-		assertTrue("Action Name missing", action.getName() != null && action.getName().trim().length()>0);
 		assertTrue("Action Name not matching", action.getName().equals("First Action"));
 
-		assertTrue("Action Type missing", action.getActionType() != null && action.getActionType().trim().length()>0);
 		assertTrue("Action Type not matching", action.getActionType().equals("extension"));
 
-		assertTrue("Action Description missing", action.getDescription() != null && action.getDescription().trim().length()>0);
 		assertTrue("Action Description not matching", action.getDescription().equals("Test Action"));
 
-		assertTrue("Action Name missing", action.getName() != null && action.getName().trim().length()>0);
 		assertTrue("Action Name not matching", action.getName().equals("First Action"));
 
 		assertTrue("Action tags are missing", action.getTags() != null && !action.getTags().isEmpty() && action.getTags().size() == 3);
@@ -138,10 +120,8 @@ public class SyndesisExtensionTest {
 	private void testSyndesisActionDescriptor(SyndesisActionDescriptor descriptor) {
 		assertTrue("invalid null descriptor", descriptor != null);
 
-		assertTrue("Action descriptor kind missing", descriptor.getKind() != null && descriptor.getKind().trim().length()>0);
 		assertTrue("Action descriptor kind not matching", descriptor.getKind().equals("step"));
 
-		assertTrue("Action descriptor entrypoint missing", descriptor.getEntryPoint() != null && descriptor.getEntryPoint().trim().length()>0);
 		assertTrue("Action descriptor entrypoint not matching", descriptor.getEntryPoint().equals("direct:my/test/actionOne"));
 
 		ActionDataShape inputShape = descriptor.getInputDataShape();
@@ -149,24 +129,17 @@ public class SyndesisExtensionTest {
 
 		ActionDataShape outputShape = descriptor.getOutputDataShape();
 		testSyndesisActionDescriptorOutputDataShape(outputShape);
-
-// this will be ignored for extensions
-//      "propertyDefinitionSteps": []
-//    }
-
 	}
 	
 	private void testSyndesisActionDescriptorInputDataShape(ActionDataShape inputShape) {
 		assertTrue("invalid null Input Datashape", inputShape != null);
 		
-		assertTrue("Action Input Datashape kind missing", inputShape.getKind() != null && inputShape.getKind().trim().length()>0);
 		assertTrue("Action Input Datashape kind not matching", inputShape.getKind().equals("any"));
 	}
 	
 	private void testSyndesisActionDescriptorOutputDataShape(ActionDataShape outputShape) {
 		assertTrue("invalid null Output Datashape", outputShape != null);
 		
-		assertTrue("Action Output Datashape kind missing", outputShape.getKind() != null && outputShape.getKind().trim().length()>0);
 		assertTrue("Action Output Datashape kind not matching", outputShape.getKind().equals("any"));
 	}
 }

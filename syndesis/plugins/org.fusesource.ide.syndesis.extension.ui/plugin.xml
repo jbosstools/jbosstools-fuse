@@ -32,7 +32,7 @@
       <wizard id="org.fusesource.ide.syndesis.extensions.wizards.SyndesisExtensionProjectWizard"
             category="org.fusesource.ide.syndesis.newwizards"
             class="org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard"
-            icon="icons/syndesis.png"
+            icon="icons/syndesis16.png"
             name="%syndesis.extension.project.wizard.name"
             project="true">
          <description>%syndesis.extension.project.wizard.description</description>
@@ -90,7 +90,7 @@
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
-            icon="icons/syndesis.png"
+            icon="icons/syndesis16.png"
             id="org.fusesource.ide.syndesis.extension.img"
             natureId="org.fusesource.ide.syndesis.extension">
       </image>
@@ -98,7 +98,7 @@
 
    <extension point="org.eclipse.wst.common.project.facet.ui.images">
       <image facet="jst.syndesis.extension"
-           path="icons/syndesis.png">
+           path="icons/syndesis64.png">
       </image>
    </extension>
    

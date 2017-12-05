@@ -24,16 +24,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SyndesisAction {
 	@JsonProperty("id")
-	private String id;			// ${actionId}
+	private String id;
 	
 	@JsonProperty("name")
-	private String name;		// Action Name
+	private String name;
 	
 	@JsonProperty("actionType")
-	private String actionType;	// extension
+	private String actionType;
 	
 	@JsonProperty("description")
-	private String description; // Action Description
+	private String description;
 	
 	@JsonProperty("tags")
 	private List<String> tags = new ArrayList<>();

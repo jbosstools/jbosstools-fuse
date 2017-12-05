@@ -36,7 +36,6 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIAc
  */
 public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 
-	private boolean activeCamelVersionValidation;
     private Combo springBootVersionCombo;
 	private Combo camelVersionCombo;
 	private Combo syndesisVersionCombo;
@@ -195,7 +194,6 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 			String camelVersion = getCamelVersion();
 			CamelVersionChecker versionChecker = new CamelVersionChecker(camelVersion);
 			try {
-				activeCamelVersionValidation = true;
 				getWizard().getContainer().run(true, true, versionChecker);
 			} catch (InterruptedException iex) {
 				versionChecker.cancel();
@@ -210,7 +208,6 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 					Thread.currentThread().interrupt();
 				}
 			}
-			activeCamelVersionValidation = versionChecker.isDone();
 			updateCamelValidation(camelVersion, versionChecker.isValid());
 		}
 		
