@@ -47,14 +47,10 @@ public class PreferredLabelEditor extends FieldEditor {
 	 * The button box containing the Add, Edit and Remove buttons.
 	 */
 	private Composite buttonBox;
-
 	private Button addButton;
 	private Button editButton;
 	private Button removeButton;
 
-	/**
-	 * The selection listener.
-	 */
 	private SelectionListener selectionListener;
 
 	/**
@@ -243,7 +239,7 @@ public class PreferredLabelEditor extends FieldEditor {
 	}
 
 	/**
-	 * Returns this field editor's selection listener. The listener is created if nessessary.
+	 * Returns this field editor's selection listener. The listener is created if necessary.
 	 *
 	 * @return the selection listener
 	 */
@@ -337,9 +333,9 @@ public class PreferredLabelEditor extends FieldEditor {
 
 	@Override
 	protected void doStore() {
-		String s = createList(getPreferredLabels());
-		if (s != null) {
-			getPreferenceStore().setValue(getPreferenceName(), s);
+		String stringOfPreferredLabels = createList(getPreferredLabels());
+		if (stringOfPreferredLabels != null) {
+			getPreferenceStore().setValue(getPreferenceName(), stringOfPreferredLabels);
 		}
 	}
 

@@ -28,10 +28,17 @@ import org.junit.Test;
  */
 public class CamelBasicModelElementTestIT {
 
+	private String originalPreference;
+
 	@Before
-	@After
 	public void cleanUserLabelsPreference() {
+		originalPreference = PreferenceManager.getInstance().loadPreferenceAsString(EDITOR_PREFERRED_LABEL);
 		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "");
+	}
+
+	@After
+	public void setBackOriginalLabelsPreference() {
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, originalPreference);
 	}
 
 	@Test
@@ -45,7 +52,7 @@ public class CamelBasicModelElementTestIT {
 		assertEquals("Log ${body}", simpleLog().getDisplayText());
 	}
 
-	private static AbstractCamelModelElement simpleLog() {
+	private AbstractCamelModelElement simpleLog() {
 		Eip eip = new Eip();
 		eip.setName("log");
 

@@ -33,7 +33,9 @@ public class ProviderHelper {
 	public static final String CATEGORY_MISC = "Miscellaneous";
 	public static final String CATEGORY_COMPONENTS = "Components";
 	public static final String CATEGORY_TRANSFORMATION = "Transformation";
-		
+	// used for specifying that an EIP doesn't belong to any of the above categories
+	public static final String CATEGORY_NONE = "NONE";
+
 	private static final HashMap<String, String> categoryMap;
 
 	static {
@@ -150,6 +152,11 @@ public class ProviderHelper {
     	if (categoryMap.containsKey(eip.getName())) {
     		return categoryMap.get(eip.getName());
     	}
-    	return "NONE";
+    	return CATEGORY_NONE;
     }
+
+	public static boolean belongsToAnyCategory(Eip eip) {
+		return !CATEGORY_NONE.equals(getCategoryFromEip(eip));
+	}
+
 }
