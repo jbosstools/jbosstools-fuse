@@ -63,7 +63,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 			IProject project = facade.getProject();
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
-			if (fproj != null && checkSyndesisExtensionsMetaDataExist(project, monitor)) {
+			if (fproj != null && checkSyndesisExtensionsMetaDataExist(project)) {
 				installDefaultFacets(project, mavenProject, fproj, monitor);
 			}
 		}
@@ -75,14 +75,14 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		if (checkSyndesisExtensionsMetaDataExist(request.getProject(), monitor)) {
+		if (checkSyndesisExtensionsMetaDataExist(request.getProject())) {
 			if (!isSyndesisExtensionsFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
 			}
 			if (!isSyndesisExtensionsNatureEnabled(request.getProject())) {
 				// enable the camel nature
-				configureNature(request.getProject(), request.getMavenProject(), monitor);
+				configureNature(request.getProject(), monitor);
 			}
 			// handle linked resources for WAR deployments
 			if (isWARProject(request.getProject(), monitor)) {
@@ -117,7 +117,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	private void configureFacet(MavenProject mavenProject, IProject project, IProgressMonitor monitor)
 			throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.configuringFacets, 4);
-		if (!checkSyndesisExtensionsMetaDataExist(project, subMonitor.split(1))) {
+		if (!checkSyndesisExtensionsMetaDataExist(project)) {
 			subMonitor.setWorkRemaining(0);
 			return;
 		}
@@ -142,7 +142,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
 	}
 	
-	private boolean checkSyndesisExtensionsMetaDataExist(IProject project, IProgressMonitor monitor) {
+	private boolean checkSyndesisExtensionsMetaDataExist(IProject project) {
 		// check for file: 
 		return project != null && project.findMember(new Path("src").append("main").append("resources").append("META-INF").append("syndesis").append("extension-definition.json")) != null;
 	}
@@ -222,7 +222,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		}
 		installSyndesisExtensionFacet(fproj, fpwc, subMonitor.split(1));
 		fpwc.commitChanges(subMonitor.split(1));
-		configureNature(project, mavenProject, subMonitor.split(1));
+		configureNature(project, subMonitor.split(1));
 		updateMavenProject(project);
 	}
 
@@ -248,7 +248,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		}
 	}
 	
-	private void configureNature(IProject project, MavenProject m2Project, IProgressMonitor monitor)
+	private void configureNature(IProject project, IProgressMonitor monitor)
 			throws CoreException {
 		addNature(project, SyndesisExtensionProjectNature.NATURE_ID, monitor);
 	}
