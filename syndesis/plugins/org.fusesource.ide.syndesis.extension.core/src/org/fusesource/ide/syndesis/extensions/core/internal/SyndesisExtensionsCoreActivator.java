@@ -46,10 +46,10 @@ public class SyndesisExtensionsCoreActivator extends BaseCorePlugin {
 	    return instance.getBundle().getBundleContext();
 	}
 
-    	@Override
+    @Override
 	public void start(BundleContext context) throws Exception {
-        super.start(context);
-        registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
+    	super.start(context);
+    	registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 	}
 	
 	/**

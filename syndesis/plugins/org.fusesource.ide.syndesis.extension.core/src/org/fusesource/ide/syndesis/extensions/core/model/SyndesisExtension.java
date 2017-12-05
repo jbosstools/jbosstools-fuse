@@ -20,6 +20,7 @@ import org.fusesource.ide.syndesis.extensions.core.internal.SyndesisExtensionsCo
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,30 +29,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class SyndesisExtension {
 	
-	private transient String springBootVersion;
-	private transient String camelVersion;
-	private transient String syndesisVersion;
+	@JsonIgnore
+	private String springBootVersion;
+	@JsonIgnore
+	private String camelVersion;
+	@JsonIgnore
+	private String syndesisVersion;
 
 	@JsonProperty("id")
-	private String id;				// assigned-by-syndesis-server (must not be hardcoded in packaged extensions)
+	private String id;				
 	
 	@JsonProperty("extensionId")
-	private String extensionId;		// ${groupId}:${artifactId}
+	private String extensionId;		
 	
 	@JsonProperty("version")
-	private String version;			// ${version}
+	private String version;			
 	
 	@JsonProperty("name")
-	private String name;			// Extension Name
+	private String name;			
 	
 	@JsonProperty("status")
-	private String status;			// Draft|Installed|Deleted (must not be hardcoded in packaged extensions)
+	private String status;			
 	
 	@JsonProperty("description")
-	private String description;		// Extension Description
-	
-	@JsonProperty("icon")
-	private String icon;			// fa-puzzle-piece
+	private String description;		
 	
 	@JsonProperty("tags")
 	private List<String> tags;
@@ -60,7 +61,7 @@ public class SyndesisExtension {
 	private List<SyndesisAction> actions;
 	
 	@JsonProperty("dependencies")
-	private List<String> dependencies;	// [mvn:g/a/v, ..., ...]
+	private List<String> dependencies;	
 	
 	private Map<String, Object> otherProperties = new HashMap<>();
 
@@ -130,20 +131,6 @@ public class SyndesisExtension {
 		this.extensionId = extensionId;
 	}
 	
-	/**
-	 * @return the icon
-	 */
-	public String getIcon() {
-		return this.icon;
-	}
-
-	/**
-	 * @param icon the icon to set
-	 */
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
 	/**
 	 * @return the id
 	 */
@@ -215,8 +202,6 @@ public class SyndesisExtension {
 	}
 	
 	/**
-<<<<<<< HEAD
-=======
 	 * @return the camelVersion
 	 */
 	public String getCamelVersion() {
@@ -257,7 +242,6 @@ public class SyndesisExtension {
 	}
 	
 	/**
->>>>>>> 70cce1ec9... FUSETOOLS-2647 - initial commit for Syndesis extension support
 	 * creates the model from the given input stream
 	 * 
 	 * @param stream

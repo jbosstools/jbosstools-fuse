@@ -171,7 +171,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = new CamelMavenUtils().getMavenModel(project);
 
-			configureProjectVersions(pomModel, project);
+			configureProjectVersions(pomModel);
 			customizeSyndesisPlugin(pomModel, project);
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
@@ -188,11 +188,11 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
 		Plugin plugin = pluginsByName.get(SYNDESIS_PLUGIN_GROUPID + ":" + SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$
 		if (plugin != null) {
-			manageConfiguration(plugin, project, pomModel);
+			manageConfiguration(plugin);
 		}
 	}
 
-	private void manageConfiguration(Plugin plugin, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+	private void manageConfiguration(Plugin plugin) throws XmlPullParserException, IOException {
 		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
 		if (config == null) {
 			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
@@ -201,10 +201,10 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 					StandardCharsets.UTF_8.name());
 			plugin.setConfiguration(config);
 		}
-		manageInstructions(config, project, pomModel);
+		manageInstructions(config);
 	}
 
-	private void manageInstructions(Xpp3Dom config, IProject project, Model pomModel) throws XmlPullParserException, IOException {
+	private void manageInstructions(Xpp3Dom config) throws XmlPullParserException, IOException {
 		setOrChangeConfigValue(config, "extensionId", extension.getExtensionId()); //$NON-NLS-1$
 		setOrChangeConfigValue(config, "name", extension.getName()); //$NON-NLS-1$
 		setOrChangeConfigValue(config, "description", extension.getDescription()); //$NON-NLS-1$
@@ -224,7 +224,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		}
 	}
 	
-	private void configureProjectVersions(Model pomModel, IProject project) {
+	private void configureProjectVersions(Model pomModel) {
 		Properties props = pomModel.getProperties();
 		props.setProperty("spring.boot.version", extension.getSpringBootVersion());
 		props.setProperty("camel.version", extension.getCamelVersion());
