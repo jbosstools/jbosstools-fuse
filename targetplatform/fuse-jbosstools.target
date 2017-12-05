@@ -3,16 +3,16 @@
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="3.6.111.v20170811-1737"/>
-<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.3.1.v20170929-1921"/>
-<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.3.1.v20170929-1921"/>
-<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.3.1.v20170929-1921"/>
+<unit id="org.jboss.ide.eclipse.as.feature.feature.group" version="3.5.2.v20171114-2017"/>
+<unit id="org.jboss.ide.eclipse.as.jmx.integration.feature.feature.group" version="3.5.2.v20171114-2017"/>
+<unit id="org.jboss.ide.eclipse.as.serverAdapter.wtp.feature.feature.group" version="3.5.2.v20171114-2017"/>
 <unit id="org.jboss.tools.archives.scanner.feature.feature.group" version="3.6.111.v20170811-1737"/>
-<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.9.1.v20170908-0905"/>
+<unit id="org.jboss.tools.common.core.feature.feature.group" version="3.9.1.v20171020-1456"/>
 <unit id="org.jboss.tools.common.feature.feature.group" version="3.9.1.v20170908-0905"/>
 <unit id="org.jboss.tools.common.jdt.feature.feature.group" version="3.9.1.v20170821-1410"/>
 <unit id="org.jboss.tools.common.text.ext.feature.feature.group" version="3.9.1.v20170908-0905"/>
-<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.9.1.v20170908-0905"/>
-<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.4.1.v20170929-2122"/>
+<unit id="org.jboss.tools.common.ui.feature.feature.group" version="3.9.2.v20171116-1909"/>
+<unit id="org.jboss.tools.foundation.feature.feature.group" version="1.4.2.v20171116-1911"/>
 <unit id="org.jboss.tools.jmx.feature.feature.group" version="1.10.1.v20170906-2003"/>
 <unit id="org.jboss.tools.maven.feature.feature.group" version="1.8.101.v20170822-1709"/>
 <unit id="org.jboss.tools.runtime.core.feature.feature.group" version="3.3.1.v20170929-1931"/>
