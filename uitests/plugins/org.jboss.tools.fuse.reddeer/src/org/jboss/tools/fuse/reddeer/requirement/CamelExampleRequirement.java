@@ -24,7 +24,7 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExa
  * Requirement for an existing Camel example. The camel example must be one of
  * the examples at <a href=
  * "https://github.com/apache/camel/tree/master/examples">https://github.com/apache/camel/tree/master/examples</a>.
- * The appropriate yaml file should look like
+ * The appropriate yaml file should look like as follows
  * 
  * <pre>
  * org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExample:
@@ -32,7 +32,11 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExa
  *   version: 2.20.1
  *   jarFile: /tmp/camel-example-spring-boot-2.20.1.jar
  *   # optional
- *   jolokiaJarFile: /tmp/jolokia-jvm-1.3.7-agent.jar
+ *   jolokiaConfiguration:
+ *     name: My Jolokia
+ *     jolokiaJarFile: /tmp/jolokia-jvm-1.3.7-agent.jar
+ *     host: localhost
+ *     port: 8778
  * </pre>
  * 
  * At the moment we support only stand-alone jar file such as spring-boot.
@@ -61,16 +65,25 @@ public class CamelExampleRequirement extends AbstractConfigurableRequirement<Cam
 		if (config.getJarFile() != null) {
 			runner = new CamelExampleRunner(getConfiguration().getJarFile(), getDeclaration().useJolokia());
 			if (getDeclaration().useJolokia()) {
-				File jolokiaJarFile = config.getJolokiaJarFile();
-				if (jolokiaJarFile == null) {
-					throw new RedDeerException("No jolokia agent was specified");
+				JolokiaConfiguration jolokiaConfig = config.getJolokiaConfiguration();
+				if (jolokiaConfig == null) {
+					throw new RedDeerException("No jolokia configuration was specified");
 				}
-				runner.setJavaAgent(jolokiaJarFile.getAbsolutePath());
+				File jolokiaJarFile = jolokiaConfig.getJolokiaJarFile();
+				StringBuilder jolokiaAgent = new StringBuilder(jolokiaJarFile.getAbsolutePath());
+				if (!jolokiaJarFile.exists()) {
+					throw new RedDeerException("Jolokia agent '" + jolokiaAgent + "' doesn't exist");
+				}
+				jolokiaAgent.append("=");
+				jolokiaAgent.append("host=").append(jolokiaConfig.getHost());
+				jolokiaAgent.append(",");
+				jolokiaAgent.append("port=").append(jolokiaConfig.getPort());
+				runner.setJavaAgent(jolokiaAgent.toString());
 			}
 			runner.run();
 		}
 	}
-
+	
 	@Override
 	public void cleanUp() {
 		if (runner != null && runner.isRunning()) {
