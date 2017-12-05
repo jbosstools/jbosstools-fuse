@@ -69,12 +69,6 @@ public class Messages extends NLS {
 	public static String newProjectWizardExtensionDetailsPageDescriptionLabel;
 	public static String newProjectWizardExtensionDetailsPageDescriptionTooltip;
 	public static String newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint;
-	public static String newProjectWizardExtensionDetailsPageIconLabel;
-	public static String newProjectWizardExtensionDetailsPageIconTooltip;
-	public static String newProjectWizardExtensionDetailsPageOptionalIconFieldHint;
-	public static String newProjectWizardExtensionDetailsPageIconBrowseLabel;
-	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogTitle;
-	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogFileTypeLabel;
 	public static String newProjectWizardExtensionDetailsPageTagsLabel;
 	public static String newProjectWizardExtensionDetailsPageTagsTooltip;
 	public static String newProjectWizardExtensionDetailsPageOptionalTagsFieldHint;
@@ -82,7 +76,6 @@ public class Messages extends NLS {
 	public static String newProjectWizardExtensionDetailsPageErrorInvalidExtensionId;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionName;
-	public static String newProjectWizardExtensionDetailsPageIconSelectionDialogFileUnavailableError;
 
 	public static String configuringFacets;
 	public static String installingRequiredFacetsForSyndesisExtensionProject;

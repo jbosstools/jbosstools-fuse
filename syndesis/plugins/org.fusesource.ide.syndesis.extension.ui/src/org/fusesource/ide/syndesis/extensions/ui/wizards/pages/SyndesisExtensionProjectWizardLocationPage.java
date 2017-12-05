@@ -126,7 +126,7 @@ public class SyndesisExtensionProjectWizardLocationPage extends WizardPage {
 		}
 
 		useDefaultWorkspaceLocationButton = new Button(locationGrp, SWT.CHECK);
-		GridData useDefaultWorkspaceLocationButtonData = new GridData(SWT.LEFT,	SWT.CENTER, false, false, 3, 1);
+		GridData useDefaultWorkspaceLocationButtonData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
 		useDefaultWorkspaceLocationButton.setLayoutData(useDefaultWorkspaceLocationButtonData);
 		useDefaultWorkspaceLocationButton.setText(Messages.newProjectWizardLocationPageLocationDefaultButtonLabel);
 		useDefaultWorkspaceLocationButton.setToolTipText(Messages.newProjectWizardLocationPageLocationDefaultButtonDescription);

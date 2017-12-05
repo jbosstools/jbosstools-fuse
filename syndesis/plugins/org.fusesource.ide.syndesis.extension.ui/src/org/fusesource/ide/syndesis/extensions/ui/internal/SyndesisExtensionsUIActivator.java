@@ -11,6 +11,7 @@
 package org.fusesource.ide.syndesis.extensions.ui.internal;
 
 import org.eclipse.core.runtime.Platform;
+import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
@@ -23,8 +24,11 @@ import org.osgi.framework.BundleContext;
  */
 public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.fusesource.ide.syndesis.extension.ui";
-	public static final String SYNDESIS_EXTENSION_PROJECT_ICON = "icons/new_extension.png";
+	public static final String SYNDESIS_EXTENSION_PROJECT_ICON = "icons/syndesis64.png";
 
+	private static final String SYNDESIS_SNAPSHOTS_KEY = "syndesis_snapshots";
+	private static final String SYNDESIS_SNAPSHOTS_URI = "https://oss.sonatype.org/content/repositories/snapshots/";
+	
 	private static SyndesisExtensionsUIActivator instance;
 
 	/**
@@ -51,6 +55,7 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
+		registerSyndesisSnapshotsRepository();
 	}
 
 	@Override
@@ -58,6 +63,11 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
     	return new SyndesisExtensionSharedImages(getBundle());
     }
 
+	private void registerSyndesisSnapshotsRepository() {
+		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
+		initializer.addStagingRepository(SYNDESIS_SNAPSHOTS_KEY, SYNDESIS_SNAPSHOTS_URI);
+	}
+	
 	/**
 	 * Gets message from plugin.properties
 	 * @param key

@@ -50,14 +50,6 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#needsProgressMonitor()
-	 */
-	@Override
-	public boolean needsProgressMonitor() {
-		return true;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
@@ -102,7 +94,6 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		extension.setVersion(extensionDetailsPage.getExtensionVersion());
 		extension.setName(extensionDetailsPage.getExtensionName());
 		extension.setDescription(extensionDetailsPage.getExtensionDescription());
-		extension.setIcon(extensionDetailsPage.getExtensionIcon());
 		extension.setTags(extensionDetailsPage.getExtensionTags());
 		return extension;
 	}
