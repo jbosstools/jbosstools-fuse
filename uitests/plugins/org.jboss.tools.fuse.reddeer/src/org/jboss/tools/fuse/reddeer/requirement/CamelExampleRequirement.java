@@ -24,6 +24,12 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExa
  * Requirement for an existing Camel example. The camel example must be one of
  * the examples at <a href=
  * "https://github.com/apache/camel/tree/master/examples">https://github.com/apache/camel/tree/master/examples</a>.
+ * <p>
+ * Optionally, you can specify configuration for JMX or Jolokia. If you do not
+ * specify JMX configuration then the camel example will not be accessible via
+ * JMX connection (only from 'Local Processes'). At the moment, we do not
+ * support any authentication.
+ * <p>
  * The appropriate yaml file should look like as follows
  * 
  * <pre>
@@ -31,6 +37,11 @@ import org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement.CamelExa
  * - name: camel-example-spring-boot
  *   version: 2.20.1
  *   jarFile: /tmp/camel-example-spring-boot-2.20.1.jar
+ *   # optional
+ *   jmxConfiguration:
+ *     name: My JMX
+ *     host: localhost
+ *     port: 9010
  *   # optional
  *   jolokiaConfiguration:
  *     name: My Jolokia
@@ -79,11 +90,19 @@ public class CamelExampleRequirement extends AbstractConfigurableRequirement<Cam
 				jolokiaAgent.append(",");
 				jolokiaAgent.append("port=").append(jolokiaConfig.getPort());
 				runner.setJavaAgent(jolokiaAgent.toString());
+			} else if (config.getJmxConfiguration() != null) {
+				JMXConfiguration jmxConfig = config.getJmxConfiguration();
+				runner.setSystemProperty("java.rmi.server.hostname", jmxConfig.getHost());
+				runner.setSystemProperty("com.sun.management.jmxremote.port", jmxConfig.getPort());
+				runner.setSystemProperty("com.sun.management.jmxremote", "true");
+				runner.setSystemProperty("com.sun.management.jmxremote.local.only", "true");
+				runner.setSystemProperty("com.sun.management.jmxremote.authenticate", "false");
+				runner.setSystemProperty("com.sun.management.jmxremote.ssl", "false");
 			}
 			runner.run();
 		}
 	}
-	
+
 	@Override
 	public void cleanUp() {
 		if (runner != null && runner.isRunning()) {
