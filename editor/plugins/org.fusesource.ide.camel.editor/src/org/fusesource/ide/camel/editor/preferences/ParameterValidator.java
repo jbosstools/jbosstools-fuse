@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preferences;
 
+import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement.USER_LABEL_PARAMETER_REGEX;
+
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 
@@ -25,7 +27,7 @@ public class ParameterValidator implements IInputValidator {
 		if (newText.isEmpty()) {
 			return UIMessages.preferredLabelsErrorMessageEmptyParameter;
 		}
-		if (newText.matches(".*[\\W&&[^-]].*")) {
+		if (!newText.matches(USER_LABEL_PARAMETER_REGEX)) {
 			return UIMessages.preferredLabelsErrorMessageWrongCharacter;
 		}
 		return null;

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preferences;
 
-import static org.fusesource.ide.camel.editor.provider.ProviderHelper.getCategoryFromEip;
+import static java.util.stream.Collectors.toList;
+import static org.fusesource.ide.camel.editor.provider.ProviderHelper.belongsToAnyCategory;
 import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
 import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.getLatestCamelVersion;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -95,8 +95,7 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	}
 
 	protected List<Eip> getComponents() {
-		return getCamelModel().getEips().stream().filter(eip -> !"NONE".equals(getCategoryFromEip(eip)))
-				.collect(Collectors.toList());
+		return getCamelModel().getEips().stream().filter(eip -> belongsToAnyCategory(eip)).collect(toList());
 	}
 
 	public void validate() {

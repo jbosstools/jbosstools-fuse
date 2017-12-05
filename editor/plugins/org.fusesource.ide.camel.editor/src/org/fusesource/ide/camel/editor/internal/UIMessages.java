@@ -177,7 +177,6 @@ public class UIMessages extends NLS {
 	public static String preferredLabelsComponentHeader;
 	public static String preferredLabelsParameter;
 	public static String preferredLabelsParameterHeader;
-	public static String preferredLabelsErrorMessage;
 	public static String preferredLabelsErrorMessageEmptyComponent;
 	public static String preferredLabelsErrorMessageEmptyParameter;
 	public static String preferredLabelsErrorMessageWrongCharacter;

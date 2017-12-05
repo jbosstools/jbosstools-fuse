@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.preferences;
 
+import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement.USER_LABEL_COMPONENT_REGEX;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class ComponentValidator implements IInputValidator {
 		if (newText.isEmpty()) {
 			return UIMessages.preferredLabelsErrorMessageEmptyComponent;
 		}
-		if (newText.matches(".*[\\W&&[^-]].*")) {
+		if (!newText.matches(USER_LABEL_COMPONENT_REGEX)) {
 			return UIMessages.preferredLabelsErrorMessageWrongCharacter;
 		}
 		if (isDuplicate(newText)) {
