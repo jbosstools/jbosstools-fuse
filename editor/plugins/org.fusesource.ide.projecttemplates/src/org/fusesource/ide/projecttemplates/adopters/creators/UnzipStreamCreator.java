@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.osgi.framework.Bundle;
 
 /**
  * base class for unzipping a template from a zip archive
@@ -96,6 +97,18 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 
 	protected InputStream getTemplateStream(String bundleEntry) {
 		URL archiveUrl = ProjectTemplatesActivator.getBundleContext().getBundle().getEntry(bundleEntry);
+		if (archiveUrl != null) {
+			try {
+				return new ZipInputStream(archiveUrl.openStream(), StandardCharsets.UTF_8);
+			} catch (IOException ex) {
+				ProjectTemplatesActivator.pluginLog().logError(ex);
+			}			
+		}
+		return null;
+	}
+	
+	protected InputStream getTemplateStream(Bundle bundle, String bundleEntry) {
+		URL archiveUrl = bundle.getEntry(bundleEntry);
 		if (archiveUrl != null) {
 			try {
 				return new ZipInputStream(archiveUrl.openStream(), StandardCharsets.UTF_8);

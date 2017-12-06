@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="*">
+         <newWizardShortcut
+               id="org.fusesource.ide.syndesis.extensions.wizards.NewSyndesisExtensionWizard">
+         </newWizardShortcut>
+         <perspectiveShortcut
+               id="org.fusesource.ide.branding.perspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+
+	<extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="%fuse.syndesis.category.label"
+            id="org.fusesource.ide.syndesis.newwizards">
+      </category>
+      <wizard id="org.fusesource.ide.syndesis.extensions.wizards.SyndesisExtensionProjectWizard"
+            category="org.fusesource.ide.syndesis.newwizards"
+            class="org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard"
+            icon="icons/syndesis16.png"
+            name="%syndesis.extension.project.wizard.name"
+            project="true">
+         <description>%syndesis.extension.project.wizard.description</description>
+         <keywordReference
+               id="org.eclipse.jdt.ui.wizards.java">
+         </keywordReference>
+      </wizard>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+         
+      <commonWizard
+            menuGroupId="org.eclipse.jdt.ui.java"
+            type="new"
+            wizardId="org.fusesource.ide.syndesis.extensions.wizards.SyndesisExtensionProjectWizard">
+         <enablement>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="true"
+                     operator="or">
+                  <or>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IPackageFragmentRoot">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IPackageFragment">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.ICompilationUnit">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.jdt.core.IJavaElement">
+                     </instanceof>
+                     <instanceof
+                           value="org.eclipse.core.resources.IResource">
+                     </instanceof>
+                  </or>
+               </iterate>
+            </with>
+         </enablement>
+      </commonWizard>
+   </extension>
+   <extension
+         id="org.fusesource.ide.syndesis.extension"
+         name="%extension.nature.name"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.fusesource.ide.syndesis.extensions.ui.SyndesisExtensionProjectNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/syndesis16.png"
+            id="org.fusesource.ide.syndesis.extension.img"
+            natureId="org.fusesource.ide.syndesis.extension">
+      </image>
+   </extension>
+
+   <extension point="org.eclipse.wst.common.project.facet.ui.images">
+      <image facet="jst.syndesis.extension"
+           path="icons/syndesis64.png">
+      </image>
+   </extension>
+   
+  .<!-- Camel Project -->
+   <extension point="org.eclipse.wst.common.project.facet.core.facets">
+      <project-facet id="jst.syndesis.extension">
+         	<label>Syndesis.io Extension</label>
+         	<description>
+             	Adds support for Syndesis.io Extensions to the project.
+         	</description>
+      </project-facet>
+      
+      <project-facet-version
+            facet="jst.syndesis.extension"
+            version="1.0">
+
+        	<constraint>
+            	<and>
+               		<requires
+                    	facet="jst.java"
+                     	version="[1.7">
+               		</requires>
+                 <requires
+                       facet="jboss.m2"
+                       version="[1.0">
+                 </requires>
+               		<or>
+	               		<requires 
+	               			facet="jst.utility"
+	               			version="1.0">
+	               		</requires>
+	               		<requires 
+	               			facet="jst.web"
+	               			version="[1.0">
+	               		</requires>
+	            	</or>
+            	</and>
+         	</constraint>
+      </project-facet-version>
+
+	  <action
+        	facet="jst.syndesis.extension"
+            id="jst.syndesis.extension.install"
+            type="install">
+         	<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisExtensionFacetInstallationDelegate"/>
+			<config-factory class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetDataModelProvider"/>
+      </action>
+      <action
+        	facet="jst.syndesis.extension"
+        	id="jst.syndesis.extension.version.change"
+        	type="version-change">
+     		<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetVersionChangeDelegate"/>
+      </action>
+   	</extension>
+
+</plugin>
