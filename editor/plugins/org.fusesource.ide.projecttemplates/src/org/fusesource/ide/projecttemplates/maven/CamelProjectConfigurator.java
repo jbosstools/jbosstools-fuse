@@ -60,11 +60,11 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
 	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
 	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
-	private static final IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
-	private static final IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
-	private static final IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2"); //$NON-NLS-1$
-	private static final IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
-	private static final IProjectFacet webFacet = WebFacetUtils.WEB_FACET;
+	public static final IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
+	public static final IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
+	public static final IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2"); //$NON-NLS-1$
+	public static final IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility"); //$NON-NLS-1$
+	public static final IProjectFacet webFacet = WebFacetUtils.WEB_FACET;
 
 	public static final String DEFAULT_CAMEL_FACET_VERSION = "3.0";
 	

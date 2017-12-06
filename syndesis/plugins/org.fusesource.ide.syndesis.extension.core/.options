@@ -1,0 +1,19 @@
+# Debugging options for the org.fusesource.ide.syndesis.extension.core plugin
+
+# Turn on general debugging
+org.fusesource.ide.syndesis.extension.core/debug=true
+
+# Tracing options
+org.fusesource.ide.syndesis.extension.core/config=false
+org.fusesource.ide.syndesis.extension.core/info=false
+org.fusesource.ide.syndesis.extension.core/warning=false
+org.fusesource.ide.syndesis.extension.core/severe=false
+org.fusesource.ide.syndesis.extension.core/finest=false
+org.fusesource.ide.syndesis.extension.core/finer=false
+
+# Loading of extension points
+org.fusesource.ide.syndesis.extension.core/extension_point=false
+
+# Performance of loading and calling delegates
+org.fusesource.ide.syndesis.extension.core/performance=false
+

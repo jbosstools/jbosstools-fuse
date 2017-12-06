@@ -1,0 +1,19 @@
+# Debugging options for the org.fusesource.ide.syndesis.extension.ui plugin
+
+# Turn on general debugging
+org.fusesource.ide.syndesis.extension.ui/debug=true
+
+# Tracing options
+org.fusesource.ide.syndesis.extension.ui/config=false
+org.fusesource.ide.syndesis.extension.ui/info=false
+org.fusesource.ide.syndesis.extension.ui/warning=false
+org.fusesource.ide.syndesis.extension.ui/severe=false
+org.fusesource.ide.syndesis.extension.ui/finest=false
+org.fusesource.ide.syndesis.extension.ui/finer=false
+
+# Loading of extension points
+org.fusesource.ide.syndesis.extension.ui/extension_point=false
+
+# Performance of loading and calling delegates
+org.fusesource.ide.syndesis.extension.ui/performance=false
+
