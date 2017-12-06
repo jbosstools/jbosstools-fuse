@@ -26,6 +26,7 @@ import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.ExternalProjectImport
 import org.eclipse.reddeer.eclipse.ui.wizards.datatransfer.WizardProjectsImportPage;
 import org.eclipse.reddeer.eclipse.utils.DeleteUtils;
 import org.eclipse.reddeer.swt.api.Shell;
+import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.impl.button.CheckBox;
 import org.eclipse.reddeer.swt.impl.button.FinishButton;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
@@ -96,6 +97,7 @@ public class ProjectFactory {
 		wiz.setProjectType(type);
 		new FinishButton().click();
 		new WaitWhile(new JobIsRunning(), TimePeriod.getCustom(900));
+		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
 	}
 
 	public static ProjectFactory newProject(String name) {
