@@ -6,15 +6,20 @@ Bundle-Version: 10.1.0.qualifier
 Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.fusesource.ide.wsdl2rest;bundle-version="10.1.0",
+ org.fusesource.ide.wsdl2rest,
  org.eclipse.core.resources,
- org.fusesource.ide.foundation.core;bundle-version="10.1.0",
+ org.fusesource.ide.foundation.core,
  org.eclipse.jdt.ui,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
  org.eclipse.jdt,
  org.eclipse.jdt.core,
  org.jboss.tools.foundation.core,
- org.jboss.tools.foundation.ui
+ org.jboss.tools.foundation.ui,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.observable,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding.property,
+ org.eclipse.core.databinding.beans
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

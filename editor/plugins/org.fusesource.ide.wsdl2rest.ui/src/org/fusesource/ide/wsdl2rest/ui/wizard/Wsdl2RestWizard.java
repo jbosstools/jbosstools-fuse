@@ -25,7 +25,8 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
-import org.fusesource.ide.wsdl2rest.ui.wizard.pages.Wsdl2RestWizardPage;
+import org.fusesource.ide.wsdl2rest.ui.wizard.pages.Wsdl2RestWizardFirstPage;
+import org.fusesource.ide.wsdl2rest.ui.wizard.pages.Wsdl2RestWizardSecondPage;
 import org.jboss.fuse.wsdl2rest.impl.Wsdl2Rest;
 
 /**
@@ -34,10 +35,10 @@ import org.jboss.fuse.wsdl2rest.impl.Wsdl2Rest;
  */
 public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
-	private Wsdl2RestWizardPage page;
+	final Wsdl2RestOptions options;
 
 	public Wsdl2RestWizard() {
-		// empty
+		options = new Wsdl2RestOptions();
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			generate(new URL(page.getWsdlURL()), page.getOutputPathURL());
+			generate(new URL(options.getWsdlURL()), options.getDestinationJava());
 		} catch (Exception e) {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
 			return false;
@@ -77,28 +78,29 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 	@Override
 	public void addPages() {
 		super.addPages();
+		
+		// page one
 		IProject project = sampleGetSelectedProject();
-		page = new Wsdl2RestWizardPage("page", "Select Incoming WSDL and Location for Generated Output", null);
-		page.setWsdlURL("http://localhost:9292/cxf/order?wsdl");
-		page.setOutputPathURL(project.getLocation().append("reststuff").toOSString());
-		page.setTargetAddress("http://localhost:8080/mycontext");
-		page.setBeanClass("com.demo.order.DemoOrderService");
-		addPage(page);
+		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage("page1", "Select Incoming WSDL and Project for Generated Output", null);
+		if (project != null) {
+			options.setProjectName(project.getName());
+		}
+		addPage(pageOne);
+		
+		// page two
+		Wsdl2RestWizardSecondPage pageTwo = new Wsdl2RestWizardSecondPage("page2", "Specify Advanced Options for wsdl2rest Processing", null);
+		addPage(pageTwo);
 	}
 	
     private void generate(final URL wsdlLocation, final String outputPath) throws Exception {
         Path outpath = new File(outputPath).toPath();
         Path contextpath = new File(outputPath + File.pathSeparator + "rest-camel-context.xml").toPath();
         Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
-        if (page.getTargetAddress() != null) {
-        	tool.setTargetAddress(new URL(page.getTargetAddress()));
-        }
-        if (page.getBeanClass() != null) {
-        	tool.setTargetBean(page.getBeanClass());
-        }
         tool.setTargetContext(contextpath);
 		tool.process();
     }
 
-
+    public Wsdl2RestOptions getOptions() {
+    	return options;
+    }
 }
