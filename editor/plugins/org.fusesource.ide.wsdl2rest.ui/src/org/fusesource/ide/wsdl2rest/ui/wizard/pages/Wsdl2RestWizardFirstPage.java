@@ -12,6 +12,9 @@ package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -76,6 +79,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 				IProject selectedProject = selectProject();
 				if (selectedProject != null) {
 					getOptionsFromWizard().setProjectName(selectedProject.getName());
+					setPathsFromProjectSelection(selectedProject);
 					projectTextControl.notifyListeners(SWT.Modify, new Event());				
 				}
 			}
@@ -94,6 +98,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		}
 		if (!Strings.isEmpty(getOptionsFromWizard().getProjectName())) {
 			projectTextControl.setText(getOptionsFromWizard().getProjectName());
+			setPathsFromProjectSelection(null);
 		}
 
 		setControl(composite);
@@ -101,4 +106,25 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
         setErrorMessage(null); // clear any error messages at first
 	}
 
+	private void setPathsFromProjectSelection(IProject selectedProject) {
+		if (selectedProject == null) {
+			selectedProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+		}
+		String path3 = "src\\main\\java";
+		IPath javaPath = new Path(path3);
+		String projectJavaPath = selectedProject.getFullPath().append(javaPath).toPortableString();
+		String projectConfigPath = null;
+		if (isProjectBlueprint()) {
+			String path2 = "src\\main\\resources\\OSGI-INF\\blueprint";
+			IPath configPath = new Path(path2);
+			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
+		} else { // use spring 
+			String path = "src\\main\\resources\\META-INF\\spring";
+			IPath configPath = new Path(path);
+			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
+		}
+		getOptionsFromWizard().setDestinationJava(projectJavaPath);
+		getOptionsFromWizard().setDestinationCamel(projectConfigPath);
+	}
+	
 }
