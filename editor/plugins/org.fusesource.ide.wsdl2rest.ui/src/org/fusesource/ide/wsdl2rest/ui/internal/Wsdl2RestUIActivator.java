@@ -24,7 +24,7 @@ public class Wsdl2RestUIActivator  extends BaseUIPlugin {
 
 	// The shared instance
 	private static Wsdl2RestUIActivator plugin;
-	
+
 	/**
 	 * The constructor
 	 */

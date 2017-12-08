@@ -31,6 +31,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Main page of the wsdl2rest Wizard, which collects the main data for the utility.
  * @author brianf
  *
  */
@@ -84,7 +85,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 				}
 			}
 		});
-		
+
 		// define the data bindings
 		Binding wsdlBinding = createBinding(urlTextControl, "wsdlURL", new WsdlValidator()); //$NON-NLS-1$
 		ControlDecorationSupport.create(wsdlBinding, SWT.LEFT | SWT.TOP);
@@ -102,29 +103,33 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		}
 
 		setControl(composite);
-        setPageComplete(isPageComplete());
-        setErrorMessage(null); // clear any error messages at first
+		setPageComplete(isPageComplete());
+		setErrorMessage(null); // clear any error messages at first
 	}
 
+	/**
+	 * Uses the selected project to default the Java and Camel config paths.
+	 * @param selectedProject
+	 */
 	private void setPathsFromProjectSelection(IProject selectedProject) {
 		if (selectedProject == null) {
 			selectedProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
 		}
-		String path3 = "src\\main\\java";
+		String path3 = "src\\main\\java"; //$NON-NLS-1$
 		IPath javaPath = new Path(path3);
 		String projectJavaPath = selectedProject.getFullPath().append(javaPath).toPortableString();
 		String projectConfigPath = null;
 		if (isProjectBlueprint()) {
-			String path2 = "src\\main\\resources\\OSGI-INF\\blueprint";
+			String path2 = "src\\main\\resources\\OSGI-INF\\blueprint"; //$NON-NLS-1$
 			IPath configPath = new Path(path2);
 			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
 		} else { // use spring 
-			String path = "src\\main\\resources\\META-INF\\spring";
+			String path = "src\\main\\resources\\META-INF\\spring"; //$NON-NLS-1$
 			IPath configPath = new Path(path);
 			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
 		}
 		getOptionsFromWizard().setDestinationJava(projectJavaPath);
 		getOptionsFromWizard().setDestinationCamel(projectConfigPath);
 	}
-	
+
 }

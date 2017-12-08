@@ -19,10 +19,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Validate that the WSDL is an accessible file, whether local or remote.
  * @author brianf
- *
  */
 public class WsdlValidator implements IValidator {
+
+	/**
+	 * Test to ensure that the URL is accessible.
+	 * @param urlText
+	 * @return
+	 */
 	private int isURLAccessible(String urlText) {
 		int code = 200;
 		try {
@@ -35,6 +41,9 @@ public class WsdlValidator implements IValidator {
 		return code;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {

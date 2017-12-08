@@ -63,13 +63,17 @@ public class Wsdl2Rest {
                 ClassGenerator classGen = ClassGeneratorFactory.getClassGenerator(outpath);
                 classGen.generateClasses(clazzDefs);
                 
+                CamelContextGenerator camelGen = new CamelContextGenerator(outpath);
                 if (targetContext != null) {
-                    CamelContextGenerator camelGen = new CamelContextGenerator(outpath);
                     camelGen.setTargetContext(targetContext);
-                    camelGen.setTargetAddress(targetAddress);
-                    camelGen.setTargetBean(targetBean);
-                    camelGen.process(clazzDefs);
                 }
+                if (targetAddress != null) {
+                	camelGen.setTargetAddress(targetAddress);
+                }
+                if (targetBean != null) {
+                	camelGen.setTargetBean(targetBean);
+                }
+                camelGen.process(clazzDefs);
                 
                 return Collections.unmodifiableList(clazzDefs);
         	} finally {

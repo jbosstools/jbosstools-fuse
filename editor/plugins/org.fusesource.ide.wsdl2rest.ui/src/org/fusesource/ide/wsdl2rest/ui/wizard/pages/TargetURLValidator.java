@@ -17,12 +17,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Validates the URL to make sure it is well formed.
  * @author brianf
- *
  */
 public class TargetURLValidator implements IValidator {
+	/**
+	 * Local Apache URL Validator to handle the actual validation
+	 */
 	UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
-	
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (((value instanceof String) && ((String) value).length() > 0)) {
