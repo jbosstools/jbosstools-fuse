@@ -12,6 +12,8 @@ package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -19,10 +21,14 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -52,6 +58,8 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
@@ -204,6 +212,32 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 			Wsdl2RestUIActivator.pluginLog().logError(e);
 		}
 		return null;
+	}
+	
+	protected boolean isProjectBlueprint() {
+		if (!Strings.isEmpty(getOptionsFromWizard().getProjectName())) {
+			try {
+				IProject testProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+				List<IFile> files = CamelUtils.getFilesWithCamelContentType(testProject);
+				if (!files.isEmpty()) {
+					IFile iFile = (IFile) files.iterator().next();
+					// gets URI for EFS.
+					URI uri = iFile.getLocationURI();
+	
+					// what if file is a link, resolve it.
+					if(iFile.isLinked()){
+					   uri = iFile.getRawLocationURI();
+					}
+	
+					// Gets native File using EFS
+					File javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
+					return CamelUtils.isBlueprintFile(javaFile.getAbsolutePath());
+				}
+			} catch (CoreException ce) {
+				Wsdl2RestUIActivator.pluginLog().logError(ce);
+			}
+		}
+		return false;
 	}
 
 }
