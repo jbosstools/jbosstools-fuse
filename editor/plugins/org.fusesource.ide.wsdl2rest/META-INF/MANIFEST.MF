@@ -10,8 +10,7 @@ Require-Bundle: org.fusesource.ide.foundation.core;bundle-version="10.1.0",
  org.eclipse.jdt.core;bundle-version="3.13.0",
  org.eclipse.jdt;bundle-version="3.13.0",
  org.apache.xerces;bundle-version="2.9.0"
-Export-Package: org.apache.commons.validator.routines,
- org.jboss.fuse.wsdl2rest,
+Export-Package: org.jboss.fuse.wsdl2rest,
  org.jboss.fuse.wsdl2rest.impl,
  org.jboss.fuse.wsdl2rest.impl.codegen
 Bundle-ClassPath: lib/args4j-2.0.31.jar,
@@ -44,5 +43,4 @@ Bundle-ClassPath: lib/args4j-2.0.31.jar,
  lib/ant-nodeps-1.8.1.jar,
  lib/cxf-tools-wsdlto-frontend-javascript-3.1.7.jar,
  resources/,
- .,
- lib/commons-validator-1.4.0.jar
+ .
