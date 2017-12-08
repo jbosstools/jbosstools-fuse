@@ -30,6 +30,5 @@ Export-Package: org.apache.commons.validator,
  org.apache.commons.validator.routines.checkdigit,
  org.apache.commons.validator.util,
  org.fusesource.ide.wsdl2rest.ui.internal,
- org.fusesource.ide.wsdl2rest.ui.internal.i18n,
  org.fusesource.ide.wsdl2rest.ui.wizard,
  org.fusesource.ide.wsdl2rest.ui.wizard.pages

@@ -18,7 +18,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class UIMessages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.fusesource.ide.wsdl2rest.ui.internal.l10n.messages";
+	private static final String BUNDLE_NAME = "org.fusesource.ide.wsdl2rest.ui.internal.i10n.messages";
 
 	public static String wsdl2RestWizardFirstPagePageOneDescription;
 	public static String wsdl2RestWizardFirstPageProjectLabel;
