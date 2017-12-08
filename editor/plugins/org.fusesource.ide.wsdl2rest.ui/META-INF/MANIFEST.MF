@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding.observable,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.property,
- org.eclipse.core.databinding.beans
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.filesystem
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/commons-validator-1.4.0.jar,
