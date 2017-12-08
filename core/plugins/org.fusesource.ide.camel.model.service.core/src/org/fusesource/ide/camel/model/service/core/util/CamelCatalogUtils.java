@@ -47,6 +47,11 @@ public class CamelCatalogUtils {
 	//TODO: change to jbostools master branch after merge
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2578-UpgradeToCamel2.20Internally/configuration/camel2bom.fuse7.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7 = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL);
+	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7.url";
+	//TODO: change to jbostools master branch after merge
+	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2680-SupportDifferetnBomsAndNotReleasedOne/configuration/camel2bom.fuse7wildfly.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);
+
 	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
 	public static final String FIS_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
 	public static final String FIS_MAPPING_URL = System.getProperty(FIS_MAPPING_PROPERTY, FIS_MAPPING_DEFAULT_URL);
@@ -128,11 +133,13 @@ public class CamelCatalogUtils {
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING;
 	
 	static {
 		CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new HashMap<>();
 		CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING = new HashMap<>();
 		CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new HashMap<>();
+		CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING = new HashMap<>();
 		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		TEST_CAMEL_VERSIONS = new ArrayList<>();
@@ -167,6 +174,12 @@ public class CamelCatalogUtils {
 			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_7_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL_FUSE_7);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 7.x from online repo. Falling back to defaults.", ex);
+		}
+		
+		try {
+			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY);
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 7.x on Wildfly from online repo. Falling back to defaults.", ex);
 		}
 		
 		try {
@@ -275,30 +288,49 @@ public class CamelCatalogUtils {
 		String bomVersion = null;
 		if(fuseBomUsed != null) {
 			if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
-				if(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.containsKey(camelVersion)) {
-					bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.get(camelVersion);
-				} else {
-					bomVersion = CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
-				}
+				bomVersion = getFuse6BomVersion(camelVersion);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_6_FIS, fuseBomUsed)) {
-				if(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion)) {
-					bomVersion = CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.get(camelVersion);
-				} else {
-					bomVersion = CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
-				}
+				bomVersion = getFUSE6FISBomVersion(camelVersion);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
-				if (CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
-					bomVersion = CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
-				} else {
-					bomVersion = new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
-				}
+				bomVersion = getFUSE7BomVersion(camelVersion, project, monitor);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
-				bomVersion = new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
-				//TODO: add a mapping for BOM_FUSE_7 wildfly boms?
+				bomVersion = getFuse7WildflyBomVersion(camelVersion, project, monitor);
 			}
 			//TODO add case for FIS for Fuse 7 when they will be known
 		}
 		return bomVersion;
+	}
+
+	protected static String getFuse7WildflyBomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
+		if (CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
+		} else {
+			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+		}
+	}
+
+	protected static String getFUSE7BomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
+		if (CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
+		} else {
+			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+		}
+	}
+
+	protected static String getFUSE6FISBomVersion(String camelVersion) {
+		if(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.get(camelVersion);
+		} else {
+			return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+		}
+	}
+
+	protected static String getFuse6BomVersion(String camelVersion) {
+		if(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.get(camelVersion);
+		} else {
+			return CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+		}
 	}
 
 	private static boolean isBom(org.apache.maven.model.Dependency bom, org.apache.maven.model.Dependency fuseBomUsed) {
