@@ -13,8 +13,7 @@ package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -24,7 +23,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
@@ -49,20 +47,7 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 			validate();
 		}
 	};
-	
-	private FocusListener focusListener = new FocusListener() {
-		
-		@Override
-		public void focusLost(FocusEvent e) {
-			validate();
-		}
-		
-		@Override
-		public void focusGained(FocusEvent e) {
-			// not interested in that event
-		}
-	};
-	
+
 	public SyndesisExtensionProjectWizardVersionsPage() {
 		super(Messages.newProjectWizardExtensionVersionsPageName);
 		setTitle(Messages.newProjectWizardExtensionVersionsPageTitle);
@@ -86,8 +71,8 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		springBootVersionCombo.setLayoutData(gridData);
 		springBootVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageSpringBootVersionTooltip);
 		fillSpringBootVersions();
-		springBootVersionCombo.addFocusListener(focusListener);
 		springBootVersionCombo.addSelectionListener(selectionListener);
+		springBootVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
 		
 		Label camelVersionLabel = new Label(container, SWT.NONE);
 		camelVersionLabel.setText(Messages.newProjectWizardExtensionVersionsPageCamelVersionLabel);
@@ -96,8 +81,8 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		camelVersionCombo.setLayoutData(gridData);
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageCamelVersionTooltip);
 		fillCamelVersions();
-		camelVersionCombo.addFocusListener(focusListener);
 		camelVersionCombo.addSelectionListener(selectionListener);
+		camelVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
 		
 		Button camelVersionValidationBtn = new Button(container, SWT.PUSH);
 		GridData camelButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -113,12 +98,13 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		syndesisVersionCombo.setLayoutData(gridData);
 		syndesisVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageSyndesisVersionTooltip);
 		fillSyndesisVersions();
-		syndesisVersionCombo.addFocusListener(focusListener);
 		syndesisVersionCombo.addSelectionListener(selectionListener);
+		syndesisVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
 		
 		setControl(container);
 		
 		springBootVersionCombo.setFocus();
+		validate();
 	}
 
 	private void fillSpringBootVersions() {
@@ -128,9 +114,9 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 	}
 	
 	private void fillCamelVersions() {
-		camelVersionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream()
-				.sorted((String o1, String o2) -> o2.compareToIgnoreCase(o1))
-				.toArray(String[]::new));
+		// for the moment we only support 2.20.0
+		camelVersionCombo.add("2.20.0");
+		camelVersionCombo.select(0);
 	}
 	
 	private void fillSyndesisVersions() {

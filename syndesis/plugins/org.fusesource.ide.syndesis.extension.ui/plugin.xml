@@ -105,9 +105,9 @@
   .<!-- Camel Project -->
    <extension point="org.eclipse.wst.common.project.facet.core.facets">
       <project-facet id="jst.syndesis.extension">
-         	<label>Syndesis.io Extension</label>
+         	<label>%extension.facet.name</label>
          	<description>
-             	Adds support for Syndesis.io Extensions to the project.
+             	%extension.facet.description
          	</description>
       </project-facet>
       
