@@ -56,7 +56,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		this.extensionIdText = createField(container, Messages.newProjectWizardExtensionDetailsPageExtensionIdLabel, null, Messages.newProjectWizardExtensionDetailsPageExtensionIdTooltip);
 		this.extensionVersionText = createField(container, Messages.newProjectWizardExtensionDetailsPageVersionLabel, null, Messages.newProjectWizardExtensionDetailsPageVersionTooltip);
 		this.extensionNameText = createField(container, Messages.newProjectWizardExtensionDetailsPageNameLabel, null, Messages.newProjectWizardExtensionDetailsPageNameTooltip);
-		this.extensionDescriptionText = createField(container, Messages.newProjectWizardExtensionDetailsPageDescriptionLabel, Messages.newProjectWizardExtensionDetailsPageOptionalTagsFieldHint, Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
+		this.extensionDescriptionText = createField(container, Messages.newProjectWizardExtensionDetailsPageDescriptionLabel, Messages.newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint, Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
 		this.extensionTagsText = createField(container, Messages.newProjectWizardExtensionDetailsPageTagsLabel, Messages.newProjectWizardExtensionDetailsPageOptionalTagsFieldHint, Messages.newProjectWizardExtensionDetailsPageTagsTooltip);
 		
 		setControl(container);
