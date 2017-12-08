@@ -19,11 +19,16 @@ import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Validates that a given path exists in the selected project.
  * @author brianf
- *
  */
 public class PathValidator implements IValidator {
 
+	/**
+	 * Verify that the path exits in the selected project.
+	 * @param path
+	 * @return
+	 */
 	private boolean isPathAccessible(String path) {
 		Path testPath = new Path(path);
 		IResource container = 
@@ -38,6 +43,9 @@ public class PathValidator implements IValidator {
 		return container != null && container.exists();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {

@@ -27,21 +27,26 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
  */
 public class ClassExistsInProjectValidator implements IValidator {
 	/**
-	 * 
+	 * Reference back to the page where this is used.
 	 */
-	private final Wsdl2RestWizardSecondPage wsdl2RestWizardSecondPage;
+	private final Wsdl2RestWizardBasePage referencedPage;
 
 	/**
+	 * Constructor
 	 * @param wsdl2RestWizardSecondPage
 	 */
-	ClassExistsInProjectValidator(Wsdl2RestWizardSecondPage wsdl2RestWizardSecondPage) {
-		this.wsdl2RestWizardSecondPage = wsdl2RestWizardSecondPage;
+	public ClassExistsInProjectValidator(Wsdl2RestWizardSecondPage referencedPage) {
+		this.referencedPage = referencedPage;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (((value instanceof String) && ((String) value).length() > 0)) {
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(this.wsdl2RestWizardSecondPage.getOptionsFromWizard().getProjectName());
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
+					this.referencedPage.getOptionsFromWizard().getProjectName());
 			IJavaProject javaProject = JavaCore.create(project);
 			IType javaClass;
 			try {

@@ -18,10 +18,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Validate that the named project exists in the workbench.
  * @author brianf
- *
  */
 class ProjectNameValidator implements IValidator {
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+	 */
 	@Override
 	public IStatus validate(Object value) {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {

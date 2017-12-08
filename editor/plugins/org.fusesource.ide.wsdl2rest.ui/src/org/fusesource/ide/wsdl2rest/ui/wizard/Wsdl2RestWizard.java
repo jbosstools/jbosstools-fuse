@@ -42,18 +42,30 @@ import org.jboss.fuse.wsdl2rest.impl.Wsdl2Rest;
  */
 public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
+	/**
+	 * Collection of settings used by the wsdl2rest utility.
+	 */
 	final Wsdl2RestOptions options;
 
+	/**
+	 * Constructor
+	 */
 	public Wsdl2RestWizard() {
 		options = new Wsdl2RestOptions();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(UIMessages.wsdl2RestWizardWindowTitle);
 		setNeedsProgressMonitor(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		try {
@@ -65,8 +77,11 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
+	/**
+	 * Uses the Workbench selection service to find the currently selected project and use it as the source. 
+	 * @return IProject
+	 */
 	protected IProject getSelectedProjectFromSelectionService() {
-		// This is a hack for some prototyping to make sure we know what project to stick the stuff in.
 		ISelectionService ss = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
 		String projExpID = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
 		ISelection sel = ss.getSelection(projExpID);
@@ -81,11 +96,14 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 		}
 		return null;
 	}	
-	
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#addPages()
+	 */
 	@Override
 	public void addPages() {
 		super.addPages();
-		
+
 		// page one
 		IProject project = getSelectedProjectFromSelectionService();
 		Wsdl2RestWizardFirstPage pageOne = new Wsdl2RestWizardFirstPage("page1", UIMessages.wsdl2RestWizardPageOneTitle, null); //$NON-NLS-1$
@@ -93,12 +111,16 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			options.setProjectName(project.getName());
 		}
 		addPage(pageOne);
-		
+
 		// page two
 		Wsdl2RestWizardSecondPage pageTwo = new Wsdl2RestWizardSecondPage("page2", UIMessages.wsdl2RestWizardPageTwoTitle, null); //$NON-NLS-1$
 		addPage(pageTwo);
 	}
-	
+
+	/**
+	 * Use the settings collected and call the wsdl2rest utility.
+	 * @throws Exception
+	 */
 	private void generate() throws Exception {
 		URL wsdlLocation = new URL(options.getWsdlURL());
 		IPath path = new org.eclipse.core.runtime.Path(options.getDestinationJava());
@@ -111,29 +133,33 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 
 			// what if file is a link, resolve it.
 			if(destFolder.isLinked()){
-			   uri = destFolder.getRawLocationURI();
+				uri = destFolder.getRawLocationURI();
 			}
 
 			// Gets native File using EFS
 			javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
 		}
 		if (javaFile != null) {
-	        Path outpath = javaFile.toPath();
-	        Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
-	        Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
-	        tool.setTargetContext(contextpath);
-	        if (!Strings.isEmpty(options.getBeanClassName())) {
-	        	tool.setTargetBean(options.getBeanClassName());
-	        }
-	        if (!Strings.isEmpty(options.getTargetServiceAddress())) {
-	    		URL targetAddressURL = new URL(options.getTargetServiceAddress());
-	        	tool.setTargetAddress(targetAddressURL);
-	        }
+			Path outpath = javaFile.toPath();
+			Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
+			Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
+			tool.setTargetContext(contextpath);
+			if (!Strings.isEmpty(options.getBeanClassName())) {
+				tool.setTargetBean(options.getBeanClassName());
+			}
+			if (!Strings.isEmpty(options.getTargetServiceAddress())) {
+				URL targetAddressURL = new URL(options.getTargetServiceAddress());
+				tool.setTargetAddress(targetAddressURL);
+			}
 			tool.process();
 		}
-    }
+	}
 
-    public Wsdl2RestOptions getOptions() {
-    	return options;
-    }
+	/**
+	 * Returns the shared Wsdl2RestOptions object 
+	 * @return Wsdl2RestOptions
+	 */
+	public Wsdl2RestOptions getOptions() {
+		return options;
+	}
 }

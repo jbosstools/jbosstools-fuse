@@ -30,20 +30,33 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
+ * Second page of the wsdl2rest wizard that collects secondary details.
  * @author brianf
- *
  */
 public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 
+	/**
+	 * Constructor
+	 * @param pageName
+	 */
 	public Wsdl2RestWizardSecondPage(String pageName) {
 		this(pageName, null, null);
 	}
 
+	/**
+	 * Constructor
+	 * @param pageName
+	 * @param title
+	 * @param titleImage
+	 */
 	public Wsdl2RestWizardSecondPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 		setMessage(UIMessages.wsdl2RestWizardSecondPagePageTwoDescription);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	public void createControl(Composite parent) {
 		WizardPageSupport.create(this, dbc);
@@ -126,7 +139,7 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		}
 
 		setControl(composite);
-        setPageComplete(isPageComplete());
-        setErrorMessage(null); // clear any error messages at first
+		setPageComplete(isPageComplete());
+		setErrorMessage(null); // clear any error messages at first
 	}
 }
