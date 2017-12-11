@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
-import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;

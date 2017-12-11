@@ -13,13 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.medium;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.maven.model.Dependency;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.fusesource.ide.camel.model.service.core.util.OnlineBomVersionSearcher;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
-import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
