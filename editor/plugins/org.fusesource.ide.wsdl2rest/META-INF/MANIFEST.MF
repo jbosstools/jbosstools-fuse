@@ -12,7 +12,7 @@ Require-Bundle: org.fusesource.ide.foundation.core;bundle-version="10.1.0",
  org.apache.xerces;bundle-version="2.9.0"
 Export-Package: org.jboss.fuse.wsdl2rest,
  org.jboss.fuse.wsdl2rest.impl,
- org.jboss.fuse.wsdl2rest.impl.codegen
+ org.jboss.fuse.wsdl2rest.util
 Bundle-ClassPath: lib/args4j-2.0.31.jar,
  lib/javaparser-core-2.5.1.jar,
  lib/commons-collections-3.2.2.jar,
@@ -42,5 +42,5 @@ Bundle-ClassPath: lib/args4j-2.0.31.jar,
  lib/ant-launcher-1.9.6.jar,
  lib/ant-nodeps-1.8.1.jar,
  lib/cxf-tools-wsdlto-frontend-javascript-3.1.7.jar,
- resources/,
- .
+ .,
+ lib/wsdl2rest-impl.jar

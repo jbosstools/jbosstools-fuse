@@ -11,9 +11,11 @@
 package org.fusesource.ide.wsdl2rest.ui.wizard;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -140,18 +142,30 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
 		}
 		if (javaFile != null) {
-			Path outpath = javaFile.toPath();
-			Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
-			Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
-			tool.setTargetContext(contextpath);
-			if (!Strings.isEmpty(options.getBeanClassName())) {
-				tool.setTargetBean(options.getBeanClassName());
-			}
-			if (!Strings.isEmpty(options.getTargetServiceAddress())) {
-				URL targetAddressURL = new URL(options.getTargetServiceAddress());
-				tool.setTargetAddress(targetAddressURL);
-			}
-			tool.process();
+	        ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+	        try {
+	            // initialize bus using bundle classloader, to prevent project dependencies from leaking in
+	            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+
+		        Path outpath = javaFile.toPath();
+				Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
+				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
+				tool.setTargetContext(contextpath);
+				if (!Strings.isEmpty(options.getBeanClassName())) {
+					tool.setTargetBean(options.getBeanClassName());
+				}
+				if (!Strings.isEmpty(options.getTargetServiceAddress())) {
+					URL targetAddressURL = new URL(options.getTargetServiceAddress());
+					tool.setTargetAddress(targetAddressURL);
+				}
+	            ClassLoader loader = tool.getClass().getClassLoader();
+	            Thread.currentThread().setContextClassLoader(loader);
+				tool.process();
+	        } catch (Exception e) {
+	            throw new InvocationTargetException(e);
+	        } finally {
+	            Thread.currentThread().setContextClassLoader(oldLoader);
+	        }
 		}
 	}
 
