@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.OnlineBomVersionSearcher;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
