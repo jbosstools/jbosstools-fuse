@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Wsdl2rest
 Bundle-SymbolicName: org.fusesource.ide.wsdl2rest
-Bundle-Version: 10.1.0.qualifier
+Bundle-Version: 10.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.fusesource.ide.foundation.core;bundle-version="10.1.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="10.1.0",

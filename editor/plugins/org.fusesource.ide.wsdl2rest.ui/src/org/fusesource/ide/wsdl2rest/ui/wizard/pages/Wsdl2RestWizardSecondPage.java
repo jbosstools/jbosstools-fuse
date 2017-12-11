@@ -125,18 +125,10 @@ public class Wsdl2RestWizardSecondPage extends Wsdl2RestWizardBasePage {
 		ControlDecorationSupport.create(beanClassBinding, SWT.LEFT | SWT.TOP);
 
 		// set initial values
-		if (!Strings.isEmpty(getOptionsFromWizard().getDestinationJava())) {
-			javaPathTextControl.setText(getOptionsFromWizard().getDestinationJava());
-		}
-		if (!Strings.isEmpty(getOptionsFromWizard().getDestinationCamel())) {
-			camelPathTextControl.setText(getOptionsFromWizard().getDestinationCamel());
-		}
-		if (!Strings.isEmpty(getOptionsFromWizard().getTargetServiceAddress())) {
-			targetAddressText.setText(getOptionsFromWizard().getTargetServiceAddress());
-		}
-		if (!Strings.isEmpty(getOptionsFromWizard().getBeanClassName())) {
-			beanClassText.setText(getOptionsFromWizard().getBeanClassName());
-		}
+		initIfNotEmpty(javaPathTextControl, getOptionsFromWizard().getDestinationJava());
+		initIfNotEmpty(camelPathTextControl, getOptionsFromWizard().getDestinationCamel());
+		initIfNotEmpty(targetAddressText, getOptionsFromWizard().getTargetServiceAddress());
+		initIfNotEmpty(beanClassText, getOptionsFromWizard().getBeanClassName());
 
 		setControl(composite);
 		setPageComplete(isPageComplete());

@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
 /**
@@ -51,7 +52,7 @@ public class PathValidator implements IValidator {
 		if (!((value instanceof String) && ((String) value).length() > 0)) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathRequired);
 		}
-		if (!isPathAccessible((String) value)) {
+		if ((value instanceof String && !isPathAccessible((String) value))) {
 			return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathMustBeAccessible);
 		}
 		return ValidationStatus.ok();   		

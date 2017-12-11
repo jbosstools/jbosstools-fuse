@@ -94,11 +94,10 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		ControlDecorationSupport.create(projectTextBinding, SWT.LEFT | SWT.TOP);
 
 		// set initial values
-		if (!Strings.isEmpty(getOptionsFromWizard().getWsdlURL())) {
-			urlTextControl.setText(getOptionsFromWizard().getWsdlURL());
-		}
+		initIfNotEmpty(urlTextControl, getOptionsFromWizard().getWsdlURL());
+		initIfNotEmpty(projectTextControl, getOptionsFromWizard().getProjectName());
+
 		if (!Strings.isEmpty(getOptionsFromWizard().getProjectName())) {
-			projectTextControl.setText(getOptionsFromWizard().getProjectName());
 			setPathsFromProjectSelection(null);
 		}
 
