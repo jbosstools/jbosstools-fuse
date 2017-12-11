@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.fusesource.ide.editor</groupId>
 		<artifactId>plugins</artifactId>
-		<version>10.1.0-SNAPSHOT</version>
+		<version>10.2.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -53,18 +53,6 @@
 						</fileset>
 					</filesets>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>ban-uberjars</id>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

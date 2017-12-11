@@ -199,7 +199,7 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				};
 			}
 		};
-		dialog.setInitialPattern("* "); //$NON-NLS-1$
+		dialog.setInitialPattern("*"); //$NON-NLS-1$
 		if (dialog.open() == FilteredResourcesSelectionDialog.OK) {
 			Object[] result = dialog.getResult();
 			if (result == null || result.length != 1 || !(result[0] instanceof IResource)) {
@@ -310,4 +310,14 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 		return false;
 	}
 
+	/**
+	 * Initialize text control if incoming String is not null or empty.
+	 * @param textControl
+	 * @param value
+	 */
+	protected void initIfNotEmpty (Text textControl, String value) {
+		if (!Strings.isEmpty(value)) {
+			textControl.setText(value);
+	 	}
+	}
 }
