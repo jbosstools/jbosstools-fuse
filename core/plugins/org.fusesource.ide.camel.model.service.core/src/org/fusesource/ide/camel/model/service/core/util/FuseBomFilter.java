@@ -43,12 +43,10 @@ public class FuseBomFilter implements Predicate<Dependency> {
 
 	@Override
 	public boolean test(Dependency dependency) {
-		return possibleBoms.stream().filter(
+		return possibleBoms.stream().anyMatch(
 				possibleBom -> 
-				possibleBom.getArtifactId().equals(dependency.getArtifactId()) && possibleBom.getGroupId().equals(dependency.getGroupId()))
-				.findAny()
-				.isPresent();
+				possibleBom.getArtifactId().equals(dependency.getArtifactId())
+				&& possibleBom.getGroupId().equals(dependency.getGroupId()));
 	}
-	
 	
 }
