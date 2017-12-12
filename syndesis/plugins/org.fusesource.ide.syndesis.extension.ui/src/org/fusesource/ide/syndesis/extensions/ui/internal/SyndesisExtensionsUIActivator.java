@@ -28,7 +28,7 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 
 	private static final String SYNDESIS_SNAPSHOTS_KEY = "syndesis_snapshots";
 	private static final String SYNDESIS_SNAPSHOTS_URI = "https://oss.sonatype.org/content/repositories/snapshots/";
-	
+
 	private static SyndesisExtensionsUIActivator instance;
 
 	/**
@@ -46,9 +46,9 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 	public static SyndesisExtensionsUIActivator getDefault() {
 		return instance;
 	}
-	
+
 	public static BundleContext getBundleContext() {
-	    return instance.getBundle().getBundleContext();
+		return instance.getBundle().getBundleContext();
 	}
 
 	@Override
@@ -59,30 +59,31 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 	}
 
 	@Override
-    protected BaseUISharedImages createSharedImages() {
-    	return new SyndesisExtensionSharedImages(getBundle());
-    }
+	protected BaseUISharedImages createSharedImages() {
+		return new SyndesisExtensionSharedImages(getBundle());
+	}
 
 	private void registerSyndesisSnapshotsRepository() {
 		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
 		initializer.addStagingRepository(SYNDESIS_SNAPSHOTS_KEY, SYNDESIS_SNAPSHOTS_URI);
 	}
-	
+
 	/**
 	 * Gets message from plugin.properties
+	 * 
 	 * @param key
 	 * @return
 	 */
-	public static String getMessage(String key)	{
+	public static String getMessage(String key) {
 		return Platform.getResourceString(instance.getBundle(), key);
 	}
 
 	/**
-	 * Get the IPluginLog for this plugin. This method 
-	 * helps to make logging easier, for example:
+	 * Get the IPluginLog for this plugin. This method helps to make logging easier,
+	 * for example:
 	 * 
-	 *     FoundationCorePlugin.pluginLog().logError(etc)
-	 *  
+	 * FoundationCorePlugin.pluginLog().logError(etc)
+	 * 
 	 * @return IPluginLog object
 	 */
 	public static IPluginLog pluginLog() {
@@ -91,6 +92,7 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 
 	/**
 	 * Get a status factory for this plugin
+	 * 
 	 * @return status factory
 	 */
 	public static StatusFactory statusFactory() {

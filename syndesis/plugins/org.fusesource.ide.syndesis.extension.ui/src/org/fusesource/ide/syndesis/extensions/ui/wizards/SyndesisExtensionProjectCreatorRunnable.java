@@ -172,7 +172,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 			Model pomModel = new CamelMavenUtils().getMavenModel(project);
 
 			configureProjectVersions(pomModel);
-			customizeSyndesisPlugin(pomModel, project);
+			customizeSyndesisPlugin(pomModel);
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
@@ -183,7 +183,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		}
 	}
 	
-	private void customizeSyndesisPlugin(Model pomModel, IProject project) throws XmlPullParserException, IOException {
+	private void customizeSyndesisPlugin(Model pomModel) throws XmlPullParserException, IOException {
 		Build build = pomModel.getBuild();
 		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
 		Plugin plugin = pluginsByName.get(SYNDESIS_PLUGIN_GROUPID + ":" + SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$

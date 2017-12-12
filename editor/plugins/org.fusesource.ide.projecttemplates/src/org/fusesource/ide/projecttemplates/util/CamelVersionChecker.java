@@ -8,14 +8,16 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.projecttemplates.util;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
+import org.fusesource.ide.projecttemplates.actions.ui.UnknownTimeMonitorUpdater;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 
 /**
@@ -25,10 +27,9 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 public class CamelVersionChecker implements IRunnableWithProgress {
 
 	private String camelVersionToValidate;
-	private Thread thread;
-	private IProgressMonitor monitor;
 	private boolean valid;
 	private boolean done;
+	private UnknownTimeMonitorUpdater unknownTimeMonitorUpdater;
 	
 	public CamelVersionChecker(String camelVersionToValidate) {
 		this.camelVersionToValidate = camelVersionToValidate;
@@ -39,29 +40,20 @@ public class CamelVersionChecker implements IRunnableWithProgress {
 	 */
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		this.monitor = monitor;
-		monitor.beginTask(Messages.newProjectWizardRuntimePageResolveDependencyStatus, IProgressMonitor.UNKNOWN);
-		this.thread = createThread();
-		this.thread.start();
-		while (this.thread.isAlive() && !this.thread.isInterrupted() && !monitor.isCanceled()) {
-			// wait
-			Thread.sleep(100);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.validatingCamelVersionMessage, camelVersionToValidate), 1);
+		unknownTimeMonitorUpdater = new UnknownTimeMonitorUpdater(subMonitor);
+		try {
+			new Thread(unknownTimeMonitorUpdater).start();
+			valid = isCamelVersionValid(camelVersionToValidate);
+			subMonitor.setWorkRemaining(0);
+		} finally {
+			unknownTimeMonitorUpdater.finish();
 		}
 		done = true;
 	}
 	
 	public void cancel() {
-		this.thread.interrupt();
-		monitor.setCanceled(true);
-	}
-	
-	private Thread createThread() {
-		return new Thread( () -> {
-				valid = isCamelVersionValid(camelVersionToValidate);
-				if (!monitor.isCanceled()) {
-					monitor.done();
-				}
-		});
+		this.unknownTimeMonitorUpdater.cancel();
 	}
 	
 	public boolean isDone() {

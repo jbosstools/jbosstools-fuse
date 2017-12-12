@@ -15,26 +15,19 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.maven.project.MavenProject;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jst.common.project.facet.WtpUtils;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.core.ui.internal.UpdateMavenProjectJob;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -44,7 +37,6 @@ import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.syndesis.extensions.ui.SyndesisExtensionProjectNature;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
-import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
 /**
  * @author lheinema
@@ -84,11 +76,6 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 				// enable the camel nature
 				configureNature(request.getProject(), monitor);
 			}
-			// handle linked resources for WAR deployments
-			if (isWARProject(request.getProject(), monitor)) {
-				configureWARStructureMapping(request.getProject(), monitor);
-			}
-			
 		}
 	}
 
@@ -137,72 +124,11 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		subMonitor.setWorkRemaining(0);
 	}
 	
-	private boolean isWARProject(IProject project, IProgressMonitor monitor) {
-		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
-		return CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(m2prj.getPackaging());
-	}
-	
 	private boolean checkSyndesisExtensionsMetaDataExist(IProject project) {
 		// check for file: 
 		return project != null && project.findMember(new Path("src").append("main").append("resources").append("META-INF").append("syndesis").append("extension-definition.json")) != null;
 	}
 
-	private void configureWARStructureMapping(IProject project, IProgressMonitor monitor) throws CoreException {
-		final IVirtualComponent c = ComponentCore.createComponent(project, false);
-		c.create(IVirtualResource.NONE, monitor);
-		final IVirtualFolder webroot = c.getRootFolder();
-		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
-		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
-		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder, monitor);
-		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder, monitor);
-	}
-	
-	/**
-	 * this methods maps a given set of local paths to a path on runtime / in
-	 * the WAR
-	 * 
-	 * @param paths
-	 * @param project
-	 * @param vFolder
-	 * @param monitor
-	 * @throws CoreException
-	 */
-	private void updateMappings(IPath[] paths, IProject project, IVirtualFolder vFolder, IProgressMonitor monitor)
-			throws CoreException {
-		for (IPath sourceLoc : paths) {
-			IFolder srcFolder = project.getFolder(sourceLoc);
-			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();
-			IVirtualResource[] mappings = ComponentCore.createResources(srcFolder);
-			boolean found = false;
-			for (IVirtualResource mapping : mappings) {
-				if (mapping.getProjectRelativePath().equals(absSourcePath)) {
-					mapping.createLink(absSourcePath, IVirtualResource.NONE, monitor);
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				// create link for source folder only when it is not mapped
-				vFolder.createLink(absSourcePath, IVirtualResource.NONE, monitor);
-			} else {
-				removeRedundantMappingToRootRuntimePath(monitor, absSourcePath, mappings);
-			}
-		}
-	}
-
-	private void removeRedundantMappingToRootRuntimePath(IProgressMonitor monitor, IPath absSourcePath,
-			IVirtualResource[] mappings) {
-		Arrays.stream(mappings).filter(mapping -> mapping.getProjectRelativePath().equals(absSourcePath))
-				.filter(mapping -> "/".equals(mapping.getRuntimePath().toPortableString()))
-				.forEach(mapping -> {
-					try {
-						mapping.delete(IVirtualResource.IGNORE_UNDERLYING_RESOURCE, monitor);
-					} catch (CoreException e) {
-						SyndesisExtensionsUIActivator.pluginLog().logError(e);
-					}
-				});
-	}
-	
 	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.installingRequiredFacetsForSyndesisExtensionProject, 4);
 		subMonitor.setWorkRemaining(3);

@@ -28,9 +28,6 @@ public interface ISyndesisExtensionFacetDataModelProperties extends ICamelFacetD
 	public static final QualifiedName QNAME_SYNDESIS_EXTENSION_VERSION = new QualifiedName("syndesis.extension", SYNDESIS_EXTENSION_PROJECT_VERSION); //$NON-NLS-1$
 	public static final QualifiedName QNAME_SPRING_BOOT_VERSION = new QualifiedName("spring.boot", SPRING_BOOT_PROJECT_VERSION); //$NON-NLS-1$
 	
-	/**
-	 * 
-	 */
 	public static final String FACET_JST_SYNDESIS_EXTENSION = "jst.syndesis.extension";
 	
 	/*
