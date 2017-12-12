@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: wsdl2rest UI plug-in
+Bundle-Name: Fuse wsdl2rest UI Plugin
 Bundle-SymbolicName: org.fusesource.ide.wsdl2rest.ui;singleton:=true
 Bundle-Version: 10.2.0.qualifier
 Bundle-Activator: org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator

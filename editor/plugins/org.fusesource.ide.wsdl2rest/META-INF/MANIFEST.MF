@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Wsdl2rest
+Bundle-Name: Fuse wsdl2rest Wrapper Plugin
 Bundle-SymbolicName: org.fusesource.ide.wsdl2rest
 Bundle-Version: 10.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
