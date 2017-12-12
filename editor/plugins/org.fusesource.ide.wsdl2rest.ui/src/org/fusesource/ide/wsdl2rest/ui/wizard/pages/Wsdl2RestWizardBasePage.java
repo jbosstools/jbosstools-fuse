@@ -11,9 +11,16 @@
 package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -64,6 +71,10 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Base page for the wsdl2rest wizard.
@@ -288,9 +299,9 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 		if (!Strings.isEmpty(getOptionsFromWizard().getProjectName())) {
 			try {
 				IProject testProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
-				List<IFile> files = CamelUtils.getFilesWithCamelContentType(testProject);
+				final List<IFile> files = CamelUtils.getFilesWithCamelContentType(testProject);
 				if (!files.isEmpty()) {
-					IFile iFile = (IFile) files.iterator().next();
+					IFile iFile = files.iterator().next();
 					// gets URI for EFS.
 					URI uri = iFile.getLocationURI();
 
@@ -318,6 +329,50 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 	protected void initIfNotEmpty (Text textControl, String value) {
 		if (!Strings.isEmpty(value)) {
 			textControl.setText(value);
-	 	}
+		}
+	}
+
+	protected String getLocationFromWSDL() {
+		String locationURL = null;
+		if (!Strings.isEmpty(getOptionsFromWizard().getWsdlURL())) {
+			URL url;
+			InputStream testStream = null;
+			try {
+				url = new URL(getOptionsFromWizard().getWsdlURL());
+				testStream = url.openStream();
+
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+
+				// Load the input XML document, parse it and return an instance of the
+				// Document class.
+				Document document = builder.parse(testStream);
+				NodeList nodeList = document.getDocumentElement().getElementsByTagName("address");
+				for (int i = 0; i < nodeList.getLength(); i++) {
+					Node node = nodeList.item(i);
+					Node locationAttr = node.getAttributes().getNamedItem("location");
+					locationURL = locationAttr.getNodeValue();
+				}
+			} catch (MalformedURLException e) {
+				// should be valid at this point
+				Wsdl2RestUIActivator.pluginLog().logError(e);
+			} catch (IOException e) {
+				// should be valid at this point
+				Wsdl2RestUIActivator.pluginLog().logError(e);
+			} catch (ParserConfigurationException e) {
+				Wsdl2RestUIActivator.pluginLog().logError(e);
+			} catch (SAXException e) {
+				Wsdl2RestUIActivator.pluginLog().logError(e);
+			} finally {
+				if (testStream != null) {
+					try {
+						testStream.close();
+					} catch (IOException e) {
+						Wsdl2RestUIActivator.pluginLog().logError(e);
+					}
+				}
+			}
+		}
+		return locationURL;
 	}
 }
