@@ -131,7 +131,7 @@
             	<and>
                		<requires
                     	facet="jst.java"
-                     	version="[1.7">
+                     	version="[1.8">
                		</requires>
                  <requires
                        facet="jboss.m2"

@@ -34,7 +34,7 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIAc
  */
 public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 
-    private Combo springBootVersionCombo;
+	private Combo springBootVersionCombo;
 	private Combo camelVersionCombo;
 	private Combo syndesisVersionCombo;
 	
@@ -115,7 +115,7 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 	
 	private void fillCamelVersions() {
 		// for the moment we only support 2.20.0
-		camelVersionCombo.add("2.20.0");
+		camelVersionCombo.add("2.20.1");
 		camelVersionCombo.select(0);
 	}
 	

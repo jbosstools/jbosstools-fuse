@@ -24,10 +24,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SyndesisActionDescriptor {
 	@JsonProperty("kind")
-	private String kind;							// endpoint|bean|step
+	private String kind;					
 	
 	@JsonProperty("entrypoint")
-	private String entryPoint;						// direct:${groupId}/${artifactId}/${actionId}
+	private String entryPoint;
 	
 	@JsonProperty("inputDataShape")
 	private ActionDataShape inputDataShape;

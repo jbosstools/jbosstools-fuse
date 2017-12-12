@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.syndesis.extensions.core.internal;
 
 import org.eclipse.core.runtime.Platform;
@@ -16,7 +15,6 @@ import org.jboss.tools.foundation.core.plugin.BaseCorePlugin;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.osgi.framework.BundleContext;
-
 
 /**
  * @author lhein
@@ -41,32 +39,33 @@ public class SyndesisExtensionsCoreActivator extends BaseCorePlugin {
 	public static SyndesisExtensionsCoreActivator getDefault() {
 		return instance;
 	}
-	
+
 	public static BundleContext getBundleContext() {
-	    return instance.getBundle().getBundleContext();
+		return instance.getBundle().getBundleContext();
 	}
 
-    @Override
+	@Override
 	public void start(BundleContext context) throws Exception {
-    	super.start(context);
-    	registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
+		super.start(context);
+		registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
 	}
-	
+
 	/**
 	 * Gets message from plugin.properties
+	 * 
 	 * @param key
 	 * @return
 	 */
-	public static String getMessage(String key)	{
+	public static String getMessage(String key) {
 		return Platform.getResourceString(instance.getBundle(), key);
 	}
 
 	/**
-	 * Get the IPluginLog for this plugin. This method 
-	 * helps to make logging easier, for example:
+	 * Get the IPluginLog for this plugin. This method helps to make logging easier,
+	 * for example:
 	 * 
-	 *     FoundationCorePlugin.pluginLog().logError(etc)
-	 *  
+	 * FoundationCorePlugin.pluginLog().logError(etc)
+	 * 
 	 * @return IPluginLog object
 	 */
 	public static IPluginLog pluginLog() {
@@ -75,10 +74,10 @@ public class SyndesisExtensionsCoreActivator extends BaseCorePlugin {
 
 	/**
 	 * Get a status factory for this plugin
+	 * 
 	 * @return status factory
 	 */
 	public static StatusFactory statusFactory() {
 		return getDefault().statusFactoryInternal();
 	}
-	
 }

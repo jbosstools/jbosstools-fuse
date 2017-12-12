@@ -13,26 +13,33 @@ package org.fusesource.ide.projecttemplates.actions.ui;
 import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
-final class UnknownTimeMonitorUpdater implements Runnable {
+public final class UnknownTimeMonitorUpdater implements Runnable {
 	
 	private final SubMonitor subMonitor;
 	private boolean finished = false;
+	private boolean canceled = false;
 
-	UnknownTimeMonitorUpdater(SubMonitor monitor) {
+	public UnknownTimeMonitorUpdater(SubMonitor monitor) {
 		this.subMonitor = monitor;
 	}
 
 	@Override
 	public void run() {
-		while(!finished) {
+		while(!finished && !canceled) {
+			subMonitor.setWorkRemaining(100).split(1);
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				ProjectTemplatesActivator.pluginLog().logError(e);
 				Thread.currentThread().interrupt();
-			}
-			subMonitor.setWorkRemaining(100).split(1);
+			}			
 		}
+		subMonitor.done();
+	}
+	
+	public void cancel() {
+		canceled = true;
+		subMonitor.setCanceled(true);
 	}
 
 	public void finish() {
