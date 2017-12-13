@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 
@@ -67,6 +69,7 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectWSDL();
+				setTargetAddressFromWsdlSelection();
 				urlTextControl.notifyListeners(SWT.Modify, new Event());
 			}
 		});
@@ -88,9 +91,11 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 
 		// define the data bindings
 		Binding wsdlBinding = createBinding(urlTextControl, "wsdlURL", new WsdlValidator()); //$NON-NLS-1$
+		wsdlBinding.getModel().addChangeListener(new WsdlChangeListener());
 		ControlDecorationSupport.create(wsdlBinding, SWT.LEFT | SWT.TOP);
 
 		Binding projectTextBinding = createBinding(projectTextControl, "projectName", new ProjectNameValidator()); //$NON-NLS-1$
+		projectTextBinding.getModel().addChangeListener(new ProjectChangeListener());
 		ControlDecorationSupport.create(projectTextBinding, SWT.LEFT | SWT.TOP);
 
 		// set initial values
@@ -104,6 +109,26 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		setControl(composite);
 		setPageComplete(isPageComplete());
 		setErrorMessage(null); // clear any error messages at first
+	}
+
+	class WsdlChangeListener implements IChangeListener {
+
+		@Override
+		public void handleChange(ChangeEvent arg0) {
+			setTargetAddressFromWsdlSelection();
+		}
+	}
+	
+	class ProjectChangeListener implements IChangeListener {
+
+		@Override
+		public void handleChange(ChangeEvent arg0) {
+			IProject selectedProject = 
+					ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
+			if (selectedProject != null) {
+				setPathsFromProjectSelection(selectedProject);
+			}
+		}
 	}
 
 	/**
@@ -129,6 +154,16 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		}
 		getOptionsFromWizard().setDestinationJava(projectJavaPath);
 		getOptionsFromWizard().setDestinationCamel(projectConfigPath);
+	}
+	
+	/**
+	 * Use the selected wsdl to determine a default target address URL for the generated REST service. 
+	 */
+	private void setTargetAddressFromWsdlSelection() {
+		String address = getLocationFromWSDL();
+		if (!Strings.isEmpty(address)) {
+			getOptionsFromWizard().setTargetServiceAddress(address);
+		}
 	}
 
 }

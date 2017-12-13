@@ -21,6 +21,10 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -72,6 +76,7 @@ import org.fusesource.ide.wsdl2rest.ui.internal.Wsdl2RestUIActivator;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestOptions;
 import org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -332,6 +337,10 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 		}
 	}
 
+	/**
+	 * Utility method to find the target service URL for the WSDL if it is available. 
+	 * @return String
+	 */
 	protected String getLocationFromWSDL() {
 		String locationURL = null;
 		if (!Strings.isEmpty(getOptionsFromWizard().getWsdlURL())) {
@@ -347,23 +356,22 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				// Load the input XML document, parse it and return an instance of the
 				// Document class.
 				Document document = builder.parse(testStream);
-				NodeList nodeList = document.getDocumentElement().getElementsByTagName("address");
-				for (int i = 0; i < nodeList.getLength(); i++) {
-					Node node = nodeList.item(i);
-					Node locationAttr = node.getAttributes().getNamedItem("location");
-					locationURL = locationAttr.getNodeValue();
-				}
-			} catch (MalformedURLException e) {
+				
+				// now use XPath to find the particular element we need
+		        XPathFactory xpf = XPathFactory.newInstance();
+		        XPath xpath = xpf.newXPath();
+            	Object rawLocation = 
+            			xpath.evaluate("/definitions/service/port/address/@location", document, XPathConstants.STRING);
+            	
+            	// if we found it, stash it!
+            	if (rawLocation != null) {
+            		locationURL = (String) rawLocation;
+            	}
+			} catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
 				// should be valid at this point
-				Wsdl2RestUIActivator.pluginLog().logError(e);
-			} catch (IOException e) {
-				// should be valid at this point
-				Wsdl2RestUIActivator.pluginLog().logError(e);
-			} catch (ParserConfigurationException e) {
-				Wsdl2RestUIActivator.pluginLog().logError(e);
-			} catch (SAXException e) {
 				Wsdl2RestUIActivator.pluginLog().logError(e);
 			} finally {
+				// make sure we close the stream
 				if (testStream != null) {
 					try {
 						testStream.close();
