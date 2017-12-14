@@ -158,31 +158,38 @@ public class ProjectFactory {
 
 	/**
 	 * Returns a list of all available templates in the following format:<br/>
-	 * {name}:{DSL} --> Content Based Router:blueprint, Content Based Router:spring, Content Based Router:java
+	 * {name}:{DSL}:{version}
 	 * 
 	 * @return all available templates
 	 */
 	public static List<String> getAllAvailableTemplates() {
+		List<String> versions = getAllAvailableCamelVersions();
 		List<String> templates = new ArrayList<String>();
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("45frHHallkIIo");
-		wiz.next();
-		wiz.next();
-		List<String> temp = wiz.getAllAvailableTemplates();
-		for (String template : temp) {
-			wiz.selectTemplate(template);
-			if (wiz.isProjectTypeAvailable(BLUEPRINT)) {
-				templates.add(template + ":blueprint");
+		for (String version : versions) {
+			templates.add("empty:blueprint:" + version);
+			templates.add("empty:spring:" + version);
+			templates.add("empty:java:" + version);
+			NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
+			wiz.open();
+			wiz.setProjectName("45frHHallkIIo");
+			wiz.next();
+			wiz.selectCamelVersion(version);
+			wiz.next();
+			List<String> temp = wiz.getAllAvailableTemplates();
+			for (String template : temp) {
+				wiz.selectTemplate(template);
+				if (wiz.isProjectTypeAvailable(BLUEPRINT)) {
+					templates.add(template + ":blueprint:" + version);
+				}
+				if (wiz.isProjectTypeAvailable(SPRING)) {
+					templates.add(template + ":spring:" + version);
+				}
+				if (wiz.isProjectTypeAvailable(JAVA)) {
+					templates.add(template + ":java:" + version);
+				}
 			}
-			if (wiz.isProjectTypeAvailable(SPRING)) {
-				templates.add(template + ":spring");
-			}
-			if (wiz.isProjectTypeAvailable(JAVA)) {
-				templates.add(template + ":java");
-			}
+			wiz.cancel();
 		}
-		wiz.cancel();
 		return templates;
 	}
 
