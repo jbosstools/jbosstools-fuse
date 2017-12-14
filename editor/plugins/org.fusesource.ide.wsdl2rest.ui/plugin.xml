@@ -6,6 +6,7 @@
       <wizard
             category="org.fusesource.ide.newwizards"
             class="org.fusesource.ide.wsdl2rest.ui.wizard.Wsdl2RestWizard"
+            icon="icons/camel_project_16x16.png"
             hasPages="true"
             id="org.fusesource.ide.wsdl2rest.wizard"
             name="WSDL to Camel Rest DSL Wizard">
