@@ -17,7 +17,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -72,18 +71,7 @@ public class FuseProjectTest extends DefaultTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		List<String> temp = ProjectFactory.getAllAvailableTemplates();
-		temp.add("empty:blueprint");
-		temp.add("empty:spring");
-		temp.add("empty:java");
-		List<String> versions = ProjectFactory.getAllAvailableCamelVersions();
-		List<String> product = new ArrayList<String>();
-		for (String name : temp) {
-			for (String version : versions) {
-				product.add(name + ":" + version);
-			}
-		}
-		return product;
+		return ProjectFactory.getAllAvailableTemplates();
 	}
 
 	@BeforeClass
@@ -150,7 +138,7 @@ public class FuseProjectTest extends DefaultTest {
 			}
 			ConsoleView console = new ConsoleView();
 			if (console.getConsoleText().contains("BUILD FAILURE")
-					|| console.getConsoleText().toLowerCase().contains("[ERROR]") || console.consoleIsTerminated()) {
+					|| console.getConsoleText().contains("[ERROR]") || console.consoleIsTerminated()) {
 				log.warn("There is a problem with building '" + name + "' project");
 				return false;
 			}
@@ -204,11 +192,8 @@ public class FuseProjectTest extends DefaultTest {
 
 		assertFalse("Project '" + template + "' was created with errors", hasErrors());
 		if ((type != JAVA) && // skip Java DSLs
-				(!template.startsWith("empty")) && // skip Empty project templates
-				(!template.startsWith("Spring on EAP")) // skip Spring on EAP template (see
-														// https://issues.jboss.org/browse/FUSETOOLS-1456)
+				(!template.startsWith("empty")) // skip Empty project templates
 		)
-
 			assertTrue("Project '" + template + "' cannot be run as Local Camel Context", canBeRun("test"));
 	}
 
