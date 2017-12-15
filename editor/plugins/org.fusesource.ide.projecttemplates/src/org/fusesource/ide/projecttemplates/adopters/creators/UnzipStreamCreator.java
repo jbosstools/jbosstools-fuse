@@ -96,15 +96,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	}
 
 	protected InputStream getTemplateStream(String bundleEntry) {
-		URL archiveUrl = ProjectTemplatesActivator.getBundleContext().getBundle().getEntry(bundleEntry);
-		if (archiveUrl != null) {
-			try {
-				return new ZipInputStream(archiveUrl.openStream(), StandardCharsets.UTF_8);
-			} catch (IOException ex) {
-				ProjectTemplatesActivator.pluginLog().logError(ex);
-			}			
-		}
-		return null;
+		return getTemplateStream(ProjectTemplatesActivator.getBundleContext().getBundle(), bundleEntry);
 	}
 	
 	protected InputStream getTemplateStream(Bundle bundle, String bundleEntry) {
