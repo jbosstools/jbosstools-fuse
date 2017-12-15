@@ -111,18 +111,21 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		// for the moment we only support 1.5.8
 		springBootVersionCombo.add("1.5.8.RELEASE");
 		springBootVersionCombo.select(0);
+		// TODO: rework with FUSETOOLS-2696
 	}
 	
 	private void fillCamelVersions() {
 		// for the moment we only support 2.20.0
 		camelVersionCombo.add("2.20.1");
 		camelVersionCombo.select(0);
+		// TODO: rework with FUSETOOLS-2696		
 	}
 	
 	private void fillSyndesisVersions() {
 		// for the moment we only support 1.2-SNAPSHOT
 		syndesisVersionCombo.add("1.2-SNAPSHOT");
 		syndesisVersionCombo.select(0);
+		// TODO: rework with FUSETOOLS-2696		
 	}
 	
 	public String getSpringBootVersion() {

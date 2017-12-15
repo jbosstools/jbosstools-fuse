@@ -77,24 +77,6 @@
          </enablement>
       </commonWizard>
    </extension>
-   <extension
-         id="org.fusesource.ide.syndesis.extension"
-         name="%extension.nature.name"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="org.fusesource.ide.syndesis.extensions.ui.SyndesisExtensionProjectNature">
-         </run>
-      </runtime>
-   </extension>
-   <extension
-         point="org.eclipse.ui.ide.projectNatureImages">
-      <image
-            icon="icons/syndesis16.png"
-            id="org.fusesource.ide.syndesis.extension.img"
-            natureId="org.fusesource.ide.syndesis.extension">
-      </image>
-   </extension>
 
    <!-- Maven configurator  -->
    <extension point="org.eclipse.m2e.core.projectConfigurators">
@@ -108,62 +90,4 @@
    <extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
    </extension>
  
-   <extension point="org.eclipse.wst.common.project.facet.ui.images">
-      <image facet="jst.syndesis.extension"
-           path="icons/syndesis64.png">
-      </image>
-   </extension>
-   
-  .<!-- Camel Project -->
-   <extension point="org.eclipse.wst.common.project.facet.core.facets">
-      <project-facet id="jst.syndesis.extension">
-         	<label>%extension.facet.name</label>
-         	<description>
-             	%extension.facet.description
-         	</description>
-      </project-facet>
-      
-      <project-facet-version
-            facet="jst.syndesis.extension"
-            version="1.0">
-
-        	<constraint>
-            	<and>
-               		<requires
-                    	facet="jst.java"
-                     	version="[1.8">
-               		</requires>
-                 <requires
-                       facet="jboss.m2"
-                       version="[1.0">
-                 </requires>
-               		<or>
-	               		<requires 
-	               			facet="jst.utility"
-	               			version="1.0">
-	               		</requires>
-	               		<requires 
-	               			facet="jst.web"
-	               			version="[1.0">
-	               		</requires>
-	            	</or>
-            	</and>
-         	</constraint>
-      </project-facet-version>
-
-	  <action
-        	facet="jst.syndesis.extension"
-            id="jst.syndesis.extension.install"
-            type="install">
-         	<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisExtensionFacetInstallationDelegate"/>
-			<config-factory class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetDataModelProvider"/>
-      </action>
-      <action
-        	facet="jst.syndesis.extension"
-        	id="jst.syndesis.extension.version.change"
-        	type="version-change">
-     		<delegate class="org.fusesource.ide.syndesis.extensions.ui.maven.SyndesisFacetVersionChangeDelegate"/>
-      </action>
-   	</extension>
-
 </plugin>
