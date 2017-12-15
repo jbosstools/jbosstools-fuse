@@ -22,7 +22,7 @@
 
         <!-- Other versions -->
         <version.apache.camel>2.21.0.fuse-000009</version.apache.camel>
-        <version.wildfly.camel>5.0.0.fuse-000005</version.wildfly.camel>
+        <version.wildfly.camel>5.1.0.fuse-000006</version.wildfly.camel>
         <version.jboss.arquillian>1.1.10.Final</version.jboss.arquillian>
 
         <!-- Plugin versions -->
