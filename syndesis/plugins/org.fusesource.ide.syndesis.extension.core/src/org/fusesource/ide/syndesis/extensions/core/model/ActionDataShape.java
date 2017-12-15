@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ActionDataShape {
 	@JsonProperty("kind")
-	private String kind;			// any
+	private String kind;
 
 	private Map<String, Object> otherProperties = new HashMap<>();
 	

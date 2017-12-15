@@ -66,14 +66,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		// adjust facets we install based on the packaging type we find
 		installFacet(fproj, fpwc, CamelProjectConfigurator.javaFacet, CamelProjectConfigurator.javaFacet.getLatestVersion());
 		installFacet(fproj, fpwc, CamelProjectConfigurator.m2eFacet, CamelProjectConfigurator.m2eFacet.getLatestVersion());
-		if (mavenProject.getPackaging() != null) {
-			String packaging = mavenProject.getPackaging();
-			if (CamelProjectConfigurator.WAR_PACKAGE.equalsIgnoreCase(packaging)) {
-				installFacet(fproj, fpwc, CamelProjectConfigurator.webFacet, CamelProjectConfigurator.javaFacet.getLatestVersion());
-			} else if (CamelProjectConfigurator.BUNDLE_PACKAGE.equalsIgnoreCase(packaging) || CamelProjectConfigurator.JAR_PACKAGE.equalsIgnoreCase(packaging)) {
-				installFacet(fproj, fpwc, CamelProjectConfigurator.utilFacet, CamelProjectConfigurator.utilFacet.getLatestVersion());
-			}
-		}
+		installFacet(fproj, fpwc, CamelProjectConfigurator.utilFacet, CamelProjectConfigurator.utilFacet.getLatestVersion());
 		fpwc.commitChanges(subMonitor.split(1));
 		updateMavenProject(project);
 		subMonitor.setWorkRemaining(0);
