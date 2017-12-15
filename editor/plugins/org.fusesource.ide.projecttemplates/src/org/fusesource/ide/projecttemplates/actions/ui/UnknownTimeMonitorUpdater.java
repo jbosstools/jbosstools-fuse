@@ -34,7 +34,6 @@ public final class UnknownTimeMonitorUpdater implements Runnable {
 				Thread.currentThread().interrupt();
 			}			
 		}
-		subMonitor.done();
 	}
 	
 	public void cancel() {
