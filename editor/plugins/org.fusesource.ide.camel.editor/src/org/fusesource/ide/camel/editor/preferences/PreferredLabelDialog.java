@@ -11,7 +11,6 @@
 package org.fusesource.ide.camel.editor.preferences;
 
 import static java.util.stream.Collectors.toList;
-import static org.fusesource.ide.camel.editor.provider.ProviderHelper.belongsToAnyCategory;
 import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.RUNTIME_PROVIDER_KARAF;
 import static org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils.getLatestCamelVersion;
 
@@ -36,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.provider.ProviderHelper;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -95,7 +95,7 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 	}
 
 	protected List<Eip> getComponents() {
-		return getCamelModel().getEips().stream().filter(eip -> belongsToAnyCategory(eip)).collect(toList());
+		return getCamelModel().getEips().stream().filter(ProviderHelper::belongsToAnyCategory).collect(toList());
 	}
 
 	public void validate() {

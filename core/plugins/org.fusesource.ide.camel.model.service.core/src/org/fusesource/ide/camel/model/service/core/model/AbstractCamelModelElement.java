@@ -66,7 +66,7 @@ public abstract class AbstractCamelModelElement {
 	public static final String WIRETAP_NODE_NAME = "wireTap";
 
 	public static final String USER_LABEL_COMPONENT_REGEX = "[\\w-]+";
-	public static final String USER_LABEL_PARAMETER_REGEX = "[\\w-]+";
+	public static final String USER_LABEL_PARAMETER_REGEX = USER_LABEL_COMPONENT_REGEX; // these expressions may be changed in the future
 	public static final String USER_LABEL_REGEX = USER_LABEL_COMPONENT_REGEX + "\\." + USER_LABEL_PARAMETER_REGEX;
 	public static final String USER_LABEL_DELIMETER = ";";
 
