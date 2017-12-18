@@ -16,6 +16,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -123,6 +124,14 @@ public class CommonTestUtils {
 		return null;
 	}
 	
+	public static IEditorReference[] getCurrentOpenEditors() {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			return page.getEditorReferences();
+		}
+		return new IEditorReference[0];
+	}
+	
 	/**
 	 * process ui events
 	 * 
@@ -131,7 +140,7 @@ public class CommonTestUtils {
 	public static void readAndDispatch(int currentNumberOfTry) {
 		try{
 			while (Display.getDefault().readAndDispatch()) {
-				
+				// wait
 			}
 		} catch(SWTException swtException){
 			//TODO: remove try catch when https://issues.jboss.org/browse/FUSETOOLS-1913 is done (CI with valid GUI)

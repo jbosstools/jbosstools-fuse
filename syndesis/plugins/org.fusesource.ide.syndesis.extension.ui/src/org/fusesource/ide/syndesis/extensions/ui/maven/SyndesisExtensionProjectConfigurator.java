@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.maven;
 
-import org.apache.maven.project.MavenProject;
+import java.util.List;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -27,6 +29,8 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 
@@ -34,6 +38,9 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
  * @author lheinema
  */
 public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigurator {
+	
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
+    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
@@ -43,21 +50,39 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		IMavenProjectFacade facade = event.getMavenProject();
 		if (event.getFlags() == MavenProjectChangedEvent.FLAG_DEPENDENCIES && facade != null) {
 			IProject project = facade.getProject();
-			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
-			if (fproj != null && checkSyndesisExtensionsMetaDataExist(project)) {
-				installDefaultFacets(project, mavenProject, fproj, monitor);
+			if (fproj != null && isValidSyndesisProject(project)) {
+				installDefaultFacets(project, fproj, monitor);
+				// we add the camel nature because this enables the Camel Contexts virtual folder in the project
+				addNature(project, RiderProjectNature.NATURE_ID, monitor);
 			}
 		}
 		super.mavenProjectChanged(event, monitor);
 	}
 	
-	private boolean checkSyndesisExtensionsMetaDataExist(IProject project) {
-		// check for file: 
-		return project != null && project.findMember(new Path("src").append("main").append("resources").append("META-INF").append("syndesis").append("extension-definition.json")) != null;
+	private boolean isValidSyndesisProject(IProject project) {
+		Model model = new CamelMavenUtils().getMavenModel(project);
+		if (model != null) {
+			return  model.getBuild().getPluginManagement() != null && isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins()) ||
+					isSyndesisPluginDefined(model.getBuild().getPlugins());
+				
+		}
+		return false;
 	}
 
-	private void installDefaultFacets(IProject project, MavenProject mavenProject, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
+	private boolean isSyndesisPluginDefined(List<Plugin> plugins) {
+		if (plugins != null) {
+			for (Plugin p : plugins) {
+				if (SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
+					SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void installDefaultFacets(IProject project, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.installingRequiredFacetsForSyndesisExtensionProject, 4);
 		subMonitor.setWorkRemaining(3);
 
@@ -99,6 +124,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		// nothing to do		
+		// we add the camel nature because this enables the Camel Contexts virtual folder in the project
+		addNature(request.getProject(), RiderProjectNature.NATURE_ID, monitor);
 	}
 }
