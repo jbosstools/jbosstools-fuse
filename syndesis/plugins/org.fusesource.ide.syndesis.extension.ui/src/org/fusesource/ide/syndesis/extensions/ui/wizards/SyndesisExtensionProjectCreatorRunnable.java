@@ -100,7 +100,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.syndesisExtensionProjectCreatorRunnableCreatingTheProjectMonitorMessage, 7);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.syndesisExtensionProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
 			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
 			
 			// first create the project skeleton
@@ -152,6 +152,8 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 			
 			// finally open the camel context file
 			openCamelContextFile(prj, subMonitor.split(1));
+			// and open the syndesis config file
+			openSyndesisConfiguration(prj, subMonitor.split(1));
 			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		} finally {
 			setbackValidationValueAfterProjectCreation(oldValueForValidation);
@@ -317,6 +319,23 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 		return result == IDialogConstants.YES_ID;
 	}
 
+	private void openSyndesisConfiguration(IProject project, IProgressMonitor monitor) {
+		if (project != null) {
+			final IFile holder = project.getFile("src/main/resources/META-INF/syndesis/extension-definition.json");
+			Display.getDefault().asyncExec( () -> {
+				try {
+					if (!holder.exists()) {
+						new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
+					}
+					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					IDE.openEditor(activePage, holder, OpenStrategy.activateOnOpen());
+				} catch (PartInitException e) {
+					SyndesisExtensionsUIActivator.pluginLog().logError("Cannot open syndesis configuration file in editor", e); //$NON-NLS-1$
+				}
+			});
+		}
+	}
+	
 	/**
 	 * Open the first detected camel context file in the editor
 	 *

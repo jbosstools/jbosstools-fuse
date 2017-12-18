@@ -17,7 +17,7 @@ import java.lang.management.ThreadMXBean;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-final class PrintThreadStackOnFailureRule extends TestWatcher {
+public final class PrintThreadStackOnFailureRule extends TestWatcher {
 	@Override
 	protected void failed(Throwable e, Description description) {
 		super.failed(e, description);

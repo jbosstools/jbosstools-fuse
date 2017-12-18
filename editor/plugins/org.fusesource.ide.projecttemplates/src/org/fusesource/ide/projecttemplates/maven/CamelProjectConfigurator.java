@@ -12,9 +12,12 @@ package org.fusesource.ide.projecttemplates.maven;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -60,6 +63,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
 	public static final String BUNDLE_PACKAGE = "BUNDLE"; //$NON-NLS-1$
 	public static final String JAR_PACKAGE = "JAR"; //$NON-NLS-1$
+	
 	public static final IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel"); //$NON-NLS-1$
 	public static final IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java"); //$NON-NLS-1$
 	public static final IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2"); //$NON-NLS-1$
@@ -79,7 +83,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			IProject project = facade.getProject();
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
-			if (fproj != null && checkCamelContextsExist(project, monitor)) {
+			if (fproj != null && checkCamelContextsExist(project, monitor) && isValidCamelFacetCandidate(project)) {
 				installDefaultFacets(project, mavenProject, fproj, monitor);
 			}
 		}
@@ -92,7 +96,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
-		if (checkCamelContextsExist(request.getProject(), monitor)) {
+		if (checkCamelContextsExist(request.getProject(), monitor) && isValidCamelFacetCandidate(request.getProject())) {
 			if (!isCamelFacetEnabled(request)) {
 				// if we have a camel context but no facade set we do set it
 				configureFacet(request.getMavenProject(), request.getProject(), monitor);
@@ -190,7 +194,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 			fproj.uninstallProjectFacet(oldfv, null, mon);
-			installCamelFacet(fproj, fpwc, DEFAULT_CAMEL_FACET_VERSION, mon);
+			installCamelFacet(fproj, fpwc, mon);
 			fpwc.commitChanges(mon);
 		}
 	}
@@ -276,14 +280,14 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 					installFacet(fproj, fpwc, utilFacet, utilFacet.getLatestVersion());
 				}
 			}
-			installCamelFacet(fproj, fpwc, camelVersion, subMonitor.split(1));
+			installCamelFacet(fproj, fpwc, subMonitor.split(1));
 			fpwc.commitChanges(subMonitor.split(1));
 			configureNature(project, mavenProject, subMonitor.split(1));
 			updateMavenProject(project);
 		}
 	}
 
-	private void updateMavenProject(final IProject project) throws CoreException {
+	private void updateMavenProject(final IProject project) {
 		// MANIFEST.MF is probably not built yet
 		if (project != null) {
 			// update the maven project so we start in a deployable state
@@ -293,17 +297,17 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 	}
 
-	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, String camelVersionString,
+	private void installCamelFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc,
 			IProgressMonitor monitor) throws CoreException {
 		IDataModel config = (IDataModel) new CamelFacetDataModelProvider().create();
 		config.setBooleanProperty(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE, false);
-		installFacet(fproj, fpwc, camelFacet, getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION));
+		installFacet(fproj, fpwc, camelFacet, getCamelFacetVersion());
 		// we need to switch dependency versions
 		CamelFacetVersionChangeDelegate del = new CamelFacetVersionChangeDelegate();
-		del.execute(fproj.getProject(), getCamelFacetVersion(DEFAULT_CAMEL_FACET_VERSION), config, monitor);
+		del.execute(fproj.getProject(), getCamelFacetVersion(), config, monitor);
 	}
 
-	private IProjectFacetVersion getCamelFacetVersion(String camelVersionString) throws CoreException {
+	private IProjectFacetVersion getCamelFacetVersion() throws CoreException {
 		try {
 			IProjectFacetVersion facetVersion = camelFacet.getVersion(DEFAULT_CAMEL_FACET_VERSION);
 			if (facetVersion != null) {
@@ -314,20 +318,50 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		}
 		return camelFacet.getLatestVersion();
 	}
+	
+	/**
+	 * common feature of all our templates is the use of the camel-maven-plugin. if it is not defined in the
+	 * pom.xml then we don't apply facet and nature on those projects.
+	 * 
+	 * @param project
+	 * @return
+	 */
+	private boolean isValidCamelFacetCandidate(IProject project) {
+		Model model = new CamelMavenUtils().getMavenModel(project);
+		if (model != null) {
+			return  model.getBuild().getPluginManagement() != null && isCamelPluginDefined(model.getBuild().getPluginManagement().getPlugins()) ||
+					isCamelPluginDefined(model.getBuild().getPlugins());
+				
+		}
+		
+		return false;
+	}
 
+	private boolean isCamelPluginDefined(List<Plugin> plugins) {
+		if (plugins != null) {
+			for (Plugin p : plugins) {
+				if (GROUP_ID_ORG_APACHE_CAMEL.equalsIgnoreCase(p.getGroupId()) && 
+					"camel-maven-plugin".equalsIgnoreCase(p.getArtifactId()) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * checks whether the project contains any camel context xml file
 	 * 
 	 * @param project
 	 * @return
 	 */
-	private boolean checkCamelContextsExist(IProject project, IProgressMonitor monitor) throws CoreException {
+	private boolean checkCamelContextsExist(IProject project, IProgressMonitor monitor) {
 		return !new CamelFilesFinder().findFiles(project).isEmpty()
 				|| new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor) != null;
 	}
 
 	private void installFacet(IFacetedProject fproj, IFacetedProjectWorkingCopy fpwc, IProjectFacet facet,
-			IProjectFacetVersion facetVersion) throws CoreException {
+			IProjectFacetVersion facetVersion) {
 		if (facet != null && !fproj.hasProjectFacet(facet)) {
 			fpwc.addProjectFacet(facetVersion);
 		} else {
