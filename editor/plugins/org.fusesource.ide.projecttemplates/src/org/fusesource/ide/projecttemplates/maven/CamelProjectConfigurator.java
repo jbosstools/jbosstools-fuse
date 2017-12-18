@@ -58,6 +58,8 @@ import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProper
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
+    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
 	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
@@ -329,19 +331,22 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private boolean isValidCamelFacetCandidate(IProject project) {
 		Model model = new CamelMavenUtils().getMavenModel(project);
 		if (model != null) {
-			return  model.getBuild().getPluginManagement() != null && isCamelPluginDefined(model.getBuild().getPluginManagement().getPlugins()) ||
-					isCamelPluginDefined(model.getBuild().getPlugins());
-				
+			boolean pluginFound = isSyndesisPluginDefined(model.getBuild().getPlugins());
+			if (!pluginFound && model.getBuild().getPluginManagement() != null) { 
+				pluginFound = isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins());
+			}
+			if (!pluginFound) {
+				return true;
+			}
 		}
-		
 		return false;
 	}
 
-	private boolean isCamelPluginDefined(List<Plugin> plugins) {
+	private boolean isSyndesisPluginDefined(List<Plugin> plugins) {
 		if (plugins != null) {
 			for (Plugin p : plugins) {
-				if (GROUP_ID_ORG_APACHE_CAMEL.equalsIgnoreCase(p.getGroupId()) && 
-					"camel-maven-plugin".equalsIgnoreCase(p.getArtifactId()) ) {
+				if (SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
+					SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
 					return true;
 				}
 			}
