@@ -15,7 +15,8 @@ import java.io.InputStream;
 
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 public abstract class AbstractEmptyProjectTemplate extends AbstractProjectTemplate {
 
@@ -37,18 +38,21 @@ public abstract class AbstractEmptyProjectTemplate extends AbstractProjectTempla
 		private static final String TEMPLATE_JAVA = "template-blank-java-fuse";
 
 		@Override
-		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
 			String bundleEntry = null;
-			switch (metadata.getDslType()) {
-			case BLUEPRINT:	bundleEntry = getBundleEntry(TEMPLATE_BLUEPRINT);
-							break;
-			case SPRING:	bundleEntry = getBundleEntry(TEMPLATE_SPRING);
-							break;
-			case JAVA:		bundleEntry = getBundleEntry(TEMPLATE_JAVA);
-							break;
-			default:
+			if (metadata instanceof ICamelDSLTypeSupport) {
+				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
+					case BLUEPRINT:	bundleEntry = getBundleEntry(TEMPLATE_BLUEPRINT);
+									break;
+					case SPRING:	bundleEntry = getBundleEntry(TEMPLATE_SPRING);
+									break;
+					case JAVA:		bundleEntry = getBundleEntry(TEMPLATE_JAVA);
+									break;
+					default:
+				}
+				return getTemplateStream(bundleEntry);
 			}
-			return getTemplateStream(bundleEntry);
+			throw new IOException("Invalid project metadata not supporting Camel DSL types");
 		}
 
 		private String getBundleEntry(String templateDsl) {

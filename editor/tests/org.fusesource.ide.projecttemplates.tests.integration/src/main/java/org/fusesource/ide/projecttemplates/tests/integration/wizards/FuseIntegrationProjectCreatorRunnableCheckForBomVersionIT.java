@@ -26,7 +26,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IRuntime;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,8 +53,8 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		String projectNameSuffix = "-withoutRuntime-"+camelVersion;
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		
-		NewProjectMetaData metadata;
-		metadata = new NewProjectMetaData();
+		NewFuseIntegrationProjectMetaData metadata;
+		metadata = new NewFuseIntegrationProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		metadata.setCamelVersion(camelVersion);
@@ -73,8 +73,8 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		String projectNameSuffix = "-withRuntime-"+camelVersion;
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		
-		NewProjectMetaData metadata;
-		metadata = new NewProjectMetaData();
+		NewFuseIntegrationProjectMetaData metadata;
+		metadata = new NewFuseIntegrationProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		metadata.setCamelVersion(camelVersion);

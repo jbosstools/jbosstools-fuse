@@ -41,7 +41,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
@@ -57,9 +56,8 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
 import org.junit.Before;
 
@@ -91,7 +89,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
-	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
+	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewFuseIntegrationProjectMetaData metadata) throws Exception {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
@@ -156,9 +154,9 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 	 * @param projectName
 	 * @return
 	 */
-	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, final String projectName) {
-		NewProjectMetaData metadata;
-		metadata = new NewProjectMetaData();
+	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, final String projectName) {
+		NewFuseIntegrationProjectMetaData metadata;
+		metadata = new NewFuseIntegrationProjectMetaData();
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		metadata.setCamelVersion(camelVersion);
@@ -215,16 +213,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 			assertThat(ed.getDesignEditor().getDiagramTypeProvider()).as("Error retrieving the diagram type provider.").isNotNull();
 			assertThat(ed.getDesignEditor().getDiagramTypeProvider().getDiagram()).as("Unable to access the camel context diagram.").isNotNull();
 		}
-	}
-	
-	protected void checkCorrectFacetsEnabled(IProject project) throws CoreException {
-		super.checkCorrectFacetsEnabled(project);
-		IFacetedProject fproj = ProjectFacetsManager.create(project);
-
-		boolean camelFacetFound = fproj.hasProjectFacet(camelFacet);
-				
-		assertThat(camelFacetFound).isTrue();
-		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(CamelProjectConfigurator.DEFAULT_CAMEL_FACET_VERSION).as("The Camel Facet version is not the right one.");
 	}
 	
     protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {

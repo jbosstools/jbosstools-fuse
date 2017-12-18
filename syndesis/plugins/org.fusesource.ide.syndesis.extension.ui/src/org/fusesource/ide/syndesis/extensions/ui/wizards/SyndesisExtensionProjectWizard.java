@@ -20,6 +20,8 @@ import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+import org.fusesource.ide.syndesis.extensions.ui.templates.BasicSyndesisExtensionXmlProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardExtensionDetailsPage;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardVersionsPage;
 
@@ -48,9 +50,9 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 	@Override
 	public boolean performFinish() {
-		final SyndesisExtension extension = getSyndesisExtension();
+		final NewSyndesisExtensionProjectMetaData metadata = getProjectMetaData();
 		try {
-			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(locationPage.getProjectName(), locationPage.getLocationPath(), locationPage.isInWorkspace(), extension));
+			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(metadata));
 		} catch (InterruptedException iex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
@@ -76,6 +78,17 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		addPage(extensionDetailsPage);
 	}
 
+	private NewSyndesisExtensionProjectMetaData getProjectMetaData() {
+		NewSyndesisExtensionProjectMetaData metadata = new NewSyndesisExtensionProjectMetaData();
+		metadata.setProjectName(locationPage.getProjectName());
+		if (!locationPage.isInWorkspace()) {
+			metadata.setLocationPath(locationPage.getLocationPath());
+		}
+		metadata.setSyndesisExtensionConfig(getSyndesisExtension());
+		metadata.setTemplate(new BasicSyndesisExtensionXmlProjectTemplate());
+		return metadata;
+	}
+	
 	private SyndesisExtension getSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
 		extension.setSpringBootVersion(versionPage.getSpringBootVersion());

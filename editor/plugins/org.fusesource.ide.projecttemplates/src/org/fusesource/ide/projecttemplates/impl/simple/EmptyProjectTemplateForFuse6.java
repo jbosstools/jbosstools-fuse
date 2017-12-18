@@ -13,7 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * this template is used for creating a blank project (not template based)
@@ -23,7 +23,7 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 public class EmptyProjectTemplateForFuse6 extends AbstractEmptyProjectTemplate {
 	
 	@Override
-	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new BlankProjectCreator("6");
 	}
 	

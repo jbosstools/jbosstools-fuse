@@ -37,7 +37,8 @@ import org.fusesource.ide.preferences.StagingRepositoriesConstants;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ICamelSupport;
 import org.fusesource.ide.projecttemplates.util.ProjectTemplatePatcher;
 
 /**
@@ -298,8 +299,8 @@ public class MavenUtils {
 	 * @param monitor			the progress monitor
 	 * @return	true on success, otherwise false
 	 */
-	public static boolean configurePomCamelVersion(IProject project, NewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
-		String newCamelVersion = Strings.isBlank(camelVersion) && projectMetaData != null ? projectMetaData.getCamelVersion() : camelVersion;
+	public static boolean configurePomCamelVersion(IProject project, CommonNewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
+		String newCamelVersion = Strings.isBlank(camelVersion) && projectMetaData != null && projectMetaData instanceof ICamelSupport ? ((ICamelSupport)projectMetaData).getCamelVersion() : camelVersion;
 		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 8);
 		try {
 			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$

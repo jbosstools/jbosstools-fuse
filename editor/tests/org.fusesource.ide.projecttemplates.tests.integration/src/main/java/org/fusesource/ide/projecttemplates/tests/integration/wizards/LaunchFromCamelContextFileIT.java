@@ -22,7 +22,7 @@ import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.CBRTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,8 +66,8 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 	}
 	
 	@Override
-	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
-		NewProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
+	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
+		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;

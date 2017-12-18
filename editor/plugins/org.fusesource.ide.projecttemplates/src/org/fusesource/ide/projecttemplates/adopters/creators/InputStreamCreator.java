@@ -13,7 +13,7 @@ package org.fusesource.ide.projecttemplates.adopters.creators;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * this abstract super class can be used to write creators which use streams
@@ -31,5 +31,5 @@ public abstract class InputStreamCreator implements TemplateCreatorSupport {
 	 * @return
 	 * @throws IOException
 	 */
-	public abstract InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException;
+	public abstract InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException;
 }

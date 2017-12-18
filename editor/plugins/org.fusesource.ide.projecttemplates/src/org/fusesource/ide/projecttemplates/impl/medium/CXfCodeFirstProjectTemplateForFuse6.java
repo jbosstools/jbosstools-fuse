@@ -13,12 +13,12 @@ package org.fusesource.ide.projecttemplates.impl.medium;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 public class CXfCodeFirstProjectTemplateForFuse6 extends AbstractCxfCodeFirstProjectTemplate {
 
 	@Override
-	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new CXfCodeFirstUnzipTemplateCreator("6");
 	}
 	

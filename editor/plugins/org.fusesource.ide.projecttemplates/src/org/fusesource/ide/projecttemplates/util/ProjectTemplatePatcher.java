@@ -26,7 +26,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
  */
 public class ProjectTemplatePatcher {
 	
-	private NewProjectMetaData projectMetaData;
+	private CommonNewProjectMetaData projectMetaData;
 	
 	/**
 	 * creates a patcher which will do tweaks to the template if needed
@@ -34,7 +34,7 @@ public class ProjectTemplatePatcher {
 	 * @param project
 	 * @param projectMetaData
 	 */
-	public ProjectTemplatePatcher(NewProjectMetaData projectMetaData) {
+	public ProjectTemplatePatcher(CommonNewProjectMetaData projectMetaData) {
 		this.projectMetaData = projectMetaData;
 	}
 	
@@ -72,8 +72,8 @@ public class ProjectTemplatePatcher {
 		.collect(Collectors.toList());
 	}
 	
-	private boolean areAriesProxyDependenciesToBeRemoved(NewProjectMetaData projectMetaData) {
-		String camelVersion = projectMetaData.getCamelVersion();
+	private boolean areAriesProxyDependenciesToBeRemoved(CommonNewProjectMetaData projectMetaData) {
+		String camelVersion = projectMetaData instanceof ICamelSupport ? ((ICamelSupport)projectMetaData).getCamelVersion() : new CamelMavenUtils().getCamelVersionFromProjectName(projectMetaData.getProjectName());
 		if (new CamelMavenUtils().isRedHatBrandedVersion(camelVersion)) { 
 			ComparableVersion v1 = new ComparableVersion(camelVersion);
 			ComparableVersion v2 = new ComparableVersion(CamelCatalogUtils.FUSE_63_R4_CAMEL_VERSION);

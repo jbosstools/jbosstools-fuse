@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.util;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IRuntime;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
@@ -18,32 +17,25 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 /**
  * @author lhein
  */
-public class NewProjectMetaData {
-	private String projectName;
+public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData implements ITemplateSupport, ICamelSupport, ICamelDSLTypeSupport {
 	private String camelVersion;
 	private IRuntime targetRuntime;
 	private CamelDSLType dslType;
 	private boolean blankProject;
-	private IPath locationPath;
 	private AbstractProjectTemplate template;
 	
 	/**
 	 * @return the template
 	 */
+	@Override
 	public AbstractProjectTemplate getTemplate() {
 		return this.template;
 	}
 	
 	/**
-	 * @return the locationPath
-	 */
-	public IPath getLocationPath() {
-		return this.locationPath;
-	}
-	
-	/**
 	 * @return the camelVersion
 	 */
+	@Override
 	public String getCamelVersion() {
 		return this.camelVersion;
 	}
@@ -51,15 +43,9 @@ public class NewProjectMetaData {
 	/**
 	 * @return the dslType
 	 */
+	@Override
 	public CamelDSLType getDslType() {
 		return this.dslType;
-	}
-	
-	/**
-	 * @return the projectName
-	 */
-	public String getProjectName() {
-		return this.projectName;
 	}
 	
 	/**
@@ -79,20 +65,15 @@ public class NewProjectMetaData {
 	/**
 	 * @param template the template to set
 	 */
+	@Override
 	public void setTemplate(AbstractProjectTemplate template) {
 		this.template = template;
 	}
 	
 	/**
-	 * @param locationPath the locationPath to set
-	 */
-	public void setLocationPath(IPath locationPath) {
-		this.locationPath = locationPath;
-	}
-	
-	/**
 	 * @param camelVersion the camelVersion to set
 	 */
+	@Override
 	public void setCamelVersion(String camelVersion) {
 		this.camelVersion = camelVersion;
 	}
@@ -100,15 +81,9 @@ public class NewProjectMetaData {
 	/**
 	 * @param dslType the dslType to set
 	 */
+	@Override
 	public void setDslType(CamelDSLType dslType) {
 		this.dslType = dslType;
-	}
-	
-	/**
-	 * @param projectName the projectName to set
-	 */
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
 	}
 	
 	/**
