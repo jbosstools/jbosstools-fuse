@@ -31,7 +31,8 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.camel.CamelFacetDataModelProvider;
 import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProperties;
 
@@ -55,7 +56,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	}
 	
 	@Override
-	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+	public boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 10);
 		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
@@ -139,7 +140,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	 * @param projectMetaData	the projects metadata
 	 * @return	a facet configuration
 	 */
-	protected IDataModel getCamelFacetDataModel(NewProjectMetaData projectMetaData) {
+	protected IDataModel getCamelFacetDataModel(NewFuseIntegrationProjectMetaData projectMetaData) {
 		CamelFacetDataModelProvider dmProv = new CamelFacetDataModelProvider();
 		dmProv.create();
 		IDataModel dm = dmProv.getDataModel();

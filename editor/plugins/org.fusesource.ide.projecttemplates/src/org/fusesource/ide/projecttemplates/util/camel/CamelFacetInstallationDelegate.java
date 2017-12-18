@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 
 /**
  * The camel facet as currently implemented requires either a utility facet
@@ -35,7 +35,7 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		if (!model.isPropertySet(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA)) {
 			return;
 		}
-		NewProjectMetaData metadata = (NewProjectMetaData)model.getProperty(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA);
+		NewFuseIntegrationProjectMetaData metadata = (NewFuseIntegrationProjectMetaData)model.getProperty(ICamelFacetDataModelProperties.CAMEL_PROJECT_METADATA);
 		
 		// store the camel version as project property
 		project.setPersistentProperty(ICamelFacetDataModelProperties.QNAME_CAMEL_VERSION, metadata.getCamelVersion());

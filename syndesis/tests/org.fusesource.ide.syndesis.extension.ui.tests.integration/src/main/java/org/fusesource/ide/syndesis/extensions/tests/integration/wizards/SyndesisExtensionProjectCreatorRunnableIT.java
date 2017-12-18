@@ -44,6 +44,8 @@ import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionIntegrationTestsActivator;
+import org.fusesource.ide.syndesis.extensions.ui.templates.BasicSyndesisExtensionXmlProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectCreatorRunnable;
 import org.junit.Before;
 
@@ -84,18 +86,24 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		extension.setTags(Arrays.asList("test", "acme"));
 		return extension;
 	}
+
+	protected NewSyndesisExtensionProjectMetaData createDefaultNewProjectMetadata(final String projectName) {
+		NewSyndesisExtensionProjectMetaData metadata = new NewSyndesisExtensionProjectMetaData();
+		metadata.setProjectName(projectName);
+		metadata.setLocationPath(null);
+		metadata.setSyndesisExtensionConfig(createDefaultNewSyndesisExtension());
+		metadata.setTemplate(new BasicSyndesisExtensionXmlProjectTemplate());
+		return metadata;
+	}
 	
 	protected void testProjectCreation(String projectNameSuffix, SyndesisExtension extension, String camelPath, String syndesisPath) throws Exception {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
 
-		SyndesisExtension syndesisExtension = extension;
-		if (syndesisExtension == null) {
-			syndesisExtension = createDefaultNewSyndesisExtension();
-		}
+		NewSyndesisExtensionProjectMetaData metaData = createDefaultNewProjectMetadata(projectName);
 
-		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new SyndesisExtensionProjectCreatorRunnable(projectName, ResourcesPlugin.getWorkspace().getRoot().getLocation(), true, syndesisExtension));
+		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new SyndesisExtensionProjectCreatorRunnable(metaData));
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 

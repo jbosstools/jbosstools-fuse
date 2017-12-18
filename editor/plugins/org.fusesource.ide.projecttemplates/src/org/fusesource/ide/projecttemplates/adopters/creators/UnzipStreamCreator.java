@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.osgi.framework.Bundle;
 
 /**
@@ -37,10 +37,10 @@ import org.osgi.framework.Bundle;
 public abstract class UnzipStreamCreator extends InputStreamCreator {
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport#create(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+	 * @see org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport#create(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
 	 */
 	@Override
-	public boolean create(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+	public boolean create(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		return unzipStream(project, metadata, monitor);
 	}
 	
@@ -50,7 +50,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	 * @param project
 	 * @return
 	 */
-	protected boolean unzipStream(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+	protected boolean unzipStream(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.unzipStreamCreatorUnzippingTemplateFileMonitorMessage,  2);
 	     try {
 	    	 // create output directory is not exists

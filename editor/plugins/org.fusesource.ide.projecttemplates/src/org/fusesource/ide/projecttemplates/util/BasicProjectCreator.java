@@ -30,9 +30,9 @@ import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 public class BasicProjectCreator {
 
 	private IProject project;
-	private NewProjectMetaData metadata;
+	private CommonNewProjectMetaData metadata;
 
-	public BasicProjectCreator(NewProjectMetaData metadata) {
+	public BasicProjectCreator(CommonNewProjectMetaData metadata) {
 		this.metadata = metadata;
 	}
 

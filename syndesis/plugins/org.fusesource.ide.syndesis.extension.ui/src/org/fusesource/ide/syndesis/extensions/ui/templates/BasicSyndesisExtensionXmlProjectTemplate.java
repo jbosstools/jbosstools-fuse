@@ -19,7 +19,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
 /**
@@ -37,10 +37,10 @@ public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTem
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
 	 */
 	@Override
-	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new SyndesisProjectCreator();
 	}
 	
@@ -50,10 +50,10 @@ public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTem
 		private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
 		
 		/* (non-Javadoc)
-		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
 		 */
 		@Override
-		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
 			String bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_XML);
 			return getTemplateStream(SyndesisExtensionsUIActivator.getBundleContext().getBundle(), bundleEntry);
 		}

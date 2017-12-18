@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Test;
 
 public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends FuseIntegrationProjectCreatorRunnableIT {
@@ -30,8 +30,8 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	}
 	
 	@Override
-	protected NewProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
-		NewProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
+	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
+		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		newProjectMetadata.setTemplate(new OSESpringBootXMLTemplate());
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;

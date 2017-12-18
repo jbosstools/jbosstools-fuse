@@ -8,7 +8,6 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.projecttemplates.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,9 +17,12 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardTemplatePage;
 
@@ -49,12 +51,12 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		final NewProjectMetaData metadata = getProjectMetaData();
+		final NewFuseIntegrationProjectMetaData metadata = getProjectMetaData();
 		try {
-			// TODO: try to make fork true
 			getContainer().run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
 		} catch (InterruptedException iex) {
 			ProjectTemplatesActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
+			Thread.currentThread().interrupt();
 			return false;
 		} catch (InvocationTargetException ite) {
 			ProjectTemplatesActivator.pluginLog().logError("Error occured executing the wizard!", ite); //$NON-NLS-1$
@@ -77,8 +79,8 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		addPage(templateSelectionPage);
 	}
 
-	private NewProjectMetaData getProjectMetaData() {
-		NewProjectMetaData metadata = new NewProjectMetaData();
+	private NewFuseIntegrationProjectMetaData getProjectMetaData() {
+		NewFuseIntegrationProjectMetaData metadata = new NewFuseIntegrationProjectMetaData();
 		metadata.setProjectName(locationPage.getProjectName());
 		if (!locationPage.isInWorkspace()) {
 			metadata.setLocationPath(locationPage.getLocationPath());
@@ -87,7 +89,12 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		metadata.setTargetRuntime(runtimeAndCamelVersionPage.getSelectedRuntime());
 		metadata.setDslType(templateSelectionPage.getDSL());
 		metadata.setBlankProject(templateSelectionPage.isEmptyProject());
-		metadata.setTemplate(templateSelectionPage.getSelectedTemplate() != null ? templateSelectionPage.getSelectedTemplate().getTemplate() : null);
+		if (metadata.isBlankProject()) {
+			// we create a blank project
+			metadata.setTemplate(BasicProjectCreatorRunnableUtils.isCamelVersionBiggerThan220(metadata.getCamelVersion()) ? new EmptyProjectTemplateForFuse7() : new EmptyProjectTemplateForFuse6());
+		} else {
+			metadata.setTemplate(templateSelectionPage.getSelectedTemplate() != null ? templateSelectionPage.getSelectedTemplate().getTemplate() : null);
+		}
 		return metadata;
 	}
 }

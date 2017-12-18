@@ -23,6 +23,8 @@ import org.apache.maven.model.Repository;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -110,6 +112,12 @@ public class CamelMavenUtils {
 
 	public String getCamelVersionFromMaven(IProject project) {
 		return getCamelVersionFromMaven(project, true);
+	}
+	
+	public String getCamelVersionFromProjectName(String projectName) {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = root.getProject(projectName);
+		return getCamelVersionFromMaven(project);
 	}
 	
 	/**

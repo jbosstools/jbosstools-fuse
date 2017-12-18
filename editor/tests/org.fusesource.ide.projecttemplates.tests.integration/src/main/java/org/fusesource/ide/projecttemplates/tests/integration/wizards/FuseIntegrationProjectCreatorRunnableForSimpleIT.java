@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -59,7 +59,7 @@ public class FuseIntegrationProjectCreatorRunnableForSimpleIT extends FuseIntegr
 
 	@Test
 	public void testEmptySpringProjectCreationOnLocationOutsideWorkspace() throws Exception {
-		NewProjectMetaData metadata = createDefaultNewProjectMetadata(CamelDSLType.SPRING,
+		NewFuseIntegrationProjectMetaData metadata = createDefaultNewProjectMetadata(CamelDSLType.SPRING,
 				getClass().getSimpleName() + "-SimpleSpringProject_outsideProject");
 		File folderForprojectOutsiddeWorkspaceLocation = tmpFolder.newFolder("folderForProjectOutsideWorkspaceLocation");
 		final Path locationPath = new Path(folderForprojectOutsiddeWorkspaceLocation.getAbsolutePath());

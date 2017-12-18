@@ -12,8 +12,7 @@ package org.fusesource.ide.projecttemplates;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
-import org.junit.Before;
+import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
 import org.junit.Test;
 
 /**
@@ -21,25 +20,18 @@ import org.junit.Test;
  */
 public class BundleSymbolicNameCorrectionTest {
 	
-	private FuseIntegrationProjectCreatorRunnable runner;
-	
-	@Before
-	public void setup() {
-		runner = new FuseIntegrationProjectCreatorRunnable(null);
-	}
-	
 	@Test
 	public void testInvalidBundleSymbolicNameCorrection() throws Exception {
-		assertThat(runner.getBundleSymbolicNameForProjectName("Ä:strönge~P Oroject!;:~$! name_44")).isEqualToIgnoringCase("strngePOrojectname_44");
+		assertThat(BasicProjectCreatorRunnableUtils.getBundleSymbolicNameForProjectName("Ä:strönge~P Oroject!;:~$! name_44")).isEqualToIgnoringCase("strngePOrojectname_44");
 	}
 	
 	@Test
 	public void testAlmostValidBundleSymbolicNameCorrection() throws Exception {
-		assertThat(runner.getBundleSymbolicNameForProjectName("My Test Project-33")).isEqualToIgnoringCase("MyTestProject-33");
+		assertThat(BasicProjectCreatorRunnableUtils.getBundleSymbolicNameForProjectName("My Test Project-33")).isEqualToIgnoringCase("MyTestProject-33");
 	}
 	
 	@Test
 	public void testValidBundleSymbolicNameCorrection() throws Exception {
-		assertThat(runner.getBundleSymbolicNameForProjectName("My_TestProject-33")).isEqualToIgnoringCase("My_TestProject-33");
+		assertThat(BasicProjectCreatorRunnableUtils.getBundleSymbolicNameForProjectName("My_TestProject-33")).isEqualToIgnoringCase("My_TestProject-33");
 	}
 }

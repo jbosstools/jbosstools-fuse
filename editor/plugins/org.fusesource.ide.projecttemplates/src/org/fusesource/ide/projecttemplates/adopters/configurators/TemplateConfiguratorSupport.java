@@ -12,7 +12,7 @@ package org.fusesource.ide.projecttemplates.adopters.configurators;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * @author lhein
@@ -27,5 +27,5 @@ public interface TemplateConfiguratorSupport {
 	 * @param monitor	the progress monitor
 	 * @return	true on success, otherwise false
 	 */
-	boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor);
+	boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor);
 }

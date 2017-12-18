@@ -19,7 +19,8 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfig
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 /**
  * @author lhein
@@ -48,7 +49,7 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	}
 
 	@Override
-	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new AMQUnzipTemplateCreator();
 	}
 
@@ -62,17 +63,19 @@ public class AMQTemplate extends AbstractProjectTemplate {
 		private static final String TEMPLATE_SPRING = "template-simple-amq-spring.zip";
 		
 		@Override
-		public InputStream getTemplateStream(NewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
 			String bundleEntry = null;
-			switch (metadata.getDslType()) {
-				case BLUEPRINT:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_BLUEPRINT);
-								break;
-				case SPRING:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_SPRING);
-								break;
-				default:
+			if (metadata instanceof ICamelDSLTypeSupport) {
+				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
+					case BLUEPRINT:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_BLUEPRINT);
+									break;
+					case SPRING:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_SPRING);
+									break;
+					default:
+				}
+				return getTemplateStream(bundleEntry);
 			}
-			return getTemplateStream(bundleEntry);
+			throw new IOException("Invalid project metadata not supporting Camel DSL types");
 		}
-
 	}
 }

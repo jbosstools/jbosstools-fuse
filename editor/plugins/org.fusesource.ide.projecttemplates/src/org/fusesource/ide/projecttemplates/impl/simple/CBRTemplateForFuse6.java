@@ -13,7 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * @author lhein
@@ -21,7 +21,7 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 public class CBRTemplateForFuse6 extends AbstractCBRTemplate {
 
 	@Override
-	public TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData) {
+	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new CBRUnzipTemplateCreator("6");
 	}
 	

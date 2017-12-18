@@ -16,12 +16,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -33,157 +30,66 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialogWithToggle;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IPerspectiveDescriptor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPreferenceConstants;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchException;
-import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEInternalPreferences;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.ui.internal.util.PrefUtil;
-import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
-import org.eclipse.wst.validation.internal.ValManager;
-import org.eclipse.wst.validation.internal.model.GlobalPreferences;
-import org.eclipse.wst.validation.internal.model.GlobalPreferencesValues;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
-import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
-import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
-import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
-import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
-import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
-import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.BasicProjectCreator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
+import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
+import org.fusesource.ide.projecttemplates.util.ICamelCatalogUser;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 
 /**
  * @author Aurelien Pupier
  *
  */
-public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWithProgress {
-
-	public static final String FUSE_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective"; //$NON-NLS-1$
+public final class FuseIntegrationProjectCreatorRunnable extends BasicProjectCreatorRunnable implements ICamelCatalogUser {
 
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
 	
-	private final NewProjectMetaData metadata;
-	
-	private boolean isJavaEditorToOpen = false;
-
 	/**
 	 * @param metadata
 	 */
-	public FuseIntegrationProjectCreatorRunnable(NewProjectMetaData metadata) {
-		this.metadata = metadata;
+	public FuseIntegrationProjectCreatorRunnable(NewFuseIntegrationProjectMetaData metadata) {
+		super(metadata);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.util.ICamelCatalogUser#shouldPreloadCatalog()
+	 */
 	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
+	public boolean shouldPreloadCatalog() {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable#doAdditionalProjectConfiguration(org.eclipse.core.resources.IProject, org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	protected void doAdditionalProjectConfiguration(IProject prj, IProgressMonitor monitor) {
+		super.doAdditionalProjectConfiguration(prj, monitor);
+		
+		// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
 		try {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.fuseIntegrationProjectCreatorRunnableCreatingTheProjectMonitorMessage, 8);
-			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().deactivate();
-			// first create the project skeleton
-			BasicProjectCreator c = new BasicProjectCreator(metadata);
-			boolean ok = c.create(subMonitor.split(1));
-			IProject prj = c.getProject();
-						
-			if (ok) {
-				// then configure the project for the given template
-				AbstractProjectTemplate template = retrieveTemplate();
-				// now execute the template
-				try {
-					template.create(prj, metadata, subMonitor.split(1));
-				} catch (CoreException ex) {
-					ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
-				}
-			}
-
-			// switch perspective if needed
-			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FUSE_PERSPECTIVE_ID);
-			IPerspectiveDescriptor currentPersp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
-			final boolean switchPerspective = currentPersp.getId().equals(finalPersp.getId()) ? false : confirmPerspectiveSwitch(workbenchWindow, finalPersp);
-			if (switchPerspective) {
-				// switch to Fuse perspective if necessary.
-				switchToFusePerspective(workbenchWindow);
-			}
-			subMonitor.setWorkRemaining(6);
-
-			// refresh
-			try {
-				prj.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
-				// update the pom maven bundle plugin config to reflect project name as Bundle-(Symbolic)Name
-				updateBundlePluginConfiguration(prj, subMonitor.split(1));
-			} catch (CoreException ex) {
-				ProjectTemplatesActivator.pluginLog().logError(ex);
-			}
-			// delete invalid MANIFEST files
-			IResource rs = prj.findMember("src/META-INF/"); //$NON-NLS-1$
-			if (rs != null && rs.exists()) {
-				try {
-					rs.delete(true, subMonitor.split(1, SubMonitor.SUPPRESS_SUBTASK));
-				} catch (CoreException ex) {
-					ProjectTemplatesActivator.pluginLog().logError(ex);
-				}
-			}
-			subMonitor.setWorkRemaining(3);
-			
-			CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
-			
-			// finally open the camel context file
-			openCamelContextFile(prj, subMonitor.split(1));
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
-		} finally {
-			setbackValidationValueAfterProjectCreation(oldValueForValidation);
-			CamelModelServiceCoreActivator.getProjectClasspathChangeListener().activate();
+			updateBundlePluginConfiguration(prj, monitor);
+		} catch (CoreException ex) {
+			ProjectTemplatesActivator.pluginLog().logError("Unable to create project...", ex); //$NON-NLS-1$
 		}
 	}
-
-	protected AbstractProjectTemplate retrieveTemplate() {
-		if (metadata.isBlankProject()) {
-			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(metadata.getCamelVersion())) > 0){
-				return new EmptyProjectTemplateForFuse6();
-			} else {
-				return new EmptyProjectTemplateForFuse7();
-			}
-		} else {
-			return metadata.getTemplate();
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable#openRequiredFilesInEditor(org.eclipse.core.resources.IProject, org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	protected void openRequiredFilesInEditor(IProject prj, IProgressMonitor monitor) {
+		super.openRequiredFilesInEditor(prj, monitor);
+		try {
+			openCamelContextFile(prj, monitor);
+		} catch (CoreException ex) {
+			ProjectTemplatesActivator.pluginLog().logError(ex);
 		}
-	}
-
-	protected void setbackValidationValueAfterProjectCreation(boolean oldValueForValidation) {
-		GlobalPreferencesValues globalPreferencesAsValues = ValManager.getDefault().getGlobalPreferences().asValues();
-		globalPreferencesAsValues.disableAllValidation = oldValueForValidation;
-		ValManager.getDefault().replace(globalPreferencesAsValues);
-	}
-
-	protected boolean disableGlobalValidationDuringProjectCreation() {
-		GlobalPreferences globalPreferences = ValManager.getDefault().getGlobalPreferences();
-		GlobalPreferencesValues globalPreferencesAsValues = globalPreferences.asValues();
-		boolean oldValueForValidation = globalPreferencesAsValues.disableAllValidation;
-		globalPreferencesAsValues.disableAllValidation = true;
-		ValManager.getDefault().replace(globalPreferencesAsValues);
-		return oldValueForValidation;
 	}
 
 	/**
@@ -245,7 +151,7 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 		Xpp3Dom bundleSymbolicName = instructions.getChild("Bundle-SymbolicName"); //$NON-NLS-1$
 		if (bundleSymbolicName == null) {
 			bundleSymbolicName = Xpp3DomBuilder.build(
-					new ByteArrayInputStream(("<Bundle-SymbolicName>" + getBundleSymbolicNameForProjectName(project.getName()) + "</Bundle-SymbolicName>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
+					new ByteArrayInputStream(("<Bundle-SymbolicName>" + BasicProjectCreatorRunnableUtils.getBundleSymbolicNameForProjectName(project.getName()) + "</Bundle-SymbolicName>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
 					StandardCharsets.UTF_8.name());
 			instructions.addChild(bundleSymbolicName);
 		}
@@ -261,151 +167,28 @@ public final class FuseIntegrationProjectCreatorRunnable implements IRunnableWit
 	}
 	
 	/**
-	 * converts a project name into a bundle symbolic name
-	 * 
-	 * @param projectName
-	 * @return
-	 */
-	public String getBundleSymbolicNameForProjectName(String projectName) {
-		return projectName.replaceAll("[^a-zA-Z0-9-_]","");
-	}
-
-	/**
-	 * Switches, if necessary, the perspective of active workbench window to
-	 * Fuse perspective.
-	 *
-	 * @param workbenchWindow
-	 */
-	void switchToFusePerspective(final IWorkbenchWindow workbenchWindow) {
-		IPerspectiveDescriptor activePerspective = workbenchWindow.getActivePage().getPerspective();
-		if (activePerspective == null || !FUSE_PERSPECTIVE_ID.equals(activePerspective.getId())) {
-			workbenchWindow.getShell().getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						workbenchWindow.getWorkbench().showPerspective(FUSE_PERSPECTIVE_ID, workbenchWindow);
-					} catch (WorkbenchException e) {
-						ProjectTemplatesActivator.pluginLog().logError(e);
-					}
-				}
-			});
-		}
-	}
-
-	/**
-	 * Prompts the user for whether to switch perspectives.
-	 *
-	 * @param window
-	 *            The workbench window in which to switch perspectives; must not
-	 *            be <code>null</code>
-	 * @param finalPersp
-	 *            The perspective to switch to; must not be <code>null</code>.
-	 *
-	 * @return <code>true</code> if it's OK to switch, <code>false</code>
-	 *         otherwise
-	 */
-	private boolean confirmPerspectiveSwitch(IWorkbenchWindow window, IPerspectiveDescriptor finalPersp) {
-
-		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
-		String pspm = store.getString(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
-		if (!IDEInternalPreferences.PSPM_PROMPT.equals(pspm)) {
-			// Return whether or not we should always switch
-			return IDEInternalPreferences.PSPM_ALWAYS.equals(pspm);
-		}
-
-		String desc = finalPersp.getDescription();
-		String message;
-		if (desc == null || desc.length() == 0) {
-			message = NLS.bind(ResourceMessages.NewProject_perspSwitchMessage, finalPersp.getLabel());
-		} else {
-			message = NLS.bind(ResourceMessages.NewProject_perspSwitchMessageWithDesc, new String[] { finalPersp.getLabel(), desc });
-		}
-
-		MessageDialogWithToggle dialog = MessageDialogWithToggle.openYesNoQuestion(window.getShell(), ResourceMessages.NewProject_perspSwitchTitle, message,
-				null /* use the default message for the toggle */,
-				false /* toggle is initially unchecked */, store, IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
-		int result = dialog.getReturnCode();
-
-		// If we are not going to prompt anymore propagate the choice.
-		if (dialog.getToggleState()) {
-			String preferenceValue;
-			if (result == IDialogConstants.YES_ID) {
-				// Doesn't matter if it is replace or new window
-				// as we are going to use the open perspective setting
-				preferenceValue = IWorkbenchPreferenceConstants.OPEN_PERSPECTIVE_REPLACE;
-			} else {
-				preferenceValue = IWorkbenchPreferenceConstants.NO_NEW_PERSPECTIVE;
-			}
-
-			// update PROJECT_OPEN_NEW_PERSPECTIVE to correspond
-			PrefUtil.getAPIPreferenceStore().setValue(IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE, preferenceValue);
-		}
-		return result == IDialogConstants.YES_ID;
-	}
-
-	/**
 	 * Open the first detected camel context file in the editor
 	 *
 	 * @param project
 	 */
-	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
+	private void openCamelContextFile(IProject project, IProgressMonitor monitor) throws CoreException {
 		if (project != null) {
 			final IFile[] holder = new IFile[1];
-			searchCamelContextXMLFile(project, holder);
-			try {
-				if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-					searchCamelContextJavaFile(project, monitor, holder);
-					isJavaEditorToOpen = true;
-				}
-			} catch (CoreException e1) {
-				ProjectTemplatesActivator.pluginLog().logError(e1);
+			boolean isJavaEditorToOpen = false;
+			
+			// first looks for xml camel file
+			BasicProjectCreatorRunnableUtils.searchCamelContextXMLFile(project, holder);
+			
+			// if no camel xml found we look for java files
+			if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
+				BasicProjectCreatorRunnableUtils.searchCamelContextJavaFile(project, monitor, holder);
+				isJavaEditorToOpen = true;
 			}
 
+			// if we found something to open then we open the editor
 			if (holder[0] != null) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (!holder[0].exists()) {
-								new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
-							}
-							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-							if(isJavaEditorToOpen){
-								IDE.openEditor(activePage, holder[0], OpenStrategy.activateOnOpen());
-							} else {
-								IDE.setDefaultEditor(holder[0], CamelUtils.CAMEL_EDITOR_ID);
-								IDE.openEditor(activePage, holder[0], CamelUtils.CAMEL_EDITOR_ID, OpenStrategy.activateOnOpen());
-							}
-						} catch (PartInitException e) {
-							ProjectTemplatesActivator.pluginLog().logError("Cannot open camel context file in editor", e); //$NON-NLS-1$
-						}
-					}
-				});
+				BasicProjectCreatorRunnableUtils.openCamelFile(holder[0], monitor, isJavaEditorToOpen);
 			}
 		}
 	}
-
-	/**
-	 * @param project
-	 * @param monitor
-	 * @param holder
-	 */
-	private void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
-		if (f != null) {
-			holder[0] = f;
-		}
-	}
-
-	/**
-	 * @param project
-	 * @param holder
-	 */
-	private void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
-		if(!camelFiles.isEmpty()){
-			holder[0] = camelFiles.iterator().next();
-		}
-	}
-
 }

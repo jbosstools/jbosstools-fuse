@@ -21,7 +21,8 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.ICamelSupport;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 /**
@@ -36,7 +37,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	}
 
 	@Override
-	public boolean configure(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+	public boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);
 		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
@@ -45,9 +46,9 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
 		
-		if (ok) {
+		if (ok && metadata instanceof ICamelSupport) {
 			// by default configure the version of camel used in the pom.xml
-			ok = MavenUtils.configurePomCamelVersion(project, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
+			ok = MavenUtils.configurePomCamelVersion(project, metadata, ((ICamelSupport)metadata).getCamelVersion(), subMonitor.newChild(1));
 		}
 		
 		return ok;

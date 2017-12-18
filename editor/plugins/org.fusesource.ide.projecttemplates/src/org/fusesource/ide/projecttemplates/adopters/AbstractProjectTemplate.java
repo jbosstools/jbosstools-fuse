@@ -25,7 +25,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfig
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * @author lhein
@@ -53,7 +53,7 @@ public abstract class AbstractProjectTemplate {
 	 * @return	true on success, otherwise false
 	 * @throws CoreException	on any error
 	 */
-	public final boolean create(IProject project, NewProjectMetaData projectMetaData, IProgressMonitor monitor) throws CoreException {
+	public final boolean create(IProject project, CommonNewProjectMetaData projectMetaData, IProgressMonitor monitor) throws CoreException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 		// first we create the project template		
 		boolean ok = getCreator(projectMetaData).create(project, projectMetaData, subMonitor.newChild(30));
@@ -89,7 +89,7 @@ public abstract class AbstractProjectTemplate {
 	 * @param projectMetaData
 	 * @return the creator
 	 */
-	public abstract TemplateCreatorSupport getCreator(NewProjectMetaData projectMetaData);
+	public abstract TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData);
 
 	public boolean isCompatible(String camelVersion) {
 		return true;

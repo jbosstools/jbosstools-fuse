@@ -20,7 +20,7 @@ import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
+import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * this class can be used to create a template project from an existing 
@@ -32,10 +32,10 @@ import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 public abstract class ArchetypeTemplateCreator implements TemplateCreatorSupport {
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport#create(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewProjectMetaData)
+	 * @see org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport#create(org.eclipse.core.resources.IProject, org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
 	 */
 	@Override
-	public boolean create(IProject project, NewProjectMetaData metadata, IProgressMonitor monitor) {
+	public boolean create(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.archetypeTemplateCreatorCreatingTemplateFromArchetypeMonitorMessage, 2);
 		Archetype archetype = getArchetype(metadata, subMonitor.newChild(1));
 		
@@ -58,7 +58,7 @@ public abstract class ArchetypeTemplateCreator implements TemplateCreatorSupport
 	 * @param monitor 
 	 * @return	the archetype
 	 */
-	protected abstract Archetype getArchetype(NewProjectMetaData metadata, IProgressMonitor monitor);
+	protected abstract Archetype getArchetype(CommonNewProjectMetaData metadata, IProgressMonitor monitor);
 
 	/**
 	 * returns the java package
