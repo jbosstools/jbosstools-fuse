@@ -61,6 +61,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(CamelDSLType.SPRING);
 		metadata.setBlankProject(true);
+		// we create a blank project
 		metadata.setTemplate(null);
 		
 		testProjectCreation(projectNameSuffix, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", metadata);
@@ -81,6 +82,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		metadata.setTargetRuntime(runtime);
 		metadata.setDslType(CamelDSLType.SPRING);
 		metadata.setBlankProject(true);
+		// we create a blank project
 		metadata.setTemplate(null);
 		
 		testProjectCreation(projectNameSuffix, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", metadata);

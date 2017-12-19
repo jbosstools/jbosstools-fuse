@@ -163,6 +163,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(dsl);
 		metadata.setBlankProject(true);
+		// we create a blank project
 		metadata.setTemplate(null);
 		return metadata;
 	}

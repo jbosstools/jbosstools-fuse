@@ -28,17 +28,11 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIAc
  */
 public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTemplate {
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getConfigurator()
-	 */
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
 		return new MavenTemplateConfigurator(null);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate#getCreator(org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
-	 */
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
 		return new SyndesisProjectCreator();
@@ -49,9 +43,6 @@ public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTem
 		private static final String TEMPLATE_FOLDER = "templates/";
 		private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
 		
-		/* (non-Javadoc)
-		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData)
-		 */
 		@Override
 		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
 			String bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_XML);
