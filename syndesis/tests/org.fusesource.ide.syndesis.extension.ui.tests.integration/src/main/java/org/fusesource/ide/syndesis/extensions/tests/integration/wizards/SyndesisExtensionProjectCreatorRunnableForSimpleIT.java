@@ -16,6 +16,6 @@ public class SyndesisExtensionProjectCreatorRunnableForSimpleIT extends Syndesis
 	
 	@Test
 	public void testSimpleExtensionProjectCreation() throws Exception {
-		testProjectCreation("-SimpleExtensionProject", null, null, null);
+		testProjectCreation("-SimpleExtensionProject", null, null);
 	}
 }

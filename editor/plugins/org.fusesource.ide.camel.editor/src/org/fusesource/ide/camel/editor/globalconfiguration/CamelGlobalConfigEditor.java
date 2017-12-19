@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.editor.globalconfiguration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,15 +21,15 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -160,17 +159,14 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 		createTreeViewer();
 		createRightButtons();
-		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
-			@Override
-			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
-				if (DEFAULT_CAT_ID.equals(o1.getId())) {
-					return 1;
-				}
-				if (DEFAULT_CAT_ID.equals(o2.getId())) {
-					return -1;
-				}
-				return o1.getName().compareTo(o2.getName());
+		this.categoryContributions.sort( (GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) -> {
+			if (DEFAULT_CAT_ID.equals(o1.getId())) {
+				return 1;
 			}
+			if (DEFAULT_CAT_ID.equals(o2.getId())) {
+				return -1;
+			}
+			return o1.getName().compareTo(o2.getName());
 		});
 		reload();
 		this.treeViewer.setInput(this.getModel());
@@ -189,19 +185,15 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		final IBaseLabelProvider labelProvider = new DecoratingStyledCellLabelProvider(new GlobalConfigLabelProvider(this), labelDecorator, null);
 		treeViewer.setLabelProvider(labelProvider);
 		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				Object selObj = Selections.getFirstSelection(event.getSelection());
-				if (selObj != null) {
-					btnModify.setEnabled(supportsEdit(selObj));
-					btnDelete.setEnabled(supportsDelete(selObj));
-				} else {
-					btnModify.setEnabled(false);
-					btnDelete.setEnabled(false);
-				}
+		treeViewer.addSelectionChangedListener( (SelectionChangedEvent event) -> {
+			Object selObj = Selections.getFirstSelection(event.getSelection());
+			if (selObj != null) {
+				btnModify.setEnabled(supportsEdit(selObj));
+				btnDelete.setEnabled(supportsDelete(selObj));
+			} else {
+				btnModify.setEnabled(false);
+				btnDelete.setEnabled(false);
 			}
-
 		});
 		treeViewer.addFilter(new ViewerFilter() {
 			@Override
@@ -283,14 +275,11 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 	@Override
 	public void modelChanged() {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				if (CamelGlobalConfigEditor.this.parentEditor != null
-						&& CamelGlobalConfigEditor.this.equals(CamelGlobalConfigEditor.this.parentEditor.getActiveEditor())) {
-					reload();
-					parentEditor.setDirtyFlag(true);
-				}
+		Display.getDefault().asyncExec( () -> {
+			if (CamelGlobalConfigEditor.this.parentEditor != null && 
+				CamelGlobalConfigEditor.this.equals(CamelGlobalConfigEditor.this.parentEditor.getActiveEditor())) {
+				reload();
+				parentEditor.setDirtyFlag(true);
 			}
 		});
 	}
@@ -318,7 +307,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 					final String elementCategoryId = elem.getCategoryId();
 					final String categoryId = cat.getId();
 					if ( (elementCategoryId.trim().length()<1 && categoryId.equals(FUSE_CAT_ID)) ||
- (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
+						 (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
 						cat.getChildren().add(elem);
 					}
 				}
@@ -420,7 +409,6 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 					}
 				} catch (Exception ex) {
 					CamelEditorUIActivator.pluginLog().logError(ex);
-					continue;
 				}
 			}
 		}
@@ -588,11 +576,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						}
 						List<Dependency> deps = item.getContributor().getElementDependencies();
 						if (deps != null && !deps.isEmpty()) {
-							try {
-								new MavenUtils().updateMavenDependencies(deps);
-							} catch (CoreException ex) {
-								CamelEditorUIActivator.pluginLog().logError("Unable to update pom dependencies for element " + item.getName(), ex);
-							}
+							new MavenUtils().updateMavenDependencies(deps, parentEditor.getEditorInput().getAdapter(IFile.class).getProject());
 						}
 					}
 				}
@@ -730,7 +714,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
 		cme.setXmlNode(newXMLNode);
 		IProject project = cf.getResource().getProject();
-		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, new NullProgressMonitor());
 		cme.setUnderlyingMetaModelObject(camelModel.getEip(eipName));
 		cme.setId(newXMLNode.getAttribute("id"));
 		cme.initialize();
@@ -745,7 +729,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			Object o = Selections.getFirstSelection(sel);
 			AbstractCamelModelElement cme = o instanceof AbstractCamelModelElement ? (AbstractCamelModelElement) o : null;
 			ICustomGlobalConfigElementContribution extHandler = getExtensionForElement(cme);
-			if (extHandler != null) {
+			if (extHandler != null && cme != null) {
 				GlobalConfigurationTypeWizard wizard = extHandler.modifyGlobalElement(parentEditor.getDesignEditor().getModel());
 				if (wizard == null) {
 					try {

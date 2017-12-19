@@ -12,12 +12,9 @@ package org.fusesource.ide.projecttemplates.maven;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -46,6 +43,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectNature;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelFilesFinder;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.JavaCamelFilesFinder;
@@ -58,8 +56,6 @@ import org.fusesource.ide.projecttemplates.util.camel.ICamelFacetDataModelProper
 
 public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 	private static final String ARTFIFACT_ID_CAMEL_PREFIX = "camel-"; //$NON-NLS-1$
 	private static final String GROUP_ID_ORG_APACHE_CAMEL = "org.apache.camel"; //$NON-NLS-1$
 	public static final String WAR_PACKAGE = "WAR"; //$NON-NLS-1$
@@ -329,29 +325,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	 * @return
 	 */
 	private boolean isValidCamelFacetCandidate(IProject project) {
-		Model model = new CamelMavenUtils().getMavenModel(project);
-		if (model != null) {
-			boolean pluginFound = isSyndesisPluginDefined(model.getBuild().getPlugins());
-			if (!pluginFound && model.getBuild().getPluginManagement() != null) { 
-				pluginFound = isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins());
-			}
-			if (!pluginFound) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isSyndesisPluginDefined(List<Plugin> plugins) {
-		if (plugins != null) {
-			for (Plugin p : plugins) {
-				if (SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
-					SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return !new MavenUtils().isSyndesisExtensionProject(project);
 	}
 	
 	/**
