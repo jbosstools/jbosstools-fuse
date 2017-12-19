@@ -62,32 +62,36 @@ public class JavaCamelFilesFinder {
 		try {
 			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder"); //$NON-NLS-1$
 			if (routeBuilderType != null) {
-				try{
-					IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
-					CollectingSearchRequestor requestor = new CollectingSearchRequestor();
-					// @formatter:off
-					final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
-					new SearchEngine().search(searchPattern,
-							new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
-							searchScope,
-							requestor,
-							monitor);
-					// @formatter:on
-					List<SearchMatch> results = requestor.getResults();
-					for (SearchMatch searchMatch : results) {
-						final Object element = searchMatch.getElement();
-						if (element instanceof ResolvedSourceType) {
-							fileToOpen = (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
-						}
-					}}
-				catch (Exception e) {
-					CamelModelServiceCoreActivator.pluginLog().logError(e);
-				}
+				doSearch(javaProject, routeBuilderType, monitor);
 			}
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
 		}
 		return fileToOpen;
+	}
+	
+	private void doSearch(IJavaProject javaProject, IType routeBuilderType, IProgressMonitor monitor) {
+		try{
+			IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
+			CollectingSearchRequestor requestor = new CollectingSearchRequestor();
+			// @formatter:off
+			final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
+			new SearchEngine().search(searchPattern,
+					new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
+					searchScope,
+					requestor,
+					monitor);
+			// @formatter:on
+			List<SearchMatch> results = requestor.getResults();
+			for (SearchMatch searchMatch : results) {
+				final Object element = searchMatch.getElement();
+				if (element instanceof ResolvedSourceType) {
+					fileToOpen = (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
+				}
+			}}
+		catch (Exception e) {
+			CamelModelServiceCoreActivator.pluginLog().logError(e);
+		}
 	}
 	
 	private static void waitJob(int decreasingCounter, IProgressMonitor monitor) throws InterruptedException {
