@@ -31,7 +31,6 @@ import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.internal.core.ResolvedSourceType;
 import org.eclipse.jdt.internal.corext.refactoring.CollectingSearchRequestor;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 
 public class JavaCamelFilesFinder {
@@ -53,40 +52,37 @@ public class JavaCamelFilesFinder {
 		}
 		try {
 			waitJob(20, monitor);
-		} catch (OperationCanceledException | InterruptedException e) {
-			CamelModelServiceCoreActivator.pluginLog().logError(e);
+		} catch (OperationCanceledException opEx) {
+			CamelModelServiceCoreActivator.pluginLog().logError(opEx);
+		} catch (InterruptedException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
+			Thread.currentThread().interrupt();
 		}
 		IJavaProject javaProject = JavaCore.create(project);
 		try {
 			IType routeBuilderType = javaProject.findType("org.apache.camel.builder.RouteBuilder"); //$NON-NLS-1$
 			if (routeBuilderType != null) {
-				Display.getDefault().syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						try{
-							IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
-							CollectingSearchRequestor requestor = new CollectingSearchRequestor();
-							// @formatter:off
-							final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
-							new SearchEngine().search(searchPattern,
-									new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
-									searchScope,
-									requestor,
-									monitor);
-							// @formatter:on
-							List<SearchMatch> results = requestor.getResults();
-							for (SearchMatch searchMatch : results) {
-								final Object element = searchMatch.getElement();
-								if (element instanceof ResolvedSourceType) {
-									fileToOpen = (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
-								}
-							}}
-						catch (Exception e) {
-							CamelModelServiceCoreActivator.pluginLog().logError(e);
+				try{
+					IJavaSearchScope searchScope = SearchEngine.createStrictHierarchyScope(javaProject, routeBuilderType, true, false, null);
+					CollectingSearchRequestor requestor = new CollectingSearchRequestor();
+					// @formatter:off
+					final SearchPattern searchPattern = SearchPattern.createPattern("*", IJavaSearchConstants.CLASS, IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_PATTERN_MATCH); //$NON-NLS-1$
+					new SearchEngine().search(searchPattern,
+							new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant() },
+							searchScope,
+							requestor,
+							monitor);
+					// @formatter:on
+					List<SearchMatch> results = requestor.getResults();
+					for (SearchMatch searchMatch : results) {
+						final Object element = searchMatch.getElement();
+						if (element instanceof ResolvedSourceType) {
+							fileToOpen = (IFile) ((ResolvedSourceType) element).getCompilationUnit().getCorrespondingResource();
 						}
-					}
-				});
+					}}
+				catch (Exception e) {
+					CamelModelServiceCoreActivator.pluginLog().logError(e);
+				}
 			}
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError(ex);
@@ -107,6 +103,7 @@ public class JavaCamelFilesFinder {
 			// Workaround to bug
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
 			waitJob(decreasingCounter-1 , monitor);
+			Thread.currentThread().interrupt();
 		}
 	}
 
