@@ -248,11 +248,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     }
     
     private void updateProjectDeps(List<Dependency> dependencies) { 
-	    try { 
-			new MavenUtils().updateMavenDependencies(dependencies, project);	
-		} catch (CoreException ex) {
-			Activator.log(new Status(ERROR, Activator.PLUGIN_ID, ex.getMessage()));
-		}
+	    new MavenUtils().updateMavenDependencies(dependencies, project);	
     }
 
     private ICompilationUnit createJavaClass(String packageName,

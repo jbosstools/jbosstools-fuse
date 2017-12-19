@@ -13,6 +13,7 @@ package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.WorkbenchException;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
@@ -55,13 +57,12 @@ import org.junit.Before;
 public abstract class SyndesisExtensionProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
 
 	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
-	protected static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
 	boolean buildFinished = false;
 	boolean buildOK = false;
 	
 	@Before
-	public void setup() throws Exception {
+	public void setup() throws WorkbenchException {
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 
@@ -96,7 +97,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		return metadata;
 	}
 	
-	protected void testProjectCreation(String projectNameSuffix, SyndesisExtension extension, String camelPath, String syndesisPath) throws Exception {
+	protected void testProjectCreation(String projectNameSuffix, String camelPath, String syndesisPath) throws InterruptedException, InvocationTargetException, CoreException, MalformedObjectNameException, IOException {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
@@ -113,10 +114,9 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		final IFile camelResource = project.getFile(Strings.isBlank(camelPath) ? CAMEL_RESOURCE_PATH : camelPath);
 		assertThat(camelResource.exists()).isTrue();
 
-		final IFile syndesisResource = project.getFile(Strings.isBlank(syndesisPath) ? SYNDESIS_RESOURCE_PATH : syndesisPath);
+		final IFile syndesisResource = project.getFile(Strings.isBlank(syndesisPath) ? SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH : syndesisPath);
 		assertThat(syndesisResource.exists()).isTrue();
 		
-		// TODO: wait for all build job to finish?
 		waitJob();
 
 		checkCamelEditorOpened(camelResource);
@@ -238,5 +238,4 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		}
 		assertThat(buildOK).isTrue();
 	}
-
 }

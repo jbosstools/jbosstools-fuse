@@ -56,6 +56,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 
 	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
 	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
+	public static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
 	private NewSyndesisExtensionProjectMetaData syndesisMetaData;
 	
@@ -178,7 +179,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	
 	private void openSyndesisConfiguration(IProject project, IProgressMonitor monitor) {
 		if (project != null) {
-			final IFile holder = project.getFile("src/main/resources/META-INF/syndesis/syndesis-extension-definition.json");
+			final IFile holder = project.getFile(SYNDESIS_RESOURCE_PATH);
 			Display.getDefault().asyncExec( () -> {
 				try {
 					if (!holder.exists()) {

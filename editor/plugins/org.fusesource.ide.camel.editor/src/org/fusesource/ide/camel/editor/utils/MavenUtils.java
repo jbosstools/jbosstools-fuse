@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -44,6 +45,9 @@ import org.fusesource.ide.foundation.ui.util.Shells;
  * @author lhein
  */
 public class MavenUtils {
+
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
+    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 
 	private static final String CAMEL_GROUP_ID = "org.apache.camel";
 	private static final String CAMEL_CORE_ARTIFACT_ID = "camel-core";
@@ -76,10 +80,10 @@ public class MavenUtils {
 	 *            the Maven dependencies to be updated
 	 * @throws CoreException
 	 * 
-	 * @Deprecated Use {@link #updateMavenDependencies(`List<Dependency>, IProject)} instead to avoid relying upon external system configuration.
+	 * @deprecated Use {@link #updateMavenDependencies(`List<Dependency>, IProject)} instead to avoid relying upon external system configuration.
 	 */
 	@Deprecated
-	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) {
 		final IProject project = CamelUtils.project();
 		if (project == null) {
 			CamelEditorUIActivator.pluginLog().logWarning(
@@ -89,7 +93,7 @@ public class MavenUtils {
 		updateMavenDependencies(compDeps, project);
 	}
 	
-	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) throws CoreException {
+	public void updateMavenDependencies(final List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project) {
 		if (compDeps == null || compDeps.isEmpty()) {
 			CamelEditorUIActivator.pluginLog()
 					.logWarning("Unable to add component dependencies because no dependencies were specified.");
@@ -117,49 +121,61 @@ public class MavenUtils {
 	 */
 	public void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, IProject project, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
-		final File pomFile = getPomFile(project);
 		CamelMavenUtils cmu = new CamelMavenUtils();
+		final File pomFile = getPomFile(project);
 		final Model model = cmu.getMavenModel(project);
-		List<Dependency> deps = cmu.getDependencyList(project);
+
+		List<Dependency> projectDependencies = cmu.getDependencyList(project);
 
 		// then check if component dependency is already a dep
-		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<>();
-		String scope = null;
-		for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
+		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDependencies = new ArrayList<>();
+		String scope = determineScopeOfCamelCoreDependency(projectDependencies);
+		determineMissingDependencies(compDeps, projectDependencies, missingDependencies);
+		subMonitor.worked(1);
+
+		addDependency(model, missingDependencies, scope);
+		subMonitor.worked(1);
+
+		if (!missingDependencies.isEmpty()) {
+			writeNewPomFile(project, pomFile, model, subMonitor.split(8));
+		}
+		subMonitor.setWorkRemaining(0);
+	}
+
+	private void determineMissingDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps, List<Dependency> projectDependencies, List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDependencies) {
+		for (org.fusesource.ide.camel.model.service.core.catalog.Dependency catalogConnectorDependency : compDeps) {
 			boolean found = false;
-			for (Dependency pomDep : deps) {
-				if (scope == null &&
-						CAMEL_GROUP_ID.equalsIgnoreCase(pomDep.getGroupId()) &&
-						CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId()) &&
-						SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
-					scope = pomDep.getScope();
-				}
-				if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId())
-						&& pomDep.getArtifactId().equalsIgnoreCase(conDep.getArtifactId())) {
+			for (Dependency pomDep : projectDependencies) {
+				if (pomDep.getGroupId().equalsIgnoreCase(catalogConnectorDependency.getGroupId()) && 
+					pomDep.getArtifactId().equalsIgnoreCase(catalogConnectorDependency.getArtifactId())) {
 					// check for correct version
-					if (pomDep.getVersion() == null || !pomDep.getVersion().equalsIgnoreCase(conDep.getVersion())) {
+					if (pomDep.getVersion() == null || !pomDep.getVersion().equalsIgnoreCase(catalogConnectorDependency.getVersion())) {
 						// not the correct version - change it to fit
-						pomDep.setVersion(conDep.getVersion());
+						pomDep.setVersion(catalogConnectorDependency.getVersion());
 					}
 					found = true;
 					break;
 				}
 			}
 			if (!found) {
-				missingDeps.add(conDep);
+				missingDependencies.add(catalogConnectorDependency);
 			}
 		}
-		subMonitor.worked(1);
-
-		addDependency(model, missingDeps, scope);
-		subMonitor.worked(1);
-
-		if (!missingDeps.isEmpty()) {
-			writeNewPomFile(project, pomFile, model, subMonitor.split(8));
-		}
-		subMonitor.setWorkRemaining(0);
 	}
-
+	
+	private String determineScopeOfCamelCoreDependency(List<Dependency> projectDependencies) {
+		String scope = null;
+		for (Dependency pomDep : projectDependencies) {
+			if (CAMEL_GROUP_ID.equalsIgnoreCase(pomDep.getGroupId()) &&
+				CAMEL_CORE_ARTIFACT_ID.equalsIgnoreCase(pomDep.getArtifactId()) &&
+				SCOPE_PROVIDED.equalsIgnoreCase(pomDep.getScope())) {
+				scope = pomDep.getScope();
+				break;
+			}
+		}
+		return scope;
+	}
+	
 	/**
 	 * @param project
 	 * @return the POM file for the supplied project
@@ -251,5 +267,31 @@ public class MavenUtils {
 				CamelEditorUIActivator.pluginLog().logError(ex);
 			}
 		}
+	}
+	
+	public boolean isSyndesisExtensionProject(IProject project) {
+		Model model = new CamelMavenUtils().getMavenModel(project);
+		if (model != null) {
+			boolean pluginFound = isSyndesisPluginDefined(model.getBuild().getPlugins());
+			if (!pluginFound && model.getBuild().getPluginManagement() != null) { 
+				pluginFound = isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins());
+			}
+			if (!pluginFound) {
+				return true;
+			}
+		}
+		return false;
+	}	
+	
+	public boolean isSyndesisPluginDefined(List<Plugin> plugins) {
+		if (plugins != null) {
+			for (Plugin p : plugins) {
+				if (SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
+					SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
