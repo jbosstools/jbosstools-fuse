@@ -58,7 +58,7 @@ public class DataFormatsInCamelModelElementIT {
 	}
 	
 	@Test
-	public void testDataFormatsInUnmarshal_notRemovedWhenUpdatingRefParameter() throws IOException, CoreException {
+	public void testDataFormatsInUnmarshalNotRemovedWhenUpdatingRefParameter() throws IOException, CoreException {
 		String name = "unmarshalSample.xml";
 
 		InputStream inputStream = CamelIOHandlerIT.class.getClassLoader().getResourceAsStream("/" + name);
@@ -72,6 +72,7 @@ public class DataFormatsInCamelModelElementIT {
 
 		CamelFile model1 = new CamelIOHandler().loadCamelModel(fileInProject, new NullProgressMonitor());
 
+		assertThat(model1.getRouteContainer().getChildElements()).isNotEmpty();
 		final AbstractCamelModelElement unmarshallElement = model1.getRouteContainer().getChildElements().get(0).getChildElements().get(0);
 		assertThat(unmarshallElement.getNodeTypeId()).isEqualTo("unmarshal");
 		unmarshallElement.setParameter("ref", "");
