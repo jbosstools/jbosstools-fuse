@@ -49,9 +49,15 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>io.syndesis</groupId>
+        <artifactId>integration-runtime</artifactId>
+        <version>${syndesis.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-
 
   <dependencies>
     <!-- annotation processing -->
@@ -78,13 +84,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <!-- project dependencies -->
-    <dependency>
-      <groupId>com.github.lalyos</groupId>
-      <artifactId>jfiglet</artifactId>
-      <version>0.0.8</version>
     </dependency>
 
     <!-- testing -->
