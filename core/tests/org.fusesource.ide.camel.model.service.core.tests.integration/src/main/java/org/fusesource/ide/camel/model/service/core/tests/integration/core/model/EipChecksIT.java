@@ -12,12 +12,10 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.model
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -46,31 +44,31 @@ public class EipChecksIT {
 	}
 
 	@Test
-	public void testChoiceEipModelCanContainWhen() throws IOException, CoreException {
+	public void testChoiceEipModelCanContainWhen() {
 		assertThisEIPCanContainThat(AbstractCamelModelElement.CHOICE_NODE_NAME, AbstractCamelModelElement.WHEN_NODE_NAME);
 	}
 
 	@Test
-	public void testRouteEipModelCanContainWireTap() throws IOException, CoreException {
+	public void testRouteEipModelCanContainWireTap() {
 		assertThisEIPCanContainThat(AbstractCamelModelElement.ROUTE_NODE_NAME, AbstractCamelModelElement.WIRETAP_NODE_NAME);
 	}
 
 	@Test
-	public void testWhenEipModelCanContainWireTap() throws IOException, CoreException {
+	public void testWhenEipModelCanContainWireTap() {
 		assertThisEIPCanContainThat(AbstractCamelModelElement.WHEN_NODE_NAME, AbstractCamelModelElement.WIRETAP_NODE_NAME);
 	}
 	
 	@Test
-	public void testWireTapCanBeChildOfAllContainers() throws IOException, CoreException {
+	public void testWireTapCanBeChildOfAllContainers() {
 		Collection<Eip> eips = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(versionToTest).getEips();
 		for (Eip eip : eips) {
-			if (eip.canHaveChildren() == false || eip.getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) continue;
+			if (!eip.canHaveChildren() || eip.getName().equalsIgnoreCase(AbstractCamelModelElement.CHOICE_NODE_NAME)) continue;
 			assertThisEIPCanContainThat(eip.getName(), AbstractCamelModelElement.WIRETAP_NODE_NAME);
 		}
 	}
 
 	@Test
-	public void testExpressionsHaveOneOfValuesAvailable() throws IOException, CoreException {
+	public void testExpressionsHaveOneOfValuesAvailable() {
 		Collection<Eip> eips = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(versionToTest).getEips();
 		for (Eip eip : eips) {
 			for (Parameter p : eip.getParameters() ) {
@@ -92,6 +90,7 @@ public class EipChecksIT {
 	
 	private void assertThisEIPCanContainThat(String eipContainer, String eipChild) {
 		Eip container = CamelCatalogCacheManager.getInstance().getDefaultCamelModel(versionToTest).getEip(eipContainer);
+		assertThat(container).isNotNull();
 		assertThat(container.canHaveChildren()).isTrue();
 		assertThat(container.getAllowedChildrenNodeTypes()).describedAs("Container " + eipContainer + " is not defined to allow child of type " + eipChild).contains(eipChild);
 	}
