@@ -11,7 +11,8 @@
 package org.fusesource.ide.syndesis.extensions.ui.internal;
 
 import org.eclipse.core.runtime.Platform;
-import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.preferences.PreferenceManager;
+import org.fusesource.ide.preferences.StagingRepositoriesConstants;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
@@ -64,8 +65,11 @@ public class SyndesisExtensionsUIActivator extends BaseUIPlugin {
 	}
 
 	private void registerSyndesisSnapshotsRepository() {
-		StagingRepositoriesPreferenceInitializer initializer = new StagingRepositoriesPreferenceInitializer();
-		initializer.addStagingRepository(SYNDESIS_SNAPSHOTS_KEY, SYNDESIS_SNAPSHOTS_URI);
+		String repoString = PreferenceManager.getInstance().loadPreferenceAsString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
+		if (repoString.indexOf(SYNDESIS_SNAPSHOTS_URI) == -1) {
+			repoString = String.format("%s%s%s%s%s", repoString, repoString.endsWith(StagingRepositoriesConstants.REPO_SEPARATOR) ? "" : StagingRepositoriesConstants.REPO_SEPARATOR, SYNDESIS_SNAPSHOTS_KEY, StagingRepositoriesConstants.NAME_URL_SEPARATOR, SYNDESIS_SNAPSHOTS_URI);
+			PreferenceManager.getInstance().savePreference(StagingRepositoriesConstants.STAGING_REPOSITORIES, repoString);
+		}
 	}
 
 	/**
