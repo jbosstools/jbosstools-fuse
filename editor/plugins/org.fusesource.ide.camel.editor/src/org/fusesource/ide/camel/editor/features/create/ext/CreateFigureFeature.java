@@ -16,6 +16,7 @@ import static org.fusesource.ide.camel.model.service.core.model.AbstractCamelMod
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
@@ -31,7 +32,6 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
@@ -593,9 +593,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	public void updateMavenDependencies(final List<Dependency> compDeps) throws CoreException {
 		CamelDesignEditor editor = (CamelDesignEditor) getDiagramBehavior().getDiagramContainer();
 		IFacetedProject fproj = ProjectFacetsManager.create(editor.getWorkspaceProject());
-		IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
-		if (fproj != null && fproj.hasProjectFacet(camelFacet)) {
-			final String m2CamelVersion = new CamelMavenUtils().getCamelVersionFromMaven(CamelUtils.project());
+		if (fproj != null) {
+			final String m2CamelVersion = new CamelMavenUtils().getCamelVersionFromMaven(fproj.getProject());
 			if (m2CamelVersion != null) {
 				updateDepsVersion(compDeps, m2CamelVersion);
 				new MavenUtils().updateMavenDependencies(compDeps, fproj.getProject());
@@ -620,9 +619,8 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * @return the eip or null if not found
 	 */
 	public Eip getEipByName(String name) {
-		// TODO: project camel version vs latest camel version
 		// then get the meta model for the given camel version
-		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project());
+		CamelModel model = CamelCatalogCacheManager.getInstance().getCamelModelForProject(CamelUtils.project(), new NullProgressMonitor());
 		if (model == null) {
 			return null;
 		}
