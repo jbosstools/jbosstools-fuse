@@ -82,7 +82,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 	public static final IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
 
 	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
-	protected static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/extension-definition.json";
+	protected static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
     public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
     
