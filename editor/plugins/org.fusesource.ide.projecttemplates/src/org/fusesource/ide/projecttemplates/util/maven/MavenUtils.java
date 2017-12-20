@@ -31,6 +31,8 @@ import org.fusesource.ide.camel.editor.provider.ext.IDependenciesManager;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.preferences.PreferenceManager;
+import org.fusesource.ide.preferences.StagingRepositoriesConstants;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -263,8 +265,9 @@ public class MavenUtils {
 	 */
 	public static boolean manageStagingRepositories(Model mavenModel) {
 		if(new StagingRepositoriesPreferenceInitializer().isStagingRepositoriesEnabled()){
+			String stagingRepoString = PreferenceManager.getInstance().loadPreferenceAsString(StagingRepositoriesConstants.STAGING_REPOSITORIES);
 			boolean hasBeenUpdated = false;
-			for(List<String> nameURlPair : new StagingRepositoriesPreferenceInitializer().getStagingRepositories()){
+			for(List<String> nameURlPair : new StagingRepositoriesPreferenceInitializer().getStagingRepositoriesAsList(stagingRepoString)) {
 				String repoURI = nameURlPair.get(1);
 				hasBeenUpdated |= MavenUtils.ensureRepositoryExists(mavenModel.getRepositories(), repoURI, nameURlPair.get(0));
 				hasBeenUpdated |= MavenUtils.ensureRepositoryExists(mavenModel.getPluginRepositories(), repoURI, nameURlPair.get(0));

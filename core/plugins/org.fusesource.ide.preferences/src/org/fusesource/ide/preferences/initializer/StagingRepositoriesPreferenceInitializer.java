@@ -104,7 +104,10 @@ public class StagingRepositoriesPreferenceInitializer extends AbstractPreference
 	 * @param repoUrl	the url of the repo
 	 */
 	public void addStagingRepository(String repoName, String repoUrl) {
-		String newRepoString = String.format("%s%s%s%s%s", getStagingRepositoriesString(), StagingRepositoriesConstants.REPO_SEPARATOR, repoName, StagingRepositoriesConstants.NAME_URL_SEPARATOR, repoUrl);
-		getPreferenceStore().setValue(StagingRepositoriesConstants.STAGING_REPOSITORIES, newRepoString);
+		// do not duplicate URIs
+		if (getStagingRepositoriesString().indexOf(repoUrl) != -1) {
+			String newRepoString = String.format("%s%s%s%s%s", getStagingRepositoriesString(), StagingRepositoriesConstants.REPO_SEPARATOR, repoName, StagingRepositoriesConstants.NAME_URL_SEPARATOR, repoUrl);
+			getPreferenceStore().setValue(StagingRepositoriesConstants.STAGING_REPOSITORIES, newRepoString);
+		}
 	}
 }
