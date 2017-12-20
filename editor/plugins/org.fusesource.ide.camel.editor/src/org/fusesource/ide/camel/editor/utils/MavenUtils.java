@@ -276,7 +276,7 @@ public class MavenUtils {
 			if (!pluginFound && model.getBuild().getPluginManagement() != null) { 
 				pluginFound = isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins());
 			}
-			if (!pluginFound) {
+			if (pluginFound) {
 				return true;
 			}
 		}
