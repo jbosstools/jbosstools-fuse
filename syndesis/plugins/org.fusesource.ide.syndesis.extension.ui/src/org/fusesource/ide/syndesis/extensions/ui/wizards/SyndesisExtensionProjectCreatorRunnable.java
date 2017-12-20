@@ -321,7 +321,7 @@ public final class SyndesisExtensionProjectCreatorRunnable implements IRunnableW
 
 	private void openSyndesisConfiguration(IProject project, IProgressMonitor monitor) {
 		if (project != null) {
-			final IFile holder = project.getFile("src/main/resources/META-INF/syndesis/extension-definition.json");
+			final IFile holder = project.getFile("src/main/resources/META-INF/syndesis/syndesis-extension-definition.json");
 			Display.getDefault().asyncExec( () -> {
 				try {
 					if (!holder.exists()) {
