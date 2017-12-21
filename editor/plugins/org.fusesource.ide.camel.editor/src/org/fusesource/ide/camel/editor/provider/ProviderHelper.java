@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
@@ -136,20 +137,28 @@ public class ProviderHelper {
     	model.getEips().forEach(imageProvider::addIconsForEIP);
     }
 
-    /**
-     * returns the correct category from a list of tags for a given eip
-     * 
-     * @param tags
-     * @return
-     */
-    public static String getCategoryFromTags(List<String> tags) {
-    	return tags.get(0); // TODO: we need a good way to find out the correct category for a tag list
-    }
-    
     public static String getCategoryFromEip(Eip eip) {
     	if (categoryMap.containsKey(eip.getName())) {
     		return categoryMap.get(eip.getName());
-    	}
+    	} else if (eip.getTags() != null && !eip.getTags().isEmpty()) {
+    		return getCategoryFromTags(eip);
+    	}	
+    	CamelEditorUIActivator.pluginLog().logWarning("Unable to categorize the element " + eip.getName() + " in the palette. Ignoring it.");
     	return "NONE";
+    }
+    
+    public static String getCategoryFromTags(Eip eip) {
+    	List<String> tags = eip.getTags();
+    	
+    	if (tags.contains("endpoint") || eip.getName().equalsIgnoreCase("log")) {
+    		return CATEGORY_COMPONENTS;
+    	} else if (tags.contains("error")) {
+    		return CATEGORY_CONTROL_FLOW;
+    	} else if (tags.contains("routing") || tags.contains("configuration")) {
+    		return CATEGORY_ROUTING;
+    	}else if (tags.contains("transformation") || tags.contains("dataformat")) {
+    		return CATEGORY_TRANSFORMATION;
+    	}
+    	return CATEGORY_MISC;
     }
 }
