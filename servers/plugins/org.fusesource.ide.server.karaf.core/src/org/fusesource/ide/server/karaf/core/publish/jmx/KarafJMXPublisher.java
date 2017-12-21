@@ -21,15 +21,22 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.foundation.ui.util.UIHelper;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.core.tree.Root;
 
 /**
  * this publisher can be used for deploying a local bundle / jar file to a local running karaf instance
@@ -134,6 +141,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
+			refreshJMXView();
 			disconnect(server);
 		}
 		return IServer.STATE_UNKNOWN;
@@ -175,7 +183,8 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-			disconnect(server);
+			refreshJMXView();
+			disconnect(server);			
 		}
 		return unpublished;
 	}
@@ -187,7 +196,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @param bundleId
 	 * @return
 	 */
-	private boolean reinstallBundle(IServer server, long bundleId, IPath file) throws CoreException {
+	private boolean reinstallBundle(IServer server, long bundleId, IPath file) {
 		if (file != null) {
 			return this.jmxPublisher.updateBundle(mbsc, bundleId, file.toOSString());
 		}
@@ -200,11 +209,49 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @param module
 	 * @return
 	 */
-	private long installBundle(IServer server, IPath file) throws CoreException {
+	private long installBundle(IServer server, IPath file) {
 		if (file != null) {
-			long bundleId = this.jmxPublisher.installBundle(mbsc, file.toOSString().replace("file:", ""));
-			return bundleId;
+			return this.jmxPublisher.installBundle(mbsc, file.toOSString().replace("file:", ""));
 		}
 		return -1;
+	}
+	
+	protected void refreshJMXView() {
+		Display.getDefault().asyncExec( () -> {
+			CommonNavigator nav = getNavigator();
+			Root root = getAffectedServerEntry(nav);
+			if (root != null) {
+				root.refresh();
+			}
+			if (nav != null) {
+				nav.getCommonViewer().refresh();
+			}
+		});
+	}
+	
+	private Root getAffectedServerEntry(CommonNavigator nav) {
+		if (nav != null) {
+			nav.getCommonViewer().refresh();
+			for (Object o : nav.getCommonViewer().getExpandedElements()) {
+				if (o instanceof IConnectionWrapper) {
+					IConnectionWrapper cw = (IConnectionWrapper)o;
+					return cw.getRoot();
+				}
+			}
+		}
+		return null;
+	}
+	
+	private CommonNavigator getNavigator() {
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			if (page != null) {
+				IViewPart viewPart = page.findView(UIHelper.ID_SERVERS_VIEW);
+				if (viewPart instanceof CommonNavigator) {
+					return (CommonNavigator)viewPart;
+				}
+			}
+		}
+		return null;					
 	}
 }
