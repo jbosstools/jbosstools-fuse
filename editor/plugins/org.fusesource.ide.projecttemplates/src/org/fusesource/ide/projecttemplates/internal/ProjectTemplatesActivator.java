@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
@@ -174,7 +175,7 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 		 */
       	public boolean visit(IResourceDelta delta) {
 			IResource res = delta.getResource();
-			if (!res.getName().equalsIgnoreCase("pom.xml")) return true;
+			if (!isRelevantResource(res)) return true;
 			switch (delta.getKind()) {
 				case IResourceDelta.ADDED:
 				case IResourceDelta.CHANGED:
@@ -187,9 +188,16 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 			return false; 
       	}
       	
+      	private boolean isRelevantResource(IResource res) {
+      		return 	res != null &&
+      				res.getName().equalsIgnoreCase("pom.xml") && 
+      				!res.getParent().getName().equalsIgnoreCase("bin") && 
+      				!res.getParent().getName().equalsIgnoreCase("target");
+      	}
+      	
       	private void validateConfiguredCamelVersionMatchesLoadedCamelVersion(IResource res) {
       		Display.getDefault().asyncExec( () -> {
-		  		String loadedCatalogVersion = CamelCatalogCacheManager.getInstance().getCamelModelForProject(res.getProject()).getVersion();
+		  		String loadedCatalogVersion = CamelCatalogCacheManager.getInstance().getCamelModelForProject(res.getProject(), new NullProgressMonitor()).getVersion();
 				String configuredCamelVersionFromPOM = new CamelMavenUtils().getCamelVersionFromMaven(res.getProject());
 				try {
 					while (!listenForEvents.compareAndSet(true, false)) {
