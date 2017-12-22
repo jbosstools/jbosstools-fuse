@@ -5,10 +5,7 @@
 - my operating system and version
 - used Development IDE and version
 - used Fuse Tooling version
-
-## The issue summary
-
-Explain what you think is wrong.
+- used Java JDK Version and Name
 
 ## Expected Behaviour
 
