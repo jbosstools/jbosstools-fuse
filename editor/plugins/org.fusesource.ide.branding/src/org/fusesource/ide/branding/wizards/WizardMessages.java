@@ -140,58 +140,6 @@ public final class WizardMessages extends NLS {
 	public static String NewCamelXMLWizardPage_statusInvalidExtension;
 	public static String NewCamelXMLWizardPage_statusFileAlreadyExists;
 	
-	// new project wizard
-	public static String wizardProjectTitle;
-	public static String wizardProjectPageProjectTitle;
-	public static String wizardProjectPageProjectDescription;
-	
-	public static String wizardProjectPageMaven2ValidatorArtifactID;
-	public static String wizardProjectPageMaven2ValidatorArtifactIDnospaces;
-	public static String wizardProjectPageMaven2ValidatorArtifactIDinvalid;
-	public static String wizardProjectPageMaven2ValidatorGroupID;
-	public static String wizardProjectPageMaven2ValidatorGroupIDnospaces;
-	public static String wizardProjectPageMaven2ValidatorGroupIDinvalid;
-	
-	public static String wizardProjectPageProjectValidatorProjectLocation;
-	public static String wizardProjectPageProjectValidatorInvalidLocation;
-	
-	public static String MavenProjectWizardLocationPage_btnUserDefault;
-	public static String MavenProjectWizardLocationPage_lblLocation;
-	public static String MavenProjectWizardLocationPage_btnLocation;
-	public static String MavenProjectWizardLocationPage_dialog_location;
-	
-	public static String WorkingSetGroup_btnAddSet;
-	public static String WorkingSetGroup_lblSet;
-	public static String WorkingSetGroup_btnMore;
-
-
-	public static String wizardProjectPageArchetypeTitle;
-	public static String wizardProjectPageArchetypeDescription;
-	public static String MavenProjectWizardArchetypePage_lblFilter;
-	
-	public static String artifactComponentGroupId;
-	public static String artifactComponentArtifactId;
-	public static String artifactComponentVersion;
-	public static String artifactComponentPackage;
-	
-	public static String wizardProjectPageMaven2ValidatorVersion;
-	public static String MavenProjectWizardArchetypeParametersPage_error_package;
-	public static String wizardProjectPageMaven2ValidatorProjectNameInvalid;
-	public static String wizardProjectPageMaven2ValidatorRequiredProperty;
-
-	public static String wizardProjectPageArchetypeColumnGroupId;
-	public static String wizardProjectPageArchetypeColumnArtifactId;
-	public static String wizardProjectPageArchetypeColumnVersion;
-
-	public static String MavenProjectWizardArchetypePage_error_read;
-	
-	public static String wizardProjectJobFailed;
-	public static String wizardProjectErrorPomAlreadyExists;
-	public static String importProjectExists;
-	public static String wizardProjectJobCreating;
-	public static String failedToOpenArchetype;
-	public static String wizardProjectPageMaven2ValidatorRequiredArchetype;
-	
 	public static String NewMessageWizard_Title;
 	public static String NewMessageWizardPage_pageTitle;
 	public static String NewMessageWizardPage_description;
