@@ -44,12 +44,10 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL = System.getProperty(CAMEL_TO_BOM_MAPPING_PROPERTY, CAMEL_TO_BOM_MAPPING_DEFAULT_URL);
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7.url";
-	//TODO: change to jbostools master branch after merge
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2578-UpgradeToCamel2.20Internally/configuration/camel2bom.fuse7.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7 = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL);
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7wildfly.url";
-	//TODO: change to jbostools master branch after merge
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2680-SupportDifferetnBomsAndNotReleasedOne/configuration/camel2bom.fuse7wildfly.properties";
+	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7wildfly.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);
 
 	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
