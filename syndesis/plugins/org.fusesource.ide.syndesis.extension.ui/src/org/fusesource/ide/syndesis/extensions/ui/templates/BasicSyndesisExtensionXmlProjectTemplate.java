@@ -33,7 +33,7 @@ public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTem
 	 */
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator();
+		return new MavenTemplateConfigurator(null);
 	}
 	
 	/* (non-Javadoc)
