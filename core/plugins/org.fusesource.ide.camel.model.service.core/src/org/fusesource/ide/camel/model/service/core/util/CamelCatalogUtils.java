@@ -131,13 +131,13 @@ public class CamelCatalogUtils {
 	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
 	private static final List<String> TEST_CAMEL_VERSIONS;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING;
-	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING;
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING;
 	
 	static {
 		CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new HashMap<>();
-		CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING = new HashMap<>();
+		CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING = new HashMap<>();
 		CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new HashMap<>();
 		CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING = new HashMap<>();
 		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
@@ -189,20 +189,20 @@ public class CamelCatalogUtils {
 		
 			for(String camelVersion : fisMapping.stringPropertyNames()) {
 				String bomVersion = fisMapping.getProperty(camelVersion);
-				CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(camelVersion, bomVersion);
+				CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(camelVersion, bomVersion);
 			}
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
 
 			// DEFAULTS
-			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
-			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
-			CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
+			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
+			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
+			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
 		}
 
 		initCamelVersionToTest();
 		
-		ALL_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.keySet());
+		ALL_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS);
 	}
 
@@ -257,7 +257,7 @@ public class CamelCatalogUtils {
 	}
 	
 	public static List<String> getPureFISVersions() {
-		return Arrays.asList(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.keySet().toArray(new String[CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.size()]));
+		return Arrays.asList(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet().toArray(new String[CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.size()]));
 	}
 	
 	/**
@@ -289,14 +289,13 @@ public class CamelCatalogUtils {
 		if(fuseBomUsed != null) {
 			if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
 				bomVersion = getFuse6BomVersion(camelVersion);
-			} else if(isBom(FuseBomFilter.BOM_FUSE_6_FIS, fuseBomUsed)) {
-				bomVersion = getFUSE6FISBomVersion(camelVersion);
+			} else if(isBom(FuseBomFilter.BOM_FUSE_FIS, fuseBomUsed)) {
+				bomVersion = getFuseFISBomVersion(camelVersion);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
-				bomVersion = getFUSE7BomVersion(camelVersion, project, monitor);
+				bomVersion = getFuse7BomVersion(camelVersion, project, monitor);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
 				bomVersion = getFuse7WildflyBomVersion(camelVersion, project, monitor);
 			}
-			//TODO add case for FIS for Fuse 7 when they will be known
 		}
 		return bomVersion;
 	}
@@ -309,7 +308,7 @@ public class CamelCatalogUtils {
 		}
 	}
 
-	protected static String getFUSE7BomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
+	protected static String getFuse7BomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
 		if (CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
 		} else {
@@ -317,11 +316,11 @@ public class CamelCatalogUtils {
 		}
 	}
 
-	protected static String getFUSE6FISBomVersion(String camelVersion) {
-		if(CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion)) {
-			return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.get(camelVersion);
+	protected static String getFuseFISBomVersion(String camelVersion) {
+		if(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.containsKey(camelVersion)) {
+			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(camelVersion);
 		} else {
-			return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
 		}
 	}
 
@@ -344,7 +343,7 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static boolean isPureFISVersion(String camelVersion) {
-		return CAMEL_VERSION_2_FUSE_6_FIS_BOM_MAPPING.containsKey(camelVersion);
+		return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.containsKey(camelVersion);
 	}
 	
 	/**
