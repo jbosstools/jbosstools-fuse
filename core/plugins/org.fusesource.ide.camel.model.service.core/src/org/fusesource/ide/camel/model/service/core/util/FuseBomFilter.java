@@ -22,13 +22,13 @@ public class FuseBomFilter implements Predicate<Dependency> {
 	public static final Dependency BOM_FUSE_6;
 	public static final Dependency BOM_FUSE_7_WILDFLY;
 	public static final Dependency BOM_FUSE_7;
-	public static final Dependency BOM_FUSE_6_FIS;
+	public static final Dependency BOM_FUSE_FIS;
 	
 	static {
 		BOM_FUSE_6 = initPossibleBomWith("org.jboss.fuse.bom", "jboss-fuse-parent");
 		BOM_FUSE_7_WILDFLY = initPossibleBomWith("org.wildfly.camel", "wildfly-camel-bom");
 		BOM_FUSE_7 = initPossibleBomWith("org.jboss.fuse", "jboss-fuse-parent");
-		BOM_FUSE_6_FIS =initPossibleBomWith("io.fabric8", "fabric8-project-bom-camel-spring-boot");
+		BOM_FUSE_FIS = initPossibleBomWith("io.fabric8", "fabric8-project-bom-camel-spring-boot");
 	}
 	
 	private static Dependency initPossibleBomWith(String groupId, String artifactId) {
