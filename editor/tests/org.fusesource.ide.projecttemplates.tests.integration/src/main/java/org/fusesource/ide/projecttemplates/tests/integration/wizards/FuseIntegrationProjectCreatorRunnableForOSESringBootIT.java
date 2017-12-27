@@ -12,16 +12,30 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eclipse.core.resources.IProject;
-import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
-import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse7;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
 public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends FuseIntegrationProjectCreatorRunnableIT {
 	
-	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT() {
-		camelVersion = "2.18.1.redhat-000015";
+	@Parameters(name = "{0}")
+	public static List<String> parameters(){
+		return Arrays.asList(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20, CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
+	}
+	
+	public FuseIntegrationProjectCreatorRunnableForOSESringBootIT(String camelVersion) {
+		this.camelVersion = camelVersion;
 	}
 	
 	@Test
@@ -31,8 +45,12 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	
 	@Override
 	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
-		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
-		newProjectMetadata.setTemplate(new OSESpringBootXMLTemplate());
+	NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
+		if (isOlderThan220()) {
+			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse6());
+		} else {
+			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse7());
+		}
 		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}

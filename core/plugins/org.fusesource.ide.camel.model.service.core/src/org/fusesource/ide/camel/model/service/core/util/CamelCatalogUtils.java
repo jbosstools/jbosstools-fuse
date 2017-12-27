@@ -288,7 +288,7 @@ public class CamelCatalogUtils {
 			if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
 				bomVersion = getFuse6BomVersion(camelVersion);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_FIS, fuseBomUsed)) {
-				bomVersion = getFuseFISBomVersion(camelVersion);
+				bomVersion = getFuseFISBomVersion(camelVersion, project, monitor);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
 				bomVersion = getFuse7BomVersion(camelVersion, project, monitor);
 			} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
@@ -314,11 +314,11 @@ public class CamelCatalogUtils {
 		}
 	}
 
-	protected static String getFuseFISBomVersion(String camelVersion) {
+	protected static String getFuseFISBomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
 		if(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(camelVersion);
 		} else {
-			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null);
+			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
 		}
 	}
 

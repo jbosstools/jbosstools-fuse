@@ -17,7 +17,7 @@ import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
-import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
@@ -49,14 +49,14 @@ public class CompatibleCamelVersionFilterTest {
 	@Test
 	public void testOpenShiftTemplateNotCompatibleWithLowerThan2_18() throws Exception {
 		CompatibleCamelVersionFilter filter = createFilter("2.17.9");
-		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplate());
+		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplateForFuse6());
 		assertThat(filter.select(null, null, templateItem)).isFalse();
 	}
 	
 	@Test
 	public void testOpenShiftTemplateCompatibleWithHigherThan2_18() throws Exception {
 		CompatibleCamelVersionFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20);
-		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplate());
+		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplateForFuse6());
 		assertThat(filter.select(null, null, templateItem)).isTrue();
 	}
 
@@ -85,7 +85,7 @@ public class CompatibleCamelVersionFilterTest {
 	public void testCategoryItemFilteredOutIfAllChildrenAlsoFiltered() throws Exception {
 		CompatibleCamelVersionFilter filter = createFilter("2.17.0");
 		CategoryItem category = new CategoryItem("id", "name", 0, null);
-		createTemplateItemInCategory(new OSESpringBootXMLTemplate(), category);
+		createTemplateItemInCategory(new OSESpringBootXMLTemplateForFuse6(), category);
 		assertThat(filter.select(null, null, category)).isFalse();
 	}
 
