@@ -52,6 +52,16 @@ final class SearchLatestBomVersionAvailableM2ECallable implements ICallable<Stri
 		try {
 			RepositorySystemSession repositorySession = context.getRepositorySession();
 			VersionRangeResult result = retrieveRepositorySystem().resolveVersionRange(repositorySession, request);
+			List<Version> productizedversion = result.getVersions().stream().filter(version -> {
+				String versionAsString = version.toString();
+				return versionAsString.contains("fuse") || versionAsString.contains("redhat");
+			}).collect(Collectors.toList());
+			VersionRangeResult versionRangeResultForProductizedVersion = new VersionRangeResult(request);
+			versionRangeResultForProductizedVersion.setVersions(productizedversion);
+			Version productizedHighestVersion = versionRangeResultForProductizedVersion.getHighestVersion();
+			if(productizedHighestVersion != null) {
+				return productizedHighestVersion.toString();
+			}
 			Version highestVersion = result.getHighestVersion();
 			if (highestVersion != null) {
 				return highestVersion.toString();
