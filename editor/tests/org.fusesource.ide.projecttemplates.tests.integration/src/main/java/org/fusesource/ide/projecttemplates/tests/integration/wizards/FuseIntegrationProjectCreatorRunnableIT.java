@@ -12,15 +12,8 @@ package org.fusesource.ide.projecttemplates.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,16 +30,11 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -55,12 +43,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
@@ -69,39 +55,23 @@ import org.fusesource.ide.launcher.debug.model.ThreadGarbageCollector;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
-import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
-import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestWatcher;
 
 /**
  * @author Aurelien Pupier
  *
  */
-public abstract class FuseIntegrationProjectCreatorRunnableIT {
-
-	public static IProjectFacet camelFacet  = ProjectFacetsManager.getProjectFacet("jst.camel");
-	public static IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
-	public static IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
-	public static IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
-    public static IProjectFacet webFacet    = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
-		
-    public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
-    
-	@Rule
-	public TestWatcher printStackTraceOnFailure = new PrintThreadStackOnFailureRule();
-
-	protected IProject project = null;
+public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
+	
+	public static IProjectFacet camelFacet = ProjectFacetsManager.getProjectFacet("jst.camel");
+	
 	boolean deploymentFinished = false;
 	boolean isDeploymentOk = false;
-	protected ILaunch launch = null;
 	protected String camelVersion;
 
 	@Before
@@ -109,10 +79,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 
-//		if("2.18.1.redhat-000015".equals(camelVersion) /*|| "2.17.0.redhat-630254".equals(camelVersion)*/){
-//			new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
-//		}
-		
 		String projectName = project != null ? project.getName() : String.format("%s-%s", getClass().getSimpleName(), camelVersion);
 		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 		
@@ -124,50 +90,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ FuseIntegrationProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
-	@After
-	public void tearDown() throws CoreException, InterruptedException, IOException {
-		if(launch != null) {
-			if (launch.canTerminate()) {
-				launch.terminate();
-			} else {
-				for (IProcess p : launch.getProcesses()) {
-					if (p.canTerminate()) {
-						while (!p.isTerminated()) {
-							p.terminate();
-						}
-					}
-				}
-			}
-		}
-		if (project != null) {
-			//refresh otherwise cannot delete due to target folder created
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			waitJob();
-			readAndDispatch(0);
-			boolean projectSuccesfullyDeleted = false;
-			while(!projectSuccesfullyDeleted ){
-				try{
-					project.delete(true, true, new NullProgressMonitor());
-				} catch(Exception e){
-					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
-					readAndDispatch(0);
-					waitJob();
-					continue;
-				}
-				projectSuccesfullyDeleted = true;
-			}
-		}
-		
-		// kill all running jobs
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_BUILD);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_REFRESH);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_REFRESH);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_BUILD);
-		
-		CommonTestUtils.closeAllEditors();
-		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
-	}
-	
 	protected void testProjectCreation(String projectNameSuffix, CamelDSLType dsl, String camelFilePath, NewProjectMetaData metadata) throws Exception {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
 		ProjectTemplatesIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
@@ -223,9 +145,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				.findAny().isPresent();
 	}
 
-	protected void additionalChecks(IProject project) {
-	}
-
 	/**
 	 * @param dsl
 	 * @param projectName
@@ -244,27 +163,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		return metadata;
 	}
 
-	protected void waitJob() {
-		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
-		jobWaiterUtil.setEndless(true);
-		jobWaiterUtil.waitJob(new NullProgressMonitor());
-	}
-
-	private void checkNoValidationError() throws CoreException {
-		checkNoValidationIssueOfType(filterError());
-	}
-	
-	private Predicate<IMarker> filterError(){
-		return marker -> {
-			try {
-				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				return severity == null || severity.equals(IMarker.SEVERITY_ERROR);
-			} catch (CoreException e1) {
-				return true;
-			}
-		};
-	}
-	
 	private void checkNoValidationWarning() throws CoreException {
 		checkNoValidationIssueOfType(filterWarning());
 	}
@@ -284,48 +182,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 				return true;
 			}
 		};
-	}
-
-	private void checkNoValidationIssueOfType(Predicate<IMarker> filter) throws CoreException {
-		final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		final List<Object> readableMarkers = Arrays.asList(markers).stream()
-				.filter(filter)
-				.map(marker -> {
-						try {
-							return extractMarkerInformation(marker);
-						} catch (Exception e) {
-							ProjectTemplatesIntegrationTestsActivator.pluginLog().logError(e);
-							try {
-								return "type: "+marker.getType()+"\n"+
-										"attributes:\n"+
-										marker.getAttributes().entrySet().stream()
-							            .map(entry -> entry.getKey() + " - " + entry.getValue())
-							            .collect(Collectors.joining(", "));
-							} catch (CoreException e1) {
-								ProjectTemplatesIntegrationTestsActivator.pluginLog().logError(e1);
-								return marker;
-							}
-						}
-					})
-				.collect(Collectors.toList());
-		assertThat(readableMarkers).isEmpty();
-	}
-
-	private Object extractMarkerInformation(IMarker marker) throws CoreException, IOException {
-		Map<String, Object> markerInformations = marker.getAttributes() != null ? marker.getAttributes() : new HashMap<>();
-		IResource resource = marker.getResource();
-		if(resource != null){
-			markerInformations.put("resource affected", resource.getLocation().toOSString());
-			if(resource instanceof IFile){
-				InputStream contents = ((IFile) resource).getContents();
-				try (BufferedReader buffer = new BufferedReader(new InputStreamReader(contents))) {
-					markerInformations.put("resource affected content", buffer.lines().collect(Collectors.joining("\n")));
-				}
-			}
-		}
-		markerInformations.put("type: ", marker.getType());
-		markerInformations.put("Creation time: ", marker.getCreationTime());
-		return markerInformations;
 	}
 
 	/**
@@ -355,43 +211,17 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT {
 		}
 	}
 	
-	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
-		assertThat(project.getNature(RiderProjectNature.NATURE_ID)).isNotNull();
-	}
-	
 	protected void checkCorrectFacetsEnabled(IProject project) throws CoreException {
+		super.checkCorrectFacetsEnabled(project);
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 
 		boolean camelFacetFound = fproj.hasProjectFacet(camelFacet);
-		boolean javaFacetFound = fproj.hasProjectFacet(javaFacet);
-		boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
-		boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
 				
 		assertThat(camelFacetFound).isTrue();
-		assertThat(javaFacetFound).isTrue();
-		assertThat(mavenFacetFound).isTrue();
-		assertThat(utilityFacetFound).isTrue();
-		
 		assertThat(fproj.getProjectFacetVersion(camelFacet).getVersionString()).isEqualTo(CamelProjectConfigurator.DEFAULT_CAMEL_FACET_VERSION).as("The Camel Facet version is not the right one.");
-		
-        checkNoConflictingFacets(fproj);
 	}
 	
-    protected void checkNoConflictingFacets(IFacetedProject fproj) {
-    	for (IProjectFacetVersion existingFacetVersion : fproj.getProjectFacets()) {
-    		for (IProjectFacetVersion existingFacetVersion2 : fproj.getProjectFacets()) {
-    			assertThat(existingFacetVersion.conflictsWith(existingFacetVersion2))
-    			.as("2 facets are conflicting: "+existingFacetVersion+ " and "+ existingFacetVersion2)
-    			.isFalse();
-    		}
-    	}
-    }
-
-	protected void readAndDispatch(int currentNumberOfTry) {
-		CommonTestUtils.readAndDispatch(currentNumberOfTry);
-	}
-
-	protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
+    protected void launchDebug(IProject project) throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
 		final File parent = new File("target/MavenLaunchOutputs");
 		parent.mkdirs();
 		final String mavenOutputFilePath = new File(parent, "MavenLaunchOutput-"+project.getName()+".txt").getAbsolutePath();

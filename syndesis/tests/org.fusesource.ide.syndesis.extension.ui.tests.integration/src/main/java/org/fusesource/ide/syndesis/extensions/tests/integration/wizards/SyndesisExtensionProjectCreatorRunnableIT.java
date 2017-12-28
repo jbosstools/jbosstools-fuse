@@ -12,16 +12,9 @@ package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.management.MalformedObjectNameException;
 
@@ -30,15 +23,10 @@ import org.apache.maven.execution.MavenExecutionResult;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -48,50 +36,28 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.fusesource.ide.camel.editor.CamelEditor;
-import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
-import org.fusesource.ide.camel.editor.utils.JobWaiterUtil;
+import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
-import org.fusesource.ide.project.RiderProjectNature;
-import org.fusesource.ide.projecttemplates.tests.integration.wizards.PrintThreadStackOnFailureRule;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionIntegrationTestsActivator;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectCreatorRunnable;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestWatcher;
 
 /**
  * @author lheinema
  */
-public abstract class SyndesisExtensionProjectCreatorRunnableIT {
-
-	public static final IProjectFacet camelFacet  = ProjectFacetsManager.getProjectFacet("jst.camel");
-	public static final IProjectFacet javaFacet 	= ProjectFacetsManager.getProjectFacet("java");
-	public static final IProjectFacet m2eFacet 	= ProjectFacetsManager.getProjectFacet("jboss.m2");
-	public static final IProjectFacet utilFacet 	= ProjectFacetsManager.getProjectFacet("jst.utility");
+public abstract class SyndesisExtensionProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
 
 	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
 	protected static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
-    public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
-    
-	@Rule
-	public TestWatcher printStackTraceOnFailure = new PrintThreadStackOnFailureRule();
-
-	protected IProject project = null;
 	boolean buildFinished = false;
 	boolean buildOK = false;
-	protected ILaunch launch = null;
-
+	
 	@Before
 	public void setup() throws Exception {
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
@@ -106,57 +72,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
-	@After
-	public void tearDown() throws CoreException {
-		terminateRunningProcesses();
-
-		waitForProjectDeletion();
-		
-		// kill all running jobs
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_BUILD);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_REFRESH);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_AUTO_REFRESH);
-		Job.getJobManager().cancel(ResourcesPlugin.FAMILY_MANUAL_BUILD);
-		
-		CommonTestUtils.closeAllEditors();
-		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(false);
-	}
-	
-	private void waitForProjectDeletion() throws CoreException {
-		if (project != null) {
-			//refresh otherwise cannot delete due to target folder created
-			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			waitJob();
-			readAndDispatch(0);
-			boolean projectSuccesfullyDeleted = false;
-			while(!projectSuccesfullyDeleted ){
-				try{
-					project.delete(true, true, new NullProgressMonitor());
-				} catch(Exception e){
-					//some lock/stream kept on camel-context.xml surely by the killed process, need time to let OS such as Windows to re-allow deletion
-					readAndDispatch(0);
-					waitJob();
-					continue;
-				}
-				projectSuccesfullyDeleted = true;
-			}
-		}
-	}
-	
-	private void terminateRunningProcesses() throws DebugException {
-		if(launch != null && launch.canTerminate()) {
-			launch.terminate();
-		} else if (launch != null) {
-			for (IProcess p : launch.getProcesses()) {
-				if (p.canTerminate()) {
-					while (!p.isTerminated()) {
-						p.terminate();
-					}
-				}
-			}
-		}
-	}
-	
 	private SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
 		extension.setSpringBootVersion("1.5.8.RELEASE");
@@ -227,30 +142,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 				.anyMatch(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor".equals(thread.getName()));
 	}
 
-	protected void additionalChecks(IProject project2) {
-	}
-
-	protected void waitJob() {
-		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
-		jobWaiterUtil.setEndless(true);
-		jobWaiterUtil.waitJob(new NullProgressMonitor());
-	}
-
-	private void checkNoValidationError() throws CoreException {
-		checkNoValidationIssueOfType(filterError());
-	}
-	
-	private Predicate<IMarker> filterError(){
-		return marker -> {
-			try {
-				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				return severity == null || severity.equals(IMarker.SEVERITY_ERROR);
-			} catch (CoreException e1) {
-				return true;
-			}
-		};
-	}
-	
 	private void checkNoValidationWarning() throws CoreException {
 		checkNoValidationIssueOfType(filterWarning());
 	}
@@ -270,48 +161,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 				return true;
 			}
 		};
-	}
-
-	private void checkNoValidationIssueOfType(Predicate<IMarker> filter) throws CoreException {
-		final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		final List<Object> readableMarkers = Arrays.asList(markers).stream()
-				.filter(filter)
-				.map(marker -> {
-						try {
-							return extractMarkerInformation(marker);
-						} catch (Exception e) {
-							SyndesisExtensionIntegrationTestsActivator.pluginLog().logError(e);
-							try {
-								return "type: "+marker.getType()+"\n"+
-										"attributes:\n"+
-										marker.getAttributes().entrySet().stream()
-							            .map(entry -> entry.getKey() + " - " + entry.getValue())
-							            .collect(Collectors.joining(", "));
-							} catch (CoreException e1) {
-								SyndesisExtensionIntegrationTestsActivator.pluginLog().logError(e1);
-								return marker;
-							}
-						}
-					})
-				.collect(Collectors.toList());
-		assertThat(readableMarkers).isEmpty();
-	}
-
-	private Object extractMarkerInformation(IMarker marker) throws CoreException, IOException {
-		Map<String, Object> markerInformations = marker.getAttributes() != null ? marker.getAttributes() : new HashMap<>();
-		IResource resource = marker.getResource();
-		if(resource != null){
-			markerInformations.put("resource affected", resource.getLocation().toOSString());
-			if(resource instanceof IFile){
-				InputStream contents = ((IFile) resource).getContents();
-				try (BufferedReader buffer = new BufferedReader(new InputStreamReader(contents))) {
-					markerInformations.put("resource affected content", buffer.lines().collect(Collectors.joining("\n")));
-				}
-			}
-		}
-		markerInformations.put("type: ", marker.getType());
-		markerInformations.put("Creation time: ", marker.getCreationTime());
-		return markerInformations;
 	}
 
 	/**
@@ -366,39 +215,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
 	}
 	
-	private void checkCorrectNatureEnabled(IProject project) throws CoreException {
-		assertThat(project.getNature(RiderProjectNature.NATURE_ID)).isNotNull();
-	}
-	
-	protected void checkCorrectFacetsEnabled(IProject project) throws CoreException {
-		IFacetedProject fproj = ProjectFacetsManager.create(project);
-
-		boolean javaFacetFound = fproj.hasProjectFacet(javaFacet);
-		boolean mavenFacetFound = fproj.hasProjectFacet(m2eFacet);
-		boolean utilityFacetFound = fproj.hasProjectFacet(utilFacet);
-				
-		assertThat(javaFacetFound).isTrue();
-		assertThat(mavenFacetFound).isTrue();
-		assertThat(utilityFacetFound).isTrue();
-		
-        checkNoConflictingFacets(fproj);
-	}
-	
-    protected void checkNoConflictingFacets(IFacetedProject fproj) {
-    	for (IProjectFacetVersion existingFacetVersion : fproj.getProjectFacets()) {
-    		for (IProjectFacetVersion existingFacetVersion2 : fproj.getProjectFacets()) {
-    			assertThat(existingFacetVersion.conflictsWith(existingFacetVersion2))
-    			.as("2 facets are conflicting: "+existingFacetVersion+ " and "+ existingFacetVersion2)
-    			.isFalse();
-    		}
-    	}
-    }
-
-	protected void readAndDispatch(int currentNumberOfTry) {
-		CommonTestUtils.readAndDispatch(currentNumberOfTry);
-	}
-
-	protected void launchBuild(IProject project, IProgressMonitor monitor) throws CoreException, InterruptedException, IOException, MalformedObjectNameException {
+    protected void launchBuild(IProject project, IProgressMonitor monitor) throws CoreException, InterruptedException, IOException, MalformedObjectNameException {
 		IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext executionContext = maven.createExecutionContext();
 		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
