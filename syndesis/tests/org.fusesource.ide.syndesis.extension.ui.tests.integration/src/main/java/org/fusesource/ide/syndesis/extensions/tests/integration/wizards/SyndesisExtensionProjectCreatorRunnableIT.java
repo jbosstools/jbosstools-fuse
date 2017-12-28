@@ -13,7 +13,6 @@ package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,7 +40,6 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
@@ -401,25 +399,19 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT {
 	}
 
 	protected void launchBuild(IProject project, IProgressMonitor monitor) throws CoreException, InterruptedException, IOException, MalformedObjectNameException {
-		final File parent = new File("target/MavenLaunchOutputs");
-		parent.mkdirs();
-		final String mavenOutputFilePath = new File(parent, "MavenLaunchOutput-"+project.getName()+".txt").getAbsolutePath();
-		
 		IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext executionContext = maven.createExecutionContext();
 		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
 		executionRequest.setPom(project.getFile("pom.xml").getLocation().toFile());
 		executionRequest.setGoals(Arrays.asList("clean", "verify"));
+		
 		MavenExecutionResult result = maven.execute(executionRequest, monitor);
 		buildFinished = true;
 		buildOK = !result.hasExceptions();
 		for (Throwable t : result.getExceptions()) {
 			SyndesisExtensionIntegrationTestsActivator.pluginLog().logError(t);
 		}
-		assertThat(buildOK).as("build failed, you can have a look to the file "+ mavenOutputFilePath + " for more information.").isTrue();
+		assertThat(buildOK).isTrue();
 	}
 
-	protected StructuredSelection getSelectionForLaunch(IProject project) {
-		return new StructuredSelection(project.getFile("pom.xml"));
-	}
 }
