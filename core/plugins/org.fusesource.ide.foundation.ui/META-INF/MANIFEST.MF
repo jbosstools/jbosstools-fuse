@@ -45,4 +45,5 @@ Export-Package: org.fusesource.ide.foundation.ui.actions,
  org.fusesource.ide.foundation.ui.propsrc,
  org.fusesource.ide.foundation.ui.tree,
  org.fusesource.ide.foundation.ui.util,
- org.fusesource.ide.foundation.ui.views
+ org.fusesource.ide.foundation.ui.views,
+ org.fusesource.ide.foundation.ui.wizard
