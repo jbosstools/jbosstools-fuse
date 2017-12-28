@@ -22,9 +22,6 @@ import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -69,6 +66,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 import org.w3c.dom.Node;
 
 /**
@@ -810,13 +808,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected void createHelpDecoration(Parameter parameter, Control control) {
 		String description = parameter.getDescription();
 		if (description != null) {
-			ControlDecoration helpDecoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
-			helpDecoration.setShowOnlyOnFocus(true);
-			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault()
-					.getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
-			helpDecoration.setImage(fieldDecoration.getImage());
-			helpDecoration.setDescriptionText(description);
-			control.setToolTipText(description);
+			new ControlDecorationHelper().addInformationOnFocus(control, description);
 		}
 	}
 

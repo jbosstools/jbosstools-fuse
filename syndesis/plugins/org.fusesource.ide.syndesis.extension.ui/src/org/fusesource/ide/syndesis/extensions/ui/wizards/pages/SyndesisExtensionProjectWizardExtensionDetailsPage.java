@@ -13,6 +13,7 @@ package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
@@ -45,9 +47,6 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		setPageComplete(false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
@@ -69,12 +68,15 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		Label l = new Label(container, SWT.NONE);
 		l.setText(label);
 		
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
 		
 		// create the control
 		Text textField = new Text(container, SWT.BORDER);
 		textField.setLayoutData(gridData);
 		textField.setToolTipText(toolTip);
+		
+		new ControlDecorationHelper().addInformationOnFocus(textField, toolTip);
+		
 		if (!Strings.isBlank(message)) {
 			textField.setMessage(message);
 		}
