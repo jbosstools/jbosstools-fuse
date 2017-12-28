@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -20,8 +19,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -49,7 +46,6 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
-import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Widgets;
