@@ -16,11 +16,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardExtensionDetailsPage;
-import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardLocationPage;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardVersionsPage;
 
 /**
@@ -30,7 +30,7 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 	protected IStructuredSelection selection;
 
-	protected SyndesisExtensionProjectWizardLocationPage locationPage;
+	protected ProjectWizardLocationPage locationPage;
 	protected SyndesisExtensionProjectWizardVersionsPage versionPage;
 	protected SyndesisExtensionProjectWizardExtensionDetailsPage extensionDetailsPage;
 
@@ -41,17 +41,11 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		setNeedsProgressMonitor(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
-	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish() {
 		final SyndesisExtension extension = getSyndesisExtension();
@@ -68,14 +62,11 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#addPages()
-	 */
 	@Override
 	public void addPages() {
 		super.addPages();
 
-		locationPage = new SyndesisExtensionProjectWizardLocationPage();
+		locationPage = new ProjectWizardLocationPage(SyndesisExtensionsUIActivator.imageDescriptorFromPlugin(SyndesisExtensionsUIActivator.PLUGIN_ID, SyndesisExtensionsUIActivator.SYNDESIS_EXTENSION_PROJECT_ICON));
 		addPage(locationPage);
 
 		versionPage = new SyndesisExtensionProjectWizardVersionsPage();

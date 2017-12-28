@@ -12,14 +12,15 @@
 package org.fusesource.ide.projecttemplates.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewProjectMetaData;
-import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardLocationPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardTemplatePage;
 
@@ -30,7 +31,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 	protected IStructuredSelection selection;
 
-	protected FuseIntegrationProjectWizardLocationPage locationPage;
+	protected ProjectWizardLocationPage locationPage;
 	protected FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
 	protected FuseIntegrationProjectWizardTemplatePage templateSelectionPage;
 
@@ -66,7 +67,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		super.addPages();
 
-		locationPage = new FuseIntegrationProjectWizardLocationPage();
+		locationPage = new ProjectWizardLocationPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		addPage(locationPage);
 
 		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage();

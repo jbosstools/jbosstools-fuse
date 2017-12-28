@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2016 Red Hat, Inc.
+ * Copyright (c) 2017 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.projecttemplates.wizards.pages;
+package org.fusesource.ide.foundation.ui.wizard;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,40 +32,31 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.projecttemplates.internal.Messages;
-import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.foundation.ui.Messages;
 
-/**
- * @author lhein
- */
-public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
-
+public class ProjectWizardLocationPage extends WizardPage {
+	
 	private Button useDefaultWorkspaceLocationButton;
-	private Label locationLabel;
 	private Text locationText;
-	private Label projectNameLabel;
 	private Text projectNameText;
-
+	
 	private IPath location;
 
-	public FuseIntegrationProjectWizardLocationPage() {
+	public ProjectWizardLocationPage(ImageDescriptor wizBan) {
 		super(Messages.newProjectWizardLocationPageName);
 		setTitle(Messages.newProjectWizardLocationPageTitle);
 		setDescription(Messages.newProjectWizardLocationPageDescription);
-		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
+		setImageDescriptor(wizBan);
 		setPageComplete(false);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
+	
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
 
 		GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
-		projectNameLabel = new Label(container, SWT.NONE);
+		Label projectNameLabel = new Label(container, SWT.NONE);
 		projectNameLabel.setText(Messages.newProjectWizardLocationPageProjectNameLabel);
 		projectNameText = new Text(container, SWT.BORDER);
 		projectNameText.setLayoutData(gridData);
@@ -77,7 +69,7 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		locationGrp.setLayoutData(locationGrpData);
 		locationGrp.setText(Messages.newProjectWizardLocationPageLocationGroupLabel);
 
-		locationLabel = new Label(locationGrp, SWT.NONE);
+		Label locationLabel = new Label(locationGrp, SWT.NONE);
 		GridData locationLabelData = new GridData();
 		locationLabelData.horizontalIndent = 10;
 		locationLabel.setLayoutData(locationLabelData);
@@ -98,10 +90,6 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		locationBrowseButton.setToolTipText(Messages.newProjectWizardLocationPageLocationBrowseButtonDescription);
 		locationBrowseButton.setEnabled(false);
 		locationBrowseButton.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dialog = new DirectoryDialog(getShell());
@@ -128,15 +116,11 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		}
 
 		useDefaultWorkspaceLocationButton = new Button(locationGrp, SWT.CHECK);
-		GridData useDefaultWorkspaceLocationButtonData = new GridData(SWT.LEFT,	SWT.CENTER, false, false, 3, 1);
+		GridData useDefaultWorkspaceLocationButtonData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);
 		useDefaultWorkspaceLocationButton.setLayoutData(useDefaultWorkspaceLocationButtonData);
 		useDefaultWorkspaceLocationButton.setText(Messages.newProjectWizardLocationPageLocationDefaultButtonLabel);
 		useDefaultWorkspaceLocationButton.setToolTipText(Messages.newProjectWizardLocationPageLocationDefaultButtonDescription);
 		useDefaultWorkspaceLocationButton.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean inWorkspace = isInWorkspace();
@@ -225,17 +209,17 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 
 		IPath projectPath = getLocationPath();
 		if (!isInWorkspace()) {
-			String location = projectPath.toOSString();
+			String locationString = projectPath.toOSString();
 
 			// check whether location is empty
-			if (location.length() == 0) {
+			if (locationString.length() == 0) {
 				setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
 				setPageComplete(false);
 				return;
 			}
 
 			// check whether the location is a syntactically correct path
-			if (!Path.ROOT.isValidPath(location)) {
+			if (!Path.ROOT.isValidPath(locationString)) {
 				setErrorMessage(Messages.newProjectWizardLocationPageInvalidProjectLocationText);
 				setPageComplete(false);
 				return;
@@ -293,4 +277,5 @@ public class FuseIntegrationProjectWizardLocationPage extends WizardPage {
 		}
 		return false;
 	}
+
 }

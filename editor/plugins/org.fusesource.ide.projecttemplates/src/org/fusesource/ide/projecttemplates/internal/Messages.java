@@ -30,22 +30,6 @@ public class Messages extends NLS {
 	public static String mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage;
 	public static String mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage;
 	public static String newProjectWizardTitle;
-	public static String newProjectWizardLocationPageName;
-	public static String newProjectWizardLocationPageTitle;
-	public static String newProjectWizardLocationPageDescription;
-	public static String newProjectWizardLocationPageProjectNameLabel;
-	public static String newProjectWizardLocationPageProjectNameDescription;
-	public static String newProjectWizardLocationPageLocationGroupLabel;
-	public static String newProjectWizardLocationPageLocationDefaultButtonLabel;
-	public static String newProjectWizardLocationPageLocationDefaultButtonDescription;
-	public static String newProjectWizardLocationPageLocationLabel;
-	public static String newProjectWizardLocationPageLocationDescription;
-	public static String newProjectWizardLocationPageLocationBrowseButtonLabel;
-	public static String newProjectWizardLocationPageLocationBrowseButtonDescription;
-	public static String newProjectWizardLocationPageLocationSelectionDialogTitle;
-	public static String newProjectWizardLocationPageInvalidProjectNameText;
-	public static String newProjectWizardLocationPageDuplicateProjectNameText;
-	public static String newProjectWizardLocationPageInvalidProjectLocationText;
 
 	public static String newProjectWizardRuntimePageName;
 	public static String newProjectWizardRuntimePageTitle;
