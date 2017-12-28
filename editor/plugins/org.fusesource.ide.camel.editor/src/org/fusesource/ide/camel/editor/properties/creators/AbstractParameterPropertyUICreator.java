@@ -19,9 +19,6 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +30,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 
 /**
  * @author Aurelien Pupier
@@ -140,12 +138,7 @@ public abstract class AbstractParameterPropertyUICreator {
 	protected void createHelpDecoration(Parameter parameter, Control control) {
 		String description = parameter.getDescription();
 		if (description != null) {
-			ControlDecoration helpDecoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
-			helpDecoration.setShowOnlyOnFocus(true);
-			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
-			helpDecoration.setImage(fieldDecoration.getImage());
-			helpDecoration.setDescriptionText(description);
-			control.setToolTipText(description);
+			new ControlDecorationHelper().addInformationOnFocus(control, description);
 		}
 	}
 

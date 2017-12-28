@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
@@ -39,9 +41,6 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 	private Combo syndesisVersionCombo;
 	
 	private SelectionListener selectionListener = new SelectionAdapter() {
-		/* (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			validate();
@@ -56,9 +55,6 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		setPageComplete(false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
@@ -66,20 +62,22 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 
 		Label springBootVersionLabel = new Label(container, SWT.NONE);
 		springBootVersionLabel.setText(Messages.newProjectWizardExtensionVersionsPageSpringBootVersionLabel);
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
 		springBootVersionCombo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN);
 		springBootVersionCombo.setLayoutData(gridData);
 		springBootVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageSpringBootVersionTooltip);
+		new ControlDecorationHelper().addInformationOnFocus(springBootVersionCombo, Messages.newProjectWizardExtensionVersionsPageSpringBootVersionTooltip);
 		fillSpringBootVersions();
 		springBootVersionCombo.addSelectionListener(selectionListener);
 		springBootVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
 		
 		Label camelVersionLabel = new Label(container, SWT.NONE);
 		camelVersionLabel.setText(Messages.newProjectWizardExtensionVersionsPageCamelVersionLabel);
-		gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(1, 1).indent(8, 0).create();
 		camelVersionCombo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN);
 		camelVersionCombo.setLayoutData(gridData);
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageCamelVersionTooltip);
+		new ControlDecorationHelper().addInformationOnFocus(camelVersionCombo, Messages.newProjectWizardExtensionVersionsPageCamelVersionTooltip);
 		fillCamelVersions();
 		camelVersionCombo.addSelectionListener(selectionListener);
 		camelVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
@@ -93,10 +91,11 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		
 		Label syndesisVersionLabel = new Label(container, SWT.NONE);
 		syndesisVersionLabel.setText(Messages.newProjectWizardExtensionVersionsPageSyndesisVersionLabel);
-		gridData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
 		syndesisVersionCombo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN);
 		syndesisVersionCombo.setLayoutData(gridData);
 		syndesisVersionCombo.setToolTipText(Messages.newProjectWizardExtensionVersionsPageSyndesisVersionTooltip);
+		new ControlDecorationHelper().addInformationOnFocus(syndesisVersionCombo, Messages.newProjectWizardExtensionVersionsPageSyndesisVersionTooltip);
 		fillSyndesisVersions();
 		syndesisVersionCombo.addSelectionListener(selectionListener);
 		syndesisVersionCombo.addModifyListener( (ModifyEvent e) -> validate() );
