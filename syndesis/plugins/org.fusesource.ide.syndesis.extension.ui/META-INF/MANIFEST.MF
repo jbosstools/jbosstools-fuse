@@ -37,5 +37,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-Activator: org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: org.fusesource.ide.syndesis.extensions.ui.wizards;x-friends:="org.fusesource.ide.syndesis.extension.core.tests.integration"
+Export-Package: org.fusesource.ide.syndesis.extensions.ui.wizards;x-friends:="org.fusesource.ide.syndesis.extension.core.tests.integration,org.fusesource.ide.syndesis.extension.ui.tests.integration"
 

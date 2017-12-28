@@ -10,10 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.tests.util;
 
-import org.eclipse.core.runtime.Plugin;
+import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
+import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class Activator extends Plugin {
+public class Activator extends BaseUIPlugin {
 	
 	public static final String ID = "org.fusesource.ide.camel.tests.util";
 	private static Activator instance;
@@ -36,5 +37,9 @@ public class Activator extends Plugin {
 	
 	public static Activator getDefault() {
 		return instance;
+	}
+	
+	public static IPluginLog pluginLog() {
+		return getDefault().pluginLogInternal();
 	}
 }

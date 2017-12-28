@@ -5,27 +5,24 @@ Bundle-SymbolicName: org.fusesource.ide.camel.tests.util
 Bundle-Version: 10.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0",
- org.eclipse.core.databinding,
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
- org.eclipse.emf.common;bundle-version="2.11.0",
+ org.assertj.core;bundle-version="2.1.0",
  org.eclipse.emf.transaction;bundle-version="1.8.0",
  org.eclipse.equinox.security;bundle-version="1.2.200",
  org.eclipse.graphiti,
- org.eclipse.graphiti.ui,
- org.eclipse.jdt.ui,
- org.eclipse.jface,
+ org.eclipse.graphiti.ui;bundle-version="0.14.0",
  org.eclipse.m2e.maven.runtime;bundle-version="1.7.1",
  org.eclipse.m2e.core;bundle-version="1.7.1",
- org.eclipse.pde.core,
  org.eclipse.ui,
  org.eclipse.ui.ide,
- org.eclipse.ui.workbench,
+ org.jboss.tools.foundation.core;bundle-version="1.4.2",
+ org.jboss.tools.foundation.ui;bundle-version="1.4.1",
+ org.eclipse.wst.common.project.facet.core;bundle-version="1.4.300",
+ org.eclipse.debug.core;bundle-version="3.11.0",
+ org.fusesource.ide.preferences;bundle-version="10.2.0",
  org.fusesource.ide.branding,
  org.fusesource.ide.camel.editor,
  org.fusesource.ide.camel.model.service.core.tests.integration,
- org.fusesource.ide.camel.model.service.core,
- org.fusesource.ide.camel.model.service.impl
+ org.fusesource.ide.project;bundle-version="10.2.0"
 Export-Package: org.fusesource.ide.camel.test.util.editor,
  org.fusesource.ide.camel.tests.util
 Bundle-Vendor: %Bundle-Vendor

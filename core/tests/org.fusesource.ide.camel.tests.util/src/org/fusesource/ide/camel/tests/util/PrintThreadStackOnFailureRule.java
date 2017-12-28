@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.fusesource.ide.projecttemplates.tests.integration.wizards;
+package org.fusesource.ide.camel.tests.util;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
