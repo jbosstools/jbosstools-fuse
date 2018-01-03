@@ -105,15 +105,13 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
 		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
 		checkMappingsForSourcePathCorrect(m2prj.getCompileSourceLocations(), classesFolder);
-		//TODO: activate check of test source folder mapping, it doesn't work in test but don't know why...
-		//checkMappingsForSourcePathCorrect(m2prj.getTestCompileSourceLocations(), classesFolder);
     }
     
     private void checkMappingsForSourcePathCorrect(IPath[] paths, IVirtualFolder vFolder) throws CoreException {
     	for (IPath sourceLoc : paths) {
 			IFolder srcFolder = project.getFolder(sourceLoc);
 			IPath absSourcePath = srcFolder.getProjectRelativePath().makeAbsolute();
-			assertThat(srcFolder.exists()).as("The folder "+ srcFolder + " doesn not exist!").isTrue();
+			assertThat(srcFolder.exists()).as("The folder "+ srcFolder + " does not exist!").isTrue();
 			IVirtualResource[] mappings = ComponentCore.createResources(srcFolder);
 			
 			boolean found = false;

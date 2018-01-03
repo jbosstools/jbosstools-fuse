@@ -122,7 +122,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		final IVirtualFolder classesFolder = webroot.getFolder("/WEB-INF/classes"); //$NON-NLS-1$
 		IMavenProjectFacade m2prj = MavenPlugin.getMavenProjectRegistry().create(project, monitor);
 		updateMappings(m2prj.getCompileSourceLocations(), project, classesFolder, monitor);
-		updateMappings(m2prj.getTestCompileSourceLocations(), project, classesFolder, monitor);
 	}
 
 	/**
