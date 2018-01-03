@@ -101,6 +101,9 @@ public class Messages extends NLS {
 	public static String configuringFacets;
 	public static String installingRequiredFacetsForCamelProject;
 
+	public static String dozerInformationApiBreakTitle;
+	public static String dozerInformationApiBreakMessage;
+
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
