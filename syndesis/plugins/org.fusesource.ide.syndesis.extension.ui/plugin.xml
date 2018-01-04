@@ -15,7 +15,7 @@
       <perspectiveExtension
             targetID="*">
          <newWizardShortcut
-               id="org.fusesource.ide.syndesis.extensions.wizards.NewSyndesisExtensionWizard">
+               id="org.fusesource.ide.syndesis.extensions.wizards.SyndesisExtensionProjectWizard">
          </newWizardShortcut>
          <perspectiveShortcut
                id="org.fusesource.ide.branding.perspective">
