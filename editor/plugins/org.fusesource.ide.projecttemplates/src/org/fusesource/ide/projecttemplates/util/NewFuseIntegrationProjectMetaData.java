@@ -11,34 +11,16 @@
 package org.fusesource.ide.projecttemplates.util;
 
 import org.eclipse.wst.server.core.IRuntime;
-import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 
 /**
  * @author lhein
  */
-public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData implements ITemplateSupport, ICamelSupport, ICamelDSLTypeSupport {
-	private String camelVersion;
+public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData implements ICamelDSLTypeSupport {
+
 	private IRuntime targetRuntime;
 	private CamelDSLType dslType;
 	private boolean blankProject;
-	private AbstractProjectTemplate template;
-	
-	/**
-	 * @return the template
-	 */
-	@Override
-	public AbstractProjectTemplate getTemplate() {
-		return this.template;
-	}
-	
-	/**
-	 * @return the camelVersion
-	 */
-	@Override
-	public String getCamelVersion() {
-		return this.camelVersion;
-	}
 	
 	/**
 	 * @return the dslType
@@ -60,22 +42,6 @@ public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData 
 	 */
 	public boolean isBlankProject() {
 		return this.blankProject;
-	}
-	
-	/**
-	 * @param template the template to set
-	 */
-	@Override
-	public void setTemplate(AbstractProjectTemplate template) {
-		this.template = template;
-	}
-	
-	/**
-	 * @param camelVersion the camelVersion to set
-	 */
-	@Override
-	public void setCamelVersion(String camelVersion) {
-		this.camelVersion = camelVersion;
 	}
 	
 	/**

@@ -10,42 +10,24 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.util;
 
-import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelSupport;
-import org.fusesource.ide.projecttemplates.util.ITemplateSupport;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 
 /**
  * @author lheinema
  */
-public class NewSyndesisExtensionProjectMetaData extends CommonNewProjectMetaData implements ITemplateSupport, ICamelSupport {
+public class NewSyndesisExtensionProjectMetaData extends CommonNewProjectMetaData {
 
-	private AbstractProjectTemplate template;
 	private SyndesisExtension syndesisExtensionConfig;
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.util.ICamelSupport#getCamelVersion()
-	 */
 	@Override
 	public String getCamelVersion() {
 		return syndesisExtensionConfig.getCamelVersion();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.util.ICamelSupport#setCamelVersion(java.lang.String)
-	 */
 	@Override
 	public void setCamelVersion(String camelVersion) {
 		this.syndesisExtensionConfig.setCamelVersion(camelVersion);
-	}
-	
-	/**
-	 * @return the template
-	 */
-	@Override
-	public AbstractProjectTemplate getTemplate() {
-		return this.template;
 	}
 	
 	/**
@@ -53,14 +35,6 @@ public class NewSyndesisExtensionProjectMetaData extends CommonNewProjectMetaDat
 	 */
 	public SyndesisExtension getSyndesisExtensionConfig() {
 		return this.syndesisExtensionConfig;
-	}
-	
-	/**
-	 * @param template the template to set
-	 */
-	@Override
-	public void setTemplate(AbstractProjectTemplate template) {
-		this.template = template;
 	}
 	
 	/**

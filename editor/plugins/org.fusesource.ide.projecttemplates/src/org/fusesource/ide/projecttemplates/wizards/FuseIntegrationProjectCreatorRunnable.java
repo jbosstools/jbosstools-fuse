@@ -37,14 +37,13 @@ import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
-import org.fusesource.ide.projecttemplates.util.ICamelCatalogUser;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 
 /**
  * @author Aurelien Pupier
  *
  */
-public final class FuseIntegrationProjectCreatorRunnable extends BasicProjectCreatorRunnable implements ICamelCatalogUser {
+public final class FuseIntegrationProjectCreatorRunnable extends BasicProjectCreatorRunnable {
 
 	private static final String ORG_APACHE_FELIX = "org.apache.felix";
 	private static final String MAVEN_BUNDLE_PLUGIN = "maven-bundle-plugin";
@@ -56,14 +55,6 @@ public final class FuseIntegrationProjectCreatorRunnable extends BasicProjectCre
 		super(metadata);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.util.ICamelCatalogUser#shouldPreloadCatalog()
-	 */
-	@Override
-	public boolean shouldPreloadCatalog() {
-		return true;
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable#doAdditionalProjectConfiguration(org.eclipse.core.resources.IProject, org.eclipse.core.runtime.IProgressMonitor)
 	 */

@@ -19,10 +19,10 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelSupport;
 import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
 
 /**
@@ -46,9 +46,9 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
 		
-		if (ok && metadata instanceof ICamelSupport) {
+		if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
 			// by default configure the version of camel used in the pom.xml
-			ok = MavenUtils.configurePomCamelVersion(project, metadata, ((ICamelSupport)metadata).getCamelVersion(), subMonitor.newChild(1));
+			ok = MavenUtils.configurePomCamelVersion(project, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
 		}
 		
 		return ok;
