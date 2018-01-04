@@ -11,13 +11,17 @@
 package org.fusesource.ide.projecttemplates.util;
 
 import org.eclipse.core.runtime.IPath;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 
 /**
  * @author lheinema
  */
 public class CommonNewProjectMetaData {
+	
+	private String camelVersion;
 	private String projectName;
 	private IPath locationPath;
+	private AbstractProjectTemplate template;
 	
 	/**
 	 * @return the locationPath
@@ -45,5 +49,41 @@ public class CommonNewProjectMetaData {
 	 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+	
+	/**
+	 * returns the camel version to be used
+	 * 
+	 * @return	the camel version
+	 */
+	public String getCamelVersion() {
+		return this.camelVersion;
+	}
+	
+	/**
+	 * sets the camel version to be used
+	 * 
+	 * @param camelVersion
+	 */
+	public void setCamelVersion(String camelVersion) {
+		this.camelVersion = camelVersion;
+	}
+	
+	/**
+	 * returns the template to be used in the project creation
+	 * 
+	 * @return	the template to use or null
+	 */
+	public AbstractProjectTemplate getTemplate() {
+		return this.template;
+	}
+	
+	/**
+	 * sets the template to be used in the project creation
+	 * 
+	 * @param template	the template to use
+	 */
+	public void setTemplate(AbstractProjectTemplate template) {
+		this.template = template;
 	}
 }

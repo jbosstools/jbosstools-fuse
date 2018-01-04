@@ -131,10 +131,10 @@ public class MavenUtils {
 		List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDependencies = new ArrayList<>();
 		String scope = determineScopeOfCamelCoreDependency(projectDependencies);
 		determineMissingDependencies(compDeps, projectDependencies, missingDependencies);
-		subMonitor.worked(1);
+		subMonitor.setWorkRemaining(9);
 
 		addDependency(model, missingDependencies, scope);
-		subMonitor.worked(1);
+		subMonitor.setWorkRemaining(8);
 
 		if (!missingDependencies.isEmpty()) {
 			writeNewPomFile(project, pomFile, model, subMonitor.split(8));

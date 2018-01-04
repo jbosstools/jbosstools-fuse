@@ -53,7 +53,16 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	public BasicProjectCreatorRunnable(CommonNewProjectMetaData metadata) {
 		this.metadata = metadata;
 	}
-
+	
+	/**
+	 * returns true if the catalog should be preloaded
+	 * 
+	 * @return
+	 */
+	public boolean shouldPreloadCatalog() {
+		return true;
+	}
+	
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		boolean oldValueForValidation = disableGlobalValidationDuringProjectCreation();
@@ -66,9 +75,9 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			boolean ok = c.create(subMonitor.split(1));
 			IProject prj = c.getProject();
 						
-			if (ok && metadata instanceof ITemplateSupport) {
+			if (ok) {
 				// then configure the project for the given template
-				AbstractProjectTemplate template = ((ITemplateSupport)metadata).getTemplate(); // retrieveTemplate()
+				AbstractProjectTemplate template = metadata.getTemplate(); // retrieveTemplate!
 				// now execute the template
 				try {
 					template.create(prj, metadata, subMonitor.split(1));
@@ -100,7 +109,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			doAdditionalProjectConfiguration(prj, subMonitor.split(1));
 
 			// preload camel catalog for the given version
-			if (this instanceof ICamelCatalogUser && ((ICamelCatalogUser)this).shouldPreloadCatalog()) {
+			if (shouldPreloadCatalog()) {
 				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			}
 					

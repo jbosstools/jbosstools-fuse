@@ -21,11 +21,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -276,8 +274,8 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	@Override
 	public void modelChanged() {
 		Display.getDefault().asyncExec( () -> {
-			if (CamelGlobalConfigEditor.this.parentEditor != null && 
-				CamelGlobalConfigEditor.this.equals(CamelGlobalConfigEditor.this.parentEditor.getActiveEditor())) {
+			if (CamelGlobalConfigEditor.this.parentEditor != null
+					&& CamelGlobalConfigEditor.this.equals(CamelGlobalConfigEditor.this.parentEditor.getActiveEditor())) {
 				reload();
 				parentEditor.setDirtyFlag(true);
 			}
@@ -307,7 +305,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 					final String elementCategoryId = elem.getCategoryId();
 					final String categoryId = cat.getId();
 					if ( (elementCategoryId.trim().length()<1 && categoryId.equals(FUSE_CAT_ID)) ||
-						 (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
+ (elementCategoryId.equals(categoryId) && !cat.getChildren().contains(elem))) {
 						cat.getChildren().add(elem);
 					}
 				}
@@ -576,7 +574,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						}
 						List<Dependency> deps = item.getContributor().getElementDependencies();
 						if (deps != null && !deps.isEmpty()) {
-							new MavenUtils().updateMavenDependencies(deps, parentEditor.getEditorInput().getAdapter(IFile.class).getProject());
+							new MavenUtils().updateMavenDependencies(deps);
 						}
 					}
 				}
@@ -714,7 +712,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	private void configureCamelModelElement(CamelFile cf, Element newXMLNode, AbstractCamelModelElement cme, final String eipName) {
 		cme.setXmlNode(newXMLNode);
 		IProject project = cf.getResource().getProject();
-		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, new NullProgressMonitor());
+		final CamelModel camelModel = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 		cme.setUnderlyingMetaModelObject(camelModel.getEip(eipName));
 		cme.setId(newXMLNode.getAttribute("id"));
 		cme.initialize();

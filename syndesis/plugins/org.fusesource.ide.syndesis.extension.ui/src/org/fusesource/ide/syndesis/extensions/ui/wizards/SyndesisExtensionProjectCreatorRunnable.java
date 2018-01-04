@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -44,7 +45,6 @@ import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
-import org.fusesource.ide.projecttemplates.util.ICamelCatalogUser;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
@@ -52,7 +52,7 @@ import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjec
 /**
  * @author lhein
  */
-public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectCreatorRunnable implements ICamelCatalogUser {
+public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectCreatorRunnable {
 
 	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
 	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
@@ -63,14 +63,6 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	public SyndesisExtensionProjectCreatorRunnable(NewSyndesisExtensionProjectMetaData metadata) {
 		super(metadata);
 		this.syndesisMetaData = metadata;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.projecttemplates.util.ICamelCatalogUser#shouldPreloadCatalog()
-	 */
-	@Override
-	public boolean shouldPreloadCatalog() {
-		return true;
 	}
 	
 	/* (non-Javadoc)
@@ -92,12 +84,14 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	 */
 	@Override
 	protected void openRequiredFilesInEditor(IProject prj, IProgressMonitor monitor) {
-		super.openRequiredFilesInEditor(prj, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 30);
+		
+		super.openRequiredFilesInEditor(prj, subMonitor.split(10));
 		
 		// finally open the camel context file
-		openCamelContextFile(prj, monitor);
+		openCamelContextFile(prj, subMonitor.split(10));
 		// and open the syndesis config file
-		openSyndesisConfiguration(prj, monitor);
+		openSyndesisConfiguration(prj, subMonitor.split(10));
 	}
 
 	/**
@@ -108,6 +102,8 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	 * @throws CoreException
 	 */
 	protected void updateSyndesisConfiguration(IProject project, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
+		
 		try {
 			File pomFile = project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toFile();
 			Model pomModel = new CamelMavenUtils().getMavenModel(project);
@@ -117,7 +113,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
-				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, monitor);
+				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, subMonitor.split(10));
 			}
 		} catch (CoreException | XmlPullParserException | IOException e1) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(e1);
