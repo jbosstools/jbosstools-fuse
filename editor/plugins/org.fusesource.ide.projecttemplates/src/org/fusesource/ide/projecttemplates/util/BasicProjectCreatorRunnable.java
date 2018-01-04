@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.util;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -40,6 +41,8 @@ import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
