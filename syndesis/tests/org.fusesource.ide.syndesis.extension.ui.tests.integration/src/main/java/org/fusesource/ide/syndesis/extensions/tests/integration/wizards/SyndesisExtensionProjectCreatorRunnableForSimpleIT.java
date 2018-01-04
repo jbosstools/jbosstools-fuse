@@ -10,14 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 public class SyndesisExtensionProjectCreatorRunnableForSimpleIT extends SyndesisExtensionProjectCreatorRunnableIT{
-	
-	@Rule
-	public TemporaryFolder tmpFolder = new TemporaryFolder();
 	
 	@Test
 	public void testSimpleExtensionProjectCreation() throws Exception {
