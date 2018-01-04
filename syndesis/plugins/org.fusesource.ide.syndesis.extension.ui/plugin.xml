@@ -13,12 +13,8 @@
 
 	<extension
          point="org.eclipse.ui.newWizards">
-      <category
-            name="%fuse.syndesis.category.label"
-            id="org.fusesource.ide.syndesis.newwizards">
-      </category>
       <wizard id="org.fusesource.ide.syndesis.extensions.wizards.SyndesisExtensionProjectWizard"
-            category="org.fusesource.ide.syndesis.newwizards"
+            category="org.fusesource.ide.newwizards"
             class="org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard"
             icon="icons/syndesis16.png"
             name="%syndesis.extension.project.wizard.name"

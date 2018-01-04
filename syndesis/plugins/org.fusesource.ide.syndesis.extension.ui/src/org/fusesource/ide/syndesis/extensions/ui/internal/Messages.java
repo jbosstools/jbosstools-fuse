@@ -78,7 +78,6 @@ public class Messages extends NLS {
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionName;
 	public static String newProjectWizardExtensionDetailsPageErrorValidationError;
 
-	public static String configuringFacets;
 	public static String installingRequiredFacetsForSyndesisExtensionProject;
 	
 	static {
