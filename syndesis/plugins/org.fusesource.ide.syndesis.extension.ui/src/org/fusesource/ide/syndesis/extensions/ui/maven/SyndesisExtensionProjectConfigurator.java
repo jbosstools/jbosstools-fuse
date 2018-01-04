@@ -52,9 +52,10 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 			IProject project = facade.getProject();
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
 			if (fproj != null && isValidSyndesisProject(project)) {
-				installDefaultFacets(project, fproj, monitor);
+				SubMonitor subMonitor = SubMonitor.convert(monitor, 20);
+				installDefaultFacets(project, fproj, subMonitor.split(10));
 				// we add the camel nature because this enables the Camel Contexts virtual folder in the project
-				addNature(project, RiderProjectNature.NATURE_ID, monitor);
+				addNature(project, RiderProjectNature.NATURE_ID, subMonitor.split(10));
 			}
 		}
 		super.mavenProjectChanged(event, monitor);
@@ -65,7 +66,6 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		if (model != null) {
 			return  model.getBuild().getPluginManagement() != null && isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins()) ||
 					isSyndesisPluginDefined(model.getBuild().getPlugins());
-				
 		}
 		return false;
 	}
@@ -125,6 +125,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
 		// we add the camel nature because this enables the Camel Contexts virtual folder in the project
-		addNature(request.getProject(), RiderProjectNature.NATURE_ID, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
+		addNature(request.getProject(), RiderProjectNature.NATURE_ID, subMonitor.split(10));
 	}
 }
