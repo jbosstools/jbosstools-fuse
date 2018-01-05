@@ -144,7 +144,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
 			setPageComplete(false);
 		} else {
-			Pattern versionPattern = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+)?((\\-).*)?$");
+			Pattern versionPattern = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+)?((\\.|\\-).*)?$");
 			Matcher m = versionPattern.matcher(getExtensionVersion());
 			if (!m.matches()) {
 				addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion);
@@ -161,6 +161,11 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 			cleanErrorMarkerForControl(extensionNameText);
 		}
 
+		if (!errorMarkers.isEmpty()) {
+			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorValidationError);
+		} else {
+			setErrorMessage(null);
+		}
 		setPageComplete(errorMarkers.isEmpty());
 	}
 	

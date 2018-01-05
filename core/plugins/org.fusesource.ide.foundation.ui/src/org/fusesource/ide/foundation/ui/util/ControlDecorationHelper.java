@@ -30,14 +30,14 @@ public class ControlDecorationHelper {
 		return decoration;
 	}
 	
-	public ControlDecoration addErrorToControl(Control control, String informationText) {
+	public ControlDecoration addErrorToControl(Control control, String errorMessage) {
 		ControlDecoration decoration = null;
 		if (control != null) {
 			decoration = new ControlDecoration(control, SWT.TOP | SWT.LEFT);
 			Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage();
 			decoration.setImage(image);
 			decoration.setShowOnlyOnFocus(false);
-			decoration.setDescriptionText(informationText);
+			decoration.setDescriptionText(errorMessage);
 		}
 		return decoration;
 	}
