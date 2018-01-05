@@ -170,9 +170,8 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	}
 	
 	private void addErrorMarkerForControl(Control control, String errorMessage) {
-		if (!errorMarkers.containsKey(control)) {
-			errorMarkers.put(control, controlDecorationHelper.addErrorToControl(control, errorMessage));
-		}
+		cleanErrorMarkerForControl(control);
+		errorMarkers.put(control, controlDecorationHelper.addErrorToControl(control, errorMessage));
 	}
 	
 	private void cleanErrorMarkerForControl(Control control) {
