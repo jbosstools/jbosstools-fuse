@@ -18,12 +18,34 @@ import org.eclipse.swt.widgets.Control;
 
 public class ControlDecorationHelper {
 
-	public void addInformationOnFocus(Control control, String informationText) {
-		ControlDecoration decoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
-		Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage();
-		decoration.setImage(image);
-		decoration.setShowOnlyOnFocus(true);
-		decoration.setDescriptionText(informationText);
+	public ControlDecoration addInformationOnFocus(Control control, String informationText) {
+		ControlDecoration decoration = null;
+		if (control != null) {
+			decoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
+			Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage();
+			decoration.setImage(image);
+			decoration.setShowOnlyOnFocus(true);
+			decoration.setDescriptionText(informationText);
+		}
+		return decoration;
 	}
 	
+	public ControlDecoration addErrorToControl(Control control, String informationText) {
+		ControlDecoration decoration = null;
+		if (control != null) {
+			decoration = new ControlDecoration(control, SWT.TOP | SWT.LEFT);
+			Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage();
+			decoration.setImage(image);
+			decoration.setShowOnlyOnFocus(false);
+			decoration.setDescriptionText(informationText);
+		}
+		return decoration;
+	}
+	
+	public void removeDecorationFromControl(ControlDecoration decoration) {
+		if (decoration != null) {
+			decoration.hide();
+			decoration.dispose();
+		}
+	}
 }
