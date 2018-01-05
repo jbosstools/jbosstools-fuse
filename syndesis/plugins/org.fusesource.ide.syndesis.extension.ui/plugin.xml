@@ -3,23 +3,11 @@
 <plugin>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
-         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="org.fusesource.ide.branding.perspective"/>
-      </perspectiveExtension>
       <perspectiveExtension
             targetID="*">
          <newWizardShortcut
                id="org.fusesource.ide.syndesis.extensions.wizards.NewSyndesisExtensionWizard">
          </newWizardShortcut>
-         <perspectiveShortcut
-               id="org.fusesource.ide.branding.perspective">
-         </perspectiveShortcut>
       </perspectiveExtension>
    </extension>
 
