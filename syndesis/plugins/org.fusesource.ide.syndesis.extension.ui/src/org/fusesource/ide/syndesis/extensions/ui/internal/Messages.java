@@ -74,6 +74,7 @@ public class Messages extends NLS {
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionId;
 	public static String newProjectWizardExtensionDetailsPageErrorInvalidExtensionId;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion;
+	public static String newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion;
 	public static String newProjectWizardExtensionDetailsPageErrorMissingExtensionName;
 
 	public static String configuringFacets;

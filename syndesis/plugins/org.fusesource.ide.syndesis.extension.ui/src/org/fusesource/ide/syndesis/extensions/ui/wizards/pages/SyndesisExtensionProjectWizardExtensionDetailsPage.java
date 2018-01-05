@@ -11,8 +11,13 @@
 package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -20,6 +25,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -38,6 +44,8 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	private Text extensionNameText;
 	private Text extensionDescriptionText;
 	private Text extensionTagsText;
+	private Map<Control, ControlDecoration> errorMarkers = new HashMap<>();
+	private ControlDecorationHelper controlDecorationHelper =  new ControlDecorationHelper();
 	
 	public SyndesisExtensionProjectWizardExtensionDetailsPage() {
 		super(Messages.newProjectWizardExtensionDetailsPageName);
@@ -60,6 +68,8 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		
 		setControl(container);
 		
+		validateFields();
+		
 		extensionIdText.setFocus();
 	}
 
@@ -75,7 +85,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		textField.setLayoutData(gridData);
 		textField.setToolTipText(toolTip);
 		
-		new ControlDecorationHelper().addInformationOnFocus(textField, toolTip);
+		controlDecorationHelper.addInformationOnFocus(textField, toolTip);
 		
 		if (!Strings.isBlank(message)) {
 			textField.setMessage(message);
@@ -118,30 +128,52 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	}
 	
 	private void validateFields() {
-		setErrorMessage(null);
-		
+		// validate the extension id
 		if (Strings.isBlank(extensionIdText.getText())) {
-			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
+			addErrorMarkerForControl(extensionIdText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
 			setPageComplete(false);
-			return;
 		} else if (extensionIdText.getText().indexOf(' ') != -1) {
-			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionId);
+			addErrorMarkerForControl(extensionIdText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionId);
 			setPageComplete(false);
-			return;
+		} else {
+			cleanErrorMarkerForControl(extensionIdText);
 		}
 		
+		// validate the extension version
 		if (Strings.isBlank(extensionVersionText.getText())) {
-			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
+			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
 			setPageComplete(false);
-			return;
+		} else {
+			Pattern versionPattern = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+)?((\\-).*)?$");
+			Matcher m = versionPattern.matcher(getExtensionVersion());
+			if (!m.matches()) {
+				addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion);
+				setPageComplete(false);	
+			} else {
+				cleanErrorMarkerForControl(extensionVersionText);
+			}
 		}
 		
 		if (Strings.isBlank(extensionNameText.getText())) {
-			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionName);
+			addErrorMarkerForControl(extensionNameText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionName);
 			setPageComplete(false);
-			return;
+		} else {
+			cleanErrorMarkerForControl(extensionNameText);
 		}
 
-		setPageComplete(getErrorMessage() == null);
+		setPageComplete(errorMarkers.isEmpty());
+	}
+	
+	private void addErrorMarkerForControl(Control control, String errorMessage) {
+		if (!errorMarkers.containsKey(control)) {
+			errorMarkers.put(control, controlDecorationHelper.addErrorToControl(control, errorMessage));
+		}
+	}
+	
+	private void cleanErrorMarkerForControl(Control control) {
+		ControlDecoration dec = errorMarkers.remove(control);
+		if (dec != null) {
+			controlDecorationHelper.removeDecorationFromControl(dec);
+		}
 	}
 }
