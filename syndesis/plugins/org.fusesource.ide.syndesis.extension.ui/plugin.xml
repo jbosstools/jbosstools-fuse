@@ -87,7 +87,5 @@
        	    runsAfter="org.eclipse.m2e.jdt.javaConfigurator,org.maven.ide.eclipse.configuration.wtp.configurator?"/>
    </extension>
 
-   <extension point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
-   </extension>
  
 </plugin>
