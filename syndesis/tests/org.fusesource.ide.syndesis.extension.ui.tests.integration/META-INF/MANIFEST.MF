@@ -20,6 +20,7 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  org.fusesource.ide.camel.editor,
  org.fusesource.ide.project,
  org.fusesource.ide.camel.tests.util,
+ org.fusesource.ide.projecttemplates,
  org.fusesource.ide.projecttemplates.tests.integration,
  org.fusesource.ide.syndesis.extension.core;bundle-version="10.2.0",
  org.fusesource.ide.syndesis.extension.ui;bundle-version="10.2.0"
