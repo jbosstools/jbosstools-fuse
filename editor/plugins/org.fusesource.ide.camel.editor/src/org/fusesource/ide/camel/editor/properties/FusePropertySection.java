@@ -12,6 +12,8 @@ package org.fusesource.ide.camel.editor.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -220,14 +222,15 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	 */
 	private void createTabFolder() {
 
-		if (this.form != null)
+		if (this.form != null && !this.form.isDisposed()) {
 			form.dispose();
+		}
 
 		this.form = this.toolkit.createForm(this.parent);
 		this.form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		this.form.getBody().setLayout(new GridLayout(1, false));
 
-		if (tabFolder != null) {
+		if (tabFolder != null && !tabFolder.isDisposed()) {
 			tabFolder.dispose();
 		}
 
@@ -532,6 +535,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		client.setLayout(new GridLayout(4, false));
 
 		DataFormat df = getCamelModel(dataFormatElement).getDataFormat(dataformat);
+		if (df == null) {
+			Collection<DataFormat> dfs = getCamelModel(dataFormatElement).getDataFormatsByTag(dataformat);
+			if (dfs != null && !dfs.isEmpty() && dfs.size() == 1) {
+				df = dfs.iterator().next(); // take first element
+			}
+		}
 		if (dataFormatElement != null && df != null && dataFormatElement.getTagNameWithoutPrefix().equals(dataformat) == false) {
 			Node oldExpNode = null;
 			for (int i = 0; i < selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
@@ -554,13 +563,12 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 				selectedEP.getXmlNode().removeChild(oldExpNode);
 				selectedEP.removeParameter(prop.getName());
 			}
-		} else if (dataFormatElement == null && dataformat.trim().length() > 0) {
+		} else if (dataFormatElement == null && dataformat.trim().length() > 0 && df != null) {
 			// no expression set, but now we set one
 			Node expNode = selectedEP.createElement(dataformat, selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 			dataFormatElement = new CamelBasicModelElement(this.selectedEP, expNode);
 			selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
 			this.selectedEP.setParameter(prop.getName(), dataFormatElement);
-
 			updateDependencies(df.getDependencies(), project);
 		}
 
