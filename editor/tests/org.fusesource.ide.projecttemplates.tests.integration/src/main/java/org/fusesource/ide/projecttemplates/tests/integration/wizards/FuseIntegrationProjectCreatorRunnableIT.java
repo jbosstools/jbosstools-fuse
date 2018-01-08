@@ -55,6 +55,7 @@ import org.fusesource.ide.launcher.debug.model.ThreadGarbageCollector;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
@@ -97,6 +98,11 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 
 		if (metadata == null) {
 			metadata = createDefaultNewProjectMetadata(dsl, projectName);
+		}
+		
+		AbstractProjectTemplate template = metadata.getTemplate();
+		if (template != null) {
+			assertThat(template.isCompatible(camelVersion)).isTrue();
 		}
 
 		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
