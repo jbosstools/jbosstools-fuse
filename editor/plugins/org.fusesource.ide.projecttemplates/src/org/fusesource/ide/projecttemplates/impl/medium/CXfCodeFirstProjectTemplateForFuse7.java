@@ -24,7 +24,7 @@ public class CXfCodeFirstProjectTemplateForFuse7 extends AbstractCxfCodeFirstPro
 
 	@Override
 	public boolean isCompatible(String camelVersion) {
-		return isStrictlyLowerThan2200(camelVersion);
+		return !isStrictlyLowerThan2200(camelVersion);
 	}
 	
 	@Override
