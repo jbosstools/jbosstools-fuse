@@ -33,6 +33,9 @@ public class CamelXMLEditorInputFactory implements IElementFactory {
 			return null;
 		}
 		final String containerId = memento.getString(CamelXMLEditorInput.KEY_SELECTED_CONTAINER_ID);
+		if (containerId == null) {
+			return null;
+		}
 		return new CamelXMLEditorInput(ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(filePath)).getAdapter(IFile.class), containerId);
 	}
 }
