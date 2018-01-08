@@ -70,10 +70,11 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	 */
 	@Override
 	protected void doAdditionalProjectConfiguration(IProject prj, IProgressMonitor monitor) {
-		super.doAdditionalProjectConfiguration(prj, monitor);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 20);
+		super.doAdditionalProjectConfiguration(prj, subMonitor.split(10));
 		// syndesis related config updates
 		try {
-			updateSyndesisConfiguration(prj, monitor);	
+			updateSyndesisConfiguration(prj, subMonitor.split(10));	
 		} catch (CoreException ex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(ex);
 		}		

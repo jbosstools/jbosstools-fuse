@@ -80,7 +80,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 						
 			if (ok) {
 				// then configure the project for the given template
-				AbstractProjectTemplate template = metadata.getTemplate(); // retrieveTemplate!
+				AbstractProjectTemplate template = retrieveTemplate();
 				// now execute the template
 				try {
 					template.create(prj, metadata, subMonitor.split(1));
@@ -98,8 +98,8 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 				if (switchPerspective) {
 					switchToFusePerspective(workbenchWindow);
 				}
-				subMonitor.setWorkRemaining(5);
 			}
+			subMonitor.setWorkRemaining(5);
 				
 			// refresh
 			try {
@@ -115,7 +115,8 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 			if (shouldPreloadCatalog()) {
 				CamelCatalogCacheManager.getInstance().getCamelModelForProject(prj, subMonitor.split(1, SubMonitor.SUPPRESS_NONE));
 			}
-					
+			subMonitor.setWorkRemaining(2);
+			
 			// finally open any editors required
 			openRequiredFilesInEditor(prj, subMonitor.split(1));
 
@@ -231,15 +232,15 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 		return result == IDialogConstants.YES_ID;
 	}
 	
-//	protected AbstractProjectTemplate retrieveTemplate() {
-//		if (metadata.isBlankProject()) {
-//			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(metadata.getCamelVersion())) > 0){
-//				return new EmptyProjectTemplateForFuse6();
-//			} else {
-//				return new EmptyProjectTemplateForFuse7();
-//			}
-//		} else {
-//			return metadata.getTemplate();
-//		}
-//	}
+	protected AbstractProjectTemplate retrieveTemplate() {
+		if (metadata.getTemplate() == null) {
+			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(metadata.getCamelVersion())) > 0){
+				return new EmptyProjectTemplateForFuse6();
+			} else {
+				return new EmptyProjectTemplateForFuse7();
+			}
+		} else {
+			return metadata.getTemplate();
+		}
+	}
 }

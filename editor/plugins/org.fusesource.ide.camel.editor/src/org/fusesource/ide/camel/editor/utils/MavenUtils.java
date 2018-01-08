@@ -47,7 +47,7 @@ import org.fusesource.ide.foundation.ui.util.Shells;
 public class MavenUtils {
 
 	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
+	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 
 	private static final String CAMEL_GROUP_ID = "org.apache.camel";
 	private static final String CAMEL_CORE_ARTIFACT_ID = "camel-core";
