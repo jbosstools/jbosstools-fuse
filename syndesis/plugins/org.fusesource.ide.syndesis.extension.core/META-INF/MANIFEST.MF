@@ -14,4 +14,5 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.12.0",
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2",
  com.fasterxml.jackson.core.jackson-core;bundle-version="2.6.2",
  com.fasterxml.jackson.core.jackson-databind
-Export-Package: org.fusesource.ide.syndesis.extensions.core.model
+Export-Package: org.fusesource.ide.syndesis.extensions.core.model,
+ org.fusesource.ide.syndesis.extensions.core.util

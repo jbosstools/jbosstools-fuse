@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -31,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 import org.fusesource.ide.foundation.ui.util.Widgets;
+import org.fusesource.ide.syndesis.extensions.core.util.SyndesisExtensionsUtil;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
@@ -143,15 +142,11 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		if (Strings.isBlank(extensionVersionText.getText())) {
 			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
 			setPageComplete(false);
+		} else if (!SyndesisExtensionsUtil.isValidSyndesisExtensionVersion(extensionVersionText.getText())) {
+			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion);
+			setPageComplete(false);	
 		} else {
-			Pattern versionPattern = Pattern.compile("^(\\d+){1}(\\.\\d+){1}(\\.\\d+)?((\\.|\\-).*)?$");
-			Matcher m = versionPattern.matcher(getExtensionVersion());
-			if (!m.matches()) {
-				addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion);
-				setPageComplete(false);	
-			} else {
-				cleanErrorMarkerForControl(extensionVersionText);
-			}
+			cleanErrorMarkerForControl(extensionVersionText);
 		}
 		
 		if (Strings.isBlank(extensionNameText.getText())) {
