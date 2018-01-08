@@ -20,7 +20,6 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -576,7 +575,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected void updateDependenciesForDataFormat(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
 			IProject project = selectedEP.getCamelFile().getResource().getProject();
-			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, new NullProgressMonitor());
+			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 			if (m != null) {
 				DataFormat df = m.getDataFormat(newValue);
 				if (df != null) {
@@ -589,7 +588,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected void updateDependenciesForLanguage(AbstractCamelModelElement selectedEP, String newValue) {
 		if (newValue != null) {
 			IProject project = selectedEP.getCamelFile().getResource().getProject();
-			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project, new NullProgressMonitor());
+			CamelModel m = CamelCatalogCacheManager.getInstance().getCamelModelForProject(project);
 			if (m != null) {
 				Language l = m.getLanguage(newValue);
 				if (l != null) {
