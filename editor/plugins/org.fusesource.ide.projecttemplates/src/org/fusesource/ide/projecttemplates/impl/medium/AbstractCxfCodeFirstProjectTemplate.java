@@ -16,6 +16,7 @@ import java.io.InputStream;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
@@ -49,7 +50,8 @@ public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjec
 		private static final String TEMPLATE_JAVA = "template-medium-cxf-codefirst-java-fuse";
 
 		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
+				throws IOException, InvalidProjectMetaDataException {
 			String bundleEntry = null;
 			if (metadata instanceof ICamelDSLTypeSupport) {
 				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
@@ -63,7 +65,7 @@ public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjec
 				}
 				return getTemplateStream(bundleEntry);
 			}
-			throw new IOException("Invalid project metadata not supporting Camel DSL types");
+			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
 		}
 
 		private String getBundleEntry(String templateDsl) {

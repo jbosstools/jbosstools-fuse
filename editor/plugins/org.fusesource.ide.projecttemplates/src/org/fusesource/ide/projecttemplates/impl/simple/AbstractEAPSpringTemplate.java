@@ -16,6 +16,7 @@ import java.io.InputStream;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
@@ -48,13 +49,14 @@ public abstract class AbstractEAPSpringTemplate extends AbstractProjectTemplate 
 
 		private static final String TEMPLATE_FOLDER = "templates/";
 		private static final String TEMPLATE_SPRING = "template-medium-eap-wildfly-spring-fuse";
-		
+
 		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
+				throws IOException, InvalidProjectMetaDataException {
 			if (metadata instanceof ICamelDSLTypeSupport && CamelDSLType.SPRING.equals((((ICamelDSLTypeSupport)metadata).getDslType()))) {
 				return getTemplateStream(String.format("%s%s%s.zip", TEMPLATE_FOLDER, TEMPLATE_SPRING, suffix));
 			}
-			throw new IOException("Invalid project metadata not supporting Camel DSL types");
+			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
 		}
 	}
 

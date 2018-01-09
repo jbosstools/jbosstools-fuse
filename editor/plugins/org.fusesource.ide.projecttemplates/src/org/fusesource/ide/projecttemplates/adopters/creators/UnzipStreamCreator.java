@@ -24,6 +24,7 @@ import java.util.zip.ZipInputStream;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
@@ -88,7 +89,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 				ProjectTemplatesActivator.pluginLog().logError("Unable to unzip stream of type " + is.getClass().getName()); //$NON-NLS-1$
 				return false;
 			 }
-	     } catch(IOException ex) {
+	     } catch(IOException|InvalidProjectMetaDataException ex) {
 	    	 ProjectTemplatesActivator.pluginLog().logError(ex);
 	    	 return false;
 	     }
