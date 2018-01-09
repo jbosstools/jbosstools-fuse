@@ -20,6 +20,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfig
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
@@ -56,7 +57,8 @@ public class OSESpringBootXMLTemplate extends AbstractProjectTemplate {
 		private static final String TEMPLATE_SPRING = "template-simple-ose-log-springboot.zip";
 		
 		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
+				throws IOException, InvalidProjectMetaDataException {
 			String bundleEntry = null;
 			if (metadata instanceof ICamelDSLTypeSupport) {
 				CamelDSLType dslType = ((ICamelDSLTypeSupport)metadata).getDslType();
@@ -65,7 +67,7 @@ public class OSESpringBootXMLTemplate extends AbstractProjectTemplate {
 				}
 				return getTemplateStream(bundleEntry);
 			}
-			throw new IOException("Invalid project metadata not supporting Camel DSL types");
+			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
 		}
 	}
 }

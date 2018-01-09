@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.adopters.creators;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
@@ -27,9 +28,10 @@ public abstract class InputStreamCreator implements TemplateCreatorSupport {
 	/**
 	 * returns the inputstream which holds the template data
 	 * 
-	 * @param metadata		the project metadata
+	 * @param metadata	the project metadata
 	 * @return
 	 * @throws IOException
+	 * @throws InvalidProjectMetaDataException
 	 */
-	public abstract InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException;
+	public abstract InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException, InvalidProjectMetaDataException;
 }

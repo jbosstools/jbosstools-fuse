@@ -19,6 +19,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
@@ -44,7 +45,8 @@ public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTem
 		private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
 		
 		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
+				throws IOException, InvalidProjectMetaDataException {
 			String bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_XML);
 			return getTemplateStream(SyndesisExtensionsUIActivator.getBundleContext().getBundle(), bundleEntry);
 		}

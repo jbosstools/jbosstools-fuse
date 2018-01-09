@@ -16,6 +16,7 @@ import java.io.InputStream;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
@@ -50,9 +51,13 @@ public abstract class AbstractCBRTemplate extends AbstractProjectTemplate {
 		private static final String TEMPLATE_BLUEPRINT = "template-simple-cbr-blueprint-fuse";
 		private static final String TEMPLATE_SPRING = "template-simple-cbr-spring-fuse";
 		private static final String TEMPLATE_JAVA = "template-simple-cbr-java-fuse";
-		
+
+		/* (non-Javadoc)
+		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData)
+		 */
 		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException {
+		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
+				throws IOException, InvalidProjectMetaDataException {
 			String bundleEntry = null;
 			if (metadata instanceof ICamelDSLTypeSupport) {
 				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
