@@ -752,8 +752,12 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 							throw new UnsupportedOperationException();
 							// here we need to reinit the model element so it
 							// copies all information from the node
-						case CONTEXT_ENDPOINT:		throw new UnsupportedOperationException();
+						case CONTEXT_ENDPOINT:
+							throw new UnsupportedOperationException();
 						case GLOBAL_ELEMENT:
+							modifyGlobalElement(newXMLNode);
+							break;
+						case GLOBAL_BEAN:
 							modifyGlobalElement(newXMLNode);
 							break;
 						default:					// nothing to do - handled via node events

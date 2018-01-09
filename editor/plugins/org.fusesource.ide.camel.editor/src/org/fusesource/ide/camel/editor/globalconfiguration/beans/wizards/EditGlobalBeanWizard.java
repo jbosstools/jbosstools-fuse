@@ -32,6 +32,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	private Element inputNode;
 	private ComponentManager componentManager;
 	private final CamelFile camelFile;
+	private Element updatedNode = null;
 
 	public EditGlobalBeanWizard(final CamelFile camelFile, CamelModel camelModel) {
 		super();
@@ -52,7 +53,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 		super.addPages();
 		final GlobalBeanEditWizardPage globalBeanPage = new GlobalBeanEditWizardPage(dbc, UIMessages.editGlobalBeanWizardBeanEditPageTitle,
 				UIMessages.editGlobalBeanWizardBeanEditPageMessage, camelFile);
-		globalBeanPage.setElement(inputNode);
+		globalBeanPage.setElement(updatedNode);
 		addPage(globalBeanPage);
 
 	}
@@ -65,7 +66,7 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	 */
 	@Override
 	public Element getGlobalConfigurationElementNode() {
-		return inputNode;
+		return this.inputNode;
 	}
 
 	/*
@@ -78,6 +79,10 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	@Override
 	public void setGlobalConfigurationElementNode(Element node) {
 		this.inputNode = node;
+		if (updatedNode == null) {
+			updatedNode = (Element) this.inputNode.cloneNode(true);
+			this.inputNode.getOwnerDocument().adoptNode(updatedNode);
+		}
 	}
 
 	/**
@@ -98,13 +103,17 @@ public class EditGlobalBeanWizard extends Wizard implements GlobalConfigurationT
 	 */
 	@Override
 	public boolean performFinish() {
-		setGlobalConfigurationElementNode(inputNode);
+		Element parentNode = (Element) inputNode.getParentNode();
+		if (parentNode != null) {
+			parentNode.replaceChild(updatedNode, inputNode);
+		}
+		setGlobalConfigurationElementNode(updatedNode);
 		return true;
 	}
 
 	@Override
 	public boolean performCancel() {
-		setGlobalConfigurationElementNode(null);
+		setGlobalConfigurationElementNode(inputNode);
 		return true;
 	}
 
