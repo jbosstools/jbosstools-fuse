@@ -49,6 +49,9 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7wildfly.url";
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7wildfly.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);
+	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.fisbom2fabric8MavenVersion.fuse7.url";
+	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2686-provideFISForFuse7Template/configuration/fisBomToFabric8MavenPlugin.fuse7.properties";
+	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_URL_MAPPING_FUSE_7 = System.getProperty(FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY, FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL);
 
 	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
 	public static final String FIS_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
@@ -132,6 +135,7 @@ public class CamelCatalogUtils {
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
 	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING;
+	static final Map<String, String> FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING;
 	
 	static {
 		CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new HashMap<>();
@@ -141,6 +145,7 @@ public class CamelCatalogUtils {
 		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
 		TEST_CAMEL_VERSIONS = new ArrayList<>();
+		FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING = new HashMap<>();
 		
 		try {
 			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL);
@@ -178,6 +183,12 @@ public class CamelCatalogUtils {
 			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY);
 		} catch (IOException ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 7.x on Wildfly from online repo. Falling back to defaults.", ex);
+		}
+		
+		try {
+			createMappingFromOnlineFiles(FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING, FISBOM_TOFABRIC8MAVENPLUGIN_URL_MAPPING_FUSE_7);
+		} catch (IOException ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS bom Version -> Farbic8 Maven Plugin Version mappings for Fuse 7.x from online repo. Falling back to defaults.", ex);
 		}
 		
 		try {
@@ -278,7 +289,7 @@ public class CamelCatalogUtils {
 	 * @return
 	 */
 	public static String getBomVersionForCamelVersion(String camelVersion, IProject project, Model mavenModel, IProgressMonitor monitor) {
-		org.apache.maven.model.Dependency fuseBomUsed = new OnlineBomVersionSearcher().retrieveAnyFuseBomUsed(mavenModel.getDependencyManagement());
+		org.apache.maven.model.Dependency fuseBomUsed = new OnlineArtifactVersionSearcher().retrieveAnyFuseBomUsed(mavenModel.getDependencyManagement());
 		return getBomVersionForCamelVersion(camelVersion, project, monitor, fuseBomUsed);
 	}
 
@@ -302,7 +313,7 @@ public class CamelCatalogUtils {
 		if (CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
 		} else {
-			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+			return new OnlineArtifactVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
 		}
 	}
 
@@ -310,15 +321,17 @@ public class CamelCatalogUtils {
 		if (CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.get(camelVersion);
 		} else {
-			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+			return new OnlineArtifactVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
 		}
 	}
 
 	protected static String getFuseFISBomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
 		if(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(camelVersion);
+		} else if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) > 0) {
+			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(CAMEL_VERSION_LATEST_FIS_20);
 		} else {
-			return new OnlineBomVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
+			return new OnlineArtifactVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);
 		}
 	}
 
@@ -493,6 +506,22 @@ public class CamelCatalogUtils {
 			dep.setVersion(version);
 			
 			dependencies.add(dep);
+		}
+	}
+
+	public static String getFabric8MavenPluginVersionForBomVersion(String bomVersion, IProgressMonitor monitor) {
+		if(FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING.containsKey(bomVersion)) {
+			return FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING.get(bomVersion);
+		} else {
+			org.apache.maven.model.Dependency artifactToSearch = new org.apache.maven.model.Dependency();
+			artifactToSearch.setGroupId("io.fabric8");
+			artifactToSearch.setArtifactId("fabric8-maven-plugin");
+			try {
+				return new OnlineArtifactVersionSearcher().findLatestVersion(monitor, artifactToSearch);
+			} catch (CoreException e) {
+				CamelModelServiceCoreActivator.pluginLog().logError(e);
+				return "";
+			}
 		}
 	}
 }

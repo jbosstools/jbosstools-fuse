@@ -29,6 +29,6 @@ public class EAPSpringTemplateForFuse7 extends AbstractEAPSpringTemplate {
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getBomVersion("org.wildfly.camel", "wildfly-camel-bom"));
+		return new MavenTemplateConfigurator(getArtifactLastVersion("org.wildfly.camel", "wildfly-camel-bom"));
 	}
 }

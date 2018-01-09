@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.fusesource.ide.camel.model.service.core.util.OnlineBomVersionSearcher;
+import org.fusesource.ide.camel.model.service.core.util.OnlineArtifactVersionSearcher;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
@@ -99,12 +99,12 @@ public abstract class AbstractProjectTemplate {
 		return new ComparableVersion(camelVersion).compareTo(COMPARABLE_CAMEL_2_20_0_VERSION) < 0;
 	}
 	
-	public String getBomVersion(String groupId, String artifactId) {
+	public String getArtifactLastVersion(String groupId, String artifactId) {
 		Dependency bomToSearch = new Dependency();
 		bomToSearch.setGroupId(groupId);
 		bomToSearch.setArtifactId(artifactId);
 		try {
-			return new OnlineBomVersionSearcher().findLatestBomVersion(new NullProgressMonitor(), bomToSearch);
+			return new OnlineArtifactVersionSearcher().findLatestVersion(new NullProgressMonitor(), bomToSearch);
 		} catch (CoreException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		}

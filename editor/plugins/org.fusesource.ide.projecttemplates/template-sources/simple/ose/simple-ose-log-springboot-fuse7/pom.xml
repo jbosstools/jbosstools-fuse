@@ -19,7 +19,7 @@
 		<spring-boot.version>1.5.4.RELEASE</spring-boot.version>
 
 		<!-- maven plugin versions -->
-		<fabric8.maven.plugin.version>3.5.32.fuse-000029</fabric8.maven.plugin.version>
+		<fabric8.maven.plugin.version>%%%PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION%%%</fabric8.maven.plugin.version>
 		<maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 	</properties>

@@ -12,18 +12,19 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
-import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTemplate {
 	
+	protected static final String PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION = "%%%PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION%%%";
 	private static ComparableVersion minimalCompatibleCamelVersion = new ComparableVersion("2.20.0");
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getBomVersion(FuseBomFilter.BOM_FUSE_FIS.getGroupId(), FuseBomFilter.BOM_FUSE_FIS.getArtifactId()));
+		String bomVersion = getArtifactLastVersion(FuseBomFilter.BOM_FUSE_FIS.getGroupId(), FuseBomFilter.BOM_FUSE_FIS.getArtifactId());
+		return new MavenConfiguratorForOSESpringBootTemplate(bomVersion);
 	}
 
 	@Override

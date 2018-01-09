@@ -29,6 +29,6 @@ public class CXfCodeFirstProjectTemplateForFuse7 extends AbstractCxfCodeFirstPro
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getBomVersion("org.jboss.fuse", "jboss-fuse-parent"));
+		return new MavenTemplateConfigurator(getArtifactLastVersion("org.jboss.fuse", "jboss-fuse-parent"));
 	}
 }
