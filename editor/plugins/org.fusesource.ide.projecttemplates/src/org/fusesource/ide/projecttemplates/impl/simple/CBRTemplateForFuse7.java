@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
@@ -29,7 +30,7 @@ public class CBRTemplateForFuse7 extends AbstractCBRTemplate {
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getBomVersion("org.jboss.fuse", "jboss-fuse-parent"));
+		return new MavenTemplateConfigurator(getArtifactLastVersion(FuseBomFilter.BOM_FUSE_7.getGroupId(), FuseBomFilter.BOM_FUSE_7.getArtifactId()));
 	}
 	
 }

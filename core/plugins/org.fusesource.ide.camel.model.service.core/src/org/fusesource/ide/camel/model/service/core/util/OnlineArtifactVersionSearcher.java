@@ -31,7 +31,7 @@ import org.eclipse.m2e.core.ui.internal.search.util.Packaging;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
-public class OnlineBomVersionSearcher {
+public class OnlineArtifactVersionSearcher {
 	
 	public String findLatestBomVersionOnAvailableRepo(IProject project, IProgressMonitor monitor) {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
@@ -67,12 +67,12 @@ public class OnlineBomVersionSearcher {
 		}
 	}
 	
-	public String findLatestBomVersion(IProgressMonitor monitor, Dependency bomToSearch) throws CoreException {
+	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) throws CoreException {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		//search with m2e Index, it goes faster in case m2e indexing is activated
 		IIndex index = MavenPlugin.getIndexManager().getWorkspaceIndex();
 		IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-		Collection<String> versions = indexSearchEngine.findVersions(bomToSearch.getGroupId(), bomToSearch.getArtifactId(), null, Packaging.POM);
+		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), null, Packaging.POM);
 		subMon.setWorkRemaining(1);
 		if(!versions.isEmpty()) {
 			return versions.iterator().next();
@@ -93,7 +93,7 @@ public class OnlineBomVersionSearcher {
 				mavenRepo.setUrl("https://origin-repository.jboss.org/nexus/content/groups/ea/");
 				additionalMavenRepos.add(mavenRepo);
 			}
-			return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, bomToSearch), subMon.split(1));
+			return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch), subMon.split(1));
 		}
 	}
 	
