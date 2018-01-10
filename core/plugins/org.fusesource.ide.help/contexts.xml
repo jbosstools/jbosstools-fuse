@@ -8,10 +8,6 @@
         <description>Aspect Oriented Programming Pattern</description>
         <topic href="aop.html" label="Aspect Oriented Programming"/>
     </context>
-  <!--  <context id="beanEIP">
-        <description>Bean Integration Pattern</description>
-        <topic href="beanEndpt.html" label="Bean Integration"/>
-    </context> -->
     <context id="doCatchEIP">
         <description>Catch Pattern</description>
         <topic href="catch.html" label="Catch Exceptions"/>
@@ -27,10 +23,6 @@
     <context id="delayEIP">
         <description>Delay Pattern</description>
         <topic href="delay.html" label="Delay"/>
-    </context>
-    <context id="dynamicEIP">
-        <description>Dynamic Routing Pattern</description>
-        <topic href="dynamicRouter.html" label="Dynamic Router"/>
     </context>
     <context id="enrichEIP">
         <description>Content Enrichment Pattern</description>
@@ -72,10 +64,6 @@
         <description>Load Balancing Pattern</description>
         <topic href="loadBalance.html" label="Load Balancer"/>
     </context>
-   <!-- <context id="logEIP">
-        <description>Logging Pattern</description>
-        <topic href="logEIP.html" label="Log"/>
-    </context> -->
     <context id="loopEIP">
         <description>Loop Pattern</description>
         <topic href="loop.html" label="Loop"/>
@@ -481,10 +469,6 @@
         <description>Exec Component Options</description>
         <topic href="Exec-Execcomponent.html" label="Exec"/>
     </context>
-  <!--  <context id="fabric">
-        <description>Fabric Component Options</description>
-        <topic href="Fabric.html" label="Fabric"/>
-    </context> -->
     <context id="facebook">
         <description>Facebook Component Options</description>
         <topic href="Facebook-FacebookComponent.html" label="Facebook"/>

@@ -53,6 +53,7 @@
             <topic label="Fuse Transformation Tooling" href="RiderDevPart.html#_fuse_transformation_tooling"/>
             <topic label="Data Transformation Tutorial" href="RiderDevPart.html#_data_transformation_tutorial"/>
          </topic>
+         <topic label="Developing extensions for Ignite integrations" href="RiderDevPart.html#IgniteExtension"/>
          <topic label="Changing the Camel version" href="RiderDevPart.html#ChangeCamelVersion"/>
       </topic>
       <topic label="Debugging Routing Contexts" href="RiderCamelDebugger.html">
@@ -123,7 +124,7 @@
       <topic label="Groovy" href="Groovy.html"/>
       <topic label="Header" href="Header.html"/>
       <topic label="JavaScript" href="JavaScript.html"/>
-      <topic label="JSonPath" href="JSonPath.html"/>
+      <topic label="JsonPath" href="JsonPath.html"/>
       <topic label="JXPath" href="JXPath.html"/>
       <topic label="MVEL" href="MVEL.html"/>
       <topic label="The Object-Graph Navigation Language(OGNL)" href="OGNL.html"/>
@@ -159,266 +160,276 @@
    </topic>
    <topic label="Enterprise Integration Pattern Reference" href="RiderEIPRef.html">
       <topic label="Route Editor Patterns" href="RefIntroToEIP.html"/>
-      <topic label="Generic" href="endpoint.html">
-         <topic label="Usage" href="endpoint.html#_usage"/>
+      <topic label="Components" href="RiderEndptRef.html">
+         <topic label="Generic" href="endpoint.html">
+            <topic label="Usage" href="endpoint.html#_usage"/>
+         </topic>
+         <topic label="Bean" href="bean.html">
+            <topic label="Usage" href="bean.html#_usage_2"/>
+            <topic label="Properties" href="bean.html#_properties"/>
+         </topic>
+         <topic label="Log" href="log.html">
+            <topic label="Usage" href="log.html#_usage_3"/>
+            <topic label="Properties" href="log.html#_properties_2"/>
+         </topic>
+         <topic label="Process" href="process.html">
+            <topic label="Usage" href="process.html#_usage_4"/>
+            <topic label="Properties" href="process.html#_properties_3"/>
+            <topic label="Related topics" href="process.html#_related_topics_29"/>
+         </topic>
       </topic>
-      <topic label="Bean" href="bean.html">
-         <topic label="Usage" href="bean.html#_usage_2"/>
-         <topic label="Properties" href="bean.html#_properties"/>
+      <topic label="Routing" href="RiderRouteRef.html">
+         <topic label="Aggregate" href="aggregate.html">
+            <topic label="Usage" href="aggregate.html#_usage_5"/>
+            <topic label="Properties" href="aggregate.html#_properties_4"/>
+            <topic label="Related topics" href="aggregate.html#_related_topics_30"/>
+         </topic>
+         <topic label="Choice" href="choice.html">
+            <topic label="Usage" href="choice.html#_usage_6"/>
+            <topic label="Properties" href="choice.html#_properties_5"/>
+         </topic>
+         <topic label="Filter" href="filter.html">
+            <topic label="Usage" href="filter.html#_usage_7"/>
+            <topic label="Properties" href="filter.html#_properties_6"/>
+            <topic label="Related topics" href="filter.html#_related_topics_31"/>
+         </topic>
+         <topic label="Hystrix" href="hystrix.html">
+            <topic label="Usage" href="hystrix.html#_usage_8"/>
+            <topic label="Properties" href="hystrix.html#_properties_7"/>
+         </topic>
+         <topic label="Idempotent Consumer" href="idempotentConsumer.html">
+            <topic label="Usage" href="idempotentConsumer.html#_usage_9"/>
+            <topic label="Related topics" href="idempotentConsumer.html#_related_topics_32"/>
+         </topic>
+         <topic label="Load Balance" href="loadBalance.html">
+            <topic label="Usage" href="loadBalance.html#_usage_10"/>
+            <topic label="Properties" href="loadBalance.html#_properties_8"/>
+            <topic label="Related topics" href="loadBalance.html#_related_topics_33"/>
+         </topic>
+         <topic label="Multicast" href="multicast.html">
+            <topic label="Usage" href="multicast.html#_usage_11"/>
+            <topic label="Properties" href="multicast.html#_properties_9"/>
+         </topic>
+         <topic label="Otherwise" href="otherwise.html">
+            <topic label="Usage" href="otherwise.html#_usage_12"/>
+            <topic label="Properties" href="otherwise.html#_properties_10"/>
+         </topic>
+         <topic label="Pipeline" href="pipeline.html">
+            <topic label="Usage" href="pipeline.html#_usage_13"/>
+            <topic label="Properties" href="pipeline.html#_properties_11"/>
+         </topic>
+         <topic label="Recipient List" href="recipientList.html">
+            <topic label="Usage" href="recipientList.html#_usage_14"/>
+            <topic label="Properties" href="recipientList.html#_properties_12"/>
+            <topic label="Related topics" href="recipientList.html#_related_topics_34"/>
+         </topic>
+         <topic label="Resequence" href="resequence.html">
+            <topic label="Usage" href="resequence.html#_usage_15"/>
+            <topic label="Properties" href="resequence.html#_properties_13"/>
+            <topic label="Related topics" href="resequence.html#_related_topics_35"/>
+         </topic>
+         <topic label="Route" href="routeIcon.html">
+            <topic label="Usage" href="routeIcon.html#_usage_16"/>
+            <topic label="Properties" href="routeIcon.html#_properties_14"/>
+            <topic label="Related topics" href="routeIcon.html#_related_topics_36"/>
+         </topic>
+         <topic label="Routing Slip" href="routingSlip.html">
+            <topic label="Usage" href="routingSlip.html#_usage_17"/>
+            <topic label="Properties" href="routingSlip.html#_properties_15"/>
+            <topic label="Related topics" href="routingSlip.html#_related_topics_37"/>
+         </topic>
+         <topic label="Sort" href="sort.html">
+            <topic label="Usage" href="sort.html#_usage_18"/>
+            <topic label="Properties" href="sort.html#_properties_16"/>
+            <topic label="Related topics" href="sort.html#_related_topics_38"/>
+         </topic>
+         <topic label="Split" href="split.html">
+            <topic label="Usage" href="split.html#_usage_19"/>
+            <topic label="Properties" href="split.html#_properties_17"/>
+            <topic label="Related topics" href="split.html#_related_topics_39"/>
+         </topic>
+         <topic label="When" href="when.html">
+            <topic label="Usage" href="when.html#_usage_20"/>
+            <topic label="Properties" href="when.html#_properties_18"/>
+            <topic label="Related topics" href="when.html#_related_topics_40"/>
+         </topic>
+         <topic label="Wire Tap" href="wiretap.html">
+            <topic label="Usage" href="wiretap.html#_usage_21"/>
+            <topic label="Properties" href="wiretap.html#_properties_19"/>
+            <topic label="Related topics" href="wiretap.html#_related_topics_41"/>
+         </topic>
       </topic>
-      <topic label="Log" href="log.html">
-         <topic label="Usage" href="log.html#_usage_3"/>
-         <topic label="Properties" href="log.html#_properties_2"/>
+      <topic label="Control Flow" href="RiderControlFlowRef.html">
+         <topic label="Delay" href="delay.html">
+            <topic label="Usage" href="delay.html#_usage_22"/>
+            <topic label="Properties" href="delay.html#_properties_20"/>
+            <topic label="Related topics" href="delay.html#_related_topics_42"/>
+         </topic>
+         <topic label="Do Catch" href="catch.html">
+            <topic label="Usage" href="catch.html#_usage_23"/>
+            <topic label="Properties" href="catch.html#_properties_21"/>
+            <topic label="Related topics" href="catch.html#_related_topics_43"/>
+         </topic>
+         <topic label="Do Finally" href="finally.html">
+            <topic label="Usage" href="finally.html#_usage_24"/>
+            <topic label="Properties" href="finally.html#_properties_22"/>
+         </topic>
+         <topic label="Do Try" href="try.html">
+            <topic label="Usage" href="try.html#_usage_25"/>
+            <topic label="Properties" href="try.html#_properties_23"/>
+         </topic>
+         <topic label="Intercept" href="intercept.html">
+            <topic label="Usage" href="intercept.html#_usage_26"/>
+            <topic label="Properties" href="intercept.html#_properties_24"/>
+         </topic>
+         <topic label="Intercept From" href="interceptFrom.html">
+            <topic label="Usage" href="interceptFrom.html#_usage_27"/>
+            <topic label="Properties" href="interceptFrom.html#_properties_25"/>
+         </topic>
+         <topic label="Intercept Send To Endpoint" href="interceptSendToEndpoint.html">
+            <topic label="Usage" href="interceptSendToEndpoint.html#_usage_28"/>
+            <topic label="Properties" href="interceptSendToEndpoint.html#_properties_26"/>
+         </topic>
+         <topic label="Loop" href="loop.html">
+            <topic label="Usage" href="loop.html#_usage_29"/>
+            <topic label="Properties" href="loop.html#_properties_27"/>
+            <topic label="Related topics" href="loop.html#_related_topics_44"/>
+         </topic>
+         <topic label="On Completion" href="onCompletion.html">
+            <topic label="Usage" href="onCompletion.html#_usage_30"/>
+            <topic label="Properties" href="onCompletion.html#_properties_28"/>
+         </topic>
+         <topic label="On Exception" href="onException.html">
+            <topic label="Usage" href="onException.html#_usage_31"/>
+            <topic label="Properties" href="onException.html#_properties_29"/>
+            <topic label="Related topics" href="onException.html#_related_topics_45"/>
+         </topic>
+         <topic label="Rollback" href="rollback.html">
+            <topic label="Usage" href="rollback.html#_usage_32"/>
+            <topic label="Properties" href="rollback.html#_properties_30"/>
+         </topic>
+         <topic label="Throttle" href="throttle.html">
+            <topic label="Usage" href="throttle.html#_usage_33"/>
+            <topic label="Properties" href="throttle.html#_properties_31"/>
+         </topic>
+         <topic label="Throw Exception" href="throwException.html">
+            <topic label="Usage" href="throwException.html#_usage_34"/>
+            <topic label="Related topics" href="throwException.html#_related_topics_46"/>
+         </topic>
+         <topic label="Transacted" href="transacted.html">
+            <topic label="Usage" href="transacted.html#_usage_35"/>
+            <topic label="Properties" href="transacted.html#_properties_32"/>
+            <topic label="Related topics" href="transacted.html#_related_topics_47"/>
+         </topic>
       </topic>
-      <topic label="Process" href="process.html">
-         <topic label="Usage" href="process.html#_usage_4"/>
-         <topic label="Properties" href="process.html#_properties_3"/>
-         <topic label="Related topics" href="process.html#_related_topics_29"/>
+      <topic label="Transformation" href="RiderTransformRef.html">
+         <topic label="Convert Body To" href="convertBody.html">
+            <topic label="Usage" href="convertBody.html#_usage_36"/>
+            <topic label="Properties" href="convertBody.html#_properties_33"/>
+         </topic>
+         <topic label="Enrich" href="enrich.html">
+            <topic label="Usage" href="enrich.html#_usage_37"/>
+            <topic label="Properties" href="enrich.html#_properties_34"/>
+         </topic>
+         <topic label="In Only" href="inOnly.html">
+            <topic label="Usage" href="inOnly.html#_usage_38"/>
+            <topic label="Properties" href="inOnly.html#_properties_35"/>
+         </topic>
+         <topic label="In OutMarks the exchange pattern for the route to request/reply" href="inOut.html">
+            <topic label="Usage" href="inOut.html#_usage_39"/>
+            <topic label="Properties" href="inOut.html#_properties_36"/>
+         </topic>
+         <topic label="Marshal" href="marshal.html">
+            <topic label="Usage" href="marshal.html#_usage_40"/>
+            <topic label="Properties" href="marshal.html#_properties_37"/>
+            <topic label="Related topics" href="marshal.html#_related_topics_48"/>
+         </topic>
+         <topic label="Poll Enrich" href="pollEnrich.html">
+            <topic label="Usage" href="pollEnrich.html#_usage_41"/>
+            <topic label="Properties" href="pollEnrich.html#_properties_38"/>
+         </topic>
+         <topic label="Remove Header" href="removeHeader.html">
+            <topic label="Usage" href="removeHeader.html#_usage_42"/>
+            <topic label="Properties" href="removeHeader.html#_properties_39"/>
+         </topic>
+         <topic label="Remove Headers" href="removeHeaders.html">
+            <topic label="Usage" href="removeHeaders.html#_usage_43"/>
+            <topic label="Properties" href="removeHeaders.html#_properties_40"/>
+         </topic>
+         <topic label="Remove Property" href="removeProperty.html">
+            <topic label="Usage" href="removeProperty.html#_usage_44"/>
+            <topic label="Properties" href="removeProperty.html#_properties_41"/>
+         </topic>
+         <topic label="Remove Properties" href="removeProperties.html">
+            <topic label="Usage" href="removeProperties.html#_usage_45"/>
+            <topic label="Properties" href="removeProperties.html#_properties_42"/>
+         </topic>
+         <topic label="Set Body" href="setBody.html">
+            <topic label="Usage" href="setBody.html#_usage_46"/>
+            <topic label="Properties" href="setBody.html#_properties_43"/>
+            <topic label="Related topics" href="setBody.html#_related_topics_49"/>
+         </topic>
+         <topic label="Set Exchange Pattern" href="setExchangePattern.html">
+            <topic label="Usage" href="setExchangePattern.html#_usage_47"/>
+            <topic label="Properties" href="setExchangePattern.html#_properties_44"/>
+         </topic>
+         <topic label="Set Fault Body" href="setFaultBody.html">
+            <topic label="Usage" href="setFaultBody.html#_usage_48"/>
+            <topic label="Properties" href="setFaultBody.html#_properties_45"/>
+            <topic label="Related topics" href="setFaultBody.html#_related_topics_50"/>
+         </topic>
+         <topic label="Set Header" href="setHeader.html">
+            <topic label="Usage" href="setHeader.html#_usage_49"/>
+            <topic label="Properties" href="setHeader.html#_properties_46"/>
+            <topic label="Related topics" href="setHeader.html#_related_topics_51"/>
+         </topic>
+         <topic label="Set Out Header" href="setOutHeader.html">
+            <topic label="Usage" href="setOutHeader.html#_usage_50"/>
+            <topic label="Properties" href="setOutHeader.html#_properties_47"/>
+            <topic label="Related topics" href="setOutHeader.html#_related_topics_52"/>
+         </topic>
+         <topic label="Set Property" href="setProperty.html">
+            <topic label="Usage" href="setProperty.html#_usage_51"/>
+            <topic label="Properties" href="setProperty.html#_properties_48"/>
+            <topic label="Related topics" href="setProperty.html#_related_topics_53"/>
+         </topic>
+         <topic label="Transform" href="transform.html">
+            <topic label="Usage" href="transform.html#_usage_52"/>
+            <topic label="Properties" href="transform.html#_properties_49"/>
+            <topic label="Related topics" href="transform.html#_related_topics_54"/>
+         </topic>
+         <topic label="Unmarshal" href="unmarshal.html">
+            <topic label="Usage" href="unmarshal.html#_usage_53"/>
+            <topic label="Properties" href="unmarshal.html#_properties_50"/>
+            <topic label="Related topics" href="unmarshal.html#_related_topics_55"/>
+         </topic>
       </topic>
-      <topic label="Aggregate" href="aggregate.html">
-         <topic label="Usage" href="aggregate.html#_usage_5"/>
-         <topic label="Properties" href="aggregate.html#_properties_4"/>
-         <topic label="Related topics" href="aggregate.html#_related_topics_30"/>
-      </topic>
-      <topic label="Choice" href="choice.html">
-         <topic label="Usage" href="choice.html#_usage_6"/>
-         <topic label="Properties" href="choice.html#_properties_5"/>
-      </topic>
-      <topic label="Filter" href="filter.html">
-         <topic label="Usage" href="filter.html#_usage_7"/>
-         <topic label="Properties" href="filter.html#_properties_6"/>
-         <topic label="Related topics" href="filter.html#_related_topics_31"/>
-      </topic>
-      <topic label="Hystrix" href="hystrix.html">
-         <topic label="Usage" href="hystrix.html#_usage_8"/>
-         <topic label="Properties" href="hystrix.html#_properties_7"/>
-      </topic>
-      <topic label="Idempotent Consumer" href="idempotentConsumer.html">
-         <topic label="Usage" href="idempotentConsumer.html#_usage_9"/>
-         <topic label="Related topics" href="idempotentConsumer.html#_related_topics_32"/>
-      </topic>
-      <topic label="Load Balance" href="loadBalance.html">
-         <topic label="Usage" href="loadBalance.html#_usage_10"/>
-         <topic label="Properties" href="loadBalance.html#_properties_8"/>
-         <topic label="Related topics" href="loadBalance.html#_related_topics_33"/>
-      </topic>
-      <topic label="Multicast" href="multicast.html">
-         <topic label="Usage" href="multicast.html#_usage_11"/>
-         <topic label="Properties" href="multicast.html#_properties_9"/>
-      </topic>
-      <topic label="Otherwise" href="otherwise.html">
-         <topic label="Usage" href="otherwise.html#_usage_12"/>
-         <topic label="Properties" href="otherwise.html#_properties_10"/>
-      </topic>
-      <topic label="Pipeline" href="pipeline.html">
-         <topic label="Usage" href="pipeline.html#_usage_13"/>
-         <topic label="Properties" href="pipeline.html#_properties_11"/>
-      </topic>
-      <topic label="Recipient List" href="recipientList.html">
-         <topic label="Usage" href="recipientList.html#_usage_14"/>
-         <topic label="Properties" href="recipientList.html#_properties_12"/>
-         <topic label="Related topics" href="recipientList.html#_related_topics_34"/>
-      </topic>
-      <topic label="Resequence" href="resequence.html">
-         <topic label="Usage" href="resequence.html#_usage_15"/>
-         <topic label="Properties" href="resequence.html#_properties_13"/>
-         <topic label="Related topics" href="resequence.html#_related_topics_35"/>
-      </topic>
-      <topic label="Route" href="routeIcon.html">
-         <topic label="Usage" href="routeIcon.html#_usage_16"/>
-         <topic label="Properties" href="routeIcon.html#_properties_14"/>
-         <topic label="Related topics" href="routeIcon.html#_related_topics_36"/>
-      </topic>
-      <topic label="Routing Slip" href="routingSlip.html">
-         <topic label="Usage" href="routingSlip.html#_usage_17"/>
-         <topic label="Properties" href="routingSlip.html#_properties_15"/>
-         <topic label="Related topics" href="routingSlip.html#_related_topics_37"/>
-      </topic>
-      <topic label="Sort" href="sort.html">
-         <topic label="Usage" href="sort.html#_usage_18"/>
-         <topic label="Properties" href="sort.html#_properties_16"/>
-         <topic label="Related topics" href="sort.html#_related_topics_38"/>
-      </topic>
-      <topic label="Split" href="split.html">
-         <topic label="Usage" href="split.html#_usage_19"/>
-         <topic label="Properties" href="split.html#_properties_17"/>
-         <topic label="Related topics" href="split.html#_related_topics_39"/>
-      </topic>
-      <topic label="When" href="when.html">
-         <topic label="Usage" href="when.html#_usage_20"/>
-         <topic label="Properties" href="when.html#_properties_18"/>
-         <topic label="Related topics" href="when.html#_related_topics_40"/>
-      </topic>
-      <topic label="Wire Tap" href="wiretap.html">
-         <topic label="Usage" href="wiretap.html#_usage_21"/>
-         <topic label="Properties" href="wiretap.html#_properties_19"/>
-         <topic label="Related topics" href="wiretap.html#_related_topics_41"/>
-      </topic>
-      <topic label="Delay" href="delay.html">
-         <topic label="Usage" href="delay.html#_usage_22"/>
-         <topic label="Properties" href="delay.html#_properties_20"/>
-         <topic label="Related topics" href="delay.html#_related_topics_42"/>
-      </topic>
-      <topic label="Do Catch" href="catch.html">
-         <topic label="Usage" href="catch.html#_usage_23"/>
-         <topic label="Properties" href="catch.html#_properties_21"/>
-         <topic label="Related topics" href="catch.html#_related_topics_43"/>
-      </topic>
-      <topic label="Do Finally" href="finally.html">
-         <topic label="Usage" href="finally.html#_usage_24"/>
-         <topic label="Properties" href="finally.html#_properties_22"/>
-      </topic>
-      <topic label="Do Try" href="try.html">
-         <topic label="Usage" href="try.html#_usage_25"/>
-         <topic label="Properties" href="try.html#_properties_23"/>
-      </topic>
-      <topic label="Intercept" href="intercept.html">
-         <topic label="Usage" href="intercept.html#_usage_26"/>
-         <topic label="Properties" href="intercept.html#_properties_24"/>
-      </topic>
-      <topic label="Intercept From" href="interceptFrom.html">
-         <topic label="Usage" href="interceptFrom.html#_usage_27"/>
-         <topic label="Properties" href="interceptFrom.html#_properties_25"/>
-      </topic>
-      <topic label="Intercept Send To Endpoint" href="interceptSendToEndpoint.html">
-         <topic label="Usage" href="interceptSendToEndpoint.html#_usage_28"/>
-         <topic label="Properties" href="interceptSendToEndpoint.html#_properties_26"/>
-      </topic>
-      <topic label="Loop" href="loop.html">
-         <topic label="Usage" href="loop.html#_usage_29"/>
-         <topic label="Properties" href="loop.html#_properties_27"/>
-         <topic label="Related topics" href="loop.html#_related_topics_44"/>
-      </topic>
-      <topic label="On Completion" href="onCompletion.html">
-         <topic label="Usage" href="onCompletion.html#_usage_30"/>
-         <topic label="Properties" href="onCompletion.html#_properties_28"/>
-      </topic>
-      <topic label="On Exception" href="onException.html">
-         <topic label="Usage" href="onException.html#_usage_31"/>
-         <topic label="Properties" href="onException.html#_properties_29"/>
-         <topic label="Related topics" href="onException.html#_related_topics_45"/>
-      </topic>
-      <topic label="Rollback" href="rollback.html">
-         <topic label="Usage" href="rollback.html#_usage_32"/>
-         <topic label="Properties" href="rollback.html#_properties_30"/>
-      </topic>
-      <topic label="Throttle" href="throttle.html">
-         <topic label="Usage" href="throttle.html#_usage_33"/>
-         <topic label="Properties" href="throttle.html#_properties_31"/>
-      </topic>
-      <topic label="Throw Exception" href="throwException.html">
-         <topic label="Usage" href="throwException.html#_usage_34"/>
-         <topic label="Related topics" href="throwException.html#_related_topics_46"/>
-      </topic>
-      <topic label="Transacted" href="transacted.html">
-         <topic label="Usage" href="transacted.html#_usage_35"/>
-         <topic label="Properties" href="transacted.html#_properties_32"/>
-         <topic label="Related topics" href="transacted.html#_related_topics_47"/>
-      </topic>
-      <topic label="Convert Body To" href="convertBody.html">
-         <topic label="Usage" href="convertBody.html#_usage_36"/>
-         <topic label="Properties" href="convertBody.html#_properties_33"/>
-      </topic>
-      <topic label="Enrich" href="enrich.html">
-         <topic label="Usage" href="enrich.html#_usage_37"/>
-         <topic label="Properties" href="enrich.html#_properties_34"/>
-      </topic>
-      <topic label="In Only" href="inOnly.html">
-         <topic label="Usage" href="inOnly.html#_usage_38"/>
-         <topic label="Properties" href="inOnly.html#_properties_35"/>
-      </topic>
-      <topic label="In OutMarks the exchange pattern for the route to request/reply" href="inOut.html">
-         <topic label="Usage" href="inOut.html#_usage_39"/>
-         <topic label="Properties" href="inOut.html#_properties_36"/>
-      </topic>
-      <topic label="Marshal" href="marshal.html">
-         <topic label="Usage" href="marshal.html#_usage_40"/>
-         <topic label="Properties" href="marshal.html#_properties_37"/>
-         <topic label="Related topics" href="marshal.html#_related_topics_48"/>
-      </topic>
-      <topic label="Poll Enrich" href="pollEnrich.html">
-         <topic label="Usage" href="pollEnrich.html#_usage_41"/>
-         <topic label="Properties" href="pollEnrich.html#_properties_38"/>
-      </topic>
-      <topic label="Remove Header" href="removeHeader.html">
-         <topic label="Usage" href="removeHeader.html#_usage_42"/>
-         <topic label="Properties" href="removeHeader.html#_properties_39"/>
-      </topic>
-      <topic label="Remove Headers" href="removeHeaders.html">
-         <topic label="Usage" href="removeHeaders.html#_usage_43"/>
-         <topic label="Properties" href="removeHeaders.html#_properties_40"/>
-      </topic>
-      <topic label="Remove Property" href="removeProperty.html">
-         <topic label="Usage" href="removeProperty.html#_usage_44"/>
-         <topic label="Properties" href="removeProperty.html#_properties_41"/>
-      </topic>
-      <topic label="Remove Properties" href="removeProperties.html">
-         <topic label="Usage" href="removeProperties.html#_usage_45"/>
-         <topic label="Properties" href="removeProperties.html#_properties_42"/>
-      </topic>
-      <topic label="Set Body" href="setBody.html">
-         <topic label="Usage" href="setBody.html#_usage_46"/>
-         <topic label="Properties" href="setBody.html#_properties_43"/>
-         <topic label="Related topics" href="setBody.html#_related_topics_49"/>
-      </topic>
-      <topic label="Set Exchange Pattern" href="setExchangePattern.html">
-         <topic label="Usage" href="setExchangePattern.html#_usage_47"/>
-         <topic label="Properties" href="setExchangePattern.html#_properties_44"/>
-      </topic>
-      <topic label="Set Fault Body" href="setFaultBody.html">
-         <topic label="Usage" href="setFaultBody.html#_usage_48"/>
-         <topic label="Properties" href="setFaultBody.html#_properties_45"/>
-         <topic label="Related topics" href="setFaultBody.html#_related_topics_50"/>
-      </topic>
-      <topic label="Set Header" href="setHeader.html">
-         <topic label="Usage" href="setHeader.html#_usage_49"/>
-         <topic label="Properties" href="setHeader.html#_properties_46"/>
-         <topic label="Related topics" href="setHeader.html#_related_topics_51"/>
-      </topic>
-      <topic label="Set Out Header" href="setOutHeader.html">
-         <topic label="Usage" href="setOutHeader.html#_usage_50"/>
-         <topic label="Properties" href="setOutHeader.html#_properties_47"/>
-         <topic label="Related topics" href="setOutHeader.html#_related_topics_52"/>
-      </topic>
-      <topic label="Set Property" href="setProperty.html">
-         <topic label="Usage" href="setProperty.html#_usage_51"/>
-         <topic label="Properties" href="setProperty.html#_properties_48"/>
-         <topic label="Related topics" href="setProperty.html#_related_topics_53"/>
-      </topic>
-      <topic label="Transform" href="transform.html">
-         <topic label="Usage" href="transform.html#_usage_52"/>
-         <topic label="Properties" href="transform.html#_properties_49"/>
-         <topic label="Related topics" href="transform.html#_related_topics_54"/>
-      </topic>
-      <topic label="Unmarshal" href="unmarshal.html">
-         <topic label="Usage" href="unmarshal.html#_usage_53"/>
-         <topic label="Properties" href="unmarshal.html#_properties_50"/>
-         <topic label="Related topics" href="unmarshal.html#_related_topics_55"/>
-      </topic>
-      <topic label="Aop" href="aop.html">
-         <topic label="Usage" href="aop.html#_usage_54"/>
-      </topic>
-      <topic label="Policy" href="policy.html">
-         <topic label="Usage" href="policy.html#_usage_55"/>
-         <topic label="Properties" href="policy.html#_properties_51"/>
-         <topic label="Related topics" href="policy.html#_related_topics_56"/>
-      </topic>
-      <topic label="Sample" href="sampling.html">
-         <topic label="Usage" href="sampling.html#_usage_56"/>
-         <topic label="Properties" href="sampling.html#_properties_52"/>
-      </topic>
-      <topic label="Stop" href="stop.html">
-         <topic label="Usage" href="stop.html#_usage_57"/>
-         <topic label="Properties" href="stop.html#_properties_53"/>
-      </topic>
-      <topic label="Threads" href="threads.html">
-         <topic label="Usage" href="threads.html#_usage_58"/>
-         <topic label="Properties" href="threads.html#_properties_54"/>
-      </topic>
-      <topic label="Validate" href="validate.html">
-         <topic label="Usage" href="validate.html#_usage_59"/>
-         <topic label="Properties" href="validate.html#_properties_55"/>
-         <topic label="Related topics" href="validate.html#_related_topics_57"/>
+      <topic label="Miscellaneous" href="RiderMiscRef.html">
+         <topic label="Aop" href="aop.html">
+            <topic label="Usage" href="aop.html#_usage_54"/>
+         </topic>
+         <topic label="Policy" href="policy.html">
+            <topic label="Usage" href="policy.html#_usage_55"/>
+            <topic label="Properties" href="policy.html#_properties_51"/>
+            <topic label="Related topics" href="policy.html#_related_topics_56"/>
+         </topic>
+         <topic label="Sample" href="sampling.html">
+            <topic label="Usage" href="sampling.html#_usage_56"/>
+            <topic label="Properties" href="sampling.html#_properties_52"/>
+         </topic>
+         <topic label="Stop" href="stop.html">
+            <topic label="Usage" href="stop.html#_usage_57"/>
+            <topic label="Properties" href="stop.html#_properties_53"/>
+         </topic>
+         <topic label="Threads" href="threads.html">
+            <topic label="Usage" href="threads.html#_usage_58"/>
+            <topic label="Properties" href="threads.html#_properties_54"/>
+         </topic>
+         <topic label="Validate" href="validate.html">
+            <topic label="Usage" href="validate.html#_usage_59"/>
+            <topic label="Properties" href="validate.html#_properties_55"/>
+            <topic label="Related topics" href="validate.html#_related_topics_57"/>
+         </topic>
       </topic>
    </topic>
    <topic label="Apache Camel Component Reference" href="IDU-Components.html">
@@ -1770,6 +1781,9 @@
          </topic>
          <topic label="See Also" href="Kestrel-KestrelComponent.html#Kestrel-SeeAlso"/>
       </topic>
+      <topic label="Kie-Camel" href="_kie_camel.html">
+         <topic label="Overview" href="_kie_camel.html#_overview_53"/>
+      </topic>
       <topic label="Krati Component" href="Krati-KratiComponent.html">
          <topic label="URI format" href="Krati-KratiComponent.html#Krati-URIformat"/>
          <topic label="Krati Options" href="Krati-KratiComponent.html#Krati-KratiOptions">
@@ -2321,8 +2335,10 @@
             <topic label="Server Configuration" href="SAP.html#SAP-ServConfig"/>
             <topic label="Repository Configuration" href="SAP.html#SAP-RepoConfig"/>
          </topic>
+         <topic label="Message Headers" href="SAP.html#sap-message-headers"/>
          <topic label="Message Body for RFC" href="SAP.html#SAP-Message-RFC"/>
          <topic label="Message Body for IDoc" href="SAP.html#SAP-Message-IDoc"/>
+         <topic label="Exchange Properties" href="SAP.html#sap-exchange-properties"/>
          <topic label="Transaction Support" href="SAP.html#SAP-Txn"/>
          <topic label="XML Serialization for RFC" href="SAP.html#SAP-XMLSerial-RFC"/>
          <topic label="XML Serialization for IDoc" href="SAP.html#SAP-XMLSerial-IDoc"/>
