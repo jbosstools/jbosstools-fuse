@@ -44,6 +44,7 @@ import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.preference.MavenUserSettingsPreferencePage;
 import org.jboss.tools.fuse.reddeer.preference.StagingRepositoriesPreferencePage;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
+import org.jboss.tools.fuse.ui.bot.tests.utils.FuseProjectDefinition;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -67,7 +68,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 public class FuseProjectTestLong extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(FuseProjectTestLong.class);
-	private String template;
+	private FuseProjectDefinition project;
 	private static String maven;
 
 	/**
@@ -76,7 +77,7 @@ public class FuseProjectTestLong extends DefaultTest {
 	 * @return List of all available Fuse project archetypes
 	 */
 	@Parameters
-	public static Collection<String> setupData() {
+	public static Collection<FuseProjectDefinition> setupData() {
 		return ProjectFactory.getAllAvailableTemplates();
 	}
 
@@ -86,8 +87,8 @@ public class FuseProjectTestLong extends DefaultTest {
 	 * @param template
 	 *            a Fuse project archetype
 	 */
-	public FuseProjectTestLong(String template) {
-		this.template = template;
+	public FuseProjectTestLong(FuseProjectDefinition project) {
+		this.project = project;
 	}
 
 	/**
@@ -158,6 +159,16 @@ public class FuseProjectTestLong extends DefaultTest {
 		new WorkbenchShell();
 	}
 
+	private void createProject(FuseProjectDefinition project) {
+
+		if (project.getTemplate().equals("empty")) {
+			ProjectFactory.newProject("test").version(project.getCamelVersion()).type(project.getDsl()).create();
+		} else {
+			ProjectFactory.newProject("test").version(project.getCamelVersion()).template(project.getTemplate()).type(project.getDsl())
+					.create();
+		}
+	}
+
 	private boolean hasErrors() {
 
 		ProblemsView view = new ProblemsView();
@@ -181,7 +192,7 @@ public class FuseProjectTestLong extends DefaultTest {
 				new CamelProject(name).runCamelContext();
 			} catch (CoreLayerException e) {
 				log.warn("There is no context menu option to run the project as Local Camel Context. Template: "
-						+ template);
+						+ project);
 				return false;
 			}
 			ConsoleView console = new ConsoleView();
@@ -219,28 +230,17 @@ public class FuseProjectTestLong extends DefaultTest {
 	@Test
 	public void testArchetype() {
 
-		String[] templateComposite = template.split(":");
-		ProjectType type = BLUEPRINT;
-		if (templateComposite[1].startsWith("spring"))
-			type = SPRING;
-		if (templateComposite[1].startsWith("java"))
-			type = JAVA;
-		if (templateComposite[0].equals("empty")) {
-			ProjectFactory.newProject("test").version(templateComposite[2]).type(type).create();
-		} else {
-			ProjectFactory.newProject("test").version(templateComposite[2]).template(templateComposite[0]).type(type)
-					.create();
-		}
-		assertTrue("Project '" + template + "' is not present in Project Explorer", isPresent("test"));
+		createProject(project);
+		assertTrue("Project '" + project + "' is not present in Project Explorer", isPresent("test"));
 		if (hasErrors()) {
-			log.warn("Project '" + template + "' was created with errors! Trying to update the project.");
+			log.warn("Project '" + project + "' was created with errors! Trying to update the project.");
 			new CamelProject("test").update();
 		}
-		assertFalse("Project '" + template + "' was created with errors", hasErrors());
-		if ((type != JAVA) && // skip Java DSLs
-				(!template.startsWith("empty")) // skip Empty project templates
+		assertFalse("Project '" + project + "' was created with errors", hasErrors());
+		if ((project.getDsl() != JAVA) && // skip Java DSLs
+				(!project.getTemplate().startsWith("empty")) // skip Empty project templates
 		)
-			assertTrue("Project '" + template + "' cannot be run as Local Camel Context", canBeRun("test"));
+			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun("test"));
 	}
 
 	/**
@@ -262,18 +262,7 @@ public class FuseProjectTestLong extends DefaultTest {
 	@Test
 	public void testCamelEditor() {
 
-		String[] templateComposite = template.split(":");
-		ProjectType type = BLUEPRINT;
-		if (templateComposite[1].startsWith("spring"))
-			type = SPRING;
-		if (templateComposite[1].startsWith("java"))
-			type = JAVA;
-		if (templateComposite[0].equals("empty")) {
-			ProjectFactory.newProject("test").version(templateComposite[2]).type(type).create();
-		} else {
-			ProjectFactory.newProject("test").version(templateComposite[2]).template(templateComposite[0]).type(type)
-					.create();
-		}
+		createProject(project);
 
 		/*
 		 * Check Error log view for possible Camel editor errors
@@ -282,7 +271,7 @@ public class FuseProjectTestLong extends DefaultTest {
 		List<LogMessage> msg = err.getErrorMessages();
 		for (LogMessage logMessage : msg) {
 			if (logMessage.getPlugin().equals("org.fusesource.ide.camel.editor"))
-				fail("Project '" + template + "' is created with Camel editor errors");
+				fail("Project '" + project + "' is created with Camel editor errors");
 		}
 
 		/*
@@ -294,13 +283,13 @@ public class FuseProjectTestLong extends DefaultTest {
 		CamelEditor editor = null;
 		int i = 0;
 
-		if (type == SPRING) {
+		if (project.getDsl() == SPRING) {
 			try {
 				editor = new CamelEditor(springContext[i]);
 			} catch (Exception e) {
 				editor = new CamelEditor(springContext[++i]);
 			}
-		} else if (type == BLUEPRINT) {
+		} else if (project.getDsl() == BLUEPRINT) {
 			try {
 				editor = new CamelEditor(blueprintContext[i]);
 			} catch (Exception e) {
@@ -308,10 +297,10 @@ public class FuseProjectTestLong extends DefaultTest {
 			}
 		}
 
-		if (type != JAVA) { // skip Java DSLs
-			assertTrue("Camel editor wasn't opened and activated -> " + template, editor.isActive());
-			assertFalse("Camel editor was opened as 'dirty' -> " + template, editor.isDirty());
-			assertFalse("Camel editor wasn't opened properly, it doesn't contains any component -> " + template,
+		if (project.getDsl() != JAVA) { // skip Java DSLs
+			assertTrue("Camel editor wasn't opened and activated -> " + project, editor.isActive());
+			assertFalse("Camel editor was opened as 'dirty' -> " + project, editor.isDirty());
+			assertFalse("Camel editor wasn't opened properly, it doesn't contains any component -> " + project,
 					editor.palleteGetComponents().isEmpty());
 		}
 	}
