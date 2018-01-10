@@ -162,13 +162,13 @@ public class ProjectFactory {
 	 * 
 	 * @return all available templates
 	 */
-	public static List<String> getAllAvailableTemplates() {
+	public static List<FuseProjectDefinition> getAllAvailableTemplates() {
 		List<String> versions = getAllAvailableCamelVersions();
-		List<String> templates = new ArrayList<String>();
+		List<FuseProjectDefinition> templates = new ArrayList<>();
 		for (String version : versions) {
-			templates.add("empty:blueprint:" + version);
-			templates.add("empty:spring:" + version);
-			templates.add("empty:java:" + version);
+			templates.add(new FuseProjectDefinition("empty", BLUEPRINT, version));
+			templates.add(new FuseProjectDefinition("empty", SPRING, version));
+			templates.add(new FuseProjectDefinition("empty", JAVA, version));
 			NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 			wiz.open();
 			wiz.setProjectName("45frHHallkIIo");
@@ -179,13 +179,13 @@ public class ProjectFactory {
 			for (String template : temp) {
 				wiz.selectTemplate(template);
 				if (wiz.isProjectTypeAvailable(BLUEPRINT)) {
-					templates.add(template + ":blueprint:" + version);
+					templates.add(new FuseProjectDefinition(template, BLUEPRINT, version));
 				}
 				if (wiz.isProjectTypeAvailable(SPRING)) {
-					templates.add(template + ":spring:" + version);
+					templates.add(new FuseProjectDefinition(template, SPRING, version));
 				}
 				if (wiz.isProjectTypeAvailable(JAVA)) {
-					templates.add(template + ":java:" + version);
+					templates.add(new FuseProjectDefinition(template, JAVA, version));
 				}
 			}
 			wiz.cancel();
