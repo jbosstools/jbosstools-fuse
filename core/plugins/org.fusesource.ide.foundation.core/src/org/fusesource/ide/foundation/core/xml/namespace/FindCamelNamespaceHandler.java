@@ -20,9 +20,7 @@ public class FindCamelNamespaceHandler extends FindNamespaceHandlerSupport {
 	
 	private static final String[] camelNamespaceArray = new String[]{
 			SpringNamespaceHandler.NAMESPACEURI_CAMEL_SPRING,
-			BlueprintNamespaceHandler.NAMESPACEURI_CAMEL_BLUEPRINT,
-			BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTP,
-			BlueprintNamespaceHandler.NAMESPACEURI_OSGI_BLUEPRINT_HTTPS };
+			BlueprintNamespaceHandler.NAMESPACEURI_CAMEL_BLUEPRINT};
 	
 	private static final Set<String> camelNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(camelNamespaceArray)));
 	
