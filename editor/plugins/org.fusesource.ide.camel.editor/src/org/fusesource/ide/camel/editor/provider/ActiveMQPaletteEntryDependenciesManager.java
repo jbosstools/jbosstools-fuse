@@ -66,22 +66,23 @@ public class ActiveMQPaletteEntryDependenciesManager implements IDependenciesMan
 	}
 
 	String getActiveMQVersion(String camelVersion) {
-		boolean redhatProductizedVersion = camelVersion.indexOf(RED_HAT_SUFFIX) != -1;
-		boolean fuseProductizedVersion = camelVersion.indexOf(FUSE_SUFFIX) != -1;	
-		String key = getVersionWithoutIdentifier(camelVersion);
-		String amqVersion = CAMEL_TO_AMQ_VERSION_MAPPING.get(key);
-		if(amqVersion != null) {
-			if (redhatProductizedVersion) {
-				return String.format("%s%s%s", amqVersion, RED_HAT_SUFFIX, getBuildNumberFromVersion(camelVersion));
-			} else if(fuseProductizedVersion){
-				return String.format("%s%s%s", amqVersion, FUSE_SUFFIX, getBuildNumberFromVersion(camelVersion));
-			} else {
-				return amqVersion;
+		if (camelVersion != null) {
+			boolean redhatProductizedVersion = camelVersion.indexOf(RED_HAT_SUFFIX) != -1;
+			boolean fuseProductizedVersion = camelVersion.indexOf(FUSE_SUFFIX) != -1;	
+			String key = getVersionWithoutIdentifier(camelVersion);
+			String amqVersion = CAMEL_TO_AMQ_VERSION_MAPPING.get(key);
+			if(amqVersion != null) {
+				if (redhatProductizedVersion) {
+					return String.format("%s%s%s", amqVersion, RED_HAT_SUFFIX, getBuildNumberFromVersion(camelVersion));
+				} else if(fuseProductizedVersion){
+					return String.format("%s%s%s", amqVersion, FUSE_SUFFIX, getBuildNumberFromVersion(camelVersion));
+				} else {
+					return amqVersion;
+				}
 			}
-		} else {
-			//use latest version
-			return LATEST_AMQ_VERSION;
 		}
+		//use latest version
+		return LATEST_AMQ_VERSION;
 	}
 
 	String getBuildNumberFromVersion(String camelVersion) {
