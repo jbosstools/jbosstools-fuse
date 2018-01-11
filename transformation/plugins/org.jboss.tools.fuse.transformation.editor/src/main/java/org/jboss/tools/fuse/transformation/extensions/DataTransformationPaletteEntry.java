@@ -13,13 +13,13 @@ package org.jboss.tools.fuse.transformation.extensions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
@@ -69,7 +69,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 	@Override
 	public boolean isValid(String runtimeProvider) {
     	String camelVersion = getCurrentProjectCamelVersion();
-    	return new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) > 0 ;
+    	return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
 	}
 
 	String getCurrentProjectCamelVersion() {

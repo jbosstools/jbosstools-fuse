@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.adopters;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -31,8 +30,6 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
  * @author lhein
  */
 public abstract class AbstractProjectTemplate {
-	
-	protected static final ComparableVersion COMPARABLE_CAMEL_2_20_0_VERSION = new ComparableVersion("2.20.0");
 	
 	/**
 	 * checks whether this template supports a given dsl type
@@ -93,10 +90,6 @@ public abstract class AbstractProjectTemplate {
 
 	public boolean isCompatible(String camelVersion) {
 		return true;
-	}
-	
-	protected boolean isStrictlyLowerThan2200(String camelVersion) {
-		return new ComparableVersion(camelVersion).compareTo(COMPARABLE_CAMEL_2_20_0_VERSION) < 0;
 	}
 	
 	public String getArtifactLastVersion(String groupId, String artifactId) {

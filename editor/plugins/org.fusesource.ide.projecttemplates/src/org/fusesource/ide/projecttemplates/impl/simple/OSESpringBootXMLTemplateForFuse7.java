@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
@@ -19,7 +19,7 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTemplate {
 	
 	protected static final String PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION = "%%%PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION%%%";
-	private static ComparableVersion minimalCompatibleCamelVersion = new ComparableVersion("2.20.0");
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.20.0";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -34,6 +34,6 @@ public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTe
 
 	@Override
 	public boolean isCompatible(String camelVersion) {
-		return new ComparableVersion(camelVersion).compareTo(minimalCompatibleCamelVersion) >= 0;
+		return new VersionUtil().isGreaterThan(camelVersion, MINIMAL_COMPATIBLE_CAMEL_VERSION);
 	}
 }

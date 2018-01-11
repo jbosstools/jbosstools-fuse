@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -41,7 +42,7 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	
 	@Override
 	public boolean isCompatible(String camelVersion) {
-		return isStrictlyLowerThan2200(camelVersion);
+		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
 	}
 
 	@Override

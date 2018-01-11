@@ -12,7 +12,6 @@ package org.fusesource.ide.projecttemplates.util;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -40,6 +39,7 @@ import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCacheManager;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
@@ -234,7 +234,7 @@ public abstract class BasicProjectCreatorRunnable implements IRunnableWithProgre
 	
 	protected AbstractProjectTemplate retrieveTemplate() {
 		if (metadata.getTemplate() == null) {
-			if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(metadata.getCamelVersion())) > 0){
+			if(new VersionUtil().isStrictlyLowerThan2200(metadata.getCamelVersion())){
 				return new EmptyProjectTemplateForFuse6();
 			} else {
 				return new EmptyProjectTemplateForFuse7();
