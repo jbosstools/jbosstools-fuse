@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
@@ -27,7 +28,7 @@ public class CBRTemplateForFuse6 extends AbstractCBRTemplate {
 	
 	@Override
 	public boolean isCompatible(String camelVersion) {
-		return isStrictlyLowerThan2200(camelVersion);
+		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
 	}
 	
 	@Override

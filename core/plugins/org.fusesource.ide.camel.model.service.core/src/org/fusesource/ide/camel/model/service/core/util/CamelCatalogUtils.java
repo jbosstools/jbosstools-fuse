@@ -33,6 +33,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 
 /**
  * collection of camel catalog related util methods
@@ -328,7 +329,7 @@ public class CamelCatalogUtils {
 	protected static String getFuseFISBomVersion(String camelVersion, IProject project, IProgressMonitor monitor) {
 		if(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.containsKey(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(camelVersion);
-		} else if(new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) > 0) {
+		} else if(new VersionUtil().isStrictlyLowerThan2200(camelVersion)) {
 			return CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.get(CAMEL_VERSION_LATEST_FIS_20);
 		} else {
 			return new OnlineArtifactVersionSearcher().findLatestBomVersionOnAvailableRepo(project, monitor);

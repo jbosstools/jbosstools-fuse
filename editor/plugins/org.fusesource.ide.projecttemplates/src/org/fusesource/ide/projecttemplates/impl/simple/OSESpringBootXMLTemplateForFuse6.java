@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
@@ -18,13 +18,14 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 public class OSESpringBootXMLTemplateForFuse6 extends AbstractOSESpringBootXMLTemplate {
 	
-	private static ComparableVersion minimalCompatibleCamelVersion = new ComparableVersion("2.18.0");
-	private static ComparableVersion maximalCompatibleCamelVersion = new ComparableVersion("2.20.0");
+	private static final String MINIMAL_COMPATIBLE_CAMEL_VERSION = "2.18.0";
+	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.20.0";
 	
 	@Override
 	public boolean isCompatible(String camelVersion) {
-		return new ComparableVersion(camelVersion).compareTo(minimalCompatibleCamelVersion) >= 0
-				&& new ComparableVersion(camelVersion).compareTo(maximalCompatibleCamelVersion) < 0;
+		VersionUtil versionUtil = new VersionUtil();
+		return versionUtil.isGreaterThan(camelVersion, MINIMAL_COMPATIBLE_CAMEL_VERSION)
+				&& versionUtil.isStrictlyGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, camelVersion);
 	}
 	
 	@Override

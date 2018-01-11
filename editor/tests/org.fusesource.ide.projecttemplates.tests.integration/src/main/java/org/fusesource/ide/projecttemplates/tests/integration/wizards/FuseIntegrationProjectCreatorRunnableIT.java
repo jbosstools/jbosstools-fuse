@@ -47,6 +47,7 @@ import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
+import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
@@ -280,6 +281,6 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 	}
 
 	protected boolean isOlderThan220() {
-		return new ComparableVersion("2.20.0").compareTo(new ComparableVersion(camelVersion)) > 0;
+		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
 	}
 }
