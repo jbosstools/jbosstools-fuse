@@ -262,6 +262,14 @@
         	type="version-change">
      		<delegate class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionChangeDelegate"/>
 		</action>
+  <action
+        facet="jst.camel"
+        id="jst.camel.uninstall"
+        type="uninstall">
+     <delegate
+           class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetUninstallationDelegate">
+     </delegate>
+  </action>
    	</extension>
 
 	<extension point="org.eclipse.ui.popupMenus">
