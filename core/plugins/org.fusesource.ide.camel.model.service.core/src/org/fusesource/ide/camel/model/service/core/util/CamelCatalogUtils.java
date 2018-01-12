@@ -51,7 +51,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7wildfly.properties";
 	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);
 	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.fisbom2fabric8MavenVersion.fuse7.url";
-	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2686-provideFISForFuse7Template/configuration/fisBomToFabric8MavenPlugin.fuse7.properties";
+	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fisBomToFabric8MavenPlugin.fuse7.properties";
 	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_URL_MAPPING_FUSE_7 = System.getProperty(FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY, FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL);
 
 	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
