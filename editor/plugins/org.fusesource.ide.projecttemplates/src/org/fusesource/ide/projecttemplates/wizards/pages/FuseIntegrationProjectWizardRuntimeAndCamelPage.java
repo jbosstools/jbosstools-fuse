@@ -444,7 +444,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 					Thread.currentThread().interrupt();
 				}
 			}
-			activeCamelVersionValidation = versionChecker.isDone();
+			activeCamelVersionValidation = !versionChecker.isDone();
 			updateCamelValidation(camelVersion, versionChecker.isValid());
 		}
 		
