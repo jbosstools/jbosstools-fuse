@@ -215,6 +215,9 @@
          	<description>
              	Adds support for Camel to the project.
          	</description>
+          <version-comparator
+                class="org.fusesource.ide.projecttemplates.util.camel.CamelFacetVersionComparator">
+          </version-comparator>
       	</project-facet>
       
       	<project-facet-version
