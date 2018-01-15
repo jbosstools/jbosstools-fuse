@@ -30,7 +30,7 @@ The general idea is to keep your 'master' branch in-sync with the 'upstream/mast
 
 ## Building JBoss Fuse Tooling
 
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](https://github.com/jbosstools/jbosstools-fuse/blob/master/.github/Build.md) for more information on how to setup, run and configure build.
+To build _JBoss Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](./Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
