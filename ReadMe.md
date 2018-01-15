@@ -43,8 +43,8 @@ Follow the [@FuseTooling](https://twitter.com/fusetooling) account to grab some 
 
 ## Building
 
-If you want to know how to build the project and setup an Eclipse workspace for development please read the [build guide](https://github.com/jbosstools/jbosstools-fuse/blob/master/.github/Build.md "Build Guide").
+If you want to know how to build the project and setup an Eclipse workspace for development please read the [build guide](./Build.md "Build Guide").
 
 ## Contributing
 
-If you want to contribute to Fuse Tooling make sure you read the [contribution guide](https://github.com/jbosstools/jbosstools-fuse/blob/master/.github/Contributing.md "Contribution Guide").
+If you want to contribute to Fuse Tooling make sure you read the [contribution guide](./Contributing.md "Contribution Guide").
