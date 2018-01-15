@@ -185,14 +185,15 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	}
 	
 	private void repairCamelFacet(ProjectConfigurationRequest request, IProgressMonitor mon) throws CoreException {
+		SubMonitor subMon = SubMonitor.convert(mon, 3);
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null) {
 			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
+			fproj.uninstallProjectFacet(oldfv, null, subMon.split(1));
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
-			fproj.uninstallProjectFacet(oldfv, null, mon);
-			installCamelFacet(fproj, fpwc, mon);
-			fpwc.commitChanges(mon);
+			installCamelFacet(fproj, fpwc, subMon.split(1));
+			fpwc.commitChanges(subMon.split(1));
 		}
 	}
 	
