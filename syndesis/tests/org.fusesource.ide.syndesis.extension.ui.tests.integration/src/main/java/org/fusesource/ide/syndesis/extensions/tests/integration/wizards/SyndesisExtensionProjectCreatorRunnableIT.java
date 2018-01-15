@@ -24,7 +24,6 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -135,7 +134,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		checkNoValidationWarning();
 		additionalChecks(project);
 		
-		launchBuild(project, new NullProgressMonitor());
+		launchBuild(new NullProgressMonitor());
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {
@@ -227,8 +226,8 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
 	}
 	
-    protected void launchBuild(IProject project, IProgressMonitor monitor) throws CoreException {
-    	SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
+	protected void launchBuild(IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
 		MavenExecutionResult result = MavenPlugin.getMaven().createExecutionContext().execute(new ExecuteProjectBuildM2ECallable(), subMonitor.split(10));
 		buildFinished = true;
 		buildOK = !result.hasExceptions();
