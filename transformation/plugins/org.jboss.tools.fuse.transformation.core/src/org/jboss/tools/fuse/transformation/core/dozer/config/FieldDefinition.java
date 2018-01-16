@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attribute name="date-format" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" type="{http://dozer.sourceforge.net}field-type" />
+ *       &lt;attribute name="type" type="{http://dozermapper.github.io/schema/bean-mapping}field-type" />
  *       &lt;attribute name="set-method" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="get-method" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="key" type="{http://www.w3.org/2001/XMLSchema}string" />

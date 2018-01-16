@@ -19,7 +19,6 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
-import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
 
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
@@ -61,15 +60,13 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 	private String computeArtifactId(String runtimeProvider) {
 		if(CamelCatalogUtils.RUNTIME_PROVIDER_SPRINGBOOT.equals(runtimeProvider)){
 			return CAMEL_DOZER_STARTER;
-		} else {
-			return CAMEL_DOZER;
 		}
+        return CAMEL_DOZER;
 	}
 
 	@Override
 	public boolean isValid(String runtimeProvider) {
-    	String camelVersion = getCurrentProjectCamelVersion();
-    	return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
+	    return true;
 	}
 
 	String getCurrentProjectCamelVersion() {

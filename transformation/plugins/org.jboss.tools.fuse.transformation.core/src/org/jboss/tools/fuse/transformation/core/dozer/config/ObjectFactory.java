@@ -34,7 +34,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private static final String DOZER_NAMESPACE = "http://dozer.sourceforge.net"; //$NON-NLS-1$
+    private static final String DOZER_NAMESPACE = "http://dozermapper.github.io/schema/bean-mapping"; //$NON-NLS-1$
     private static final QName _RelationshipType_QNAME = new QName(DOZER_NAMESPACE, "relationship-type"); //$NON-NLS-1$
     private static final QName _ClassA_QNAME = new QName(DOZER_NAMESPACE, "class-a"); //$NON-NLS-1$
     private static final QName _BDeepIndexHint_QNAME = new QName(DOZER_NAMESPACE, "b-deep-index-hint"); //$NON-NLS-1$

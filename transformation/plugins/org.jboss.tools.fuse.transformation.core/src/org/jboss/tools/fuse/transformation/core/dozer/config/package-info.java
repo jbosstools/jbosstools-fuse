@@ -8,5 +8,5 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://dozer.sourceforge.net", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://dozermapper.github.io/schema/bean-mapping", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.jboss.tools.fuse.transformation.core.dozer.config;

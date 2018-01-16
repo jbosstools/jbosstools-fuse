@@ -24,7 +24,7 @@ public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
 
     private static final QualifiedName[] SUPPORTED_OPTIONS = new QualifiedName[] {IContentDescription.CHARSET};
     private static final String ROOT_ELEMENT = "<mappingsxmlns="; //$NON-NLS-1$
-    private static final String XMLNS = "http://dozer.sourceforge.net"; //$NON-NLS-1$
+    private static final String XMLNS = "http://dozermapper.github.io/schema/bean-mapping"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)

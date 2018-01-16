@@ -27,18 +27,18 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://dozer.sourceforge.net}stop-on-errors" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}date-format" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}wildcard" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}trim-strings" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}map-null" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}map-empty-string" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}bean-factory" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}relationship-type" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}custom-converters" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}copy-by-references" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}allowed-exceptions" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}variables" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}stop-on-errors" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}date-format" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}wildcard" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}trim-strings" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}map-null" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}map-empty-string" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}bean-factory" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}relationship-type" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}custom-converters" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}copy-by-references" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}allowed-exceptions" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}variables" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

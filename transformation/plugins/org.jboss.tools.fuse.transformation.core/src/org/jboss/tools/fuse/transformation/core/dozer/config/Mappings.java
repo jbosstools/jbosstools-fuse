@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://dozer.sourceforge.net}configuration" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}mapping" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}configuration" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}mapping" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

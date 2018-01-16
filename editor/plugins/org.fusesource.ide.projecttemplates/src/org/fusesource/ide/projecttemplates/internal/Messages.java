@@ -51,7 +51,7 @@ public class Messages extends NLS {
 	public static String newProjectWizardRuntimePageCamelVersionValidInfo;
 	public static String newProjectWizardRuntimePageResolveDependencyStatus;
 	public static String newProjectWizardRuntimePageCamelVersionInvalidSyntaxWarning;
-	
+
 	public static String newProjectWizardTemplatePageName;
 	public static String newProjectWizardTemplatePageTitle;
 	public static String newProjectWizardTemplatePageDescription;
@@ -71,22 +71,19 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageTemplateFilterMessageInformation;
 
 	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;
-	
+
 	public static String switchCamelVersionDialogName;
 	public static String switchCamelVersionDialogTitle;
 	public static String switchCamelVersionDialogVersionsLabel;
 	public static String validatingCamelVersionMessage;
 	public static String invalidCamelVersionMessage;
 	public static String switchCamelVersionDialogSameVersionErrorMessage;
-	
+
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogTitle;
 	public static String reOpenCamelEditorAfterVersionVersionChangeDialogText;
 
 	public static String configuringFacets;
 	public static String installingRequiredFacetsForCamelProject;
-
-	public static String dozerInformationApiBreakTitle;
-	public static String dozerInformationApiBreakMessage;
 
 	static {
         // initialize resource bundle
