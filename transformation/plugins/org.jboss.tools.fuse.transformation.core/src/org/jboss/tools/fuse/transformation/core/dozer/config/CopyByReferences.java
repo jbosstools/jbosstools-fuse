@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://dozer.sourceforge.net}copy-by-reference" maxOccurs="unbounded"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}copy-by-reference" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

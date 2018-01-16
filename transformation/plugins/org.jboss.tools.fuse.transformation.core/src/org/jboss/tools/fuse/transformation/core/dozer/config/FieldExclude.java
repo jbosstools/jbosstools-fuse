@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://dozer.sourceforge.net}a"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}b"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}a"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}b"/>
  *       &lt;/sequence>
- *       &lt;attribute name="type" type="{http://dozer.sourceforge.net}type" default="bi-directional" />
+ *       &lt;attribute name="type" type="{http://dozermapper.github.io/schema/bean-mapping}type" default="bi-directional" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

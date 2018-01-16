@@ -28,16 +28,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://dozer.sourceforge.net}a"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}b"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}a-hint" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}b-hint" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}a-deep-index-hint" minOccurs="0"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}b-deep-index-hint" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}a"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}b"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}a-hint" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}b-hint" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}a-deep-index-hint" minOccurs="0"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}b-deep-index-hint" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="relationship-type" type="{http://dozer.sourceforge.net}relationship" />
+ *       &lt;attribute name="relationship-type" type="{http://dozermapper.github.io/schema/bean-mapping}relationship" />
  *       &lt;attribute name="remove-orphans" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="type" type="{http://dozer.sourceforge.net}type" />
+ *       &lt;attribute name="type" type="{http://dozermapper.github.io/schema/bean-mapping}type" />
  *       &lt;attribute name="map-id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="copy-by-reference" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="custom-converter" type="{http://www.w3.org/2001/XMLSchema}string" />

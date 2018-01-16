@@ -23,7 +23,7 @@ import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupp
  */
 public class DozerNamespaceHandler extends FindNamespaceHandlerSupport {
 
-	private static String[] dozerNamespaces = new String[]{ "http://dozer.sourceforge.net" }; //$NON-NLS-1$
+	private static String[] dozerNamespaces = new String[]{ "http://dozermapper.github.io/schema/bean-mapping" }; //$NON-NLS-1$
 	private static final Set<String> dzrNamespaces =
 	    Collections.unmodifiableSet(new HashSet<>(Arrays.asList(dozerNamespaces)));
 

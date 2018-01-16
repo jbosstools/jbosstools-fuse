@@ -31,11 +31,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence minOccurs="0">
- *         &lt;element ref="{http://dozer.sourceforge.net}class-a"/>
- *         &lt;element ref="{http://dozer.sourceforge.net}class-b"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}class-a"/>
+ *         &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}class-b"/>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element ref="{http://dozer.sourceforge.net}field" maxOccurs="unbounded"/>
- *           &lt;element ref="{http://dozer.sourceforge.net}field-exclude" maxOccurs="unbounded" minOccurs="0"/>
+ *           &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}field" maxOccurs="unbounded"/>
+ *           &lt;element ref="{http://dozermapper.github.io/schema/bean-mapping}field-exclude" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *       &lt;attribute name="date-format" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -45,8 +45,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="map-null" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="map-empty-string" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="bean-factory" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" type="{http://dozer.sourceforge.net}type" />
- *       &lt;attribute name="relationship-type" type="{http://dozer.sourceforge.net}relationship" />
+ *       &lt;attribute name="type" type="{http://dozermapper.github.io/schema/bean-mapping}type" />
+ *       &lt;attribute name="relationship-type" type="{http://dozermapper.github.io/schema/bean-mapping}relationship" />
  *       &lt;attribute name="map-id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
