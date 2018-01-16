@@ -29,6 +29,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.project.RiderProjectNature;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
@@ -38,9 +39,6 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
  * @author lheinema
  */
 public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigurator {
-	
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
@@ -73,8 +71,8 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	private boolean isSyndesisPluginDefined(List<Plugin> plugins) {
 		if (plugins != null) {
 			for (Plugin p : plugins) {
-				if (SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
-					SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
+				if (MavenUtils.SYNDESIS_PLUGIN_GROUPID.equalsIgnoreCase(p.getGroupId()) && 
+					MavenUtils.SYNDESIS_PLUGIN_ARTIFACTID.equalsIgnoreCase(p.getArtifactId()) ) {
 					return true;
 				}
 			}
