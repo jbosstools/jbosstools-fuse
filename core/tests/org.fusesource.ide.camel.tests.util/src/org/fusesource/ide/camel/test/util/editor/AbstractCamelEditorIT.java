@@ -59,7 +59,6 @@ public class AbstractCamelEditorIT {
 		IWorkbenchPart welcomePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		welcomePage.dispose();
 		page.closeAllEditors(false);
-		page.closeAllPerspectives(false, false);
 		PlatformUI.getWorkbench().showPerspective(FusePerspective.ID, page.getWorkbenchWindow());
 		safeRunnableIgnoreErrorStateBeforeTests = SafeRunnable.getIgnoreErrors();
 		SafeRunnable.setIgnoreErrors(false);
