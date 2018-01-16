@@ -326,10 +326,12 @@ public class KarafUtils {
 	
 	public static String stripParametersFromSymbolicName(String symbolicName) {
 		String resVal = symbolicName;
-		// sometimes parameters are added to the symbolic name - we should ignore them
-		int paramIdx = symbolicName.indexOf(';');
-		if (paramIdx != -1) {
-			resVal = symbolicName.substring(0, paramIdx);
+		if (symbolicName != null) {
+			// sometimes parameters are added to the symbolic name - we should ignore them
+			int paramIdx = symbolicName.indexOf(';');
+			if (paramIdx != -1) {
+				resVal = symbolicName.substring(0, paramIdx);
+			}
 		}
 		return resVal;
 	}
