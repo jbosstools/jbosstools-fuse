@@ -118,8 +118,8 @@
       </plugin>
 
       <plugin>
-        <groupId>io.syndesis</groupId>
-        <artifactId>syndesis-maven-plugin</artifactId>
+        <groupId>io.syndesis.extension</groupId>
+        <artifactId>extension-maven-plugin</artifactId>
         <version>${syndesis.version}</version>
         <configuration>
           <extensionId>my-company-extension</extensionId>
