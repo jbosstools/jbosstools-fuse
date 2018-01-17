@@ -30,6 +30,7 @@ public class CamelModel {
 	private Map<String, DataFormat> dataformats = new HashMap<>();
 	private Map<String, Eip> eips = new HashMap<>();
 	private Map<String, Language> languages = new HashMap<>();
+	private String version;
 	
 	/**
 	 * adds a component to the cache (overwrites existing component with same id)
@@ -210,5 +211,19 @@ public class CamelModel {
 	 */
 	public void setLanguages(Map<String, Language> languages) {
 		this.languages.putAll(languages);
+	}
+	
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return this.version;
+	}
+	
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 }
