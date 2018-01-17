@@ -19,19 +19,22 @@ import java.util.function.Predicate;
 
 import javax.management.MalformedObjectNameException;
 
+import org.apache.maven.Maven;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.ICallable;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -131,7 +134,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		checkNoValidationWarning();
 		additionalChecks(project);
 		
-		launchBuild(project, new NullProgressMonitor());
+		launchBuild(new NullProgressMonitor());
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {
@@ -223,14 +226,9 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
 	}
 	
-    protected void launchBuild(IProject project, IProgressMonitor monitor) throws CoreException, InterruptedException, IOException, MalformedObjectNameException {
-		IMaven maven = MavenPlugin.getMaven();
-		IMavenExecutionContext executionContext = maven.createExecutionContext();
-		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
-		executionRequest.setPom(project.getFile("pom.xml").getLocation().toFile());
-		executionRequest.setGoals(Arrays.asList("clean", "verify"));
-		
-		MavenExecutionResult result = maven.execute(executionRequest, monitor);
+	protected void launchBuild(IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
+		MavenExecutionResult result = MavenPlugin.getMaven().createExecutionContext().execute(new ExecuteProjectBuildM2ECallable(), subMonitor.split(10));
 		buildFinished = true;
 		buildOK = !result.hasExceptions();
 		for (Throwable t : result.getExceptions()) {
@@ -238,4 +236,15 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		}
 		assertThat(buildOK).isTrue();
 	}
+    
+    final class ExecuteProjectBuildM2ECallable implements ICallable<MavenExecutionResult> {
+    	@Override
+    	public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException {
+			MavenExecutionRequest executionRequest = context.getExecutionRequest();
+			executionRequest.setPom(project.getFile("pom.xml").getLocation().toFile());
+			executionRequest.setGoals(Arrays.asList("clean", "verify"));
+			final IMaven maven = MavenPlugin.getMaven();
+			return ((MavenImpl)maven).lookupComponent(Maven.class).execute(executionRequest);
+    	}
+    }
 }
