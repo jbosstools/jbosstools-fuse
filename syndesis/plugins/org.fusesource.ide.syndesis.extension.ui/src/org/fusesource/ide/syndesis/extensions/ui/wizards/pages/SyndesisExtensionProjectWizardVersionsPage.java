@@ -28,6 +28,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
 import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
+import org.fusesource.ide.syndesis.extensions.core.util.SyndesisExtensionsUtil;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
@@ -39,6 +40,7 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 	private Combo springBootVersionCombo;
 	private Combo camelVersionCombo;
 	private Combo syndesisVersionCombo;
+	private SyndesisExtensionsUtil.IgniteVersionInfoModel versionModel;	
 	
 	private SelectionListener selectionListener = new SelectionAdapter() {
 		@Override
@@ -60,6 +62,8 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new GridLayout(3, false));
 
+		versionModel = SyndesisExtensionsUtil.getIgniteVersionModel();
+		
 		Label springBootVersionLabel = new Label(container, SWT.NONE);
 		springBootVersionLabel.setText(Messages.newProjectWizardExtensionVersionsPageSpringBootVersionLabel);
 		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
@@ -107,24 +111,18 @@ public class SyndesisExtensionProjectWizardVersionsPage extends WizardPage {
 	}
 
 	private void fillSpringBootVersions() {
-		// for the moment we only support 1.5.8
-		springBootVersionCombo.add("1.5.8.RELEASE");
+		springBootVersionCombo.add(versionModel.getSpringBootVersion());
 		springBootVersionCombo.select(0);
-		// TODO: rework with FUSETOOLS-2696
 	}
 	
 	private void fillCamelVersions() {
-		// for the moment we only support 2.20.0
-		camelVersionCombo.add("2.20.1");
+		camelVersionCombo.add(versionModel.getCamelVersion());
 		camelVersionCombo.select(0);
-		// TODO: rework with FUSETOOLS-2696		
 	}
 	
 	private void fillSyndesisVersions() {
-		// for the moment we only support 1.2-SNAPSHOT
-		syndesisVersionCombo.add("1.2-SNAPSHOT");
+		syndesisVersionCombo.add(versionModel.getSyndesisVersion());
 		syndesisVersionCombo.select(0);
-		// TODO: rework with FUSETOOLS-2696		
 	}
 	
 	public String getSpringBootVersion() {
