@@ -50,7 +50,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private static final String CUSTOM_MAPPER_ID = "_customMapping"; //$NON-NLS-1$
     private static final String EXPRESSION_MAPPER_ID = "_expressionMapping"; //$NON-NLS-1$
     private static final String DOZER_SCHEMA_LOC =
-            "http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd"; //$NON-NLS-1$
+            "http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd"; //$NON-NLS-1$
 
     public static DozerMapperConfiguration loadConfig(final File file) throws JAXBException {
         return new DozerMapperConfiguration(file, null);
