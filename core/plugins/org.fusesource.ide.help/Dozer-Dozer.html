@@ -60,7 +60,7 @@ target field. &nbsp;To use a variable mapping, simply define a variable
 within your mapping configuration and then map from the VariableMapper
 class into your target field of choice:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;mappings&nbsp;xmlns="http:</strong>//dozermapper.github.io/schema/bean-mapping"&nbsp;
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
+  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;configuration&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;variables&gt;</strong>
       <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;variable</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">name</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"CUST_ID"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>ACME-SALES<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/variable&gt;</strong>
@@ -89,7 +89,7 @@ example custom mapping and configuration are provided below.</p><pre class="prog
     }
 }&nbsp;</pre><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;mappings&nbsp;xmlns="http:</strong>//dozermapper.github.io/schema/bean-mapping"&nbsp;
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
+  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;mapping&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;class-a&gt;</strong>org.example.A<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/class-a&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;class-b&gt;</strong>org.example.B<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/class-b&gt;</strong>
@@ -108,7 +108,7 @@ Camel message header or exchange property to a target field or to
 concatenate multiple source fields into a target field. &nbsp;The syntax of a
 mapping expression is:</p><pre class="programlisting">[language]:[expression]</pre><p>An example of mapping a message header into a target field:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;mappings&nbsp;xmlns="http:</strong>//dozermapper.github.io/schema/bean-mapping"&nbsp;
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
+  xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd"&gt;
   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;mapping&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;class-a&gt;</strong>org.apache.camel.component.dozer.ExpressionMapper<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/class-a&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;class-b&gt;</strong>org.example.B<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/class-b&gt;</strong>
