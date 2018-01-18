@@ -50,8 +50,8 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 	}
 
 	public void useDefaultLocation(boolean choice) {
-		log.debug("Setting 'Use default Workspace location' to: " + choice);
-		new CheckBox("Use default Workspace location").toggle(choice);
+		log.debug("Setting 'Use default workspace location' to: " + choice);
+		new CheckBox("Use default workspace location").toggle(choice);
 	}
 
 	public boolean isPathEditable() {

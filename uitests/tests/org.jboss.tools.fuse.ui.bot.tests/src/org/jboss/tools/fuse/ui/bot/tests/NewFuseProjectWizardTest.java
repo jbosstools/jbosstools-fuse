@@ -89,7 +89,7 @@ public class NewFuseProjectWizardTest {
 				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, "resources/projects") + "/test");
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		assertFalse("The path is editable, but 'Use default Workspace location' is selected!", wiz.isPathEditable());
+		assertFalse("The path is editable, but 'Use default workspace location' is selected!", wiz.isPathEditable());
 		wiz.setProjectName("test");
 		wiz.useDefaultLocation(false);
 		wiz.setLocation(targetLocation.getAbsolutePath());
