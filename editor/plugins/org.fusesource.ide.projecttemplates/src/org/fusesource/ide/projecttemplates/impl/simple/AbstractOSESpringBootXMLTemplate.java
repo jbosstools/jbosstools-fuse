@@ -10,15 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
+import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
-import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 public abstract class AbstractOSESpringBootXMLTemplate extends AbstractProjectTemplate {
 
@@ -30,28 +24,14 @@ public abstract class AbstractOSESpringBootXMLTemplate extends AbstractProjectTe
 	/**
 	 * creator class for the CBR simple template 
 	 */
-	protected class OSEUnzipTemplateCreator extends UnzipStreamCreator {
+	protected class OSEUnzipTemplateCreator extends DSLDependentUnzipStreamCreator {
 
-		private String suffix;
-		private static final String TEMPLATE_FOLDER = "templates/";
 		private static final String TEMPLATE_SPRING = "template-simple-ose-log-springboot-fuse";
 		
 		public OSEUnzipTemplateCreator(String suffix) {
-			this.suffix = suffix;
+			super(null, TEMPLATE_SPRING, null, suffix);
 		}
 		
-		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata) throws IOException, InvalidProjectMetaDataException {
-			String bundleEntry = null;
-			if (metadata instanceof ICamelDSLTypeSupport) {
-				CamelDSLType dslType = ((ICamelDSLTypeSupport)metadata).getDslType();
-				if (dslType == CamelDSLType.SPRING) {
-					bundleEntry = String.format("%s%s%s.zip", TEMPLATE_FOLDER, TEMPLATE_SPRING, suffix);
-				}
-				return getTemplateStream(bundleEntry);
-			}
-			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
-		}
 	}
 
 }

@@ -10,15 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.medium;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
+import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
-import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjectTemplate {
 
@@ -36,41 +30,16 @@ public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjec
 		}	
 	}
 
-	protected class CXfCodeFirstUnzipTemplateCreator extends UnzipStreamCreator {
+	protected class CXfCodeFirstUnzipTemplateCreator extends DSLDependentUnzipStreamCreator {
 
-		private String suffix;
-
-		public CXfCodeFirstUnzipTemplateCreator(String suffix) {
-			this.suffix = suffix;
-		}
-
-		private static final String TEMPLATE_FOLDER = "templates/";
 		private static final String TEMPLATE_BLUEPRINT = "template-medium-cxf-codefirst-blueprint-fuse";
 		private static final String TEMPLATE_SPRING = "template-medium-cxf-codefirst-spring-fuse";
 		private static final String TEMPLATE_JAVA = "template-medium-cxf-codefirst-java-fuse";
 
-		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
-				throws IOException, InvalidProjectMetaDataException {
-			String bundleEntry = null;
-			if (metadata instanceof ICamelDSLTypeSupport) {
-				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
-					case BLUEPRINT:	bundleEntry = getBundleEntry(TEMPLATE_BLUEPRINT);
-									break;
-					case SPRING:	bundleEntry = getBundleEntry(TEMPLATE_SPRING);
-									break;
-					case JAVA: bundleEntry = getBundleEntry(TEMPLATE_JAVA);
-									break;
-					default:
-				}
-				return getTemplateStream(bundleEntry);
-			}
-			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
+		public CXfCodeFirstUnzipTemplateCreator(String suffix) {
+			super(TEMPLATE_BLUEPRINT, TEMPLATE_SPRING, TEMPLATE_JAVA, suffix);
 		}
 
-		private String getBundleEntry(String templateDsl) {
-			return String.format("%s%s%s.zip", TEMPLATE_FOLDER, templateDsl, suffix);
-		}
 	}
 
 }

@@ -10,19 +10,14 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.impl.simple;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
+import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
-import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 /**
  * @author lhein
@@ -58,27 +53,14 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	/**
 	 * creator class for the CBR simple template 
 	 */
-	private class AMQUnzipTemplateCreator extends UnzipStreamCreator {
+	private class AMQUnzipTemplateCreator extends DSLDependentUnzipStreamCreator {
 
-		private static final String TEMPLATE_FOLDER = "templates/";
-		private static final String TEMPLATE_BLUEPRINT = "template-simple-amq-blueprint.zip";
-		private static final String TEMPLATE_SPRING = "template-simple-amq-spring.zip";
+		private static final String TEMPLATE_BLUEPRINT = "template-simple-amq-blueprint";
+		private static final String TEMPLATE_SPRING = "template-simple-amq-spring";
 		
-		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
-				throws IOException, InvalidProjectMetaDataException {
-			String bundleEntry = null;
-			if (metadata instanceof ICamelDSLTypeSupport) {
-				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
-					case BLUEPRINT:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_BLUEPRINT);
-									break;
-					case SPRING:	bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_SPRING);
-									break;
-					default:
-				}
-				return getTemplateStream(bundleEntry);
-			}
-			throw new InvalidProjectMetaDataException("Invalid project metadata not supporting Camel DSL types");
+		public AMQUnzipTemplateCreator() {
+			super(TEMPLATE_BLUEPRINT, TEMPLATE_SPRING, null, "");
 		}
+		
 	}
 }

@@ -10,15 +10,9 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
-import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
+import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
-import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
-import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.projecttemplates.util.ICamelDSLTypeSupport;
 
 public abstract class AbstractCBRTemplate extends AbstractProjectTemplate {
 
@@ -39,44 +33,16 @@ public abstract class AbstractCBRTemplate extends AbstractProjectTemplate {
 	/**
 	 * creator class for the CBR simple template 
 	 */
-	protected class CBRUnzipTemplateCreator extends UnzipStreamCreator {
+	protected class CBRUnzipTemplateCreator extends DSLDependentUnzipStreamCreator {
 		
-		private String suffix;
-
-		public CBRUnzipTemplateCreator(String suffix) {
-			this.suffix = suffix;
-		}
-
-		private static final String TEMPLATE_FOLDER = "templates/";
 		private static final String TEMPLATE_BLUEPRINT = "template-simple-cbr-blueprint-fuse";
 		private static final String TEMPLATE_SPRING = "template-simple-cbr-spring-fuse";
 		private static final String TEMPLATE_JAVA = "template-simple-cbr-java-fuse";
 
-		/* (non-Javadoc)
-		 * @see org.fusesource.ide.projecttemplates.adopters.creators.InputStreamCreator#getTemplateStream(org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData)
-		 */
-		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
-				throws IOException, InvalidProjectMetaDataException {
-			String bundleEntry = null;
-			if (metadata instanceof ICamelDSLTypeSupport) {
-				switch (((ICamelDSLTypeSupport)metadata).getDslType()) {
-					case BLUEPRINT:	bundleEntry = getBundleEntry(TEMPLATE_BLUEPRINT);
-									break;
-					case SPRING:	bundleEntry = getBundleEntry(TEMPLATE_SPRING);
-									break;
-					case JAVA:		bundleEntry = getBundleEntry(TEMPLATE_JAVA);
-									break;
-					default:
-				}
-				return getTemplateStream(bundleEntry);
-			}
-			throw new IOException("Invalid project metadata not supporting Camel DSL types");
+		public CBRUnzipTemplateCreator(String suffix) {
+			super(TEMPLATE_BLUEPRINT, TEMPLATE_SPRING, TEMPLATE_JAVA, suffix);
 		}
 
-		private String getBundleEntry(String templateDsl) {
-			return String.format("%s%s%s.zip", TEMPLATE_FOLDER, templateDsl, suffix);
-		}
 	}
 
 }
