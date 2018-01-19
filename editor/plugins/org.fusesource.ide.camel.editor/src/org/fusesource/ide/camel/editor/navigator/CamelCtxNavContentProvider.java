@@ -105,7 +105,12 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider, IReso
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		try {
-			event.getDelta().accept(new DeltaWalker());
+			if(event != null) {
+				IResourceDelta delta = event.getDelta();
+				if (delta != null) {
+					delta.accept(new DeltaWalker());
+				}
+			}
 		} catch (CoreException ex) {
 			CamelEditorUIActivator.pluginLog().logError(ex);
 		}
