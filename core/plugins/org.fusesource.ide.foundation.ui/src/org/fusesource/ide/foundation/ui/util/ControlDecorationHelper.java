@@ -15,6 +15,7 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 public class ControlDecorationHelper {
 
@@ -23,11 +24,19 @@ public class ControlDecorationHelper {
 		if (control != null) {
 			decoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
 			Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION).getImage();
-			decoration.setImage(image);
+			setImageAsynchronuously(decoration, image);
 			decoration.setShowOnlyOnFocus(true);
 			decoration.setDescriptionText(informationText);
 		}
 		return decoration;
+	}
+
+	private void setImageAsynchronuously(final ControlDecoration decoration, final Image image) {
+		Display.getDefault().asyncExec(() -> {
+			if (!Widgets.isDisposed(decoration.getControl())) {
+				decoration.setImage(image);
+			}
+		});
 	}
 	
 	public ControlDecoration addErrorToControl(Control control, String errorMessage) {
@@ -35,7 +44,7 @@ public class ControlDecorationHelper {
 		if (control != null) {
 			decoration = new ControlDecoration(control, SWT.TOP | SWT.LEFT);
 			Image image = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR).getImage();
-			decoration.setImage(image);
+			setImageAsynchronuously(decoration, image);
 			decoration.setShowOnlyOnFocus(false);
 			decoration.setDescriptionText(errorMessage);
 		}
