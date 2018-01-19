@@ -64,6 +64,21 @@ public final class CamelComponentUtils {
 	 */
 	public static Component getComponentModel(String protocol, CamelFile camelFile) {
 		CamelModel camelModel = camelFile.getCamelModel();
+		Map<String, Component> knownComponents = retrieveKnownComponents(camelModel);
+		String componentClass = getComponentClass(protocol, camelFile, camelModel);
+		if (knownComponents.containsKey(componentClass)) {
+			return knownComponents.get(componentClass);
+		} else {
+			Component c = buildModelForComponent(protocol, componentClass, camelFile, camelModel);
+			if (c != null) {
+				knownComponents.put(componentClass, c);
+				return getComponentModel(protocol, camelFile);
+			}
+			return null;
+		}
+	}
+
+	private static Map<String, Component> retrieveKnownComponents(CamelModel camelModel) {
 		Map<String, Component> knownComponents;
 		if (knownComponentsForCamelModel.containsKey(camelModel)) {
 			knownComponents = knownComponentsForCamelModel.get(camelModel);
@@ -71,17 +86,7 @@ public final class CamelComponentUtils {
 			knownComponents = new HashMap<>();
 			knownComponentsForCamelModel.put(camelModel, knownComponents);
 		}
-		String componentClass = getComponentClass(protocol, camelFile);
-		if (knownComponents.containsKey(componentClass)) {
-			return knownComponents.get(componentClass);
-		} else {
-			Component c = buildModelForComponent(protocol, componentClass, camelFile);
-			if (c != null) {
-				knownComponents.put(componentClass, c);
-				return getComponentModel(protocol, camelFile);
-			}
-			return null;
-		}
+		return knownComponents;
 	}
 
 	public static String[] getRefs(CamelFile cf) {
@@ -197,9 +202,9 @@ public final class CamelComponentUtils {
 		return p.getOneOf();
 	}
 
-	public static String getComponentClassForScheme(String scheme, CamelFile camelFile) {
+	public static String getComponentClassForScheme(String scheme, CamelModel camelModel) {
 		String compClass = null;
-		Collection<Component> components = camelFile.getCamelModel().getComponents();
+		Collection<Component> components = camelModel.getComponents();
 		for (Component c : components) {
 			if (c.supportsScheme(scheme)) {
 				compClass = c.getClazz();
@@ -245,10 +250,12 @@ public final class CamelComponentUtils {
 	 * returns the component class for the given scheme
 	 *
 	 * @param scheme
+	 * @param camelFile
+	 * @param camelModel
 	 * @return the class or null if not found
 	 */
-	protected static String getComponentClass(String scheme, CamelFile camelFile) {
-		String compClass = getComponentClassForScheme(scheme, camelFile);
+	protected static String getComponentClass(String scheme, CamelFile camelFile, CamelModel camelModel) {
+		String compClass = getComponentClassForScheme(scheme, camelModel);
 		if (compClass == null) {
 			// seems this scheme has no model entry -> check dependency
 			IProject project = camelFile.getResource().getProject();
@@ -315,9 +322,8 @@ public final class CamelComponentUtils {
 		return f.isFile() && f.getName().toLowerCase().endsWith(".jar");
 	}
 
-	protected static Component buildModelForComponent(String scheme, String clazz, CamelFile camelFile) {
+	protected static Component buildModelForComponent(String scheme, String clazz, CamelFile camelFile, CamelModel camelModel) {
 		// 1. take what we have in our model xml
-		CamelModel camelModel = camelFile.getCamelModel();
 		Component resModel = camelModel.getComponentForScheme(scheme);
 
 		// 2. try to generate the model from json blob

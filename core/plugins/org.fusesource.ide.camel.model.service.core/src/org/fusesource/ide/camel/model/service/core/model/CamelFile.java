@@ -463,6 +463,10 @@ public class CamelFile extends AbstractCamelModelElement implements EventListene
 		fireModelChanged();
 	}
 	
+	/**
+	 * /!\ Call this method carefully, it is a not very fast method.
+	 * @return
+	 */
 	public CamelModel getCamelModel(){
 		return CamelCatalogCacheManager.getInstance().getCamelModelForProject(resource.getProject());
 	}
