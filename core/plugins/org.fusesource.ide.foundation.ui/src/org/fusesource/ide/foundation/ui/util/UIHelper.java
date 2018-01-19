@@ -14,7 +14,7 @@ package org.fusesource.ide.foundation.ui.util;
 public interface UIHelper {
 
 	public static final String ID_PROPERTIES_VIEW = "org.eclipse.ui.views.PropertySheet";
-	public static final String ID_JMX_EXPORER = "org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer";
+	public static final String ID_JMX_EXPLORER = "org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer";
 	public static final String ID_DIAGRAM_VIEW = "org.fusesource.ide.jmx.views.DiagramView";
 	public static final String ID_TERMINAL_VIEW = "org.eclipse.tm.terminal.view.ui.TerminalsView";
 	public static final String ID_MESSAGE_TABLE = "org.fusesource.ide.jmx.views.MessageView";
