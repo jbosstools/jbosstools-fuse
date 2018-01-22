@@ -73,7 +73,7 @@ public class SyndesisExtensionsUtil {
 				
 		model.setCamelVersion(vMapping.getProperty(KEY_CAMEL_VERSION, "2.20.1"));
 		model.setSpringBootVersion(vMapping.getProperty(KEY_SPRING_BOOT_VERSION, "1.5.8.RELEASE"));
-		model.setSyndesisVersion(vMapping.getProperty(KEY_SYNDESIS_VERSION, "1.2.2"));
+		model.setSyndesisVersion(vMapping.getProperty(KEY_SYNDESIS_VERSION, "1.2.3"));
 		
 		return model;
 	}
