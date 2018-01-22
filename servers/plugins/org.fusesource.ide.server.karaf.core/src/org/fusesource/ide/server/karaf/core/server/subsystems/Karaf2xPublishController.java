@@ -11,8 +11,6 @@
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
@@ -50,21 +48,11 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerModelUtilities;
  * @author lhein
  */
 public class Karaf2xPublishController extends AbstractSubsystemController implements IPublishController, IPrimaryPublishController  {
-	private static final List<String> GOALS = Arrays.asList("package");
 	
 	protected IPublishBehaviour publisher2 = new KarafJMXPublisher();
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.core.server.behavior.IPublishController#canPublish()
-	 */
 	@Override
 	public IStatus canPublish() {
-		// workaround for bug in WTP (https://bugs.eclipse.org/bugs/show_bug.cgi?id=465141), should be removed once its fixed upstream
-		// also switch back startBeforePublish=true to all kind of servers in the plugin.xml files
-		if (getServer().getServerState() != Server.STATE_STARTED){
-			return Status.CANCEL_STATUS;
-		}
 		return Status.OK_STATUS;
 	}
 
