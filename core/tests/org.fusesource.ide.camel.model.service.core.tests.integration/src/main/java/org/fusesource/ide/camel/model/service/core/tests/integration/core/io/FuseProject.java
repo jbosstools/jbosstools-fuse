@@ -16,7 +16,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -98,6 +100,11 @@ public class FuseProject extends ExternalResource {
 		// Create a fake pom.xml
 		IFile pom = project.getFile(IMavenConstants.POM_FILE_NAME);
 		pom.create(new ByteArrayInputStream(String.format(DUMMY_POM_CONTENT, this.camelVersion).getBytes(StandardCharsets.UTF_8)), true, new NullProgressMonitor());
+		IFolder srcFolder = project.getFolder("src");
+		srcFolder.create(IResource.FORCE, true, new NullProgressMonitor());
+		IFolder srcMainFolder = srcFolder.getFolder("main");
+		srcMainFolder.create(IResource.FORCE, true, new NullProgressMonitor());
+		srcMainFolder.getFolder("java").create(IResource.FORCE, true, new NullProgressMonitor());
 	}
 
 	@Override
@@ -122,16 +129,26 @@ public class FuseProject extends ExternalResource {
 	}
 
 	public CamelFile createEmptyCamelFile(IFile file) throws CoreException, IOException {
-		try(InputStream source = FuseProject.class.getResourceAsStream("/empty-CamelFile.xml")){
+		return createFileFromTemplate(file, "/empty-CamelFile.xml");
+	}
+
+	public CamelFile createEmptyBlueprintCamelFile(IFile file) throws CoreException, IOException {
+		return createFileFromTemplate(file, "/empty-BlueprintCamelFile.xml");
+	}
+
+	protected CamelFile createFileFromTemplate(IFile file, String nameTemplate) throws CoreException, IOException {
+		try(InputStream source = FuseProject.class.getResourceAsStream(nameTemplate)){
 			file.create(source, true, new NullProgressMonitor());
 		}
 		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 
-	public CamelFile createEmptyBlueprintCamelFile(IFile file) throws CoreException, IOException {
-		try(InputStream source = FuseProject.class.getResourceAsStream("/empty-BlueprintCamelFile.xml")){
-			file.create(source, true, new NullProgressMonitor());
-		}
-		return new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
+	public CamelFile createEmptyCamelFileWithRoutes() throws CoreException, IOException {
+		IFile file = project.getFile("camel-context.xml");
+		return createEmptyCamelFileWithRoutes(file);
+	}
+
+	private CamelFile createEmptyCamelFileWithRoutes(IFile file) throws CoreException, IOException {
+		return createFileFromTemplate(file, "/empty-CamelFileWithRoutes.xml");
 	}
 }
