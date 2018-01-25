@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.fuse.ui;singleton:=true
-Bundle-Version: 10.2.0.qualifier
+Bundle-Version: 10.3.0.qualifier
 Bundle-Activator: org.fusesource.ide.server.fuse.ui.FuseESBUIPlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.fusesource.ide.server.karaf.core,
  org.fusesource.ide.server.karaf.ui,
  org.fusesource.ide.server.fuse.core,
- org.fusesource.ide.foundation.core;bundle-version="10.2.0",
+ org.fusesource.ide.foundation.core;bundle-version="10.3.0",
  org.jboss.ide.eclipse.as.wtp.core;bundle-version="3.0.0",
  org.jboss.ide.eclipse.as.wtp.ui;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
