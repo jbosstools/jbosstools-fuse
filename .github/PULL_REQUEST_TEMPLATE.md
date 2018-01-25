@@ -24,6 +24,7 @@ After this checklist is all checked or PR provides explanations for possible pas
 
 - [ ] Are there unit-tests?
 - [ ] Are there integration tests (or at least a jira to tackle these)?
+- [ ] Do we need a new UI test?
 
 ## Legal
 
