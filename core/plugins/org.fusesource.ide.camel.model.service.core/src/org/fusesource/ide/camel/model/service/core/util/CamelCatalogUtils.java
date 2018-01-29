@@ -105,7 +105,7 @@ public class CamelCatalogUtils {
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
-	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.20.1";
+	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.20.2";
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = FUSE_621_R9_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R5_CAMEL_VERSION;
 	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R3_CAMEL_VERSION;
