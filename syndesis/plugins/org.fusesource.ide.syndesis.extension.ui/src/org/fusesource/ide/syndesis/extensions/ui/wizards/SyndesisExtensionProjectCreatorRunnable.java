@@ -42,6 +42,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
@@ -54,8 +55,6 @@ import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjec
  */
 public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectCreatorRunnable {
 
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
 	public static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
 	private NewSyndesisExtensionProjectMetaData syndesisMetaData;
@@ -124,7 +123,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	private void customizeSyndesisPlugin(Model pomModel) throws XmlPullParserException, IOException {
 		Build build = pomModel.getBuild();
 		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
-		Plugin plugin = pluginsByName.get(SYNDESIS_PLUGIN_GROUPID + ":" + SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$
+		Plugin plugin = pluginsByName.get(MavenUtils.SYNDESIS_PLUGIN_GROUPID + ":" + MavenUtils.SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$
 		if (plugin != null) {
 			manageConfiguration(plugin);
 		}
