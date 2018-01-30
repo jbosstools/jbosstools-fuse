@@ -41,8 +41,11 @@ public class SwitchCamelVersionWizard extends Wizard {
 		String selectedCamelVersion = page.getSelectedCamelVersion();
 		try {
 			getContainer().run(true, false, new SwitchCamelVersionRunnableWithProgress(this, selectedCamelVersion));
-		} catch (InvocationTargetException | InterruptedException e) {
+		} catch (InvocationTargetException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
+		} catch (InterruptedException iex) {
+			ProjectTemplatesActivator.pluginLog().logError(iex);
+			Thread.currentThread().interrupt();
 		}
 		if(!hasValidCamelVersion) {
 			page.setErrorMessage(NLS.bind(Messages.invalidCamelVersionMessage, selectedCamelVersion));

@@ -99,6 +99,7 @@ public class SAPToolSuiteImportWizard extends Wizard implements IImportWizard {
 			return false;
 		} catch (InterruptedException e) {
 			MessageDialog.openWarning(getShell(), Messages.SAPToolSuiteImportWizard_SAPImportCancelledTitle, Messages.SAPToolSuiteImportWizard_SAPImportCancelledMessage);
+			Thread.currentThread().interrupt();
 			return false;
 		} 
 	}

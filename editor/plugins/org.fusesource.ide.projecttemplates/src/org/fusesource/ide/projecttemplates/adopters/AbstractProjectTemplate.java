@@ -71,8 +71,11 @@ public abstract class AbstractProjectTemplate {
 		project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 		try {
 			Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_REFRESH, subMonitor.split(1));
-		} catch (OperationCanceledException | InterruptedException e) {
+		} catch (OperationCanceledException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
+		} catch (InterruptedException ex) { 
+			ProjectTemplatesActivator.pluginLog().logError(ex);
+			Thread.currentThread().interrupt();
 		}
 		subMonitor.setWorkRemaining(0);
 	}

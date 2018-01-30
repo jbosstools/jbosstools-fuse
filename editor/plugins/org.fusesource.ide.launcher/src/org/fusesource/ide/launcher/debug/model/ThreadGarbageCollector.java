@@ -36,7 +36,10 @@ public class ThreadGarbageCollector extends Job {
 			try {
 				checkAllThreads();
 				Thread.sleep(TIME_BETWEEN_GARBAGE_COLLECTION);
-			} catch (InterruptedException | DebugException ex) {
+			} catch (InterruptedException iex) {
+				Activator.getLogger().error(iex);
+				Thread.currentThread().interrupt();
+			} catch (DebugException ex) {
 				Activator.getLogger().error(ex);
 			}
 		}
