@@ -195,7 +195,9 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 			}
 			try {
 				Thread.sleep(100);
-			} catch(InterruptedException ie) {} // ignore
+			} catch(InterruptedException ie) {
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 	

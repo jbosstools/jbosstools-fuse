@@ -87,8 +87,11 @@ public class NewDataFormatWizard extends Wizard implements GlobalConfigurationTy
 					dataformatNode = createDataFormatNode(dataformatSelected, dataFormatSelectionPage.getId(), monitor);
 				}
 			});
-		} catch (InvocationTargetException | InterruptedException e) {
+		} catch (InvocationTargetException ex) {
+			CamelEditorUIActivator.pluginLog().logError(ex);
+		} catch (InterruptedException e) {
 			CamelEditorUIActivator.pluginLog().logError(e);
+			Thread.currentThread().interrupt();
 		}
 		
 		return true;

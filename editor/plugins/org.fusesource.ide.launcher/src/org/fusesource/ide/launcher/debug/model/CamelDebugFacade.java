@@ -70,7 +70,8 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// ignore
+				Activator.getLogger().error(e);
+				Thread.currentThread().interrupt();
 			}
 			initializeDebuggerMBean();
 		}

@@ -55,7 +55,13 @@ public class JobWaiterUtil {
 			for (Object jobFamily : jobFamilies) {
 				Job.getJobManager().join(jobFamily, monitor);
 			}
-		} catch (InterruptedException | OperationCanceledException e) {
+		} catch (InterruptedException iex) {
+			// Workaround to bug
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
+			exception = iex;
+			waitJob(currentCounter, monitor);
+			Thread.currentThread().interrupt();			
+		} catch (OperationCanceledException e) {
 			// Workaround to bug
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=335251
 			exception = e;

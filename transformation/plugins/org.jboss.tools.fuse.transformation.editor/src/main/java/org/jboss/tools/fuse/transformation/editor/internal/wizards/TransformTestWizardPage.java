@@ -274,7 +274,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             // Ensure build of Java classes has completed
             try {
                 Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
-            } catch (final InterruptedException ignored) {
+            } catch (InterruptedException ignored) {
+            	Thread.currentThread().interrupt();
             }
 
             IPath srcPath;

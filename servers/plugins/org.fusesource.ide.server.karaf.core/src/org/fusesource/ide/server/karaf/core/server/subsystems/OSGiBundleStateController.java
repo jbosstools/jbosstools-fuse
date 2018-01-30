@@ -390,7 +390,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException ie) {
-					// Ignore, intentional
+					Thread.currentThread().interrupt();
 				}
 			}
 
@@ -423,6 +423,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				try {
 					Thread.sleep(maxDelay);
 				} catch(InterruptedException ie) {
+					Thread.currentThread().interrupt();
 					return;
 				}
 				synchronized(monitor) {

@@ -99,6 +99,7 @@ public class JMXCamelConnectJob extends Job {
 					Thread.sleep(TIME_WAIT_BETWEEN_RETRY);
 				} catch (InterruptedException e) {
 					monitor.setCanceled(true);
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
