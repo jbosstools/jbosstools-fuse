@@ -12,6 +12,7 @@ package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -61,22 +62,22 @@ import org.junit.Before;
 public abstract class SyndesisExtensionProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
 
 	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
-	
-	boolean buildFinished = false;
-	boolean buildOK = false;
-	
+
 	@Before
 	public void setup() throws WorkbenchException {
-		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting setup for "+ SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
+		SyndesisExtensionIntegrationTestsActivator.pluginLog()
+				.logInfo("Starting setup for " + SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 		CommonTestUtils.prepareIntegrationTestLaunch(SCREENSHOT_FOLDER);
 
 		String projectName = project != null ? project.getName() : String.format("%s", getClass().getSimpleName());
-		ScreenshotUtil.saveScreenshotToFile(String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
+		ScreenshotUtil.saveScreenshotToFile(
+				String.format("%s/MavenLaunchOutput-%s_BEFORE.png", SCREENSHOT_FOLDER, projectName), SWT.IMAGE_PNG);
 
 		// TODO: for now we need the staging repos, disable before GA
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 
-		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("End setup for "+ SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
+		SyndesisExtensionIntegrationTestsActivator.pluginLog()
+				.logInfo("End setup for " + SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
 	private SyndesisExtension createDefaultNewSyndesisExtension() {
@@ -101,27 +102,33 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		metadata.setTemplate(new BasicSyndesisExtensionXmlProjectTemplate());
 		return metadata;
 	}
-	
-	protected void testProjectCreation(String projectNameSuffix, String camelPath, String syndesisPath) throws InterruptedException, InvocationTargetException, CoreException, MalformedObjectNameException, IOException {
+
+	protected void testProjectCreation(String projectNameSuffix, String camelPath, String syndesisPath)
+			throws InterruptedException, InvocationTargetException, CoreException, MalformedObjectNameException,
+			IOException {
 		final String projectName = getClass().getSimpleName() + projectNameSuffix;
-		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: "+projectName);
+		SyndesisExtensionIntegrationTestsActivator.pluginLog()
+				.logInfo("Starting creation of the project: " + projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
 
 		NewSyndesisExtensionProjectMetaData metaData = createDefaultNewProjectMetadata(projectName);
 
-		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new SyndesisExtensionProjectCreatorRunnable(metaData));
+		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true,
+				new SyndesisExtensionProjectCreatorRunnable(metaData));
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		assertThat(project.exists()).describedAs("The project "+ project.getName()+ " doesn't exist.").isTrue();
-		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Project created: "+projectName);
-		
+		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
+		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Project created: " + projectName);
+
 		final IFile camelResource = project.getFile(Strings.isBlank(camelPath) ? CAMEL_RESOURCE_PATH : camelPath);
 		assertThat(camelResource.exists()).isTrue();
 
-		final IFile syndesisResource = project.getFile(Strings.isBlank(syndesisPath) ? SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH : syndesisPath);
+		final IFile syndesisResource = project
+				.getFile(Strings.isBlank(syndesisPath) ? SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH
+						: syndesisPath);
 		assertThat(syndesisResource.exists()).isTrue();
-		
+
 		waitJob();
 
 		checkCamelEditorOpened(camelResource);
@@ -135,13 +142,13 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		checkNoValidationError();
 		checkNoValidationWarning();
 		additionalChecks(project);
-		
+
 		launchBuild(new NullProgressMonitor());
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {
 		int waitTimeLeft = 30000;
-		while(isValidationThreadRunning() && waitTimeLeft > 0) {
+		while (isValidationThreadRunning() && waitTimeLeft > 0) {
 			Thread.sleep(100);
 			waitTimeLeft -= 100;
 		}
@@ -152,23 +159,24 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 
 	protected boolean isValidationThreadRunning() {
 		return Thread.getAllStackTraces().keySet().stream()
-				.anyMatch(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor".equals(thread.getName()));
+				.anyMatch(thread -> "org.eclipse.wst.sse.ui.internal.reconcile.StructuredRegionProcessor"
+						.equals(thread.getName()));
 	}
 
 	private void checkNoValidationWarning() throws CoreException {
 		checkNoValidationIssueOfType(filterWarning());
 	}
-	
-	private Predicate<IMarker> filterWarning(){
+
+	private Predicate<IMarker> filterWarning() {
 		return marker -> {
 			try {
 				Object severity = marker.getAttribute(IMarker.SEVERITY);
-				boolean isWarning = severity ==null  || severity.equals(IMarker.SEVERITY_WARNING);
-				String message = (String)marker.getAttribute(IMarker.MESSAGE);
+				boolean isWarning = severity == null || severity.equals(IMarker.SEVERITY_WARNING);
+				String message = (String) marker.getAttribute(IMarker.MESSAGE);
 				return isWarning
-						//TODO: managed other dependencies than camel
+						// TODO: managed other dependencies than camel
 						&& !message.startsWith("Duplicating managed version")
-						//TODO: manage community version and pure fis version
+				// TODO: manage community version and pure fis version
 						&& !message.startsWith("Overriding managed version");
 			} catch (CoreException e1) {
 				return true;
@@ -191,16 +199,18 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		IEditorReference editor = getEditorForFile(camelResource);
 		assertThat(editor).as("No editor has been opened.").isNotNull();
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
-		
+
 		// if xml context we check if the design editor loads fine
 		if ("xml".equalsIgnoreCase(camelResource.getFileExtension()) && editor instanceof CamelEditor) {
-			CamelEditor ed = (CamelEditor)editor;
+			CamelEditor ed = (CamelEditor) editor;
 			assertThat(ed.getDesignEditor()).as("The Camel Designer has not been created.").isNotNull();
-			assertThat(ed.getDesignEditor().getDiagramTypeProvider()).as("Error retrieving the diagram type provider.").isNotNull();
-			assertThat(ed.getDesignEditor().getDiagramTypeProvider().getDiagram()).as("Unable to access the camel context diagram.").isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider()).as("Error retrieving the diagram type provider.")
+					.isNotNull();
+			assertThat(ed.getDesignEditor().getDiagramTypeProvider().getDiagram())
+					.as("Unable to access the camel context diagram.").isNotNull();
 		}
 	}
-	
+
 	private IEditorReference getEditorForFile(IFile file) throws PartInitException {
 		for (IEditorReference ref : CommonTestUtils.getCurrentOpenEditors()) {
 			IEditorInput editorInput = ref.getEditorInput();
@@ -210,7 +220,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param syndesisResource
 	 * @throws InterruptedException
@@ -227,26 +237,49 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		assertThat(editor).as("No editor has been opened.").isNotNull();
 		assertThat(editor.isDirty()).as("A newly created project should not have dirty editor.").isFalse();
 	}
-	
+
 	protected void launchBuild(IProgressMonitor monitor) throws CoreException {
+		boolean buildFinished = false;
+
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
-		MavenExecutionResult result = MavenPlugin.getMaven().createExecutionContext().execute(new ExecuteProjectBuildM2ECallable(), subMonitor.split(10));
-		buildFinished = true;
-		buildOK = !result.hasExceptions();
-		for (Throwable t : result.getExceptions()) {
-			SyndesisExtensionIntegrationTestsActivator.pluginLog().logError(t);
+		final IMaven maven = MavenPlugin.getMaven();
+		IMavenExecutionContext context = maven.createExecutionContext();
+		final MavenExecutionRequest request = context.getExecutionRequest();
+		IFile pom = project.getFile("pom.xml");
+		File pomFile = pom.getRawLocation().toFile();
+		request.setPom(pomFile);
+		request.setGoals(Arrays.asList("clean", "verify"));
+		request.setBaseDirectory(pomFile.getParentFile());
+		request.setUpdateSnapshots(false);
+		MavenExecutionResult result;
+		
+		try {
+			result = context.execute(new ICallable<MavenExecutionResult>() {
+				public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor innerMonitor) throws CoreException {
+					return ((MavenImpl)maven).lookupComponent(Maven.class).execute(request);
+				}
+			}, subMonitor.split(10));
+		} catch (CoreException ex) {
+			result = null;
+		} finally {
+			buildFinished=true;		
+		}
+
+		// wait for maven build to be completed
+		while (!buildFinished) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		
+		boolean buildOK = result != null && !result.hasExceptions();
+		if (result != null) { 
+			for (Throwable t:result.getExceptions()) {
+				SyndesisExtensionIntegrationTestsActivator.pluginLog().logError(t);
+			}
 		}
 		assertThat(buildOK).isTrue();
 	}
-    
-    final class ExecuteProjectBuildM2ECallable implements ICallable<MavenExecutionResult> {
-    	@Override
-    	public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException {
-			MavenExecutionRequest executionRequest = context.getExecutionRequest();
-			executionRequest.setPom(project.getFile("pom.xml").getLocation().toFile());
-			executionRequest.setGoals(Arrays.asList("clean", "verify"));
-			final IMaven maven = MavenPlugin.getMaven();
-			return ((MavenImpl)maven).lookupComponent(Maven.class).execute(executionRequest);
-    	}
-    }
 }
