@@ -120,7 +120,7 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 	 * Get the IPluginLog for this plugin. This method helps to make logging easier,
 	 * for example:
 	 * 
-	 * FoundationCorePlugin.pluginLog().logError(etc)
+	 * ProjectTemplatesActivator.pluginLog().logError(etc)
 	 * 
 	 * @return IPluginLog object
 	 */
@@ -157,7 +157,7 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 			if (!listenForEvents.get()) return;
 			if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
 				try {
-					event.getDelta().accept(new DeltaPrinter());
+					event.getDelta().accept(new DeltaWalker());
 				} catch (CoreException ex) {
 					pluginLog().logError(ex);
 				}
@@ -165,7 +165,7 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
 		}
 	}
 	
-	class DeltaPrinter implements IResourceDeltaVisitor {
+	class DeltaWalker implements IResourceDeltaVisitor {
 		
 		private static final String MARKER_ID = ProjectTemplatesActivator.PLUGIN_ID + ".CamelCatalogVersionProblem";
 		
@@ -190,9 +190,9 @@ public class ProjectTemplatesActivator extends BaseUIPlugin {
       	
       	private boolean isRelevantResource(IResource res) {
       		return 	res != null &&
-      				res.getName().equalsIgnoreCase("pom.xml") && 
-      				!res.getParent().getName().equalsIgnoreCase("bin") && 
-      				!res.getParent().getName().equalsIgnoreCase("target");
+      				"pom.xml".equalsIgnoreCase(res.getName()) && 
+      				!"bin".equalsIgnoreCase(res.getParent().getName()) && 
+      				!"target".equalsIgnoreCase(res.getParent().getName());
       	}
       	
       	private void validateConfiguredCamelVersionMatchesLoadedCamelVersion(IResource res) {
