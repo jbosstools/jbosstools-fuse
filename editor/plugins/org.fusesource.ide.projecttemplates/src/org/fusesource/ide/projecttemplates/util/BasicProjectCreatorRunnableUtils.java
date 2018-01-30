@@ -61,6 +61,18 @@ public class BasicProjectCreatorRunnableUtils {
 	}
 	
 	/**
+	 * @param project
+	 * @return
+	 */
+	public static IFile searchCamelContextXMLFile(IProject project) {
+		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
+		if(!camelFiles.isEmpty()){
+			return camelFiles.iterator().next();
+		}
+		return null;
+	}
+	
+	/**
 	 * converts a project name into a bundle symbolic name
 	 * 
 	 * @param projectName

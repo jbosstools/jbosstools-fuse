@@ -198,14 +198,12 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	 */
 	private void openCamelContextFile(IProject project, IProgressMonitor monitor) {
 		if (project != null) {
-			final IFile[] holder = new IFile[1];
-			
 			// first looks for xml camel file
-			BasicProjectCreatorRunnableUtils.searchCamelContextXMLFile(project, holder);
+			IFile camelFile = BasicProjectCreatorRunnableUtils.searchCamelContextXMLFile(project);
 			
 			// if we found something to open then we open the editor
-			if (holder[0] != null) {
-				BasicProjectCreatorRunnableUtils.openCamelFile(holder[0], monitor, false);
+			if (camelFile != null && camelFile.exists()) {
+				BasicProjectCreatorRunnableUtils.openCamelFile(camelFile, monitor, false);
 			}
 		}
 	}
