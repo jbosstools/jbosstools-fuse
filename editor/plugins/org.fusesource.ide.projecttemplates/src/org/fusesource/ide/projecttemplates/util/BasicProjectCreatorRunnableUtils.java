@@ -42,24 +42,10 @@ public class BasicProjectCreatorRunnableUtils {
 	 * @param monitor
 	 * @param holder
 	 */
-	public static void searchCamelContextJavaFile(IProject project, IProgressMonitor monitor, final IFile[] holder) {
-		IFile f = new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
-		if (f != null) {
-			holder[0] = f;
-		}
+	public static IFile searchCamelContextJavaFile(IProject project, IProgressMonitor monitor) {
+		return new JavaCamelFilesFinder().findJavaDSLRouteBuilderClass(project, monitor);
 	}
 
-	/**
-	 * @param project
-	 * @param holder
-	 */
-	public static void searchCamelContextXMLFile(IProject project, final IFile[] holder) {
-		Set<IFile> camelFiles = new CamelFilesFinder().findFiles(project);
-		if(!camelFiles.isEmpty()){
-			holder[0] = camelFiles.iterator().next();
-		}
-	}
-	
 	/**
 	 * @param project
 	 * @return
