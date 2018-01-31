@@ -49,8 +49,10 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private static final String VARIABLE_MAPPER_ID = "_variableMapping"; //$NON-NLS-1$
     private static final String CUSTOM_MAPPER_ID = "_customMapping"; //$NON-NLS-1$
     private static final String EXPRESSION_MAPPER_ID = "_expressionMapping"; //$NON-NLS-1$
-    private static final String DOZER_SCHEMA_LOC =
-            "http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd"; //$NON-NLS-1$
+    public static final String DOZER_6_1_XMLNS = "http://dozermapper.github.io/schema/bean-mapping"; //$NON-NLS-1$
+    public static final String DOZER_6_1_SCHEMA_LOC = "https://dozermapper.github.io/schema/bean-mapping.xsd"; //$NON-NLS-1$
+    public static final String PRE_DOZER_6_1_XMLNS = "http://dozer.sourceforge.net"; //$NON-NLS-1$
+    public static final String PRE_DOZER_6_1_SCHEMA_LOC = "http://dozer.sourceforge.net/schema/beanmapping.xsd"; //$NON-NLS-1$
 
     public static DozerMapperConfiguration loadConfig(final File file) throws JAXBException {
         return new DozerMapperConfiguration(file, null);
@@ -565,7 +567,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         final Marshaller m = getJAXBContext().createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		m.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
-        m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, DOZER_SCHEMA_LOC);
+        m.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, DOZER_6_1_XMLNS + " " + DOZER_6_1_SCHEMA_LOC);
         m.marshal(mapConfig, output);
     }
 

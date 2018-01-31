@@ -71,6 +71,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
 import org.jboss.tools.fuse.transformation.editor.internal.SourceTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.TargetTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.l10n.Messages;
+import org.jboss.tools.fuse.transformation.editor.internal.util.DozerMigrator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -349,8 +350,12 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
         IFile configFile = ((FileEditorInput)getEditorInput()).getFile();
         IJavaProject javaProject = JavaCore.create(configFile.getProject());
+        IProgressMonitor monitor = new NullProgressMonitor();
         try {
             loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject, getClass().getClassLoader());
+
+            new DozerMigrator().migrateIfNecessary(site, this, configFile, monitor);
+
             manager = new TransformationManager(configFile, loader);
             // Add contributed transformations if missing or a different version
             String version = Activator.plugin().getBundle().getVersion().toString();
@@ -369,10 +374,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 			MavenUtils mavenUtils = new MavenUtils();
 			mavenUtils.addResourceFolder(project, pomFile, Util.TRANSFORMATIONS_FOLDER);
 			mavenUtils.addResourceFolder(project, pomFile, MavenUtils.RESOURCES_PATH);
-
-			IProgressMonitor monitor = new NullProgressMonitor();
-			
-
 
             // Ensure Java project source classpath entry exists for main Java source & transformations folder
             Util.ensureSourceFolderExists(javaProject, Util.TRANSFORMATIONS_FOLDER, monitor);
