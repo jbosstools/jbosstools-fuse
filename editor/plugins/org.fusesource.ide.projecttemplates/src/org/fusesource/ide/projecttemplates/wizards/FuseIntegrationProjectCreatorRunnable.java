@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -164,22 +165,24 @@ public final class FuseIntegrationProjectCreatorRunnable extends BasicProjectCre
 	 */
 	private void openCamelContextFile(IProject project, IProgressMonitor monitor) throws CoreException {
 		if (project != null) {
-			final IFile[] holder = new IFile[1];
+			SubMonitor subMonitor = SubMonitor.convert(monitor, 2);
 			boolean isJavaEditorToOpen = false;
 			
 			// first looks for xml camel file
-			BasicProjectCreatorRunnableUtils.searchCamelContextXMLFile(project, holder);
+			IFile camelFile = BasicProjectCreatorRunnableUtils.searchCamelContextXMLFile(project);
 			
 			// if no camel xml found we look for java files
-			if (holder[0] == null && project.hasNature(JavaCore.NATURE_ID)) {
-				BasicProjectCreatorRunnableUtils.searchCamelContextJavaFile(project, monitor, holder);
+			if (camelFile == null && project.hasNature(JavaCore.NATURE_ID)) {
+				camelFile = BasicProjectCreatorRunnableUtils.searchCamelContextJavaFile(project, subMonitor.split(1));
 				isJavaEditorToOpen = true;
 			}
+			subMonitor.setWorkRemaining(1);
 
 			// if we found something to open then we open the editor
-			if (holder[0] != null) {
-				BasicProjectCreatorRunnableUtils.openCamelFile(holder[0], monitor, isJavaEditorToOpen);
+			if (camelFile != null) {
+				BasicProjectCreatorRunnableUtils.openCamelFile(camelFile, subMonitor.split(1), isJavaEditorToOpen);
 			}
+			subMonitor.setWorkRemaining(0);
 		}
 	}
 }
