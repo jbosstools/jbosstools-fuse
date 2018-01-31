@@ -207,11 +207,13 @@ public class Messages extends NLS {
 	public static String TransformationEditor_invalidPomConfiguration;
 	public static String TransformationEditor_invalidTransformationFile;
 	public static String TransformationEditor_messageDialogConfirmation;
+	public static String TransformationEditorMigrationDialogConfirmation;
 	public static String TransformationEditor_mustBeOpenedViaCamelEditor;
 	public static String TransformationEditor_tooltipHideSourceVariableViewers;
 	public static String TransformationEditor_tooltipHideTargetViewers;
 	public static String TransformationEditor_tooltipShowSourceVariableViewers;
 	public static String TransformationEditor_tooltipShowTargetViewers;
+	public static String TransformationEditorUnableToOpenIncompatibleTransformationFile;
 	public static String TransformTestWizardPage_Browse;
 	public static String TransformTestWizardPage_BrowseTooltip;
 	public static String TransformTestWizardPage_description;
@@ -232,7 +234,7 @@ public class Messages extends NLS {
 	public static String Util_SelectCamelFileDialogTitle;
 	public static String Util_SelectCamelXMLFileFromProject_DialogTitle;
 	public static String Util_SelectTransformationFileFromProject;
-    public static String Util_UnableToCreateSourceFolder;
+	public static String Util_UnableToCreateSourceFolder;
 
 	public static String VariablesViewer_addVariableDialog_validation_variablealreadyExists;
 	public static String VariablesViewer_addVariableDialogDescription;
