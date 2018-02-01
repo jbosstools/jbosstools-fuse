@@ -11,9 +11,10 @@
 package org.jboss.tools.fuse.ui.bot.tests.suite;
 
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.jboss.tools.fuse.ui.bot.tests.CamelEditorRoutesTest;
 import org.jboss.tools.fuse.ui.bot.tests.CamelEditorTest;
+import org.jboss.tools.fuse.ui.bot.tests.ComponentTest;
 import org.jboss.tools.fuse.ui.bot.tests.ProjectLocalRunTest;
-import org.jboss.tools.fuse.ui.bot.tests.SimpleTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
@@ -27,7 +28,8 @@ import junit.framework.TestSuite;
 @SuiteClasses({
 	CamelEditorTest.class,
 	ProjectLocalRunTest.class,
-	SimpleTest.class,
+	ComponentTest.class,
+	CamelEditorRoutesTest.class
 	})
 @RunWith(RedDeerSuite.class)
 public class SmokeTests extends TestSuite {
