@@ -282,7 +282,7 @@
 					<includes>
 						<include>**/*IT.class</include>
 					</includes>
-					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -Dgroovy.grape.report.downloads=true -Divy.message.logger.level=4 -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000</argLine>
+					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} ${moduleProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -Dgroovy.grape.report.downloads=true -Divy.message.logger.level=4 -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000</argLine>
 					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
 				</configuration>
 			</plugin>
