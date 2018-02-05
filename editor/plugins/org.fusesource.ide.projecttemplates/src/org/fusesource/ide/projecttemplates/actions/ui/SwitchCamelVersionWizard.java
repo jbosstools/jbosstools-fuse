@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
+import org.fusesource.ide.projecttemplates.util.CamelVersionChecker;
 
 public class SwitchCamelVersionWizard extends Wizard {
 	
@@ -39,18 +40,32 @@ public class SwitchCamelVersionWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		String selectedCamelVersion = page.getSelectedCamelVersion();
+		CamelVersionChecker camelVersionChecker = new CamelVersionChecker(selectedCamelVersion);
 		try {
-			getContainer().run(true, false, new SwitchCamelVersionRunnableWithProgress(this, selectedCamelVersion));
+			getContainer().run(true, true, camelVersionChecker);
 		} catch (InvocationTargetException e) {
 			ProjectTemplatesActivator.pluginLog().logError(e);
 		} catch (InterruptedException iex) {
 			ProjectTemplatesActivator.pluginLog().logError(iex);
 			Thread.currentThread().interrupt();
 		}
-		if(!hasValidCamelVersion) {
-			page.setErrorMessage(NLS.bind(Messages.invalidCamelVersionMessage, selectedCamelVersion));
+		while (!camelVersionChecker.isDone()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
 		}
-		return hasValidCamelVersion;
+		if (!camelVersionChecker.isCanceled()) {
+			hasValidCamelVersion = camelVersionChecker.isValid();
+
+			if(!hasValidCamelVersion) {
+				page.setErrorMessage(NLS.bind(Messages.invalidCamelVersionMessage, selectedCamelVersion));
+			}
+			return hasValidCamelVersion;
+		} else {
+			return false;
+		}
 	}
 
 	public String getSelectedCamelVersion() {
