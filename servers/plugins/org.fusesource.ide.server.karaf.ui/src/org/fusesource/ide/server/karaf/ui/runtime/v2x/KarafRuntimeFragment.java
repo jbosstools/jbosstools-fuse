@@ -129,6 +129,24 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		}
 		return null;
 	}
+	
+	@Override
+	protected String getErrorString() {
+		String superError = getErrorFromParent();
+		String homeVersionWarning = getHomeVersionWarning();
+		
+		if (superError != null && homeVersionWarning != null) {
+			return superError +"\n"+ homeVersionWarning;
+		} else if (superError == null) {
+			return homeVersionWarning;
+		} else {
+			return superError;
+		}
+	}
+
+	String getErrorFromParent() {
+		return super.getErrorString();
+	}
 
 	/*
 	 * (non-Javadoc)
