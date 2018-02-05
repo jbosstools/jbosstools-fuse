@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.WeakHashMap;
 
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.foundation.core.util.BundleUtils;
@@ -20,13 +21,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-/**
- * A utility class for retrieving a IJBoss7ManagerService or 
- * the id of a IJBoss7ManagerService for a given IServer or IRuntimeType id 
- */
 public class CamelServiceManagerUtil {
 
 	public static final String DEFAULT_SERVICE = "dynamic";
+	private static WeakHashMap<String, ICamelManagerService> cache = new WeakHashMap<>();
+	
 	
 	private CamelServiceManagerUtil() {
 		// access through singleton
@@ -44,13 +43,18 @@ public class CamelServiceManagerUtil {
 	 * @throws CamelManagerException
 	 */
 	public static ICamelManagerService getManagerService(String serviceVersion) {
-		try {
-			BundleContext context = CamelModelServiceCoreActivator.getBundleContext();
-			CamelManagerServiceProxy proxy = new CamelManagerServiceProxy(context, serviceVersion);
-			proxy.open();
-			return proxy;
-		} catch(InvalidSyntaxException ise) {
-			throw new CamelManagerException(ise);
+		if (cache.containsKey(serviceVersion)) {
+			return cache.get(serviceVersion);
+		} else {
+			try {
+				BundleContext context = CamelModelServiceCoreActivator.getBundleContext();
+				CamelManagerServiceProxy proxy = new CamelManagerServiceProxy(context, serviceVersion);
+				proxy.open();
+				cache.put(serviceVersion, proxy);
+				return proxy;
+			} catch(InvalidSyntaxException ise) {
+				throw new CamelManagerException(ise);
+			}
 		}
 	}
 	
@@ -73,8 +77,6 @@ public class CamelServiceManagerUtil {
 	}
 	
 	/**
-	 * Execute some command, request, or action on the appropriate 
-	 * IJBoss7ManagerService for the given IServer. 
 	 * 
 	 * @param serviceAware	The action to be executed
 	 * @param server   
@@ -92,9 +94,6 @@ public class CamelServiceManagerUtil {
 	}
 	
 	/**
-	 * An interface for an object capable of executing a command,
-	 * request, or action on a IJBoss7ManagerService. 
-	 * 
 	 * @param <RESULT> The type of the result you are expecting from the service
 	 */
 	public static interface IServiceAware<RESULT> {
