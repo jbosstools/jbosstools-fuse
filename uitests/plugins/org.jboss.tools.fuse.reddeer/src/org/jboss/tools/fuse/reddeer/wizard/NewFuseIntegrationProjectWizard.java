@@ -41,31 +41,31 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public void setProjectName(String name) {
 		log.debug("Setting Project name to: " + name);
-		new LabeledText("Project Name").setText(name);
+		new LabeledText(this, "Project Name").setText(name);
 	}
 
 	public void setLocation(String path) {
 		log.debug("Setting project Path to: " + path);
-		new LabeledText("Path").setText(path);
+		new LabeledText(this, "Path").setText(path);
 	}
 
 	public void useDefaultLocation(boolean choice) {
 		log.debug("Setting 'Use default workspace location' to: " + choice);
-		new CheckBox("Use default workspace location").toggle(choice);
+		new CheckBox(this, "Use default workspace location").toggle(choice);
 	}
 
 	public boolean isPathEditable() {
-		return new LabeledText("Path").isEnabled();
+		return new LabeledText(this, "Path").isEnabled();
 	}
 
 	public void selectTargetRuntime(String runtime) {
 		log.debug("Setting 'Target Runtime' to: " + runtime);
-		new DefaultCombo(0).setSelection(runtime);
+		new DefaultCombo(this, 0).setSelection(runtime);
 	}
 
 	public ServerRuntimeWizard newTargetRuntime() {
 		log.debug("Invoking new server runtime wizard");
-		new PushButton("New").click();
+		new PushButton(this, "New").click();
 		new WaitUntil(new ShellIsAvailable("New Server Runtime Environment"));
 		new DefaultShell("New Server Runtime Environment");
 		return new ServerRuntimeWizard();
@@ -73,22 +73,22 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public List<String> getTargetRuntimes() {
 		log.debug("Getting all available target runtimes");
-		return new DefaultCombo(0).getItems();
+		return new DefaultCombo(this, 0).getItems();
 	}
 
 	public String getTargetRuntime() {
 		log.debug("Getting selected Target Runtime");
-		return new DefaultCombo(0).getSelection();
+		return new DefaultCombo(this, 0).getSelection();
 	}
 
 	public List<String> getCamelVersions() {
 		log.debug("Getting all available camel versions");
-		return new DefaultCombo(1).getItems();
+		return new DefaultCombo(this, 1).getItems();
 	}
 
 	public String getCamelVersion() {
 		log.debug("Getting selected Camel version");
-		return new DefaultCombo(1).getText();
+		return new DefaultCombo(this, 1).getText();
 	}
 
 	public void selectCamelVersion(String version) {
@@ -102,22 +102,22 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public void setCamelVersion(String version) {
 		log.debug("Setting 'Camel Version' to: " + version);
-		new DefaultCombo(1).setText(version);
+		new DefaultCombo(this, 1).setText(version);
 	}
 
 	public void setProjectType(ProjectType type) {
 		switch (type) {
 		case JAVA:
 			log.debug("Setting project type to: Java DSL");
-			new RadioButton("Java DSL").toggle(true);
+			new RadioButton(this, "Java DSL").toggle(true);
 			break;
 		case SPRING:
 			log.debug("Setting project type to: Spring DSL");
-			new RadioButton("Spring DSL").toggle(true);
+			new RadioButton(this, "Spring DSL").toggle(true);
 			break;
 		case BLUEPRINT:
 			log.debug("Setting project type to: Blueprint DSL");
-			new RadioButton("Blueprint DSL").toggle(true);
+			new RadioButton(this, "Blueprint DSL").toggle(true);
 			break;
 		}
 	}
@@ -126,13 +126,13 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 		switch (type) {
 		case JAVA:
 			log.debug("Trying to determine whether 'Java DSL' project type is available");
-			return new RadioButton(type.getDescription()).isEnabled();
+			return new RadioButton(this, type.getDescription()).isEnabled();
 		case SPRING:
 			log.debug("Trying to determine whether 'Spring DSL' project type is available");
-			return new RadioButton(type.getDescription()).isEnabled();
+			return new RadioButton(this, type.getDescription()).isEnabled();
 		case BLUEPRINT:
 			log.debug("Trying to determine whether 'Blueprint DSL' project type is available");
-			return new RadioButton(type.getDescription()).isEnabled();
+			return new RadioButton(this, type.getDescription()).isEnabled();
 		default:
 			return true;
 		}
@@ -142,13 +142,13 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 		switch (type) {
 		case JAVA:
 			log.debug("Trying to determine whether 'Java DSL' project type is selected");
-			return new RadioButton(type.getDescription()).isSelected();
+			return new RadioButton(this, type.getDescription()).isSelected();
 		case SPRING:
 			log.debug("Trying to determine whether 'Spring DSL' project type is selected");
-			return new RadioButton(type.getDescription()).isSelected();
+			return new RadioButton(this, type.getDescription()).isSelected();
 		case BLUEPRINT:
 			log.debug("Trying to determine whether 'Blueprint DSL' project type is selected");
-			return new RadioButton(type.getDescription()).isSelected();
+			return new RadioButton(this, type.getDescription()).isSelected();
 		default:
 			return true;
 		}
@@ -160,7 +160,7 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public void selectTemplate(String name) {
 		log.debug("Selecting a predefined template: " + name);
-		new RadioButton("Use a predefined template").toggle(true);
+		new RadioButton(this, "Use a predefined template").toggle(true);
 		for (TreeItem item : new DefaultTree().getAllItems()) {
 			if (item.getText().equals(name)) {
 				item.select();
@@ -172,7 +172,7 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public void selectTemplate(String... path) {
 		log.debug("Selecting a predefined template: " + path);
-		new RadioButton("Use a predefined template").toggle(true);
+		new RadioButton(this, "Use a predefined template").toggle(true);
 		try {
 			new DefaultTreeItem(path).select();
 		} catch (Exception e) {
@@ -184,12 +184,19 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 	public List<String> getAllAvailableTemplates() {
 		log.debug("Retrieving available templates");
 		List<String> templates = new ArrayList<String>();
-		new RadioButton("Use a predefined template").toggle(true);
+		new RadioButton(this, "Use a predefined template").toggle(true);
 		for (TreeItem item : new DefaultTree().getAllItems()) {
 			if (item.getItems().isEmpty()) {
 				templates.add(item.getText());
 			}
 		}
 		return templates;
+	}
+	
+	/**
+	 * Click on BTN 'Verify' project Camel version
+	 */
+	public void clickVerifyButton() {
+		new PushButton(this, "Verify").click();
 	}
 }
