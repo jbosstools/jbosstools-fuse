@@ -44,4 +44,8 @@ public final class UnknownTimeMonitorUpdater implements Runnable {
 	public void finish() {
 		finished = true;
 	}
+	
+	public boolean shouldTerminate() {
+		return canceled || finished || subMonitor.isCanceled();
+	}
 }

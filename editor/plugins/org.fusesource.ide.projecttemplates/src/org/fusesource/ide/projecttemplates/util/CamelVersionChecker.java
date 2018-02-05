@@ -27,24 +27,33 @@ import org.fusesource.ide.projecttemplates.internal.Messages;
 public class CamelVersionChecker implements IRunnableWithProgress {
 
 	private String camelVersionToValidate;
-	private boolean valid;
+	private boolean valid = true;
+	private boolean isCanceled = false;
 	private boolean done;
 	private UnknownTimeMonitorUpdater unknownTimeMonitorUpdater;
+	private Thread threadCheckingCamelVersion;
 	
 	public CamelVersionChecker(String camelVersionToValidate) {
 		this.camelVersionToValidate = camelVersionToValidate;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, NLS.bind(Messages.validatingCamelVersionMessage, camelVersionToValidate), 1);
 		unknownTimeMonitorUpdater = new UnknownTimeMonitorUpdater(subMonitor);
 		try {
 			new Thread(unknownTimeMonitorUpdater).start();
-			valid = isCamelVersionValid(camelVersionToValidate);
+			threadCheckingCamelVersion = createThreadCheckingCamelVersion(camelVersionToValidate);
+			threadCheckingCamelVersion.start();
+			while (!unknownTimeMonitorUpdater.shouldTerminate() && threadCheckingCamelVersion.isAlive() && !threadCheckingCamelVersion.isInterrupted()) {
+				Thread.sleep(100);
+			}
+			if (subMonitor.isCanceled()) {
+				isCanceled = true;
+			}
+			if (threadCheckingCamelVersion.isAlive()) {
+				threadCheckingCamelVersion.interrupt();
+			}
 			subMonitor.setWorkRemaining(0);
 		} finally {
 			unknownTimeMonitorUpdater.finish();
@@ -53,7 +62,13 @@ public class CamelVersionChecker implements IRunnableWithProgress {
 	}
 	
 	public void cancel() {
-		this.unknownTimeMonitorUpdater.cancel();
+		isCanceled = true;
+		if (unknownTimeMonitorUpdater != null) {
+			unknownTimeMonitorUpdater.cancel();
+		}
+		if (threadCheckingCamelVersion != null) {
+			threadCheckingCamelVersion.interrupt();
+		}
 	}
 	
 	public boolean isDone() {
@@ -63,12 +78,15 @@ public class CamelVersionChecker implements IRunnableWithProgress {
 	public boolean isValid() {
 		return valid;
 	}
-	
-	public synchronized boolean isCamelVersionValid(String camelVersion) {
-		boolean versionValid = false;
-		if (camelVersion != null) {
-			versionValid = CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion);
-		}
-		return versionValid;
+
+	public Thread createThreadCheckingCamelVersion(String camelVersion) {
+		return new Thread(
+				null, 
+				() -> valid = CamelServiceManagerUtil.getManagerService().isCamelVersionExisting(camelVersion),
+				"CamelVersionChecker "+CamelVersionChecker.this.toString());
+	}
+
+	public boolean isCanceled() {
+		return isCanceled;
 	}
 }
