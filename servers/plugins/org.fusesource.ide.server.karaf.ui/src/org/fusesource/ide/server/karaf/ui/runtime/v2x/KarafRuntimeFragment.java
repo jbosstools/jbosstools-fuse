@@ -26,7 +26,6 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.TaskModel;
-import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
@@ -43,34 +42,6 @@ import org.jboss.tools.as.runtimes.integration.ui.composites.DownloadRuntimeHome
  */
 public class KarafRuntimeFragment extends RuntimeWizardFragment {
 
-	// TODO: remove with next version of jbt server tools
-	private Composite compositeStored = null;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#createComposite(org.eclipse.swt.widgets.Composite, org.eclipse.wst.server.ui.wizard.IWizardHandle)
-	 */
-	// TODO: remove with next version of jbt server tools
-	@Override
-	public Composite createComposite(Composite parent, IWizardHandle handle) {
-		this.compositeStored = super.createComposite(parent, handle);
-		return this.compositeStored;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#isComplete()
-	 */
-	// TODO: remove with next version of jbt server tools
-	@Override
-	public boolean isComplete() {
-	   return super.isComplete() && compositeStored != null && !compositeStored.isDisposed();
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#updateWizardHandle(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	protected void updateWizardHandle(Composite parent) {
 		// make modifications to parentComposite
@@ -86,20 +57,12 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		return KarafUIPlugin.getDefault().getImageRegistry().getDescriptor(KarafUIPlugin.IMG_KARAF_LOGO_LARGE);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#createJRECompositeWidget(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	protected AbstractJREComposite createJRECompositeWidget(Composite main) {
 		// Create our composite
 		return new KarafJREComposite(main, SWT.NONE, getTaskModel());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#getExplanationText()
-	 */
 	@Override
 	protected String getExplanationText() {
 		return "Please point to a Karaf installation.";
@@ -109,10 +72,6 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "org.jboss.ide.eclipse.as.doc.user.new_server_runtime"); //$NON-NLS-1$		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#getHomeVersionWarning()
-	 */
 	@Override
 	protected String getHomeVersionWarning() {
 		String homeDir = homeDirComposite.getHomeDirectory();
@@ -148,10 +107,6 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		return super.getErrorString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#saveJreInRuntime(org.eclipse.wst.server.core.IRuntimeWorkingCopy)
-	 */
 	@Override
 	protected void saveJreInRuntime(IRuntimeWorkingCopy wc) {
 		IKarafRuntimeWorkingCopy srt = (IKarafRuntimeWorkingCopy) wc.loadAdapter(
@@ -164,19 +119,11 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#createHomeCompositeWidget(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	protected RuntimeHomeComposite createHomeCompositeWidget(Composite main) {
 		return new DownloadRuntimeHomeComposite(main, SWT.NONE, handle, getTaskModel());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#saveRuntimeLocationInPreferences(org.eclipse.wst.server.core.IRuntime)
-	 */
 	@Override
 	protected void saveRuntimeLocationInPreferences(IRuntime runtime) {
 		// Do nothing
