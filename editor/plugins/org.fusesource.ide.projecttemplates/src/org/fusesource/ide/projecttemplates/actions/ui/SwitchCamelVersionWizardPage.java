@@ -13,6 +13,7 @@ package org.fusesource.ide.projecttemplates.actions.ui;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -62,7 +63,7 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 	public boolean isPageComplete() {
 		boolean isDifferentVersion = !initialCamelVersion.equals(getSelectedCamelVersion());
 		if(!isDifferentVersion) {
-			setErrorMessage(Messages.switchCamelVersionDialogSameVersionErrorMessage);
+			setErrorMessage(NLS.bind(Messages.switchCamelVersionDialogSameVersionErrorMessage, initialCamelVersion));
 		} else if(Strings.isBlank(getSelectedCamelVersion())) {
 			setErrorMessage(Messages.switchCamelVersionDialogTitle);
 		} else {
