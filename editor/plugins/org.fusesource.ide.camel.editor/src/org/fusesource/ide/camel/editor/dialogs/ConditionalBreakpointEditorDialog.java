@@ -533,7 +533,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 		}
 		
 		// not initialized yet
-		ICamelManagerService svc = CamelServiceManagerUtil.getManagerService(CamelServiceManagerUtil.DEFAULT_SERVICE);
+		ICamelManagerService svc = CamelServiceManagerUtil.getManagerService();
 		if (svc != null) {
 			String ex = svc.testExpression(combo_language.getText().trim(), text_condition.getText());
 			if (ex != null && !ex.contains("No language could be found for:")) {

@@ -53,7 +53,7 @@ public class DurationConversionIT {
 	
 	@Before
 	public void setup() {
-		this.svc = CamelServiceManagerUtil.getManagerService(CamelServiceManagerUtil.DEFAULT_SERVICE);
+		this.svc = CamelServiceManagerUtil.getManagerService();
 		assertNotNull("Camel Catalog Service was null!", this.svc);
 	}
 	
