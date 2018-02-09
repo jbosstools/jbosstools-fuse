@@ -18,8 +18,8 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
-import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -77,7 +77,7 @@ public class ProjectTemplatePatcher {
 		String camelVersion = Strings.isBlank(projectMetaData.getCamelVersion()) ? new CamelMavenUtils().getCamelVersionFromProjectName(projectMetaData.getProjectName()) : projectMetaData.getCamelVersion();
 		if (new CamelMavenUtils().isRedHatBrandedVersion(camelVersion)) { 
 			ComparableVersion v1 = new ComparableVersion(camelVersion);
-			ComparableVersion v2 = new ComparableVersion(CamelCatalogUtils.FUSE_63_R4_CAMEL_VERSION);
+			ComparableVersion v2 = new ComparableVersion(CamelForFuse6ToBomMapper.FUSE_63_R4_CAMEL_VERSION);
 			return v1.compareTo(v2) >= 0; 
 		}
 		return false;

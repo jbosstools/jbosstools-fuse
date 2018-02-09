@@ -10,15 +10,13 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.model.Model;
@@ -32,6 +30,11 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelCatalogCoordinates;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFIS20ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse7ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForWildflyFuse7ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.FISBomToFabric8MavenPluginMapper;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 
@@ -41,74 +44,18 @@ import org.fusesource.ide.foundation.core.util.VersionUtil;
  * @author lhein
  */
 public class CamelCatalogUtils {
-	public static final String CAMEL_TO_BOM_MAPPING_PROPERTY = "org.jboss.tools.fuse.camel2bom.url";
-	public static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
-	public static final String CAMEL_TO_BOM_MAPPING_URL = System.getProperty(CAMEL_TO_BOM_MAPPING_PROPERTY, CAMEL_TO_BOM_MAPPING_DEFAULT_URL);
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7.url";
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7.properties";
-	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7 = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL);
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7wildfly.url";
-	public static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7wildfly.properties";
-	public static final String CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY = System.getProperty(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);
-	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.fisbom2fabric8MavenVersion.fuse7.url";
-	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fisBomToFabric8MavenPlugin.fuse7.properties";
-	public static final String FISBOM_TOFABRIC8MAVENPLUGIN_URL_MAPPING_FUSE_7 = System.getProperty(FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY, FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL);
 
-	public static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
-	public static final String FIS_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
-	public static final String FIS_MAPPING_URL = System.getProperty(FIS_MAPPING_PROPERTY, FIS_MAPPING_DEFAULT_URL);
-	
 	public static final String KEY_CAMEL_TEST_VERSIONS = "FUSE_TOOLING_CAMEL_TEST_VERSIONS";
 
-	private static final String FUSE_621_R0_CAMEL_VERSION = "2.15.1.redhat-621084";
-	private static final String FUSE_621_R1_CAMEL_VERSION = "2.15.1.redhat-621090";
-	private static final String FUSE_621_R2_CAMEL_VERSION = "2.15.1.redhat-621107";
-	private static final String FUSE_621_R3_CAMEL_VERSION = "2.15.1.redhat-621117";
-	private static final String FUSE_621_R4_CAMEL_VERSION = "2.15.1.redhat-621159";
-	private static final String FUSE_621_R5_CAMEL_VERSION = "2.15.1.redhat-621169";
-	private static final String FUSE_621_R6_CAMEL_VERSION = "2.15.1.redhat-621177";
-	private static final String FUSE_621_R7_CAMEL_VERSION = "2.15.1.redhat-621186";
-	private static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621195";
-	private static final String FUSE_621_R9_CAMEL_VERSION = "2.15.1.redhat-621216";
-	
-	private static final String FUSE_621_R0_BOM_VERSION = "6.2.1.redhat-084";
-	private static final String FUSE_621_R1_BOM_VERSION = "6.2.1.redhat-090";
-	private static final String FUSE_621_R2_BOM_VERSION = "6.2.1.redhat-107";
-	private static final String FUSE_621_R3_BOM_VERSION = "6.2.1.redhat-117";
-	private static final String FUSE_621_R4_BOM_VERSION = "6.2.1.redhat-159";
-	private static final String FUSE_621_R5_BOM_VERSION = "6.2.1.redhat-169";
-	private static final String FUSE_621_R6_BOM_VERSION = "6.2.1.redhat-177";
-	private static final String FUSE_621_R7_BOM_VERSION = "6.2.1.redhat-186";
-	private static final String FUSE_621_R8_BOM_VERSION = "6.2.1.redhat-195";
-	private static final String FUSE_621_R9_BOM_VERSION = "6.2.1.redhat-216";
-	
-	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
-	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
-	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
-	private static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
-	public static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
-	public static final String FUSE_63_R5_CAMEL_VERSION = "2.17.0.redhat-630310";
-
-	private static final String FUSE_63_R0_BOM_VERSION = "6.3.0.redhat-187";
-	private static final String FUSE_63_R1_BOM_VERSION = "6.3.0.redhat-224";
-	private static final String FUSE_63_R2_BOM_VERSION = "6.3.0.redhat-254";
-	private static final String FUSE_63_R3_BOM_VERSION = "6.3.0.redhat-262";
-	static final String FUSE_63_R4_BOM_VERSION = "6.3.0.redhat-283";
-	static final String FUSE_63_R5_BOM_VERSION = "6.3.0.redhat-310";
-	
-	public static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
-	public static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
-	public static final String FIS_20_R3_CAMEL_VERSION = "2.18.1.redhat-000021";
-	
-	public static final String DEFAULT_CAMEL_VERSION = FIS_20_R3_CAMEL_VERSION;
+	public static final String DEFAULT_CAMEL_VERSION = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String CAMEL_SPRING_BOOT_STARTER = "camel-spring-boot-starter";
 	public static final String CAMEL_WILDFLY = "org.wildfly.camel";
 	
 	public static final String CAMEL_VERSION_LATEST_COMMUNITY = "2.20.2";
-	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = FUSE_621_R9_CAMEL_VERSION;
-	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = FUSE_63_R5_CAMEL_VERSION;
-	public static final String CAMEL_VERSION_LATEST_FIS_20 = FIS_20_R3_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_62 = CamelForFuse6ToBomMapper.FUSE_621_R9_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_PRODUCTIZED_63 = CamelForFuse6ToBomMapper.FUSE_63_R5_CAMEL_VERSION;
+	public static final String CAMEL_VERSION_LATEST_FIS_20 = CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION;
 	
 	public static final String RUNTIME_PROVIDER_KARAF = "karaf";
 	public static final String RUNTIME_PROVIDER_SPRINGBOOT = "springboot";
@@ -129,87 +76,21 @@ public class CamelCatalogUtils {
 	public static final String GAV_KEY_ARTIFACTID = "artifactId";
 	public static final String GAV_KEY_VERSION = "version";
 	
-	private static final List<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
-	private static final List<String> ALL_CAMEL_CATALOG_VERSIONS;
-	private static final List<String> TEST_CAMEL_VERSIONS;
-	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING;
-	static final Map<String, String> CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING;
-	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING;
-	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING;
-	static final Map<String, String> FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING;
+	private static final Set<String> OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new HashSet<>();
+	private static final Set<String> ALL_CAMEL_CATALOG_VERSIONS = new HashSet<>();
+	private static final Set<String> TEST_CAMEL_VERSIONS = new HashSet<>();
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new CamelForFuse6ToBomMapper().getMapping();
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING = new CamelForFIS20ToBomMapper().getMapping();
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new CamelForFuse7ToBomMapper().getMapping();
+	static final Map<String, String> CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING = new CamelForWildflyFuse7ToBomMapper().getMapping();
+	static final Map<String, String> FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING = new FISBomToFabric8MavenPluginMapper().getMapping();
 	
 	static {
-		CAMEL_VERSION_2_FUSE_6_BOM_MAPPING = new HashMap<>();
-		CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING = new HashMap<>();
-		CAMEL_VERSION_2_FUSE_7_BOM_MAPPING = new HashMap<>();
-		CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING = new HashMap<>();
-		ALL_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
-		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS = new ArrayList<>();
-		TEST_CAMEL_VERSIONS = new ArrayList<>();
-		FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING = new HashMap<>();
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.keySet());
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_7_BOM_MAPPING.keySet());
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING.keySet());
+		OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
 		
-		try {
-			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL);
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 6.x from online repo. Falling back to defaults.", ex);
-
-			// DEFAULTS
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R0_CAMEL_VERSION, FUSE_621_R0_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R1_CAMEL_VERSION, FUSE_621_R1_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R2_CAMEL_VERSION, FUSE_621_R2_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R3_CAMEL_VERSION, FUSE_621_R3_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R4_CAMEL_VERSION, FUSE_621_R4_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R5_CAMEL_VERSION, FUSE_621_R5_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R6_CAMEL_VERSION, FUSE_621_R6_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R7_CAMEL_VERSION, FUSE_621_R7_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R8_CAMEL_VERSION, FUSE_621_R8_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_621_R9_CAMEL_VERSION, FUSE_621_R9_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R0_CAMEL_VERSION, FUSE_63_R0_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R1_CAMEL_VERSION, FUSE_63_R1_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R2_CAMEL_VERSION, FUSE_63_R2_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R3_CAMEL_VERSION, FUSE_63_R3_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R4_CAMEL_VERSION, FUSE_63_R4_BOM_VERSION);
-			CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.put(FUSE_63_R5_CAMEL_VERSION, FUSE_63_R5_BOM_VERSION);
-			
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.keySet());
-		}
-		
-		try {
-			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_7_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL_FUSE_7);
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 7.x from online repo. Falling back to defaults.", ex);
-		}
-		
-		try {
-			createMappingFromOnlineFiles(CAMEL_VERSION_2_FUSE_7_WILDFLY_BOM_MAPPING, CAMEL_TO_BOM_MAPPING_URL_FUSE_7_WILDFLY);
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the Camel Version -> BOM Version mappings for Fuse 7.x on Wildfly from online repo. Falling back to defaults.", ex);
-		}
-		
-		try {
-			createMappingFromOnlineFiles(FISBOM_TO_FABRIC8MAVENPLUGIN_MAPPING, FISBOM_TOFABRIC8MAVENPLUGIN_URL_MAPPING_FUSE_7);
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS bom Version -> Farbic8 Maven Plugin Version mappings for Fuse 7.x from online repo. Falling back to defaults.", ex);
-		}
-		
-		try {
-			Properties fisMapping = new Properties();
-			URL url = new URL(FIS_MAPPING_URL);
-			fisMapping.load(url.openStream());
-		
-			for(String camelVersion : fisMapping.stringPropertyNames()) {
-				String bomVersion = fisMapping.getProperty(camelVersion);
-				CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(camelVersion, bomVersion);
-			}
-		} catch (IOException ex) {
-			CamelModelServiceCoreActivator.pluginLog().logError("Unable to retrieve the FIS-ONLY Camel Versions list from online repo. Falling back to defaults.", ex);
-
-			// DEFAULTS
-			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R1_CAMEL_VERSION, "2.2.170.redhat-000010");			
-			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R2_CAMEL_VERSION, "2.2.170.redhat-000013");
-			CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put(FIS_20_R3_CAMEL_VERSION, "2.2.170.redhat-000019");
-		}
-
 		initCamelVersionToTest();
 		
 		ALL_CAMEL_CATALOG_VERSIONS.addAll(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
@@ -235,39 +116,24 @@ public class CamelCatalogUtils {
 		}
 	}
 
-	protected static void createMappingFromOnlineFiles(Map<String, String> bomMapping, String onlineUrl) throws IOException {
-		Properties vMapping = new Properties();
-		URL url = new URL(onlineUrl);
-		vMapping.load(url.openStream());
-		
-		for(String camelVersion : vMapping.stringPropertyNames()) {
-			String bomVersion = vMapping.getProperty(camelVersion);
-			bomMapping.put(camelVersion, bomVersion);
-			
-			// we only add camel versions later than 2.17.0 to the supported versions map (prior versions had
-			// too many errors in the catalog or not catalog at all) 
-			OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS.add(camelVersion);
-		}
-	}
-
 	private CamelCatalogUtils() {
 		// utility class
 	}
 	
 	public static List<String> getOfficialSupportedCamelCatalogVersions() {
-		return OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS;
+		return new ArrayList<>(OFFICIAL_SUPPORTED_CAMEL_CATALOG_VERSIONS);
 	}
 	
 	public static List<String> getAllCamelCatalogVersions() {
-		return ALL_CAMEL_CATALOG_VERSIONS;
+		return new ArrayList<>(ALL_CAMEL_CATALOG_VERSIONS);
 	}
 	
 	public static List<String> getCamelVersionsToTestWith() {
-		return TEST_CAMEL_VERSIONS;
+		return new ArrayList<>(TEST_CAMEL_VERSIONS);
 	}
 	
 	public static List<String> getPureFISVersions() {
-		return Arrays.asList(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet().toArray(new String[CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.size()]));
+		return new ArrayList<>(CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.keySet());
 	}
 	
 	/**
