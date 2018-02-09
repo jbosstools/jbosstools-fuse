@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wst.server.core.IRuntime;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.junit.Before;
@@ -39,8 +38,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 	FuseIntegrationProjectWizardRuntimeAndCamelPage page;
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	private IRuntime runtime;
-	@Mock
-	private Combo camelversionCombo;
 	@Rule
 	public  TemporaryFolder tmpFolder = new TemporaryFolder();
 	private File fakeEAPCamelFolder;
@@ -53,9 +50,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 		doCallRealMethod().when(page).getErrorMessage();
 		doCallRealMethod().when(page).determineRuntimeCamelVersion(runtime);
 		doCallRealMethod().when(page).setErrorMessage(Mockito.any());
-		doCallRealMethod().when(page).setCamelVersionCombo(Mockito.any());
-		doReturn(false).when(camelversionCombo).isDisposed();
-		page.setCamelVersionCombo(camelversionCombo);
 		doReturn("2.17.3").when(page).getSelectedCamelVersion();
 	}
 	
@@ -71,7 +65,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 	public void testValidationMessageClearedWhenNoRuntimeCalledAndValidCamelVersionSyntax() throws Exception {
 		doReturn(null).when(page).getSelectedRuntime();
 
-		doReturn("2.0.0").when(camelversionCombo).getText();
 		doReturn("2.0.0").when(page).getSelectedCamelVersion();
 		
 		page.validate();
@@ -82,7 +75,6 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPageIT {
 	@Test
 	public void testValidationMessageAppearedForInvalidCamelVersionSyntax() throws Exception {
 		doReturn(null).when(page).getSelectedRuntime();
-		doReturn("invalidVersion").when(camelversionCombo).getText();
 		doReturn("invalidVersion").when(page).getSelectedCamelVersion();
 		
 		page.validate();

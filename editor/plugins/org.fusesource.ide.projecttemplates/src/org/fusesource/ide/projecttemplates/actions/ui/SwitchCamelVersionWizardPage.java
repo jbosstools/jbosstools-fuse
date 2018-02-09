@@ -10,8 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.actions.ui;
 
+import java.util.Comparator;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -19,7 +25,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
+import org.fusesource.ide.camel.model.service.core.util.CamelVersionLabelProvider;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.util.Widgets;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 
 public class SwitchCamelVersionWizardPage extends WizardPage {
@@ -43,12 +51,25 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 		lbtVersion.setText(Messages.switchCamelVersionDialogVersionsLabel);
 
 		Combo versionCombo = new Combo(parent, SWT.DROP_DOWN | SWT.RIGHT);
-		versionCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		versionCombo.setItems(CamelCatalogUtils.getAllCamelCatalogVersions().stream()
-				.sorted((String o1, String o2) -> o2.compareToIgnoreCase(o1))
+		ComboViewer versionComboViewer = new ComboViewer(versionCombo);
+		versionComboViewer.setLabelProvider(new CamelVersionLabelProvider());
+		versionComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		versionComboViewer.setComparator(new ViewerComparator(Comparator.reverseOrder()));
+		versionComboViewer.setInput(CamelCatalogUtils.getAllCamelCatalogVersions().stream()
 				.filter(camelVersion -> !initialCamelVersion.equals(camelVersion))
 				.toArray(String[]::new));
-		versionCombo.addModifyListener(event -> currentSelectedVersion = versionCombo.getText());
+		versionCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		versionCombo.addModifyListener(event -> {
+			if (!Widgets.isDisposed(versionComboViewer)) {
+				String selectedElement = (String) ((IStructuredSelection)versionComboViewer.getSelection()).getFirstElement();
+				if (selectedElement != null) {
+					currentSelectedVersion =  selectedElement;
+				} else {
+					// the Camel version has been entered manually
+					currentSelectedVersion = versionComboViewer.getCombo().getText();
+				}
+			}		
+		});
 		versionCombo.select(0);
 		versionCombo.addModifyListener(event -> getWizard().getContainer().updateButtons());
 		

@@ -20,15 +20,15 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	public static final String CAMEL_TO_BOM_MAPPING_PROPERTY = "org.jboss.tools.fuse.camel2bom.url";
 	private static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
 
-	private static final String FUSE_621_R0_CAMEL_VERSION = "2.15.1.redhat-621084";
-	private static final String FUSE_621_R1_CAMEL_VERSION = "2.15.1.redhat-621090";
-	private static final String FUSE_621_R2_CAMEL_VERSION = "2.15.1.redhat-621107";
-	private static final String FUSE_621_R3_CAMEL_VERSION = "2.15.1.redhat-621117";
-	private static final String FUSE_621_R4_CAMEL_VERSION = "2.15.1.redhat-621159";
-	private static final String FUSE_621_R5_CAMEL_VERSION = "2.15.1.redhat-621169";
-	private static final String FUSE_621_R6_CAMEL_VERSION = "2.15.1.redhat-621177";
-	private static final String FUSE_621_R7_CAMEL_VERSION = "2.15.1.redhat-621186";
-	private static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621195";
+	static final String FUSE_621_R0_CAMEL_VERSION = "2.15.1.redhat-621084";
+	static final String FUSE_621_R1_CAMEL_VERSION = "2.15.1.redhat-621090";
+	static final String FUSE_621_R2_CAMEL_VERSION = "2.15.1.redhat-621107";
+	static final String FUSE_621_R3_CAMEL_VERSION = "2.15.1.redhat-621117";
+	static final String FUSE_621_R4_CAMEL_VERSION = "2.15.1.redhat-621159";
+	static final String FUSE_621_R5_CAMEL_VERSION = "2.15.1.redhat-621169";
+	static final String FUSE_621_R6_CAMEL_VERSION = "2.15.1.redhat-621177";
+	static final String FUSE_621_R7_CAMEL_VERSION = "2.15.1.redhat-621186";
+	static final String FUSE_621_R8_CAMEL_VERSION = "2.15.1.redhat-621195";
 	public static final String FUSE_621_R9_CAMEL_VERSION = "2.15.1.redhat-621216";
 
 	private static final String FUSE_621_R0_BOM_VERSION = "6.2.1.redhat-084";
@@ -42,10 +42,10 @@ public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 	private static final String FUSE_621_R8_BOM_VERSION = "6.2.1.redhat-195";
 	private static final String FUSE_621_R9_BOM_VERSION = "6.2.1.redhat-216";
 
-	private static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
-	private static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
-	private static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
-	private static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
+	static final String FUSE_63_R0_CAMEL_VERSION = "2.17.0.redhat-630187";
+	static final String FUSE_63_R1_CAMEL_VERSION = "2.17.0.redhat-630224";
+	static final String FUSE_63_R2_CAMEL_VERSION = "2.17.0.redhat-630254";
+	static final String FUSE_63_R3_CAMEL_VERSION = "2.17.0.redhat-630262";
 	public static final String FUSE_63_R4_CAMEL_VERSION = "2.17.0.redhat-630283";
 	public static final String FUSE_63_R5_CAMEL_VERSION = "2.17.0.redhat-630310";
 
