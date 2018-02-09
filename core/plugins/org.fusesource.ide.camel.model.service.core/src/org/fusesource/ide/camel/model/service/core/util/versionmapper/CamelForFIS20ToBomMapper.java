@@ -20,8 +20,8 @@ public class CamelForFIS20ToBomMapper extends OnlineVersionMapper {
 	private static final String FIS_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
 	private static final String FIS_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fismarker.properties";
 	
-	private static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
-	private static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
+	static final String FIS_20_R1_CAMEL_VERSION = "2.18.1.redhat-000012";
+	static final String FIS_20_R2_CAMEL_VERSION = "2.18.1.redhat-000015";
 	public static final String FIS_20_R3_CAMEL_VERSION = "2.18.1.redhat-000021";
 	
 	public CamelForFIS20ToBomMapper() {
