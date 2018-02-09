@@ -18,6 +18,8 @@ import java.util.Comparator;
 
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFIS20ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -34,10 +36,10 @@ public class CamelCatalogUtilsTest {
 		CamelCatalogUtils.CAMEL_VERSION_2_FUSE_FIS_BOM_MAPPING.put("specificFISCamelVersionForTest", "specificFISBomVersionForTest");
 		return Arrays.asList(new Object[][] {
 			{ "2.15.1.redhat-621186", FuseBomFilter.BOM_FUSE_6, "6.2.1.redhat-186" },
-			{ CamelCatalogUtils.FUSE_63_R5_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelCatalogUtils.FUSE_63_R5_BOM_VERSION },
-			{ CamelCatalogUtils.FUSE_63_R4_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelCatalogUtils.FUSE_63_R4_BOM_VERSION },
-			{ CamelCatalogUtils.FIS_20_R3_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_FIS, "2.2.170.redhat-000019" },
-			{ CamelCatalogUtils.FIS_20_R3_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_FIS, "2.2.170.redhat-000019" },
+			{ CamelForFuse6ToBomMapper.FUSE_63_R5_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelForFuse6ToBomMapper.FUSE_63_R5_BOM_VERSION },
+			{ CamelForFuse6ToBomMapper.FUSE_63_R4_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_6, CamelForFuse6ToBomMapper.FUSE_63_R4_BOM_VERSION },
+			{ CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_FIS, "2.2.170.redhat-000019" },
+			{ CamelForFIS20ToBomMapper.FIS_20_R3_CAMEL_VERSION, FuseBomFilter.BOM_FUSE_FIS, "2.2.170.redhat-000019" },
 			{ "2.19.0", FuseBomFilter.BOM_FUSE_FIS, latestBomFis20Bom },
 			{ "2.19.0", FuseBomFilter.BOM_FUSE_6, CamelCatalogUtils.CAMEL_VERSION_2_FUSE_6_BOM_MAPPING.values().stream().sorted(Comparator.reverseOrder()).findFirst().orElse(null) },
 			{"specificFISCamelVersionForTest", FuseBomFilter.BOM_FUSE_FIS, "specificFISBomVersionForTest"},

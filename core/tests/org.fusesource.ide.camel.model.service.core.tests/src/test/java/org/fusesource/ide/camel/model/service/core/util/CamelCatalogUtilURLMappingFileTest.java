@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFIS20ToBomMapper;
+import org.fusesource.ide.camel.model.service.core.util.versionmapper.CamelForFuse6ToBomMapper;
 import org.junit.Test;
 
 public class CamelCatalogUtilURLMappingFileTest {
@@ -25,7 +27,7 @@ public class CamelCatalogUtilURLMappingFileTest {
 	public void testRemoteCamel2BOMVersionMappingAvailability() {
 		try {
 			Properties vMapping = new Properties();
-			URL url = new URL(CamelCatalogUtils.CAMEL_TO_BOM_MAPPING_URL);
+			URL url = new URL(new CamelForFuse6ToBomMapper().getUrl());
 			vMapping.load(url.openStream());
 			assertTrue("Seems there is no data available in the online mapping file for Camel2BOM versions.", vMapping.size() > 0);
 		} catch (IOException ex) {
@@ -37,7 +39,7 @@ public class CamelCatalogUtilURLMappingFileTest {
 	public void testRemoteFISVersionMappingAvailability() {
 		try {
 			Properties fisMapping = new Properties();
-			URL url = new URL(CamelCatalogUtils.FIS_MAPPING_URL);
+			URL url = new URL(new CamelForFIS20ToBomMapper().getUrl());
 			fisMapping.load(url.openStream());
 			assertTrue("Seems there is no data available in the online mapping file for FIS ONLY versions.", fisMapping.size() > 0);
 		} catch (IOException ex) {

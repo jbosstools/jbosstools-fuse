@@ -10,20 +10,16 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.core.util;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Properties;
+import java.util.Map;
 
 /**
  * @author lheinema
  */
 public class SyndesisExtensionsUtil {
 	
-	private static final String URL_IGNITE_VERSIONS_FILE = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/ignite.properties";
-	
-	private static final String KEY_SPRING_BOOT_VERSION = "spring.boot.version";
-	private static final String KEY_CAMEL_VERSION = "camel.version";
-	private static final String KEY_SYNDESIS_VERSION = "syndesis.version";
+	static final String KEY_SPRING_BOOT_VERSION = "spring.boot.version";
+	static final String KEY_CAMEL_VERSION = "camel.version";
+	static final String KEY_SYNDESIS_VERSION = "syndesis.version";
 	
 	private SyndesisExtensionsUtil() {
 		// util class
@@ -56,36 +52,15 @@ public class SyndesisExtensionsUtil {
 	/**
 	 * retrieves important version information from an online version mapping file
 	 * 
-	 * @param urlString
 	 * @return
-	 * @throws IOException
-	 */
-	public static IgniteVersionInfoModel getIgniteVersionModel(String urlString) {
-		IgniteVersionInfoModel model = new IgniteVersionInfoModel();
-		Properties vMapping = new Properties();
-		
-		try {
-			URL url = new URL(urlString);
-			vMapping.load(url.openStream());
-		} catch (IOException ex) {
-			// we ignore load errors
-		}
-				
-		model.setCamelVersion(vMapping.getProperty(KEY_CAMEL_VERSION, "2.20.1"));
-		model.setSpringBootVersion(vMapping.getProperty(KEY_SPRING_BOOT_VERSION, "1.5.8.RELEASE"));
-		model.setSyndesisVersion(vMapping.getProperty(KEY_SYNDESIS_VERSION, "1.2.3"));
-		
-		return model;
-	}
-	
-	/**
-	 * retrieves important version information from an online version mapping file
-	 * 
-	 * @return
-	 * @throws IOException
 	 */
 	public static IgniteVersionInfoModel getIgniteVersionModel() {
-		return getIgniteVersionModel(URL_IGNITE_VERSIONS_FILE);
+		IgniteVersionInfoModel model = new IgniteVersionInfoModel();
+		Map<String, String> mapping = new IgniteVersionMapper().getMapping();
+		model.setCamelVersion(mapping.get(KEY_CAMEL_VERSION));
+		model.setSpringBootVersion(mapping.get(KEY_SPRING_BOOT_VERSION));
+		model.setSyndesisVersion(mapping.get(KEY_SYNDESIS_VERSION));
+		return model;
 	}
 	
 	public static class IgniteVersionInfoModel {
