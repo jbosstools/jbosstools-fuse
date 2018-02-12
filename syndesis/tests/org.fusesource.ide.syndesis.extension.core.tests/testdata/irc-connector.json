@@ -1,0 +1,105 @@
+{
+  "schemaVersion" : "v1",
+  "name" : "IRC",
+  "description" : "IRC Extension Connector for Syndesis",
+  "extensionId" : "io.syndesis.extensions:syndesis-connector-irc",
+  "version" : "1.0.0",
+  "actions" : [ {
+    "id" : "io.syndesis:irc-privmsg",
+    "name" : "IRC PRIVMSG",
+    "description" : "React to privmsg",
+    "descriptor" : {
+      "componentScheme" : "irc",
+      "inputDataShape" : {
+        "kind" : "any"
+      },
+      "outputDataShape" : {
+        "kind" : "any"
+      },
+      "propertyDefinitionSteps" : [ {
+        "description" : "Properties",
+        "name" : "properties",
+        "properties" : {
+          "nickname" : {
+            "componentProperty" : false,
+            "deprecated" : false,
+            "description" : "Nickname",
+            "displayName" : "nickname",
+            "javaType" : "string",
+            "kind" : "parameter",
+            "required" : true,
+            "secret" : false,
+            "type" : "string"
+          },
+          "hostname" : {
+            "componentProperty" : false,
+            "deprecated" : false,
+            "description" : "hostname",
+            "displayName" : "hostname",
+            "javaType" : "string",
+            "kind" : "parameter",
+            "required" : true,
+            "secret" : false,
+            "type" : "string"
+          },
+          "port" : {
+            "componentProperty" : false,
+            "deprecated" : false,
+            "description" : "port",
+            "displayName" : "port_",
+            "javaType" : "int",
+            "kind" : "parameter",
+            "required" : true,
+            "secret" : false,
+            "type" : "int"
+          },
+          "channels" : {
+            "componentProperty" : false,
+            "deprecated" : false,
+            "description" : "channels",
+            "displayName" : "channels",
+            "javaType" : "string",
+            "kind" : "parameter",
+            "required" : true,
+            "secret" : false,
+            "type" : "string"
+          }
+        }
+      } ],
+      "configuredProperties" : {
+        "autoRejoin" : "true",
+        "onNick" : "false",
+        "onQuit" : "false",
+        "onJoin" : "false",
+        "onKick" : "false",
+        "onMode" : "false",
+        "onPart" : "false",
+        "onTopic" : "false",
+        "onPrivmsg" : "true"
+      }
+    },
+    "actionType" : "connector",
+    "pattern" : "From"
+  } ],
+  "dependencies" : [ {
+    "type" : "MAVEN",
+    "id" : "io.syndesis.integration:integration-runtime:jar:1.3-SNAPSHOT"
+  }, {
+    "type" : "MAVEN",
+    "id" : "org.apache.camel:camel-core:jar:2.20.1"
+  }, {
+    "type" : "MAVEN",
+    "id" : "org.apache.camel:camel-irc:jar:2.20.1"
+  }, {
+    "type" : "MAVEN",
+    "id" : "org.apache.camel:camel-spring-boot:jar:2.20.1"
+  }, {
+    "type" : "MAVEN",
+    "id" : "org.springframework.boot:spring-boot-autoconfigure:jar:1.5.8.RELEASE"
+  }, {
+    "type" : "MAVEN",
+    "id" : "org.springframework.boot:spring-boot-loader:jar:1.5.8.RELEASE"
+  } ],
+  "extensionType" : "Connectors"
+}
+

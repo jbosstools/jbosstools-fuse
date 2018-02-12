@@ -90,7 +90,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		extension.setVersion("1.0.0");
 		extension.setName("ACME Custom Extension");
 		extension.setDescription("ACME Custom Extension Filter");
-		extension.setTags(Arrays.asList("test", "acme"));
 		return extension;
 	}
 

@@ -98,7 +98,6 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		extension.setVersion(extensionDetailsPage.getExtensionVersion());
 		extension.setName(extensionDetailsPage.getExtensionName());
 		extension.setDescription(extensionDetailsPage.getExtensionDescription());
-		extension.setTags(extensionDetailsPage.getExtensionTags());
 		return extension;
 	}
 }
