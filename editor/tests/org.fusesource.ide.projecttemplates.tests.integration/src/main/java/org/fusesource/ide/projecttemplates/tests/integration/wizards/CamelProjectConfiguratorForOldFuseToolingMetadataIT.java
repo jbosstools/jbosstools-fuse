@@ -39,7 +39,6 @@ import org.fusesource.ide.camel.tests.util.MavenProjectHelper;
 import org.fusesource.ide.projecttemplates.maven.CamelProjectConfigurator;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CamelProjectConfiguratorForOldFuseToolingMetadataIT {
@@ -68,7 +67,6 @@ public class CamelProjectConfiguratorForOldFuseToolingMetadataIT {
 	}
 
 	@Test
-	@Ignore("when importing as Eclipse projects, the Camel facet version is not updated. See https://issues.jboss.org/browse/FUSETOOLS-2756")
 	public void testFacetUpgradedUsingSmartImport() throws Exception {
 		SmartImportJob job = new SmartImportJob(projectDirectory, Collections.EMPTY_SET, true, true);
 		Map<File, List<ProjectConfigurator>> proposals = job.getImportProposals(new NullProgressMonitor());
