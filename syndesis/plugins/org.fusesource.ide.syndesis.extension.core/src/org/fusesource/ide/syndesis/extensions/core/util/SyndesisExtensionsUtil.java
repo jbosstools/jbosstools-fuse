@@ -12,6 +12,8 @@ package org.fusesource.ide.syndesis.extensions.core.util;
 
 import java.util.Map;
 
+import org.fusesource.ide.syndesis.extensions.core.internal.SyndesisExtensionsCoreActivator;
+
 /**
  * @author lheinema
  */
@@ -56,10 +58,12 @@ public class SyndesisExtensionsUtil {
 	 */
 	public static IgniteVersionInfoModel getIgniteVersionModel() {
 		IgniteVersionInfoModel model = new IgniteVersionInfoModel();
+
 		Map<String, String> mapping = new IgniteVersionMapper().getMapping();
 		model.setCamelVersion(mapping.get(KEY_CAMEL_VERSION));
 		model.setSpringBootVersion(mapping.get(KEY_SPRING_BOOT_VERSION));
 		model.setSyndesisVersion(mapping.get(KEY_SYNDESIS_VERSION));
+
 		return model;
 	}
 	

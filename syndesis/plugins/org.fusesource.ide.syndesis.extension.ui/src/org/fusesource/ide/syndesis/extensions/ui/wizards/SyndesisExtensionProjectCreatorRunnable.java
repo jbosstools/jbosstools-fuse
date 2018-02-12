@@ -151,7 +151,6 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 		setOrChangeConfigValue(config, "name", getExtension().getName()); //$NON-NLS-1$
 		setOrChangeConfigValue(config, "description", getExtension().getDescription()); //$NON-NLS-1$
 		setOrChangeConfigValue(config, "version", getExtension().getVersion()); //$NON-NLS-1$
-		setOrChangeConfigValue(config, "tags", getExtension().getTags().stream().collect(Collectors.joining(","))); //$NON-NLS-1$
 	}
 	
 	private void setOrChangeConfigValue(Xpp3Dom config, String keyName, String newValue) throws XmlPullParserException, IOException {

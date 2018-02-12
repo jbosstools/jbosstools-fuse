@@ -15,14 +15,60 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.fusesource.ide.foundation.core.databinding.PojoModelObservable;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * @author lheinema
  */
-public class SyndesisAction {
+@JsonPropertyOrder({ "id", "name", "description", "descriptor", "tags", "actionType" })
+public class SyndesisAction extends PojoModelObservable {
+	
+	private static final String PROPERTY_ID = "property.id";
+	private static final String PROPERTY_NAME = "property.name";
+	private static final String PROPERTY_ACTIONTYPE = "property.actiontype";
+	private static final String PROPERTY_DESCRIPTION = "property.description";
+	private static final String PROPERTY_DESCRIPTOR = "property.descriptor";
+	private static final String PROPERTY_TAGS = "property.tags";
+	private static final String PROPERTY_PATTERN = "property.pattern";
+	
+	enum ActionType {
+
+		CONNECTOR ("connector"),
+	    STEP ("step");
+		
+		private String type;
+		
+		ActionType (String type) {
+			this.type = type;
+		}
+		
+		@Override
+		public String toString() {
+			return this.type;
+		}
+	}
+	
+	enum PatternType {
+		FROM ("From"),
+		TO ("To");
+		
+		private String type;
+		
+		private PatternType(String type) {
+			this.type = type;
+		}
+		
+		@Override
+		public String toString() {
+			return this.type;
+		}
+	}
+	
 	@JsonProperty("id")
 	private String id;
 	
@@ -32,11 +78,14 @@ public class SyndesisAction {
 	@JsonProperty("actionType")
 	private String actionType;
 	
-	@JsonProperty("description")
-	private String description;
-	
 	@JsonProperty("tags")
 	private List<String> tags = new ArrayList<>();
+	
+	@JsonProperty("pattern")
+	private String pattern;
+	
+	@JsonProperty("description")
+	private String description;
 	
 	@JsonProperty("descriptor")
 	private SyndesisActionDescriptor descriptor;
@@ -64,6 +113,7 @@ public class SyndesisAction {
 	 * @param actionType the actionType to set
 	 */
 	public void setActionType(String actionType) {
+		firePropertyChange(PROPERTY_ACTIONTYPE, this.actionType, actionType);
 		this.actionType = actionType;
 	}
 	
@@ -78,6 +128,7 @@ public class SyndesisAction {
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
+		firePropertyChange(PROPERTY_DESCRIPTION, this.description, description);
 		this.description = description;
 	}
 	
@@ -92,6 +143,7 @@ public class SyndesisAction {
 	 * @param descriptor the descriptor to set
 	 */
 	public void setDescriptor(SyndesisActionDescriptor descriptor) {
+		firePropertyChange(PROPERTY_DESCRIPTOR, this.descriptor, descriptor);
 		this.descriptor = descriptor;
 	}
 	
@@ -106,6 +158,7 @@ public class SyndesisAction {
 	 * @param id the id to set
 	 */
 	public void setId(String id) {
+		firePropertyChange(PROPERTY_ID, this.id, id);
 		this.id = id;
 	}
 	
@@ -120,7 +173,38 @@ public class SyndesisAction {
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
+		firePropertyChange(PROPERTY_NAME, this.name, name);
 		this.name = name;
+	}
+	
+	/**
+	 * @return the tags
+	 */
+	public List<String> getTags() {
+		return this.tags;
+	}
+	
+	/**
+	 * @param tags the tags to set
+	 */
+	public void setTags(List<String> tags) {
+		firePropertyChange(PROPERTY_TAGS, this.tags, tags);
+		this.tags = tags;
+	}
+	
+	/**
+	 * @return the pattern
+	 */
+	public String getPattern() {
+		return this.pattern;
+	}
+	
+	/**
+	 * @param pattern the pattern to set
+	 */
+	public void setPattern(String pattern) {
+		firePropertyChange(PROPERTY_PATTERN, this.pattern, pattern);
+		this.pattern = pattern;
 	}
 	
 	/**
@@ -135,19 +219,5 @@ public class SyndesisAction {
 	 */
 	public void setOtherProperties(Map<String, Object> otherProperties) {
 		this.otherProperties = otherProperties;
-	}
-	
-	/**
-	 * @return the tags
-	 */
-	public List<String> getTags() {
-		return this.tags;
-	}
-	
-	/**
-	 * @param tags the tags to set
-	 */
-	public void setTags(List<String> tags) {
-		this.tags = tags;
 	}
 }

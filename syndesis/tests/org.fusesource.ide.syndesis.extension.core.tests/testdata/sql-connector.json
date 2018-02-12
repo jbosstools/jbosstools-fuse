@@ -1,0 +1,304 @@
+{
+	"description":"Invoke SQL or stored procedures.",
+	"icon":"fa-database",
+	"connectorCustomizers": ["io.syndesis.connector.sql.customizer.DataSourceCustomizer"],
+	"id":"sql",
+	"actions":	[
+	{
+		"id":"sql-connector",
+		"name":"Invoke SQL",
+		"description":"Invoke SQL to obtain, store, update, or delete data.",
+		"descriptor":
+		{
+			"componentScheme":"sql",
+			"connectorCustomizers":["io.syndesis.connector.sql.customizer.SqlConnectorCustomizer"],
+			"inputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"outputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"propertyDefinitionSteps":	[
+				{
+					"description":"Enter a SQL statement that starts with INSERT, SELECT, UPDATE or DELETE.",
+					"name":"SQL statement",
+					"properties":
+					{
+						"query":
+						{
+							"deprecated":false,
+							"description":"SQL statement to be executed. Can contain input parameters prefixed by ':#' (for example ':#MYPARAMNAME').",
+							"displayName":"SQL statement",
+							"group":"common",
+							"javaType":"java.lang.String",
+							"kind":"path",
+							"required":true,
+							"secret":false,
+							"type":"string"
+						}
+					}
+				}
+			]
+		},
+		"tags":["dynamic"],
+		"actionType":"connector",
+		"pattern":"To"
+	},
+	
+	{
+		"id":"sql-start-connector",
+		"name":"Periodic SQL invocation",
+		"description":"Periodically invoke SQL to obtain, store, update, or delete data.",
+		"descriptor":
+		{
+			"componentScheme":"sql",
+			"connectorCustomizers":["io.syndesis.connector.sql.customizer.SqlStartConnectorCustomizer"],
+			"split":{},
+			"inputDataShape":
+			{
+				"kind":"none"
+			},
+			"outputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"propertyDefinitionSteps":	[
+				{
+					"description":"Enter a SQL statement that starts with SELECT.",
+					"name":"SQL statement",
+					"properties":
+					{
+						"query":
+						{
+							"deprecated":false,
+							"description":"SQL SELECT statement to be executed.",
+							"displayName":"SQL statement",
+							"group":"common",
+							"javaType":"java.lang.String",
+							"kind":"path",
+							"required":true,
+							"secret":false,
+							"type":"string"
+						},
+						"schedulerExpression":
+						{
+							"defaultValue":"1000",
+							"deprecated":false,
+							"description":"Delay in milli seconds between scheduling (executing).",
+							"displayName":"Period",
+							"group":"consumer",
+							"javaType":"long",
+							"kind":"parameter",
+							"required":false,
+							"secret":false,	
+							"type":"duration"
+						}
+					}
+				}
+			]
+		},
+		"tags":["dynamic"],
+		"actionType":"connector",
+		"pattern":"From"
+	},
+
+	{
+		"id":"sql-stored-connector",
+		"name":"Invoke stored procedure",
+		"description":"Periodically invoke a stored procedure.",
+		"descriptor":
+		{
+			"componentScheme":"sql-stored",
+			"connectorCustomizers":["io.syndesis.connector.sql.customizer.SqlStoredConnectorCustomizer"],
+			"inputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"outputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"propertyDefinitionSteps":	[
+				{
+					"description":"Select the stored procedure.",
+					"name":"Procedure name",
+					"properties":
+					{
+						"procedureName":
+						{
+							"componentProperty":true,
+							"deprecated":false,
+							"description":"Name of the stored procedure.",
+							"displayName":"Procedure name",
+							"group":"common",
+							"javaType":"java.lang.String",
+							"kind":"property",
+							"required":false,
+							"secret":true,
+							"type":"string"
+						},
+						"template":
+						{
+							"componentProperty":false,
+							"deprecated":false,
+							"description":"StoredProcedure template to perform.",
+							"displayName":"Template",
+							"group":"producer",
+							"javaType":"java.lang.String",
+							"kind":"path",
+							"required":true,
+							"secret":false,
+							"type":"hidden"
+						}
+					}
+				}
+			]
+		},
+		"tags":["dynamic"],
+		"actionType":"connector",
+		"pattern":"To"
+	},
+
+	{
+		"id":"sql-stored-start-connector",
+		"name":"Periodic stored procedure invocation",
+		"description":"Periodically invoke a stored procedure.",
+		"descriptor":
+		{
+			"componentScheme":"sql-stored",
+			"connectorCustomizers":["io.syndesis.connector.sql.customizer.SqlStartStoredConnectorCustomizer"],
+			"inputDataShape":
+			{
+				"kind":"none"
+			},
+			"outputDataShape":
+			{
+				"kind":"json-schema"
+			},
+			"propertyDefinitionSteps":	[
+				{
+					"description":"Select the stored procedure.",
+					"name":"Procedure name",
+					"properties":
+					{
+						"procedureName":
+						{
+							"componentProperty":true,
+							"deprecated":false,
+							"description":"Name of the stored procedure.",
+							"displayName":"Procedure name",
+							"group":"producer",
+							"javaType":"java.lang.String",
+							"kind":"path",
+							"required":true,
+							"secret":false,
+							"type":"string"
+						},
+						"template":
+						{
+							"componentProperty":false,
+							"deprecated":false,
+							"description":"Stored Procedure template to perform.",
+							"displayName":"Template",
+							"group":"producer",
+							"javaType":"java.lang.String",
+							"kind":"path",
+							"required":true,
+							"secret":false,
+							"type":"hidden"
+						},
+						"schedulerExpression":
+						{
+							"defaultValue":"1000",
+							"deprecated":false,
+							"description":"Delay in milli seconds between scheduling (executing).",
+							"displayName":"Period",	
+							"group":"consumer",
+							"javaType":"long",
+							"kind":"parameter",
+							"required":false,
+							"secret":false,
+							"type":"duration"
+						}
+					}
+				}
+			]
+		},
+		"tags":["dynamic"],
+		"actionType":"connector",
+		"pattern":"From"
+	}
+	],
+	
+	"tags":["verifier"],
+	"name":"Database",
+	"properties":
+	{
+		"url":
+		{
+			"componentProperty":true,
+			"defaultValue":"jdbc:postgresql://syndesis-db:5432/sampledb",
+			"deprecated":false,
+			"description":"JDBC URL of the database.",
+			"displayName":"Connection URL",
+			"group":"common",
+			"javaType":"java.lang.String",
+			"kind":"property",
+			"required":true,
+			"secret":true,
+			"type":"string"
+		},
+		"user":
+		{	
+			"componentProperty":true,
+			"defaultValue":"sampledb",
+			"deprecated":false,
+			"description":"Username for the database connection.",
+			"displayName":"Username",
+			"group":"common",
+			"javaType":"java.lang.String",
+			"kind":"property",
+			"required":true,
+			"secret":true,
+			"type":"string"
+		},
+		"password":
+		{
+			"componentProperty":true,
+			"deprecated":false,
+			"description":"Password for the database connection.",
+			"displayName":"Password",
+			"group":"security",
+			"javaType":"java.lang.String",
+			"kind":"property",
+			"label":"common,security",
+			"required":false,
+			"secret":true,
+			"type":"string"
+		},
+		"schema":
+		{
+			"componentProperty":true,
+			"defaultValue":"sampledb",
+			"deprecated":false,
+			"description":"Database schema.",
+			"displayName":"Schema",
+			"group":"common",
+			"javaType":"java.lang.String",
+			"kind":"property",
+			"label":"common",
+			"required":false,
+			"secret":false,
+			"type":"string"
+		}
+	},
+	"dependencies":	[
+		{
+			"type":"MAVEN",
+			"id":"io.syndesis.connector:connector-sql:1.3-SNAPSHOT"
+		}
+	]
+}
+
