@@ -70,14 +70,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 
 	public static final String DEFAULT_CAMEL_FACET_VERSION = "3.0";
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void mavenProjectChanged(MavenProjectChangedEvent event, IProgressMonitor monitor) throws CoreException {
 		IMavenProjectFacade facade = event.getMavenProject();
-		if (event.getFlags() == MavenProjectChangedEvent.FLAG_DEPENDENCIES && facade != null) {
+		if ((event.getFlags() == MavenProjectChangedEvent.FLAG_DEPENDENCIES || event.getKind() == MavenProjectChangedEvent.KIND_ADDED) && facade != null) {
 			IProject project = facade.getProject();
 			MavenProject mavenProject = facade.getMavenProject(monitor);
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
@@ -88,10 +84,6 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		super.mavenProjectChanged(event, monitor);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#configure(org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
 		if (checkCamelContextsExist(request.getProject(), monitor) && isValidCamelFacetCandidate(request.getProject())) {
