@@ -28,12 +28,13 @@ import org.eclipse.wst.validation.ValidationState;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.tests.integration.core.io.FuseProject;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.junit.Rule;
 
 public class AbstractXMLCamelRouteValidorTestHelper {
 
 	@Rule
-	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName());
+	public FuseProject fuseProject = new FuseProject(getClass().getSimpleName(), CamelCatalogUtils.CAMEL_VERSION_LATEST_COMMUNITY);
 	private CamelIOHandler marshaller = new CamelIOHandler();
 	private XMLCamelRoutesValidator xmlCamelRoutesValidator = new XMLCamelRoutesValidator();
 
