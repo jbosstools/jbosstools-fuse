@@ -18,7 +18,9 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.cache.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteContainerElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
@@ -32,7 +34,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public final class TextParameterValidator implements IValidator {
 
-
+	private static final String REGISTER_ENDPOINT_IDS_FROM_ROUTE = "registerEndpointIdsFromRoute";
 	private AbstractCamelModelElement camelModelElement;
 	private Parameter parameter;
 
@@ -111,7 +113,7 @@ public final class TextParameterValidator implements IValidator {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
 				} else if (routeContainer != null && !routeContainer.isIDUnique((String) value)) {
 					return ValidationStatus.warning("Parameter " + parameter.getName() + " does not contain a unique value.");
-				} else {
+				} else if (shouldCheckForComponentIdUnicity(camelModelElement)) {
 					Component component = PropertiesUtils.getComponentFor(camelModelElement);
 					if (component != null && value.equals(component.getScheme())) {
 						return ValidationStatus.error(NLS.bind(Messages.validationSameComponentIdAndComponentDefinitionId, parameter.getName(), value));
@@ -127,5 +129,18 @@ public final class TextParameterValidator implements IValidator {
 		}
 		// all checks passed
 		return ValidationStatus.ok();
+	}
+
+	private boolean shouldCheckForComponentIdUnicity(AbstractCamelModelElement camelModelElement) {
+		CamelModel camelModel = camelModelElement.getCamelFile().getCamelModel();
+		Eip camelContextDefintion = camelModel.getEip("camelContext");
+		Parameter registerEndpointParameterDefinition = camelContextDefintion.getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
+		if (registerEndpointParameterDefinition == null) {
+			// prior to 2.20, the registerEndpointIdsFromRoute didn't exist and ids must be different
+			return true;
+		} else {
+			Object isRegisteringEndpointIdsFromRoute = camelModelElement.getRouteContainer().getParameter(REGISTER_ENDPOINT_IDS_FROM_ROUTE);
+			return "true".equals(isRegisteringEndpointIdsFromRoute);
+		}
 	}
 }
