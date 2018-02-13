@@ -426,7 +426,6 @@ public class NewBeanWizardIT {
 		logInfo("End setup for "+ NewBeanWizardIT.class.getSimpleName());
 	}
 
-	@SuppressWarnings("restriction")
 	protected void waitJob() {
 		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
 		jobWaiterUtil.setEndless(true);

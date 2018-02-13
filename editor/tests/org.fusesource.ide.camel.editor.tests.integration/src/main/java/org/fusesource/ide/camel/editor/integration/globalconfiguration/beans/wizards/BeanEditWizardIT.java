@@ -477,7 +477,6 @@ public class BeanEditWizardIT {
 		logInfo("End setup for "+ BeanEditWizardIT.class.getSimpleName());
 	}
 
-	@SuppressWarnings("restriction")
 	protected void waitJob() {
 		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
 		jobWaiterUtil.setEndless(true);

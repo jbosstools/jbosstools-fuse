@@ -200,7 +200,6 @@ public class BeanConfigUtilIT {
 		return model1;
 	}
 
-	@SuppressWarnings("restriction")
 	protected void waitJob() {
 		JobWaiterUtil jobWaiterUtil = new BuildAndRefreshJobWaiterUtil();
 		jobWaiterUtil.setEndless(true);
