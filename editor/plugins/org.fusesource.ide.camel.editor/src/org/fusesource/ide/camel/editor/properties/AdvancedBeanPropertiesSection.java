@@ -61,9 +61,9 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedBeanPropertiesSection extends FusePropertySection {
 
-	private static final int PUBLIC_AND_STATIC_METHOD_BROWSE = 1;
+	private static final int PUBLIC_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE = 1;
 	private static final int PUBLIC_NO_ARG_METHOD_BROWSE = 2;
-	private static final int PUBLIC_OR_STATIC_METHOD_BROWSE = 3;
+	private static final int PUBLIC_NON_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE = 3;
 
 	private BeanConfigUtil beanConfigUtil = new BeanConfigUtil();
 	private Map<String, Parameter> parameterList;
@@ -245,7 +245,7 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		} else if (GlobalBeanEIP.PROP_INIT_METHOD.equals(propName) || GlobalBeanEIP.PROP_DESTROY_METHOD.equals(propName)) {
 			return createTextFieldWithNoArgMethodBrowse(p, page);
 		} else if (GlobalBeanEIP.PROP_FACTORY_METHOD.equals(propName)) {
-			return createTextFieldWithPublicOrStaticMethodBrowse(p, page);
+			return createTextFieldForFactoryMethod(p, page);
 		} else if (GlobalBeanEIP.PROP_ID.equals(propName)) {
 			return createIDTextField(p, page);
 		} else if (GlobalBeanEIP.PROP_SCOPE.equals(propName)) {
@@ -296,11 +296,13 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 		return txtFieldCreator;
 	}
 
-	private AbstractTextFieldParameterPropertyUICreator createTextFieldWithPublicOrStaticMethodBrowse(final Parameter p, final Composite page) {
+	private AbstractParameterPropertyUICreator createTextFieldForFactoryMethod(Parameter p, Composite page) {
 		AbstractTextFieldParameterPropertyUICreator txtFieldCreator = new AttributeTextFieldPropertyUICreatorWithBrowse(dbc, modelMap, eip, selectedEP, p,  getValidatorForField(p), page, getWidgetFactory());
 		txtFieldCreator.setColumnSpan(2);
 		txtFieldCreator.create();
-		createPublicOrStaticMethodBrowseButton(page, txtFieldCreator.getControl());
+		Button browseBeanButton = new Button(page, SWT.PUSH);
+		browseBeanButton.setText("..."); //$NON-NLS-1$
+		browseBeanButton.addSelectionListener(new FactoryMethodSelectionListener(txtFieldCreator.getControl()));
 		return txtFieldCreator;
 	}
 
@@ -408,9 +410,9 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 				final IProject project = selectedEP.getCamelFile().getResource().getProject();
 				String className = (String) control;
 				String methodName;
-				switch (methodBrowseType) {
-				case PUBLIC_AND_STATIC_METHOD_BROWSE:
-					methodName = beanConfigUtil.handlePublicAndStaticMethodBrowse(project, className,
+				switch (getMethodBrowseType()) {
+				case PUBLIC_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE:
+					methodName = beanConfigUtil.handlePublicStaticNonVoidNonConstructorMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					break;
 				case PUBLIC_NO_ARG_METHOD_BROWSE:
@@ -422,8 +424,8 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 								getDisplay().getActiveShell());
 					}
 					break;
-				case PUBLIC_OR_STATIC_METHOD_BROWSE:
-					methodName = beanConfigUtil.handlePublicOrStaticMethodBrowse(project, className,
+				case PUBLIC_NON_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE:
+					methodName = beanConfigUtil.handlePublicNonStaticNonVoidNonConstructorMethodBrowse(project, className,
 							getDisplay().getActiveShell());
 					break;
 				default:
@@ -436,9 +438,28 @@ public class AdvancedBeanPropertiesSection extends FusePropertySection {
 				}
 			}
 		}
-	}
 
-	private void createPublicOrStaticMethodBrowseButton(Composite composite, Text field) {
-		createMethodBrowseBtn(composite, field, PUBLIC_OR_STATIC_METHOD_BROWSE);
+		public int getMethodBrowseType() {
+			return methodBrowseType;
+		}
 	}
+	
+	class FactoryMethodSelectionListener extends MethodSelectionListener {
+
+		public FactoryMethodSelectionListener(Text field) {
+			super(-1, field);
+		}
+		
+		@Override
+		public int getMethodBrowseType() {
+			Object beanClassCurrentValue = modelMap.get(GlobalBeanEIP.PROP_CLASS);
+			if (beanClassCurrentValue != null && !"".equals(beanClassCurrentValue)) {
+				return PUBLIC_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE;
+			} else {
+				return PUBLIC_NON_STATIC_NON_VOID_NON_CONSTRUCTOR_METHOD_BROWSE;
+			}
+		}
+		
+	}
+	
 }

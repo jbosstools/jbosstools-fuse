@@ -223,19 +223,22 @@ public class BeanConfigUtil {
 				}).toArray(IMethod[]::new);
 	}
 
-	private String openStaticAndPublicMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+	private String openStaticAndPublicNonVoidNonConstructorMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
 		IType foundClass = jproject.findType(className);
 		if (foundClass != null) {
-			return openMethodDialog(shell, getStaticPublicMethods(foundClass), UIMessages.beanConfigUtilSelectStaticPublicMethod);
+			return openMethodDialog(shell, getStaticPublicNonVoidNonConstructorMethods(foundClass), UIMessages.beanConfigUtilSelectStaticPublicMethod);
 		}
 		return null;
 	}
 
-	private IMethod[] getStaticPublicMethods(IType foundClass) throws JavaModelException {
+	private IMethod[] getStaticPublicNonVoidNonConstructorMethods(IType foundClass) throws JavaModelException {
 		return Stream.of(foundClass.getMethods())
 				.filter(method -> {
 					try {
-						return Flags.isStatic(method.getFlags()) && Flags.isPublic(method.getFlags());
+						return Flags.isStatic(method.getFlags())
+								&& Flags.isPublic(method.getFlags())
+								&& !method.isConstructor()
+								&& !Character.toString(Signature.C_VOID).equals(method.getReturnType());
 					} catch (JavaModelException e) {
 						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & static flags.", e); //$NON-NLS-1$
 						return false;
@@ -250,6 +253,29 @@ public class BeanConfigUtil {
 						return isPublicNoArgNotConstructorMethod(method);
 					} catch (JavaModelException e) {
 						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & no arguments.", e); //$NON-NLS-1$
+						return false;
+					}
+				}).toArray(IMethod[]::new);
+	}
+	
+	private String openPublicNotStaticNonVoidNonConstructorMethodDialog(IJavaProject jproject, String className, Shell shell) throws JavaModelException {
+		IType foundClass = jproject.findType(className);
+		if (foundClass != null) {
+			return openMethodDialog(shell, getPublicNotStaticNonVoidNonConstructorMethods(foundClass), UIMessages.beanConfigUtilSelectPublicNotStaticMethod);
+		}
+		return null;
+	}
+	
+	private IMethod[] getPublicNotStaticNonVoidNonConstructorMethods(IType foundClass) throws JavaModelException {
+		return Stream.of(foundClass.getMethods())
+				.filter(method -> {
+					try {
+						return !Flags.isStatic(method.getFlags())
+								&& Flags.isPublic(method.getFlags())
+								&& !method.isConstructor()
+								&& !Character.toString(Signature.C_VOID).equals(method.getReturnType());
+					} catch (JavaModelException e) {
+						CamelEditorUIActivator.pluginLog().logInfo("Issue when testing method for public & not static flags.", e); //$NON-NLS-1$
 						return false;
 					}
 				}).toArray(IMethod[]::new);
@@ -401,12 +427,26 @@ public class BeanConfigUtil {
 		return null;
 	}
 
-	public String handlePublicAndStaticMethodBrowse(IProject project, String className, Shell shell) {
+	public String handlePublicStaticNonVoidNonConstructorMethodBrowse(IProject project, String className, Shell shell) {
 		if (project != null) {
 			IJavaProject jproject = JavaCore.create(project);
 			if (jproject.exists()) {
 				try {
-					return openStaticAndPublicMethodDialog(jproject, className, shell);
+					return openStaticAndPublicNonVoidNonConstructorMethodDialog(jproject, className, shell);
+				} catch (JavaModelException e) {
+					CamelEditorUIActivator.pluginLog().logError(e);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String handlePublicNonStaticNonVoidNonConstructorMethodBrowse(IProject project, String className, Shell shell) {
+		if (project != null) {
+			IJavaProject jproject = JavaCore.create(project);
+			if (jproject.exists()) {
+				try {
+					return openPublicNotStaticNonVoidNonConstructorMethodDialog(jproject, className, shell);
 				} catch (JavaModelException e) {
 					CamelEditorUIActivator.pluginLog().logError(e);
 				}
@@ -785,5 +825,7 @@ public class BeanConfigUtil {
 		}
 		return null;
 	}
+
+
 
 }

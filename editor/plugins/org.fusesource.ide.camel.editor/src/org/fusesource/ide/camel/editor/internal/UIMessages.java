@@ -79,6 +79,7 @@ public class UIMessages extends NLS {
 	public static String beanClassExistsValidatorErrorBeanClassMustExist;
 	public static String beanConfigUtilNoMethodsAvailable;
 	public static String beanConfigUtilSelectStaticPublicMethod;
+	public static String beanConfigUtilSelectPublicNotStaticMethod;
 	public static String beanConfigUtilMethodSelectionDialogTitle;
 	public static String beanConfigUtilMethodSelectionErrorCreatingXML;
 	public static String beanConfigUtilMethodSelectionErrorNoTypeFound;
@@ -166,6 +167,7 @@ public class UIMessages extends NLS {
 	public static String updatePomDependenciesProgressDialogLabel;
 	public static String loadingCamelFile;
 	public static String pending;
+
 
 	static {
 		// initialize resource bundle
