@@ -62,6 +62,7 @@ import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsComman
 import org.fusesource.ide.camel.editor.globalconfiguration.CamelGlobalConfigEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.restconfiguration.RestConfigEditor;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
@@ -86,6 +87,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public static final int DESIGN_PAGE_INDEX = 0;
 	public static final int SOURCE_PAGE_INDEX = 1;
 	public static final int GLOBAL_CONF_INDEX = 2;
+	public static final int REST_CONF_INDEX = 3;
 	
 	/** The text editor used in source page */
 	private StructuredTextEditor sourceEditor;
@@ -217,6 +219,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
 		createGlobalConfPage(GLOBAL_CONF_INDEX);
+		boolean restPageVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_SHOW_REST_PAGE);
+		if (restPageVisible) {
+			createRestConfPage(REST_CONF_INDEX);
+		}
 
 		IDocument document = getDocument();
 		if (document == null) {
@@ -333,6 +339,21 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 		}
 	}
+	
+	private void createRestConfPage(int index) {
+		CamelFile model = designEditor.getModel();
+		if (model != null && model.getRouteContainer() instanceof CamelContextElement) {
+			try {
+				RestConfigEditor restConfigEditor = new RestConfigEditor(this);
+				addPage(index, restConfigEditor, editorInput);
+				setPageText(index, "REST");
+			} catch (PartInitException e) {
+				ErrorDialog.openError(getSite().getShell(),
+						"Error creating nested REST configuration page", null, e.getStatus());
+			}
+		}
+	}
+
 	
 	@Override
 	public boolean isSaveAsAllowed() {
