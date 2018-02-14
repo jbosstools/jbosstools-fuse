@@ -6,6 +6,17 @@ package hello;
  */
 public class FactoryBean {
 
+	public FactoryBean() {
+	}
+
+	public void voidMethod() {
+
+	}
+
+	public static void staticVoidMethod() {
+
+	}
+
 	HelloBean defaultCreateHelloBean() {
 		return new HelloBean();
 	}

@@ -545,8 +545,8 @@ public class ConfigurationsEditorBeanTest {
 		methodDialog.cancel();
 		editor.close(true);
 
-		assertEquals("Only public static methods should be listed as possible factory methods",
-				asSet("publicStaticVoid()", "publicStaticFactory()"), actualMethods);
+		assertEquals("Only public static non-void methods should be listed as possible factory methods",
+				asSet("publicStaticFactory()"), actualMethods);
 	}
 
 	/**
@@ -582,7 +582,7 @@ public class ConfigurationsEditorBeanTest {
 		methodDialog.cancel();
 		editor.close(true);
 
-		assertEquals("Only public non-static methods should be listed as possible reference factory methods",
+		assertEquals("Only public non-static non-void methods should be listed as possible reference factory methods",
 				asSet("publicCreateHelloBean()"), actualMethods);
 	}
 
