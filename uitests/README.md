@@ -9,9 +9,13 @@
 
 ## Executing tests from command line
 
-The UI tests are disabled by default. To enable them you need to set
+The UI smoke tests are enabled by default. You can also execute other test suite by specifying
 
-    -DskipUITests=false
+    -DtestUIClass=ServerTests
+
+To disable UI tests you need to set
+
+    -DskipUITests=true
 
 It is also recommended to ignore local artifacts
 
@@ -22,7 +26,7 @@ You may also get errors from baseline comparison, so disable it
     -Dtycho.baseline=disable
     -DskipBaselineComparison=true
 
-So, the final command should look like
+Executing only UI tests should look like as follows
 
     mvn clean verify -pl uitests/tests/org.jboss.tools.fuse.ui.bot.tests -am \
     	-DskipUITests=false \
