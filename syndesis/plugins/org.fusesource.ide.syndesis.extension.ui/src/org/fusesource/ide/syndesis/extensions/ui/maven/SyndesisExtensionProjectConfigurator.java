@@ -12,8 +12,10 @@ package org.fusesource.ide.syndesis.extensions.ui.maven;
 
 import java.util.List;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginManagement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,8 +66,13 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	private boolean isValidSyndesisProject(IProject project) {
 		Model model = new CamelMavenUtils().getMavenModel(project);
 		if (model != null) {
-			return  model.getBuild().getPluginManagement() != null && isSyndesisPluginDefined(model.getBuild().getPluginManagement().getPlugins()) ||
-					isSyndesisPluginDefined(model.getBuild().getPlugins());
+			Build build = model.getBuild();
+			if (build != null) {
+				PluginManagement pluginManagement = build.getPluginManagement();
+				if (pluginManagement != null) {
+					return isSyndesisPluginDefined(pluginManagement.getPlugins()) || isSyndesisPluginDefined(build.getPlugins());
+				}
+			}
 		}
 		return false;
 	}
@@ -83,8 +90,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	}
 
 	private void installDefaultFacets(IProject project, IFacetedProject fproj, IProgressMonitor monitor) throws CoreException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.installingRequiredFacetsForSyndesisExtensionProject, 4);
-		subMonitor.setWorkRemaining(3);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.installingRequiredFacetsForSyndesisExtensionProject, 3);
 
 		IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 
