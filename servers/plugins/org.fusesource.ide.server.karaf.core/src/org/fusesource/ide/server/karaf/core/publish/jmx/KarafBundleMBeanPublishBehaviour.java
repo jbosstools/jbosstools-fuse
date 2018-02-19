@@ -48,7 +48,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	@Override
 	public long getBundleId(MBeanServerConnection mbsc, String bundleSymbolicName, String version) {
 		try {
-			TabularData	tabData = getTabularData(mbsc); 
+			TabularData	tabData = getTabularData(mbsc);
 			return getBundleId(bundleSymbolicName, version, tabData);
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
@@ -67,16 +67,18 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			if (row instanceof CompositeData) {
 				CompositeData cd = (CompositeData) row;
 				String bsn = getBundleSymbolicName(cd);
-				String id = cd.get("ID").toString();
-				String ver = cd.get("Version").toString();
-				if (version != null) {
-					if (bsn.equals(bundleSymbolicName) && ver.equals(version)) {
-						return Long.parseLong(id);
-					}	
-				} else {
-					// if we don't have a version we take the first best
-					if (bsn.equals(bundleSymbolicName)) {
-						return Long.parseLong(id);
+				if (bsn != null) {
+					String id = cd.get("ID").toString();
+					String ver = cd.get("Version").toString();
+					if (version != null) {
+						if (bsn.equals(bundleSymbolicName) && ver.equals(version)) {
+							return Long.parseLong(id);
+						}
+					} else {
+						// if we don't have a version we take the first best
+						if (bsn.equals(bundleSymbolicName)) {
+							return Long.parseLong(id);
+						}
 					}
 				}
 			}
@@ -181,11 +183,14 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	}
 	
 	protected String getBundleSymbolicName(CompositeData cd) {
-		String bsn;
+		String bsn = null;
 		try {
 			bsn = cd.get("Symbolic Name").toString();
 		} catch (InvalidKeyException ex) {
-			bsn = cd.get("Name").toString();
+			Object name = cd.get("Name");
+			if (name != null) {
+				bsn = name.toString();
+			}
 		}
 		return bsn;
 	}
