@@ -22,11 +22,13 @@ import org.eclipse.reddeer.swt.impl.button.CheckBox;
 import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.button.RadioButton;
 import org.eclipse.reddeer.swt.impl.combo.DefaultCombo;
+import org.eclipse.reddeer.swt.impl.link.DefaultLink;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.dialog.MessageDialog;
 
 /**
  * @author tsedmik
@@ -187,7 +189,7 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public List<String> getAllAvailableTemplates() {
 		log.debug("Retrieving available templates");
-		List<String> templates = new ArrayList<String>();
+		List<String> templates = new ArrayList<>();
 		new RadioButton(this, "Use a predefined template").toggle(true);
 		for (TreeItem item : new DefaultTree().getAllItems()) {
 			if (item.getItems().isEmpty()) {
@@ -202,5 +204,11 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 	 */
 	public void clickVerifyButton() {
 		new PushButton(this, "Verify").click();
+	}
+
+	public MessageDialog selectMoreExamples() {
+		log.debug("Click on link to see more examples");
+		new DefaultLink(this, "Where can I find more examples?").click();
+		return new MessageDialog("Where can I find more examples?");
 	}
 }

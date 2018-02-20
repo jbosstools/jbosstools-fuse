@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +27,6 @@ import org.eclipse.reddeer.direct.project.Project;
 import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
-import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
@@ -37,9 +36,8 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
+import org.jboss.tools.fuse.reddeer.dialog.MessageDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
-import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
-import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
@@ -52,11 +50,7 @@ import org.junit.runner.RunWith;
  * @author tsedmik
  */
 @RunWith(RedDeerSuite.class)
-@Fuse(state = PRESENT)
 public class NewFuseProjectWizardTest {
-
-	@InjectRequirement
-	private FuseRequirement serverRequirement;
 
 	/**
 	 * Prepares test environment
@@ -96,43 +90,6 @@ public class NewFuseProjectWizardTest {
 		wiz.finish();
 		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-	}
-
-	/**
-	 * <p>
-	 * Tests 'Target Runtime' option
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>setup a JBoss Fuse runtime</li>
-	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
-	 * <li>Set project name</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Check whether the configured runtime is present in 'Target Runtime' combobox</li>
-	 * <li>Select the configured runtime and check whether Camel version is set properly and user cannot change it</li>
-	 * <li>Select 'Target Runtime' to 'No Runtime Selected'</li>
-	 * <li>Check whether user can change Camel Version</li>
-	 * <li>Cancel the wizard</li>
-	 * </ol>
-	 */
-	@Test
-	public void testRuntime() {
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("test");
-		wiz.next();
-		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2, wiz.getTargetRuntimes().size());
-		for (String temp : wiz.getTargetRuntimes()) {
-			if (!(temp.equals("No Runtime selected")
-					|| temp.equals(serverRequirement.getConfiguration().getServer().getRuntimeName()))) {
-				fail("'Target Runtime' Combo box contains something wrong!");
-			}
-		}
-		wiz.selectTargetRuntime(serverRequirement.getConfiguration().getServer().getRuntimeName());
-		assertFalse("Path should not be editable!. The runtime is set.", wiz.isCamelVersionEditable());
-		assertEquals("Camel versions are different (runtime vs wizard)!", serverRequirement.getConfiguration().getCamelVersion(), wiz.getCamelVersion());
-		wiz.cancel();
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
@@ -359,6 +316,37 @@ public class NewFuseProjectWizardTest {
 			fail(build.toString());
 		}
 
+	}
+	
+	/**
+	 * <p>
+	 * Verifies that More examples are announced to users
+	 * </p>
+	 * <b>Steps:</b>
+	 * <ol>
+	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
+	 * <li>Set project name</li>
+	 * <li>Hit 'Next'</li>
+	 * <li>Hit 'Next'</li>
+	 * <li>Click link to see more examples</li>
+	 * <li>Check the text contains the Github repositories containing more examples</li>
+	 * </ol>
+	 *
+	 * @author apupier
+	 */
+	@Test
+	public void testMoreExamplesAvailable() {
+		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
+		wiz.open();
+		wiz.setProjectName("test");
+		wiz.next();
+		wiz.next();
+		MessageDialog moreExamplesDialog = wiz.selectMoreExamples();
+		assertThat(moreExamplesDialog.getMessage())
+		.contains("https://github.com/apache/camel/tree/master/examples",
+				"https://github.com/fabric8-quickstarts");
+		wiz.cancel();
+		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
 }
