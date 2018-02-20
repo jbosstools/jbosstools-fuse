@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.reddeer.common.condition.AbstractWaitCondition;
 import org.eclipse.reddeer.common.util.Display;
@@ -188,22 +189,17 @@ public class FusePropertiesView extends PropertySheet {
 	public String getLabel(final Widget widget) {
 		
 		activate();
-		final StringBuffer buff = new StringBuffer();
+		final StringBuilder builder = new StringBuilder();
 
-		Display.syncExec(new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				Label label = (Label) widget;
-				buff.append(label.getText());
-			}
+		Display.syncExec(() -> {
+			Label label = (Label) widget;
+			builder.append(label.getText());
 		});
 		
-		return buff.toString();
+		return builder.toString();
 	}
 
-	public HashMap<Widget, Widget> getDetailsProperties() {
+	public Map<Widget, Widget> getDetailsProperties() {
 
 		activate();
 		final CTabFolder folde = new DefaultCTabFolder().getSWTWidget();
@@ -221,10 +217,7 @@ public class FusePropertiesView extends PropertySheet {
 				Text text = null;
 				Button button = null;
 
-				for (Control children : childrens) {
-
-					Widget w = ((Widget) children);
-
+				for (Control w : childrens) {
 					if (w instanceof CCombo) {
 						combo = (CCombo) w;
 						list.add(combo);
@@ -241,9 +234,9 @@ public class FusePropertiesView extends PropertySheet {
 				}
 
 				for (Iterator<Widget> iterator = list.iterator(); iterator.hasNext();) {
-					Widget widget = (Widget) iterator.next();
+					Widget widget = iterator.next();
 					Widget temp = widget;
-					widget = (Widget) iterator.next();
+					widget = iterator.next();
 					m.put(temp, widget);
 				}
 
@@ -259,10 +252,11 @@ public class FusePropertiesView extends PropertySheet {
 	 * @param label
 	 *            Label
 	 */
+	@Override
 	public void selectTab(String label) {
 		
 		activate();
-		List<String> old = new ArrayList<String>();
+		List<String> old = new ArrayList<>();
 
 		try {
 			old = new TabbedPropertyList().getTabs();
@@ -287,7 +281,7 @@ public class FusePropertiesView extends PropertySheet {
 		new DefaultCTabItem(tab).activate();
 	}
 
-	public ArrayList<String> getPropertiesTabsTitles() {
+	public List<String> getPropertiesTabsTitles() {
 
 		activate();
 		final ArrayList<String> list = new ArrayList<>();
@@ -303,7 +297,7 @@ public class FusePropertiesView extends PropertySheet {
 		return list;
 	}
 
-	public HashMap<Widget, Widget> getAdvancedProperties(final String tab) {
+	public Map<Widget, Widget> getAdvancedProperties(final String tab) {
 
 		activate();
 		final CTabFolder folde = new DefaultCTabFolder().getSWTWidget();
@@ -328,10 +322,7 @@ public class FusePropertiesView extends PropertySheet {
 				Text text = null;
 				Button button = null;
 
-				for (Control children : childrens) {
-
-					Widget w = ((Widget) children);
-
+				for (Control w : childrens) {
 					if (w instanceof CCombo) {
 						combo = (CCombo) w;
 						list.add(combo);
@@ -348,11 +339,11 @@ public class FusePropertiesView extends PropertySheet {
 				}
 
 				for (Iterator<Widget> iterator = list.iterator(); iterator.hasNext();) {
-					Widget widget = (Widget) iterator.next();
+					Widget widget = iterator.next();
 					Widget temp = widget;
 					// this is not a very good solution, but so far it is sufficient -> in future think better solution variants
 					if (list.size() % 2 != 1) 
-						widget = (Widget) iterator.next();
+						widget = iterator.next();
 					m.put(temp, widget);
 					// ----
 				}
@@ -373,7 +364,7 @@ public class FusePropertiesView extends PropertySheet {
 
 		@Override
 		public boolean test() {
-			List<String> actual = new ArrayList<String>();
+			List<String> actual = new ArrayList<>();
 
 			try {
 				actual = new TabbedPropertyList().getTabs();

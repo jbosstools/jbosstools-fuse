@@ -116,7 +116,7 @@ public class ServerKaraf extends ServerBase {
 
 	@Override
 	public String getUrl(String host, String path) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		result.append("http://").append(host).append(":").append(getHttpPort()).append("/");
 		if (path.toLowerCase().endsWith("wsdl")) {
 			result.append("cxf").append("/");

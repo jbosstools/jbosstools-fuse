@@ -44,7 +44,7 @@ public abstract class AbstractURICamelComponent implements CamelComponent {
 	}
 
 	public String getUri() {
-		StringBuffer uri = new StringBuffer(baseUri);
+		StringBuilder uri = new StringBuilder(baseUri);
 		for (String key : keyList) {
 			uri.append(":").append(getProperty(key));
 		}

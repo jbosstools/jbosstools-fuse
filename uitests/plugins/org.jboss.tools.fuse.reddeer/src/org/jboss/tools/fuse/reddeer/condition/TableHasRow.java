@@ -44,7 +44,7 @@ public class TableHasRow extends AbstractWaitCondition {
 
 	@Override
 	public String description() {
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 		message.append("an item matching ").append(matcher.toString()).append(" in\n");
 		for (TableItem item : items) {
 			message.append("\t").append(item.getText()).append("\n");
