@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -30,8 +29,8 @@ public class HttpClient {
 		this.url = url;
 	}
 
-	public String get() throws MalformedURLException, IOException {
-		StringBuffer response = new StringBuffer();
+	public String get() throws IOException {
+		StringBuilder response = new StringBuilder();
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setRequestMethod("GET");
 		try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
@@ -43,8 +42,8 @@ public class HttpClient {
 		return response.toString();
 	}
 
-	public String post(String data) throws MalformedURLException, IOException {
-		StringBuffer response = new StringBuffer();
+	public String post(String data) throws IOException {
+		StringBuilder response = new StringBuilder();
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setRequestMethod("POST");
 		if (data != null) {

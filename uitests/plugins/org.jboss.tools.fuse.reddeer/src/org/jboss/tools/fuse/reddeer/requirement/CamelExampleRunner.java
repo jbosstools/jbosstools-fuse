@@ -103,9 +103,9 @@ public class CamelExampleRunner extends JarRunner {
 
 		@Override
 		public String toString() {
-			StringBuffer buffer = new StringBuffer();
-			getLines().forEach(line -> buffer.append(line + System.getProperty("line.separator")));
-			return buffer.toString();
+			StringBuilder builder = new StringBuilder();
+			getLines().forEach(line -> builder.append(line + System.getProperty("line.separator")));
+			return builder.toString();
 		}
 
 		@Override

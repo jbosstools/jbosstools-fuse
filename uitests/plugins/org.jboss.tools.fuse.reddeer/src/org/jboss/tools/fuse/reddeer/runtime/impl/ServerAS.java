@@ -78,7 +78,7 @@ public class ServerAS extends ServerBase {
 
 	@Override
 	public String getUrl(String host, String path) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		result.append("http://").append(host).append(":").append(getHttpPort()).append("/").append(path);
 		return result.toString();
 	}
