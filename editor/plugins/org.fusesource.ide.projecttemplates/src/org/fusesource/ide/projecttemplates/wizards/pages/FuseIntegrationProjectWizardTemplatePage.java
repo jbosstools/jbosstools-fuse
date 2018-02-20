@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
@@ -24,6 +25,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -97,6 +99,8 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		createTemplatesPanel(grpEmptyVsTemplate);
 
 		createDSLRadioButtons(container);
+		
+		createLinkForOtherExamples(container);
 
 		buttonEmptyProject.setSelection(true);
 		buttonBlueprintDSL.setSelection(true);
@@ -105,6 +109,18 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 
 		setTemplatesActive(false);
 		validate();
+	}
+
+	private void createLinkForOtherExamples(Composite container) {
+		Link link = new Link(container, SWT.NONE);
+		link.setLayoutData(GridDataFactory.fillDefaults().span(3, 1).grab(true, true).align(SWT.END, SWT.CENTER).create());
+		link.setText("<A>"+Messages.newProjectWizardTemplatePageWhereToFindMoreExamples+"</A>");
+		link.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog.openInformation(getShell(), Messages.newProjectWizardTemplatePageWhereToFindMoreExamples, Messages.newProjectWizardTemplatePageListOfOtherExamplesRepos);
+			}
+		});
 	}
 
 	protected void createTemplatesPanel(Composite grpEmptyVsTemplate) {
