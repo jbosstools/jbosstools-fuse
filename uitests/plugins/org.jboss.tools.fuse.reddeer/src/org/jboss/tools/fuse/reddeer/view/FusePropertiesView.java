@@ -148,7 +148,7 @@ public class FusePropertiesView extends PropertySheet {
 		case DESC:
 			return new LabeledText("Description").getText();
 		case ID:
-			new LabeledText("Id").getText();
+			return new LabeledText("Id").getText();
 		case PATTERN:
 			return new LabeledCCombo("Pattern").getSelection();
 		case REF:
