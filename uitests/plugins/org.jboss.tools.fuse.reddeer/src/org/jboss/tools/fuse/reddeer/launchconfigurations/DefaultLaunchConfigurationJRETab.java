@@ -15,14 +15,14 @@ import org.eclipse.reddeer.swt.impl.button.PushButton;
 import org.eclipse.reddeer.swt.impl.group.DefaultGroup;
 import org.eclipse.reddeer.swt.impl.text.DefaultText;
 
-public class LocalCamelContextLaunchConfigurationJRETab extends LaunchConfigurationTab {
+public class DefaultLaunchConfigurationJRETab extends LaunchConfigurationTab {
 
 	/**
 	 * Represents 'JRE' tab in Local Camel Context launch configuration
 	 * 
 	 * @author djelinek
 	 */
-	public LocalCamelContextLaunchConfigurationJRETab() {
+	public DefaultLaunchConfigurationJRETab() {
 		super("JRE");
 	}
 

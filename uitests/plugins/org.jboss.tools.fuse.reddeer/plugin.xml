@@ -6,5 +6,6 @@
     <requirement class="org.jboss.tools.fuse.reddeer.requirement.SAPLibraryRequirement"/>
     <requirement class="org.jboss.tools.fuse.reddeer.requirement.CamelExampleRequirement"/>
     <requirement class="org.jboss.tools.fuse.reddeer.requirement.JolokiaRequirement"/>
+    <requirement class="org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement"/>
   </extension>
 </plugin>
