@@ -357,6 +357,23 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>fast</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tychoVersion}</version>
+						<configuration>
+							<excludes>
+								<exclude>**/FuseIntegrationProjectCreatorRunnableFor*IT.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
 
