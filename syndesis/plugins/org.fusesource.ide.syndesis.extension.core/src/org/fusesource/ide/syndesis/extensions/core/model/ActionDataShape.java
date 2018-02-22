@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ActionDataShape extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_NAME = "property.name";
 	private static final String PROPERTY_DESCRIPTION = "property.description";
 	private static final String PROPERTY_KIND = "property.kind";
@@ -75,6 +76,7 @@ public class ActionDataShape extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 	

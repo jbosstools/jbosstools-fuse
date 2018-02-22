@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "id", "name", "description", "descriptor", "tags", "actionType" })
 public class SyndesisAction extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_ID = "property.id";
 	private static final String PROPERTY_NAME = "property.name";
 	private static final String PROPERTY_ACTIONTYPE = "property.actiontype";
@@ -99,6 +100,7 @@ public class SyndesisAction extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 	

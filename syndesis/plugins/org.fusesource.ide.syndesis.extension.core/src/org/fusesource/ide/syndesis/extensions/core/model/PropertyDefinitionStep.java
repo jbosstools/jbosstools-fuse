@@ -10,9 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.core.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.fusesource.ide.foundation.core.databinding.PojoModelObservable;
@@ -26,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class PropertyDefinitionStep extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_DESCRIPTION = "property.description";
 	private static final String PROPERTY_NAME = "property.name";
 	private static final String PROPERTY_PROPERTIES = "property.properties";
@@ -48,6 +47,7 @@ public class PropertyDefinitionStep extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 	

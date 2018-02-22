@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc.
+ * Copyright (c) 2018 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -12,7 +12,6 @@ package org.fusesource.ide.syndesis.extensions.core.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,12 +19,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.fusesource.ide.syndesis.extensions.core.model.ActionDataShape;
-import org.fusesource.ide.syndesis.extensions.core.model.PropertyDefinitionStep;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisAction;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisActionDescriptor;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtensionProperty;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,7 +80,7 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	 */
 	@Test
 	public void testGetActions() {
-		assertTrue("actions are not correct", extension.getActions() != null && !extension.getActions().isEmpty() && extension.getActions().size() == 4);
+		assertThat(extension.getActions()).hasSize(4);
 	}
 	
 	@Test
@@ -97,7 +90,7 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	
 	@Test
 	public void testGetTags() {
-		assertThat(extension.getTags().contains("verifier"));
+		assertThat(extension.getTags()).contains("verifier");
 	}
 
 	@Test
@@ -145,7 +138,7 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	@Test
 	public void testStepProperties() {
 		Map<String, SyndesisExtensionProperty> properties = extension.getActions().get(0).getDescriptor().getPropertyDefinitionSteps().get(0).getProperties();
-		assertThat(properties.keySet()).contains("query");
+		assertThat(properties).containsKey("query");
 		
 		SyndesisExtensionProperty prop = properties.get("query");
 		assertThat(prop.getDeprecated()).isFalse();
@@ -161,8 +154,7 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	
 	@Test
 	public void testExtensionProperties() {
-		assertThat(extension.getExtensionProperties()).hasSize(4);
-		assertThat(extension.getExtensionProperties().keySet()).contains(
+		assertThat(extension.getExtensionProperties()).containsOnlyKeys(
 				"url",
 				"user",
 				"password",

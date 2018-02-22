@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SyndesisActionDescriptor extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_KIND = "property.kind";
 	private static final String PROPERTY_ENTRYPOINT = "property.entrypoint";
 	private static final String PROPERTY_INPUTDATASHAPE = "property.inputdatashape";
@@ -68,6 +69,7 @@ public class SyndesisActionDescriptor extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 

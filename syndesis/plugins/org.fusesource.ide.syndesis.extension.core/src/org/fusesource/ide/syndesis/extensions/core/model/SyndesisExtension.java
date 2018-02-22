@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @JsonPropertyOrder({"schemaVersion", "name", "description", "icon", "extensionId", "version", "tags", "actions", "dependencies"})
 public class SyndesisExtension extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_SPRINGBOOTVERSION = "property.springbootversion";
 	private static final String PROPERTY_CAMELVERSION = "property.camelversion";
 	private static final String PROPERTY_SYNDESISVERSION = "property.syndesisversion";
@@ -150,6 +151,7 @@ public class SyndesisExtension extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 

@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SyndesisExtensionProperty extends PojoModelObservable {
 	
+	private static final String PROPERTY_OTHER = "property.other";
 	private static final String PROPERTY_KIND = "property.kind";
 	private static final String PROPERTY_DISPLAYNAME = "property.displayname";
 	private static final String PROPERTY_GROUP = "property.group";
@@ -100,6 +101,7 @@ public class SyndesisExtensionProperty extends PojoModelObservable {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
+		firePropertyChange(PROPERTY_OTHER, this.otherProperties.get(name), value);
 		otherProperties.put(name, value);
 	}
 
