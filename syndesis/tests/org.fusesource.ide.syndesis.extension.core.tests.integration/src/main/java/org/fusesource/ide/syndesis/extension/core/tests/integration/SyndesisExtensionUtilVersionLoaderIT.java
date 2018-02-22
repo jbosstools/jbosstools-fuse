@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.fusesource.ide.syndesis.extensions.core.model;
+package org.fusesource.ide.syndesis.extension.core.tests.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +18,7 @@ import org.junit.Test;
 /**
  * @author lheinema
  */
-public class SyndesisExtensionUtilVersionLoaderTest {
+public class SyndesisExtensionUtilVersionLoaderIT {
 		
 	@Test
 	public void testURLVersionLoaderFromURL() {
