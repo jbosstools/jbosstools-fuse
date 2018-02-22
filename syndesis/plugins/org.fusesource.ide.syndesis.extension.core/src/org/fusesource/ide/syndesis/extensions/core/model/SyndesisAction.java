@@ -91,6 +91,9 @@ public class SyndesisAction extends PojoModelObservable {
 	@JsonProperty("descriptor")
 	private SyndesisActionDescriptor descriptor;
 	
+	/**
+	 * otherProperties is catching all not matched json data (see JsonAnyGetter/Setter annotation)
+	 */
 	private Map<String, Object> otherProperties = new HashMap<>();
 	
 	@JsonAnyGetter

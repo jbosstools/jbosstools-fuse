@@ -46,6 +46,9 @@ public class ActionDataShape extends PojoModelObservable {
 	@JsonProperty("specification")
 	private String specification;
 	
+	/**
+	 * otherProperties is catching all not matched json data (see JsonAnyGetter/Setter annotation)
+	 */
 	private Map<String, Object> otherProperties = new HashMap<>();
 
 	enum DataShapeKind {	    
