@@ -12,8 +12,6 @@ package org.fusesource.ide.syndesis.extensions.core.util;
 
 import java.util.Map;
 
-import org.fusesource.ide.syndesis.extensions.core.internal.SyndesisExtensionsCoreActivator;
-
 /**
  * @author lheinema
  */

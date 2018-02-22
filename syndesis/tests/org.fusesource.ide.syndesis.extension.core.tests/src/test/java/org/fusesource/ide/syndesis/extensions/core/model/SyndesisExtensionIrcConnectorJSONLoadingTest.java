@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc.
+ * Copyright (c) 2018 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -12,20 +12,14 @@ package org.fusesource.ide.syndesis.extensions.core.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.fusesource.ide.syndesis.extensions.core.model.ActionDataShape;
-import org.fusesource.ide.syndesis.extensions.core.model.PropertyDefinitionStep;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisAction;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisActionDescriptor;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtensionProperty;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,12 +73,15 @@ public class SyndesisExtensionIrcConnectorJSONLoadingTest {
 	 */
 	@Test
 	public void testGetDependencies() {
-		assertThat(extension.getDependencies()).filteredOn("id", "io.syndesis.integration:integration-runtime:jar:1.3-SNAPSHOT").isNotNull(); 
-		assertThat(extension.getDependencies()).filteredOn("id", "org.apache.camel:camel-core:jar:2.20.1").isNotNull();
-		assertThat(extension.getDependencies()).filteredOn("id", "org.apache.camel:camel-irc:jar:2.20.1").isNotNull();
-		assertThat(extension.getDependencies()).filteredOn("id", "org.apache.camel:camel-spring-boot:jar:2.20.1").isNotNull();
-		assertThat(extension.getDependencies()).filteredOn("id", "org.springframework.boot:spring-boot-autoconfigure:jar:1.5.8.RELEASE").isNotNull();
-		assertThat(extension.getDependencies()).filteredOn("id", "org.springframework.boot:spring-boot-loader:jar:1.5.8.RELEASE").isNotNull();
+		List<String> idOfDependencies = extension.getDependencies().stream().map(edep -> edep.getId()).collect(Collectors.toList());
+		assertThat(idOfDependencies)
+		.contains(
+				"io.syndesis.integration:integration-runtime:jar:1.3-SNAPSHOT",
+				"org.apache.camel:camel-core:jar:2.20.1",
+				"org.apache.camel:camel-irc:jar:2.20.1",
+				"org.apache.camel:camel-spring-boot:jar:2.20.1",
+				"org.springframework.boot:spring-boot-autoconfigure:jar:1.5.8.RELEASE",
+				"org.springframework.boot:spring-boot-loader:jar:1.5.8.RELEASE");
 	}
 
 	/**
@@ -100,7 +97,7 @@ public class SyndesisExtensionIrcConnectorJSONLoadingTest {
 	 */
 	@Test
 	public void testGetActions() {
-		assertTrue("actions are not correct", extension.getActions() != null && !extension.getActions().isEmpty() && extension.getActions().size() == 1);
+		assertThat(extension.getActions()).hasSize(1);
 	}
 
 	@Test
@@ -143,12 +140,7 @@ public class SyndesisExtensionIrcConnectorJSONLoadingTest {
 	@Test
 	public void testStepProperties() {
 		Map<String, SyndesisExtensionProperty> properties = extension.getActions().get(0).getDescriptor().getPropertyDefinitionSteps().get(0).getProperties();
-		assertThat(properties.keySet()).contains(
-				"nickname",
-				"hostname",
-				"port",
-				"channels"
-		);
+		assertThat(properties).containsKeys( "nickname", "hostname", "port", "channels" );
 		
 		SyndesisExtensionProperty prop = properties.get("port");
 		assertThat(prop.getComponentProperty()).isFalse();
@@ -165,7 +157,7 @@ public class SyndesisExtensionIrcConnectorJSONLoadingTest {
 	@Test
 	public void testConfiguredProperties() {
 		SyndesisActionDescriptor descriptor = extension.getActions().get(0).getDescriptor();
-		assertThat(descriptor.getConfiguredProperties().keySet()).contains(
+		assertThat(descriptor.getConfiguredProperties()).containsKeys(
 				"autoRejoin",
 				"onNick",
 				"onQuit",

@@ -33,7 +33,7 @@ public class SyndesisExtensionUtilValidVersionTest {
 		return new String[] {
 				"1.0",
 				"1.0.0",
-		"1.1.20180108"};
+				"1.1.20180108"};
 	}
 	
 	@Test
