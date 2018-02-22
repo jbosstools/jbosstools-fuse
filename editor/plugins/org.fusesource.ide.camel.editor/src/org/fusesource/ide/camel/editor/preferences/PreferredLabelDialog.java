@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -117,6 +118,10 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 		}
 	}
 
+	public void setDescription(String msg) {
+		setMessage(msg, IMessageProvider.INFORMATION);
+	}
+
 	@Override
 	public void create() {
 		super.create();
@@ -140,11 +145,11 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 			if (parameter != null && !parameter.isEmpty()) {
 				parameterCombo.setSelection(new StructuredSelection(eip.getParameter(parameter)));
 			}
+			setDescription(NLS.bind(UIMessages.preferredLabelsEditDialogDescription, component));
 		} else {
 			componentCombo.setInput(getComponents());
+			setDescription(UIMessages.preferredLabelsNewDialogDescription);
 		}
-
-		validate();
 	}
 
 	@Override
@@ -185,7 +190,7 @@ public class PreferredLabelDialog extends TitleAreaDialog {
 				return element.toString();
 			}
 		});
-		comboViewer.addSelectionChangedListener(event -> validate());
+		comboViewer.addPostSelectionChangedListener(event -> validate());
 		return comboViewer;
 	}
 
