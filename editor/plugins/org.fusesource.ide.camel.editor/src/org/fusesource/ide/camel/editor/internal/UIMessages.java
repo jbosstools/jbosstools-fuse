@@ -168,6 +168,7 @@ public class UIMessages extends NLS {
 	public static String loadingCamelFile;
 	public static String pending;
 
+	public static String editorPreferencePageTechPreviewRESTEditorPageSetting;
 
 	static {
 		// initialize resource bundle

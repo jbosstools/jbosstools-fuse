@@ -221,7 +221,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
 		createGlobalConfPage(GLOBAL_CONF_INDEX);
-		createRestConfPage(REST_CONF_INDEX);
+		boolean restPageVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_SHOW_REST_PAGE);
+		if (restPageVisible) {
+			createRestConfPage(REST_CONF_INDEX);
+		}
 
 		IDocument document = getDocument();
 		if (document == null) {

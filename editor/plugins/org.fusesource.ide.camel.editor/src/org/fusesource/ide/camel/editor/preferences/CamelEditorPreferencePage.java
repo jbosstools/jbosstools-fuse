@@ -84,6 +84,13 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(gridVisibilityEditor);
 
+		BooleanFieldEditor restPageVisibilityEditor = new BooleanFieldEditor(
+				PreferencesConstants.EDITOR_SHOW_REST_PAGE,
+				UIMessages.editorPreferencePageTechPreviewRESTEditorPageSetting,
+				getFieldEditorParent());
+
+		addField(restPageVisibilityEditor);
+
 		// Sets up the context sensitive help for this page
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getFieldEditorParent(), "org.fusesource.ide.camel.editor.editorConfig");
 	}
