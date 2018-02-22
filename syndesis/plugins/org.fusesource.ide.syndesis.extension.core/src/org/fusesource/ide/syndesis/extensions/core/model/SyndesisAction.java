@@ -39,7 +39,7 @@ public class SyndesisAction extends PojoModelObservable {
 	enum ActionType {
 
 		CONNECTOR ("connector"),
-	    STEP ("step");
+		STEP ("step");
 		
 		private String type;
 		
