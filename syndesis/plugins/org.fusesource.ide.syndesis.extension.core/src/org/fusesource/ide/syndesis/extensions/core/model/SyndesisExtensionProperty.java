@@ -47,7 +47,7 @@ public class SyndesisExtensionProperty extends PojoModelObservable {
 	private String kind;
 	
 	@JsonProperty("displayName")
-    private String displayName;
+	private String displayName;
     
 	@JsonProperty("group")
 	private String group;

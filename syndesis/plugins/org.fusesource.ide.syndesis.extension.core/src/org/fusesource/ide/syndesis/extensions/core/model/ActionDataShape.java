@@ -34,7 +34,7 @@ public class ActionDataShape extends PojoModelObservable {
 	private String name;
 
 	@JsonProperty("description")
-    private String description;
+	private String description;
 
 	@JsonProperty("kind")
 	private String kind;
@@ -49,9 +49,9 @@ public class ActionDataShape extends PojoModelObservable {
 
 	enum DataShapeKind {	    
 		ANY ("any"),
-	    JAVA ("java"),
-	    JSON_SCHEMA ("json-schema"),
-	    NONE ("none");
+		JAVA ("java"),
+		JSON_SCHEMA ("json-schema"),
+		NONE ("none");
 		
 		private String value;
 		

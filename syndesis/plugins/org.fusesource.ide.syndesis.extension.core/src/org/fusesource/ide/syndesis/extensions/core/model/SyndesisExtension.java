@@ -54,37 +54,37 @@ public class SyndesisExtension extends PojoModelObservable {
 	private static final String PROPERTY_CONNECTORCUSTOMIZER = "property.connectorcustomizer";
 	
 	enum Status {
-        DRAFT ("Draft"),
-        INSTALLED ("Installed"),
-        DELETED ("Deleted");
-        
+		DRAFT ("Draft"),
+		INSTALLED ("Installed"),
+		DELETED ("Deleted");
+		
 		private String value;
-        
-        Status(String value) {
-        	this.value = value;
+		
+		Status(String value) {
+			this.value = value;
         }
 
-        @Override
+		@Override
         public String toString() {
         	return this.value;
         }
-    }
+	}
 
-    enum Type {
-    	STEPS ("Steps"),
-        CONNECTORS ("Connectors");
+	enum Type {
+		STEPS ("Steps"),
+		CONNECTORS ("Connectors");
+		
+		private String value;
+		
+		Type(String value) {
+			this.value = value;
+		}
     	
-    	private String value;
-    	
-    	Type(String value) {
-    		this.value = value;
-    	}
-    	
-    	@Override
-    	public String toString() {
-    		return this.value;
-    	}
-    }
+		@Override
+		public String toString() {
+			return this.value;
+		}
+	}
 	
 	@JsonIgnore
 	private String springBootVersion;
