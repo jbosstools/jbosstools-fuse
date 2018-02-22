@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;

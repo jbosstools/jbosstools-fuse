@@ -64,7 +64,7 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	 */
 	@Test
 	public void testGetConnectorCustomizers() {
-		assertThat(extension.getConnectorCustomizers().contains("io.syndesis.connector.sql.customizer.DataSourceCustomizer"));
+		assertThat(extension.getConnectorCustomizers()).contains("io.syndesis.connector.sql.customizer.DataSourceCustomizer");
 	}
 	
 	/**

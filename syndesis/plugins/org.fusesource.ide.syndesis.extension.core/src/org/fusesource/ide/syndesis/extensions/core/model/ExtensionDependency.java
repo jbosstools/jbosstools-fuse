@@ -36,6 +36,9 @@ public class ExtensionDependency extends PojoModelObservable {
 	@JsonProperty("id")
 	private String id;
 	
+	/**
+	 * otherProperties is catching all not matched json data (see JsonAnyGetter/Setter annotation)
+	 */
 	private Map<String, Object> otherProperties = new HashMap<>();
 	
 	@JsonAnyGetter

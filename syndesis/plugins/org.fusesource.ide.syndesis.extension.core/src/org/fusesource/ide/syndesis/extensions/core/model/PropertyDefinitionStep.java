@@ -38,6 +38,9 @@ public class PropertyDefinitionStep extends PojoModelObservable {
 	@JsonProperty("properties")
 	private Map<String, SyndesisExtensionProperty> properties = new HashMap<>();
 	
+	/**
+	 * otherProperties is catching all not matched json data (see JsonAnyGetter/Setter annotation)
+	 */
 	private Map<String, Object> otherProperties = new HashMap<>();
 	
 	@JsonAnyGetter
