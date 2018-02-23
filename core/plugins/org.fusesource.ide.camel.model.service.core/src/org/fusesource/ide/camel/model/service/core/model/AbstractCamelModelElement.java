@@ -467,6 +467,11 @@ public abstract class AbstractCamelModelElement {
 		String propertyToCheck = singlePropertyDisplay.get(eipType);
 		if( propertyToCheck != null ) {
 			Object propVal = getParameter(propertyToCheck);
+			if (propVal == null) {
+				// try to get the default value
+				Parameter param = getUnderlyingMetaModelObject().getProperties().get(propertyToCheck);
+				propVal = param == null ? null : param.getDefaultValue();
+			}
 			if (propVal != null) {
 				if( propVal instanceof AbstractCamelModelElement) {
 					// seems to be an expression
