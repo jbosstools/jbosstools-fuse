@@ -13,6 +13,10 @@ package org.fusesource.ide.camel.model.service.core.tests.integration.core.model
 import static org.fusesource.ide.preferences.PreferencesConstants.EDITOR_PREFERRED_LABEL;
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
@@ -52,6 +56,20 @@ public class CamelBasicModelElementTestIT {
 		assertEquals("Log ${body}", simpleLog().getDisplayText());
 	}
 
+	@Test
+	public void testDisplayingUserTextWithDefaultValue() {
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "bean.cache"); 
+		assertEquals("Bean true", defaultBean().getDisplayText());
+	}
+
+	@Test
+	public void testDisplayingUserTextWithModifiedDefaultValue() {
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "bean.cache");
+		AbstractCamelModelElement bean = defaultBean();
+		bean.setParameter("cache", false);
+		assertEquals("Bean false", bean.getDisplayText());
+	}
+
 	private AbstractCamelModelElement simpleLog() {
 		Eip eip = new Eip();
 		eip.setName("log");
@@ -60,6 +78,23 @@ public class CamelBasicModelElementTestIT {
 		element.setId("_log1");
 		element.setParameter("logName", "coolName");
 		element.setParameter("message", "${body}");
+		element.setUnderlyingMetaModelObject(eip);
+
+		return element;
+	}
+
+	private AbstractCamelModelElement defaultBean() {
+		Eip eip = new Eip();
+		eip.setName("bean");
+		// set default value for the cache parameter
+		Map<String, Parameter> eipProperties = new HashMap<>();
+		Parameter cacheParam = new Parameter();
+		cacheParam.setDefaultValue("true");
+		eipProperties.put("cache", cacheParam);
+		eip.setProperties(eipProperties);
+
+		AbstractCamelModelElement element = new CamelBasicModelElement(null, null);
+		element.setId("_bean1");
 		element.setUnderlyingMetaModelObject(eip);
 
 		return element;
