@@ -329,4 +329,14 @@ public class CamelCatalogUtils {
 		return "";
 	}
 
+	public MavenDependency getMavenDependency(CatalogType type, String name) {
+		String groupId = getPropertytValue(type, name, "groupId");
+		String artifactId = getPropertytValue(type, name, "artifactId");
+		String version = getPropertytValue(type, name, "version");
+		if (groupId == null || groupId.isEmpty()) {
+			return null;
+		}
+		return new MavenDependency(groupId, artifactId, version);
+	}
+
 }

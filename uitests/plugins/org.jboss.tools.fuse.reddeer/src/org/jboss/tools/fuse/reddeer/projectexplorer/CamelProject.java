@@ -11,7 +11,15 @@
 package org.jboss.tools.fuse.reddeer.projectexplorer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -19,6 +27,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.reddeer.common.exception.WaitTimeoutExpiredException;
 import org.eclipse.reddeer.common.matcher.RegexMatcher;
+import org.eclipse.reddeer.common.util.XPathEvaluator;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
@@ -38,7 +47,9 @@ import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
+import org.jboss.tools.fuse.reddeer.MavenDependency;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
+import org.xml.sax.SAXException;
 
 /**
  * Manipulates with Camel projects
@@ -131,7 +142,8 @@ public class CamelProject {
 	 */
 	private static void closeSecureStorage() {
 		try {
-			new WaitUntil(new ShellIsAvailable(new WithTextMatcher(new RegexMatcher("Secure Storage.*"))), TimePeriod.DEFAULT);
+			new WaitUntil(new ShellIsAvailable(new WithTextMatcher(new RegexMatcher("Secure Storage.*"))),
+					TimePeriod.DEFAULT);
 		} catch (RuntimeException ex1) {
 			return;
 		}
@@ -223,4 +235,31 @@ public class CamelProject {
 	public Project getProject() {
 		return new ProjectExplorer().getProject(name);
 	}
+
+	public File getPomFile() {
+		return new File(getFile(), "pom.xml");
+	}
+
+	public String getPomContent() throws IOException {
+		return new String(Files.readAllBytes(getPomFile().toPath()));
+	}
+
+	public void setPomContent(String content) throws IOException {
+		Files.write(getPomFile().toPath(), content.getBytes());
+	}
+
+	public List<MavenDependency> getMavenDependencies() throws FileNotFoundException, ParserConfigurationException,
+			SAXException, IOException, XPathExpressionException {
+		List<MavenDependency> deps = new ArrayList<>();
+		XPathEvaluator xpath = new XPathEvaluator(new FileInputStream(getPomFile()), false);
+		int numOfDeps = Integer.valueOf(xpath.evaluateXPath("count(/project/dependencies/dependency)"));
+		for (int i = 1; i <= numOfDeps; i++) {
+			String groupId = xpath.evaluateXPath("/project/dependencies/dependency[" + i + "]/groupId");
+			String artifactId = xpath.evaluateXPath("/project/dependencies/dependency[" + i + "]/artifactId");
+			String version = xpath.evaluateXPath("/project/dependencies/dependency[" + i + "]/version");
+			deps.add(new MavenDependency(groupId, artifactId, version));
+		}
+		return deps;
+	}
+
 }
