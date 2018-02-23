@@ -12,7 +12,6 @@ package org.fusesource.ide.camel.editor.restconfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -70,33 +69,6 @@ import org.w3c.dom.NodeList;
 public class RestConfigEditor extends EditorPart implements ICamelModelListener, ISelectionProvider {
 
 	private HashMap<String, Color> colorMap;
-	public static final String REST_COLOR_LIGHT_BLUE = "light-blue";  //$NON-NLS-1$
-	public static final String REST_COLOR_LIGHT_GREEN = "light-green";  //$NON-NLS-1$
-	public static final String REST_COLOR_LIGHT_ORANGE = "light-orange";  //$NON-NLS-1$
-	public static final String REST_COLOR_LIGHT_RED = "light-red"; //$NON-NLS-1$
-	public static final String REST_COLOR_LIGHT_GREY = "light-grey"; //$NON-NLS-1$
-	public static final String REST_COLOR_DARK_BLUE = "dark-blue";  //$NON-NLS-1$
-	public static final String REST_COLOR_DARK_GREEN = "dark-green";  //$NON-NLS-1$
-	public static final String REST_COLOR_DARK_ORANGE = "dark-orange";  //$NON-NLS-1$
-	public static final String REST_COLOR_DARK_RED = "dark-red"; //$NON-NLS-1$
-
-	private static final String REST_TAG = "rest"; //$NON-NLS-1$
-	private static final String REST_CONFIGURATION_TAG = "restConfiguration"; //$NON-NLS-1$
-	private static final String REST_VERB_FLAG = "restVerb"; //$NON-NLS-1$
-
-	private static final String GET_VERB = "get"; //$NON-NLS-1$
-	private static final String POST_VERB = "post"; //$NON-NLS-1$
-	private static final String PUT_VERB = "put"; //$NON-NLS-1$
-//	private static final String PATCH_VERB = "patch"; //$NON-NLS-1$
-	private static final String DELETE_VERB = "delete"; //$NON-NLS-1$
-//	private static final String HEAD_VERB = "head"; //$NON-NLS-1$
-//	private static final String TRACE_VERB = "trace"; //$NON-NLS-1$
-//	private static final String CONNECT_VERB = "connect"; //$NON-NLS-1$
-//	private static final String OPTIONS_VERB = "options"; //$NON-NLS-1$
-
-	private static final String IMG_DESC_ADD = "icons/editor/add.png"; //$NON-NLS-1$
-	private static final String IMG_DESC_DELETE = "icons/rem_co.png"; //$NON-NLS-1$
-
 	private CamelEditor parentEditor;
 	private Composite parent;
 	private ScrolledForm form;
@@ -158,7 +130,6 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		tabFolder.setSimple(false);
 		tabFolder.setLayout(new GridLayout(2, false));
 		tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true, 1, 10));
-		
 		configurationTab = new CTabItem(tabFolder, SWT.NULL);
 		configurationTab.setText("Configuration");
 
@@ -170,15 +141,15 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	private void createColors() {
 		colorMap = new HashMap<>();
-		colorMap.put(REST_COLOR_LIGHT_BLUE, new Color(Display.getDefault(), 235, 242, 250));
-		colorMap.put(REST_COLOR_LIGHT_ORANGE, new Color(Display.getDefault(), 250, 241, 230));
-		colorMap.put(REST_COLOR_LIGHT_GREEN, new Color(Display.getDefault(), 232, 245, 239));
-		colorMap.put(REST_COLOR_LIGHT_GREY, new Color(Display.getDefault(), 240, 248, 255));
-		colorMap.put(REST_COLOR_LIGHT_RED, new Color(Display.getDefault(), 250, 231, 231));
-		colorMap.put(REST_COLOR_DARK_BLUE, new Color(Display.getDefault(), 93, 173, 255));
-		colorMap.put(REST_COLOR_DARK_ORANGE, new Color(Display.getDefault(), 254, 162, 24));
-		colorMap.put(REST_COLOR_DARK_GREEN, new Color(Display.getDefault(), 65, 205, 142));
-		colorMap.put(REST_COLOR_DARK_RED, new Color(Display.getDefault(), 252, 60, 55));
+		colorMap.put(RestConfigConstants.REST_COLOR_LIGHT_BLUE, new Color(Display.getDefault(), 235, 242, 250));
+		colorMap.put(RestConfigConstants.REST_COLOR_LIGHT_ORANGE, new Color(Display.getDefault(), 250, 241, 230));
+		colorMap.put(RestConfigConstants.REST_COLOR_LIGHT_GREEN, new Color(Display.getDefault(), 232, 245, 239));
+		colorMap.put(RestConfigConstants.REST_COLOR_LIGHT_GREY, new Color(Display.getDefault(), 240, 248, 255));
+		colorMap.put(RestConfigConstants.REST_COLOR_LIGHT_RED, new Color(Display.getDefault(), 250, 231, 231));
+		colorMap.put(RestConfigConstants.REST_COLOR_DARK_BLUE, new Color(Display.getDefault(), 93, 173, 255));
+		colorMap.put(RestConfigConstants.REST_COLOR_DARK_ORANGE, new Color(Display.getDefault(), 254, 162, 24));
+		colorMap.put(RestConfigConstants.REST_COLOR_DARK_GREEN, new Color(Display.getDefault(), 65, 205, 142));
+		colorMap.put(RestConfigConstants.REST_COLOR_DARK_RED, new Color(Display.getDefault(), 252, 60, 55));
 	}
 
 	private void destroyColors() {
@@ -220,17 +191,17 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	@Override
 	public void modelChanged() {
-		Display.getDefault().asyncExec( () -> {
-			if (RestConfigEditor.this.parentEditor != null
-					&& RestConfigEditor.this.equals(RestConfigEditor.this.parentEditor.getActiveEditor())) {
-				reload();
-			}
-		});
+//		Display.getDefault().asyncExec( () -> {
+//			if (RestConfigEditor.this.parentEditor != null
+//					&& RestConfigEditor.this.equals(RestConfigEditor.this.parentEditor.getActiveEditor())) {
+//				reload();
+//			}
+//		});
 	}
 
 	@Override
 	public void setFocus() {
-		Display.getDefault().asyncExec(this::reload);
+//		Display.getDefault().asyncExec(this::reload);
 	}
 
 	private void createContents() {
@@ -254,41 +225,41 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 	
 	private Color getBackgroundColorForType(String tag) {
-		if (GET_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_LIGHT_BLUE);
+		if (RestConfigConstants.GET_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_BLUE);
 		}
-		if (PUT_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_LIGHT_GREEN);
+		if (RestConfigConstants.PUT_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_GREEN);
 		}
-		if (POST_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_LIGHT_ORANGE);
+		if (RestConfigConstants.POST_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_ORANGE);
 		}
-		if (DELETE_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_LIGHT_RED);
+		if (RestConfigConstants.DELETE_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_RED);
 		}
-		return colorMap.get(REST_COLOR_LIGHT_GREY);
+		return colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_GREY);
 	}		
 
 	private Color getForegroundColorForType(String tag) {
 		Color foregroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-		if (PUT_VERB.equals(tag)) {
+		if (RestConfigConstants.PUT_VERB.equals(tag)) {
 			foregroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 		}
 		return foregroundColor;
 	}		
 
 	private Color getImageColorForType(String tag) {
-		if (GET_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_DARK_BLUE);
+		if (RestConfigConstants.GET_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_DARK_BLUE);
 		}
-		if (PUT_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_DARK_GREEN);
+		if (RestConfigConstants.PUT_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_DARK_GREEN);
 		}
-		if (POST_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_DARK_ORANGE);
+		if (RestConfigConstants.POST_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_DARK_ORANGE);
 		}
-		if (DELETE_VERB.equals(tag)) {
-			return colorMap.get(REST_COLOR_DARK_RED);
+		if (RestConfigConstants.DELETE_VERB.equals(tag)) {
+			return colorMap.get(RestConfigConstants.REST_COLOR_DARK_RED);
 		}
 		return Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
 	}
@@ -304,24 +275,24 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 	
 	private String getTextForImage(String text) {
-		if (compareTextAndTag(text, GET_VERB) != null) {
-			return GET_VERB;
+		if (compareTextAndTag(text, RestConfigConstants.GET_VERB) != null) {
+			return RestConfigConstants.GET_VERB;
 		}
-		if (compareTextAndTag(text, PUT_VERB) != null) {
-			return PUT_VERB;
+		if (compareTextAndTag(text, RestConfigConstants.PUT_VERB) != null) {
+			return RestConfigConstants.PUT_VERB;
 		}
-		if (compareTextAndTag(text, POST_VERB) != null) {
-			return POST_VERB;
+		if (compareTextAndTag(text, RestConfigConstants.POST_VERB) != null) {
+			return RestConfigConstants.POST_VERB;
 		}
-		if (compareTextAndTag(text, DELETE_VERB) != null) {
-			return DELETE_VERB;
+		if (compareTextAndTag(text, RestConfigConstants.DELETE_VERB) != null) {
+			return RestConfigConstants.DELETE_VERB;
 		}
 		return null;
 	}
 	
 	private Composite createVerbComposite(Composite parent, String labelText, String content) {
 		Composite client=toolkit.createComposite(parent,SWT.BORDER);
-		client.setBackground(colorMap.get(REST_COLOR_LIGHT_BLUE));
+		client.setBackground(colorMap.get(RestConfigConstants.REST_COLOR_LIGHT_BLUE));
 		client.setLayout(new GridLayout(2, false));
 		GridData gd = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).create();
 		client.setLayoutData(gd);
@@ -331,19 +302,20 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		Color backgroundColor = getBackgroundColorForType(graphicLabel);
 		Color foregroundColor = getForegroundColorForType(graphicLabel);
 		client.setBackground(backgroundColor);
+		client.addListener(SWT.MouseDown, new RestVerbSelectionListener());
 
 		Label image=new Label(client,SWT.WRAP | SWT.BOLD | SWT.CENTER);
 		image.setText(graphicLabel);
 		image.setBackground(imageColor);
 		image.setForeground(foregroundColor);
 		image.setLayoutData(GridDataFactory.fillDefaults().hint(50, SWT.DEFAULT).create());
-		image.addListener(SWT.MouseDown, new SelectionListener());
+		image.addListener(SWT.MouseDown, new RestVerbSelectionListener());
 
 		Label label=new Label(client,SWT.WRAP);
 		label.setText(content);
 		label.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 		label.setBackground(client.getBackground());
-		label.addListener(SWT.MouseDown, new SelectionListener());
+		label.addListener(SWT.MouseDown, new RestVerbSelectionListener());
 
 		return client;
 	}
@@ -351,12 +323,12 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	private Object getDataFromSelectedUIElement(Control control) {
 		Node data = null;
 		if (!control.isDisposed()) {
-			if (control.getData(REST_VERB_FLAG) != null) {
-				data = (Node) control.getData(REST_VERB_FLAG);
-			} else if (control.getData(REST_TAG) != null) {
-				data = (Node) control.getData(REST_TAG);
-			} else if (control.getData(REST_CONFIGURATION_TAG) != null) {
-				data = (Node) control.getData(REST_CONFIGURATION_TAG);
+			if (control.getData(RestConfigConstants.REST_VERB_FLAG) != null) {
+				data = (Node) control.getData(RestConfigConstants.REST_VERB_FLAG);
+			} else if (control.getData(RestConfigConstants.REST_TAG) != null) {
+				data = (Node) control.getData(RestConfigConstants.REST_TAG);
+			} else if (control.getData(RestConfigConstants.REST_CONFIGURATION_TAG) != null) {
+				data = (Node) control.getData(RestConfigConstants.REST_CONFIGURATION_TAG);
 			}
 			if (data != null) {
 				return new CamelBasicModelElement(null, data);
@@ -368,13 +340,13 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		return null;
 	}
 
-	class ToggleAction extends Action {
-		public ToggleAction ( ) {
+	class PushAction extends Action {
+		public PushAction ( ) {
 			super(null, IAction.AS_PUSH_BUTTON);
 		}
 	}
 
-	class AddAction extends ToggleAction {
+	class AddAction extends PushAction {
 		@Override
 		public void run() {
 			MessageBox box = new MessageBox(Display.getCurrent().getActiveShell(), SWT.CANCEL | SWT.OK);
@@ -384,15 +356,15 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 		@Override
 		public String getToolTipText() {
-			return "Add something";
+			return "Add...";
 		}
 		@Override
 		public ImageDescriptor getImageDescriptor() {
-			return mImageRegistry.getDescriptor(IMG_DESC_ADD);
+			return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_ADD);
 		}
 	}
 
-	class DeleteAction extends ToggleAction {
+	class DeleteAction extends PushAction {
 		@Override
 		public void run() {
 			MessageBox box = new MessageBox(Display.getCurrent().getActiveShell(), SWT.CANCEL | SWT.OK);
@@ -402,43 +374,49 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 		@Override
 		public String getToolTipText() {
-			return "Delete something";
+			return "Delete...";
 		}
 		@Override
 		public ImageDescriptor getImageDescriptor() {
-			return mImageRegistry.getDescriptor(IMG_DESC_DELETE);
+			return mImageRegistry.getDescriptor(RestConfigConstants.IMG_DESC_DELETE);
 		}
 	}
 
 	private void getImages() {
 		mImageRegistry = new ImageRegistry();
-		mImageRegistry.put(IMG_DESC_ADD, ImageDescriptor
+		mImageRegistry.put(RestConfigConstants.IMG_DESC_ADD, ImageDescriptor
 				.createFromURL(CamelEditorUIActivator.getDefault().getBundle()
-						.getEntry(IMG_DESC_ADD)));	
-		mImageRegistry.put(IMG_DESC_DELETE, ImageDescriptor
+						.getEntry(RestConfigConstants.IMG_DESC_ADD)));	
+		mImageRegistry.put(RestConfigConstants.IMG_DESC_DELETE, ImageDescriptor
 				.createFromURL(CamelEditorUIActivator.getDefault().getBundle()
-						.getEntry(IMG_DESC_DELETE)));	
+						.getEntry(RestConfigConstants.IMG_DESC_DELETE)));	
 	}
 
-	private Composite createRestTabSection() {
-		Section section = toolkit.createSection(form.getBody(), Section.EXPANDED | Section.TITLE_BAR | Section.DESCRIPTION);
-		section.setText(REST_TAG);
-		section.setDescription("Specify the details for each REST entry.");
-		section.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
-		section.setLayout(new GridLayout(2, false));
-
+	private ToolBar createToolbar(Composite parent) {
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-		ToolBar toolbar = toolBarManager.createControl(section);
+		ToolBar toolbar = toolBarManager.createControl(parent);
 		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
 		// Add action to the tool bar
 		AddAction action = new AddAction();
 		toolBarManager.add(action);
+		action.setEnabled(false);
 		DeleteAction daction = new DeleteAction();
 		toolBarManager.add(daction);
+		daction.setEnabled(false);
 
 		toolBarManager.update(true);
+		return toolbar;
+	}
+	
+	private Composite createRestTabSection() {
+		Section section = toolkit.createSection(form.getBody(), Section.EXPANDED | Section.TITLE_BAR | Section.DESCRIPTION);
+		section.setText(RestConfigConstants.REST_TAG.toUpperCase());
+		section.setDescription("Specify the details for each REST entry.");
+		section.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
+		section.setLayout(new GridLayout(2, false));
 
+		ToolBar toolbar = createToolbar(section);
 		section.setTextClient(toolbar);
 		
 		Composite client=toolkit.createComposite(section,SWT.NONE);
@@ -450,30 +428,25 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		restList.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(1, 5).create());
 		restList.setContentProvider(new ArrayContentProvider());
 		restList.setLabelProvider(new RestLabelProvider());
-		restList.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getStructuredSelection().getFirstElement() instanceof Element) {
-					Control[] children = restOpsSection.getChildren();
-					for (int i = 0; i < children.length; i++) {
-						Control child = children[i];
-						child.dispose();
-					}
-					
-					Element restElement = (Element) event.getStructuredSelection().getFirstElement();
-					if (restElement.getChildNodes().getLength() > 0) {
-						for (int i = 0; i < restElement.getChildNodes().getLength(); i++) {
-							Node child = restElement.getChildNodes().item(i);
-							if (child instanceof Element) {
-								Element elChild = (Element) child;
-								String verbUri = elChild.getAttribute("uri"); //$NON-NLS-1$
-								Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
-								operation.setData(REST_VERB_FLAG, elChild);
-							}
+		restList.addSelectionChangedListener(event -> {
+			if (event.getStructuredSelection().getFirstElement() instanceof Element) {
+				clearUI();
+				
+				Element restElement = (Element) event.getStructuredSelection().getFirstElement();
+				setSelection(new StructuredSelection(new CamelBasicModelElement(null, restElement)));
+				
+				if (restElement.getChildNodes().getLength() > 0) {
+					for (int i = 0; i < restElement.getChildNodes().getLength(); i++) {
+						Node child = restElement.getChildNodes().item(i);
+						if (child instanceof Element) {
+							Element elChild = (Element) child;
+							String verbUri = elChild.getAttribute("uri"); //$NON-NLS-1$
+							Composite operation = createVerbComposite(restOpsSection, elChild.getTagName(), verbUri);
+							operation.setData(RestConfigConstants.REST_VERB_FLAG, elChild);
 						}
 					}
-					restOpsSection.layout();
 				}
+				restOpsSection.layout();
 			}
 		});
 
@@ -490,18 +463,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		section.setLayoutData(gd);
 		section.setLayout(new GridLayout(2, false));
 
-		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-		ToolBar toolbar = toolBarManager.createControl(section);
-		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-
-		// Add action to the tool bar
-		AddAction action = new AddAction();
-		toolBarManager.add(action);
-		DeleteAction daction = new DeleteAction();
-		toolBarManager.add(daction);
-
-		toolBarManager.update(true);
-
+		ToolBar toolbar = createToolbar(section);
 		section.setTextClient(toolbar);
 
 		Composite client=toolkit.createComposite(section,SWT.BORDER);
@@ -531,26 +493,14 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 
 	private Composite createRestConfigurationTabSection() {
 		Section section = toolkit.createSection(tabFolder, Section.EXPANDED | Section.TITLE_BAR | Section.DESCRIPTION);
-		section.setText(REST_CONFIGURATION_TAG);
+		section.setText(RestConfigConstants.REST_CONFIGURATION_TAG.toUpperCase());
 		section.setDescription("Specify the details of the REST Configuration.");
 		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,false);
 		section.setLayoutData(gd);
 		section.setLayout(new GridLayout(2, false));
 
-		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-
-		ToolBar toolbar = toolBarManager.createControl(section);
-		toolbar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-
-		// Add action to the tool bar
-		AddAction action = new AddAction();
-		toolBarManager.add(action);
-		DeleteAction daction = new DeleteAction();
-		toolBarManager.add(daction);
-
-		toolBarManager.update(true);
-
-		section.setTextClient(toolbar);		
+		ToolBar toolbar = createToolbar(section);
+		section.setTextClient(toolbar);
 
 		Composite client=toolkit.createComposite(section,SWT.NONE);
 		client.setLayout(new GridLayout(2, false));
@@ -558,17 +508,25 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		
 		toolkit.createLabel(client, "Component:");
 		componentCombo = new Combo(client, SWT.DROP_DOWN);
+		componentCombo.add("netty-http");
+		componentCombo.add("netty4-http");
+		componentCombo.add("jetty");
 		componentCombo.add("restlet");
+		componentCombo.add("servlet");
 		componentCombo.add("spark-rest");
+		componentCombo.add("undertow");
 		componentCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		componentCombo.setEnabled(false);
 		
 		toolkit.createLabel(client, "Context Path:");
 		contextPathText = toolkit.createText(client, "", SWT.BORDER);
 		contextPathText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		contextPathText.setEnabled(false);
 		
 		toolkit.createLabel(client, "Port:");
 		portText = toolkit.createText(client, "", SWT.BORDER);
 		portText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		portText.setEnabled(false);
 
 		toolkit.createLabel(client, "Binding Mode:");
 		bindingModeCombo = new Combo(client, SWT.DROP_DOWN);
@@ -576,12 +534,15 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		bindingModeCombo.add("json");
 		bindingModeCombo.add("json_xml");
 		bindingModeCombo.add("off");
+		bindingModeCombo.add("xml");
 		bindingModeCombo.setText("off");
 		bindingModeCombo.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		bindingModeCombo.setEnabled(false);
 
 		toolkit.createLabel(client, "Host:");
 		hostText = toolkit.createText(client, "", SWT.BORDER);
 		hostText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		hostText.setEnabled(false);
 		
 		section.setClient(client);
 		configurationTab.setControl(section);
@@ -597,24 +558,24 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	
 	private void buildModel() {
 		model = new HashMap<>();
-		getModel().put(REST_CONFIGURATION_TAG, new ArrayList<Object>());
-		getModel().put(REST_TAG, new ArrayList<Object>());
+		getModel().put(RestConfigConstants.REST_CONFIGURATION_TAG, new ArrayList<Object>());
+		getModel().put(RestConfigConstants.REST_TAG, new ArrayList<Object>());
 		CamelFile cf = parentEditor.getDesignEditor().getModel();
 		if (cf != null && cf.getRouteContainer() != null) {
 			Node node = cf.getRouteContainer().getXmlNode();
 			if (node instanceof Element) {
-				NodeList configlist = ((Element) node).getElementsByTagName(REST_CONFIGURATION_TAG);
+				NodeList configlist = ((Element) node).getElementsByTagName(RestConfigConstants.REST_CONFIGURATION_TAG);
 				if (configlist != null && configlist.getLength() > 0) {
 					for (int i=0; i < configlist.getLength(); i++) {
 						Element config = (Element) configlist.item(i);
-						getModel().get(REST_CONFIGURATION_TAG).add(config);
+						getModel().get(RestConfigConstants.REST_CONFIGURATION_TAG).add(config);
 					}
 				}
-				NodeList restlist = ((Element) node).getElementsByTagName(REST_TAG);
+				NodeList restlist = ((Element) node).getElementsByTagName(RestConfigConstants.REST_TAG);
 				if (restlist != null && restlist.getLength() > 0) {
 					for (int i=0; i < restlist.getLength(); i++) {
 						Element config = (Element) restlist.item(i);
-						getModel().get(REST_TAG).add(config);
+						getModel().get(RestConfigConstants.REST_TAG).add(config);
 					}
 				}
 			}
@@ -622,15 +583,14 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 
 	private void clearUI() {
-//		Control[] children = restConfigParent.getChildren();
-//		for (int i = 0; i < children.length; i++) {
-//			Control child = children[i];
-//			child.dispose();
-//		}
-//		if (restComposite != null) {
-//			restComposite.dispose();
-//		}
-//		form.layout();
+		if (restOpsSection != null && !restOpsSection.isDisposed()) {
+			Control[] children = restOpsSection.getChildren();
+			for (int i = 0; i < children.length; i++) {
+				Control child = children[i];
+				child.dispose();
+			}
+		}
+		form.layout();
 	}
 
 	private String getAttrValue(Element element, String attrName) {
@@ -644,46 +604,45 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 	}
 	
 	private void refreshRestConfigurationSection() {
-		if (!getModel().get(REST_CONFIGURATION_TAG).isEmpty()) {
-			for (Iterator<?> iterator = getModel().get(REST_CONFIGURATION_TAG).iterator(); iterator.hasNext();) {
-				Element restConfig = (Element) iterator.next();
-				
-				String component = "";
-				if (getAttrValue(restConfig, "component") != null) {
-					component = getAttrValue(restConfig, "component");
-				}
-				
-				String bindingMode = "off";
-				if (getAttrValue(restConfig, "bindingMode") != null) {
-					bindingMode = getAttrValue(restConfig, "bindingMode");
-				}
-				String port = "";
-				if (getAttrValue(restConfig, "port") != null) {
-					port = getAttrValue(restConfig, "port");
-				}
-				String contextPath = "";
-				if (getAttrValue(restConfig, "contextPath") != null) {
-					contextPath = getAttrValue(restConfig, "contextPath");
-				}
-				String host = "";
-				if (getAttrValue(restConfig, "host") != null) {
-					host = getAttrValue(restConfig, "host");
-				}
-				
-				componentCombo.setText(component);
-				bindingModeCombo.setText(bindingMode);
-				portText.setText(port);
-				contextPathText.setText(contextPath);
-				hostText.setText(host);
-				
-				break;
+		if (!getModel().get(RestConfigConstants.REST_CONFIGURATION_TAG).isEmpty()) {
+			Element restConfig = (Element) getModel().get(RestConfigConstants.REST_CONFIGURATION_TAG).get(0);
+			
+			String component = "";
+			if (getAttrValue(restConfig, "component") != null) {
+				component = getAttrValue(restConfig, "component");
 			}
+			
+			String bindingMode = "off";
+			if (getAttrValue(restConfig, "bindingMode") != null) {
+				bindingMode = getAttrValue(restConfig, "bindingMode");
+			}
+			String port = "";
+			if (getAttrValue(restConfig, "port") != null) {
+				port = getAttrValue(restConfig, "port");
+			}
+			String contextPath = "";
+			if (getAttrValue(restConfig, "contextPath") != null) {
+				contextPath = getAttrValue(restConfig, "contextPath");
+			}
+			String host = "";
+			if (getAttrValue(restConfig, "host") != null) {
+				host = getAttrValue(restConfig, "host");
+			}
+			
+			componentCombo.setText(component);
+			bindingModeCombo.setText(bindingMode);
+			portText.setText(port);
+			contextPathText.setText(contextPath);
+			hostText.setText(host);
 		}
 	}
 	
 	private void refreshRestSection() {
-		if (!getModel().get(REST_TAG).isEmpty()) {
-			restList.setInput(getModel().get(REST_TAG));
+		clearUI();
+		if (!getModel().get(RestConfigConstants.REST_TAG).isEmpty()) {
+			restList.setInput(getModel().get(RestConfigConstants.REST_TAG));
+			restList.refresh();
+			restList.setSelection(new StructuredSelection(restList.getElementAt(0)), true);
 		}
 	}	
 	
@@ -729,7 +688,7 @@ public class RestConfigEditor extends EditorPart implements ICamelModelListener,
 		}
 	}
 
-	class SelectionListener implements Listener {
+	class RestVerbSelectionListener implements Listener {
 		@Override
 		public void handleEvent(Event event) {
 			Control newControl = (Control) event.widget;
