@@ -20,6 +20,7 @@ import org.eclipse.reddeer.common.wait.WaitUntil;
 import org.eclipse.reddeer.eclipse.condition.ConsoleHasText;
 import org.eclipse.reddeer.eclipse.debug.ui.launchConfigurations.RunConfigurationsDialog;
 import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
+import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -35,6 +36,7 @@ import org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement.OpenShift;
 import org.jboss.tools.fuse.reddeer.view.OpenShiftExplorer;
 import org.jboss.tools.fuse.reddeer.wizard.CreateOpenShiftProjectWizard;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,6 +83,15 @@ public class FuseOnOpenShiftTest {
 		// Disable showing Error Log view after changes
 		new LogView().open();
 		new LogView().setActivateOnNewEvents(false);
+	}
+
+	@After
+	public void deleteProjects() {
+		new ProjectExplorer().deleteAllProjects();
+		OpenShiftExplorer explorer = new OpenShiftExplorer();
+		explorer.open();
+		explorer.selectConnection(OPENSHIFT_CONNECTION);
+		explorer.deleteProject(OPENSHIFT_PROJECT_NAME);
 	}
 
 	/**
