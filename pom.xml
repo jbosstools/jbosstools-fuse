@@ -104,6 +104,12 @@
 			<layout>p2</layout>
 			<url>${jbosstools-central-site}</url>
 		</repository>
+
+		<repository>
+			<id>jbosstools-openshift</id>
+			<layout>p2</layout>
+			<url>${jbosstools-openshift-site}</url>
+		</repository>
 		<!-- End of repository definitions causing a warning (see FUSETOOLS-2547) -->
 
 		<repository>
