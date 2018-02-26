@@ -10,18 +10,25 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
+import org.eclipse.reddeer.common.wait.WaitWhile;
 import org.eclipse.reddeer.core.exception.CoreLayerException;
 import org.eclipse.reddeer.swt.api.TreeItem;
 import org.eclipse.reddeer.swt.condition.ShellIsAvailable;
 import org.eclipse.reddeer.swt.condition.TreeItemHasMinChildren;
+import org.eclipse.reddeer.swt.impl.button.OkButton;
 import org.eclipse.reddeer.swt.impl.link.DefaultLink;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenu;
 import org.eclipse.reddeer.swt.impl.menu.ContextMenuItem;
+import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
 import org.eclipse.reddeer.swt.impl.toolbar.DefaultToolItem;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.view.WorkbenchView;
 import org.jboss.tools.fuse.reddeer.condition.ContextMenuHasItem;
 import org.jboss.tools.fuse.reddeer.condition.OpenShiftExplorerLoadingIsCompleted;
@@ -66,7 +73,8 @@ public class OpenShiftExplorer extends WorkbenchView {
 	/**
 	 * Checks whether OpenShift Explorer contains given connection
 	 * 
-	 * @param name the whole name of the connection in OpenShift Explorer view
+	 * @param name
+	 *            the whole name of the connection in OpenShift Explorer view
 	 * @return true - the connection is present, false - otherwise
 	 */
 	public boolean isConnectionPresent(String name) {
@@ -100,8 +108,9 @@ public class OpenShiftExplorer extends WorkbenchView {
 	}
 
 	/**
-	 * Opens Pod Log of given pod defined by the whole path in the OpenShift Explorer. Note: It opens the log of the
-	 * first pod under given deployment.
+	 * Opens Pod Log of given pod defined by the whole path in the OpenShift Explorer.<br/>
+	 * Note: It opens the log of the first pod under given deployment.<br/>
+	 * Note: The connection will lose its selection
 	 * 
 	 * @param path
 	 *            the whole path in the OpenShift Explorer: $CONNECTION --> $PROJECT --> $DEPLOYMENT
@@ -121,7 +130,53 @@ public class OpenShiftExplorer extends WorkbenchView {
 		}
 		new WaitUntil(new OpenShiftPodIsRunning(treeItem), TimePeriod.getCustom(20));
 		treeItem.select();
-		new WaitUntil(new ContextMenuHasItem(new ContextMenu(treeItem), "Pod Log..."), TimePeriod.getCustom(20));	
+		selectedConnection = null;
+		new WaitUntil(new ContextMenuHasItem(new ContextMenu(treeItem), "Pod Log..."), TimePeriod.getCustom(20));
 		new ContextMenuItem("Pod Log...").select();
+	}
+
+	/**
+	 * Returns a list of all available projects under the given connection<br/>
+	 * <b>Some connection must be selected!</b>
+	 * 
+	 * @return list of projects
+	 */
+	public List<String> getAllAvailableProjects() {
+		if (selectedConnection != null) {
+			selectedConnection.expand();
+			new WaitUntil(new TreeItemHasMinChildren(selectedConnection, 1), TimePeriod.getCustom(20));
+			new WaitUntil(new OpenShiftExplorerLoadingIsCompleted(selectedConnection), TimePeriod.getCustom(20));
+			List<String> tmp = new ArrayList<>();
+			for (TreeItem item : selectedConnection.getItems()) {
+				tmp.add(item.getText());
+			}
+			return tmp;
+		} else {
+			throw new OpenShiftExplorerException("No Connection was selected!");
+		}
+	}
+
+	/**
+	 * Deletes the given project from the selected connection<br/>
+	 * <b>Some connection must be selected!</b><br/>
+	 * Note: The connection will lose its selection
+	 * 
+	 * @param openshiftProjectName
+	 *            name of the project (complete name which is shown in OpenShift Explorer)
+	 */
+	public void deleteProject(String openshiftProjectName) {
+		for (String project : getAllAvailableProjects()) {
+			if (project.equals(openshiftProjectName)) {
+				selectedConnection.getItem(project).select();
+				selectedConnection = null;
+				new ContextMenuItem("Delete").select();
+				new WaitUntil(new ShellIsAvailable("Delete OpenShift Project"));
+				new OkButton(new DefaultShell("Delete OpenShift Project")).click();
+				new WaitWhile(new JobIsRunning(), false);
+				return;
+			}
+		}
+		throw new OpenShiftExplorerException(
+				"No '" + openshiftProjectName + "' project is available in '" + selectedConnection.getText() + "'");
 	}
 }
