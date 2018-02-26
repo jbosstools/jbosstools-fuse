@@ -13,6 +13,7 @@ package org.jboss.tools.fuse.reddeer.view;
 import java.util.List;
 
 import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.matcher.RegexMatcher;
 import org.eclipse.reddeer.common.wait.AbstractWait;
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.core.exception.CoreLayerException;
@@ -101,7 +102,7 @@ public class JMXNavigator extends WorkbenchView {
 		log.info("Trying to identify the right process");
 		TreeItem rightItem = null;
 		log.info("Looking for '" + path[1] + "' item");
-		rightItem = getTreeItem(items, path[1]);
+		rightItem = getTreeItem(items, new RegexMatcher(path[1] + ".*").toString());
 		if (rightItem == null) {
 			for (TreeItem item : items) {
 				if ((path[1].equals("Local Camel Context") && item.getText().startsWith("maven [")
