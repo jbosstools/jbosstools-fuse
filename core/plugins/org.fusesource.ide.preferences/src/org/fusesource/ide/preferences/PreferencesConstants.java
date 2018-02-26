@@ -25,6 +25,7 @@ public interface PreferencesConstants {
 	static final String EDITOR_FIGURE_FG_COLOR = "diagramFigureForegroundColorPreference";
 	static final String EDITOR_TEXT_COLOR = "diagramTextColorPreference";
 	static final String EDITOR_TABLE_CHART_BG_COLOR = "diagramTableChartBackgroundColorPreference";
+	static final String EDITOR_SHOW_REST_PAGE = "showRestPagePreference";
 
 	static final String EDITOR_TABLE_HEALTH_CHART_COLOR_PREFIX = "tableHealthChartColor";
 
