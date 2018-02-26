@@ -47,7 +47,8 @@ public class MessagesView extends WorkbenchView {
 		for (TableItem item : table.getItems()) {
 			Message msg = new Message();
 			msg.setTraceId(Integer.parseInt(item.getText()));
-			msg.setTraceNode(item.getText(14));
+			msg.setTraceNode(item.getText(14));			
+			msg.setMessageBody(item.getText(2));
 			data.add(msg);
 		}
 		log.debug(data.size() + "items were found.");
@@ -70,8 +71,22 @@ public class MessagesView extends WorkbenchView {
 		Message msg = new Message();
 		msg.setTraceId(Integer.parseInt(item.getText()));
 		msg.setTraceNode(item.getText(15));
-
+		msg.setMessageBody(item.getText(2));
 		return msg;
+	}
+	
+	/**
+	 * Tries to find specific message in Message view
+	 * 
+	 * @return true/false
+	 */
+	public boolean containsMessageBody(String messageBody) {
+		activate();
+		for (Message message : getAllMessages()) {
+			if(message.getMessageBody().equals(messageBody))
+				return true;
+		}
+		return false;
 	}
 }
 

@@ -19,6 +19,7 @@ public class Message {
 
 	int traceId;
 	String traceNode;
+	String messageBody;
 
 	public int getTraceId() {
 		return traceId;
@@ -34,5 +35,13 @@ public class Message {
 
 	public void setTraceNode(String traceNode) {
 		this.traceNode = traceNode;
+	}
+	
+	public void setMessageBody(String messageBody) {
+		this.messageBody = messageBody;
+	}
+	
+	public String getMessageBody() {
+		return this.messageBody;
 	}
 }
