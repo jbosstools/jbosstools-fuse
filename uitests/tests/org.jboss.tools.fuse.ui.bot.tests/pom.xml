@@ -121,6 +121,12 @@
  							<artifactId>org.jboss.tools.jmx.feature.feature.group</artifactId>
  							<version>0.0.0</version>
  						</dependency>
+						<!-- We need Openshift plugin -->
+ 						<dependency>
+ 							<type>p2-installable-unit</type>
+ 							<artifactId>org.jboss.tools.openshift.feature.feature.group</artifactId>
+ 							<version>0.0.0</version>
+ 						</dependency>
 					</dependencies>
 				</configuration>
 			</plugin>

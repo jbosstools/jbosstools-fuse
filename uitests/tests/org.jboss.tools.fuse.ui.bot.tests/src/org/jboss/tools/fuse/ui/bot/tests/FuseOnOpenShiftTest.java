@@ -23,10 +23,12 @@ import org.eclipse.reddeer.eclipse.ui.console.ConsoleView;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.junit.requirement.inject.InjectRequirement;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
+import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequirement.OpenPerspective;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.launchconfigurations.DefaultLaunchConfigurationJRETab;
 import org.jboss.tools.fuse.reddeer.launchconfigurations.MavenBuildLaunchConfiguration;
+import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferenceUtil;
 import org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.OpenShiftRequirement.OpenShift;
@@ -44,6 +46,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(RedDeerSuite.class)
 @OpenShift
+@OpenPerspective(FuseIntegrationPerspective.class)
 public class FuseOnOpenShiftTest {
 
 	private static final String BUILD_OK = "BUILD SUCCESS";
