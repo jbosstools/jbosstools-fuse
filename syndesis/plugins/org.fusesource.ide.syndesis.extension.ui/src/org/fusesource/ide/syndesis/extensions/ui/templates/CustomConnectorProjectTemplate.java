@@ -27,7 +27,7 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIAc
  * @author lheinema
  *
  */
-public class BasicSyndesisExtensionXmlProjectTemplate extends AbstractProjectTemplate {
+public class CustomConnectorProjectTemplate extends AbstractProjectTemplate {
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {

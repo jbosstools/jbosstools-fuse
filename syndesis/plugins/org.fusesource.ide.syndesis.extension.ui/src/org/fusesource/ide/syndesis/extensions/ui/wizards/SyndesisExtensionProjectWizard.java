@@ -20,10 +20,11 @@ import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
-import org.fusesource.ide.syndesis.extensions.ui.templates.BasicSyndesisExtensionXmlProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomConnectorProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsCamelRouteProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsJavaBeanProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardExtensionDetailsPage;
-import org.fusesource.ide.syndesis.extensions.ui.wizards.pages.SyndesisExtensionProjectWizardVersionsPage;
 
 /**
  * @author lhein
@@ -33,9 +34,10 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 	protected IStructuredSelection selection;
 
 	protected ProjectWizardLocationPage locationPage;
-	protected SyndesisExtensionProjectWizardVersionsPage versionPage;
 	protected SyndesisExtensionProjectWizardExtensionDetailsPage extensionDetailsPage;
 
+	private SyndesisExtension extensionModel = new SyndesisExtension();
+	
 	public SyndesisExtensionProjectWizard() {
 		super();
 		setWindowTitle(Messages.newProjectWizardTitle);
@@ -71,9 +73,6 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		locationPage = new ProjectWizardLocationPage(SyndesisExtensionsUIActivator.imageDescriptorFromPlugin(SyndesisExtensionsUIActivator.PLUGIN_ID, SyndesisExtensionsUIActivator.SYNDESIS_EXTENSION_PROJECT_ICON));
 		addPage(locationPage);
 
-		versionPage = new SyndesisExtensionProjectWizardVersionsPage();
-		addPage(versionPage);
-		
 		extensionDetailsPage = new SyndesisExtensionProjectWizardExtensionDetailsPage();
 		addPage(extensionDetailsPage);
 	}
@@ -84,20 +83,25 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		if (!locationPage.isInWorkspace()) {
 			metadata.setLocationPath(locationPage.getLocationPath());
 		}
-		metadata.setSyndesisExtensionConfig(getSyndesisExtension());
-		metadata.setTemplate(new BasicSyndesisExtensionXmlProjectTemplate());
+		// TODO: remove after we got a logic to determine the springboot and camel versions
+		extensionModel.setSpringBootVersion("1.5.8.RELEASE");
+		extensionModel.setCamelVersion("2.20.1");
+		// end of TODO
+		metadata.setSyndesisExtensionConfig(extensionModel);
+		if (extensionDetailsPage.isCustomConnector()) {
+			// custom connector template
+			metadata.setTemplate(new CustomConnectorProjectTemplate());
+		} else if (extensionDetailsPage.isCamelRoute()) {
+			// custom step as camel route template
+			metadata.setTemplate(new CustomStepAsCamelRouteProjectTemplate());
+		} else {
+			// custom step as java bean template
+			metadata.setTemplate(new CustomStepAsJavaBeanProjectTemplate());
+		}
 		return metadata;
 	}
 	
-	private SyndesisExtension getSyndesisExtension() {
-		SyndesisExtension extension = new SyndesisExtension();
-		extension.setSpringBootVersion(versionPage.getSpringBootVersion());
-		extension.setCamelVersion(versionPage.getCamelVersion());
-		extension.setSyndesisVersion(versionPage.getSyndesisVersion());
-		extension.setExtensionId(extensionDetailsPage.getExtensionId());
-		extension.setVersion(extensionDetailsPage.getExtensionVersion());
-		extension.setName(extensionDetailsPage.getExtensionName());
-		extension.setDescription(extensionDetailsPage.getExtensionDescription());
-		return extension;
+	public SyndesisExtension getSyndesisExtension() {
+		return extensionModel;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat, Inc.
+ * Copyright (c) 2018 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,41 +10,113 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.ValidationStatusProvider;
+import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.conversion.IConverter;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.databinding.dialog.IValidationMessageProvider;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ControlDecorationHelper;
-import org.fusesource.ide.foundation.ui.util.Widgets;
-import org.fusesource.ide.syndesis.extensions.core.util.SyndesisExtensionsUtil;
+import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
+import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard;
+import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionIdValidator;
+import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionNameValidator;
+import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionVersionValidator;
 
 /**
  * @author lheinema
  */
 public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPage {
 
-	private Text extensionIdText;
-	private Text extensionVersionText;
-	private Text extensionNameText;
-	private Text extensionDescriptionText;
-	private Text extensionTagsText;
-	private Map<Control, ControlDecoration> errorMarkers = new HashMap<>();
+	private SelectionListener btnGroupSelectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			customConnector = customConnectorRadio.getSelection();
+			stepButtonGroup.setVisible(customStepRadio.getSelection());
+		}
+	};
+	
+	private SelectionListener stepSelectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			camelRoute = stepCamelRouteRadio.getSelection();
+		}
+	};
+	
+	private IValidationMessageProvider dummyMessageProvider = new IValidationMessageProvider() {
+		
+		@Override
+		public int getMessageType(ValidationStatusProvider statusProvider) {
+			IStatus s = getStatus(statusProvider);
+			if (!s.isOK()) {
+				return IMessageProvider.ERROR;
+			}
+			return IMessageProvider.NONE;
+		}
+		
+		@Override
+		public String getMessage(ValidationStatusProvider statusProvider) {
+			IStatus s = getStatus(statusProvider);
+			if (!s.isOK()) {
+				return Messages.newProjectWizardExtensionDetailsPageErrorValidationError;
+			}
+			return null;
+		}
+		
+		private IStatus getStatus(ValidationStatusProvider statusProvider) {
+			if (statusProvider != null) {
+				IObservableValue<IStatus> s = statusProvider.getValidationStatus();
+				return s.getValue();
+			}
+			return Status.OK_STATUS;
+		}
+	};
+	
+	private ComboViewer syndesisVersionCombo;
+	private Button customStepRadio;
+	private Button customConnectorRadio;
+	private Button stepCamelRouteRadio;
+	private Composite stepButtonGroup;
+	
 	private ControlDecorationHelper controlDecorationHelper =  new ControlDecorationHelper();
+	private SyndesisExtensionProjectWizard wizard;
+	private Map<String, String> syndesisVersionMap = new IgniteVersionMapper().getMapping();
+	private boolean customConnector;
+	private boolean camelRoute;
 	
 	public SyndesisExtensionProjectWizardExtensionDetailsPage() {
 		super(Messages.newProjectWizardExtensionDetailsPageName);
@@ -56,28 +128,207 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	
 	@Override
 	public void createControl(Composite parent) {
+		DataBindingContext dbc = new DataBindingContext();
+		WizardPageSupport wps = WizardPageSupport.create(this, dbc);
+		wps.setValidationMessageProvider(dummyMessageProvider);
+		wizard = (SyndesisExtensionProjectWizard)getWizard();
+				
 		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayout(new GridLayout(3, false));
+		container.setLayout(new GridLayout(4, false));
 
-		this.extensionIdText = createField(container, Messages.newProjectWizardExtensionDetailsPageExtensionIdLabel, null, Messages.newProjectWizardExtensionDetailsPageExtensionIdTooltip);
-		this.extensionVersionText = createField(container, Messages.newProjectWizardExtensionDetailsPageVersionLabel, null, Messages.newProjectWizardExtensionDetailsPageVersionTooltip);
-		this.extensionNameText = createField(container, Messages.newProjectWizardExtensionDetailsPageNameLabel, null, Messages.newProjectWizardExtensionDetailsPageNameTooltip);
-		this.extensionDescriptionText = createField(container, Messages.newProjectWizardExtensionDetailsPageDescriptionLabel, Messages.newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint, Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
-		this.extensionTagsText = createField(container, Messages.newProjectWizardExtensionDetailsPageTagsLabel, Messages.newProjectWizardExtensionDetailsPageOptionalTagsFieldHint, Messages.newProjectWizardExtensionDetailsPageTagsTooltip);
+		createSyndesisVersionControls(container, dbc);
+		
+		Label spacer = new Label(container, SWT.NONE);
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		spacer.setLayoutData(gridData);
+		
+		Label extensionDetailsLabel = new Label(container, SWT.NONE);
+		extensionDetailsLabel.setText(Messages.newProjectWizardExtensionDetailsPageExtensionDetailsLabel);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		extensionDetailsLabel.setLayoutData(gridData);
+		
+		Text extensionIdText = createField(container, Messages.newProjectWizardExtensionDetailsPageExtensionIdLabel, null, Messages.newProjectWizardExtensionDetailsPageExtensionIdTooltip);
+		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy.setBeforeSetValidator(new SyndesisExtensionIdValidator());		
+		createBinding(dbc, extensionIdText, "extensionId", updateStrategy);
+
+		Text extensionNameText = createField(container, Messages.newProjectWizardExtensionDetailsPageNameLabel, null, Messages.newProjectWizardExtensionDetailsPageNameTooltip);
+		updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy.setBeforeSetValidator(new SyndesisExtensionNameValidator());
+		createBinding(dbc, extensionNameText, "name", updateStrategy);
+
+		Text extensionDescriptionText = createField(container, Messages.newProjectWizardExtensionDetailsPageDescriptionLabel, Messages.newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint, Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
+		createBinding(dbc, extensionDescriptionText, "description");
+
+		Text extensionVersionText = createField(container, Messages.newProjectWizardExtensionDetailsPageVersionLabel, null, Messages.newProjectWizardExtensionDetailsPageVersionTooltip);
+		updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy.setBeforeSetValidator(new SyndesisExtensionVersionValidator());
+		createBinding(dbc, extensionVersionText, "version", updateStrategy);
+		
+		spacer = new Label(container, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		spacer.setLayoutData(gridData);
+		
+		createExtensionTypeRadioGroup(container);
+				
+		spacer = new Label(container, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		spacer.setLayoutData(gridData);
+		
+		createStepTypeRadioGroup(container);
 		
 		setControl(container);
 		
-		validateFields();
-		
 		extensionIdText.setFocus();
 	}
+	
+	private Binding createBinding(DataBindingContext dbc, Widget control, String property) {
+		return createBinding(dbc, control, property, null);
+	}
+	
+	private Binding createBinding(DataBindingContext dbc, Widget control, String property, UpdateValueStrategy updateStrategy) {
+		IObservableValue target = null;
+		if (control instanceof Combo) {
+			target = WidgetProperties.selection().observe(control);	
+		} else if (control instanceof Text) {
+			target = WidgetProperties.text(SWT.Modify).observe(control);
+		} else {
+			// not supported
+		}
+		IObservableValue model= BeanProperties.value(SyndesisExtension.class, property).observe(wizard.getSyndesisExtension());
+		if (model != null && target != null) {
+			Binding b = dbc.bindValue(target, model, updateStrategy, null);
+			ControlDecorationSupport.create(b, SWT.TOP | SWT.LEFT);
+			return b;
+		}
+		return null;
+	}
 
+	private void createSyndesisVersionControls(Composite container, DataBindingContext dbc) {
+		Label syndesisVersionLabel = new Label(container, SWT.NONE);
+		syndesisVersionLabel.setText(Messages.newProjectWizardExtensionDetailsPageSyndesisVersionLabel);
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		syndesisVersionLabel.setLayoutData(gridData);
+		
+		Label spacer = new Label(container, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
+		syndesisVersionCombo = new ComboViewer(container, SWT.BORDER | SWT.DROP_DOWN);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
+		syndesisVersionCombo.getCombo().setLayoutData(gridData);
+		syndesisVersionCombo.getCombo().setToolTipText(Messages.newProjectWizardExtensionDetailsPageSyndesisVersionTooltip);
+		new ControlDecorationHelper().addInformationOnFocus(syndesisVersionCombo.getCombo(), Messages.newProjectWizardExtensionDetailsPageSyndesisVersionTooltip);
+		syndesisVersionCombo.setLabelProvider(new SyndesisVersionLabelProvider());
+		syndesisVersionCombo.setComparator(new ViewerComparator(Comparator.reverseOrder()));
+		syndesisVersionCombo.setContentProvider(ArrayContentProvider.getInstance());
+		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
+		updateStrategy.setConverter(IConverter.create(String.class, String.class, o1 -> translateDisplayTextToVersion((String) o1)));
+		createBinding(dbc, syndesisVersionCombo.getCombo(), "syndesisVersion", updateStrategy);
+		
+		syndesisVersionCombo.setInput(getSyndesisVersions());
+		syndesisVersionCombo.getCombo().select(0);
+		
+		Button syndesisVersionValidationBtn = new Button(container, SWT.PUSH);
+		GridData verifyVersionButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		syndesisVersionValidationBtn.setLayoutData(verifyVersionButtonData);
+		syndesisVersionValidationBtn.setText(Messages.newProjectWizardExtensionDetailsPageSyndesisVersionValidationLabel);
+		syndesisVersionValidationBtn.setToolTipText(Messages.newProjectWizardExtensionDetailsPageSyndesisVersionValidationTooltip);
+		syndesisVersionValidationBtn.addSelectionListener(new VersionValidationHandler());
+	}
+	
+	private void createStepTypeRadioGroup(Composite container) {
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		stepButtonGroup = new Composite(container, SWT.NONE);
+		stepButtonGroup.setLayoutData(gridData);
+		stepButtonGroup.setLayout(new GridLayout(4, false));
+
+		Label stepTypeLabel = new Label(stepButtonGroup, SWT.NONE);
+		stepTypeLabel.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionLabel);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		stepTypeLabel.setLayoutData(gridData);
+
+		Label spacer = new Label(stepButtonGroup, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
+		Button stepJavaBeanRadio = new Button(stepButtonGroup, SWT.RADIO);
+		stepJavaBeanRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanLabel);
+		stepJavaBeanRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanHint);
+		stepJavaBeanRadio.setLayoutData(gridData);
+		stepJavaBeanRadio.addSelectionListener(stepSelectionListener);
+		
+		spacer = new Label(stepButtonGroup, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
+		stepCamelRouteRadio = new Button(stepButtonGroup, SWT.RADIO);
+		stepCamelRouteRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteLabel);
+		stepCamelRouteRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteHint);
+		stepCamelRouteRadio.setLayoutData(gridData);
+		stepCamelRouteRadio.addSelectionListener(stepSelectionListener);
+		stepCamelRouteRadio.setSelection(true);
+	}
+	
+	private void createExtensionTypeRadioGroup(Composite container) {
+		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		Composite typeButtonGroup = new Composite(container, SWT.NONE);
+		typeButtonGroup.setLayoutData(gridData);
+		typeButtonGroup.setLayout(new GridLayout(4, false));
+				
+		Label extensionTypeLabel = new Label(typeButtonGroup, SWT.NONE);
+		extensionTypeLabel.setText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionLabel);
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
+		extensionTypeLabel.setLayoutData(gridData);
+
+		Label spacer = new Label(typeButtonGroup, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
+		customStepRadio = new Button(typeButtonGroup, SWT.RADIO);
+		customStepRadio.setText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionStepLabel);
+		customStepRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionStepHint);
+		customStepRadio.setLayoutData(gridData);
+		customStepRadio.addSelectionListener(btnGroupSelectionListener);
+		customStepRadio.setSelection(true);
+		
+		spacer = new Label(typeButtonGroup, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
+		customConnectorRadio = new Button(typeButtonGroup, SWT.RADIO);
+		customConnectorRadio.setText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionConnectorLabel);
+		customConnectorRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionConnectorHint);
+		customConnectorRadio.setLayoutData(gridData);
+		customConnectorRadio.addSelectionListener(btnGroupSelectionListener);
+	}
+	
 	private Text createField(Composite container, String label, String message, String toolTip) {
 		// create the label
+		Label spacer = new Label(container, SWT.NONE);
+		GridData gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		gridData.minimumWidth = 10;
+		gridData.widthHint = 15;
+		spacer.setLayoutData(gridData);
+		
 		Label l = new Label(container, SWT.NONE);
 		l.setText(label);
 		
-		GridData gridData = GridDataFactory.fillDefaults().grab(true, false).span(2, 1).indent(8, 0).create();
+		gridData = GridDataFactory.fillDefaults().grab(true, false).span(1, 1).indent(8, 0).create();
 		
 		// create the control
 		Text textField = new Text(container, SWT.BORDER);
@@ -89,90 +340,79 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		if (!Strings.isBlank(message)) {
 			textField.setMessage(message);
 		}
-		textField.addModifyListener( (ModifyEvent e) -> validateFields() );
+		
+		spacer = new Label(container, SWT.NONE);
+		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
+		spacer.setLayoutData(gridData);
 		
 		return textField;
 	}
 	
-	public String getExtensionId() {
-		if (!Widgets.isDisposed(extensionIdText) && !Strings.isBlank(extensionIdText.getText())) {
-			return extensionIdText.getText();
+	private String[] getSyndesisVersions() {
+		return syndesisVersionMap.keySet().toArray(new String[syndesisVersionMap.size()]);
+	}
+	
+	private String translateDisplayTextToVersion(String displayText) {
+		for (Entry<String, String> e : syndesisVersionMap.entrySet()) {
+			if (e.getValue().equals(displayText)) {
+				return e.getKey();
+			}
 		}
 		return null;
 	}
 	
-	public String getExtensionVersion() {
-		if (!Widgets.isDisposed(extensionVersionText) && !Strings.isBlank(extensionVersionText.getText())) {
-			return extensionVersionText.getText();
-		}
-		return null;
+	/**
+	 * @return the camelRoute
+	 */
+	public boolean isCamelRoute() {
+		return this.camelRoute;
 	}
 	
-	public String getExtensionName() {
-		if (!Widgets.isDisposed(extensionNameText) && !Strings.isBlank(extensionNameText.getText())) {
-			return extensionNameText.getText();
-		}
-		return null;
+	/**
+	 * @return the customConnector
+	 */
+	public boolean isCustomConnector() {
+		return this.customConnector;
 	}
 	
-	public String getExtensionDescription() {
-		if (!Widgets.isDisposed(extensionDescriptionText) && !Strings.isBlank(extensionDescriptionText.getText())) {
-			return extensionDescriptionText.getText();
-		}
-		return null;
-	}
-	
-	public List<String> getExtensionTags() {
-		return Arrays.asList(extensionTagsText.getText().split(","));
-	}
-	
-	private void validateFields() {
-		// validate the extension id
-		if (Strings.isBlank(extensionIdText.getText())) {
-			addErrorMarkerForControl(extensionIdText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
-			setPageComplete(false);
-		} else if (extensionIdText.getText().indexOf(' ') != -1) {
-			addErrorMarkerForControl(extensionIdText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionId);
-			setPageComplete(false);
-		} else {
-			cleanErrorMarkerForControl(extensionIdText);
+	class VersionValidationHandler extends SelectionAdapter {
+		
+		/* (non-Javadoc)
+		 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+		 */
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String syndesisVersion = syndesisVersionCombo.getCombo().getText();
+//			SyndesisVersionChecker versionChecker = new SyndesisVersionChecker(syndesisVersion);
+//			try {
+//				getWizard().getContainer().run(true, true, versionChecker);
+//			} catch (InterruptedException iex) {
+//				versionChecker.cancel();
+//				Thread.currentThread().interrupt();
+//			} catch (Exception ex) {
+//				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+//			}
+//			while (!versionChecker.isDone()) {
+//				try {
+//					Thread.sleep(100);
+//				} catch (InterruptedException ex) {
+//					Thread.currentThread().interrupt();
+//				}
+//			}
+//			updateSyndesisValidation(syndesisVersion, versionChecker.isValid());
+			// TODO: for now we always assume its valid
+			updateSyndesisValidation(syndesisVersion, true);
 		}
 		
-		// validate the extension version
-		if (Strings.isBlank(extensionVersionText.getText())) {
-			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionVersion);
-			setPageComplete(false);
-		} else if (!SyndesisExtensionsUtil.isValidSyndesisExtensionVersion(extensionVersionText.getText())) {
-			addErrorMarkerForControl(extensionVersionText, Messages.newProjectWizardExtensionDetailsPageErrorInvalidExtensionVersion);
-			setPageComplete(false);	
-		} else {
-			cleanErrorMarkerForControl(extensionVersionText);
-		}
-		
-		if (Strings.isBlank(extensionNameText.getText())) {
-			addErrorMarkerForControl(extensionNameText, Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionName);
-			setPageComplete(false);
-		} else {
-			cleanErrorMarkerForControl(extensionNameText);
-		}
-
-		if (!errorMarkers.isEmpty()) {
-			setErrorMessage(Messages.newProjectWizardExtensionDetailsPageErrorValidationError);
-		} else {
-			setErrorMessage(null);
-		}
-		setPageComplete(errorMarkers.isEmpty());
-	}
-	
-	private void addErrorMarkerForControl(Control control, String errorMessage) {
-		cleanErrorMarkerForControl(control);
-		errorMarkers.put(control, controlDecorationHelper.addErrorToControl(control, errorMessage));
-	}
-	
-	private void cleanErrorMarkerForControl(Control control) {
-		ControlDecoration dec = errorMarkers.remove(control);
-		if (dec != null) {
-			controlDecorationHelper.removeDecorationFromControl(dec);
+		private void updateSyndesisValidation(String syndesisVersion, boolean valid) {
+			if (!valid) {
+				setMessage(null);
+				setErrorMessage(NLS.bind(Messages.newProjectWizardExtensionDetailsPageErrorInvalidSyndesisVersion, syndesisVersion));
+			} else {
+				setErrorMessage(null);
+				setMessage(Messages.newProjectWizardExtensionDetailsPageSyndesisVersionValid, INFORMATION);
+			}
+			setPageComplete(valid);
 		}
 	}
 }

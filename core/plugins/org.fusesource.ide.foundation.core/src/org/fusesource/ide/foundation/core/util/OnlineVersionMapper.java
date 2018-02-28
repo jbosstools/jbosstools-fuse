@@ -53,9 +53,9 @@ public abstract class OnlineVersionMapper {
 		URL url = new URL(getUrl());
 		vMapping.load(url.openStream());
 
-		for(String camelVersion : vMapping.stringPropertyNames()) {
-			String bomVersion = vMapping.getProperty(camelVersion);
-			mapping.put(camelVersion, bomVersion);
+		for(String key : vMapping.stringPropertyNames()) {
+			String value = vMapping.getProperty(key);
+			mapping.put(key, value);
 		}
 		return mapping;
 	}
