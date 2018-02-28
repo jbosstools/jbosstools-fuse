@@ -18,7 +18,6 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
 
 /**
  * @author lheinema
- *
  */
 public class CustomConnectorProjectTemplate extends AbstractProjectTemplate {
 	
