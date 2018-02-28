@@ -15,20 +15,21 @@ import java.util.Map;
 
 import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 
-final class IgniteVersionMapper extends OnlineVersionMapper {
+public class IgniteVersionMapper extends OnlineVersionMapper {
 	
-	private static final String URL_IGNITE_VERSIONS_FILE = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/ignite.properties";
+	private static final String URL_IGNITE_VERSIONS_FILE = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/igniteVersionToDisplayName.properties";
 
-	IgniteVersionMapper() {
+	public IgniteVersionMapper() {
 		super("org.jboss.tools.fuse.ignite.url", IgniteVersionMapper.URL_IGNITE_VERSIONS_FILE);
 	}
 
 	@Override
 	protected Map<String, String> createFallbackMapping() {
 		Map<String, String> mapping = new HashMap<>();
-		mapping.put(SyndesisExtensionsUtil.KEY_CAMEL_VERSION, "2.20.1");
-		mapping.put(SyndesisExtensionsUtil.KEY_SPRING_BOOT_VERSION, "1.5.8.RELEASE");
-		mapping.put(SyndesisExtensionsUtil.KEY_SYNDESIS_VERSION, "1.2.3");
+		
+		mapping.put("1.2.9.fuse-000001-redhat-1", "1.2.9.fuse-000001-redhat-1 (Fuse Ignite TP3)");
+		mapping.put("1.3-SNAPSHOT", "1.3-SNAPSHOT (Fuse Ignite TP4)");
+		
 		return mapping;
 	}
 }
