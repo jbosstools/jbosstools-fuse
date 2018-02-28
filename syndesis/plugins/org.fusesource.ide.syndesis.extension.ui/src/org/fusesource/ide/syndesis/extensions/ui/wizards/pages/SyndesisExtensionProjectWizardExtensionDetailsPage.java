@@ -291,7 +291,6 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
 		extensionTypeLabel.setLayoutData(gridData);
 
-
 		Label spacer = new Label(typeButtonGroup, SWT.NONE);
 		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
 		gridData.minimumWidth = 10;
