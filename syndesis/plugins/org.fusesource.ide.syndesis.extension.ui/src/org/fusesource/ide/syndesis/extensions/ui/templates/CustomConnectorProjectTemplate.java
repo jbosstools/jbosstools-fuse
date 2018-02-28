@@ -20,7 +20,7 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
  * @author lheinema
  */
 public class CustomConnectorProjectTemplate extends AbstractProjectTemplate {
-	
+
 	private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
 	
 	@Override
