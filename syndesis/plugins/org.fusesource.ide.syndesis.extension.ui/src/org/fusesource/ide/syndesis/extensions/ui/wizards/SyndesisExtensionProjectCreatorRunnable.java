@@ -53,8 +53,8 @@ import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjec
  */
 public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectCreatorRunnable {
 
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis.extension";
+	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "extension-maven-plugin";
 	public static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
 	private NewSyndesisExtensionProjectMetaData syndesisMetaData;
@@ -166,8 +166,6 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	
 	private void configureProjectVersions(Model pomModel) {
 		Properties props = pomModel.getProperties();
-		props.setProperty("spring.boot.version", getExtension().getSpringBootVersion());
-		props.setProperty("camel.version", getExtension().getCamelVersion());
 		props.setProperty("syndesis.version", getExtension().getSyndesisVersion());
 		pomModel.setProperties(props);
 	}

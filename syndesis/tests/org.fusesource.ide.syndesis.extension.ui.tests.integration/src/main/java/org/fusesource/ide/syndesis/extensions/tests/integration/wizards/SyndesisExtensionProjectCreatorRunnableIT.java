@@ -83,8 +83,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	private SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
 		SyndesisExtensionsUtil.IgniteVersionInfoModel model = SyndesisExtensionsUtil.getIgniteVersionModel();
-		extension.setSpringBootVersion(model.getSpringBootVersion());
-		extension.setCamelVersion(model.getCamelVersion());
 		extension.setSyndesisVersion(model.getSyndesisVersion());
 		extension.setExtensionId("com.acme.custom");
 		extension.setVersion("1.0.0");
