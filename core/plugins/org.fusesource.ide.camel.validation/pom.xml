@@ -13,6 +13,6 @@
 
   <artifactId>org.fusesource.ide.camel.validation</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Camel Validation</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Validation</name>
  
 </project>

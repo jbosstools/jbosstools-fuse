@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Create a composite to handle the user-specification of a JBoss Fuse Runtime 
+ * Create a composite to handle the user-specification of a Red Hat Fuse Runtime 
  * installation directory.
  * 
  * Copyright (c) 2014 Red Hat, Inc.

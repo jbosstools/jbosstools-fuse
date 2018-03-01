@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.core.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Features :: Core Feature</name>
+  <name>Red Hat Fuse Tooling :: Core :: Features :: Core Feature</name>
 </project>

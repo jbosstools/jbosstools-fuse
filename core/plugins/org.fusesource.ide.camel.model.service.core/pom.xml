@@ -13,7 +13,7 @@
 
   <artifactId>org.fusesource.ide.camel.model.service.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Camel Model Service API</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Model Service API</name>
   
   <properties>
   		<bundle.xerces.version>2.11.0</bundle.xerces.version>

@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test covers Data Transformation Tooling in JBoss Fuse Runtime perspective
+ * Test covers Data Transformation Tooling in Red Hat Fuse Runtime perspective
  * 
  * @author tsedmik
  */
@@ -75,17 +75,17 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy a Fuse project with defined Data Transformation to JBoss Fuse runtime
+	 * Test tries to deploy a Fuse project with defined Data Transformation to Red Hat Fuse runtime
 	 * </p>
 	 * <b>Steps</b>
 	 * <ol>
-	 * <li>start JBoss Fuse</li>
+	 * <li>start Red Hat Fuse</li>
 	 * <li>import 'trans217' project from 'resources/projects/trans217'</li>
-	 * <li>enable Fuse Camel Nature on the project (has to be done to ensure that project can be deployed to JBoss Fuse
+	 * <li>enable Fuse Camel Nature on the project (has to be done to ensure that project can be deployed to Red Hat Fuse
 	 * Runtime)</li>
 	 * <li>deploy the project</li>
 	 * <li>invoke the route with copying a file</li>
-	 * <li>check log of JBoss Fuse (deployed project should log transformed XML file in JSON format)</li>
+	 * <li>check log of Red Hat Fuse (deployed project should log transformed XML file in JSON format)</li>
 	 * </ol>
 	 */
 	@Test
@@ -106,7 +106,7 @@ public class DataTransformationDeploymentTest extends DefaultTest {
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("Tests cannot copy XML file to home folder of JBoss Fuse Runtime!");
+			fail("Tests cannot copy XML file to home folder of Red Hat Fuse Runtime!");
 		}
 		try {
 			new WaitUntil(new FuseLogContainsText(

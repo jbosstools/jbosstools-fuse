@@ -9,7 +9,7 @@
     <groupId>org.jboss.tools.fuse.transformation</groupId>
     <artifactId>plugins</artifactId>
     <packaging>pom</packaging>
-    <name>JBoss Fuse Tooling :: Data Transformation :: Plugins</name>
+    <name>Red Hat Fuse Tooling :: Data Transformation :: Plugins</name>
     
     <modules>
         <module>org.jboss.tools.fuse.transformation.core</module>

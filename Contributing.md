@@ -28,9 +28,9 @@ At any time, you can pull changes from the upstream and merge them onto your mas
 
 The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
 
-## Building JBoss Fuse Tooling
+## Building Red Hat Fuse Tooling
 
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](./Build.md) for more information on how to setup, run and configure build.
+To build _Red Hat Fuse Tooling_ requires specific versions of Java (1.8+) and +Maven (3.0+). See this [link](./Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
@@ -44,9 +44,9 @@ But *do not* push changes without having the new and existing unit tests pass!
 
 ## Contribute fixes and features
 
-_JBoss Fuse Tooling_ is open source, and we welcome anybody who wants to participate and contribute!
+_Red Hat Fuse Tooling_ is open source, and we welcome anybody who wants to participate and contribute!
 
-If you want to fix a bug or make any changes, please log an issue in the [JBoss Fuse Tooling JIRA](https://issues.jboss.org/browse/FUSETOOLS) describing the bug or new feature and give it a fitting component type. Then we highly recommend making the changes on a topic branch named with the JIRA issue number. For example, this command creates a branch for the _FUSETOOLS-1234_ issue:
+If you want to fix a bug or make any changes, please log an issue in the [Red Hat Fuse Tooling JIRA](https://issues.jboss.org/browse/FUSETOOLS) describing the bug or new feature and give it a fitting component type. Then we highly recommend making the changes on a topic branch named with the JIRA issue number. For example, this command creates a branch for the _FUSETOOLS-1234_ issue:
 
     git checkout -b FUSETOOLS-1234
 
@@ -67,7 +67,7 @@ If the pull grabbed a lot of changes, you should rerun your build with tests ena
 
 You can then push your topic branch and its changes into your public fork repository:
 
-    git push origin FUSETOOLS-1234         # pushes your topic branch into your public fork of JBoss Fuse Tooling
+    git push origin FUSETOOLS-1234         # pushes your topic branch into your public fork of Red Hat Fuse Tooling
 
 And then [generate a pull-request](http://help.github.com/pull-requests/) where we can review the proposed changes, comment on them, discuss with you, and if everything is good then to merge the changes right into the official repository.
 
@@ -103,7 +103,7 @@ If you introduced new dependencies or changed versions it is always a good idea 
 - in Eclipse choose _Install new software_, then _Add_ to add a new update site
 - choose _Local_ in the following dialog and set the location to file://your_path_to_jbosstools-fuse>/site/target/repository
 - close the dialog with _OK_ and then select the new added update site from the drop down box
-- then in the tree below check all the _JBoss Fuse Tooling_ entries
+- then in the tree below check all the _Red Hat Fuse Tooling_ entries
 - hit _Next_ to install the software
 - if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 

@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.jmx.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Features :: JMX Feature</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Features :: JMX Feature</name>
 </project>

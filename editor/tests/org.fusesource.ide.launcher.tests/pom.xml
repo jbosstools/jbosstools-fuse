@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.launcher.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Tests :: Camel IDE Launcher Tests</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Tests :: Camel IDE Launcher Tests</name>
 </project>

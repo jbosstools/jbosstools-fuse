@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.server.fuse.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Server Adapters :: Plugins :: JBoss Fuse Adapter Core</name>
+  <name>Red Hat Fuse Tooling :: Server Adapters :: Plugins :: Red Hat Fuse Adapter Core</name>
 </project>

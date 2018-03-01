@@ -98,24 +98,24 @@
    <bundle id="org.jboss.tools.fuse.reddeer.source"><category name="AllUITests"/></bundle>
    <bundle id="org.jboss.tools.fuse.ui.bot.tests.source"><category name="AllUITests"/></bundle>
 
-   <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site - Features">
+   <category-def name="AllFeatures" label="Red Hat Fuse Tooling Nightly Build Update Site - Features">
       <description>
-         JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.
+         Red Hat Fuse Tooling Nightly Build Update Site: contains all features in this build.
       </description>
    </category-def>
-   <category-def name="AllSources" label="JBoss Fuse Tooling Nightly Build Update Site - Sources">
+   <category-def name="AllSources" label="Red Hat Fuse Tooling Nightly Build Update Site - Sources">
       <description>
-         JBoss Fuse Tooling Nightly Build Update Site: contains all source features in this build.
+         Red Hat Fuse Tooling Nightly Build Update Site: contains all source features in this build.
       </description>
    </category-def>
-   <category-def name="AllTests" label="JBoss Fuse Tooling Nightly Build Update Site - Tests">
+   <category-def name="AllTests" label="Red Hat Fuse Tooling Nightly Build Update Site - Tests">
       <description>
-         JBoss Fuse Tooling Nightly Build Update Site: contains all tests in this build.
+         Red Hat Fuse Tooling Nightly Build Update Site: contains all tests in this build.
       </description>
    </category-def>
-   <category-def name="AllUITests" label="JBoss Fuse Tooling Nightly Build Update Site - UI Tests">
+   <category-def name="AllUITests" label="Red Hat Fuse Tooling Nightly Build Update Site - UI Tests">
       <description>
-         JBoss Fuse Tooling Nightly Build Update Site: contains all UI tests in this build.
+         Red Hat Fuse Tooling Nightly Build Update Site: contains all UI tests in this build.
       </description>
    </category-def>
 </site>

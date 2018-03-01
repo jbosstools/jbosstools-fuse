@@ -13,5 +13,5 @@
   
   <artifactId>org.fusesource.ide.catalogs</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: XSD Catalogs</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: XSD Catalogs</name>
 </project>

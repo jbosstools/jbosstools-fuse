@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>m2-repo-cleaner</artifactId>
-	<name>JBoss Fuse Tooling :: Tools :: Local Repository Repair Tool</name>
+	<name>Red Hat Fuse Tooling :: Tools :: Local Repository Repair Tool</name>
 	<description>IDE m2 repair tools</description>
 
 	<prerequisites>

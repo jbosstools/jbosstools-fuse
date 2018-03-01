@@ -1,14 +1,14 @@
-# JBoss Fuse Tooling for Eclipse
+# Red Hat Fuse Tooling for Eclipse
 
-Please visit our [project site](http://tools.jboss.org/features/apachecamel.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/tooling_tutorials/) to learn more about _JBoss Fuse Tooling_ .
+Please visit our [project site](http://tools.jboss.org/features/apachecamel.html) or the [documentation provided by _Red Hat_](https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/tooling_tutorials/) to learn more about _Red Hat Fuse Tooling_ .
 
 ## Summary
 
-JBoss Fuse Tooling contains a set of plugins / features for Eclipse which allows you to create [Apache Camel](http://camel.apache.org) routes in a graphical editor, debug and launch them locally and deploy them to runtimes like [Apache Karaf](http://karaf.apache.org), [JBoss Fuse](https://developers.redhat.com/products/fuse/overview/), [JBoss EAP](https://developers.redhat.com/products/eap/overview/) and [OpenShift](https://www.openshift.com/).
+Red Hat Fuse Tooling contains a set of plugins / features for Eclipse which allows you to create [Apache Camel](http://camel.apache.org) routes in a graphical editor, debug and launch them locally and deploy them to runtimes like [Apache Karaf](http://karaf.apache.org), [Red Hat Fuse](https://developers.redhat.com/products/fuse/overview/), [JBoss EAP](https://developers.redhat.com/products/eap/overview/) and [OpenShift](https://www.openshift.com/).
 
 ## Community
 
-JBoss Fuse Tooling is open source and we like to encourage everybody to try it and get involved into the future development of the project. For more information see the *Contributing* section below.
+Red Hat Fuse Tooling is open source and we like to encourage everybody to try it and get involved into the future development of the project. For more information see the *Contributing* section below.
 
 ### Issues
 
@@ -16,7 +16,7 @@ If you want to report bugs or request new features please raise a ticket at our 
 
 ### Forums
 
-Get in touch with developers and users of JBoss Fuse Tooling in our [forum](https://stackoverflow.com/questions/tagged/jbossfuse). That's the place to ask questions or help other users.
+Get in touch with developers and users of Red Hat Fuse Tooling in our [forum](https://stackoverflow.com/questions/tagged/jbossfuse). That's the place to ask questions or help other users.
 
 ### Instant messaging
 

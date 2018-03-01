@@ -80,7 +80,7 @@ public class RuntimeCamelVersionFinder {
 	 * checks whether the given runtime is a fuse runtime
 	 * 
 	 * @param runtime	the runtime to check
-	 * @return	true if the runtime is a jboss fuse runtime
+	 * @return	true if the runtime is a Red Hat fuse runtime
 	 */
 	private boolean isJBossFuseRuntime(IRuntime runtime) {
 		return isRuntimeOfType(runtime, FUSE_RUNTIME_PREFIX);

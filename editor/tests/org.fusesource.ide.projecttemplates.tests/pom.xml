@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.projecttemplates.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Tests :: Project Templates Tests</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Tests :: Project Templates Tests</name>
 </project>

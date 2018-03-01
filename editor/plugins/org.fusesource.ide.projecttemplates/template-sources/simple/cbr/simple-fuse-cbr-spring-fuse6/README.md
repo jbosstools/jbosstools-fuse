@@ -19,13 +19,13 @@ This quick start combines use of the Camel Recipient List, which allows you to a
 In studying this quick start you will learn:
 
 * how to define a Camel route using the Spring XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
 * how to use the CBR enterprise integration pattern
 
 For more information see:
 
 * http://www.enterpriseintegrationpatterns.com/ContentBasedRouter.html for more information about the CBR EIP
-* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using JBoss Fuse
+* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using Red Hat Fuse
 
 Note: Extra steps, like use of Camel VM Component, need to be taken when accessing Camel Routes in different Camel Contexts, and in different OSGi bundles, as you are dealing with classes in different ClassLoaders.
 
@@ -37,7 +37,7 @@ Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* Red Hat Fuse 6
 
 
 Build and Deploy the Quickstart
@@ -45,8 +45,8 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-cbr` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* In the JBoss Fuse console, enter the following command:
+* Start Red Hat Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* In the Red Hat Fuse console, enter the following command:
 
         osgi:install -s mvn:com.mycompany/camel-spring-cbr/1.0.0-SNAPSHOT
 
@@ -63,7 +63,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel route has been started, you will see a directory `work/cbr/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/cbr/input` in your Red Hat Fuse installation.
 2. Copy the files you find in this quick start's `src/test/resources/data` directory to the newly created `work/cbr/input`
 directory.
 3. Wait a few moments and you will find the same files organized by country under the `work/cbr/output` directory.

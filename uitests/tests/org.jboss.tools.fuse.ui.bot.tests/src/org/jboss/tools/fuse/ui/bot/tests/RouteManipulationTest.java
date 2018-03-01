@@ -53,7 +53,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests covers 'Remote Route Editing' feature of the JBoss Fuse Tooling
+ * Tests covers 'Remote Route Editing' feature of the Red Hat Fuse Tooling
  * 
  * @author tsedmik
  */

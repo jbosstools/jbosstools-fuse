@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.fusesource.ide.syndesis</groupId>
 	<artifactId>features</artifactId>
-	<name>JBoss Fuse Tooling :: Syndesis Support :: Features</name>
+	<name>Red Hat Fuse Tooling :: Syndesis Support :: Features</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.syndesis.extension.feature</module>

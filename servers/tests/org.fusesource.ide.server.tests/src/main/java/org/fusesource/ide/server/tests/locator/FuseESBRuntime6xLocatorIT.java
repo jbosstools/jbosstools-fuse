@@ -61,7 +61,7 @@ public class FuseESBRuntime6xLocatorIT {
 		MockListener listener = new MockListener();
 		locator.searchForRuntimes(dest, listener, new NullProgressMonitor());
 		
-		assertThat(listener.getFoundRuntime().getName()).contains("Red Hat JBoss Fuse 6");
+		assertThat(listener.getFoundRuntime().getName()).contains("Red Hat Fuse 6");
 	}
 	
 	/**

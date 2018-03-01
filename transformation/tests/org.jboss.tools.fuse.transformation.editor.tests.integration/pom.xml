@@ -12,5 +12,5 @@
   
   <artifactId>org.jboss.tools.fuse.transformation.editor.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Transformation Editor :: Tests :: Transformation Editor Integration Tests</name>
+  <name>Red Hat Fuse Tooling :: Transformation Editor :: Tests :: Transformation Editor Integration Tests</name>
 </project>

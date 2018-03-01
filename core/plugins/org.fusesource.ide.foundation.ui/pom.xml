@@ -13,5 +13,5 @@
 
   <artifactId>org.fusesource.ide.foundation.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Foundation UI</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Foundation UI</name>
 </project>

@@ -13,7 +13,7 @@
 
   <artifactId>org.jboss.tools.fuse.transformation.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Data Transformation :: Plugins :: Core</name>
+  <name>Red Hat Fuse Tooling :: Data Transformation :: Plugins :: Core</name>
   
   <build>
 		<plugins>

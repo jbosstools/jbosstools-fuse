@@ -38,7 +38,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 /**
- * Tests validity of the license agreement used with JBoss Fuse Tooling
+ * Tests validity of the license agreement used with Red Hat Fuse Tooling
  * 
  * @author tsedmik
  */
@@ -68,7 +68,7 @@ public class LicenseTest {
 		new DefaultTabItem(shell, "Installed Software").activate();
 		List<String> fusePlugins = new ArrayList<String>();
 		for (TreeItem item : new DefaultTree(shell).getItems()) {
-			if (item.getText().startsWith("Red Hat JBoss Fuse Tools")) {
+			if (item.getText().startsWith("Red Hat Fuse Tools")) {
 				fusePlugins.add(item.getText());
 			}
 		}
@@ -109,7 +109,7 @@ public class LicenseTest {
 
 	/**
 	 * <p>
-	 * Tests validity of the license agreement used with JBoss Fuse Tooling
+	 * Tests validity of the license agreement used with Red Hat Fuse Tooling
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>

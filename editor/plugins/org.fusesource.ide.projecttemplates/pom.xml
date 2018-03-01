@@ -13,7 +13,7 @@
 
 	<artifactId>org.fusesource.ide.projecttemplates</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Project Templates</name>
+	<name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Project Templates</name>
 	
 	<properties>
 		<!-- Set to false to regenerate locally the template zips -->

@@ -18,7 +18,7 @@ Prerequisites
 Getting started at the Command Line
 ------------------------------------
 
-1. Install JBoss Fuse on your application server
+1. Install Red Hat Fuse on your application server
 
 2. Configure a $JBOSS_HOME environment variable to point at your application server installation directory
 

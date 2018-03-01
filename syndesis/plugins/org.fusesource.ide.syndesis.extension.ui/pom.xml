@@ -13,7 +13,7 @@
 
   <artifactId>org.fusesource.ide.syndesis.extension.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Syndesis Support :: Plugins :: Syndesis Extensions UI</name>
+  <name>Red Hat Fuse Tooling :: Syndesis Support :: Plugins :: Syndesis Extensions UI</name>
   
   <properties>
 		<!-- Set to false to regenerate locally the template zips -->

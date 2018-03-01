@@ -12,6 +12,6 @@
   
   <artifactId>org.fusesource.ide.maven</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Maven</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Maven</name>
 
 </project>

@@ -11,9 +11,9 @@ To run this project
 
     mvn camel:run
 
-To run this project from JBoss Fuse shell :
+To run this project from Red Hat Fuse shell :
 
-    - create a properties file named camel.activemq.spring.cfg in etc folder of JBoss Fuse containing ActiveMQ
+    - create a properties file named camel.activemq.spring.cfg in etc folder of Red Hat Fuse containing ActiveMQ
       connection options, i.e :
 
       broker.url       = tcp://localhost:61616

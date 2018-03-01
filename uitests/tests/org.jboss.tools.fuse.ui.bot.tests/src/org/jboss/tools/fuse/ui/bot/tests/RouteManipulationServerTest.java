@@ -57,7 +57,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests covers 'Remote Route Editing' and 'Tracing' features for a project which is deployed on JBoss Fuse Runtime
+ * Tests covers 'Remote Route Editing' and 'Tracing' features for a project which is deployed on Red Hat Fuse Runtime
  * 
  * @author tsedmik
  */
@@ -123,14 +123,14 @@ public class RouteManipulationServerTest {
 
 	/**
 	 * <p>
-	 * Tests Remote Route Editing of deployed camel context on JBoss Fuse in JMX Navigator view.
+	 * Tests Remote Route Editing of deployed camel context on Red Hat Fuse in JMX Navigator view.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>import the project 'test-route-manipulation'</li>
-	 * <li>deploy the project the JBoss Fuse runtime</li>
+	 * <li>deploy the project the Red Hat Fuse runtime</li>
 	 * <li>open JMX Navigator view</li>
-	 * <li>select the node "JBoss Fuse", "Camel", "_context1"</li>
+	 * <li>select the node "Red Hat Fuse", "Camel", "_context1"</li>
 	 * <li>select the context menu option Edit Routes</li>
 	 * <li>set focus on the recently opened Camel Editor</li>
 	 * <li>select component Log _log1</li>
@@ -141,12 +141,12 @@ public class RouteManipulationServerTest {
 	 * <li>remove otherwise branch</li>
 	 * <li>save the editor</li>
 	 * <li>open JMX Navigator view</li>
-	 * <li>try to select the node "JBoss Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer",
+	 * <li>try to select the node "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer",
 	 * "Choice", "Otherwise", "Log _log2" (successful)</li>
 	 * <li>activate Camel Editor and switch to Source page</li>
 	 * <li>remove otherwise branch</li>
 	 * <li>open JMX Navigator view</li>
-	 * <li>try to select the node "JBoss Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer",
+	 * <li>try to select the node "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer",
 	 * "Choice", "Otherwise" (unsuccessful)</li>
 	 * </ol>
 	 */
@@ -154,8 +154,8 @@ public class RouteManipulationServerTest {
 	public void testRemoteRouteEditing() {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
-		jmx.getNode("Local Processes", "JBoss Fuse", "Camel");
-		TreeItem jmxNode = jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1");
+		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel");
+		TreeItem jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Edit Routes").select();
 		CamelEditor editor = new CamelEditor(new DefaultEditor(new RegexMatcher("<connected>Remote CamelContext:.*")).getTitle());
@@ -166,26 +166,26 @@ public class RouteManipulationServerTest {
 		editor.setProperty("Message *", "AAA-BBB-CCC");
 		editor.save();
 		assertTrue(new FuseShellSSH().containsLog("AAA-BBB-CCC"));
-		assertNotNull(jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise", "Log _log2"));
+		assertNotNull(jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise", "Log _log2"));
 		editor.activate();
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/blueprint-route-edit.xml");
 		CamelEditor.switchTab("Design");
 		jmx.refreshLocalProcesses();
-		assertNull(jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise"));
+		assertNull(jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1", "Routes", "_route1", "timer:EverySecondTimer", "SetBody _setBody1", "Choice", "Otherwise"));
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
 	/**
 	 * <p>
-	 * Tests Tracing of deployed camel context on JBoss Fuse in JMX Navigator view.
+	 * Tests Tracing of deployed camel context on Red Hat Fuse in JMX Navigator view.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>import the project 'test-route-manipulation'</li>
-	 * <li>deploy the project the JBoss Fuse runtime</li>
+	 * <li>deploy the project the Red Hat Fuse runtime</li>
 	 * <li>open JMX Navigator view</li>
-	 * <li>select the node "JBoss Fuse", "Camel", "_context1"</li>
+	 * <li>select the node "Red Hat Fuse", "Camel", "_context1"</li>
 	 * <li>select the context menu option Start Tracing</li>
 	 * <li>check if the context menu option was changed into Stop Tracing Context</li>
 	 * <li>open Message View</li>
@@ -197,20 +197,20 @@ public class RouteManipulationServerTest {
 	public void testTracing() {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.refreshLocalProcesses();
-		jmx.getNode("Local Processes", "JBoss Fuse", "Camel");
+		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		TreeItem jmxNode = jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1");
+		TreeItem jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Start Tracing").select();
 		AbstractWait.sleep(TimePeriod.SHORT);
-		jmxNode = jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1");
+		jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();;
 		MessagesView msg = new MessagesView();
 		msg.open();
-		jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1").select();
+		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1").select();
 		assertTrue(msg.getAllMessages().size() > 4);
-		jmxNode = jmx.getNode("Local Processes", "JBoss Fuse", "Camel", "_context1");
+		jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);

@@ -293,7 +293,7 @@
       <GlobalConfigCategory
             icon="icons/editor/fuse_icon_16c.png"
             id="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
-            name="JBoss Fuse">
+            name="Red Hat Fuse">
       </GlobalConfigCategory>
       <GlobalConfigCategory
             icon="icons/editor/add.png"

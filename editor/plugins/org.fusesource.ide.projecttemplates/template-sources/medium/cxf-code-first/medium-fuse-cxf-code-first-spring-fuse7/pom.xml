@@ -27,7 +27,7 @@
 		<version.maven-surefire-plugin>2.19.1</version.maven-surefire-plugin>
 		<skipTests>true</skipTests>
 
-		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
+		<!-- the version of the Red Hat Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>%%%PLACEHOLDER_BOMVERSION%%%</jboss.fuse.bom.version>
 		<camel.version>2.20.1</camel.version>
 	</properties>

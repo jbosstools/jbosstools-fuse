@@ -13,6 +13,6 @@
 
   <artifactId>org.fusesource.ide.jmx.diagram.view</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Plugins :: JMX Diagram View</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Plugins :: JMX Diagram View</name>
 
 </project>

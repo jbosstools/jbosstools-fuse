@@ -19,6 +19,6 @@
     </properties>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>build-config</artifactId>
-    <name>JBoss Fuse Tooling :: Build Configuration</name>
+    <name>Red Hat Fuse Tooling :: Build Configuration</name>
     <version>10.3.0-SNAPSHOT</version>
 </project>

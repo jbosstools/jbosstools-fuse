@@ -12,7 +12,7 @@
   
   <artifactId>org.fusesource.ide.jmx.activemq</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Plugins :: Apache ActiveMQ Facade</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Plugins :: Apache ActiveMQ Facade</name>
   
   <build>
 		<plugins>

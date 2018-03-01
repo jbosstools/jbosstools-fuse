@@ -171,7 +171,7 @@ public class NewFuseProjectWizardTest {
 	 * <li>Set project name</li>
 	 * <li>Hit 'Next'</li>
 	 * <li>Hit 'Next'</li>
-	 * <li>Select 'Use a predefined template' and 'JBoss Fuse --> Beginner --> Content Based Router</li>
+	 * <li>Select 'Use a predefined template' and 'Red Hat Fuse --> Beginner --> Content Based Router</li>
 	 * <li>Select 'Blueprint DSL'</li>
 	 * <li>Finish the wizard</li>
 	 * <li>Check the project - should be created without any problems</li>
@@ -186,7 +186,7 @@ public class NewFuseProjectWizardTest {
 		wiz.next();
 		wiz.selectCamelVersion(SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254);
 		wiz.next();
-		wiz.selectTemplate("JBoss Fuse", "Beginner", "Content Based Router");
+		wiz.selectTemplate("Red Hat Fuse", "Beginner", "Content Based Router");
 		wiz.setProjectType(ProjectType.BLUEPRINT);
 		wiz.finish();
 		assertFalse("Project was created with errors", hasErrors());

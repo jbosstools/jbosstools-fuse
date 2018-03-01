@@ -8,7 +8,7 @@
     </parent>
     <artifactId>org.jboss.tools.fuse.transformation.editor</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>JBoss Fuse Tooling :: Data Transformation :: Plugins :: Editor</name>
+    <name>Red Hat Fuse Tooling :: Data Transformation :: Plugins :: Editor</name>
     <dependencies>
 	    <dependency>
 	      <groupId>ca.uhn.hapi</groupId>
