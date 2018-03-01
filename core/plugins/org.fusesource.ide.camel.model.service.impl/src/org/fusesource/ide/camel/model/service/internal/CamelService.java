@@ -41,7 +41,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataForma
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
-import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.preferences.StagingRepositoriesUtils;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 
 /**
@@ -58,7 +58,6 @@ public class CamelService implements ICamelManagerService {
 	
 	private File tempFolder;
 
-	private CamelMavenUtils camelMavenUtils = new CamelMavenUtils();
 	private IPluginLog logger;
 
 	public CamelService() {
@@ -146,7 +145,7 @@ public class CamelService implements ICamelManagerService {
 	}
 
 	private void configureAdditionalRepos(MavenVersionManager versionManager) {
-		List<List<String>> additionalM2Repos = camelMavenUtils.getAdditionalRepos();
+		List<List<String>> additionalM2Repos = StagingRepositoriesUtils.getAdditionalRepos();
 		for (List<String> repo : additionalM2Repos) {
 			String repoName = repo.get(0);
 			String repoUri = repo.get(1);
@@ -319,7 +318,7 @@ public class CamelService implements ICamelManagerService {
 		} catch (IOException ex) {
 			logger.logError(ex);
 		} finally {
-			for (List<String> rep : camelMavenUtils.getAdditionalRepos()) {
+			for (List<String> rep : StagingRepositoriesUtils.getAdditionalRepos()) {
 				tmpMan.addMavenRepository(rep.get(0), rep.get(1));
 			}
 		}

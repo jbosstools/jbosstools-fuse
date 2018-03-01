@@ -29,6 +29,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.ui.internal.search.util.IndexSearchEngine;
 import org.eclipse.m2e.core.ui.internal.search.util.Packaging;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.preferences.StagingRepositoriesUtils;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 
 public class OnlineArtifactVersionSearcher {
@@ -78,7 +79,7 @@ public class OnlineArtifactVersionSearcher {
 			return versions.iterator().next();
 		} else {
 			//search with Aether APi
-			List<List<String>> additionalRepos = new CamelMavenUtils().getAdditionalRepos();
+			List<List<String>> additionalRepos = StagingRepositoriesUtils.getAdditionalRepos();
 			List<Repository> additionalMavenRepos = new ArrayList<>();
 			for (List<String> repo : additionalRepos) {
 				Repository mavenRepo = new Repository();
