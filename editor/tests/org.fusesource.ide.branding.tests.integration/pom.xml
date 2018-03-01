@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.branding.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Tests :: Camel Branding Integration Tests</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Tests :: Camel Branding Integration Tests</name>
 </project>

@@ -25,7 +25,7 @@
 		<skipTests>true</skipTests>
 		<cxf-version>3.0.2</cxf-version>
 
-		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
+		<!-- the version of the Red Hat Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
 	</properties>
 	<dependencyManagement>

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.graph</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Graph</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Graph</name>
 </project>

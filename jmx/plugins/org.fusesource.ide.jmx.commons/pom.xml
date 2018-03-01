@@ -13,6 +13,6 @@
 
   <artifactId>org.fusesource.ide.jmx.commons</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Plugins :: JMX Commons</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Plugins :: JMX Commons</name>
 
 </project>

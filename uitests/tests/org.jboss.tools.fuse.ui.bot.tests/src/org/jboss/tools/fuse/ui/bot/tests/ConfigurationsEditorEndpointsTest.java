@@ -68,7 +68,7 @@ public class ConfigurationsEditorEndpointsTest extends DefaultTest {
 	
 	private static final String PROJECT_NAME = "cbr";
 	private static final String CONTEXT = "camel-context.xml";
-	private static final String TYPE = "JBoss Fuse";
+	private static final String TYPE = "Red Hat Fuse";
 	
 	private String element; 
 	private List<String> availableEndpoints = Arrays.asList("Atom - The atom component is used for consuming Atom RSS feeds.", 

@@ -43,11 +43,11 @@ public class SAPInstallationTest {
 
 	/**
 	 * <p>
-	 * Tries to install JBoss Fuse SAP Tool Suite
+	 * Tries to install Red Hat Fuse SAP Tool Suite
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>open Install JBoss Fuse SAP Tool Suite</li>
+	 * <li>open Install Red Hat Fuse SAP Tool Suite</li>
 	 * <li>fill required fields</li>
 	 * <li>install SAP Tooling</li>
 	 * </ol>
@@ -77,12 +77,12 @@ public class SAPInstallationTest {
 
 	public class InstallationWizard extends ImportMenuWizard {
 
-		public static final String TITLE = "Install JBoss Fuse SAP Tool Suite ";
+		public static final String TITLE = "Install Red Hat Fuse SAP Tool Suite ";
 		public static final String JCO3_SECTION = "Select JCo3 Archive File";
 		public static final String IDOC3_SECTION = "Select IDoc3 Archive File";
 
 		public InstallationWizard() {
-			super(TITLE, "JBoss Fuse", "Install JBoss Fuse SAP Tool Suite");
+			super(TITLE, "Red Hat Fuse", "Install Red Hat Fuse SAP Tool Suite");
 		}
 
 		public InstallationWizard activate() {

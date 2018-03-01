@@ -11,6 +11,6 @@
   </parent>
   
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Editor Transformation :: Tests :: Editor Transformation Tests</name>
+  <name>Red Hat Fuse Tooling :: Editor Transformation :: Tests :: Editor Transformation Tests</name>
   <artifactId>org.jboss.tools.fuse.transformation.editor.tests</artifactId>
 </project>

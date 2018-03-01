@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.cheatsheets</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Cheat Sheets</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Cheat Sheets</name>
 </project>

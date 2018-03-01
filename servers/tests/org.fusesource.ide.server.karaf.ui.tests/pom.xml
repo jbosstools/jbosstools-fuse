@@ -13,5 +13,5 @@
 
 	<artifactId>org.fusesource.ide.server.karaf.ui.tests</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<name>JBoss Fuse Tooling :: Server Adapters :: Tests :: Karaf UI Tests</name>
+	<name>Red Hat Fuse Tooling :: Server Adapters :: Tests :: Karaf UI Tests</name>
 </project>

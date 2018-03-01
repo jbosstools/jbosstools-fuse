@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Simple tests verifies only presence of JBoss Fuse Tooling plugins
+ * Simple tests verifies only presence of Red Hat Fuse Tooling plugins
  * 
  * @author tsedmik
  */
@@ -65,7 +65,7 @@ public class SimpleTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Simple test tries to open view related to JBoss Fuse Tooling
+	 * Simple test tries to open view related to Red Hat Fuse Tooling
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
@@ -80,7 +80,7 @@ public class SimpleTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Simple test tries to open perspectives related to JBoss Fuse Tooling
+	 * Simple test tries to open perspectives related to Red Hat Fuse Tooling
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>

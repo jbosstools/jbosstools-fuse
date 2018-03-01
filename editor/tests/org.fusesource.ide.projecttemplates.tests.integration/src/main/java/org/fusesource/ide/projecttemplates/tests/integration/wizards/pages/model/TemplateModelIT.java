@@ -29,7 +29,7 @@ public class TemplateModelIT {
 	
 	@Test
 	public void testCorrectNumberOfCategories() throws Exception {
-		//currently only 4: Jboss Fuse, Fuse on EAP, Fuse on OpenShift, Empty and Default category
+		//currently only 4: Red Hat Fuse, Fuse on EAP, Fuse on OpenShift, Empty and Default category
 		assertThat(new TemplateModel().getTemplateCategories()).hasSize(5);
 	}
 	

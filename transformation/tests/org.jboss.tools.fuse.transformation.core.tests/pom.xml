@@ -12,5 +12,5 @@
   
   <artifactId>org.jboss.tools.fuse.transformation.core.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core Transformation :: Tests :: Core Transformation Tests</name>
+  <name>Red Hat Fuse Tooling :: Core Transformation :: Tests :: Core Transformation Tests</name>
 </project>

@@ -13,6 +13,6 @@
 
   <artifactId>org.fusesource.ide.syndesis.extension.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Syndesis Support :: Plugins :: Syndesis Extensions Core</name>
+  <name>Red Hat Fuse Tooling :: Syndesis Support :: Plugins :: Syndesis Extensions Core</name>
 
 </project>

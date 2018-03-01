@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
 
-		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
+		<!-- the version of the Red Hat Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>%%%PLACEHOLDER_BOMVERSION%%%</jboss.fuse.bom.version>
 
 		<camel.version>2.20.1</camel.version>

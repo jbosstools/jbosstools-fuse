@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test covers Data Transformation Tooling in JBoss Fuse on EAP Runtime perspective
+ * Test covers Data Transformation Tooling in Red Hat Fuse on EAP Runtime perspective
  * 
  * @author tsedmik
  */
@@ -73,11 +73,11 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy a Fuse project with defined Data Transformation to JBoss Fuse on EAP runtime
+	 * Test tries to deploy a Fuse project with defined Data Transformation to Red Hat Fuse on EAP runtime
 	 * </p>
 	 * <b>Steps</b>
 	 * <ol>
-	 * <li>start JBoss Fuse on EAP</li>
+	 * <li>start Red Hat Fuse on EAP</li>
 	 * <li>import 'wildfly-transformation' project from 'resources/projects/datatrans'</li>
 	 * <li>deploy the project</li>
 	 * <li>invoke the route with copying a file</li>
@@ -109,7 +109,7 @@ public class DataTransformationDeploymentEAPTest extends DefaultTest {
 			Files.copy(new File(from).toPath(), new File(to).toPath(), REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("Tests cannot copy XML file to home folder of JBoss Fuse on EAP Runtime!");
+			fail("Tests cannot copy XML file to home folder of Red Hat Fuse on EAP Runtime!");
 		}
 
 		// check whether transformation was sucessful

@@ -145,7 +145,7 @@ public class JMXNavigatorServerTest {
 
 	/**
 	 * <p>
-	 * Test tries to access nodes relevant for JBoss Fuse in JMX Navigator view.
+	 * Test tries to access nodes relevant for Red Hat Fuse in JMX Navigator view.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>

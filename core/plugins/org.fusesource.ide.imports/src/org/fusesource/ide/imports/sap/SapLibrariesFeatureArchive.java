@@ -28,7 +28,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		"source code, or contact Red Hat, Attn: General Counsel,\n" + 
 		"100 East Davie St., Raleigh NC 27601 USA.\n";
 
-	private static final String FEATURE_DESCRIPTION = "Provides SAP JCo3 and IDoc3 Libraries for JBoss Fuse SAP Tooling Suite installations.";
+	private static final String FEATURE_DESCRIPTION = "Provides SAP JCo3 and IDoc3 Libraries for Red Hat Fuse SAP Tooling Suite installations.";
 
 	private static final String FEATURE_PROVIDER_NAME = "JBoss by Red Hat";
 
@@ -70,7 +70,7 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			"devUpdateSiteName=SAP Libraries Development Update Site\n" +
 			"\n" +
 			"# \"description\" property - description of the feature\n" +
-			"description=Provides SAP JCo3 and IDoc3 Libraries for JBoss Fuse SAP Tooling Suite installations.\n" +
+			"description=Provides SAP JCo3 and IDoc3 Libraries for Red Hat Fuse SAP Tooling Suite installations.\n" +
 			"copyright=Copyright (c) Red Hat, Inc., and individual contributors as indicated by the @authors tag, 2006-2017.\n ";
 
 	private static final String LICENSE_FILE_NAME = "license.html";

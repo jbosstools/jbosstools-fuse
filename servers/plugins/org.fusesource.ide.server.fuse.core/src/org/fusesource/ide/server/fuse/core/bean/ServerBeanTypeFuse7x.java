@@ -34,7 +34,7 @@ public class ServerBeanTypeFuse7x extends ServerBeanType {
 	
 	protected ServerBeanTypeFuse7x() {
 		super(	"FUSE7x", //$NON-NLS-1$
-				"JBoss Fuse 7.x", //$NON-NLS-1$
+				"Red Hat Fuse 7.x", //$NON-NLS-1$
 				"lib", //$NON-NLS-1$
 				new Fuse7xServerTypeCondition());
 	}

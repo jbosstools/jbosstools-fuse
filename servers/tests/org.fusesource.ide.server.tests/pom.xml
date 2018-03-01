@@ -13,5 +13,5 @@
 
 	<artifactId>org.fusesource.ide.server.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<name>JBoss Fuse Tooling :: Server Adapters :: Tests :: Server Tests</name>
+	<name>Red Hat Fuse Tooling :: Server Adapters :: Tests :: Server Tests</name>
 </project>

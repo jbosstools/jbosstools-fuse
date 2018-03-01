@@ -53,12 +53,12 @@ public class ServerJRETest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Tries to run JBoss Fuse server with different JRE than runs JBDS
+	 * Tries to run Red Hat Fuse server with different JRE than runs JBDS
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
 	 * <li>add new JRE different from that runs JBDS</li>
-	 * <li>add new JBoss Fuse Server Runtime with different JRE</li>
+	 * <li>add new Red Hat Fuse Server Runtime with different JRE</li>
 	 * <li>start the server</li>
 	 * <li>check Console View whether the server starting with the selected JRE</li>
 	 * </ol>

@@ -121,7 +121,7 @@ public class RegressionFuseTest extends DefaultTest {
 
 		// tests the _Cancel_ button
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new DefaultTreeItem("Red Hat JBoss Middleware", "Red Hat JBoss Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
+		new DefaultTreeItem("Red Hat JBoss Middleware", "Red Hat Fuse " + serverRequirement.getConfiguration().getServer().getVersion())
 				.select();
 		AbstractWait.sleep(TimePeriod.SHORT);
 		new PushButton("Cancel").click();

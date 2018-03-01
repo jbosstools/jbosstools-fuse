@@ -12,6 +12,6 @@
   
   <artifactId>org.fusesource.ide.jmx.karaf</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Plugins :: Apache Karaf Facade</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Plugins :: Apache Karaf Facade</name>
   
 </project>

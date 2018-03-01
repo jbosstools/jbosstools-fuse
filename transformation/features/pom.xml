@@ -10,7 +10,7 @@
   <groupId>org.jboss.tools.fuse.transformation</groupId>
   <artifactId>features</artifactId>
   <packaging>pom</packaging>
-  <name>JBoss Fuse Tooling :: Data Transformation :: Features</name>
+  <name>Red Hat Fuse Tooling :: Data Transformation :: Features</name>
 
   <modules>
     <module>org.jboss.tools.fuse.transformation.feature</module>

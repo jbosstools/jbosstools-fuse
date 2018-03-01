@@ -21,7 +21,7 @@ public abstract class BaseKarafServerTypeCondition extends AbstractCondition {
 	
 	/**
 	 * checks if the karaf is a standalone karaf or an integrated version
-	 * used in JBoss Fuse
+	 * used in Red Hat Fuse
 	 * @param location
 	 * @return
 	 */

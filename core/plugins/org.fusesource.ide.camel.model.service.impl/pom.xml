@@ -13,7 +13,7 @@
 
   <artifactId>org.fusesource.ide.camel.model.service.impl</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Camel Dynamic Service Implementation</name>
   
   <properties>
   		<bundle.camel.version>2.20.2</bundle.camel.version>

@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.server.karaf.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Server Adapters :: Plugins :: Apache Karaf Adapter Core</name>
+  <name>Red Hat Fuse Tooling :: Server Adapters :: Plugins :: Apache Karaf Adapter Core</name>
 </project>

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.preferences</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Preferences</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Preferences</name>
 </project>

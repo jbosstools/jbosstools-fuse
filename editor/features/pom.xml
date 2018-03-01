@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.fusesource.ide.editor</groupId>
 	<artifactId>features</artifactId>
-	<name>JBoss Fuse Tooling :: Camel Editor :: Features</name>
+	<name>Red Hat Fuse Tooling :: Camel Editor :: Features</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.camel.editor.feature</module>

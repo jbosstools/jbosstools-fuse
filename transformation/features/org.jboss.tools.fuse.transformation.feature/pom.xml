@@ -12,5 +12,5 @@
 
   <artifactId>org.jboss.tools.fuse.transformation.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <name>JBoss Fuse Tooling :: Data Transformation :: Features :: Data Transformation Feature</name>
+  <name>Red Hat Fuse Tooling :: Data Transformation :: Features :: Data Transformation Feature</name>
 </project>

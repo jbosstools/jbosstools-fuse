@@ -1,4 +1,4 @@
-# JBoss Tools Fuse UI Tests
+# Red Hat Fuse UI Tests
 
 ## Structure
 
@@ -65,7 +65,7 @@ Current version of JBoss Tools Fuse is built on Eclipse Oxygen, so download Ecli
 
 ### Executing tests from IDE without target platform
 
-1. Install JBoss Fuse Tools, e.g from http://download.jboss.org/jbosstools/oxygen/staging/updates/
+1. Install Red Hat Fuse Tools, e.g from http://download.jboss.org/jbosstools/oxygen/staging/updates/
 2. Install RedDeer 2.x, e.g. from http://download.eclipse.org/reddeer/releases/2.0.0/
 3. Import the tests as Existing Projects into Workspace
 4. Now, we can launch 'RedDeer Test' which is available in Run configuration

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.launcher.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Launcher UI</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Launcher UI</name>
 </project>

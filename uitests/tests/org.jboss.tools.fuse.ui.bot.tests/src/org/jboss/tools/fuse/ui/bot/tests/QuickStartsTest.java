@@ -49,7 +49,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests quickstarts which contains JBoss Fuse Runtime
+ * Tests quickstarts which contains Red Hat Fuse Runtime
  * 
  * @author tsedmik
  */
@@ -116,14 +116,14 @@ public class QuickStartsTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy 'beginner-camel-cbr' quickstart to JBoss Fuse Runtime.
+	 * Test tries to deploy 'beginner-camel-cbr' quickstart to Red Hat Fuse Runtime.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>import 'beginner-camel-cbr' project from JBoss Fuse quickstarts</li>
+	 * <li>import 'beginner-camel-cbr' project from Red Hat Fuse quickstarts</li>
 	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to JBoss Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether JBoss Fuse log contains '(CamelContext:
+	 * <li>deploy the project to Red Hat Fuse</li>
+	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
 	 * cbr-example-context) started')</li>
 	 * </ol>
 	 */
@@ -146,14 +146,14 @@ public class QuickStartsTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy 'beginner-camel-eips' quickstart to JBoss Fuse Runtime.
+	 * Test tries to deploy 'beginner-camel-eips' quickstart to Red Hat Fuse Runtime.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>import 'beginner-camel-eips' project from JBoss Fuse quickstarts</li>
+	 * <li>import 'beginner-camel-eips' project from Red Hat Fuse quickstarts</li>
 	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to JBoss Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether JBoss Fuse log contains '(CamelContext:
+	 * <li>deploy the project to Red Hat Fuse</li>
+	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
 	 * eip-example-context) started')</li>
 	 * </ol>
 	 */
@@ -177,14 +177,14 @@ public class QuickStartsTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy 'beginner-camel-errorhandler' quickstart to JBoss Fuse Runtime.
+	 * Test tries to deploy 'beginner-camel-errorhandler' quickstart to Red Hat Fuse Runtime.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>import 'beginner-camel-errorhandler' project from JBoss Fuse quickstarts</li>
+	 * <li>import 'beginner-camel-errorhandler' project from Red Hat Fuse quickstarts</li>
 	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to JBoss Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether JBoss Fuse log contains '(CamelContext:
+	 * <li>deploy the project to Red Hat Fuse</li>
+	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
 	 * errors-example-context) started')</li>
 	 * </ol>
 	 */
@@ -208,14 +208,14 @@ public class QuickStartsTest {
 
 	/**
 	 * <p>
-	 * Test tries to deploy 'beginner-camel-log' quickstart to JBoss Fuse Runtime.
+	 * Test tries to deploy 'beginner-camel-log' quickstart to Red Hat Fuse Runtime.
 	 * </p>
 	 * <b>Steps:</b>
 	 * <ol>
-	 * <li>import 'beginner-camel-log' project from JBoss Fuse quickstarts</li>
+	 * <li>import 'beginner-camel-log' project from Red Hat Fuse quickstarts</li>
 	 * <li>check that project is ok (no errors, unresolved dependencies, ...)</li>
-	 * <li>deploy the project to JBoss Fuse</li>
-	 * <li>check whether the project is successfully deployed (check whether JBoss Fuse log contains '(CamelContext:
+	 * <li>deploy the project to Red Hat Fuse</li>
+	 * <li>check whether the project is successfully deployed (check whether Red Hat Fuse log contains '(CamelContext:
 	 * log-example-context) started')</li>
 	 * </ol>
 	 */

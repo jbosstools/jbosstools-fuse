@@ -35,7 +35,7 @@ public class FuseESBRuntimeFragment extends KarafRuntimeFragment {
 
 	@Override
 	protected String getExplanationText() {
-		return "Please point to a JBoss Fuse installation.";
+		return "Please point to a Red Hat Fuse installation.";
 	}
 
 	@Override

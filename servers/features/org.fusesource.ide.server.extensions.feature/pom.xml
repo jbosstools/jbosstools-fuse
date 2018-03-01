@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.server.extensions.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <name>JBoss Fuse Tooling :: Server Adapters :: Features :: Server Adapters Feature</name>
+  <name>Red Hat Fuse Tooling :: Server Adapters :: Features :: Server Adapters Feature</name>
 </project>

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Create a WST wizard fragment associated with a composite to handle the 
- * user-specification of a JBoss Fuse Runtime installation directory.
+ * user-specification of a Red Hat Fuse Runtime installation directory.
  * 
  * Copyright (c) 2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.

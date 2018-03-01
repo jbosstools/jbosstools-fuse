@@ -9,7 +9,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 	<groupId>org.fusesource.ide.syndesis</groupId>
 	<artifactId>tests</artifactId>
-	<name>JBoss Fuse Tooling :: Syndesis Support :: Tests</name>
+	<name>Red Hat Fuse Tooling :: Syndesis Support :: Tests</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.syndesis.extension.core.tests</module>

@@ -11,7 +11,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <groupId>org.jboss.tools.fuse</groupId>
   <artifactId>transformation</artifactId>
   <packaging>pom</packaging>
-  <name>JBoss Fuse Tooling :: Data Transformation</name>
+  <name>Red Hat Fuse Tooling :: Data Transformation</name>
 
   <modules>
     <module>plugins</module>

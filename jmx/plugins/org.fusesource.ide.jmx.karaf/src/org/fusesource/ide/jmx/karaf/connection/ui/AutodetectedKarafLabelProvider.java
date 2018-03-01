@@ -29,7 +29,7 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 	private static final String KARAF_HOME_POSTFIX = " ";
 	
 	private static final String KARAF_TYPE_KARAF 	= "Apache Karaf";
-	private static final String KARAF_TYPE_FUSE  	= "JBoss Fuse";
+	private static final String KARAF_TYPE_FUSE  	= "Red Hat Fuse";
 	private static final String KARAF_TYPE_FABRIC8 	= "Fabric8";
 	private static final String KARAF_TYPE_AMQ		= "JBoss A-MQ";
 	

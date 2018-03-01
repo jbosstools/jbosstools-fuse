@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.syndesis.extension.core.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Syndesis Support :: Tests :: Syndesis Extensions Core Tests</name>
+  <name>Red Hat Fuse Tooling :: Syndesis Support :: Tests :: Syndesis Extensions Core Tests</name>
 </project>

@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.preferences.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Tests :: Preferences Integration Tests</name>
+  <name>Red Hat Fuse Tooling :: Core :: Tests :: Preferences Integration Tests</name>
 </project>

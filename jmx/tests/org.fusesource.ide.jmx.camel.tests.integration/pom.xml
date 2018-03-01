@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.jmx.camel.tests.integration</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Integration Tests :: Camel</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Integration Tests :: Camel</name>
 </project>

@@ -13,6 +13,6 @@
 
   <artifactId>org.fusesource.ide.foundation.core</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Core :: Plugins :: Foundation Core</name>
+  <name>Red Hat Fuse Tooling :: Core :: Plugins :: Foundation Core</name>
 
 </project>

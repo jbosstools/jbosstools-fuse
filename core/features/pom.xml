@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.fusesource.ide.core</groupId>
 	<artifactId>features</artifactId>
-	<name>JBoss Fuse Tooling :: Core :: Features</name>
+	<name>Red Hat Fuse Tooling :: Core :: Features</name>
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.core.feature</module>

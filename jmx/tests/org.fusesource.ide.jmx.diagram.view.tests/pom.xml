@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.jmx.diagram.view.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Tests :: Diagram ::View</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Tests :: Diagram ::View</name>
 </project>

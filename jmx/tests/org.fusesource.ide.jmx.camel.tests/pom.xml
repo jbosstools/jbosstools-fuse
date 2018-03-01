@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.jmx.camel.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Tests ::Camel</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Tests ::Camel</name>
 </project>

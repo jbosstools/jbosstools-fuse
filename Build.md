@@ -1,6 +1,6 @@
 # Build Guide
 
-This document describes how to get and build the sources. It also covers how to setup the Eclipse workspace to run _JBoss Fuse Tooling_ from inside a vanilla Eclipse.
+This document describes how to get and build the sources. It also covers how to setup the Eclipse workspace to run _Red Hat Fuse Tooling_ from inside a vanilla Eclipse.
 
 ## Get the code
 
@@ -18,9 +18,9 @@ At any time, you can pull changes from the upstream and merge them onto your mas
 
 The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
 
-## Building JBoss Fuse Tooling
+## Building Red Hat Fuse Tooling
 
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+).
+To build _Red Hat Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+).
 
 This command will run the build:
 
@@ -49,10 +49,10 @@ Now its time to open your Eclipse if you haven't done so.
 
 Here's how to setup Eclipse...
 
-- create a new workspace for working on _JBoss Fuse Tooling_
+- create a new workspace for working on _Red Hat Fuse Tooling_
 - import the project into Eclipse from directory "fuseide" (_Import... -> General -> Existing Project_)
 
-Now your Eclipse has set the target platform you need for running _JBoss Fuse Tooling_. A rebuild of all imported projects is done directly after setting the target platform. Make sure there are no more errors displayed in any of the projects.
+Now your Eclipse has set the target platform you need for running _Red Hat Fuse Tooling_. A rebuild of all imported projects is done directly after setting the target platform. Make sure there are no more errors displayed in any of the projects.
 
 ### Access Restriction errors
 
@@ -62,7 +62,7 @@ To get rid of the access restriction warnings open menu
 
 then turn Forbidden reference (access rules) to "Warning" (it was "Error").
 
-## Running JBoss Fuse Tooling
+## Running Red Hat Fuse Tooling
 
 Before trying to run the Fuse Tooling you should have built the project, imported it successfully into Eclipse and also set the correct target platform (_see the steps above_).
 

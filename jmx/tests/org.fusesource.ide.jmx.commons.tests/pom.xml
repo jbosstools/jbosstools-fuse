@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.jmx.commons.tests</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Tests :: Commons</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Tests :: Commons</name>
 </project>

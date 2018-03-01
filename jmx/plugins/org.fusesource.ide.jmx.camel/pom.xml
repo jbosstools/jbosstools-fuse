@@ -12,6 +12,6 @@
   
   <artifactId>org.fusesource.ide.jmx.camel</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: JMX :: Plugins :: Apache Camel Facade</name>
+  <name>Red Hat Fuse Tooling :: JMX :: Plugins :: Apache Camel Facade</name>
   
 </project>

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.branding</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Branding</name>
+  <name>Red Hat Fuse Tooling :: Camel Editor :: Plugins :: Branding</name>
 </project>

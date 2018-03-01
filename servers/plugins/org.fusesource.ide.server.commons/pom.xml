@@ -13,5 +13,5 @@
 
   <artifactId>org.fusesource.ide.server.commons</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Server Adapters :: Plugins :: Commons</name>
+  <name>Red Hat Fuse Tooling :: Server Adapters :: Plugins :: Commons</name>
 </project>

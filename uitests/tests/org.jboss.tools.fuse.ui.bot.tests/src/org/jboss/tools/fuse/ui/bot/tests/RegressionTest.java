@@ -183,7 +183,7 @@ public class RegressionTest extends DefaultTest {
 		new WaitUntil(new ShellIsAvailable("New Server Runtime Environment"));
 		new DefaultShell("New Server Runtime Environment").setFocus();
 		AbstractWait.sleep(TimePeriod.SHORT);
-		new DefaultTreeItem("JBoss Fuse", "JBoss Fuse 6.1").select();
+		new DefaultTreeItem("Red Hat Fuse", "Red Hat Fuse 6.1").select();
 		if (new PushButton("Finish").isEnabled()) {
 			new PushButton("Cancel").click();
 			new DefaultShell("Preferences").close();
