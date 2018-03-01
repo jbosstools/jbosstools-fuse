@@ -34,8 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SyndesisExtension extends PojoModelObservable {
 	
 	private static final String PROPERTY_OTHER = "property.other";
-	private static final String PROPERTY_SPRINGBOOTVERSION = "property.springbootversion";
-	private static final String PROPERTY_CAMELVERSION = "property.camelversion";
 	private static final String PROPERTY_SYNDESISVERSION = "property.syndesisversion";
 	private static final String PROPERTY_ID = "property.id";
 	private static final String PROPERTY_EXTENSIONID = "property.extensionid";
@@ -87,10 +85,6 @@ public class SyndesisExtension extends PojoModelObservable {
 		}
 	}
 	
-	@JsonIgnore
-	private String springBootVersion;
-	@JsonIgnore
-	private String camelVersion;
 	@JsonIgnore
 	private String syndesisVersion;
 
@@ -291,34 +285,6 @@ public class SyndesisExtension extends PojoModelObservable {
 	public void setVersion(String version) {
 		firePropertyChange(PROPERTY_VERSION, this.version, version);
 		this.version = version;
-	}
-	
-	/**
-	 * @return the camelVersion
-	 */
-	public String getCamelVersion() {
-		return this.camelVersion;
-	}
-	/**
-	 * @param camelVersion the camelVersion to set
-	 */
-	public void setCamelVersion(String camelVersion) {
-		firePropertyChange(PROPERTY_CAMELVERSION, this.camelVersion, camelVersion);
-		this.camelVersion = camelVersion;
-	}
-	/**
-	 * @return the springBootVersion
-	 */
-	public String getSpringBootVersion() {
-		return this.springBootVersion;
-	}
-	
-	/**
-	 * @param springBootVersion the springBootVersion to set
-	 */
-	public void setSpringBootVersion(String springBootVersion) {
-		firePropertyChange(PROPERTY_SPRINGBOOTVERSION, this.springBootVersion, springBootVersion);
-		this.springBootVersion = springBootVersion;
 	}
 	
 	/**

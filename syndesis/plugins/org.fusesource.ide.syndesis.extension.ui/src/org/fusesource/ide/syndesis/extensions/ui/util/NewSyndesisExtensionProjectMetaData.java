@@ -20,16 +20,6 @@ public class NewSyndesisExtensionProjectMetaData extends CommonNewProjectMetaDat
 
 	private SyndesisExtension syndesisExtensionConfig;
 	
-	@Override
-	public String getCamelVersion() {
-		return syndesisExtensionConfig.getCamelVersion();
-	}
-	
-	@Override
-	public void setCamelVersion(String camelVersion) {
-		this.syndesisExtensionConfig.setCamelVersion(camelVersion);
-	}
-	
 	/**
 	 * @return the syndesisExtensionConfig
 	 */

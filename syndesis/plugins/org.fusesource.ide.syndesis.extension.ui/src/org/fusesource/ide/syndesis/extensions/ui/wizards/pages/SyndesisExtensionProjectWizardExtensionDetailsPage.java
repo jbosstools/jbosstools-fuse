@@ -52,6 +52,7 @@ import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
+import org.fusesource.ide.syndesis.extensions.ui.util.SyndesisVersionChecker;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectWizard;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionIdValidator;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExtensionNameValidator;
@@ -377,35 +378,30 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	}
 	
 	class VersionValidationHandler extends SelectionAdapter {
-		
-		/* (non-Javadoc)
-		 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-		 */
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String syndesisVersion = syndesisVersionCombo.getCombo().getText();
-//			SyndesisVersionChecker versionChecker = new SyndesisVersionChecker(syndesisVersion);
-//			try {
-//				getWizard().getContainer().run(true, true, versionChecker);
-//			} catch (InterruptedException iex) {
-//				versionChecker.cancel();
-//				Thread.currentThread().interrupt();
-//			} catch (Exception ex) {
-//				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
-//			}
-//			while (!versionChecker.isDone()) {
-//				try {
-//					Thread.sleep(100);
-//				} catch (InterruptedException ex) {
-//					Thread.currentThread().interrupt();
-//				}
-//			}
-//			updateSyndesisValidation(syndesisVersion, versionChecker.isValid());
-			// TODO: for now we always assume its valid
-			updateSyndesisValidation(syndesisVersion, true);
+			String syndesisVersion = translateDisplayTextToVersion(syndesisVersionCombo.getCombo().getText());
+			SyndesisVersionChecker versionChecker = new SyndesisVersionChecker(syndesisVersion);
+			try {
+				getWizard().getContainer().run(true, true, versionChecker);
+			} catch (InterruptedException iex) {
+				versionChecker.cancel();
+				Thread.currentThread().interrupt();
+			} catch (Exception ex) {
+				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+			}
+			while (!versionChecker.isDone()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			updateSyndesisValidation(syndesisVersion, versionChecker);
 		}
 		
-		private void updateSyndesisValidation(String syndesisVersion, boolean valid) {
+		private void updateSyndesisValidation(String syndesisVersion, SyndesisVersionChecker versionChecker) {
+			boolean valid = versionChecker.isValid();
 			if (!valid) {
 				setMessage(null);
 				setErrorMessage(NLS.bind(Messages.newProjectWizardExtensionDetailsPageErrorInvalidSyndesisVersion, syndesisVersion));

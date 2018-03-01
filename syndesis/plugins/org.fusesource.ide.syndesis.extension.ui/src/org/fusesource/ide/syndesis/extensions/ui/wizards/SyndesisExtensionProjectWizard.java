@@ -52,9 +52,8 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 
 	@Override
 	public boolean performFinish() {
-		final NewSyndesisExtensionProjectMetaData metadata = getProjectMetaData();
 		try {
-			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(metadata));
+			getContainer().run(false, true, new SyndesisExtensionProjectCreatorRunnable(getProjectMetaData()));
 		} catch (InterruptedException iex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError("User canceled the wizard!", iex); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
@@ -83,10 +82,6 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		if (!locationPage.isInWorkspace()) {
 			metadata.setLocationPath(locationPage.getLocationPath());
 		}
-		// TODO: remove after we got a logic to determine the springboot and camel versions
-		extensionModel.setSpringBootVersion("1.5.8.RELEASE");
-		extensionModel.setCamelVersion("2.20.1");
-		// end of TODO
 		metadata.setSyndesisExtensionConfig(extensionModel);
 		if (extensionDetailsPage.isCustomConnector()) {
 			metadata.setTemplate(new CustomConnectorProjectTemplate());
