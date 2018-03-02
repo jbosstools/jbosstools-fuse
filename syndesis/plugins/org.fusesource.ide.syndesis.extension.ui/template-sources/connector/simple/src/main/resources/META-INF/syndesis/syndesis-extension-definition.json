@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "v1",
+  "properties": {
+    "authorizationToken": {
+      "kind": "property",
+      "displayName": "Authorization Token",
+      "group": "security",
+      "label": "security",
+      "required": true,
+      "type": "string",
+      "javaType": "java.lang.String",
+      "tags": [],
+      "deprecated": false,
+      "secret": true,
+      "componentProperty": false,
+      "description": "Telegram Bot Authorization Token"
+    }
+  },
+  "actions": [
+    {
+      "name": "Chat Messages",
+      "description": "Receive all messages sent to the chat bot",
+      "id": "io.syndesis:telegram-chat-from-action",
+      "pattern": "From",
+      "actionType": "connector",
+      "descriptor": {
+        "componentScheme": "telegram",
+        "inputDataShape": {
+          "kind": "none"
+        },
+        "outputDataShape": {
+          "kind": "java",
+          "type": "org.apache.camel.component.telegram.model.IncomingMessage"
+        },
+        "configuredProperties": {
+          "type": "bots"
+        }
+      }
+    },
+    {
+      "name": "Send a chat Messages",
+      "description": "Send a messages to the chat (through the bot).",
+      "id": "io.syndesis:telegram-chat-to-action",
+      "pattern": "To",
+      "actionType": "connector",
+      "descriptor": {
+        "componentScheme": "telegram",
+        "inputDataShape": {
+          "kind": "java",
+          "type": "java.lang.String"
+        },
+        "outputDataShape": {
+          "kind": "none"
+        },
+        "configuredProperties": {
+          "type": "bots"
+        },
+        "propertyDefinitionSteps": [
+            {
+                "description": "Chat id",
+                "name": "chatId",
+                "properties": {
+                    "chatId": {
+                        "componentProperty": false,
+                        "deprecated": false,
+                        "description": "The telegram's Chat Id, if not set will use CamelTelegramChatId from the incoming exchange.",
+                        "displayName": "Chat Id",
+                        "javaType": "String",
+                        "kind": "parameter",
+                        "required": false,
+                        "secret": false,
+                        "type": "string",
+                        "tags": [],
+                        "enum": []
+                    }
+                }
+            }
+        ]
+      }
+    }
+  ]
+}

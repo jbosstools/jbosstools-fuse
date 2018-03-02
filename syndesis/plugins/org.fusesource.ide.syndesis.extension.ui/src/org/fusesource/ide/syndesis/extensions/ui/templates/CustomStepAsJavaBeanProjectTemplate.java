@@ -21,7 +21,7 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
  */
 public class CustomStepAsJavaBeanProjectTemplate extends AbstractProjectTemplate {
 	
-	private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
+	private static final String TEMPLATE_XML = "template-custom-step-javabean.zip";
 
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
