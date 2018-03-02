@@ -21,7 +21,7 @@ import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
  */
 public class CustomConnectorProjectTemplate extends AbstractProjectTemplate {
 
-	private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
+	private static final String TEMPLATE_XML = "template-custom-connector.zip";
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
