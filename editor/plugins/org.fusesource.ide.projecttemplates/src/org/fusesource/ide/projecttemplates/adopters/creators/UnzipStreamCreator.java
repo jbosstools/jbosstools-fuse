@@ -64,7 +64,7 @@ public abstract class UnzipStreamCreator extends InputStreamCreator {
 	    	 
 			 if (is instanceof ZipInputStream) {
 				// get the zip file content
-				ZipInputStream zis = (ZipInputStream) getTemplateStream(metadata);
+				ZipInputStream zis = (ZipInputStream)is;
 				// get the zipped file list entry
 				ZipEntry ze = zis.getNextEntry();
 				while (ze != null) {
