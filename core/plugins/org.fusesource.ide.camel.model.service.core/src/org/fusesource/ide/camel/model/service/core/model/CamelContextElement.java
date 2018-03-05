@@ -269,6 +269,9 @@ public class CamelContextElement extends CamelRouteContainerElement {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
+			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(REST_CONFIGURATION_NODE_NAME) ||
+					CamelUtils.getTagNameWithoutPrefix(tmp).equals(REST_NODE_NAME)) {
+				// these are handled differently on the REST page in the editor, so let them by
 			} else {
 				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + CamelUtils.getTagNameWithoutPrefix(tmp));
 			}

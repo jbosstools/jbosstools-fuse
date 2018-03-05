@@ -78,6 +78,8 @@ public abstract class AbstractCamelModelElement {
 	public static final String ENDPOINT_NODE_NAME = "endpoint";
 	public static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
 	public static final String BEAN_NODE = "bean";
+	public static final String REST_CONFIGURATION_NODE_NAME = "restConfiguration";
+	public static final String REST_NODE_NAME = "rest";
 	
 	// children is a list of objects which are no route outputs
 	private List<AbstractCamelModelElement> childElements = new ArrayList<>();
