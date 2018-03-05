@@ -121,6 +121,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	private boolean rollBackActive = false;
 	
+	private RestConfigEditor restConfigEditor;
+	
 	/**
 	 * creates a new editor instance
 	 */
@@ -344,7 +346,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		CamelFile model = designEditor.getModel();
 		if (model != null && model.getRouteContainer() instanceof CamelContextElement) {
 			try {
-				RestConfigEditor restConfigEditor = new RestConfigEditor(this);
+				restConfigEditor = new RestConfigEditor(this);
 				addPage(index, restConfigEditor, editorInput);
 				setPageText(index, "REST");
 			} catch (PartInitException e) {
@@ -473,7 +475,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 			this.lastActivePageIdx = newPageIndex;
 			super.pageChange(newPageIndex);
-		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX) {
+		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX || newPageIndex == REST_CONF_INDEX) {
 			if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
 				IDocument document = getDocument();
 				if (document != null) {
@@ -487,11 +489,15 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 						super.pageChange(newPageIndex);
 						getDocument().set(text);
 					} else {
-						updateModelFromSource();
 						lastError = "";
 						if (newPageIndex == GLOBAL_CONF_INDEX) {
+							updateModelFromSource();
 							globalConfigEditor.reload();
+						} else if (newPageIndex == REST_CONF_INDEX) {
+							updateModelFromSource(false);
+							restConfigEditor.reload();
 						} else if (newPageIndex == DESIGN_PAGE_INDEX) {
+							updateModelFromSource();
 							designEditor.switchContainer(); // needed to fix sync issue between props view and selected context element
 							designEditor.refreshOutlineView();
 						}
@@ -502,6 +508,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			} else {
 				if (newPageIndex == GLOBAL_CONF_INDEX) {
 					globalConfigEditor.reload();
+				} else if (newPageIndex == REST_CONF_INDEX) {
+					restConfigEditor.reload();
 				} else {
 					designEditor.update();
 					designEditor.refreshOutlineView();
