@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 
 import java.nio.file.Path;
 
+import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -23,16 +24,17 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 
 final class MavenConfiguratorForOSESpringBootTemplate extends MavenTemplateConfigurator {
 
-	MavenConfiguratorForOSESpringBootTemplate(String bomVersion) {
-		super(bomVersion);
+	MavenConfiguratorForOSESpringBootTemplate(Dependency bomForPlaceHolder) {
+		super(bomForPlaceHolder);
 	}
 
 	@Override
-	protected void configureVersions(IProject project, IProgressMonitor monitor) throws CoreException {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
-		super.configureVersions(project, subMonitor.split(1));
+	protected void configureVersions(IProject project, String camelVersion, IProgressMonitor monitor) throws CoreException {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 4);
+		super.configureVersions(project, camelVersion, subMonitor.split(1));
 		IFile pom = project.getFile("pom.xml");
 		Path pomAbsolutePath = pom.getLocation().toFile().toPath();
+		String bomVersion = CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, subMonitor.split(1), bomForPlaceHolder);
 		String fabric8MavenPluginVersion = CamelCatalogUtils.getFabric8MavenPluginVersionForBomVersion(bomVersion, subMonitor.split(1));
 		replace(fabric8MavenPluginVersion, OSESpringBootXMLTemplateForFuse7.PLACEHOLDER_FABRIC8MAVENPLUGIN_VERSION, pomAbsolutePath, pomAbsolutePath);
 		project.refreshLocal(IResource.DEPTH_ONE, subMonitor.split(1));

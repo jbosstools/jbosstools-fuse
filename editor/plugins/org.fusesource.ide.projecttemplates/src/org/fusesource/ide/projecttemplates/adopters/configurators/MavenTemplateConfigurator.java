@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
+import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -32,8 +33,8 @@ import org.fusesource.ide.projecttemplates.util.maven.MavenUtils;
  */
 public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	
-	public MavenTemplateConfigurator(String bomVersion) {
-		super(bomVersion);
+	public MavenTemplateConfigurator(Dependency bomForPlaceHolder) {
+		super(bomForPlaceHolder);
 	}
 
 	@Override

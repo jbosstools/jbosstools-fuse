@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.impl.simple;
 
+import org.fusesource.ide.camel.model.service.core.util.FuseBomFilter;
 import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
@@ -31,6 +32,6 @@ public class EmptyProjectTemplateForFuse7 extends AbstractEmptyProjectTemplate {
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getArtifactLastVersion("org.jboss.fuse", "jboss-fuse-parent"));
+		return new MavenTemplateConfigurator(FuseBomFilter.BOM_FUSE_7);
 	}
 }

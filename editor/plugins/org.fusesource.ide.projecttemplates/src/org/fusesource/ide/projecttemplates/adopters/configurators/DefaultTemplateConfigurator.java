@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -29,6 +30,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
@@ -49,10 +51,10 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	private static final String PLACEHOLDER_PROJECTNAME_IN_LAUNCH_CONFIGURATION = "%%%PLACEHOLDER_PROJECTNAME%%%";
 	private static final String PLACEHOLDER_BOMVERSION = "%%%PLACEHOLDER_BOMVERSION%%%";
 	
-	protected String bomVersion;
+	protected Dependency bomForPlaceHolder;
 	
-	public DefaultTemplateConfigurator(String bomVersion) {
-		this.bomVersion = bomVersion;
+	public DefaultTemplateConfigurator(Dependency bomForPlaceHolder) {
+		this.bomForPlaceHolder = bomForPlaceHolder;
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 10);
 		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
-			configureVersions(project, subMonitor.split(1));
+			configureVersions(project, metadata.getCamelVersion(), subMonitor.split(1));
 			// add java facet
 			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.split(1)); //$NON-NLS-1$
 			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
@@ -80,12 +82,18 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 		return true;
 	}
 
-	protected void configureVersions(IProject project, IProgressMonitor monitor) throws CoreException {
-		if (bomVersion != null) {
+	protected void configureVersions(IProject project, String camelVersion, IProgressMonitor monitor) throws CoreException {
+		if (bomForPlaceHolder != null) {
+			SubMonitor subMon = SubMonitor.convert(monitor, 2);
 			IFile pom = project.getFile("pom.xml");
 			Path pomAbsolutePath = pom.getLocation().toFile().toPath();
-			replace(bomVersion, PLACEHOLDER_BOMVERSION, pomAbsolutePath, pomAbsolutePath);
-			project.refreshLocal(IResource.DEPTH_ONE, monitor);
+			String bomVersion = CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, subMon.split(1), bomForPlaceHolder);
+			if (bomVersion != null) {
+				replace(bomVersion, PLACEHOLDER_BOMVERSION, pomAbsolutePath, pomAbsolutePath);
+				project.refreshLocal(IResource.DEPTH_ONE, subMon.split(1));
+			} else {
+				subMon.setWorkRemaining(0);
+			}
 		}
 	}
 

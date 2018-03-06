@@ -27,7 +27,7 @@ public class FISBomToFabric8MavenPluginMapper extends OnlineVersionMapper {
 
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.emptyMap();
+		return Collections.singletonMap("2.3.7.fuse-000036-redhat-2", "3.5.32.fuse-000040-redhat-2");
 	}
 
 }
