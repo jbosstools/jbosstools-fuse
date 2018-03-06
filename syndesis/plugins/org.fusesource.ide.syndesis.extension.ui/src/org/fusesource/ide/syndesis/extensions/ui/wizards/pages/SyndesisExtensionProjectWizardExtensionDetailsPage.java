@@ -286,7 +286,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		stepJavaBeanRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanHint);
 		stepJavaBeanRadio.setLayoutData(gridData);
 		stepJavaBeanRadio.addSelectionListener(stepSelectionListener);
-
+	
 		stepCamelRouteRadio.setSelection(true);
 		camelRoute = true;
 	}
