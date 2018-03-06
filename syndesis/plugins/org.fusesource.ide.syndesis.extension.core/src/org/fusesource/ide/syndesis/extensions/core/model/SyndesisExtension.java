@@ -12,6 +12,7 @@ package org.fusesource.ide.syndesis.extensions.core.model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.fusesource.ide.syndesis.extensions.core.internal.SyndesisExtensionsCo
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -422,5 +424,15 @@ public class SyndesisExtension extends PojoModelObservable {
 			SyndesisExtensionsCoreActivator.pluginLog().logError(ex);
 		}
 		return null;
+	}
+	
+	public static void writeToFile(OutputStream stream, SyndesisExtension extension) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setSerializationInclusion(Include.NON_DEFAULT);
+			mapper.writerWithDefaultPrettyPrinter().writeValue(stream, extension);
+		} catch (IOException ex) {
+			SyndesisExtensionsCoreActivator.pluginLog().logError(ex);
+		}
 	}
 }

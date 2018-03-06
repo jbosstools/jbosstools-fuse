@@ -11,21 +11,14 @@
 package org.fusesource.ide.syndesis.extensions.ui.wizards;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Properties;
 
-import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,6 +35,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
 import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnable;
 import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
@@ -53,8 +47,6 @@ import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjec
  */
 public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectCreatorRunnable {
 
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis.extension";
-	private static final String SYNDESIS_PLUGIN_ARTIFACTID = "extension-maven-plugin";
 	public static final String SYNDESIS_RESOURCE_PATH = "src/main/resources/META-INF/syndesis/syndesis-extension-definition.json";
 	
 	private NewSyndesisExtensionProjectMetaData syndesisMetaData;
@@ -109,59 +101,57 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 			Model pomModel = new CamelMavenUtils().getMavenModel(project);
 
 			configureProjectVersions(pomModel);
-			customizeSyndesisPlugin(pomModel);
+			configureMetaDataInJSONFile(project, subMonitor.split(1));
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
 				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, subMonitor.split(10));
 			}
-		} catch (CoreException | XmlPullParserException | IOException e1) {
+		} catch (CoreException | IOException e1) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(e1);
+		} finally {
+			subMonitor.setWorkRemaining(0);
 		}
 	}
 	
-	private void customizeSyndesisPlugin(Model pomModel) throws XmlPullParserException, IOException {
-		Build build = pomModel.getBuild();
-		Map<String, Plugin> pluginsByName = build.getPluginsAsMap();
-		Plugin plugin = pluginsByName.get(SYNDESIS_PLUGIN_GROUPID + ":" + SYNDESIS_PLUGIN_ARTIFACTID); //$NON-NLS-1$
-		if (plugin != null) {
-			manageConfiguration(plugin);
-		}
+	private void configureMetaDataInJSONFile(IProject project, IProgressMonitor monitor) {
+		IResource jsonFile = project.getFile(SYNDESIS_RESOURCE_PATH);
+		Display.getDefault().asyncExec( () -> updateJsonFile(jsonFile, monitor) );
 	}
 
-	private void manageConfiguration(Plugin plugin) throws XmlPullParserException, IOException {
-		Xpp3Dom config = (Xpp3Dom)plugin.getConfiguration();
-		if (config == null) {
-			config = Xpp3DomBuilder.build(new ByteArrayInputStream((
-					"<configuration>" + //$NON-NLS-1$
-					"</configuration>").getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-					StandardCharsets.UTF_8.name());
-			plugin.setConfiguration(config);
+	private void updateJsonFile(IResource jsonFile, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
+		if (!jsonFile.exists()) {
+			new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
 		}
-		manageInstructions(config);
+		SyndesisExtension extenstion = null;
+		try (InputStream is = jsonFile.getLocationURI().toURL().openStream()) {
+			extenstion = SyndesisExtension.getJSONFactoryInstance(is);
+			if (extenstion != null && syndesisMetaData.getSyndesisExtensionConfig() != null) {
+				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getExtensionId())) 	extenstion.setExtensionId(syndesisMetaData.getSyndesisExtensionConfig().getExtensionId());
+				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getName()))			extenstion.setName(syndesisMetaData.getSyndesisExtensionConfig().getName());
+				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getDescription())) 	extenstion.setDescription(syndesisMetaData.getSyndesisExtensionConfig().getDescription());
+				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getVersion())) 		extenstion.setVersion(syndesisMetaData.getSyndesisExtensionConfig().getVersion());
+			}
+		} catch (IOException ex) {
+			SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+		} finally {
+			subMonitor.setWorkRemaining(1);
+		}
+		
+		if (extenstion != null) {
+			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(jsonFile.getLocation().toOSString()))) {
+				SyndesisExtension.writeToFile(os, extenstion);
+				jsonFile.refreshLocal(0, subMonitor);
+			} catch (CoreException | IOException ex) {
+				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+			}
+		}
+		subMonitor.setWorkRemaining(0);
 	}
-
+	
 	private SyndesisExtension getExtension() {
 		return syndesisMetaData.getSyndesisExtensionConfig();
-	}
-	
-	private void manageInstructions(Xpp3Dom config) throws XmlPullParserException, IOException {
-		setOrChangeConfigValue(config, "extensionId", getExtension().getExtensionId()); //$NON-NLS-1$
-		setOrChangeConfigValue(config, "name", getExtension().getName()); //$NON-NLS-1$
-		setOrChangeConfigValue(config, "description", getExtension().getDescription()); //$NON-NLS-1$
-		setOrChangeConfigValue(config, "version", getExtension().getVersion()); //$NON-NLS-1$
-	}
-	
-	private void setOrChangeConfigValue(Xpp3Dom config, String keyName, String newValue) throws XmlPullParserException, IOException {
-		Xpp3Dom elem = config.getChild(keyName); 
-		if (elem == null) {
-			elem = Xpp3DomBuilder.build(
-					new ByteArrayInputStream((String.format("<%s>%s</%s>", keyName, newValue, keyName)).getBytes(StandardCharsets.UTF_8)), //$NON-NLS-1$
-					StandardCharsets.UTF_8.name());
-			config.addChild(elem);
-		} else {
-			elem.setValue(newValue);
-		}
 	}
 	
 	private void configureProjectVersions(Model pomModel) {
