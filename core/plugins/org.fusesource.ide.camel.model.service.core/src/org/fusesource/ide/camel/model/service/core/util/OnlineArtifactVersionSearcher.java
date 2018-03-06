@@ -22,6 +22,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.internal.index.IIndex;
@@ -37,13 +38,17 @@ public class OnlineArtifactVersionSearcher {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		String bomVersion = null;
 		try {
-			IMavenProjectFacade mavenProjectFacade = new CamelMavenUtils().getMavenProjectFacade(project);
-			MavenProject mavenProject = mavenProjectFacade.getMavenProject(subMon.split(1));
-			
-			Dependency bomUsed = retrieveAnyFuseBomUsed(mavenProject);
-			
-			if(bomUsed != null) {
-				bomVersion = findLatestBomVersionOnAvailableRepo(project, subMon.split(1), mavenProject, bomUsed);
+			if (project != null) {
+				IMavenProjectFacade mavenProjectFacade = new CamelMavenUtils().getMavenProjectFacade(project);
+				MavenProject mavenProject = mavenProjectFacade.getMavenProject(subMon.split(1));
+
+				Dependency bomUsed = retrieveAnyFuseBomUsed(mavenProject);
+
+				if (bomUsed != null) {
+					bomVersion = findLatestBomVersionOnAvailableRepo(project, subMon.split(1), mavenProject, bomUsed);
+				}
+			} else {
+				
 			}
 		} catch (CoreException e) {
 			CamelModelServiceCoreActivator.pluginLog().logError(e);
@@ -67,7 +72,7 @@ public class OnlineArtifactVersionSearcher {
 		}
 	}
 	
-	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) throws CoreException {
+	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		//search with m2e Index, it goes faster in case m2e indexing is activated
 		IIndex index = MavenPlugin.getIndexManager().getWorkspaceIndex();
@@ -93,7 +98,12 @@ public class OnlineArtifactVersionSearcher {
 				mavenRepo.setUrl("https://origin-repository.jboss.org/nexus/content/groups/ea/");
 				additionalMavenRepos.add(mavenRepo);
 			}
-			return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch), subMon.split(1));
+			try {
+				return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch), subMon.split(1));
+			} catch (OperationCanceledException | CoreException e) {
+				CamelModelServiceCoreActivator.pluginLog().logError(e);
+				return null;
+			}
 		}
 	}
 	

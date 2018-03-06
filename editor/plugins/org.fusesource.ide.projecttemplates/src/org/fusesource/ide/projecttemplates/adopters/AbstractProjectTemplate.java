@@ -99,11 +99,6 @@ public abstract class AbstractProjectTemplate {
 		Dependency bomToSearch = new Dependency();
 		bomToSearch.setGroupId(groupId);
 		bomToSearch.setArtifactId(artifactId);
-		try {
-			return new OnlineArtifactVersionSearcher().findLatestVersion(new NullProgressMonitor(), bomToSearch);
-		} catch (CoreException e) {
-			ProjectTemplatesActivator.pluginLog().logError(e);
-		}
-		return null;
+		return new OnlineArtifactVersionSearcher().findLatestVersion(new NullProgressMonitor(), bomToSearch);
 	}
 }

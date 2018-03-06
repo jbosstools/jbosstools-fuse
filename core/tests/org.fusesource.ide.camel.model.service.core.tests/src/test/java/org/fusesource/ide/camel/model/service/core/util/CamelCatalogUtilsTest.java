@@ -56,7 +56,7 @@ public class CamelCatalogUtilsTest {
     
 	@Test
 	public void testBomVersionRetrieval() throws Exception {
-		assertThat(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, null, new NullProgressMonitor(), bomUsed)).isEqualTo(expectedBomVersion);
+		assertThat(CamelCatalogUtils.getBomVersionForCamelVersion(camelVersion, new NullProgressMonitor(), bomUsed)).isEqualTo(expectedBomVersion);
 	}
 
 }

@@ -39,12 +39,13 @@ public abstract class OnlineVersionMapper {
 	}
 
 	public Map<String, String> getMapping() {
-		try {
-			return createMappingFromOnlineFiles();
-		} catch (IOException e) {
-			FoundationCoreActivator.pluginLog().logError("Unable to retrieve the mapping from online repo. Falling back to defaults.", e);
-			return createFallbackMapping();
-		}
+		return createFallbackMapping();
+//		try {
+//			return createMappingFromOnlineFiles();
+//		} catch (IOException e) {
+//			FoundationCoreActivator.pluginLog().logError("Unable to retrieve the mapping from online repo. Falling back to defaults.", e);
+//			return createFallbackMapping();
+//		}
 	}
 
 	protected Map<String, String> createMappingFromOnlineFiles() throws IOException {

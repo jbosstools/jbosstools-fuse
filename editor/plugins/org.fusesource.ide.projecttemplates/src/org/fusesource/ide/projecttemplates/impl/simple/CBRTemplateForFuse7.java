@@ -31,7 +31,7 @@ public class CBRTemplateForFuse7 extends AbstractCBRTemplate {
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
-		return new MavenTemplateConfigurator(getArtifactLastVersion(FuseBomFilter.BOM_FUSE_7.getGroupId(), FuseBomFilter.BOM_FUSE_7.getArtifactId()));
+		return new MavenTemplateConfigurator(FuseBomFilter.BOM_FUSE_7);
 	}
 	
 }

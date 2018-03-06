@@ -10,23 +10,27 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.service.core.util.versionmapper;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 
-public class CamelForFuse7ToBomMapper extends OnlineVersionMapper {
+public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 
-	private static final String CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7.url";
-	private static final String CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7.properties";
+	private static final String FUSE_ON_OPENSHIFT_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
+	private static final String FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7onOpenShift.properties";
 	
-	public CamelForFuse7ToBomMapper() {
-		super(CAMEL_TO_BOM_MAPPING_FUSE_7_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_DEFAULT_URL);
+	public static final String FUSE_700_TP3_CAMEL_VERSION = "2.21.0.000033-fuse-000001-redhat-1";
+
+	public CamelForFuseOnOpenShiftToBomMapper() {
+		super(FUSE_ON_OPENSHIFT_MAPPING_PROPERTY, FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL);
 	}
-	
+
 	@Override
 	protected Map<String, String> createFallbackMapping() {
-		return Collections.singletonMap(CamelForFuseOnOpenShiftToBomMapper.FUSE_700_TP3_CAMEL_VERSION, "7.0.0.fuse-000145-redhat-1");
+		Map<String, String> mapping = new HashMap<>();
+		mapping.put(FUSE_700_TP3_CAMEL_VERSION, "2.3.7.fuse-000036-redhat-2");
+		return mapping;
 	}
 
 }
