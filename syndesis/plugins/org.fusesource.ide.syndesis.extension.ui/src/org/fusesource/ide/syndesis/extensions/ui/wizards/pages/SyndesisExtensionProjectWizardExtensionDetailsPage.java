@@ -278,6 +278,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		stepJavaBeanRadio.addSelectionListener(stepSelectionListener);
 
 		stepCamelRouteRadio.setSelection(true);
+		camelRoute = true;
 	}
 	
 	private void createExtensionTypeRadioGroup(Composite container) {
@@ -303,7 +304,6 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		customStepRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionStepHint);
 		customStepRadio.setLayoutData(gridData);
 		customStepRadio.addSelectionListener(btnGroupSelectionListener);
-		customStepRadio.setSelection(true);
 		
 		spacer = new Label(typeButtonGroup, SWT.NONE);
 		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
@@ -317,6 +317,9 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		customConnectorRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageTypeSelectionConnectorHint);
 		customConnectorRadio.setLayoutData(gridData);
 		customConnectorRadio.addSelectionListener(btnGroupSelectionListener);
+		
+		customStepRadio.setSelection(true);
+		customConnector = customConnectorRadio.getSelection();
 	}
 	
 	private Text createField(Composite container, String label, String message, String toolTip) {
