@@ -83,12 +83,16 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 
 	public List<String> getCamelVersions() {
 		log.debug("Getting all available camel versions");
-		return new DefaultCombo(this, 1).getItems();
+		List<String> items = new ArrayList<>();
+		for (String s : new DefaultCombo(1).getItems()) {
+			items.add(s.split("\\s")[0].trim());
+		}
+		return items;
 	}
 
 	public String getCamelVersion() {
 		log.debug("Getting selected Camel version");
-		return new DefaultCombo(this, 1).getText();
+		return new DefaultCombo(1).getText().split("\\s")[0].trim();
 	}
 
 	public void selectCamelVersion(String version) {
