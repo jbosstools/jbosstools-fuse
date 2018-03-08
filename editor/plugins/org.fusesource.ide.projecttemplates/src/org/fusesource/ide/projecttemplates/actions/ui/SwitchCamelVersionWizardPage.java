@@ -17,6 +17,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.osgi.util.NLS;
@@ -70,7 +71,11 @@ public class SwitchCamelVersionWizardPage extends WizardPage {
 				}
 			}		
 		});
-		versionCombo.select(0);
+		if(CamelCatalogUtils.DEFAULT_CAMEL_VERSION.equals(initialCamelVersion)) {
+			versionCombo.select(0);
+		} else {
+			versionComboViewer.setSelection(new StructuredSelection(CamelCatalogUtils.DEFAULT_CAMEL_VERSION));
+		}
 		versionCombo.addModifyListener(event -> getWizard().getContainer().updateButtons());
 		
 		setControl(parent);
