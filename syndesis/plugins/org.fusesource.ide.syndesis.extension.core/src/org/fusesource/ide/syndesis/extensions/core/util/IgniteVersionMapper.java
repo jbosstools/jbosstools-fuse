@@ -17,7 +17,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 
 final class IgniteVersionMapper extends OnlineVersionMapper {
 	
-	private static final String URL_IGNITE_VERSIONS_FILE = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/ignite.properties";
+	private static final String URL_IGNITE_VERSIONS_FILE = BASE_REPO_CONFIG_URI+"ignite.properties";
 
 	IgniteVersionMapper() {
 		super("org.jboss.tools.fuse.ignite.url", IgniteVersionMapper.URL_IGNITE_VERSIONS_FILE);

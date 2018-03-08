@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 public class CamelForFuseOnOpenShiftToBomMapper extends OnlineVersionMapper {
 
 	private static final String FUSE_ON_OPENSHIFT_MAPPING_PROPERTY = "org.jboss.tools.fuse.fismarker.url";
-	private static final String FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7onOpenShift.properties";
+	private static final String FUSE_ON_OPENSHIFT_MAPPING_DEFAULT_URL = BASE_REPO_CONFIG_URI+"camel2bom.fuse7onOpenShift.properties";
 	
 	public static final String FUSE_700_TP3_CAMEL_VERSION = "2.21.0.000033-fuse-000001-redhat-1";
 

@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 public class CamelForWildflyFuse7ToBomMapper extends OnlineVersionMapper {
 	
 	private static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY = "org.jboss.tools.fuse.camel2bom.fuse7wildfly.url";
-	private static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.fuse7wildfly.properties";
+	private static final String CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL = BASE_REPO_CONFIG_URI+"camel2bom.fuse7wildfly.properties";
 	
 	public CamelForWildflyFuse7ToBomMapper() {
 		super(CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_PROPERTY, CAMEL_TO_BOM_MAPPING_FUSE_7_WILDFLY_DEFAULT_URL);

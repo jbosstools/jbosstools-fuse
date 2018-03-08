@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 public class CamelVersionToDisplayNameMapper extends OnlineVersionMapper {
 	
 	public CamelVersionToDisplayNameMapper() {
-		super("org.jboss.fuse.displayname.url", "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camelVersionToDisplayName.properties");
+		super("org.jboss.fuse.displayname.url", BASE_REPO_CONFIG_URI+"camelVersionToDisplayName.properties");
 	}
 
 	@Override

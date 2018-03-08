@@ -20,6 +20,8 @@ import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 public abstract class OnlineVersionMapper {
 
+	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/";
+	
 	private String mappingProperty;
 	private String defaultUrl;
 
@@ -39,13 +41,12 @@ public abstract class OnlineVersionMapper {
 	}
 
 	public Map<String, String> getMapping() {
-		return createFallbackMapping();
-//		try {
-//			return createMappingFromOnlineFiles();
-//		} catch (IOException e) {
-//			FoundationCoreActivator.pluginLog().logError("Unable to retrieve the mapping from online repo. Falling back to defaults.", e);
-//			return createFallbackMapping();
-//		}
+		try {
+			return createMappingFromOnlineFiles();
+		} catch (IOException e) {
+			FoundationCoreActivator.pluginLog().logError("Unable to retrieve the mapping from online repo. Falling back to defaults.", e);
+			return createFallbackMapping();
+		}
 	}
 
 	protected Map<String, String> createMappingFromOnlineFiles() throws IOException {
