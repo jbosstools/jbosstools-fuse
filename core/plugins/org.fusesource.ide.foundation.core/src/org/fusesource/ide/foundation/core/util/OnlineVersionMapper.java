@@ -19,8 +19,9 @@ import java.util.Properties;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 
 public abstract class OnlineVersionMapper {
-
-	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/";
+	
+	//TODO : to update to master branch right after merge
+	protected static final String BASE_REPO_CONFIG_URI = "https://raw.githubusercontent.com/apupier/jbosstools-fuse/FUSETOOLS-2846-IncludeFuse7TechPreview3InCamelVersionList/configuration/";
 	
 	private String mappingProperty;
 	private String defaultUrl;
