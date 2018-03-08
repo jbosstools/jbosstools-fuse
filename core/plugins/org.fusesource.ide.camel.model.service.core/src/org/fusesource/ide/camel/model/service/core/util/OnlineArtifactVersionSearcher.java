@@ -47,8 +47,6 @@ public class OnlineArtifactVersionSearcher {
 				if (bomUsed != null) {
 					bomVersion = findLatestBomVersionOnAvailableRepo(project, subMon.split(1), mavenProject, bomUsed);
 				}
-			} else {
-				
 			}
 		} catch (CoreException e) {
 			CamelModelServiceCoreActivator.pluginLog().logError(e);

@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 public class CamelForFuse6ToBomMapper extends OnlineVersionMapper {
 
 	public static final String CAMEL_TO_BOM_MAPPING_PROPERTY = "org.jboss.tools.fuse.camel2bom.url";
-	private static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/camel2bom.properties";
+	private static final String CAMEL_TO_BOM_MAPPING_DEFAULT_URL = BASE_REPO_CONFIG_URI+"camel2bom.properties";
 
 	static final String FUSE_621_R0_CAMEL_VERSION = "2.15.1.redhat-621084";
 	static final String FUSE_621_R1_CAMEL_VERSION = "2.15.1.redhat-621090";

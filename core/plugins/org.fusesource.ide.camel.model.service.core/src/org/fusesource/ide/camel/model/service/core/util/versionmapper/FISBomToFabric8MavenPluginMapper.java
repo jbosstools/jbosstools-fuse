@@ -18,7 +18,7 @@ import org.fusesource.ide.foundation.core.util.OnlineVersionMapper;
 public class FISBomToFabric8MavenPluginMapper extends OnlineVersionMapper {
 	
 	private static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_PROPERTY = "org.jboss.tools.fuse.fisbom2fabric8MavenVersion.fuse7.url";
-	private static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = "https://raw.githubusercontent.com/jbosstools/jbosstools-fuse/master/configuration/fisBomToFabric8MavenPlugin.fuse7.properties";
+	private static final String FISBOM_TOFABRIC8MAVENPLUGIN_MAPPING_FUSE_7_DEFAULT_URL = BASE_REPO_CONFIG_URI+"fisBomToFabric8MavenPlugin.fuse7.properties";
 	
 	
 	public FISBomToFabric8MavenPluginMapper() {
