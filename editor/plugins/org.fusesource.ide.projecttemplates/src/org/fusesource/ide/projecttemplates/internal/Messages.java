@@ -34,12 +34,9 @@ public class Messages extends NLS {
 	public static String newProjectWizardRuntimePageName;
 	public static String newProjectWizardRuntimePageTitle;
 	public static String newProjectWizardRuntimePageDescription;
-	public static String newProjectWizardRuntimePageRuntimeGroupLabel;
-	public static String newProjectWizardRuntimePageRuntimeLabel;
 	public static String newProjectWizardRuntimePageRuntimeDescription;
 	public static String newProjectWizardRuntimePageRuntimeNewButtonLabel;
 	public static String newProjectWizardRuntimePageRuntimeNewButtonDescription;
-	public static String newProjectWizardRuntimePageCamelGroupLabel;
 	public static String newProjectWizardRuntimePageCamelLabel;
 	public static String newProjectWizardRuntimePageCamelDescription;
 	public static String newProjectWizardRuntimePageCamelVersionValidationLabel;
@@ -51,6 +48,10 @@ public class Messages extends NLS {
 	public static String newProjectWizardRuntimePageCamelVersionValidInfo;
 	public static String newProjectWizardRuntimePageResolveDependencyStatus;
 	public static String newProjectWizardRuntimePageCamelVersionInvalidSyntaxWarning;
+	public static String newProjectWizardRuntimePageWhichRuntime;
+	public static String newProjectWizardRuntimePageSpringBootChoice;
+	public static String newProjectWizardRuntimePageKarafChoice;
+	public static String newProjectWizardRuntimePageWildflyChoice;
 	
 	public static String newProjectWizardTemplatePageName;
 	public static String newProjectWizardTemplatePageTitle;
@@ -90,6 +91,7 @@ public class Messages extends NLS {
 
 	public static String dozerInformationApiBreakTitle;
 	public static String dozerInformationApiBreakMessage;
+
 
 	static {
         // initialize resource bundle
