@@ -15,6 +15,7 @@ import org.fusesource.ide.foundation.core.util.VersionUtil;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTemplate {
 	
@@ -33,7 +34,7 @@ public class OSESpringBootXMLTemplateForFuse7 extends AbstractOSESpringBootXMLTe
 	}
 
 	@Override
-	public boolean isCompatible(String camelVersion) {
-		return new VersionUtil().isGreaterThan(camelVersion, MINIMAL_COMPATIBLE_CAMEL_VERSION);
+	public boolean isCompatible(EnvironmentData environment) {
+		return super.isCompatible(environment) && new VersionUtil().isGreaterThan(environment.getCamelVersion(), MINIMAL_COMPATIBLE_CAMEL_VERSION);
 	}
 }

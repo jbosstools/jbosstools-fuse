@@ -15,6 +15,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 /**
  * @author lhein
@@ -27,8 +28,8 @@ public class CBRTemplateForFuse6 extends AbstractCBRTemplate {
 	}
 	
 	@Override
-	public boolean isCompatible(String camelVersion) {
-		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
+	public boolean isCompatible(EnvironmentData environment) {
+		return super.isCompatible(environment) && new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion());
 	}
 	
 	@Override

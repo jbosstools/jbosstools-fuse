@@ -79,8 +79,8 @@ public class TemplateItem implements NameAndWeightSupport {
 		return this.template;
 	}
 
-	public boolean isCompatible(String camelVersion) {
-		return template.isCompatible(camelVersion);
+	public boolean isCompatible(EnvironmentData environment) {
+		return template.isCompatible(environment);
 	}
 
 	public CamelDSLType getDslType() {

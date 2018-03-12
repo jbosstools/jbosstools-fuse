@@ -18,6 +18,9 @@ import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipSt
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 
 /**
  * @author lhein
@@ -36,8 +39,11 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	}
 	
 	@Override
-	public boolean isCompatible(String camelVersion) {
-		return new VersionUtil().isStrictlyLowerThan2200(camelVersion);
+	public boolean isCompatible(EnvironmentData environment) {
+		return super.isCompatible(environment)
+				&& new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
+				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime());
 	}
 
 	@Override

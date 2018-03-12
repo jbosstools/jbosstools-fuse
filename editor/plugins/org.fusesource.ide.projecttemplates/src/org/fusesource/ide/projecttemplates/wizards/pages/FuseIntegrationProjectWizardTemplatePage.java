@@ -31,10 +31,11 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
-import org.fusesource.ide.projecttemplates.wizards.pages.filter.CompatibleCamelVersionFilter;
+import org.fusesource.ide.projecttemplates.wizards.pages.filter.CompatibleEnvironmentFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.ExcludeEmptyCategoriesFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.TemplateNameAndKeywordPatternFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateModel;
 import org.fusesource.ide.projecttemplates.wizards.pages.provider.TemplateContentProvider;
@@ -47,12 +48,11 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 
 	private FilteredTree listTemplates;
 	private Text templateInfoText;
-	private FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage;
-	private CompatibleCamelVersionFilter compatibleCamelVersionFilter;
+	private EnvironmentData environment;
 	
-	public FuseIntegrationProjectWizardTemplatePage(FuseIntegrationProjectWizardRuntimeAndCamelPage runtimeAndCamelVersionPage) {
+	public FuseIntegrationProjectWizardTemplatePage(EnvironmentData environment) {
 		super(Messages.newProjectWizardTemplatePageName);
-		this.runtimeAndCamelVersionPage = runtimeAndCamelVersionPage;
+		this.environment = environment;
 		setTitle(Messages.newProjectWizardTemplatePageTitle);
 		setDescription(Messages.newProjectWizardTemplatePageDescription);
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
@@ -78,7 +78,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		createLinkForOtherExamples(container);
 		
 		setControl(container);
-
+		
 		validate();
 	}
 
@@ -133,10 +133,10 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		listTemplates.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		listTemplates.getViewer().setContentProvider(new TemplateContentProvider());
 		listTemplates.getViewer().setLabelProvider(new TemplateLabelProvider());
-		compatibleCamelVersionFilter = new CompatibleCamelVersionFilter(runtimeAndCamelVersionPage.getSelectedCamelVersion());
+		CompatibleEnvironmentFilter compatibleEnvironmentFilter = new CompatibleEnvironmentFilter(environment);
 		listTemplates.getViewer().setFilters(
 				new ExcludeEmptyCategoriesFilter(),
-				compatibleCamelVersionFilter);
+				compatibleEnvironmentFilter);
 		listTemplates.getViewer().setInput(getTemplates());
 		listTemplates.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -172,6 +172,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	}
 	
 	private void validate() {
+		listTemplates.getViewer().refresh();
 		if ((listTemplates.getViewer().getSelection().isEmpty() || 
 			 Selections.getFirstSelection(listTemplates.getViewer().getSelection()) instanceof CategoryItem)) {
 			setPageComplete(false);
@@ -201,9 +202,11 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 	public FilteredTree getListTemplates() {
 		return this.listTemplates;
 	}
-
-	public void refresh(String camelVersion) {
-		compatibleCamelVersionFilter.setCamelVersion(camelVersion);
-		listTemplates.getViewer().refresh();
+	
+	public void refresh() {
+		if (listTemplates != null) {
+			listTemplates.getViewer().refresh();
+		}
 	}
+
 }

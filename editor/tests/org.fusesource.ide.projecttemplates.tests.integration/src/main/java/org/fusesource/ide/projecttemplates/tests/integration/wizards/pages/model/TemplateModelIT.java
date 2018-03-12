@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateModel;
 import org.junit.Test;
 
@@ -45,7 +48,7 @@ public class TemplateModelIT {
 	private void checkSingleTemplateForVersion(CategoryItem categoryItem, String camelVersionLatestProductized63) {
 		assertThat(categoryItem.getTemplates()
 				.stream()
-				.filter(template -> template.isCompatible(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63))
+				.filter(template -> template.isCompatible(new EnvironmentData(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.WildFly)))
 				.collect(Collectors.toList()))
 		.hasSize(1);
 	}

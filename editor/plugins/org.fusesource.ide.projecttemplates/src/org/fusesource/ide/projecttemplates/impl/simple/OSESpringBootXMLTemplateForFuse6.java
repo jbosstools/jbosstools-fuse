@@ -15,6 +15,7 @@ import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateC
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 public class OSESpringBootXMLTemplateForFuse6 extends AbstractOSESpringBootXMLTemplate {
 	
@@ -22,9 +23,11 @@ public class OSESpringBootXMLTemplateForFuse6 extends AbstractOSESpringBootXMLTe
 	private static final String MAXIMAL_COMPATIBLE_CAMEL_VERSION = "2.20.0";
 	
 	@Override
-	public boolean isCompatible(String camelVersion) {
+	public boolean isCompatible(EnvironmentData environment) {
 		VersionUtil versionUtil = new VersionUtil();
-		return versionUtil.isGreaterThan(camelVersion, MINIMAL_COMPATIBLE_CAMEL_VERSION)
+		String camelVersion = environment.getCamelVersion();
+		return super.isCompatible(environment)
+				&& versionUtil.isGreaterThan(camelVersion, MINIMAL_COMPATIBLE_CAMEL_VERSION)
 				&& versionUtil.isStrictlyGreaterThan(MAXIMAL_COMPATIBLE_CAMEL_VERSION, camelVersion);
 	}
 	

@@ -13,20 +13,21 @@ package org.fusesource.ide.projecttemplates.wizards.pages.filter;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 
-public class CompatibleCamelVersionFilter extends ViewerFilter {
+public class CompatibleEnvironmentFilter extends ViewerFilter {
 	
-	private String camelVersion;
+	private EnvironmentData environment;
 
-	public CompatibleCamelVersionFilter(String camelVersion) {
-		this.setCamelVersion(camelVersion);
+	public CompatibleEnvironmentFilter(EnvironmentData environment) {
+		this.environment = environment;
 	}
 
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 		if (element instanceof TemplateItem) {
-			return ((TemplateItem) element).isCompatible(camelVersion);
+			return ((TemplateItem) element).isCompatible(environment);
 		} else if (element instanceof CategoryItem) {
 			return hasCompatibleChildren((CategoryItem)element);
 		}
@@ -35,7 +36,7 @@ public class CompatibleCamelVersionFilter extends ViewerFilter {
 
 	private boolean hasCompatibleChildren(CategoryItem category) {
 		boolean hasCompatibleTemplate = category.getTemplates().stream()
-				.anyMatch(template -> template.isCompatible(camelVersion));
+				.anyMatch(template -> template.isCompatible(environment));
 		if (!hasCompatibleTemplate) {
 			for (CategoryItem subCat : category.getSubCategories()) {
 				if (hasCompatibleChildren(subCat)) {
@@ -44,10 +45,6 @@ public class CompatibleCamelVersionFilter extends ViewerFilter {
 			}
 		}
 		return hasCompatibleTemplate;
-	}
-
-	public void setCamelVersion(String camelVersion) {
-		this.camelVersion = camelVersion;
 	}
 
 }

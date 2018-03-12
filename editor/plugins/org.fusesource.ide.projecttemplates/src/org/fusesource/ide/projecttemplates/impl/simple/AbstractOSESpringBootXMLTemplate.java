@@ -13,12 +13,19 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 
 public abstract class AbstractOSESpringBootXMLTemplate extends AbstractProjectTemplate {
 
 	@Override
 	public boolean supportsDSL(CamelDSLType type) {
 		return type == CamelDSLType.SPRING;
+	}
+	
+	@Override
+	public boolean isCompatible(EnvironmentData environment) {
+		return super.isCompatible(environment) && FuseRuntimeKind.SpringBoot.equals(environment.getFuseRuntime());
 	}
 	
 	/**

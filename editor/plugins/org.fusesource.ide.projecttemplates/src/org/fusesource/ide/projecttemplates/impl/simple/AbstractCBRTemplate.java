@@ -13,11 +13,21 @@ package org.fusesource.ide.projecttemplates.impl.simple;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.creators.DSLDependentUnzipStreamCreator;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 
 public abstract class AbstractCBRTemplate extends AbstractProjectTemplate {
 
 	public AbstractCBRTemplate() {
 		super();
+	}
+	
+	@Override
+	public boolean isCompatible(EnvironmentData environment) {
+		return super.isCompatible(environment)
+				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime());
 	}
 
 	@Override
