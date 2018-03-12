@@ -187,6 +187,27 @@
           name="%template.medium.cxf.code.first.name"
           weight="50">
     </projectTemplate>
+    <projectTemplateCategory
+          id="fuse.projecttemplates.EMPTY_CATEGORY"
+          name="%template.category.empty"
+          weight="50">
+    </projectTemplateCategory>
+    <projectTemplate
+          category="fuse.projecttemplates.EMPTY_CATEGORY"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6"
+          description="%template.empty.description"
+          id="org.fusesource.ide.projecttemplates.empty"
+          name="%template.empty.name"
+          weight="50">
+    </projectTemplate>
+    <projectTemplate
+          category="fuse.projecttemplates.EMPTY_CATEGORY"
+          class="org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7"
+          description="%template.empty.description"
+          id="org.fusesource.ide.projecttemplates.empty"
+          name="%template.empty.name"
+          weight="50">
+    </projectTemplate>
  </extension>
  
  <!-- Maven configurator  -->

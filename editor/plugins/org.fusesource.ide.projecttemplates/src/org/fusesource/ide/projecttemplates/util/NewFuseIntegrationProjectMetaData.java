@@ -20,7 +20,6 @@ public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData 
 
 	private IRuntime targetRuntime;
 	private CamelDSLType dslType;
-	private boolean blankProject;
 	
 	/**
 	 * @return the dslType
@@ -38,13 +37,6 @@ public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData 
 	}
 	
 	/**
-	 * @return the blankProject
-	 */
-	public boolean isBlankProject() {
-		return this.blankProject;
-	}
-	
-	/**
 	 * @param dslType the dslType to set
 	 */
 	@Override
@@ -59,10 +51,4 @@ public class NewFuseIntegrationProjectMetaData extends CommonNewProjectMetaData 
 		this.targetRuntime = targetRuntime;
 	}
 	
-	/**
-	 * @param blankProject the blankProject to set
-	 */
-	public void setBlankProject(boolean blankProject) {
-		this.blankProject = blankProject;
-	}
 }

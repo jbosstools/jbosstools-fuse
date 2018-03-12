@@ -10,9 +10,7 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages.provider;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 
@@ -20,55 +18,22 @@ import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
  * @author lhein
  *
  */
-public class TemplateLabelProvider implements ILabelProvider {
+public class TemplateLabelProvider extends LabelProvider {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
-	 */
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
-	 */
-	@Override
-	public void dispose() {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
-	 */
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
-	 */
-	@Override
-	public Image getImage(Object element) {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
-	 */
 	@Override
 	public String getText(Object element) {
 		if (element instanceof CategoryItem) {
 			return ((CategoryItem)element).getName();
 		} else if (element instanceof TemplateItem) {
-			return ((TemplateItem)element).getName();
+			TemplateItem templateItem = (TemplateItem)element;
+			return templateItem.getName() + computeDslSuffix(templateItem);
 		}
 		return element.toString();
+	}
+	
+	private String computeDslSuffix(TemplateItem templateItem) {
+		String dslName = templateItem.getDslType().name();
+		String dslNameFormatted = dslName.substring(0, 1).toUpperCase() + dslName.substring(1, dslName.length()).toLowerCase();
+		return " - "+dslNameFormatted+" DSL";
 	}
 }

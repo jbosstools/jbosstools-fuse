@@ -71,7 +71,6 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
 		} else {
 			newProjectMetadata.setTemplate(new EAPSpringTemplateForFuse7());
 		}
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 	

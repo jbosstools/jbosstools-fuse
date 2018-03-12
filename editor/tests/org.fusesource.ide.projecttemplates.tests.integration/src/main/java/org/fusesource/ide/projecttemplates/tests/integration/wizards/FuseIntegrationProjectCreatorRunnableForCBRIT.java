@@ -61,7 +61,6 @@ public class FuseIntegrationProjectCreatorRunnableForCBRIT extends FuseIntegrati
 		} else {
 			newProjectMetadata.setTemplate(new CBRTemplateForFuse7());
 		}
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 	
