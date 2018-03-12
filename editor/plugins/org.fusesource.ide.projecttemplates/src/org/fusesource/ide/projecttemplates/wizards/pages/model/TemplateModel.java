@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 
 /**
@@ -48,9 +49,6 @@ public class TemplateModel {
 
 	private NameAndWeightComparator comparator = new NameAndWeightComparator();
 	
-	/**
-	 * 
-	 */
 	public TemplateModel() {
 		initialize();
 	}
@@ -82,8 +80,8 @@ public class TemplateModel {
 				String id = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_ID);
 				String name = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_NAME);
 				String description = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_DESCRIPTION);
-				String weight = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_WEIGHT);
 				String keywords = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_KEYWORDS);
+				String weight = e.getAttribute(PROJECT_TEMPLATE_PROVIDER_ATTR_WEIGHT);
 				int iWeight = 10;
 				try {
 					iWeight = Integer.parseInt(weight);
@@ -95,11 +93,19 @@ public class TemplateModel {
 				if (category == null) {
 					category = getCategory(DEFAULT_CAT_ID);
 				}
-				TemplateItem item = new TemplateItem(id, name, description, iWeight, category, template, keywords);
-				category.addTemplate(item);
+				createTemplateForEachDSL(template, id, name, description, keywords, iWeight, category);
 			}
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
+		}
+	}
+
+	private void createTemplateForEachDSL(AbstractProjectTemplate template, String id, String name, String description, String keywords, int iWeight, CategoryItem category) {
+		for (CamelDSLType dslType : CamelDSLType.values()) {
+			if (template.supportsDSL(dslType)) {
+				TemplateItem item = new TemplateItem(id, name , description, iWeight, category, template, keywords, dslType);
+				category.addTemplate(item);
+			}
 		}
 	}
 

@@ -12,6 +12,7 @@ package org.fusesource.ide.projecttemplates.wizards.pages.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.wizards.pages.filter.ExcludeEmptyCategoriesFilter;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
@@ -42,7 +43,7 @@ public class ExcludeEmptyCategoriesFilterTest {
 	@Test
 	public void testFilledSingleCategory() throws Exception {
 		CategoryItem cat1 = new CategoryItem("a.1", "Cat1", 0, null);
-		cat1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1, null, "test"));
+		cat1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1, null, "test", CamelDSLType.SPRING));
 		assertThat(filter.isEmptyCategory(cat1)).isFalse();
 	}
 	
@@ -51,7 +52,7 @@ public class ExcludeEmptyCategoriesFilterTest {
 		CategoryItem cat1 = new CategoryItem("a.1", "Cat1", 0, null);
 		CategoryItem cat1_1 = new CategoryItem("a.1.1", "Cat1.1", 0, "a.1");
 		cat1.addSubCategory(cat1_1);
-		cat1_1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1_1, null, "test"));
+		cat1_1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1_1, null, "test", CamelDSLType.SPRING));
 		assertThat(filter.isEmptyCategory(cat1)).isFalse();
 		assertThat(filter.isEmptyCategory(cat1_1)).isFalse();
 	}
@@ -61,7 +62,7 @@ public class ExcludeEmptyCategoriesFilterTest {
 		CategoryItem cat1 = new CategoryItem("a.1", "Cat1", 0, null);
 		CategoryItem cat1_1 = new CategoryItem("a.1.1", "Cat1.1", 0, "a.1");
 		cat1.addSubCategory(cat1_1);
-		cat1_1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1_1, null, "test"));
+		cat1_1.addTemplate(new TemplateItem("t1", "test", "test", 0, cat1_1, null, "test", CamelDSLType.SPRING));
 		CategoryItem cat2 = new CategoryItem("a.2", "Cat2", 0, null);
 		assertThat(filter.isEmptyCategory(cat1)).isFalse();
 		assertThat(filter.isEmptyCategory(cat1_1)).isFalse();

@@ -57,7 +57,6 @@ public class FuseIntegrationProjectCreatorRunnableForAMQIT extends FuseIntegrati
 	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		newProjectMetadata.setTemplate(new AMQTemplate());
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 	

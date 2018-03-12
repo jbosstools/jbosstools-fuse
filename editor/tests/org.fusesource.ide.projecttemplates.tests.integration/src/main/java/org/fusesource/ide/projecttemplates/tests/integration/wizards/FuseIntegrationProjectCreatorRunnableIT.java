@@ -25,7 +25,6 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -57,6 +56,8 @@ import org.fusesource.ide.launcher.ui.launch.ExecutePomAction;
 import org.fusesource.ide.launcher.ui.launch.ExecutePomActionPostProcessor;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
@@ -163,9 +164,11 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		metadata.setCamelVersion(camelVersion);
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(dsl);
-		metadata.setBlankProject(true);
-		// we create a blank project
-		metadata.setTemplate(null);
+		if (isOlderThan220()) {
+			metadata.setTemplate(new EmptyProjectTemplateForFuse6());
+		} else {
+			metadata.setTemplate(new EmptyProjectTemplateForFuse7());
+		}
 		return metadata;
 	}
 

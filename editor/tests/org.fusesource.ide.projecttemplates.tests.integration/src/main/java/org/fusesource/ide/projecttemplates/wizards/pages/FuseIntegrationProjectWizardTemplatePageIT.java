@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
@@ -31,7 +30,7 @@ import org.junit.Test;
 public class FuseIntegrationProjectWizardTemplatePageIT {
 
 	@Test
-	public void testDSLButtonsIntellisense() throws Exception {
+	public void testTemplatesAvailable() throws Exception {
 		FuseIntegrationProjectWizard wiz = new FuseIntegrationProjectWizard();
 		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wiz);
 		dlg.create();
@@ -45,18 +44,6 @@ public class FuseIntegrationProjectWizardTemplatePageIT {
 		
 		TemplateItem eapTemplate = findEAPTemplate(cats);
 		assertThat(eapTemplate).isNotNull();
-		
-		page.getBtnTemplateProject().setSelection(true);
-		assertThat(page.getBtnTemplateProject().getSelection()).isTrue();
-		
-		page.getListTemplates().getViewer().setSelection(new StructuredSelection(cbrTemplate));
-		assertThat(page.getBtnJavaDSL().isEnabled()).isTrue();
-		
-		page.getBtnJavaDSL().setSelection(true);
-		assertThat(page.getBtnJavaDSL().getSelection()).isTrue();
-		
-		page.getListTemplates().getViewer().setSelection(new StructuredSelection(eapTemplate));
-		assertThat(page.getBtnBlueprintDSL().getSelection()).isTrue();
 	}
 
 	private TemplateItem findEAPTemplate(List<CategoryItem> cats) {

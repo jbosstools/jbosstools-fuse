@@ -69,7 +69,6 @@ public class LaunchFromCamelContextFileIT extends FuseIntegrationProjectCreatorR
 	protected NewFuseIntegrationProjectMetaData createDefaultNewProjectMetadata(CamelDSLType dsl, String projectName) {
 		NewFuseIntegrationProjectMetaData newProjectMetadata = super.createDefaultNewProjectMetadata(dsl, projectName);
 		newProjectMetadata.setTemplate(new CBRTemplateForFuse6());
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 

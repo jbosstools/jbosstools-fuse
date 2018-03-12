@@ -71,7 +71,6 @@ public class FuseIntegrationProjectCreatorRunnableForCXFCodeFirstIT extends Fuse
 		} else {
 			newProjectMetadata.setTemplate(new CXfCodeFirstProjectTemplateForFuse7());
 		}
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 	

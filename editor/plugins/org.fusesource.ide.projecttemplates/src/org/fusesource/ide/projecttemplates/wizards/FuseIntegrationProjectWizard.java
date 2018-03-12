@@ -25,6 +25,7 @@ import org.fusesource.ide.projecttemplates.util.BasicProjectCreatorRunnableUtils
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardTemplatePage;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 
 /**
  * @author lhein
@@ -87,14 +88,9 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 		}
 		metadata.setCamelVersion(runtimeAndCamelVersionPage.getSelectedCamelVersion());
 		metadata.setTargetRuntime(runtimeAndCamelVersionPage.getSelectedRuntime());
-		metadata.setDslType(templateSelectionPage.getDSL());
-		metadata.setBlankProject(templateSelectionPage.isEmptyProject());
-		if (metadata.isBlankProject()) {
-			// we create a blank project
-			metadata.setTemplate(BasicProjectCreatorRunnableUtils.isCamelVersionBiggerThan220(metadata.getCamelVersion()) ? new EmptyProjectTemplateForFuse7() : new EmptyProjectTemplateForFuse6());
-		} else {
-			metadata.setTemplate(templateSelectionPage.getSelectedTemplate() != null ? templateSelectionPage.getSelectedTemplate().getTemplate() : null);
-		}
+		TemplateItem selectedTemplateItem = templateSelectionPage.getSelectedTemplate();
+		metadata.setDslType(selectedTemplateItem.getDslType());
+		metadata.setTemplate(selectedTemplateItem.getTemplate());
 		return metadata;
 	}
 }

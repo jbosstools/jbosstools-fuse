@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 
 /**
  * @author lhein
@@ -27,6 +28,7 @@ public class TemplateItem implements NameAndWeightSupport {
 	private int weight;
 	private CategoryItem category;
 	private AbstractProjectTemplate template;
+	private CamelDSLType dslType;
 	
 	/**
 	 * creates a new template item
@@ -38,13 +40,14 @@ public class TemplateItem implements NameAndWeightSupport {
 	 * @param category		the category
 	 * @param template		the template class
 	 */
-	public TemplateItem(String id, String name, String description, int weight, CategoryItem category, AbstractProjectTemplate template, String keywords) {
+	public TemplateItem(String id, String name, String description, int weight, CategoryItem category, AbstractProjectTemplate template, String keywords, CamelDSLType dslType) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.weight = weight;
 		this.category = category;
 		this.template = template;
+		this.dslType = dslType;
 		initKeywords(keywords);
 	}
 	
@@ -107,5 +110,9 @@ public class TemplateItem implements NameAndWeightSupport {
 
 	public boolean isCompatible(String camelVersion) {
 		return template.isCompatible(camelVersion);
+	}
+
+	public CamelDSLType getDslType() {
+		return dslType;
 	}
 }

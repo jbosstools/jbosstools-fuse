@@ -26,6 +26,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.wst.server.core.IRuntime;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
+import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,9 +61,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		metadata.setCamelVersion(camelVersion);
 		metadata.setTargetRuntime(null);
 		metadata.setDslType(CamelDSLType.SPRING);
-		metadata.setBlankProject(true);
-		// we create a blank project
-		metadata.setTemplate(null);
+		metadata.setTemplate(new EmptyProjectTemplateForFuse6());
 		
 		testProjectCreation(projectNameSuffix, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", metadata);
 		
@@ -81,9 +80,7 @@ public class FuseIntegrationProjectCreatorRunnableCheckForBomVersionIT extends F
 		metadata.setCamelVersion(camelVersion);
 		metadata.setTargetRuntime(runtime);
 		metadata.setDslType(CamelDSLType.SPRING);
-		metadata.setBlankProject(true);
-		// we create a blank project
-		metadata.setTemplate(null);
+		metadata.setTemplate(new EmptyProjectTemplateForFuse6());
 		
 		testProjectCreation(projectNameSuffix, CamelDSLType.SPRING, "src/main/resources/META-INF/spring/camel-context.xml", metadata);
 		

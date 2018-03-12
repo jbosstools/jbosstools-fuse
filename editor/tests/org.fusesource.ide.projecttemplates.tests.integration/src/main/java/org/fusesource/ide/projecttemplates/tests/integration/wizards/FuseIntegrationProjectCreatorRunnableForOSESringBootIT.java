@@ -51,7 +51,6 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 		} else {
 			newProjectMetadata.setTemplate(new OSESpringBootXMLTemplateForFuse7());
 		}
-		newProjectMetadata.setBlankProject(false);
 		return newProjectMetadata;
 	}
 	

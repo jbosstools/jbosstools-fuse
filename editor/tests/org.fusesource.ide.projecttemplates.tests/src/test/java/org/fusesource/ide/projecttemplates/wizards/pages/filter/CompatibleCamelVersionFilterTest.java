@@ -15,6 +15,7 @@ import static org.mockito.Mockito.doReturn;
 
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
+import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.AMQTemplate;
 import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
@@ -94,7 +95,7 @@ public class CompatibleCamelVersionFilterTest {
 	}
 	
 	protected TemplateItem createTemplateItemInCategory(AbstractProjectTemplate template, CategoryItem category) {
-		TemplateItem templateItem = new TemplateItem("id", "name", "description", 1, category, template, "keywords");
+		TemplateItem templateItem = new TemplateItem("id", "name", "description", 1, category, template, "keywords", CamelDSLType.SPRING);
 		if (category != null) {
 			category.addTemplate(templateItem);
 		}

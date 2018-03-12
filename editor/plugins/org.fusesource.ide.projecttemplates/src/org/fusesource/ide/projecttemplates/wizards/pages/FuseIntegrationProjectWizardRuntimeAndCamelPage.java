@@ -172,8 +172,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 				setMessage(null);
 			}
 		});
-
-		camelVersionComboViewer.addSelectionChangedListener(event -> {
+		
+		camelVersionCombo.addModifyListener(e -> {
 			validate();
 			((FuseIntegrationProjectWizardTemplatePage)getWizard().getPage(Messages.newProjectWizardTemplatePageName)).refresh(camelVersionCombo.getText());
 		});
