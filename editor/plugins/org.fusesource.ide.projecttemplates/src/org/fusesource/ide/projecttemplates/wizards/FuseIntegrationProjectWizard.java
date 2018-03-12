@@ -16,12 +16,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
 import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardTemplatePage;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 
 /**
@@ -69,11 +73,11 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 		locationPage = new ProjectWizardLocationPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		addPage(locationPage);
-
-		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage();
+		EnvironmentData environmentData = new EnvironmentData(CamelCatalogUtils.getLatestCamelVersion(), FuseDeploymentPlatform.OpenShift, FuseRuntimeKind.SpringBoot);
+		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage(environmentData);
 		addPage(runtimeAndCamelVersionPage);
 
-		templateSelectionPage = new FuseIntegrationProjectWizardTemplatePage(runtimeAndCamelVersionPage);
+		templateSelectionPage = new FuseIntegrationProjectWizardTemplatePage(environmentData);
 		addPage(templateSelectionPage);
 	}
 

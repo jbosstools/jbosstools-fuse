@@ -10,9 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
-import java.beans.Beans;
-
-public class EnvironmentData extends Beans {
+public class EnvironmentData {
 	
 	private String camelVersion;
 	private FuseDeploymentPlatform deploymentPlatform;

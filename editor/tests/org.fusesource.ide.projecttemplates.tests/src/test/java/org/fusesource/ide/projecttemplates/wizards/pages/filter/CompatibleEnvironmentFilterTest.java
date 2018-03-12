@@ -21,6 +21,9 @@ import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFu
 import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItemIdentity;
 import org.junit.Test;
@@ -29,42 +32,42 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CompatibleCamelVersionFilterTest {
+public class CompatibleEnvironmentFilterTest {
 	
 	@Mock
 	private FuseIntegrationProjectWizardRuntimeAndCamelPage page;
 	
 	@Test
 	public void testAMQCompatibleWith63() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63);
+		CompatibleEnvironmentFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
 		TemplateItem templateItem = createTemplateItem(new AMQTemplate());
 		assertThat(filter.select(null, null, templateItem)).isTrue();
 	}
 
 	@Test
 	public void testAMQNotCompatibleWithHigherThan2_20() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter("2.20.0");
+		CompatibleEnvironmentFilter filter = createFilter("2.20.0");
 		TemplateItem templateItem = createTemplateItem(new AMQTemplate());
 		assertThat(filter.select(null, null, templateItem)).isFalse();
 	}
 	
 	@Test
 	public void testOpenShiftTemplateNotCompatibleWithLowerThan2_18() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter("2.17.9");
+		CompatibleEnvironmentFilter filter = createFilter("2.17.9");
 		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplateForFuse6());
 		assertThat(filter.select(null, null, templateItem)).isFalse();
 	}
 	
 	@Test
 	public void testOpenShiftTemplateCompatibleWithHigherThan2_18() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20);
+		CompatibleEnvironmentFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_FIS_20);
 		TemplateItem templateItem = createTemplateItem(new OSESpringBootXMLTemplateForFuse6());
 		assertThat(filter.select(null, null, templateItem)).isTrue();
 	}
 
 	@Test
 	public void testCategoryItemNotFilteredOutIfContainsChild() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter("2.20.0");
+		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
 		CategoryItem category = new CategoryItem("id", "name", 0, null);
 		createTemplateItemInCategory(new EmptyProjectTemplateForFuse7(), category);
 		assertThat(filter.select(null, null, category)).isTrue();
@@ -72,7 +75,7 @@ public class CompatibleCamelVersionFilterTest {
 	
 	@Test
 	public void testCategoryWithDepthTwoItemNotFilteredOutIfContainsChild() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter("2.20.0");
+		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
 		CategoryItem category1 = new CategoryItem("id1", "name", 0, null);
 		CategoryItem category2 = new CategoryItem("id2", "name", 0, category1.getName());
 		category2.setParentCategory(category1);
@@ -85,7 +88,7 @@ public class CompatibleCamelVersionFilterTest {
 	
 	@Test
 	public void testCategoryItemFilteredOutIfAllChildrenAlsoFiltered() throws Exception {
-		CompatibleCamelVersionFilter filter = createFilter("2.17.0");
+		CompatibleEnvironmentFilter filter = createFilter("2.17.0");
 		CategoryItem category = new CategoryItem("id", "name", 0, null);
 		createTemplateItemInCategory(new OSESpringBootXMLTemplateForFuse6(), category);
 		assertThat(filter.select(null, null, category)).isFalse();
@@ -96,15 +99,19 @@ public class CompatibleCamelVersionFilterTest {
 	}
 	
 	protected TemplateItem createTemplateItemInCategory(AbstractProjectTemplate template, CategoryItem category) {
-		TemplateItem templateItem = new TemplateItem(new TemplateItemIdentity("id", "name", "description",  "keywords"), 1, category, template, CamelDSLType.SPRING);
+		TemplateItem templateItem = new TemplateItem(new TemplateItemIdentity("id", "name", "description", "keywords"), 1, category, template, CamelDSLType.SPRING);
 		if (category != null) {
 			category.addTemplate(templateItem);
 		}
 		return templateItem;
 	}
 	
-	protected CompatibleCamelVersionFilter createFilter(String camelVersion) {
+	protected CompatibleEnvironmentFilter createFilter(String camelVersion) {
+		return createFilter(camelVersion, FuseDeploymentPlatform.OpenShift, FuseRuntimeKind.SpringBoot);
+	}
+	
+	protected CompatibleEnvironmentFilter createFilter(String camelVersion, FuseDeploymentPlatform platform, FuseRuntimeKind runtime) {
 		doReturn(camelVersion).when(page).getSelectedCamelVersion();
-		return new CompatibleCamelVersionFilter(camelVersion);
+		return new CompatibleEnvironmentFilter(new EnvironmentData(camelVersion, platform, runtime));
 	}
 }

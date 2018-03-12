@@ -61,6 +61,9 @@ import org.fusesource.ide.projecttemplates.impl.simple.EmptyProjectTemplateForFu
 import org.fusesource.ide.projecttemplates.tests.integration.ProjectTemplatesIntegrationTestsActivator;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
 import org.fusesource.ide.projecttemplates.wizards.FuseIntegrationProjectCreatorRunnable;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.junit.Before;
 
 /**
@@ -102,7 +105,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		
 		AbstractProjectTemplate template = metadata.getTemplate();
 		if (template != null) {
-			assertThat(template.isCompatible(camelVersion)).isTrue();
+			assertThat(template.isCompatible(createEnvironmentData())).isTrue();
 		}
 
 		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new FuseIntegrationProjectCreatorRunnable(metadata));
@@ -132,6 +135,10 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 		} else {
 			//TODO: different Run? or implement the java local camel context?
 		}
+	}
+
+	protected EnvironmentData createEnvironmentData() {
+		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {

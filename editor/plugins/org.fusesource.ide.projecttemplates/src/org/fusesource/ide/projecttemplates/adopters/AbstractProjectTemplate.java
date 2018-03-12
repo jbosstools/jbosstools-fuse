@@ -25,6 +25,7 @@ import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupp
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
 
 /**
  * @author lhein
@@ -91,7 +92,7 @@ public abstract class AbstractProjectTemplate {
 	 */
 	public abstract TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData);
 
-	public boolean isCompatible(String camelVersion) {
+	public boolean isCompatible(EnvironmentData environment) {
 		return true;
 	}
 	

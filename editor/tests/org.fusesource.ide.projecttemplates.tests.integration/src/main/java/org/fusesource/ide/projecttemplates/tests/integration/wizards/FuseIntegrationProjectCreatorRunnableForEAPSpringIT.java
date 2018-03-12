@@ -39,6 +39,9 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse6;
 import org.fusesource.ide.projecttemplates.impl.simple.EAPSpringTemplateForFuse7;
 import org.fusesource.ide.projecttemplates.util.NewFuseIntegrationProjectMetaData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseDeploymentPlatform;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -133,5 +136,9 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
     protected void launchDebug(IProject project)throws InterruptedException, IOException, MalformedObjectNameException, DebugException {
     	// Local launch is not configured for EAP projects
     }
-
+    
+	protected EnvironmentData createEnvironmentData() {
+		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.WildFly);
+	}
+    
 }

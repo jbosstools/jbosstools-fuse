@@ -21,12 +21,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.sideeffect.ISideEffect;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.SelectObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -80,18 +85,19 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	private Map<String, IRuntime> serverRuntimes;
 	private String lastSelectedRuntime;
 	private ComboViewer camelVersionComboViewer;
-	private EnvironmentData environment = new EnvironmentData(CamelCatalogUtils.getLatestCamelVersion(), FuseDeploymentPlatform.OpenShift, FuseRuntimeKind.SpringBoot);
+	private EnvironmentData environment;
 	private DataBindingContext dbc = new DataBindingContext();
 	private ISWTObservableValue standAloneObservable;
 	private IObservableValue<FuseDeploymentPlatform> environmentPlatformObservable;
 	private ISideEffect sideEffect;
 	
-	public FuseIntegrationProjectWizardRuntimeAndCamelPage() {
+	public FuseIntegrationProjectWizardRuntimeAndCamelPage(EnvironmentData environment) {
 		super(Messages.newProjectWizardRuntimePageName);
 		setTitle(Messages.newProjectWizardRuntimePageTitle);
 		setDescription(Messages.newProjectWizardRuntimePageDescription);
 		setImageDescriptor(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		setPageComplete(false);
+		this.environment = environment;
 	}
 
 	@Override
@@ -139,8 +145,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		camelVersionComboViewer.setComparator(new ViewerComparator(Comparator.reverseOrder()));
 		GridData camelComboData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		camelVersionCombo.setLayoutData(camelComboData);
-		camelVersionComboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		camelVersionComboViewer.setInput(CamelCatalogUtils.getAllCamelCatalogVersions());
+		camelVersionComboViewer.setContentProvider(new ObservableListContentProvider());
+		camelVersionComboViewer.setInput(new WritableList<String>(new ArrayList<String>(CamelCatalogUtils.getAllCamelCatalogVersions()), String.class));
 		camelVersionComboViewer.setSelection(new StructuredSelection(CamelCatalogUtils.getLatestCamelVersion()));
 		camelVersionCombo.setToolTipText(Messages.newProjectWizardRuntimePageCamelDescription);
 		camelVersionCombo.addSelectionListener(new SelectionAdapter() {
@@ -161,8 +167,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		camelVersionCombo.addModifyListener(e -> {
 			validate();
-			((FuseIntegrationProjectWizardTemplatePage)getWizard().getPage(Messages.newProjectWizardTemplatePageName)).refresh(camelVersionCombo.getText());
+			environment.setCamelVersion(camelVersionCombo.getText());
+			refreshFilteredTemplates();
 		});
+		
+		dbc.bindValue(ViewerProperties.singleSelection().observeDelayed(300, camelVersionComboViewer), PojoProperties.value(EnvironmentData.class, "camelVersion").observe(environment));
 		
 		Button camelVersionValidationBtn = new Button(camelGrp, SWT.PUSH);
 		GridData camelButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -197,7 +206,15 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		observableValue.addOption(FuseRuntimeKind.SpringBoot, WidgetProperties.selection().observe(springBootRadio));
 		observableValue.addOption(FuseRuntimeKind.Karaf, WidgetProperties.selection().observe(karafRadio));
 		observableValue.addOption(FuseRuntimeKind.WildFly, WidgetProperties.selection().observe(eapRadio));
-		dbc.bindValue(observableValue, BeanProperties.value(EnvironmentData.class, "fuseRuntime").observe(environment));
+		IObservableValue observe = PojoProperties.value(EnvironmentData.class, "fuseRuntime").observe(environment);
+		dbc.bindValue(observableValue, observe);
+		observe.addChangeListener(new IChangeListener() {
+			
+			@Override
+			public void handleChange(ChangeEvent event) {
+				refreshFilteredTemplates();
+			}
+		});
 	}
 
 	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton) {
@@ -260,8 +277,15 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		standAloneObservable = WidgetProperties.selection().observe(standAloneRadioButton);
 		observableValue.addOption(FuseDeploymentPlatform.OpenShift,  WidgetProperties.selection().observe(openShiftRadioButton));
 		observableValue.addOption(FuseDeploymentPlatform.Standalone, standAloneObservable);
-		environmentPlatformObservable = BeanProperties.value(EnvironmentData.class, "deploymentPlatform").observe(environment);
+		environmentPlatformObservable = PojoProperties.value(EnvironmentData.class, "deploymentPlatform").observe(environment);
 		dbc.bindValue(observableValue, environmentPlatformObservable);
+		environmentPlatformObservable.addChangeListener(new IChangeListener() {
+			
+			@Override
+			public void handleChange(ChangeEvent event) {
+				refreshFilteredTemplates();
+			}
+		});
 		
 		openShiftRadioButton.addSelectionListener(new ValidateTriggerListener());
 	}	
@@ -444,6 +468,10 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		setPageComplete(getErrorMessage() == null);
 	}
 
+	private void refreshFilteredTemplates() {
+		((FuseIntegrationProjectWizardTemplatePage)getWizard().getPage(Messages.newProjectWizardTemplatePageName)).refresh();
+	}
+
 	private void validateForRuntimeCamelVersion(String runtimeCamelVersion) {
 		if (UNKNOWN_CAMEL_VERSION.equals(runtimeCamelVersion)) {
 			if (!Widgets.isDisposed(camelVersionComboViewer)){
@@ -479,7 +507,7 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	public boolean isPageComplete() {
 		return super.isPageComplete() && getErrorMessage() == null;
 	}
-	
+
 	private final class ValidateTriggerListener extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {

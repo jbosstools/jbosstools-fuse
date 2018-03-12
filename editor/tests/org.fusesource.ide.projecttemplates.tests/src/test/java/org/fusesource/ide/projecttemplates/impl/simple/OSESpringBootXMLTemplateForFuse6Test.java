@@ -15,6 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.fusesource.ide.projecttemplates.wizards.pages.model.EnvironmentData;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.FuseRuntimeKind;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -43,7 +45,7 @@ public class OSESpringBootXMLTemplateForFuse6Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new OSESpringBootXMLTemplateForFuse6().isCompatible(version)).isEqualTo(isCompatible);
+		assertThat(new OSESpringBootXMLTemplateForFuse6().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SpringBoot))).isEqualTo(isCompatible);
 	}
 
 }
