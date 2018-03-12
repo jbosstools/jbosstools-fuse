@@ -252,29 +252,34 @@ public class CamelContextElement extends CamelRouteContainerElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(DATA_FORMATS_NODE_NAME)) {
-				NodeList dfs = tmp.getChildNodes();
-				for (int y=0; y<dfs.getLength(); y++) {
-					Node tmp_df = dfs.item(y);
-					if (tmp_df.getNodeType() != Node.ELEMENT_NODE) continue;
-					CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp_df);
-					cme.initialize();
-					this.dataformats.put(cme.getId(), cme);
-				}
-			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(ENDPOINT_NODE_NAME)) {
-				CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp);
+			parseNode(tmp);
+		}
+	}
+
+	private void parseNode(Node node) {
+		String tagNameWithoutPrefix = CamelUtils.getTagNameWithoutPrefix(node);
+		if (DATA_FORMATS_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			NodeList dfs = node.getChildNodes();
+			for (int y=0; y<dfs.getLength(); y++) {
+				Node tmp_df = dfs.item(y);
+				if (tmp_df.getNodeType() != Node.ELEMENT_NODE) continue;
+				CamelBasicModelElement cme = new CamelBasicModelElement(this, tmp_df);
 				cme.initialize();
-				this.endpointDefinitions.put(cme.getId(), cme);
-			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(ROUTE_NODE_NAME)) {
-				CamelRouteElement cme = new CamelRouteElement(this, tmp);
-				cme.initialize();
-				addChildElement(cme);
-			} else if (CamelUtils.getTagNameWithoutPrefix(tmp).equals(REST_CONFIGURATION_NODE_NAME) ||
-					CamelUtils.getTagNameWithoutPrefix(tmp).equals(REST_NODE_NAME)) {
-				// these are handled differently on the REST page in the editor, so let them by
-			} else {
-				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + CamelUtils.getTagNameWithoutPrefix(tmp));
+				this.dataformats.put(cme.getId(), cme);
 			}
+		} else if (ENDPOINT_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			CamelBasicModelElement cme = new CamelBasicModelElement(this, node);
+			cme.initialize();
+			this.endpointDefinitions.put(cme.getId(), cme);
+		} else if (ROUTE_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			CamelRouteElement cme = new CamelRouteElement(this, node);
+			cme.initialize();
+			addChildElement(cme);
+		} else if (REST_CONFIGURATION_NODE_NAME.equals(tagNameWithoutPrefix) ||
+				REST_NODE_NAME.equals(tagNameWithoutPrefix)) {
+			// these are handled differently on the REST page in the editor, so let them by
+		} else {
+			CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + tagNameWithoutPrefix);
 		}
 	}
 	
