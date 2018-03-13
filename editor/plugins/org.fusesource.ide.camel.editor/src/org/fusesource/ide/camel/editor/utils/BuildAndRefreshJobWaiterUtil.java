@@ -21,7 +21,8 @@ public class BuildAndRefreshJobWaiterUtil extends JobWaiterUtil {
 			ResourcesPlugin.FAMILY_AUTO_BUILD,
 			ResourcesPlugin.FAMILY_MANUAL_REFRESH,
 			ResourcesPlugin.FAMILY_AUTO_REFRESH,
-			ResourcesPlugin.FAMILY_MANUAL_BUILD);
+			ResourcesPlugin.FAMILY_MANUAL_BUILD
+	);
 
 	public BuildAndRefreshJobWaiterUtil() {
 		super(buildAnRefreshJobFamilies);

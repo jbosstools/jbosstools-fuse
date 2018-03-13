@@ -8,7 +8,6 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
 import org.apache.maven.model.Model;
@@ -43,6 +42,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage, 3);
 		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
+		if (ok) {
+			// by default add staging repos if option enabled
+			ok = MavenUtils.configureStagingRepositories(project, subMonitor.newChild(1));
+		}
+		
 		if (ok) {
 			// by default add the maven nature
 			ok = configureMavenNature(project, subMonitor.newChild(1));

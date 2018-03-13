@@ -69,11 +69,15 @@ public class OnlineArtifactVersionSearcher {
 	}
 	
 	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) throws CoreException {
+		return findLatestVersion(monitor, artifactToSearch, null);
+	}
+	
+	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch, String searchExpression) throws CoreException {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		//search with m2e Index, it goes faster in case m2e indexing is activated
 		IIndex index = MavenPlugin.getIndexManager().getWorkspaceIndex();
 		IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), null, Packaging.POM);
+		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), searchExpression, Packaging.POM);
 		subMon.setWorkRemaining(1);
 		if(!versions.isEmpty()) {
 			return versions.iterator().next();
@@ -94,7 +98,7 @@ public class OnlineArtifactVersionSearcher {
 				mavenRepo.setUrl("https://origin-repository.jboss.org/nexus/content/groups/ea/");
 				additionalMavenRepos.add(mavenRepo);
 			}
-			return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch), subMon.split(1));
+			return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch, searchExpression), subMon.split(1));
 		}
 	}
 	
