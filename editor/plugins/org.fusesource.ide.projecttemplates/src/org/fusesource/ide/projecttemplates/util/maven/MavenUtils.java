@@ -290,6 +290,31 @@ public class MavenUtils {
 	}
 	
 	/**
+	 * adds staging repositories to the pom file if enabled
+	 * 
+	 * @param project
+	 * @param monitor
+	 * @return
+	 */
+	public static boolean configureStagingRepositories(IProject project, IProgressMonitor monitor) {
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorAddingStagingRepositories, 3);
+		try {
+			File pomFile = new File(project.getFile(IMavenConstants.POM_FILE_NAME).getLocation().toOSString()); //$NON-NLS-1$
+			Model m2m = new CamelMavenUtils().getMavenModel(project);
+			subMonitor.setWorkRemaining(2);
+
+			MavenUtils.manageStagingRepositories(m2m);
+			subMonitor.setWorkRemaining(1);
+
+			new org.fusesource.ide.camel.editor.utils.MavenUtils().writeNewPomFile(project, pomFile, m2m, subMonitor.split(1));
+		} catch (Exception ex) {
+			ProjectTemplatesActivator.pluginLog().logError(ex);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * changes all occurrences of Camel version in the pom.xml file with the
 	 * version defined in the wizard
 	 * 

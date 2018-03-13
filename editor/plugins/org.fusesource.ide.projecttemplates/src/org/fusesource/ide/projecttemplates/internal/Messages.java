@@ -29,6 +29,7 @@ public class Messages extends NLS {
 	public static String mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage;
 	public static String mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage;
 	public static String mavenTemplateConfiguratorConfiguringTemplatesMonitorMessage;
+	public static String mavenTemplateConfiguratorAddingStagingRepositories;
 	public static String newProjectWizardTitle;
 
 	public static String newProjectWizardRuntimePageName;
