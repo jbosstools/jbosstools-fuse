@@ -44,13 +44,12 @@ public class ClassExistsInProjectValidator implements IValidator {
 	 */
 	@Override
 	public IStatus validate(Object value) {
-		if (((value instanceof String) && ((String) value).length() > 0)) {
+		if (((value instanceof String) && (!((String) value).isEmpty()))) {
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
 					this.referencedPage.getOptionsFromWizard().getProjectName());
 			IJavaProject javaProject = JavaCore.create(project);
-			IType javaClass;
 			try {
-				javaClass = javaProject == null ? null : javaProject.findType((String) value);
+				IType javaClass = javaProject == null ? null : javaProject.findType((String) value);
 				if (javaClass == null) {
 					return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorJavaClassMustExist);
 				}

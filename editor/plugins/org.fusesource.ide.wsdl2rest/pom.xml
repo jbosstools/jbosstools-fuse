@@ -5,16 +5,16 @@
   <parent>
     <groupId>org.fusesource.ide.editor</groupId>
     <artifactId>plugins</artifactId>
-    <version>10.2.0-SNAPSHOT</version>
+    <version>10.3.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
   <artifactId>org.fusesource.ide.wsdl2rest</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest Implemenatation </name>
+  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Wsdl2Rest Implementation </name>
 
     <properties>
-        <version.apache.camel>2.18.0</version.apache.camel>
+        <version.apache.camel>2.20.1</version.apache.camel>
         <version.apache.cxf>3.1.7</version.apache.cxf>
         <version.apache.velocity>1.7</version.apache.velocity>
         <version.args4j>2.0.31</version.args4j>

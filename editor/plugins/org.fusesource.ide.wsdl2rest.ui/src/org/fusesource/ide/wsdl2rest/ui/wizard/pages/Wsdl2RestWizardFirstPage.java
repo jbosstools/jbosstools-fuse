@@ -139,17 +139,24 @@ public class Wsdl2RestWizardFirstPage extends Wsdl2RestWizardBasePage {
 		if (selectedProject == null) {
 			selectedProject = ResourcesPlugin.getWorkspace().getRoot().getProject(getOptionsFromWizard().getProjectName());
 		}
-		String path3 = "src\\main\\java"; //$NON-NLS-1$
-		IPath javaPath = new Path(path3);
+		StringBuilder pathSrcJava = new StringBuilder().append("src") //$NON-NLS-1$
+				.append(Path.SEPARATOR).append("main") //$NON-NLS-1$
+				.append(Path.SEPARATOR).append("java"); //$NON-NLS-1$ 
+		StringBuilder pathSrcResources = new StringBuilder().append("src") //$NON-NLS-1$
+				.append(Path.SEPARATOR).append("main") //$NON-NLS-1$
+				.append(Path.SEPARATOR).append("resources"); //$NON-NLS-1$
+		IPath javaPath = new Path(pathSrcJava.toString());
 		String projectJavaPath = selectedProject.getFullPath().append(javaPath).toPortableString();
 		String projectConfigPath = null;
 		if (isProjectBlueprint()) {
-			String path2 = "src\\main\\resources\\OSGI-INF\\blueprint"; //$NON-NLS-1$
-			IPath configPath = new Path(path2);
+			StringBuilder pathBlueprint = pathSrcResources.append(Path.SEPARATOR).append("OSGI-INF") //$NON-NLS-1$
+					.append(Path.SEPARATOR).append("blueprint"); //$NON-NLS-1$
+			IPath configPath = new Path(pathBlueprint.toString());
 			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
 		} else { // use spring 
-			String path = "src\\main\\resources\\META-INF\\spring"; //$NON-NLS-1$
-			IPath configPath = new Path(path);
+			StringBuilder pathSpring = pathSrcResources.append(Path.SEPARATOR).append("META-INF") //$NON-NLS-1$
+					.append(Path.SEPARATOR).append("spring"); //$NON-NLS-1$
+			IPath configPath = new Path(pathSpring.toString());
 			projectConfigPath = selectedProject.getFullPath().append(configPath).toPortableString();
 		}
 		getOptionsFromWizard().setDestinationJava(projectJavaPath);

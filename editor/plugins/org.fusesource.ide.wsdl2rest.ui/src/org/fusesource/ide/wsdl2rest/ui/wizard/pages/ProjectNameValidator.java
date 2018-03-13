@@ -28,17 +28,17 @@ class ProjectNameValidator implements IValidator {
 	 */
 	@Override
 	public IStatus validate(Object value) {
-		if (!((value instanceof String) && ((String) value).length() > 0)) {
-			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorProjectNameRequired);
-		}
-		try {
-			IProject testProject = ResourcesPlugin.getWorkspace().getRoot().getProject((String)value);
-			if (!testProject.exists()) {
+		if (value instanceof String && (!((String) value).isEmpty())) {
+			try {
+				IProject testProject = ResourcesPlugin.getWorkspace().getRoot().getProject((String)value);
+				if (!testProject.exists()) {
+					return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorProjectMustBeInWorkspace);
+				}
+			} catch (Exception ex) {
 				return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorProjectMustBeInWorkspace);
 			}
-		} catch (Exception ex) {
-			return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorProjectMustBeInWorkspace);
+			return ValidationStatus.ok();
 		}
-		return ValidationStatus.ok();
+		return ValidationStatus.error(UIMessages.wsdl2RestWizardFirstPageValidatorProjectNameRequired);
 	}
 }
