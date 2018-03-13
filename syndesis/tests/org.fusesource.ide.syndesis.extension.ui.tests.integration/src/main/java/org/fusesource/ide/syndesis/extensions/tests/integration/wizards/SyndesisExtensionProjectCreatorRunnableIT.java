@@ -49,7 +49,7 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
-import org.fusesource.ide.syndesis.extensions.core.util.SyndesisExtensionsUtil;
+import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
 import org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionIntegrationTestsActivator;
 import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsCamelRouteProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
@@ -82,8 +82,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 
 	private SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
-		SyndesisExtensionsUtil.IgniteVersionInfoModel model = SyndesisExtensionsUtil.getIgniteVersionModel();
-		extension.setSyndesisVersion(model.getSyndesisVersion());
+		extension.setSyndesisVersion(new IgniteVersionMapper().getMapping().keySet().iterator().next());
 		extension.setExtensionId("com.acme.custom");
 		extension.setVersion("1.0.0");
 		extension.setName("ACME Custom Extension");

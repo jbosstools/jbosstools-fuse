@@ -35,10 +35,16 @@ final class SearchLatestBomVersionAvailableM2ECallable implements ICallable<Stri
 	
 	private Dependency bomUsed;
 	private List<Repository> repositories;
+	private String versionExpression;
 
 	SearchLatestBomVersionAvailableM2ECallable(List<org.apache.maven.model.Repository> repositories, Dependency bomUsed) {
+		this(repositories, bomUsed, null);
+	}
+	
+	SearchLatestBomVersionAvailableM2ECallable(List<org.apache.maven.model.Repository> repositories, Dependency bomUsed, String searchExpression) {
 		this.repositories = repositories;
 		this.bomUsed = bomUsed;
+		this.versionExpression = searchExpression;
 	}
 
 	@Override
@@ -54,6 +60,9 @@ final class SearchLatestBomVersionAvailableM2ECallable implements ICallable<Stri
 			VersionRangeResult result = retrieveRepositorySystem().resolveVersionRange(repositorySession, request);
 			List<Version> productizedversion = result.getVersions().stream().filter(version -> {
 				String versionAsString = version.toString();
+				if (versionExpression != null) {
+					return (versionAsString.contains("fuse") || versionAsString.contains("redhat")) && versionAsString.startsWith(versionExpression);
+				}
 				return versionAsString.contains("fuse") || versionAsString.contains("redhat");
 			}).collect(Collectors.toList());
 			VersionRangeResult versionRangeResultForProductizedVersion = new VersionRangeResult(request);
@@ -63,7 +72,8 @@ final class SearchLatestBomVersionAvailableM2ECallable implements ICallable<Stri
 				return productizedHighestVersion.toString();
 			}
 			Version highestVersion = result.getHighestVersion();
-			if (highestVersion != null) {
+			if (highestVersion != null && versionExpression == null || 
+				highestVersion != null && highestVersion.toString().startsWith(versionExpression)) {
 				return highestVersion.toString();
 			}
 		} catch (VersionRangeResolutionException e) {

@@ -42,6 +42,7 @@
    <bundle id="org.fusesource.ide.launcher.ui.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.project.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.projecttemplates.tests.integration"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.syndesis.extension.core.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.syndesis.extension.ui.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration"><category name="AllTests"/></bundle>
@@ -84,6 +85,7 @@
    <bundle id="org.fusesource.ide.launcher.ui.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.project.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.projecttemplates.tests.integration.source"><category name="AllTests"/></bundle>
+   <bundle id="org.fusesource.ide.syndesis.extension.core.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.fusesource.ide.syndesis.extension.ui.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.core.tests.integration.source"><category name="AllTests"/></bundle>
    <bundle id="org.jboss.tools.fuse.transformation.editor.tests.integration.source"><category name="AllTests"/></bundle>

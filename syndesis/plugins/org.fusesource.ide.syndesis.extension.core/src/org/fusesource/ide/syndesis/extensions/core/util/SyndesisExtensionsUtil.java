@@ -10,16 +10,10 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.core.util;
 
-import java.util.Map;
-
 /**
  * @author lheinema
  */
 public class SyndesisExtensionsUtil {
-	
-	static final String KEY_SPRING_BOOT_VERSION = "spring.boot.version";
-	static final String KEY_CAMEL_VERSION = "camel.version";
-	static final String KEY_SYNDESIS_VERSION = "syndesis.version";
 	
 	private SyndesisExtensionsUtil() {
 		// util class
@@ -47,69 +41,5 @@ public class SyndesisExtensionsUtil {
 			}			
 		}
 		return valid;
-	}
-	
-	/**
-	 * retrieves important version information from an online version mapping file
-	 * 
-	 * @return
-	 */
-	public static IgniteVersionInfoModel getIgniteVersionModel() {
-		IgniteVersionInfoModel model = new IgniteVersionInfoModel();
-
-		Map<String, String> mapping = new IgniteVersionMapper().getMapping();
-		model.setCamelVersion(mapping.get(KEY_CAMEL_VERSION));
-		model.setSpringBootVersion(mapping.get(KEY_SPRING_BOOT_VERSION));
-		model.setSyndesisVersion(mapping.get(KEY_SYNDESIS_VERSION));
-
-		return model;
-	}
-	
-	public static class IgniteVersionInfoModel {
-		private String springBootVersion;
-		private String camelVersion;
-		private String syndesisVersion;
-		
-		/**
-		 * @return the camelVersion
-		 */
-		public String getCamelVersion() {
-			return this.camelVersion;
-		}
-		
-		/**
-		 * @return the springBootVersion
-		 */
-		public String getSpringBootVersion() {
-			return this.springBootVersion;
-		}
-		
-		/**
-		 * @return the syndesisVersion
-		 */
-		public String getSyndesisVersion() {
-			return this.syndesisVersion;
-		}
-		
-		/**
-		 * @param camelVersion the camelVersion to set
-		 */
-		public void setCamelVersion(String camelVersion) {
-			this.camelVersion = camelVersion;
-		}
-		
-		/**
-		 * @param springBootVersion the springBootVersion to set
-		 */
-		public void setSpringBootVersion(String springBootVersion) {
-			this.springBootVersion = springBootVersion;
-		}
-		
-		/**
-		 * @param syndesisVersion the syndesisVersion to set
-		 */
-		public void setSyndesisVersion(String syndesisVersion) {
-			this.syndesisVersion = syndesisVersion;
-		}
 	}
 }

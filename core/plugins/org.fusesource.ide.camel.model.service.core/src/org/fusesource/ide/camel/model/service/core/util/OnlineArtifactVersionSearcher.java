@@ -72,11 +72,15 @@ public class OnlineArtifactVersionSearcher {
 	}
 	
 	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch) {
+		return findLatestVersion(monitor, artifactToSearch, null);
+	}
+	
+	public String findLatestVersion(IProgressMonitor monitor, Dependency artifactToSearch, String searchExpression) {
 		SubMonitor subMon = SubMonitor.convert(monitor, 2);
 		//search with m2e Index, it goes faster in case m2e indexing is activated
 		IIndex index = MavenPlugin.getIndexManager().getWorkspaceIndex();
 		IndexSearchEngine indexSearchEngine = new IndexSearchEngine(index);
-		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), null, Packaging.POM);
+		Collection<String> versions = indexSearchEngine.findVersions(artifactToSearch.getGroupId(), artifactToSearch.getArtifactId(), searchExpression, Packaging.POM);
 		subMon.setWorkRemaining(1);
 		if(!versions.isEmpty()) {
 			return versions.iterator().next();
@@ -98,7 +102,7 @@ public class OnlineArtifactVersionSearcher {
 				additionalMavenRepos.add(mavenRepo);
 			}
 			try {
-				return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch), subMon.split(1));
+				return MavenPlugin.getMaven().createExecutionContext().execute(new SearchLatestBomVersionAvailableM2ECallable(additionalMavenRepos, artifactToSearch, searchExpression), subMon.split(1));
 			} catch (OperationCanceledException | CoreException e) {
 				CamelModelServiceCoreActivator.pluginLog().logError(e);
 				return null;
