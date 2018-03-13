@@ -4,8 +4,6 @@ Last update: 8-DEC-2017
 This plug-in provides a wizard wrapper for the Wsdl2Rest code originally found here: [https://github.com/jboss-fuse/wsdl2rest](https://github.com/jboss-fuse/wsdl2rest)
 
 ## Running the wizard
-NOTE: THIS DOES NOT WORK CURRENTLY, BUT DEMONSTRATES THE BASIC APPROACH.
-
 In the project you will find an "example" directory that includes several files - a couple of classes and a wsdl file.
 
 Create a new Fuse Integration project. Leave it as a Blank project that uses the Spring DSL.
@@ -33,7 +31,7 @@ Add the following dependencies to your project pom.xml:
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-jackson</artifactId>
-      <version>2.20.0</version>
+      <version>2.20.1</version>
     </dependency>
 
 This should resolve the errors. 

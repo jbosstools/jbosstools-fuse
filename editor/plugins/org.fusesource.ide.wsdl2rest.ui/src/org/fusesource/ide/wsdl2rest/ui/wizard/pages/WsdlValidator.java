@@ -12,7 +12,7 @@ package org.fusesource.ide.wsdl2rest.ui.wizard.pages;
 
 import java.io.InputStream;
 import java.net.URL;
-
+import org.apache.commons.httpclient.HttpStatus;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -30,7 +30,7 @@ public class WsdlValidator implements IValidator {
 	 * @return
 	 */
 	private int isURLAccessible(String urlText) {
-		int code = 200;
+		int code = HttpStatus.SC_OK;
 		try {
 			final URL url = new URL(urlText);
 			InputStream testStream = url.openStream();

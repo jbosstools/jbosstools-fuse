@@ -142,12 +142,12 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 			javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());			
 		}
 		if (javaFile != null) {
-	        ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
-	        try {
-	            // initialize bus using bundle classloader, to prevent project dependencies from leaking in
-	            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+			ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+			try {
+				// initialize bus using bundle classloader, to prevent project dependencies from leaking in
+				Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 
-		        Path outpath = javaFile.toPath();
+				Path outpath = javaFile.toPath();
 				Path contextpath = new File(javaFile.getAbsolutePath() + File.separator + "rest-camel-context.xml").toPath(); //$NON-NLS-1$
 				Wsdl2Rest tool = new Wsdl2Rest(wsdlLocation, outpath);
 				tool.setTargetContext(contextpath);
@@ -158,14 +158,14 @@ public class Wsdl2RestWizard extends Wizard implements INewWizard {
 					URL targetAddressURL = new URL(options.getTargetServiceAddress());
 					tool.setTargetAddress(targetAddressURL);
 				}
-	            ClassLoader loader = tool.getClass().getClassLoader();
-	            Thread.currentThread().setContextClassLoader(loader);
+				ClassLoader loader = tool.getClass().getClassLoader();
+				Thread.currentThread().setContextClassLoader(loader);
 				tool.process();
-	        } catch (Exception e) {
-	            throw new InvocationTargetException(e);
-	        } finally {
-	            Thread.currentThread().setContextClassLoader(oldLoader);
-	        }
+			} catch (Exception e) {
+				throw new InvocationTargetException(e);
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldLoader);
+			}
 		}
 	}
 

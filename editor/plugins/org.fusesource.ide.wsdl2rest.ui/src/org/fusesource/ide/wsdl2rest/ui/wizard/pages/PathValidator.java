@@ -26,7 +26,7 @@ import org.fusesource.ide.wsdl2rest.ui.internal.UIMessages;
 public class PathValidator implements IValidator {
 
 	/**
-	 * Verify that the path exits in the selected project.
+	 * Verify that the path exists in the selected project.
 	 * @param path
 	 * @return
 	 */
@@ -49,11 +49,14 @@ public class PathValidator implements IValidator {
 	 */
 	@Override
 	public IStatus validate(Object value) {
-		if (!((value instanceof String) && ((String) value).length() > 0)) {
-			return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathRequired);
-		}
-		if ((value instanceof String && !isPathAccessible((String) value))) {
-			return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathMustBeAccessible);
+		if (value instanceof String) {
+			String stringValue = (String)value;
+			if(stringValue.isEmpty()){
+				return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathRequired);
+			}
+			if (!isPathAccessible(stringValue)) {
+				return ValidationStatus.error(UIMessages.wsdl2RestWizardSecondPageValidatorPathMustBeAccessible);
+			}
 		}
 		return ValidationStatus.ok();   		
 	}

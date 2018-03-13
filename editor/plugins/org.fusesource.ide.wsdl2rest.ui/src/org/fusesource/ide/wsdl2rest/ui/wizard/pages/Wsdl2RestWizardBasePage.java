@@ -86,10 +86,6 @@ import org.xml.sax.SAXException;
  * @author brianf
  *
  */
-/**
- * @author brianf
- *
- */
 public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 
 	/**
@@ -356,17 +352,17 @@ public abstract class Wsdl2RestWizardBasePage extends WizardPage {
 				// Load the input XML document, parse it and return an instance of the
 				// Document class.
 				Document document = builder.parse(testStream);
-				
+
 				// now use XPath to find the particular element we need
-		        XPathFactory xpf = XPathFactory.newInstance();
-		        XPath xpath = xpf.newXPath();
-            	Object rawLocation = 
-            			xpath.evaluate("/definitions/service/port/address/@location", document, XPathConstants.STRING);
-            	
-            	// if we found it, stash it!
-            	if (rawLocation != null) {
-            		locationURL = (String) rawLocation;
-            	}
+				XPathFactory xpf = XPathFactory.newInstance();
+				XPath xpath = xpf.newXPath();
+				Object rawLocation = 
+						xpath.evaluate("/definitions/service/port/address/@location", document, XPathConstants.STRING);
+
+				// if we found it, stash it!
+				if (rawLocation != null) {
+					locationURL = (String) rawLocation;
+				}
 			} catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
 				// should be valid at this point
 				Wsdl2RestUIActivator.pluginLog().logError(e);
