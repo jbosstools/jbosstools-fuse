@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.projecttemplates.adopters.configurators;
 
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,6 +20,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.fusesource.ide.camel.editor.utils.BuildAndRefreshJobWaiterUtil;
+import org.fusesource.ide.camel.model.service.core.util.CamelMavenUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.internal.Messages;
 import org.fusesource.ide.projecttemplates.internal.ProjectTemplatesActivator;
@@ -46,16 +48,23 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
 		
-		if (ok) {
-			// by default add staging repos if option enabled
-			ok = MavenUtils.configureStagingRepositories(project, subMonitor.newChild(1));
+		// to not trigger too many events while configuring the pom  we reuse the model
+		Model m2model = new CamelMavenUtils().getMavenModel(project);
+		try {
+			if (ok) {
+				// by default add staging repos if option enabled
+				ok = MavenUtils.manageStagingRepositories(m2model);
+			}
+			subMonitor.setWorkRemaining(2);
+			
+			if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
+				// by default configure the version of camel used in the pom.xml
+				ok = MavenUtils.configurePomCamelVersion(project, m2model, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
+			}
+			subMonitor.setWorkRemaining(1);
+		} finally {
+			MavenUtils.saveModelToPOM(project, m2model, subMonitor.newChild(1));
 		}
-		
-		if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
-			// by default configure the version of camel used in the pom.xml
-			ok = MavenUtils.configurePomCamelVersion(project, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));
-		}
-		
 		return ok;
 	}
 	

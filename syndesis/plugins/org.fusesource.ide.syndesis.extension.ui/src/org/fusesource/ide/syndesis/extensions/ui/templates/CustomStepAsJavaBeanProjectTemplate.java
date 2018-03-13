@@ -10,23 +10,19 @@
  ******************************************************************************/
 package org.fusesource.ide.syndesis.extensions.ui.templates;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.configurators.MavenTemplateConfigurator;
 import org.fusesource.ide.projecttemplates.adopters.configurators.TemplateConfiguratorSupport;
 import org.fusesource.ide.projecttemplates.adopters.creators.TemplateCreatorSupport;
-import org.fusesource.ide.projecttemplates.adopters.creators.UnzipStreamCreator;
-import org.fusesource.ide.projecttemplates.adopters.util.InvalidProjectMetaDataException;
 import org.fusesource.ide.projecttemplates.util.CommonNewProjectMetaData;
-import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 
 /**
  * @author lheinema
  *
  */
 public class CustomStepAsJavaBeanProjectTemplate extends AbstractProjectTemplate {
+	
+	private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
 	
 	@Override
 	public TemplateConfiguratorSupport getConfigurator() {
@@ -35,19 +31,6 @@ public class CustomStepAsJavaBeanProjectTemplate extends AbstractProjectTemplate
 	
 	@Override
 	public TemplateCreatorSupport getCreator(CommonNewProjectMetaData projectMetaData) {
-		return new SyndesisProjectCreator();
-	}
-	
-	private class SyndesisProjectCreator extends UnzipStreamCreator {
-
-		private static final String TEMPLATE_FOLDER = "templates/";
-		private static final String TEMPLATE_XML = "template-syndesis-ext-xml.zip";
-		
-		@Override
-		public InputStream getTemplateStream(CommonNewProjectMetaData metadata)
-				throws IOException, InvalidProjectMetaDataException {
-			String bundleEntry = String.format("%s%s", TEMPLATE_FOLDER, TEMPLATE_XML);
-			return getTemplateStream(SyndesisExtensionsUIActivator.getBundleContext().getBundle(), bundleEntry);
-		}
+		return new SyndesisProjectCreator(TEMPLATE_XML);
 	}
 }
