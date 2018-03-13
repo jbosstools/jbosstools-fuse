@@ -128,6 +128,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		}, fuseRuntime -> {
 			environment.setFuseRuntime(fuseRuntime);
 			dbc.updateTargets();
+			//trick to ensure chained bindings are working (covering for instance select Standalone, select Wildfly, select Kubernetes/OpenShift --> the runtime combo must be disabled as Spring Boot is automatically selected
+			dbc.updateTargets();
 			validate();
 		});
 	}
