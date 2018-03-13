@@ -46,7 +46,7 @@ public abstract class OnlineVersionMapper {
 			return createMappingFromOnlineFiles();
 		} catch (IOException e) {
 			FoundationCoreActivator.pluginLog().logError("Unable to retrieve the mapping from online repo. Falling back to defaults.", e);
-			return createFallbackMapping();
+			return consolidateMapping(createFallbackMapping());
 		}
 	}
 
@@ -60,6 +60,11 @@ public abstract class OnlineVersionMapper {
 			String value = vMapping.getProperty(key);
 			mapping.put(key, value);
 		}
+		return consolidateMapping(mapping);
+	}
+	
+	protected Map<String, String> consolidateMapping(Map<String, String> mapping) {
+		// default impl...let subclasses override on demand
 		return mapping;
 	}
 }

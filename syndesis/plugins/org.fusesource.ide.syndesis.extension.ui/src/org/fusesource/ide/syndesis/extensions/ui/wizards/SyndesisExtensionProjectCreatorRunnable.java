@@ -121,8 +121,13 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 
 	private void updateJsonFile(IResource jsonFile, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
+		try {
+			jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor);
+		} catch (CoreException ex) {
+			SyndesisExtensionsUIActivator.pluginLog().logError(ex);
+		}
 		if (!jsonFile.exists()) {
-			new BuildAndRefreshJobWaiterUtil().waitJob(monitor);
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
 		}
 		SyndesisExtension extenstion = null;
 		try (InputStream is = jsonFile.getLocationURI().toURL().openStream()) {
@@ -142,7 +147,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 		if (extenstion != null) {
 			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(jsonFile.getLocation().toOSString()))) {
 				SyndesisExtension.writeToFile(os, extenstion);
-				jsonFile.refreshLocal(0, subMonitor);
+				jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor.split(1));
 			} catch (CoreException | IOException ex) {
 				SyndesisExtensionsUIActivator.pluginLog().logError(ex);
 			}

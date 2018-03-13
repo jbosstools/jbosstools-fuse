@@ -44,6 +44,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
 		if (ok) {
+			// by default add staging repos if option enabled
+			ok = MavenUtils.configureStagingRepositories(project, subMonitor.newChild(1));
+		}
+		
+		if (ok) {
 			// by default add the maven nature
 			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
