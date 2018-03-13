@@ -89,13 +89,10 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 		// end of TODO
 		metadata.setSyndesisExtensionConfig(extensionModel);
 		if (extensionDetailsPage.isCustomConnector()) {
-			// custom connector template
 			metadata.setTemplate(new CustomConnectorProjectTemplate());
 		} else if (extensionDetailsPage.isCamelRoute()) {
-			// custom step as camel route template
 			metadata.setTemplate(new CustomStepAsCamelRouteProjectTemplate());
 		} else {
-			// custom step as java bean template
 			metadata.setTemplate(new CustomStepAsJavaBeanProjectTemplate());
 		}
 		return metadata;
