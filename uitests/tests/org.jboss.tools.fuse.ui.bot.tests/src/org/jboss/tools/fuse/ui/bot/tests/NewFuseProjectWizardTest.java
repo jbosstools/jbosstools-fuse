@@ -36,9 +36,10 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
-import org.jboss.tools.fuse.reddeer.dialog.MessageDialog;
+import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.ui.bot.tests.utils.LogChecker;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Test;
@@ -341,12 +342,12 @@ public class NewFuseProjectWizardTest {
 		wiz.setProjectName("test");
 		wiz.next();
 		wiz.next();
-		MessageDialog moreExamplesDialog = wiz.selectMoreExamples();
+		WhereToFindMoreTemplatesMessageDialog moreExamplesDialog = wiz.selectMoreExamples();
 		assertThat(moreExamplesDialog.getMessage())
 		.contains("https://github.com/apache/camel/tree/master/examples",
 				"https://github.com/fabric8-quickstarts");
 		wiz.cancel();
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
+		LogChecker.assertNoFuseError();
 	}
 
 }

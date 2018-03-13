@@ -14,7 +14,7 @@
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/org.jboss.tools.fuse.ui.bot.tests/src/org/jboss/tools/fuse/ui/bot/tests/CamelEditorTest.java"/>
+<listEntry value="/org.jboss.tools.fuse.ui.bot.tests/src/org/jboss/tools/fuse/ui/bot/tests/NewFuseProjectWizardTest.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -24,14 +24,14 @@
 </mapAttribute>
 <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
-<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value="testMoreExamplesAvailable"/>
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.jboss.tools.fuse.ui.bot.tests.CamelEditorTest"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.jboss.tools.fuse.ui.bot.tests.NewFuseProjectWizardTest"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} - consoleLog -eclipse.password resources/security/password -pluginCustomization resources/settings/plugin_customization.ini"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.jboss.tools.fuse.ui.bot.tests"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.requiredJavaVersion=1.8 -Xms40m -Xmx512m&#10;-Dusage_reporting_enabled=false&#10;-Dstaging.repositories=false"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.requiredJavaVersion=1.8 -Xms40m -Xmx512m&#13;&#10;-Dusage_reporting_enabled=false&#13;&#10;-Dstaging.repositories=false"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="com.jboss.devstudio.core.product"/>
 <stringAttribute key="rd.launch.property.rd.captureScreenshot" value="true"/>
