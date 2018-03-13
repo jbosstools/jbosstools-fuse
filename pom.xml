@@ -290,6 +290,21 @@
 					</includes>
 					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError ${platformSystemProperties} ${systemProperties} ${moduleProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.vpe.loadxulrunner=false -Dgroovy.grape.report.downloads=true -Divy.message.logger.level=4 -Dsun.net.client.defaultConnectTimeout=30000 -Dsun.net.client.defaultReadTimeout=30000</argLine>
 					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
+					<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>p2-installable-unit</type>
+								<id>org.eclipse.wst.common.emf</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+				</configuration>
+			</plugin>
 				</configuration>
 			</plugin>
 		</plugins>
