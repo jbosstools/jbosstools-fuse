@@ -46,6 +46,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ok = configureMavenNature(project, subMonitor.newChild(1));
 		}
 		
+		if (ok) {
+			// by default add staging repos if option enabled
+			ok = MavenUtils.configureStagingRepositories(project, subMonitor.newChild(1));
+		}
+		
 		if (ok && !Strings.isBlank(metadata.getCamelVersion())) {
 			// by default configure the version of camel used in the pom.xml
 			ok = MavenUtils.configurePomCamelVersion(project, metadata, metadata.getCamelVersion(), subMonitor.newChild(1));

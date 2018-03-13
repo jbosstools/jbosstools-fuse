@@ -170,7 +170,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 	private boolean isInvalidCamelFacetVersion(ProjectConfigurationRequest request) throws CoreException {
 		IProject project = request.getProject();
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
-		if (fproj != null) {
+		if (fproj != null && fproj.getInstalledVersion(camelFacet) != null) {
 			return fproj.getInstalledVersion(camelFacet).getVersionString().compareTo(DEFAULT_CAMEL_FACET_VERSION) < 0;
 		}
 		return true;
@@ -182,7 +182,7 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null) {
 			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
-			fproj.uninstallProjectFacet(oldfv, null, subMon.split(1));
+			if (oldfv != null) fproj.uninstallProjectFacet(oldfv, null, subMon.split(1));
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 			installCamelFacet(fproj, fpwc, subMon.split(1));
 			fpwc.commitChanges(subMon.split(1));
