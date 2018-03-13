@@ -189,7 +189,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	private Binding createBinding(DataBindingContext dbc, Widget control, String property, UpdateValueStrategy updateStrategy) {
 		IObservableValue target = null;
 		if (control instanceof Combo) {
-			target = WidgetProperties.selection().observe(control);	
+			target = WidgetProperties.text().observe(control);		
 		} else if (control instanceof Text) {
 			target = WidgetProperties.text(SWT.Modify).observe(control);
 		} else {
@@ -257,11 +257,11 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		spacer.setLayoutData(gridData);
 		
 		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
-		Button stepJavaBeanRadio = new Button(stepButtonGroup, SWT.RADIO);
-		stepJavaBeanRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanLabel);
-		stepJavaBeanRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanHint);
-		stepJavaBeanRadio.setLayoutData(gridData);
-		stepJavaBeanRadio.addSelectionListener(stepSelectionListener);
+		stepCamelRouteRadio = new Button(stepButtonGroup, SWT.RADIO);
+		stepCamelRouteRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteLabel);
+		stepCamelRouteRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteHint);
+		stepCamelRouteRadio.setLayoutData(gridData);
+		stepCamelRouteRadio.addSelectionListener(stepSelectionListener);
 		
 		spacer = new Label(stepButtonGroup, SWT.NONE);
 		gridData = GridDataFactory.fillDefaults().grab(false, false).span(1, 1).indent(8, 0).create();
@@ -270,11 +270,12 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		spacer.setLayoutData(gridData);
 		
 		gridData = GridDataFactory.fillDefaults().grab(true, false).span(3, 1).indent(8, 0).create();
-		stepCamelRouteRadio = new Button(stepButtonGroup, SWT.RADIO);
-		stepCamelRouteRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteLabel);
-		stepCamelRouteRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionCamelRouteHint);
-		stepCamelRouteRadio.setLayoutData(gridData);
-		stepCamelRouteRadio.addSelectionListener(stepSelectionListener);
+		Button stepJavaBeanRadio = new Button(stepButtonGroup, SWT.RADIO);
+		stepJavaBeanRadio.setText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanLabel);
+		stepJavaBeanRadio.setToolTipText(Messages.newProjectWizardExtensionDetailsPageStepTypeSelectionJavaBeanHint);
+		stepJavaBeanRadio.setLayoutData(gridData);
+		stepJavaBeanRadio.addSelectionListener(stepSelectionListener);
+		
 		stepCamelRouteRadio.setSelection(true);
 	}
 	
@@ -358,7 +359,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 				return e.getKey();
 			}
 		}
-		return null;
+		return displayText;
 	}
 	
 	/**
