@@ -70,6 +70,7 @@ public class Messages extends NLS {
 	public static String newProjectWizardTemplatePageFilterBoxText;
 	public static String newProjectWizardTemplatePageTemplateFilterMessageInformation;
 	public static String newProjectWizardTemplatePageWhereToFindMoreExamples;
+	public static String newProjectWizardTemplatePageListOfOtherExamplesReposMessage;
 	public static String newProjectWizardTemplatePageListOfOtherExamplesRepos;
 
 	public static String unzipStreamCreatorUnzippingTemplateFileMonitorMessage;

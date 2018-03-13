@@ -28,7 +28,7 @@ import org.eclipse.reddeer.swt.impl.text.LabeledText;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.dialog.MessageDialog;
+import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
 
 /**
  * @author tsedmik
@@ -206,9 +206,9 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 		new PushButton(this, "Verify").click();
 	}
 
-	public MessageDialog selectMoreExamples() {
+	public WhereToFindMoreTemplatesMessageDialog selectMoreExamples() {
 		log.debug("Click on link to see more examples");
 		new DefaultLink(this, "Where can I find more examples?").click();
-		return new MessageDialog("Where can I find more examples?");
+		return new WhereToFindMoreTemplatesMessageDialog("Where can I find more examples?");
 	}
 }

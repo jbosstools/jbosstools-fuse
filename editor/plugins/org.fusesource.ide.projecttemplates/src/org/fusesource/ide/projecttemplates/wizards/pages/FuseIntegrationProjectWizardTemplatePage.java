@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.JFaceResources;
@@ -118,7 +117,7 @@ public class FuseIntegrationProjectWizardTemplatePage extends WizardPage {
 		link.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(getShell(), Messages.newProjectWizardTemplatePageWhereToFindMoreExamples, Messages.newProjectWizardTemplatePageListOfOtherExamplesRepos);
+				new WhereToFindMoreTemplatesMessageDialog(getShell()).open();
 			}
 		});
 	}

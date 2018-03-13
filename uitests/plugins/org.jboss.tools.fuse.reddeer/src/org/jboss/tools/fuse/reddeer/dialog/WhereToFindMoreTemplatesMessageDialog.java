@@ -10,18 +10,18 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.reddeer.dialog;
 
-import org.eclipse.reddeer.swt.impl.label.DefaultLabel;
 import org.eclipse.reddeer.swt.impl.shell.DefaultShell;
+import org.eclipse.reddeer.swt.impl.styledtext.DefaultStyledText;
 
-public class MessageDialog extends DefaultShell {
+public class WhereToFindMoreTemplatesMessageDialog extends DefaultShell {
 	
-	public MessageDialog(String shellTitle) {
+	public WhereToFindMoreTemplatesMessageDialog(String shellTitle) {
 		super(shellTitle);
 	}
 
 	public String getMessage() {
-		// Label message is the second Widget
-		return new DefaultLabel(this, 1).getText();
+		// StyledText message is the first Widget
+		return new DefaultStyledText(this, 0).getText();
 	}
 
 }
