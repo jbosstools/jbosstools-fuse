@@ -182,7 +182,10 @@ public class CamelProjectConfigurator extends AbstractProjectConfigurator {
 		IFacetedProject fproj = ProjectFacetsManager.create(project);
 		if (fproj != null) {
 			IProjectFacetVersion oldfv = fproj.getInstalledVersion(camelFacet);
-			if (oldfv != null) fproj.uninstallProjectFacet(oldfv, null, subMon.split(1));
+			if (oldfv != null) {
+				fproj.uninstallProjectFacet(oldfv, null, subMon.split(1));
+			}
+			subMon.setWorkRemaining(2);
 			IFacetedProjectWorkingCopy fpwc = fproj.createWorkingCopy();
 			installCamelFacet(fproj, fpwc, subMon.split(1));
 			fpwc.commitChanges(subMon.split(1));

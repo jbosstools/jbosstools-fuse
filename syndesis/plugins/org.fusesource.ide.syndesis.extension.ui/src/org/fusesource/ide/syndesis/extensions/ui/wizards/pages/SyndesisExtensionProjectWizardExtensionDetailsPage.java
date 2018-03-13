@@ -189,9 +189,9 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	private Binding createBinding(DataBindingContext dbc, Widget control, String property, UpdateValueStrategy updateStrategy) {
 		IObservableValue target = null;
 		if (control instanceof Combo) {
-			target = WidgetProperties.text().observe(control);		
+			target = WidgetProperties.text().observeDelayed(200, control);		
 		} else if (control instanceof Text) {
-			target = WidgetProperties.text(SWT.Modify).observe(control);
+			target = WidgetProperties.text(SWT.Modify).observeDelayed(200, control);
 		} else {
 			// not supported
 		}
