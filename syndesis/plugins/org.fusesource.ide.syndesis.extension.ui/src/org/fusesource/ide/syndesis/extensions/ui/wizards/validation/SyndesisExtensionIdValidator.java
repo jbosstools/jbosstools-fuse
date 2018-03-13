@@ -18,17 +18,12 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 
 /**
  * @author lheinema
- *
  */
 public class SyndesisExtensionIdValidator implements IValidator {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-	 */
 	@Override
 	public IStatus validate(Object value) {
 		String id = (String) value;
-		// validate the extension id
 		if (Strings.isBlank(id)) {
 			return ValidationStatus.error(Messages.newProjectWizardExtensionDetailsPageErrorMissingExtensionId);
 		} else if (id.indexOf(' ') != -1) {
