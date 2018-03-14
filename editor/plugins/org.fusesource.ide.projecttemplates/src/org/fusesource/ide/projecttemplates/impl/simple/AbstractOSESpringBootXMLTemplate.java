@@ -25,7 +25,7 @@ public abstract class AbstractOSESpringBootXMLTemplate extends AbstractProjectTe
 	
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
-		return super.isCompatible(environment) && FuseRuntimeKind.SpringBoot.equals(environment.getFuseRuntime());
+		return super.isCompatible(environment) && FuseRuntimeKind.SPRINGBOOT.equals(environment.getFuseRuntime());
 	}
 	
 	/**

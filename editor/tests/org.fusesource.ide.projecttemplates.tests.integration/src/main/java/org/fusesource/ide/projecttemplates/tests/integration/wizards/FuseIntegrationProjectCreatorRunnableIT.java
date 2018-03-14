@@ -138,7 +138,7 @@ public abstract class FuseIntegrationProjectCreatorRunnableIT extends AbstractPr
 	}
 
 	protected EnvironmentData createEnvironmentData() {
-		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
+		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF);
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {

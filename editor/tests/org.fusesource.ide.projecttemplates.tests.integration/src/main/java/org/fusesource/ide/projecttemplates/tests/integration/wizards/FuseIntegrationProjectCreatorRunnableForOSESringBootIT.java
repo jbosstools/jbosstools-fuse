@@ -64,6 +64,6 @@ public class FuseIntegrationProjectCreatorRunnableForOSESringBootIT extends Fuse
 	}
 	
 	protected EnvironmentData createEnvironmentData() {
-		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.SpringBoot);
+		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.SPRINGBOOT);
 	}
 }

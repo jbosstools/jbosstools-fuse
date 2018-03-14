@@ -22,8 +22,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoProperties;
-import org.eclipse.core.databinding.observable.ChangeEvent;
-import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.sideeffect.ISideEffect;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -120,8 +118,8 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 
 	private ISideEffect selectSpringBootForOpenShiftPlatform() {
 		return ISideEffect.create(() -> {
-			if (FuseDeploymentPlatform.OpenShift.equals(environmentPlatformObservable.getValue())) {
-				return FuseRuntimeKind.SpringBoot;
+			if (FuseDeploymentPlatform.OPENSHIFT.equals(environmentPlatformObservable.getValue())) {
+				return FuseRuntimeKind.SPRINGBOOT;
 			} else {
 				return environment.getFuseRuntime();
 			}
@@ -205,18 +203,12 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		runtimeWildflyComboViewer = createRuntimeSelection(runtimeGrp, eapRadio);
 		
 		SelectObservableValue<FuseRuntimeKind> observableValue = new SelectObservableValue<>();
-		observableValue.addOption(FuseRuntimeKind.SpringBoot, WidgetProperties.selection().observe(springBootRadio));
-		observableValue.addOption(FuseRuntimeKind.Karaf, WidgetProperties.selection().observe(karafRadio));
-		observableValue.addOption(FuseRuntimeKind.WildFly, WidgetProperties.selection().observe(eapRadio));
+		observableValue.addOption(FuseRuntimeKind.SPRINGBOOT, WidgetProperties.selection().observe(springBootRadio));
+		observableValue.addOption(FuseRuntimeKind.KARAF, WidgetProperties.selection().observe(karafRadio));
+		observableValue.addOption(FuseRuntimeKind.WILDFLY, WidgetProperties.selection().observe(eapRadio));
 		IObservableValue observe = PojoProperties.value(EnvironmentData.class, "fuseRuntime").observe(environment);
 		dbc.bindValue(observableValue, observe);
-		observe.addChangeListener(new IChangeListener() {
-			
-			@Override
-			public void handleChange(ChangeEvent event) {
-				refreshFilteredTemplates();
-			}
-		});
+		observe.addChangeListener(event -> refreshFilteredTemplates());
 	}
 
 	private ComboViewer createRuntimeSelection(Group runtimeGrp, Button relatedRadioButton) {
@@ -277,17 +269,11 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 		
 		SelectObservableValue<FuseDeploymentPlatform> observableValue = new SelectObservableValue<>();
 		standAloneObservable = WidgetProperties.selection().observe(standAloneRadioButton);
-		observableValue.addOption(FuseDeploymentPlatform.OpenShift,  WidgetProperties.selection().observe(openShiftRadioButton));
-		observableValue.addOption(FuseDeploymentPlatform.Standalone, standAloneObservable);
+		observableValue.addOption(FuseDeploymentPlatform.OPENSHIFT,  WidgetProperties.selection().observe(openShiftRadioButton));
+		observableValue.addOption(FuseDeploymentPlatform.STANDALONE, standAloneObservable);
 		environmentPlatformObservable = PojoProperties.value(EnvironmentData.class, "deploymentPlatform").observe(environment);
 		dbc.bindValue(observableValue, environmentPlatformObservable);
-		environmentPlatformObservable.addChangeListener(new IChangeListener() {
-			
-			@Override
-			public void handleChange(ChangeEvent event) {
-				refreshFilteredTemplates();
-			}
-		});
+		environmentPlatformObservable.addChangeListener(event -> refreshFilteredTemplates());
 		
 		openShiftRadioButton.addSelectionListener(new ValidateTriggerListener());
 	}	
@@ -403,9 +389,9 @@ public class FuseIntegrationProjectWizardRuntimeAndCamelPage extends WizardPage 
 	 * @return the selected runtime
 	 */
 	public IRuntime getSelectedRuntime() {
-		if (FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime())) {
+		if (FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime())) {
 			return getSelectedRuntime(runtimeKarafComboViewer);
-		} else if(FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime())) {
+		} else if(FuseRuntimeKind.WILDFLY.equals(environment.getFuseRuntime())) {
 			return getSelectedRuntime(runtimeWildflyComboViewer);
 		}
 		return null;

@@ -11,6 +11,6 @@
 package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
 public enum FuseDeploymentPlatform {
-	OpenShift,
-	Standalone
+	OPENSHIFT,
+	STANDALONE
 }

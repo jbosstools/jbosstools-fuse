@@ -45,7 +45,7 @@ public class OSESpringBootXMLTemplateForFuse6Test {
 	
 	@Test
 	public void testIsCompatible() throws Exception {
-		assertThat(new OSESpringBootXMLTemplateForFuse6().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SpringBoot))).isEqualTo(isCompatible);
+		assertThat(new OSESpringBootXMLTemplateForFuse6().isCompatible(new EnvironmentData(version, null, FuseRuntimeKind.SPRINGBOOT))).isEqualTo(isCompatible);
 	}
 
 }

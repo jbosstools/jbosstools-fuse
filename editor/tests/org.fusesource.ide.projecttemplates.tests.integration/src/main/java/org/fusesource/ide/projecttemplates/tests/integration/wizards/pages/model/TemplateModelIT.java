@@ -48,7 +48,7 @@ public class TemplateModelIT {
 	private void checkSingleTemplateForVersion(CategoryItem categoryItem, String camelVersionLatestProductized63) {
 		assertThat(categoryItem.getTemplates()
 				.stream()
-				.filter(template -> template.isCompatible(new EnvironmentData(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.WildFly)))
+				.filter(template -> template.isCompatible(new EnvironmentData(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY)))
 				.collect(Collectors.toList()))
 		.hasSize(1);
 	}

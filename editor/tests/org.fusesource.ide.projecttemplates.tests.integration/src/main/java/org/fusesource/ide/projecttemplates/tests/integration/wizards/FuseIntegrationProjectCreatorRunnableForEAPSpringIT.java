@@ -138,7 +138,7 @@ public class FuseIntegrationProjectCreatorRunnableForEAPSpringIT extends FuseInt
     }
     
 	protected EnvironmentData createEnvironmentData() {
-		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.WildFly);
+		return new EnvironmentData(camelVersion, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.WILDFLY);
 	}
     
 }

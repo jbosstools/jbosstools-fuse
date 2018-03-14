@@ -42,8 +42,8 @@ public class AMQTemplate extends AbstractProjectTemplate {
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
 				&& new VersionUtil().isStrictlyLowerThan2200(environment.getCamelVersion())
-				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
-				&& FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime());
+				&& FuseDeploymentPlatform.STANDALONE.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime());
 	}
 
 	@Override
