@@ -1,0 +1,46 @@
+{
+  "schemaVersion" : "v1",
+  "actions" : [ {
+    "id" : "Log-body",
+    "name" : "Log Body",
+    "description" : "A simple xml Body Log with a prefix",
+    "descriptor" : {
+      "kind" : "ENDPOINT",
+      "entrypoint" : "direct:log-xml",
+      "resource" : "classpath:META-INF/syndesis/extensions/log-body-action.xml",
+      "inputDataShape" : {
+        "kind" : "any"
+      },
+      "outputDataShape" : {
+        "kind" : "any"
+      },
+      "propertyDefinitionSteps" : [ {
+        "description" : "Define your Log message",
+        "name" : "Log Body",
+        "properties" : {
+          "prefix" : {
+            "componentProperty" : false,
+            "deprecated" : false,
+            "description" : "The Log body prefix message",
+            "displayName" : "Log Prefix",
+            "javaType" : "String",
+            "kind" : "parameter",
+            "required" : false,
+            "secret" : false,
+            "type" : "string"
+          }
+        }
+      } ]
+    },
+    "tags" : [ "xml" ],
+    "actionType" : "step"
+  } ],
+  "dependencies" : [ {
+    "type" : "MAVEN",
+    "id" : "io.syndesis.extension:extension-api:jar:1.3-SNAPSHOT"
+  }, {
+    "type" : "MAVEN",
+    "id" : "io.syndesis.extension:extension-api:jar:1.3-SNAPSHOT"
+  } ],
+  "extensionType" : "Steps"
+}

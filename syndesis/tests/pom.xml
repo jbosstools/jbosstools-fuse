@@ -13,6 +13,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.syndesis.extension.core.tests</module>
+		<module>org.fusesource.ide.syndesis.extension.core.tests.integration</module>
 		<module>org.fusesource.ide.syndesis.extension.ui.tests.integration</module>
 	</modules>
 </project>

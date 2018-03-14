@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes id="routes-1"
+    xmlns="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <route id="log-body-prefix-xml">
+        <from id="_from1" uri="direct:log-xml"/>
+        <choice id="_choice1">
+            <when id="_when1">
+                <simple>${header.prefix} != ''</simple>
+                <log id="_log1" message="${header.prefix} ${body}"/>
+            </when>
+            <otherwise id="_otherwise1">
+                <log id="_log2" message="Output ${body}"/>
+            </otherwise>
+        </choice>
+    </route>
+</routes>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<routes id="routes-1401c62c-8f33-469d-b811-9caa05ab3539" xmlns="http://camel.apache.org/schema/spring"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-	<route id="log-body">
-		<from id="_from1" uri="direct:log-body" />
-		<log id="_log1" message="Body is ${body}" />
-	</route>
-</routes>

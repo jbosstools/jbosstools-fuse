@@ -49,9 +49,9 @@ import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
-import org.fusesource.ide.syndesis.extensions.core.util.SyndesisExtensionsUtil;
+import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
 import org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionIntegrationTestsActivator;
-import org.fusesource.ide.syndesis.extensions.ui.templates.BasicSyndesisExtensionXmlProjectTemplate;
+import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsCamelRouteProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectCreatorRunnable;
 import org.junit.Before;
@@ -82,10 +82,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 
 	private SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
-		SyndesisExtensionsUtil.IgniteVersionInfoModel model = SyndesisExtensionsUtil.getIgniteVersionModel();
-		extension.setSpringBootVersion(model.getSpringBootVersion());
-		extension.setCamelVersion(model.getCamelVersion());
-		extension.setSyndesisVersion(model.getSyndesisVersion());
+		extension.setSyndesisVersion(new IgniteVersionMapper().getMapping().keySet().iterator().next());
 		extension.setExtensionId("com.acme.custom");
 		extension.setVersion("1.0.0");
 		extension.setName("ACME Custom Extension");
@@ -98,7 +95,7 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		metadata.setSyndesisExtensionConfig(createDefaultNewSyndesisExtension());
-		metadata.setTemplate(new BasicSyndesisExtensionXmlProjectTemplate());
+		metadata.setTemplate(new CustomStepAsCamelRouteProjectTemplate());
 		return metadata;
 	}
 
@@ -238,8 +235,6 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	}
 
 	protected void launchBuild(IProgressMonitor monitor) throws CoreException {
-		boolean buildFinished = false;
-
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 10);
 		final IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext context = maven.createExecutionContext();
@@ -260,19 +255,8 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 			}, subMonitor.split(10));
 		} catch (CoreException ex) {
 			result = null;
-		} finally {
-			buildFinished=true;		
 		}
 
-		// wait for maven build to be completed
-		while (!buildFinished) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-		}
-		
 		boolean buildOK = result != null && !result.hasExceptions();
 		if (result != null) { 
 			for (Throwable t:result.getExceptions()) {
