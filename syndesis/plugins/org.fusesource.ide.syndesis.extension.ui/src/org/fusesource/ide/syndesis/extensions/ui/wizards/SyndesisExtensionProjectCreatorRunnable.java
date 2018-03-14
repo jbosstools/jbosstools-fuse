@@ -155,6 +155,9 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	}
 	
 	private void configureProjectVersions(Model pomModel) {
+		// align pom version
+		pomModel.setVersion(getExtension().getVersion());
+		// align syndesis property version
 		Properties props = pomModel.getProperties();
 		props.setProperty("syndesis.version", getExtension().getSyndesisVersion());
 		pomModel.setProperties(props);
