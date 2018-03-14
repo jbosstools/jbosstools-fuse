@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.tests.integration.core.model;
 
 import static org.fusesource.ide.preferences.PreferencesConstants.EDITOR_PREFERRED_LABEL;
+import static org.fusesource.ide.preferences.PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -38,6 +39,10 @@ public class CamelBasicModelElementTestIT {
 	public void cleanUserLabelsPreference() {
 		originalPreference = PreferenceManager.getInstance().loadPreferenceAsString(EDITOR_PREFERRED_LABEL);
 		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "");
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFER_ID_AS_LABEL, false);
+		
+		System.out.println(PreferenceManager.getInstance().loadPreferenceAsBoolean(EDITOR_PREFER_ID_AS_LABEL));
+		System.out.println();
 	}
 
 	@After
@@ -50,10 +55,23 @@ public class CamelBasicModelElementTestIT {
 		assertEquals("Log coolName", simpleLog().getDisplayText());
 	}
 
+ 	@Test
+	public void testDisplayingIdText() {
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFER_ID_AS_LABEL, true);
+		assertEquals("Log _log1", simpleLog().getDisplayText());
+	}
+ 
 	@Test
 	public void testDisplayingUserText() {
 		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "log.message");
 		assertEquals("Log ${body}", simpleLog().getDisplayText());
+	}
+
+	@Test
+	public void testDisplayingUserTextIfIdIsPrefered() {
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFER_ID_AS_LABEL, true);
+		PreferenceManager.getInstance().savePreference(EDITOR_PREFERRED_LABEL, "log.message");
+		assertEquals("Log _log1", simpleLog().getDisplayText());
 	}
 
 	@Test

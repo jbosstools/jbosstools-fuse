@@ -60,6 +60,7 @@ public class UIMessages extends NLS {
 	public static String failedXMLValidationText;
 	public static String editorPreferencePageDescription;
 	public static String editorPreferencePageDefaultLanguageSetting;
+	public static String editorPreferencePagePreferIdAsLabelSetting;
 	public static String editorPreferencePageLayoutOrientationSetting;
 	public static String editorPreferencePageLayoutOrientationSOUTH;
 	public static String editorPreferencePageLayoutOrientationEAST;

@@ -76,6 +76,12 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 
 		addField(gridVisibilityEditor);
 
+		BooleanFieldEditor preferIdAsLabelEditor = new BooleanFieldEditor(
+				PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL, UIMessages.editorPreferencePagePreferIdAsLabelSetting,
+				getFieldEditorParent());
+
+		addField(preferIdAsLabelEditor);
+
 		PreferredLabelEditor userLabelsEditor = new PreferredLabelEditor(PreferencesConstants.EDITOR_PREFERRED_LABEL,
 				UIMessages.editorPreferencePageUserLabels, getFieldEditorParent());
 
