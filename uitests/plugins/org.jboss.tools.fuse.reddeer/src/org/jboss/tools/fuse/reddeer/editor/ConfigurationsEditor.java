@@ -32,10 +32,10 @@ import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 public class ConfigurationsEditor extends DefaultEditor {
 
 	public static final String CONFIGURATIONS_TAB = "Configurations";
-	public static final String ROOT_ELEMENT = "JBoss Fuse";
+	public static final String ROOT_ELEMENT = "Red Hat Fuse";
 
 	private static Logger log = Logger.getLogger(ConfigurationsEditor.class);
-	private static final String TYPE = "JBoss Fuse";
+	private static final String TYPE = "Red Hat Fuse";
 
 	public enum Element {
 

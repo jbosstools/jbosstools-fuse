@@ -107,7 +107,7 @@ public class JMXNavigator extends WorkbenchView {
 			for (TreeItem item : items) {
 				if ((path[1].equals("Local Camel Context") && item.getText().startsWith("maven [")
 						|| path[1].equals("karaf")
-								&& (item.getText().contains("karaf") || item.getText().startsWith("JBoss Fuse")) || item.getText().contains(path[1]))
+								&& (item.getText().contains("karaf") || item.getText().startsWith("JBoss Fuse") || item.getText().startsWith("Red Hat Fuse")) || item.getText().contains(path[1]))
 						|| path[0].equals("User-Defined Connections")) {
 					item.select();
 					item.doubleClick();

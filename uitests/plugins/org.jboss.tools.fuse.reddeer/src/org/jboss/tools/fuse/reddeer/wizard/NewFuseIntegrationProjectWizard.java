@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.reddeer.wizard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.reddeer.common.logging.Logger;
@@ -38,7 +39,7 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 	private static Logger log = Logger.getLogger(NewFuseIntegrationProjectWizard.class);
 
 	public NewFuseIntegrationProjectWizard() {
-		super("New Fuse Integration Project", "JBoss Fuse", "Fuse Integration Project");
+		super("New Fuse Integration Project", "Red Hat Fuse", "Fuse Integration Project");
 	}
 
 	public void setProjectName(String name) {
@@ -182,7 +183,7 @@ public class NewFuseIntegrationProjectWizard extends NewMenuWizard {
 		try {
 			new DefaultTreeItem(path).select();
 		} catch (Exception e) {
-			throw new NewFuseIntegrationProjectWizardException("Given template is not available: " + path);
+			throw new NewFuseIntegrationProjectWizardException("Given template is not available: " + Arrays.toString(path));
 		}
 		
 	}

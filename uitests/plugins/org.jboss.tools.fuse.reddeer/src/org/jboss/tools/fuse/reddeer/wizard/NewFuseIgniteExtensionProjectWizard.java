@@ -20,7 +20,7 @@ import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
 public class NewFuseIgniteExtensionProjectWizard extends NewMenuWizard {
 
 	private static final String SHELL_NAME = "New Fuse Ignite Extension Project";
-	private static final String WIZARD_CATEGORY = "JBoss Fuse";
+	private static final String WIZARD_CATEGORY = "Red Hat Fuse";
 	private static final String WIZARD_NAME = "Fuse Ignite Extension Project";
 	
 	public NewFuseIgniteExtensionProjectWizard() {

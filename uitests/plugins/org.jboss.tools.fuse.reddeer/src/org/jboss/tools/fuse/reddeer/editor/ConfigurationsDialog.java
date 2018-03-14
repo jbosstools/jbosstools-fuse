@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Control;
 public class ConfigurationsDialog implements ReferencedComposite {
 
 	public static final String TITLE = "Create new global element...";
-	public static final String ROOT = "JBoss Fuse";
+	public static final String ROOT = "Red Hat Fuse";
 
 	private Shell shell;
 

@@ -72,7 +72,7 @@ public class FeaturesServerTest extends DefaultTest {
 	 */
 	@Test
 	public void testFuseJbossRuntimeDetection() {
-		downloadRuntime("Red Hat Fuse 6.3.0");
+		downloadRuntime("Red Hat JBoss Fuse 6.3.0");
 		assertTrue("Server was not created in view", new ServersView2().getServers().size() == 1);
 		WorkbenchPreferenceDialog dialog = new WorkbenchPreferenceDialog();
 		FuseServerRuntimePreferencePage serverRuntime = new FuseServerRuntimePreferencePage(dialog);
@@ -110,7 +110,7 @@ public class FeaturesServerTest extends DefaultTest {
 		runtimeWiz.setInstallFolder(getPath() + "target/temp_install");
 		runtimeWiz.setDownloadFolder(getPath() + "target/temp");
 		runtimeWiz.finish(name);
-		new WaitWhile(new ShellIsAvailable("Download 'Red Hat Fuse 6.3.0'"), TimePeriod.getCustom(900));
+		new WaitWhile(new ShellIsAvailable("Download 'Red Hat JBoss Fuse 6.3.0'"), TimePeriod.getCustom(900));
 		dialog.ok();
 	}
 
