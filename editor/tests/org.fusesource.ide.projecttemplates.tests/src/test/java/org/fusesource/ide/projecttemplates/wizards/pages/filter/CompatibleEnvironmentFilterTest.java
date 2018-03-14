@@ -39,7 +39,7 @@ public class CompatibleEnvironmentFilterTest {
 	
 	@Test
 	public void testAMQCompatibleWith63() throws Exception {
-		CompatibleEnvironmentFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
+		CompatibleEnvironmentFilter filter = createFilter(CamelCatalogUtils.CAMEL_VERSION_LATEST_PRODUCTIZED_63, FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF);
 		TemplateItem templateItem = createTemplateItem(new AMQTemplate());
 		assertThat(filter.select(null, null, templateItem)).isTrue();
 	}
@@ -67,7 +67,7 @@ public class CompatibleEnvironmentFilterTest {
 
 	@Test
 	public void testCategoryItemNotFilteredOutIfContainsChild() throws Exception {
-		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
+		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF);
 		CategoryItem category = new CategoryItem("id", "name", 0, null);
 		createTemplateItemInCategory(new EmptyProjectTemplateForFuse7(), category);
 		assertThat(filter.select(null, null, category)).isTrue();
@@ -75,7 +75,7 @@ public class CompatibleEnvironmentFilterTest {
 	
 	@Test
 	public void testCategoryWithDepthTwoItemNotFilteredOutIfContainsChild() throws Exception {
-		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.Standalone, FuseRuntimeKind.Karaf);
+		CompatibleEnvironmentFilter filter = createFilter("2.20.0", FuseDeploymentPlatform.STANDALONE, FuseRuntimeKind.KARAF);
 		CategoryItem category1 = new CategoryItem("id1", "name", 0, null);
 		CategoryItem category2 = new CategoryItem("id2", "name", 0, category1.getName());
 		category2.setParentCategory(category1);
@@ -107,7 +107,7 @@ public class CompatibleEnvironmentFilterTest {
 	}
 	
 	protected CompatibleEnvironmentFilter createFilter(String camelVersion) {
-		return createFilter(camelVersion, FuseDeploymentPlatform.OpenShift, FuseRuntimeKind.SpringBoot);
+		return createFilter(camelVersion, FuseDeploymentPlatform.OPENSHIFT, FuseRuntimeKind.SPRINGBOOT);
 	}
 	
 	protected CompatibleEnvironmentFilter createFilter(String camelVersion, FuseDeploymentPlatform platform, FuseRuntimeKind runtime) {

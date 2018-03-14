@@ -25,8 +25,8 @@ public abstract class AbstractEmptyProjectTemplate extends AbstractProjectTempla
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
-				&& FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime());
+				&& FuseDeploymentPlatform.STANDALONE.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime());
 	}
 
 	protected class BlankProjectCreator extends DSLDependentUnzipStreamCreator {

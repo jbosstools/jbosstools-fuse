@@ -26,8 +26,8 @@ public abstract class AbstractEAPSpringTemplate extends AbstractProjectTemplate 
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
-				&& FuseRuntimeKind.WildFly.equals(environment.getFuseRuntime());
+				&& FuseDeploymentPlatform.STANDALONE.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.WILDFLY.equals(environment.getFuseRuntime());
 	}
 
 	@Override

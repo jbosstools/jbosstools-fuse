@@ -11,7 +11,7 @@
 package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
 public enum FuseRuntimeKind {
-	SpringBoot,
-	Karaf,
-	WildFly
+	SPRINGBOOT,
+	KARAF,
+	WILDFLY
 }

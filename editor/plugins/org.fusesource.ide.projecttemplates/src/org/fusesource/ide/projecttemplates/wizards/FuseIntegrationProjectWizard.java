@@ -73,7 +73,7 @@ public class FuseIntegrationProjectWizard extends Wizard implements INewWizard {
 
 		locationPage = new ProjectWizardLocationPage(ProjectTemplatesActivator.imageDescriptorFromPlugin(ProjectTemplatesActivator.PLUGIN_ID, ProjectTemplatesActivator.IMAGE_CAMEL_PROJECT_ICON));
 		addPage(locationPage);
-		EnvironmentData environmentData = new EnvironmentData(CamelCatalogUtils.getLatestCamelVersion(), FuseDeploymentPlatform.OpenShift, FuseRuntimeKind.SpringBoot);
+		EnvironmentData environmentData = new EnvironmentData(CamelCatalogUtils.getLatestCamelVersion(), FuseDeploymentPlatform.OPENSHIFT, FuseRuntimeKind.SPRINGBOOT);
 		runtimeAndCamelVersionPage = new FuseIntegrationProjectWizardRuntimeAndCamelPage(environmentData);
 		addPage(runtimeAndCamelVersionPage);
 

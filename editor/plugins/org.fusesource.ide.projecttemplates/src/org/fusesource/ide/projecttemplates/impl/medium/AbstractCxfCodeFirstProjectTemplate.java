@@ -26,8 +26,8 @@ public abstract class AbstractCxfCodeFirstProjectTemplate extends AbstractProjec
 	@Override
 	public boolean isCompatible(EnvironmentData environment) {
 		return super.isCompatible(environment)
-				&& FuseDeploymentPlatform.Standalone.equals(environment.getDeploymentPlatform())
-				&& FuseRuntimeKind.Karaf.equals(environment.getFuseRuntime());
+				&& FuseDeploymentPlatform.STANDALONE.equals(environment.getDeploymentPlatform())
+				&& FuseRuntimeKind.KARAF.equals(environment.getFuseRuntime());
 	}
 
 	@Override
