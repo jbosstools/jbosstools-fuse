@@ -16,6 +16,7 @@ package org.fusesource.ide.preferences;
  */
 public interface PreferencesConstants {
 	static final String EDITOR_DEFAULT_LANGUAGE = "defaultLanguagePreference";
+	static final String EDITOR_PREFER_ID_AS_LABEL = "preferIdAsLabelPreference";
 	static final String EDITOR_LAYOUT_ORIENTATION = "diagramLayoutOrientationPreference";
 	static final String EDITOR_GRID_VISIBILITY = "diagramGridVisibilityPreference";
 	static final String EDITOR_GRID_COLOR = "diagramGridColorPreference";
