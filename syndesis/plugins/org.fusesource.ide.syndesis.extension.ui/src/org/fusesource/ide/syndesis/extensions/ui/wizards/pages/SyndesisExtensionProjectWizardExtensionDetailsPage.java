@@ -63,6 +63,10 @@ import org.fusesource.ide.syndesis.extensions.ui.wizards.validation.SyndesisExte
  */
 public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPage {
 
+	private static final String DEFAULT_EXTENSION_ID = "ignite.extension.example";
+	private static final String DEFAULT_EXTENSION_NAME = "Example Ignite Extension";
+	private static final String DEFAULT_EXTENSION_VERSION = "1.0.0";
+	
 	private SelectionListener btnGroupSelectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -152,12 +156,16 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		UpdateValueStrategy updateStrategy = UpdateValueStrategy.create(null);
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionIdValidator());		
 		createBinding(dbc, extensionIdText, "extensionId", updateStrategy);
-
+		// set a default value
+		extensionIdText.setText(DEFAULT_EXTENSION_ID);
+		
 		Text extensionNameText = createField(container, Messages.newProjectWizardExtensionDetailsPageNameLabel, null, Messages.newProjectWizardExtensionDetailsPageNameTooltip);
 		updateStrategy = UpdateValueStrategy.create(null);
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionNameValidator());
 		createBinding(dbc, extensionNameText, "name", updateStrategy);
-
+		// set a default value
+		extensionNameText.setText(DEFAULT_EXTENSION_NAME);
+		
 		Text extensionDescriptionText = createField(container, Messages.newProjectWizardExtensionDetailsPageDescriptionLabel, Messages.newProjectWizardExtensionDetailsPageOptionalDescriptionFieldHint, Messages.newProjectWizardExtensionDetailsPageDescriptionTooltip);
 		createBinding(dbc, extensionDescriptionText, "description");
 
@@ -165,6 +173,8 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		updateStrategy = UpdateValueStrategy.create(null);
 		updateStrategy.setBeforeSetValidator(new SyndesisExtensionVersionValidator());
 		createBinding(dbc, extensionVersionText, "version", updateStrategy);
+		// set a default value
+		extensionVersionText.setText(DEFAULT_EXTENSION_VERSION);
 		
 		spacer = new Label(container, SWT.NONE);
 		gridData = GridDataFactory.fillDefaults().grab(true, false).span(4, 1).indent(8, 0).create();
