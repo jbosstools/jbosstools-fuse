@@ -10,10 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.projecttemplates.wizards.pages.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
 
@@ -21,72 +19,45 @@ import org.fusesource.ide.projecttemplates.adopters.util.CamelDSLType;
  * @author lhein
  */
 public class TemplateItem implements NameAndWeightSupport {
-	private String id;
-	private String name;
-	private String description;
-	private List<String> keywords = new ArrayList<>();
+	
+	private TemplateItemIdentity templateItemIdentity;
 	private int weight;
 	private CategoryItem category;
 	private AbstractProjectTemplate template;
 	private CamelDSLType dslType;
 	
-	/**
-	 * creates a new template item
-	 * 
-	 * @param id			the id of the template
-	 * @param name			the name of the template 
-	 * @param description	the description of the template
-	 * @param weight		the weight for sorting
-	 * @param category		the category
-	 * @param template		the template class
-	 */
-	public TemplateItem(String id, String name, String description, int weight, CategoryItem category, AbstractProjectTemplate template, String keywords, CamelDSLType dslType) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
+	public TemplateItem(TemplateItemIdentity templateItemIdentity, int weight, CategoryItem category, AbstractProjectTemplate template, CamelDSLType dslType) {
+		this.templateItemIdentity = templateItemIdentity;
 		this.weight = weight;
 		this.category = category;
 		this.template = template;
 		this.dslType = dslType;
-		initKeywords(keywords);
-	}
-	
-	private void initKeywords(String keywordsString) {
-		if(keywordsString != null){
-			String[] words = keywordsString.split(" ");
-			for (String word : words) {
-				word = word.trim();
-				if (!Strings.isBlank(word) && !keywords.contains(word)) {
-					keywords.add(word);
-				}
-			}
-		}
 	}
 	
 	/**
 	 * @return the keywords
 	 */
 	public List<String> getKeywords() {
-		return this.keywords;
+		return templateItemIdentity.getKeywords();
 	}
 	
 	/**
 	 * @return the id
 	 */
 	public String getId() {
-		return this.id;
+		return templateItemIdentity.getId();
 	}
 	
 	@Override
 	public String getName() {
-		return this.name;
+		return templateItemIdentity.getName();
 	}
 	
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return this.description;
+		return templateItemIdentity.getDescription();
 	}
 
 	@Override
