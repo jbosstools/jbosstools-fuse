@@ -28,20 +28,54 @@
 				<artifactId>truezip-maven-plugin</artifactId>
         		<version>1.2</version>
         		<executions>
-              		<!-- BLANK-BLUEPRINT TEMPLATE -->
+              		<!-- custom step - camel route -->
           			<execution>
-            			<id>create-template-syndesis-ext-xml</id>
+            			<id>create-template-custom-step-camel-route</id>
             			<goals>
               				<goal>copy</goal>
             			</goals>
             			<phase>generate-resources</phase>
             			<configuration>
               				<fileset>
-                				<directory>template-sources/simple/syndesis-extension-project/syndesis-ext-xml</directory>
+                				<directory>template-sources/step/camelroute</directory>
                 				<includes>
                   					<include>**</include>
                 				</includes>
-                				<outputDirectory>templates/template-syndesis-ext-xml.zip</outputDirectory>
+                				<outputDirectory>templates/template-custom-step-camelroute.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			<!-- custom step - java bean -->
+          			<execution>
+            			<id>create-template-custom-step-java-bean</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/step/javabean</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-custom-step-javabean.zip</outputDirectory>
+              				</fileset>
+            			</configuration>
+          			</execution>
+          			<!-- custom connector -->
+          			<execution>
+            			<id>create-template-custom-connector</id>
+            			<goals>
+              				<goal>copy</goal>
+            			</goals>
+            			<phase>generate-resources</phase>
+            			<configuration>
+              				<fileset>
+                				<directory>template-sources/connector/simple</directory>
+                				<includes>
+                  					<include>**</include>
+                				</includes>
+                				<outputDirectory>templates/template-custom-connector.zip</outputDirectory>
               				</fileset>
             			</configuration>
           			</execution>
