@@ -103,7 +103,7 @@ public class TemplateModel {
 	private void createTemplateForEachDSL(AbstractProjectTemplate template, String id, String name, String description, String keywords, int iWeight, CategoryItem category) {
 		for (CamelDSLType dslType : CamelDSLType.values()) {
 			if (template.supportsDSL(dslType)) {
-				TemplateItem item = new TemplateItem(id, name , description, iWeight, category, template, keywords, dslType);
+				TemplateItem item = new TemplateItem(new TemplateItemIdentity(id, name, description, keywords), iWeight, category, template, dslType);
 				category.addTemplate(item);
 			}
 		}
