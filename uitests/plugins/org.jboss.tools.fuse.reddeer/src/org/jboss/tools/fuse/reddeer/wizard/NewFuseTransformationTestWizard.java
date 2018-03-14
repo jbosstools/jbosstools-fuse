@@ -27,7 +27,7 @@ public class NewFuseTransformationTestWizard extends NewMenuWizard {
 	private Logger log = Logger.getLogger(NewFuseTransformationTestWizard.class);
 
 	public NewFuseTransformationTestWizard() {
-		super("New Fuse Transformation Test", "JBoss Fuse", "Fuse Transformation Test");
+		super("New Fuse Transformation Test", "Red Hat Fuse", "Fuse Transformation Test");
 	}
 
 	public void selectTransformationID(String name) {

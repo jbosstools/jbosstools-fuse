@@ -172,7 +172,7 @@
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
-           category="Red Hat Red Hat Fuse"
+           category="Red Hat JBoss Fuse"
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.fuseesb6x.launch"
            modes="run,debug"
@@ -182,7 +182,7 @@
 	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
      <launchConfigurationType
-           category="Red Hat Red Hat Fuse"
+           category="Red Hat Fuse"
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.fuseesb7x.launch"
            modes="run,debug"

@@ -8,6 +8,6 @@
 	  <version>10.3.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.jboss.tools.fuse.reddeer</artifactId>
-	<name>JBoss Fuse Tooling :: UI Tests :: Plugins :: RedDeer Framework</name>
+	<name>Red Hat Fuse Tooling :: UI Tests :: Plugins :: RedDeer Framework</name>
 	<packaging>eclipse-plugin</packaging>
 </project>

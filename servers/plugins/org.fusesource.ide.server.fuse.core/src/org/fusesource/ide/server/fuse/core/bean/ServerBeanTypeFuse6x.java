@@ -34,7 +34,7 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 	
 	protected ServerBeanTypeFuse6x() {
 		super(	"FUSE6x", //$NON-NLS-1$
-				"Red Hat Fuse 6.x", //$NON-NLS-1$
+				"Red Hat JBoss Fuse 6.x", //$NON-NLS-1$
 				"lib" + File.separator + "esb-version.jar", //$NON-NLS-1$
 				new Fuse6xServerTypeCondition());
 	}

@@ -20,7 +20,7 @@ import org.eclipse.reddeer.eclipse.selectionwizard.NewMenuWizard;
 public class CamelTestCaseWizard extends NewMenuWizard {
 
 	public CamelTestCaseWizard() {
-		super("New Camel JUnit Test Case", "JBoss Fuse", "Camel Test Case");
+		super("New Camel JUnit Test Case", "Red Hat Fuse", "Camel Test Case");
 	}
 
 }

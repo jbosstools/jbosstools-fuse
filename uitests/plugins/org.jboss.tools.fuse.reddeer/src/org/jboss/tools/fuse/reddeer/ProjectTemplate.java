@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ProjectTemplate {
 
-	public static final List<String> CBR = Arrays.asList("JBoss Fuse", "Beginner", "Content Based Router");
-	public static final List<String> AMQ = Arrays.asList("JBoss Fuse", "Beginner", "ActiveMQ");
-	public static final List<String> CXF = Arrays.asList("JBoss Fuse", "Advanced", "CXF code first");
+	public static final List<String> CBR = Arrays.asList("Red Hat Fuse", "Beginner", "Content Based Router");
+	public static final List<String> AMQ = Arrays.asList("Red Hat Fuse", "Beginner", "ActiveMQ");
+	public static final List<String> CXF = Arrays.asList("Red Hat Fuse", "Advanced", "CXF code first");
 	public static final List<String> EAP = Arrays.asList("Fuse on EAP", "Medium", "Spring on EAP");
 
 }

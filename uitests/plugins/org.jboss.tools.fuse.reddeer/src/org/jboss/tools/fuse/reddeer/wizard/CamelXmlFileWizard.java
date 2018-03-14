@@ -21,7 +21,7 @@ import org.eclipse.reddeer.swt.impl.text.LabeledText;
 public class CamelXmlFileWizard extends NewMenuWizard {
 
 	public CamelXmlFileWizard() {
-		super("New Camel COntext XML File", "JBoss Fuse", "Camel XML File");
+		super("New Camel COntext XML File", "Red Hat Fuse", "Camel XML File");
 	}
 
 	public CamelXmlFileWizard openWizard() {

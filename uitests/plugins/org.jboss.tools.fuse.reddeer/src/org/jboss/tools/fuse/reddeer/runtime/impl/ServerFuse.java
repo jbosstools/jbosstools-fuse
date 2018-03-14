@@ -17,8 +17,9 @@ package org.jboss.tools.fuse.reddeer.runtime.impl;
  */
 public class ServerFuse extends ServerKaraf {
 
-	private final String category = "Red Hat JBoss Middleware";
-	private final String label = "Red Hat JBoss Fuse";
+	private static final String CATEGORY = "Red Hat JBoss Middleware";
+	private static final String LABEL_6 = "Red Hat JBoss Fuse";
+	private static final String LABEL_7 = "Red Hat Fuse";
 
 	public ServerFuse() {
 		setType("Fuse");
@@ -26,21 +27,30 @@ public class ServerFuse extends ServerKaraf {
 	
 	@Override
 	public String getCategory() {
-		return category;
+		return CATEGORY;
 	}
 
 	@Override
 	public String getServerType() {
-		return label + " " + getVersion() + " Server";
+		return getLabel(getVersion()) + " " + getVersion() + " Server";
 	}
 
 	@Override
 	public String getRuntimeType() {
-		return label + " " + getVersion();
+		return getLabel(getVersion()) + " " + getVersion();
 	}
 
 	@Override
 	public String getRuntimeName() {
-		return label + " " + getVersion() + " Runtime";
+		return getLabel(getVersion()) + " " + getVersion() + " Runtime";
 	}
+	
+	private String getLabel(String version) {
+		if (version.startsWith("6.")) {
+			return LABEL_6;
+		} else {
+			return LABEL_7;
+		}
+	}
+	
 }

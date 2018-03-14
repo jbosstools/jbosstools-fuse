@@ -33,7 +33,7 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
  */
 public class CamelEndpointDialog extends WizardDialog {
 	
-	private static final String TYPE = "JBoss Fuse";
+	private static final String TYPE = "Red Hat Fuse";
 
 	public void activate() {
 		new WaitUntil(new ShellIsAvailable("Choose Global Camel endpoint"));
