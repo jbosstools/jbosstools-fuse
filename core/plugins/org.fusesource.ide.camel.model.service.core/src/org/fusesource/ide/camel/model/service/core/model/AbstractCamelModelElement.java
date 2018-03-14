@@ -412,6 +412,7 @@ public abstract class AbstractCamelModelElement {
 	 */
 	public final String getDisplayText(boolean useID) {
 		String result = String.format("%s ", Strings.capitalize(getNodeTypeId()));
+		String eipType = getNodeTypeId();
 
 		// honor the PREFER_ID_AS_LABEL preference
 		// we initially set it to the value of the contains method
@@ -426,9 +427,18 @@ public abstract class AbstractCamelModelElement {
 			}
 		}
 
+		// User defined labels
+		String[] userLabels = new String[] {};
+		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_PREFERRED_LABEL)) {
+			String userProperties = PreferenceManager.getInstance()
+					.loadPreferenceAsString(PreferencesConstants.EDITOR_PREFERRED_LABEL);
+			userLabels = userProperties.split(USER_LABEL_DELIMETER);
+		}
+
 		// we only return the id if we are told so by the preference AND the
-		// value of the ID is set != null
-		if (preferID && getId() != null && getId().trim().length() > 0) {
+		// value of the ID is set != null AND it is not overridden by any user label 
+		if (preferID && getId() != null && getId().trim().length() > 0
+				&& !Arrays.stream(userLabels).anyMatch(str -> str.contains(eipType))) {
 			result += getId();
 			return result;
 		}
@@ -442,7 +452,6 @@ public abstract class AbstractCamelModelElement {
 			}
 		}
 
-		String eipType = getNodeTypeId();
 		// For some nodes, we just return their node name
 		String[] nodeNameOnly = new String[] { CHOICE_NODE_NAME, "try", "finally", OTHERWISE_NODE_NAME, "marshal", "unmarshal" };
 		if (Arrays.asList(nodeNameOnly).contains(eipType)) {
@@ -466,16 +475,11 @@ public abstract class AbstractCamelModelElement {
 		singlePropertyDisplay.put("sort", NODE_KIND_EXPRESSION);
 		singlePropertyDisplay.put(WHEN_NODE_NAME, NODE_KIND_EXPRESSION);
 
-		// User defined labels
-		if (PreferenceManager.getInstance().containsPreference(PreferencesConstants.EDITOR_PREFERRED_LABEL)) {
-			String userProperties = PreferenceManager.getInstance()
-					.loadPreferenceAsString(PreferencesConstants.EDITOR_PREFERRED_LABEL);
-			String[] userLabels = userProperties.split(USER_LABEL_DELIMETER);
-			for (String userLabel : userLabels) {
-				if (userLabel.matches(USER_LABEL_REGEX)) {
-					String[] parts = userLabel.split("\\.");
-					singlePropertyDisplay.put(parts[0], parts[1]);
-				}
+		// Apply user preferred labels
+		for (String userLabel : userLabels) {
+			if (userLabel.matches(USER_LABEL_REGEX)) {
+				String[] parts = userLabel.split("\\.");
+				singlePropertyDisplay.put(parts[0], parts[1]);
 			}
 		}
 
