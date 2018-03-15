@@ -122,21 +122,22 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	private void updateJsonFile(IResource jsonFile, IProgressMonitor monitor) {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
 		try {
-			jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor);
+			jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor.split(1));
 		} catch (CoreException ex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(ex);
 		}
 		if (!jsonFile.exists()) {
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor);
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 		}
-		SyndesisExtension extenstion = null;
+		SyndesisExtension extension = null;
 		try (InputStream is = jsonFile.getLocationURI().toURL().openStream()) {
-			extenstion = SyndesisExtension.getJSONFactoryInstance(is);
-			if (extenstion != null && syndesisMetaData.getSyndesisExtensionConfig() != null) {
-				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getExtensionId())) 	extenstion.setExtensionId(syndesisMetaData.getSyndesisExtensionConfig().getExtensionId());
-				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getName()))			extenstion.setName(syndesisMetaData.getSyndesisExtensionConfig().getName());
-				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getDescription())) 	extenstion.setDescription(syndesisMetaData.getSyndesisExtensionConfig().getDescription());
-				if (!Strings.isBlank(syndesisMetaData.getSyndesisExtensionConfig().getVersion())) 		extenstion.setVersion(syndesisMetaData.getSyndesisExtensionConfig().getVersion());
+			extension = SyndesisExtension.getJSONFactoryInstance(is);
+			SyndesisExtension extensionConfig = syndesisMetaData.getSyndesisExtensionConfig();
+			if (extension != null && extensionConfig != null) {
+				if (!Strings.isBlank(extensionConfig.getExtensionId())) 	extension.setExtensionId(extensionConfig.getExtensionId());
+				if (!Strings.isBlank(extensionConfig.getName()))			extension.setName(extensionConfig.getName());
+				if (!Strings.isBlank(extensionConfig.getDescription())) 	extension.setDescription(extensionConfig.getDescription());
+				if (!Strings.isBlank(extensionConfig.getVersion())) 		extension.setVersion(extensionConfig.getVersion());
 			}
 		} catch (IOException ex) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(ex);
@@ -144,9 +145,9 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 			subMonitor.setWorkRemaining(1);
 		}
 		
-		if (extenstion != null) {
+		if (extension != null) {
 			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(jsonFile.getLocation().toOSString()))) {
-				SyndesisExtension.writeToFile(os, extenstion);
+				SyndesisExtension.writeToFile(os, extension);
 				jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor.split(1));
 			} catch (CoreException | IOException ex) {
 				SyndesisExtensionsUIActivator.pluginLog().logError(ex);

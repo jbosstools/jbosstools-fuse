@@ -166,16 +166,20 @@ public class CamelCatalogUtils {
 
 	public static String getBomVersionForCamelVersion(String camelVersion, IProgressMonitor monitor, org.apache.maven.model.Dependency fuseBomUsed) {
 		String bomVersion = null;
-		if(fuseBomUsed != null) {
-			if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
-				bomVersion = getFuse6BomVersion(camelVersion);
-			} else if(isBom(FuseBomFilter.BOM_FUSE_FIS, fuseBomUsed)) {
-				bomVersion = getFuseFISBomVersion(camelVersion, fuseBomUsed, monitor);
-			} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
-				bomVersion = getFuse7BomVersion(camelVersion, fuseBomUsed, monitor);
-			} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
-				bomVersion = getFuse7WildflyBomVersion(camelVersion, fuseBomUsed, monitor);
+		if (camelVersion != null) {
+			if(fuseBomUsed != null) {
+				if(isBom(FuseBomFilter.BOM_FUSE_6, fuseBomUsed)) {
+					bomVersion = getFuse6BomVersion(camelVersion);
+				} else if(isBom(FuseBomFilter.BOM_FUSE_FIS, fuseBomUsed)) {
+					bomVersion = getFuseFISBomVersion(camelVersion, fuseBomUsed, monitor);
+				} else if(isBom(FuseBomFilter.BOM_FUSE_7, fuseBomUsed)) {
+					bomVersion = getFuse7BomVersion(camelVersion, fuseBomUsed, monitor);
+				} else if(isBom(FuseBomFilter.BOM_FUSE_7_WILDFLY, fuseBomUsed)) {
+					bomVersion = getFuse7WildflyBomVersion(camelVersion, fuseBomUsed, monitor);
+				}
 			}
+		} else {
+			return null;
 		}
 		return bomVersion;
 	}

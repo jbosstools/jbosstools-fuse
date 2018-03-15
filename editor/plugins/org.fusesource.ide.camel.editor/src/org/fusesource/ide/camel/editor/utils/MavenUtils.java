@@ -202,7 +202,7 @@ public class MavenUtils {
 			subMonitor.worked(1);
 			IFile pomIFile2 = project.getProject().getFile(IMavenConstants.POM_FILE_NAME);
 			if (pomIFile2 != null) {
-				pomIFile2.refreshLocal(IResource.DEPTH_INFINITE, subMonitor.split(1));
+				pomIFile2.refreshLocal(IResource.DEPTH_ONE, subMonitor.split(1));
 				new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.split(1));
 			}
 		} catch (Exception ex) {
