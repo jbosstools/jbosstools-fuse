@@ -22,6 +22,7 @@ import org.fusesource.ide.projecttemplates.impl.simple.OSESpringBootXMLTemplateF
 import org.fusesource.ide.projecttemplates.wizards.pages.FuseIntegrationProjectWizardRuntimeAndCamelPage;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.CategoryItem;
 import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItem;
+import org.fusesource.ide.projecttemplates.wizards.pages.model.TemplateItemIdentity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -95,7 +96,7 @@ public class CompatibleCamelVersionFilterTest {
 	}
 	
 	protected TemplateItem createTemplateItemInCategory(AbstractProjectTemplate template, CategoryItem category) {
-		TemplateItem templateItem = new TemplateItem("id", "name", "description", 1, category, template, "keywords", CamelDSLType.SPRING);
+		TemplateItem templateItem = new TemplateItem(new TemplateItemIdentity("id", "name", "description",  "keywords"), 1, category, template, CamelDSLType.SPRING);
 		if (category != null) {
 			category.addTemplate(templateItem);
 		}
