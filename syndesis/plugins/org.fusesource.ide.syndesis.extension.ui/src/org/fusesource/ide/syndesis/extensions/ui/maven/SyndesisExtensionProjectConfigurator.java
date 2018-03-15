@@ -41,8 +41,8 @@ import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
  */
 public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigurator {
 	
-	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis";
-    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "syndesis-maven-plugin";
+	private static final String SYNDESIS_PLUGIN_GROUPID = "io.syndesis.extension";
+    private static final String SYNDESIS_PLUGIN_ARTIFACTID = "extension-maven-plugin";
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator#mavenProjectChanged(org.eclipse.m2e.core.project.MavenProjectChangedEvent, org.eclipse.core.runtime.IProgressMonitor)

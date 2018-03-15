@@ -11,13 +11,16 @@
 package org.fusesource.ide.syndesis.extensions.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.fusesource.ide.foundation.ui.wizard.ProjectWizardLocationPage;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
+import org.fusesource.ide.syndesis.extensions.core.util.SyndesisVersionUtil;
 import org.fusesource.ide.syndesis.extensions.ui.internal.Messages;
 import org.fusesource.ide.syndesis.extensions.ui.internal.SyndesisExtensionsUIActivator;
 import org.fusesource.ide.syndesis.extensions.ui.templates.CustomConnectorProjectTemplate;
@@ -89,6 +92,10 @@ public class SyndesisExtensionProjectWizard extends Wizard implements INewWizard
 			metadata.setTemplate(new CustomStepAsCamelRouteProjectTemplate());
 		} else {
 			metadata.setTemplate(new CustomStepAsJavaBeanProjectTemplate());
+		}
+		Map<String, String> versions = SyndesisVersionUtil.checkSyndesisVersionExisting(metadata.getSyndesisExtensionConfig().getSyndesisVersion(), new NullProgressMonitor());
+		if (versions.containsKey(SyndesisVersionUtil.PROP_CAMEL_VERSION)) {
+			metadata.setCamelVersion(versions.get(SyndesisVersionUtil.PROP_CAMEL_VERSION));
 		}
 		return metadata;
 	}

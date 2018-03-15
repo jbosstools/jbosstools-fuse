@@ -65,11 +65,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 			configureVersions(project, metadata.getCamelVersion(), subMonitor.split(1));
 			// add java facet
 			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.split(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
-			// add m2 facet
 			installFacet(project, "jboss.m2", null, null, subMonitor.split(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
-			// now add jst utility
 			installFacet(project, "jst.utility", null, null, subMonitor.split(1)); //$NON-NLS-1$
 			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			project.getFile(".classpath").delete(true, subMonitor.split(1)); //$NON-NLS-1$

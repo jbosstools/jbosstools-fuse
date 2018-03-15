@@ -11,8 +11,10 @@
 package org.fusesource.ide.syndesis.extensions.ui.wizards.pages;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -43,6 +45,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -119,7 +122,7 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 	
 	private ControlDecorationHelper controlDecorationHelper =  new ControlDecorationHelper();
 	private SyndesisExtensionProjectWizard wizard;
-	private Map<String, String> syndesisVersionMap = new IgniteVersionMapper().getMapping();
+	private Map<String, String> syndesisVersionMap = new HashMap<>();
 	private boolean customConnector;
 	private boolean camelRoute;
 	
@@ -239,8 +242,11 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		updateStrategy.setConverter(IConverter.create(String.class, String.class, o1 -> translateDisplayTextToVersion((String) o1)));
 		createBinding(dbc, syndesisVersionCombo.getCombo(), "syndesisVersion", updateStrategy);
 		
-		syndesisVersionCombo.setInput(getSyndesisVersions());
-		syndesisVersionCombo.getCombo().select(0);
+		Display.getDefault().asyncExec( () -> {
+			syndesisVersionMap = new IgniteVersionMapper().getMapping();
+			syndesisVersionCombo.setInput(getSyndesisVersions());
+			syndesisVersionCombo.getCombo().select(0);
+		} );
 		
 		Button syndesisVersionValidationBtn = new Button(container, SWT.PUSH);
 		GridData verifyVersionButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
@@ -363,8 +369,8 @@ public class SyndesisExtensionProjectWizardExtensionDetailsPage extends WizardPa
 		return textField;
 	}
 	
-	private String[] getSyndesisVersions() {
-		return syndesisVersionMap.keySet().toArray(new String[syndesisVersionMap.size()]);
+	private Set<String> getSyndesisVersions() {
+		return syndesisVersionMap.keySet();
 	}
 	
 	private String translateDisplayTextToVersion(String displayText) {

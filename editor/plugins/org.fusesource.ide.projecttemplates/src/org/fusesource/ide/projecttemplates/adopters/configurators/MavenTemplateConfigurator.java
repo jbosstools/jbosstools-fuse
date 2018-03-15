@@ -44,17 +44,14 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 		boolean ok = super.configure(project, metadata, subMonitor.newChild(1));
 
 		if (ok) {
-			// by default add staging repos if option enabled
-			ok = MavenUtils.configureStagingRepositories(project, subMonitor.newChild(1));
-		}
-		
-		if (ok) {
 			// by default add the maven nature
 			ok = configureMavenNature(project, subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
 		}
-		
+
 		// to not trigger too many events while configuring the pom  we reuse the model
 		Model m2model = new CamelMavenUtils().getMavenModel(project);
+
 		try {
 			if (ok) {
 				// by default add staging repos if option enabled
@@ -86,11 +83,11 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
 			configuration.setSelectedProfiles(""); //$NON-NLS-1$
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			//new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
 			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
-			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			//new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
         } catch(CoreException ex) {
         	ProjectTemplatesActivator.pluginLog().logError(ex.getMessage(), ex);
         	return false;
