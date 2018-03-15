@@ -438,7 +438,7 @@ public abstract class AbstractCamelModelElement {
 		// we only return the id if we are told so by the preference AND the
 		// value of the ID is set != null AND it is not overridden by any user label 
 		if (preferID && getId() != null && getId().trim().length() > 0
-				&& !Arrays.stream(userLabels).anyMatch(str -> str.contains(eipType))) {
+				&& Arrays.stream(userLabels).noneMatch(str -> str.contains(eipType))) {
 			result += getId();
 			return result;
 		}
