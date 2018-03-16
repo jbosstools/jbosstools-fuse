@@ -146,7 +146,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 		}
 		
 		if (extension != null) {
-			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(jsonFile.getLocation().toOSString()))) {
+			try (OutputStream os = new FileOutputStream(jsonFile.getLocation().toOSString())) {
 				SyndesisExtension.writeToFile(os, extension);
 				jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor.split(1));
 			} catch (CoreException | IOException ex) {
