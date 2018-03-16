@@ -267,7 +267,8 @@ public class CamelMavenUtils {
 		repoList.add(Arrays.asList("old-fuse", "https://repository.jboss.org/nexus/content/repositories/fs-releases"));
 		// red hat public GA repo
 		repoList.add(Arrays.asList("redhat-ga", "https://maven.repository.redhat.com/ga/"));
-		
+		// Red Hat public Early Access repository
+		repoList.add(Arrays.asList("redhat-early-access","https://maven.repository.redhat.com/earlyaccess/all"));
 		
 		return repoList;
 	}

@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.model.service.core.util.CamelCatalogUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SwitchCamelVersionWizardIT {
@@ -30,8 +29,6 @@ public class SwitchCamelVersionWizardIT {
 	}
 	
 	@Test
-	@Ignore("The automated test cannot work for now because the Camel version is not looking for early access repository, neither the configured repositories in the pom of the project."
-			+ "Working locally if you already have the artefact locally or configured your local settings.xml. see FUSETOOLS-2865")
 	public void testSwitchValidateExistingVersionWhenAlreadyDefaultVersionChooseLatestVersionByDefault() throws Exception {
 		testSwitchFromExistingSelectByDefault(CamelCatalogUtils.DEFAULT_CAMEL_VERSION, getLatestCamelVersion());
 	}
