@@ -345,6 +345,7 @@ public class MavenUtils {
 			} else {
 				return false;
 			}
+			subMonitor.setWorkRemaining(0);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
@@ -354,9 +355,8 @@ public class MavenUtils {
 	
 	public static boolean configurePomCamelVersion(IProject project, Model m2m, CommonNewProjectMetaData projectMetaData, String camelVersion, IProgressMonitor monitor) {
 		String newCamelVersion = Strings.isBlank(camelVersion) && projectMetaData != null && !Strings.isBlank(projectMetaData.getCamelVersion()) ? projectMetaData.getCamelVersion() : camelVersion;
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 8);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.mavenTemplateConfiguratorAdaptingprojectToCamelVersionMonitorMessage, 7);
 		try {
-			subMonitor.setWorkRemaining(7);
 			if (m2m.getDependencyManagement() != null) {
 				MavenUtils.updateCamelVersionDependencies(m2m, m2m.getDependencyManagement().getDependencies(), newCamelVersion);
 			}
@@ -378,7 +378,7 @@ public class MavenUtils {
 				ProjectTemplatePatcher patcher = new ProjectTemplatePatcher(projectMetaData);
 				patcher.patch(m2m, subMonitor.split(1));
 			}
-			subMonitor.setWorkRemaining(1);
+			subMonitor.setWorkRemaining(0);
 		} catch (Exception ex) {
 			ProjectTemplatesActivator.pluginLog().logError(ex);
 			return false;
