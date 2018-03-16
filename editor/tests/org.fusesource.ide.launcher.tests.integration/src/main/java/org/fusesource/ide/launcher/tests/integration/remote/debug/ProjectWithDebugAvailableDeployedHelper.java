@@ -146,7 +146,7 @@ public class ProjectWithDebugAvailableDeployedHelper {
 				isDeploymentOk = deploymentFinished;
 				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "JMX connection succeeded\nisDeployment Finished? " + isDeploymentOk));
 			} catch(IOException ioe){
-				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "JMX connection attempt failed", ioe));
+				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.ID, "actively awaiting that Camel Route starts, JMX connection attempt failed so Camel route not yet started. ", ioe));
 			}
 			Thread.sleep(500);
 			currentAwaitedTime += 500;
