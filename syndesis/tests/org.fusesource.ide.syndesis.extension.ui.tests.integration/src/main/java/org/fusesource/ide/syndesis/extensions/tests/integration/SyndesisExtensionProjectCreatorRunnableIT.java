@@ -60,8 +60,6 @@ import org.junit.Before;
  */
 public abstract class SyndesisExtensionProjectCreatorRunnableIT extends AbstractProjectCreatorRunnableIT {
 
-	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
-
 	protected Map<String, String> versions;
 	
 	@Before
@@ -84,6 +82,10 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	}
 
 	protected abstract AbstractProjectTemplate getTemplate();
+	
+	protected String getCamelResourcePath() {
+		return null;
+	}
 	
 	protected SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
@@ -120,12 +122,13 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Project created: " + projectName);
 
-		final IFile camelResource = project.getFile(CAMEL_RESOURCE_PATH);
+		IFile camelResource = null;
 		if (hasCamelRoute()) {
+			camelResource = project.getFile(getCamelResourcePath());
 			assertThat(camelResource.exists()).isTrue();
 		}
 
-		final IFile syndesisResource = project.getFile(SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH);
+		IFile syndesisResource = project.getFile(SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH);
 		assertThat(syndesisResource.exists()).isTrue();
 
 		waitJob();
