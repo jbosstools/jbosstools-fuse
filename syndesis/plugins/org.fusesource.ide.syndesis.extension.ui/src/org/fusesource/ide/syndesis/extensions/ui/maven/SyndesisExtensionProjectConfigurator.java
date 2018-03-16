@@ -68,9 +68,13 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 		if (model != null) {
 			Build build = model.getBuild();
 			if (build != null) {
-				PluginManagement pluginManagement = build.getPluginManagement();
-				if (pluginManagement != null) {
-					return isSyndesisPluginDefined(pluginManagement.getPlugins()) || isSyndesisPluginDefined(build.getPlugins());
+				if (isSyndesisPluginDefined(build.getPlugins())) {
+					return true;
+				} else {
+					PluginManagement pluginManagement = build.getPluginManagement();
+					if (pluginManagement != null) {
+						return isSyndesisPluginDefined(pluginManagement.getPlugins());
+					}
 				}
 			}
 		}
