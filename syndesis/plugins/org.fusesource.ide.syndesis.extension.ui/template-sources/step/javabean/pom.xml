@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mycompany.ignite.extensions</groupId>
 	<artifactId>custom-step-bean</artifactId>
@@ -11,88 +10,90 @@
 	<description>Logs a message body with a prefix</description>
 
 	<properties>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    	<java.version>1.8</java.version>
-    	<!-- plugins -->
-    	<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-    	<!-- dependencies -->
-    	<syndesis.version>1.3-SNAPSHOT</syndesis.version>
-    </properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<!-- plugins -->
+		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<!-- dependencies -->
+		<syndesis.version>1.3-SNAPSHOT</syndesis.version>
+	</properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.syndesis.extension</groupId>
-                <artifactId>extension-bom</artifactId>
-                <version>${syndesis.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.syndesis.extension</groupId>
+				<artifactId>extension-bom</artifactId>
+				<version>${syndesis.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-    <dependencies>
+	<dependencies>
 
-        <!-- annotation processing -->
-        <dependency>
-          <groupId>io.syndesis.extension</groupId>
-          <artifactId>extension-annotation-processor</artifactId>
-          <optional>true</optional>
-        </dependency>
+		<!-- annotation processing -->
+		<dependency>
+			<groupId>io.syndesis.extension</groupId>
+			<artifactId>extension-annotation-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 
-        <!-- runtime -->
-        <dependency>
-          <groupId>io.syndesis.extension</groupId>
-          <artifactId>extension-api</artifactId>
-          <scope>provided</scope>
-        </dependency>
+		<!-- runtime -->
+		<dependency>
+			<groupId>io.syndesis.extension</groupId>
+			<artifactId>extension-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
-        <!-- project dependencies -->
-        <dependency>
-            <groupId>com.github.lalyos</groupId>
-            <artifactId>jfiglet</artifactId>
-            <version>0.0.8</version>
-        </dependency>
+		<!-- project dependencies -->
+		<dependency>
+			<groupId>com.github.lalyos</groupId>
+			<artifactId>jfiglet</artifactId>
+			<version>0.0.8</version>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 
-    <build>
-        <plugins>
-        	<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<version>${maven-compiler-plugin.version}</version>
-        		<configuration>
-          			<source>${java.version}</source>
-          			<target>${java.version}</target>
-        		</configuration>
-      		</plugin>
-            <plugin>
-                <groupId>io.syndesis.extension</groupId>
-                <artifactId>extension-maven-plugin</artifactId>
-                <version>${syndesis.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate-metadata</goal>
-                            <goal>repackage-extension</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.syndesis.extension</groupId>
+				<artifactId>extension-maven-plugin</artifactId>
+				<version>${syndesis.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate-metadata</goal>
+							<goal>repackage-extension</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
