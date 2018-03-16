@@ -145,6 +145,8 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		additionalChecks(project);
 
 		launchBuild(new NullProgressMonitor());
+		waitJob();
+		CommonTestUtils.closeAllEditors();
 	}
 
 	private void waitForValidationThreads() throws InterruptedException {
