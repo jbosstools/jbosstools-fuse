@@ -13,11 +13,11 @@ package org.fusesource.ide.syndesis.extensions.core.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -43,7 +43,9 @@ public class SyndesisExtensionJSONStructuralLoadingTest {
 	@Test
 	public void testJSONLoading() throws IOException {
 		URI uri = URI.create(jsonUrl);
-		SyndesisExtension extension = SyndesisExtension.getJSONFactoryInstance(uri.toURL().openStream());
-		assertThat(extension).as("URL " + jsonUrl + " is an invalid source file. Structure might have changed upstream!").isNotNull();
+		try (InputStream is = uri.toURL().openStream()) {
+			SyndesisExtension extension = SyndesisExtension.getJSONFactoryInstance(is);
+			assertThat(extension).as("URL " + jsonUrl + " is an invalid source file. Structure might have changed upstream!").isNotNull();
+		}		
 	}
 }
