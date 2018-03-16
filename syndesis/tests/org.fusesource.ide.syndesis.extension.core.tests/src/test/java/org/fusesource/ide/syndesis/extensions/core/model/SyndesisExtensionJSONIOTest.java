@@ -49,12 +49,18 @@ public class SyndesisExtensionJSONIOTest {
 	@Test
 	public void testWriteAndReload() throws IOException {
 		File f = File.createTempFile("unitTest", "json");
-		SyndesisExtension.writeToFile(new FileOutputStream(f), extension);
-		SyndesisExtension extNew = SyndesisExtension.getJSONFactoryInstance(new FileInputStream(f));
-		assertThat(extNew.getExtensionId()).isEqualTo(extension.getExtensionId());
-		assertThat(extNew.getName()).isEqualTo(extension.getName());
-		assertThat(extNew.getDescription()).isEqualTo(extension.getDescription());
-		assertThat(extNew.getVersion()).isEqualTo(extension.getVersion());
+		try (FileOutputStream fos = new FileOutputStream(f)) {
+			SyndesisExtension.writeToFile(fos, extension);
+		}
+		
+		SyndesisExtension extNew;
+		try (FileInputStream fis = new FileInputStream(f)) {
+			extNew = SyndesisExtension.getJSONFactoryInstance(fis);
+			assertThat(extNew.getExtensionId()).isEqualTo(extension.getExtensionId());
+			assertThat(extNew.getName()).isEqualTo(extension.getName());
+			assertThat(extNew.getDescription()).isEqualTo(extension.getDescription());
+			assertThat(extNew.getVersion()).isEqualTo(extension.getVersion());
+		}
 		f.deleteOnExit();
 
 		String jsonOriginalString = mapper.writeValueAsString(extension);
