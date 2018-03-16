@@ -33,7 +33,9 @@ public class SyndesisExtensionIrcConnectorJSONLoadingTest {
 	@Before
 	public void onStart() throws IOException {
 		File jsonFile = new File("testdata/irc-connector.json");
-		this.extension = SyndesisExtension.getJSONFactoryInstance(new FileInputStream(jsonFile));
+		try (FileInputStream fis = new FileInputStream(jsonFile)) {
+			this.extension = SyndesisExtension.getJSONFactoryInstance(fis);
+		}
 	}
 
 	/**

@@ -32,7 +32,9 @@ public class SyndesisExtensionSqlConnectorJSONLoadingTest {
 	@Before
 	public void onStart() throws IOException {
 		File jsonFile = new File("testdata/sql-connector.json");
-		this.extension = SyndesisExtension.getJSONFactoryInstance(new FileInputStream(jsonFile));
+		try (FileInputStream fis = new FileInputStream(jsonFile)) {
+			this.extension = SyndesisExtension.getJSONFactoryInstance(fis);
+		}
 	}
 
 	/**
