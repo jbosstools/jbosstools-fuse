@@ -42,4 +42,12 @@ public class SyndesisExtensionProjectCreatorRunnableForCustomStepRouteExtensionI
 	protected boolean hasCamelRoute() {
 		return true;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionProjectCreatorRunnableIT#getCamelResourcePath()
+	 */
+	@Override
+	protected String getCamelResourcePath() {
+		return "src/main/resources/META-INF/syndesis/extensions/log-body-action.xml";
+	}
 }

@@ -48,10 +48,10 @@ import org.junit.rules.TestWatcher;
 
 public abstract class AbstractProjectCreatorRunnableIT {
 
-	public static IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java");
-	public static IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2");
-	public static IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility");
-	public static IProjectFacet webFacet = ProjectFacetsManager.getProjectFacet("jst.web");
+	public static final IProjectFacet javaFacet = ProjectFacetsManager.getProjectFacet("java");
+	public static final IProjectFacet m2eFacet = ProjectFacetsManager.getProjectFacet("jboss.m2");
+	public static final IProjectFacet utilFacet = ProjectFacetsManager.getProjectFacet("jst.utility");
+	public static final IProjectFacet webFacet = ProjectFacetsManager.getProjectFacet("jst.web");
 	public static final String SCREENSHOT_FOLDER = "./target/MavenLaunchOutputs";
 	
 	@Rule
