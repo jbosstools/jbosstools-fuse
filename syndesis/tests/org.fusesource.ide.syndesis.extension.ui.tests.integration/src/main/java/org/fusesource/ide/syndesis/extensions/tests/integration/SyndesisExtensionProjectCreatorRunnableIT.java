@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.fusesource.ide.syndesis.extensions.tests.integration.wizards;
+package org.fusesource.ide.syndesis.extensions.tests.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import javax.management.MalformedObjectNameException;
@@ -45,13 +46,11 @@ import org.eclipse.ui.WorkbenchException;
 import org.fusesource.ide.camel.editor.CamelEditor;
 import org.fusesource.ide.camel.tests.util.AbstractProjectCreatorRunnableIT;
 import org.fusesource.ide.camel.tests.util.CommonTestUtils;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.ScreenshotUtil;
 import org.fusesource.ide.preferences.initializer.StagingRepositoriesPreferenceInitializer;
+import org.fusesource.ide.projecttemplates.adopters.AbstractProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.core.model.SyndesisExtension;
 import org.fusesource.ide.syndesis.extensions.core.util.IgniteVersionMapper;
-import org.fusesource.ide.syndesis.extensions.tests.integration.SyndesisExtensionIntegrationTestsActivator;
-import org.fusesource.ide.syndesis.extensions.ui.templates.CustomStepAsCamelRouteProjectTemplate;
 import org.fusesource.ide.syndesis.extensions.ui.util.NewSyndesisExtensionProjectMetaData;
 import org.fusesource.ide.syndesis.extensions.ui.wizards.SyndesisExtensionProjectCreatorRunnable;
 import org.junit.Before;
@@ -63,6 +62,8 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 
 	protected static final String CAMEL_RESOURCE_PATH = "src/main/resources/camel/extension.xml";
 
+	protected Map<String, String> versions;
+	
 	@Before
 	public void setup() throws WorkbenchException {
 		SyndesisExtensionIntegrationTestsActivator.pluginLog()
@@ -76,17 +77,21 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		// TODO: for now we need the staging repos, disable before GA
 		new StagingRepositoriesPreferenceInitializer().setStagingRepositoriesEnablement(true);
 
+		versions = new IgniteVersionMapper().getMapping();
+		
 		SyndesisExtensionIntegrationTestsActivator.pluginLog()
 				.logInfo("End setup for " + SyndesisExtensionProjectCreatorRunnableIT.class.getSimpleName());
 	}
 
-	private SyndesisExtension createDefaultNewSyndesisExtension() {
+	protected abstract AbstractProjectTemplate getTemplate();
+	
+	protected SyndesisExtension createDefaultNewSyndesisExtension() {
 		SyndesisExtension extension = new SyndesisExtension();
-		extension.setSyndesisVersion(new IgniteVersionMapper().getMapping().keySet().iterator().next());
+		extension.setSyndesisVersion(versions.keySet().toArray()[versions.size()-1].toString());
 		extension.setExtensionId("com.acme.custom");
 		extension.setVersion("1.0.0");
 		extension.setName("ACME Custom Extension");
-		extension.setDescription("ACME Custom Extension Filter");
+		extension.setDescription("ACME Custom Extension");
 		return extension;
 	}
 
@@ -95,40 +100,40 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 		metadata.setProjectName(projectName);
 		metadata.setLocationPath(null);
 		metadata.setSyndesisExtensionConfig(createDefaultNewSyndesisExtension());
-		metadata.setTemplate(new CustomStepAsCamelRouteProjectTemplate());
+		metadata.setTemplate(getTemplate());
 		return metadata;
 	}
 
-	protected void testProjectCreation(String projectNameSuffix, String camelPath, String syndesisPath)
-			throws InterruptedException, InvocationTargetException, CoreException, MalformedObjectNameException,
-			IOException {
-		final String projectName = getClass().getSimpleName() + projectNameSuffix;
-		SyndesisExtensionIntegrationTestsActivator.pluginLog()
-				.logInfo("Starting creation of the project: " + projectName);
+	protected abstract boolean hasCamelRoute();
+	
+	protected void testProjectCreation() throws InterruptedException, InvocationTargetException, CoreException, MalformedObjectNameException, IOException {
+		final String projectName = getClass().getSimpleName();
+		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Starting creation of the project: " + projectName);
 		assertThat(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).exists()).isFalse();
 
 		NewSyndesisExtensionProjectMetaData metaData = createDefaultNewProjectMetadata(projectName);
 
-		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true,
-				new SyndesisExtensionProjectCreatorRunnable(metaData));
+		new ProgressMonitorDialog(Display.getDefault().getActiveShell()).run(false, true, new SyndesisExtensionProjectCreatorRunnable(metaData));
 
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
 		assertThat(project.exists()).describedAs("The project " + project.getName() + " doesn't exist.").isTrue();
 		SyndesisExtensionIntegrationTestsActivator.pluginLog().logInfo("Project created: " + projectName);
 
-		final IFile camelResource = project.getFile(Strings.isBlank(camelPath) ? CAMEL_RESOURCE_PATH : camelPath);
-		assertThat(camelResource.exists()).isTrue();
+		final IFile camelResource = project.getFile(CAMEL_RESOURCE_PATH);
+		if (hasCamelRoute()) {
+			assertThat(camelResource.exists()).isTrue();
+		}
 
-		final IFile syndesisResource = project
-				.getFile(Strings.isBlank(syndesisPath) ? SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH
-						: syndesisPath);
+		final IFile syndesisResource = project.getFile(SyndesisExtensionProjectCreatorRunnable.SYNDESIS_RESOURCE_PATH);
 		assertThat(syndesisResource.exists()).isTrue();
 
 		waitJob();
 
-		checkCamelEditorOpened(camelResource);
-		waitJob();
+		if (hasCamelRoute()) {
+			checkCamelEditorOpened(camelResource);
+			waitJob();
+		}
 		checkJSONEditorOpened(syndesisResource);
 		waitJob();
 		checkCorrectFacetsEnabled(project);
@@ -224,7 +229,11 @@ public abstract class SyndesisExtensionProjectCreatorRunnableIT extends Abstract
 	private void checkJSONEditorOpened(IFile syndesisResource) throws InterruptedException, PartInitException {
 		readAndDispatch(0);
 		int currentAwaitedTime = 0;
-		while (CommonTestUtils.getCurrentOpenEditors().length < 2 && currentAwaitedTime < 30000) {
+		int expectedEditorsCount = 1;
+		if (hasCamelRoute()) {
+			expectedEditorsCount++;
+		}
+		while (CommonTestUtils.getCurrentOpenEditors().length < expectedEditorsCount && currentAwaitedTime < 30000) {
 			Thread.sleep(100);
 			currentAwaitedTime += 100;
 			System.out.println("awaited activation of editor " + currentAwaitedTime);
