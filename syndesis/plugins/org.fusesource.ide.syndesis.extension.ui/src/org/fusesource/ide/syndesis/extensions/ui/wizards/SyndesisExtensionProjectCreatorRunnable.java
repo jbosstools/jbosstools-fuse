@@ -105,7 +105,7 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(pomFile))) {
 				MavenPlugin.getMaven().writeModel(pomModel, out);
-				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, subMonitor.split(10));
+				project.getFile(IMavenConstants.POM_FILE_NAME).refreshLocal(IResource.DEPTH_ZERO, subMonitor.split(1));
 			}
 		} catch (CoreException | IOException e1) {
 			SyndesisExtensionsUIActivator.pluginLog().logError(e1);
@@ -116,11 +116,11 @@ public final class SyndesisExtensionProjectCreatorRunnable extends BasicProjectC
 	
 	private void configureMetaDataInJSONFile(IProject project, IProgressMonitor monitor) {
 		IResource jsonFile = project.getFile(SYNDESIS_RESOURCE_PATH);
-		Display.getDefault().asyncExec( () -> updateJsonFile(jsonFile, monitor) );
+		Display.getDefault().syncExec( () -> updateJsonFile(jsonFile, monitor) );
 	}
 
 	private void updateJsonFile(IResource jsonFile, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 3);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 5);
 		try {
 			jsonFile.refreshLocal(IProject.DEPTH_ZERO, subMonitor.split(1));
 		} catch (CoreException ex) {

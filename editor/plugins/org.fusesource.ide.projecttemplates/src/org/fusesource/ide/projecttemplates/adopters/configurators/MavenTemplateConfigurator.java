@@ -78,7 +78,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 	 * @return	true on success
 	 */
 	protected boolean configureMavenNature(IProject project, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage, 4);
+		SubMonitor subMonitor = SubMonitor.convert(monitor,Messages.mavenTemplateConfiguratorConfiguringMavenNatureMonitorMessage, 3);
 		try {
 			ResolverConfiguration configuration = new ResolverConfiguration();
 			configuration.setResolveWorkspaceProjects(true);
@@ -87,7 +87,7 @@ public class MavenTemplateConfigurator extends DefaultTemplateConfigurator {
 			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
 			configurationManager.enableMavenNature(project, configuration, subMonitor.newChild(1));
 			configurationManager.updateProjectConfiguration(project, subMonitor.newChild(1));
-			//new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
+			new BuildAndRefreshJobWaiterUtil().waitJob(subMonitor.newChild(1));
         } catch(CoreException ex) {
         	ProjectTemplatesActivator.pluginLog().logError(ex.getMessage(), ex);
         	return false;
