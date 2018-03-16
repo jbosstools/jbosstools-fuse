@@ -50,7 +50,7 @@ public class SyndesisExtensionProjectConfigurator extends AbstractProjectConfigu
 	@Override
 	public void mavenProjectChanged(MavenProjectChangedEvent event, IProgressMonitor monitor) throws CoreException {
 		IMavenProjectFacade facade = event.getMavenProject();
-		if (event.getFlags() == MavenProjectChangedEvent.FLAG_DEPENDENCIES && facade != null) {
+		if ((event.getFlags() == MavenProjectChangedEvent.FLAG_DEPENDENCIES || event.getKind() == MavenProjectChangedEvent.KIND_ADDED) && facade != null) {
 			IProject project = facade.getProject();
 			IFacetedProject fproj = ProjectFacetsManager.create(project);
 			if (fproj != null && isValidSyndesisProject(project)) {
