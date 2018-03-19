@@ -112,12 +112,9 @@ public class FuseProjectTest extends DefaultTest {
 
 	private void createProject(FuseProjectDefinition project) {
 
-		if (project.getTemplate().equals("empty")) {
-			ProjectFactory.newProject("test").version(project.getCamelVersion()).type(project.getDsl()).create();
-		} else {
-			ProjectFactory.newProject("test").version(project.getCamelVersion()).template(project.getTemplate()).type(project.getDsl())
-					.create();
-		}
+		ProjectFactory.newProject("test").deploymentType(project.getDeploymentType())
+				.runtimeType(project.getRuntimeType()).version(project.getCamelVersion())
+				.template(project.getTemplate()).create();
 	}
 
 	private boolean hasErrors() {
@@ -147,8 +144,8 @@ public class FuseProjectTest extends DefaultTest {
 				return false;
 			}
 			ConsoleView console = new ConsoleView();
-			if (console.getConsoleText().contains("BUILD FAILURE")
-					|| console.getConsoleText().contains("[ERROR]") || console.consoleIsTerminated()) {
+			if (console.getConsoleText().contains("BUILD FAILURE") || console.getConsoleText().contains("[ERROR]")
+					|| console.consoleIsTerminated()) {
 				log.warn("There is a problem with building '" + name + "' project");
 				return false;
 			}
@@ -189,7 +186,7 @@ public class FuseProjectTest extends DefaultTest {
 
 		assertFalse("Project '" + project + "' was created with errors", hasErrors());
 		if ((project.getDsl() != JAVA) && // skip Java DSLs
-				(!project.getTemplate().startsWith("empty")) // skip Empty project templates
+				(!project.getTemplate()[project.getTemplate().length - 1].toLowerCase().contains("empty")) // skip Empty project templates
 		)
 			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun("test"));
 	}

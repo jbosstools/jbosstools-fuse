@@ -10,11 +10,15 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests.utils;
 
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
 import static org.jboss.tools.fuse.reddeer.ProjectType.BLUEPRINT;
 import static org.jboss.tools.fuse.reddeer.ProjectType.JAVA;
 import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.OPENSHIFT;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.reddeer.common.wait.AbstractWait;
@@ -36,6 +40,11 @@ import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
 
 /**
  * Can create new Fuse projects or import existing
@@ -46,9 +55,9 @@ public class ProjectFactory {
 
 	private String name;
 	private String version;
-	private String template;
-	private List<String> templatePath;
-	private ProjectType type;
+	private NewFuseIntegrationProjectWizardRuntimeType runtimeType;
+	private NewFuseIntegrationProjectWizardDeploymentType deploymentType;
+	private String[] template;
 
 	private ProjectFactory(String name) {
 		this.name = name;
@@ -58,24 +67,19 @@ public class ProjectFactory {
 		this.version = version;
 		return this;
 	}
-	
-	/**
-	 * @param template
-	 * @return You should use a full path to the Template for performance reason.
-	 */
-	@Deprecated
-	public ProjectFactory template(String template) {
+
+	public ProjectFactory template(String[] template) {
 		this.template = template;
 		return this;
 	}
-	
-	public ProjectFactory template(List<String> templatePath) {
-		this.templatePath = templatePath;
+
+	public ProjectFactory runtimeType(NewFuseIntegrationProjectWizardRuntimeType runtimeType) {
+		this.runtimeType = runtimeType;
 		return this;
 	}
 
-	public ProjectFactory type(ProjectType type) {
-		this.type = type;
+	public ProjectFactory deploymentType(NewFuseIntegrationProjectWizardDeploymentType deploymentType) {
+		this.deploymentType = deploymentType;
 		return this;
 	}
 
@@ -83,19 +87,27 @@ public class ProjectFactory {
 		PreferencesUtil.setOpenAssociatedPerspective("never");
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName(name);
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName(name);
 		wiz.next();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
 		if (version != null) {
-			wiz.selectCamelVersion(version);
+			secondPage.typeCamelVersion(version);
+		}
+		if (deploymentType != null) {
+			secondPage.setDeploymentType(deploymentType);
+		}
+		if (runtimeType != null && deploymentType == STANDALONE) {
+			secondPage.setRuntimeType(runtimeType);
 		}
 		wiz.next();
-		if(templatePath != null) {
-			wiz.selectTemplate(templatePath.toArray(new String[templatePath.size()]));
-		} else if (template != null) {
-			wiz.selectTemplate(template);
+		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
+		if (template != null) {
+			lastPage.selectTemplate(template);
+		} else {
+			lastPage.selectTemplate(SPRINGBOOT);
 		}
-		wiz.setProjectType(type);
-		new FinishButton().click();
+		new FinishButton(wiz).click();
 		new WaitWhile(new JobIsRunning(), TimePeriod.getCustom(900));
 		new WaitWhile(new ShellIsAvailable("New Fuse Integration Project"), TimePeriod.getCustom(900));
 	}
@@ -157,43 +169,6 @@ public class ProjectFactory {
 	}
 
 	/**
-	 * Returns a list of all available templates in the following format:<br/>
-	 * {name}:{DSL}:{version}
-	 * 
-	 * @return all available templates
-	 */
-	public static List<FuseProjectDefinition> getAllAvailableTemplates() {
-		List<String> versions = getAllAvailableCamelVersions();
-		List<FuseProjectDefinition> templates = new ArrayList<>();
-		for (String version : versions) {
-			templates.add(new FuseProjectDefinition("empty", BLUEPRINT, version));
-			templates.add(new FuseProjectDefinition("empty", SPRING, version));
-			templates.add(new FuseProjectDefinition("empty", JAVA, version));
-			NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-			wiz.open();
-			wiz.setProjectName("45frHHallkIIo");
-			wiz.next();
-			wiz.selectCamelVersion(version);
-			wiz.next();
-			List<String> temp = wiz.getAllAvailableTemplates();
-			for (String template : temp) {
-				wiz.selectTemplate(template);
-				if (wiz.isProjectTypeAvailable(BLUEPRINT)) {
-					templates.add(new FuseProjectDefinition(template, BLUEPRINT, version));
-				}
-				if (wiz.isProjectTypeAvailable(SPRING)) {
-					templates.add(new FuseProjectDefinition(template, SPRING, version));
-				}
-				if (wiz.isProjectTypeAvailable(JAVA)) {
-					templates.add(new FuseProjectDefinition(template, JAVA, version));
-				}
-			}
-			wiz.cancel();
-		}
-		return templates;
-	}
-
-	/**
 	 * Returns all available Camel versions in New Fuse Integration Project Wizard
 	 * 
 	 * @return all available Camel versions
@@ -202,10 +177,70 @@ public class ProjectFactory {
 		List<String> versions;
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName("rfhaSS234");
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("rfhaSS234");
 		wiz.next();
-		versions = wiz.getCamelVersions();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		versions = secondPage.getAllAvailableCamelVersions();
 		wiz.cancel();
 		return versions;
+	}
+
+	public static Collection<FuseProjectDefinition> getAllAvailableTemplates() {
+		List<FuseProjectDefinition> templates = new ArrayList<>();
+		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
+		wiz.open();
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("rfhaSS234ss");
+		wiz.next();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+
+		// for all deployment types
+		for (NewFuseIntegrationProjectWizardDeploymentType deploymentType : NewFuseIntegrationProjectWizardDeploymentType
+				.values()) {
+			secondPage.setDeploymentType(deploymentType);
+
+			// for all different runtime types
+			for (NewFuseIntegrationProjectWizardRuntimeType runtimeType : NewFuseIntegrationProjectWizardRuntimeType
+					.values()) {
+
+				// skip Openshift/Karaf and OpenShift/EAP combinations
+				if (deploymentType == OPENSHIFT
+						&& !(runtimeType == NewFuseIntegrationProjectWizardRuntimeType.SPRINGBOOT)) {
+					continue;
+				}
+				secondPage.setRuntimeType(runtimeType);
+
+				// for all available Camel versions
+				for (String camelVersion : secondPage.getAllAvailableCamelVersions()) {
+					secondPage.typeCamelVersion(camelVersion);
+					wiz.next();
+					NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(
+							wiz);
+
+					// add all available templates
+					for (String[] path : lastPage.getAllAvailableTemplates()) {
+
+						// determine project type
+						ProjectType projectType;
+						if (path[path.length - 1].toLowerCase().contains("blueprint")) {
+							projectType = BLUEPRINT;
+						} else if (path[path.length - 1].toLowerCase().contains("spring")) {
+							projectType = SPRING;
+						} else {
+							projectType = JAVA;
+						}
+
+						FuseProjectDefinition project = new FuseProjectDefinition(runtimeType, deploymentType, path,
+								camelVersion, projectType);
+						templates.add(project);
+					}
+
+					wiz.back();
+				}
+			}
+		}
+		wiz.cancel();
+		return templates;
 	}
 }

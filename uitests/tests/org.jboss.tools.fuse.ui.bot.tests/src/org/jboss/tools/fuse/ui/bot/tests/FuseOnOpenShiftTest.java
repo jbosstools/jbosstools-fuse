@@ -10,10 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.OPENSHIFT;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
 
 import org.eclipse.reddeer.common.wait.TimePeriod;
 import org.eclipse.reddeer.common.wait.WaitUntil;
@@ -113,8 +112,7 @@ public class FuseOnOpenShiftTest {
 	public void testDeploymentToOpenShift() {
 
 		// create a new Fuse Integration Project
-		ProjectFactory.newProject(PROJECT_NAME).template(Arrays.asList("Fuse on OpenShift", "SpringBoot on OpenShift"))
-				.type(SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(OPENSHIFT).template(SPRINGBOOT).create();
 
 		// create a new project on OpenShift
 		OpenShiftExplorer explorer = new OpenShiftExplorer();

@@ -39,7 +39,6 @@ import org.eclipse.reddeer.requirements.openperspective.OpenPerspectiveRequireme
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.FileUtils;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.preference.MavenUserSettingsPreferencePage;
 import org.jboss.tools.fuse.reddeer.preference.StagingRepositoriesPreferencePage;
@@ -161,12 +160,9 @@ public class FuseProjectTestLong extends DefaultTest {
 
 	private void createProject(FuseProjectDefinition project) {
 
-		if (project.getTemplate().equals("empty")) {
-			ProjectFactory.newProject("test").version(project.getCamelVersion()).type(project.getDsl()).create();
-		} else {
-			ProjectFactory.newProject("test").version(project.getCamelVersion()).template(project.getTemplate()).type(project.getDsl())
-					.create();
-		}
+		ProjectFactory.newProject("test").deploymentType(project.getDeploymentType())
+		.runtimeType(project.getRuntimeType()).version(project.getCamelVersion())
+		.template(project.getTemplate()).create();
 	}
 
 	private boolean hasErrors() {
@@ -238,7 +234,7 @@ public class FuseProjectTestLong extends DefaultTest {
 		}
 		assertFalse("Project '" + project + "' was created with errors", hasErrors());
 		if ((project.getDsl() != JAVA) && // skip Java DSLs
-				(!project.getTemplate().startsWith("empty")) // skip Empty project templates
+				(!project.getTemplate()[project.getTemplate().length - 1].toLowerCase().contains("empty")) // skip Empty project templates
 		)
 			assertTrue("Project '" + project + "' cannot be run as Local Camel Context", canBeRun("test"));
 	}

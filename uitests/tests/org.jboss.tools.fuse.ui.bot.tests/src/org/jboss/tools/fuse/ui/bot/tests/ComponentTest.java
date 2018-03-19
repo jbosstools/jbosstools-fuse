@@ -10,8 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_SPRING;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -78,7 +80,8 @@ public class ComponentTest extends DefaultTest {
 	public static void setupResetCamelContext() {
 
 		new WorkbenchShell();
-		ProjectFactory.newProject("camel-spring").type(SPRING).version(CAMEL_2_17_0_REDHAT_630187).create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(EMPTY_SPRING).create();
 		new LogView().deleteLog();
 	}
 

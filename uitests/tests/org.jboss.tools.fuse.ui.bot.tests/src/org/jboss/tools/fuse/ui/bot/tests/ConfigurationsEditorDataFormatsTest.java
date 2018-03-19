@@ -10,6 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_SPRING;
+import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -33,9 +37,6 @@ import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.ui.IViewReference;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
-import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
-import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.XPathEvaluator;
 import org.jboss.tools.fuse.reddeer.editor.CamelDataFormatDialog;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
@@ -55,7 +56,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 /**
  * Tests for global elements - Data Formats in Configurations Tab in Camel editor
- *  
+ * 
  * @author djelinek
  */
 @CleanWorkspace
@@ -65,57 +66,35 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 
 	protected Logger log = Logger.getLogger(ConfigurationsEditorDataFormatsTest.class);
-	
+
 	private static final String PROJECT_NAME = "cbr";
 	private static final String CONTEXT = "camel-context.xml";
 	private static final String TYPE = "Red Hat Fuse";
-	
+
 	private String element;
 	private List<String> availableDataFormats = Arrays.asList("avro - Camel Avro data format",
-															  "barcode - Camel Barcode (e.g. QRcode, PDF417, DataMatrix) support",
-															  "base64 - Camel Base64 data format support",
-															  "beanio - Camel BeanIO data format support",
-															  "bindy-csv - Camel Bindy data format support",
-															  "bindy-fixed - Camel Bindy data format support",
-															  "bindy-kvp - Camel Bindy data format support",
-															  "boon - Camel Boon support",
-															  "castor - Camel Castor data format support",
-															  "crypto - Camel Cryptographic Support",
-															  "csv - Camel CSV data format support",
-															  "flatpack - Camel FlatPack support",
-															  "gzip - The Core Camel Java DSL based router",
-															  "hessian - Hessian serialization support",
-															  "hl7 - Camel HL7 support",
-															  "ical - Camel iCal component",
-															  "jacksonxml - Camel Jackson XML support",
-															  "jaxb - Camel JAXB support",
-															  "jibx - Camel Jibx support",
-															  "json-gson - Camel Gson support",
-															  "json-jackson - Camel Jackson support",
-															  "json-xstream - Camel XStream support",
-															  "lzf - Camel LZF support",
-															  "mime-multipart - Camel Mail support",
-															  "pgp - Camel Cryptographic Support",
-															  "protobuf - Camel Components",
-															  "rss - Camel RSS support",
-															  "secureXML - Camel Partial XML Encryption/Decryption and XML Signature support",
-															  "serialization - The Core Camel Java DSL based router",
-															  "soapjaxb - Camel SOAP support",
-															  "string - The Core Camel Java DSL based router",
-															  "syslog - Camel Syslog support",
-															  "tarfile - Camel Tar file support",
-															  "tidyMarkup - Camel TagSoup support",
-															  "univocity-csv - Camel UniVocity parsers data format support",
-															  "univocity-fixed - Camel UniVocity parsers data format support",
-															  "univocity-tsv - Camel UniVocity parsers data format support",
-															  "xmlBeans - Camel XMLBeans support",
-															  "xmljson - Camel XML JSON Data Format",
-															  "xmlrpc - Camel XML RPC support",
-															  "xstream - Camel XStream support",
-															  "yaml-snakeyaml - Camel SnakeYAML support",
-															  "zip - The Core Camel Java DSL based router",
-															  "zipfile - Camel Zip file support"	);
-	
+			"barcode - Camel Barcode (e.g. QRcode, PDF417, DataMatrix) support",
+			"base64 - Camel Base64 data format support", "beanio - Camel BeanIO data format support",
+			"bindy-csv - Camel Bindy data format support", "bindy-fixed - Camel Bindy data format support",
+			"bindy-kvp - Camel Bindy data format support", "boon - Camel Boon support",
+			"castor - Camel Castor data format support", "crypto - Camel Cryptographic Support",
+			"csv - Camel CSV data format support", "flatpack - Camel FlatPack support",
+			"gzip - The Core Camel Java DSL based router", "hessian - Hessian serialization support",
+			"hl7 - Camel HL7 support", "ical - Camel iCal component", "jacksonxml - Camel Jackson XML support",
+			"jaxb - Camel JAXB support", "jibx - Camel Jibx support", "json-gson - Camel Gson support",
+			"json-jackson - Camel Jackson support", "json-xstream - Camel XStream support", "lzf - Camel LZF support",
+			"mime-multipart - Camel Mail support", "pgp - Camel Cryptographic Support", "protobuf - Camel Components",
+			"rss - Camel RSS support", "secureXML - Camel Partial XML Encryption/Decryption and XML Signature support",
+			"serialization - The Core Camel Java DSL based router", "soapjaxb - Camel SOAP support",
+			"string - The Core Camel Java DSL based router", "syslog - Camel Syslog support",
+			"tarfile - Camel Tar file support", "tidyMarkup - Camel TagSoup support",
+			"univocity-csv - Camel UniVocity parsers data format support",
+			"univocity-fixed - Camel UniVocity parsers data format support",
+			"univocity-tsv - Camel UniVocity parsers data format support", "xmlBeans - Camel XMLBeans support",
+			"xmljson - Camel XML JSON Data Format", "xmlrpc - Camel XML RPC support", "xstream - Camel XStream support",
+			"yaml-snakeyaml - Camel SnakeYAML support", "zip - The Core Camel Java DSL based router",
+			"zipfile - Camel Zip file support");
+
 	/**
 	 * Sets parameters for parameterized test
 	 * 
@@ -123,9 +102,10 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Parameters
 	public static Collection<String> setupData() {
-		
+
 		new WorkbenchShell();
-		ProjectFactory.newProject(PROJECT_NAME).version(SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187).template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();	
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
 		for (IViewReference viewReference : WorkbenchPartLookup.getInstance().findAllViewReferences()) {
 			if (viewReference.getPartName().equals("Welcome")) {
 				final IViewReference iViewReference = viewReference;
@@ -137,8 +117,8 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 				});
 				break;
 			}
-		}	
-		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);	
+		}
+		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
 		List<String> dataFormats = CamelDataFormatDialog.getDataFormats();
 		return dataFormats;
 	}
@@ -152,41 +132,42 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	public ConfigurationsEditorDataFormatsTest(String element) {
 		this.element = element;
 	}
-	
+
 	/**
 	 * Prepares test environment
 	 */
 	@BeforeClass
 	public static void setupResetCamelContext() {
-		
-		ProjectFactory.newProject(PROJECT_NAME).version(SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187).template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
+
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_SPRING).create();
 	}
-	
+
 	@Before
 	public void initialSetup() {
-		
+
 		new CamelProject(PROJECT_NAME).openCamelContext(CONTEXT);
 		CamelEditor.switchTab("Configurations");
 	}
-	
+
 	/**
 	 * Cleans up test environment
 	 */
 	@AfterClass
 	public static void setupDeleteProjects() {
-		
+
 		new WorkbenchShell();
 		EditorHandler.getInstance().closeAll(true);
 		ProjectFactory.deleteAllProjects();
 	}
-	
+
 	@After
 	public void clearEnviroment() {
-		
+
 		CamelEditor.switchTab("Source");
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-cbr.xml");
 	}
-	
+
 	/**
 	 * <p>
 	 * Test verify that all of Data Formats are available in CamelDataFormat dialog.
@@ -194,10 +175,10 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 */
 	@Test
 	public void testDataFormatAvailability() {
-		
+
 		assertTrue(element, availableDataFormats.contains(element));
 	}
-	
+
 	/**
 	 * <p>
 	 * Test tries create <i>Data Format</i> global element inside Camel Editor in configurations tab
@@ -211,19 +192,19 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	public void testCreateDataFormat()	{
-		
+	public void testCreateDataFormat() {
+
 		try {
 			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
 			confEditor.activate();
 			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);	
+			confEditor.createNewGlobalDataFormat(title[0], element);
 			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Data Format)" }).select();
 		} catch (Exception e) {
 			fail(element);
 		}
 	}
-	
+
 	/**
 	 * <p>
 	 * Test tries edit <i>Data Format</i> global element inside Camel Editor in configurations tab
@@ -238,14 +219,14 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	public void testEditDataFormat()	{
-		
+	public void testEditDataFormat() {
+
 		try {
 			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
 			confEditor.activate();
 			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);	
-			confEditor.editGlobalDataFormat(title[0]);				
+			confEditor.createNewGlobalDataFormat(title[0], element);
+			confEditor.editGlobalDataFormat(title[0]);
 			new LabeledText("Id").setText("changed" + title[0]);
 			confEditor.activate();
 			new DefaultTreeItem(new String[] { TYPE, "changed" + title[0] + " (Data Format)" }).select();
@@ -253,7 +234,7 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 			fail(element);
 		}
 	}
-	
+
 	/**
 	 * <p>
 	 * Test tries delete <i>Data Format</i> global element inside Camel Editor in configurations tab
@@ -268,13 +249,13 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	public void testDeleteDataFormat()	{
-		
+	public void testDeleteDataFormat() {
+
 		try {
-			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);	
+			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
 			confEditor.activate();
 			String[] title = element.split(" ");
-			confEditor.createNewGlobalDataFormat(title[0], element);	
+			confEditor.createNewGlobalDataFormat(title[0], element);
 			confEditor.deleteGlobalElement(Element.DATAFORMAT, title[0]);
 			new DefaultTreeItem(new String[] { TYPE, title[0] + " (Data Format)" }).select();
 			fail(element);
@@ -282,7 +263,7 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 			log.info("Data Format: " + element + ", was deleted");
 		}
 	}
-	
+
 	/**
 	 * <p>
 	 * Test tries create and delete <i>Data Format</i> global element and checks Source XML
@@ -298,23 +279,23 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 	 * </ol>
 	 */
 	@Test
-	public void testSourceXML()	{
-		
+	public void testSourceXML() {
+
 		try {
 			ConfigurationsEditor confEditor = new ConfigurationsEditor(PROJECT_NAME, CONTEXT);
 			confEditor.activate();
 			String[] node = element.split(" ");
 			String[] format = new String[] { "" };
-			if(!node[0].startsWith("univocity") && !node[0].startsWith("mime"))
+			if (!node[0].startsWith("univocity") && !node[0].startsWith("mime"))
 				format = node[0].split("-");
-			else 
+			else
 				format[0] = node[0];
-			confEditor.createNewGlobalDataFormat(node[0], element);	
-			CamelEditor.switchTab("Source");	
-			String content = new DefaultStyledText().getText();	
+			confEditor.createNewGlobalDataFormat(node[0], element);
+			CamelEditor.switchTab("Source");
+			String content = new DefaultStyledText().getText();
 			log.info(content);
 			XPathEvaluator eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if(!eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] +"[@id='" + node[0] + "']")) {
+			if (!eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] + "[@id='" + node[0] + "']")) {
 				testIssue_1930();
 				fail(element);
 			}
@@ -324,17 +305,17 @@ public class ConfigurationsEditorDataFormatsTest extends DefaultTest {
 			content = new DefaultStyledText().getText();
 			log.info(content);
 			eval = new XPathEvaluator(new ByteArrayInputStream(content.getBytes()));
-			if(eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] +"[@id='" + node[0] + "']")) {
+			if (eval.evaluateBoolean("/beans/camelContext/dataFormats/" + format[0] + "[@id='" + node[0] + "']")) {
 				testIssue_1930();
 				fail(element);
 			}
-			CamelEditor.switchTab("Configurations");		
+			CamelEditor.switchTab("Configurations");
 		} catch (Exception e) {
 			testIssue_1930();
 			fail(element);
 		}
 	}
-	
+
 	/**
 	 * https://issues.jboss.org/browse/FUSETOOLS-1930
 	 */

@@ -10,6 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_JAVA;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_SPRING;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -80,7 +86,19 @@ public class CamelEditorRoutesTest {
 	@Before
 	public void createProject() {
 		new WorkbenchShell();
-		ProjectFactory.newProject(PROJECT_NAME).type(type).create();
+		switch (type) {
+		case SPRING:
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_SPRING)
+					.create();
+			break;
+		case BLUEPRINT:
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+					.template(EMPTY_BLUEPRINT).create();
+			break;
+		default:
+			ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).template(EMPTY_JAVA)
+					.create();
+		}
 		LogView errorLog = new LogView();
 		errorLog.open();
 		errorLog.deleteLog();

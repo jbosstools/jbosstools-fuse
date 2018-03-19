@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertFalse;
 
 import org.eclipse.reddeer.common.logging.Logger;
@@ -26,7 +28,6 @@ import org.eclipse.reddeer.workbench.core.condition.JobIsRunning;
 import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
 import org.jboss.tools.fuse.reddeer.wizard.CamelTestCaseWizard;
@@ -38,9 +39,8 @@ import org.junit.runner.RunWith;
 
 /**
  * Tests option <i>Run a Project as Local Camel Context (with or without tests)</i>. The option is tested on a project
- * from 'Content Based Router' template. If you want to change template (see static variables), you have to
- * change <i>resources/FailingTest.java</i> and <i>resources/PassingTest.java</i> too (to correspondent with a new
- * project).
+ * from 'Content Based Router' template. If you want to change template (see static variables), you have to change
+ * <i>resources/FailingTest.java</i> and <i>resources/PassingTest.java</i> too (to correspondent with a new project).
  * 
  * @author tsedmik
  */
@@ -76,7 +76,8 @@ public class ProjectLocalRunTest extends DefaultTest {
 	public static void setupCreateProject() {
 
 		log.info("Create a new Fuse project from 'Content Based Router' template");
-		ProjectFactory.newProject(PROJECT_NAME).version("2.15.1.redhat-621084").template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF).version("2.15.1.redhat-621084")
+				.template(ProjectTemplate.CBR_SPRING).create();
 		new CamelProject(PROJECT_NAME).update();
 		createTestClass();
 	}

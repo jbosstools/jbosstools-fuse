@@ -93,7 +93,7 @@ public class RouteManipulationServerTest {
 
 	@Before
 	public void setupImportProject() {
-		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getName(), "test-route-manipulation");
+		FuseServerManipulator.addModule(serverRequirement.getConfiguration().getServer().getName(), "test-route-manipulation");
 	}
 
 	@After
@@ -103,12 +103,12 @@ public class RouteManipulationServerTest {
 		} catch (Exception e) {
 			// editor is not opened --> ok
 		}
-		FuseServerManipulator.publish(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.publish(serverRequirement.getConfiguration().getServer().getName());
 	}
 
 	@AfterClass
 	public static void defaultFinalClean() {
-		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getName());
+		FuseServerManipulator.removeAllModules(serverRequirement.getConfiguration().getServer().getName());
 		ConsoleView console = new ConsoleView();
 		console.open();
 		try {
@@ -202,17 +202,13 @@ public class RouteManipulationServerTest {
 		TreeItem jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Start Tracing").select();
-		AbstractWait.sleep(TimePeriod.SHORT);
+		AbstractWait.sleep(TimePeriod.getCustom(3));
 		jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
 		jmxNode.select();
 		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();;
 		MessagesView msg = new MessagesView();
 		msg.open();
-		jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1").select();
 		assertTrue(msg.getAllMessages().size() > 4);
-		jmxNode = jmx.getNode("Local Processes", "Red Hat Fuse", "Camel", "_context1");
-		jmxNode.select();
-		new ContextMenu(jmxNode).getItem("Stop Tracing Context").select();
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 }

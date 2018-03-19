@@ -11,6 +11,8 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.PRESENT;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -24,6 +26,8 @@ import org.jboss.tools.fuse.reddeer.LogGrapper;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement;
 import org.jboss.tools.fuse.reddeer.requirement.FuseRequirement.Fuse;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
 import org.junit.Test;
@@ -32,7 +36,7 @@ import org.junit.runner.RunWith;
 @RunWith(RedDeerSuite.class)
 @Fuse(state = PRESENT)
 public class NewFuseProjectWizardWithFuseRequirementsTest {
-	
+
 	@InjectRequirement
 	private FuseRequirement serverRequirement;
 
@@ -44,7 +48,7 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 		log.deleteLog();
 		WorkbenchShellHandler.getInstance().closeAllNonWorbenchShells();
 	}
-	
+
 	/**
 	 * <p>
 	 * Tests 'Target Runtime' option
@@ -66,18 +70,23 @@ public class NewFuseProjectWizardWithFuseRequirementsTest {
 	public void testRuntime() {
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName("test");
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("test");
 		wiz.next();
-		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2, wiz.getTargetRuntimes().size());
-		for (String temp : wiz.getTargetRuntimes()) {
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		secondPage.setDeploymentType(STANDALONE);
+		secondPage.setRuntimeType(KARAF);
+		assertEquals("There is something wrong in 'Target Runtime' Combo box!", 2, secondPage.getKarafRuntimes().size());
+		for (String temp : secondPage.getKarafRuntimes()) {
 			if (!(temp.equals("No Runtime selected")
 					|| temp.equals(serverRequirement.getConfiguration().getServer().getRuntimeName()))) {
 				fail("'Target Runtime' Combo box contains something wrong!");
 			}
 		}
-		wiz.selectTargetRuntime(serverRequirement.getConfiguration().getServer().getRuntimeName());
-		assertFalse("Path should not be editable!. The runtime is set.", wiz.isCamelVersionEditable());
-		assertEquals("Camel versions are different (runtime vs wizard)!", serverRequirement.getConfiguration().getCamelVersion(), wiz.getCamelVersion());
+		secondPage.selectKarafRuntime(serverRequirement.getConfiguration().getServer().getRuntimeName());
+		assertFalse("Path should not be editable!. The runtime is set.", secondPage.isCamelVersionComboEditable());
+		assertEquals("Camel versions are different (runtime vs wizard)!",
+				serverRequirement.getConfiguration().getCamelVersion(), secondPage.getSelectedCamelVersion());
 		wiz.cancel();
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}

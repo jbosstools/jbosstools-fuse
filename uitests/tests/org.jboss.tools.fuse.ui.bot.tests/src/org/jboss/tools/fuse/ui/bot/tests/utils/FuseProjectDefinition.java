@@ -11,6 +11,8 @@
 package org.jboss.tools.fuse.ui.bot.tests.utils;
 
 import org.jboss.tools.fuse.reddeer.ProjectType;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType;
 
 /**
  * Represents a Fuse Integration project
@@ -19,30 +21,19 @@ import org.jboss.tools.fuse.reddeer.ProjectType;
  */
 public class FuseProjectDefinition {
 
-	private String template;
-	private ProjectType dsl;
+	private NewFuseIntegrationProjectWizardRuntimeType runtimeType;
+	private NewFuseIntegrationProjectWizardDeploymentType deploymentType;
+	private String[] template;
 	private String camelVersion;
+	private ProjectType dsl;
 
-	public FuseProjectDefinition(String template, ProjectType dsl, String camelVersion) {
+	public FuseProjectDefinition(NewFuseIntegrationProjectWizardRuntimeType runtimeType,
+			NewFuseIntegrationProjectWizardDeploymentType deploymentType, String[] template, String camelVersion, ProjectType dsl) {
 		super();
+		this.runtimeType = runtimeType;
+		this.deploymentType = deploymentType;
 		this.template = template;
-		this.dsl = dsl;
 		this.camelVersion = camelVersion;
-	}
-
-	public String getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-
-	public ProjectType getDsl() {
-		return dsl;
-	}
-
-	public void setDsl(ProjectType dsl) {
 		this.dsl = dsl;
 	}
 
@@ -52,5 +43,37 @@ public class FuseProjectDefinition {
 
 	public void setCamelVersion(String camelVersion) {
 		this.camelVersion = camelVersion;
+	}
+
+	public NewFuseIntegrationProjectWizardRuntimeType getRuntimeType() {
+		return runtimeType;
+	}
+
+	public void setRuntimeType(NewFuseIntegrationProjectWizardRuntimeType runtimeType) {
+		this.runtimeType = runtimeType;
+	}
+
+	public NewFuseIntegrationProjectWizardDeploymentType getDeploymentType() {
+		return deploymentType;
+	}
+
+	public void setDeploymentType(NewFuseIntegrationProjectWizardDeploymentType deploymentType) {
+		this.deploymentType = deploymentType;
+	}
+
+	public String[] getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String[] template) {
+		this.template = template;
+	}
+
+	public ProjectType getDsl() {
+		return dsl;
+	}
+
+	public void setDsl(ProjectType dsl) {
+		this.dsl = dsl;
 	}
 }

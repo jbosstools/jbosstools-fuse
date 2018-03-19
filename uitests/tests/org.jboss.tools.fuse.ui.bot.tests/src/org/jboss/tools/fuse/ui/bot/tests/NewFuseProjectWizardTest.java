@@ -11,6 +11,10 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.EMPTY_BLUEPRINT;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.SPRINGBOOT;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -22,9 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.reddeer.direct.project.Project;
-import org.eclipse.reddeer.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.reddeer.eclipse.ui.views.log.LogView;
 import org.eclipse.reddeer.eclipse.ui.views.markers.ProblemsView;
 import org.eclipse.reddeer.junit.runner.RedDeerSuite;
@@ -33,12 +35,13 @@ import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
 import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.jboss.tools.fuse.reddeer.FileUtils;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.ResourceHelper;
 import org.jboss.tools.fuse.reddeer.SupportedCamelVersions;
 import org.jboss.tools.fuse.reddeer.dialog.WhereToFindMoreTemplatesMessageDialog;
-import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizard;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardAdvancedPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardFirstPage;
+import org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimePage;
 import org.jboss.tools.fuse.ui.bot.tests.utils.LogChecker;
 import org.jboss.tools.fuse.ui.bot.tests.utils.ProjectFactory;
 import org.junit.After;
@@ -84,10 +87,16 @@ public class NewFuseProjectWizardTest {
 				ResourceHelper.getResourceAbsolutePath(Activator.PLUGIN_ID, "resources/projects") + "/test");
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		assertFalse("The path is editable, but 'Use default workspace location' is selected!", wiz.isPathEditable());
-		wiz.setProjectName("test");
-		wiz.useDefaultLocation(false);
-		wiz.setLocation(targetLocation.getAbsolutePath());
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		assertFalse("The path is editable, but 'Use default workspace location' is selected!",
+				firstPage.isPathEditable());
+		firstPage.setProjectName("test");
+		firstPage.useDefaultLocation(false);
+		firstPage.setLocation(targetLocation.getAbsolutePath());
+		wiz.next();
+		wiz.next();
+		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
+		lastPage.selectTemplate(SPRINGBOOT);
 		wiz.finish();
 		File actualLocation = new File(Project.getLocation("test"));
 		assertEquals("Location of a project is different!", targetLocation, actualLocation);
@@ -113,13 +122,16 @@ public class NewFuseProjectWizardTest {
 	public void testCamelVersion() {
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName("test");
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("test");
 		wiz.next();
-		wiz.selectTargetRuntime("No Runtime selected");
-		wiz.selectCamelVersion("2.17.3");
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		secondPage.setDeploymentType(STANDALONE);
+		secondPage.setRuntimeType(KARAF);
+		secondPage.typeCamelVersion("2.17.3");
 		wiz.next();
-		wiz.startWithEmptyProject();
-		wiz.setProjectType(ProjectType.BLUEPRINT);
+		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
+		lastPage.selectTemplate(EMPTY_BLUEPRINT);
 		wiz.finish();
 		assertFalse("Project was created with errors", hasErrors());
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
@@ -129,141 +141,6 @@ public class NewFuseProjectWizardTest {
 		} catch (IOException e) {
 			fail("Cannot access project's pom.xml file!");
 		}
-	}
-
-	/**
-	 * <p>
-	 * Tries to create an empty project.
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
-	 * <li>Set project name</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Check whether the 'Start with an empty project' is selected and 'Blueprint DSL'</li>
-	 * <li>Finish the wizard</li>
-	 * <li>Check the project - should be created without any problems</li>
-	 * <li>Check Error Log - no error from Fuse Tooling should be present</li>
-	 * </ol>
-	 */
-	@Test
-	public void testEmptyProject() {
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("test");
-		wiz.next();
-		wiz.next();
-		wiz.startWithEmptyProject();
-		wiz.setProjectType(ProjectType.BLUEPRINT);
-		wiz.finish();
-		assertFalse("Project was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-	}
-
-	/**
-	 * <p>
-	 * Tries to create a project from 'Content Based Router'
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
-	 * <li>Set project name</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Select 'Use a predefined template' and 'Red Hat Fuse --> Beginner --> Content Based Router</li>
-	 * <li>Select 'Blueprint DSL'</li>
-	 * <li>Finish the wizard</li>
-	 * <li>Check the project - should be created without any problems</li>
-	 * <li>Check Error Log - no error from Fuse Tooling should be present</li>
-	 * </ol>
-	 */
-	@Test
-	public void testCBRProject() {
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("test");
-		wiz.next();
-		wiz.selectCamelVersion(SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254);
-		wiz.next();
-		wiz.selectTemplate("Red Hat Fuse", "Beginner", "Content Based Router");
-		wiz.setProjectType(ProjectType.BLUEPRINT);
-		wiz.finish();
-		assertFalse("Project was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-	}
-
-	/**
-	 * <p>
-	 * Tries to create an empty project from all available project types (Blueprint, Spring, Java)
-	 * </p>
-	 * <b>Steps:</b>
-	 * <ol>
-	 * <li>Invoke <i>File --> New --> Fuse Integration Project</i> wizard</li>
-	 * <li>Set project name</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Hit 'Next'</li>
-	 * <li>Check whether the 'Start with an empty project' is selected</li>
-	 * <li>Try to create a project from all available project types (Blueprint, Spring, Java)
-	 * <li>Finish the wizard</li>
-	 * <li>Check the project - should be created without any problems</li>
-	 * <li>Check Error Log - no error from Fuse Tooling should be present</li>
-	 * <li>Check whether the project uses selected DSL</li>
-	 * <li></li>
-	 * </ol>
-	 */
-	@Test
-	public void testProjectTypes() {
-
-		// Blueprint DSL
-		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("blueprint");
-		wiz.next();
-		wiz.next();
-		wiz.startWithEmptyProject();
-		wiz.setProjectType(ProjectType.BLUEPRINT);
-		wiz.finish();
-		try {
-			assertTrue("Created Camel File is not in Blueprint DSL",
-					new CamelEditor("blueprint.xml").xpath("/blueprint").length() > 0);
-		} catch (CoreException e) {
-			fail("Something went wrong with access to Camel File - blueprint.xml");
-		}
-		assertFalse("Project with Blueprint DSL was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-
-		// Spring DSL
-		wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("spring");
-		wiz.next();
-		wiz.next();
-		wiz.startWithEmptyProject();
-		wiz.setProjectType(ProjectType.SPRING);
-		wiz.finish();
-		try {
-			assertTrue("Created Camel File is not in Spring DSL",
-					new CamelEditor("camel-context.xml").xpath("/beans").length() > 0);
-		} catch (CoreException e) {
-			fail("Something went wrong with access to Camel File - camel-context.xml");
-		}
-		assertFalse("Project with Spring DSL was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
-
-		// Java DSL
-		wiz = new NewFuseIntegrationProjectWizard();
-		wiz.open();
-		wiz.setProjectName("java");
-		wiz.next();
-		wiz.next();
-		wiz.startWithEmptyProject();
-		wiz.setProjectType(ProjectType.JAVA);
-		wiz.finish();
-		assertTrue("Project created with Java DSL do not contain 'CamelRoute.java' file", new ProjectExplorer()
-				.getProject("java").containsResource("src/main/java", "com.mycompany", "CamelRoute.java"));
-		assertFalse("Project with Java DSL was created with errors", hasErrors());
-		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
 	private boolean hasErrors() {
@@ -297,9 +174,11 @@ public class NewFuseProjectWizardTest {
 
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName("test");
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("test");
 		wiz.next();
-		List<String> versions = wiz.getCamelVersions();
+		NewFuseIntegrationProjectWizardRuntimePage secondPage = new NewFuseIntegrationProjectWizardRuntimePage(wiz);
+		List<String> versions = secondPage.getAllAvailableCamelVersions();
 		Collection<String> supported = SupportedCamelVersions.getCamelVersions();
 		List<String> missing = new ArrayList<>();
 		for (String sup : supported) {
@@ -318,7 +197,7 @@ public class NewFuseProjectWizardTest {
 		}
 
 	}
-	
+
 	/**
 	 * <p>
 	 * Verifies that More examples are announced to users
@@ -339,12 +218,14 @@ public class NewFuseProjectWizardTest {
 	public void testMoreExamplesAvailable() {
 		NewFuseIntegrationProjectWizard wiz = new NewFuseIntegrationProjectWizard();
 		wiz.open();
-		wiz.setProjectName("test");
+		NewFuseIntegrationProjectWizardFirstPage firstPage = new NewFuseIntegrationProjectWizardFirstPage(wiz);
+		firstPage.setProjectName("test");
 		wiz.next();
 		wiz.next();
-		WhereToFindMoreTemplatesMessageDialog moreExamplesDialog = wiz.selectMoreExamples();
-		assertThat(moreExamplesDialog.getMessage())
-		.contains("https://github.com/apache/camel/tree/master/examples",
+		NewFuseIntegrationProjectWizardAdvancedPage lastPage = new NewFuseIntegrationProjectWizardAdvancedPage(wiz);
+		lastPage.selectMoreExamplesLink();
+		WhereToFindMoreTemplatesMessageDialog moreExamplesDialog = new WhereToFindMoreTemplatesMessageDialog();
+		assertThat(moreExamplesDialog.getMessage()).contains("https://github.com/apache/camel/tree/master/examples",
 				"https://github.com/fabric8-quickstarts");
 		wiz.cancel();
 		LogChecker.assertNoFuseError();

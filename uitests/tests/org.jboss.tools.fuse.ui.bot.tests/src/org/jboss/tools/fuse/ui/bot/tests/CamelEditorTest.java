@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +35,6 @@ import org.eclipse.reddeer.workbench.exception.WorkbenchLayerException;
 import org.eclipse.reddeer.workbench.handler.EditorHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.component.File;
 import org.jboss.tools.fuse.reddeer.component.Log;
 import org.jboss.tools.fuse.reddeer.component.Otherwise;
@@ -74,7 +75,8 @@ public class CamelEditorTest extends DefaultTest {
 	@Before
 	public void setupResetCamelContext() {
 		new WorkbenchShell();
-		ProjectFactory.newProject("cbr").template(ProjectTemplate.CBR).type(ProjectType.SPRING).create();
+		ProjectFactory.newProject("cbr").deploymentType(STANDALONE).runtimeType(KARAF)
+				.template(ProjectTemplate.CBR_SPRING).create();
 		LogView view = new LogView();
 		view.open();
 		view.deleteLog();
@@ -141,8 +143,8 @@ public class CamelEditorTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Test tries to manipulate with XML source of the camel-context.xml file and
-	 * checks if it affects components in the Camel Editor.
+	 * Test tries to manipulate with XML source of the camel-context.xml file and checks if it affects components in the
+	 * Camel Editor.
 	 * </p>
 	 * <b>Steps</b>
 	 * <ol>
@@ -152,8 +154,7 @@ public class CamelEditorTest extends DefaultTest {
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>cut branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
-	 * <li>check if the otherwise component is no longer available in the Camel
-	 * Editor</li>
+	 * <li>check if the otherwise component is no longer available in the Camel Editor</li>
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>paste branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
@@ -231,9 +232,8 @@ public class CamelEditorTest extends DefaultTest {
 
 	/**
 	 * <p>
-	 * Test tries to add components in the Camel Editor via Drag&Drop feature (Adds
-	 * components from Palette and connections between components via the Camel
-	 * Editor).
+	 * Test tries to add components in the Camel Editor via Drag&Drop feature (Adds components from Palette and
+	 * connections between components via the Camel Editor).
 	 * </p>
 	 * <ol>
 	 * <li>create a new project from template 'Content Based Router'</li>
@@ -242,11 +242,10 @@ public class CamelEditorTest extends DefaultTest {
 	 * <li>switch to Source tab in the Camel Editor</li>
 	 * <li>remove branch otherwise</li>
 	 * <li>switch to Design tab in the Camel Editor</li>
-	 * <li>add back removed components (from branch otherwise) via Drag&Drop
-	 * feature</li>
+	 * <li>add back removed components (from branch otherwise) via Drag&Drop feature</li>
 	 * <li>switch to Source tab in the Camel Editor</li>
-	 * <li>check if the content of the file is equals to content of the same file
-	 * immediately after project creation</li>
+	 * <li>check if the content of the file is equals to content of the same file immediately after project
+	 * creation</li>
 	 * </ol>
 	 */
 	@Test
@@ -278,12 +277,12 @@ public class CamelEditorTest extends DefaultTest {
 	 * <li>create a new project from template 'Content Based Router'</li>
 	 * <li>open camel-context.xml file</li>
 	 * <li>Invoke 'Collapse' on route component 'Choice'</li>
-	 * <li>Check if component was collapsed (check if changed size of collapsed
-	 * component area and height is smaller then begin values)</li>
+	 * <li>Check if component was collapsed (check if changed size of collapsed component area and height is smaller
+	 * then begin values)</li>
 	 * <li>Check fuse errors in Error Log View</li>
 	 * <li>Invoke 'Expand' on route component 'Choice'</li>
-	 * <li>Check if component was expanded (check changed size of expanded component
-	 * area -> should be same as area size and height before collapse)</li>
+	 * <li>Check if component was expanded (check changed size of expanded component area -> should be same as area size
+	 * and height before collapse)</li>
 	 * <li>Check fuse errors in Error Log View</li>
 	 * </ol>
 	 */

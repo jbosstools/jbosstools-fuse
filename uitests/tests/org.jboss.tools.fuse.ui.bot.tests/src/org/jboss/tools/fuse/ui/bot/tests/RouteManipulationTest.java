@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.ui.bot.tests;
 
-import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR;
-import static org.jboss.tools.fuse.reddeer.ProjectType.SPRING;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630254;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -40,6 +40,7 @@ import org.eclipse.reddeer.workbench.impl.editor.DefaultEditor;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.jboss.tools.fuse.reddeer.JiraIssue;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
+import org.jboss.tools.fuse.reddeer.ProjectTemplate;
 import org.jboss.tools.fuse.reddeer.editor.CamelEditor;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.projectexplorer.CamelProject;
@@ -68,8 +69,8 @@ public class RouteManipulationTest extends DefaultTest {
 	@Before
 	public void setupCreateAndRunCamelProject() {
 
-		ProjectFactory.newProject("camel-spring").template(CBR).type(SPRING).version(CAMEL_2_17_0_REDHAT_630254)
-				.create();
+		ProjectFactory.newProject("camel-spring").deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630254).template(ProjectTemplate.CBR_SPRING).create();
 		LogView log = new LogView();
 		log.open();
 		log.deleteLog();
@@ -135,8 +136,8 @@ public class RouteManipulationTest extends DefaultTest {
 		FuseJMXNavigator jmx = new FuseJMXNavigator();
 		jmx.getNode("Local Processes", "Local Camel Context", "Camel");
 		AbstractWait.sleep(TimePeriod.DEFAULT);
-		assertNotNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes", "cbr-route",
-				"file:src/main/data?noop=true", "Log _log1", "Choice", "Log _log5"));
+		assertNotNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes",
+				"cbr-route", "file:src/main/data?noop=true", "Log _log1", "Choice", "Log _log5"));
 		jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context").select();
 		new ContextMenuItem("Edit Routes").select();
 		editor = new CamelEditor(new DefaultEditor(new RegexMatcher("<connected>Remote CamelContext:.*")).getTitle());
@@ -165,11 +166,11 @@ public class RouteManipulationTest extends DefaultTest {
 		EditorManipulator.copyFileContentToCamelXMLEditor("resources/camel-context-route-edit.xml");
 		CamelEditor.switchTab("Design");
 		new WaitUntil(new ConsoleHasText("INFO  YYY"));
-		assertNotNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes", "cbr-route",
-				"file:src/main/data?noop=true", "Log _log1", "Choice", "When /order/customer/country = 'UK'",
-				"Log _log2", "file:work/cbr/output/uk"));
-		assertNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes", "cbr-route",
-				"file:src/main/data?noop=true", "Choice", "Otherwise"));
+		assertNotNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes",
+				"cbr-route", "file:src/main/data?noop=true", "Log _log1", "Choice",
+				"When /order/customer/country = 'UK'", "Log _log2", "file:work/cbr/output/uk"));
+		assertNull(jmx.getNode("Local Processes", "Local Camel Context", "Camel", "cbr-example-context", "Routes",
+				"cbr-route", "file:src/main/data?noop=true", "Choice", "Otherwise"));
 		assertTrue(LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 

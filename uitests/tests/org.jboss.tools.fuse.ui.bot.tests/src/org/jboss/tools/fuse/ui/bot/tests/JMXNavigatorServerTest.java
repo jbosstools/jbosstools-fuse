@@ -11,7 +11,10 @@
 package org.jboss.tools.fuse.ui.bot.tests;
 
 import static org.eclipse.reddeer.requirements.server.ServerRequirementState.RUNNING;
+import static org.jboss.tools.fuse.reddeer.ProjectTemplate.CBR_BLUEPRINT;
 import static org.jboss.tools.fuse.reddeer.SupportedCamelVersions.CAMEL_2_17_0_REDHAT_630187;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardDeploymentType.STANDALONE;
+import static org.jboss.tools.fuse.reddeer.wizard.NewFuseIntegrationProjectWizardRuntimeType.KARAF;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -31,8 +34,6 @@ import org.eclipse.reddeer.workbench.handler.WorkbenchShellHandler;
 import org.eclipse.reddeer.workbench.impl.shell.WorkbenchShell;
 import org.eclipse.reddeer.workbench.ui.dialogs.WorkbenchPreferenceDialog;
 import org.jboss.tools.fuse.reddeer.LogGrapper;
-import org.jboss.tools.fuse.reddeer.ProjectTemplate;
-import org.jboss.tools.fuse.reddeer.ProjectType;
 import org.jboss.tools.fuse.reddeer.condition.FuseLogContainsText;
 import org.jboss.tools.fuse.reddeer.perspectives.FuseIntegrationPerspective;
 import org.jboss.tools.fuse.reddeer.preference.ConsolePreferencePage;
@@ -71,12 +72,11 @@ public class JMXNavigatorServerTest {
 
 	@InjectRequirement
 	private static FuseRequirement serverReq;
-		
+
 	@RequirementRestriction
 	public static RequirementMatcher getRestrictionMatcher() {
 		return new RequirementMatcher(Fuse.class, "server", new ServerTypeMatcher(ServerFuse.class));
 	}
-
 
 	/**
 	 * Prepares test environment
@@ -105,7 +105,8 @@ public class JMXNavigatorServerTest {
 		error.open();
 		error.setActivateOnNewEvents(false);
 
-		ProjectFactory.newProject(PROJECT_NAME).template(ProjectTemplate.CBR).version(CAMEL_2_17_0_REDHAT_630187).type(ProjectType.BLUEPRINT).create();
+		ProjectFactory.newProject(PROJECT_NAME).deploymentType(STANDALONE).runtimeType(KARAF)
+				.version(CAMEL_2_17_0_REDHAT_630187).template(CBR_BLUEPRINT).create();
 		serverName = serverReq.getConfiguration().getServer().getName();
 		FuseServerManipulator.addModule(serverName, PROJECT_NAME);
 
@@ -154,8 +155,8 @@ public class JMXNavigatorServerTest {
 	 * <li>start the server</li>
 	 * <li>open JMX Navigator View</li>
 	 * <li>try to access node "karaf", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/input"</li>
-	 * <li>try to access node "karaf", "Camel", "camelContext", "Routes", "cbr-route", "file:work/cbr/input",
-	 * "Log _log1", "Choice", "Otherwise", "Log _log4", "file:work/cbr/output/others"</li>
+	 * <li>try to access node "karaf", "Camel", "camelContext", "Routes", "cbr-route", "file:work/cbr/input", "Log
+	 * _log1", "Choice", "Otherwise", "Log _log4", "file:work/cbr/output/others"</li>
 	 * </ol>
 	 */
 	@Test
@@ -167,11 +168,13 @@ public class JMXNavigatorServerTest {
 		jmx.connectTo("Local Processes", "karaf");
 		assertNotNull(
 				"The following path is inaccesible: karaf/Camel/cbr-example-context/Endpoints/file/work/cbr/input",
-				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Endpoints", "file", "work/cbr/input"));
+				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Endpoints", "file",
+						"work/cbr/input"));
 		assertNotNull(
 				"The following path is inaccesible: karaf/Camel/camel-*/Routes/cbr-route/file:work/cbr/input/Log _log1/Choice/Otherwise/Log _log4/file:work/cbr/output/others",
-				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Routes", "cbr-route", "file:work/cbr/input", "Log _log1",
-						"Choice", "Otherwise", "Log _log4", "file:work/cbr/output/others"));
+				jmx.getNode("Local Processes", "karaf", "Camel", "cbr-example-context", "Routes", "cbr-route",
+						"file:work/cbr/input", "Log _log1", "Choice", "Otherwise", "Log _log4",
+						"file:work/cbr/output/others"));
 		assertTrue("There are some errors in Error Log", LogGrapper.getPluginErrors("fuse").size() == 0);
 	}
 
@@ -210,7 +213,8 @@ public class JMXNavigatorServerTest {
 		} catch (WaitTimeoutExpiredException e) {
 			fail("Camel context was not suspended!");
 		}
-		assertTrue("Resume of Camel Context was not performed", jmx.resumeCamelContext("Local Processes", "karaf", "Camel", camel));
+		assertTrue("Resume of Camel Context was not performed",
+				jmx.resumeCamelContext("Local Processes", "karaf", "Camel", camel));
 		try {
 			new WaitUntil(new FuseLogContainsText("(CamelContext: " + camel + ") resumed"), TimePeriod.DEFAULT);
 		} catch (WaitTimeoutExpiredException e) {
