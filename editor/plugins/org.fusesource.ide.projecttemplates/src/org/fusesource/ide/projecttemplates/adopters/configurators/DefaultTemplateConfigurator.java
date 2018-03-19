@@ -60,7 +60,7 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 	
 	@Override
 	public boolean configure(IProject project, CommonNewProjectMetaData metadata, IProgressMonitor monitor) {
-		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 10);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.defaultTemplateConfiguratorConfiguringJavaProjectMonitorMessage, 7);
 		IProjectFacetVersion javaFacet = ProjectFacetsManager.getProjectFacet("jst.java").getDefaultVersion(); //$NON-NLS-1$
 		try {
 			configureVersions(project, metadata.getCamelVersion(), subMonitor.split(1));
@@ -68,7 +68,6 @@ public class DefaultTemplateConfigurator implements TemplateConfiguratorSupport 
 			installFacet(project, "jst.java", javaFacet.getVersionString(), null, subMonitor.split(1)); //$NON-NLS-1$
 			installFacet(project, "jboss.m2", null, null, subMonitor.split(1)); //$NON-NLS-1$
 			installFacet(project, "jst.utility", null, null, subMonitor.split(1)); //$NON-NLS-1$
-			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			project.getFile(".classpath").delete(true, subMonitor.split(1)); //$NON-NLS-1$
 			project.refreshLocal(IProject.DEPTH_INFINITE, subMonitor.split(1));
 			configureLaunchConfiguration(project, subMonitor.split(1));
