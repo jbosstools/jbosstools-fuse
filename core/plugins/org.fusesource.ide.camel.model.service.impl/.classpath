@@ -7,13 +7,13 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-maven-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-provider-karaf-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-provider-springboot-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.20.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.20.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-maven-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-provider-karaf-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-catalog-provider-springboot-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.21.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.21.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/log4j-over-slf4j-1.7.22.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.22.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slf4j-simple-1.7.22.jar"/>
